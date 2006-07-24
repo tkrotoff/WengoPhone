@@ -31,7 +31,7 @@ QtToaster::QtToaster(QWidget * toaster, QFrame * toasterWindowFrame)
 	_toaster->setParent(_toaster->parentWidget(), Qt::ToolTip | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
 	_toaster->setAttribute(Qt::WA_DeleteOnClose, true);
 
-	_toaster->resize(200, 150);
+	_toaster->resize(190, 150);
 
 	QRect r = toasterWindowFrame->rect();
 
@@ -59,7 +59,8 @@ void QtToaster::show() {
 	QDesktopWidget * desktop = QApplication::desktop();
 	QRect screenGeometry = desktop->screenGeometry(desktop->primaryScreen());
 
-	_toaster->move(screenGeometry.bottom(), screenGeometry.right()/* - _toaster->size().width()*/);
+	_toaster->move(screenGeometry.bottom(), screenGeometry.right() - _toaster->size().width());
+	//_toaster->move(1280 + 50, 1024 + 50);
 
 	_toaster->show();
 
