@@ -119,22 +119,23 @@ void QtAdvancedConfig::setItem(boost::any value, int row, int column) {
 void QtAdvancedConfig::saveConfig() {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
-	for (int row = 0; row < _ui->tableWidget->rowCount(); row++) {
+	int tableSize = _ui->tableWidget->rowCount();
+	for (int row = 0; row < tableSize; row++) {
 
 		QTableWidgetItem * itemKey = _ui->tableWidget->item(row, KEY_NAME_COLUMN);
 		if (!itemKey) {
-			return;
+			continue;
 		}
 		std::string key = itemKey->text().toStdString();
 
 		QTableWidgetItem * itemValue = _ui->tableWidget->item(row, VALUE_COLUMN);
 		if (!itemValue) {
-			return;
+			continue;
 		}
 
 		QTableWidgetItem * itemType = _ui->tableWidget->item(row, TYPE_COLUMN);
 		if (!itemType) {
-			return;
+			continue;
 		}
 
 		if (itemType->text() == TYPE_BOOLEAN) {
