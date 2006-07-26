@@ -510,10 +510,10 @@ void QtProfileBar::wsCallForwardInfoEventHandler(WsInfo & sender, int id, WsInfo
 		case WsInfo::WsInfoCallForwardModeNumber:
 			wsCallForwardInfoEvent(tr("active") + " (" + QString::fromStdString(dest1) + ")");
 			break;
-		case WsInfo::WsInfoCallForwardMode_Disabled:
+		case WsInfo::WsInfoCallForwardModeDisabled:
 			wsCallForwardInfoEvent(tr("inactive"));
 			break;
-		case WsInfo::WsInfoCallForwardMode_Unauthorized:
+		case WsInfo::WsInfoCallForwardModeUnauthorized:
 			wsCallForwardInfoEvent(tr("unauthorized"));
 			break;
 		}

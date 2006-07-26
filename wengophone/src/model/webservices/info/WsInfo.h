@@ -23,7 +23,7 @@
 #include <model/webservices/WengoWebService.h>
 
 /**
- * @class WsWengoInfo wengo information web service
+ * Wengo information web service.
  *
  * @author Mathieu Stute
  */
@@ -34,7 +34,7 @@ public:
 		/** The information could not be retrieved. */
 		WsInfoStatusError,
 
-		/** Retrive information successfully */
+		/** Retrieve information successfully */
 		WsInfoStatusOk
 	};
 
@@ -46,10 +46,10 @@ public:
 		WsInfoCallForwardModeNumber,
 
 		/** callforward is disabled. */
-		WsInfoCallForwardMode_Disabled,
+		WsInfoCallForwardModeDisabled,
 
 		/** callforward is unauthorized. */
-		WsInfoCallForwardMode_Unauthorized,
+		WsInfoCallForwardModeUnauthorized,
 	};
 
 	/**

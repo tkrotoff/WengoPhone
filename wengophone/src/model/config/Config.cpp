@@ -82,7 +82,7 @@ const std::string Config::CALL_FORWARD_PHONENUMBER2_KEY = "call.forward.phonenum
 const std::string Config::CALL_FORWARD_PHONENUMBER3_KEY = "call.forward.phonenumber3";
 const std::string Config::CALL_FORWARD_TOMOBILE_KEY = "call.forward.tomobile";
 
-const std::string Config::ACTIVE_VOICE_MAIL_KEY = "voicemail.active";
+const std::string Config::VOICE_MAIL_ACTIVE_KEY = "voicemail.active";
 
 const std::string Config::GENERAL_AUTOSTART_KEY = "general.autostart";
 const std::string Config::GENERAL_CLICK_START_FREECALL_KEY = "general.click.start.freecall";
@@ -128,8 +128,10 @@ const std::string Config::RESOURCES_DIR_KEY = "resources.dir";
 const std::string Config::WENBOX_ENABLE_KEY = "wenbox.enable";
 const std::string Config::IEACTIVEX_ENABLE_KEY = "ieactivex.enable";
 
-const std::string Config::GUI_BACKGROUND_KEY = "cmdline.gui.background";
-const std::string Config::PLACECALL_FROMCMDLINE_KEY = "cmdline.model.placecall";
+const std::string Config::CMDLINE_BACKGROUND_MODE_ENABLE_KEY = "cmdline.background.mode.enable";
+const std::string Config::CMDLINE_PLACECALL_KEY = "cmdline.placecall";
+
+const std::string Config::CMDSERVER_AUTHORIZED_KEY = "cmdserver.authorized";
 
 Config::Config(const std::string & name)
 	: AutomaticSettings() {
@@ -212,7 +214,7 @@ Config::Config(const std::string & name)
 	_keyDefaultValueMap[CALL_FORWARD_PHONENUMBER2_KEY] = empty;
 	_keyDefaultValueMap[CALL_FORWARD_PHONENUMBER3_KEY] = empty;
 	_keyDefaultValueMap[CALL_FORWARD_TOMOBILE_KEY] = false;
-	_keyDefaultValueMap[ACTIVE_VOICE_MAIL_KEY] = false;
+	_keyDefaultValueMap[VOICE_MAIL_ACTIVE_KEY] = false;
 
 	_keyDefaultValueMap[GENERAL_AUTOSTART_KEY] = true;
 	_keyDefaultValueMap[GENERAL_CLICK_START_FREECALL_KEY] = true;
@@ -254,8 +256,10 @@ Config::Config(const std::string & name)
 	_keyDefaultValueMap[WENBOX_ENABLE_KEY] = true;
 	_keyDefaultValueMap[IEACTIVEX_ENABLE_KEY] = true;
 
-	_keyDefaultValueMap[GUI_BACKGROUND_KEY] = false;
-	_keyDefaultValueMap[PLACECALL_FROMCMDLINE_KEY] = empty;
+	_keyDefaultValueMap[CMDLINE_BACKGROUND_MODE_ENABLE_KEY] = false;
+	_keyDefaultValueMap[CMDLINE_PLACECALL_KEY] = empty;
+
+	_keyDefaultValueMap[CMDSERVER_AUTHORIZED_KEY] = empty;
 }
 
 Config::~Config() {
@@ -501,8 +505,8 @@ bool Config::getCallForwardToMobile() const {
 	return getBooleanKeyValue(CALL_FORWARD_TOMOBILE_KEY);
 }
 
-bool Config::hasVoiceMail() const {
-	return getBooleanKeyValue(ACTIVE_VOICE_MAIL_KEY);
+bool Config::getVoiceMailActive() const {
+	return getBooleanKeyValue(VOICE_MAIL_ACTIVE_KEY);
 }
 
 bool Config::getGeneralAutoStart() const {
@@ -624,14 +628,18 @@ bool Config::getWenboxEnable() const {
 	return getBooleanKeyValue(WENBOX_ENABLE_KEY);
 }
 
-bool Config::getIEActiveX() const {
+bool Config::getIEActiveXEnable() const {
 	return getBooleanKeyValue(IEACTIVEX_ENABLE_KEY);
 }
 
-bool Config::getGuiBackground() const {
-	return getBooleanKeyValue(GUI_BACKGROUND_KEY);
+std::string Config::getCmdLinePlaceCall() const {
+	return getStringKeyValue(CMDLINE_PLACECALL_KEY);
 }
 
-std::string Config::getCmdLinePlaceCall() const {
-	return getStringKeyValue(PLACECALL_FROMCMDLINE_KEY);
+bool Config::getCmdLineBackgroundModeEnable() const {
+	return getBooleanKeyValue(CMDLINE_BACKGROUND_MODE_ENABLE_KEY);
+}
+
+std::string Config::getCmdServerAuthorized() const {
+	return getStringKeyValue(CMDSERVER_AUTHORIZED_KEY);
 }

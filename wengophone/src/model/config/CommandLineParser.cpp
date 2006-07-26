@@ -34,24 +34,24 @@ CommandLineParser::CommandLineParser(int argc, char * argv[]) {
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
-	//set executable name
+	//Set executable name
 	std::string executableName;
 	if (argv[0]) {
-		char *p = strrchr(argv[0], '/');
+		char * p = strrchr(argv[0], '/');
 		executableName = std::string(p ? p + 1 : argv[0]);
 		config.set(Config::EXECUTABLE_NAME_KEY, executableName);
 	}
 
-	//reset all key to default
-	config.resetToDefaultValue(Config::GUI_BACKGROUND_KEY);
-	config.resetToDefaultValue(Config::PLACECALL_FROMCMDLINE_KEY);
+	//Reset all key to default
+	config.resetToDefaultValue(Config::CMDLINE_BACKGROUND_MODE_ENABLE_KEY);
+	config.resetToDefaultValue(Config::CMDLINE_PLACECALL_KEY);
 
 	try {
 		options_description desc("Allowed options");
 		desc.add_options()
-		// First parameter describes option name/short name
-		// The second is parameter to option
-		// The third is description
+		//First parameter describes option name/short name
+		//The second is parameter to option
+		//The third is description
 		("help,h", "print usage message")
 		("background,b", "run in background mode")
 		("command,c", value<string>(), "pass a command to the wengophone")
@@ -67,15 +67,19 @@ CommandLineParser::CommandLineParser(int argc, char * argv[]) {
 
 		if (vm.count("background")) {
 			LOG_DEBUG("run in background mode");
-			config.set(Config::GUI_BACKGROUND_KEY, true);
+			config.set(Config::CMDLINE_BACKGROUND_MODE_ENABLE_KEY, true);
 		}
 
 		if (vm.count("command")) {
 			static String commandCall = "call/";
 			String command = String(vm["command"].as<string>());
+
+			//FIXME is it right to do that here?
+			command.remove("wengo://");
+
 			LOG_DEBUG("command:" + command);
-			if(command.beginsWith(commandCall)) {
-				config.set(Config::PLACECALL_FROMCMDLINE_KEY, command.split("/")[1]);
+			if (command.beginsWith(commandCall)) {
+				config.set(Config::CMDLINE_PLACECALL_KEY, command.split("/")[1]);
 			}
 		}
 	}

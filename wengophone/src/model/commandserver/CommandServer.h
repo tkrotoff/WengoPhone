@@ -82,13 +82,13 @@ private:
 
 	static CommandServer * _commandServerInstance;
 
-	static int _port;
+	static const int _port = 25902;
 
-	static std::string _queryStatus;
+	static const std::string _queryStatus;
 
-	static std::string _queryCall;
+	static const std::string _queryCall;
 
-	static std::string _querySms;
+	static const std::string _querySms;
 
 	WengoPhone & _wengoPhone;
 };

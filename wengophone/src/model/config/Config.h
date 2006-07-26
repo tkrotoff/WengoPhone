@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef CONFIG_H
-#define CONFIG_H
+#ifndef OWCONFIG_H
+#define OWCONFIG_H
 
 #include <settings/AutomaticSettings.h>
 
@@ -217,7 +217,10 @@ public:
 	static const std::string WENGO_SOFTUPDATE_PATH_KEY;
 	std::string getWengoSoftUpdatePath() const;
 
-	/** Wengo cirpack web service path on the server. */
+	/**
+	 * Wengo cirpack web service path on the server.
+	 * FIXME no cirpack information please!
+	 */
 	static const std::string WENGO_CIRPACK_PATH_KEY;
 	std::string getWengoCirpackPath() const;
 
@@ -284,8 +287,8 @@ public:
 	bool getCallForwardToMobile() const;
 
 	/** Active voice mail. */
-	static const std::string ACTIVE_VOICE_MAIL_KEY;
-	bool hasVoiceMail() const;
+	static const std::string VOICE_MAIL_ACTIVE_KEY;
+	bool getVoiceMailActive() const;
 
 	/** @} */
 
@@ -445,25 +448,31 @@ public:
 
 	/** Enables Internet Explorer ActiveX support (relevant only under Windows). */
 	static const std::string IEACTIVEX_ENABLE_KEY;
-	bool getIEActiveX() const;
+	bool getIEActiveXEnable() const;
+
+	/**
+	 * Returns the authorized server that can pass commands to the softphone.
+	 * @see CommandServer
+	 */
+	static const std::string CMDSERVER_AUTHORIZED_KEY;
+	std::string getCmdServerAuthorized() const;
 
 	/** @} */
 
 	/**
-	 * @name command line options
+	 * @name Command Line Options
 	 * @{
 	 */
 
 	/** Run the GUI in background mode. */
-	static const std::string GUI_BACKGROUND_KEY;
-	bool getGuiBackground() const;
+	static const std::string CMDLINE_BACKGROUND_MODE_ENABLE_KEY;
+	bool getCmdLineBackgroundModeEnable() const;
 
-	/** place a call. */
-	static const std::string PLACECALL_FROMCMDLINE_KEY;
+	/** Place a call. */
+	static const std::string CMDLINE_PLACECALL_KEY;
 	std::string getCmdLinePlaceCall() const;
 
 	/** @} */
-
 
 private:
 
@@ -471,4 +480,4 @@ private:
 	std::string _name;
 };
 
-#endif	//CONFIG_H
+#endif	//OWCONFIG_H

@@ -56,26 +56,26 @@ WengoPhone::WengoPhone() {
 	HttpRequest::setUserAgent(ss.str());
 	////
 
-	// Creating instance of NetworkObserver
+	//Creating instance of NetworkObserver
 	NetworkObserver::getInstance();
 	////
 
-	// Creating instance of NetworkProxyDiscovery
+	//Creating instance of NetworkProxyDiscovery
 	NetworkProxyDiscovery::getInstance();
 	////
-	
+
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
-	// Binding events
+	//Binding events
 	config.valueChangedEvent +=
 		boost::bind(&WengoPhone::valueChangedEventHandler, this, _1, _2);
 	////
 
-	// Creating the UserProfileHandler instance
+	//Creating the UserProfileHandler instance
 	_userProfileHandler = new UserProfileHandler(*this);
 	////
 
-	// Creating instance of CommandServer
+	//Creating instance of CommandServer
 	CommandServer::getInstance(*this);
 	////
 }
@@ -86,11 +86,11 @@ void WengoPhone::shutdownAfterTimeout() {
 
 WengoPhone::~WengoPhone() {
 	while (_running) {
-		// Waiting for end of model thread
+		//Waiting for end of model thread
 		Thread::msleep(100);
 	}
 
-	// Deleting created objects
+	//Deleting created objects
 	if (_userProfileHandler) {
 		delete _userProfileHandler;
 	}
@@ -100,7 +100,7 @@ WengoPhone::~WengoPhone() {
 		delete _startupSettingListener;
 	}
 	////
-		
+
 	saveConfiguration();
 
 	/**

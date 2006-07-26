@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,10 +34,10 @@ void PhoneLineStateOk::execute(IPhoneLine & phoneLine) {
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	const std::string callFromCommandLine = config.getCmdLinePlaceCall();
-	if(!callFromCommandLine.empty()) {
+	if (!callFromCommandLine.empty()) {
 		LOG_DEBUG("call from command line: " + callFromCommandLine);
 		//Resets the value to its default to do this call only for the first connection
-		config.resetToDefaultValue(Config::PLACECALL_FROMCMDLINE_KEY);
+		config.resetToDefaultValue(Config::CMDLINE_PLACECALL_KEY);
 		////
 		phoneLine.makeCall(callFromCommandLine);
 	}

@@ -23,17 +23,15 @@
 #include <model/phoneline/IPhoneLine.h>
 #include <model/profile/UserProfileHandler.h>
 #include <model/profile/UserProfile.h>
+#include <model/config/ConfigManager.h>
+#include <model/config/Config.h>
 
 #include <util/Logger.h>
-#include <util/String.h>
-
-#define ALLOWFROM ""
 
 CommandServer * CommandServer::_commandServerInstance = NULL;
-int CommandServer::_port = 25902;
-std::string CommandServer::_queryStatus = "1|s";
-std::string CommandServer::_queryCall = "1|o|call/";
-std::string CommandServer::_querySms = "1|o|sms/";
+const std::string CommandServer::_queryStatus = "1|s";
+const std::string CommandServer::_queryCall = "1|o|call/";
+const std::string CommandServer::_querySms = "1|o|sms/";
 
 CommandServer::CommandServer(WengoPhone & wengoPhone)
 	: _wengoPhone(wengoPhone) {
@@ -71,11 +69,11 @@ void CommandServer::connectionEventHandler(LocalServer * sender, const std::stri
 }
 
 void CommandServer::incomingRequestEventHandler(LocalServer * sender, const std::string & connectionId, const std::string & data) {
-	LOG_DEBUG("CommandServer: incoming request, connectionId: "  + connectionId + " data: " + data);
+	LOG_DEBUG("CommandServer: incoming request, connectionId: " + connectionId + " data: " + data);
 	String query = String(data);
 	if (query == _queryStatus) {
 
-		// Find the phoneline status and answer.
+		//Find the phoneline status and answer
 		UserProfile * userprofile = _wengoPhone.getUserProfileHandler().getCurrentUserProfile();
 		if (userprofile) {
 			IPhoneLine * phoneLine = userprofile->getActivePhoneLine();
@@ -88,10 +86,10 @@ void CommandServer::incomingRequestEventHandler(LocalServer * sender, const std:
 
 	} else if (query.contains(_queryCall)) {
 
-		// Extract the number from query & place the call
+		//Extract the number from query & place the call
 		StringList l = query.split("/");
 		if (l.size() == 2) {
-			LOG_DEBUG("Call peer: " + l[1]);
+			LOG_DEBUG("call peer: " + l[1]);
 			UserProfile * userprofile = _wengoPhone.getUserProfileHandler().getCurrentUserProfile();
 			if (userprofile) {
 				IPhoneLine * phoneLine = userprofile->getActivePhoneLine();
@@ -104,16 +102,18 @@ void CommandServer::incomingRequestEventHandler(LocalServer * sender, const std:
 		_localServer->writeToClient(connectionId, data + "|0");
 
 	} else if (query.contains(_querySms)) {
-		LOG_WARN("Not yet implemented");
+		LOG_WARN("not yet implemented");
 	} else {
 
-		// "emulate" a http server. Needed for Flash sockets.
+		Config & config = ConfigManager::getInstance().getCurrentConfig();
+
+		//"emulate" a http server. Needed for Flash sockets
 		_localServer->writeToClient(connectionId,
 			buildHttpForFlash(
 				"<?xml version=\"1.0\"?>\n"
 				"<!DOCTYPE cross-domain-policy SYSTEM \"http://www.macromedia.com/xml/dtds/cross-domain-policy.dtd\">\n"
 				"<cross-domain-policy>\n"
-				"<allow-access-from domain=\"" + std::string(ALLOWFROM) + "\" to-ports=\"*\" />\n"
+				"<allow-access-from domain=\"" + config.getCmdServerAuthorized() + "\" to-ports=\"*\" />\n"
 				"<allow-access-from domain=\"localhost\" to-ports=\"*\" />\n"
 				"</cross-domain-policy>"
 			)
@@ -123,9 +123,9 @@ void CommandServer::incomingRequestEventHandler(LocalServer * sender, const std:
 
 void CommandServer::writeStatusEventHandler(LocalServer * sender, const std::string & writeId, LocalServer::Error error) {
 	if (error == LocalServer::NoError) {
-		LOG_DEBUG("CommandServer: writeId: "  + writeId + ", write success");
+		LOG_DEBUG("CommandServer: writeId: " + writeId + ", write success");
 	} else {
-		LOG_WARN("CommandServer: writeId: "  + writeId + ", write failed");
+		LOG_WARN("CommandServer: writeId: " + writeId + ", write failed");
 	}
 }
 
@@ -140,7 +140,7 @@ std::string CommandServer::buildHttpForFlash(const std::string & xml) {
 		"Connection: close\n"
 		"Content-Type: text/xml";
 
-	// add the xml Content-Length and the header separator.
+	//Add the xml Content-Length and the header separator
 	httpHeader += "Content-Length: " + String::fromNumber(xml.size()) + "\n\n";
 
 	return httpHeader + xml;

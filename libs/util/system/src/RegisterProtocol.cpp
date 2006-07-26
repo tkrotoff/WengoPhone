@@ -19,6 +19,7 @@
 
 #include <system/RegisterProtocol.h>
 
+#include <util/String.h>
 #include <cutil/global.h>
 
 #ifdef OS_WINDOWS
@@ -32,7 +33,7 @@ RegisterProtocol::RegisterProtocol(const std::string & protocol)
 bool RegisterProtocol::bind(const std::string & command, const std::string & icon, const std::string & url) {
 #ifdef OS_WINDOWS
 	return (
-		WindowsRegistry::createKey(HKEY_CLASSES_ROOT, "", _protocol) &&
+		WindowsRegistry::createKey(HKEY_CLASSES_ROOT, String::null, _protocol) &&
 		WindowsRegistry::createKey(HKEY_CLASSES_ROOT, _protocol, "DefaultIcon", icon) &&
 		WindowsRegistry::createEntry(HKEY_CLASSES_ROOT, _protocol , "URL Protocol", url) &&
 		WindowsRegistry::createKey(HKEY_CLASSES_ROOT, _protocol, "shell\\open\\command", command)
@@ -57,7 +58,7 @@ bool RegisterProtocol::unbind() {
 		WindowsRegistry::deleteKey(HKEY_CLASSES_ROOT, _protocol, "shell\\open\\command") &&
 		WindowsRegistry::deleteKey(HKEY_CLASSES_ROOT, _protocol, "shell\\open") &&
 		WindowsRegistry::deleteKey(HKEY_CLASSES_ROOT, _protocol, "shell") &&
-		WindowsRegistry::deleteKey(HKEY_CLASSES_ROOT, "", _protocol)
+		WindowsRegistry::deleteKey(HKEY_CLASSES_ROOT, String::null, _protocol)
 	);
 #else
 	return false;

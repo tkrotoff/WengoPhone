@@ -54,21 +54,22 @@ QString QtCallForwardSettings::getName() const {
 }
 
 void QtCallForwardSettings::saveConfig() {
-	bool mustCallTheWs = false;
-	std::string mode = "";
-	std::string number1 = _ui->phoneNumber1Edit->text().toStdString();
-	std::string number2 = _ui->phoneNumber2Edit->text().toStdString();
-	std::string number3 = _ui->phoneNumber3Edit->text().toStdString();
 
-	if(_ui->forwardToVoiceMailRadioButton->isChecked()) {
+	std::string mode;
+	if (_ui->forwardToVoiceMailRadioButton->isChecked()) {
 		mode = "voicemail";
-	} else if( _ui->disableRadioButton->isChecked() ) {
+	} else if (_ui->disableRadioButton->isChecked()) {
 		mode = "disable";
-	} else if( _ui->forwardToNumberRadioButton->isChecked() ) {
+	} else if (_ui->forwardToNumberRadioButton->isChecked()) {
 		mode = "number";
 	}
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
+
+	std::string number1 = _ui->phoneNumber1Edit->text().toStdString();
+	std::string number2 = _ui->phoneNumber2Edit->text().toStdString();
+	std::string number3 = _ui->phoneNumber3Edit->text().toStdString();
+	bool mustCallTheWs = false;
 
 	//if the mode has changed
 	if (config.getCallForwardMode() != mode) {
@@ -77,8 +78,8 @@ void QtCallForwardSettings::saveConfig() {
 	} else {
 		//if numbers have changed
 		if ((mode == "number") &&
-			(config.getCallForwardPhoneNumber1() != number1 ) ||
-			(config.getCallForwardPhoneNumber2() != number2 ) ||
+			(config.getCallForwardPhoneNumber1() != number1) ||
+			(config.getCallForwardPhoneNumber2() != number2) ||
 			(config.getCallForwardPhoneNumber3() != number3)) {
 			config.set(Config::CALL_FORWARD_PHONENUMBER1_KEY, number1);
 			config.set(Config::CALL_FORWARD_PHONENUMBER2_KEY, number2);
@@ -87,7 +88,7 @@ void QtCallForwardSettings::saveConfig() {
 		}
 	}
 
-	if (mustCallTheWs) {	
+	if (mustCallTheWs) {
 		if (_cWengoPhone.getCUserProfileHandler().getCUserProfile()) {
 			if (_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCWsCallForward()) {
 				if (mode == "voicemail") {
@@ -109,21 +110,21 @@ void QtCallForwardSettings::readConfig() {
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
-	if( config.getCallForwardMode() == "voicemail") {
+	if (config.getCallForwardMode() == "voicemail") {
 		_ui->forwardToVoiceMailRadioButton->setChecked(true);
 
-	}  else if( config.getCallForwardMode() == "number" ) {
+	} else if (config.getCallForwardMode() == "number") {
 		_ui->forwardToNumberRadioButton->setChecked(true);
 
-	} else if( config.getCallForwardMode() == "disable" ) {
+	} else if (config.getCallForwardMode() == "disable") {
 		_ui->disableRadioButton->setChecked(true);
 
-	} else if( config.getCallForwardMode() == "unauthorized") {
+	} else if (config.getCallForwardMode() == "unauthorized") {
 		_ui->groupBoxSettings->setEnabled(false);
 		_ui->groupBoxCellPhone->setEnabled(false);
 	}
 
-	_ui->forwardToVoiceMailRadioButton->setEnabled(config.hasVoiceMail());
+	_ui->forwardToVoiceMailRadioButton->setEnabled(config.getVoiceMailActive());
 	_ui->phoneNumber1Edit->setText(QString::fromStdString(config.getCallForwardPhoneNumber1()));
 	_ui->phoneNumber2Edit->setText(QString::fromStdString(config.getCallForwardPhoneNumber2()));
 	_ui->phoneNumber3Edit->setText(QString::fromStdString(config.getCallForwardPhoneNumber3()));

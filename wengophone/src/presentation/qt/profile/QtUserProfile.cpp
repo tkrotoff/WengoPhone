@@ -89,8 +89,7 @@ void QtUserProfile::authorizationRequestEventHandler(PresenceHandler & sender,
 	authorizationRequestEventHandlerSignal(&sender, imContact, QString::fromStdString(message));
 }
 
-void QtUserProfile::loginStateChangedEventHandlerSlot(SipAccount * sender,
-	int iState) {
+void QtUserProfile::loginStateChangedEventHandlerSlot(SipAccount * sender, int iState) {
 
 	EnumSipLoginState::SipLoginState state = (EnumSipLoginState::SipLoginState) iState;
 
@@ -109,7 +108,7 @@ void QtUserProfile::loginStateChangedEventHandlerSlot(SipAccount * sender,
 
 	case EnumSipLoginState::SipLoginStateDisconnected:
 #ifdef OS_WINDOWS
-		if (config.getIEActiveX() && (sender->getType() == SipAccount::SipAccountTypeWengo)) {
+		if (config.getIEActiveXEnable() && (sender->getType() == SipAccount::SipAccountTypeWengo)) {
 			_qtWengoPhone.getQtBrowser()->setUrl(qApp->applicationDirPath().toStdString() +
 				"/" + QtWengoPhone::LOCAL_WEB_DIR + "/loading.html");
 		}
@@ -176,7 +175,7 @@ void QtUserProfile::setBrowserUrlToAccount() {
 #ifdef OS_WINDOWS
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
-	if (config.getIEActiveX() && _cUserProfile.getUserProfile().getActivePhoneLine()) {
+	if (config.getIEActiveXEnable() && _cUserProfile.getUserProfile().getActivePhoneLine()) {
 		WengoAccount wengoAccount = *_cUserProfile.getUserProfile().getWengoAccount();
 		std::string data = "?login=" + wengoAccount.getWengoLogin() +
 			"&password=" + wengoAccount.getWengoPassword() +
