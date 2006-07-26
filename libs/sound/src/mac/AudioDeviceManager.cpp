@@ -24,7 +24,11 @@
 
 #include <util/Logger.h>
 
+Mutex AudioDeviceManager::_mutex;
+
 std::list<AudioDevice> AudioDeviceManager::getInputDeviceList() {
+	Mutex::ScopedLock scopedLock(_mutex);
+
 	std::list<AudioDevice> result;
 
 	std::vector<AudioDeviceID> devList = CoreAudioUtilities::audioDeviceList(true);
@@ -51,6 +55,8 @@ std::list<AudioDevice> AudioDeviceManager::getInputDeviceList() {
 }
 
 std::list<AudioDevice> AudioDeviceManager::getOutputDeviceList() {
+	Mutex::ScopedLock scopedLock(_mutex);
+
 	std::list<AudioDevice> result;
 
 	std::vector<AudioDeviceID> devList = CoreAudioUtilities::audioDeviceList(false);
@@ -77,6 +83,8 @@ std::list<AudioDevice> AudioDeviceManager::getOutputDeviceList() {
 }
 
 AudioDevice AudioDeviceManager::getDefaultOutputDevice() {
+	Mutex::ScopedLock scopedLock(_mutex);
+
 	OSStatus status = noErr;
 	AudioDevice result;
 
@@ -103,6 +111,8 @@ AudioDevice AudioDeviceManager::getDefaultOutputDevice() {
 }
 
 bool AudioDeviceManager::setDefaultOutputDevice(const AudioDevice & audioDevice) {
+	Mutex::ScopedLock scopedLock(_mutex);
+
 	OSStatus status = noErr;
 
 	// Setting the device
@@ -129,6 +139,8 @@ bool AudioDeviceManager::setDefaultOutputDevice(const AudioDevice & audioDevice)
 }
 
 AudioDevice AudioDeviceManager::getDefaultInputDevice() {
+	Mutex::ScopedLock scopedLock(_mutex);
+
 	OSStatus status = noErr;
 	AudioDevice result;
 
@@ -155,6 +167,8 @@ AudioDevice AudioDeviceManager::getDefaultInputDevice() {
 }
 
 bool AudioDeviceManager::setDefaultInputDevice(const AudioDevice & audioDevice) {
+	Mutex::ScopedLock scopedLock(_mutex);
+
 	OSStatus status = noErr;
 
 	// Setting the device

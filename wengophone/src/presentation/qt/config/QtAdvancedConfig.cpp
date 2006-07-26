@@ -119,7 +119,7 @@ void QtAdvancedConfig::setItem(boost::any value, int row, int column) {
 void QtAdvancedConfig::saveConfig() {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
-	int tableSize = _ui->tableWidget->rowCount();
+	const int tableSize = _ui->tableWidget->rowCount();
 	for (int row = 0; row < tableSize; row++) {
 
 		QTableWidgetItem * itemKey = _ui->tableWidget->item(row, KEY_NAME_COLUMN);

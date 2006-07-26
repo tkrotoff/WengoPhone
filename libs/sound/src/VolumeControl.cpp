@@ -32,6 +32,8 @@
 #endif
 
 VolumeControl::VolumeControl(const AudioDevice & audioDevice) {
+	Mutex::ScopedLock scopedLock(_mutex);
+
 #if defined(OS_WINDOWS)
 	_iVolumeControlPrivate = new Win32VolumeControl(audioDevice);
 #elif defined(OS_MACOSX)
@@ -42,6 +44,8 @@ VolumeControl::VolumeControl(const AudioDevice & audioDevice) {
 }
 
 bool VolumeControl::setLevel(unsigned level) {
+	Mutex::ScopedLock scopedLock(_mutex);
+
 	if (_iVolumeControlPrivate) {
 		return _iVolumeControlPrivate->setLevel(level);
 	} else {
@@ -50,6 +54,8 @@ bool VolumeControl::setLevel(unsigned level) {
 }
 
 int VolumeControl::getLevel() {
+	Mutex::ScopedLock scopedLock(_mutex);
+
 	if (_iVolumeControlPrivate) {
 		return _iVolumeControlPrivate->getLevel();
 	} else {
@@ -58,6 +64,8 @@ int VolumeControl::getLevel() {
 }
 
 bool VolumeControl::setMute(bool mute) {
+	Mutex::ScopedLock scopedLock(_mutex);
+
 	if (_iVolumeControlPrivate) {
 		return _iVolumeControlPrivate->setMute(mute);
 	} else {
@@ -66,6 +74,8 @@ bool VolumeControl::setMute(bool mute) {
 }
 
 bool VolumeControl::isMuted() {
+	Mutex::ScopedLock scopedLock(_mutex);
+
 	if (_iVolumeControlPrivate) {
 		return _iVolumeControlPrivate->isMuted();
 	} else {
@@ -74,6 +84,8 @@ bool VolumeControl::isMuted() {
 }
 
 bool VolumeControl::isSettable() const {
+	Mutex::ScopedLock scopedLock(_mutex);
+
 	if (_iVolumeControlPrivate) {
 		return _iVolumeControlPrivate->isSettable();
 	} else {

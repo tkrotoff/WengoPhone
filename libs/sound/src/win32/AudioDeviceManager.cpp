@@ -27,6 +27,8 @@
 
 #include <windows.h>
 
+Mutex AudioDeviceManager::_mutex;
+
 /**
  * Registry path for the default audio device.
  */
@@ -178,6 +180,8 @@ static std::string getDefaultDeviceFromRegistry(const std::string & registryKeyD
 }
 
 AudioDevice AudioDeviceManager::getDefaultOutputDevice() {
+	Mutex::ScopedLock scopedLock(_mutex);
+
 	std::string defaultDeviceName(getDefaultDeviceFromRegistry(PLAYBACK_DEVICE_REGISTRY_KEY));
 	if (defaultDeviceName.empty()) {
 		WAVEOUTCAPSA outcaps;
@@ -198,6 +202,8 @@ AudioDevice AudioDeviceManager::getDefaultOutputDevice() {
 }
 
 AudioDevice AudioDeviceManager::getDefaultInputDevice() {
+	Mutex::ScopedLock scopedLock(_mutex);
+
 	std::string defaultDeviceName(getDefaultDeviceFromRegistry(RECORD_DEVICE_REGISTRY_KEY));
 	if (defaultDeviceName.empty()) {
 		WAVEINCAPSA incaps;
@@ -218,10 +224,14 @@ AudioDevice AudioDeviceManager::getDefaultInputDevice() {
 }
 
 bool AudioDeviceManager::setDefaultOutputDevice(const AudioDevice & audioDevice) {
+	Mutex::ScopedLock scopedLock(_mutex);
+
 	return setDefaultDeviceToRegistry(audioDevice.getName(), PLAYBACK_DEVICE_REGISTRY_KEY);
 }
 
 bool AudioDeviceManager::setDefaultInputDevice(const AudioDevice & audioDevice) {
+	Mutex::ScopedLock scopedLock(_mutex);
+
 	return setDefaultDeviceToRegistry(audioDevice.getName(), RECORD_DEVICE_REGISTRY_KEY);
 }
 
@@ -268,6 +278,8 @@ StringList getMixerDeviceList(DWORD targetType) {
 }
 
 std::list<AudioDevice> AudioDeviceManager::getOutputDeviceList() {
+	Mutex::ScopedLock scopedLock(_mutex);
+
 	std::list<AudioDevice> listDevices;
 	StringList devices = getMixerDeviceList(MIXERLINE_TARGETTYPE_WAVEOUT);
 	for (unsigned i = 0; i < devices.size(); i++) {
@@ -282,6 +294,8 @@ std::list<AudioDevice> AudioDeviceManager::getOutputDeviceList() {
 }
 
 std::list<AudioDevice> AudioDeviceManager::getInputDeviceList() {
+	Mutex::ScopedLock scopedLock(_mutex);
+
 	std::list<AudioDevice> listDevices;
 	StringList devices = getMixerDeviceList(MIXERLINE_TARGETTYPE_WAVEIN);
 	for (unsigned i = 0; i < devices.size(); i++) {

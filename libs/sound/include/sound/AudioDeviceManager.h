@@ -23,6 +23,7 @@
 #include <sound/AudioDevice.h>
 
 #include <util/NonCopyable.h>
+#include <thread/Mutex.h>
 
 #include <list>
 
@@ -86,6 +87,10 @@ public:
 	 * false if an error occured
 	 */
 	static bool setDefaultInputDevice(const AudioDevice & audioDevice);
+
+private:
+
+	static Mutex _mutex;
 };
 
 #endif	//OWAUDIODEVICEMANAGER_H
