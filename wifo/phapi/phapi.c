@@ -887,7 +887,7 @@ phLinePlaceCall_withCa(int vlid, const char *uri, void *userdata, int rcid, int 
 				  "");
   if (i!=0)
       return -1;
-
+  
   if (_is_video_enabled(streams)) 
       _get_local_video_sdp_port(local_video_port);
 
@@ -909,14 +909,16 @@ phLinePlaceCall_withCa(int vlid, const char *uri, void *userdata, int rcid, int 
 	}
 	
 	eXosip_lock();
+	DBG_SIP_NEGO("STUN ports (a.local=%s, a.public=%s) (v.local=%s, v.public=%s)\n",local_voice_port,public_voice_port,local_video_port,public_video_port,0,0,0);
 	i = eXosip_initiate_call(invite, userdata, NULL,  local_voice_port,  optional(local_video_port), optional(public_voice_port), 
 				 optional(public_video_port)); 
     }
   else
     {
 #endif
-      eXosip_lock();
-      i = eXosip_initiate_call(invite, userdata, NULL, local_voice_port, optional(local_video_port),  0, 0);
+	eXosip_lock();
+	DBG_SIP_NEGO("NO STUN ports (a.local=%s, a.public=%s) (v.local=%s, v.public=%s)\n",local_voice_port,0,local_video_port,0,0,0,0);
+	i = eXosip_initiate_call(invite, userdata, NULL, local_voice_port, optional(local_video_port),  0, 0);
 
 #ifdef STUN_ENABLE
     }
@@ -1150,14 +1152,20 @@ phAcceptCall3(int cid, void *userData, int streams)
 {
     int i;
     phcall_t *ca = ph_locate_call_by_cid(cid);
+    phCallStateInfo_t info;
+    char *remoteUri = 0;
     char  local_video_port[16];
     char  local_voice_port[16];
 #ifdef STUN_ENABLE
     char  public_voice_port[16];
     char  public_video_port[16];
+
+	public_voice_port[0] = 0;
+	public_video_port[0] = 0;
 #endif
-    phCallStateInfo_t info;
-    char *remoteUri = 0;
+
+   local_video_port[0] = 0;
+   local_voice_port[0] = 0;
 
 
     DBG_SIP_NEGO("SIP NEGO: phAcceptCall3\n", 0, 0, 0);
@@ -1187,7 +1195,8 @@ phAcceptCall3(int cid, void *userData, int streams)
         }
 
         eXosip_lock();
-        i = eXosip_answer_call(ca->did, 200, local_voice_port, ph_get_call_contact(ca), local_video_port , public_voice_port , public_video_port);
+		DBG_SIP_NEGO("STUN ports (a.local=%s, a.public=%s) (v.local=%s, v.public=%s)\n",local_voice_port,public_voice_port,local_video_port,public_video_port,0,0,0);
+        i = eXosip_answer_call(ca->did, 200, local_voice_port, ph_get_call_contact(ca), optional(local_video_port) , optional(public_voice_port) , optional(public_video_port));
     }
     else 
     { // start ifdef'ed else clause
@@ -1195,7 +1204,8 @@ phAcceptCall3(int cid, void *userData, int streams)
     
         
     eXosip_lock();
-    i = eXosip_answer_call(ca->did, 200, local_voice_port, ph_get_call_contact(ca), local_video_port, local_voice_port, local_video_port);
+	DBG_SIP_NEGO("NO STUN ports (a.local=%s, a.public=%s) (v.local=%s, v.public=%s)\n",local_voice_port,0,local_video_port,0,0,0,0);
+    i = eXosip_answer_call(ca->did, 200, local_voice_port, ph_get_call_contact(ca), optional(local_video_port), 0, 0);
 
 
 #ifdef STUN_ENABLE
@@ -3266,7 +3276,7 @@ ph_call_media_start(phcall_t *ca, eXosip_event_t *je, int resumeflag)
 	// we need to understand what is required from the function call
 	// by default, nothing to do
 	s->newstreams = 0;
-    
+	
 	if ( // user accepts video and network accepts video
 		(_is_video_enabled(ca->user_mflags))
 		&& ca->video_payload

@@ -795,6 +795,7 @@ sdp_confirm_media (osip_negotiation_t * config,
 {
   char *payload;
   char *tmp, *tmp2, *tmp3, *tmp4;
+  char* local_video_port;
   int ret;
   int i;
   int k;
@@ -811,11 +812,11 @@ sdp_confirm_media (osip_negotiation_t * config,
 
       if (tmp == NULL)
 	return -1;
-      sdp_message_m_media_add (*dest, osip_strdup (tmp), osip_strdup ("0"),
-			       NULL, osip_strdup (tmp4));
       k = 0;
       if (0 == strncmp (tmp, "audio", 5))
 	{
+      sdp_message_m_media_add (*dest, osip_strdup (tmp), osip_strdup ("0"),
+			       NULL, osip_strdup (tmp4));
 	  do
 	    {
 	      payload = sdp_message_m_payload_get (remote, i, k);
@@ -890,6 +891,14 @@ sdp_confirm_media (osip_negotiation_t * config,
 	}
       else if (0 == strncmp (tmp, "video", 5))
 	{
+        /* JWA: added 4 lines + if/else to reject video when it is not accepted locally */
+        local_video_port = config->fcn_get_video_port (context, i);
+        if (local_video_port[0]=='\0')
+        { free(local_video_port);
+        }else{
+      sdp_message_m_media_add (*dest, osip_strdup (tmp), osip_strdup ("0"),
+			       NULL, osip_strdup (tmp4));
+
 	  do
 	    {
 	      payload = sdp_message_m_payload_get (remote, i, k);
@@ -964,9 +973,13 @@ sdp_confirm_media (osip_negotiation_t * config,
 	  while (payload != NULL);
 	  if (NULL != sdp_message_m_payload_get (*dest, i, 0))
 	    video_qty = 1;
+  }
 	}
       else
 	{
+              sdp_message_m_media_add (*dest, osip_strdup (tmp), osip_strdup ("0"),
+			       NULL, osip_strdup (tmp4));
+
 	  do
 	    {
 	      payload = sdp_message_m_payload_get (remote, i, k);
@@ -1094,6 +1107,7 @@ osip_negotiation_ctx_execute_negotiation (osip_negotiation_t * config,
 		med->m_port = config->fcn_get_video_port (context, i);
 	      else
 		med->m_port = osip_strdup ("0");	/* should never happen */
+          
 	    }
 	  else
 	    {

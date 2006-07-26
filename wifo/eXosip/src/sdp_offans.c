@@ -94,8 +94,8 @@ char *eXosip_sdp_get_video_port(osip_negotiation_ctx_t *context, int pos_media)
   eXosip_call_t *jc = (eXosip_call_t*)osip_negotiation_ctx_get_mycontext(context);
   if (jc==NULL)
     return osip_strdup("10700");
-  else if (jc->c_sdp_port[0]=='\0')
-    return osip_strdup("10700");
+  else if (jc->c_video_port[0]=='\0')
+    return osip_strdup("");
   else return osip_strdup(jc->c_video_port);
 }
 

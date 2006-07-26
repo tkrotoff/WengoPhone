@@ -1610,8 +1610,27 @@ int eXosip_answer_call(int jid, int status, char *local_sdp_port, char *contact,
 	  osip_negotiation_ctx_set_mycontext(jc->c_ctx, jc);
 	}
 
-	snprintf(jc->c_sdp_port,9, "%s",  public_sdp_port ?  public_sdp_port : local_sdp_port);
-	snprintf(jc->c_video_port,9, "%s",  public_video_port ?  public_video_port : local_video_port);
+      if (emptystr(public_sdp_port))
+      {
+	    public_sdp_port = local_sdp_port;
+        
+      }
+    snprintf(jc->c_sdp_port,9, "%s",  public_sdp_port);
+      
+      if (emptystr(public_video_port))
+      {
+	  public_video_port = local_video_port;
+      }
+      
+      if (public_video_port==0 || public_video_port[0]=='\0') {
+          jc->c_video_port[0]='\0';
+      }
+      else
+          {
+        snprintf(jc->c_video_port,9, "%s",  public_video_port);
+      }
+
+	
 
     i = eXosip_answer_invite_2xx(jc, jd, status, local_sdp_port, contact, local_video_port, public_sdp_port, public_video_port);
     }
