@@ -24,7 +24,7 @@
 
 #include <cutil/global.h>
 
-#ifdef OS_WIN32 
+#ifdef OS_WIN32
 #include <winsock2.h>
 #include <windows.h>
 #ifndef CC_MINGW
@@ -90,7 +90,7 @@ inline int strncasecmp(const char *str1, const char *str2, int size) {return str
 #include <netinet/in.h>
 #include <errno.h>
 #include <net/if.h>
-#include <sys/ioctl.h> 
+#include <sys/ioctl.h>
 
 /*
 typedef int Socket;
@@ -136,12 +136,11 @@ char *_cleanStr(char *str)
 {
 	int i;
 
-	if (str && *str)
-	{
-		for (i = 0; str[i]; i++)
-		{
-			if (str[i] == '=')
+	if (str && *str) {
+		for (i = 0; str[i]; i++) {
+			if (str[i] == '=') {
 				return (&str[i+1]);
+			}
 		}
 
 		return str;
@@ -150,14 +149,13 @@ char *_cleanStr(char *str)
 	return 0;
 }
 
-int _parseProxyUrl(char *url) 
+int _parseProxyUrl(char *url)
 {
 	char * tmp;
 
 	for (tmp = _cleanStr(url), url = tmp; *tmp && *tmp != ':'; tmp++);
 
-	if (tmp && *tmp) 
-	{
+	if (tmp && *tmp) {
 		_LocalProxy.address = (char *) malloc(tmp - url + 1);
 		memcpy(_LocalProxy.address, url, tmp - url);
 		_LocalProxy.address[tmp - url] = 0;
@@ -171,7 +169,7 @@ int _parseProxyUrl(char *url)
 	return -1;
 }
 
-int _getProxyAddress() 
+int _getProxyAddress()
 {
 #if defined OS_WIN32 && defined CC_MSVC
 	long ret;
@@ -204,10 +202,8 @@ int _getProxyAddress()
 	ret = RegQueryValueEx(result, "ProxyEnable", 0, 0, (LPBYTE) & enable, & enablesize);
 	ret = RegQueryValueEx(result, "ProxyServer", 0, 0, (LPBYTE)url, & size);
 
-	if (ret == ERROR_SUCCESS && enable == 1) 
-	{
-		if (_parseProxyUrl(url) == 0) 
-		{
+	if (ret == ERROR_SUCCESS && enable == 1) {
+		if (_parseProxyUrl(url) == 0) {
 			RegCloseKey(result);
 			return 0;
 		}
@@ -218,54 +214,55 @@ int _getProxyAddress()
 	ret = RegQueryValueEx(result, "AutoConfigURL", 0, 0, (LPBYTE)url, & size);
 	RegCloseKey(result);
 
-	if (ret != ERROR_SUCCESS) 
-	{
-		if (DetectAutoProxyUrl(url, size, PROXY_AUTO_DETECT_TYPE_DHCP | PROXY_AUTO_DETECT_TYPE_DNS_A) == false)
+	if (ret != ERROR_SUCCESS) {
+		if (DetectAutoProxyUrl(url, size, PROXY_AUTO_DETECT_TYPE_DHCP | PROXY_AUTO_DETECT_TYPE_DNS_A) == false) {
 			return -1;
+		}
 	}
 
 	GetTempPathA(sizeof(TempPath), TempPath);
 	GetTempFileNameA(TempPath, NULL, 0, TempFile);
-	if (URLDownloadToFileA(NULL, url, TempFile, NULL, NULL) != S_OK)
+	if (URLDownloadToFileA(NULL, url, TempFile, NULL, NULL) != S_OK) {
 		return -1;
+	}
 
-	if (!(hModJS = LoadLibrary("jsproxy.dll")))
+	if (!(hModJS = LoadLibrary("jsproxy.dll"))) {
 		return -1;
+	}
 
 	if (!(pInternetInitializeAutoProxyDll = (pfnInternetInitializeAutoProxyDll)
 		GetProcAddress(hModJS, "InternetInitializeAutoProxyDll")) ||
 		!(pInternetDeInitializeAutoProxyDll = (pfnInternetDeInitializeAutoProxyDll)
 		GetProcAddress(hModJS, "InternetDeInitializeAutoProxyDll")) ||
 		!(pInternetGetProxyInfo = (pfnInternetGetProxyInfo)
-		GetProcAddress(hModJS, "InternetGetProxyInfo"))) 
-	{
+		GetProcAddress(hModJS, "InternetGetProxyInfo"))) {
 		return -1;
 	}
 
-	if (!(returnVal = pInternetInitializeAutoProxyDll(0, TempFile, NULL, 0, NULL)))
+	if (!(returnVal = pInternetInitializeAutoProxyDll(0, TempFile, NULL, 0, NULL))) {
 		return -1;
+	}
 
 	DeleteFileA(TempFile);
 
 	if (!pInternetGetProxyInfo((LPSTR)url1, sizeof(url1),
 								(LPSTR)host, sizeof(host),
-								&proxy, &dwProxyHostNameLength)) 
-	{
+								&proxy, &dwProxyHostNameLength)) {
 		return -1;
 	}
 
-	if (strncmp("PROXY ", proxy, 6) == 0)
-	{
-		if (_parseProxyUrl(proxy + 6) != 0)
+	if (strncmp("PROXY ", proxy, 6) == 0) {
+		if (_parseProxyUrl(proxy + 6) != 0) {
 			return -1;
-	} 
-	else
-	{
+		}
+	}
+	else {
 		return -1;
 	}
 
-	if (!pInternetDeInitializeAutoProxyDll(NULL, 0))
+	if (!pInternetDeInitializeAutoProxyDll(NULL, 0)) {
 		return -1;
+	}
 #endif
 
 	return 0;
@@ -277,14 +274,17 @@ EnumAuthType get_proxy_auth_type(const char *proxy_addr, int proxy_port, int tim
 
 	is_proxy_auth_needed(proxy_addr, proxy_port, timeout);
 
-	if ((_LocalProxy.proxy_auth_type & CURLAUTH_BASIC) == CURLAUTH_BASIC)
+	if ((_LocalProxy.proxy_auth_type & CURLAUTH_BASIC) == CURLAUTH_BASIC) {
 		authType = proxyAuthBasic;
-	else if ((_LocalProxy.proxy_auth_type & CURLAUTH_DIGEST) == CURLAUTH_DIGEST)
+	}
+	else if ((_LocalProxy.proxy_auth_type & CURLAUTH_DIGEST) == CURLAUTH_DIGEST) {
 		authType = proxyAuthDigest;
-	else if ((_LocalProxy.proxy_auth_type & CURLAUTH_NTLM) == CURLAUTH_NTLM)
+	}
+	else if ((_LocalProxy.proxy_auth_type & CURLAUTH_NTLM) == CURLAUTH_NTLM) {
 		authType = proxyAuthNTLM;
+	}
 
-	return authType; 
+	return authType;
 }
 
 void _get_proxy_auth_type2(const char *url, const char *proxy_addr, int proxy_port, int timeout)
@@ -303,14 +303,15 @@ void _get_proxy_auth_type2(const char *url, const char *proxy_addr, int proxy_po
 	snprintf(proxy_buf, sizeof(proxy_buf), "%s:%d", proxy_addr, proxy_port);
 	curl_easy_setopt(curl_tmp, CURLOPT_PROXY, proxy_buf);
 
-	if (timeout > 0)
+	if (timeout > 0) {
 		curl_easy_setopt(curl_tmp, CURLOPT_TIMEOUT, timeout);
+	}
 
 	curl_easy_setopt(curl_tmp, CURLOPT_HTTPPROXYTUNNEL, 1);
 	ret = curl_easy_perform(curl_tmp);
 
 	curl_easy_getinfo(curl_tmp, CURLINFO_PROXYAUTH_AVAIL, &(_LocalProxy.proxy_auth_type));
-	
+
 	curl_easy_cleanup(curl_tmp);
 }
 
@@ -326,8 +327,9 @@ void _get_auth_type(const char *url, int timeout)
 	snprintf(url_buf, sizeof(url_buf), "http://%s", url);
 	curl_easy_setopt(curl_tmp, CURLOPT_URL, url_buf);
 
-	if (timeout > 0)
+	if (timeout > 0) {
 		curl_easy_setopt(curl_tmp, CURLOPT_TIMEOUT, timeout);
+	}
 
 	ret = curl_easy_perform(curl_tmp);
 
@@ -360,19 +362,20 @@ NETLIB_BOOLEAN is_url_proxyless_exception(const char *url)
 {
 	int i;
 
-	if (!url)
+	if (!url) {
 		return NETLIB_FALSE;
+	}
 
-	if (!_LocalProxy.proxy_exceptions)
+	if (!_LocalProxy.proxy_exceptions) {
 		_LocalProxy.proxy_exceptions = internet_explorer_proxyless_exception_list();
+	}
 
-	if (!_LocalProxy.proxy_exceptions)
+	if (!_LocalProxy.proxy_exceptions) {
 		return NETLIB_FALSE;
+	}
 
-	for (i = 0; _LocalProxy.proxy_exceptions[i]; i++)
-	{
-		if (domain_url_cmp((char *)url, _LocalProxy.proxy_exceptions[i]) == false)
-		{
+	for (i = 0; _LocalProxy.proxy_exceptions[i]; i++) {
+		if (domain_url_cmp((char *)url, _LocalProxy.proxy_exceptions[i]) == false) {
 			return NETLIB_TRUE;
 		}
 	}
@@ -383,7 +386,7 @@ NETLIB_BOOLEAN is_url_proxyless_exception(const char *url)
 NETLIB_BOOLEAN is_udp_port_opened(const char *stun_server, int port, NatType *nType)
 {
 	*nType = get_nat_type(stun_server);
-	return (*nType > StunTypeUnknown && *nType < StunTypeBlocked ? 
+	return (*nType > StunTypeUnknown && *nType < StunTypeBlocked ?
 		NETLIB_TRUE : NETLIB_FALSE);
 }
 
@@ -391,19 +394,20 @@ NETLIB_BOOLEAN is_local_udp_port_used(const char *itf, int port)
 {
 	struct sockaddr_in  raddr;
 	Socket localsock;
-	
-	if (!itf)
+
+	if (!itf) {
 		raddr.sin_addr.s_addr = htons(INADDR_ANY);
-	else
+	} else {
 		raddr.sin_addr.s_addr = inet_addr(itf);
+	}
 	raddr.sin_port = htons((short)port);
 	raddr.sin_family = AF_INET;
-	
-	if ((localsock = socket(PF_INET, SOCK_DGRAM, 0)) == -1)
+
+	if ((localsock = socket(PF_INET, SOCK_DGRAM, 0)) == -1) {
 		return NETLIB_TRUE;
-	
-	if (bind(localsock, (struct sockaddr *)&raddr, sizeof (raddr)) < 0)
-	{
+	}
+
+	if (bind(localsock, (struct sockaddr *)&raddr, sizeof (raddr)) < 0) {
 		closesocket(localsock);
 		return NETLIB_TRUE;
 	}
@@ -418,25 +422,25 @@ int get_local_free_udp_port(const char *itf)
 	struct sockaddr_in name;
 	int name_size = sizeof (struct sockaddr_in);
 	Socket localsock;
-	
-	if (!itf)
+
+	if (!itf) {
 		raddr.sin_addr.s_addr = htons(INADDR_ANY);
-	else
+	} else {
 		raddr.sin_addr.s_addr = inet_addr(itf);
+	}
 	raddr.sin_port = htons(0);
 	raddr.sin_family = AF_INET;
-	
-	if ((localsock = socket(PF_INET, SOCK_DGRAM, 0)) == -1)
+
+	if ((localsock = socket(PF_INET, SOCK_DGRAM, 0)) == -1) {
 		return -1;
-	
-	if (bind(localsock, (struct sockaddr *)&raddr, sizeof (raddr)) < 0)
-	{
+	}
+
+	if (bind(localsock, (struct sockaddr *)&raddr, sizeof (raddr)) < 0) {
 		closesocket(localsock);
 		return -1;
 	}
 
-	if (getsockname(localsock, (struct sockaddr *) &name, (socklen_t *)&name_size) < 0)
-	{
+	if (getsockname(localsock, (struct sockaddr *) &name, (socklen_t *)&name_size) < 0) {
 		closesocket(localsock);
 		return -1;
 	}
@@ -462,12 +466,12 @@ NETLIB_BOOLEAN sip_ping(Socket sock, int ping_timeout)
 
 	ret = select(sock + 1, &rfds, 0, 0, &timeout);
 
-	if (ret < 1 || !FD_ISSET(sock, &rfds))
+	if (ret < 1 || !FD_ISSET(sock, &rfds)) {
 		return NETLIB_FALSE;
+	}
 
 	ret = recv(sock, buff, sizeof (buff), 0);
-	if (ret < 1)
-	{
+	if (ret < 1) {
 #if defined(OS_WIN32)
 		ret = GetLastError();
 #else
@@ -475,8 +479,9 @@ NETLIB_BOOLEAN sip_ping(Socket sock, int ping_timeout)
 #endif
 		return NETLIB_FALSE;
 	}
-	else
+	else {
 		return NETLIB_TRUE;
+	}
 }
 
 NETLIB_BOOLEAN sip_ping2(http_sock_t *hs, int ping_timeout)
@@ -495,12 +500,12 @@ NETLIB_BOOLEAN sip_ping2(http_sock_t *hs, int ping_timeout)
 
 	ret = select(hs->fd + 1, &rfds, 0, 0, &timeout);
 
-	if (ret < 1 || !FD_ISSET(hs->fd, &rfds))
+	if (ret < 1 || !FD_ISSET(hs->fd, &rfds)) {
 		return NETLIB_FALSE;
+	}
 
 	ret = http_tunnel_recv(hs, buff, sizeof (buff));
-	if (ret < 1)
-	{
+	if (ret < 1) {
 #if defined(OS_WIN32)
 		ret = GetLastError();
 #else
@@ -508,8 +513,9 @@ NETLIB_BOOLEAN sip_ping2(http_sock_t *hs, int ping_timeout)
 #endif
 		return NETLIB_FALSE;
 	}
-	else
+	else {
 		return NETLIB_TRUE;
+	}
 }
 
 NETLIB_BOOLEAN udp_sip_ping(const char *sip_server, int sip_port, int local_port, int ping_timeout)
@@ -525,42 +531,42 @@ NETLIB_BOOLEAN udp_sip_ping(const char *sip_server, int sip_port, int local_port
 	laddr.sin_family = AF_INET;
 
 	sock = socket(PF_INET, SOCK_DGRAM, 0);
-	if (sock <= 0)
+	if (sock <= 0) {
 		return -1;
+	}
 
-	if (bind(sock, (struct sockaddr *)&laddr, sizeof (laddr)) < 0)
-	{
+	if (bind(sock, (struct sockaddr *)&laddr, sizeof (laddr)) < 0) {
 		closesocket(sock);
 		return -1;
 	}
-	
+
 	addr.sin_family = PF_INET;
 	addr.sin_addr.s_addr = inet_addr(sip_server);
 	addr.sin_port = htons(sip_port);
 
 	i = connect(sock,(struct sockaddr *)&addr, sizeof(struct sockaddr));
-	if (i < 0)
-	{
+	if (i < 0) {
 		closesocket(sock);
 		return NETLIB_FALSE;
 	}
 
 	ret = sip_ping(sock, ping_timeout);
 	closesocket(sock);
-	
+
 	return (ret ? NETLIB_TRUE : NETLIB_FALSE);
 }
 
 NETLIB_BOOLEAN is_https(const char *url)
 {
-	if (strncasecmp(url, "https", 5) == 0)
+	if (strncasecmp(url, "https", 5) == 0) {
 		return NETLIB_TRUE;
-	else
+	} else {
 		return NETLIB_FALSE;
+	}
 }
 
-HttpRet is_http_conn_allowed(const char *url, 
-							  const char *proxy_addr, int proxy_port, 
+HttpRet is_http_conn_allowed(const char *url,
+							  const char *proxy_addr, int proxy_port,
 							  const char *proxy_login, const char *proxy_passwd,
 							  NETLIB_BOOLEAN ssl, int timeout)
 {
@@ -574,111 +580,116 @@ HttpRet is_http_conn_allowed(const char *url,
 	char *redir_url;
 
 	mcurl = curl_easy_init();
-	
-	if (ssl)
-	{
+
+	if (ssl) {
 		snprintf(url_buf, sizeof(url_buf), "https://%s", url);
 		curl_easy_setopt(mcurl, CURLOPT_SSLVERSION, CURL_SSLVERSION_SSLv3);
 		curl_easy_setopt(mcurl, CURLOPT_SSL_VERIFYPEER, 0);
 		curl_easy_setopt(mcurl, CURLOPT_SSL_VERIFYHOST, 0);
 	}
-	else
+	else {
 		snprintf(url_buf, sizeof(url_buf), "http://%s", url);
-	
+	}
+
 	curl_easy_setopt(mcurl, CURLOPT_URL, url_buf);
 
-	if (timeout > 0)
+	if (timeout > 0) {
 		curl_easy_setopt(mcurl, CURLOPT_TIMEOUT, timeout);
+	}
 
 	/* FOLLOW REDIRECTION */
 	curl_easy_setopt(mcurl, CURLOPT_FOLLOWLOCATION, 1);
 	curl_easy_setopt(mcurl, CURLOPT_UNRESTRICTED_AUTH, 1);
 	/* ****************** */
 	curl_easy_setopt(mcurl, CURLOPT_VERBOSE, 1);
- 
-	if (proxy_addr && *proxy_addr != 0)
-	{
-		if (proxy_login && *proxy_login != 0)
-		{
+
+	if (proxy_addr && *proxy_addr != 0) {
+		if (proxy_login && *proxy_login != 0) {
 			if (!_LocalProxy.proxy_auth_type)
 				_get_proxy_auth_type2(url, proxy_addr, proxy_port, timeout);
 
 			snprintf(auth_buf, sizeof(auth_buf), "%s:%s", proxy_login, proxy_passwd);
 			curl_easy_setopt(mcurl, CURLOPT_PROXYUSERPWD, auth_buf);
-			
-			if ((_LocalProxy.proxy_auth_type & CURLAUTH_BASIC) == CURLAUTH_BASIC)
+
+			if ((_LocalProxy.proxy_auth_type & CURLAUTH_BASIC) == CURLAUTH_BASIC) {
 				curl_easy_setopt(mcurl, CURLOPT_PROXYAUTH, CURLAUTH_BASIC);
-			else if ((_LocalProxy.proxy_auth_type & CURLAUTH_DIGEST) == CURLAUTH_DIGEST)
+			}
+			else if ((_LocalProxy.proxy_auth_type & CURLAUTH_DIGEST) == CURLAUTH_DIGEST) {
 				curl_easy_setopt(mcurl, CURLOPT_PROXYAUTH, CURLAUTH_DIGEST);
-			else if ((_LocalProxy.proxy_auth_type & CURLAUTH_NTLM) == CURLAUTH_NTLM)
+			}
+			else if ((_LocalProxy.proxy_auth_type & CURLAUTH_NTLM) == CURLAUTH_NTLM) {
 				curl_easy_setopt(mcurl, CURLOPT_PROXYAUTH, CURLAUTH_NTLM);
+			}
 		}
 		snprintf(proxy_buf, sizeof(proxy_buf), "%s:%d", proxy_addr, proxy_port);
 		curl_easy_setopt(mcurl, CURLOPT_PROXY, proxy_buf);
 	}
-	else
-	{
-		if (proxy_login && *proxy_login != 0)
-		{
-			if (!_LocalProxy.auth_type)
+	else {
+		if (proxy_login && *proxy_login != 0) {
+			if (!_LocalProxy.auth_type) {
 				_get_auth_type(url, timeout);
+			}
 
 			snprintf(auth_buf, sizeof(auth_buf), "%s:%s", proxy_login, proxy_passwd);
 			curl_easy_setopt(mcurl, CURLOPT_USERPWD, auth_buf);
 
-			if ((_LocalProxy.proxy_auth_type & CURLAUTH_BASIC) == CURLAUTH_BASIC)
+			if ((_LocalProxy.proxy_auth_type & CURLAUTH_BASIC) == CURLAUTH_BASIC) {
 				curl_easy_setopt(mcurl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
-			else if ((_LocalProxy.proxy_auth_type & CURLAUTH_DIGEST) == CURLAUTH_DIGEST)
+			}
+			else if ((_LocalProxy.proxy_auth_type & CURLAUTH_DIGEST) == CURLAUTH_DIGEST) {
 				curl_easy_setopt(mcurl, CURLOPT_HTTPAUTH, CURLAUTH_DIGEST);
-			else if ((_LocalProxy.proxy_auth_type & CURLAUTH_NTLM) == CURLAUTH_NTLM)
+			}
+			else if ((_LocalProxy.proxy_auth_type & CURLAUTH_NTLM) == CURLAUTH_NTLM) {
 				curl_easy_setopt(mcurl, CURLOPT_HTTPAUTH, CURLAUTH_NTLM);
+			}
 		}
 
 	}
 
 	ret = curl_easy_perform(mcurl);
 	curl_easy_getinfo(mcurl, CURLINFO_RESPONSE_CODE, &http_resp_code);
-	if (!_LocalProxy.proxy_auth_type)
+	if (!_LocalProxy.proxy_auth_type) {
 		curl_easy_getinfo(mcurl, CURLINFO_PROXYAUTH_AVAIL, &(_LocalProxy.proxy_auth_type));
+	}
 	curl_easy_getinfo(mcurl, CURLINFO_EFFECTIVE_URL, &redir_tmp);
 
 	redir_url = strdup(redir_tmp);
 
 	curl_easy_cleanup(mcurl);
 
-	if ((http_resp_code / 100) == 3)
-	{
+	if ((http_resp_code / 100) == 3) {
 		NETLIB_BOOLEAN is_ssl;
 		char *tmp;
 
-		if ((is_ssl= is_https(redir_url)) == NETLIB_TRUE)
+		if ((is_ssl= is_https(redir_url)) == NETLIB_TRUE) {
 			tmp = redir_url + 8;
-		else
-			tmp = redir_url + 7;
-
-		if (is_url_proxyless_exception(tmp))
-		{
-			return is_http_conn_allowed(tmp, NULL, 0, 
-										proxy_login, proxy_passwd, is_ssl, timeout);
 		}
-		else
-		{
-			return is_http_conn_allowed(tmp, proxy_addr, proxy_port, 
-										proxy_login, proxy_passwd, is_ssl, timeout);
+		else {
+			tmp = redir_url + 7;
+		}
+
+		if (is_url_proxyless_exception(tmp)) {
+			return is_http_conn_allowed(tmp, NULL, 0, proxy_login, proxy_passwd, is_ssl, timeout);
+		}
+		else {
+			return is_http_conn_allowed(tmp, proxy_addr, proxy_port, proxy_login, proxy_passwd, is_ssl, timeout);
 		}
 	}
-	
-	if (http_resp_code == 200)
+
+	if (http_resp_code == 200) {
 		return HTTP_OK;
-	else if (http_resp_code != 404 && http_resp_code != 200 && http_resp_code != 0)
+	}
+	else if (http_resp_code != 404 && http_resp_code != 200 && http_resp_code != 0) {
 		return HTTP_AUTH;
-	else
+	}
+	else {
 		return HTTP_NOK;
+	}
 }
 
 HttpRet is_tunnel_conn_allowed(const char *http_gate_addr, int http_gate_port,
 								const char *sip_addr, int sip_port,
-								const char *proxy_addr, int proxy_port, 
+								const char *proxy_addr, int proxy_port,
 								const char *proxy_login, const char *proxy_passwd,
 								NETLIB_BOOLEAN ssl, int timeout,
 								NETLIB_BOOLEAN ping, int ping_timeout)
@@ -687,24 +698,25 @@ HttpRet is_tunnel_conn_allowed(const char *http_gate_addr, int http_gate_port,
 	http_sock_t *hs;
 	int http_code;
 
-	if (proxy_addr)
+	if (proxy_addr) {
 		http_tunnel_init_proxy(proxy_addr, proxy_port, proxy_login, proxy_passwd);
+	}
 
 	http_tunnel_init_host(http_gate_addr, http_gate_port, ssl);
 	hs = (http_sock_t *)http_tunnel_open(sip_addr, sip_port, HTTP_TUNNEL_VAR_MODE, &http_code, timeout);
 
-	if (hs == NULL)
-	{
-		if (http_code == 404)
+	if (hs == NULL) {
+		if (http_code == 404) {
 			return HTTP_NOK;
-		else
+		} else {
 			return HTTP_AUTH;
+		}
 	}
 
-	if (ping)
-	{
-		if (sip_ping2(hs, ping_timeout) == NETLIB_FALSE)
+	if (ping) {
+		if (sip_ping2(hs, ping_timeout) == NETLIB_FALSE) {
 			return HTTP_NOK;
+		}
 	}
 
 	return HTTP_OK;
@@ -715,10 +727,11 @@ NETLIB_BOOLEAN is_proxy_auth_needed(const char *proxy_addr, int proxy_port, int 
 {
 	HttpRet ret;
 
-	if (_LocalProxy.auth_type)
+	if (_LocalProxy.auth_type) {
 		return NETLIB_TRUE;
+	}
 
-	ret = is_http_conn_allowed("www.google.com:80", proxy_addr, proxy_port, 
+	ret = is_http_conn_allowed("www.google.com:80", proxy_addr, proxy_port,
 								NULL, NULL, NETLIB_FALSE, timeout);
 
 	return (ret == HTTP_AUTH ? NETLIB_TRUE : NETLIB_FALSE);
@@ -730,8 +743,8 @@ NETLIB_BOOLEAN is_proxy_auth_ok(const char *proxy_addr, int proxy_port,
 {
 	HttpRet ret;
 
-	ret = is_http_conn_allowed("www.google.com:80", proxy_addr, proxy_port, 
-								proxy_login, proxy_passwd, 
+	ret = is_http_conn_allowed("www.google.com:80", proxy_addr, proxy_port,
+								proxy_login, proxy_passwd,
 								NETLIB_FALSE, timeout);
 
 	return (ret == HTTP_OK ? NETLIB_TRUE : NETLIB_FALSE);
@@ -739,15 +752,16 @@ NETLIB_BOOLEAN is_proxy_auth_ok(const char *proxy_addr, int proxy_port,
 
 
 
-char *get_local_http_proxy_address() 
+char *get_local_http_proxy_address()
 {
-	if (_LocalProxy.address == NULL)
+	if (_LocalProxy.address == NULL) {
 		_getProxyAddress();
+	}
 
 	return _LocalProxy.address;
 }
 
-int get_local_http_proxy_port() 
+int get_local_http_proxy_port()
 {
 	return _LocalProxy.port;
 }
@@ -798,24 +812,24 @@ NETLIB_BOOLEAN is_connection_available()
 	ifc.ifc_len = sizeof buf;
 	ifc.ifc_buf = (char *)buf;
 
-	if ((sock = socket(PF_INET, SOCK_STREAM, 0)) < 0)
+	if ((sock = socket(PF_INET, SOCK_STREAM, 0)) < 0) {
 		return NETLIB_FALSE;
+	}
 
-	if (ioctl(sock, SIOCGIFCONF, &ifc) == -1)
-	{
+	if (ioctl(sock, SIOCGIFCONF, &ifc) == -1) {
 		closesocket(sock);
 		return NETLIB_FALSE;
 	}
 
-	for (int i = 0; i < (ifc.ifc_len / sizeof(struct ifreq)); i++ )
-	{
-		if (ioctl(sock, SIOCGIFFLAGS, &ifc.ifc_req[i]) == 0)
-		{
-			if ((ifc.ifc_req[i]).ifr_ifru.ifru_flags & IFF_LOOPBACK)
+	for (int i = 0; i < (ifc.ifc_len / sizeof(struct ifreq)); i++) {
+		if (ioctl(sock, SIOCGIFFLAGS, &ifc.ifc_req[i]) == 0) {
+			if ((ifc.ifc_req[i]).ifr_ifru.ifru_flags & IFF_LOOPBACK) {
 				continue;
+			}
 
-			if ((ifc.ifc_req[i]).ifr_ifru.ifru_flags & IFF_RUNNING)
+			if ((ifc.ifc_req[i]).ifr_ifru.ifru_flags & IFF_RUNNING) {
 				res = NETLIB_TRUE;
+			}
 		}
 	}
 
