@@ -141,7 +141,7 @@ void PhApiWrapper::setNetworkParameter() {
 	if (_tunnelNeeded) {
 		//TODO: activate SSL for HTTP tunnel
 		phTunnelConfig(_proxyServer.c_str(), _proxyPort, _tunnelServer.c_str(), _tunnelPort,
-			_proxyLogin.c_str(), _proxyPassword.c_str(), 0);
+			_proxyLogin.c_str(), _proxyPassword.c_str(), _tunnelSSL, 0);
 
 		phcfg.use_tunnel = 1;
 		natType = "fcone";

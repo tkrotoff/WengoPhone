@@ -2485,10 +2485,10 @@ ph_tunnel_init2(char *sip_proxy)
 	char buf[256];
 	int tunerr;
 
-	if (!phcfg.use_tunnel) 
+	if (!(phcfg.use_tunnel & PH_TUNNEL_USE)) 
 		return 0;
 
-	http_tunnel_init_host(phcfg.httpt_server, phcfg.httpt_server_port, 0);
+	http_tunnel_init_host(phcfg.httpt_server, phcfg.httpt_server_port, phcfg.use_tunnel & PH_TUNNEL_SSL);
 	http_tunnel_init_proxy(phcfg.http_proxy,phcfg.http_proxy_port, 
 		phcfg.http_proxy_user, phcfg.http_proxy_passwd);
 
@@ -2537,10 +2537,10 @@ ph_tunnel_init()
 	char buf[256];
 	int tunerr;
 
-	if (!phcfg.use_tunnel) 
+	if (!(phcfg.use_tunnel & PH_TUNNEL_USE)) 
 		return 0;
 
-	http_tunnel_init_host(phcfg.httpt_server, phcfg.httpt_server_port, 0);
+	http_tunnel_init_host(phcfg.httpt_server, phcfg.httpt_server_port, phcfg.use_tunnel & PH_TUNNEL_SSL);
 	http_tunnel_init_proxy(phcfg.http_proxy,phcfg.http_proxy_port, 
 		phcfg.http_proxy_user, phcfg.http_proxy_passwd);
 
@@ -2936,7 +2936,7 @@ phInit(phCallbacks_t *cbk, char * server, int asyncmode)
 int phTunnelConfig(const char* http_proxy, const int http_proxy_port,
                   const char* httpt_server, const int httpt_server_port,
                   const char *proxy_user, const char* proxy_passwd,
-                  int autoconf)
+                  int use_ssl, int autoconf)
 {
   phcfg.httpt_server[0] = 0;
   phcfg.http_proxy[0] = 0;
@@ -2983,9 +2983,13 @@ int phTunnelConfig(const char* http_proxy, const int http_proxy_port,
   }
 
   phcfg.use_tunnel = PH_TUNNEL_USE;
+  if (use_ssl)
+  {
+	  phcfg.use_tunnel |= PH_TUNNEL_SSL;
+  }
   if (autoconf)
   {
-    phcfg.use_tunnel |= PH_TUNNEL_AUTOCONF;
+	  phcfg.use_tunnel |= PH_TUNNEL_AUTOCONF;
   }
   return 0;
 }

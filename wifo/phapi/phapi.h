@@ -809,13 +809,14 @@ MY_DLLEXPORT int phAddAuthInfo(const char *username, const char *userid,
  * @param httpt_server_port			Port of the HTTP TUNNEL SERVER that do the http to udp conversion
  * @param proxy_user				User name used for authentication purpose
  * @param proxy_passwd				Password for proxy
+ * @param use_ssl					If this is set to 1, SSL will be used to create the http tunnel
  * @param autoconf	                If this is set to 1, this funtion will try to detect network configuration when it can't 
  *									setup a tunnel with given parameters.
 */
 MY_DLLEXPORT int phTunnelConfig(const char* http_proxy, const int http_proxy_port,
 								const char* httpt_server, const int httpt_server_port, 
 								const char *proxy_user, const char* proxy_passwd,
-								int autotoconf);
+								int use_ssl, int autotoconf);
 
 /**
   @var phIsInitialize 
@@ -977,12 +978,14 @@ struct phConfig {
 			      the new CID will be deliverd in newcid field  in the CALLREDIRECTED event */
   char stunserver[128]; /*!< stun server address:port or name:port */
 
-#define PH_TUNNEL_AUTOCONF 2
-#define PH_TUNNEL_USE  1
-  int  use_tunnel; 
+#define PH_TUNNEL_SSL		4
+#define PH_TUNNEL_AUTOCONF	2
+#define PH_TUNNEL_USE		1
+  int  use_tunnel;
 
   char httpt_server[128];
   int  httpt_server_port;
+
   char http_proxy[128];
   int  http_proxy_port;
   char http_proxy_user[128];
