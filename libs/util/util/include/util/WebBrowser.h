@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef WEBBROWSER_H
-#define WEBBROWSER_H
+#ifndef OWWEBBROWSER_H
+#define OWWEBBROWSER_H
 
 #include <util/NonCopyable.h>
 
@@ -42,4 +42,4 @@ public:
 	static bool openUrl(const std::string & url);
 };
 
-#endif	//WEBBROWSER_H
+#endif	//OWWEBBROWSER_H

@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef SAFESTRINGS_H
-#define SAFESTRINGS_H
+#ifndef OWSAFESTRINGS_H
+#define OWSAFESTRINGS_H
 
 #include <stddef.h>
 
@@ -33,7 +33,7 @@
  * @author Sebastien Tricaud
  */
 
-size_t strlcpy(char *dst, const char *src, size_t siz);
-size_t strlcat(char *dst, const char *src, size_t siz);
+size_t strlcpy(char * dst, const char * src, size_t size);
+size_t strlcat(char * dst, const char * src, size_t size);
 
-#endif	//SAFESTRINGS_H
+#endif	//OWSAFESTRINGS_H

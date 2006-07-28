@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef INTERFACE_H
-#define INTERFACE_H
+#ifndef OWINTERFACE_H
+#define OWINTERFACE_H
 
 #include <util/NonCopyable.h>
 
@@ -32,4 +32,4 @@ public:
 	virtual ~Interface() { }
 };
 
-#endif	//INTERFACE_H
+#endif	//OWINTERFACE_H

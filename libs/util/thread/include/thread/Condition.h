@@ -23,11 +23,11 @@
 #include <boost/thread/condition.hpp>
 
 /**
- * Condition wrapper.
+ * Condition wrapper for boost.
  *
  * @author Philippe Bernery
  */
 class Condition : public boost::condition {
 };
 
-#endif //OWCONDITION_H
+#endif	//OWCONDITION_H

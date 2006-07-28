@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef IHTTPREQUEST_H
-#define IHTTPREQUEST_H
+#ifndef OWIHTTPREQUEST_H
+#define OWIHTTPREQUEST_H
 
 #include <util/Event.h>
 #include <thread/Thread.h>
@@ -158,4 +158,4 @@ public:
 	virtual void run() = 0;
 };
 
-#endif	//IHTTPREQUEST_H
+#endif	//OWIHTTPREQUEST_H

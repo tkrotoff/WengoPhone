@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef SETTINGSSERIALIZER_H
-#define SETTINGSSERIALIZER_H
+#ifndef OWSETTINGSSERIALIZER_H
+#define OWSETTINGSSERIALIZER_H
 
 #include <settings/Settings.h>
 
@@ -60,4 +60,4 @@ private:
 
 BOOST_CLASS_VERSION(SettingsSerializer, SettingsSerializer::SERIALIZATION_VERSION)
 
-#endif	//SETTINGSSERIALIZER_H
+#endif	//OWSETTINGSSERIALIZER_H

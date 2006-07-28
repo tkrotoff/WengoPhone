@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef PATH_H
-#define PATH_H
+#ifndef OWPATH_H
+#define OWPATH_H
 
 #include <cutil/global.h>
 
@@ -46,7 +46,7 @@ public:
 	 * The executable path returned always finished by "/" or "\".
 	 *
 	 * On MacOS X, returns full path to exe. e.g: /Application/WengoPhone.app/Contents/MacOS/WengoPhone
-	 * 
+	 *
 	 * @return application executable path
 	 */
 	static std::string getApplicationDirPath();
@@ -69,8 +69,9 @@ public:
 	 * @return the home dir of the current user.
 	 */
 	static std::string getHomeDirPath();
+
 #ifdef OS_MACOSX
-	// Special extensions for MacOS X
+	//Special extensions for MacOS X
 
 	/**
 	 * Gets the application bundle path.
@@ -95,4 +96,4 @@ public:
 #endif
 };
 
-#endif	//PATH_H
+#endif	//OWPATH_H

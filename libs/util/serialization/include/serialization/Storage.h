@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef STORAGE_H
-#define STORAGE_H
+#ifndef OWSTORAGE_H
+#define OWSTORAGE_H
 
 #include <util/Interface.h>
 
@@ -53,4 +53,4 @@ public:
 	virtual bool save(const std::string & url) = 0;
 };
 
-#endif //STORAGE_H
+#endif //OWSTORAGE_H

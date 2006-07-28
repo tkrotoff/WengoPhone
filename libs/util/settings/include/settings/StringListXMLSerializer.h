@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef STRINGLISTXMLSERIALIZER_H
-#define STRINGLISTXMLSERIALIZER_H
+#ifndef OWSTRINGLISTXMLSERIALIZER_H
+#define OWSTRINGLISTXMLSERIALIZER_H
 
 #include <serialization/Serializable.h>
 
@@ -38,4 +38,4 @@ private:
 	StringList & _stringList;
 };
 
-#endif	//STRINGLISTXMLSERIALIZER_H
+#endif	//OWSTRINGLISTXMLSERIALIZER_H

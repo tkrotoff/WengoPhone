@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef THREAD_H
-#define THREAD_H
+#ifndef OWTHREAD_H
+#define OWTHREAD_H
 
 #include <thread/Condition.h>
 #include <thread/Mutex.h>
@@ -226,7 +226,7 @@ protected:
 			if (_terminate){
 				return;
 			}
-			_condition.wait(ScopedLock);			
+			_condition.wait(ScopedLock);
 		}
 	}
 	/**
@@ -448,4 +448,4 @@ private:
 	Arg4 _arg4;
 };
 
-#endif	//THREAD_H
+#endif	//OWTHREAD_H

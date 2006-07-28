@@ -24,19 +24,19 @@
 int main(int argc, char **argv) {
 
 	RegisterProtocol protocol("wengo2");
-	if( protocol.isBinded() ) {
+	if (protocol.isBinded()) {
 		printf("Protocol binded: yes\n");
 	} else {
 		printf("Protocol binded: no\n");
 	}
 
-	if( protocol.bind("c:\\Program Files\\WengoPhone\\qtwengophone.exe", "c:\\Program Files\\WengoPhone\\qtwengophone.exe,0", "http://wengo.com") ) {
+	if (protocol.bind("c:\\Program Files\\WengoPhone\\qtwengophone.exe", "c:\\Program Files\\WengoPhone\\qtwengophone.exe,0", "http://wengo.com")) {
 		printf("Protocol binded: ok\n");
 	} else {
 		printf("Protocol binded: failed\n");
 	}
 
-	if( protocol.unbind() ) {
+	if (protocol.unbind()) {
 		printf("Protocol unbinded: ok\n");
 	} else {
 		printf("Protocol unbinded: failed\n");

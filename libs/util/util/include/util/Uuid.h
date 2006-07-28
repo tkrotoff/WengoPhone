@@ -49,7 +49,6 @@ public:
 	 * @return a string containing a UUID.
 	 */
 	static std::string generateString();
-
 };
 
-#endif //OWUUID_H
+#endif	//OWUUID_H

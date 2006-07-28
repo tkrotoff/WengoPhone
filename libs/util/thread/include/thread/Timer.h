@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef TIMER_H
-#define TIMER_H
+#ifndef OWTIMER_H
+#define OWTIMER_H
 
 #include <util/Event.h>
 #include <util/List.h>
@@ -79,4 +79,4 @@ private:
 	void lastTimeoutEventHandler(PrivateThread & thread);
 };
 
-#endif	//TIMER_H
+#endif	//OWTIMER_H

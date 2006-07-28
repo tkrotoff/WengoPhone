@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef HTTPREQUEST_H
-#define HTTPREQUEST_H
+#ifndef OWHTTPREQUEST_H
+#define OWHTTPREQUEST_H
 
 #include <http/IHttpRequest.h>
 
@@ -180,4 +180,4 @@ private:
 	static std::string _userAgent;
 };
 
-#endif	//HTTPREQUEST_H
+#endif	//OWHTTPREQUEST_H

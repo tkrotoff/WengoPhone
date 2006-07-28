@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef BASE64_H
-#define BASE64_H
+#ifndef OWBASE64_H
+#define OWBASE64_H
 
 #include <util/NonCopyable.h>
 
@@ -57,4 +57,4 @@ public:
 	static std::string decode(const std::string & encodedString);
 };
 
-#endif	//BASE64_H
+#endif	//OWBASE64_H

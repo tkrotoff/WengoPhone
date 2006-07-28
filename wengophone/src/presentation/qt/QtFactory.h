@@ -44,11 +44,6 @@
 
 #include <QApplication>
 
-#include <boost/program_options.hpp>
-#include <iostream>
-using namespace boost::program_options;
-using namespace std;
-
 #ifdef OS_MACOSX
 	#include <CoreFoundation/CoreFoundation.h>
 #endif
@@ -83,8 +78,8 @@ public:
 	}
 
 	void reset() {
-		// Objects are deleted by the class who constructs them.
-		// So we can set the pointer to NULL safely.
+		//Objects are deleted by the class who constructs them.
+		//So we can set the pointer to NULL safely.
 		_qtContactList = NULL;
 		_qtChatHandler = NULL;
 		_qtWenboxPlugin = NULL;
@@ -114,7 +109,7 @@ public:
 			//FIXME: QtWengoPhone must be instanciated before _qtUserProfileHandler
 			_qtUserProfileHandler = new QtUserProfileHandler(cUserProfileHandler, *_qtWengoPhone);
 		}
-		
+
 		return _qtUserProfileHandler;
 	}
 
@@ -150,14 +145,14 @@ public:
 	PChatHandler * createPresentationChatHandler(CChatHandler & cChatHandler) {
 		if (!_qtChatHandler) {
 			_qtChatHandler = new QtChatHandler(cChatHandler);
-		}	
+		}
 		return _qtChatHandler;
 	}
 
 	PSms * createPresentationSms(CSms & cSms) {
 		if (!_qtSms) {
 			_qtSms = new QtSms(cSms);
-		}	
+		}
 		return _qtSms;
 	}
 
@@ -187,6 +182,10 @@ public:
 			_qtHistory = new QtHistory(cHistory);
 		}
 		return _qtHistory;
+	}
+
+	PConferenceCall * createPresentationConferenceCall(CConferenceCall & cConferenceCall) {
+		return NULL;
 	}
 
 private:

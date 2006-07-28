@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef OUTOFRANGEEXCEPTION_H
-#define OUTOFRANGEEXCEPTION_H
+#ifndef OWOUTOFRANGEEXCEPTION_H
+#define OWOUTOFRANGEEXCEPTION_H
 
 #include <util/exception/Exception.h>
 
@@ -43,4 +43,4 @@ private:
 	OutOfRangeException & operator=(const OutOfRangeException &);
 };
 
-#endif	//OUTOFRANGEEXCEPTION_H
+#endif	//OWOUTOFRANGEEXCEPTION_H

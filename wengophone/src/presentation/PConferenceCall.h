@@ -17,34 +17,40 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef OWREGISTERPROTOCOL_H
-#define OWREGISTERPROTOCOL_H
+#ifndef OWPCONFERENCECALL_H
+#define OWPCONFERENCECALL_H
 
-#include <string>
+#include "Presentation.h"
+
+#include <sipwrapper/EnumConferenceCallState.h>
+
+class CConferenceCall;
 
 /**
- * Binds a protocol to a command.
+ * Graphical representation of a ConferenceCall.
  *
- * Registers protocols like http:// callto:// wengo://
- * Under Windows, register the new protocol inside the registry database.
- *
- * @see http://www.w3.org/Addressing/schemes-gen.html
- * @author Mathieu Stute
+ * @ingroup presentation
+ * @author Tanguy Krotoff
  */
-class RegisterProtocol {
+class PConferenceCall : public Presentation {
 public:
 
-	RegisterProtocol(const std::string & protocol);
+	virtual CConferenceCall & getCConferenceCall() const = 0;
 
-	bool bind(const std::string & command, const std::string & icon = "", const std::string & url = "");
+	/**
+	 * @see ConferenceCall::stateChangedEvent
+	 */
+	virtual void stateChangedEvent(EnumConferenceCallState::ConferenceCallState state) = 0;
 
-	bool isBinded() const;
+	/**
+	 * @see ConferenceCall::phoneCallAddedEvent
+	 */
+	virtual void phoneCallAddedEvent(CPhoneCall & cPhoneCall) = 0;
 
-	bool unbind();
-
-private:
-
-	std::string _protocol;
+	/**
+	 * @see ConferenceCall::phoneCallRemovedEvent
+	 */
+	virtual void phoneCallRemovedEvent(CPhoneCall & cPhoneCall) = 0;
 };
 
-#endif	//OWREGISTERPROTOCOL_H
+#endif	//OWPCONFERENCECALL_H

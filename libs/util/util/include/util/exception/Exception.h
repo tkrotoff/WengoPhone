@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef EXCEPTION_H
-#define EXCEPTION_H
+#ifndef OWEXCEPTION_H
+#define OWEXCEPTION_H
 
 #include <string>
 
@@ -61,4 +61,4 @@ private:
 	std::string _message;
 };
 
-#endif	//EXCEPTION_H
+#endif	//OWEXCEPTION_H

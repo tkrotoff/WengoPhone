@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef GLOBAL_H
-#define GLOBAL_H
+#ifndef OWGLOBAL_H
+#define OWGLOBAL_H
 
 /**
  * OS and compilers detection via defines (preprocessor).
@@ -147,4 +147,4 @@
 	#error This compiler has not been tested
 #endif
 
-#endif	//GLOBAL_H
+#endif	//OWGLOBAL_H

@@ -17,17 +17,16 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef VCARDPARSER_H
-#define VCARDPARSER_H
+#ifndef OWVCARDPARSER_H
+#define OWVCARDPARSER_H
 
 #include <util/Event.h>
+#include <util/StringList.h>
 
-#include <string>
-#include <vector>
 #include <ifstream>
 
 /**
- * Parse a VCard.
+ * Parses a VCard file.
  *
  * Usage:
  * <pre>
@@ -76,7 +75,7 @@ public:
 	 * @param tagLine the tag line to analyse
 	 * @return a vector of string containing the found types
 	 */
-	static std::vector<std::string> getType(const std::string & tagLine);
+	static StringList getType(const std::string & tagLine);
 
 	/**
 	 * Returns the value of the tag line.
@@ -87,17 +86,17 @@ public:
 	 * @param tagLine the tag line to analyse
 	 * @return a vector og string containing the found values
 	 */
-	static std::vector<std::string> getValue(const std::string & tagLine);
+	static StringList getValue(const std::string & tagLine);
 
 private:
 
 	/**
-	 * Retrieve the last tag line even if it is folded.
+	 * Retrieves the last tag line even if it is folded.
 	 */
 	std::string getLastTagLine();
 
 	/**
-	 * Retrieve the tag.
+	 * Retrieves the tag.
 	 *
 	 * @param tagLine the tag line to retrieve the tag from
 	 * @return the tag
@@ -126,7 +125,6 @@ private:
 
 	/** Name of the file to read. */
 	std::string _filename;
-
 };
 
-#endif	//VCARDPARSER_H
+#endif	//OWVCARDPARSER_H

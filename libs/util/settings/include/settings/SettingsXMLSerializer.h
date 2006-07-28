@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef SETTINGSXMLSERIALIZER_H
-#define SETTINGSXMLSERIALIZER_H
+#ifndef OWSETTINGSXMLSERIALIZER_H
+#define OWSETTINGSXMLSERIALIZER_H
 
 #include <serialization/Serializable.h>
 
@@ -38,4 +38,4 @@ protected:
 	Settings & _settings;
 };
 
-#endif	//SETTINGSXMLSERIALIZER_H
+#endif	//OWSETTINGSXMLSERIALIZER_H

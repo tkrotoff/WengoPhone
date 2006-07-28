@@ -40,9 +40,9 @@ char * getWindowsVersion() {
 	ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
 	osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
 
-	if (!(bOsVersionInfoEx = GetVersionEx ((OSVERSIONINFO *) &osvi))) {
+	if (!(bOsVersionInfoEx = GetVersionEx((OSVERSIONINFO *) &osvi))) {
 		osvi.dwOSVersionInfoSize = sizeof (OSVERSIONINFO);
-		if (! GetVersionEx ((OSVERSIONINFO *) &osvi)) {
+		if (!GetVersionEx((OSVERSIONINFO *) &osvi)) {
 			return toReturn;
 		}
 	}
@@ -126,15 +126,15 @@ char * getWindowsVersion() {
 				}
 			} else {
 				if (osvi.wProductType == VER_NT_SERVER || osvi.wProductType == VER_NT_DOMAIN_CONTROLLER) {
-					if (osvi.dwMajorVersion==5 && osvi.dwMinorVersion==2) {
+					if (osvi.dwMajorVersion == 5 && osvi.dwMinorVersion == 2) {
 						if (si.wProcessorArchitecture==PROCESSOR_ARCHITECTURE_IA64) {
-						   if (osvi.wSuiteMask & VER_SUITE_DATACENTER) {
+							if (osvi.wSuiteMask & VER_SUITE_DATACENTER) {
 								strncat(toReturn, "Datacenter Edition for Itanium-based Systems", 44);
 								printf("Datacenter Edition for Itanium-based Systems");
-						   } else if (osvi.wSuiteMask & VER_SUITE_ENTERPRISE) {
+							} else if (osvi.wSuiteMask & VER_SUITE_ENTERPRISE) {
 								strncat(toReturn, "Enterprise Edition for Itanium-based Systems", 44);
 								printf("Enterprise Edition for Itanium-based Systems");
-						   }
+							}
 						} else if (si.wProcessorArchitecture==PROCESSOR_ARCHITECTURE_AMD64) {
 							if (osvi.wSuiteMask & VER_SUITE_DATACENTER) {
 								strncat(toReturn, "Datacenter x64 Edition ", 23);
@@ -163,7 +163,7 @@ char * getWindowsVersion() {
 						}
 					}
 				}
-				else if (osvi.dwMajorVersion==5 && osvi.dwMinorVersion==0) {
+				else if (osvi.dwMajorVersion == 5 && osvi.dwMinorVersion == 0) {
 					if (osvi.wSuiteMask & VER_SUITE_DATACENTER) {
 						strncat(toReturn, "Datacenter Server ", 18);
 						printf("Datacenter Server ");
@@ -195,14 +195,14 @@ char * getWindowsVersion() {
 			LONG lRet;
 
 			lRet = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
-			"SYSTEM\\CurrentControlSet\\Control\\ProductOptions",
-			0, KEY_QUERY_VALUE, &hKey);
+				"SYSTEM\\CurrentControlSet\\Control\\ProductOptions",
+				0, KEY_QUERY_VALUE, &hKey);
 			if (lRet != ERROR_SUCCESS) {
 				return toReturn;
 			}
 
 			lRet = RegQueryValueEx(hKey, "ProductType", NULL, NULL,
-			(LPBYTE) szProductType, &dwBufLen);
+				(LPBYTE) szProductType, &dwBufLen);
 			RegCloseKey(hKey);
 
 			if ((lRet != ERROR_SUCCESS) || (dwBufLen > BUFSIZE)) {
@@ -253,7 +253,7 @@ char * getWindowsVersion() {
 			}
 			RegCloseKey(hKey);
 		} else {
-		//not Windows NT 4.0
+			//not Windows NT 4.0
 			strcat(toReturn, osvi.szCSDVersion);
 			strcat(toReturn, " (Build ");
 			itoa(osvi.dwBuildNumber, temp, 10);

@@ -21,10 +21,8 @@
 
 #include <util/Logger.h>
 
-using namespace std;
-
-VCardParser::VCardParser(const string & filename) 
-: _filename(filename) {
+VCardParser::VCardParser(const std::string & filename)
+	: _filename(filename) {
 }
 
 VCardParser::~VCardParser() {
@@ -37,9 +35,9 @@ bool VCardParser::parse() {
 		return false;
 	}
 
-	string lastLine = getLastLine();
+	std::string lastLine = getLastLine();
 	while (!lastLine.empty()) {
-		string tag = getTag();
+		std::string tag = getTag();
 
 		tagFoundEvent(tag, lastLine);
 
@@ -51,24 +49,22 @@ bool VCardParser::parse() {
 	return true;
 }
 
-vector<string> VCardParser::getType(const string & tagLine) {
-
+StringList VCardParser::getType(const std::string & tagLine) {
 }
 
-vector<string> VCardParser::getValue(const string & tagLine) {
-
+StringList VCardParser::getValue(const std::string & tagLine) {
 }
 
-string VCardParser::getLastTagLine() {
-	string result;
-	stringstream strStream;
+std::string VCardParser::getLastTagLine() {
+	std::string result;
+	std::stringstream strStream;
 
-	// Get a line
+	//Get a line
 	_fileStream.get(strStream);
 	result = strStream.str();
 	////
 
-	// Looking if the next lines are folded lines
+	//Looking if the next lines are folded lines
 	pos_type lastPos = _fileStream.tellg();
 	_fileStream.get(strStream);
 
@@ -85,14 +81,11 @@ string VCardParser::getLastTagLine() {
 	return result;
 }
 
-string VCardParser::getTag(const string & tagLine) {
-
+std::string VCardParser::getTag(const std::string & tagLine) {
 }
 
 bool VCardParser::beginWithLinearWhiteSpace(const std::string & line) {
-	
 }
 
-string VCardParser::stripLinearWhiteSpace(const string & line) {
-
+std::string VCardParser::stripLinearWhiteSpace(const std::string & line) {
 }

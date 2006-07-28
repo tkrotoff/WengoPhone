@@ -23,6 +23,7 @@
 #include <sipwrapper/EnumPhoneCallState.h>
 #include <sipwrapper/CodecList.h>
 
+#include <util/NonCopyable.h>
 #include <util/Trackable.h>
 
 #include <pixertool/pixertool.h>
@@ -36,11 +37,13 @@ class CWengoPhone;
 class WebcamVideoFrame;
 
 /**
+ * Control layer for a phone call.
  *
+ * @see PhoneCall
  * @ingroup control
  * @author Tanguy Krotoff
  */
-class CPhoneCall : public Trackable {
+class CPhoneCall : NonCopyable, public Trackable {
 public:
 
 	CPhoneCall(PhoneCall & phoneCall, CWengoPhone & cWengoPhone);
@@ -64,9 +67,7 @@ public:
 	}
 
 	/**
-	 * Gets the current state of this phone call.
-	 *
-	 * @return phone call state
+	 * @see PhoneCall::getState()
 	 */
 	EnumPhoneCallState::PhoneCallState getState() const;
 
@@ -133,9 +134,7 @@ public:
 	std::string getPeerDisplayName() const;
 
 	/**
-	 * Gets duration of the current call.
-	 *
-	 * @return duration
+	 * @see PhoneCall::getDuration()
 	 */
 	int getDuration() const;
 
@@ -143,8 +142,7 @@ private:
 
 	void stateChangedEventHandler(PhoneCall & sender, EnumPhoneCallState::PhoneCallState state);
 
-	void videoFrameReceivedEventHandler(PhoneCall & sender, piximage * remoteVideoFrame,
-		piximage * localVideoFrame);
+	void videoFrameReceivedEventHandler(PhoneCall & sender, piximage * remoteVideoFrame, piximage * localVideoFrame);
 
 	PhoneCall & _phoneCall;
 

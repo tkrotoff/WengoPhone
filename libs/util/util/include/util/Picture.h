@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef PICTURE_H
-#define PICTURE_H
+#ifndef OWPICTURE_H
+#define OWPICTURE_H
 
 #include <string>
 
@@ -89,7 +89,6 @@ private:
 	std::string _pictureData;
 
 	std::string _filename;
-
 };
 
-#endif	//PICTURE_H
+#endif	//OWPICTURE_H

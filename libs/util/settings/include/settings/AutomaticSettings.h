@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef AUTOMATICSETTINGS_H
-#define AUTOMATICSETTINGS_H
+#ifndef OWAUTOMATICSETTINGS_H
+#define OWAUTOMATICSETTINGS_H
 
 #include <settings/Settings.h>
 
@@ -127,4 +127,4 @@ protected:
 	Keys _keyDefaultValueMap;
 };
 
-#endif	//AUTOMATICSETTINGS_H
+#endif	//OWAUTOMATICSETTINGS_H

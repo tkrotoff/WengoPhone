@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef LOGGER_H
-#define LOGGER_H
+#ifndef OWLOGGER_H
+#define OWLOGGER_H
 
 #include <util/NonCopyable.h>
 #include <util/String.h>
@@ -142,4 +142,4 @@ private:
 	mutable boost::mutex _mutex;
 };
 
-#endif	//LOGGER_H
+#endif	//OWLOGGER_H

@@ -52,13 +52,13 @@ bool DateXMLSerializer::unserialize(const std::string & data) {
 	TiXmlHandle docHandle(&doc);
 	TiXmlHandle date = docHandle.FirstChild("date");
 
-	// Retrieving day
+	//Retrieving day
 	_date._day = String(date.FirstChild("day").FirstChild().Text()->Value()).toInteger();
 
-	// Retrieving month
+	//Retrieving month
 	_date._month = String(date.FirstChild("month").FirstChild().Text()->Value()).toInteger();
 
-	// Retrieving year
+	//Retrieving year
 	_date._year = String(date.FirstChild("year").FirstChild().Text()->Value()).toInteger();
 
 	return true;

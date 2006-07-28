@@ -54,6 +54,8 @@ class PUserProfile;
 class CUserProfile;
 class PUserProfileHandler;
 class CUserProfileHandler;
+class PConferenceCall;
+class CConferenceCall;
 
 /**
  * Factories for the presentation component.
@@ -109,6 +111,8 @@ public:
 	virtual PSubscribe * createPresentationSubscribe(CSubscribe & cSubscribe) = 0;
 
 	virtual PWsDirectory * createPresentationWsDirectory(CWsDirectory & cWsDirectory) = 0;
+
+	virtual PConferenceCall * createPresentationConferenceCall(CConferenceCall & cConferenceCall) = 0;
 
 	/** Because of the presentation event loop (QApplication::exec()). */
 	virtual int exec() = 0;

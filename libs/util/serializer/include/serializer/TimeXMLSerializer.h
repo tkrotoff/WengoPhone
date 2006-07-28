@@ -25,7 +25,7 @@
 class Time;
 
 /**
- * Serialize a Time object.
+ * Serializes a Time object.
  *
  * @author Mathieu Stute
  */
@@ -41,7 +41,6 @@ public:
 private:
 
 	Time & _time;
-
 };
 
 #endif //OWTIMEXMLSERIALIZER_H

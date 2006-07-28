@@ -52,13 +52,13 @@ bool TimeXMLSerializer::unserialize(const std::string & data) {
 	TiXmlHandle docHandle(&doc);
 	TiXmlHandle date = docHandle.FirstChild("time");
 
-	// Retrieving hour
+	//Retrieving hour
 	_time._hour = String(date.FirstChild("hour").FirstChild().Text()->Value()).toInteger();
 
-	// Retrieving minute
+	//Retrieving minute
 	_time._minute = String(date.FirstChild("minute").FirstChild().Text()->Value()).toInteger();
 
-	// Retrieving second
+	//Retrieving second
 	_time._second = String(date.FirstChild("second").FirstChild().Text()->Value()).toInteger();
 
 	return true;

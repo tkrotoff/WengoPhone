@@ -24,6 +24,49 @@
  * Simple library to retrieve a human readable
  * string representing the windows version.
  *
+ * String is something like:
+ *
+ * - Microsoft Windows Vista
+ * - Microsoft Server Longhorn
+ * - Microsoft Windows Server 2003 R2
+ * - Microsoft Windows XP Professional x64 Edition
+ * - Microsoft Windows Server 2003
+ * - Microsoft Windows XP
+ * - Microsoft Windows 2000
+ * - Microsoft Windows NT
+ *
+ * + Various editions:
+ *   - Workstation 4.0
+ *   - Home Edition
+ *   - Professional
+ *   - Datacenter Edition for Itanium-based Systems
+ *   - Datacenter x64 Edition
+ *   - Enterprise x64 Edition
+ *   - Standard x64 Edition
+ *   - Datacenter Edition
+ *   - Enterprise Edition
+ *   - Web Edition
+ *   - Standard Edition
+ *   - Datacenter Server
+ *   - Advanced Server
+ *   - Server
+ *   - Server 4.0, Enterprise Edition
+ *   - Server 4.0
+ *   - Workstation
+ *   - Server
+ *   - Advanced Server
+ *   - Service Pack 6a (Build N)
+ *   - (Build N)
+ *
+ * - Microsoft Windows 95
+ *   - OSR2
+ * - Microsoft Windows 98
+ *   - A
+ *   - B
+ *   - SE
+ * - Microsoft Windows Millennium Edition
+ * - Microsoft Win32s
+ *
  * @author Mathieu Stute
  */
 

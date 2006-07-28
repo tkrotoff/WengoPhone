@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef STRINGLIST_H
-#define STRINGLIST_H
+#ifndef OWSTRINGLIST_H
+#define OWSTRINGLIST_H
 
 #include <util/List.h>
 
@@ -143,4 +143,4 @@ private:
 	};
 };
 
-#endif	//STRINGLIST_H
+#endif	//OWSTRINGLIST_H

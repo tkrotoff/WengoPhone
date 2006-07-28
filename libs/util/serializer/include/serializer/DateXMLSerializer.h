@@ -17,15 +17,15 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef DATEXMLSERIALIZER_H
-#define DATEXMLSERIALIZER_H
+#ifndef OWDATEXMLSERIALIZER_H
+#define OWDATEXMLSERIALIZER_H
 
 #include <serialization/Serializable.h>
 
 class Date;
 
 /**
- * Serialize a Date object.
+ * Serializes a Date object.
  *
  * @author Philippe Bernery
  */
@@ -41,7 +41,6 @@ public:
 private:
 
 	Date & _date;
-
 };
 
-#endif //DATEXMLSERIALIZER_H
+#endif //OWDATEXMLSERIALIZER_H

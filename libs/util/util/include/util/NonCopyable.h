@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef NONCOPYABLE_H
-#define NONCOPYABLE_H
+#ifndef OWNONCOPYABLE_H
+#define OWNONCOPYABLE_H
 
 /**
  * Ensures derived classes have private copy constructor and copy assignment.
@@ -56,4 +56,4 @@ private:
 	const NonCopyable & operator=(const NonCopyable &);
 };
 
-#endif	//NONCOPYABLE_H
+#endif	//OWNONCOPYABLE_H

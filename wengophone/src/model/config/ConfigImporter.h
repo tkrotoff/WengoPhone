@@ -66,7 +66,7 @@ private:
 
 	static bool classicXMLParser(const std::string & xmlFile, void * structVcard);
 
-	static std::string classicVCardToString(void *structVcard);
+	static std::string classicVCardToString(void * structVcard);
 
 	static void * getLastWengoUser(const std::string & configUserFile, unsigned version);
 

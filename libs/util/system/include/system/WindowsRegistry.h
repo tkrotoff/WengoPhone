@@ -25,7 +25,7 @@
 #include <string>
 
 /**
- *
+ * Class to manipulate the Windows registry database.
  *
  * @author Mathieu Stute
  */

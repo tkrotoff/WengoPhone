@@ -71,9 +71,7 @@ void CPhoneCall::stateChangedEventHandler(PhoneCall & sender, EnumPhoneCallState
 	}
 }
 
-void CPhoneCall::videoFrameReceivedEventHandler(PhoneCall & sender, piximage * remoteVideoFrame,
-	piximage * localVideoFrame) {
-
+void CPhoneCall::videoFrameReceivedEventHandler(PhoneCall & sender, piximage * remoteVideoFrame, piximage * localVideoFrame) {
 	if (_pPhoneCall) {
 		_pPhoneCall->videoFrameReceivedEvent(remoteVideoFrame, localVideoFrame);
 	}

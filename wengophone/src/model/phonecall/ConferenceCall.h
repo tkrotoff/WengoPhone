@@ -81,13 +81,35 @@ public:
 
 	~ConferenceCall();
 
-	void addPhoneCall(PhoneCall & phoneCall);
-
-	void removePhoneCall(PhoneCall & phoneCall);
-
+	/**
+	 * Adds a phone number to the conference.
+	 *
+	 * If the phone number corresponds to an existing PhoneCall
+	 * the PhoneCall is directly added to the conference; otherwise a new PhoneCall is created.
+	 *
+	 * @param phoneNumber phone number to add to the conference
+	 */
 	void addPhoneNumber(const std::string & phoneNumber);
 
+	/**
+	 * Removes a phone number to the conference.
+	 *
+	 * If the phone number corresponds to an existing PhoneCall
+	 * the PhoneCall is directly removed (and call is closed) to the conference.
+	 *
+	 * @param phoneNumber phone number to remove from the conference
+	 */
 	void removePhoneNumber(const std::string & phoneNumber);
+
+	/**
+	 * FIXME should be private?
+	 */
+	void addPhoneCall(PhoneCall & phoneCall);
+
+	/**
+	 * FIXME should be private?
+	 */
+	void removePhoneCall(PhoneCall & phoneCall);
 
 	typedef List<PhoneCall *> PhoneCallList;
 

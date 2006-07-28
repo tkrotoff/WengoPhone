@@ -29,8 +29,7 @@
 using namespace std;
 
 SettingsXMLSerializer::SettingsXMLSerializer(Settings & settings)
-: _settings(settings) {
-
+	: _settings(settings) {
 }
 
 std::string SettingsXMLSerializer::serialize() {

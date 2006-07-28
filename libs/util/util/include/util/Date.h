@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef DATE_H
-#define DATE_H
+#ifndef OWDATE_H
+#define OWDATE_H
 
 #include <ctime>
 #include <string>
@@ -126,4 +126,4 @@ private:
 	unsigned _year;
 };
 
-#endif	//DATE_H
+#endif	//OWDATE_H

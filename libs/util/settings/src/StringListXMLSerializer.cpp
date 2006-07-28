@@ -26,7 +26,7 @@
 using namespace std;
 
 StringListXMLSerializer::StringListXMLSerializer(StringList & stringList)
-: _stringList(stringList) {
+	: _stringList(stringList) {
 }
 
 std::string StringListXMLSerializer::serialize() {

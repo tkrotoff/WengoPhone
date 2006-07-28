@@ -154,6 +154,7 @@ sources = [
 	'control/chat/CChatHandler.cpp',
 	'control/phoneline/CPhoneLine.cpp',
 	'control/phonecall/CPhoneCall.cpp',
+	'control/phonecall/CConferenceCall.cpp',
 	'control/profile/CUserProfile.cpp',
 	'control/profile/CUserProfileHandler.cpp',
 	'control/contactlist/CContactList.cpp',

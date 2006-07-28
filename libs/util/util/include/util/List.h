@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef LIST_H
-#define LIST_H
+#ifndef OWLIST_H
+#define OWLIST_H
 
 #include <vector>
 #include <algorithm>
@@ -85,4 +85,4 @@ public:
 	}
 };
 
-#endif	//LIST_H
+#endif	//OWLIST_H
