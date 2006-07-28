@@ -148,6 +148,7 @@ struct ph_video_stream
 	unsigned int fps; /* FPS for encoding & decoding */
 	unsigned int fps_interleave_time; /* Maximum time between two frames, in milliseconds */
 	struct timeval last_decode_time; /* timeval of the last decoding */
+	struct timeval last_encode_time; /* timeval of the last encoding */
 
         void (*frameDisplayCallback)(void *ctx, void *event);
 

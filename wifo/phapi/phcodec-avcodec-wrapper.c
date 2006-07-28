@@ -110,8 +110,11 @@ int phcodec_avcodec_encoder_init(ph_avcodec_encoder_ctx_t *encoder_t, void *ctx,
 	encoder_t->context->pix_fmt = PIX_FMT_YUV420P;
 	encoder_t->context->width = dest_width;
 	encoder_t->context->height = dest_height;
+    
+    // time base unit for the presentation timestamps = millisecond
 	encoder_t->context->time_base.num = 1;
-	encoder_t->context->time_base.den = meta_t->frame_rate;
+    encoder_t->context->time_base.den = 1000;
+    
 	encoder_t->context->max_b_frames = 0;
 	//encoder_t->context->dsp_mask = (FF_MM_MMX|FF_MM_MMXEXT|FF_MM_SSE|FF_MM_SSE2);
 	//encoder_t->context->dsp_mask = (FF_MM_FORCE|FF_MM_MMX|FF_MM_MMXEXT|FF_MM_SSE|FF_MM_SSE2);
@@ -167,11 +170,11 @@ void phcodec_avcodec_video_rtp_callback(struct AVCodecContext * context, void *d
 	          int size, int packetNumber ) {
 
 	phvstream_t *video_stream = (phvstream_t *)context->opaque;
-	//uint32_t ts = (uint32_t) ( 90.0 * context->coded_frame->pts ) / 1000;
-	uint32_t ts = (uint32_t) ( 90000 * context->coded_frame->pts );
+    // time base unit of ->pts has been defined as "millisecond"
+    // ts = fix_random + sum (90000 / local_fps)
+    // => ts = 0 + sum (90 * delta_ts_millisec)
+    uint32_t ts = (uint32_t) ( 90 * context->coded_frame->pts );
 	int eof;
-
-	//printf("pts: %d\n",context->coded_frame->pts);
 
 	/*
 	 * Set the P bit of h263 header to 1 (start of picture)

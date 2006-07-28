@@ -79,8 +79,6 @@ void phmedia_video_rtpsend_callback (void *ctx, void *data, int size,
 	phvstream_t *video_stream = (phvstream_t *) ctx;
 	mblk_t *m1 ;
 
-	video_stream->txtstamp = ts;
-
 	m1 = rtp_session_create_packet (video_stream->ms.rtp_session,
 			RTP_FIXED_HEADER_SIZE, (char *)data, size);
 	if (!m1)
@@ -200,7 +198,9 @@ void ph_media_free_video_frame(phm_videoframe_t *ptr) {
  */
 int ph_media_video_send_frame(phvstream_t *video_stream, phm_videoframe_t *phmvf, int cache) {
 	ph_h263_encoder_ctx_t *video_encoder = (ph_h263_encoder_ctx_t *) video_stream->ms.encoder_ctx;
+	struct timeval now_time;
 	unsigned enclen = 0;
+    unsigned delta_ts = 0;
 	struct _piximage *image_captured;
 	AVFrame *avf_prepared_for_encoding;
 	unsigned len_prepared_for_encoding = pix_size (PIX_OSI_YUV420P,
@@ -248,12 +248,24 @@ int ph_media_video_send_frame(phvstream_t *video_stream, phm_videoframe_t *phmvf
 	}
 	//
 
+
+    // calculate the delta timestamp
+    gettimeofday(&now_time, 0);
+    ph_tvsub(&now_time, &video_stream->last_encode_time);
+    delta_ts = now_time.tv_usec / 1000; // in millisec
+    gettimeofday(&video_stream->last_encode_time, 0);
+    if (!video_stream->num_encoded_frames)
+    {
+        delta_ts = 1000; // 1 sec
+    }
+
 	// encode the frame and re-adjust tstamps
+	video_stream->num_encoded_frames += 1;
+	video_stream->txtstamp += delta_ts;
+    avf_prepared_for_encoding->pts = video_stream->txtstamp;
 	enclen = video_stream->ms.codec->encode(video_encoder,
 		avf_prepared_for_encoding, len_prepared_for_encoding,
 		video_encoder->data_enc, video_encoder->max_frame_len);
-	video_stream->num_encoded_frames += 1;
-	video_stream->txtstamp += 90000;
 	//
 
 	return 1;
