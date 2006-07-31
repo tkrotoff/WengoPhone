@@ -8,6 +8,7 @@ headers = []
 sources = [
   'src/spxec.c',
   'src/spxecfft.c',
+  'src/spxecfftwrap.c',
 ]
 
 env.WengoAddIncludePath(include_path)
