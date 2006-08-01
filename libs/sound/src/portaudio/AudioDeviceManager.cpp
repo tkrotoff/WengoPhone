@@ -25,7 +25,7 @@
 
 #include <util/Logger.h>
 
-Mutex AudioDeviceManager::_mutex;
+RecursiveMutex AudioDeviceManager::_mutex;
 
 /**
  * Retrieves the number of audio device found.
@@ -42,7 +42,7 @@ int getNbDevices() {
 }
 
 std::list<AudioDevice> AudioDeviceManager::getInputDeviceList() {
-	Mutex::ScopedLock scopedLock(_mutex);
+	RecursiveMutex::ScopedLock scopedLock(_mutex);
 
 	std::list<AudioDevice> deviceList;
 
@@ -83,7 +83,7 @@ std::list<AudioDevice> AudioDeviceManager::getInputDeviceList() {
 }
 
 std::list<AudioDevice> AudioDeviceManager::getOutputDeviceList() {
-	Mutex::ScopedLock scopedLock(_mutex);
+	RecursiveMutex::ScopedLock scopedLock(_mutex);
 
 	std::list<AudioDevice> deviceList;
 
@@ -124,7 +124,7 @@ std::list<AudioDevice> AudioDeviceManager::getOutputDeviceList() {
 }
 
 AudioDevice AudioDeviceManager::getDefaultOutputDevice() {
-	Mutex::ScopedLock scopedLock(_mutex);
+	RecursiveMutex::ScopedLock scopedLock(_mutex);
 
 	std::list<AudioDevice> list = getOutputDeviceList();
 
@@ -144,7 +144,7 @@ bool AudioDeviceManager::setDefaultOutputDevice(const AudioDevice & audioDevice)
 }
 
 AudioDevice AudioDeviceManager::getDefaultInputDevice() {
-	Mutex::ScopedLock scopedLock(_mutex);
+	RecursiveMutex::ScopedLock scopedLock(_mutex);
 
 	std::list<AudioDevice> list = getInputDeviceList();
 
@@ -160,7 +160,7 @@ AudioDevice AudioDeviceManager::getDefaultInputDevice() {
 }
 
 bool AudioDeviceManager::setDefaultInputDevice(const AudioDevice & audioDevice) {
-	Mutex::ScopedLock scopedLock(_mutex);
+	RecursiveMutex::ScopedLock scopedLock(_mutex);
 
 	return false;
 }

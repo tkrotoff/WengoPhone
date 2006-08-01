@@ -23,7 +23,7 @@
 #include <sound/AudioDevice.h>
 
 #include <util/NonCopyable.h>
-#include <thread/Mutex.h>
+#include <thread/RecursiveMutex.h>
 
 #include <list>
 
@@ -90,7 +90,7 @@ public:
 
 private:
 
-	static Mutex _mutex;
+	static RecursiveMutex _mutex;
 };
 
 #endif	//OWAUDIODEVICEMANAGER_H

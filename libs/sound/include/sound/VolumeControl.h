@@ -23,7 +23,7 @@
 #include <sound/AudioDevice.h>
 #include <sound/IVolumeControl.h>
 
-#include <thread/Mutex.h>
+#include <thread/RecursiveMutex.h>
 
 /**
  * Volume control implementation.
@@ -54,7 +54,7 @@ private:
 	/** System dependant implementation. */
 	IVolumeControl * _iVolumeControlPrivate;
 
-	mutable Mutex _mutex;
+	mutable RecursiveMutex _mutex;
 };
 
 #endif	//OWVOLUMECONTROL_H
