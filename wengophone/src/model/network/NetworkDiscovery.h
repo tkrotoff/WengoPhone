@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef NETWORKDISCOVERY_H
-#define NETWORKDISCOVERY_H
+#ifndef OWNETWORKDISCOVERY_H
+#define OWNETWORKDISCOVERY_H
 
 #include <sipwrapper/EnumNatType.h>
 
@@ -32,8 +32,7 @@
  * @ingroup model
  * @author Philippe Bernery
  */
-class NetworkDiscovery
-{
+class NetworkDiscovery {
 public:
 
 	NetworkDiscovery();
@@ -94,4 +93,4 @@ private:
 	static const unsigned HTTP_TIMEOUT = 10;
 };
 
-#endif /*NETWORKDISCOVERY_H*/
+#endif	//OWNETWORKDISCOVERY_H
