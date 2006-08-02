@@ -36,6 +36,9 @@
 #include <http/HttpRequest.h>
 #include <thread/Timer.h>
 #include <util/Logger.h>
+#include <system/RegisterProtocol.h>
+#include <util/Path.h>
+#include <cutil/global.h>
 
 #include <sstream>
 
@@ -75,6 +78,12 @@ WengoPhone::WengoPhone() {
 	_userProfileHandler = new UserProfileHandler(*this);
 	////
 
+#ifdef OS_WINDOWS
+	RegisterProtocol registerProtocol("wengo");
+	std::string executableFullName = Path::getApplicationDirPath() + Path::getPathSeparator() + config.getExecutableName();
+	registerProtocol.bind(executableFullName + " -c %1", executableFullName + ",0", "http://www.wengo.com");
+#endif
+
 	//Creating instance of CommandServer
 	CommandServer::getInstance(*this);
 	////
@@ -94,7 +103,6 @@ WengoPhone::~WengoPhone() {
 	if (_userProfileHandler) {
 		delete _userProfileHandler;
 	}
-
 
 	if (_startupSettingListener) {
 		delete _startupSettingListener;
