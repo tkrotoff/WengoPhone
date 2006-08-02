@@ -24,10 +24,10 @@
 
 #include <util/Logger.h>
 
-Mutex AudioDeviceManager::_mutex;
+RecursiveMutex AudioDeviceManager::_mutex;
 
 std::list<AudioDevice> AudioDeviceManager::getInputDeviceList() {
-	Mutex::ScopedLock scopedLock(_mutex);
+	RecursiveMutex::ScopedLock scopedLock(_mutex);
 
 	std::list<AudioDevice> result;
 
@@ -55,7 +55,7 @@ std::list<AudioDevice> AudioDeviceManager::getInputDeviceList() {
 }
 
 std::list<AudioDevice> AudioDeviceManager::getOutputDeviceList() {
-	Mutex::ScopedLock scopedLock(_mutex);
+	RecursiveMutex::ScopedLock scopedLock(_mutex);
 
 	std::list<AudioDevice> result;
 
@@ -83,7 +83,7 @@ std::list<AudioDevice> AudioDeviceManager::getOutputDeviceList() {
 }
 
 AudioDevice AudioDeviceManager::getDefaultOutputDevice() {
-	Mutex::ScopedLock scopedLock(_mutex);
+	RecursiveMutex::ScopedLock scopedLock(_mutex);
 
 	OSStatus status = noErr;
 	AudioDevice result;
@@ -111,7 +111,7 @@ AudioDevice AudioDeviceManager::getDefaultOutputDevice() {
 }
 
 bool AudioDeviceManager::setDefaultOutputDevice(const AudioDevice & audioDevice) {
-	Mutex::ScopedLock scopedLock(_mutex);
+	RecursiveMutex::ScopedLock scopedLock(_mutex);
 
 	OSStatus status = noErr;
 
@@ -139,7 +139,7 @@ bool AudioDeviceManager::setDefaultOutputDevice(const AudioDevice & audioDevice)
 }
 
 AudioDevice AudioDeviceManager::getDefaultInputDevice() {
-	Mutex::ScopedLock scopedLock(_mutex);
+	RecursiveMutex::ScopedLock scopedLock(_mutex);
 
 	OSStatus status = noErr;
 	AudioDevice result;
@@ -167,7 +167,7 @@ AudioDevice AudioDeviceManager::getDefaultInputDevice() {
 }
 
 bool AudioDeviceManager::setDefaultInputDevice(const AudioDevice & audioDevice) {
-	Mutex::ScopedLock scopedLock(_mutex);
+	RecursiveMutex::ScopedLock scopedLock(_mutex);
 
 	OSStatus status = noErr;
 
