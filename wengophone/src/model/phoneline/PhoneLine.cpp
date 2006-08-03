@@ -125,7 +125,8 @@ int PhoneLine::makeCall(const std::string & phoneNumber) {
 		//FIXME this should be a LOG_FATAL()
 		if (phoneCall) {
 			EnumPhoneCallState::PhoneCallState state = phoneCall->getState();
-			if (state != EnumPhoneCallState::PhoneCallStateHold) {
+			if (state != EnumPhoneCallState::PhoneCallStateHold &&
+				state != EnumPhoneCallState::PhoneCallStateClosed) {
 
 				LOG_ERROR("cannot place the call=" + phoneNumber + ", at least another phone call is not in hold state");
 				return SipWrapper::CallIdError;
