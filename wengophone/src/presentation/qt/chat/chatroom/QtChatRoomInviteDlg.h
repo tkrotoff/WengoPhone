@@ -32,6 +32,11 @@
 
 class Contact;
 
+/**
+ *
+ * @ingroup presentation
+ * @author Mr K.
+ */
 class QtChatRoomInviteDlg : public QDialog
 {
 	Q_OBJECT

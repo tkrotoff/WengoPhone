@@ -18,7 +18,6 @@
  */
 
 #include "QtChatWindow.h"
-
 #include "QtChatWidget.h"
 #include "QtChatTabWidget.h"
 

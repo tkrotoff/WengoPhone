@@ -37,7 +37,11 @@
 class QtChatTabWidget;
 class QtWengoPhone;
 
-
+/**
+ *
+ * @ingroup presentation
+ * @author Mr K.
+ */
 class QtChatWindow : public QObject, public Trackable {
 	Q_OBJECT
 

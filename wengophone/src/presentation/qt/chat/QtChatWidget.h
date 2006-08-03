@@ -20,10 +20,10 @@
 #ifndef OWQTCHATWIDGET_H
 #define OWQTCHATWIDGET_H
 
-#include "QtEmoticonsWidget.h"
-#include "QtEmoticon.h"
+#include "emoticons/QtEmoticonsWidget.h"
+#include "emoticons/QtEmoticon.h"
+#include "chatroom/QtChatRoomInviteDlg.h"
 #include "QtChatContactInfo.h"
-#include "QtChatRoomInviteDlg.h"
 
 #include <control/chat/CChatHandler.h>
 
@@ -48,6 +48,11 @@ class QtWengoStyleLabel;
 class QtEmoticonsManager;
 class QtWengoPhone;
 
+/**
+ *
+ * @ingroup presentation
+ * @author Mr K.
+ */
 class QtChatWidget : public QWidget, public Trackable {
 	Q_OBJECT
 public:

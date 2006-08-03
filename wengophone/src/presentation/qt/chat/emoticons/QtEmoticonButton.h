@@ -22,6 +22,11 @@
 #include <QtGui>
 #include "QtEmoticon.h"
 
+/**
+ *
+ * @ingroup presentation
+ * @author Mr K.
+ */
 class QtEmoticonButton : public QPushButton
 {
 	Q_OBJECT

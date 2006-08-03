@@ -17,7 +17,12 @@
 * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 */
+
 #include "QtChatRoomInviteDlg.h"
+#include "QtChatRoomTreeWidgetItem.h"
+#include "QtChatRoomListWidgetItem.h"
+
+#include <presentation/qt/contactlist/QtContactPixmap.h>
 
 #include <util/Logger.h>
 
@@ -27,10 +32,6 @@
 #include <model/contactlist/ContactList.h>
 #include <model/contactlist/ContactProfile.h>
 #include <model/contactlist/ContactGroup.h>
-
-#include "../contactlist/QtContactPixmap.h"
-#include "QtChatRoomTreeWidgetItem.h"
-#include "QtChatRoomListWidgetItem.h"
 
 QtChatRoomInviteDlg::QtChatRoomInviteDlg(IMChatSession & chatSession, CContactList & cContactList, QWidget * parent , Qt::WFlags f ) :
 QDialog(parent,f), _cContactList(cContactList), _chatSession(chatSession)

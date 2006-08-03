@@ -26,6 +26,11 @@
 
 class ContactProfile;
 
+/**
+ *
+ * @ingroup presentation
+ * @author Mr K.
+ */
 class QtChatRoomTreeWidgetItem : public QTreeWidgetItem
 {
 

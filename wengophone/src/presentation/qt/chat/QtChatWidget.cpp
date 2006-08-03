@@ -23,8 +23,8 @@
 #include "QtChatWidget.h"
 #include "QtChatTabWidget.h"
 #include "QtChatWidgetManager.h"
-#include "QtEmoticonsWidget.h"
-#include "QtEmoticonsManager.h"
+#include "emoticons/QtEmoticonsWidget.h"
+#include "emoticons/QtEmoticonsManager.h"
 
 #include <control/contactlist/CContactList.h>
 #include <control/profile/CUserProfile.h>

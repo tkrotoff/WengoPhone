@@ -23,6 +23,11 @@
 #include <QtXml>
 #include "QtEmoticon.h"
 
+/**
+ *
+ * @ingroup presentation
+ * @author Mr K.
+ */
 class QtEmoticonsManager : public QObject
 {
 	Q_OBJECT

@@ -21,6 +21,11 @@
 
 #include <QtGui>
 
+/**
+ *
+ * @ingroup presentation
+ * @author Mr K.
+ */
 class QtEmoticon
 {
 public:

@@ -30,6 +30,11 @@
 #include <imwrapper/IMChat.h>
 #include <control/chat/CChatHandler.h>
 
+/**
+ *
+ * @ingroup presentation
+ * @author Mr K.
+ */
 class QtChatContactWidget : public QLabel
 {
 	Q_OBJECT

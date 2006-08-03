@@ -27,6 +27,11 @@
 
 class QtEmoticonsManager;
 
+/**
+ *
+ * @ingroup presentation
+ * @author Mr K.
+ */
 class EmoticonsWidget : public QWidget {
 	Q_OBJECT
 public:

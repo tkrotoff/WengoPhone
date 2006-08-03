@@ -26,6 +26,11 @@
 #include <QtGui>
 class ContactProfile;
 
+/**
+ *
+ * @ingroup presentation
+ * @author Mr K.
+ */
 class QtChatRoomListWidgetItem : public QListWidgetItem
 {
 public:

@@ -23,6 +23,11 @@
 
 #include <QtGui>
 
+/**
+ *
+ * @ingroup presentation
+ * @author Mr K.
+ */
 class QtChatTabWidget : public QTabWidget
 {
 	Q_OBJECT

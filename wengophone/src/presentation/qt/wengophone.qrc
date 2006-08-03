@@ -185,40 +185,40 @@
         <file>pics/dialpad/9_on.png</file>
     </qresource>
     <qresource prefix="/emoticons" >
-        <file>chat/emoticons/emblem-unreadable.png</file>
-        <file>chat/emoticons/face-angel16.png</file>
-        <file>chat/emoticons/face-angel22.png</file>
-        <file>chat/emoticons/face-angel48.png</file>
-        <file>chat/emoticons/face-crying16.png</file>
-        <file>chat/emoticons/face-crying22.png</file>
-        <file>chat/emoticons/face-crying48.png</file>
-        <file>chat/emoticons/face-devil-grin16.png</file>
-        <file>chat/emoticons/face-devil-grin22.png</file>
-        <file>chat/emoticons/face-devil-grin48.png</file>
-        <file>chat/emoticons/face-glasses16.png</file>
-        <file>chat/emoticons/face-glasses22.png</file>
-        <file>chat/emoticons/face-glasses48.png</file>
-        <file>chat/emoticons/face-kiss16.png</file>
-        <file>chat/emoticons/face-kiss22.png</file>
-        <file>chat/emoticons/face-kiss48.png</file>
-        <file>chat/emoticons/face-plain16.png</file>
-        <file>chat/emoticons/face-plain22.png</file>
-        <file>chat/emoticons/face-plain48.png</file>
-        <file>chat/emoticons/face-sad16.png</file>
-        <file>chat/emoticons/face-sad22.png</file>
-        <file>chat/emoticons/face-sad48.png</file>
-        <file>chat/emoticons/face-smile-big16.png</file>
-        <file>chat/emoticons/face-smile-big22.png</file>
-        <file>chat/emoticons/face-smile-big48.png</file>
-        <file>chat/emoticons/face-smile16.png</file>
-        <file>chat/emoticons/face-smile22.png</file>
-        <file>chat/emoticons/face-smile48.png</file>
-        <file>chat/emoticons/face-surprise16.png</file>
-        <file>chat/emoticons/face-surprise22.png</file>
-        <file>chat/emoticons/face-surprise48.png</file>
-        <file>chat/emoticons/face-wink16.png</file>
-        <file>chat/emoticons/face-wink22.png</file>
-        <file>chat/emoticons/face-wink48.png</file>
+        <file>pics/emoticons/emblem-unreadable.png</file>
+        <file>pics/emoticons/face-angel16.png</file>
+        <file>pics/emoticons/face-angel22.png</file>
+        <file>pics/emoticons/face-angel48.png</file>
+        <file>pics/emoticons/face-crying16.png</file>
+        <file>pics/emoticons/face-crying22.png</file>
+        <file>pics/emoticons/face-crying48.png</file>
+        <file>pics/emoticons/face-devil-grin16.png</file>
+        <file>pics/emoticons/face-devil-grin22.png</file>
+        <file>pics/emoticons/face-devil-grin48.png</file>
+        <file>pics/emoticons/face-glasses16.png</file>
+        <file>pics/emoticons/face-glasses22.png</file>
+        <file>pics/emoticons/face-glasses48.png</file>
+        <file>pics/emoticons/face-kiss16.png</file>
+        <file>pics/emoticons/face-kiss22.png</file>
+        <file>pics/emoticons/face-kiss48.png</file>
+        <file>pics/emoticons/face-plain16.png</file>
+        <file>pics/emoticons/face-plain22.png</file>
+        <file>pics/emoticons/face-plain48.png</file>
+        <file>pics/emoticons/face-sad16.png</file>
+        <file>pics/emoticons/face-sad22.png</file>
+        <file>pics/emoticons/face-sad48.png</file>
+        <file>pics/emoticons/face-smile-big16.png</file>
+        <file>pics/emoticons/face-smile-big22.png</file>
+        <file>pics/emoticons/face-smile-big48.png</file>
+        <file>pics/emoticons/face-smile16.png</file>
+        <file>pics/emoticons/face-smile22.png</file>
+        <file>pics/emoticons/face-smile48.png</file>
+        <file>pics/emoticons/face-surprise16.png</file>
+        <file>pics/emoticons/face-surprise22.png</file>
+        <file>pics/emoticons/face-surprise48.png</file>
+        <file>pics/emoticons/face-wink16.png</file>
+        <file>pics/emoticons/face-wink22.png</file>
+        <file>pics/emoticons/face-wink48.png</file>
     </qresource>
     <qresource prefix="/forms" >
         <file>chat/ChatRoomInviteWidget.ui</file>

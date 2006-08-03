@@ -22,6 +22,11 @@
 
 #include <QString>
 
+/**
+ *
+ * @ingroup presentation
+ * @author Mr K.
+ */
 class QtChatContactInfo {
 public:
 
