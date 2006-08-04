@@ -29,6 +29,12 @@ elif WengoOSMacOSX():
 
 	link_flags += ['-framework Cocoa']
 
+elif WengoOSPosix():
+	sources += [
+		'src/unix/Processes.cpp',
+		'src/null/Startup.cpp',
+	]
+
 else:
 	sources += [
 		'src/null/Processes.cpp',
