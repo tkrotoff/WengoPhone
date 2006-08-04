@@ -29,6 +29,7 @@ using namespace std;
 
 #include <util/StringList.h>
 #include <util/Logger.h>
+#include <util/Path.h>
 
 CommandLineParser::CommandLineParser(int argc, char * argv[]) {
 
@@ -37,7 +38,7 @@ CommandLineParser::CommandLineParser(int argc, char * argv[]) {
 	//Set executable name
 	std::string executableName;
 	if (argv[0]) {
-		char * p = strrchr(argv[0], '/');
+		char * p = strrchr(argv[0], Path::getPathSeparator()[0]);
 		executableName = std::string(p ? p + 1 : argv[0]);
 		config.set(Config::EXECUTABLE_NAME_KEY, executableName);
 	}

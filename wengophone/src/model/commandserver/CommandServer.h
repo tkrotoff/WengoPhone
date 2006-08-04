@@ -20,7 +20,7 @@
 #ifndef OWCOMMANDSERVER_H
 #define OWCOMMANDSERVER_H
 
-#include <localserver/LocalServer.h>
+#include <owsocket/OWServerSocket.h>
 
 class WengoPhone;
 
@@ -46,7 +46,7 @@ public:
 	 * @param sender sender of the event.
 	 * @param error error status.
 	 */
-	void serverStatusEventHandler(LocalServer * sender, LocalServer::Error error);
+	void serverStatusEventHandler(OWServerSocket * sender, OWServerSocket::Error error);
 
 	/**
 	 * A client connection has been established handler.
@@ -54,7 +54,7 @@ public:
 	 * @param sender sender of the event.
 	 * @param connectionId client connection id.
 	 */
-	void connectionEventHandler(LocalServer * sender, const std::string & connectionId);
+	void connectionEventHandler(OWServerSocket * sender, const std::string & connectionId);
 
 	/**
 	 * An incoming request was received handler.
@@ -63,7 +63,7 @@ public:
 	 * @param connectionId client connection id.
 	 * @param data received data.
 	 */
-	void incomingRequestEventHandler(LocalServer * sender, const std::string & connectionId, const std::string & data);
+	void incomingRequestEventHandler(OWServerSocket * sender, const std::string & connectionId, const std::string & data);
 
 	/**
 	 * Write status event.
@@ -72,13 +72,13 @@ public:
 	 * @param writeId write id.
 	 * @param error error status
 	 */
-	void writeStatusEventHandler(LocalServer * sender, const std::string & writeId, LocalServer::Error error);
+	void writeStatusEventHandler(OWServerSocket * sender, const std::string & writeId, OWServerSocket::Error error);
 
 private:
 
 	static std::string buildHttpForFlash(const std::string & xml);
 
-	LocalServer * _localServer;
+	OWServerSocket * _serverSocket;
 
 	static CommandServer * _commandServerInstance;
 

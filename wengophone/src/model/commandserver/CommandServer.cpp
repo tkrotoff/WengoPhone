@@ -36,16 +36,16 @@ const std::string CommandServer::_querySms = "1|o|sms/";
 CommandServer::CommandServer(WengoPhone & wengoPhone)
 	: _wengoPhone(wengoPhone) {
 
-	_localServer = new LocalServer(_port);
-	_localServer->serverStatusEvent += boost::bind(&CommandServer::serverStatusEventHandler, this, _1, _2);
-	_localServer->connectionEvent += boost::bind(&CommandServer::connectionEventHandler, this, _1, _2);
-	_localServer->incomingRequestEvent += boost::bind(&CommandServer::incomingRequestEventHandler, this, _1, _2, _3);
-	_localServer->writeStatusEvent += boost::bind(&CommandServer::writeStatusEventHandler, this, _1, _2, _3);
-	_localServer->init();
+	_serverSocket = new OWServerSocket("127.0.0.1", _port);
+	_serverSocket->serverStatusEvent += boost::bind(&CommandServer::serverStatusEventHandler, this, _1, _2);
+	_serverSocket->connectionEvent += boost::bind(&CommandServer::connectionEventHandler, this, _1, _2);
+	_serverSocket->incomingRequestEvent += boost::bind(&CommandServer::incomingRequestEventHandler, this, _1, _2, _3);
+	_serverSocket->writeStatusEvent += boost::bind(&CommandServer::writeStatusEventHandler, this, _1, _2, _3);
+	_serverSocket->init();
 }
 
 CommandServer::~CommandServer() {
-	delete _localServer;
+	delete _serverSocket;
 }
 
 CommandServer & CommandServer::getInstance(WengoPhone & wengoPhone) {
@@ -56,19 +56,19 @@ CommandServer & CommandServer::getInstance(WengoPhone & wengoPhone) {
 	return *_commandServerInstance;
 }
 
-void CommandServer::serverStatusEventHandler(LocalServer * sender, LocalServer::Error error) {
-	if (error == LocalServer::NoError) {
+void CommandServer::serverStatusEventHandler(OWServerSocket * sender, OWServerSocket::Error error) {
+	if (error == OWServerSocket::NoError) {
 		LOG_DEBUG("CommandServer: connected");
 	} else {
 		LOG_WARN("CommandServer: not connected");
 	}
 }
 
-void CommandServer::connectionEventHandler(LocalServer * sender, const std::string & connectionId) {
+void CommandServer::connectionEventHandler(OWServerSocket * sender, const std::string & connectionId) {
 	LOG_DEBUG("CommandServer: client connection: " + connectionId);
 }
 
-void CommandServer::incomingRequestEventHandler(LocalServer * sender, const std::string & connectionId, const std::string & data) {
+void CommandServer::incomingRequestEventHandler(OWServerSocket * sender, const std::string & connectionId, const std::string & data) {
 	LOG_DEBUG("CommandServer: incoming request, connectionId: " + connectionId + " data: " + data);
 	String query = String(data);
 	if (query == _queryStatus) {
@@ -78,9 +78,9 @@ void CommandServer::incomingRequestEventHandler(LocalServer * sender, const std:
 		if (userprofile) {
 			IPhoneLine * phoneLine = userprofile->getActivePhoneLine();
 			if (phoneLine->isConnected()) {
-				_localServer->writeToClient(connectionId, _queryStatus + "|1");
+				_serverSocket->writeToClient(connectionId, _queryStatus + "|1");
 			} else {
-				_localServer->writeToClient(connectionId, _queryStatus + "|0");
+				_serverSocket->writeToClient(connectionId, _queryStatus + "|0");
 			}
 		}
 
@@ -95,11 +95,11 @@ void CommandServer::incomingRequestEventHandler(LocalServer * sender, const std:
 				IPhoneLine * phoneLine = userprofile->getActivePhoneLine();
 				if (phoneLine->isConnected()) {
 					phoneLine->makeCall(l[1]);
-					_localServer->writeToClient(connectionId, data + "|1");
+					_serverSocket->writeToClient(connectionId, data + "|1");
 				}
 			}
 		}
-		_localServer->writeToClient(connectionId, data + "|0");
+		_serverSocket->writeToClient(connectionId, data + "|0");
 
 	} else if (query.contains(_querySms)) {
 		LOG_WARN("not yet implemented");
@@ -108,7 +108,7 @@ void CommandServer::incomingRequestEventHandler(LocalServer * sender, const std:
 		Config & config = ConfigManager::getInstance().getCurrentConfig();
 
 		//"emulate" a http server. Needed for Flash sockets
-		_localServer->writeToClient(connectionId,
+		_serverSocket->writeToClient(connectionId,
 			buildHttpForFlash(
 				"<?xml version=\"1.0\"?>\n"
 				"<!DOCTYPE cross-domain-policy SYSTEM \"http://www.macromedia.com/xml/dtds/cross-domain-policy.dtd\">\n"
@@ -121,8 +121,8 @@ void CommandServer::incomingRequestEventHandler(LocalServer * sender, const std:
 	}
 }
 
-void CommandServer::writeStatusEventHandler(LocalServer * sender, const std::string & writeId, LocalServer::Error error) {
-	if (error == LocalServer::NoError) {
+void CommandServer::writeStatusEventHandler(OWServerSocket * sender, const std::string & writeId, OWServerSocket::Error error) {
+	if (error == OWServerSocket::NoError) {
 		LOG_DEBUG("CommandServer: writeId: " + writeId + ", write success");
 	} else {
 		LOG_WARN("CommandServer: writeId: " + writeId + ", write failed");

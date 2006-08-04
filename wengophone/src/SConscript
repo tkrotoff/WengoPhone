@@ -15,7 +15,7 @@ libs = [
 	'owhttp',
 	'owserialization',
 	'owserializer',
-	'owlocalserver',
+	'owsocket',
 	'imwrapper',
 	'sipwrapper',
 	'wenbox',

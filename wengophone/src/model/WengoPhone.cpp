@@ -80,7 +80,7 @@ WengoPhone::WengoPhone() {
 
 #ifdef OS_WINDOWS
 	RegisterProtocol registerProtocol("wengo");
-	std::string executableFullName = Path::getApplicationDirPath() + Path::getPathSeparator() + config.getExecutableName();
+	std::string executableFullName = Path::getApplicationDirPath() + config.getExecutableName();
 	registerProtocol.bind(executableFullName + " -c %1", executableFullName + ",0", "http://www.wengo.com");
 #endif
 

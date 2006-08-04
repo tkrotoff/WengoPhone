@@ -34,6 +34,7 @@
 
 #include <imwrapper/IMWrapperFactory.h>
 #include <sipwrapper/SipWrapperFactory.h>
+#include <owsocket/OWClientSocket.h>
 #include <WengoPhoneBuildId.h>
 
 #ifdef PHAPIWRAPPER
@@ -107,7 +108,20 @@ int main(int argc, char * argv[]) {
 
 	//No 2 qtwengophone at the same time
 	if (Processes::isRunning("qtwengophone.exe")) {
-		QMessageBox::warning(NULL, QObject::tr("WengoPhone"), QObject::tr("WengoPhone is already running."), QMessageBox::Ok, 0);
+
+		const std::string callFromCommandLine = config.getCmdLinePlaceCall();
+		if (!callFromCommandLine.empty()) {
+			//sends a command via socket to the existing instance.
+			OWClientSocket sock;
+			sock.connect("127.0.0.1", 25902);
+			sock.write("1|o|call/" + callFromCommandLine);
+#ifdef OS_WINDOWS
+			Sleep(1000);
+			WSACleanup();
+#endif
+		} else {
+			QMessageBox::warning(NULL, QObject::tr("WengoPhone"), QObject::tr("WengoPhone is already running."), QMessageBox::Ok, 0);
+		}
 		return EXIT_SUCCESS;
 	}
 
