@@ -17,41 +17,11 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <localserver/LocalServer.h>
+#include <owsocket/OWServerSocket.h>
 
-#include <cutil/global.h>
+#include "OWSocketCommon.h"
+
 #include <util/String.h>
-
-#ifdef OS_WINDOWS
-	#include <winsock2.h>
-	#include <windows.h>
-	#ifndef CC_MINGW
-		#include <wininet.h>
-		#include <urlmon.h>
-		#include <stdio.h>
-		#include <ws2tcpip.h>
-		#include <time.h>
-
-		#ifndef snprintf
-			#define snprintf _snprintf
-		#endif
-
-		typedef SOCKET Socket;
-	#endif //CC_MINGW
-#else
-	#include <sys/time.h>
-	#include <sys/types.h>
-	#include <sys/socket.h>
-	#include <unistd.h>
-	#include <arpa/inet.h>
-	#include <netinet/in.h>
-	#include <errno.h>
-	#include <net/if.h>
-	#include <sys/ioctl.h>
-
-	typedef int Socket;
-	inline int closesocket(Socket fd) {return close(fd);}
-#endif	//OS_WINDOWS
 
 #ifndef MSG_NOSIGNAL
 	#define MSG_NOSIGNAL 0
@@ -61,30 +31,28 @@ Socket _mainSock;
 static std::list<Socket> _clientSockList;
 typedef std::list<Socket>::iterator SockListIterator;
 
-const std::string LocalServer::LISTENING_IP = "127.0.0.1";
-
-LocalServer::LocalServer(int port)
-	: _port(port) {
+OWServerSocket::OWServerSocket(const std::string listeningIp, int port)
+	: _listeningIp(listeningIp), _port(port) {
 	_started = false;
 }
 
-void LocalServer::init() {
+void OWServerSocket::init() {
 	if (createMainListeningSocket()) {
 		_started = true;
 		start();
 	}
 }
 
-bool LocalServer::createMainListeningSocket() {
+bool OWServerSocket::createMainListeningSocket() {
 
 	struct sockaddr_in raddr;
 	int option = 1;
 
-	if (LISTENING_IP.empty()) {
+	if (_listeningIp.empty()) {
 		raddr.sin_addr.s_addr = htons(INADDR_ANY);
 	}
 	else {
-		raddr.sin_addr.s_addr = inet_addr(LISTENING_IP.c_str());
+		raddr.sin_addr.s_addr = inet_addr(_listeningIp.c_str());
 	}
 	raddr.sin_port = htons(_port);
 	raddr.sin_family = AF_INET;
@@ -114,7 +82,7 @@ bool LocalServer::createMainListeningSocket() {
 	return true;
 }
 
-LocalServer::~LocalServer() {
+OWServerSocket::~OWServerSocket() {
 
 	if (_started) {
 		_started = false;
@@ -131,7 +99,7 @@ LocalServer::~LocalServer() {
 	}
 }
 
-bool LocalServer::closeAndRemoveFromList(const std::string & connectionId) {
+bool OWServerSocket::closeAndRemoveFromList(const std::string & connectionId) {
 	Socket sockId = (Socket) String(connectionId).toInteger();
 
 	SockListIterator it;
@@ -146,7 +114,7 @@ bool LocalServer::closeAndRemoveFromList(const std::string & connectionId) {
 	return false;
 }
 
-bool LocalServer::checkConnectionId(const std::string & connectionId) {
+bool OWServerSocket::checkConnectionId(const std::string & connectionId) {
 	Socket sockId = (Socket) String(connectionId).toInteger();
 
 	SockListIterator it;
@@ -159,7 +127,7 @@ bool LocalServer::checkConnectionId(const std::string & connectionId) {
 	return false;
 }
 
-bool LocalServer::writeToClient(const std::string & connectionId, const std::string & data) {
+bool OWServerSocket::writeToClient(const std::string & connectionId, const std::string & data) {
 	Socket sockId = (Socket) String(connectionId).toInteger();
 	Error error = UnknownError;
 
@@ -182,7 +150,7 @@ bool LocalServer::writeToClient(const std::string & connectionId, const std::str
 	return (error == NoError);
 }
 
-int LocalServer::getHighestSocket() {
+int OWServerSocket::getHighestSocket() {
 	int highest = 0;
 
 	SockListIterator it;
@@ -199,10 +167,10 @@ int LocalServer::getHighestSocket() {
 	return highest;
 }
 
-int LocalServer::getRequest(int sockId, char *buff, unsigned int buffsize) {
+int OWServerSocket::getRequest(int sockId, char *buff, unsigned int buffsize) {
 	struct timeval timeout;
 	fd_set rfds;
-	int nbytes = 0;
+	unsigned int nbytes = 0;
 	Socket sock = (Socket) sockId;
 
 	memset(buff, 0, buffsize);
@@ -216,6 +184,7 @@ int LocalServer::getRequest(int sockId, char *buff, unsigned int buffsize) {
 		int ret = select(sock + 1, &rfds, 0, 0, &timeout);
 
 		if (ret <= 0) {
+			LOG_WARN("select error");
 			return -1;
 		}
 
@@ -223,6 +192,7 @@ int LocalServer::getRequest(int sockId, char *buff, unsigned int buffsize) {
 			ret = recv(sock, buff + nbytes, 1, 0);
 
 			if (ret <= 0) {
+				LOG_WARN("recv error");
 				return -1;
 			} else {
 				nbytes += ret;
@@ -241,12 +211,12 @@ int LocalServer::getRequest(int sockId, char *buff, unsigned int buffsize) {
 	return nbytes;
 }
 
-void LocalServer::run() {
+void OWServerSocket::run() {
 	Socket sock;
 	struct sockaddr from;
 	socklen_t fromlen = sizeof(from);
 	fd_set rfds;
-	struct timeval to;
+	//struct timeval to;
 	char buff[256];
 
 	serverStatusEvent(this, NoError);
@@ -275,7 +245,7 @@ void LocalServer::run() {
 			for (it = _clientSockList.begin(); it != _clientSockList.end(); it++) {
 				if (FD_ISSET(*it, &rfds)) {
 					if (getRequest(*it, buff, sizeof(buff)) == -1) {
-						LOG_DEBUG("error reading socket");
+						LOG_WARN("error reading socket");
 						closesocket(*it);
 						_clientSockList.erase(it);
 					} else {

@@ -10,7 +10,8 @@ link_flags = []
 headers = [
 ]
 sources = [
-	'src/LocalServer.cpp',
+	'src/OWServerSocket.cpp',
+	'src/OWClientSocket.cpp',
 ]
 
 env.WengoAddLinkFlags(link_flags)
@@ -18,5 +19,4 @@ env.WengoAddIncludePath(include_path)
 env.WengoUseLibraries(libs)
 env.WengoAddDoxyfile()
 
-env.WengoStaticLibrary('owlocalserver', sources, headers)
-
+env.WengoStaticLibrary('owsocket', sources, headers)
