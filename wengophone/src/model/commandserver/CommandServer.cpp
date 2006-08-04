@@ -77,7 +77,7 @@ void CommandServer::incomingRequestEventHandler(OWServerSocket * sender, const s
 		UserProfile * userprofile = _wengoPhone.getUserProfileHandler().getCurrentUserProfile();
 		if (userprofile) {
 			IPhoneLine * phoneLine = userprofile->getActivePhoneLine();
-			if (phoneLine->isConnected()) {
+			if (phoneLine && phoneLine->isConnected()) {
 				_serverSocket->writeToClient(connectionId, _queryStatus + "|1");
 			} else {
 				_serverSocket->writeToClient(connectionId, _queryStatus + "|0");
@@ -93,7 +93,7 @@ void CommandServer::incomingRequestEventHandler(OWServerSocket * sender, const s
 			UserProfile * userprofile = _wengoPhone.getUserProfileHandler().getCurrentUserProfile();
 			if (userprofile) {
 				IPhoneLine * phoneLine = userprofile->getActivePhoneLine();
-				if (phoneLine->isConnected()) {
+				if (phoneLine && phoneLine->isConnected()) {
 					phoneLine->makeCall(l[1]);
 					_serverSocket->writeToClient(connectionId, data + "|1");
 				}
