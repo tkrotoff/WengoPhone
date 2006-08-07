@@ -44,6 +44,7 @@ void OWClientSocket::connect(const std::string & ip, int port) {
 	_ip = ip;
 	_port = port;
 	Error error = NoError;
+	int i = 1;
 
 	if ((_mySock = socket(PF_INET, SOCK_STREAM, 0)) == -1) {
 		LOG_DEBUG("cannot create socket");
