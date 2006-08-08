@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef PFACTORY_H
-#define PFACTORY_H
+#ifndef OWPFACTORY_H
+#define OWPFACTORY_H
 
 class CWengoPhone;
 class PWengoPhone;
@@ -56,6 +56,8 @@ class PUserProfileHandler;
 class CUserProfileHandler;
 class PConferenceCall;
 class CConferenceCall;
+
+class IThreadEvent;
 
 /**
  * Factories for the presentation component.
@@ -114,7 +116,11 @@ public:
 
 	virtual PConferenceCall * createPresentationConferenceCall(CConferenceCall & cConferenceCall) = 0;
 
-	/** Because of the presentation event loop (QApplication::exec()). */
+	/**
+	 * Because of the presentation event loop.
+	 *
+	 * @see QApplication::exec()
+	 */
 	virtual int exec() = 0;
 
 	/** Processes all pending events of the presentation. */
@@ -123,9 +129,18 @@ public:
 	/** Reset the factory. */
 	virtual void reset() = 0;
 
+	/** @see QApplication::postEvent() */
+	static void postEvent(IThreadEvent * event) {
+		_factory->postEventImpl(event);
+	}
+
+protected:
+
+	virtual void postEventImpl(IThreadEvent * event) = 0;
+
 private:
 
 	static PFactory * _factory;
 };
 
-#endif	//PFACTORY_H
+#endif	//OWPFACTORY_H

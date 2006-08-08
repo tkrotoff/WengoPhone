@@ -22,9 +22,8 @@
 #include <QEvent>
 
 EventFilter::EventFilter(QObject * receiver, const char * member)
-: QObject() {
-	connect(this, SIGNAL(activate(QEvent *)),
-		receiver, member);
+	: QObject() {
+	connect(this, SIGNAL(activate(QEvent *)), receiver, member);
 }
 
 void EventFilter::filter(QEvent * event) {

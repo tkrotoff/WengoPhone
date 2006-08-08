@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef PRESENTATION_H
-#define PRESENTATION_H
+#ifndef OWPRESENTATION_H
+#define OWPRESENTATION_H
 
 #include <util/Interface.h>
 
@@ -61,22 +61,6 @@ public:
 	 * contains a method update()
 	 */
 	virtual void updatePresentation() = 0;
-
-protected:
-
-	/**
-	 * Updates the presentation component in the thread safe way.
-	 *
-	 * Threaded version since the GUI library is not thread safe.
-	 * This method is called by updatePresentation()
-	 */
-	virtual void updatePresentationThreadSafe() = 0;
-
-	/**
-	 * Initializes and constructs the presentation component
-	 * in a thread safe way.
-	 */
-	virtual void initThreadSafe() = 0;
 };
 
-#endif	//PRESENTATION_H
+#endif	//OWPRESENTATION_H

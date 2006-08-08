@@ -35,7 +35,6 @@
 class Connect;
 class IMAccount;
 class NetworkObserver;
-class Thread;
 class UserProfile;
 class WengoPhone;
 
@@ -64,7 +63,7 @@ public:
 	Event<void (ConnectHandler & sender, IMAccount & imAccount,
 		int currentStep, int totalSteps, const std::string & infoMessage)> connectionProgressEvent;
 
-	ConnectHandler(UserProfile & userProfile, Thread & modelThread);
+	ConnectHandler(UserProfile & userProfile);
 
 	~ConnectHandler();
 
@@ -153,8 +152,6 @@ private:
 	IMAccountPtrSet _actualIMAccount;
 
 	UserProfile & _userProfile;
-
-	Thread & _modelThread;
 };
 
 #endif	//OWCONNECTHANDLER_H

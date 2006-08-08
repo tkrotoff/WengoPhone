@@ -17,43 +17,27 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef OWQTCHATHANDLER_H
-#define OWQTCHATHANDLER_H
-
-#include <presentation/PChatHandler.h>
+#ifndef OWTHREADEVENTFILTER_H
+#define OWTHREADEVENTFILTER_H
 
 #include <QObject>
 
-class CChatHandler;
-class IMAccount;
-class IMContactSet;
-class QtChatWindow;
+class QEvent;
 
 /**
+ * Catch a post event (=thread event).
  *
- * @ingroup presentation
  * @author Tanguy Krotoff
- * @author Philippe Bernery
  */
-class QtChatHandler : public QObject, public PChatHandler {
+class ThreadEventFilter : public QObject {
 	Q_OBJECT
 public:
 
-	QtChatHandler(CChatHandler & cChatHandler);
-
-	~QtChatHandler();
-
-	void createSession(IMAccount & imAccount, IMContactSet & imContactSet);
-
-	void newIMChatSessionCreatedEvent(IMChatSession & imChatSession);
-
-	void updatePresentation();
+	ThreadEventFilter();
 
 private:
 
-	CChatHandler & _cChatHandler;
-
-	QtChatWindow * _qtChatWindow;
+	virtual bool eventFilter(QObject * watched, QEvent * event);
 };
 
-#endif	//OWQTCHATHANDLER_H
+#endif	//OWTHREADEVENTFILTER_H

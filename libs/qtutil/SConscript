@@ -2,7 +2,8 @@ env = WengoGetQt4Environment()
 
 libs = [
 	'qt4',
-	'owutil'
+	'owutil',
+	'owthread',
 ]
 lib_path = []
 include_path = ['include']
@@ -25,6 +26,8 @@ headers = [
 	'include/qtutil/QtClickableLabel.h',
 	'include/qtutil/WidgetBackgroundImage.h',
 	'include/qtutil/Wizard.h',
+	'include/qtutil/QtThreadEvent.h',
+	'include/qtutil/ThreadEventFilter.h',
 ]
 sources = [
 	'src/EventFilter.cpp',
@@ -44,6 +47,7 @@ sources = [
 	'src/QtClickableLabel.cpp',
 	'src/WidgetBackgroundImage.cpp',
 	'src/Wizard.cpp',
+	'src/ThreadEventFilter.cpp',
 ]
 forms = [
 	'src/Wizard.ui',

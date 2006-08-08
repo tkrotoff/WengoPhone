@@ -27,7 +27,6 @@
 #include <util/Trackable.h>
 
 class Profile;
-class Thread;
 class UserProfile;
 class WengoAccount;
 class WengoPhone;
@@ -69,30 +68,30 @@ public:
 	 * @param sender this class
 	 * @param userProfile the set UserProfile
 	 */
-	Event<void (UserProfileHandler & sender, 
+	Event<void (UserProfileHandler & sender,
 		UserProfile & userProfile)> userProfileInitializedEvent;
 
 	/**
-	 * Emitted when the requested WengoAccount (given via setCurrentUserProfile) 
+	 * Emitted when the requested WengoAccount (given via setCurrentUserProfile)
 	 * is not valid.
 	 *
 	 * @param sender this class
 	 * @param wengoAccount the WengoAccount provided by the user
 	 */
-	Event<void (UserProfileHandler & sender, 
+	Event<void (UserProfileHandler & sender,
 		WengoAccount & wengoAccount)> wengoAccountNotValidEvent;
 
 	/**
-	 * Emitted when a non-Default UserProfile has been created and when a 
+	 * Emitted when a non-Default UserProfile has been created and when a
 	 * Default UserProfile exists.
 	 *
-	 * Thus a dialog window can appear to propose to import ContactList and 
+	 * Thus a dialog window can appear to propose to import ContactList and
 	 * IMAccounts from the Default UserProfile to the created UserProfile.
 	 */
-	Event<void (UserProfileHandler & sender, 
+	Event<void (UserProfileHandler & sender,
 		const std::string & createdProfileName)> defaultUserProfileExistsEvent;
 
-	UserProfileHandler(Thread & modelThread);
+	UserProfileHandler();
 
 	~UserProfileHandler();
 
@@ -100,7 +99,7 @@ public:
 	 * Initializes the UserPofileHandler.
 	 *
 	 * During initialization, the UserProfileHandler will check for the last
-	 * used UserProfile. If no UserProfile has been used, the 
+	 * used UserProfile. If no UserProfile has been used, the
 	 * noCurrentUserProfileSetEvent will be emitted.
 	 */
 	void init();
@@ -220,7 +219,7 @@ private:
 	/**
 	 * @see importDefaultProfileToProfile
 	 * When calling importDefaultProfileToProfile, the current UserProfile
-	 * will be destroyed and thus UserProfileHandler must wait for the 
+	 * will be destroyed and thus UserProfileHandler must wait for the
 	 * release of the currentUserProfile. When currentUserProfileReleased
 	 * will be called it will call actuallyImportDefaultProfileToProfile to
 	 * actually import the default profile to the desired UserProfile.
@@ -238,11 +237,11 @@ private:
 	 */
 	bool _importDefaultProfileToProfile;
 
-	/** 
+	/**
 	 * Name of the UserProfile to import when calling
 	 * actuallyImportDefaultProfileToProfile.
 	 */
-	std::string _nameOfProfileToImport;	
+	std::string _nameOfProfileToImport;
 
 	Mutex _mutex;
 
@@ -254,8 +253,6 @@ private:
 	bool _saveTimerRunning;
 
 	Timer _saveTimer;
-
-	Thread & _modelThread;
 };
 
 #endif //OWUSERPROFILEHANDLER_H

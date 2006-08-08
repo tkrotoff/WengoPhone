@@ -24,6 +24,8 @@
 #include <thread/Mutex.h>
 #include <thread/Thread.h>
 
+#include <util/Event.h>
+
 #include <string>
 
 class NetworkObserver;
@@ -76,7 +78,7 @@ private:
 /**
  * Network proxy discovery.
  *
- *	TODO: add a proxyHasChangedEvent to notify registered classes that the proxy settings have changed.
+ * TODO: add a proxyHasChangedEvent to notify registered classes that the proxy settings have changed.
  *
  * @author Julien Bossart
  * @author Philippe Bernery

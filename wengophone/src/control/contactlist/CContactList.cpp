@@ -19,6 +19,7 @@
 
 #include "CContactList.h"
 
+#include <model/WengoPhone.h>
 #include <model/contactlist/ContactList.h>
 #include <model/contactlist/Contact.h>
 #include <model/contactlist/ContactGroup.h>
@@ -28,13 +29,12 @@
 #include <presentation/PFactory.h>
 #include <presentation/PContactList.h>
 
-#include <thread/Thread.h>
+#include <thread/ThreadEvent.h>
 
 #include <util/Logger.h>
 
-CContactList::CContactList(ContactList & contactList, Thread & modelThread)
-	: _contactList(contactList),
-	_modelThread(modelThread) {
+CContactList::CContactList(ContactList & contactList)
+	: _contactList(contactList) {
 
 	_pContactList = PFactory::getFactory().createPresentationContactList(*this);
 
@@ -58,8 +58,8 @@ CContactList::~CContactList() {
 }
 
 void CContactList::contactAddedEventHandler(ContactList & sender, Contact & contact) {
-	// We do not emit the event if the Contact has no group because the GUI
-	// does not support a Contact with no group
+	//We do not emit the event if the Contact has no group because the GUI
+	//does not support a Contact with no group
 	if (!contact.getGroupId().empty()) {
 		_pContactList->contactAddedEvent(contact.getUUID());
 	}
@@ -165,7 +165,7 @@ void CContactList::addContact(const ContactProfile & contactProfile) {
 	MyThreadEvent * event =
 		new MyThreadEvent(boost::bind(&CContactList::addContactThreadSafe, this, _1), contactProfile);
 
-	_modelThread.postEvent(event);
+	WengoPhone::postEvent(event);
 }
 
 void CContactList::addContactThreadSafe(ContactProfile contactProfile) {
@@ -181,7 +181,7 @@ void CContactList::removeContact(const std::string & contactId) {
 	MyThreadEvent * event =
 		new MyThreadEvent(boost::bind(&CContactList::removeContactThreadSafe, this, _1), contactId);
 
-	_modelThread.postEvent(event);
+	WengoPhone::postEvent(event);
 }
 
 void CContactList::removeContactThreadSafe(std::string contactId) {
@@ -198,7 +198,7 @@ void CContactList::updateContact(const ContactProfile & contactProfile) {
 	MyThreadEvent * event =
 		new MyThreadEvent(boost::bind(&CContactList::updateContactThreadSafe, this, _1), contactProfile);
 
-	_modelThread.postEvent(event);
+	WengoPhone::postEvent(event);
 }
 
 void CContactList::updateContactThreadSafe(ContactProfile contactProfile) {
@@ -210,13 +210,15 @@ void CContactList::updateContactThreadSafe(ContactProfile contactProfile) {
 }
 
 void CContactList::addContactGroup(const std::string & name) {
-/*	typedef ThreadEvent1<void (std::string contactId), std::string> MyThreadEvent;
+	/*
+	typedef ThreadEvent1<void (std::string contactId), std::string> MyThreadEvent;
 	MyThreadEvent * event =
 		new MyThreadEvent(boost::bind(&CContactList::addContactGroupThreadSafe, this, _1), name);
 
-	_modelThread.postEvent(event);*/
-	// FIXME: Here we do not change the thread because QtProfileDetails needs this method to be blocking
-	// We should change the code in QtProfileDetails
+	_modelThread.postEvent(event);
+	*/
+	//FIXME: Here we do not change the thread because QtProfileDetails needs this method to be blocking
+	//We should change the code in QtProfileDetails
 	_contactList.addContactGroup(name);
 }
 
@@ -229,7 +231,7 @@ void CContactList::removeContactGroup(const std::string & id) {
 	MyThreadEvent * event =
 		new MyThreadEvent(boost::bind(&CContactList::removeContactGroupThreadSafe, this, _1), id);
 
-	_modelThread.postEvent(event);
+	WengoPhone::postEvent(event);
 }
 
 void CContactList::removeContactGroupThreadSafe(std::string id) {
@@ -241,7 +243,7 @@ void CContactList::renameContactGroup(const std::string & groupId, const std::st
 	MyThreadEvent * event =
 		new MyThreadEvent(boost::bind(&CContactList::renameContactGroupThreadSafe, this, _1, _2), groupId, name);
 
-	_modelThread.postEvent(event);
+	WengoPhone::postEvent(event);
 }
 
 void CContactList::renameContactGroupThreadSafe(std::string groupId, std::string name) {
@@ -253,7 +255,7 @@ void CContactList::merge(const std::string & dstContactId, const std::string & s
 	MyThreadEvent * event =
 		new MyThreadEvent(boost::bind(&CContactList::mergeThreadSafe, this, _1, _2), dstContactId, srcContactId);
 
-	_modelThread.postEvent(event);
+	WengoPhone::postEvent(event);
 }
 
 void CContactList::mergeThreadSafe(std::string dstContactId, std::string srcContactId) {

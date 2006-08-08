@@ -50,7 +50,7 @@
 #include <QtGui>
 
 QtPhoneCall::QtPhoneCall(CPhoneCall & cPhoneCall)
-	: QObjectThreadSafe(NULL),
+	: QObject(NULL),
 	_cPhoneCall(cPhoneCall) {
 
 	_qtWengoPhone = (QtWengoPhone *) _cPhoneCall.getCWengoPhone().getPresentation();
@@ -61,20 +61,6 @@ QtPhoneCall::QtPhoneCall(CPhoneCall & cPhoneCall)
 	_hold = true;
 	_showVideo = false;
 
-	typedef PostEvent0 < void() > MyPostEvent;
-	MyPostEvent * event = new MyPostEvent(boost::bind(&QtPhoneCall::initThreadSafe, this));
-	postEvent(event);
-}
-
-QtPhoneCall::~QtPhoneCall() {
-	if (_remoteVideoFrame && _localVideoFrame) {
-		pix_free(_remoteVideoFrame);
-		pix_free(_localVideoFrame);
-	}
-	delete _ui;
-}
-
-void QtPhoneCall::initThreadSafe() {
 	_phoneCallWidget = new QWidget(_qtWengoPhone->getWidget());
 
 	_ui = new Ui::PhoneCallWidget();
@@ -157,6 +143,14 @@ void QtPhoneCall::initThreadSafe() {
 	}
 }
 
+QtPhoneCall::~QtPhoneCall() {
+	if (_remoteVideoFrame && _localVideoFrame) {
+		pix_free(_remoteVideoFrame);
+		pix_free(_localVideoFrame);
+	}
+	delete _ui;
+}
+
 QString QtPhoneCall::getDisplayName(QString str) {
 	QString tmp;
 
@@ -231,22 +225,7 @@ QMenu * QtPhoneCall::createInviteMenu() const {
 	return menu;
 }
 
-void QtPhoneCall::updatePresentation() {
-	typedef PostEvent0 < void() > MyPostEvent;
-	MyPostEvent * event = new MyPostEvent(boost::bind(&QtPhoneCall::updatePresentationThreadSafe, this));
-	postEvent(event);
-}
-
-void QtPhoneCall::updatePresentationThreadSafe() {
-}
-
 void QtPhoneCall::stateChangedEvent(EnumPhoneCallState::PhoneCallState state) {
-	typedef PostEvent1 < void(EnumPhoneCallState::PhoneCallState), EnumPhoneCallState::PhoneCallState > MyPostEvent;
-	MyPostEvent * event = new MyPostEvent(boost::bind(&QtPhoneCall::stateChangedEventThreadSafe, this, _1), state);
-	postEvent(event);
-}
-
-void QtPhoneCall::stateChangedEventThreadSafe(EnumPhoneCallState::PhoneCallState state) {
  	std::string codecs;
 	if (_cPhoneCall.getAudioCodecUsed() != CodecList::AudioCodecError) {
 		codecs += CodecList::toString(_cPhoneCall.getAudioCodecUsed());
@@ -340,13 +319,6 @@ void QtPhoneCall::stateChangedEventThreadSafe(EnumPhoneCallState::PhoneCallState
 }
 
 void QtPhoneCall::videoFrameReceivedEvent(piximage * remoteVideoFrame, piximage * localVideoFrame) {
-	typedef PostEvent2<void (piximage * remoteVideoFrame, piximage * localVideoFrame), piximage *, piximage *> MyPostEvent;
-	MyPostEvent * event = new MyPostEvent(boost::bind(&QtPhoneCall::videoFrameReceivedEventThreadSafe,
-		this, _1,_2), remoteVideoFrame, localVideoFrame);
-	postEvent(event);
-}
-
-void QtPhoneCall::videoFrameReceivedEventThreadSafe(piximage * remoteVideoFrame, piximage * localVideoFrame) {
 #ifdef XV_HWACCEL
 	if (!_videoWindow) {
 		_remoteVideoFrame = remoteVideoFrame;
@@ -393,8 +365,9 @@ void QtPhoneCall::rejectActionTriggered(bool) {
 		_cPhoneCall.hangUp();
 		break;
 	default:
-		delete _phoneCallWidget;
-		callRejected(); // Close the widget
+		LOG_DEBUG("call rejected");
+		//delete _phoneCallWidget;
+		//callRejected(); // Close the widget
 	}
 }
 
@@ -415,7 +388,8 @@ void QtPhoneCall::holdResumeActionTriggered(bool) {
 }
 
 void QtPhoneCall::addContactActionTriggered(bool) {
-	if (_cPhoneCall.getCWengoPhone().getCUserProfileHandler().getCUserProfile()) {
+	CWengoPhone & cWengoPhone = _cPhoneCall.getCWengoPhone();
+	if (cWengoPhone.getCUserProfileHandler().getCUserProfile()) {
 		//This method should not be called if no UserProfile has been set
 		std::string callAddress = _cPhoneCall.getPeerDisplayName();
 
@@ -533,7 +507,7 @@ void QtPhoneCall::showToaster(const QString & userName) {
 		return;
 	}
 
-	//Shows toaster for incoming chats ?
+	//Shows toaster for incoming chats?
 	if (!config.getNotificationShowToasterOnIncomingCall()) {
 		return;
 	}
@@ -547,13 +521,7 @@ void QtPhoneCall::showToaster(const QString & userName) {
 }
 
 void QtPhoneCall::close() {
-	typedef PostEvent0 < void() > MyPostEvent;
-	MyPostEvent * event = new MyPostEvent(boost::bind(&QtPhoneCall::closeThreadSafe, this));
-	postEvent(event);
-}
-
-void QtPhoneCall::closeThreadSafe() {
-	_qtWengoPhone->getStatusBar().showMessage(QString::null);
+	/*_qtWengoPhone->getStatusBar().showMessage(QString::null);
 	_ui->durationLabel = NULL;
 	_callTimer->disconnect();
 	_callTimer->stop();
@@ -573,5 +541,5 @@ void QtPhoneCall::closeThreadSafe() {
 	delete _phoneCallWidget;
 	_phoneCallWidget = NULL;
 	deleteMe(this);
-	callRejected();
+	callRejected();*/
 }

@@ -28,29 +28,44 @@
 #include <model/WengoPhone.h>
 #include <model/webservices/subscribe/WsSubscribe.h>
 
+#include <thread/ThreadEvent.h>
 #include <util/Logger.h>
-
-using namespace std;
 
 CWengoPhone::CWengoPhone(WengoPhone & wengoPhone)
 	: _wengoPhone(wengoPhone) {
 
-	_pWengoPhone = PFactory::getFactory().createPresentationWengoPhone(*this);
-
-	_cUserProfileHandler = 
-		new CUserProfileHandler(wengoPhone.getUserProfileHandler(), *this, _wengoPhone);
-
-	_wengoPhone.initFinishedEvent +=
-		boost::bind(&CWengoPhone::initFinishedEventHandler, this, _1);
-	_wengoPhone.timeoutEvent += controlTimeoutEvent;
-	_wengoPhone.wsSubscribeCreatedEvent +=
-		boost::bind(&CWengoPhone::wsSubscribeCreatedEventHandler, this, _1, _2);
+	_pWengoPhone = NULL;
+	typedef ThreadEvent0<void ()> MyThreadEvent;
+	MyThreadEvent * event = new MyThreadEvent(boost::bind(&CWengoPhone::initPresentationThreadSafe, this));
+	PFactory::postEvent(event);
 }
 
 CWengoPhone::~CWengoPhone() {
-	if (_pWengoPhone) {
+	/*if (_pWengoPhone) {
 		delete _pWengoPhone;
-	}
+	}*/
+}
+
+void CWengoPhone::initPresentationThreadSafe() {
+	_pWengoPhone = PFactory::getFactory().createPresentationWengoPhone(*this);
+
+	_cUserProfileHandler = new CUserProfileHandler(_wengoPhone.getUserProfileHandler(), *this);
+
+	_wengoPhone.initFinishedEvent += boost::bind(&CWengoPhone::initFinishedEventHandler, this, _1);
+	_wengoPhone.exitEvent += boost::bind(&CWengoPhone::exitEventHandler, this);
+	_wengoPhone.wsSubscribeCreatedEvent += boost::bind(&CWengoPhone::wsSubscribeCreatedEventHandler, this, _1, _2);
+}
+
+Presentation * CWengoPhone::getPresentation() {
+	return _pWengoPhone;
+}
+
+CUserProfileHandler & CWengoPhone::getCUserProfileHandler() {
+	return *_cUserProfileHandler;
+}
+
+WengoPhone & CWengoPhone::getWengoPhone() const {
+	return _wengoPhone;
 }
 
 void CWengoPhone::start() {
@@ -58,7 +73,7 @@ void CWengoPhone::start() {
 }
 
 void CWengoPhone::terminate() {
-	_wengoPhone.terminate();
+	//_wengoPhone.terminate();
 }
 
 void CWengoPhone::initFinishedEventHandler(WengoPhone & sender) {
@@ -69,4 +84,16 @@ void CWengoPhone::wsSubscribeCreatedEventHandler(WengoPhone & sender, WsSubscrib
 	static CSubscribe cSubscribe(wsSubscribe, *this);
 
 	LOG_DEBUG("CSubscribe created");
+}
+
+void CWengoPhone::exitEventHandler() {
+	typedef ThreadEvent0<void ()> MyThreadEvent;
+	MyThreadEvent * event = new MyThreadEvent(boost::bind(&CWengoPhone::exitEventHandlerThreadSafe, this));
+	WengoPhone::postEvent(event);
+}
+
+void CWengoPhone::exitEventHandlerThreadSafe() {
+	if (_pWengoPhone) {
+		_pWengoPhone->exitEvent();
+	}
 }

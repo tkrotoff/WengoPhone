@@ -20,21 +20,20 @@
 #ifndef OWCPHONECALL_H
 #define OWCPHONECALL_H
 
+#include <control/Control.h>
+
 #include <sipwrapper/EnumPhoneCallState.h>
 #include <sipwrapper/CodecList.h>
-
-#include <util/NonCopyable.h>
-#include <util/Trackable.h>
 
 #include <pixertool/pixertool.h>
 
 #include <string>
 
-class PhoneCall;
-class PPhoneCall;
-class WengoPhone;
+class Presentation;
 class CWengoPhone;
-class WebcamVideoFrame;
+class PPhoneCall;
+class PhoneCall;
+class WengoPhone;
 
 /**
  * Control layer for a phone call.
@@ -43,20 +42,16 @@ class WebcamVideoFrame;
  * @ingroup control
  * @author Tanguy Krotoff
  */
-class CPhoneCall : NonCopyable, public Trackable {
+class CPhoneCall : public Control {
 public:
 
 	CPhoneCall(PhoneCall & phoneCall, CWengoPhone & cWengoPhone);
 
 	~CPhoneCall();
 
-	PPhoneCall * getPresentation() const {
-		return _pPhoneCall;
-	}
+	Presentation * getPresentation();
 
-	CWengoPhone & getCWengoPhone() const {
-		return _cWengoPhone;
-	}
+	CWengoPhone & getCWengoPhone();
 
 	/**
 	 * FIXME this breaks the control layer.
@@ -140,9 +135,25 @@ public:
 
 private:
 
+	void initPresentationThreadSafe();
+
 	void stateChangedEventHandler(PhoneCall & sender, EnumPhoneCallState::PhoneCallState state);
 
 	void videoFrameReceivedEventHandler(PhoneCall & sender, piximage * remoteVideoFrame, piximage * localVideoFrame);
+
+	void stateChangedEventHandlerThreadSafe(EnumPhoneCallState::PhoneCallState state);
+
+	void videoFrameReceivedEventHandlerThreadSafe(piximage * remoteVideoFrame, piximage * localVideoFrame);
+
+	void hangUpThreadSafe();
+
+	void acceptThreadSafe();
+
+	void holdThreadSafe();
+
+	void resumeThreadSafe();
+
+	void blindTransferThreadSafe(std::string phoneNumber);
 
 	PhoneCall & _phoneCall;
 

@@ -17,43 +17,21 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef OWQTCHATHANDLER_H
-#define OWQTCHATHANDLER_H
+#include <qtutil/ThreadEventFilter.h>
 
-#include <presentation/PChatHandler.h>
+#include <qtutil/QtThreadEvent.h>
 
-#include <QObject>
+#include <QEvent>
 
-class CChatHandler;
-class IMAccount;
-class IMContactSet;
-class QtChatWindow;
+ThreadEventFilter::ThreadEventFilter()
+	: QObject() {
+}
 
-/**
- *
- * @ingroup presentation
- * @author Tanguy Krotoff
- * @author Philippe Bernery
- */
-class QtChatHandler : public QObject, public PChatHandler {
-	Q_OBJECT
-public:
-
-	QtChatHandler(CChatHandler & cChatHandler);
-
-	~QtChatHandler();
-
-	void createSession(IMAccount & imAccount, IMContactSet & imContactSet);
-
-	void newIMChatSessionCreatedEvent(IMChatSession & imChatSession);
-
-	void updatePresentation();
-
-private:
-
-	CChatHandler & _cChatHandler;
-
-	QtChatWindow * _qtChatWindow;
-};
-
-#endif	//OWQTCHATHANDLER_H
+bool ThreadEventFilter::eventFilter(QObject * watched, QEvent * event) {
+	if (event->type() == QtThreadEvent::EventValue) {
+		QtThreadEvent * threadEvent = (QtThreadEvent *) event;
+		threadEvent->callback();
+		return true;
+	}
+	return QObject::eventFilter(watched, event);
+}

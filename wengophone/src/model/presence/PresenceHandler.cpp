@@ -23,18 +23,18 @@
 #include <model/contactlist/ContactList.h>
 #include <model/connect/ConnectHandler.h>
 #include <model/profile/UserProfile.h>
+#include <model/WengoPhone.h>
 
 #include <imwrapper/IMContact.h>
 
-#include <thread/Thread.h>
+#include <thread/ThreadEvent.h>
 #include <util/Logger.h>
 #include <util/Picture.h>
 
 using namespace std;
 
-PresenceHandler::PresenceHandler(UserProfile & userProfile, Thread & modelThread)
-	: _userProfile(userProfile),
-	_modelThread(modelThread) {
+PresenceHandler::PresenceHandler(UserProfile & userProfile)
+	: _userProfile(userProfile) {
 
 	_userProfile.newIMAccountAddedEvent +=
 		boost::bind(&PresenceHandler::newIMAccountAddedEventHandler, this, _1, _2);
@@ -121,9 +121,9 @@ void PresenceHandler::disconnectedEventHandler(ConnectHandler & sender, IMAccoun
 	LOG_DEBUG("an account is disconnected, login=" + imAccount.getLogin()
 		+ " protocol=" + String::fromNumber(imAccount.getProtocol()));
 	if (it != _presenceMap.end()) {
-		// The presence state is now used to save the last presence state
-		// used when connected. @see IMAccount::_presenceState
-		// (*it).second->changeMyPresence(EnumPresenceState::PresenceStateOffline, String::null);
+		//The presence state is now used to save the last presence state
+		//used when connected. @see IMAccount::_presenceState
+		//(*it).second->changeMyPresence(EnumPresenceState::PresenceStateOffline, String::null);
 	} else {
 		LOG_ERROR("this IMAccount has already been added=" + imAccount.getLogin());
 	}
@@ -232,7 +232,7 @@ void PresenceHandler::authorizationRequestEventHandler(IMPresence & sender, cons
 	MyThreadEvent * event =
 		new MyThreadEvent(boost::bind(&PresenceHandler::authorizationRequestEventHandlerThreadSafe, this, _1, _2, _3), &sender.getIMAccount(), contactId, message);
 
-	_modelThread.postEvent(event);
+	WengoPhone::postEvent(event);
 }
 
 void PresenceHandler::authorizationRequestEventHandlerThreadSafe(IMAccount * imAccount, std::string contactId, std::string message) {

@@ -17,43 +17,47 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef OWQTCHATHANDLER_H
-#define OWQTCHATHANDLER_H
+#ifndef OWQTTHREADEVENT_H
+#define OWQTTHREADEVENT_H
 
-#include <presentation/PChatHandler.h>
+#include <thread/ThreadEvent.h>
 
-#include <QObject>
-
-class CChatHandler;
-class IMAccount;
-class IMContactSet;
-class QtChatWindow;
+#include <QEvent>
 
 /**
+ * ThreadEvent for Qt.
  *
- * @ingroup presentation
+ * Used when sending a Qt event from another thread than the Qt thread.
+ * This event permits thread safety.
+ *
+ * @see QCoreApplication::postEvent()
  * @author Tanguy Krotoff
- * @author Philippe Bernery
  */
-class QtChatHandler : public QObject, public PChatHandler {
-	Q_OBJECT
+class QtThreadEvent : public QEvent, public IThreadEvent {
 public:
 
-	QtChatHandler(CChatHandler & cChatHandler);
+	/** QtThreadEvent is a QEvent with a specific value. */
+	static const int EventValue = QEvent::User + 4;
 
-	~QtChatHandler();
+	QtThreadEvent(IThreadEvent * event)
+		: QEvent((QEvent::Type) EventValue),
+		IThreadEvent() {
 
-	void createSession(IMAccount & imAccount, IMContactSet & imContactSet);
+		_threadEventPrivate = event;
+	}
 
-	void newIMChatSessionCreatedEvent(IMChatSession & imChatSession);
+	~QtThreadEvent() {
+		delete _threadEventPrivate;
+		_threadEventPrivate = NULL;
+	}
 
-	void updatePresentation();
+	void callback() {
+		_threadEventPrivate->callback();
+	}
 
 private:
 
-	CChatHandler & _cChatHandler;
-
-	QtChatWindow * _qtChatWindow;
+	IThreadEvent * _threadEventPrivate;
 };
 
-#endif	//OWQTCHATHANDLER_H
+#endif	//OWQTTHREADEVENT_H

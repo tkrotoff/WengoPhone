@@ -115,7 +115,8 @@ void QtEventWidget::voiceMailClicked() {
 
 void QtEventWidget::missedCallClicked() {
 	//Shows the history tab
-	_cWengoPhone.getPresentation()->showHistory();
+	PWengoPhone * pWengoPhone = (PWengoPhone *) _cWengoPhone.getPresentation();
+	pWengoPhone->showHistory();
 }
 
 void QtEventWidget::slotUpdatedTranslation() {

@@ -17,12 +17,10 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef OW_PHISTORY_H
-#define OW_PHISTORY_H
+#ifndef OWPHISTORY_H
+#define OWPHISTORY_H
 
 #include "Presentation.h"
-
-#include <string>
 
 /**
  *
@@ -31,10 +29,10 @@
  */
 class PHistory : public Presentation {
 public:
-	
-	virtual void removeHistoryMemento(unsigned int id) = 0;
-		
+
+	virtual void removeHistoryMemento(unsigned id) = 0;
+
 	virtual void clearAllEntries() = 0;
 };
 
-#endif	//OW_PHISTORY_H
+#endif	//OWPHISTORY_H

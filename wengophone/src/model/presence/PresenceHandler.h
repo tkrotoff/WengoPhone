@@ -82,7 +82,7 @@ public:
 		Picture icon) > contactIconChangedEvent;
 
 
-	PresenceHandler(UserProfile & userProfile, Thread & modelThread);
+	PresenceHandler(UserProfile & userProfile);
 
 	~PresenceHandler();
 
@@ -235,8 +235,6 @@ private:
 	IMContactMultiMap _pendingSubscriptions;
 
 	UserProfile & _userProfile;
-
-	Thread & _modelThread;
 };
 
 #endif	//PRESENCEHANDLER_H

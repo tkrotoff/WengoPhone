@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef OW_CHISTORY_H
-#define OW_CHISTORY_H
+#ifndef OWCHISTORY_H
+#define OWCHISTORY_H
 
 #include <model/history/History.h>
 
@@ -29,10 +29,10 @@
 
 class CWengoPhone;
 class PHistory;
-class Thread;
 
 /**
- * @class CHistory, control for History
+ * Control for History.
+ *
  * @ingroup control
  * @author Mathieu Stute
  */
@@ -43,21 +43,21 @@ public:
 	 * The history has been loaded.
 	 */
 	Event<void (CHistory &)> historyLoadedEvent;
-	
+
 	/**
 	 * A memento has been added.
 	 */
-	Event<void (CHistory &, unsigned int id)> mementoAddedEvent;
-	
+	Event<void (CHistory &, unsigned id)> mementoAddedEvent;
+
 	/**
 	 * A memento has been updated.
 	 */
-	Event<void (CHistory &, unsigned int id)> mementoUpdatedEvent;
+	Event<void (CHistory &, unsigned id)> mementoUpdatedEvent;
 
 	/**
 	 * A memento has been removed.
 	 */
-	Event<void (CHistory &, unsigned int id)> mementoRemovedEvent;
+	Event<void (CHistory &, unsigned id)> mementoRemovedEvent;
 
 	/**
 	 * Unseen missed calls changed event.
@@ -67,27 +67,24 @@ public:
 	/**
 	 * Default constructor.
 	 */
-	CHistory(History & history, CWengoPhone & cWengoPhone, Thread & modelThread);
+	CHistory(History & history, CWengoPhone & cWengoPhone);
 
 	~CHistory();
 
 	/**
 	 * @see History::removeMemento
 	 */
-	void removeHistoryMemento(unsigned int id);
-	void removeHistoryMementoThreadSafe(unsigned int id);
+	void removeHistoryMemento(unsigned id);
 
 	/**
 	 * @see History::clear
 	 */
 	void clear(HistoryMemento::State state = HistoryMemento::Any);
-	void clearThreadSafe(HistoryMemento::State state);
 
 	/**
 	 * @see History::replay
 	 */
-	void replay(unsigned int id);
-	void replayThreadSafe(unsigned int id);
+	void replay(unsigned id);
 
 	/**
 	 * @see History::getMementos
@@ -95,44 +92,42 @@ public:
 	 HistoryMementoCollection * getMementos(HistoryMemento::State state, int count = -1);
 
 	/**
-	 * Get the memento data.
+	 * Gets the memento data.
 	 *
 	 * @param id the memento id
 	 * @return the memento data (the sms text)
 	 */
-	std::string getMementoData(unsigned int id);
-	
+	std::string getMementoData(unsigned id) const;
+
 	/**
-	 * Get the memento peer.
+	 * Gets the memento peer.
 	 *
 	 * @param id the memento id
 	 * @return the memento peer
 	 */
-	std::string getMementoPeer(unsigned int id);
+	std::string getMementoPeer(unsigned id) const;
 
 	/**
-	 * Reset unseen missed calls.
-	 *
+	 * Resets unseen missed calls.
 	 */
 	void resetUnseenMissedCalls();
-	void resetUnseenMissedCallsThreadSafe();
 
 	/**
-	 * Returns the unseen missed calls count.
+	 * Gets the unseen missed calls count.
 	 *
 	 * @return unseen missed calls count
 	 */
 	int getUnseenMissedCalls();
 
 	/**
-	 * retrive the CWengoPhone.
+	 * Retreives the CWengoPhone.
 	 *
 	 * @return the CWengoPhone
 	 */
 	CWengoPhone & getCWengoPhone() const;
 
 	/**
-	 * retrive the History.
+	 * Retreives the History.
 	 *
 	 * @return the History
 	 */
@@ -140,26 +135,32 @@ public:
 
 private:
 
-	void historyMementoAddedEventHandler(History &, unsigned int id);
+	void historyMementoAddedEventHandler(History &, unsigned id);
 
-	void historyMementoUpdatedEventHandler(History &, unsigned int id);
+	void historyMementoUpdatedEventHandler(History &, unsigned id);
 
-	void historyMementoRemovedEventHandler(History &, unsigned int id);
+	void historyMementoRemovedEventHandler(History &, unsigned id);
 
 	void historyLoadedEventHandler(History &);
 
 	void unseenMissedCallsChangedEventhandler(History &, int count);
 
-	/** link to the model. */
+	void removeHistoryMementoThreadSafe(unsigned id);
+
+	void clearThreadSafe(HistoryMemento::State state);
+
+	void replayThreadSafe(unsigned id);
+
+	void resetUnseenMissedCallsThreadSafe();
+
+	/** Link to the model. */
 	History & _history;
 
-	/** link to the CWengoPhone. */
+	/** Link to the CWengoPhone. */
 	CWengoPhone & _cWengoPhone;
 
-	/** link to the presentation via an interface. */
+	/** Link to the presentation via an interface. */
 	PHistory * _pHistory;
-
-	/** Reference to model Thread. Used to post event to the model thread. */
-	Thread & _modelThread;
 };
-#endif	//OW_CHISTORY_H
+
+#endif	//OWCHISTORY_H

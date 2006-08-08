@@ -51,11 +51,15 @@
 	#include <NullIMFactory.h>
 #endif
 
+#include <util/Logger.h>
+
 #include <cutil/global.h>
 
 #if defined(CC_MSVC)
 	#include <memorydump/MemoryDump.h>
 #endif
+
+#include <QtGui>
 
 /**
  * Stub function to make GCC silent.

@@ -17,17 +17,12 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef PCHATHANDLER_H
-#define PCHATHANDLER_H
+#ifndef OWPCHATHANDLER_H
+#define OWPCHATHANDLER_H
 
 #include <presentation/Presentation.h>
 
-#include <imwrapper/IMChat.h>
-
-#include <util/NonCopyable.h>
-#include <util/Event.h>
-
-class IMContactSet;
+class IMChatSession;
 
 /**
  *
@@ -39,14 +34,9 @@ class PChatHandler : public Presentation {
 public:
 
 	/**
-	 * @see ChatHandler::createSession
-	 */
-	virtual void createSession(IMAccount & imAccount, IMContactSet & imContactSet) = 0;
-
-	/**
 	 * @see ChatHandler::newIMChatSessionCreatedEvent
 	 */
-	virtual void newIMChatSessionCreatedEventHandler(IMChatSession & imChatSession) = 0;
+	virtual void newIMChatSessionCreatedEvent(IMChatSession & imChatSession) = 0;
 };
 
-#endif	//PCHATHANDLER_H
+#endif	//OWPCHATHANDLER_H

@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef CHATHANDLER_H
-#define CHATHANDLER_H
+#ifndef OWCHATHANDLER_H
+#define OWCHATHANDLER_H
 
 #include <util/Event.h>
 #include <util/NonCopyable.h>
@@ -56,7 +56,7 @@ public:
 	Event<void (ChatHandler & sender, IMChatSession & imChatSession)> newIMChatSessionCreatedEvent;
 
 	/**
-	 * Create a new IMChatSession.
+	 * Creates a new IMChatSession.
 	 * The newChatSessionCreatedEvent is emitted when an IMChatSession is created
 	 *
 	 * @param imAccount the IMAccount for which we want to create the new IMChatSession
@@ -106,4 +106,4 @@ private:
 	UserProfile & _userProfile;
 };
 
-#endif	//CHATHANDLER_H
+#endif	//OWCHATHANDLER_H

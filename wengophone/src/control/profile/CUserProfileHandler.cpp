@@ -27,13 +27,12 @@
 #include <model/account/wengo/WengoAccount.h>
 #include <model/profile/UserProfile.h>
 #include <model/profile/UserProfileHandler.h>
+#include <model/WengoPhone.h>
 
-#include <thread/Thread.h>
+#include <thread/ThreadEvent.h>
 
-CUserProfileHandler::CUserProfileHandler(UserProfileHandler & userProfileHandler,
-	CWengoPhone & cWengoPhone, Thread & modelThread)
+CUserProfileHandler::CUserProfileHandler(UserProfileHandler & userProfileHandler, CWengoPhone & cWengoPhone)
 	: _userProfileHandler(userProfileHandler),
-	_modelThread(modelThread),
 	_cWengoPhone(cWengoPhone) {
 
 	_cUserProfile = NULL;
@@ -71,7 +70,7 @@ void CUserProfileHandler::createUserProfile(const WengoAccount & wengoAccount) {
 	MyThreadEvent * event =
 		new MyThreadEvent(boost::bind(&CUserProfileHandler::createUserProfileThreadSafe, this, _1), wengoAccount);
 
-	_modelThread.postEvent(event);
+	WengoPhone::postEvent(event);
 }
 
 void CUserProfileHandler::createUserProfileThreadSafe(WengoAccount wengoAccount) {
@@ -83,21 +82,20 @@ void CUserProfileHandler::createAndSetUserProfile(const WengoAccount & wengoAcco
 	MyThreadEvent * event =
 		new MyThreadEvent(boost::bind(&CUserProfileHandler::createAndSetUserProfileThreadSafe, this, _1), wengoAccount);
 
-	_modelThread.postEvent(event);
+	WengoPhone::postEvent(event);
 }
 
 void CUserProfileHandler::createAndSetUserProfileThreadSafe(WengoAccount wengoAccount) {
 	_userProfileHandler.createAndSetUserProfile(wengoAccount);
 }
 
-void CUserProfileHandler::setCurrentUserProfile(const std::string & login,
-	const WengoAccount & wengoAccount) {
+void CUserProfileHandler::setCurrentUserProfile(const std::string & login, const WengoAccount & wengoAccount) {
 	typedef ThreadEvent2<void (std::string, WengoAccount), std::string, WengoAccount> MyThreadEvent;
 	MyThreadEvent * event =
 		new MyThreadEvent(boost::bind(&CUserProfileHandler::setUserProfileThreadSafe, this, _1, _2),
 			login, wengoAccount);
 
-	_modelThread.postEvent(event);
+	WengoPhone::postEvent(event);
 }
 
 void CUserProfileHandler::setUserProfileThreadSafe(std::string profileName, WengoAccount wengoAccount) {
@@ -109,7 +107,7 @@ void CUserProfileHandler::importDefaultProfileToProfile(const std::string & prof
 	MyThreadEvent * event =
 		new MyThreadEvent(boost::bind(&CUserProfileHandler::importDefaultProfileToProfileThreadSafe, this, _1), profileName);
 
-	_modelThread.postEvent(event);
+	WengoPhone::postEvent(event);
 }
 
 void CUserProfileHandler::importDefaultProfileToProfileThreadSafe(std::string profileName) {
@@ -140,7 +138,7 @@ void CUserProfileHandler::currentUserProfileReleased() {
 	MyThreadEvent * event =
 		new MyThreadEvent(boost::bind(&CUserProfileHandler::currentUserProfileReleasedThreadSafe, this));
 
-	_modelThread.postEvent(event);
+	WengoPhone::postEvent(event);
 }
 
 void CUserProfileHandler::currentUserProfileReleasedThreadSafe() {
@@ -154,7 +152,6 @@ void CUserProfileHandler::currentUserProfileReleasedThreadSafe() {
 	_userProfileHandler.currentUserProfileReleased();
 }
 
-
 void CUserProfileHandler::noCurrentUserProfileSetEventHandler(UserProfileHandler & sender) {
 	_pUserProfileHandler->noCurrentUserProfileSetEventHandler();
 }
@@ -165,7 +162,7 @@ void CUserProfileHandler::currentUserProfileWillDieEventHandler(UserProfileHandl
 
 void CUserProfileHandler::userProfileInitializedEventHandler(UserProfileHandler & sender, UserProfile & userProfile) {
 	Mutex::ScopedLock scopedLock(_mutex);
-	_cUserProfile = new CUserProfile(userProfile, _cWengoPhone, _modelThread);
+	_cUserProfile = new CUserProfile(userProfile, _cWengoPhone);
 	_pUserProfileHandler->userProfileInitializedEventHandler();
 }
 

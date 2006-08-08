@@ -45,7 +45,6 @@ class IPhoneLine;
 class PhoneCall;
 class PUserProfile;
 class UserProfile;
-class Thread;
 class WengoAccount;
 class WsCallForward;
 class WsDirectory;
@@ -64,8 +63,7 @@ public:
 
 	Event <void (CUserProfile & sender)> makeCallErrorEvent;
 
-	CUserProfile(UserProfile & userProfile, CWengoPhone & cWengoPhone,
-		Thread & modelThread);
+	CUserProfile(UserProfile & userProfile, CWengoPhone & cWengoPhone);
 
 	~CUserProfile();
 
@@ -255,8 +253,6 @@ private:
 	CPhoneLine * _cPhoneLine;
 
 	CWengoPhone & _cWengoPhone;
-
-	Thread & _modelThread;
 };
 
 #endif	//OWCUSERPROFILE_H

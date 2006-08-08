@@ -20,35 +20,14 @@
 #ifndef OWTHREAD_H
 #define OWTHREAD_H
 
-#include <thread/Condition.h>
-#include <thread/Mutex.h>
 #include <util/Interface.h>
-#include <util/Logger.h>
-
-#include <boost/thread/detail/lock.hpp>
-#include <boost/thread/thread.hpp>
-#include <boost/thread/xtime.hpp>
-#include <boost/function.hpp>
-#include <boost/bind.hpp>
+#include <thread/Mutex.h>
+#include <thread/Condition.h>
 
 #include <vector>
 
-/**
- * Event for Thread.
- *
- * Used when sending an event from another thread than the current one.
- *
- * @author Tanguy Krotoff
- */
-class ThreadEvent {
-public:
-
-	virtual ~ThreadEvent() {
-	}
-
-	/** Calls the callback. */
-	virtual void callback() = 0;
-};
+class IThreadEvent;
+namespace boost { class thread; }
 
 /**
  * Thread helper for boost.
@@ -78,20 +57,14 @@ public:
 class Thread : Interface {
 public:
 
-	virtual ~Thread() {
-		//FIXME Do not delete the boost::thread otherwise it crashes
-		//delete _thread;
-	}
+	virtual ~Thread();
 
 	/**
 	 * Starts/creates the Thread with a given priority.
 	 *
 	 * Calls the pure virtual method run().
 	 */
-	void start() {
-		_terminate = false;
-		_thread = new boost::thread(boost::bind(&Thread::run, this));
-	}
+	void start();
 
 	/**
 	 * Blocks a Thread.
@@ -101,9 +74,7 @@ public:
 	 *
 	 * This provides similar functionality to the POSIX pthread_join() function.
 	 */
-	void join() {
-		_thread->join();
-	}
+	void join();
 
 	/**
 	 * Adds a ThreadEvent to the thread main loop.
@@ -112,16 +83,9 @@ public:
 	 * Warning: do not delete ThreadEvent, the method runEvents() will do it
 	 * once the ThreadEvent has been executed.
 	 *
-	 * FIXME
-	 *
 	 * @param event to inject inside the thread main loop
 	 */
-	virtual void postEvent(ThreadEvent * event) {
-		Mutex::ScopedLock ScopedLock(_mutex);
-		_eventList.push_back(event);
-		ScopedLock.unlock();
-		_condition.notify_all();
-	}
+	static void postEvent(IThreadEvent * event);
 
 	/**
 	 * Causes the current thread to sleep.
@@ -130,17 +94,7 @@ public:
 	 *
 	 * @param seconds number of seconds the current thread should sleep
 	 */
-	static void sleep(unsigned long seconds) {
-		if (seconds == 0) {
-			boost::thread::yield();
-			return;
-		}
-
-		boost::xtime xt;
-		boost::xtime_get(&xt, boost::TIME_UTC);
-		xt.sec += seconds;
-		boost::thread::sleep(xt);
-	}
+	static void sleep(unsigned long seconds);
 
 	/**
 	 * Causes the current thread to sleep.
@@ -150,31 +104,7 @@ public:
 	 * @see sleep()
 	 * @param milliseconds number of milliseconds the current thread should sleep
 	 */
-	static void msleep(unsigned long milliseconds) {
-		static const unsigned int MILLISECONDS_PER_SECOND = 1000;
-		static const unsigned int NANOSECONDS_PER_MILLISECOND = 1000000;
-
-		if (milliseconds == 0) {
-			boost::thread::yield();
-			return;
-		}
-
-		unsigned int sec = 0;
-		//If larger than 1 second, do some voodoo for the boost::xtime struct
-		if (milliseconds >= MILLISECONDS_PER_SECOND) {
-			//Converts ms > 1000 into secs + remaining ms
-			unsigned int secs = milliseconds / MILLISECONDS_PER_SECOND;
-			milliseconds = milliseconds - secs * MILLISECONDS_PER_SECOND;
-			sec += secs;
-		}
-		milliseconds *= NANOSECONDS_PER_MILLISECOND;
-
-		boost::xtime xt;
-		boost::xtime_get(&xt, boost::TIME_UTC);
-		xt.nsec += milliseconds;
-		xt.sec += sec;
-		boost::thread::sleep(xt);
-	}
+	static void msleep(unsigned long milliseconds);
 
 protected:
 
@@ -213,22 +143,8 @@ protected:
 	/**
 	 * Runs the events inserted inside the main thread loop via postEvent().
 	 */
-	virtual void runEvents() {
-		Mutex::ScopedLock ScopedLock(_mutex);
-		while (1){
-			for (unsigned int i = 0; i < _eventList.size(); i++) {
-				ScopedLock.unlock();
-				_eventList[i]->callback();
-				ScopedLock.lock();
-				delete _eventList[i];
-			}
-			_eventList.clear();
-			if (_terminate){
-				return;
-			}
-			_condition.wait(ScopedLock);
-		}
-	}
+	void runEvents();
+
 	/**
 	 * Terminates the execution of the thread.
 	 *
@@ -246,28 +162,23 @@ protected:
 	 * }
 	 * </pre>
 	 */
-	virtual void terminate() {
-		Mutex::ScopedLock ScopedLock(_mutex);
-		_terminate = true;
-		ScopedLock.unlock();
-		_condition.notify_all();
-	}
+	void terminate();
 
 	/** Defines the vector of ThreadEvent. */
-	typedef std::vector < ThreadEvent * > Events;
+	typedef std::vector < IThreadEvent * > Events;
 
 	/** List of PostEvent. */
-	Events _eventList;
+	static Events _eventList;
 
 	/**
-	 * Mutex used for postEvent().
+	 * Mutex used for postEvent() and runEvents().
 	 */
-	mutable Mutex _mutex;
+	static Mutex _mutex;
 
 	/**
 	 * Condition used for postEvent().
 	 */
-	Condition _condition;
+	static Condition _condition;
 
 	/**
 	 * If this thread should be terminate or not.
@@ -281,171 +192,6 @@ private:
 
 	/** Boost thread. */
 	boost::thread * _thread;
-};
-
-/**
- * ThreadEvent with 0 argument.
- *
- * The callback inside ThreadEvent has 0 argument.
- *
- * @author Tanguy Krotoff
- */
-template<typename Signature>
-class ThreadEvent0 : public ThreadEvent {
-public:
-
-	template<typename Callback>
-	ThreadEvent0(const Callback & callback)
-		: ThreadEvent(),
-		_callback(callback) {
-	}
-
-	void callback() {
-		_callback();
-	}
-
-private:
-
-	/** Callback function. */
-	boost::function<Signature> _callback;
-};
-
-/**
- * ThreadEvent with 1 argument.
- *
- * The callback inside ThreadEvent has 1 argument.
- *
- * @author Tanguy Krotoff
- */
-template<typename Signature, typename Arg1>
-class ThreadEvent1 : public ThreadEvent {
-public:
-
-	template<typename Callback>
-	ThreadEvent1(const Callback & callback, const Arg1 & arg1)
-		: ThreadEvent(),
-		_callback(callback),
-		_arg1(arg1) {
-	}
-
-	void callback() {
-		_callback(_arg1);
-	}
-
-private:
-
-	/** Callback function. */
-	boost::function<Signature> _callback;
-
-	Arg1 _arg1;
-};
-
-/**
- * ThreadEvent with 2 arguments.
- *
- * The callback inside ThreadEvent has 2 arguments.
- *
- * @author Tanguy Krotoff
- */
-template<typename Signature, typename Arg1, typename Arg2>
-class ThreadEvent2 : public ThreadEvent {
-public:
-
-	template<typename Callback>
-	ThreadEvent2(const Callback & callback, const Arg1 & arg1, const Arg2 & arg2)
-		: ThreadEvent(),
-		_callback(callback),
-		_arg1(arg1),
-		_arg2(arg2) {
-	}
-
-	void callback() {
-		_callback(_arg1, _arg2);
-	}
-
-private:
-
-	/** Callback function. */
-	boost::function<Signature> _callback;
-
-	Arg1 _arg1;
-
-	Arg2 _arg2;
-};
-
-/**
- * ThreadEvent with 3 arguments.
- *
- * The callback inside ThreadEvent has 3 arguments.
- *
- * @author Tanguy Krotoff
- */
-template<typename Signature, typename Arg1, typename Arg2, typename Arg3>
-class ThreadEvent3 : public ThreadEvent {
-public:
-
-	template<typename Callback>
-	ThreadEvent3(const Callback & callback, const Arg1 & arg1, const Arg2 & arg2, const Arg3 & arg3)
-		: ThreadEvent(),
-		_callback(callback),
-		_arg1(arg1),
-		_arg2(arg2),
-		_arg3(arg3) {
-	}
-
-	void callback() {
-		_callback(_arg1, _arg2, _arg3);
-	}
-
-private:
-
-	/** Callback function. */
-	boost::function<Signature> _callback;
-
-	Arg1 _arg1;
-
-	Arg2 _arg2;
-
-	Arg3 _arg3;
-};
-
-/**
- * ThreadEvent with 4 arguments.
- *
- * The callback inside ThreadEvent has 4 arguments.
- *
- * @author Tanguy Krotoff
- */
-template<typename Signature, typename Arg1, typename Arg2, typename Arg3, typename Arg4>
-class ThreadEvent4 : public ThreadEvent {
-public:
-
-	template<typename Callback>
-	ThreadEvent4(const Callback & callback, const Arg1 & arg1, const Arg2 & arg2, const Arg3 & arg3, const Arg4 & arg4)
-		: ThreadEvent(),
-		_callback(callback),
-		_arg1(arg1),
-		_arg2(arg2),
-		_arg3(arg3),
-		_arg4(arg4) {
-	}
-
-	void callback() {
-		_callback(_arg1, _arg2, _arg3, _arg4);
-	}
-
-private:
-
-	/** Callback function. */
-	boost::function<Signature> _callback;
-
-	Arg1 _arg1;
-
-	Arg2 _arg2;
-
-	Arg3 _arg3;
-
-	Arg4 _arg4;
 };
 
 #endif	//OWTHREAD_H

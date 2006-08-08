@@ -34,7 +34,6 @@ class ContactGroup;
 class ContactProfile;
 class CWengoPhone;
 class PContactList;
-class Thread;
 
 /**
  *
@@ -45,7 +44,7 @@ class CContactList : public Trackable {
 	friend class CUserProfile;
 public:
 
-	CContactList(ContactList & contactList, Thread & modelThread);
+	CContactList(ContactList & contactList);
 
 	~CContactList();
 
@@ -243,9 +242,6 @@ private:
 
 	/** Direct link to the presentation via an interface. */
 	PContactList * _pContactList;
-
-	/** Reference to model Thread. Used to post event to the model thread. */
-	Thread & _modelThread;
 };
 
 #endif	//OWCCONTACTLIST_H

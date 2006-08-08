@@ -322,12 +322,15 @@
        </sizepolicy>
       </property>
       <property name="currentIndex" >
-       <number>0</number>
+       <number>-1</number>
       </property>
      </widget>
     </item>
     <item row="4" column="0" >
      <widget class="QLabel" name="configPanelLabel" >
+      <property name="cursor" >
+       <cursor>13</cursor>
+      </property>
       <property name="text" >
        <string>&lt;u>Click to change Audio and Video Settings&lt;/u></string>
       </property>
@@ -347,7 +350,7 @@
        </sizepolicy>
       </property>
       <property name="currentIndex" >
-       <number>0</number>
+       <number>-1</number>
       </property>
      </widget>
     </item>

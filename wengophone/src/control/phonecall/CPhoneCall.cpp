@@ -25,25 +25,37 @@
 #include <control/CWengoPhone.h>
 
 #include <model/WengoPhone.h>
-#include <model/SipCallbacks.h>
 #include <model/phonecall/PhoneCall.h>
-#include <model/phoneline/PhoneLine.h>
-#include <model/config/ConfigManager.h>
-#include <model/config/Config.h>
 
 #include <util/Logger.h>
+#include <thread/ThreadEvent.h>
 
 CPhoneCall::CPhoneCall(PhoneCall & phoneCall, CWengoPhone & cWengoPhone)
 	: _phoneCall(phoneCall),
 	_cWengoPhone(cWengoPhone) {
 
+	_pPhoneCall = NULL;
+	typedef ThreadEvent0<void ()> MyThreadEvent;
+	MyThreadEvent * event = new MyThreadEvent(boost::bind(&CPhoneCall::initPresentationThreadSafe, this));
+	PFactory::postEvent(event);
+}
+
+CPhoneCall::~CPhoneCall() {
+}
+
+Presentation * CPhoneCall::getPresentation() {
+	return _pPhoneCall;
+}
+
+CWengoPhone & CPhoneCall::getCWengoPhone() {
+	return _cWengoPhone;
+}
+
+void CPhoneCall::initPresentationThreadSafe() {
 	_pPhoneCall = PFactory::getFactory().createPresentationPhoneCall(*this);
 
 	_phoneCall.stateChangedEvent += boost::bind(&CPhoneCall::stateChangedEventHandler, this, _1, _2);
 	_phoneCall.videoFrameReceivedEvent += boost::bind(&CPhoneCall::videoFrameReceivedEventHandler, this, _1, _2, _3);
-}
-
-CPhoneCall::~CPhoneCall() {
 }
 
 std::string CPhoneCall::getPeerSipAddress() const {
@@ -63,6 +75,12 @@ int CPhoneCall::getDuration() const {
 }
 
 void CPhoneCall::stateChangedEventHandler(PhoneCall & sender, EnumPhoneCallState::PhoneCallState state) {
+	typedef ThreadEvent1<void (EnumPhoneCallState::PhoneCallState), EnumPhoneCallState::PhoneCallState> MyThreadEvent;
+	MyThreadEvent * event = new MyThreadEvent(boost::bind(&CPhoneCall::stateChangedEventHandlerThreadSafe, this, _1), state);
+	PFactory::postEvent(event);
+}
+
+void CPhoneCall::stateChangedEventHandlerThreadSafe(EnumPhoneCallState::PhoneCallState state) {
 	if (state == EnumPhoneCallState::PhoneCallStateClosed) {
 		_pPhoneCall->close();
 		_pPhoneCall = NULL;
@@ -72,28 +90,64 @@ void CPhoneCall::stateChangedEventHandler(PhoneCall & sender, EnumPhoneCallState
 }
 
 void CPhoneCall::videoFrameReceivedEventHandler(PhoneCall & sender, piximage * remoteVideoFrame, piximage * localVideoFrame) {
+	typedef ThreadEvent2<void (piximage *, piximage *), piximage *, piximage *> MyThreadEvent;
+	MyThreadEvent * event = new MyThreadEvent(boost::bind(&CPhoneCall::videoFrameReceivedEventHandlerThreadSafe, this, _1, _2), remoteVideoFrame, localVideoFrame);
+	PFactory::postEvent(event);
+}
+
+void CPhoneCall::videoFrameReceivedEventHandlerThreadSafe(piximage * remoteVideoFrame, piximage * localVideoFrame) {
 	if (_pPhoneCall) {
 		_pPhoneCall->videoFrameReceivedEvent(remoteVideoFrame, localVideoFrame);
 	}
 }
 
 void CPhoneCall::hangUp() {
+	typedef ThreadEvent0<void ()> MyThreadEvent;
+	MyThreadEvent * event = new MyThreadEvent(boost::bind(&CPhoneCall::hangUpThreadSafe, this));
+	WengoPhone::postEvent(event);
+}
+
+void CPhoneCall::hangUpThreadSafe() {
 	_phoneCall.close();
 }
 
 void CPhoneCall::accept() {
+	typedef ThreadEvent0<void ()> MyThreadEvent;
+	MyThreadEvent * event = new MyThreadEvent(boost::bind(&CPhoneCall::acceptThreadSafe, this));
+	WengoPhone::postEvent(event);
+}
+
+void CPhoneCall::acceptThreadSafe() {
 	_phoneCall.accept();
 }
 
 void CPhoneCall::hold() {
+	typedef ThreadEvent0<void ()> MyThreadEvent;
+	MyThreadEvent * event = new MyThreadEvent(boost::bind(&CPhoneCall::holdThreadSafe, this));
+	WengoPhone::postEvent(event);
+}
+
+void CPhoneCall::holdThreadSafe() {
 	_phoneCall.hold();
 }
 
 void CPhoneCall::resume() {
+	typedef ThreadEvent0<void ()> MyThreadEvent;
+	MyThreadEvent * event = new MyThreadEvent(boost::bind(&CPhoneCall::resumeThreadSafe, this));
+	WengoPhone::postEvent(event);
+}
+
+void CPhoneCall::resumeThreadSafe() {
 	_phoneCall.resume();
 }
 
 void CPhoneCall::blindTransfer(const std::string & phoneNumber) {
+	typedef ThreadEvent1<void (std::string), std::string> MyThreadEvent;
+	MyThreadEvent * event = new MyThreadEvent(boost::bind(&CPhoneCall::blindTransferThreadSafe, this, _1), phoneNumber);
+	WengoPhone::postEvent(event);
+}
+
+void CPhoneCall::blindTransferThreadSafe(std::string phoneNumber) {
 	_phoneCall.blindTransfer(phoneNumber);
 }
 

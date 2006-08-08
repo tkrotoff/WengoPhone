@@ -29,8 +29,7 @@
 #include <util/File.h>
 #include <util/Logger.h>
 
-UserProfileHandler::UserProfileHandler(Thread & modelThread)
-: _modelThread(modelThread) {
+UserProfileHandler::UserProfileHandler() {
 	_currentUserProfile = NULL;
 	_desiredUserProfile = NULL;
 	_importDefaultProfileToProfile = false;
@@ -74,7 +73,7 @@ UserProfile * UserProfileHandler::getUserProfile(const std::string & name) {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
 	if (userProfileExists(name)) {
-		result = new UserProfile(_modelThread);
+		result = new UserProfile();
 		UserProfileFileStorage userProfileStorage(*result);
 		userProfileStorage.load(File::convertPathSeparators(config.getConfigDir() + "profiles/" + name + "/"));
 	}
@@ -87,7 +86,7 @@ UserProfileHandler::UserProfileHandlerError UserProfileHandler::createUserProfil
 	UserProfileHandlerError result = UserProfileHandlerErrorNoError;
 	std::string profileName;
 
-	userProfile = new UserProfile(_modelThread);
+	userProfile = new UserProfile();
 	if (!wengoAccount.getWengoLogin().empty()) {
 		userProfile->setWengoAccount(wengoAccount);
 	}
@@ -97,7 +96,7 @@ UserProfileHandler::UserProfileHandlerError UserProfileHandler::createUserProfil
 	if (!userProfileExists(profileName)) {
 		if (userProfile->isWengoAccountValid()) {
 			saveUserProfile(*userProfile);
-			if ((profileName != UserProfile::DEFAULT_USERPROFILE_NAME) && 
+			if ((profileName != UserProfile::DEFAULT_USERPROFILE_NAME) &&
 				userProfileExists(UserProfile::DEFAULT_USERPROFILE_NAME)) {
 				defaultUserProfileExistsEvent(*this, profileName);
 			}
@@ -118,7 +117,7 @@ UserProfileHandler::UserProfileHandlerError UserProfileHandler::createUserProfil
 
 void UserProfileHandler::createAndSetUserProfile(const WengoAccount & wengoAccount) {
 	createUserProfile(wengoAccount);
-	
+
 	if (createUserProfile(wengoAccount) != UserProfileHandlerErrorWengoAccountNotValid) {
 		std::string profileName = wengoAccount.getWengoLogin();
 		if (profileName.empty()) {
@@ -140,7 +139,7 @@ bool UserProfileHandler::userProfileExists(const std::string & name) {
 	return result;
 }
 
-void UserProfileHandler::setCurrentUserProfile(const std::string & name, 
+void UserProfileHandler::setCurrentUserProfile(const std::string & name,
 	const WengoAccount & wengoAccount) {
 
 	Mutex::ScopedLock lock(_mutex);
@@ -158,7 +157,7 @@ void UserProfileHandler::setCurrentUserProfile(const std::string & name,
 
 		if (result) {
 			// If the WengoAccount is not empty, we update the one in UserProfile
-			if (result->hasWengoAccount() && 
+			if (result->hasWengoAccount() &&
 				!wengoAccount.getWengoLogin().empty() &&
 				((wengoAccount.getWengoPassword() != result->getWengoAccount()->getWengoPassword()) ||
 					(wengoAccount.hasAutoLogin() != result->getWengoAccount()->hasAutoLogin()))) {

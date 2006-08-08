@@ -9,6 +9,7 @@ link_flags = []
 headers = []
 sources = [
 	'src/Timer.cpp',
+	'src/Thread.cpp',
 ]
 
 env.WengoAddLinkFlags(link_flags)

@@ -135,9 +135,8 @@ static const std::string CONTACTLIST_FILENAME = "contactlist.xml";
 static const std::string NEW_HISTORY_FILENAME = "history.xml";
 static const std::string OLD_HISTORY_FILENAME = "_history";
 
-ConfigImporter::ConfigImporter(UserProfileHandler & userProfileHandler, Thread & modelThread)
-	: _modelThread(modelThread),
-	_userProfileHandler(userProfileHandler) {
+ConfigImporter::ConfigImporter(UserProfileHandler & userProfileHandler)
+	: _userProfileHandler(userProfileHandler) {
 }
 
 bool ConfigImporter::importConfig(const string & str) {
@@ -635,7 +634,7 @@ bool ConfigImporter::importConfigFromV1toV3() {
 	File mDir(classicPath);
 	StringList dirList = mDir.getDirectoryList();
 	string sep = mDir.getPathSeparator();
-	UserProfile userProfile(_modelThread);
+	UserProfile userProfile;
 
 	last_user_t * lastUser = (last_user_t *) getLastWengoUser(classicPath + USERCONFIG_FILENAME, CONFIG_VERSION1);
 	if (lastUser) {
@@ -683,7 +682,7 @@ bool ConfigImporter::importConfigFromV1toV3() {
 bool ConfigImporter::importConfigFromV2toV3() {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	String configDir = config.getConfigDir();
-	UserProfile userProfile(_modelThread);
+	UserProfile userProfile;
 	string sep = File::getPathSeparator();
 
 	FileReader file(configDir + USERPROFILE_FILENAME);

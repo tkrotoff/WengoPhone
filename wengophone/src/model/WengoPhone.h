@@ -77,11 +77,14 @@ public:
 	Event<void (WengoPhone & sender, WsSubscribe & wsSubscribe)> wsSubscribeCreatedEvent;
 
 	/**
-	 * timeout has been reached.
+	 * Application should be closed.
+	 *
+	 * This event goes to the presentation layer and the presentation layer
+	 * should exit the application.
 	 *
 	 * @param sender this class
 	 */
-	Event<void ()> timeoutEvent;
+	Event<void (WengoPhone & sender)> exitEvent;
 
 	WengoPhone();
 
@@ -100,7 +103,7 @@ public:
 	 * This method should be called when you exit definitly WengoPhone.
 	 * You cannot call start() then terminate() several times.
 	 */
-	virtual void terminate();
+	//virtual void terminate();
 
 	/**
 	 * Starts the thread of the model component.
@@ -117,7 +120,7 @@ private:
 	/**
 	 * @see terminate()
 	 */
-	void terminateThreadSafe();
+	//void terminateThreadSafe();
 
 	/**
 	 * Saves the Configuration.
@@ -132,10 +135,9 @@ private:
 	/** Wengo subscribe web service. */
 	WsSubscribe * _wsSubscribe;
 
-
 	/**
 	 * Emergency timeout handler called when SIP unregistering
-	 * is not quick enough, or timed out.
+	 * is not quick enough or timed out.
 	 */
 	void shutdownAfterTimeout();
 

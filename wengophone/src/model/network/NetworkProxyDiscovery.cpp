@@ -23,6 +23,9 @@
 #include <model/config/Config.h>
 #include <model/config/ConfigManager.h>
 
+#include <util/Logger.h>
+#include <thread/ThreadEvent.h>
+
 #include <netlib.h>
 
 NetworkProxy::NetworkProxy() {

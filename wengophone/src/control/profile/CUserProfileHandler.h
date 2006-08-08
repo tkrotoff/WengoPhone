@@ -33,7 +33,6 @@ class CWengoPhone;
 class PUserProfileHandler;
 class UserProfile;
 class UserProfileHandler;
-class Thread;
 
 /**
  * Control of UserProfileHandler.
@@ -43,8 +42,7 @@ class Thread;
 class CUserProfileHandler : public Trackable {
 public:
 
-	CUserProfileHandler(UserProfileHandler & userProfileHandler,
-		CWengoPhone & cWengoPhone, Thread & modelThread);
+	CUserProfileHandler(UserProfileHandler & userProfileHandler, CWengoPhone & cWengoPhone);
 
 	~CUserProfileHandler();
 
@@ -172,8 +170,6 @@ private:
 	UserProfileHandler & _userProfileHandler;
 
 	CWengoPhone & _cWengoPhone;
-
-	Thread & _modelThread;
 
 	mutable Mutex _mutex;
 };

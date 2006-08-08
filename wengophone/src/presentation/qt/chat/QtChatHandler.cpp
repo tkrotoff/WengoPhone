@@ -18,21 +18,15 @@
  */
 
 #include "QtChatHandler.h"
+
 #include "QtChatWindow.h"
 
-#include <presentation/qt/toaster/QtToaster.h>
-
-#include <model/config/ConfigManager.h>
-#include <model/config/Config.h>
-
 #include <control/chat/CChatHandler.h>
-#include <control/CWengoPhone.h>
+
 #include <util/Logger.h>
 
-#include <QWidget>
-
 QtChatHandler::QtChatHandler(CChatHandler & cChatHandler)
-	: QObjectThreadSafe(NULL),
+	: QObject(NULL),
 	_cChatHandler(cChatHandler) {
 
 	_qtChatWindow = NULL;
@@ -41,16 +35,9 @@ QtChatHandler::QtChatHandler(CChatHandler & cChatHandler)
 QtChatHandler::~QtChatHandler() {
 }
 
-void QtChatHandler::newIMChatSessionCreatedEventHandler(IMChatSession & imChatSession) {
-	typedef PostEvent1<void (IMChatSession & imChatSession), IMChatSession &> MyPostEvent;
-	MyPostEvent * event =
-		new MyPostEvent(boost::bind(&QtChatHandler::newIMChatSessionCreatedEventHandlerThreadSafe, this, _1), imChatSession);
-	postEvent(event);
-}
-
-void QtChatHandler::newIMChatSessionCreatedEventHandlerThreadSafe(IMChatSession & imChatSession) {
+void QtChatHandler::newIMChatSessionCreatedEvent(IMChatSession & imChatSession) {
 	if (!_qtChatWindow) {
-		 _qtChatWindow =  new QtChatWindow(_cChatHandler, imChatSession);
+		_qtChatWindow =  new QtChatWindow(_cChatHandler, imChatSession);
 		_qtChatWindow->showToaster(&imChatSession);
 	} else {
 		_qtChatWindow->addChatSession(&imChatSession);
@@ -62,13 +49,4 @@ void QtChatHandler::createSession(IMAccount & imAccount, IMContactSet & imContac
 }
 
 void QtChatHandler::updatePresentation() {
-
-}
-
-void QtChatHandler::updatePresentationThreadSafe() {
-
-}
-
-void QtChatHandler::initThreadSafe() {
-	_qtChatWindow = NULL;
 }

@@ -22,26 +22,57 @@
 #include <presentation/PChatHandler.h>
 #include <presentation/PFactory.h>
 
+#include <control/profile/CUserProfile.h>
+#include <control/CWengoPhone.h>
+
 #include <model/chat/ChatHandler.h>
 
 #include <util/Logger.h>
+#include <thread/ThreadEvent.h>
 
 CChatHandler::CChatHandler(ChatHandler & chatHandler, CUserProfile & cUserProfile)
-	: _chatHandler(chatHandler), _cUserProfile(cUserProfile) {
+	: _chatHandler(chatHandler),
+	_cUserProfile(cUserProfile) {
 
-	_pChatHandler = PFactory::getFactory().createPresentationChatHandler(*this);
-
-	_chatHandler.newIMChatSessionCreatedEvent +=
-		boost::bind(&CChatHandler::newIMChatSessionCreatedEventHandler, this, _1, _2);
+	_pChatHandler = NULL;
+	typedef ThreadEvent0<void ()> MyThreadEvent;
+	MyThreadEvent * event = new MyThreadEvent(boost::bind(&CChatHandler::initPresentationThreadSafe, this));
+	PFactory::postEvent(event);
 }
 
 CChatHandler::~CChatHandler() {
-	delete _pChatHandler;
+	//delete _pChatHandler;
+}
+
+void CChatHandler::initPresentationThreadSafe() {
+	_pChatHandler = PFactory::getFactory().createPresentationChatHandler(*this);
+
+	_chatHandler.newIMChatSessionCreatedEvent += boost::bind(&CChatHandler::newIMChatSessionCreatedEventHandler, this, _1, _2);
+}
+
+Presentation * CChatHandler::getPresentation() {
+	return _pChatHandler;
+}
+
+CWengoPhone & CChatHandler::getCWengoPhone() {
+	return _cUserProfile.getCWengoPhone();
+}
+
+CUserProfile & CChatHandler::getCUserProfile() {
+	return _cUserProfile;
 }
 
 void CChatHandler::newIMChatSessionCreatedEventHandler(ChatHandler & sender, IMChatSession & imChatSession) {
+	typedef ThreadEvent1<void (IMChatSession &), IMChatSession &> MyThreadEvent;
+	MyThreadEvent * event = new MyThreadEvent(boost::bind(&CChatHandler::newIMChatSessionCreatedEventHandlerThreadSafe, this, _1), imChatSession);
+	PFactory::postEvent(event);
+}
+
+void CChatHandler::newIMChatSessionCreatedEventHandlerThreadSafe(IMChatSession & imChatSession) {
 	LOG_DEBUG("new IMChatSessionCreatedEvent");
-	_pChatHandler->newIMChatSessionCreatedEventHandler(imChatSession);
+	if (_pChatHandler) {
+		_pChatHandler->newIMChatSessionCreatedEvent(imChatSession);
+	}
 }
 
 void CChatHandler::createSession(IMAccount & imAccount, IMContactSet & imContactSet) {

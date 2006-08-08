@@ -111,9 +111,6 @@ QtWengoPhone::QtWengoPhone(CWengoPhone & cWengoPhone)
 
 	_chatWindow = NULL;
 
-	_cWengoPhone.controlTimeoutEvent += boost::bind(&QtWengoPhone::timeoutEventHandler, this);
-	connect(this, SIGNAL(signalTimeoutEventReached()), SLOT(slotTimeoutEventReachedThreadSafe()));
-
 	NetworkProxyDiscovery::getInstance().proxyNeedsAuthenticationEvent +=
 		boost::bind(&QtWengoPhone::proxyNeedsAuthenticationEventHandler, this, _1, _2);
 	NetworkProxyDiscovery::getInstance().wrongProxyAuthenticationEvent +=
@@ -1004,11 +1001,7 @@ void QtWengoPhone::slotSystrayMenuCallBlank(bool checked) {
 	getWidget()->setWindowState(getWidget()->windowState() & ~Qt::WindowMinimized | Qt::WindowActive);
 }
 
-void QtWengoPhone::timeoutEventHandler() {
-	signalTimeoutEventReached();
-}
-
-void QtWengoPhone::slotTimeoutEventReachedThreadSafe() {
+void QtWengoPhone::exitEvent() {
 	QCoreApplication::exit(EXIT_SUCCESS);
 }
 

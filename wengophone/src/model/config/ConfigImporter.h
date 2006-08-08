@@ -26,7 +26,6 @@
 #include <string>
 
 class Contact;
-class Thread;
 class UserProfile;
 class UserProfileHandler;
 
@@ -40,7 +39,7 @@ class UserProfileHandler;
 class ConfigImporter {
 public:
 
-	ConfigImporter(UserProfileHandler & userProfileHandler, Thread & modelThread);
+	ConfigImporter(UserProfileHandler & userProfileHandler);
 
 	/**
 	 * Imports the WengoPhone Classic Config only if no WengoPhone NG
@@ -89,8 +88,6 @@ private:
 	void addContactDetails(Contact & contact, void * structVcard);
 
 	UserProfileHandler & _userProfileHandler;
-
-	Thread & _modelThread;
 };
 
 #endif	//OWCONFIGIMPORTER_H

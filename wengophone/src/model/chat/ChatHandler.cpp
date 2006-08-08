@@ -30,14 +30,11 @@
 
 using namespace std;
 
-ChatHandler::ChatHandler(UserProfile & userProfile) 
-: _userProfile(userProfile) {
-	_userProfile.newIMAccountAddedEvent +=
-		boost::bind(&ChatHandler::newIMAccountAddedEventHandler, this, _1, _2);
-	_userProfile.getConnectHandler().connectedEvent +=
-		boost::bind(&ChatHandler::connectedEventHandler, this, _1, _2);
-	_userProfile.getConnectHandler().disconnectedEvent +=
-		boost::bind(&ChatHandler::disconnectedEventHandler, this, _1, _2);
+ChatHandler::ChatHandler(UserProfile & userProfile)
+	: _userProfile(userProfile) {
+	_userProfile.newIMAccountAddedEvent += boost::bind(&ChatHandler::newIMAccountAddedEventHandler, this, _1, _2);
+	_userProfile.getConnectHandler().connectedEvent += boost::bind(&ChatHandler::connectedEventHandler, this, _1, _2);
+	_userProfile.getConnectHandler().disconnectedEvent += boost::bind(&ChatHandler::disconnectedEventHandler, this, _1, _2);
 }
 
 ChatHandler::~ChatHandler() {
@@ -62,8 +59,7 @@ void ChatHandler::disconnectedEventHandler(ConnectHandler & sender, IMAccount & 
 void ChatHandler::newIMChatSessionCreatedEventHandler(IMChat & sender, IMChatSession & imChatSession) {
 	LOG_DEBUG("a new IMChatSession has been created");
 	_imChatSessionSet.insert(&imChatSession);
-	imChatSession.imChatSessionWillDieEvent += 
-		boost::bind(&ChatHandler::imChatSessionWillDieEventHandler, this, _1);
+	imChatSession.imChatSessionWillDieEvent += boost::bind(&ChatHandler::imChatSessionWillDieEventHandler, this, _1);
 	newIMChatSessionCreatedEvent(*this, imChatSession);
 }
 
@@ -102,7 +98,7 @@ void ChatHandler::imAccountDeadEventHandler(IMAccount & sender) {
 	IMChatMap::iterator it = _imChatMap.find(&sender);
 
 	if (it != _imChatMap.end()) {
-		//TODO: close all IMChatSession opened with this IMAccount
+		//TODO close all IMChatSession opened with this IMAccount
 		delete (*it).second;
 		_imChatMap.erase(it);
 	} else {

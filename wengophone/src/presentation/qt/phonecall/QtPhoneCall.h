@@ -22,9 +22,9 @@
 
 #include <presentation/PPhoneCall.h>
 
-#include <qtutil/QObjectThreadSafe.h>
-
 #include <pixertool/pixertool.h>
+
+#include <QObject>
 
 class PhoneCall;
 class CPhoneCall;
@@ -45,7 +45,7 @@ namespace Ui { class PhoneCallWidget; }
  * @author Mathieu Stute
  * @author Philippe Bernery
  */
-class QtPhoneCall : public QObjectThreadSafe, public PPhoneCall {
+class QtPhoneCall : public QObject, public PPhoneCall {
 	Q_OBJECT
 public:
 
@@ -53,7 +53,7 @@ public:
 
 	virtual ~QtPhoneCall();
 
-	void updatePresentation();
+	void updatePresentation() { }
 
 	QWidget * getWidget() const {
 		return _phoneCallWidget;
@@ -106,16 +106,6 @@ private Q_SLOTS:
 	void updateCallDuration();
 
 private:
-
-	void initThreadSafe();
-
-	void closeThreadSafe();
-
-	void updatePresentationThreadSafe();
-
-	void stateChangedEventThreadSafe(EnumPhoneCallState::PhoneCallState state);
-
-	void videoFrameReceivedEventThreadSafe(piximage * remoteVideoFrame, piximage * localVideoFrame);
 
 	void showVideoWidget();
 

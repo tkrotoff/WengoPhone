@@ -17,16 +17,10 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef PWENGOPHONE_H
-#define PWENGOPHONE_H
+#ifndef OWPWENGOPHONE_H
+#define OWPWENGOPHONE_H
 
 #include "Presentation.h"
-
-class IMContact;
-class PresenceHandler;
-class WengoAccount;
-
-#include <string>
 
 /**
  *
@@ -37,6 +31,11 @@ class PWengoPhone : public Presentation {
 public:
 
 	virtual void showHistory() = 0;
+
+	/**
+	 * @see WengoPhone::exitEvent
+	 */
+	virtual void exitEvent() = 0;
 };
 
-#endif	//PWENGOPHONE_H
+#endif	//OWPWENGOPHONE_H

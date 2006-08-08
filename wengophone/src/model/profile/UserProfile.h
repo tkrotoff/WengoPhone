@@ -49,7 +49,6 @@ class IPhoneLine;
 class NetworkObserver;
 class PhoneCall;
 class SipAccount;
-class Thread;
 class WenboxPlugin;
 class WengoAccount;
 class WsDirectory;
@@ -157,7 +156,7 @@ public:
 	 */
 	Event<void (UserProfile & sender, WsDirectory & wsDirectory)> wsDirectoryCreatedEvent;
 
-	UserProfile(Thread & modelThread);
+	UserProfile();
 
 	virtual ~UserProfile();
 
@@ -558,8 +557,6 @@ private:
 
 	/** Name of the UserProfile. */
 	std::string _name;
-
-	Thread & _modelThread;
 };
 
 #endif //OWUSERPROFILE_H

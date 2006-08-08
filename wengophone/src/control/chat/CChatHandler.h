@@ -17,20 +17,18 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef CCHATHANDLER_H
-#define CCHATHANDLER_H
+#ifndef OWCCHATHANDLER_H
+#define OWCCHATHANDLER_H
 
-#include <imwrapper/IMChat.h>
+#include <control/Control.h>
 
-#include <util/Event.h>
-#include <util/NonCopyable.h>
-#include <util/Trackable.h>
-
+class Presentation;
 class ChatHandler;
 class CUserProfile;
 class CWengoPhone;
 class IMAccount;
 class IMContactSet;
+class IMChatSession;
 class PChatHandler;
 
 /**
@@ -39,20 +37,31 @@ class PChatHandler;
  * @author Tanguy Krotoff
  * @author Philippe Bernery
  */
-class CChatHandler : NonCopyable, public Trackable {
+class CChatHandler : public Control {
 public:
 
 	CChatHandler(ChatHandler & chatHandler, CUserProfile & cUserProfile);
 
 	~CChatHandler();
 
-	void createSession(IMAccount & imAccount, IMContactSet & imContactSet);
+	Presentation * getPresentation();
 
-	CUserProfile & getCUserProfile() const { return _cUserProfile;}
+	CWengoPhone & getCWengoPhone();
+
+	CUserProfile & getCUserProfile();
+
+	/**
+	 * @see ChatHandler::createSession()
+	 */
+	void createSession(IMAccount & imAccount, IMContactSet & imContactSet);
 
 private:
 
+	void initPresentationThreadSafe();
+
 	void newIMChatSessionCreatedEventHandler(ChatHandler & sender, IMChatSession & imChatSession);
+
+	void newIMChatSessionCreatedEventHandlerThreadSafe(IMChatSession & imChatSession);
 
 	ChatHandler & _chatHandler;
 
@@ -61,4 +70,4 @@ private:
 	CUserProfile & _cUserProfile;
 };
 
-#endif	//CCHATHANDLER_H
+#endif	//OWCCHATHANDLER_H

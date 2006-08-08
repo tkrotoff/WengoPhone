@@ -20,40 +20,13 @@
 #ifndef OWCWENGOPHONE_H
 #define OWCWENGOPHONE_H
 
-#include <control/profile/CUserProfileHandler.h>
+#include <control/Control.h>
 
-#include <model/WengoPhone.h>
-#include <model/account/SipAccount.h>
-
-#include <imwrapper/EnumIMProtocol.h>
-
-#include <util/Trackable.h>
-
-#include <string>
-
-class CUserProfileHandler;
 class PWengoPhone;
+class WengoPhone;
+class Presentation;
+class CUserProfileHandler;
 class WsSubscribe;
-
-/**
- * @defgroup control Control Component
- *
- * Like the model component, the control is part of the heart of WengoPhone.
- * It is developped in pure C++ using libraries like LibUtil, Boost, TinyXML and Curl.
- * This component has a very limited 'intelligence', everything is in fact done
- * inside the model component.
- *
- * The control component goal is to make the jonction between the model component
- * and the presentation component.
- *
- * The control component receives informations from the model component via the design
- * pattern observer. On the other hand it sends informations to the model component directly.
- * The control component dialogs with the presentation component via interfaces thus allowing
- * different graphical interfaces to be implemented (Qt, GTK+...).
- *
- * All classes inside the control component are named using a leading 'C' letter and
- * are inside the subdirectory control.
- */
 
 /**
  * @ingroup control
@@ -61,29 +34,21 @@ class WsSubscribe;
  * @author Philippe Bernery
  * @author Mathieu Stute
  */
-class CWengoPhone : public Trackable {
+class CWengoPhone : public Control {
 public:
-
-	/**
-	 * @see WengoPhone::timeoutEvent
-	 */
-	Event<void ()> controlTimeoutEvent;
 
 	CWengoPhone(WengoPhone & wengoPhone);
 
 	~CWengoPhone();
 
-	PWengoPhone * getPresentation() const {
-		return _pWengoPhone;
+	Presentation * getPresentation();
+
+	CWengoPhone & getCWengoPhone() {
+		return *this;
 	}
 
-	WengoPhone & getWengoPhone() const {
-		return _wengoPhone;
-	}
-
-	Thread & getModelThread() const  {
-		return _wengoPhone;
-	}
+	/** FIXME should be removed. */
+	WengoPhone & getWengoPhone() const;
 
 	/**
 	 * Entry point of the application, equivalent to main().
@@ -104,15 +69,19 @@ public:
 	/**
 	 * Gets the CUserProfileHandler
 	 */
-	CUserProfileHandler & getCUserProfileHandler() {
-		return *_cUserProfileHandler;
-	}
+	CUserProfileHandler & getCUserProfileHandler();
 
 private:
+
+	void initPresentationThreadSafe();
 
 	void initFinishedEventHandler(WengoPhone & sender);
 
 	void wsSubscribeCreatedEventHandler(WengoPhone & sender, WsSubscribe & wsSubscribe);
+
+	void exitEventHandler();
+
+	void exitEventHandlerThreadSafe();
 
 	/** Direct link to the model. */
 	WengoPhone & _wengoPhone;

@@ -70,12 +70,11 @@ WengoPhone::WengoPhone() {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
 	//Binding events
-	config.valueChangedEvent +=
-		boost::bind(&WengoPhone::valueChangedEventHandler, this, _1, _2);
+	config.valueChangedEvent += boost::bind(&WengoPhone::valueChangedEventHandler, this, _1, _2);
 	////
 
 	//Creating the UserProfileHandler instance
-	_userProfileHandler = new UserProfileHandler(*this);
+	_userProfileHandler = new UserProfileHandler();
 	////
 
 #ifdef OS_WINDOWS
@@ -90,7 +89,7 @@ WengoPhone::WengoPhone() {
 }
 
 void WengoPhone::shutdownAfterTimeout() {
-	timeoutEvent();
+	exitEvent(*this);
 }
 
 WengoPhone::~WengoPhone() {
@@ -113,7 +112,7 @@ WengoPhone::~WengoPhone() {
 
 	/**
 	 * Set up a timeout triggered if SIP registering is too long
-	 * so that closing WengoPhone NG is not too long.
+	 * so that closing WengoPhone is not too long.
 	 */
 	static Timer shutdownTimeout;
 	shutdownTimeout.timeoutEvent += boost::bind(&WengoPhone::shutdownAfterTimeout, this);
@@ -123,16 +122,15 @@ WengoPhone::~WengoPhone() {
 void WengoPhone::init() {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
-	//remove WengoPhone Classic from startup registry
+	//Remove WengoPhone Classic from startup registry
 	ClassicExterminator::killClassicExecutable();
 
-	//remove WengoPhone Classic from startup registry
+	//Remove WengoPhone Classic from startup registry
 	ClassicExterminator::removeClassicFromStartup();
 
 	//Imports the Config from WengoPhone Classic.
-	ConfigImporter importer(*_userProfileHandler, *this);
+	ConfigImporter importer(*_userProfileHandler);
 	importer.importConfig(config.getConfigDir());
-
 
 	_wsSubscribe = new WsSubscribe();
 	wsSubscribeCreatedEvent(*this, *_wsSubscribe);
@@ -150,25 +148,25 @@ void WengoPhone::init() {
 
 void WengoPhone::run() {
 	init();
-	LOG_DEBUG("The model thread is ready for events");
+	LOG_DEBUG("model thread is ready for events");
 
 	_running = true;
 	runEvents();
 	_running = false;
 }
 
-void WengoPhone::terminate() {
+/*void WengoPhone::terminate() {
 /*
 	typedef ThreadEvent0<void ()> MyThreadEvent;
 	MyThreadEvent * event = new MyThreadEvent(boost::bind(&WengoPhone::terminateThreadSafe, this));
 	postEvent(event);
 */
-	Thread::terminate();
-}
+/*	Thread::terminate();
+}*/
 
-void WengoPhone::terminateThreadSafe() {
+/*void WengoPhone::terminateThreadSafe() {
 	_terminate = true;
-}
+}*/
 
 void WengoPhone::saveConfiguration() {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();

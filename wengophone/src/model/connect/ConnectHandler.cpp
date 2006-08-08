@@ -22,18 +22,18 @@
 #include <model/connect/Connect.h>
 #include <model/network/NetworkObserver.h>
 #include <model/profile/UserProfile.h>
+#include <model/WengoPhone.h>
 
 #include <imwrapper/IMAccount.h>
 #include <imwrapper/EnumIMProtocol.h>
 
-#include <thread/Thread.h>
 #include <util/Logger.h>
+#include <thread/ThreadEvent.h>
 
 using namespace std;
 
-ConnectHandler::ConnectHandler(UserProfile & userProfile, Thread & modelThread)
-	: _userProfile(userProfile),
-	_modelThread(modelThread) {
+ConnectHandler::ConnectHandler(UserProfile & userProfile)
+	: _userProfile(userProfile) {
 
 	_userProfile.newIMAccountAddedEvent +=
 		boost::bind(&ConnectHandler::newIMAccountAddedEventHandler, this, _1, _2);
@@ -96,7 +96,7 @@ void ConnectHandler::connectedEventHandler(IMConnect & sender) {
 	MyThreadEvent * event =
 		new MyThreadEvent(boost::bind(&ConnectHandler::connectedEventHandlerThreadSafe, this, _1), &sender.getIMAccount());
 
-	_modelThread.postEvent(event);
+	WengoPhone::postEvent(event);
 }
 
 void ConnectHandler::connectedEventHandlerThreadSafe(IMAccount * imAccount) {
@@ -181,7 +181,7 @@ void ConnectHandler::connectionIsUpEventHandler(NetworkObserver & sender) {
 	MyThreadEvent * event =
 		new MyThreadEvent(boost::bind(&ConnectHandler::connectionIsUpEventHandlerThreadSafe, this));
 
-	_modelThread.postEvent(event);
+	WengoPhone::postEvent(event);
 }
 
 void ConnectHandler::connectionIsUpEventHandlerThreadSafe() {
@@ -199,7 +199,7 @@ void ConnectHandler::connectionIsDownEventHandler(NetworkObserver & sender) {
 	MyThreadEvent * event =
 		new MyThreadEvent(boost::bind(&ConnectHandler::connectionIsDownEventHandlerThreadSafe, this));
 
-	_modelThread.postEvent(event);
+	WengoPhone::postEvent(event);
 }
 
 void ConnectHandler::connectionIsDownEventHandlerThreadSafe() {

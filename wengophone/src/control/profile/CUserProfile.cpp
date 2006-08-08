@@ -33,6 +33,7 @@
 #include <control/webservices/callforward/CWsCallForward.h>
 #include <control/wenbox/CWenboxPlugin.h>
 
+#include <model/WengoPhone.h>
 #include <model/account/wengo/WengoAccount.h>
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
@@ -47,16 +48,15 @@
 
 #include <sipwrapper/SipWrapper.h>
 
+#include <thread/ThreadEvent.h>
 #include <util/Logger.h>
 
-CUserProfile::CUserProfile(UserProfile & userProfile, CWengoPhone & cWengoPhone,
-	Thread & modelThread)
+CUserProfile::CUserProfile(UserProfile & userProfile, CWengoPhone & cWengoPhone)
 	: _userProfile(userProfile),
 	_cWengoPhone(cWengoPhone),
-	_cContactList(userProfile.getContactList(), modelThread),
+	_cContactList(userProfile.getContactList()),
 	_cWenboxPlugin(*userProfile.getWenboxPlugin(), cWengoPhone),
-	_cChatHandler(userProfile.getChatHandler(), *this),
-	_modelThread(modelThread) {
+	_cChatHandler(userProfile.getChatHandler(), *this) {
 
 	_cHistory = NULL;
 	_cPhoneLine = NULL;
@@ -89,7 +89,7 @@ CUserProfile::CUserProfile(UserProfile & userProfile, CWengoPhone & cWengoPhone,
 	_userProfile.getPresenceHandler().authorizationRequestEvent +=
 		boost::bind(&CUserProfile::authorizationRequestEventHandler, this, _1, _2, _3);
 
-	// Check if a PhoneLine already exist
+	//Check if a PhoneLine already exist
 	if (_userProfile.getActivePhoneLine()) {
 		phoneLineCreatedEventHandler(_userProfile, *_userProfile.getActivePhoneLine());
 	}
@@ -101,7 +101,7 @@ CUserProfile::CUserProfile(UserProfile & userProfile, CWengoPhone & cWengoPhone,
 	}
 
 	if (_userProfile.getWsSoftUpdate()) {
-        wsSoftUpdateCreatedEventHandler(_userProfile, *_userProfile.getWsSoftUpdate());
+		wsSoftUpdateCreatedEventHandler(_userProfile, *_userProfile.getWsSoftUpdate());
 	}
 
 	if (_userProfile.getWsDirectory()) {
@@ -192,15 +192,13 @@ void CUserProfile::wsSoftUpdateCreatedEventHandler(UserProfile & sender, WsSoftU
 }
 
 void CUserProfile::historyLoadedEventHandler(History & history) {
-	_cHistory = new CHistory(history, _cWengoPhone, _cWengoPhone.getModelThread());
+	_cHistory = new CHistory(history, _cWengoPhone);
 }
 
 void CUserProfile::disconnect() {
 	typedef ThreadEvent0<void ()> MyThreadEvent;
-	MyThreadEvent * event =
-		new MyThreadEvent(boost::bind(&CUserProfile::disconnectThreadSafe, this));
-
-	_modelThread.postEvent(event);
+	MyThreadEvent * event = new MyThreadEvent(boost::bind(&CUserProfile::disconnectThreadSafe, this));
+	WengoPhone::postEvent(event);
 }
 
 void CUserProfile::disconnectThreadSafe() {
@@ -209,10 +207,8 @@ void CUserProfile::disconnectThreadSafe() {
 
 void CUserProfile::makeContactCall(const std::string & contactId) {
 	typedef ThreadEvent1<void (std::string contactId), std::string> MyThreadEvent;
-	MyThreadEvent * event =
-		new MyThreadEvent(boost::bind(&CUserProfile::makeContactCallThreadSafe, this, _1), contactId);
-
-	_modelThread.postEvent(event);
+	MyThreadEvent * event = new MyThreadEvent(boost::bind(&CUserProfile::makeContactCallThreadSafe, this, _1), contactId);
+	WengoPhone::postEvent(event);
 }
 
 void CUserProfile::makeContactCallThreadSafe(std::string contactId) {
@@ -227,10 +223,8 @@ void CUserProfile::makeContactCallThreadSafe(std::string contactId) {
 
 void CUserProfile::makeCall(const std::string & phoneNumber) {
 	typedef ThreadEvent1<void (std::string phoneNumber), std::string> MyThreadEvent;
-	MyThreadEvent * event =
-		new MyThreadEvent(boost::bind(&CUserProfile::makeCallThreadSafe, this, _1), phoneNumber);
-
-	_modelThread.postEvent(event);
+	MyThreadEvent * event = new MyThreadEvent(boost::bind(&CUserProfile::makeCallThreadSafe, this, _1), phoneNumber);
+	WengoPhone::postEvent(event);
 }
 
 void CUserProfile::makeCallThreadSafe(std::string phoneNumber) {
@@ -242,10 +236,8 @@ void CUserProfile::makeCallThreadSafe(std::string phoneNumber) {
 
 void CUserProfile::startIM(const std::string & contactId) {
 	typedef ThreadEvent1<void (std::string contactId), std::string> MyThreadEvent;
-	MyThreadEvent * event =
-		new MyThreadEvent(boost::bind(&CUserProfile::startIMThreadSafe, this, _1), contactId);
-
-	_modelThread.postEvent(event);
+	MyThreadEvent * event = new MyThreadEvent(boost::bind(&CUserProfile::startIMThreadSafe, this, _1), contactId);
+	WengoPhone::postEvent(event);
 }
 
 void CUserProfile::startIMThreadSafe(std::string contactId) {
@@ -257,10 +249,8 @@ void CUserProfile::startIMThreadSafe(std::string contactId) {
 
 void CUserProfile::setWengoAccount(const WengoAccount & wengoAccount) {
 	typedef ThreadEvent1<void (WengoAccount wengoAccount), WengoAccount> MyThreadEvent;
-	MyThreadEvent * event =
-		new MyThreadEvent(boost::bind(&CUserProfile::setWengoAccountThreadSafe, this, _1), wengoAccount);
-
-	_modelThread.postEvent(event);
+	MyThreadEvent * event = new MyThreadEvent(boost::bind(&CUserProfile::setWengoAccountThreadSafe, this, _1), wengoAccount);
+	WengoPhone::postEvent(event);
 }
 
 void CUserProfile::setWengoAccountThreadSafe(WengoAccount wengoAccount) {

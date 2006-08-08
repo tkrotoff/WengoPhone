@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,15 +19,19 @@
 
 #include "CHistory.h"
 
-#include <control/CWengoPhone.h>
 #include <presentation/PFactory.h>
 #include <presentation/PHistory.h>
 
-#include <util/Logger.h>
-#include <thread/Thread.h>
+#include <control/CWengoPhone.h>
 
-CHistory::CHistory(History & history, CWengoPhone & cWengoPhone, Thread & modelThread)
-	: _history(history), _cWengoPhone(cWengoPhone), _modelThread(modelThread) {
+#include <model/WengoPhone.h>
+
+#include <util/Logger.h>
+#include <thread/ThreadEvent.h>
+
+CHistory::CHistory(History & history, CWengoPhone & cWengoPhone)
+	: _history(history),
+	_cWengoPhone(cWengoPhone) {
 
 	_pHistory = PFactory::getFactory().createPresentationHistory(*this);
 
@@ -70,47 +74,41 @@ void CHistory::unseenMissedCallsChangedEventhandler(History &, int count) {
 	unseenMissedCallsChangedEvent(*this, count);
 }
 
-void CHistory::removeHistoryMemento(unsigned int id) {
-	typedef ThreadEvent1<void (unsigned int id), unsigned int> MyThreadEvent;
-	MyThreadEvent * event =
-			new MyThreadEvent(boost::bind(&CHistory::removeHistoryMementoThreadSafe, this, _1), id);
-
-	_modelThread.postEvent(event);
+void CHistory::removeHistoryMemento(unsigned id) {
+	typedef ThreadEvent1<void (unsigned id), unsigned> MyThreadEvent;
+	MyThreadEvent * event = new MyThreadEvent(boost::bind(&CHistory::removeHistoryMementoThreadSafe, this, _1), id);
+	WengoPhone::postEvent(event);
 }
 
-void CHistory::removeHistoryMementoThreadSafe(unsigned int id) {
+void CHistory::removeHistoryMementoThreadSafe(unsigned id) {
 	_history.removeMemento(id);
 }
 
 void CHistory::clear(HistoryMemento::State state) {
 	typedef ThreadEvent1<void (HistoryMemento::State state), HistoryMemento::State> MyThreadEvent;
-	MyThreadEvent * event =
-			new MyThreadEvent(boost::bind(&CHistory::clearThreadSafe, this, _1), state);
-
-	_modelThread.postEvent(event);
+	MyThreadEvent * event = new MyThreadEvent(boost::bind(&CHistory::clearThreadSafe, this, _1), state);
+	WengoPhone::postEvent(event);
 }
 
 void CHistory::clearThreadSafe(HistoryMemento::State state) {
 	_history.clear(state);
 }
 
-std::string CHistory::getMementoData(unsigned int id) {
+std::string CHistory::getMementoData(unsigned id) const {
 	return _history.getMemento(id)->getData();
 }
 
-std::string CHistory::getMementoPeer(unsigned int id) {
+std::string CHistory::getMementoPeer(unsigned id) const {
 	return _history.getMemento(id)->getPeer();
 }
 
-void CHistory::replay(unsigned int id) {
-	typedef ThreadEvent1<void (unsigned int id), unsigned int> MyThreadEvent;
-	MyThreadEvent * event =
-			new MyThreadEvent(boost::bind(&CHistory::replayThreadSafe, this, _1), id);
-
-	_modelThread.postEvent(event);
+void CHistory::replay(unsigned id) {
+	typedef ThreadEvent1<void (unsigned id), unsigned> MyThreadEvent;
+	MyThreadEvent * event = new MyThreadEvent(boost::bind(&CHistory::replayThreadSafe, this, _1), id);
+	WengoPhone::postEvent(event);
 }
 
-void CHistory::replayThreadSafe(unsigned int id) {
+void CHistory::replayThreadSafe(unsigned id) {
 	_history.replay(id);
 }
 
@@ -120,10 +118,8 @@ HistoryMementoCollection * CHistory::getMementos(HistoryMemento::State state, in
 
 void CHistory::resetUnseenMissedCalls() {
 	typedef ThreadEvent0<void ()> MyThreadEvent;
-	MyThreadEvent * event =
-			new MyThreadEvent(boost::bind(&CHistory::resetUnseenMissedCallsThreadSafe, this));
-
-	_modelThread.postEvent(event);
+	MyThreadEvent * event = new MyThreadEvent(boost::bind(&CHistory::resetUnseenMissedCallsThreadSafe, this));
+	WengoPhone::postEvent(event);
 }
 
 void CHistory::resetUnseenMissedCallsThreadSafe() {

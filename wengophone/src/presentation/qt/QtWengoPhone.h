@@ -155,8 +155,6 @@ Q_SIGNALS:
 
 	void connectionStatusEventHandlerSignal(int totalSteps, int currentStep, QString infoMsg);
 
-	void signalTimeoutEventReached();
-
 	void removeHistorySignal();
 
 public Q_SLOTS:
@@ -249,8 +247,6 @@ private Q_SLOTS:
 
 	void slotSystrayMenuCallBlank(bool checked);
 
-	void slotTimeoutEventReachedThreadSafe();
-
 	void slotTranslationChanged();
 
 	void showHideGroups();
@@ -285,7 +281,7 @@ private:
 
 	QMenu * createStatusMenu();
 
-	void timeoutEventHandler();
+	void exitEvent();
 
 	QMenu * createCallMenu();
 
