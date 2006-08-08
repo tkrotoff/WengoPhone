@@ -31,7 +31,7 @@ OWClientSocket::OWClientSocket() {
 	_mySock = 0;
 #ifdef OS_WINDOWS
 	WSADATA WSAData;
-	if (WSAStartup(MAKEWORD(2,2), &WSAData) != NO_ERROR) {
+	if (WSAStartup(MAKEWORD(2, 2), &WSAData) != NO_ERROR) {
 		LOG_ERROR("Cannot initialize WinSock");
 	}
 #endif
@@ -44,7 +44,6 @@ void OWClientSocket::connect(const std::string & ip, int port) {
 	_ip = ip;
 	_port = port;
 	Error error = NoError;
-	int i = 1;
 
 	if ((_mySock = socket(PF_INET, SOCK_STREAM, 0)) == -1) {
 		LOG_DEBUG("cannot create socket");
@@ -53,31 +52,29 @@ void OWClientSocket::connect(const std::string & ip, int port) {
 	}
 
 #ifdef SO_NOSIGPIPE
+	int i = 1;
 	setsockopt(_mySock, SOL_SOCKET, SO_NOSIGPIPE, &i, sizeof(i));
 #endif
 
-	struct sockaddr_in	addr;
+	struct sockaddr_in addr;
 	addr.sin_port = (unsigned short) htons(_port);
 	addr.sin_addr.s_addr = inet_addr(_ip.c_str());
 	addr.sin_family = PF_INET;
 
-	if (::connect(_mySock, (struct sockaddr *) &addr, sizeof(addr)) == -1)
-	{
+	if (::connect(_mySock, (struct sockaddr *) &addr, sizeof(addr)) == -1) {
 		LOG_DEBUG("cannot connect to " + _ip);
 		closesocket(_mySock);
 		error = UnknownError;
-	}	
-	
+	}
+
 	connectionStatusEvent(this, error);
 }
 
 bool OWClientSocket::write(const std::string & data) {
-		
-	int size;
-	int ret;
 	bool noError = false;
 
-	for (int i = 0, size = data.length() + 1; size; size -= i) {
+	int size = data.length() + 1;
+	for (int i = 0; size; size -= i) {
 		i = send(_mySock, data.c_str(), size, MSG_NOSIGNAL);
 		if (i < 1) {
 			break;
@@ -93,7 +90,7 @@ bool OWClientSocket::write(const std::string & data) {
 		FD_SET(_mySock, &rfds);
 		to.tv_sec = 2;
 		to.tv_usec = 0;
-		ret = select(_mySock + 1, &rfds, 0, 0, &to);
+		int ret = select(_mySock + 1, &rfds, 0, 0, &to);
 		if (ret && FD_ISSET(_mySock, &rfds)) {
 			size = recv(_mySock, buff, sizeof(buff) - 1, 0);
 			if (size) {

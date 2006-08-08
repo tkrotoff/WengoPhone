@@ -21,6 +21,7 @@
 
 #include "OWSocketCommon.h"
 
+#include <util/Logger.h>
 #include <util/String.h>
 
 #ifndef MSG_NOSIGNAL
@@ -31,8 +32,9 @@ Socket _mainSock;
 static std::list<Socket> _clientSockList;
 typedef std::list<Socket>::iterator SockListIterator;
 
-OWServerSocket::OWServerSocket(const std::string listeningIp, int port)
-	: _listeningIp(listeningIp), _port(port) {
+OWServerSocket::OWServerSocket(const std::string & listeningIp, int port)
+	: _listeningIp(listeningIp),
+	_port(port) {
 	_started = false;
 }
 
@@ -44,9 +46,7 @@ void OWServerSocket::init() {
 }
 
 bool OWServerSocket::createMainListeningSocket() {
-
 	struct sockaddr_in raddr;
-	int option = 1;
 
 	if (_listeningIp.empty()) {
 		raddr.sin_addr.s_addr = htons(INADDR_ANY);
@@ -63,6 +63,7 @@ bool OWServerSocket::createMainListeningSocket() {
 		return false;
 	}
 
+	int option = 1;
 #ifdef OS_WINDOWS
 	//FIXME don't know if this is the right way to do it
 	setsockopt(_mainSock, SOL_SOCKET, SO_REUSEADDR, (const char *) &option, sizeof(int));
@@ -70,7 +71,7 @@ bool OWServerSocket::createMainListeningSocket() {
 	setsockopt(_mainSock, SOL_SOCKET, SO_REUSEADDR, (const void *) &option, sizeof(int));
 #endif
 
-	if (bind(_mainSock, (struct sockaddr *)&raddr, sizeof (raddr)) < 0) {
+	if (bind(_mainSock, (struct sockaddr *) &raddr, sizeof (raddr)) < 0) {
 		LOG_DEBUG("cannot bind main socket");
 		closesocket(_mainSock);
 		_mainSock = 0;
@@ -83,7 +84,6 @@ bool OWServerSocket::createMainListeningSocket() {
 }
 
 OWServerSocket::~OWServerSocket() {
-
 	if (_started) {
 		_started = false;
 
@@ -132,8 +132,8 @@ bool OWServerSocket::writeToClient(const std::string & connectionId, const std::
 	Error error = UnknownError;
 
 	if (checkConnectionId(connectionId)) {
-		int size;
-		for (int i = 0, size = data.length() + 1; size; size -= i) {
+		int size = data.length() + 1;
+		for (int i = 0; size; size -= i) {
 			i = send(sockId, data.c_str(), size, MSG_NOSIGNAL);
 			if (i < 1) {
 				break;
@@ -167,10 +167,10 @@ int OWServerSocket::getHighestSocket() {
 	return highest;
 }
 
-int OWServerSocket::getRequest(int sockId, char *buff, unsigned int buffsize) {
+int OWServerSocket::getRequest(int sockId, char * buff, unsigned buffsize) {
 	struct timeval timeout;
 	fd_set rfds;
-	unsigned int nbytes = 0;
+	unsigned nbytes = 0;
 	Socket sock = (Socket) sockId;
 
 	memset(buff, 0, buffsize);
@@ -249,7 +249,7 @@ void OWServerSocket::run() {
 						closesocket(*it);
 						_clientSockList.erase(it);
 					} else {
-						incomingRequestEvent(this, String::fromNumber((int)*it), std::string(buff));
+						incomingRequestEvent(this, String::fromNumber((int) *it), std::string(buff));
 					}
 					break;
 				}

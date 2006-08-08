@@ -31,7 +31,6 @@
  * @author Mathieu Stute
  */
 class OWClientSocket {
-
 public:
 
 	//To finish

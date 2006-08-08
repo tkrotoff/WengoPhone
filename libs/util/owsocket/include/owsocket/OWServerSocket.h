@@ -33,7 +33,6 @@
  * @author Mathieu Stute
  */
 class OWServerSocket : public Thread {
-
 public:
 
 	//To finish
@@ -86,7 +85,7 @@ public:
 	 * @param listeningIp listening ip.
 	 * @param port listening port.
 	 */
-	OWServerSocket(const std::string listeningIp, int port);
+	OWServerSocket(const std::string & listeningIp, int port);
 
 	/**
 	 * Destructor.
@@ -122,7 +121,7 @@ private:
 
 	bool closeAndRemoveFromList(const std::string & connectionId);
 
-	int getRequest(int sockId, char *buff, unsigned int buffsize);
+	int getRequest(int sockId, char * buff, unsigned buffsize);
 
 	int getHighestSocket();
 
