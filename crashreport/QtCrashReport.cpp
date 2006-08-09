@@ -27,6 +27,7 @@
 #include <util/Path.h>
 #include <util/File.h>
 #include <thread/Thread.h>
+#include <util/Logger.h>
 
 #ifdef OS_WINDOWS
 	#include <system/WindowsVersion.h>
