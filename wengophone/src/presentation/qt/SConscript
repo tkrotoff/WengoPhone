@@ -101,7 +101,7 @@ headers = [
 	'chat/QtChatHandler.h',
 	'chat/QtChatWidget.h',
 	'chat/QtChatWindow.h',
-	'chat/QTChatActionBarWidget.h',
+	'chat/QtChatActionBarWidget.h',
 	'webservices/sms/QtSms.h',
 	'webservices/softupdate/QtSoftUpdate.h',
 	'webservices/subscribe/QtSubscribe.h',
