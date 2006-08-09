@@ -33,6 +33,8 @@
         <file>pics/chat/chat_emoticon_button.png</file>
         <file>pics/chat/chat_emoticon_button_on.png</file>
         <file>pics/chat/chat_send.png</file>
+        <file>pics/chat/invite.png</file>
+        <file>pics/chat/invite_on.png</file>
         <file>pics/close_normal.png</file>
         <file>pics/close_on.png</file>
         <file>pics/config/accounts.png</file>

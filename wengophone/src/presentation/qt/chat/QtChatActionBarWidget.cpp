@@ -75,14 +75,12 @@ _chatWidget(chatWidget) {
 	layout->setMargin(0);
 	layout->setSpacing(0);
 
-	/*
 	addLabel(QString("inviteLabel"),
-		QPixmap(":/pics/chat/chat_call_bar_button.png"),
-		QPixmap(":/pics/chat/chat_call_bar_button_on.png"),
-		QSize(46, 65));
-	*/
+		QPixmap(":/pics/chat/invite.png"),
+		QPixmap(":/pics/chat/invite_on.png"),
+		QSize(36, 65));
 
-	//connect(_labels["inviteLabel"], SIGNAL(clicked()), SLOT(inviteContact()));
+	connect(_labels["inviteLabel"], SIGNAL(clicked()), SLOT(inviteContact()));
 	connect(_callLabel, SIGNAL(clicked()), SLOT(callContact()));
 }
 
