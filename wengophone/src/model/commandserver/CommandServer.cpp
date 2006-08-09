@@ -108,16 +108,16 @@ void CommandServer::incomingRequestEventHandler(OWServerSocket * sender, const s
 		Config & config = ConfigManager::getInstance().getCurrentConfig();
 
 		//"emulate" a http server. Needed for Flash sockets
-		_serverSocket->writeToClient(connectionId,
-			buildHttpForFlash(
-				"<?xml version=\"1.0\"?>\n"
-				"<!DOCTYPE cross-domain-policy SYSTEM \"http://www.macromedia.com/xml/dtds/cross-domain-policy.dtd\">\n"
-				"<cross-domain-policy>\n"
-				"<allow-access-from domain=\"" + config.getCmdServerAuthorized() + "\" to-ports=\"*\" />\n"
-				"<allow-access-from domain=\"localhost\" to-ports=\"*\" />\n"
-				"</cross-domain-policy>"
-			)
-		);
+		std::string temp = "<?xml version=\"1.0\"?>\n"
+			"<!DOCTYPE cross-domain-policy SYSTEM \"http://www.macromedia.com/xml/dtds/cross-domain-policy.dtd\">\n"
+			"<cross-domain-policy>\n"
+			"<allow-access-from domain=\"button.wdeal.com\" to-ports=\"*\" />\n";
+		if (!config.getCmdServerAuthorized().empty()) {
+			temp += "<allow-access-from domain=\"" + config.getCmdServerAuthorized() + "\" to-ports=\"*\" />\n";
+		}
+		temp += "<allow-access-from domain=\"localhost\" to-ports=\"*\" />\n"
+				"</cross-domain-policy>";
+		_serverSocket->writeToClient(connectionId, buildHttpForFlash(temp));
 	}
 }
 
