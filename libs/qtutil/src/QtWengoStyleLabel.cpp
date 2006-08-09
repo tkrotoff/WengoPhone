@@ -117,21 +117,31 @@ void QtWengoStyleLabel::resizeEvent ( QResizeEvent * event ){
 	QLabel::resizeEvent (event);
 }
 
-void QtWengoStyleLabel::setPixmaps(const QPixmap & normaleLeftPixmap,
-								const QPixmap & normaleRightPixmap,
-				                const QPixmap & normaleFillPixmap,
+void QtWengoStyleLabel::setPixmaps(const QPixmap & normalLeftPixmap,
+								const QPixmap & normalRightPixmap,
+				                const QPixmap & normalFillPixmap,
 				                const QPixmap & pressedLeftPixmap,
 				                const QPixmap & pressedRightPixmap,
 				                const QPixmap & pressedFillPixmap){
 
-	_normalLeftPixmap = normaleLeftPixmap;
-	_normalRightPixmap = normaleRightPixmap;
-	_normalFillPixmap = normaleFillPixmap;
+	_normalLeftPixmap = normalLeftPixmap;
+	_normalRightPixmap = normalRightPixmap;
+	_normalFillPixmap = normalFillPixmap;
 
 	_pressedLeftPixmap = pressedLeftPixmap;
 	_pressedRightPixmap = pressedRightPixmap;
 	_pressedFillPixmap = pressedFillPixmap;
 
+}
+
+void QtWengoStyleLabel::setLeftPixmaps(const QPixmap & normalLeftPixmap, const QPixmap & pressedLeftPixmap){
+	_normalLeftPixmap = normalLeftPixmap;
+	_pressedLeftPixmap = pressedLeftPixmap;
+}
+
+void QtWengoStyleLabel::setRightPixmaps(const QPixmap & normalRightPixmap, const QPixmap & pressedRightPixmap){
+	_normalRightPixmap = normalRightPixmap;
+	_pressedRightPixmap = pressedRightPixmap;
 }
 
 void QtWengoStyleLabel::setTextColor(const QColor & color){

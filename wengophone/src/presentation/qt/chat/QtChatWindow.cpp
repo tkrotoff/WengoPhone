@@ -110,11 +110,7 @@ QtChatWindow::QtChatWindow(CChatHandler & cChatHandler, IMChatSession & imChatSe
 
 	connect(closeTabButton, SIGNAL(clicked() ), SLOT(closeTab()));
 
-	_inviteFrame = new QFrame(_dialog);
-	createInviteFrame();
-
 	glayout->addWidget(_menuBar);
-	glayout->addWidget(_inviteFrame);
 	glayout->addWidget(_contactListFrame);
 	glayout->addWidget(_tabWidget);
 
@@ -151,45 +147,6 @@ void QtChatWindow::enableChatButton(){
 	_qtWengoPhone->setChatWindow(_dialog );
 }
 
-void QtChatWindow::createInviteFrame(){
-	_inviteFrame->setMaximumSize(QSize(10000,80));
-	_inviteFrame->setMinimumSize(QSize(16,80));
-	QGridLayout * layout = new QGridLayout(_inviteFrame);
-	_callLabel = new QtWengoStyleLabel(_inviteFrame);
-	_inviteLabel = new QtWengoStyleLabel(_inviteFrame);
-	_callLabel->setPixmaps(
-		QPixmap(":/pics/chat/chat_call_bar_button.png"),
-		QPixmap(),
-		QPixmap(),
-		QPixmap(":/pics/chat/chat_call_bar_button_on.png"),
-		QPixmap(":/pics/profilebar/bar_separator.png"),
-		QPixmap()
-	);
-	_callLabel->setMaximumSize(QSize(46,65));
-	_callLabel->setMinimumSize(QSize(46,46));
-
-	_inviteLabel->setPixmaps(
-		QPixmap(),
-		QPixmap(":/pics/profilebar/bar_end.png"),
-		QPixmap(":/pics/profilebar/bar_fill.png"),
-		QPixmap(),
-		QPixmap(":/pics/profilebar/bar_on_end.png"),
-		QPixmap(":/pics/profilebar/bar_on_fill.png")
-	);
-	_inviteLabel->setMinimumSize(QSize(120,65));
-	_inviteLabel->setText(tr("   invite"));
-	_inviteLabel->setTextColor(Qt::white);
-	_inviteLabel->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-
-	connect(_inviteLabel,SIGNAL(clicked()), SLOT(inviteContact()));
-	connect(_callLabel,SIGNAL(clicked()),SLOT(callContact()));
-
-	layout->addWidget(_callLabel,0,0);
-	layout->addWidget(_inviteLabel,0,1);
-	layout->setMargin(0);
-	layout->setSpacing(0);
-
-}
 
 void QtChatWindow::callContact(){
 	QtChatWidget * widget = dynamic_cast<QtChatWidget *>(_tabWidget->widget(_tabWidget->currentIndex()));

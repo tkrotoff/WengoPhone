@@ -32,12 +32,16 @@ public:
 
 	~QtWengoStyleLabel ( );
 
-	void setPixmaps(const QPixmap & normaleLeftPixmap,
-	                const QPixmap & normaleRightPixmap,
-	                const QPixmap & normaleFillPixmap,
+	void setPixmaps(const QPixmap & normalLeftPixmap,
+	                const QPixmap & normalRightPixmap,
+	                const QPixmap & normalFillPixmap,
 	                const QPixmap & pressedLeftPixmap,
 	                const QPixmap & pressedRightPixmap,
 	                const QPixmap & pressedFillPixmap);
+
+	void setLeftPixmaps(const QPixmap & normalRightPixmap, const QPixmap & pressedRightPixmap);
+
+	void setRightPixmaps(const QPixmap & normalRightPixmap, const QPixmap & pressedRightPixmap);
 
 	void setTextColor(const QColor & color);
 

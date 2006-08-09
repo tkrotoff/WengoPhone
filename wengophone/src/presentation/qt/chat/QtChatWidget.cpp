@@ -44,6 +44,7 @@
 #include <presentation/qt/QtWengoPhone.h>
 #include <presentation/qt/contactlist/QtContactList.h>
 #include <presentation/qt/contactlist/QtContactListManager.h>
+#include <presentation/qt/chat/QtChatActionBarWidget.h>
 
 #include <QtGui>
 
@@ -68,6 +69,7 @@ QWidget(parent, f), _cChatHandler(cChatHandler),_qtWengoPhone(qtWengoPhone) {
 
 	_qtEmoticonManager = new QtEmoticonsManager(this);
 	_emoticonsWidget = new EmoticonsWidget(_qtEmoticonManager,this,Qt::Popup);
+	_actionBar = new QtChatActionBarWidget(qtWengoPhone, this, this);
 
 	_stoppedTypingTimerId = -1;
 	_notTypingTimerId = -1;
@@ -81,6 +83,7 @@ QWidget(parent, f), _cChatHandler(cChatHandler),_qtWengoPhone(qtWengoPhone) {
 	_ui.contactListLabel->setVisible(false);
 	createActionFrame();
 	setupSendButton();
+	_ui.gridLayout->addWidget(_actionBar, 0, 0);
 
 	QtChatTabWidget * parentWidget = dynamic_cast<QtChatTabWidget *>(parent);
 

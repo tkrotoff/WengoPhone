@@ -47,6 +47,7 @@ class QTimerEvent;
 class QtWengoStyleLabel;
 class QtEmoticonsManager;
 class QtWengoPhone;
+class QtChatActionBarWidget;
 
 /**
  *
@@ -204,6 +205,8 @@ private:
 	EmoticonsWidget *_emoticonsWidget;
 
 	mutable QMutex _mutex;
+
+	QtChatActionBarWidget * _actionBar;
 };
 
 #endif //OWQTCHATWIDGET_H
