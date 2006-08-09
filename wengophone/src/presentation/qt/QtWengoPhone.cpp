@@ -442,6 +442,9 @@ void QtWengoPhone::addPhoneCall(QtPhoneCall * qtPhoneCall) {
 	if (qtPhoneCall->isIncoming()) {
 		_callButton->setEnabled(true);
 	}
+
+	_wengoPhoneWindow->show();
+	_wengoPhoneWindow->raise();
 }
 
 void QtWengoPhone::addToConference(QString phoneNumber, PhoneCall * targetCall) {
