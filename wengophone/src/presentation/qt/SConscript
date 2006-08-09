@@ -203,7 +203,7 @@ sources = [
 	'chat/QtChatWidget.cpp',
 	'chat/QtChatWidgetManager.cpp',
 	'chat/QtChatWindow.cpp',
-	'chat/QTChatActionBarWidget.cpp',
+	'chat/QtChatActionBarWidget.cpp',
 	'webservices/sms/QtSms.cpp',
 	'webservices/softupdate/QtSoftUpdate.cpp',
 	'webservices/softupdate/QtBrowserSoftUpdate.cpp',
