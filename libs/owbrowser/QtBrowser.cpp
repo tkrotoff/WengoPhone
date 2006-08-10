@@ -25,10 +25,18 @@
 
 #if (defined OS_WINDOWS) && (defined QT_COMMERCIAL)
 	#include <QAxWidget>
+
+	#include <windows.h>
+	#define INITGUID
+	#include <initguid.h>
+	#include <exdisp.h>
+	#include <memory.h>
+
 #endif
 
 #include <iostream>
 using namespace std;
+
 
 QtBrowser::QtBrowser(QWidget * parent, BrowserMode mode) : QObject() {
 	_browserWidget = new QWidget(parent);
@@ -45,11 +53,19 @@ QtBrowser::QtBrowser(QWidget * parent, BrowserMode mode) : QObject() {
 	setMode(mode);
 }
 
-void QtBrowser::setUrl(const std::string & url) {
+void QtBrowser::setUrl(const std::string & url, const std::string & data, bool postMethod) {
 	_url = QString::fromStdString(url);
 	if (_mode == IEMODE) {
 #if (defined OS_WINDOWS) && (defined QT_COMMERCIAL)
-		_ieBrowser->dynamicCall("Navigate(const QString&)", _url);
+		if (!postMethod || data.empty()) {
+			if (data.empty()) {
+				_ieBrowser->dynamicCall("Navigate(const QString&)", _url);
+			} else {
+				_ieBrowser->dynamicCall("Navigate(const QString&)", QString::fromStdString(url + "?" + data));
+			}
+		} else {
+			setPost(url, data);
+		}
 #endif
 	} else {
 		_qtBrowser->setSource(_url);
@@ -114,13 +130,11 @@ void QtBrowser::initBrowser() {
 			_ieBrowser = NULL;
 		}
 #endif
-
 		//Init Qt browser
 		_qtBrowser = new QTextBrowser(_browserWidget);
 		connect(_qtBrowser, SIGNAL(anchorClicked(const QUrl &)),
 			SLOT(beforeNavigate(const QUrl &)));
 		_layout->addWidget(_qtBrowser);
-
 	} else {
 #if (defined OS_WINDOWS) && (defined QT_COMMERCIAL)
 		//Clean qt browser
@@ -140,4 +154,78 @@ void QtBrowser::initBrowser() {
 		_layout->addWidget(_ieBrowser);
 #endif
 	}
+}
+
+#if (defined OS_WINDOWS) && (defined QT_COMMERCIAL)
+bool initPostData(LPVARIANT pvPostData,const std::string & postData) {
+	HRESULT hr;
+	LPSAFEARRAY psa;
+
+	LPCTSTR cszPostData = (LPCTSTR)postData.c_str();
+	UINT cElems = lstrlen(cszPostData);
+	LPSTR pPostData;
+
+	if (!pvPostData) {
+		return false;
+	}
+	VariantInit(pvPostData);
+	psa = SafeArrayCreateVector(VT_UI1, 0, cElems);
+	if (!psa) {
+		return false;
+	}
+
+	hr = SafeArrayAccessData(psa, (LPVOID*)&pPostData);
+	memcpy(pPostData, cszPostData, cElems);
+	hr = SafeArrayUnaccessData(psa);
+
+	V_VT(pvPostData) = VT_ARRAY | VT_UI1;
+	V_ARRAY(pvPostData) = psa;
+	return true;
+}
+#endif
+
+void QtBrowser::setPost(const std::string & url,const std::string & postData) {
+#if (defined OS_WINDOWS) && (defined QT_COMMERCIAL)
+	BSTR bstrHeaders = NULL;
+	BSTR bstrURL = NULL;
+	VARIANT vFlags= {0};
+	VARIANT vPostData = {0};
+	VARIANT vHeaders = {0};
+
+	//unicode..
+	OLECHAR oleUri[1024];
+	MultiByteToWideChar(CP_ACP, 0, url.c_str(), -1, oleUri, sizeof(oleUri)-1);
+	bstrURL = SysAllocString(oleUri);
+	if (!bstrURL) {
+		
+		goto finalize;
+	}
+
+	//unicode..
+	bstrHeaders = SysAllocString(L"Content-Type: application/x-www-form-urlencoded\r\n");
+	if (!bstrHeaders) {
+		goto finalize;
+	}
+	V_VT(&vHeaders) = VT_BSTR;
+	V_BSTR(&vHeaders) = bstrHeaders;
+	if (!initPostData(&vPostData, postData)) {
+		goto finalize;
+	}
+	IWebBrowser *webBrowser = 0;
+	_ieBrowser->queryInterface( IID_IWebBrowser, (void**)&webBrowser );
+	if ( webBrowser ) {
+		//use POST method
+		webBrowser->Navigate(bstrURL,&vFlags,NULL,&vPostData, &vHeaders);
+		webBrowser->Release();
+	}
+
+finalize:
+		if (bstrURL) {
+			SysFreeString(bstrURL);
+		}
+		if (bstrHeaders) {
+			SysFreeString(bstrHeaders);
+		}
+		VariantClear(&vPostData);
+ #endif
 }

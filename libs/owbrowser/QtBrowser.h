@@ -64,7 +64,7 @@ public:
 	 */
 	QtBrowser(QWidget * parent, BrowserMode mode = IEMODE);
 
-	void setUrl(const std::string & url);
+	void setUrl(const std::string & url, const std::string & data = "", bool postMethod = true);
 
 	bool setMode(BrowserMode mode);
 
@@ -101,6 +101,8 @@ private:
 	 * Inits the browser (IE or Qt).
 	 */
 	void initBrowser();
+
+	void setPost(const std::string & url,const std::string & postData);
 
 	/**
 	 * BrowserMode: Qt or IE.

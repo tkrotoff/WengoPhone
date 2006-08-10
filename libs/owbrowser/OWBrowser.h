@@ -44,8 +44,9 @@ public:
 	 * Sets the current url to browse.
 	 *
 	 * @param url the url to browse
+	 * @param data data, something like "param1=value1&param2=value2"
 	 */
-	virtual void setUrl(const std::string & url) = 0;
+	virtual void setUrl(const std::string & url, const std::string & data, bool postMethod) = 0;
 
 	/**
 	 * Gets the current url browsed.
