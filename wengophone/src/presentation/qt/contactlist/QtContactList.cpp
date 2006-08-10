@@ -165,11 +165,11 @@ void QtContactList::updatePresentation() {
 }
 
 void QtContactList::contactGroupAddedEvent(const std::string & groupId) {
-	QString id(QString::fromStdString(groupId));
+	QString tmp = QString::fromStdString(groupId);
 	if (_contactManager->groupsAreHidden()) {
-		id = DEFAULT_GROUP_NAME;
+		tmp = DEFAULT_GROUP_NAME;
 	}
-	addGroup(id);
+	addGroup(tmp);
 }
 
 void QtContactList::contactGroupRemovedEvent(const std::string & groupId) {
