@@ -117,7 +117,7 @@ public:
 	void unblock();
 
 	UserProfile & getUserProfile() const {
-			return _userProfile;
+		return _userProfile;
 	}
 
 private:

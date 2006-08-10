@@ -35,8 +35,7 @@ WenboxPlugin::WenboxPlugin(UserProfile & userProfile)
 	: _userProfile(userProfile) {
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
-	config.valueChangedEvent +=
-		boost::bind(&WenboxPlugin::wenboxConfigChangedEventHandler, this, _1, _2);
+	config.valueChangedEvent += boost::bind(&WenboxPlugin::wenboxConfigChangedEventHandler, this, _1, _2);
 
 	_wenbox = new Wenbox();
 	openWenbox();

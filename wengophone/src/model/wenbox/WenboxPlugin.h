@@ -17,13 +17,14 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef WENBOXPLUGIN_H
-#define WENBOXPLUGIN_H
+#ifndef OWWENBOXPLUGIN_H
+#define OWWENBOXPLUGIN_H
 
 #include <wenbox/Wenbox.h>
 
 #include <util/StringList.h>
 #include <util/Trackable.h>
+#include <util/NonCopyable.h>
 
 class PhoneCall;
 class Settings;
@@ -39,9 +40,19 @@ class UserProfile;
  * @ingroup model
  * @author Tanguy Krotoff
  */
-class WenboxPlugin : public Trackable {
+class WenboxPlugin : NonCopyable, public Trackable {
 public:
 
+	/**
+	 * Phone number buffer has been updated event.
+	 *
+	 * Example:
+	 * buffer before: 0147
+	 * buffer now: 014708
+	 *
+	 * @param sender this class
+	 * @param phoneNumberBuffer phone number buffer
+	 */
 	Event<void (WenboxPlugin & sender, const std::string & phoneNumberBuffer)> phoneNumberBufferUpdatedEvent;
 
 	WenboxPlugin(UserProfile & userProfile);
@@ -83,4 +94,4 @@ private:
 	std::string _phoneNumberBuffer;
 };
 
-#endif	//WENBOXPLUGIN_H
+#endif	//OWWENBOXPLUGIN_H

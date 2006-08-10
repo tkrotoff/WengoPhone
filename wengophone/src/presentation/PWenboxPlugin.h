@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef PWENBOXPLUGIN_H
-#define PWENBOXPLUGIN_H
+#ifndef OWPWENBOXPLUGIN_H
+#define OWPWENBOXPLUGIN_H
 
 #include "Presentation.h"
 
@@ -33,10 +33,6 @@ class PWenboxPlugin : public Presentation {
 public:
 
 	virtual void phoneNumberBufferUpdatedEvent(const std::string & phoneNumberBuffer) = 0;
-
-protected:
-
-	virtual void phoneNumberBufferUpdatedEventThreadSafe(const std::string & phoneNumberBuffer) = 0;
 };
 
-#endif	//PWENBOXPLUGIN_H
+#endif	//OWPWENBOXPLUGIN_H

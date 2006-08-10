@@ -44,7 +44,6 @@
 
 WengoPhone::WengoPhone() {
 	_startupSettingListener = new StartupSettingListener();
-	_running = false;
 	_wsSubscribe = NULL;
 
 	//set HttpRequest User Agent
@@ -88,15 +87,15 @@ WengoPhone::WengoPhone() {
 	////
 }
 
-void WengoPhone::shutdownAfterTimeout() {
+void WengoPhone::exitAfterTimeout() {
 	exitEvent(*this);
 }
 
 WengoPhone::~WengoPhone() {
-	while (_running) {
+	/*while (!_terminate) {
 		//Waiting for end of model thread
 		Thread::msleep(100);
-	}
+	}*/
 
 	//Deleting created objects
 	if (_userProfileHandler) {
@@ -109,14 +108,6 @@ WengoPhone::~WengoPhone() {
 	////
 
 	saveConfiguration();
-
-	/**
-	 * Set up a timeout triggered if SIP registering is too long
-	 * so that closing WengoPhone is not too long.
-	 */
-	static Timer shutdownTimeout;
-	shutdownTimeout.timeoutEvent += boost::bind(&WengoPhone::shutdownAfterTimeout, this);
-	shutdownTimeout.start(3000, 3000);
 }
 
 void WengoPhone::init() {
@@ -150,23 +141,23 @@ void WengoPhone::run() {
 	init();
 	LOG_DEBUG("model thread is ready for events");
 
-	_running = true;
 	runEvents();
-	_running = false;
+
+	//If we are here this means WengoPhone::terminate() has been called
+	//and Thread::_terminate = true
 }
 
-/*void WengoPhone::terminate() {
-/*
-	typedef ThreadEvent0<void ()> MyThreadEvent;
-	MyThreadEvent * event = new MyThreadEvent(boost::bind(&WengoPhone::terminateThreadSafe, this));
-	postEvent(event);
-*/
-/*	Thread::terminate();
-}*/
+void WengoPhone::terminate() {
+	Thread::terminate();
 
-/*void WengoPhone::terminateThreadSafe() {
-	_terminate = true;
-}*/
+	/**
+	 * Set up a timeout triggered if SIP registering is too long
+	 * so that closing WengoPhone is not too long.
+	 */
+	static Timer shutdownTimeout;
+	shutdownTimeout.timeoutEvent += boost::bind(&WengoPhone::exitAfterTimeout, this);
+	shutdownTimeout.start(3000, 3000);
+}
 
 void WengoPhone::saveConfiguration() {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();

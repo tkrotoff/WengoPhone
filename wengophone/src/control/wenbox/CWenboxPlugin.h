@@ -17,13 +17,14 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef CWENBOXPLUGIN_H
-#define CWENBOXPLUGIN_H
+#ifndef OWCWENBOXPLUGIN_H
+#define OWCWENBOXPLUGIN_H
 
-#include <util/Trackable.h>
+#include <control/Control.h>
 
 #include <string>
 
+class Presentation;
 class CWengoPhone;
 class PWenboxPlugin;
 class WenboxPlugin;
@@ -33,20 +34,24 @@ class WenboxPlugin;
  * @ingroup control
  * @author Tanguy Krotoff
  */
-class CWenboxPlugin : public Trackable {
+class CWenboxPlugin : public Control {
 public:
 
 	CWenboxPlugin(WenboxPlugin & wenboxPlugin, CWengoPhone & cWengoPhone);
 
 	~CWenboxPlugin();
 
-	CWengoPhone & getCWengoPhone() const {
-		return _cWengoPhone;
-	}
+	Presentation * getPresentation() const;
+
+	CWengoPhone & getCWengoPhone() const;
 
 private:
 
+	void initPresentationThreadSafe();
+
 	void phoneNumberBufferUpdatedEventHandler(WenboxPlugin & sender, const std::string & phoneNumberBuffer);
+
+	void phoneNumberBufferUpdatedEventHandlerThreadSafe(std::string phoneNumberBuffer);
 
 	/** Direct link to the model. */
 	WenboxPlugin & _wenboxPlugin;
@@ -57,4 +62,4 @@ private:
 	CWengoPhone & _cWengoPhone;
 };
 
-#endif	//CWENBOXPLUGIN_H
+#endif	//OWCWENBOXPLUGIN_H

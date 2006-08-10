@@ -22,13 +22,13 @@
 
 #include <sipwrapper/EnumConferenceCallState.h>
 
-#include <util/NonCopyable.h>
-#include <util/Trackable.h>
+#include <control/Control.h>
 
 class CWengoPhone;
 class CPhoneCall;
 class PhoneCall;
 class ConferenceCall;
+class Presentation;
 class PConferenceCall;
 
 /**
@@ -38,20 +38,16 @@ class PConferenceCall;
  * @ingroup control
  * @author Tanguy Krotoff
  */
-class CConferenceCall : NonCopyable, public Trackable {
+class CConferenceCall : public Control {
 public:
 
 	CConferenceCall(ConferenceCall & conferenceCall, CWengoPhone & cWengoPhone);
 
 	~CConferenceCall();
 
-	PConferenceCall * getPresentation() const {
-		return _pConferenceCall;
-	}
+	Presentation * getPresentation() const;
 
-	CWengoPhone & getCWengoPhone() const {
-		return _cWengoPhone;
-	}
+	CWengoPhone & getCWengoPhone() const;
 
 	/**
 	 * @see ConferenceCall::addPhoneCall()
@@ -74,6 +70,8 @@ public:
 	void removePhoneNumber(const std::string & phoneNumber);
 
 private:
+
+	void initPresentationThreadSafe();
 
 	void stateChangedEventHandler(ConferenceCall & sender, EnumConferenceCallState::ConferenceCallState state);
 

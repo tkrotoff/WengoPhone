@@ -43,11 +43,11 @@ CPhoneCall::CPhoneCall(PhoneCall & phoneCall, CWengoPhone & cWengoPhone)
 CPhoneCall::~CPhoneCall() {
 }
 
-Presentation * CPhoneCall::getPresentation() {
+Presentation * CPhoneCall::getPresentation() const {
 	return _pPhoneCall;
 }
 
-CWengoPhone & CPhoneCall::getCWengoPhone() {
+CWengoPhone & CPhoneCall::getCWengoPhone() const {
 	return _cWengoPhone;
 }
 

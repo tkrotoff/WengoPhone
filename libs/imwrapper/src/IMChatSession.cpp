@@ -21,21 +21,24 @@
 
 #include <imwrapper/EnumIMProtocol.h>
 #include <imwrapper/IMContact.h>
+#include <imwrapper/IMAccount.h>
 
 #include <util/Logger.h>
 
 using namespace std;
 
 IMChatSession::IMChatMessage::IMChatMessage(const IMContact & imContact, const string & message)
-: _imContact(imContact), _message(message) {
-
+	: _imContact(imContact),
+	_message(message) {
 }
 
 IMChatSession::IMChatMessage::~IMChatMessage() {
 }
 
 IMChatSession::IMChatSession(IMChat & imChat, bool userCreated)
-: _imChat(imChat), _userCreated(userCreated) {
+	: _imChat(imChat),
+	_userCreated(userCreated) {
+
 	_imChat.messageReceivedEvent +=
 		boost::bind(&IMChatSession::messageReceivedEventHandler, this, _1, _2, _3, _4);
 	_imChat.statusMessageReceivedEvent +=
@@ -50,8 +53,7 @@ IMChatSession::IMChatSession(IMChat & imChat, bool userCreated)
 
 IMChatSession::~IMChatSession() {
 	for (IMChatMessageList::const_iterator it = _receivedIMChatMessageList.begin();
-		it != _receivedIMChatMessageList.end();
-		++it) {
+		it != _receivedIMChatMessageList.end(); ++it) {
 		delete (*it);
 	}
 }
@@ -66,13 +68,13 @@ void IMChatSession::close() {
 void IMChatSession::addIMContact(const IMContact & imContact) {
 	//The IMContact must be of the same protocol of the IMAccount
 	if (_imChat.getIMAccount() == *imContact.getIMAccount()) {
-		LOG_DEBUG("adding a new IMContact: " + imContact.getContactId());
+		LOG_DEBUG("adding a new IMContact=" + imContact.getContactId());
 		_imChat.addContact(*this, imContact.getContactId());
 	}
 }
 
 void IMChatSession::removeIMContact(const IMContact & imContact) {
-	LOG_DEBUG("removing an IMContact" + imContact.getContactId());
+	LOG_DEBUG("removing an IMContact=" + imContact.getContactId());
 	_imChat.removeContact(*this, imContact.getContactId());
 }
 
@@ -83,15 +85,14 @@ void IMChatSession::removeAllIMContact() {
 }
 
 void IMChatSession::sendMessage(const std::string & message) {
-	LOG_DEBUG("sending a message. Raw message: " + message);
+	LOG_DEBUG("sending raw message=" + message);
 	_imChat.sendMessage(*this, message);
 }
 
 void IMChatSession::changeTypingState(IMChat::TypingState state) {
-	const char *message;
-	
-	switch (state)
-	{
+	std::string message;
+
+	switch (state) {
 		case IMChat::TypingStateTyping:
 			message = "typing";
 			break;
@@ -105,13 +106,12 @@ void IMChatSession::changeTypingState(IMChat::TypingState state) {
 			break;
 	}
 
-	std::string messageState(message);
-	LOG_DEBUG("changing my typing state: " + messageState);
+	LOG_DEBUG("changing my typing state=" + message);
 	_imChat.changeTypingState(*this, state);
 }
 
 void IMChatSession::messageReceivedEventHandler(IMChat & sender, IMChatSession & imChatSession, const std::string & contactId, const std::string & message) {
-	LOG_DEBUG("message received: " + message);
+	LOG_DEBUG("message received=" + message);
 
 	if (imChatSession == *this) {
 		IMContact imContact(_imChat.getIMAccount(), contactId);
@@ -120,13 +120,13 @@ void IMChatSession::messageReceivedEventHandler(IMChat & sender, IMChatSession &
 			_receivedIMChatMessageList.push_back(new IMChatMessage(foundIMContact, message));
 			messageReceivedEvent(*this);
 		} else {
-			LOG_ERROR("this session does not know " + contactId);
+			LOG_ERROR("this session does not know contact=" + contactId);
 		}
 	}
 }
 
 void IMChatSession::statusMessageReceivedEventHandler(IMChat & sender, IMChatSession & imChatSession, IMChat::StatusMessage status, const std::string & message) {
-	LOG_DEBUG("status message received: " + message);
+	LOG_DEBUG("status message received=" + message);
 
 	if (imChatSession == *this) {
 		statusMessageReceivedEvent(*this, status, message);
@@ -134,7 +134,7 @@ void IMChatSession::statusMessageReceivedEventHandler(IMChat & sender, IMChatSes
 }
 
 void IMChatSession::typingStateChangedEventHandler(IMChat & sender, IMChatSession & imChatSession, const std::string & contactId, IMChat::TypingState state) {
-	LOG_DEBUG("typing state changed: " + contactId);
+	LOG_DEBUG("typing state changed=" + contactId);
 
 	if (imChatSession == *this) {
 		IMContact imContact(_imChat.getIMAccount(), contactId);
@@ -142,7 +142,7 @@ void IMChatSession::typingStateChangedEventHandler(IMChat & sender, IMChatSessio
 			const IMContact & foundIMContact = *_imContactSet.find(imContact);
 			typingStateChangedEvent(*this, foundIMContact, state);
 		} else {
-			LOG_ERROR("this session does not know " + contactId);
+			LOG_ERROR("this session does not know contact=" + contactId);
 		}
 	}
 }
@@ -165,11 +165,11 @@ void IMChatSession::contactRemovedEventHandler(IMChat & sender, IMChatSession & 
 	if (imChatSession == *this) {
 		IMContact imContact(_imChat.getIMAccount(), contactId);
 		if (_imContactSet.find(imContact) == _imContactSet.end()) {
-			LOG_ERROR("IMContact for " + contactId + " not in IMContactList");
+			LOG_ERROR("IMContact for=" + contactId + " not in IMContactList");
 		} else {
 			contactRemovedEvent(*this, *_imContactSet.find(imContact));
 			_imContactSet.erase(_imContactSet.find(imContact));
-			LOG_DEBUG("IMContact " + contactId + " removed from IMContactList");
+			LOG_DEBUG("IMContact=" + contactId + " removed from IMContactList");
 		}
 	}
 }
@@ -178,12 +178,12 @@ bool IMChatSession::canDoMultiChat() const {
 	EnumIMProtocol::IMProtocol proto = _imChat.getIMAccount().getProtocol();
 
 	switch (proto) {
-		case EnumIMProtocol::IMProtocolMSN :
-		case EnumIMProtocol::IMProtocolYahoo :
-		case EnumIMProtocol::IMProtocolAIMICQ :
+		case EnumIMProtocol::IMProtocolMSN:
+		case EnumIMProtocol::IMProtocolYahoo:
+		case EnumIMProtocol::IMProtocolAIMICQ:
 			return true;
 
-		default :
+		default:
 			return false;
 	}
 }

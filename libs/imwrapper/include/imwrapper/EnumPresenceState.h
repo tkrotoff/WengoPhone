@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef ENUMPRESENCESTATE_H
-#define ENUMPRESENCESTATE_H
+#ifndef OWENUMPRESENCESTATE_H
+#define OWENUMPRESENCESTATE_H
 
 #include <util/NonCopyable.h>
 
@@ -77,4 +77,4 @@ public:
 	static PresenceState fromString(const std::string & presenceState);
 };
 
-#endif	//ENUMPRESENCESTATE_H
+#endif	//OWENUMPRESENCESTATE_H

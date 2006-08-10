@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef CONTACTLIST_H
-#define CONTACTLIST_H
+#ifndef OWCONTACTLIST_H
+#define OWCONTACTLIST_H
 
 #include "ContactGroup.h"
 
@@ -135,7 +135,7 @@ public:
 	Event<void (ContactList & sender, Contact & contact)> contactChangedEvent;
 
 	/**
-	 * Add a ContactGroup.
+	 * Adds a ContactGroup.
 	 *
 	 * If a ContactGroup with the given name exists, no ContactGroup is created
 	 *
@@ -144,38 +144,38 @@ public:
 	void addContactGroup(const std::string & name);
 
 	/**
-	 * Remove a ContactGroup.
+	 * Removes a ContactGroup.
 	 *
 	 * If no ContactGroup with the given name exists, nothing happens
 	 *
-	 * @param id the UUID of the ContactGroup to remove.
+	 * @param groupId the UUID of the ContactGroup to remove.
 	 */
-	void removeContactGroup(const std::string & id);
+	void removeContactGroup(const std::string & groupId);
 
 	/**
 	 * Renames a ContactGroup.
 	 *
-	 * @param id the UUID of the group to rename
+	 * @param groupId the UUID of the group to rename
 	 * @param name the desired name
 	 */
-	void renameContactGroup(const std::string & id, const std::string & name);
+	void renameContactGroup(const std::string & groupId, const std::string & name);
 
 	/**
-	 * Create and add a Contact to the ContactList.
+	 * Creates and adds a Contact to the ContactList.
 	 *
 	 * @return a reference to the new Contact
 	 */
 	Contact & createContact();
 
 	/**
-	 * Remove a Contact.
+	 * Removes a Contact.
 	 *
 	 * @param the contact to remove
 	 */
 	void removeContact(Contact & contact);
 
 	/**
-	 * Merges two Contact.
+	 * Merges two Contacts.
 	 *
 	 * Merging two Contact will result in a deletation of the source Contact
 	 * after fulling the destination Contact with missing information that
@@ -219,7 +219,7 @@ public:
 	}
 
 	/**
-	 * Find the first Contact that owns an IMContact.
+	 * Finds the first Contact that owns an IMContact.
 	 *
 	 * @param imContact the IMContact to look for
 	 * @return the Contact or NULL if not found
@@ -385,4 +385,4 @@ private:
 	RecursiveMutex::ScopedLock * _scopedLock;
 };
 
-#endif	//CONTACTLIST_H
+#endif	//OWCONTACTLIST_H

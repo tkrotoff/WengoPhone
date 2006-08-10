@@ -49,9 +49,9 @@ public:
 
 	~CPhoneCall();
 
-	Presentation * getPresentation();
+	Presentation * getPresentation() const;
 
-	CWengoPhone & getCWengoPhone();
+	CWengoPhone & getCWengoPhone() const;
 
 	/**
 	 * FIXME this breaks the control layer.

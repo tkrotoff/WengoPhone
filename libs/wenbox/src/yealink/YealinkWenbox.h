@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef YEALINKWENBOX_H
-#define YEALINKWENBOX_H
+#ifndef OWYEALINKWENBOX_H
+#define OWYEALINKWENBOX_H
 
 #include <wenbox/IWenbox.h>
 
@@ -86,4 +86,4 @@ private:
 	void * _userCallbackParam;
 };
 
-#endif	//YEALINKWENBOX_H
+#endif	//OWYEALINKWENBOX_H

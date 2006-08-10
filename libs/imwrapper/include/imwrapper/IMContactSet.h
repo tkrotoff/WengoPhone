@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef IMCONTACTSET_H
-#define IMCONTACTSET_H
+#ifndef OWIMCONTACTSET_H
+#define OWIMCONTACTSET_H
 
 #include <imwrapper/IMContact.h>
 
@@ -32,7 +32,6 @@ public:
 	std::string serialize();
 
 	bool unserialize(const std::string & data);
-
 };
 
-#endif //IMCONTACTSET_H
+#endif	//OWIMCONTACTSET_H

@@ -19,6 +19,8 @@
 
 #include <imwrapper/IMContact.h>
 
+#include <imwrapper/IMAccount.h>
+
 #include <util/Logger.h>
 
 using namespace std;
@@ -55,7 +57,7 @@ IMContact::IMContact(const IMContact & imContact)
 IMContact::~IMContact() {
 }
 
-bool IMContact::operator == (const IMContact & imContact) const {
+bool IMContact::operator==(const IMContact & imContact) const {
 	bool result = false;
 
 	if (_imAccount && imContact._imAccount) {
@@ -75,7 +77,7 @@ bool IMContact::operator == (const IMContact & imContact) const {
 	return result;
 }
 
-bool IMContact::operator < (const IMContact & imContact) const {
+bool IMContact::operator<(const IMContact & imContact) const {
 	bool result = false;
 
 	if (cleanContactId() < imContact.cleanContactId()) {

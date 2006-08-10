@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef IMCONTACTLIST_H
-#define IMCONTACTLIST_H
+#ifndef OWIMCONTACTLIST_H
+#define OWIMCONTACTLIST_H
 
 #include <util/Event.h>
 #include <util/Interface.h>
@@ -27,7 +27,6 @@
 #include <string>
 
 class IMAccount;
-class IMContact;
 
 /**
  * FIXME: Currently an IMContact can be in only one group (because of Gaim limitation)
@@ -109,7 +108,7 @@ public:
 	virtual void removeGroup(const std::string & groupName) = 0;
 
 	/**
-	 * Move a contact to another group.
+	 * Moves a contact to another group.
 	 *
 	 * @param newGroupName the new group name
 	 * @param oldGroupName the old group name
@@ -119,7 +118,7 @@ public:
 		const std::string & oldGroupName, const std::string & contactId) = 0;
 
 	/**
-	 * Change group name.
+	 * Changes group name.
 	 *
 	 * @param oldGroupName the old group name
 	 * @param newGroupName the new group name
@@ -139,7 +138,6 @@ protected:
 		: _imAccount(imAccount) {}
 
 	const IMAccount & _imAccount;
-
 };
 
-#endif //IMCONTACTLIST_H
+#endif	//OWIMCONTACTLIST_H

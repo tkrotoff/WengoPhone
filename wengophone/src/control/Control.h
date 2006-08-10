@@ -67,7 +67,7 @@ public:
 	 *
 	 * @return Presentation layer associated with this Control
 	 */
-	virtual Presentation * getPresentation() = 0;
+	virtual Presentation * getPresentation() const = 0;
 
 	/**
 	 * Gets the root Control object.
@@ -76,7 +76,7 @@ public:
 	 *
 	 * @return root Control object
 	 */
-	virtual CWengoPhone & getCWengoPhone() = 0;
+	virtual CWengoPhone & getCWengoPhone() const = 0;
 
 protected:
 

@@ -20,37 +20,31 @@
 #ifndef OWQTSIMPLEADDIMCONTACT_H
 #define OWQTSIMPLEADDIMCONTACT_H
 
-#include "ui_SimpleAddIMContact.h"
-
 #include <imwrapper/EnumIMProtocol.h>
 
 #include <QObject>
-#include <QDialog>
 
-#include <set>
+#include <vector>
 
 class CUserProfile;
 class ContactProfile;
+
+class QDialog;
 class QWidget;
-class IMAccount;
+namespace Ui { class SimpleAddIMAccount; }
 
 /**
  * Simplified window for adding an IM contact to a given contact.
- *
- * @author Mr K.
  */
-class QtSimpleAddIMContact : public QDialog
-{
+class QtSimpleAddIMContact : public QObject {
 	Q_OBJECT
 public:
 
-	typedef std::vector< std::pair<std::string, std::string> > ContactGroupVector;
+	QtSimpleAddIMContact(CUserProfile & cUserProfile, ContactProfile & contactProfile, QWidget * parent);
 
-	QtSimpleAddIMContact(CUserProfile & cUserProfile,
-		ContactProfile & contactProfile,
-		QWidget * parent = NULL);
+	~QtSimpleAddIMContact();
 
-	virtual ~QtSimpleAddIMContact();
+	int show();
 
 private Q_SLOTS:
 
@@ -58,17 +52,21 @@ private Q_SLOTS:
 
 	void advanced();
 
-	void currentIndexChanged (const QString & text);
+	void currentIndexChanged(const QString & text);
 
 private:
 
 	bool hasAccount(EnumIMProtocol::IMProtocol imProtocol) const;
 
-	Ui::SimpleAddIMAccount _ui;
+	typedef std::vector< std::pair<std::string, std::string> > ContactGroupVector;
+
+	QDialog * _addIMAccountDialog;
+
+	Ui::SimpleAddIMAccount * _ui;
 
 	CUserProfile & _cUserProfile;
 
 	ContactProfile & _contactProfile;
 };
 
-#endif //OWQTSIMPLEADDIMCONTACT_H
+#endif	//OWQTSIMPLEADDIMCONTACT_H

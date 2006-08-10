@@ -17,20 +17,18 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QTWENBOXPLUGIN_H
-#define QTWENBOXPLUGIN_H
+#ifndef OWQTWENBOXPLUGIN_H
+#define OWQTWENBOXPLUGIN_H
 
 #include <presentation/PWenboxPlugin.h>
 
-#include <qtutil/QObjectThreadSafe.h>
-
-#include <util/Trackable.h>
+#include <QObject>
 
 class CWenboxPlugin;
 class QComboBox;
 class Timer;
 
-class QtWenboxPlugin : public QObjectThreadSafe, public PWenboxPlugin, public Trackable {
+class QtWenboxPlugin : public QObject, public PWenboxPlugin {
 public:
 
 	QtWenboxPlugin(CWenboxPlugin & cWenboxPlugin);
@@ -43,12 +41,6 @@ public:
 
 private:
 
-	void initThreadSafe();
-
-	void updatePresentationThreadSafe() { }
-
-	void phoneNumberBufferUpdatedEventThreadSafe(const std::string & phoneNumberBuffer);
-
 	void timeoutEventHandler();
 
 	CWenboxPlugin & _cWenboxPlugin;
@@ -58,4 +50,4 @@ private:
 	Timer * _timer;
 };
 
-#endif	//QTWENBOXPLUGIN_H
+#endif	//OWQTWENBOXPLUGIN_H

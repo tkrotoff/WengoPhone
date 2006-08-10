@@ -17,16 +17,16 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef IMPRESENCE_H
-#define IMPRESENCE_H
+#ifndef OWIMPRESENCE_H
+#define OWIMPRESENCE_H
 
-#include <imwrapper/IMAccount.h>
 #include <imwrapper/EnumPresenceState.h>
+#include <imwrapper/IMAccount.h>
 
 #include <util/Event.h>
 #include <util/Interface.h>
-#include <util/StringList.h>
 #include <util/Trackable.h>
+#include <util/String.h>
 
 class Picture;
 
@@ -116,7 +116,6 @@ public:
 	Event< void (IMPresence & sender, const std::string & contactId,
 		Picture icon) > contactIconChangedEvent;
 
-
 	virtual ~IMPresence() { }
 
 	/**
@@ -139,14 +138,14 @@ public:
 	virtual void changeMyAlias(const std::string & alias) = 0;
 
 	/**
-	 * Change my icon.
+	 * Changes my icon.
 	 *
 	 * @param picture the desired icon
 	 */
 	virtual void changeMyIcon(const Picture & picture) = 0;
 
 	/**
-	 * Subscribe to the presence of a contact.
+	 * Subscribes to the presence of a contact.
 	 *
 	 * @param contactId id of the contact
 	 */
@@ -160,21 +159,20 @@ public:
 	virtual void blockContact(const std::string & contactId) = 0;
 
 	/**
-	 * Authorize a contact to see my Presence.
+	 * Authorizes a contact to see my Presence.
 	 *
 	 * @param contactId contact id
 	 */
 	virtual void unblockContact(const std::string & contactId) = 0;
 
 	/**
-	 * Authorize a contact to add me in his contact list.
+	 * Authorizes a contact to add me in his contact list.
 	 *
 	 * @param contactId contact id
  	 * @param authorized TRUE if we agree
 	 */
-	virtual void authorizeContact(const std::string & contactId, bool auhorized, 
+	virtual void authorizeContact(const std::string & contactId, bool auhorized,
 		const std::string message) = 0;
-
 
 	IMAccount & getIMAccount() const {
 		return _imAccount;
@@ -187,4 +185,4 @@ protected:
 	IMAccount & _imAccount;
 };
 
-#endif	//IMPRESENCE_H
+#endif	//OWIMPRESENCE_H

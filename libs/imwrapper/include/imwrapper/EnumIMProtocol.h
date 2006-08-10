@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef ENUMIMPROTOCOL_H
-#define ENUMIMPROTOCOL_H
+#ifndef OWENUMIMPROTOCOL_H
+#define OWENUMIMPROTOCOL_H
 
 #include <util/NonCopyable.h>
 
@@ -58,4 +58,4 @@ public:
 	static IMProtocol toIMProtocol(const std::string & protocol);
 };
 
-#endif	//ENUMIMPROTOCOL_H
+#endif	//OWENUMIMPROTOCOL_H

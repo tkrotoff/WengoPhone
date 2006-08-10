@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef IMCONNECT_H
-#define IMCONNECT_H
+#ifndef OWIMCONNECT_H
+#define OWIMCONNECT_H
 
 #include "IMAccount.h"
 
@@ -90,4 +90,4 @@ protected:
 	IMAccount & _imAccount;
 };
 
-#endif	//IMCONNECT_H
+#endif	//OWIMCONNECT_H

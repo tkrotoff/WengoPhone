@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef IMCHAT_H
-#define IMCHAT_H
+#ifndef OWIMCHAT_H
+#define OWIMCHAT_H
 
 #include <imwrapper/IMContactSet.h>
 
@@ -48,10 +48,10 @@ public:
 		/** Chat message has been received. */
 		StatusMessageReceived,
 
-		/** Chat message sending error. 'message' contains the one that produces the error */
+		/** Chat message sending error. 'message' contains the one that produces the error. */
 		StatusMessageError,
 
-		/** Information message (e.g "toto has left the chat room"). 'message' contains the information message */
+		/** Information message (e.g "toto has left the chat room"). 'message' contains the information message. */
 		StatusMessageInfo
 	};
 
@@ -75,7 +75,7 @@ public:
 	Event<void (IMChat & sender, IMChatSession & imChatSession)> newIMChatSessionCreatedEvent;
 
 	/**
-	 * Emitted when a contact has been added to a session
+	 * Emitted when a contact has been added to a session.
 	 *
 	 * @param sender this class
 	 * @param imChatSession the session where a contact has been added
@@ -84,7 +84,7 @@ public:
 	Event<void (IMChat & sender, IMChatSession & imChatSession, const IMContact & imContact)> contactAddedEvent;
 
 	/**
-	 * Emitted when a contact is removed from a session
+	 * Emitted when a contact is removed from a session.
 	 *
 	 * @param sender this class
 	 * @param imChatSession the session where a contact has been removed
@@ -138,7 +138,7 @@ public:
 protected:
 
 	/**
-	 * Says IMChat to close a new session given a IMChatSession
+	 * Says IMChat to close a new session given a IMChatSession.
 	 *
 	 * @param chatSession the IMChatSession to close
 	 */
@@ -184,4 +184,4 @@ protected:
 	IMAccount & _imAccount;
 };
 
-#endif	//IMCHAT_H
+#endif	//OWIMCHAT_H

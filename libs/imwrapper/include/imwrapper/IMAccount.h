@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef IMACCOUNT_H
-#define IMACCOUNT_H
+#ifndef OWIMACCOUNT_H
+#define OWIMACCOUNT_H
 
 #include <imwrapper/EnumIMProtocol.h>
 #include <imwrapper/EnumPresenceState.h>
@@ -26,6 +26,7 @@
 
 #include <util/Event.h>
 #include <util/Trackable.h>
+#include <util/NonCopyable.h>
 
 #include <string>
 
@@ -38,7 +39,7 @@
  * @author Tanguy Krotoff
  * @author Philippe Bernery
  */
-class IMAccount : public Trackable {
+class IMAccount : NonCopyable, public Trackable {
 	friend class IMAccountXMLSerializer;
 	friend class IMConnect;
 	friend class IMPresence;
@@ -101,9 +102,9 @@ public:
 		return _imAccountParameters;
 	}
 
-	bool operator == (const IMAccount & imAccount) const;
+	bool operator==(const IMAccount & imAccount) const;
 
-	bool operator < (const IMAccount & imAccount) const;
+	bool operator<(const IMAccount & imAccount) const;
 
 private:
 
@@ -122,7 +123,7 @@ private:
 	}
 
 	/**
-	 * This method exists because of Jabber that uses conatctId with a 'Resource'
+	 * This method exists because of Jabber that uses contactId with a 'Resource'
 	 * e.g.: 'blabla@jabber.org/Resource'.
 	 *
 	 * It will add '/WengoPhone' to the login id if the login does not contain
@@ -157,4 +158,4 @@ private:
 	bool _connected;
 };
 
-#endif	//IMACCOUNT_H
+#endif	//OWIMACCOUNT_H

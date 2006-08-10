@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef IMCONTACTXMLSERIALIZER_H
-#define IMCONTACTXMLSERIALIZER_H
+#ifndef OWIMCONTACTXMLSERIALIZER_H
+#define OWIMCONTACTXMLSERIALIZER_H
 
 #include <serialization/Serializable.h>
 
@@ -26,25 +26,24 @@ class IMContact;
 class IMAccountHandler;
 
 /**
- * Serialize an IMContact object.
+ * Serializes an IMContact object.
  *
  * @author Philippe Bernery
  */
 class IMContactXMLSerializer : public Serializable {
 public:
-	
+
 	IMContactXMLSerializer(IMContact & imContact, IMAccountHandler & imAccountHandler);
-	
+
 	std::string serialize();
-	
+
 	bool unserialize(const std::string & data);
-	
+
 private:
-		
+
 	IMContact & _imContact;
 
 	IMAccountHandler & _imAccountHandler;
-
 };
 
-#endif //IMCONTACTXMLSERIALIZER_H
+#endif	//OWIMCONTACTXMLSERIALIZER_H

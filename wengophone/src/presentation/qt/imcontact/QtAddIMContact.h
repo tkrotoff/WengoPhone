@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QTADDIMCONTACT_H
-#define QTADDIMCONTACT_H
+#ifndef OWQTADDIMCONTACT_H
+#define OWQTADDIMCONTACT_H
 
 #include <util/NonCopyable.h>
 
@@ -46,8 +46,7 @@ class QtAddIMContact : public QObject, NonCopyable {
 	Q_OBJECT
 public:
 
-	QtAddIMContact(ContactProfile & contactProfile, CUserProfile & cUserProfile,
-		QWidget * parent);
+	QtAddIMContact(ContactProfile & contactProfile, CUserProfile & cUserProfile, QWidget * parent);
 
 	~QtAddIMContact();
 
@@ -78,4 +77,4 @@ private:
 	ContactProfile & _contactProfile;
 };
 
-#endif	//QTADDIMCONTACT_H
+#endif	//OWQTADDIMCONTACT_H

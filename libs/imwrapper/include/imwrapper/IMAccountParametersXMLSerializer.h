@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef IMACCOUNTPARAMETERSXMLSERIALIZER_H
-#define IMACCOUNTPARAMETERSXMLSERIALIZER_H
+#ifndef OWIMACCOUNTPARAMETERSXMLSERIALIZER_H
+#define OWIMACCOUNTPARAMETERSXMLSERIALIZER_H
 
 #include <settings/SettingsXMLSerializer.h>
 
@@ -28,7 +28,6 @@ class IMAccountParametersXMLSerializer : public SettingsXMLSerializer {
 public:
 
 	IMAccountParametersXMLSerializer(IMAccountParameters & imAccountParameters);
-
 };
 
-#endif //IMACCOUNTPARAMETERSXMLSERIALIZER_H
+#endif	//OWIMACCOUNTPARAMETERSXMLSERIALIZER_H

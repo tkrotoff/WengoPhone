@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef WENBOX_H
-#define WENBOX_H
+#ifndef OWWENBOX_H
+#define OWWENBOX_H
 
 #include <wenbox/IWenbox.h>
 
@@ -85,4 +85,4 @@ private:
 	bool _open;
 };
 
-#endif	//WENBOX_H
+#endif	//OWWENBOX_H

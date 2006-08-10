@@ -56,11 +56,15 @@ void CWengoPhone::initPresentationThreadSafe() {
 	_wengoPhone.wsSubscribeCreatedEvent += boost::bind(&CWengoPhone::wsSubscribeCreatedEventHandler, this, _1, _2);
 }
 
-Presentation * CWengoPhone::getPresentation() {
+Presentation * CWengoPhone::getPresentation() const {
 	return _pWengoPhone;
 }
 
-CUserProfileHandler & CWengoPhone::getCUserProfileHandler() {
+CWengoPhone & CWengoPhone::getCWengoPhone() const {
+	return (CWengoPhone &) *this;
+}
+
+CUserProfileHandler & CWengoPhone::getCUserProfileHandler() const {
 	return *_cUserProfileHandler;
 }
 
@@ -73,7 +77,7 @@ void CWengoPhone::start() {
 }
 
 void CWengoPhone::terminate() {
-	//_wengoPhone.terminate();
+	_wengoPhone.terminate();
 }
 
 void CWengoPhone::initFinishedEventHandler(WengoPhone & sender) {

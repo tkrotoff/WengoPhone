@@ -17,20 +17,19 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef IMCONTACT_H
-#define IMCONTACT_H
+#ifndef OWIMCONTACT_H
+#define OWIMCONTACT_H
 
-#include <imwrapper/IMAccount.h>
 #include <imwrapper/EnumPresenceState.h>
+#include <imwrapper/EnumIMProtocol.h>
 
 #include <util/Event.h>
 #include <util/Picture.h>
 #include <util/Trackable.h>
+#include <util/NonCopyable.h>
 
 #include <string>
-#include <set>
 
-class PresenceHandler;
 class IMAccount;
 
 /**
@@ -41,7 +40,7 @@ class IMAccount;
  *
  * @author Philippe Bernery
  */
-class IMContact : public Trackable {
+class IMContact : NonCopyable, public Trackable {
 	friend class IMContactXMLSerializer;
 public:
 
@@ -150,7 +149,7 @@ private:
 	 * Pointer to the associated IMAccount.
 	 * If NULL, no IMAccount is currently associated with this IMAccount
 	 */
-	const IMAccount  * _imAccount;
+	const IMAccount * _imAccount;
 
 	std::string _contactId;
 
@@ -166,4 +165,4 @@ private:
 	EnumPresenceState::PresenceState _presenceState;
 };
 
-#endif	//IMCONTACT_H
+#endif	//OWIMCONTACT_H

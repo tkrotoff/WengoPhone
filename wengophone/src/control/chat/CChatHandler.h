@@ -44,11 +44,11 @@ public:
 
 	~CChatHandler();
 
-	Presentation * getPresentation();
+	Presentation * getPresentation() const;
 
-	CWengoPhone & getCWengoPhone();
+	CWengoPhone & getCWengoPhone() const;
 
-	CUserProfile & getCUserProfile();
+	CUserProfile & getCUserProfile() const;
 
 	/**
 	 * @see ChatHandler::createSession()

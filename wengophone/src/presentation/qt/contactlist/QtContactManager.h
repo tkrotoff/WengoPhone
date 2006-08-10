@@ -56,12 +56,12 @@ public:
 
 	void removeContact(const QString & contactId);
 
-	void moveContact(const QString & contactId,
-		const QString & srcContactGroupId, const QString & dstContactGroupId);
+	void moveContact(const std::string & dstGroupId,
+		const std::string & srcGroupId, const std::string & contactId);
 
 	bool groupsAreHidden();
 
-	virtual bool event(QEvent * e);
+	virtual bool event(QEvent * event);
 
 public Q_SLOTS:
 

@@ -26,6 +26,8 @@
 
 #include <model/contactlist/ContactProfile.h>
 
+#include <imwrapper/IMAccount.h>
+
 #include <QtGui>
 
 QtAddIMContact::QtAddIMContact(ContactProfile & contactProfile,
@@ -39,7 +41,7 @@ QtAddIMContact::QtAddIMContact(ContactProfile & contactProfile,
 	_ui = new Ui::AddIMContact();
 	_ui->setupUi(_addIMContactWindow);
 
-	_ui->protocolComboBox->addItem(QIcon(":pics/protocols/wengo.png"), 
+	_ui->protocolComboBox->addItem(QIcon(":pics/protocols/wengo.png"),
 		QString::fromStdString(EnumIMProtocol::toString(EnumIMProtocol::IMProtocolWengo)));
 	_ui->protocolComboBox->addItem(QIcon(":pics/protocols/msn.png"),
 		QString::fromStdString(EnumIMProtocol::toString(EnumIMProtocol::IMProtocolMSN)));
@@ -97,8 +99,7 @@ void QtAddIMContact::imProtocolChanged(const QString & protocolName) {
 void QtAddIMContact::loadIMAccounts(EnumIMProtocol::IMProtocol imProtocol) {
 	_ui->treeWidget->clear();
 
-	std::set<IMAccount *> imAccounts =
-		_cUserProfile.getIMAccountsOfProtocol(imProtocol);
+	std::set<IMAccount *> imAccounts = _cUserProfile.getIMAccountsOfProtocol(imProtocol);
 
 	for (std::set<IMAccount *>::const_iterator it = imAccounts.begin();
 		it != imAccounts.end(); ++it) {
@@ -124,8 +125,7 @@ std::set<IMAccount *> QtAddIMContact::getSelectedIMAccounts(EnumIMProtocol::IMPr
 	for (std::set<IMAccount *>::const_iterator it = imAccounts.begin();
 		it != imAccounts.end(); ++it) {
 
-		QList<QTreeWidgetItem *> list =
-			_ui->treeWidget->findItems(QString::fromStdString((*it)->getLogin()), Qt::MatchExactly, 1);
+		QList<QTreeWidgetItem *> list = _ui->treeWidget->findItems(QString::fromStdString((*it)->getLogin()), Qt::MatchExactly, 1);
 
 		if (list.size() > 0) {
 			//There should be only one item

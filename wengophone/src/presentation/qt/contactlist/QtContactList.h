@@ -20,13 +20,12 @@
 #ifndef OWQTCONTACTLIST_H
 #define OWQTCONTACTLIST_H
 
-#include <control/contactlist/CContactList.h>
 #include <presentation/PContactList.h>
 
-#include <qtutil/QObjectThreadSafe.h>
-
+#include <QObject>
 #include <QString>
 
+class CContactList;
 class Contact;
 class ContactPopupMenu;
 class ContactGroupPopupMenu;
@@ -41,7 +40,7 @@ namespace Ui { class ContactList; }
  *
  * @author Tanguy Krotoff
  */
-class QtContactList : public QObjectThreadSafe, public PContactList {
+class QtContactList : public QObject, public PContactList {
 	Q_OBJECT
 public:
 
@@ -73,39 +72,22 @@ public:
 
 	void updatePresentation();
 
-	void contactGroupAddedEvent(std::string contactGroupId);
+	void contactGroupAddedEvent(const std::string & groupId);
 
-	void contactGroupRemovedEvent(std::string contactGroupId);
+	void contactGroupRemovedEvent(const std::string & groupId);
 
-	void contactGroupRenamedEvent(std::string contactGroupId);
+	void contactGroupRenamedEvent(const std::string & groupId);
 
-	void contactAddedEvent(std::string contactId);
+	void contactAddedEvent(const std::string & contactId);
 
-	void contactRemovedEvent(std::string contactId);
+	void contactRemovedEvent(const std::string & contactId);
 
-	void contactMovedEvent(std::string dstContactGroupId,
-		std::string srcContactGroupId, std::string contactId);
+	void contactMovedEvent(const std::string & dstGroupId,
+		const std::string & srcGroupId, const std::string & contactId);
 
-	void contactChangedEvent(std::string contactId);
+	void contactChangedEvent(const std::string & contactId);
 
 	CContactList & getCContactList() const;
-
-Q_SIGNALS:
-
-	void contactGroupAddedEventSignal(QString contactGroupId);
-
-	void contactGroupRemovedEventSignal(QString contactGroupId);
-
-	void contactGroupRenamedEventSignal(QString contactGroupId);
-
-	void contactAddedEventSignal(QString contactId);
-
-	void contactRemovedEventSignal(QString contactId);
-
-	void contactMovedEventSignal(QString dstContactGroupId,
-		QString srcContactGroupId, QString contactId);
-
-	void contactChangedEventSignal(QString contactId);
 
 public Q_SLOTS:
 
@@ -119,24 +101,9 @@ public Q_SLOTS:
 
 	void showHideGroups();
 
-	void contactGroupAddedEventSlot(QString contactGroupId);
-
 private Q_SLOTS:
 
 	void groupRightClickedSlot(const QString & groupName);
-
-	void contactGroupRemovedEventSlot(QString contactGroupId);
-
-	void contactGroupRenamedEventSlot(QString contactGroupId);
-
-	void contactAddedEventSlot(QString contactId);
-
-	void contactRemovedEventSlot(QString contactId);
-
-	void contactMovedEventSlot(QString dstContactGroupId,
-		QString srcContactGroupId, QString contactId);
-
-	void contactChangedEventSlot(QString contactId);
 
 	void mergeContactsSlot(QString dstContact, QString srcContact);
 
@@ -146,10 +113,6 @@ private:
 	 * Initializes the Content of the QtContactList.
 	 */
 	void initContent();
-
-	void initThreadSafe();
-
-	void updatePresentationThreadSafe();
 
 	QTreeWidgetItem * addGroup(QString contactGroupId);
 

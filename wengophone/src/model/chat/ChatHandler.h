@@ -35,7 +35,9 @@ class IMContactSet;
 class UserProfile;
 
 /**
+ * Allows to create an instant messaging chat session.
  *
+ * @see IMChatSession
  * @ingroup model
  * @author Tanguy Krotoff
  * @author Philippe Bernery

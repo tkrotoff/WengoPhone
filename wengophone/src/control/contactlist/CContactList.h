@@ -20,33 +20,38 @@
 #ifndef OWCCONTACTLIST_H
 #define OWCCONTACTLIST_H
 
-#include <model/contactlist/ContactProfile.h>
+#include <control/Control.h>
 
 #include <util/StringList.h>
-#include <util/Trackable.h>
 
 #include <vector>
 #include <string>
 
+class Presentation;
 class ContactList;
 class Contact;
 class ContactGroup;
 class ContactProfile;
 class CWengoPhone;
 class PContactList;
+class IMContact;
 
 /**
  *
  * @ingroup control
  * @author Tanguy Krotoff
  */
-class CContactList : public Trackable {
+class CContactList : public Control {
 	friend class CUserProfile;
 public:
 
-	CContactList(ContactList & contactList);
+	CContactList(ContactList & contactList, CWengoPhone & cWengoPhone);
 
 	~CContactList();
+
+	Presentation * getPresentation() const;
+
+	CWengoPhone & getCWengoPhone() const;
 
 	/**
 	 * Gets a list of pair of <group UUID, group name>.
@@ -62,10 +67,7 @@ public:
 	std::string getContactGroupName(const std::string & groupId) const;
 
 	/**
-	 * Gets the UUID of a ContactGroup from its name.
-	 *
-	 * @param groupName the name of the group to find
-	 * @return the UUID of the group. An empty string if not found
+	 * @see ContactList::getContactGroupIdFromName()
 	 */
 	std::string getContactGroupIdFromName(const std::string & groupName) const;
 
@@ -82,6 +84,9 @@ public:
 	 */
 	ContactProfile getContactProfile(const std::string & contactId) const;
 
+	/**
+	 * @see ContactList::findContactThatOwns()
+	 */
 	std::string findContactThatOwns(const IMContact & imContact);
 
 	/**
@@ -92,7 +97,7 @@ public:
 	StringList getContactIds() const;
 
 	/**
-	 * Add a Contact to the ContactList.
+	 * Adds a Contact to the ContactList.
 	 *
 	 * This method is used by GUI to add a Contact into the model.
 	 *
@@ -103,9 +108,7 @@ public:
 	void addContact(const ContactProfile & contactProfile);
 
 	/**
-	 * Removes a Contact from the ContactList.
-	 *
-	 * @param contactId the UUID of the Contact to remove
+	 * @see ContactList::removeContact()
 	 */
 	void removeContact(const std::string & contactId);
 
@@ -124,25 +127,17 @@ public:
 	void addContactGroup(const std::string & name);
 
 	/**
-	 * Removes a contact group.
-	 *
-	 * @param id the UUID of the group to remove
+	 * @see ContactList::removeContactGroup()
 	 */
-	void removeContactGroup(const std::string & id);
+	void removeContactGroup(const std::string & groupId);
 
 	/**
-	 * Changes a group name.
-	 *
-	 * @param groupId the UUID of the group to be changed
-	 * @param name the desired name
+	 * @see ContactList::renameContactGroup()
 	 */
 	void renameContactGroup(const std::string & groupId, const std::string & name);
 
 	/**
-	 * Merges two contacts.
-	 *
-	 * @param dstContactId the id of the destination contact
-	 * @param srcContactId the id of the source contact
+	 * @see ContactList::mergeContacts()
 	 */
 	void merge(const std::string & dstContactId, const std::string & srcContactId);
 
@@ -153,6 +148,8 @@ public:
 	ContactList & getContactList() { return _contactList; }
 
 private:
+
+	void initPresentationThreadSafe();
 
 	/**
 	 * Returns a pointer to the Contact associated with the given contactId
@@ -171,25 +168,35 @@ private:
 	 */
 	void contactAddedEventHandler(ContactList & sender, Contact & contact);
 
+	void contactAddedEventHandlerThreadSafe(Contact & contact);
+
 	/**
 	 * @see ContactList::contactRemovedEvent
 	 */
 	void contactRemovedEventHandler(ContactList & sender, Contact & contact);
+
+	void contactRemovedEventHandlerThreadSafe(Contact & contact);
 
 	/**
 	 * @see ContactList::contactGroupAddedEvent
 	 */
 	void contactGroupAddedEventHandler(ContactList & sender, ContactGroup & contactGroup);
 
+	void contactGroupAddedEventHandlerThreadSafe(ContactGroup & contactGroup);
+
 	/**
 	 * @see ContactList::contactGroupRemovedEvent
 	 */
 	void contactGroupRemovedEventHandler(ContactList & sender, ContactGroup & contactGroup);
 
+	void contactGroupRemovedEventHandlerThreadSafe(ContactGroup & contactGroup);
+
 	/**
 	 * @see ContactList::contactGroupRenamedEvent
 	 */
 	void contactGroupRenamedEventHandler(ContactList & sender, ContactGroup & contactGroup);
+
+	void contactGroupRenamedEventHandlerThreadSafe(ContactGroup & contactGroup);
 
 	/**
 	 * @see ContactList::contactGroupMovedEvent
@@ -197,10 +204,15 @@ private:
 	void contactMovedEventHandler(ContactList & sender, ContactGroup & dstContactGroup,
 		ContactGroup & srcContactGroup, Contact & contact);
 
+	void contactMovedEventHandlerThreadSafe(ContactGroup & dstContactGroup, ContactGroup & srcContactGroup,
+		Contact & contact);
+
 	/**
 	 * @see ContactList::contactChangedEvent
 	 */
 	void contactChangedEventHandler(ContactList & sender, Contact & contact);
+
+	void contactChangedEventHandlerThreadSafe(Contact & contact);
 
 	/**
 	 * @see addContact
@@ -225,7 +237,7 @@ private:
 	/**
 	 * @see removeContactGroup
 	 */
-	void removeContactGroupThreadSafe(std::string id);
+	void removeContactGroupThreadSafe(std::string groupId);
 
 	/**
 	 * @see renameContactGroup
@@ -242,6 +254,8 @@ private:
 
 	/** Direct link to the presentation via an interface. */
 	PContactList * _pContactList;
+
+	CWengoPhone & _cWengoPhone;
 };
 
 #endif	//OWCCONTACTLIST_H

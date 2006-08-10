@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef IMWRAPPERFACTORY_H
-#define IMWRAPPERFACTORY_H
+#ifndef OWIMWRAPPERFACTORY_H
+#define OWIMWRAPPERFACTORY_H
 
 #include <util/Interface.h>
 
@@ -98,4 +98,4 @@ private:
 	static IMWrapperFactory * _factory;
 };
 
-#endif	//IMWRAPPERFACTORY_H
+#endif	//OWIMWRAPPERFACTORY_H

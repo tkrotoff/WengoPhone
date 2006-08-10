@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef IMACCOUNTHANDLER_H
-#define IMACCOUNTHANDLER_H
+#ifndef OWIMACCOUNTHANDLER_H
+#define OWIMACCOUNTHANDLER_H
 
 #include <imwrapper/EnumIMProtocol.h>
 #include <imwrapper/IMAccount.h>
@@ -42,4 +42,4 @@ public:
 
 };
 
-#endif	//IMACCOUNTHANDLER_H
+#endif	//OWIMACCOUNTHANDLER_H

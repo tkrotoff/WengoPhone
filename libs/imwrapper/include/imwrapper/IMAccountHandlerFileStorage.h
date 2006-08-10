@@ -17,13 +17,14 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef IMACCOUNTHANDLERFILESTORAGE_H
-#define IMACCOUNTHANDLERFILESTORAGE_H
+#ifndef OWIMACCOUNTHANDLERFILESTORAGE_H
+#define OWIMACCOUNTHANDLERFILESTORAGE_H
 
 #include <imwrapper/IMAccountHandlerStorage.h>
 
 class IMAccountHandlerFileStorage : public IMAccountHandlerStorage {
 public:
+
 	IMAccountHandlerFileStorage(IMAccountHandler & imAccountHandler);
 
 	virtual ~IMAccountHandlerFileStorage();
@@ -37,4 +38,4 @@ protected:
 	IMAccountHandler & _imAccountHandler;
 };
 
-#endif	//IMACCOUNTHANDLERFILESTORAGE_H
+#endif	//OWIMACCOUNTHANDLERFILESTORAGE_H

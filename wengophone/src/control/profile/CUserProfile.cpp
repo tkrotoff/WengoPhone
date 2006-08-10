@@ -54,7 +54,7 @@
 CUserProfile::CUserProfile(UserProfile & userProfile, CWengoPhone & cWengoPhone)
 	: _userProfile(userProfile),
 	_cWengoPhone(cWengoPhone),
-	_cContactList(userProfile.getContactList()),
+	_cContactList(userProfile.getContactList(), cWengoPhone),
 	_cWenboxPlugin(*userProfile.getWenboxPlugin(), cWengoPhone),
 	_cChatHandler(userProfile.getChatHandler(), *this) {
 

@@ -103,7 +103,7 @@ public:
 	 * This method should be called when you exit definitly WengoPhone.
 	 * You cannot call start() then terminate() several times.
 	 */
-	//virtual void terminate();
+	void terminate();
 
 	/**
 	 * Starts the thread of the model component.
@@ -116,11 +116,6 @@ private:
 	 * Entry point of the application, equivalent to main().
 	 */
 	void init();
-
-	/**
-	 * @see terminate()
-	 */
-	//void terminateThreadSafe();
 
 	/**
 	 * Saves the Configuration.
@@ -139,12 +134,7 @@ private:
 	 * Emergency timeout handler called when SIP unregistering
 	 * is not quick enough or timed out.
 	 */
-	void shutdownAfterTimeout();
-
-	/**
-	 * True if the thread is running.
-	 */
-	bool _running;
+	void exitAfterTimeout();
 
 	UserProfileHandler * _userProfileHandler;
 

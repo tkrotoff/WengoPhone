@@ -41,11 +41,9 @@ public:
 
 	~CWengoPhone();
 
-	Presentation * getPresentation();
+	Presentation * getPresentation() const;
 
-	CWengoPhone & getCWengoPhone() {
-		return *this;
-	}
+	CWengoPhone & getCWengoPhone() const;
 
 	/** FIXME should be removed. */
 	WengoPhone & getWengoPhone() const;
@@ -69,7 +67,7 @@ public:
 	/**
 	 * Gets the CUserProfileHandler
 	 */
-	CUserProfileHandler & getCUserProfileHandler();
+	CUserProfileHandler & getCUserProfileHandler() const;
 
 private:
 

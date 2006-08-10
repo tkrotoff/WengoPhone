@@ -28,20 +28,35 @@
 #include <model/phonecall/ConferenceCall.h>
 
 #include <util/Logger.h>
+#include <thread/ThreadEvent.h>
 
 CConferenceCall::CConferenceCall(ConferenceCall & conferenceCall, CWengoPhone & cWengoPhone)
 	: _conferenceCall(conferenceCall),
 	_cWengoPhone(cWengoPhone) {
 
+	_pConferenceCall = NULL;
+	typedef ThreadEvent0<void ()> MyThreadEvent;
+	MyThreadEvent * event = new MyThreadEvent(boost::bind(&CConferenceCall::initPresentationThreadSafe, this));
+	PFactory::postEvent(event);
+}
+
+CConferenceCall::~CConferenceCall() {
+}
+
+void CConferenceCall::initPresentationThreadSafe() {
 	_pConferenceCall = PFactory::getFactory().createPresentationConferenceCall(*this);
 
 	_conferenceCall.stateChangedEvent += boost::bind(&CConferenceCall::stateChangedEventHandler, this, _1, _2);
-
 	_conferenceCall.phoneCallAddedEvent += boost::bind(&CConferenceCall::phoneCallAddedEventHandler, this, _1, _2);
 	_conferenceCall.phoneCallRemovedEvent += boost::bind(&CConferenceCall::phoneCallRemovedEventHandler, this, _1, _2);
 }
 
-CConferenceCall::~CConferenceCall() {
+Presentation * CConferenceCall::getPresentation() const {
+	return _pConferenceCall;
+}
+
+CWengoPhone & CConferenceCall::getCWengoPhone() const {
+	return _cWengoPhone;
 }
 
 void CConferenceCall::addPhoneCall(CPhoneCall & cPhoneCall) {

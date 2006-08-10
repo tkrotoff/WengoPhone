@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef NULLWENBOX_H
-#define NULLWENBOX_H
+#ifndef OWNULLWENBOX_H
+#define OWNULLWENBOX_H
 
 #include <wenbox/IWenbox.h>
 
@@ -53,4 +53,4 @@ public:
 	bool setState(PhoneCallState state, const std::string & phoneNumber = String::null);
 };
 
-#endif	//NULLWENBOX_H
+#endif	//OWNULLWENBOX_H

@@ -17,15 +17,15 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef IMACCOUNTHANDLERXMLSERIALIZER_H
-#define IMACCOUNTHANDLERXMLSERIALIZER_H
+#ifndef OWIMACCOUNTHANDLERXMLSERIALIZER_H
+#define OWIMACCOUNTHANDLERXMLSERIALIZER_H
 
 #include <serialization/Serializable.h>
 
 class IMAccountHandler;
 
 /**
-* Serialize an IMAccount object.
+ * Serializes an IMAccountHandler object.
  *
  * @author Philippe Bernery
  */
@@ -41,7 +41,6 @@ public:
 private:
 
 	IMAccountHandler & _imAccountHandler;
-
 };
 
-#endif //IMACCOUNTHANDLERXMLSERIALIZER_H
+#endif	//OWIMACCOUNTHANDLERXMLSERIALIZER_H

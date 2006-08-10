@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef IMCHATSESSION_H
-#define IMCHATSESSION_H
+#ifndef OWIMCHATSESSION_H
+#define OWIMCHATSESSION_H
 
 #include <imwrapper/IMChat.h>
 #include <imwrapper/IMContactSet.h>
@@ -132,8 +132,9 @@ public:
 
 	class IMChatMessage {
 	public:
+
 		IMChatMessage(const IMContact & imContact, const std::string & message);
-	
+
 		~IMChatMessage();
 
 		const IMContact & getIMContact() const { return _imContact; }
@@ -141,6 +142,7 @@ public:
 		std::string getMessage() const { return _message; }
 
 	private:
+
 		const IMContact & _imContact;
 
 		std::string _message;
@@ -256,4 +258,4 @@ private:
 	bool _userCreated;
 };
 
-#endif //IMCHATSESSION_H
+#endif //OWIMCHATSESSION_H

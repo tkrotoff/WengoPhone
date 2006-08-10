@@ -50,6 +50,7 @@ class WsCallForward;
 class WsDirectory;
 class WsSms;
 class WsSoftUpdate;
+class PresenceHandler;
 
 /**
  * Control layer for UserProfile.

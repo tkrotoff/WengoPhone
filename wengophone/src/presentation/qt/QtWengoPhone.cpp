@@ -716,9 +716,8 @@ void QtWengoPhone::addContact() {
 		//FIXME: this method should not be called if no UserProfile has been set
 		ContactProfile contactProfile;
 		QtSimpleAddIMContact qtSimpleAddIMContact(*_cWengoPhone.getCUserProfileHandler().getCUserProfile(),
-			contactProfile,
-			_wengoPhoneWindow);
-		if (qtSimpleAddIMContact.exec() == QDialog::Accepted) {
+			contactProfile, _wengoPhoneWindow);
+		if (qtSimpleAddIMContact.show() == QDialog::Accepted) {
 			_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCContactList().addContact(contactProfile);
 		}
 	}

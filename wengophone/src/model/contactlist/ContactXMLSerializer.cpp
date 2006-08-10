@@ -28,6 +28,8 @@
 #include <imwrapper/IMContactXMLSerializer.h>
 #include <imwrapper/IMContactSet.h>
 
+#include <util/String.h>
+
 #include <tinyxml.h>
 
 using namespace std;
@@ -47,7 +49,7 @@ string ContactXMLSerializer::serialize() {
 
 	result += ProfileXMLSerializer::serialize();
 
-	// Serializing IMContacts
+	//Serializing IMContacts
 	for (IMContactSet::const_iterator it = _contact._imContactSet.begin();
 		it != _contact._imContactSet.end();
 		++it) {
@@ -56,7 +58,7 @@ string ContactXMLSerializer::serialize() {
 	}
 	////
 
-	// Serializing group
+	//Serializing group
 	_contactList.lock();
 	ContactGroup * contactGroup = _contactList.getContactGroup(_contact.getGroupId());
 	if (contactGroup) {

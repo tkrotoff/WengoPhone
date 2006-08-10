@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef IMACCOUNTPARAMETER_H
-#define IMACCOUNTPARAMETER_H
+#ifndef OWIMACCOUNTPARAMETER_H
+#define OWIMACCOUNTPARAMETER_H
 
 #include <settings/AutomaticSettings.h>
 
@@ -157,4 +157,4 @@ private:
 	virtual void copy(const IMAccountParameters & imAccountParameters);
 };
 
-#endif //IMACCOUNTPARAMETER_H
+#endif	//OWIMACCOUNTPARAMETER_H

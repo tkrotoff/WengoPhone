@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef IMACCOUNTHANDLERSTORAGE_H
-#define IMACCOUNTHANDLERSTORAGE_H
+#ifndef OWIMACCOUNTHANDLERSTORAGE_H
+#define OWIMACCOUNTHANDLERSTORAGE_H
 
 #include <serialization/Storage.h>
 
@@ -30,7 +30,7 @@ class IMAccountHandlerStorage : public Storage {
 public:
 
 	IMAccountHandlerStorage(IMAccountHandler & imAccountHandler)
-	: _imAccountHandler(imAccountHandler) {};
+		: _imAccountHandler(imAccountHandler) {};
 
 	virtual ~IMAccountHandlerStorage() {};
 
@@ -39,4 +39,4 @@ protected:
 	IMAccountHandler & _imAccountHandler;
 };
 
-#endif	//IMACCOUNTHANDLERSTORAGE_H
+#endif	//OWIMACCOUNTHANDLERSTORAGE_H

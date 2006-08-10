@@ -21,22 +21,45 @@
 
 #include <presentation/PFactory.h>
 #include <presentation/PWenboxPlugin.h>
+
 #include <model/wenbox/WenboxPlugin.h>
+
+#include <thread/ThreadEvent.h>
 
 CWenboxPlugin::CWenboxPlugin(WenboxPlugin & wenboxPlugin, CWengoPhone & cWengoPhone)
 	: _wenboxPlugin(wenboxPlugin),
 	_cWengoPhone(cWengoPhone) {
 
-	_pWenboxPlugin = PFactory::getFactory().createPresentationWenboxPlugin(*this);
-
-	_wenboxPlugin.phoneNumberBufferUpdatedEvent +=
-		boost::bind(&CWenboxPlugin::phoneNumberBufferUpdatedEventHandler, this, _1, _2);
+	_pWenboxPlugin = NULL;
+	typedef ThreadEvent0<void ()> MyThreadEvent;
+	MyThreadEvent * event = new MyThreadEvent(boost::bind(&CWenboxPlugin::initPresentationThreadSafe, this));
+	PFactory::postEvent(event);
 }
 
 CWenboxPlugin::~CWenboxPlugin() {
-	delete _pWenboxPlugin;
+	//delete _pWenboxPlugin;
+}
+
+Presentation * CWenboxPlugin::getPresentation() const {
+	return _pWenboxPlugin;
+}
+
+CWengoPhone & CWenboxPlugin::getCWengoPhone() const {
+	return _cWengoPhone;
+}
+
+void CWenboxPlugin::initPresentationThreadSafe() {
+	_pWenboxPlugin = PFactory::getFactory().createPresentationWenboxPlugin(*this);
+
+	_wenboxPlugin.phoneNumberBufferUpdatedEvent += boost::bind(&CWenboxPlugin::phoneNumberBufferUpdatedEventHandler, this, _1, _2);
 }
 
 void CWenboxPlugin::phoneNumberBufferUpdatedEventHandler(WenboxPlugin & sender, const std::string & phoneNumberBuffer) {
+	typedef ThreadEvent1<void (std::string), std::string> MyThreadEvent;
+	MyThreadEvent * event = new MyThreadEvent(boost::bind(&CWenboxPlugin::phoneNumberBufferUpdatedEventHandlerThreadSafe, this, _1), phoneNumberBuffer);
+	PFactory::postEvent(event);
+}
+
+void CWenboxPlugin::phoneNumberBufferUpdatedEventHandlerThreadSafe(std::string phoneNumberBuffer) {
 	_pWenboxPlugin->phoneNumberBufferUpdatedEvent(phoneNumberBuffer);
 }

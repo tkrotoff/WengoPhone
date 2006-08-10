@@ -17,19 +17,15 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef PCONTACTLIST_H
-#define PCONTACTLIST_H
+#ifndef OWPCONTACTLIST_H
+#define OWPCONTACTLIST_H
 
 #include "Presentation.h"
-
-#include <util/Event.h>
 
 #include <string>
 
 /**
  *
- * FIXME Please put const std::string & rather than just std::string,
- * there is a good reason behind this.
  *
  * @ingroup presentation
  * @author Tanguy Krotoff
@@ -44,59 +40,59 @@ public:
 	 *
 	 * @param contactId contact UUID to show
 	 */
-	Event<void (const std::string & contactId)> showToaster;
+	//Event<void (const std::string & contactId)> showToaster;
 
 	/**
 	 * Called by the control when a group has been added.
 	 *
 	 * @param contactGroupId the contact group UUID
 	 */
-	virtual void contactGroupAddedEvent(std::string contactGroupId) = 0;
+	virtual void contactGroupAddedEvent(const std::string & groupId) = 0;
 
 	/**
 	 * Called by the control when a group has been removed.
 	 *
 	 * @param contactGroupId the contact group UUID
 	 */
-	virtual void contactGroupRemovedEvent(std::string contactGroupId) = 0;
+	virtual void contactGroupRemovedEvent(const std::string & groupId) = 0;
 
 	/**
 	 * Called by the control when a group has been renamed.
 	 *
 	 * @param contactGroupId the contact group UUID
 	 */
-	virtual void contactGroupRenamedEvent(std::string contactGroupId) = 0;
+	virtual void contactGroupRenamedEvent(const std::string & groupId) = 0;
 
 	/**
 	 * Called by the control when a contact has been added.
 	 *
 	 * @param contactId the contact UUID
 	 */
-	virtual void contactAddedEvent(std::string contactId) = 0;
+	virtual void contactAddedEvent(const std::string & contactId) = 0;
 
 	/**
 	 * Called by the control when a contact has been removed.
 	 *
 	 * @param contactId the contact UUID
 	 */
-	virtual void contactRemovedEvent(std::string contactId) = 0;
+	virtual void contactRemovedEvent(const std::string & contactId) = 0;
 
 	/**
 	 * Called by the control when a contact has moved.
 	 *
-	 * @param srcContactGroupId the contact group UUID
-	 * @param dstContactGroupId the contact group UUID
+	 * @param dstGroupId the contact group UUID
+	 * @param srcGroupId the contact group UUID
 	 * @param contactId the contact UUID
 	 */
-	virtual void contactMovedEvent(std::string dstContactGroupId,
-		std::string srcContactGroupId, std::string contactId) = 0;
+	virtual void contactMovedEvent(const std::string & dstGroupId,
+		const std::string & srcGroupId, const std::string & contactId) = 0;
 
 	/**
 	 * Called by the control when a contact has changed.
 	 *
 	 * @param contactId the UUID of the changed Contact
 	 */
-	virtual void contactChangedEvent(std::string contactId) = 0;
+	virtual void contactChangedEvent(const std::string & contactId) = 0;
 };
 
-#endif	//PCONTACTLIST_H
+#endif	//OWPCONTACTLIST_H

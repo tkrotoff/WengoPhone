@@ -50,15 +50,15 @@ void CChatHandler::initPresentationThreadSafe() {
 	_chatHandler.newIMChatSessionCreatedEvent += boost::bind(&CChatHandler::newIMChatSessionCreatedEventHandler, this, _1, _2);
 }
 
-Presentation * CChatHandler::getPresentation() {
+Presentation * CChatHandler::getPresentation() const {
 	return _pChatHandler;
 }
 
-CWengoPhone & CChatHandler::getCWengoPhone() {
+CWengoPhone & CChatHandler::getCWengoPhone() const {
 	return _cUserProfile.getCWengoPhone();
 }
 
-CUserProfile & CChatHandler::getCUserProfile() {
+CUserProfile & CChatHandler::getCUserProfile() const {
 	return _cUserProfile;
 }
 

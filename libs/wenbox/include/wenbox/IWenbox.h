@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef IWENBOX_H
-#define IWENBOX_H
+#ifndef OWIWENBOX_H
+#define OWIWENBOX_H
 
 #include <cutil/dllexport.h>
 
@@ -250,4 +250,4 @@ public:
  */
 extern "C" API IWenbox * getInstance();
 
-#endif	//IWENBOX_H
+#endif	//OWIWENBOX_H
