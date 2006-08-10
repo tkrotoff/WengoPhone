@@ -48,6 +48,8 @@ class QtWengoStyleLabel;
 class QtEmoticonsManager;
 class QtWengoPhone;
 class QtChatActionBarWidget;
+class QtChatEditWidget;
+class QtChatHistoryWidget;
 
 /**
  *
@@ -114,6 +116,12 @@ public Q_SLOTS:
 
 	virtual void setVisible ( bool visible );
 
+	/*
+	void chatEditContextMenuSlot(const QPoint & pos);
+
+	void saveHistoryAsHtmlSlot();
+	*/
+
 Q_SIGNALS:
 
 	void newMessage(IMChatSession* session,const QString & msg);
@@ -166,7 +174,7 @@ private:
 	 * @param message the message to change
 	 * @return the changed message
 	 */
-	QString insertFontTag(const QString & message);
+	QString insertFontTag(const QString & message);	
 
 	ContactInfoHash _qtContactInfo;
 
@@ -207,6 +215,10 @@ private:
 	mutable QMutex _mutex;
 
 	QtChatActionBarWidget * _actionBar;
+
+	QtChatEditWidget * _chatEdit;
+
+	QtChatHistoryWidget * _chatHistory;
 };
 
 #endif //OWQTCHATWIDGET_H

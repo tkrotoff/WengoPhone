@@ -35,6 +35,8 @@ class QString;
 *
 * Displays available actions from a chat window.
 *
+* TODO verify that there is nothing left elsewhere that could be brought inhere (slots, ...)
+*
 * @author Nicolas Couturier
 */
 class QtChatActionBarWidget : public QWidget {
@@ -80,9 +82,9 @@ public:
 
 public Q_SLOTS:
 
-		void inviteContact();
+	void inviteContact();
 
-		void callContact();
+	void callContact();
 
 private:
 

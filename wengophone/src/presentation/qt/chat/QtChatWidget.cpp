@@ -45,6 +45,8 @@
 #include <presentation/qt/contactlist/QtContactList.h>
 #include <presentation/qt/contactlist/QtContactListManager.h>
 #include <presentation/qt/chat/QtChatActionBarWidget.h>
+#include <presentation/qt/chat/QtChatEditWidget.h>
+#include <presentation/qt/chat/QtChatHistoryWidget.h>
 
 #include <QtGui>
 
@@ -70,6 +72,8 @@ QWidget(parent, f), _cChatHandler(cChatHandler),_qtWengoPhone(qtWengoPhone) {
 	_qtEmoticonManager = new QtEmoticonsManager(this);
 	_emoticonsWidget = new EmoticonsWidget(_qtEmoticonManager,this,Qt::Popup);
 	_actionBar = new QtChatActionBarWidget(qtWengoPhone, this, this);
+	_chatEdit = new QtChatEditWidget(this);
+	_chatHistory = new QtChatHistoryWidget(this);
 
 	_stoppedTypingTimerId = -1;
 	_notTypingTimerId = -1;
@@ -84,27 +88,41 @@ QWidget(parent, f), _cChatHandler(cChatHandler),_qtWengoPhone(qtWengoPhone) {
 	createActionFrame();
 	setupSendButton();
 	_ui.gridLayout->addWidget(_actionBar, 0, 0);
+	_ui.editStack->addWidget(_chatEdit);
+	_ui.editStack->setCurrentWidget(_chatEdit);
+	_ui.frame_3->layout()->addWidget(_chatHistory);
 
 	QtChatTabWidget * parentWidget = dynamic_cast<QtChatTabWidget *>(parent);
 
-	QtChatWidgetManager * cwm = new QtChatWidgetManager(this,_ui.chatEdit);
+	QtChatWidgetManager * cwm = new QtChatWidgetManager(this,_chatEdit);
 
 	connect (cwm,SIGNAL(enterPressed(Qt::KeyboardModifiers)),this, SLOT (enterPressed(Qt::KeyboardModifiers)));
 	connect (cwm,SIGNAL(deletePressed()),this,SLOT (deletePressed()));
 	connect (cwm,SIGNAL(ctrlTabPressed()),parentWidget,SLOT(ctrlTabPressedSlot()));
 	connect (_fontLabel,SIGNAL(clicked()), this, SLOT (chooseFont()));
-	connect (_ui.chatHistory,SIGNAL(anchorClicked(const QUrl &)),this,SLOT(urlClicked(const QUrl & )));
+	connect (_chatHistory,SIGNAL(anchorClicked(const QUrl &)),this,SLOT(urlClicked(const QUrl & )));
 	connect (_emoticonsLabel,SIGNAL(clicked()),this,SLOT(chooseEmoticon()));
 	connect (_ui.sendButton,SIGNAL(clicked()),this,SLOT(sendButtonClicked()));
 
 	connect (this,SIGNAL(contactAddedEventSignal()),this,SLOT(contactAddedEventSlot()));
 	connect (this,SIGNAL(contactRemovedEventSignal()),this,SLOT(contactRemovedEventSlot()));
 
-	_ui.chatHistory->setHtml ("<qt type=detail>");
+	_chatHistory->setHtml ("<qt type=detail>");
 
 	connect(_emoticonsWidget,SIGNAL(emoticonClicked(QtEmoticon)),this,SLOT(emoticonSelected(QtEmoticon)));
-	connect(_emoticonsWidget,SIGNAL(closed()),_ui.chatEdit,SLOT(setFocus()));
-	connect(_ui.chatEdit,SIGNAL(textChanged ()),SLOT(chatEditChanged()));
+	connect(_emoticonsWidget,SIGNAL(closed()),_chatEdit,SLOT(setFocus()));
+	connect(_chatEdit,SIGNAL(textChanged ()),SLOT(chatEditChanged()));
+
+
+	/* Save As of the chatHistory */
+	/*_saveAsAct = new QAction(tr("&Save As"), _ui.chatHistory);
+        _saveAsAct->setShortcut(tr("Ctrl+S"));
+        _saveAsAct->setStatusTip(tr("Save the document to disk"));
+        connect(_saveAsAct, SIGNAL(triggered()), this, SLOT(saveHistoryAsHtmlSlot()));*/
+
+	/* Context Menu of the chatHistory */
+	/*_ui.chatHistory->setContextMenuPolicy(Qt::CustomContextMenu);
+	connect(_ui.chatHistory, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(chatEditContextMenuSlot(const QPoint &)));*/
 }
 
 QtChatWidget::~QtChatWidget() {
@@ -155,9 +173,9 @@ const QString & QtChatWidget::nickName() const {
 }
 
 void QtChatWidget::addToHistory(const QString & senderName,const QString & str) {
-	QTextCursor curs(_ui.chatHistory->document());
+	QTextCursor curs(_chatHistory->document());
 	curs.movePosition(QTextCursor::End);
-	_ui.chatHistory->setTextCursor(curs);
+	_chatHistory->setTextCursor(curs);
 
 	QString header;
 	if (hasQtChatContactInfo(senderName)) {
@@ -178,15 +196,15 @@ void QtChatWidget::addToHistory(const QString & senderName,const QString & str) 
 	QString table = QString("<table border=0 width=98% cellspacing=0 cellpadding=5>")+
 					QString("<tr><td>")+tmpStr+
 					QString("</td></tr></table>");
-	_ui.chatHistory->insertHtml(header);
-	_ui.chatHistory->insertHtml(table);
-	_ui.chatHistory->ensureCursorVisible();
+	_chatHistory->insertHtml(header);
+	_chatHistory->insertHtml(table);
+	_chatHistory->ensureCursorVisible();
 }
 
 void QtChatWidget::urlClicked(const QUrl & link) {
-	_ui.chatHistory->setSource(QUrl(QString::null));
+	_chatHistory->setSource(QUrl(QString::null));
 	WebBrowser::openUrl(link.toString().toStdString());
-	_ui.chatHistory->ensureCursorVisible();
+	_chatHistory->ensureCursorVisible();
 }
 
 void QtChatWidget::sendButtonClicked() {
@@ -196,7 +214,7 @@ void QtChatWidget::sendButtonClicked() {
 void QtChatWidget::enterPressed(Qt::KeyboardModifiers modifier) {
 
 	if (modifier == Qt::ControlModifier) {
-		_ui.chatEdit->append(QString::null);
+		_chatEdit->append(QString::null);
 		return;
 	}
 	if (_notTypingTimerId != -1) {
@@ -212,12 +230,12 @@ void QtChatWidget::enterPressed(Qt::KeyboardModifiers modifier) {
 	_imChatSession->changeTypingState(IMChat::TypingStateNotTyping);
 
 	//Drop empty message
-	if (_ui.chatEdit->toPlainText().isEmpty()) {
+	if (_chatEdit->toPlainText().isEmpty()) {
 		return;
 	}
 
-	addToHistory(_nickName,_ui.chatEdit->toHtml());
-	QString tmp = emoticon2Text(_ui.chatEdit->toHtml());
+	addToHistory(_nickName,_chatEdit->toHtml());
+	QString tmp = emoticon2Text(_chatEdit->toHtml());
 
 	//bad and ugly hack
 	QTextDocument tmpDocument;
@@ -225,21 +243,21 @@ void QtChatWidget::enterPressed(Qt::KeyboardModifiers modifier) {
 
 
 	newMessage(_imChatSession, prepareMessageForSending(tmpDocument.toPlainText()));
-	_ui.chatEdit->clear();
-	_ui.chatEdit->setFocus();
+	_chatEdit->clear();
+	_chatEdit->setFocus();
 }
 
 //Work around for Qt 4.1.2 bug
 //can be removed with Qt > 4.1.2
 void QtChatWidget::deletePressed() {
-	QTextCursor cursor = _ui.chatEdit->textCursor();
+	QTextCursor cursor = _chatEdit->textCursor();
 	if (!cursor.hasSelection()) {
 		cursor.movePosition( QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor, 1 );
 		cursor.removeSelectedText();
 	} else {
 		cursor.removeSelectedText();
 	}
-	_ui.chatEdit->setTextCursor(cursor);
+	_chatEdit->setTextCursor(cursor);
 }
 
 QString QtChatWidget::prepareMessageForSending(const QString & message) {
@@ -288,8 +306,8 @@ QString QtChatWidget::insertFontTag(const QString & message) {
 void QtChatWidget::chooseFont() {
 	bool ok;
 	_currentFont = QFontDialog::getFont(&ok,_currentFont,this);
-	_ui.chatEdit->setCurrentFont(_currentFont);
-	_ui.chatEdit->setFocus();
+	_chatEdit->setCurrentFont(_currentFont);
+	_chatEdit->setFocus();
 }
 
 const QString QtChatWidget::emoticon2Text(const QString &htmlstr) {
@@ -368,8 +386,8 @@ void QtChatWidget::chooseEmoticon() {
 }
 
 void QtChatWidget::emoticonSelected(QtEmoticon emoticon) {
-	_ui.chatEdit->insertHtml(emoticon.getHtml());
-	_ui.chatEdit->ensureCursorVisible();
+	_chatEdit->insertHtml(emoticon.getHtml());
+	_chatEdit->ensureCursorVisible();
 }
 
 void QtChatWidget::setIMChatSession(IMChatSession * imChatSession) {
@@ -541,7 +559,7 @@ void QtChatWidget::setupSendButton() {
 void QtChatWidget::setVisible (bool visible) {
 	QWidget::setVisible(visible);
 	if (visible) {
-		_ui.chatEdit->setFocus();
+		_chatEdit->setFocus();
 	}
 }
 
@@ -560,3 +578,14 @@ QString QtChatWidget::getNewBackgroundColor() const {
 	_lastBackGroundColor.setRed(_lastBackGroundColor.red() + 20);
 	return QString("%1").arg(_lastBackGroundColor.name());
 }
+
+/*void QtChatWidget::chatEditContextMenuSlot(const QPoint & pos){
+	LOG_DEBUG("chatEditContextMenuSlot");
+	QMenu menu(_ui.chatHistory);
+	menu.addAction(_saveAsAct);
+	menu.exec(_ui.chatHistory->viewport()->mapToGlobal(pos));
+}
+
+void QtChatWidget::saveHistoryAsHtmlSlot(){
+	LOG_DEBUG("saveHistoryAsHtmlSlot");
+}*/
