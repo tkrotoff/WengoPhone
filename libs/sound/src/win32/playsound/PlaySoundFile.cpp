@@ -109,7 +109,7 @@ PlaySoundFile::PlaySoundFile() {
 PlaySoundFile::~PlaySoundFile() {
 }
 
-HWAVEOUT _hWaveOut;
+static HWAVEOUT _hWaveOut = NULL;
 
 bool PlaySoundFile::play(const std::string & filename) {
 	SoundFile * soundFile;
