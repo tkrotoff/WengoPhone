@@ -177,7 +177,7 @@ void QtUserProfile::setBrowserUrlToAccount() {
 
 	if (config.getIEActiveXEnable() && _cUserProfile.getUserProfile().getActivePhoneLine()) {
 		WengoAccount wengoAccount = *_cUserProfile.getUserProfile().getWengoAccount();
-		std::string data = "?login=" + wengoAccount.getWengoLogin() +
+		std::string data = "login=" + wengoAccount.getWengoLogin() +
 			"&password=" + wengoAccount.getWengoPassword() +
 			"&lang=" + config.getLanguage() +
 			"&wl=" + std::string(WengoPhoneBuildId::SOFTPHONE_NAME) +
@@ -187,9 +187,9 @@ void QtUserProfile::setBrowserUrlToAccount() {
 			if (proxyAuthType == NetworkProxy::ProxyAuthTypeDigest) {
 				//HTTPS cannot be used when the HTTP proxy is in digest:
 				//ActiveX Internet Explorer crashes!
-				_qtWengoPhone.getQtBrowser()->setUrl(std::string("http://www.wengo.fr/auth/auth.php") + data);
+				_qtWengoPhone.getQtBrowser()->setUrl(std::string("http://www.wengo.fr/auth/auth.php"), data, true);
 			} else {
-				_qtWengoPhone.getQtBrowser()->setUrl(std::string("https://www.wengo.fr/auth/auth.php") + data);
+				_qtWengoPhone.getQtBrowser()->setUrl(std::string("https://www.wengo.fr/auth/auth.php"), data, true);
 			}
 		}
 	}
