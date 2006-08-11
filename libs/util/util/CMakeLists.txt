@@ -5,14 +5,18 @@ find_package(Boost REQUIRED)
 include_directories(${Boost_INCLUDE_DIR})
 
 #owcutil dependency
-include_directories(${owcutil_SOURCE_DIR}/include)
+include_directories(${owcutil_INCLUDE_DIR})
 link_directories(${owcutil_BINARY_DIR})
-if (MSVC)
-	include_directories(${owcutil_SOURCE_DIR}/include/cutil/msvc)
-endif (MSVC)
 
-include_directories(include)
+#includes
+set(owutil_INCLUDE_DIR
+	${owutil_SOURCE_DIR}/include
+	CACHE INTERNAL ""
+)
 
+include_directories(${owutil_INCLUDE_DIR})
+
+#sources
 set(owutil_SRCS
 	src/exception/Exception.cpp
 	src/Base64.cpp
@@ -46,6 +50,7 @@ if (UNIX)
 	)
 endif (UNIX)
 
+#owutil
 add_library(owutil STATIC ${owutil_SRCS})
 
 #owcutil dependency
