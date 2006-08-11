@@ -2,19 +2,19 @@ project(owhttp)
 
 #owutil dependency
 link_directories(${owutil_BINARY_DIR})
-include_directories(${owutil_INCLUDE_DIR})
 
 #owcurl dependency
 link_directories(${owcurl_BINARY_DIR})
 include_directories(${owcurl_INCLUDE_DIR})
 
 #owthread dependency
-include_directories(${owthread_INCLUDE_DIR})
 link_directories(${owthread_BINARY_DIR})
 
 #includes
 set(owhttp_INCLUDE_DIR
 	${owhttp_SOURCE_DIR}/include
+	${owutil_INCLUDE_DIR}
+	${owthread_INCLUDE_DIR}
 	CACHE INTERNAL ""
 )
 

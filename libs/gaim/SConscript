@@ -51,7 +51,7 @@ if WengoCCMinGW():
 				info_file.write(str(i) + '=' + tmp_include_path + '\n')
 				i += 1
 		info_file.close()
-		
+
 		shutil.copyfile(os.path.join(WengoGetSourcePath(), 'src/config.h.mingw'), os.path.join(WengoGetSourcePath(), 'src/config.h'))
 
 
@@ -267,22 +267,22 @@ if WengoCCGCC() or WengoCCMinGW():
 		'src/src/protocols/yahoo/ycht.c',
 	]
 
-	
+
 	include_path += [
 		'src',
 		'src/src',
 		'src/src/protocols/oscar/',
 	]
-	
+
 	lib_path += [
 		'binary-lib/msvc',
 	]
-	
+
 	defines['HAVE_CONFIG_H'] = 1
 	defines['HAVE_GLIB'] = 1
 	defines['GAIM_STATIC_PRPL'] = 1
 	defines['HAVE_SSL'] = 1
-	
+
 	if WengoCCMinGW():
 		libs_file += [
 			'binary-lib/msvc/iconv.dll',
@@ -296,7 +296,7 @@ if WengoCCGCC() or WengoCCMinGW():
 			'binary-lib/msvc/ssl3.dll',
 			'binary-lib/msvc/zlib1.dll',
 		]
-		
+
 		for lib_file in libs_file:
 			env.WengoCopyToBuildDir(lib_file, 'binary-lib/msvc/')
 		libs += [
@@ -311,13 +311,13 @@ if WengoCCGCC() or WengoCCMinGW():
 			'zlib1',
 		]
 
-	
+
 		include_path += [
 			'src/src/protocols/jabber/win32',
 			'src/src/win32',
 			'src/src/protocols/jabber/win32',
 		]
-		
+
 		sources += [
 			'src/plugins/ssl/ssl-nss.c',
 			'src/src/win32/libc_interface.c',
@@ -325,14 +325,14 @@ if WengoCCGCC() or WengoCCMinGW():
 			'src/src/win32/untar.c',
 			'src/src/protocols/jabber/win32/posix.uname.c',
 		]
-		
+
 	else:
 		defines['HAVE_GNUTLS'] = 1
 		sources += [
 			'src/src/prefix.c',
 			'src/plugins/ssl/ssl-gnutls.c',
 		]
-		
+
 		libs += [
 			'gnutls',
 		]
