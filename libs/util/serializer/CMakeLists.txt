@@ -1,13 +1,5 @@
 project(owserializer)
 
-#Boost dependency
-find_package(Boost REQUIRED)
-include_directories(${Boost_INCLUDE_DIR})
-
-#owcutil dependency
-include_directories(${owcutil_INCLUDE_DIR})
-link_directories(${owcutil_BINARY_DIR})
-
 #owutil dependency
 include_directories(${owutil_INCLUDE_DIR})
 link_directories(${owutil_BINARY_DIR})

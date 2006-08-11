@@ -2,15 +2,15 @@ project(owutil)
 
 #Boost dependency
 find_package(Boost REQUIRED)
-include_directories(${Boost_INCLUDE_DIR})
 
 #owcutil dependency
-include_directories(${owcutil_INCLUDE_DIR})
 link_directories(${owcutil_BINARY_DIR})
 
 #includes
 set(owutil_INCLUDE_DIR
 	${owutil_SOURCE_DIR}/include
+	${owcutil_INCLUDE_DIR}
+	${Boost_INCLUDE_DIR}
 	CACHE INTERNAL ""
 )
 
