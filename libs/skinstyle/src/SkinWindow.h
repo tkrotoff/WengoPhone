@@ -22,7 +22,7 @@
 
 #include "SkinWidget.h"
 
-#include <QObject>
+#include <QtCore/QObject>
 #include <QPoint>
 
 class QWidget;

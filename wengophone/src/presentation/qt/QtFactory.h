@@ -22,7 +22,7 @@
 
 #include <presentation/PFactory.h>
 
-#include <QObject>
+#include <QtCore/QObject>
 
 class PWengoPhone;
 class CWengoPhone;

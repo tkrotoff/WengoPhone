@@ -20,7 +20,7 @@
 #ifndef QTWENGOSTYLELABEL_H
 #define QTWENGOSTYLELABEL_H
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 class QtWengoStyleLabel : public QLabel
 {
@@ -28,7 +28,7 @@ class QtWengoStyleLabel : public QLabel
 	Q_OBJECT
 public:
 
-	QtWengoStyleLabel ( QWidget * parent = 0, Qt::WFlags f = 0 );
+	QtWengoStyleLabel ( QWidget * parent = 0);
 
 	~QtWengoStyleLabel ( );
 

@@ -20,7 +20,7 @@
 #ifndef OWQTTOASTER_H
 #define OWQTTOASTER_H
 
-#include <QObject>
+#include <QtCore/QObject>
 
 class QWidget;
 class QTimer;

@@ -25,7 +25,7 @@
 
 #include <util/Logger.h>
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 QtIdle::QtIdle(UserProfile & userProfile, QObject * parent)
 	: QObjectThreadSafe(parent),

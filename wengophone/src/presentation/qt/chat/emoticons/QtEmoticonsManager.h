@@ -19,8 +19,8 @@
 #ifndef OWQTEMOTICONSMANAGER_H
 #define OWQTEMOTICONSMANAGER_H
 
-#include <QtGui>
-#include <QtXml>
+#include <QtGui/QtGui>
+#include <QtXml/QtXml>
 #include "QtEmoticon.h"
 
 /**

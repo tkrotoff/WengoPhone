@@ -20,7 +20,7 @@
 #ifndef SKINDEMO_H
 #define SKINDEMO_H
 
-#include <QMainWindow>
+#include <QtGui/QMainWindow>
 
 class QMenuBar;
 class QStatusBar;

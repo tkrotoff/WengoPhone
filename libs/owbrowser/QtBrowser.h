@@ -25,7 +25,7 @@
 #include <util/Event.h>
 #include <cutil/global.h>
 
-#include <QObject>
+#include <QtCore/QObject>
 
 class QWidget;
 class QTextBrowser;

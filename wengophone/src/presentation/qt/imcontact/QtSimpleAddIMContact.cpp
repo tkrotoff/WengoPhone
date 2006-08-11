@@ -31,7 +31,7 @@
 
 #include <qtutil/WidgetBackgroundImage.h>
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 QtSimpleAddIMContact::QtSimpleAddIMContact(CUserProfile & cUserProfile, ContactProfile & contactProfile, QWidget * parent)
 	: _cUserProfile(cUserProfile),

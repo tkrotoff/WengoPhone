@@ -36,7 +36,7 @@
 
 #include <util/Logger.h>
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 static const char * MNG_FORMAT = "MNG";
 

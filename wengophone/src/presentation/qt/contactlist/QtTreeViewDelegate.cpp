@@ -31,7 +31,7 @@
 #include <util/Logger.h>
 #include <util/StringList.h>
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 static int GROUP_WIDGET_FRAME_HEIGHT = 22;
 

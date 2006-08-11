@@ -22,12 +22,11 @@
 
 #include <presentation/PHistory.h>
 
-#include <control/history/CHistory.h>
+#include <model/history/HistoryMemento.h>
 
-#include <util/Trackable.h>
+#include <QtCore/QObject>
 
-#include <qtutil/QObjectThreadSafe.h>
-
+class CHistory;
 class QtHistoryWidget;
 class QtHistoryItem;
 
@@ -36,22 +35,32 @@ class QtHistoryItem;
  *
  * @author Mathieu Stute
  */
-class QtHistory : public QObjectThreadSafe, public PHistory, public Trackable {
+class QtHistory : public QObject, public PHistory {
 	Q_OBJECT
 public:
 
-	QtHistory ( CHistory & cHistory );
+	QtHistory(CHistory & cHistory);
 
-	virtual ~QtHistory();
+	~QtHistory();
 
-	void updatePresentation ();
+	void updatePresentation();
 
 	void addHistoryMemento(HistoryMemento::State, const std::string & date,
-		const std::string & time, int duration, const std::string & name, unsigned int id);
-
-	void removeHistoryMemento(unsigned int id);
+		const std::string & time, int duration, const std::string & name, unsigned id);
 
 	void clearAllEntries();
+
+	void removeHistoryMemento(unsigned id);
+
+	void historyLoadedEvent();
+
+	void mementoAddedEvent(unsigned id);
+
+	void mementoUpdatedEvent(unsigned id);
+
+	void mementoRemovedEvent(unsigned id);
+
+	void unseenMissedCallsChangedEvent(int count);
 
 	void clearSmsEntries();
 
@@ -69,27 +78,15 @@ public:
 
 public Q_SLOTS:
 
-	void replayItem ( QtHistoryItem * item );
+	void replayItem(QtHistoryItem * item);
 
-	void removeItem( unsigned int id);
+	void removeItem(unsigned id);
 
 private Q_SLOTS:
 
 	void resetUnseenMissedCalls();
 
 private:
-
-	void initThreadSafe();
-
-	void updatePresentationThreadSafe();
-
-	void historyLoadedEventHandler(CHistory &);
-
-	void mementoAddedEventHandler(CHistory &, unsigned int id);
-
-	void mementoUpdatedEventHandler(CHistory &, unsigned int id);
-
-	void mementoRemovedEventHandler(CHistory &, unsigned int id);
 
 	QtHistoryWidget * _historyWidget;
 

@@ -20,7 +20,7 @@
 #ifndef OWQTCHATCONTACTINFO_H
 #define OWQTCHATCONTACTINFO_H
 
-#include <QString>
+#include <QtCore/QString>
 
 /**
  *

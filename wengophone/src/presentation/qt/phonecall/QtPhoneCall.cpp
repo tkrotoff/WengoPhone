@@ -47,7 +47,7 @@
 
 #include <util/Logger.h>
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 QtPhoneCall::QtPhoneCall(CPhoneCall & cPhoneCall)
 	: QObject(NULL),

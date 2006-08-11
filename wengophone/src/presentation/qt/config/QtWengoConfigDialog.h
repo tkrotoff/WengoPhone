@@ -23,7 +23,7 @@
 #include <util/NonCopyable.h>
 #include <util/List.h>
 
-#include <QObject>
+#include <QtCore/QObject>
 
 class CWengoPhone;
 

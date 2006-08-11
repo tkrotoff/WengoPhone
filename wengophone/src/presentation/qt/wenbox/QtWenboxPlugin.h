@@ -22,7 +22,7 @@
 
 #include <presentation/PWenboxPlugin.h>
 
-#include <QObject>
+#include <QtCore/QObject>
 
 class CWenboxPlugin;
 class QComboBox;

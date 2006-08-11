@@ -19,7 +19,7 @@
 #ifndef OWQTEMOTICON_H
 #define OWQTEMOTICON_H
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 /**
  *

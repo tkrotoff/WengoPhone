@@ -42,7 +42,7 @@
 #include <qtutil/ThreadEventFilter.h>
 #include <qtutil/QtThreadEvent.h>
 
-#include <QApplication>
+#include <QtGui/QApplication>
 
 #ifdef OS_MACOSX
 	#include <CoreFoundation/CoreFoundation.h>

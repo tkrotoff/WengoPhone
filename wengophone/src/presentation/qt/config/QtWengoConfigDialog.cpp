@@ -33,7 +33,7 @@
 
 #include <util/Logger.h>
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 QtWengoConfigDialog::QtWengoConfigDialog(CWengoPhone & cWengoPhone, QWidget * parent)
 	: QObject(parent) {

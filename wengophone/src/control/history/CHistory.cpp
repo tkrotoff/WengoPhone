@@ -33,6 +33,17 @@ CHistory::CHistory(History & history, CWengoPhone & cWengoPhone)
 	: _history(history),
 	_cWengoPhone(cWengoPhone) {
 
+	_pHistory = NULL;
+	typedef ThreadEvent0<void ()> MyThreadEvent;
+	MyThreadEvent * event = new MyThreadEvent(boost::bind(&CHistory::initPresentationThreadSafe, this));
+	PFactory::postEvent(event);
+}
+
+CHistory::~CHistory() {
+	//delete _pHistory;
+}
+
+void CHistory::initPresentationThreadSafe() {
 	_pHistory = PFactory::getFactory().createPresentationHistory(*this);
 
 	_history.historyLoadedEvent += boost::bind(&CHistory::historyLoadedEventHandler, this, _1);
@@ -42,8 +53,8 @@ CHistory::CHistory(History & history, CWengoPhone & cWengoPhone)
 	_history.unseenMissedCallsChangedEvent += boost::bind(&CHistory::unseenMissedCallsChangedEventhandler, this, _1, _2);
 }
 
-CHistory::~CHistory() {
-	delete _pHistory;
+Presentation * CHistory::getPresentation() const {
+	return _pHistory;
 }
 
 CWengoPhone & CHistory::getCWengoPhone() const {
@@ -54,24 +65,54 @@ History & CHistory::getHistory() {
 	return _history;
 }
 
-void CHistory::historyMementoAddedEventHandler(History & history, unsigned int id) {
-	mementoAddedEvent(*this, id);
+void CHistory::historyMementoAddedEventHandler(History & sender, unsigned id) {
+	typedef ThreadEvent1<void (unsigned), unsigned> MyThreadEvent;
+	MyThreadEvent * event = new MyThreadEvent(boost::bind(&CHistory::historyMementoAddedEventHandlerThreadSafe, this, _1), id);
+	PFactory::postEvent(event);
 }
 
-void CHistory::historyMementoUpdatedEventHandler(History & history, unsigned int id) {
-	mementoUpdatedEvent(*this, id);
+void CHistory::historyMementoAddedEventHandlerThreadSafe(unsigned id) {
+	_pHistory->mementoAddedEvent(id);
 }
 
-void CHistory::historyMementoRemovedEventHandler(History & history, unsigned int id) {
-	mementoRemovedEvent(*this, id);
+void CHistory::historyMementoUpdatedEventHandler(History & sender, unsigned id) {
+	typedef ThreadEvent1<void (unsigned), unsigned> MyThreadEvent;
+	MyThreadEvent * event = new MyThreadEvent(boost::bind(&CHistory::historyMementoUpdatedEventHandlerThreadSafe, this, _1), id);
+	PFactory::postEvent(event);
 }
 
-void CHistory::historyLoadedEventHandler(History & history) {
-	historyLoadedEvent(*this);
+void CHistory::historyMementoUpdatedEventHandlerThreadSafe(unsigned id) {
+	_pHistory->mementoUpdatedEvent(id);
 }
 
-void CHistory::unseenMissedCallsChangedEventhandler(History &, int count) {
-	unseenMissedCallsChangedEvent(*this, count);
+void CHistory::historyMementoRemovedEventHandler(History & sender, unsigned id) {
+	typedef ThreadEvent1<void (unsigned), unsigned> MyThreadEvent;
+	MyThreadEvent * event = new MyThreadEvent(boost::bind(&CHistory::historyMementoRemovedEventHandlerThreadSafe, this, _1), id);
+	PFactory::postEvent(event);
+}
+
+void CHistory::historyMementoRemovedEventHandlerThreadSafe(unsigned id) {
+	_pHistory->mementoRemovedEvent(id);
+}
+
+void CHistory::historyLoadedEventHandler(History & sender) {
+	typedef ThreadEvent0<void ()> MyThreadEvent;
+	MyThreadEvent * event = new MyThreadEvent(boost::bind(&CHistory::historyLoadedEventHandlerThreadSafe, this));
+	PFactory::postEvent(event);
+}
+
+void CHistory::historyLoadedEventHandlerThreadSafe() {
+	_pHistory->historyLoadedEvent();
+}
+
+void CHistory::unseenMissedCallsChangedEventhandler(History & sender, int count) {
+	/*typedef ThreadEvent1<void (int), int> MyThreadEvent;
+	MyThreadEvent * event = new MyThreadEvent(boost::bind(&CHistory::unseenMissedCallsChangedEventHandlerThreadSafe, this, _1), count);
+	PFactory::postEvent(event);*/
+}
+
+void CHistory::unseenMissedCallsChangedEventHandlerThreadSafe(int count) {
+	_pHistory->unseenMissedCallsChangedEvent(count);
 }
 
 void CHistory::removeHistoryMemento(unsigned id) {

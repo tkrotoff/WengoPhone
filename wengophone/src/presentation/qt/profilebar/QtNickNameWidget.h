@@ -20,7 +20,7 @@
 #ifndef QTNICKNAMEWIDGET_H
 #define QTNICKNAMEWIDGET_H
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 #include <qtutil/QtClickableLabel.h>
 

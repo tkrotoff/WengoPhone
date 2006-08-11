@@ -20,7 +20,7 @@
 #ifndef NONRESIZEABLEWIDGET_H
 #define NONRESIZEABLEWIDGET_H
 
-#include <QObject>
+#include <QtCore/QObject>
 
 class QWidget;
 

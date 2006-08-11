@@ -27,7 +27,7 @@
 
 #include <qtutil/MouseEventFilter.h>
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 QtBrowserSoftUpdate::QtBrowserSoftUpdate(const std::string & downloadUrl,
 				unsigned long long buildId,

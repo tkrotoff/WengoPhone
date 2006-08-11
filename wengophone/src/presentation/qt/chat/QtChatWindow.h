@@ -30,7 +30,7 @@
 #include "QtChatWidget.h"
 #include "QtChatContactWidget.h"
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 #include <string>
 

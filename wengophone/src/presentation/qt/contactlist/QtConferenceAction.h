@@ -20,8 +20,8 @@
 #ifndef OWQTCONFERENCEACTION_H
 #define OWQTCONFERENCEACTION_H
 
-#include <QObject>
-#include <QAction>
+#include <QtCore/QObject>
+#include <QtGui/QAction>
 
 class PhoneCall;
 class QString;

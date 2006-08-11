@@ -20,7 +20,7 @@
 #ifndef OWQTCHATEDITWIDGET_H
 #define OWQTCHATEDITWIDGET_H
 
-#include <QTextEdit>
+#include <QtGui/QTextEdit>
 
 class QDragEnterEvent;
 class QDropEvent;

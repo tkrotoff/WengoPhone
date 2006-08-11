@@ -30,7 +30,7 @@
 #include <util/WebBrowser.h>
 #include <util/Logger.h>
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 static const std::string YAHOO_FORGOT_PASSWORD_LINK_EN = "http://edit.yahoo.com/config/eval_forgot_pw?.src=pg&.done=http://messenger.yahoo.com/&.redir_from=MESSENGER";
 static const std::string YAHOO_FORGOT_PASSWORD_LINK_FR = "http://edit.yahoo.com/config/eval_forgot_pw?.src=pg&.done=http://fr.messenger.yahoo.com&.intl=fr&.redir_from=MESSENGER";

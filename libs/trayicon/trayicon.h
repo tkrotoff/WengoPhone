@@ -21,14 +21,13 @@
 #ifndef CS_TRAYICON_H
 #define CS_TRAYICON_H
 
-#include <qobject.h>
-#include <qimage.h>
-//Added by qt3to4:
-#include <QPixmap>
-#include <QMouseEvent>
-#include <QEvent>
-#include <QMenu>
-#include <QPoint>
+#include <QtCore/QObject>
+#include <QtCore/QPoint>
+#include <QtCore/QEvent>
+#include <QtGui/QImage>
+#include <QtGui/QMouseEvent>
+#include <QtGui/QPixmap>
+#include <QtGui/QMenu>
 
 class QMenu;
 

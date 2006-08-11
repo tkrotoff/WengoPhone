@@ -20,7 +20,7 @@
 #ifndef SKININFOREADER_H
 #define SKININFOREADER_H
 
-#include <QString>
+#include <QtCore/QString>
 
 class QSettings;
 

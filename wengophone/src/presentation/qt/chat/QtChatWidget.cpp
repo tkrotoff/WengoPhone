@@ -48,7 +48,7 @@
 #include <presentation/qt/chat/QtChatEditWidget.h>
 #include <presentation/qt/chat/QtChatHistoryWidget.h>
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 static const int CHAT_NOT_TYPING_DELAY=1000;
 static const int CHAT_STOPPED_TYPING_DELAY=1000;

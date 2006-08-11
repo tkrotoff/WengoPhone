@@ -28,7 +28,7 @@
 
 #include <qtutil/QObjectThreadSafe.h>
 
-#include <QString>
+#include <QtCore/QString>
 
 class QtWengoPhone;
 

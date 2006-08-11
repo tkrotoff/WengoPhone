@@ -3,7 +3,7 @@
 #include <QApplication>
 #include <QImage>
 #include <QPainter>
-#include <QMainWindow>
+#include <QtGui/QMainWindow>
 #include <QMessageBox>
 #include <QFile>
 #include <QTextStream>

@@ -22,7 +22,7 @@
 
 #include "IQtToaster.h"
 
-#include <QObject>
+#include <QtCore/QObject>
 
 class QtToaster;
 

@@ -30,7 +30,7 @@
 
 #include <util/Trackable.h>
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 class CWengoPhone;
 class IPhoneLine;

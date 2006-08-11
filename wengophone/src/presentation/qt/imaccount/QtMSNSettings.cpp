@@ -30,7 +30,7 @@
 #include <util/WebBrowser.h>
 #include <util/Logger.h>
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 static const std::string MSN_LOGIN_DEFAULT_EXTENSION = "hotmail.com";
 static const std::string MSN_FORGOT_PASSWORD_LINK_EN = "https://accountservices.passport.net/uiresetpw.srf?lc=1033";

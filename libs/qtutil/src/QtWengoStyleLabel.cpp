@@ -1,45 +1,44 @@
 /*
-* WengoPhone, a voice over Internet phone
-* Copyright (C) 2004-2006  Wengo
+ * WengoPhone, a voice over Internet phone
+ * Copyright (C) 2004-2006  Wengo
  *
-* This program is free software; you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation; either version 2 of the License, or
-* (at your option) any later version.
-*
-* This program is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program; if not, write to the Free Software
-* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-
-*/
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
 
 #include <qtutil/QtWengoStyleLabel.h>
 
-QtWengoStyleLabel::QtWengoStyleLabel( QWidget * parent , Qt::WFlags f  ) :
-QLabel(parent,f){
+QtWengoStyleLabel::QtWengoStyleLabel(QWidget * parent)
+	: QLabel(parent) {
 
 	_parent = parent;
 	_pressed = false;
 	_selected = false;
 
-	// Default background color
-	_backgroundColor = _parent->palette().color(QPalette::Window );
-	// Default text color
+	//Default background color
+	_backgroundColor = _parent->palette().color(QPalette::Window);
+	//Default text color
 	_textColor = _parent->palette().color(QPalette::Text);
 
 	_alignment = Qt::AlignCenter;
 }
 
-QtWengoStyleLabel::~QtWengoStyleLabel ( ){
+QtWengoStyleLabel::~QtWengoStyleLabel() {
 }
 
 
-void QtWengoStyleLabel::paintEvent(QPaintEvent * event){
+void QtWengoStyleLabel::paintEvent(QPaintEvent * event) {
 /*
 	qDebug() << "Paint event";
 	QLabel::paintEvent( event );
@@ -51,14 +50,14 @@ void QtWengoStyleLabel::paintEvent(QPaintEvent * event){
 	rect.adjust(-1,-1,1,1);
 
 
-	// painter.fillRect(rect,QBrush(_backgroundColor));
+	//painter.fillRect(rect,QBrush(_backgroundColor));
 
 	if ( ! _pressed && ! _selected ){
-		// Draw the left side if any
+		//Draw the left side if any
 		if ( !_normalLeftPixmap.isNull() ){
 			painter.drawPixmap(0,0,_normalLeftPixmap);
 		}
-		// Fill the the label
+		//Fill the the label
 		if ( !_normalFillPixmap.isNull() ){
 			QBrush brush(_normalFillPixmap);
 
@@ -69,19 +68,19 @@ void QtWengoStyleLabel::paintEvent(QPaintEvent * event){
 				fillRect.adjust(0,0,0-_normalRightPixmap.rect().width(),0);
 			painter.fillRect(fillRect,brush);
 		}
-		// Draw the right side
+		//Draw the right side
 		if ( ! _normalRightPixmap.isNull() ){
 			painter.drawPixmap( (rect.width()-1) - _normalRightPixmap.rect().width(),0,_normalRightPixmap);
 		}
 
-	} // if ( ! _pressed )
+	} //if ( ! _pressed )
 	else
 	{
-		// Draw the left side if any
+		//Draw the left side if any
 		if ( !_pressedLeftPixmap.isNull() ){
 			painter.drawPixmap(0,0,_pressedLeftPixmap);
 		}
-		// Fill the the label
+		//Fill the the label
 		if ( !_pressedFillPixmap.isNull() ){
 			QBrush brush(_pressedFillPixmap);
 
@@ -92,7 +91,7 @@ void QtWengoStyleLabel::paintEvent(QPaintEvent * event){
 				fillRect.adjust(0,0,0-_pressedRightPixmap.rect().width(),0);
 			painter.fillRect(fillRect,brush);
 		}
-		// Draw the right side
+		//Draw the right side
 		if ( ! _pressedRightPixmap.isNull() ){
 			painter.drawPixmap( (rect.width()-1) - _pressedRightPixmap.rect().width(),0,_pressedRightPixmap);
 		}
@@ -199,7 +198,7 @@ void QtWengoStyleLabel::setText(const QString & text){
     textWidth+=40;
     QSize s = size();
     if ( textWidth > s.width()){
-//        setMaximumSize(textWidth,s.height());
+//      setMaximumSize(textWidth,s.height());
         setMinimumSize(textWidth,s.height());
     }
 

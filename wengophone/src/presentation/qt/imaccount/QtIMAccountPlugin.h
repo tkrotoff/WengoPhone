@@ -20,7 +20,7 @@
 #ifndef QTIMACCOUNTPLUGIN_H
 #define QTIMACCOUNTPLUGIN_H
 
-#include <QObject>
+#include <QtCore/QObject>
 
 #include <util/Interface.h>
 

@@ -31,8 +31,7 @@
 
 #include <util/String.h>
 
-#include <QGridLayout>
-#include <QString>
+#include <QtGui/QtGui>
 
 #if defined(OS_WINDOWS)
 #include <windows.h>
@@ -41,7 +40,7 @@
 QtChatActionBarWidget::QtChatActionBarWidget(QtWengoPhone * qtWengoPhone, QtChatWidget * chatWidget, QWidget * parent) :
 QWidget(parent),
 _qtWengoPhone(qtWengoPhone),
-_chatWidget(chatWidget) {	
+_chatWidget(chatWidget) {
 
 	setMaximumSize(QSize(10000, 80));
 	setMinimumSize(QSize(16, 80));

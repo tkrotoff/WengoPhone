@@ -82,8 +82,7 @@
 #include <cutil/global.h>
 #include <qtutil/QtWengoStyleLabel.h>
 
-#include <QtGui>
-#include <QAction>
+#include <QtGui/QtGui>
 
 #include "QtSystray.h"
 

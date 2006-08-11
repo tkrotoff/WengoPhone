@@ -21,7 +21,7 @@
 
 #include <qtutil/QtThreadEvent.h>
 
-#include <QEvent>
+#include <QtCore/QEvent>
 
 ThreadEventFilter::ThreadEventFilter()
 	: QObject() {

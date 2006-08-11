@@ -28,7 +28,7 @@
 
 #include <thread/Timer.h>
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 QtWenboxPlugin::QtWenboxPlugin(CWenboxPlugin & cWenboxPlugin)
 	: QObject(NULL),

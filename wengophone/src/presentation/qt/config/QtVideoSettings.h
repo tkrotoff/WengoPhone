@@ -26,7 +26,7 @@
 
 #include <util/Trackable.h>
 
-#include <QWidget>
+#include <QtGui/QWidget>
 
 class IWebcamDriver;
 

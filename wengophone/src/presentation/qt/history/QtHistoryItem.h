@@ -20,7 +20,7 @@
 #ifndef QTHISTORYITEM_H
 #define QTHISTORYITEM_H
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 /**
  * History item widget.

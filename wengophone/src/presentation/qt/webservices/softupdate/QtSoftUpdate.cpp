@@ -33,7 +33,7 @@
 #include <util/Logger.h>
 #include <cutil/global.h>
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 static const char * UPDATE_PROGRAM = "update.exe";
 

@@ -20,7 +20,7 @@
 #ifndef QTSLIDERMANAGER_H
 #define QTSLIDERMANAGER_H
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 class QtClickableLabel;
 

@@ -20,7 +20,7 @@
 #ifndef QTSUBSCRIBE2_H
 #define QTSUBSCRIBE2_H
 
-#include <QObject>
+#include <QtCore/QObject>
 
 class CWengoPhone;
 

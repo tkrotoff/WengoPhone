@@ -24,7 +24,7 @@
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 QtPrivacySettings::QtPrivacySettings(QWidget * parent)
 	: QObject(parent) {

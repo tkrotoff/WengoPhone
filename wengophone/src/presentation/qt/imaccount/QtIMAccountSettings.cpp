@@ -34,7 +34,7 @@
 
 #include <qtutil/Widget.h>
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 QtIMAccountSettings::QtIMAccountSettings(UserProfile & userProfile, IMAccount * imAccount, QWidget * parent)
 	: QObject(parent),

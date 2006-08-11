@@ -21,18 +21,13 @@
 
 #include "trayicon.h"
 
-#include <QDesktopWidget>
-#include <QApplication>
-#include <QImage>
-#include <QPixmap>
-#include <QPainter>
-#include <QBitmap>
+#include <QtGui/QtGui>
 
 #include <stdio.h>
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/Xatom.h>
-#include <QX11Info>
+#include <QtGui/QX11Info>
 
 //#if QT_VERSION < 0x030200
 //extern Time qt_x_time;
@@ -168,23 +163,23 @@ void TrayIcon::TrayIconPrivate::setPixmap(const QPixmap &pm)
 		// let's make a new mask
 		mask.fill(Qt::color0);
 		QPainter maskPainter(&mask);
-		
+
 		// draw the old mask in the center
-		maskPainter.drawPixmap((width()  - pm.width() ) / 2, 
+		maskPainter.drawPixmap((width()  - pm.width() ) / 2,
 		                       (height() - pm.height()) / 2, pm.mask());
-		
+
 		QPixmap newPix(QWidget::size());
 		QPainter pixPainter( &newPix );
-		
+
 		// draw the old pixmap in the center
-		pixPainter.drawPixmap((width() - pm.width())/2, 
+		pixPainter.drawPixmap((width() - pm.width())/2,
 					(height() - pm.height())/2, pm);
 		newPix.setMask(mask);
 		pix = newPix;
 	}
 	else {
 		pix = pm;
-		mask = pm.mask(); 
+		mask = pm.mask();
 	}
 
 	setMask(mask);

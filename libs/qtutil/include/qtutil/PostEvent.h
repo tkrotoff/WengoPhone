@@ -23,7 +23,7 @@
 #include <boost/function.hpp>
 #include <boost/bind.hpp>
 
-#include <QEvent>
+#include <QtCore/QEvent>
 
 /**
  * PostEvent for Qt.

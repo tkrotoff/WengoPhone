@@ -34,7 +34,7 @@
 
 #include <qtutil/WidgetBackgroundImage.h>
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 const char * QtSubscribe::TERMSOFSERVICE_LINK = "http://www.wengo.fr";
 const char * QtSubscribe::TERMSOFSERVICEPDF_LINK = "http://www.wengo.fr";

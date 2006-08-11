@@ -25,7 +25,7 @@
 
 #include <util/Logger.h>
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 static const int KEY_NAME_COLUMN = 0;
 static const int STATUS_COLUMN = 1;

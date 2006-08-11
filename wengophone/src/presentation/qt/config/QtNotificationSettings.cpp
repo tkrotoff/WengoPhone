@@ -28,7 +28,7 @@
 
 #include <util/Logger.h>
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 QtNotificationSettings::QtNotificationSettings(QWidget * parent)
 	: QObject(parent) {

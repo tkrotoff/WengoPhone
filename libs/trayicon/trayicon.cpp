@@ -19,12 +19,8 @@
  */
 
 #include "trayicon.h"
-#include <QtGui>
-//Added by qt3to4:
-#include <QPixmap>
-#include <QMouseEvent>
-#include <QEvent>
-#include <QDebug>
+
+#include <QtGui/QtGui>
 
 /*!
   \class TrayIcon qtrayicon.h

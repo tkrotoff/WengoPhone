@@ -19,7 +19,7 @@
 
 #include <qtutil/PaintEventFilter.h>
 
-#include <QEvent>
+#include <QtCore/QEvent>
 
 PaintEventFilter::PaintEventFilter(QObject * receiver, const char * member)
 : EventFilter(receiver, member) {

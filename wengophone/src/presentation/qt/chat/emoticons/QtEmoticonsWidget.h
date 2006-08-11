@@ -20,7 +20,7 @@
 #ifndef OWQTEMOTICONSWIDGET_H
 #define OWQTEMOTICONSWIDGET_H
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 #include "QtEmoticon.h"
 #include "QtEmoticonButton.h"

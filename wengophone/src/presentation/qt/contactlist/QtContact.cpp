@@ -29,7 +29,7 @@
 
 #include <util/Logger.h>
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 //const QColor QtContact::SELECTION_BACKGROUND = QColor(201, 201, 201);
 const QColor QtContact::SELECTION_BACKGROUND = QColor(193, 223, 255);

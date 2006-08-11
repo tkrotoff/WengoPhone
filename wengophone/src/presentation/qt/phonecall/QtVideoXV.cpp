@@ -19,11 +19,10 @@
 
 #include "QtVideoXV.h"
 
-
 #include "ui_VideoWindow.h"
 
-// must be above XVWindow.h
-#include <QtGui>
+//must be above XVWindow.h
+#include <QtGui/QtGui>
 
 #include "XVWindow.h"
 
@@ -32,7 +31,6 @@
 #include <util/Logger.h>
 
 #include <cutil/global.h>
-
 
 QtVideoXV::QtVideoXV(QWidget * parent,
 	int remoteVideoFrameWidth, int remoteVideoFrameHeight,

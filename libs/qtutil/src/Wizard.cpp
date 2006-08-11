@@ -23,7 +23,7 @@
 
 #include <util/Logger.h>
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 Wizard::Wizard(QWidget * parent) {
 	_wizardDialog = new QDialog(parent);

@@ -28,7 +28,7 @@
 #include <thread/Thread.h>
 #include <util/Logger.h>
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 #include <string>
 using namespace std;

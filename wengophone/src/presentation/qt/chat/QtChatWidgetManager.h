@@ -20,7 +20,7 @@
 #ifndef OWQTCHATWIDGETMANAGER_H
 #define OWQTCHATWIDGETMANAGER_H
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 /**
  * Class to manage the QTextEdit widget in the chat window

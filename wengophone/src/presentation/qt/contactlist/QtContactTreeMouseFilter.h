@@ -20,8 +20,8 @@
 #ifndef OWQTCONTACTTREEMOUSEFILTER_H
 #define OWQTCONTACTTREEMOUSEFILTER_H
 
-#include <QObject>
-#include <QPoint>
+#include <QtCore/QObject>
+#include <QtCore/QPoint>
 
 class CContactList;
 class QTreeWidgetItem;

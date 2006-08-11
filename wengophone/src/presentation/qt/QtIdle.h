@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QTIDLE_H
-#define QTIDLE_H
+#ifndef OWQTIDLE_H
+#define OWQTIDLE_H
 
 #include <idle/Idle.h>
 
@@ -61,4 +61,4 @@ private:
 	Idle * _idle;
 };
 
-#endif	//QTIDLE_H
+#endif	//OWQTIDLE_H

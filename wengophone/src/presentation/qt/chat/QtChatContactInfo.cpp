@@ -19,7 +19,7 @@
 
 #include "QtChatContactInfo.h"
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 QtChatContactInfo::QtChatContactInfo() {
 	_isNull = true;

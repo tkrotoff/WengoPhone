@@ -19,7 +19,7 @@
 
 #include <qtutil/ToolTipLineEdit.h>
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 ToolTipLineEdit::ToolTipLineEdit(QWidget * parent)
 	: QLineEdit(parent) {

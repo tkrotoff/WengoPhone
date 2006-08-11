@@ -43,19 +43,19 @@ CPhoneCall::CPhoneCall(PhoneCall & phoneCall, CWengoPhone & cWengoPhone)
 CPhoneCall::~CPhoneCall() {
 }
 
+void CPhoneCall::initPresentationThreadSafe() {
+	_pPhoneCall = PFactory::getFactory().createPresentationPhoneCall(*this);
+
+	_phoneCall.stateChangedEvent += boost::bind(&CPhoneCall::stateChangedEventHandler, this, _1, _2);
+	_phoneCall.videoFrameReceivedEvent += boost::bind(&CPhoneCall::videoFrameReceivedEventHandler, this, _1, _2, _3);
+}
+
 Presentation * CPhoneCall::getPresentation() const {
 	return _pPhoneCall;
 }
 
 CWengoPhone & CPhoneCall::getCWengoPhone() const {
 	return _cWengoPhone;
-}
-
-void CPhoneCall::initPresentationThreadSafe() {
-	_pPhoneCall = PFactory::getFactory().createPresentationPhoneCall(*this);
-
-	_phoneCall.stateChangedEvent += boost::bind(&CPhoneCall::stateChangedEventHandler, this, _1, _2);
-	_phoneCall.videoFrameReceivedEvent += boost::bind(&CPhoneCall::videoFrameReceivedEventHandler, this, _1, _2, _3);
 }
 
 std::string CPhoneCall::getPeerSipAddress() const {

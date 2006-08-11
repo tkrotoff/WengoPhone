@@ -26,7 +26,7 @@
 #include <util/Logger.h>
 #include <cutil/global.h>
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 #include <curl/curl.h>
 #ifndef OS_MACOSX

@@ -20,8 +20,8 @@
 #ifndef TOOLTIPLINEEDIT_H
 #define TOOLTIPLINEEDIT_H
 
-#include <QLineEdit>
-#include <QPalette>
+#include <QtGui/QLineEdit>
+#include <QtGui/QPalette>
 
 class QWidget;
 class QMouseEvent;

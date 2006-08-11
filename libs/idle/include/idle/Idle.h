@@ -17,14 +17,14 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef IDLE_H
-#define IDLE_H
+#ifndef OWIDLE_H
+#define OWIDLE_H
 
 #include <util/NonCopyable.h>
 #include <util/Event.h>
 
-#include <QObject>
-#include <QPoint>
+#include <QtCore/QObject>
+#include <QtCore/QPoint>
 
 class QTimer;
 
@@ -91,4 +91,4 @@ private:
 	QPoint _originalMousePos;
 };
 
-#endif	//IDLE_H
+#endif	//OWIDLE_H

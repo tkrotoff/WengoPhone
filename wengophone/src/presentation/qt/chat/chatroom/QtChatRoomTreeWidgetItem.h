@@ -22,7 +22,7 @@
 
 #include <model/contactlist/Contact.h>
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 class ContactProfile;
 

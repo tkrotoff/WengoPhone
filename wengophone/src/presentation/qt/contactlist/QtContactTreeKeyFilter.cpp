@@ -19,7 +19,7 @@
 
 #include "QtContactTreeKeyFilter.h"
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 QtContactTreeKeyFilter::QtContactTreeKeyFilter(QObject * parent, QTreeWidget * target) {
 	_tree = target;

@@ -19,10 +19,10 @@
 
 #include <qtutil/EnabledChangeEventFilter.h>
 
-#include <QEvent>
+#include <QtCore/QEvent>
 
 EnabledChangeEventFilter::EnabledChangeEventFilter(QObject * receiver, const char * member)
-: EventFilter(receiver, member) {
+	: EventFilter(receiver, member) {
 }
 
 bool EnabledChangeEventFilter::eventFilter(QObject * watched, QEvent * event) {

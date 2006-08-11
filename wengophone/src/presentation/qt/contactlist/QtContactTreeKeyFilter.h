@@ -20,7 +20,7 @@
 #ifndef OWQTCONTACTTREEKEYFILTER_H
 #define OWQTCONTACTTREEKEYFILTER_H
 
-#include <QObject>
+#include <QtCore/QObject>
 
 class QKeyEvent;
 class QTreeWidget;

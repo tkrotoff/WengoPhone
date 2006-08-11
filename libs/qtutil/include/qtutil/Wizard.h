@@ -22,7 +22,7 @@
 
 #include <util/NonCopyable.h>
 
-#include <QObject>
+#include <QtCore/QObject>
 
 class QWidget;
 class QDialog;

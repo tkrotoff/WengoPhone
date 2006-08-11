@@ -28,8 +28,8 @@
 
 #include <qtutil/QObjectThreadSafe.h>
 
-#include <QProcess>
-#include <QString>
+#include <QtCore/QString>
+#include <QtCore/QProcess>
 
 class CWengoPhone;
 class SoftUpdater;

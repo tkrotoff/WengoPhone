@@ -22,8 +22,8 @@
 
 #include <model/account/wengo/WengoAccount.h>
 
-#include <QObject>
-#include <QPalette>
+#include <QtCore/QObject>
+#include <QtGui/QPalette>
 
 #include <string>
 

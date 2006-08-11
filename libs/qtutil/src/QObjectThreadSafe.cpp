@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,7 +19,7 @@
 
 #include <qtutil/QObjectThreadSafe.h>
 
-#include <QCoreApplication>
+#include <QtCore/QCoreApplication>
 
 QObjectThreadSafe::QObjectThreadSafe(QObject * parent)
 	: QObject(parent) {

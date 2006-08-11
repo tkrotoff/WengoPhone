@@ -22,7 +22,7 @@
 
 #include <thread/ThreadEvent.h>
 
-#include <QEvent>
+#include <QtCore/QEvent>
 
 /**
  * ThreadEvent for Qt.

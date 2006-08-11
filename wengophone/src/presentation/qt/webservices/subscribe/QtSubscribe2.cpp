@@ -37,7 +37,7 @@
 
 #include <qtutil/WidgetBackgroundImage.h>
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 QtSubscribe2::QtSubscribe2(CWengoPhone & cWengoPhone, const QString & nickName, const QString & password, const QString & email, QWidget * parent)
 	: QObject(parent),

@@ -37,7 +37,7 @@
 #include <util/Logger.h>
 #include <cutil/global.h>
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 #ifdef OS_WINDOWS
 	#include <windows.h>

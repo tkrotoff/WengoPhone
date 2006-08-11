@@ -33,7 +33,7 @@
 	#include <system/WindowsVersion.h>
 #endif
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 #include <iostream>
 #include <cstdio>

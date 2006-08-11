@@ -30,9 +30,10 @@
 
 #include <util/Trackable.h>
 
-#include <QMainWindow>
-#include <QVariant>
-#include <QAction>
+#include <QtGui/QMainWindow>
+#include <QtCore/QVariant>
+#include <QtGui/QAction>
+
 #include <string>
 
 class CWengoPhone;

@@ -21,7 +21,7 @@
 #ifndef OWQTCHATROOMINVITEDLG_H
 #define OWQTCHATROOMINVITEDLG_H
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 #include <control/contactlist/CContactList.h>
 #include <model/contactlist/Contact.h>

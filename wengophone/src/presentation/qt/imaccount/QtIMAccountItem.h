@@ -20,7 +20,7 @@
 #ifndef QTIMACCOUNTITEM_H
 #define QTIMACCOUNTITEM_H
 
-#include <QTreeWidgetItem>
+#include <QtGui/QTreeWidgetItem>
 
 class IMAccount;
 

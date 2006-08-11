@@ -21,7 +21,7 @@
 #ifndef OWQTCHATCONTACTWIDGET_H
 #define OWQTCHATCONTACTWIDGET_H
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 #include <model/profile/UserProfile.h>
 

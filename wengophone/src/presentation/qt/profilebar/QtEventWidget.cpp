@@ -31,7 +31,7 @@
 
 #include <qtutil/MouseEventFilter.h>
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 static const char * VOICE_MAIL_CALL = "123";
 

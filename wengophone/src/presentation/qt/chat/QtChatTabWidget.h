@@ -21,7 +21,7 @@
 #ifndef OWQTCHATTABWIDGET_H
 #define OWQTCHATTABWIDGET_H
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 /**
  *

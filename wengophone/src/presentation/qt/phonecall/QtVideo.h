@@ -22,7 +22,7 @@
 
 #include <util/Interface.h>
 
-#include <QObject>
+#include <QtCore/QObject>
 
 #include <pixertool/pixertool.h>
 

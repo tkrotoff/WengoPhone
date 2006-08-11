@@ -29,7 +29,7 @@
 
 #include <model/contactlist/ContactProfile.h>
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 QtIMContactManager::QtIMContactManager(ContactProfile & contactProfile,
 	CUserProfile & cUserProfile, QWidget * parent)

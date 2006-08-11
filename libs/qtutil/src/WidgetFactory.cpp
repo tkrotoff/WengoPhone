@@ -19,9 +19,9 @@
 
 #include <qtutil/WidgetFactory.h>
 
-#include <QFile>
-#include <QMessageBox>
-#include <QtUiTools>
+#include <QtCore/QFile>
+#include <QtGui/QMessageBox>
+#include <QtUiTools/QtUiTools>
 
 #include <util/Logger.h>
 

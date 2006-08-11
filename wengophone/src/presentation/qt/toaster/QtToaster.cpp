@@ -19,7 +19,7 @@
 
 #include "QtToaster.h"
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 QtToaster::QtToaster(QWidget * toaster, QFrame * toasterWindowFrame)
 	: QObject(toaster) {

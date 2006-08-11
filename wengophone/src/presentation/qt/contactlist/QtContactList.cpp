@@ -40,7 +40,7 @@
 #include <util/StringList.h>
 #include <util/Logger.h>
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 const QString QtContactList::DEFAULT_GROUP_NAME = "WENGO2006CLISTHIDE";
 const QString QtContactList::STATUS_UNKNOW_PIXMAP = ":/pics/status/unknown.png";

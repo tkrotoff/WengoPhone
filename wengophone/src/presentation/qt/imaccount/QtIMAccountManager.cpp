@@ -28,7 +28,7 @@
 
 #include <util/Logger.h>
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 static const int COLUMN_ENABLE_BUTTON = 2;
 

@@ -28,7 +28,7 @@
 
 #include <cutil/global.h>
 
-#include <QtXml>
+#include <QtXml/QtXml>
 
 EmoticonsWidget::EmoticonsWidget(QtEmoticonsManager * qtEmoticonsManager, QWidget * parent, Qt::WFlags flags)
 	: QWidget(parent, flags) {

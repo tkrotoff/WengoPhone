@@ -21,7 +21,7 @@
 
 #include <qtutil/MouseEventFilter.h>
 
-#include <QWidget>
+#include <QtGui/QWidget>
 #include <QPalette>
 #include <QPixmap>
 #include <QBrush>

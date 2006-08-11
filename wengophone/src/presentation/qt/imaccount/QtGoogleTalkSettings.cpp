@@ -30,7 +30,7 @@
 #include <util/WebBrowser.h>
 #include <util/Logger.h>
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 static const std::string GOOGLETALK_SERVER = "talk.google.com";
 static const std::string GOOGLETALK_LOGIN_EXTENSION = "gmail.com";

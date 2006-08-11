@@ -19,7 +19,7 @@
 
 #include "QtStatusBarStyle.h"
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 QtStatusBarStyle::QtStatusBarStyle() : QCommonStyle() {
 }

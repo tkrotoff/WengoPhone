@@ -20,7 +20,7 @@
 #ifndef QTIMMENU_H
 #define QTIMMENU_H
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 class CUserProfile;
 class IMAccount;

@@ -22,7 +22,7 @@
 #include "QtContactListManager.h"
 #include "QtContact.h"
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 QtContactInfo::QtContactInfo(QTreeWidgetItem * item, QTreeWidgetItem * parentItem, const QString & contactId, int index, QObject * parent)
 	: QObject(parent) {

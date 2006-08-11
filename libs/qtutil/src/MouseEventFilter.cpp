@@ -21,8 +21,8 @@
 
 #include <util/Logger.h>
 
-#include <QEvent>
-#include <QMouseEvent>
+#include <QtCore/QEvent>
+#include <QtGui/QMouseEvent>
 
 #include <exception>
 

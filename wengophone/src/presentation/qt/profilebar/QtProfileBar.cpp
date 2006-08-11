@@ -570,8 +570,9 @@ void QtProfileBar::paintEvent(QPaintEvent * event) {
 }
 
 void QtProfileBar::cHistoryCreatedEventHandlerSlot() {
-	_cUserProfile.getCHistory()->unseenMissedCallsChangedEvent +=
-		boost::bind(&QtProfileBar::unseenMissedCallsChangedEventHandler, this, _1, _2);
+	//FIXME CHistory API changed
+	/*_cUserProfile.getCHistory()->unseenMissedCallsChangedEvent +=
+		boost::bind(&QtProfileBar::unseenMissedCallsChangedEventHandler, this, _1, _2);*/
 
 	_eventWidget->setMissedCall(_cUserProfile.getCHistory()->getUnseenMissedCalls());
 }

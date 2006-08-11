@@ -20,7 +20,7 @@
 #ifndef OWQTCHATHISTORYWIDGET_H
 #define OWQTCHATHISTORYWIDGET_H
 
-#include <QTextBrowser>
+#include <QtGui/QTextBrowser>
 
 class QPoint;
 class QAction;

@@ -20,7 +20,7 @@
 #ifndef QTCLICKABLELABLE_H
 #define QTCLICKABLELABLE_H
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 /**
  *
@@ -31,7 +31,7 @@ class QtClickableLabel : public QLabel {
 Q_OBJECT
 public:
 
-	QtClickableLabel( QWidget * parent = 0, Qt::WFlags f = 0 );
+	QtClickableLabel( QWidget * parent = 0);
 
 	void setSelected(bool value);
 

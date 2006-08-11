@@ -28,7 +28,7 @@
 
 #include <qtutil/QObjectThreadSafe.h>
 
-#include <QWidget>
+#include <QtGui/QWidget>
 
 class ContactProfile;
 class CWsDirectory;

@@ -20,7 +20,7 @@
 #ifndef QTIMCONTACTITEM_H
 #define QTIMCONTACTITEM_H
 
-#include <QTreeWidgetItem>
+#include <QtGui/QTreeWidgetItem>
 
 class IMContact;
 

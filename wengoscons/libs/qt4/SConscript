@@ -36,30 +36,31 @@ lib_path = [qt_lib_dir]
 include_path = []
 if WengoOSMacOSX():
 	include_path += [os.path.join(qtdir, 'lib', 'QtCore.framework', 'Headers')]
-	include_path += [os.path.join(qtdir, 'lib', 'QtGui.framework', 'Headers')]
-#	include_path += [os.path.join(qtdir, 'lib', 'QtNetwork.framework', 'Headers')]
-	include_path += [os.path.join(qtdir, 'lib', 'QtXml.framework', 'Headers')]
-	include_path += [os.path.join(qtdir, 'lib', 'QtSvg.framework', 'Headers')]
-	include_path += [os.path.join(qtdir, 'include', 'QtUiTools')]
+	#include_path += [os.path.join(qtdir, 'lib', 'QtCore.framework', 'Headers')]
+	#include_path += [os.path.join(qtdir, 'lib', 'QtGui.framework', 'Headers')]
+	#include_path += [os.path.join(qtdir, 'lib', 'QtNetwork.framework', 'Headers')]
+	#include_path += [os.path.join(qtdir, 'lib', 'QtXml.framework', 'Headers')]
+	#include_path += [os.path.join(qtdir, 'lib', 'QtSvg.framework', 'Headers')]
+	#include_path += [os.path.join(qtdir, 'include', 'QtUiTools')]
 elif WengoOSLinux():
 	include_path += [qtincludedir]
-	include_path += [os.path.join(qtincludedir, 'Qt')]
-	include_path += [os.path.join(qtincludedir, 'QtCore')]
-	include_path += [os.path.join(qtincludedir, 'QtGui')]
-	include_path += [os.path.join(qtincludedir, 'QtNetwork')]
-	include_path += [os.path.join(qtincludedir, 'QtXml')]
-	include_path += [os.path.join(qtincludedir, 'QtSvg')]
-	include_path += [os.path.join(qtincludedir, 'QtUiTools')]
+	#include_path += [os.path.join(qtincludedir, 'Qt')]
+	#include_path += [os.path.join(qtincludedir, 'QtCore')]
+	#include_path += [os.path.join(qtincludedir, 'QtGui')]
+	#include_path += [os.path.join(qtincludedir, 'QtNetwork')]
+	#include_path += [os.path.join(qtincludedir, 'QtXml')]
+	#include_path += [os.path.join(qtincludedir, 'QtSvg')]
+	#include_path += [os.path.join(qtincludedir, 'QtUiTools')]
 else:
 	include_path += [os.path.join(qtdir, 'include')]
-	include_path += [os.path.join(qtdir, 'include', 'Qt')]
-	include_path += [os.path.join(qtdir, 'include', 'QtCore')]
-	include_path += [os.path.join(qtdir, 'include', 'QtGui')]
-	include_path += [os.path.join(qtdir, 'include', 'QtNetwork')]
-	include_path += [os.path.join(qtdir, 'include', 'QtXml')]
-	include_path += [os.path.join(qtdir, 'include', 'QtSvg')]
-	include_path += [os.path.join(qtdir, 'include', 'QtUiTools')]
-	include_path += [os.path.join(qtdir, 'include', 'ActiveQt')]
+	#include_path += [os.path.join(qtdir, 'include', 'Qt')]
+	#include_path += [os.path.join(qtdir, 'include', 'QtCore')]
+	#include_path += [os.path.join(qtdir, 'include', 'QtGui')]
+	#include_path += [os.path.join(qtdir, 'include', 'QtNetwork')]
+	#include_path += [os.path.join(qtdir, 'include', 'QtXml')]
+	#include_path += [os.path.join(qtdir, 'include', 'QtSvg')]
+	#include_path += [os.path.join(qtdir, 'include', 'QtUiTools')]
+	#include_path += [os.path.join(qtdir, 'include', 'ActiveQt')]
 defines = {
 	'UNICODE' : 1,
 	'QT_DLL' : 1,
@@ -67,7 +68,7 @@ defines = {
 	'QT_CORE_LIB' : 1,
 	'QT_GUI_LIB' : 1,
 	'QT_XML_LIB' : 1,
-	'QT_NETWORK_LIB' : 1,
+	'QT_NETWORK_LIB' : 0,
 	'QT_THREAD_SUPPORT' : 1,
 	'QT_NO_KEYWORDS' : 1,
 }

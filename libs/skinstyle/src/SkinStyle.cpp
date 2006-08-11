@@ -26,7 +26,7 @@
 #include <qtutil/Object.h>
 #include <qtutil/NonResizeableWidget.h>
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 #include <iostream>
 using namespace std;

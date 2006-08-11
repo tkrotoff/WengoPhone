@@ -30,9 +30,15 @@
 class PHistory : public Presentation {
 public:
 
-	virtual void removeHistoryMemento(unsigned id) = 0;
+	virtual void historyLoadedEvent() = 0;
 
-	virtual void clearAllEntries() = 0;
+	virtual void mementoAddedEvent(unsigned id) = 0;
+
+	virtual void mementoUpdatedEvent(unsigned id) = 0;
+
+	virtual void mementoRemovedEvent(unsigned id) = 0;
+
+	virtual void unseenMissedCallsChangedEvent(int count) = 0;
 };
 
 #endif	//OWPHISTORY_H

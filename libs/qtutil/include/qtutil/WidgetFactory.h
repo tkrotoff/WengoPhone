@@ -22,8 +22,8 @@
 
 #include <util/NonCopyable.h>
 
-#include <QString>
-#include <QWidget>
+#include <QtCore/QString>
+#include <QtGui/QWidget>
 
 /**
  * Replacement for QFormBuilder::load().

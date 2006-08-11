@@ -33,7 +33,7 @@
 #include <util/Logger.h>
 #include <qtutil/MouseEventFilter.h>
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 QtConfigPanel::QtConfigPanel(CWengoPhone & cWengoPhone, QWidget * parent)
 	: QObjectThreadSafe(parent),

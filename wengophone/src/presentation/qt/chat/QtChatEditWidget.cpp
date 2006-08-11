@@ -21,17 +21,7 @@
 
 #include <util/Logger.h>
 
-#include <QTextEdit>
-#include <QMimeData>
-#include <QUrl>
-#include <QList>
-#include <QDragEnterEvent>
-#include <QDropEvent>
-#include <QDragMoveEvent>
-#include <QDragLeaveEvent>
-#include <QFile>
-#include <QFileInfo>
-#include <QFrame>
+#include <QtGui/QtGUi>
 
 #include <stdio.h>
 

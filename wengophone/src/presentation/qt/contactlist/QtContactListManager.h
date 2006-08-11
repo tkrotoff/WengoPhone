@@ -23,7 +23,7 @@
 #include "QtContact.h"
 #include "QtContactPixmap.h"
 
-#include <QString>
+#include <QtCore/QString>
 
 class CContact;
 class QMutex;

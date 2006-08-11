@@ -26,7 +26,7 @@
 
 #include <qtutil/QObjectThreadSafe.h>
 
-#include <QVariant>
+#include <QtCore/QVariant>
 
 class QtWengoPhone;
 class TrayIcon;
@@ -53,7 +53,7 @@ public Q_SLOTS:
 
 private Q_SLOTS:
 
-	void sysTrayDoubleClicked(const QPoint & );
+	void sysTrayDoubleClicked(const QPoint &);
 
 	void slotSystrayMenuCallWengo(QAction * action);
 

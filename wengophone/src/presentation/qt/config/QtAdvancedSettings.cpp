@@ -23,7 +23,7 @@
 
 #include "QtAdvancedConfig.h"
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 QtAdvancedSettings::QtAdvancedSettings(QWidget * parent)
 	: QObject(parent) {

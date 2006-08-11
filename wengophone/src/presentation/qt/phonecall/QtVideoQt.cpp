@@ -29,7 +29,7 @@
 
 #include <cutil/global.h>
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 #if defined OS_WINDOWS && defined CC_MSVC
 	#include <windows.h>

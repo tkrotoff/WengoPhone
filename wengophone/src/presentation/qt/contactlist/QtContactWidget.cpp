@@ -37,7 +37,7 @@
 
 #include <util/Logger.h>
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 const QString QtContactWidget::AVATAR_BACKGROUND = ":/pics/fond_avatar.png";
 

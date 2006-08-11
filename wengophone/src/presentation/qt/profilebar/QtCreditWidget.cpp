@@ -27,7 +27,7 @@
 
 #include <qtutil/MouseEventFilter.h>
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 QtCreditWidget::QtCreditWidget(CWengoPhone & cWengoPhone, QWidget * parent)
 	: QObjectThreadSafe(NULL),

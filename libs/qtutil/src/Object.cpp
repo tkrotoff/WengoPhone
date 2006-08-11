@@ -19,8 +19,8 @@
 
 #include <qtutil/Object.h>
 
-#include <QMessageBox>
-#include <QMetaObject>
+#include <QtGui/QMessageBox>
+#include <QtCore/QMetaObject>
 
 #include <util/Logger.h>
 

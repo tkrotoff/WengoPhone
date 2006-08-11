@@ -21,7 +21,7 @@
 
 #include <model/profile/UserProfile.h>
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 QtIMAccountPlugin::QtIMAccountPlugin(UserProfile & userProfile, IMAccount * imAccount, QWidget * parent)
 	: QObject(parent),

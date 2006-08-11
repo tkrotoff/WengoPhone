@@ -22,7 +22,7 @@
 
 #include <util/NonCopyable.h>
 
-#include <QMenu>
+#include <QtGui/QMenu>
 
 class CContactList;
 class QTreeWidgetItem;

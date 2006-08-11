@@ -25,7 +25,7 @@
 
 #include <presentation/qt/QtWengoPhone.h>
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 #include <util/Logger.h>
 

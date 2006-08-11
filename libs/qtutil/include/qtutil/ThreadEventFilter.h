@@ -20,7 +20,7 @@
 #ifndef OWTHREADEVENTFILTER_H
 #define OWTHREADEVENTFILTER_H
 
-#include <QObject>
+#include <QtCore/QObject>
 
 class QEvent;
 

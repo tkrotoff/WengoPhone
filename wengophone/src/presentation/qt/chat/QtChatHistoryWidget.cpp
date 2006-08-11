@@ -21,15 +21,7 @@
 
 #include <util/Logger.h>
 
-#include <Qwidget>
-#include <QTextBrowser>
-#include <QFrame>
-#include <QPoint>
-#include <QMenu>
-#include <QAction>
-#include <QString>
-#include <QFileDialog>
-#include <QFile>
+#include <QtGui/QtGui>
 
 QtChatHistoryWidget::QtChatHistoryWidget(QWidget * parent)
 : QTextBrowser(parent){

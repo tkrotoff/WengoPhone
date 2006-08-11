@@ -20,7 +20,7 @@
 #ifndef OWQTBROWSERSOFTUPDATE_H
 #define OWQTBROWSERSOFTUPDATE_H
 
-#include <QObject>
+#include <QtCore/QObject>
 
 #include <util/NonCopyable.h>
 

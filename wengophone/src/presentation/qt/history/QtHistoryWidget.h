@@ -20,8 +20,8 @@
 #ifndef QTHISTORYWIDGET_H
 #define QTHISTORYWIDGET_H
 
-#include <QtGui>
-#include <QObject>
+#include <QtGui/QtGui>
+#include <QtCore/QObject>
 
 #include "QtHistoryItem.h"
 

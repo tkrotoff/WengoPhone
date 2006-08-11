@@ -28,7 +28,7 @@
 
 #include <imwrapper/IMAccount.h>
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 QtAddIMContact::QtAddIMContact(ContactProfile & contactProfile,
 	CUserProfile & cUserProfile, QWidget * parent)

@@ -27,7 +27,7 @@
 
 #include <qtutil/Object.h>
 
-#include <QWidget>
+#include <QtGui/QWidget>
 #include <QPixmap>
 #include <QBitmap>
 #include <QPainter>

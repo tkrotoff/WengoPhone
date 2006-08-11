@@ -23,7 +23,7 @@
 
 #include "ui_QtCallToaster.h"
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 QtCallToaster::QtCallToaster()
 	: QObject(NULL) {

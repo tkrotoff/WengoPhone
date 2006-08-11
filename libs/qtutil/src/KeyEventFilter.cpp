@@ -19,10 +19,10 @@
 
 #include <qtutil/KeyEventFilter.h>
 
-#include <QEvent>
+#include <QtCore/QEvent>
 
 KeyPressEventFilter::KeyPressEventFilter(QObject * receiver, const char * member)
-: EventFilter(receiver, member) {
+	: EventFilter(receiver, member) {
 }
 
 bool KeyPressEventFilter::eventFilter(QObject * watched, QEvent * event) {

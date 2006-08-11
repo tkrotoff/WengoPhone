@@ -22,7 +22,7 @@
 
 #include <control/CWengoPhone.h>
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 class QtContactCallList;
 class PhoneCall;

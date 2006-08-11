@@ -20,7 +20,7 @@
 #ifndef QTSTATUSBARSTYLE_H
 #define QTSTATUSBARSTYLE_H
 
-#include <QCommonStyle>
+#include <QtGui/QCommonStyle>
 
 class PrimitiveElement;
 class QStyleOption;

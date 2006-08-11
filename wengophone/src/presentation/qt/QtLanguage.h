@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QTLANGUAGE_H
-#define QTLANGUAGE_H
+#ifndef OWQTLANGUAGE_H
+#define OWQTLANGUAGE_H
 
 #include <qtutil/QObjectThreadSafe.h>
 
@@ -76,4 +76,4 @@ private:
 	static QString getFileNameFromISO639Code(const std::string & iso639Code);
 };
 
-#endif	//QTLANGUAGE_H
+#endif	//OWQTLANGUAGE_H

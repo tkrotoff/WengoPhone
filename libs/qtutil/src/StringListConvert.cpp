@@ -21,7 +21,7 @@
 
 #include <util/StringList.h>
 
-#include <QStringList>
+#include <QtCore/QStringList>
 
 QStringList StringListConvert::toQStringList(const StringList & strList) {
 	QStringList tmp;

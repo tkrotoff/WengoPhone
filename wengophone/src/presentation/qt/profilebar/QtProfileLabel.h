@@ -20,7 +20,7 @@
 #ifndef QTPROFILELABEL_H
 #define QTPROFILELABEL_H
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 /**
  *

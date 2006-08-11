@@ -21,10 +21,10 @@
 
 #include <util/Logger.h>
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 #if (defined OS_WINDOWS) && (defined QT_COMMERCIAL)
-	#include <QAxWidget>
+	#include <ActiveQt/QAxWidget>
 
 	#include <windows.h>
 	#define INITGUID
@@ -36,7 +36,6 @@
 
 #include <iostream>
 using namespace std;
-
 
 QtBrowser::QtBrowser(QWidget * parent, BrowserMode mode) : QObject() {
 	_browserWidget = new QWidget(parent);
@@ -197,7 +196,6 @@ void QtBrowser::setPost(const std::string & url,const std::string & postData) {
 	MultiByteToWideChar(CP_ACP, 0, url.c_str(), -1, oleUri, sizeof(oleUri)-1);
 	bstrURL = SysAllocString(oleUri);
 	if (!bstrURL) {
-		
 		goto finalize;
 	}
 
@@ -227,5 +225,5 @@ finalize:
 			SysFreeString(bstrHeaders);
 		}
 		VariantClear(&vPostData);
- #endif
+#endif
 }

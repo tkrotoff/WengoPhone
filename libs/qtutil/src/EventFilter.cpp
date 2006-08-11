@@ -19,7 +19,7 @@
 
 #include <qtutil/EventFilter.h>
 
-#include <QEvent>
+#include <QtCore/QEvent>
 
 EventFilter::EventFilter(QObject * receiver, const char * member)
 	: QObject() {

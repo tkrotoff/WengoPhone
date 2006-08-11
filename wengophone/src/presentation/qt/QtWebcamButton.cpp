@@ -25,7 +25,7 @@
 #include <util/StringList.h>
 #include <util/Logger.h>
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 QtWebcamButton::QtWebcamButton(QPushButton * webcamButton)
 	: QObjectThreadSafe(webcamButton) {

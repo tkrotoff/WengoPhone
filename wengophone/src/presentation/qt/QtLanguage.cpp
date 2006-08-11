@@ -25,7 +25,7 @@
 
 #include <util/Logger.h>
 
-#include <QtCore>
+#include <QtCore/QtCore>
 
 static const char * LANGUAGE_FILE_EXTENSION = "qm";
 static const char * LANG_DIR = "lang";

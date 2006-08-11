@@ -20,7 +20,7 @@
 #ifndef QTCONTACTCALLLIST_H
 #define QTCONTACTCALLLIST_H
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 class QtPhoneCall;
 class PhoneCall;

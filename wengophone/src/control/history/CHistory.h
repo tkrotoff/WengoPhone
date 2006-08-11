@@ -22,11 +22,11 @@
 
 #include <model/history/History.h>
 
-#include <util/Event.h>
-#include <util/Trackable.h>
+#include <control/Control.h>
 
 #include <string>
 
+class Presentation;
 class CWengoPhone;
 class PHistory;
 
@@ -36,33 +36,8 @@ class PHistory;
  * @ingroup control
  * @author Mathieu Stute
  */
-class CHistory : public Trackable {
+class CHistory : public Control {
 public:
-
-	/**
-	 * The history has been loaded.
-	 */
-	Event<void (CHistory &)> historyLoadedEvent;
-
-	/**
-	 * A memento has been added.
-	 */
-	Event<void (CHistory &, unsigned id)> mementoAddedEvent;
-
-	/**
-	 * A memento has been updated.
-	 */
-	Event<void (CHistory &, unsigned id)> mementoUpdatedEvent;
-
-	/**
-	 * A memento has been removed.
-	 */
-	Event<void (CHistory &, unsigned id)> mementoRemovedEvent;
-
-	/**
-	 * Unseen missed calls changed event.
-	 */
-	Event<void (CHistory &, int count)> unseenMissedCallsChangedEvent;
 
 	/**
 	 * Default constructor.
@@ -70,6 +45,10 @@ public:
 	CHistory(History & history, CWengoPhone & cWengoPhone);
 
 	~CHistory();
+
+	Presentation * getPresentation() const;
+
+	CWengoPhone & getCWengoPhone() const;
 
 	/**
 	 * @see History::removeMemento
@@ -120,13 +99,7 @@ public:
 	int getUnseenMissedCalls();
 
 	/**
-	 * Retreives the CWengoPhone.
-	 *
-	 * @return the CWengoPhone
-	 */
-	CWengoPhone & getCWengoPhone() const;
-
-	/**
+	 * FIXME to remove
 	 * Retreives the History.
 	 *
 	 * @return the History
@@ -135,15 +108,22 @@ public:
 
 private:
 
-	void historyMementoAddedEventHandler(History &, unsigned id);
+	void initPresentationThreadSafe();
 
-	void historyMementoUpdatedEventHandler(History &, unsigned id);
+	void historyMementoAddedEventHandler(History & sender, unsigned id);
+	void historyMementoAddedEventHandlerThreadSafe(unsigned id);
 
-	void historyMementoRemovedEventHandler(History &, unsigned id);
+	void historyMementoUpdatedEventHandler(History & sender, unsigned id);
+	void historyMementoUpdatedEventHandlerThreadSafe(unsigned id);
 
-	void historyLoadedEventHandler(History &);
+	void historyMementoRemovedEventHandler(History & sender, unsigned id);
+	void historyMementoRemovedEventHandlerThreadSafe(unsigned id);
 
-	void unseenMissedCallsChangedEventhandler(History &, int count);
+	void historyLoadedEventHandler(History & sender);
+	void historyLoadedEventHandlerThreadSafe();
+
+	void unseenMissedCallsChangedEventhandler(History & sender, int count);
+	void unseenMissedCallsChangedEventHandlerThreadSafe(int count);
 
 	void removeHistoryMementoThreadSafe(unsigned id);
 

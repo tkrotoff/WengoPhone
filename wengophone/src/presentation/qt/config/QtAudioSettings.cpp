@@ -34,7 +34,7 @@
 
 #include <qtutil/StringListConvert.h>
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 static const char * AUDIO_TEST_CALL = "333";
 

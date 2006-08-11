@@ -21,7 +21,7 @@
 
 #include <imwrapper/IMContact.h>
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 QtIMContactItem::QtIMContactItem(QTreeWidget * parent, const QStringList & strings)
 	: QTreeWidgetItem(parent, strings) {

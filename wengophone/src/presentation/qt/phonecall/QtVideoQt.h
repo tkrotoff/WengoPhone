@@ -22,7 +22,7 @@
 
 #include "QtVideo.h"
 
-#include <QImage>
+#include <QtGui/QImage>
 
 class QtVideoQtEventManager;
 

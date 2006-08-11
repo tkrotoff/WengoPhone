@@ -20,8 +20,8 @@
 #ifndef OWQTCONTACTPIXMAP_H
 #define OWQTCONTACTPIXMAP_H
 
-#include <QHash>
-#include <QPixmap>
+#include <QtCore/QHash>
+#include <QtGui/QPixmap>
 
 /**
  * Store status pixmaps

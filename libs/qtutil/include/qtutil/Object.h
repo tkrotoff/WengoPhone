@@ -22,8 +22,8 @@
 
 #include <util/NonCopyable.h>
 
-#include <QString>
-#include <QObject>
+#include <QtCore/QString>
+#include <QtCore/QObject>
 
 /**
  * Replacement for QObject::findChild().

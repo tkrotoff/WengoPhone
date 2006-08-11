@@ -24,13 +24,10 @@
 
 #include <model/contactlist/ContactGroup.h>
 
-#include <QAction>
-#include <QString>
-#include <QWidget>
-#include <QMessageBox>
-
 #include <util/Logger.h>
 #include <util/StringList.h>
+
+#include <QtGui/QtGui>
 
 #include <iostream>
 

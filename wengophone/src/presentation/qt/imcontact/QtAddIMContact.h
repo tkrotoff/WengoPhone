@@ -24,7 +24,7 @@
 
 #include <imwrapper/EnumIMProtocol.h>
 
-#include <QObject>
+#include <QtCore/QObject>
 
 #include <set>
 

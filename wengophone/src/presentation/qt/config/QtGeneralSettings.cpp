@@ -28,7 +28,7 @@
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 QtGeneralSettings::QtGeneralSettings(CWengoPhone & cWengoPhone, QWidget * parent)
 	: QObject(parent) {

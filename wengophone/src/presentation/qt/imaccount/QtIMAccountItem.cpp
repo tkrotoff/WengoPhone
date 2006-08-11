@@ -21,7 +21,7 @@
 
 #include <imwrapper/IMAccount.h>
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 QtIMAccountItem::QtIMAccountItem(QTreeWidget * parent, const QStringList & strings)
 	: QTreeWidgetItem(parent, strings) {

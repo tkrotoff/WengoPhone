@@ -24,10 +24,10 @@
 
 #include "QtContactPixmap.h"
 
-#include <QObject>
-#include <QString>
-#include <QPixmap>
-#include <QMutex>
+#include <QtCore/QObject>
+#include <QtCore/QString>
+#include <QtCore/QMutex>
+#include <QtGui/QPixmap>
 
 class QPainter;
 class CWengoPhone;

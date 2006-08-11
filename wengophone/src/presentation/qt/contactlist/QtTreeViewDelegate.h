@@ -20,9 +20,9 @@
 #ifndef OWQTTREEVIEWDELEGATE_H
 #define OWQTTREEVIEWDELEGATE_H
 
-#include <QItemDelegate>
-#include <QSize>
-#include <QPixmap>
+#include <QtCore/QSize>
+#include <QtGui/QItemDelegate>
+#include <QtGui/QPixmap>
 
 class CWengoPhone;
 class QModelIndex;

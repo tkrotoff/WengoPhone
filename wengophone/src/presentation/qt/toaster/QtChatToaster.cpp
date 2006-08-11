@@ -23,7 +23,7 @@
 
 #include "ui_QtChatToaster.h"
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 QtChatToaster::QtChatToaster()
 	: QObject(NULL) {

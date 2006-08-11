@@ -20,10 +20,10 @@
 #ifndef OWQTCHATACTIONBARWIDGET_H
 #define OWQTCHATACTIONBARWIDGET_H
 
-#include <QWidget>
-#include <QMap>
-#include <QList>
-#include <QMutex>
+#include <QtGui/QWidget>
+#include <QtCore/QMap>
+#include <QtCore/QList>
+#include <QtCore/QMutex>
 
 class QtWengoPhone;
 class QtChatWidget;

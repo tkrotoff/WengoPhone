@@ -20,9 +20,9 @@
 #ifndef OWQTCONTACTMANAGER_H
 #define OWQTCONTACTMANAGER_H
 
-#include <QObject>
-#include <QMutex>
-#include <QList>
+#include <QtCore/QObject>
+#include <QtCore/QMutex>
+#include <QtCore/QList>
 
 class CUserProfile;
 class CWengoPhone;

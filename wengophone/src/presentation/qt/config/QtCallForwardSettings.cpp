@@ -31,7 +31,7 @@
 
 #include <util/Logger.h>
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 QtCallForwardSettings::QtCallForwardSettings(CWengoPhone & cWengoPhone, QWidget * parent)
 	: QObject(parent),

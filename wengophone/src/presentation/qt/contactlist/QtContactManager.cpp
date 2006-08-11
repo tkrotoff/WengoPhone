@@ -44,7 +44,7 @@
 
 #include <util/Logger.h>
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 QtContactManager::QtContactManager(CUserProfile & cUserProfile, CWengoPhone & cWengoPhone,
 	QtContactList & qtContactList, QObject * parent, QTreeWidget * target)

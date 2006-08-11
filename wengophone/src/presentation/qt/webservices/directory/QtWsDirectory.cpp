@@ -38,7 +38,7 @@
 
 #include <qtutil/WidgetBackgroundImage.h>
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 #include <cstdio>
 

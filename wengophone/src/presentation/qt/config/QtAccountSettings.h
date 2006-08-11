@@ -22,7 +22,7 @@
 
 #include "QtISettings.h"
 
-#include <QObject>
+#include <QtCore/QObject>
 
 class CWengoPhone;
 

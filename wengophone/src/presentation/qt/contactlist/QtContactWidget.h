@@ -24,8 +24,8 @@
 
 #include <model/contactlist/ContactProfile.h>
 
-#include <QWidget>
-#include <QString>
+#include <QtGui/QWidget>
+#include <QtCore/QString>
 
 class CContact;
 class CWengoPhone;

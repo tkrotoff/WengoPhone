@@ -19,10 +19,10 @@
 
 #include <qtutil/ResizeEventFilter.h>
 
-#include <QEvent>
+#include <QtCore/QEvent>
 
 ResizeEventFilter::ResizeEventFilter(QObject * receiver, const char * member)
-: EventFilter(receiver, member) {
+	: EventFilter(receiver, member) {
 }
 
 bool ResizeEventFilter::eventFilter(QObject * watched, QEvent * event) {

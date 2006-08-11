@@ -30,7 +30,7 @@
 #include <model/WengoPhone.h>
 #include <model/profile/UserProfile.h>
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 QtAccountSettings::QtAccountSettings(CWengoPhone & cWengoPhone, QWidget * parent)
 	: QObject(parent) {

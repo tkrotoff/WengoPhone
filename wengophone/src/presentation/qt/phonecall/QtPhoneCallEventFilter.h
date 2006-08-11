@@ -20,7 +20,7 @@
 #ifndef QTPHONECALLEVENTFILTER_H
 #define QTPHONECALLEVENTFILTER_H
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 class QtPhoneCallEventFilter : public QObject {
 	Q_OBJECT

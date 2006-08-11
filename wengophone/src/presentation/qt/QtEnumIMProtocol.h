@@ -24,7 +24,7 @@
 
 #include <imwrapper/EnumIMProtocol.h>
 
-#include <QString>
+#include <QtCore/QString>
 
 /**
  * Instant Messaging protocols.

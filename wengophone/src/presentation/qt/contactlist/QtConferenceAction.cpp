@@ -17,8 +17,9 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <model/phonecall/PhoneCall.h>
 #include "QtConferenceAction.h"
+
+#include <model/phonecall/PhoneCall.h>
 
 QtConferenceAction::QtConferenceAction(const QString & text, QObject * parent) : QAction(text, parent) {
 }

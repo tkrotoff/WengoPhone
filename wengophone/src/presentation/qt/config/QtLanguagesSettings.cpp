@@ -27,7 +27,7 @@
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 QtLanguagesSettings::QtLanguagesSettings(QWidget * parent)
 	: QObject(parent) {

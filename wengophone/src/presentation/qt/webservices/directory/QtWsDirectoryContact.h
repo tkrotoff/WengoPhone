@@ -20,7 +20,7 @@
 #ifndef OWQTWSDIRECTORYCONTACT_H
 #define OWQTWSDIRECTORYCONTACT_H
 
-#include <QObject>
+#include <QtCore/QObject>
 
 class QtWsDirectory;
 class ContactProfile;

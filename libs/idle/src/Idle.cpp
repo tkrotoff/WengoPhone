@@ -21,8 +21,8 @@
 
 #include <util/Logger.h>
 
-#include <QtCore>
-#include <QCursor>
+#include <QtCore/QtCore>
+#include <QtGui/QCursor>
 
 Idle::Idle(QObject * parent)
 	: QObject(parent) {

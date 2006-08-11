@@ -21,7 +21,7 @@
 #ifndef QTWENGOPHONEEVENTFILTER_H
 #define QTWENGOPHONEEVENTFILTER_H
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 class QtWengoPhoneEventFilter : public QObject
 {

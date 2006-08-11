@@ -21,7 +21,7 @@
 
 #include "ui_VideoWindow.h"
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 QtVideo::QtVideo(QWidget * parent) {
 	_videoWindow = new QWidget(parent);

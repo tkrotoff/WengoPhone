@@ -19,7 +19,7 @@
 
 #include <softupdater/SoftUpdater.h>
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 #include <iostream>
 using namespace std;

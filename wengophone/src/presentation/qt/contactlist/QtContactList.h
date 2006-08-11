@@ -22,8 +22,8 @@
 
 #include <presentation/PContactList.h>
 
-#include <QObject>
-#include <QString>
+#include <QtCore/QObject>
+#include <QtCore/QString>
 
 class CContactList;
 class Contact;

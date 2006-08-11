@@ -25,7 +25,7 @@
 
 #include <control/profile/CUserProfileHandler.h>
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 QtUserProfileHandler::QtUserProfileHandler(CUserProfileHandler & cUserProfileHandler,
 	QtWengoPhone & qtWengoPhone)

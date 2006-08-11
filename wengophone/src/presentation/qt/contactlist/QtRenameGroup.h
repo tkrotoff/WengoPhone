@@ -20,8 +20,8 @@
 #ifndef OWQTRENAMEGROUP_H
 #define OWQTRENAMEGROUP_H
 
-#include <QString>
-#include <QDialog>
+#include <QtCore/QString>
+#include <QtGui/QDialog>
 
 class QWidget;
 

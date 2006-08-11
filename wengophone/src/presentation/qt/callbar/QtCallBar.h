@@ -22,7 +22,7 @@
 
 class QtWengoStyleLabel;
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 class QtCallBar : public QFrame {
 	Q_OBJECT

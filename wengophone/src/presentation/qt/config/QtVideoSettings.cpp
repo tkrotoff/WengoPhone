@@ -37,7 +37,7 @@
 
 #include <qtutil/StringListConvert.h>
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 static const int VIDEO_QUALITY_COLUMN = 0;
 static const char * VIDEO_TEST_CALL = "334";

@@ -21,7 +21,7 @@
 
 #include <util/Logger.h>
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 QtContactListManager * QtContactListManager::_instance = NULL;
 

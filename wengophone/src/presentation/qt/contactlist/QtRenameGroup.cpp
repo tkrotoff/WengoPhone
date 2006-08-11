@@ -21,7 +21,7 @@
 
 #include "ui_RenameGroupDialog.h"
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 QtRenameGroup::QtRenameGroup(const QString & groupName, QWidget * parent)
 	: QDialog(parent) {

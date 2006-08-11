@@ -22,7 +22,7 @@
 
 #include "QtContactPixmap.h"
 
-#include <QObject>
+#include <QtCore/QObject>
 
 class QTreeWidgetItem;
 class QtContact;

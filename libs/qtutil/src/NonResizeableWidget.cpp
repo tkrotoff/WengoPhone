@@ -21,9 +21,10 @@
 
 #include <qtutil/ResizeEventFilter.h>
 
-#include <QWidget>
+#include <QtGui/QWidget>
 
-NonResizeableWidget::NonResizeableWidget(QWidget * widget) : QObject(widget) {
+NonResizeableWidget::NonResizeableWidget(QWidget * widget)
+	: QObject(widget) {
 	_widget = widget;
 
 	//Resize event filter

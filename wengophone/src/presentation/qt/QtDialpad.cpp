@@ -33,7 +33,7 @@
 #include <util/Logger.h>
 #include <util/StringList.h>
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 QtDialpad::QtDialpad(QtWengoPhone * qtWengoPhone)
 	: QObject(NULL) {

@@ -22,7 +22,7 @@
 
 #include <presentation/PChatHandler.h>
 
-#include <QObject>
+#include <QtCore/QObject>
 
 class CChatHandler;
 class IMAccount;

@@ -31,7 +31,7 @@
 #include <util/Logger.h>
 #include <qtutil/QtWengoStyleLabel.h>
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 QtPhoneLine::QtPhoneLine(CPhoneLine & cPhoneLine)
 	: QObjectThreadSafe(NULL),

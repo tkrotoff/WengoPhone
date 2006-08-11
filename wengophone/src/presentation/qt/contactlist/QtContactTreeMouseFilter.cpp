@@ -27,13 +27,7 @@
 
 #include <util/Logger.h>
 
-#include <QTreeWidgetItem>
-#include <QMouseEvent>
-#include <QDragEnterEvent>
-#include <QDropEvent>
-#include <QDragMoveEvent>
-#include <QApplication>
-#include <QMessageBox>
+#include <QtGui/QtGui>
 
 const QString QtContactTreeMouseFilter::WENGO_MIME_TYPE = "application/x-wengo-user-data";
 

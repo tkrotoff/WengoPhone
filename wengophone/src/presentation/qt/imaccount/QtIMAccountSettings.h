@@ -22,7 +22,7 @@
 
 #include <presentation/qt/QtEnumIMProtocol.h>
 
-#include <QObject>
+#include <QtCore/QObject>
 
 namespace Ui { class IMAccountTemplate; }
 

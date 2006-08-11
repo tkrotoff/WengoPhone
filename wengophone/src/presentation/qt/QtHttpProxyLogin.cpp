@@ -23,7 +23,7 @@
 
 #include <qtutil/WidgetBackgroundImage.h>
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 QtHttpProxyLogin::QtHttpProxyLogin(QWidget * parent, const std::string & proxyAddress, unsigned proxyPort)
 	: QObject(parent) {

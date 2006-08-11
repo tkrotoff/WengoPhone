@@ -59,7 +59,7 @@
 	#include <memorydump/MemoryDump.h>
 #endif
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 /**
  * Stub function to make GCC silent.

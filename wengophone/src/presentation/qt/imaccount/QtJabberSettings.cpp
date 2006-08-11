@@ -25,7 +25,7 @@
 
 #include <util/Logger.h>
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 QtJabberSettings::QtJabberSettings(UserProfile & userProfile, IMAccount * imAccount, QWidget * parent)
 	: QtIMAccountPlugin(userProfile, imAccount, parent) {

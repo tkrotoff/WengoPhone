@@ -35,11 +35,11 @@
 
 #include "ui_ChatRoomWidget.h"
 
-#include <QObject>
-#include <QWidget>
-#include <QString>
-#include <QHash>
-#include <QColor>
+#include <QtCore/QObject>
+#include <QtCore/QString>
+#include <QtCore/QHash>
+#include <QtGui/QWidget>
+#include <QtGui/QColor>
 
 class QFont;
 class QUrl;

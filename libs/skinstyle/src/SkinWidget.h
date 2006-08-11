@@ -20,7 +20,7 @@
 #ifndef SKINWIDGET_H
 #define SKINWIDGET_H
 
-#include <QObject>
+#include <QtCore/QObject>
 
 class QWidget;
 class QPixmap;

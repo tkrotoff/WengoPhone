@@ -35,7 +35,7 @@
 #include <util/Logger.h>
 #include <util/WebBrowser.h>
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 QtLogin::QtLogin(QWidget * parent, CUserProfileHandler & cUserProfileHandler)
 	: _cUserProfileHandler(cUserProfileHandler) {
@@ -211,13 +211,13 @@ void QtLogin::currentIndexChanged(const QString & profileName) {
 }
 
 void QtLogin::slotUpdatedTranslation() {
-  _ui->retranslateUi(_loginWindow);
+	_ui->retranslateUi(_loginWindow);
 }
 
 void QtLogin::loginClicked() {
 	std::string login = _ui->loginComboBox->currentText().toStdString();
 
-	//FIXME: if login is empty we should create a default profile
+	//FIXME if login is empty we should create a default profile
 	if (!login.empty()) {
 		WengoAccount wengoAccount(login, _ui->passwordLineEdit->text().toStdString(), true);
 

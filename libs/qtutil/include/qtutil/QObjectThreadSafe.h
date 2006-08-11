@@ -22,7 +22,7 @@
 
 #include <qtutil/PostEvent.h>
 
-#include <QObject>
+#include <QtCore/QObject>
 
 #include <string>
 

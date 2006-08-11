@@ -25,7 +25,7 @@
 
 #include <model/contactlist/ContactProfile.h>
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 QtWsDirectoryContact::QtWsDirectoryContact(QtWsDirectory * qtWsDirectory, ContactProfile * contact, bool online, QWidget * parent)
 	: QObject(parent),

@@ -30,7 +30,7 @@
 #include <util/WebBrowser.h>
 #include <util/Logger.h>
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 static const std::string AIM_FORGOT_PASSWORD_LINK_EN = "http://www.aol.co.uk/aim/faqs/AIM_FAQ_Passwords.htm";
 static const std::string AIM_FORGOT_PASSWORD_LINK_FR = "http://www.aim.aol.fr/oubli.htm";

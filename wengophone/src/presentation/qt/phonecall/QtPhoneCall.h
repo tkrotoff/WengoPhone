@@ -24,7 +24,7 @@
 
 #include <pixertool/pixertool.h>
 
-#include <QObject>
+#include <QtCore/QObject>
 
 class PhoneCall;
 class CPhoneCall;

@@ -38,7 +38,7 @@
 #include <QtBrowser.h>
 #include <WengoPhoneBuildId.h>
 
-#include <QtGui>
+#include <QtGui/QtGui>
 
 QtUserProfile::QtUserProfile(CUserProfile & cUserProfile, QtWengoPhone & qtWengoPhone)
 	: QObjectThreadSafe(NULL),

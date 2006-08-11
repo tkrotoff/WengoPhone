@@ -20,16 +20,9 @@
 
 #include "trayicon.h"
 
-#include <QWidget>
-#include <QApplication>
-#include <QImage>
-#include <QPixmap>
-#include <QBitmap>
-#include <QCursor>
-#include <QLibrary>
-#include <QPainter>
+#include <QtGui/QtGui>
 
-#include <qt_windows.h>
+#include <QtCore/qt_windows.h>
 
 static uint WM_TASKBARCREATED = 0;
 #define WM_NOTIFYICON	(WM_APP+101)
@@ -182,12 +175,12 @@ public:
 static HICON createIcon( const QPixmap &pm, HBITMAP &hbm )
 {
 	HBITMAP pmhbitmap = pm.toWinHBITMAP( QPixmap::PremultipliedAlpha );
- 
+
 	ICONINFO iconInfo;
 	iconInfo.fIcon    = TRUE;
 	iconInfo.hbmMask  = pmhbitmap;
 	iconInfo.hbmColor = pmhbitmap;
-	
+
 	HICON icon = CreateIconIndirect( &iconInfo );
 
 	DeleteObject(pmhbitmap);

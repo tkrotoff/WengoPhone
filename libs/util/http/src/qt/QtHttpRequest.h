@@ -22,7 +22,7 @@
 
 #include <http/IHttpRequest.h>
 
-#include <QObject>
+#include <QtCore/QObject>
 
 #include <vector>
 
