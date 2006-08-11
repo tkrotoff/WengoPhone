@@ -223,7 +223,7 @@
         <file>pics/emoticons/face-wink48.png</file>
     </qresource>
     <qresource prefix="/forms" >
-        <file>chat/ChatRoomInviteWidget.ui</file>
+        <file>chat/chatroom/ChatRoomInviteWidget.ui</file>
         <file>chat/ChatRoomWidget.ui</file>
         <file>phonecall/ConferenceCallWidget.ui</file>
     </qresource>
