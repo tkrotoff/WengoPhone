@@ -1,8 +1,8 @@
 project(wengophone)
 
-set(CMAKE_START_TEMP_FILE "")
-set(CMAKE_END_TEMP_FILE "")
-set(CMAKE_VERBOSE_MAKEFILE 1)
+#set(CMAKE_START_TEMP_FILE "")
+#set(CMAKE_END_TEMP_FILE "")
+#set(CMAKE_VERBOSE_MAKEFILE 1)
 
 set(CMAKE_BUILD_TYPE RelWithDebInfo)
 
