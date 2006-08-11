@@ -29,7 +29,6 @@ projects = [
 	'libs/webcam',
 	'libs/owbrowser',
 	'libs/softupdater',
-	'libs/util/owsocket',
 	'wifo',
 	'libs/sipwrapper',
 	'libs/imwrapper/src/gaim',

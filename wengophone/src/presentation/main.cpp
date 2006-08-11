@@ -34,7 +34,7 @@
 
 #include <imwrapper/IMWrapperFactory.h>
 #include <sipwrapper/SipWrapperFactory.h>
-#include <owsocket/OWClientSocket.h>
+#include <socket/ClientSocket.h>
 #include <WengoPhoneBuildId.h>
 
 #ifdef PHAPIWRAPPER
@@ -116,7 +116,7 @@ int main(int argc, char * argv[]) {
 		const std::string callFromCommandLine = config.getCmdLinePlaceCall();
 		if (!callFromCommandLine.empty()) {
 			//sends a command via socket to the existing instance.
-			OWClientSocket sock;
+			ClientSocket sock;
 			sock.connect("127.0.0.1", 25902);
 			sock.write("1|o|call/" + callFromCommandLine);
 #ifdef OS_WINDOWS

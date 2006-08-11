@@ -17,16 +17,16 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <owsocket/OWClientSocket.h>
+#include <socket/ClientSocket.h>
 
-#include "OWSocketCommon.h"
+#include "SocketCommon.h"
 
 #include <util/Logger.h>
 #include <util/String.h>
 
 Socket _mySock;
 
-OWClientSocket::OWClientSocket() {
+ClientSocket::ClientSocket() {
 	_port = 0;
 	_mySock = 0;
 #ifdef OS_WINDOWS
@@ -37,17 +37,17 @@ OWClientSocket::OWClientSocket() {
 #endif
 }
 
-OWClientSocket::~OWClientSocket() {
+ClientSocket::~ClientSocket() {
 }
 
-void OWClientSocket::connect(const std::string & ip, int port) {
+void ClientSocket::connect(const std::string & ip, int port) {
 	_ip = ip;
 	_port = port;
 	Error error = NoError;
 
 	if ((_mySock = socket(PF_INET, SOCK_STREAM, 0)) == -1) {
 		LOG_DEBUG("cannot create socket");
-		connectionStatusEvent(this, UnknownError);
+		connectionStatusEvent(*this, UnknownError);
 		return;
 	}
 
@@ -67,10 +67,10 @@ void OWClientSocket::connect(const std::string & ip, int port) {
 		error = UnknownError;
 	}
 
-	connectionStatusEvent(this, error);
+	connectionStatusEvent(*this, error);
 }
 
-bool OWClientSocket::write(const std::string & data) {
+bool ClientSocket::write(const std::string & data) {
 	bool noError = false;
 
 	int size = data.length() + 1;
@@ -95,7 +95,7 @@ bool OWClientSocket::write(const std::string & data) {
 			size = recv(_mySock, buff, sizeof(buff) - 1, 0);
 			if (size) {
 				buff[size] = 0;
-				dataReceivedEvent(this, buff);
+				dataReceivedEvent(*this, buff);
 			}
 		}
 	}
@@ -106,7 +106,7 @@ bool OWClientSocket::write(const std::string & data) {
 	return noError;
 }
 
-bool OWClientSocket::disconnect() {
+bool ClientSocket::disconnect() {
 	closesocket(_mySock);
 	return true;
 }

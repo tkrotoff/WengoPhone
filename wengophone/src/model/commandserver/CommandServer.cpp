@@ -36,7 +36,7 @@ const std::string CommandServer::_querySms = "1|o|sms/";
 CommandServer::CommandServer(WengoPhone & wengoPhone)
 	: _wengoPhone(wengoPhone) {
 
-	_serverSocket = new OWServerSocket("127.0.0.1", _port);
+	_serverSocket = new ServerSocket("127.0.0.1", _port);
 	_serverSocket->serverStatusEvent += boost::bind(&CommandServer::serverStatusEventHandler, this, _1, _2);
 	_serverSocket->connectionEvent += boost::bind(&CommandServer::connectionEventHandler, this, _1, _2);
 	_serverSocket->incomingRequestEvent += boost::bind(&CommandServer::incomingRequestEventHandler, this, _1, _2, _3);
@@ -56,20 +56,20 @@ CommandServer & CommandServer::getInstance(WengoPhone & wengoPhone) {
 	return *_commandServerInstance;
 }
 
-void CommandServer::serverStatusEventHandler(OWServerSocket * sender, OWServerSocket::Error error) {
-	if (error == OWServerSocket::NoError) {
-		LOG_DEBUG("CommandServer: connected");
+void CommandServer::serverStatusEventHandler(ServerSocket & sender, ServerSocket::Error error) {
+	if (error == ServerSocket::NoError) {
+		LOG_DEBUG("connected");
 	} else {
-		LOG_WARN("CommandServer: not connected");
+		LOG_WARN("not connected");
 	}
 }
 
-void CommandServer::connectionEventHandler(OWServerSocket * sender, const std::string & connectionId) {
-	LOG_DEBUG("CommandServer: client connection: " + connectionId);
+void CommandServer::connectionEventHandler(ServerSocket & sender, const std::string & connectionId) {
+	LOG_DEBUG("client connection=" + connectionId);
 }
 
-void CommandServer::incomingRequestEventHandler(OWServerSocket * sender, const std::string & connectionId, const std::string & data) {
-	LOG_DEBUG("CommandServer: incoming request, connectionId: " + connectionId + " data: " + data);
+void CommandServer::incomingRequestEventHandler(ServerSocket & sender, const std::string & connectionId, const std::string & data) {
+	LOG_DEBUG("incoming request connectionId=" + connectionId + " data=" + data);
 	String query = String(data);
 	if (query == _queryStatus) {
 
@@ -89,7 +89,7 @@ void CommandServer::incomingRequestEventHandler(OWServerSocket * sender, const s
 		//Extract the number from query & place the call
 		StringList l = query.split("/");
 		if (l.size() == 2) {
-			LOG_DEBUG("call peer: " + l[1]);
+			LOG_DEBUG("call peer=" + l[1]);
 			UserProfile * userprofile = _wengoPhone.getUserProfileHandler().getCurrentUserProfile();
 			if (userprofile) {
 				IPhoneLine * phoneLine = userprofile->getActivePhoneLine();
@@ -121,11 +121,11 @@ void CommandServer::incomingRequestEventHandler(OWServerSocket * sender, const s
 	}
 }
 
-void CommandServer::writeStatusEventHandler(OWServerSocket * sender, const std::string & writeId, OWServerSocket::Error error) {
-	if (error == OWServerSocket::NoError) {
-		LOG_DEBUG("CommandServer: writeId: " + writeId + ", write success");
+void CommandServer::writeStatusEventHandler(ServerSocket & sender, const std::string & writeId, ServerSocket::Error error) {
+	if (error == ServerSocket::NoError) {
+		LOG_DEBUG("writeId=" + writeId + " write success");
 	} else {
-		LOG_WARN("CommandServer: writeId: " + writeId + ", write failed");
+		LOG_WARN("writeId=" + writeId + " write failed");
 	}
 }
 

@@ -17,9 +17,9 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <owsocket/OWServerSocket.h>
+#include <socket/ServerSocket.h>
 
-#include "OWSocketCommon.h"
+#include "SocketCommon.h"
 
 #include <util/Logger.h>
 #include <util/String.h>
@@ -32,20 +32,20 @@ Socket _mainSock;
 static std::list<Socket> _clientSockList;
 typedef std::list<Socket>::iterator SockListIterator;
 
-OWServerSocket::OWServerSocket(const std::string & listeningIp, int port)
+ServerSocket::ServerSocket(const std::string & listeningIp, int port)
 	: _listeningIp(listeningIp),
 	_port(port) {
 	_started = false;
 }
 
-void OWServerSocket::init() {
+void ServerSocket::init() {
 	if (createMainListeningSocket()) {
 		_started = true;
 		start();
 	}
 }
 
-bool OWServerSocket::createMainListeningSocket() {
+bool ServerSocket::createMainListeningSocket() {
 	struct sockaddr_in raddr;
 
 	if (_listeningIp.empty()) {
@@ -83,7 +83,7 @@ bool OWServerSocket::createMainListeningSocket() {
 	return true;
 }
 
-OWServerSocket::~OWServerSocket() {
+ServerSocket::~ServerSocket() {
 	if (_started) {
 		_started = false;
 
@@ -99,7 +99,7 @@ OWServerSocket::~OWServerSocket() {
 	}
 }
 
-bool OWServerSocket::closeAndRemoveFromList(const std::string & connectionId) {
+bool ServerSocket::closeAndRemoveFromList(const std::string & connectionId) {
 	Socket sockId = (Socket) String(connectionId).toInteger();
 
 	SockListIterator it;
@@ -114,7 +114,7 @@ bool OWServerSocket::closeAndRemoveFromList(const std::string & connectionId) {
 	return false;
 }
 
-bool OWServerSocket::checkConnectionId(const std::string & connectionId) {
+bool ServerSocket::checkConnectionId(const std::string & connectionId) {
 	Socket sockId = (Socket) String(connectionId).toInteger();
 
 	SockListIterator it;
@@ -127,7 +127,7 @@ bool OWServerSocket::checkConnectionId(const std::string & connectionId) {
 	return false;
 }
 
-bool OWServerSocket::writeToClient(const std::string & connectionId, const std::string & data) {
+bool ServerSocket::writeToClient(const std::string & connectionId, const std::string & data) {
 	Socket sockId = (Socket) String(connectionId).toInteger();
 	Error error = UnknownError;
 
@@ -146,11 +146,11 @@ bool OWServerSocket::writeToClient(const std::string & connectionId, const std::
 	}
 
 	closeAndRemoveFromList(connectionId);
-	writeStatusEvent(this, connectionId, error);
+	writeStatusEvent(*this, connectionId, error);
 	return (error == NoError);
 }
 
-int OWServerSocket::getHighestSocket() {
+int ServerSocket::getHighestSocket() {
 	int highest = 0;
 
 	SockListIterator it;
@@ -167,7 +167,7 @@ int OWServerSocket::getHighestSocket() {
 	return highest;
 }
 
-int OWServerSocket::getRequest(int sockId, char * buff, unsigned buffsize) {
+int ServerSocket::getRequest(int sockId, char * buff, unsigned buffsize) {
 	struct timeval timeout;
 	fd_set rfds;
 	unsigned nbytes = 0;
@@ -211,7 +211,7 @@ int OWServerSocket::getRequest(int sockId, char * buff, unsigned buffsize) {
 	return nbytes;
 }
 
-void OWServerSocket::run() {
+void ServerSocket::run() {
 	Socket sock;
 	struct sockaddr from;
 	socklen_t fromlen = sizeof(from);
@@ -219,7 +219,7 @@ void OWServerSocket::run() {
 	//struct timeval to;
 	char buff[256];
 
-	serverStatusEvent(this, NoError);
+	serverStatusEvent(*this, NoError);
 
 	while (_started) {
 		SockListIterator it;
@@ -237,7 +237,7 @@ void OWServerSocket::run() {
 			sock = accept(_mainSock, &from, &fromlen);
 			if (sock > 0) {
 				_clientSockList.push_back(sock);
-				connectionEvent(this, String::fromNumber((int)sock));
+				connectionEvent(*this, String::fromNumber((int)sock));
 			}
 		}
 		else if (err) {
@@ -249,7 +249,7 @@ void OWServerSocket::run() {
 						closesocket(*it);
 						_clientSockList.erase(it);
 					} else {
-						incomingRequestEvent(this, String::fromNumber((int) *it), std::string(buff));
+						incomingRequestEvent(*this, String::fromNumber((int) *it), std::string(buff));
 					}
 					break;
 				}
@@ -257,5 +257,5 @@ void OWServerSocket::run() {
 		}
 	}
 
-	serverStatusEvent(this, UnknownError);
+	serverStatusEvent(*this, UnknownError);
 }

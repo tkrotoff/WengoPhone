@@ -48,4 +48,4 @@ WengoAddConsoleArguments(args)
 if WengoGetConsoleArgument("enable-debug-console"):
 	WengoShowWindowsConsole(True)
 else:
-	WengoShowWindowsConsole(False)
+	WengoShowWindowsConsole(True)

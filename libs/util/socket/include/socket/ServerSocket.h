@@ -32,7 +32,7 @@
  * @author Julien Bossart
  * @author Mathieu Stute
  */
-class OWServerSocket : public Thread {
+class ServerSocket : public Thread {
 public:
 
 	//To finish
@@ -47,62 +47,61 @@ public:
 	/**
 	 * Server status event.
 	 *
-	 * @param sender sender of the event.
-	 * @param error error status.
+	 * @param sender this class
+	 * @param error error status
 	 */
-	Event<void (OWServerSocket * sender, Error error)> serverStatusEvent;
+	Event<void (ServerSocket & sender, Error error)> serverStatusEvent;
 
 	/**
 	 * A client connection has been established.
 	 *
-	 * @param sender sender of the event.
-	 * @param connectionId client connection id.
+	 * @param sender this class
+	 * @param connectionId client connection id
 	 */
-	Event<void (OWServerSocket * sender, const std::string & connectionId)> connectionEvent;
+	Event<void (ServerSocket & sender, const std::string & connectionId)> connectionEvent;
 
 	/**
 	 * An incoming request was received.
 	 *
-	 * @param sender sender of the event.
-	 * @param connectionId client connection id.
-	 * @param data received data.
+	 * @param sender this class
+	 * @param connectionId client connection id
+	 * @param data received data
 	 */
-	Event<void (OWServerSocket * sender, const std::string & connectionId, const std::string & data)> incomingRequestEvent;
+	Event<void (ServerSocket & sender, const std::string & connectionId, const std::string & data)> incomingRequestEvent;
 
 	/**
 	 * Write status event.
 	 *
-	 * @param sender sender of the event.
-	 * @param writeId write id.
+	 * @param sender this class
+	 * @param writeId write id
 	 * @param error error status
 	 */
-	Event<void (OWServerSocket * sender, const std::string & writeId, Error error)> writeStatusEvent;
+	Event<void (ServerSocket & sender, const std::string & writeId, Error error)> writeStatusEvent;
 
 	/**
-	 * Default constructor. Provide a server that listen to the given port.
+	 * Default constructor.
+	 *
+	 * Provides a server that listen to the given port.
 	 * Emit connectionEvent when a client connect to the socket.
 	 *
-	 * @param listeningIp listening ip.
-	 * @param port listening port.
+	 * @param listeningIp listening ip
+	 * @param port listening port
 	 */
-	OWServerSocket(const std::string & listeningIp, int port);
+	ServerSocket(const std::string & listeningIp, int port);
+
+	~ServerSocket();
 
 	/**
-	 * Destructor.
-	 */
-	~OWServerSocket();
-
-	/**
-	 * Start the thread.
+	 * Starts the thread.
 	 */
 	void init();
 
 	/**
-	 * Send data to a connection.
+	 * Sends data to a connection.
 	 *
-	 * @param connectionId client connection id.
-	 * @param data data to be written on the socket.
-	 * @return true if writing has succeeded.
+	 * @param connectionId client connection id
+	 * @param data data to be written on the socket
+	 * @return true if writing has succeeded
 	 */
 	bool writeToClient(const std::string & connectionId, const std::string & data);
 

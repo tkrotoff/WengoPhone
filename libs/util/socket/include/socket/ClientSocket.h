@@ -25,12 +25,12 @@
 #include <string>
 
 /**
- * Connect to a OWServerSocket.
+ * Connect to a ServerSocket.
  *
  * @author Julien Bossart
  * @author Mathieu Stute
  */
-class OWClientSocket {
+class ClientSocket {
 public:
 
 	//To finish
@@ -45,50 +45,44 @@ public:
 	/**
 	 * Connection status event.
 	 *
-	 * @param sender sender of the event.
-	 * @param error error status.
+	 * @param sender this class
+	 * @param error error status
 	 */
-	Event<void (OWClientSocket * sender, Error error)> connectionStatusEvent;
+	Event<void (ClientSocket & sender, Error error)> connectionStatusEvent;
 
 	/**
 	 * Data has been received.
 	 *
-	 * @param sender sender of the event.
-	 * @param data received data.
+	 * @param sender this class
+	 * @param data received data
 	 */
-	Event<void (OWClientSocket * sender, const std::string & data)> dataReceivedEvent;
+	Event<void (ClientSocket & sender, const std::string & data)> dataReceivedEvent;
+
+	ClientSocket();
+
+	~ClientSocket();
 
 	/**
-	 * Constructor.
-	 */
-	OWClientSocket();
-
-	/**
-	 * Destructor.
-	 */
-	~OWClientSocket();
-
-	/**
-	 * Connect to a server.
+	 * Connects to a server.
 	 *
-	 * @param ip remote ip.
-	 * @param port remote port.
+	 * @param ip remote ip
+	 * @param port remote port
 	 */
 	void connect(const std::string & ip, int port);
 
 	/**
-	 * Send data to the server.
+	 * Sends data to the server.
 	 *
-	 * @param data data to be written.
-	 * @return true if writing has succeeded.
+	 * @param data data to be written
+	 * @return true if writing has succeeded
 	 */
 	bool write(const std::string & data);
 
 	/**
-	 * Send data to the server.
+	 * Sends data to the server.
 	 *
-	 * @param data data to be written.
-	 * @return true if writing has succeeded.
+	 * @param data data to be written
+	 * @return true if writing has succeeded
 	 */
 	bool disconnect();
 

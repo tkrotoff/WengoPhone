@@ -8,6 +8,7 @@ projects = [
 	'shlibloader',
 	'settings',
 	'system',
+	'socket',
 ]
 
 if WengoCCMSVC():

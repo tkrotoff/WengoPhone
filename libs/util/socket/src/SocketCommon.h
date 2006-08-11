@@ -37,7 +37,7 @@
 		#endif
 
 		typedef SOCKET Socket;
-	#endif //CC_MINGW
+	#endif
 #else
 	#include <sys/time.h>
 	#include <sys/types.h>
@@ -50,8 +50,8 @@
 	#include <sys/ioctl.h>
 
 	typedef int Socket;
-	inline int closesocket(Socket fd) {return close(fd);}
-#endif	//OS_WINDOWS
+	inline int closesocket(Socket fd) { return close(fd); }
+#endif
 
 #ifndef MSG_NOSIGNAL
 	#define MSG_NOSIGNAL 0

@@ -20,7 +20,7 @@
 #ifndef OWCOMMANDSERVER_H
 #define OWCOMMANDSERVER_H
 
-#include <owsocket/OWServerSocket.h>
+#include <socket/ServerSocket.h>
 
 class WengoPhone;
 
@@ -40,45 +40,31 @@ public:
 
 	static CommandServer & getInstance(WengoPhone & wengoPhone);
 
-	/**
-	 * Server status event handler.
-	 *
-	 * @param sender sender of the event.
-	 * @param error error status.
-	 */
-	void serverStatusEventHandler(OWServerSocket * sender, OWServerSocket::Error error);
-
-	/**
-	 * A client connection has been established handler.
-	 *
-	 * @param sender sender of the event.
-	 * @param connectionId client connection id.
-	 */
-	void connectionEventHandler(OWServerSocket * sender, const std::string & connectionId);
-
-	/**
-	 * An incoming request was received handler.
-	 *
-	 * @param sender sender of the event.
-	 * @param connectionId client connection id.
-	 * @param data received data.
-	 */
-	void incomingRequestEventHandler(OWServerSocket * sender, const std::string & connectionId, const std::string & data);
-
-	/**
-	 * Write status event.
-	 *
-	 * @param sender sender of the event.
-	 * @param writeId write id.
-	 * @param error error status
-	 */
-	void writeStatusEventHandler(OWServerSocket * sender, const std::string & writeId, OWServerSocket::Error error);
-
 private:
 
 	static std::string buildHttpForFlash(const std::string & xml);
 
-	OWServerSocket * _serverSocket;
+	/**
+	 * @see ServerSocket::serverStatusEvent
+	 */
+	void serverStatusEventHandler(ServerSocket & sender, ServerSocket::Error error);
+
+	/**
+	 * @see ServerSocket::connectionEvent
+	 */
+	void connectionEventHandler(ServerSocket & sender, const std::string & connectionId);
+
+	/**
+	 * @see ServerSocket::incomingRequestEvent
+	 */
+	void incomingRequestEventHandler(ServerSocket & sender, const std::string & connectionId, const std::string & data);
+
+	/**
+	 * @see ServerSocket::writeStatusEvent
+	 */
+	void writeStatusEventHandler(ServerSocket & sender, const std::string & writeId, ServerSocket::Error error);
+
+	ServerSocket * _serverSocket;
 
 	static CommandServer * _commandServerInstance;
 

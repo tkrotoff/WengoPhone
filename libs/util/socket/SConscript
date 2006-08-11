@@ -10,8 +10,8 @@ link_flags = []
 headers = [
 ]
 sources = [
-	'src/OWServerSocket.cpp',
-	'src/OWClientSocket.cpp',
+	'src/ServerSocket.cpp',
+	'src/ClientSocket.cpp',
 ]
 
 env.WengoAddLinkFlags(link_flags)
