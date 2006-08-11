@@ -30,11 +30,11 @@
 class YealinkWenbox : public IWenbox {
 public:
 
-	void setKeyPressedCallback(KeyPressedCallback keyPressedCallback, void * param);
-
 	YealinkWenbox();
 
 	~YealinkWenbox();
+
+	void setKeyPressedCallback(KeyPressedCallback keyPressedCallback, void * param);
 
 	bool open();
 

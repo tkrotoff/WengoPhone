@@ -34,13 +34,15 @@ public:
 
 	~NullWenbox();
 
+	void setKeyPressedCallback(KeyPressedCallback keyPressedCallback, void * param);
+
 	bool open();
 
 	bool close();
 
 	std::string getDeviceName();
 
-	StringList getAudioDeviceNameList() const;
+	std::list<std::string> getAudioDeviceNameList() const;
 
 	bool setDefaultMode(Mode mode);
 
@@ -50,7 +52,7 @@ public:
 
 	bool setRingingTone(int tone);
 
-	bool setState(PhoneCallState state, const std::string & phoneNumber = String::null);
+	bool setState(PhoneCallState state, const std::string & phoneNumber);
 };
 
 #endif	//OWNULLWENBOX_H

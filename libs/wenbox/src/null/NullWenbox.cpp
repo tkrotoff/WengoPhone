@@ -19,6 +19,8 @@
 
 #include "NullWenbox.h"
 
+#include <util/StringList.h>
+
 IWenbox * getInstance() {
 	NullWenbox * wenbox = new NullWenbox();
 	return wenbox;
@@ -28,6 +30,9 @@ NullWenbox::NullWenbox() {
 }
 
 NullWenbox::~NullWenbox() {
+}
+
+void NullWenbox::setKeyPressedCallback(KeyPressedCallback keyPressedCallback, void * param) {
 }
 
 bool NullWenbox::open() {
@@ -42,7 +47,7 @@ std::string NullWenbox::getDeviceName() {
 	return "NullWenbox";
 }
 
-StringList NullWenbox::getAudioDeviceNameList() const {
+std::list<std::string> NullWenbox::getAudioDeviceNameList() const {
 	StringList strList;
 	strList += "NullWenbox";
 	return strList;
