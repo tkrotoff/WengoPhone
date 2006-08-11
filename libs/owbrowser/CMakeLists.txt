@@ -4,12 +4,6 @@ project(owbrowser)
 find_package(Qt4 REQUIRED)
 include_directories(
 	${QT_INCLUDE_DIR}
-	${QT_QTNETWORK_INCLUDE_DIR}
-	${QT_QTCORE_INCLUDE_DIR}
-	${QT_QTGUI_INCLUDE_DIR}
-	${QT_QTXML_INCLUDE_DIR}
-	${QT_QTSVG_INCLUDE_DIR}
-	${QT_INCLUDE_DIR}/QtUiTools
 )
 
 #owqtutil dependency
