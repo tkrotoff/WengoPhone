@@ -1486,7 +1486,7 @@ static int cmdloop(const char* userid, const char *regserver, FILE *file, int do
 	  }
 
 	case CMD_TUNCONF:
-	  ret = phTunnelConfig(proxy_server, proxy_port, tunnel_server, tunnel_port, proxy_user, proxy_passwd, 0);
+	  ret = phTunnelConfig(proxy_server, proxy_port, tunnel_server, tunnel_port, proxy_user, proxy_passwd, 0, 0);
 	  break;
 
 
