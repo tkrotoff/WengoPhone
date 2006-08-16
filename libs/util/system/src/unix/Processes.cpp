@@ -54,7 +54,7 @@ bool Processes::isRunning(const std::string & searchName) {
 			}
 		}
 	}
-	close((int)proc);
+	closedir(proc);
 
 	return false;
 }
