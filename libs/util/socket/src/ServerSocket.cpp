@@ -48,6 +48,7 @@ void ServerSocket::init() {
 bool ServerSocket::createMainListeningSocket() {
 	struct sockaddr_in raddr;
 
+	memset(&raddr, 0, sizeof(struct sockaddr_in));
 	if (_listeningIp.empty()) {
 		raddr.sin_addr.s_addr = htons(INADDR_ANY);
 	}
@@ -59,6 +60,7 @@ bool ServerSocket::createMainListeningSocket() {
 
 	_mainSock = 0;
 	if ((_mainSock = socket(PF_INET, SOCK_STREAM, 0)) == -1) {
+		perror("socket");
 		LOG_DEBUG("cannot create main socket");
 		return false;
 	}
@@ -72,6 +74,7 @@ bool ServerSocket::createMainListeningSocket() {
 #endif
 
 	if (bind(_mainSock, (struct sockaddr *) &raddr, sizeof (raddr)) < 0) {
+		perror("bind");
 		LOG_DEBUG("cannot bind main socket");
 		closesocket(_mainSock);
 		_mainSock = 0;
