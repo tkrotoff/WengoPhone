@@ -25,7 +25,7 @@
 
 QtChatHistoryWidget::QtChatHistoryWidget(QWidget * parent)
 : QTextBrowser(parent){
-	setFrameStyle(QFrame::Shape::NoFrame | QFrame::Shadow::Plain);
+	setFrameStyle(QFrame::NoFrame | QFrame::Plain);
 	setContextMenuPolicy(Qt::CustomContextMenu);
 	makeActions();
 	connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), SLOT(showContextMenuSlot(const QPoint &)));

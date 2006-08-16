@@ -21,14 +21,14 @@
 
 #include <util/Logger.h>
 
-#include <QtGui/QtGUi>
+#include <QtGui/QtGui>
 
 #include <stdio.h>
 
 QtChatEditWidget::QtChatEditWidget(QWidget *parent)
 : QTextEdit(parent){
 	setAcceptDrops(true);
-	setFrameStyle(QFrame::Shape::NoFrame | QFrame::Shadow::Plain);
+	setFrameStyle(QFrame::NoFrame | QFrame::Plain);
 }
 
 void QtChatEditWidget::dragEnterEvent(QDragEnterEvent *event){
