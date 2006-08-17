@@ -891,7 +891,29 @@ void
 eXosip_report_call_event_with_status(int evt, eXosip_call_t *jc, eXosip_dialog_t *jd, osip_message_t *sip)
 {
 	eXosip_event_t *je;
+
+	// <ncouturier>
+	osip_body_t * body = NULL;
+	// </ncouturier>
+
 	je = eXosip_event_init_for_call(evt, jc, jd);
+
+	// <ncouturier>
+	if(jd != NULL && jd->d_200Ok != NULL && jd->d_200Ok->bodies != NULL){
+		if(!osip_list_eol(jd->d_200Ok->bodies, 0)){
+			body = (osip_body_t *)osip_list_get(jd->d_200Ok->bodies, 0);
+
+			if (je->msg_body) osip_free(je->msg_body);
+
+			je->msg_body = osip_strdup(body->body);
+			if (!je->msg_body){
+				eXosip_event_free(je);
+				return;				
+			}
+		}
+	}
+	// </ncouturier>
+
 	if (je!=NULL)
 	{
 		if (sip != NULL)
@@ -1039,8 +1061,8 @@ void eXosip_update_audio_session(osip_transaction_t *transaction)
 static void cb_rcv2xx_4invite(osip_transaction_t *tr,osip_message_t *sip)
 {
   int i;
-  eXosip_dialog_t *jd;
-  eXosip_call_t *jc;
+  eXosip_dialog_t *jd = NULL;
+  eXosip_call_t *jc = NULL;
   jinfo_t *jinfo =  (jinfo_t *)osip_transaction_get_your_instance(tr);
   if (jinfo==NULL)
     return;
@@ -1222,8 +1244,8 @@ static void cb_rcv2xx_4invite(osip_transaction_t *tr,osip_message_t *sip)
 static void cb_rcv2xx_4subscribe(osip_transaction_t *tr,osip_message_t *sip)
 {
   int i;
-  eXosip_dialog_t    *jd;
-  eXosip_subscribe_t *js;
+  eXosip_dialog_t    *jd = NULL;
+  eXosip_subscribe_t *js = NULL;
   char *tmp;
   jinfo_t *jinfo =  (jinfo_t *)osip_transaction_get_your_instance(tr);
   if (jinfo==NULL)
@@ -1306,8 +1328,10 @@ static void cb_rcv2xx(int type, osip_transaction_t *tr,osip_message_t *sip)
   eXosip_call_t      *jc;
   eXosip_subscribe_t *js;
   eXosip_notify_t    *jn;
-  jinfo_t *jinfo =  (jinfo_t *)osip_transaction_get_your_instance(tr);
+  jinfo_t *jinfo =  NULL;
   OSIP_TRACE(osip_trace(__FILE__,__LINE__,OSIP_INFO1,NULL,"cb_rcv2xx (id=%i)\r\n", tr->transactionid));
+
+  jinfo = (jinfo_t *)osip_transaction_get_your_instance(tr);
 
   if (MSG_IS_RESPONSE_FOR(sip, "REGISTER"))
     {

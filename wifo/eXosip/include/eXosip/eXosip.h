@@ -514,6 +514,8 @@ int  eXosip_set_call_reference(int jid, void *reference);
  */
 int   eXosip_on_hold_call  (int jid);
 int   eXosip_off_hold_call (int jid, char *rtp_ip, int port);
+int eXosip_on_hold_call_with_body(int jid, const char * bodytype, const char * body);
+int eXosip_off_hold_call_with_body(int jid, const char * bodytype, const char * body);
 
 /**
  * Tranfer a call.

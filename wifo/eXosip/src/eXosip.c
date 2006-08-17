@@ -2004,6 +2004,86 @@ int eXosip_on_hold_call  (int jid)
   return 0;
 }
 
+int eXosip_on_hold_call_with_body(int jid, const char * bodytype, const char * body){
+	eXosip_dialog_t *jd = NULL;
+	eXosip_call_t *jc = NULL;
+	osip_transaction_t *transaction;
+	osip_event_t *sipevent;
+	osip_message_t *invite;
+	int i;
+	char *size;
+
+	if(bodytype == NULL || body == NULL){
+		return -1;
+	}
+
+	if(jid>0){
+		eXosip_call_dialog_find(jid, &jc, &jd);
+	}
+	if(jd==NULL){
+		OSIP_TRACE (osip_trace(__FILE__, __LINE__, OSIP_ERROR, NULL, "eXosip: No call here?\n"));
+		return -1;
+	}
+
+	transaction = eXosip_find_last_invite(jc, jd);
+	if(transaction==NULL){
+		return -1;
+	}
+	if(transaction->state!=ICT_TERMINATED && transaction->state!=IST_TERMINATED){
+		return -1;
+	}
+
+	i = _eXosip_build_request_within_dialog(&invite, "INVITE", jd->d_dialog, "UDP");
+	if(i!=0) {
+		return -2;
+	}
+
+	if (body!=NULL){
+		size = (char *)osip_malloc(7*sizeof(char));
+		#ifdef __APPLE_CC__
+		sprintf(size,"%li",strlen(body));
+		#else
+		sprintf(size,"%i",strlen(body));
+		#endif
+		osip_message_set_content_length(invite, size);
+		osip_free(size);
+
+		osip_message_set_body(invite, body, strlen(body));
+		//osip_free(body);
+		osip_message_set_content_type(invite, bodytype);
+
+	}else{
+		osip_message_set_content_length(invite, "0");
+	}
+
+	if (jc->c_subject==NULL || jc->c_subject[0]=='\0'){
+		#if 0
+		osip_message_set_subject(invite, "New Call");
+		#endif
+
+	}else{
+		osip_message_set_subject(invite, jc->c_subject);
+	}
+
+	transaction=NULL;
+	i = osip_transaction_init(&transaction, ICT, eXosip.j_osip, invite);
+	if (i!=0){
+		/* TODO: release the j_call.. */
+		osip_message_free(invite);
+		return -2;
+	}
+
+	osip_list_add(jd->d_out_trs, transaction, 0);
+
+	sipevent = osip_new_outgoing_sipmessage(invite);
+	sipevent->transactionid =  transaction->transactionid;
+
+	osip_transaction_set_your_instance(transaction, __eXosip_new_jinfo(jc, jd, NULL, NULL));
+	osip_transaction_add_event(transaction, sipevent);
+	__eXosip_wakeup();
+	return 0;
+}
+
 int eXosip_off_hold_call (int jid, char *rtp_ip, int port)
 {
   eXosip_dialog_t *jd = NULL;
@@ -2134,6 +2214,80 @@ int eXosip_off_hold_call (int jid, char *rtp_ip, int port)
   return 0;
 }
 
+
+int eXosip_off_hold_call_with_body(int jid, const char * bodytype, const char * body){
+	eXosip_dialog_t *jd = NULL;
+	eXosip_call_t *jc = NULL;
+
+	osip_transaction_t *transaction;
+	osip_event_t *sipevent;
+	osip_message_t *invite;
+	int i;
+	char *size;
+
+	if(bodytype == NULL || body == NULL){
+		return -1;
+	}
+
+	if (jid>0){
+		eXosip_call_dialog_find(jid, &jc, &jd);
+	}
+	if (jd==NULL){
+		OSIP_TRACE(osip_trace(__FILE__, __LINE__, OSIP_ERROR, NULL, "eXosip: No call here?\n"));
+		return -1;
+	}
+
+	transaction = eXosip_find_last_invite(jc, jd);
+	if (transaction==NULL){
+		return -1;
+	}
+	if (transaction->state!=ICT_TERMINATED && transaction->state!=IST_TERMINATED){
+		return -1;
+	}
+
+	i = _eXosip_build_request_within_dialog(&invite, "INVITE", jd->d_dialog, "UDP");
+
+	if(body != NULL){
+		size= (char *)osip_malloc(7*sizeof(char));
+		#ifdef __APPLE_CC__
+		sprintf(size,"%li",strlen(body));
+		#else
+		sprintf(size,"%i",strlen(body));
+		#endif
+		osip_message_set_content_length(invite, size);
+		osip_free(size);
+
+		osip_message_set_body(invite, body, strlen(body));
+		osip_message_set_content_type(invite, bodytype);
+	}else{
+		osip_message_set_content_length(invite, "0");
+	}
+
+	if (jc->c_subject==NULL || jc->c_subject[0]=='\0'){
+		#if 0
+		osip_message_set_subject(invite, "New Call");
+		#endif
+	}else{
+		osip_message_set_subject(invite, jc->c_subject);
+	}
+
+	i = osip_transaction_init(&transaction, ICT, eXosip.j_osip, invite);
+	if (i!=0){
+		/* TODO: release the j_call.. */
+		osip_message_free(invite);
+		return -2;
+	}
+
+	osip_list_add(jd->d_out_trs, transaction, 0);
+
+	sipevent = osip_new_outgoing_sipmessage(invite);
+	sipevent->transactionid =  transaction->transactionid;
+
+	osip_transaction_set_your_instance(transaction, __eXosip_new_jinfo(jc, jd, NULL, NULL));
+	osip_transaction_add_event(transaction, sipevent);
+	__eXosip_wakeup();
+	return 0;
+}
 
 
 static osip_transaction_t *eXosip_create_transaction_with_jinfo_for_list(jinfo_t *ji,

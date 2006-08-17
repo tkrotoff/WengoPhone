@@ -21,6 +21,7 @@ projects = [
 	'ortp',
 	'libosip2',
 	'eXosip',
+	'phapi-util',
 	'phapi/amrwb',
 	'phapi/amrnb',
 	'phapi/stun',
@@ -31,7 +32,9 @@ projects = [
 	'phapi/fidlib',
 	'phapi/msdirent',
 	'phapi',
-	'miniua'
+	'miniua',
+	'sfp-plugin',
+	'tests/WifoPluginsConsole',
 ]
 
 SConscript(dirs = projects)

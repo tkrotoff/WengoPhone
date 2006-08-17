@@ -73,6 +73,14 @@
 
 #include "phlog.h"
 
+// <ncouturier>
+#include "phplugin.h"
+#include <phapi-util/mappinglist.h>
+#include <phapi-util/comparator.h>
+#include <phapi-util/util.h>
+#include "phplugin-sdp.h" // TODO remove when we have a real SDP plugin
+// </ncouturier>
+
 #ifdef USE_HTTP_TUNNEL
 #include "httptunnel.h"
 #endif
@@ -134,7 +142,7 @@ static char*  _get_public_sip_port();
 
 void ph_message_progress(eXosip_event_t *je);
 static void ph_keep_refreshing();
-static void  ph_call_requestfailure(eXosip_event_t *je);
+/*static*/ void  ph_call_requestfailure(eXosip_event_t *je);
 
 static void ph_frame_display_cbk(void *ctx, void *event);
 
@@ -222,6 +230,7 @@ static int ph_busyFlag;
 
 static FILE *ph_log_file;
 
+#define ph_printf printf
 void *
 ph_api_thread(void *arg);
 
@@ -337,7 +346,7 @@ MY_DLLEXPORT phConfig_t *phGetConfig()
 
 
 #ifdef EMBED
-MY_DLLEXPORT phConfig_t phcfg = { "10600", "", 
+MY_DLLEXPORT phConfig_t phcfg = {"10600", "", 
 			/* sipport  */ "5060", 
 			 /* identity */ "", 
 			/*  proxy */    "" ,
@@ -352,7 +361,7 @@ MY_DLLEXPORT phConfig_t phcfg = { "10600", "",
 			 0
 };
 #else
-MY_DLLEXPORT phConfig_t phcfg = { "10600", "", "10700", "", 
+MY_DLLEXPORT phConfig_t phcfg = {"10600", "", "10700", "", 
 			/* sipport  */ "5060", 
 			 /* identity */ "", 
 			/*  proxy */    "" ,
@@ -626,6 +635,17 @@ void ph_release_call(phcall_t *ca)
   ca->cid = -1;
 }
 
+// <ncouturier>
+/**
+* Releases a SIP call (notion of audio is here inexistant)
+*/
+void ph_release_call2(phcall_t *ca){
+	DBG_SIP_NEGO("SIP_NEGO: ph_release_call\n", 0, 0, 0);
+
+	memset(ca, 0, sizeof(phcall_t));
+	ca->cid = -1;
+}
+// </ncouturier>
 
 int ph_has_active_calls()
 {
@@ -827,12 +847,6 @@ ph_build_cname(char *buf, int n, struct vline *vl)
   snprintf(buf, n, "%s@%s", un, s);
 }
 
-MY_DLLEXPORT int 
-phLinePlaceCall2(int vlid, const char *uri, void *userdata, int rcid, int streams)
-{
-   return phLinePlaceCall_withCa(vlid, uri, userdata, rcid, streams, 0);
-}
-
 #define optional(x) (x[0] ? x : 0)
 
 int
@@ -943,6 +957,8 @@ phLinePlaceCall_withCa(int vlid, const char *uri, void *userdata, int rcid, int 
 
   ca0->vlid = ph_vline2vlid(vl);
 
+  phplugin_associate_callid_to_plugin2(ca0->cid, "application/sdp"); // TODO remove when we have a real SDP plugin
+
   eXosip_unlock();  
   return i;
 
@@ -953,6 +969,12 @@ MY_DLLEXPORT int
 phLinePlaceCall(int vlid, const char *uri, void *userdata, int rcid)
 {
   return phLinePlaceCall_withCa(vlid, uri, userdata, rcid, PH_STREAM_AUDIO, 0);
+}
+
+MY_DLLEXPORT int 
+phLinePlaceCall2(int vlid, const char *uri, void *userdata, int rcid, int streams)
+{
+   return phLinePlaceCall_withCa(vlid, uri, userdata, rcid, streams, 0);
 }
 
 
@@ -2937,6 +2959,8 @@ phInit(phCallbacks_t *cbk, char * server, int asyncmode)
 
   phIsInitialized = 1;
 
+  sdp_register_plugin(); // TODO remove when we have a real SDP plugin
+
   DEBUGTRACE("PhInit finished\n");
 
   return 0;
@@ -3085,8 +3109,6 @@ phPoll()
     }
   return 0;
 }
-
-
 
 void ph_refer_notify(int did, int status, const char* msg, int final)
 {
@@ -3785,7 +3807,7 @@ ph_call_ringing(eXosip_event_t *je)
 }
 
 
-static void 
+/*static*/ void 
 ph_call_requestfailure(eXosip_event_t *je)
 {
   phCallStateInfo_t info;
@@ -4302,6 +4324,9 @@ void ph_subscription_progress(eXosip_event_t *je)
 	}
 }
 
+
+// <ncouturier>
+#ifndef USE_PLUGINS
 static int
 ph_event_get()
 {
@@ -4446,9 +4471,217 @@ ph_event_get()
 		return 0;
 	return -1;
 }
+#endif /* USE_PLUGINS */
 
+// </ncouturier>
 #define MAX_SRV_IDLE_TIME	45 /* The maximum idle time since we receive the last message from server */
 
+// <ncouturier>
+#ifdef USE_PLUGINS
+/**
+* Tests if an event is a call event.
+*
+* @param	[in]	je : an eXosip event
+* @return	TRUE if it is a call event; FALSE else
+*/
+static unsigned int isCallEvent(eXosip_event_t * je){
+	if(je->type == EXOSIP_CALL_NEW ||
+		je->type == EXOSIP_CALL_ANSWERED ||
+		je->type == EXOSIP_CALL_PROCEEDING ||
+		je->type == EXOSIP_CALL_RINGING ||
+		je->type == EXOSIP_CALL_REDIRECTED ||
+		je->type == EXOSIP_CALL_REPLACES ||
+		je->type == EXOSIP_CALL_REQUESTFAILURE ||
+		je->type == EXOSIP_CALL_SERVERFAILURE ||
+		je->type == EXOSIP_CALL_GLOBALFAILURE ||
+		je->type == EXOSIP_CALL_NOANSWER ||
+		je->type == EXOSIP_CALL_CLOSED ||
+		je->type == EXOSIP_CALL_HOLD ||
+		je->type == EXOSIP_CALL_OFFHOLD ||
+		je->type == EXOSIP_CALL_REFERED ||
+		je->type == EXOSIP_CALL_REFER_STATUS ||
+		je->type == EXOSIP_CALL_REFER_FAILURE){
+
+		return TRUE;
+	}
+	return FALSE;
+}
+/**
+* Forwards the processiong of events to the appropriate plugin.
+*
+* @param	[in]	plugin : the plugin to which forward the event
+* @param	[in][out]	je : the eXosip event
+*/
+static void ph_process_call_event(phplugin_t * plugin, eXosip_event_t * je){
+	if(plugin != NULL && je != NULL){
+		switch(je->type){
+			case EXOSIP_CALL_NEW:
+				if(plugin->plg_callbacks.on_EXOSIP_CALL_NEW != NULL) plugin->plg_callbacks.on_EXOSIP_CALL_NEW(je);
+				break;
+			
+			case EXOSIP_CALL_ANSWERED:
+				if(plugin->plg_callbacks.on_EXOSIP_CALL_ANSWERED != NULL) plugin->plg_callbacks.on_EXOSIP_CALL_ANSWERED(je);
+				break;
+
+			case EXOSIP_CALL_PROCEEDING:
+				if(plugin->plg_callbacks.on_EXOSIP_CALL_PROCEEDING != NULL) plugin->plg_callbacks.on_EXOSIP_CALL_PROCEEDING(je);
+				break;
+
+			case EXOSIP_CALL_RINGING:
+				if(plugin->plg_callbacks.on_EXOSIP_CALL_RINGING != NULL) plugin->plg_callbacks.on_EXOSIP_CALL_RINGING(je);
+				break;
+
+			case EXOSIP_CALL_REDIRECTED:
+				if(plugin->plg_callbacks.on_EXOSIP_CALL_REDIRECTED != NULL) plugin->plg_callbacks.on_EXOSIP_CALL_REDIRECTED(je);
+				break;
+
+			case EXOSIP_CALL_REPLACES:
+				if(plugin->plg_callbacks.on_EXOSIP_CALL_REPLACES != NULL) plugin->plg_callbacks.on_EXOSIP_CALL_REPLACES(je);
+				break;
+
+			case EXOSIP_CALL_REQUESTFAILURE:
+				if(plugin->plg_callbacks.on_EXOSIP_CALL_REQUESTFAILURE != NULL) plugin->plg_callbacks.on_EXOSIP_CALL_REQUESTFAILURE(je);
+				break;
+
+			case EXOSIP_CALL_SERVERFAILURE:
+				if(plugin->plg_callbacks.on_EXOSIP_CALL_SERVERFAILURE != NULL) plugin->plg_callbacks.on_EXOSIP_CALL_SERVERFAILURE(je);
+				break;
+
+			case EXOSIP_CALL_GLOBALFAILURE:
+				if(plugin->plg_callbacks.on_EXOSIP_CALL_GLOBALFAILURE != NULL) plugin->plg_callbacks.on_EXOSIP_CALL_GLOBALFAILURE(je);
+				break;
+
+			case EXOSIP_CALL_NOANSWER:
+				if(plugin->plg_callbacks.on_EXOSIP_CALL_NOANSWER != NULL) plugin->plg_callbacks.on_EXOSIP_CALL_NOANSWER(je);
+				break;
+
+			case EXOSIP_CALL_CLOSED:
+				if(plugin->plg_callbacks.on_EXOSIP_CALL_CLOSED != NULL) plugin->plg_callbacks.on_EXOSIP_CALL_CLOSED(je);
+				break;
+
+			case EXOSIP_CALL_HOLD:
+				if(plugin->plg_callbacks.on_EXOSIP_CALL_HOLD != NULL) plugin->plg_callbacks.on_EXOSIP_CALL_HOLD(je);
+				break;
+
+			case EXOSIP_CALL_OFFHOLD:
+				if(plugin->plg_callbacks.on_EXOSIP_CALL_OFFHOLD != NULL) plugin->plg_callbacks.on_EXOSIP_CALL_OFFHOLD(je);
+				break;			
+
+			case EXOSIP_CALL_REFERED:
+				if(plugin->plg_callbacks.on_EXOSIP_CALL_REFERED != NULL) plugin->plg_callbacks.on_EXOSIP_CALL_REFERED(je);
+				break;
+
+			case EXOSIP_CALL_REFER_STATUS:
+				if(plugin->plg_callbacks.on_EXOSIP_CALL_REFER_STATUS != NULL) plugin->plg_callbacks.on_EXOSIP_CALL_REFER_STATUS(je);
+				break;
+
+			case EXOSIP_CALL_REFER_FAILURE:
+				if(plugin->plg_callbacks.on_EXOSIP_CALL_REFER_FAILURE != NULL) plugin->plg_callbacks.on_EXOSIP_CALL_REFER_FAILURE(je);
+				break;			
+
+			default:
+				if (phDebugLevel > 0){
+					ph_printf("event(%i %i %i %i) text=%s\n", je->cid, je->sid, je->nid, je->did, je->textinfo);
+				}
+				break;
+		}
+	}
+}
+
+/**
+* Retrieves eXosip events
+*
+* @return	0 if there has been events; -1 if there were no events
+*/
+static int ph_event_get(){
+	int counter =0;
+	/* use events to print some info */
+	eXosip_event_t *je;
+	phplugin_t * plugin = NULL;
+
+	//  phReleaseTerminatedCalls();
+	for (;;){
+		je = eXosip_event_wait(0,timeout);
+		if (je==NULL){
+			break;
+		}
+		counter++;
+
+		if (phDebugLevel > 0){
+			ph_printf("\n<- %s (%i %i) [%i %s] %s requri=%s\n",
+			evtnames[je->type], je->cid, je->did, 
+			je->status_code,
+			je->reason_phrase,
+			je->remote_uri,
+			je->req_uri);
+		}
+
+		// get the plugin corresponding to that content-type
+		if(isCallEvent(je)){
+			if(je->i_ctt != NULL){
+				// prepare the key (content type)
+				phplugin_content_type_t content_type;
+				strncpy(content_type.type, je->i_ctt->type, sizeof(content_type.type));
+				strncpy(content_type.subtype, je->i_ctt->subtype, sizeof(content_type.subtype));
+				// get the plugin associated with the content type
+				plugin = phplugin_get_plugin_associated_to_content_type(content_type);
+				// associates the plugin to the call id
+				phplugin_associate_callid_to_plugin(je->cid, plugin);
+			}else{
+				// tries to retrieve the plugin associated to the call id
+				plugin = phplugin_get_plugin_associated_to_call_id(je->cid);
+			}		
+
+			// call to process the event according the plugin used
+			if(plugin != NULL){
+				ph_process_call_event(plugin, je);
+			}
+		}else{
+			switch(je->type){
+				case EXOSIP_REGISTRATION_SUCCESS:
+					ph_reg_progress(je);
+					break;
+
+				case EXOSIP_REGISTRATION_FAILURE:
+					ph_reg_progress(je);
+					break;
+
+				case EXOSIP_MESSAGE_NEW:					
+				case EXOSIP_MESSAGE_SUCCESS:        /* announce a 200ok to a previous sent */
+				case EXOSIP_MESSAGE_FAILURE:
+					ph_message_progress(je);
+					break;
+
+				case EXOSIP_SUBSCRIPTION_REQUESTFAILURE:
+				case EXOSIP_SUBSCRIPTION_ANSWERED:
+					ph_subscription_progress(je);
+					break;
+
+				case EXOSIP_SUBSCRIPTION_NOTIFY:
+					ph_notify_handler(je);
+					break;
+
+				default:
+					if (phDebugLevel > 0){
+						ph_printf("event(%i %i %i %i) text=%s\n", je->cid, je->sid, je->nid, je->did, je->textinfo);
+					}
+					break;
+			}
+		}
+
+		eXosip_event_free(je);
+	}
+
+	ph_refresh_vlines();
+	ph_scan_calls();
+
+	if (counter>0){
+		return 0;
+	}
+	return -1;
+}
+#endif /* USE_PLUGINS */
+// </ncouturier>
 static void
 ph_keep_refreshing()
 {
@@ -4628,3 +4861,551 @@ void phSetDebugLevel(int level)
 {
   phDebugLevel = level;
 }
+
+// <ncouturier>
+// ----- GENERIC WRAPPERS FOR PLUGINS -----
+
+/**
+* Gets the local IP
+*
+* @param	[out]	ip : the buffer that will receive the local ip
+*/
+MY_DLLEXPORT void ph_get_local_ip(char * ip){
+	eXosip_get_localip(ip);
+}
+
+/**
+* Gets the local username
+*
+* @param	[in]	vlid : a virtual line id
+* @return	the local username
+*/
+MY_DLLEXPORT char * ph_get_username(int vlid){
+	struct vline *vl;
+
+	if (!(vl = ph_valid_vlid(vlid))){
+		return NULL;
+	}
+
+	return vl->username;
+}
+
+
+/**
+* Gets the virtual line id associated to a user_id
+*
+* @param	[in]	user_id : ?
+* @param	[in]	alt_id : ?
+* @return	the virtual line id
+*/
+MY_DLLEXPORT int ph_get_vlid(const char * user_id, const char * alt_id){
+	return ph_get_vline_id(user_id, alt_id);
+}
+
+/**
+* Generic PhApi service. Sends an invite with a custom body
+*
+* @param	[in]	vlid : a virtual line id
+* @param	[in]	userdata : ?
+* @param	[in]	uri : the destination uri (ex : "<sip:user@domain>")
+* @param	[in]	bodytype : the type of body message (ex : "type/subtype")
+* @param	[in]	body : the custom message body
+* @param	[in]	call_id : the call id
+* @return	TRUE if succeeds; FALSE else
+*/
+MY_DLLEXPORT int phInvite(int vlid, void *userdata, char * uri, const char * bodytype, const char * body, int * call_id){
+	int i;
+	osip_message_t *invite;
+	char *proxy = phcfg.proxy;
+	struct vline *vl;
+	char from[512];
+	phcall_t *ca = NULL; // forced to use it, even though it mixes the notion of SIP and SDP call
+
+	DBG_SIP_NEGO("phLineSendFile: a new file transfer is being processed\n",0,0,0);
+ 
+
+	// TODO verif des arguments
+	if (!nonempty(uri)){
+		return -PH_BADARG;
+	}
+
+	if (!(vl = ph_valid_vlid(vlid))){
+		return -PH_BADVLID;
+	}
+
+	ph_build_from(from, sizeof(from), vl);
+
+	proxy = vl->proxy;
+
+	if((i = eXosip_build_initial_invite(&invite, uri, from, proxy, "")) != 0){
+		return -1;
+	}
+
+	eXosip_lock();
+	i = eXosip_initiate_call_with_body(invite, bodytype, body, userdata);
+
+	ca = ph_allocate_call(i);
+	ca->vlid = ph_vline2vlid(vl);
+
+	eXosip_unlock(); 
+
+	if(ca != NULL && call_id != NULL){
+			*call_id = ca->cid;
+
+			// associate this new call with the right plugin
+			phplugin_associate_callid_to_plugin2(ca->cid, bodytype);
+	}
+
+	return i;
+}
+
+/**
+* Generic PhApi service. Sends a 200OK with a custom body
+*
+* @param	[in]	cid : the call id
+* @param	[in]	bodytype : the type of body message (ex : "type/subtype")
+* @param	[in]	body : the custom message body
+* @return	TRUE if succeeds; FALSE else
+*/
+MY_DLLEXPORT int phAccept(int cid, const char * bodytype, const char * body){
+	int i;
+	phcall_t *ca = ph_locate_call_by_cid(cid);
+
+	DBG_SIP_NEGO("SIP NEGO: phAccept\n", 0, 0, 0);
+	if (!ca) {
+		return -PH_BADCID;
+	}
+
+	eXosip_lock();
+	i = eXosip_answer_call_with_body(ca->did, 200, bodytype, body);
+	eXosip_unlock();
+
+	if (i)
+		return i;
+
+	return 0;
+}
+/**
+* Generic PhApi service. Creates a new call in PhApi.
+*
+* @param	[in]	cid : a call id
+* @param	[in]	did : a dialog id
+* @param	[in]	local_uri : ?
+* @param	[in]	req_uri : ?
+* @return	TRUE if succeeds; FALSE else
+*/
+MY_DLLEXPORT int phNewCall(int cid, int did, const char * local_uri, const char * req_uri){
+	phcall_t *ca;
+	struct vline *vl;
+	int vlid;
+
+	vlid = ph_get_vline_id(local_uri, req_uri);
+
+	if (!vlid)
+	{
+		ph_answer_request(did, 404, 0);
+		return FALSE;
+	}
+
+	vl = ph_vlid2vline(vlid);
+
+	assert(vl);
+
+	if (vl->busy)
+	{
+		ph_answer_request(did, 486, vl->contact);
+		return FALSE;
+	}
+
+
+	if (vl->followme && vl->followme[0])
+	{
+		ph_answer_request(did, 302, vl->followme);
+		return FALSE;
+	}
+
+	// ca = ph_locate_call(je, 1);
+	if((ca = ph_locate_call_by_cid(cid)) == NULL){
+		if((ca = ph_allocate_call(cid)) == NULL){
+			m_log_error("Could not locate call", "phNewCall");
+			return FALSE;
+		}
+		ca->did = did;
+	}
+
+	if (ca)
+	{
+		ca->vlid = vlid;
+		ph_build_cname(ca->cname, sizeof(ca->cname), ph_vlid2vline(ca->vlid));
+	}
+	else
+	{
+		ph_answer_request(did, 500, vl->contact);
+		return FALSE;
+	}
+
+	return ca->cid;
+}
+
+/**
+* Generic PhApi service. Stops the state ringing of a call.
+*
+* @param	[in]	call_id : a call id
+* @return	TRUE if succeeds; FALSE else
+*/
+MY_DLLEXPORT int phStopRinging(int call_id){
+	phcall_t *ca = NULL;
+
+	ca = ph_locate_call_by_cid(call_id);
+	if(ca && ca->isringing){
+		ca->isringing = 0;
+		return TRUE;
+	}
+	return FALSE;
+}
+
+/**
+* Generic PhApi service.
+*
+* @param	[in]	call_id : the call id
+* @param	[in]	status_code : the status code of the originating eXosip event
+* @return	TRUE if succeeds; FALSE else
+*/
+MY_DLLEXPORT int phCallAnswered(int call_id, int did, int status_code){
+	phcall_t *ca, *rca=0;
+
+	DBG_SIP_NEGO("SIP NEGO: ph_call_answered\n", 0, 0, 0);
+
+	ca = ph_locate_call_by_cid(call_id);
+	if(ca){
+		rca = ph_locate_call_by_rcid(ca->rcid);
+	}else{
+		return FALSE;
+	}
+
+	ca->did = did;
+
+	if(ca->localresume){
+		ca->localresume = 0;
+	}
+
+	if(rca){
+		ph_refer_notify(rca->rdid, status_code, "Answered", 1);
+	}
+
+	return TRUE;
+}
+
+/**
+* Generic PhApi service. Sends a CANCEL, DECLINE or a BYE that must be sent
+*
+* @param	[in]	call_id : the call id
+* @return	TRUE if succeeds; FALSE else
+*/
+MY_DLLEXPORT int phBye(int call_id){
+	int i;
+	phcall_t *ca = ph_locate_call_by_cid(call_id);
+	int did;
+
+	DBG_SIP_NEGO("phCloseSipCall %d\n", call_id,0,0);
+
+	if(!ca){
+		return -PH_BADCID;
+	}
+
+	if(ca->isringing){
+		ca->isringing = 0;
+	}
+
+	did = ca->did;
+
+	ph_release_call2(ca);
+
+	eXosip_lock();
+	i = eXosip_terminate_call(call_id, did);
+	eXosip_unlock();
+
+	phplugin_disassociate_callid_from_any_plugin(call_id);
+
+	if(i){
+		return i;
+	}
+
+	return i;
+}
+
+/**
+* Generic PhApi service. Is the same as a phBye, because the function eXosip_terminate_call() used inside decides
+* wether it is a CANCEL, DECLINE or a BYE that must be sent
+*
+* @param	[in]	call_id : the call id
+* @return	TRUE if succeeds; FALSE else
+*/
+MY_DLLEXPORT int phCancel(int call_id){
+	int i;
+	phcall_t *ca = ph_locate_call_by_cid(call_id);
+	int did;
+
+	DBG_SIP_NEGO("phCloseSipCall %d\n", call_id,0,0);
+
+	if(!ca){
+		return -PH_BADCID;
+	}
+
+	if(ca->isringing){
+		ca->isringing = 0;
+	}
+
+	did = ca->did;
+
+	ph_release_call2(ca);
+
+	eXosip_lock();
+	i = eXosip_terminate_call(call_id, did);
+	eXosip_unlock();
+
+	phplugin_disassociate_callid_from_any_plugin(call_id);
+
+	if(i){
+		return i;
+	}
+
+	return i;
+}
+
+/**
+* Generic PhApi service.
+*
+* @param	[in]
+* @return	TRUE if succeeds; FALSE else
+*/
+MY_DLLEXPORT int phEndCall(int call_id, int status_code){
+	phcall_t *ca, *rca=0;
+
+	ca = ph_locate_call_by_cid(call_id);
+	if(ca){
+		rca = ph_locate_call_by_cid(ca->rcid);
+		ph_release_call(ca);
+	}else{
+		return FALSE;
+	}
+
+	if (rca){
+		ph_refer_notify(rca->rdid, status_code, "Closed", 1);
+	}
+
+	phplugin_disassociate_callid_from_any_plugin(call_id);
+
+	return TRUE;
+}
+/**
+* Generic PhApi service.
+*
+* @param	[in]	call_id : the call id
+* @param	[in]	status_code : the status code of the originating eXosip event
+* @return	TRUE if succeeds; FALSE else
+*/
+MY_DLLEXPORT int phRequestFailure(int call_id, int status_code){
+	phcall_t *ca, *rca=0;
+
+	ca = ph_locate_call_by_cid(call_id);
+	if(!ca){
+		return FALSE;
+	}
+
+	rca = ph_locate_call_by_cid(ca->rcid);
+	ph_release_call(ca);
+
+	if (rca){
+		ph_refer_notify(rca->rdid, status_code, status_code == 486 ? "Busy" : "Request failure", 1);
+	}
+
+	phplugin_disassociate_callid_from_any_plugin(call_id);
+
+	return TRUE;
+}
+
+/**
+* Generic PhApi service.
+*
+* @param	[in]	call_id : the call id
+* @param	[in]	status_code : the status code of the originating eXosip event
+* @return	TRUE if succeeds; FALSE else
+*/
+MY_DLLEXPORT int phServerFailure(int call_id, int status_code){
+	phcall_t *ca, *rca=0;
+
+	ca = ph_locate_call_by_cid(call_id);
+	if(ca){
+		rca = ph_locate_call_by_cid(ca->rcid);
+		ph_release_call(ca);
+	}else{
+		return FALSE;
+	}
+
+	if(rca){
+		ph_refer_notify(rca->rdid, status_code, "Server failure", 1);
+	}
+
+	phplugin_disassociate_callid_from_any_plugin(call_id);
+
+	return TRUE;
+}
+
+/**
+* Generic PhApi service.
+*
+* @param	[in]	call_id : the call id
+* @param	[in]	status_code : the status code of the originating eXosip event
+* @return	TRUE if succeeds; FALSE else
+*/
+MY_DLLEXPORT int phGlobalFailure(int call_id, int status_code){
+	phcall_t *ca, *rca=0;
+
+	ca = ph_locate_call_by_cid(call_id);
+	if(ca){
+		rca = ph_locate_call_by_cid(ca->rcid);
+		ph_release_call(ca);
+	}else{
+		return FALSE;
+	}
+
+	if(rca){
+		ph_refer_notify(rca->rdid, status_code, "Global failure", 1);
+	}
+
+	phplugin_disassociate_callid_from_any_plugin(call_id);
+
+	return TRUE;
+}
+
+/**
+* Generic PhApi service.
+*
+* @param	[in]	call_id : the call id
+* @param	[in]	status_code : the status code of the originating eXosip event
+* @return	TRUE if succeeds; FALSE else
+*/
+MY_DLLEXPORT int phNoAnswer(int call_id, int status_code){
+	phcall_t *ca, *rca=0;
+
+	ca = ph_locate_call_by_cid(call_id);
+	if (ca){
+		rca = ph_locate_call_by_cid(ca->rcid);
+		ph_release_call(ca);
+	}
+
+	if (rca){
+		ph_refer_notify(rca->rdid, status_code, "No answer", 1);
+	}
+
+	phplugin_disassociate_callid_from_any_plugin(call_id);
+
+	return TRUE;
+}
+
+/**
+* Generic PhApi service.
+*
+* @param	[in]	call_id : the call id
+* @param	[in]	status_code : the status code of the originating eXosip event
+* @return	TRUE if succeeds; FALSE else
+*/
+MY_DLLEXPORT int phProceeding(int call_id, int status_code){
+	phcall_t *ca, *rca=0;
+
+	DBG_SIP_NEGO("SIP NEGO: phProceeding\n", 0, 0, 0);
+
+	ca = ph_locate_call_by_cid(call_id);
+	if(ca){
+		rca = ph_locate_call_by_cid(ca->rcid);
+	}else{
+		return FALSE;
+	}
+
+	if(rca){
+		ph_refer_notify(rca->rdid, status_code, "Proceeding", 0);
+	}
+
+	return TRUE;
+}
+
+/**
+* Generic PhApi service.
+*
+* @param	[in]	call_id : the call id
+* @return	TRUE if succeeds; FALSE else
+*/
+MY_DLLEXPORT int phRinging(int call_id){
+	phcall_t *ca, *rca=0;
+
+	DBG_SIP_NEGO("SIP NEGO: phRinging\n", 0, 0, 0);
+
+	ca = ph_locate_call_by_cid(call_id);
+	if(ca){
+		rca = ph_locate_call_by_cid(ca->rcid);
+	}else{
+		return FALSE;
+	}
+
+	if (rca){
+		ph_refer_notify(rca->rdid, 180, "Ringing", 0);
+	}
+
+	return TRUE;
+}
+
+MY_DLLEXPORT int phHoldOn(int call_id, const char * bodytype){
+	phcall_t *ca = ph_locate_call_by_cid(call_id);
+	int i;
+
+	DBG_SIP_NEGO("SIP_NEGO: phHoldOn\n", 0, 0, 0);
+
+	if (!ca){
+		return -PH_BADCID;
+	}
+
+	if (ca->localhold){
+		return -PH_HOLDERR;
+	}
+
+	ca->localhold = 1;
+
+	eXosip_lock();
+	i = eXosip_on_hold_call_with_body(ca->did, bodytype, "holdon");
+	eXosip_unlock();
+
+	if(i==0){
+		return TRUE;
+	}
+	return FALSE;
+}
+
+MY_DLLEXPORT int phHoldOff(int call_id, const char * bodytype){
+	phcall_t *ca = ph_locate_call_by_cid(call_id);
+	int i;
+
+	DBG_SIP_NEGO("SIP_NEGO: phHoldOff\n", 0, 0, 0);
+
+	if (!ca){
+		return -PH_BADCID;
+	}
+
+	if (ca->localhold != 1){
+		return -PH_HOLDERR;
+	}
+
+	ca->localhold = 0;
+
+	eXosip_lock();
+	i = eXosip_off_hold_call_with_body(ca->did, bodytype, "holdoff");
+	eXosip_unlock();
+
+	if(i==0){
+		return TRUE;
+	}
+	return FALSE;
+}
+
+// -----
+// </ncouturier>

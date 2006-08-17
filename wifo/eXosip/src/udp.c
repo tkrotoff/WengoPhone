@@ -97,6 +97,10 @@ static int eXosip_pendingosip_transaction_exist(eXosip_call_t *jc, eXosip_dialog
 static int eXosip_release_finished_calls(eXosip_call_t *jc, eXosip_dialog_t *jd);
 static int eXosip_release_aborted_calls(eXosip_call_t *jc, eXosip_dialog_t *jd);
 
+// <ncouturier>
+osip_content_type_t * copy_content_type(osip_content_type_t * ctt_src);
+// </ncouturier>
+
 
 static void eXosip_send_default_answer(eXosip_dialog_t *jd,
 				       osip_transaction_t *transaction,
@@ -679,9 +683,6 @@ static void eXosip_process_cancel(osip_transaction_t *transaction, osip_event_t 
 }
 
 
-
-
- 
 static osip_event_t *
 eXosip_process_reinvite(eXosip_call_t *jc, eXosip_dialog_t *jd,
 			osip_transaction_t *transaction,
@@ -828,6 +829,14 @@ static void eXosip_process_new_options(osip_transaction_t *transaction, osip_eve
   __eXosip_wakeup();
 }
 
+/**
+* This function is called on receive of a new (out of any previous transaction) INVITE.
+* Sends provisional answers.
+* Puts an event in the eXosip event list.
+*
+* @param	[in] transaction	SIP messages part of the same Command Sequence (CSeq)
+* @param	[in] evt			? TODO
+*/
 static void eXosip_process_new_invite(osip_transaction_t *transaction, osip_event_t *evt)
 {
   osip_event_t *evt_answer;
@@ -835,7 +844,10 @@ static void eXosip_process_new_invite(osip_transaction_t *transaction, osip_even
   eXosip_call_t *jc, *oldjc;
   eXosip_dialog_t *jd, *oldjd;
   osip_message_t *answer;
-  int oldcid = 0;
+  // <ncouturier>
+  osip_body_t * body = NULL;
+  // </ncouturier>
+  int oldcid = 0;  
 
 
   /* if we're recieving a new INVITE with tag in To: header,  ignore it */
@@ -851,10 +863,6 @@ static void eXosip_process_new_invite(osip_transaction_t *transaction, osip_even
 	  return ;
 	}
     }
-
-
-
-
 
   eXosip_call_init(&jc);
   /* eXosip_call_set_subect... */
@@ -975,7 +983,36 @@ static void eXosip_process_new_invite(osip_transaction_t *transaction, osip_even
 	      snprintf(je->req_uri, 255, "%s", tmp);
 	      osip_free(tmp);
 	    }
-	  eXosip_event_add_sdp_info(je, transaction->orig_request);
+		// <ncouturier>
+		if(transaction->orig_request->content_type != NULL){
+			if (osip_strcasecmp(transaction->orig_request->content_type->type, "application") == 0 &&
+				osip_strcasecmp(transaction->orig_request->content_type->subtype, "sdp") == 0)
+			{			
+				eXosip_event_add_sdp_info(je, transaction->orig_request);
+				// fill in the content type
+				je->i_ctt = copy_content_type(transaction->orig_request->content_type);
+			}
+			else
+			{
+				// fill in the content type
+				je->i_ctt = copy_content_type(transaction->orig_request->content_type);
+
+				// fill in the body; just get the first body
+				// TODO get all the bodies?
+				if(!osip_list_eol(transaction->orig_request->bodies, 0)){
+					body = (osip_body_t *)osip_list_get(transaction->orig_request->bodies, 0);
+
+					if (je->msg_body) osip_free(je->msg_body);
+
+					je->msg_body = osip_strdup(body->body);
+					if (!je->msg_body){
+						eXosip_event_free(je);
+						return;				
+					}
+				}
+			}
+		}
+		// </ncouturier>
 	  eXosip_event_add_status(je, answer);
 	}
 
@@ -992,118 +1029,142 @@ static void eXosip_process_new_invite(osip_transaction_t *transaction, osip_even
 static void eXosip_process_invite_within_call(eXosip_call_t *jc, eXosip_dialog_t *jd,
 					      osip_transaction_t *transaction, osip_event_t *evt)
 {
-  sdp_message_t *sdp;
-  int i;
-  int pos;
-  int pos_media;
-  char *sndrcv;
-  char *ipaddr;
+	sdp_message_t *sdp;
+	int i;
+	int pos;
+	int pos_media;
+	char *sndrcv;
+	char *ipaddr;
+	osip_body_t *body;
 
-  /* Is this a "on hold" message? */
-  sdp = NULL;
-  pos = 0;
-  i = 500;
-  while (!osip_list_eol(evt->sip->bodies,pos))
-    {
-      osip_body_t *body;
-      body = (osip_body_t *)osip_list_get(evt->sip->bodies,pos);
-      pos++;
-      
-      i = sdp_message_init(&sdp);
-      if (i!=0) break;
-      
-      /* WE ASSUME IT IS A SDP BODY AND THAT    */
-      /* IT IS THE ONLY ONE, OF COURSE, THIS IS */
-      /* NOT TRUE */
-      if (body->body!=NULL)
-	{
-	  i = sdp_message_parse(sdp,body->body);
-	  if (i==0) {
-	    i = 200;
-	    break;
-	  }
-	}
-      sdp_message_free(sdp);
-      sdp = NULL;
-    }
+	/* Is this a "on hold" message? */
+	sdp = NULL;
+	pos = 0;
+	i = 500;
+	while (!osip_list_eol(evt->sip->bodies,pos)){		
+		body = (osip_body_t *)osip_list_get(evt->sip->bodies,pos);
+		pos++;
 
-  if (pos!=0 && i!=200)
-    {
-      send_default_answer(jd, transaction, evt, 400, NULL, NULL, __LINE__);
-      return;
-    }
+		// <ncouturier>
+		if(evt->sip != NULL && evt->sip->content_type != NULL && osip_strcasecmp(evt->sip->content_type->type, "application") == 0 && osip_strcasecmp(evt->sip->content_type->subtype, "sdp") == 0){
 
-  /* TODO: we should verify the content-type */
-  if (pos!=0)
-    {
-      pos_media=-1;
-      pos = 0;
-      ipaddr = NULL;
-      while (!sdp_message_endof_media(sdp, pos_media))
-	{
-	  ipaddr = sdp_message_c_addr_get(sdp, pos_media, pos);
-	  while (ipaddr!=NULL) /* only one is allowed here? */
-	    {
-	      if (pos==1 && pos_media==-1)
-		break;
-	      if (0==osip_strcasecmp("0.0.0.0", ipaddr))
-		break;
-	      pos++;
-	      ipaddr = sdp_message_c_addr_get(sdp, pos_media, pos);
-	    }
-	  if (pos==1 && pos_media==-1)
-	    ipaddr=NULL;
-	  if (ipaddr!=NULL)
-	    break;
-	  pos = 0;
-	  pos_media++;
-	}
-      
-      if (ipaddr==NULL)
-	{
-	  sndrcv = NULL;
-	  pos_media=-1;
-	  pos = 0;
-	  while (!sdp_message_endof_media(sdp, pos_media))
-	    {
-          const char *mtype = sdp_message_m_media_get(sdp, pos_media);
-          
-          /* take only audio streams in account */
-	      if ((mtype != 0) && !osip_strcasecmp(mtype, "audio"))
-            {
-	        sndrcv = sdp_message_a_att_field_get(sdp, pos_media, pos);
-	        while (sndrcv!=NULL)
-		        {
-		        if (0==osip_strcasecmp("inactive", sndrcv) || 0==osip_strcasecmp("sendonly", sndrcv))
-		            break;
-		        pos++;
-		        sndrcv = sdp_message_a_att_field_get(sdp, pos_media, pos);
-		        }
-            }
-            
-	      if (sndrcv!=NULL)
-		    break;
-	      pos = 0;
-	      pos_media++;
-	    }
+			i = sdp_message_init(&sdp);
+			if (i!=0){
+				break;
+			}
+
+			/* WE ASSUME IT IS A SDP BODY AND THAT    */
+			/* IT IS THE ONLY ONE, OF COURSE, THIS IS */
+			/* NOT TRUE */
+			if (body->body!=NULL){
+				i = sdp_message_parse(sdp,body->body);
+				if (i==0) {
+					i = 200;
+					break;
+				}
+			}
+			sdp_message_free(sdp);
+			sdp = NULL;
+
+		}else{
+			if(body != NULL && body->body != NULL && (osip_strcasecmp(body->body, "holdon") == 0 || osip_strcasecmp(body->body, "holdoff") == 0)){
+				i = 200;
+			}
+		}
+		// </ncouturier>
 	}
 
-      if (ipaddr!=NULL || (sndrcv!=NULL && (0==osip_strcasecmp("inactive", sndrcv)
-					    || 0==osip_strcasecmp("sendonly", sndrcv))))
-	{
-	  /*  We received an INVITE to put on hold the other party. */
-	  eXosip_process_invite_on_hold(jc, jd, transaction, evt, sdp);
-	  return;
+	if (pos!=0 && i!=200){
+		send_default_answer(jd, transaction, evt, 400, NULL, NULL, __LINE__);
+		return;
 	}
-      else
-	{
-	  /* This is a call modification, probably for taking it of hold */
-	  eXosip_process_invite_off_hold(jc, jd, transaction, evt, sdp);
-	  return;
+
+	// <ncouturier>
+
+	/* TODO: we should verify the content-type */
+
+	if(evt->sip != NULL && evt->sip->content_type != NULL && osip_strcasecmp(evt->sip->content_type->type, "application") == 0 && osip_strcasecmp(evt->sip->content_type->subtype, "sdp") == 0){
+		if (pos!=0){
+			pos_media=-1;
+			pos = 0;
+			ipaddr = NULL;
+			while (!sdp_message_endof_media(sdp, pos_media)){
+				ipaddr = sdp_message_c_addr_get(sdp, pos_media, pos);
+				while (ipaddr!=NULL){ /* only one is allowed here? */			
+					if (pos==1 && pos_media==-1){
+						break;
+					}
+					if (0==osip_strcasecmp("0.0.0.0", ipaddr)){
+						break;
+					}
+					pos++;
+					ipaddr = sdp_message_c_addr_get(sdp, pos_media, pos);
+				}
+				if (pos==1 && pos_media==-1){
+					ipaddr=NULL;
+				}
+				if (ipaddr!=NULL){
+					break;
+				}
+				pos = 0;
+				pos_media++;
+			}
+
+			if (ipaddr==NULL){
+				sndrcv = NULL;
+				pos_media=-1;
+				pos = 0;
+				while (!sdp_message_endof_media(sdp, pos_media)){
+					const char *mtype = sdp_message_m_media_get(sdp, pos_media);
+
+					/* take only audio streams in account */
+					if ((mtype != 0) && !osip_strcasecmp(mtype, "audio")){
+						sndrcv = sdp_message_a_att_field_get(sdp, pos_media, pos);
+						while (sndrcv!=NULL){
+							if (0==osip_strcasecmp("inactive", sndrcv) || 0==osip_strcasecmp("sendonly", sndrcv)){
+								break;
+							}
+							pos++;
+							sndrcv = sdp_message_a_att_field_get(sdp, pos_media, pos);
+						}
+					}
+
+					if (sndrcv!=NULL){
+						break;
+					}
+					pos = 0;
+					pos_media++;
+				}
+			}
+
+			if (ipaddr!=NULL || (sndrcv!=NULL && (0==osip_strcasecmp("inactive", sndrcv) || 0==osip_strcasecmp("sendonly", sndrcv)))){
+				/*  We received an INVITE to put on hold the other party. */
+				eXosip_process_invite_on_hold(jc, jd, transaction, evt, sdp);
+				return;
+			}else{
+				/* This is a call modification, probably for taking it of hold */
+				eXosip_process_invite_off_hold(jc, jd, transaction, evt, sdp);
+				return;
+			}
+		}
+
+	}else{
+		if (pos!=0){
+			if(body != NULL && body->body != NULL && osip_strcasecmp(body->body, "holdon") == 0){
+				/*  We received an INVITE to put on hold the other party. */
+				eXosip_process_invite_on_hold(jc, jd, transaction, evt, sdp);
+				return;
+			}else if(body != NULL && body->body != NULL && osip_strcasecmp(body->body, "holdoff") == 0){
+				/* This is a call modification, probably for taking it of hold */
+				eXosip_process_invite_off_hold(jc, jd, transaction, evt, sdp);
+				return;
+			}
+		}
 	}
-    }
-  eXosip_process_invite_off_hold(jc, jd, transaction, evt, NULL);
-  return;
+
+	// </ncouturier>
+	eXosip_process_invite_off_hold(jc, jd, transaction, evt, NULL);
+	return;
 }
 
 static int eXosip_event_package_is_supported(osip_transaction_t *transaction,
@@ -2688,3 +2749,14 @@ void eXosip_release_terminated_calls ( void )
 	pos++;
     }
 }
+
+// <ncouturier>
+osip_content_type_t * copy_content_type(osip_content_type_t * ctt_src){
+	osip_content_type_t * ctt_dst = (osip_content_type_t *)malloc(sizeof(osip_content_type_t));
+	ctt_dst->type = strdup(ctt_src->type);
+	ctt_dst->subtype = strdup(ctt_src->subtype);
+	ctt_dst->gen_params = NULL;
+
+	return ctt_dst;
+}
+// </ncouturier>

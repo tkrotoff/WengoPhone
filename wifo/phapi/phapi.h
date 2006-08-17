@@ -883,7 +883,167 @@ MY_DLLEXPORT int  phVideoControlSetBitrate(int callid, int maxrate, int minrate)
 MY_DLLEXPORT void phVideoControlCodecSet(int, struct phVideoCodecConfig *);
 MY_DLLEXPORT void phVideoControlCodecGet(int, struct phVideoCodecConfig *);
 
+/*****************FILE-TRANSFER****************/
+// <ncouturier>
+/**
+* Gets the local IP
+*
+* @param	[out]	ip : the buffer that will receive the local ip
+*/
+MY_DLLEXPORT void ph_get_local_ip(char * ip);
 
+/**
+* Gets the virtual line id associated to a user_id
+*
+* @param	[in]	user_id : ?
+* @param	[in]	alt_id : ?
+* @return	the virtual line id
+*/
+MY_DLLEXPORT int ph_get_vlid(const char * user_id, const char * alt_id);
+
+/**
+* Gets the local username
+*
+* @param	[in]	vlid : a virtual line id
+* @return	the local username
+*/
+MY_DLLEXPORT char * ph_get_username(int vlid);
+
+/**
+* Generic PhApi service. Sends an invite with a custom body
+*
+* @param	[in]	vlid : a virtual line id
+* @param	[in]	userdata : ?
+* @param	[in]	uri : the destination uri (ex : "<sip:user@domain>")
+* @param	[in]	bodytype : the type of body message (ex : "type/subtype")
+* @param	[in]	body : the custom message body
+* @param	[in]	call_id : the call id
+* @return	TRUE if succeeds; FALSE else
+*/
+MY_DLLEXPORT int phInvite(int vlid, void *userdata, char * uri, const char * bodytype, const char * body, int * call_id);
+
+/**
+* Generic PhApi service. Creates a new call in PhApi.
+*
+* @param	[in]	cid : a call id
+* @param	[in]	did : a dialog id
+* @param	[in]	local_uri : ?
+* @param	[in]	req_uri : ?
+* @return	TRUE if succeeds; FALSE else
+*/
+MY_DLLEXPORT int phNewCall(int cid, int did, const char * local_uri, const char * req_uri);
+
+/**
+* Generic PhApi service. Stops the state ringing of a call.
+*
+* @param	[in]	call_id : a call id
+* @return	TRUE if succeeds; FALSE else
+*/
+MY_DLLEXPORT int phStopRinging(int call_id);
+
+/**
+* Generic PhApi service.
+*
+* @param	[in]	call_id : the call id
+* @param	[in]	did : the dialog id
+* @param	[in]	status_code : the status code of the originating eXosip event
+* @return	TRUE if succeeds; FALSE else
+*/
+MY_DLLEXPORT int phCallAnswered(int call_id, int did, int status_code);
+
+/**
+* Generic PhApi service. Sends a 200OK with a custom body
+*
+* @param	[in]	cid : the call id
+* @param	[in]	bodytype : the type of body message (ex : "type/subtype")
+* @param	[in]	body : the custom message body
+* @return	TRUE if succeeds; FALSE else
+*/
+MY_DLLEXPORT int phAccept(int cid, const char * bodytype, const char * body);
+
+/**
+* Generic PhApi service. Sends a CANCEL, DECLINE or a BYE that must be sent
+*
+* @param	[in]	call_id : the call id
+* @return	TRUE if succeeds; FALSE else
+*/
+MY_DLLEXPORT int phBye(int call_id);
+
+/**
+* Generic PhApi service. Is the same as a phBye, because the function eXosip_terminate_call() used inside decides
+* wether it is a CANCEL, DECLINE or a BYE that must be sent
+*
+* @param	[in]	call_id : the call id
+* @return	TRUE if succeeds; FALSE else
+*/
+MY_DLLEXPORT int phCancel(int sid);
+
+/**
+* Generic PhApi service.
+*
+* @param	[in]
+* @return	TRUE if succeeds; FALSE else
+*/
+MY_DLLEXPORT int phEndCall(int call_id, int status_code);
+
+/**
+* Generic PhApi service.
+*
+* @param	[in]	call_id : the call id
+* @param	[in]	status_code : the status code of the originating eXosip event
+* @return	TRUE if succeeds; FALSE else
+*/
+MY_DLLEXPORT int phRequestFailure(int call_id, int status_code);
+
+/**
+* Generic PhApi service.
+*
+* @param	[in]	call_id : the call id
+* @param	[in]	status_code : the status code of the originating eXosip event
+* @return	TRUE if succeeds; FALSE else
+*/
+MY_DLLEXPORT int phServerFailure(int call_id, int status_code);
+
+/**
+* Generic PhApi service.
+*
+* @param	[in]	call_id : the call id
+* @param	[in]	status_code : the status code of the originating eXosip event
+* @return	TRUE if succeeds; FALSE else
+*/
+MY_DLLEXPORT int phGlobalFailure(int call_id, int status_code);
+
+/**
+* Generic PhApi service.
+*
+* @param	[in]	call_id : the call id
+* @param	[in]	status_code : the status code of the originating eXosip event
+* @return	TRUE if succeeds; FALSE else
+*/
+MY_DLLEXPORT int phNoAnswer(int call_id, int status_code);
+
+/**
+* Generic PhApi service.
+*
+* @param	[in]	call_id : the call id
+* @param	[in]	status_code : the status code of the originating eXosip event
+* @return	TRUE if succeeds; FALSE else
+*/
+MY_DLLEXPORT int phProceeding(int call_id, int status_code);
+
+/**
+* Generic PhApi service.
+*
+* @param	[in]	call_id : the call id
+* @return	TRUE if succeeds; FALSE else
+*/
+MY_DLLEXPORT int phRinging(int call_id);
+
+MY_DLLEXPORT int phHoldOn(int call_id, const char * bodytype);
+
+MY_DLLEXPORT int phHoldOff(int call_id, const char * bodytype);
+
+// </ncouturier>
 
 /********************CONFIG*********************/
 
