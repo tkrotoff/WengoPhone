@@ -38,6 +38,7 @@
 using namespace std;
 
 WengoAccount WengoAccount::empty;
+short WengoAccount::testSIPRetry = 3;
 
 WengoAccount::WengoAccount()
 	: SipAccount(),
@@ -230,13 +231,18 @@ bool WengoAccount::discoverForSIP() {
 	_localSIPPort = _networkDiscovery.getFreeLocalPort();
 	LOG_DEBUG("SIP will use " + String::fromNumber(_localSIPPort) + " as local SIP port");
 
-	if (_networkDiscovery.testUDP(_stunServer)
-		&& _networkDiscovery.testSIP(_sipProxyServerHostname, _sipProxyServerPort, _localSIPPort)) {
+	for (int i = 0; i < testSIPRetry; i++) {
 
-		_needsHttpTunnel = false;
+		LOG_DEBUG("testUDP / testSIP test number: " + String::fromNumber(i+1));
 
-		LOG_DEBUG("SIP can connect via UDP");
-		return true;
+		if ((_networkDiscovery.testUDP(_stunServer)) &&
+			(_networkDiscovery.testSIP(_sipProxyServerHostname, _sipProxyServerPort, _localSIPPort))) {
+
+			_needsHttpTunnel = false;
+
+			LOG_DEBUG("SIP can connect via UDP");
+			return true;
+		}
 	}
 
 	LOG_DEBUG("cannot connect via UDP");

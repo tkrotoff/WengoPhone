@@ -123,6 +123,9 @@ private:
 
 	/** True if the WengoAccount has been tested and is valid (SSO request ok). */
 	bool _isValid;
+
+	/** Number of testSIP retry. */
+	static short testSIPRetry;
 };
 
 #endif	//OWWENGOACCOUNT_H
