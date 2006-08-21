@@ -27,17 +27,17 @@ using namespace std;
 #include <boost/program_options.hpp>
 using namespace boost::program_options;
 
-#include <QApplication>
+#include <QtGui/QApplication>
 
 int main(int argc, char** argv) {
 
 	QApplication app(argc, argv);
 
-	string dumpfile = "";
-	string applicationName = "";
-	string lang = "";
-	string style = "";
-	string info = "";
+	string dumpfile;
+	string applicationName;
+	string lang;
+	string style;
+	string info;
 
 	try {
 
