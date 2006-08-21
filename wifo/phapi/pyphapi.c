@@ -379,10 +379,9 @@ static PyObject * PyPhLineSetBusy(PyObject *self, PyObject *params) {
 static PyObject * PyPhAcceptCall2(PyObject *self, PyObject *params) {
     int cid;
     int ret;
-    void *userdata;
 
-    if (PyArg_ParseTuple(params, "iO&", &cid, &userdata)) {
-        ret = phAcceptCall2(cid, userdata);
+    if (PyArg_ParseTuple(params, "i", &cid)) {
+        ret = phAcceptCall2(cid, 0);
     }
 
     return Py_BuildValue("i", ret);
@@ -394,11 +393,10 @@ static PyObject * PyPhAcceptCall2(PyObject *self, PyObject *params) {
 static PyObject * PyPhAcceptCall3(PyObject *self, PyObject *params) {
     int cid;
     int ret;
-    void *userdata;
     int stream;
 
-    if (PyArg_ParseTuple(params, "iO&i", &cid, &userdata, &stream)) {
-        ret = phAcceptCall3(cid, userdata, stream);
+    if (PyArg_ParseTuple(params, "ii", &cid, &stream)) {
+        ret = phAcceptCall3(cid, 0, stream);
     }
 
     return Py_BuildValue("i", ret);

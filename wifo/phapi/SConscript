@@ -291,15 +291,15 @@ if not WengoOSWindows() and not WengoOSMacOSX():
 pyphapi
 """
 phapi_py_env = WengoGetEnvironment()
-python_include = "C:\Program Files\Python24\include"
-python_lib = "C:\Program Files\Python24\libs"
-#python_lib = "/usr/lib/python2.4/config"
-#python_include = "/usr/include/python2.4"
 
 if WengoOSWindows():
 	phapi_py_env.WengoUseLibraries(["phapi", "python24"])
+	python_include = "C:\Program Files\Python24\include"
+	python_lib = "C:\Program Files\Python24\libs"
 else:
 	phapi_py_env.WengoUseLibraries(["phapi", "python2.4"])
+	python_lib = "/usr/lib/python2.4/config"
+	python_include = "/usr/include/python2.4"
 
 phapi_py_env.WengoAddIncludePath([python_include])
 phapi_py_env.WengoAddLibPath([python_lib])
