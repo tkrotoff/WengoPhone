@@ -81,10 +81,14 @@ void CPhoneCall::stateChangedEventHandler(PhoneCall & sender, EnumPhoneCallState
 }
 
 void CPhoneCall::stateChangedEventHandlerThreadSafe(EnumPhoneCallState::PhoneCallState state) {
+	if (!_pPhoneCall) {
+		return;
+	}
+
 	if (state == EnumPhoneCallState::PhoneCallStateClosed) {
 		_pPhoneCall->close();
 		_pPhoneCall = NULL;
-	} else if (_pPhoneCall) {
+	} else {
 		_pPhoneCall->stateChangedEvent(state);
 	}
 }
