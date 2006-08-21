@@ -183,6 +183,7 @@ static PyObject * PyPhTunnelConfig(PyObject *self, PyObject *params) {
                              httpt_server_port,
                              proxy_user,
                              proxy_passwd,
+							 0,
                              autoconf);
     }
 
