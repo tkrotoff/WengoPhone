@@ -168,7 +168,7 @@ int PhoneLine::makeCall(const std::string & phoneNumber) {
 
 	//History: create a HistoryMemento for this outgoing call
 	HistoryMemento * memento = new HistoryMemento(
-		HistoryMemento::OutgoingCall, sipAddress.getSipAddress(), callId);
+		HistoryMemento::OutgoingCall, sipAddress.getDisplayName(), callId);
 	_userProfile.getHistory().addMemento(memento);
 
 	return callId;
@@ -346,7 +346,7 @@ void PhoneLine::setPhoneCallState(int callId, EnumPhoneCallState::PhoneCallState
 
 		//History: create a HistoryMemento for this incoming call
 		HistoryMemento * memento = new HistoryMemento(
-				HistoryMemento::IncomingCall, sipAddress.getSipAddress(), callId);
+				HistoryMemento::IncomingCall, sipAddress.getDisplayName(), callId);
 		_userProfile.getHistory().addMemento(memento);
 
 		break;
