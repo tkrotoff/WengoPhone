@@ -28,25 +28,23 @@ class QDragMoveEvent;
 class QDragLeaveEvent;
 
 /**
- * Implements a text edit with drag and drop support for file transfer
+ * Subclass  a QTextEdit with drag and drop support for file transfer.
  *
  * @author Nicolas Couturier
  */
 class QtChatEditWidget : public QTextEdit {
-
 	Q_OBJECT
-
 public:
 
-    QtChatEditWidget(QWidget *parent);
+	QtChatEditWidget(QWidget *parent);
 
 protected:
 
-    void dragEnterEvent(QDragEnterEvent *event);
+	void dragEnterEvent(QDragEnterEvent * event);
 
-	void dragMoveEvent(QDragMoveEvent *event);
+	void dragMoveEvent(QDragMoveEvent * event);
 
-    void dropEvent(QDropEvent *event);
+	void dropEvent(QDropEvent * event);
 
 	void dragLeaveEvent(QDragLeaveEvent * event);
 };

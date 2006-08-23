@@ -17,398 +17,150 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <imwrapper/IMContactSet.h>
-#include <imwrapper/EnumIMProtocol.h>
-
 #include "QtChatWidget.h"
 #include "QtChatTabWidget.h"
-#include "QtChatWidgetManager.h"
+#include "QtChatActionBarWidget.h"
+#include "QtChatEditEventManager.h"
+#include "QtChatEditActionBarWidget.h"
+#include "QtChatEditWidget.h"
+#include "QtChatHistoryWidget.h"
+#include "QtChatUtils.h"
+#include "QtChatUserFrame.h"
+#include "chatroom/QtChatRoomInviteDlg.h"
+#include "contactlist/QtChatContactList.h"
 #include "emoticons/QtEmoticonsWidget.h"
-#include "emoticons/QtEmoticonsManager.h"
+
+#include <model/profile/UserProfile.h>
 
 #include <control/contactlist/CContactList.h>
 #include <control/profile/CUserProfile.h>
 
-#include <model/profile/UserProfile.h>
-
-#include <util/WebBrowser.h>
-#include <util/Logger.h>
-
-#include <cutil/global.h>
-
-#include <qtutil/QtWengoStyleLabel.h>
-
-#include <util/Logger.h>
-#include <util/WebBrowser.h>
-
 #include <presentation/qt/QtWengoPhone.h>
 #include <presentation/qt/contactlist/QtContactList.h>
 #include <presentation/qt/contactlist/QtContactListManager.h>
-#include <presentation/qt/chat/QtChatActionBarWidget.h>
-#include <presentation/qt/chat/QtChatEditWidget.h>
-#include <presentation/qt/chat/QtChatHistoryWidget.h>
+
+#include <imwrapper/IMContactSet.h>
+#include <imwrapper/EnumIMProtocol.h>
+
+#include <util/Logger.h>
+#include <cutil/global.h>
+#include <qtutil/QtWengoStyleLabel.h>
 
 #include <QtGui/QtGui>
 
-static const int CHAT_NOT_TYPING_DELAY=1000;
-static const int CHAT_STOPPED_TYPING_DELAY=1000;
-//static const QString CHAT_USER_BACKGOUND_COLOR = "#B4C8FF";
+#include <string>
+
+static const int CHAT_NOT_TYPING_DELAY = 1000;
+static const int CHAT_STOPPED_TYPING_DELAY = 1000;
 static const QString CHAT_USER_BACKGOUND_COLOR = "#F0EFFF";
 static const QString CHAT_USER_FORGROUND_COLOR = "#000000";
-static const QString CHAT_EMOTICONS_LABEL_OFF_BEGIN = ":/pics/chat/chat_emoticon_button.png";
-static const QString CHAT_EMOTICONS_LABEL_OFF_END = ":/pics/profilebar/bar_separator.png";
-static const QString CHAT_EMOTICONS_LABEL_OFF_FILL = ":/pics/profilebar/bar_fill.png";
-static const QString CHAT_EMOTICONS_LABEL_ON_BEGIN = ":/pics/chat/chat_emoticon_button_on.png";
-static const QString CHAT_EMOTICONS_LABEL_ON_END = ":/pics/profilebar/bar_separator.png";
-static const QString CHAT_EMOTICONS_LABEL_ON_FILL = ":/pics/profilebar/bar_on_fill.png";
-static const QString CHAT_FONT_LABEL_OFF_END = ":/pics/profilebar/bar_end.png";
-static const QString CHAT_FONT_LABEL_OFF_FILL = ":/pics/profilebar/bar_fill.png";
-static const QString CHAT_FONT_LABEL_ON_END = ":/pics/profilebar/bar_on_end.png";
-static const QString CHAT_FONT_LABEL_ON_FILL = ":/pics/profilebar/bar_on_fill.png";
 
-QtChatWidget::QtChatWidget(CChatHandler & cChatHandler, QtWengoPhone * qtWengoPhone, int sessionId,QWidget * parent, Qt::WFlags f) :
-QWidget(parent, f), _cChatHandler(cChatHandler),_qtWengoPhone(qtWengoPhone) {
+QtChatWidget::QtChatWidget(CChatHandler & cChatHandler,
+	QtWengoPhone * qtWengoPhone, int sessionId, QWidget * parent, QtChatTabWidget * qtChatTabWidget) :
+	QWidget(parent), _cChatHandler(cChatHandler),_qtWengoPhone(qtWengoPhone) {
 
-	_qtEmoticonManager = new QtEmoticonsManager(this);
-	_emoticonsWidget = new EmoticonsWidget(_qtEmoticonManager,this,Qt::Popup);
-	_actionBar = new QtChatActionBarWidget(qtWengoPhone, this, this);
-	_chatEdit = new QtChatEditWidget(this);
-	_chatHistory = new QtChatHistoryWidget(this);
-
+	//Default nickname for testing purpose
+	_nickName = "Wengo";
 	_stoppedTypingTimerId = -1;
 	_notTypingTimerId = -1;
 	_isTyping = false;
 	_sessionId = sessionId;
 	_lastBackGroundColor = QColor("#D0FFE6");
+	_isContactListFrameOpened = false;
+	_isUserPictureFrameOpened = false;
 
-	//Default nickname for testing purpose
-	_nickName = "Wengo";
+	//setup ui
 	_ui.setupUi(this);
-	_ui.contactListLabel->setVisible(false);
-	createActionFrame();
-	setupSendButton();
-	_ui.gridLayout->addWidget(_actionBar, 0, 0);
-	_ui.editStack->addWidget(_chatEdit);
-	_ui.editStack->setCurrentWidget(_chatEdit);
-	_ui.frame_3->layout()->addWidget(_chatHistory);
+	QPixmap pix = _ui.sendButton->icon().pixmap(50,50);
+	QPainter painter(&pix);
+	painter.setPen(Qt::white);
+	painter.drawText(pix.rect(),Qt::AlignCenter,tr("send"));
+	painter.end();
+	_ui.sendButton->setIcon(QIcon(pix));
+	////
 
-	QtChatTabWidget * parentWidget = dynamic_cast<QtChatTabWidget *>(parent);
+	//creates sub widgets
+	_emoticonsWidget = new EmoticonsWidget(this, Qt::Popup);
+	_actionBar = new QtChatActionBarWidget(qtWengoPhone, this, this);
+	_editActionBar = new QtChatEditActionBarWidget(this, this);
+	_chatEdit = new QtChatEditWidget(this);
+	_chatHistory = new QtChatHistoryWidget(this);
+	_qtChatUserFrame = new QtChatUserFrame(this);
+	_qtChatContactList = new QtChatContactList(this);
+	////
 
-	QtChatWidgetManager * cwm = new QtChatWidgetManager(this,_chatEdit);
+	//create QtChatEditEventManager
+	QtChatEditEventManager * cwm = new QtChatEditEventManager(this, _chatEdit);
+	////
 
-	connect (cwm,SIGNAL(enterPressed(Qt::KeyboardModifiers)),this, SLOT (enterPressed(Qt::KeyboardModifiers)));
-	connect (cwm,SIGNAL(deletePressed()),this,SLOT (deletePressed()));
-	connect (cwm,SIGNAL(ctrlTabPressed()),parentWidget,SLOT(ctrlTabPressedSlot()));
-	connect (_fontLabel,SIGNAL(clicked()), this, SLOT (chooseFont()));
-	connect (_chatHistory,SIGNAL(anchorClicked(const QUrl &)),this,SLOT(urlClicked(const QUrl & )));
-	connect (_emoticonsLabel,SIGNAL(clicked()),this,SLOT(chooseEmoticon()));
-	connect (_ui.sendButton,SIGNAL(clicked()),this,SLOT(sendButtonClicked()));
+	//add sub widgets
+	_ui.actionStackedWidget->addWidget(_actionBar);
+	_ui.actionStackedWidget->setCurrentWidget(_actionBar);
+	_ui.editActionStackedWidget->addWidget(_editActionBar);
+	_ui.editActionStackedWidget->setCurrentWidget(_editActionBar);
+	_ui.editStackedWidget->addWidget(_chatEdit);
+	_ui.editStackedWidget->setCurrentWidget(_chatEdit);
+	_ui.historyStackedWidget->addWidget(_chatHistory);
+	_ui.historyStackedWidget->setCurrentWidget(_chatHistory);
+	////
 
-	connect (this,SIGNAL(contactAddedEventSignal()),this,SLOT(contactAddedEventSlot()));
-	connect (this,SIGNAL(contactRemovedEventSignal()),this,SLOT(contactRemovedEventSlot()));
+	//signal connection
+	connect (cwm,SIGNAL(enterPressed(Qt::KeyboardModifiers)), SLOT (enterPressed(Qt::KeyboardModifiers)));
+	connect (cwm,SIGNAL(deletePressed()), SLOT(deletePressed()));
+	connect (cwm,SIGNAL(ctrlTabPressed()), qtChatTabWidget, SLOT(ctrlTabPressedSlot()));
+	connect (_ui.sendButton, SIGNAL(clicked()), SLOT(sendButtonClicked()));
+	connect (_editActionBar, SIGNAL(fontLabelClicked()), SLOT(changeFont()));
+	connect (_editActionBar, SIGNAL(emoticonsLabelClicked()), SLOT(chooseEmoticon()));
+	connect(_emoticonsWidget, SIGNAL(emoticonClicked(QtEmoticon)), SLOT(emoticonSelected(QtEmoticon)));
+	connect(_emoticonsWidget, SIGNAL(closed()), _chatEdit, SLOT(setFocus()));
+	connect(_chatEdit, SIGNAL(textChanged()), SLOT(chatEditTextChanged()));
+	connect (this, SIGNAL(contactAddedEventSignal()), SLOT(contactAddedEventSlot()));
+	connect (this, SIGNAL(contactRemovedEventSignal()), SLOT(contactRemovedEventSlot()));
+	connect(_ui.historyFoldButton, SIGNAL(clicked()), SLOT(historyFoldButtonClicked()));
+	connect(_ui.editFoldButton, SIGNAL(clicked()), SLOT(editFoldButtonClicked()));
+	////
 
-	_chatHistory->setHtml ("<qt type=detail>");
-
-	connect(_emoticonsWidget,SIGNAL(emoticonClicked(QtEmoticon)),this,SLOT(emoticonSelected(QtEmoticon)));
-	connect(_emoticonsWidget,SIGNAL(closed()),_chatEdit,SLOT(setFocus()));
-	connect(_chatEdit,SIGNAL(textChanged ()),SLOT(chatEditChanged()));
-
-
-	/* Save As of the chatHistory */
-	/*_saveAsAct = new QAction(tr("&Save As"), _ui.chatHistory);
-        _saveAsAct->setShortcut(tr("Ctrl+S"));
-        _saveAsAct->setStatusTip(tr("Save the document to disk"));
-        connect(_saveAsAct, SIGNAL(triggered()), this, SLOT(saveHistoryAsHtmlSlot()));*/
-
-	/* Context Menu of the chatHistory */
-	/*_ui.chatHistory->setContextMenuPolicy(Qt::CustomContextMenu);
-	connect(_ui.chatHistory, SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(chatEditContextMenuSlot(const QPoint &)));*/
+	addUserPictureFrame();
+	addContactListFrame();
+	updateUserFrame();
+	_cChatHandler.getCUserProfile().getUserProfile().profileChangedEvent +=
+		boost::bind(&QtChatWidget::updateUserFrame, this);
 }
 
 QtChatWidget::~QtChatWidget() {
 	_imChatSession->close();
 }
 
-void QtChatWidget::chatEditChanged() {
-	if (!_isTyping) {
-		_imChatSession->changeTypingState(IMChat::TypingStateTyping);
-		_isTyping = true;
-	}
-
-	if (_notTypingTimerId != -1) {
-		killTimer(_notTypingTimerId);
-		_notTypingTimerId = -1;
-	}
-
-	if (_stoppedTypingTimerId == -1) {
-		_stoppedTypingTimerId = startTimer(CHAT_STOPPED_TYPING_DELAY);
-	} else {
-		killTimer(_stoppedTypingTimerId);
-		_stoppedTypingTimerId = startTimer(CHAT_STOPPED_TYPING_DELAY);
-	}
-}
-
-void QtChatWidget::timerEvent ( QTimerEvent * event) {
-	if (event->timerId() == _stoppedTypingTimerId) {
-		killTimer(_stoppedTypingTimerId);
-		_stoppedTypingTimerId = -1;
-		_imChatSession->changeTypingState(IMChat::TypingStateStopTyping);
-		_notTypingTimerId = startTimer(CHAT_NOT_TYPING_DELAY);
-		_isTyping = false;
-	}
-	if (event->timerId() == _notTypingTimerId) {
-		killTimer(_notTypingTimerId);
-		_notTypingTimerId = -1;
-		_imChatSession->changeTypingState(IMChat::TypingStateNotTyping);
-		_isTyping = false;
-	}
-}
-
-void  QtChatWidget::setNickName(const QString & nickname) {
-	_nickName = nickname;
-}
-
-const QString & QtChatWidget::nickName() const {
-	return _nickName;
-}
-
-void QtChatWidget::addToHistory(const QString & senderName,const QString & str) {
-	QTextCursor curs(_chatHistory->document());
-	curs.movePosition(QTextCursor::End);
-	_chatHistory->setTextCursor(curs);
-
-	QString header;
-	if (hasQtChatContactInfo(senderName)) {
-		QtChatContactInfo qtChatContactInfo = getQtChatContactInfo(senderName);
-		header = qtChatContactInfo.getHeader();
-	} else {
-		IMContactSet imContactSet = _imChatSession->getIMContactSet();
-		IMContactSet::iterator it = imContactSet.begin();
-		QString nickName = QString::fromStdString((*it).getContactId());
-		QtChatContactInfo qtChatContactInfo(getNewBackgroundColor(),CHAT_USER_FORGROUND_COLOR,senderName);
-		_qtContactInfo[senderName] = qtChatContactInfo;
-		header = qtChatContactInfo.getHeader();
-	}
-	QTextDocument tmp;
-	tmp.setHtml(str);
-
-	QString tmpStr = text2Emoticon(replaceUrls(tmp.toPlainText(),str));
-	QString table = QString("<table border=0 width=98% cellspacing=0 cellpadding=5>")+
-					QString("<tr><td>")+tmpStr+
-					QString("</td></tr></table>");
-	_chatHistory->insertHtml(header);
-	_chatHistory->insertHtml(table);
-	_chatHistory->ensureCursorVisible();
-}
-
-void QtChatWidget::urlClicked(const QUrl & link) {
-	_chatHistory->setSource(QUrl(QString::null));
-	WebBrowser::openUrl(link.toString().toStdString());
-	_chatHistory->ensureCursorVisible();
-}
-
-void QtChatWidget::sendButtonClicked() {
-	enterPressed();
-}
-
-void QtChatWidget::enterPressed(Qt::KeyboardModifiers modifier) {
-
-	if (modifier == Qt::ControlModifier) {
-		_chatEdit->append(QString::null);
-		return;
-	}
-	if (_notTypingTimerId != -1) {
-		killTimer(_notTypingTimerId);
-		_notTypingTimerId = -1;
-	}
-
-	if (_stoppedTypingTimerId != -1) {
-		killTimer(_stoppedTypingTimerId);
-		_stoppedTypingTimerId = -1;
-	}
-
-	_imChatSession->changeTypingState(IMChat::TypingStateNotTyping);
-
-	//Drop empty message
-	if (_chatEdit->toPlainText().isEmpty()) {
-		return;
-	}
-
-	addToHistory(_nickName,_chatEdit->toHtml());
-	QString tmp = emoticon2Text(_chatEdit->toHtml());
-
-	//bad and ugly hack
-	QTextDocument tmpDocument;
-	tmpDocument.setHtml(tmp);
-
-
-	newMessage(_imChatSession, prepareMessageForSending(tmpDocument.toPlainText()));
-	_chatEdit->clear();
-	_chatEdit->setFocus();
-}
-
-//Work around for Qt 4.1.2 bug
-//can be removed with Qt > 4.1.2
-void QtChatWidget::deletePressed() {
-	QTextCursor cursor = _chatEdit->textCursor();
-	if (!cursor.hasSelection()) {
-		cursor.movePosition( QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor, 1 );
-		cursor.removeSelectedText();
-	} else {
-		cursor.removeSelectedText();
-	}
-	_chatEdit->setTextCursor(cursor);
-}
-
-QString QtChatWidget::prepareMessageForSending(const QString & message) {
-	QString result;
-
-	//Insert font tag
-	result = insertFontTag(message);
-	result = result.replace("\n","<br>");
-	return result;
-}
-
-QString QtChatWidget::insertFontTag(const QString & message) {
-	QString result = "<font color=\"%1\"><font face=\"%2\">";
-	result = result.arg(CHAT_USER_FORGROUND_COLOR);
-	result = result.arg(_currentFont.defaultFamily());
-
-	if (_currentFont.bold()) {
-		result += "<b>";
-	}
-
-	if (_currentFont.italic()) {
-		result += "<i>";
-	}
-
-	if (_currentFont.underline()) {
-		result += "<u>";
-	}
-
-	result += message;
-
-	if (_currentFont.underline()) {
-		result += "</u>";
-	}
-
-	if (_currentFont.italic()) {
-		result += "</i>";
-	}
-
-	if (_currentFont.bold()) {
-		result += "</b>";
-	}
-	result += "</font></font>";
-	return result;
-}
-
-void QtChatWidget::chooseFont() {
+void QtChatWidget::changeFont() {
 	bool ok;
-	_currentFont = QFontDialog::getFont(&ok,_currentFont,this);
-	_chatEdit->setCurrentFont(_currentFont);
+	QFont font = QFontDialog::getFont(&ok, _chatEdit->currentFont(), this);
+	if (ok) {
+		_chatEdit->setCurrentFont(font);
+	}
 	_chatEdit->setFocus();
-}
-
-const QString QtChatWidget::emoticon2Text(const QString &htmlstr) {
-	return _qtEmoticonManager->emoticons2Text(htmlstr,getProtocol());
-}
-
-const QString QtChatWidget::text2Emoticon(const QString &htmlstr) {
-	return _qtEmoticonManager->text2Emoticon(htmlstr,getProtocol());
-}
-
-QString QtChatWidget::getProtocol() const {
-	QString protocol;
-
-	EnumIMProtocol::IMProtocol proto = _imChatSession->getIMChat().getIMAccount().getProtocol();
-	switch (proto) {
-	case EnumIMProtocol::IMProtocolMSN:
-		protocol="msn";
-		break;
-	case EnumIMProtocol::IMProtocolYahoo:
-		protocol="yahoo";
-		break;
-	case EnumIMProtocol::IMProtocolWengo:
-		protocol="wengo";
-		break;
-	case EnumIMProtocol::IMProtocolJabber:
-	case EnumIMProtocol::IMProtocolAIMICQ:
-	case EnumIMProtocol::IMProtocolUnknown:
-		protocol="default";
-		break;
-	default:
-		protocol="default";
-	}
-	return protocol;
-}
-
-const QString QtChatWidget::replaceUrls(const QString & str, const QString & htmlstr) {
-	int beginPos = 0;
-	QString tmp=htmlstr;
-	int endPos;
-	int repCount=0;
-
-	QStringList urls;
-	QStringList reps;
-	while (true) {
-		beginPos = str.indexOf(QRegExp("(http://|https://|ftp://)", Qt::CaseInsensitive), beginPos);
-
-		if (beginPos == -1) {
-			break;
-		}
-		for (endPos = beginPos; endPos < str.size(); endPos++) {
-			if ((str[endPos] == ' ') || (str[endPos] == '\r') || (str[endPos] == '\n')) {
-				break;
-			}
-		}
-		QString url = str.mid(beginPos, endPos - beginPos);
-		urls << url;
-		QString r = QString("$$_$$*_WENGOSTRUTILS_|KB|%1").arg(repCount);
-		reps << r;
-		repCount++;
-		tmp.replace(url, r);
-		beginPos = endPos;
-	}
-	for (int i = 0; i < reps.size(); i++) {
-		QString url = QString("<a href='" + urls[i]+ "'>" + urls[i] + "</a>");
-		tmp.replace(reps[i], url);
-	}
-	return tmp;
 }
 
 void QtChatWidget::chooseEmoticon() {
-	QPoint p = _ui.actionFrame->pos();
-	p.setY(p.y() + _ui.actionFrame->rect().bottom());
+	QPoint p = _ui.editActionStackedWidget->pos();
+	p.setY(p.y() + _ui.editActionStackedWidget->rect().bottom());
 	_emoticonsWidget->move(mapToGlobal(p));
 	_emoticonsWidget->setWindowOpacity(0.95);
 	_emoticonsWidget->show();
 }
 
-void QtChatWidget::emoticonSelected(QtEmoticon emoticon) {
-	_chatEdit->insertHtml(emoticon.getHtml());
-	_chatEdit->ensureCursorVisible();
+void QtChatWidget::setVisible(bool visible) {
+	QWidget::setVisible(visible);
+	if (visible) {
+		_chatEdit->setFocus();
+	}
 }
 
-void QtChatWidget::setIMChatSession(IMChatSession * imChatSession) {
-	std::string tmpNickName = imChatSession->getIMChat().getIMAccount().getLogin();
-	QString nickName = QString::fromUtf8(tmpNickName.c_str());
-
-	QtChatContactInfo  qtChatContactInfo(QtChatContactInfo(CHAT_USER_BACKGOUND_COLOR,
-		CHAT_USER_FORGROUND_COLOR,nickName));
-
-	_qtContactInfo[nickName] = qtChatContactInfo;
-
-	_imChatSession = imChatSession;
-	_emoticonsWidget->initButtons(getProtocol());
-
-	_imChatSession->contactAddedEvent +=
-		boost::bind(&QtChatWidget::contactAddedEventHandler, this, _1, _2);
-
-	_imChatSession->contactRemovedEvent +=
-		boost::bind(&QtChatWidget::contactRemovedEventHandler, this, _1, _2);
-
-	_imChatSession->changeTypingState(IMChat::TypingStateNotTyping);
+void QtChatWidget::showInviteDialog() {
+	if (canDoMultiChat()) {
+		QtChatRoomInviteDlg dlg(*_imChatSession, 
+			_cChatHandler.getCUserProfile().getCContactList(),this);
+		dlg.exec();
+	}
 }
 
 void QtChatWidget::contactAddedEventHandler(IMChatSession &, const IMContact &) {
@@ -420,158 +172,24 @@ void QtChatWidget::contactRemovedEventHandler(IMChatSession &, const IMContact &
 }
 
 void QtChatWidget::contactAddedEventSlot() {
-	updateContactListLabel();
+	updateChatContactList();
 }
 
 void QtChatWidget::contactRemovedEventSlot() {
-	updateContactListLabel();
+	updateChatContactList();
 }
 
-void QtChatWidget::updateContactListLabel() {
-	QMutexLocker locker(&_mutex);
-
-	QtContactList * qtContactList = _qtWengoPhone->getContactList();
-	CContactList & cContactList = qtContactList->getCContactList();
-
-	IMContactSet imContactSet = _imChatSession->getIMContactSet();
-	QStringList contactStringList;
-
-	IMContactSet::iterator it;
-
-	for (it = imContactSet.begin(); it != imContactSet.end(); it++) {
-
-
-		QString contactId = QString::fromStdString(cContactList.findContactThatOwns((*it)));
-		QString contactDisplayName;
-
-		std::string tmpContactname = cContactList.getContactProfile(contactId.toStdString()).getFirstName();
-		if (tmpContactname.empty()) {
-			tmpContactname = cContactList.getContactProfile(contactId.toStdString()).getLastName();
-		}
-		if (tmpContactname.empty()) {
-			tmpContactname = (*it).getContactId();
-		}
-		contactDisplayName=QString::fromUtf8(tmpContactname.c_str());
-
-		// QString nickName = QString::fromStdString((*it).getContactId());
-		QString nickName = contactDisplayName;
-		contactStringList << nickName;
-		if (!hasQtChatContactInfo(nickName)) {
-			QtChatContactInfo qtChatContactInfo(getNewBackgroundColor(),CHAT_USER_FORGROUND_COLOR,nickName);
-			_qtContactInfo[nickName] = qtChatContactInfo;
-		}
-	}
-	_ui.contactListLabel->setToolTip(QString::null);
-	if (contactStringList.size() > 2) {
-		_ui.contactListLabel->show();
-		QString str = QString(tr("Chat with: "));
-		str += contactStringList[0] + "; ";
-		str += contactStringList[1] + "...";
-		_ui.contactListLabel->setText(str);
-		str = contactStringList.join("<br>");
-		_ui.contactListLabel->setToolTip(str);
-	} else {
-		if (contactStringList.size() > 1) {
-			_ui.contactListLabel->show();
-			QString str = QString(tr("Chat with: ")) + contactStringList.join("; ");
-			_ui.contactListLabel->setText(str);
-		}
-	}
+void QtChatWidget::sendButtonClicked() {
+	enterPressed();
 }
 
-bool QtChatWidget::canDoMultiChat() {
-	return _imChatSession->canDoMultiChat();
+bool QtChatWidget::hasUserColor(const QString & nickName) const {
+	return (_userColorHash.find(nickName) != _userColorHash.end());
 }
 
-void QtChatWidget::inviteContact() {
-	QtChatRoomInviteDlg dlg(*_imChatSession,
-		_cChatHandler.getCUserProfile().getCContactList(),this);
-	dlg.exec();
-}
-
-void QtChatWidget::setRemoteTypingState(const IMChatSession & sender,const IMChat::TypingState state) {
-	IMContact from = * sender.getIMContactSet().begin();
-	QString remoteName = QString::fromUtf8(from.getContactId().c_str());
-	switch (state) {
-	case IMChat::TypingStateNotTyping:
-		_ui.typingStateLabel->setText(QString::null);
-		break;
-	case IMChat::TypingStateTyping:
-		_ui.typingStateLabel->setText(remoteName + tr(" is typing"));
-		break;
-	case IMChat::TypingStateStopTyping:
-		_ui.typingStateLabel->setText(QString::null);
-		break;
-	default:
-		break;
-	}
-}
-
-void QtChatWidget::createActionFrame() {
-	QHBoxLayout * layout = new QHBoxLayout(_ui.actionFrame);
-	_emoticonsLabel = new QtWengoStyleLabel(_ui.actionFrame);
-
-	_fontLabel = new QtWengoStyleLabel(_ui.actionFrame);
-
-	_emoticonsLabel->setPixmaps(
-					QPixmap(CHAT_EMOTICONS_LABEL_OFF_BEGIN),
-					QPixmap(CHAT_EMOTICONS_LABEL_OFF_END),
-					QPixmap(CHAT_EMOTICONS_LABEL_OFF_FILL),
-					QPixmap(CHAT_EMOTICONS_LABEL_ON_BEGIN),
-					QPixmap(CHAT_EMOTICONS_LABEL_ON_END),
-					QPixmap(CHAT_EMOTICONS_LABEL_ON_FILL)
-					);
-
-	_emoticonsLabel->setMaximumSize(QSize(120,65));
-	_emoticonsLabel->setMinimumSize(QSize(120,65));
-
-	_fontLabel->setPixmaps(
-				QPixmap(),
-				QPixmap(CHAT_FONT_LABEL_OFF_END),
-				QPixmap(CHAT_FONT_LABEL_OFF_FILL),
-				QPixmap(),
-				QPixmap(CHAT_FONT_LABEL_ON_END),
-				QPixmap(CHAT_FONT_LABEL_ON_FILL)
-				);
-
-	_emoticonsLabel->setText(tr("emoticons  "));
-	_emoticonsLabel->setTextColor(Qt::white);
-	_emoticonsLabel->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
-
-	_fontLabel->setText(tr("    fonts"));
-	_fontLabel->setTextColor(Qt::white);
-	_fontLabel->setTextAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-	layout->addWidget(_emoticonsLabel);
-	layout->addWidget(_fontLabel);
-	layout->setMargin(0);
-	layout->setSpacing(0);
-}
-
-void QtChatWidget::setupSendButton() {
-	QPixmap pix = _ui.sendButton->icon().pixmap(50,50);
-	QPainter painter (&pix);
-	painter.setPen(Qt::white);
-	painter.drawText(pix.rect(),Qt::AlignCenter,tr("send"));
-	painter.end();
-	_ui.sendButton->setIcon(QIcon(pix));
-}
-
-void QtChatWidget::setVisible (bool visible) {
-	QWidget::setVisible(visible);
-	if (visible) {
-		_chatEdit->setFocus();
-	}
-}
-
-QtChatContactInfo QtChatWidget::getQtChatContactInfo(const QString & nickName) const {
-	return _qtContactInfo[nickName];
-}
-
-bool QtChatWidget::hasQtChatContactInfo(const QString & nickName) const {
-	if (_qtContactInfo.find(nickName) == _qtContactInfo.end()) {
-		return false;
-	}
-	return true;
+void QtChatWidget::emoticonSelected(QtEmoticon emoticon) {
+	_chatEdit->insertHtml(emoticon.getHtml());
+	_chatEdit->ensureCursorVisible();
 }
 
 QString QtChatWidget::getNewBackgroundColor() const {
@@ -579,13 +197,231 @@ QString QtChatWidget::getNewBackgroundColor() const {
 	return QString("%1").arg(_lastBackGroundColor.name());
 }
 
-/*void QtChatWidget::chatEditContextMenuSlot(const QPoint & pos){
-	LOG_DEBUG("chatEditContextMenuSlot");
-	QMenu menu(_ui.chatHistory);
-	menu.addAction(_saveAsAct);
-	menu.exec(_ui.chatHistory->viewport()->mapToGlobal(pos));
+void QtChatWidget::historyFoldButtonClicked() {
+	if (_isContactListFrameOpened) {
+		removeContactListFrame();
+	} else {
+		addContactListFrame();
+	}
 }
 
-void QtChatWidget::saveHistoryAsHtmlSlot(){
-	LOG_DEBUG("saveHistoryAsHtmlSlot");
-}*/
+void QtChatWidget::editFoldButtonClicked() {
+	if (_isUserPictureFrameOpened) {
+		removeUserPictureFrame();
+	} else {
+		addUserPictureFrame();
+	}
+}
+
+void QtChatWidget::enterPressed(Qt::KeyboardModifiers modifier) {
+	//CTRL+ENTER = new line
+	if (modifier == Qt::ControlModifier) {
+		_chatEdit->append(QString::null);
+		////
+	} else {
+		sendMessage();
+	}
+}
+
+void QtChatWidget::addUserPictureFrame() {
+	QGridLayout * glayout = dynamic_cast<QGridLayout *>(_ui.EditFrame->layout());
+	_qtChatUserFrame->setVisible(true);
+	_qtChatUserFrame->setMinimumSize(65, 65);
+	glayout->addWidget(_qtChatUserFrame, 0, 2);
+
+	_isUserPictureFrameOpened = true;
+	_ui.editFoldButton->setIcon(QIcon(":pics/group_close.png"));
+}
+
+void QtChatWidget::removeUserPictureFrame() {
+	QGridLayout * glayout = dynamic_cast<QGridLayout *>(_ui.EditFrame->layout());
+	_qtChatUserFrame->setVisible(false);
+	_qtChatUserFrame->setMinimumSize(0, 0);
+	glayout->removeWidget(_qtChatUserFrame);
+
+	_isUserPictureFrameOpened = false;
+	_ui.editFoldButton->setIcon(QIcon(":pics/group_close_reverse.png"));
+}
+
+void QtChatWidget::addContactListFrame() {
+	QGridLayout * glayout = dynamic_cast<QGridLayout *>(_ui.HistoryFrame->layout());
+	_qtChatContactList->setVisible(true);
+	_qtChatContactList->setMinimumSize(65, 65);
+	glayout->addWidget(_qtChatContactList, 0, 2);
+
+	_isContactListFrameOpened = true;
+	_ui.historyFoldButton->setIcon(QIcon(":pics/group_close.png"));
+}
+
+void QtChatWidget::removeContactListFrame() {
+	QGridLayout * glayout = dynamic_cast<QGridLayout *>(_ui.HistoryFrame->layout());
+	_qtChatContactList->setVisible(false);
+	_qtChatContactList->setMinimumSize(0, 0);
+	glayout->removeWidget(_qtChatContactList);
+
+	_isContactListFrameOpened = false;
+	_ui.historyFoldButton->setIcon(QIcon(":pics/group_close_reverse.png"));
+}
+
+void QtChatWidget::updateUserFrame() {
+	QPixmap pixmap;
+	std::string myData = _cChatHandler.getCUserProfile().getUserProfile().getIcon().getData();
+	pixmap.loadFromData((uchar *)myData.c_str(), myData.size());
+	_qtChatUserFrame->setPixmap(pixmap);
+}
+
+void QtChatWidget::addToHistory(const QString & senderName, const QString & str) {
+	QTextCursor curs(_chatHistory->document());
+	curs.movePosition(QTextCursor::End);
+	_chatHistory->setTextCursor(curs);
+
+	if (!hasUserColor(senderName)) {
+		_userColorHash[senderName] = getNewBackgroundColor();
+	}
+
+	// insert "header" code html
+	QString header = QtChatUtils::getUserHeader(getUserColor(senderName),CHAT_USER_FORGROUND_COLOR, senderName);
+	_chatHistory->insertHtml(header);
+	////
+
+	// insert message html code
+	QString table = QString("<table border=\"0\" width=\"98%\" cellspacing=\"0\" cellpadding=\"5\">") +
+		QString("<tr><td>") + 
+		QtChatUtils::decodeMessage(_imChatSession->getIMChat().getIMAccount().getProtocol(), str) +
+		QString("</td></tr></table>");
+	_chatHistory->insertHtml(table);
+	////
+
+	_chatHistory->ensureCursorVisible();
+}
+
+void QtChatWidget::sendMessage() {
+
+	//manage typing timer
+	stopNotTypingTimer();
+	stopStoppedTypingTimer();
+	////
+
+	//Not typing anymore
+	_imChatSession->changeTypingState(IMChat::TypingStateNotTyping);
+
+	//Drop empty message
+	if (_chatEdit->toPlainText().isEmpty()) {
+		return;
+	}
+
+	//add the text to QtChatHistoryWidget
+	addToHistory(_nickName, _chatEdit->toHtml());
+	////
+
+	std::string message(QtChatUtils::encodeMessage(
+		_chatEdit->currentFont(),
+		_imChatSession->getIMChat().getIMAccount().getProtocol(),
+		_chatEdit->toHtml()).toUtf8().constData()
+	);
+	_imChatSession->sendMessage(message);
+	////
+
+	_chatEdit->clear();
+	_chatEdit->setFocus();
+}
+
+void QtChatWidget::setIMChatSession(IMChatSession * imChatSession) {
+	std::string tmpNickName = imChatSession->getIMChat().getIMAccount().getLogin();
+	QString nickName = QString::fromUtf8(tmpNickName.c_str());
+	_userColorHash[nickName] = CHAT_USER_BACKGOUND_COLOR;
+
+	_imChatSession = imChatSession;
+	_emoticonsWidget->initButtons(QtChatUtils::getProtocol(_imChatSession->getIMChat().getIMAccount().getProtocol()));
+
+	_imChatSession->contactAddedEvent +=
+		boost::bind(&QtChatWidget::contactAddedEventHandler, this, _1, _2);
+	_imChatSession->contactRemovedEvent +=
+		boost::bind(&QtChatWidget::contactRemovedEventHandler, this, _1, _2);
+	_imChatSession->changeTypingState(IMChat::TypingStateNotTyping);
+}
+
+void QtChatWidget::chatEditTextChanged() {
+	// change typing state to Typing
+	if (!_isTyping) {
+		_imChatSession->changeTypingState(IMChat::TypingStateTyping);
+		_isTyping = true;
+	}
+	////
+
+	// manage timers
+	stopNotTypingTimer();
+	if (_stoppedTypingTimerId == -1) {
+		_stoppedTypingTimerId = startTimer(CHAT_STOPPED_TYPING_DELAY);
+	} else {
+		killTimer(_stoppedTypingTimerId);
+		_stoppedTypingTimerId = startTimer(CHAT_STOPPED_TYPING_DELAY);
+	}
+	////
+}
+
+void QtChatWidget::setRemoteTypingState(const IMChatSession & sender,const IMChat::TypingState state) {
+	IMContact from = * sender.getIMContactSet().begin();
+	QString remoteName = QString::fromUtf8(from.getContactId().c_str());
+	switch (state) {
+		case IMChat::TypingStateNotTyping:
+			_ui.typingStateLabel->setText(QString::null);
+			break;
+		case IMChat::TypingStateTyping:
+			_ui.typingStateLabel->setText(remoteName + tr(" is typing"));
+			break;
+		case IMChat::TypingStateStopTyping:
+			_ui.typingStateLabel->setText(QString::null);
+			break;
+		default:
+			break;
+	}
+}
+
+void QtChatWidget::timerEvent(QTimerEvent * event) {
+	if (event->timerId() == _stoppedTypingTimerId) {
+		killTimer(_stoppedTypingTimerId);
+		_stoppedTypingTimerId = -1;
+		_imChatSession->changeTypingState(IMChat::TypingStateStopTyping);
+		_notTypingTimerId = startTimer(CHAT_NOT_TYPING_DELAY);
+		_isTyping = false;
+	}
+
+	if (event->timerId() == _notTypingTimerId) {
+		killTimer(_notTypingTimerId);
+		_notTypingTimerId = -1;
+		_imChatSession->changeTypingState(IMChat::TypingStateNotTyping);
+		_isTyping = false;
+	}
+}
+
+void QtChatWidget::stopNotTypingTimer() {
+	if (_notTypingTimerId != -1) {
+		killTimer(_notTypingTimerId);
+		_notTypingTimerId = -1;
+	}
+}
+
+void QtChatWidget::stopStoppedTypingTimer() {
+	if (_stoppedTypingTimerId != -1) {
+		killTimer(_stoppedTypingTimerId);
+		_stoppedTypingTimerId = -1;
+	}
+}
+
+//Work around for Qt 4.1.2 bug, can be removed with Qt > 4.1.2
+void QtChatWidget::deletePressed() {
+	QTextCursor cursor = _chatEdit->textCursor();
+	if (!cursor.hasSelection()) {
+		cursor.movePosition( QTextCursor::PreviousCharacter, QTextCursor::KeepAnchor, 1 );
+		cursor.removeSelectedText();
+	} else {
+		cursor.removeSelectedText();
+	}
+	_chatEdit->setTextCursor(cursor);
+}
+////
+
+void QtChatWidget::updateChatContactList() {
+	
+}

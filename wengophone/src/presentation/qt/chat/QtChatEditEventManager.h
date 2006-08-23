@@ -17,61 +17,40 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef OWQTEMOTICONSWIDGET_H
-#define OWQTEMOTICONSWIDGET_H
+#ifndef OWQTCHATEDITEVENTMANAGER_H
+#define OWQTCHATEDITEVENTMANAGER_H
 
 #include <QtGui/QtGui>
 
-#include "QtEmoticon.h"
-#include "QtEmoticonButton.h"
-
 /**
+ * Class to manage the key events in QtChatEditWidget.
  *
  * @ingroup presentation
  * @author Mr K.
  */
-class EmoticonsWidget : public QWidget {
+class QtChatEditEventManager : public QObject {
 	Q_OBJECT
 public:
 
-	enum EmoticonsWidgetStat {
-		Window,
-		Popup
-	};
-
-	EmoticonsWidget(QWidget * parent, Qt::WFlags flags);
-
-	void initButtons(const QString & protocol);
-
-public Q_SLOTS:
-
-	void changeStat();
-
-	void buttonClicked(QtEmoticon emoticon);
+	QtChatEditEventManager (QObject * parent = 0, QTextEdit * target = 0);
 
 Q_SIGNALS:
 
-	void emoticonClicked(QtEmoticon emoticon);
+	void enterPressed(Qt::KeyboardModifiers modifier);
 
-	void closed();
+	void ctrlTabPressed();
 
-private:
+	void deletePressed();
 
-	virtual void closeEvent(QCloseEvent * event);
+protected:
 
-	void addButton(QtEmoticon emoticon);
+	bool eventFilter(QObject *obj, QEvent *event);
 
-	QWidget * _widget;
+	bool keyPress(QObject *obj, QEvent *event);
 
-	QStringList _iconName;
+	QTextEdit * _target;
 
-	EmoticonsWidgetStat _stat;
-
-	int _buttonX;
-
-	int _buttonY;
-
-	QGridLayout * _layout;
+	QObject * _parent;
 };
 
-#endif	//OWQTEMOTICONSWIDGET_H
+#endif //OWQTCHATEDITEVENTMANAGER_H

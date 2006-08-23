@@ -17,47 +17,30 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef OWQTCHATHISTORYWIDGET_H
-#define OWQTCHATHISTORYWIDGET_H
+#include "QtChatContactList.h"
+#include "QtChatContactListItem.h"
 
-#include <QtGui/QTextBrowser>
+#include <QtGui/QtGui>
 
-class QPoint;
-class QAction;
-class QWidget;
+#include <util/Logger.h>
 
-/**
- * Implements the chat text zone with a custom context menu.
- *
- * TODO: verify that there is nothing left elsewhere that could be brought inhere (slots, ...)
- * @author Nicolas Couturier
- */
-class QtChatHistoryWidget : public QTextBrowser {
-	Q_OBJECT
-public:
+QtChatContactList::QtChatContactList(QWidget * parent)
+	: QWidget(parent) {
 
-	QtChatHistoryWidget(QWidget * parent);
+	QGridLayout * glayout = new QGridLayout();
+	glayout->setMargin(0);
+	glayout->setSpacing(0);
+	setLayout(glayout);
 
-public Q_SLOTS:
+	LOG_DEBUG("\n\n\n\n\n\nQtChatContactList\n\n\n\n\n\n");
+}
 
-	void showContextMenuSlot(const QPoint & pos);
+void QtChatContactList::addContact(QPixmap picture, const QString & nickname) {
+	QtChatContactListItem * item = new QtChatContactListItem(this, picture, nickname, QtChatContactListItem::SMALL);
+	_widgetMap[_widgetMap.count() + 1] = item;
 
-	void saveHistoryAsHtmlSlot();
+	QGridLayout * glayout = dynamic_cast<QGridLayout *>(layout());
+	glayout->addWidget(item, 0, _widgetMap.count());
+	LOG_DEBUG("\n\n\n\n\n\naddContact: " + nickname.toStdString() + "\n\n\n\n\n\n");
+}
 
-private Q_SLOTS:
-
-	/**
-	 * An URL has been clicked we must open a web browser
-	 *
-	 * @param link the clicked url
-	 */
-	void urlClicked(const QUrl & link);
-
-private:
-
-	void makeActions();
-
-	QAction * _saveAsAction;
-};
-
-#endif	//OWQTCHATHISTORYWIDGET_H

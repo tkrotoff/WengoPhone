@@ -24,21 +24,19 @@
 #include <QtGui/QtGui>
 
 /**
+ * Subclass QTabWidget in order to blink them 
+ * and to deal with CTRL+TAB
  *
+ * TODO: remove include QtGui/QtGui
+ * 
  * @ingroup presentation
  * @author Mr K.
  */
-class QtChatTabWidget : public QTabWidget
-{
+class QtChatTabWidget : public QTabWidget {
 	Q_OBJECT
-
 public:
 
-	typedef QSet<int> BlinkingTabIndex;
-
-	typedef QHash<int, QIcon> BlinkingTabIcons;
-
-	QtChatTabWidget( QWidget * parent = 0 );
+	QtChatTabWidget(QWidget * parent = 0);
 
 	void setBlinkingTab(int index);
 
@@ -56,9 +54,13 @@ Q_SIGNALS:
 
 private:
 
-	virtual void timerEvent ( QTimerEvent * event );
+	typedef QSet<int> BlinkingTabIndex;
 
-	bool event(QEvent *event);
+	typedef QHash<int, QIcon> BlinkingTabIcons;
+
+	virtual void timerEvent(QTimerEvent * event);
+
+	bool event(QEvent * event);
 
 	BlinkingTabIndex _blinkingTabIndex;
 
@@ -69,7 +71,6 @@ private:
 	QPixmap _alphaPixmap;
 
 	int _timerId;
-
 };
 
 #endif //OWQTCHATTABWIDGET_H

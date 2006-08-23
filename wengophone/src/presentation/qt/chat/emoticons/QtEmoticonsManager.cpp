@@ -17,16 +17,26 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <model/config/ConfigManager.h>
-#include <model/config/Config.h>
 #include "QtEmoticonsManager.h"
 
-QtEmoticonsManager::QtEmoticonsManager(QObject * parent) : QObject(parent) {
+#include <model/config/ConfigManager.h>
+#include <model/config/Config.h>
 
+QtEmoticonsManager * QtEmoticonsManager::_instance = NULL;
+
+QtEmoticonsManager::QtEmoticonsManager() {
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	loadFromFile(QString::fromStdString(config.getResourcesDir() + "emoticons/icondef2.xml"));
+}
+
+QtEmoticonsManager * QtEmoticonsManager::getInstance() {
+	if (!_instance) {
+		_instance = new QtEmoticonsManager();
+	}
+	return _instance;
 }
 
 int QtEmoticonsManager::getProtocolCount() {
-
 	return _protocolsList.size();
 }
 

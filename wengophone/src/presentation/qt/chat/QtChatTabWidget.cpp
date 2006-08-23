@@ -45,9 +45,7 @@ void QtChatTabWidget::stopBlinkingTab(int index) {
 }
 
 bool QtChatTabWidget::isBlinkingTab(int index) {
-	if (_blinkingTabIndex.contains(index))
-		return true;
-	return false;
+	return (_blinkingTabIndex.contains(index));
 }
 
 void QtChatTabWidget::timerEvent (QTimerEvent * event) {
@@ -58,7 +56,6 @@ void QtChatTabWidget::timerEvent (QTimerEvent * event) {
 	}
 
 	BlinkingTabIndex::const_iterator it;
-
 	for (it = _blinkingTabIndex.begin(); it != _blinkingTabIndex.end(); it++) {
 		tabBar()->setTabTextColor((*it),_currentColor);
 
@@ -71,7 +68,7 @@ void QtChatTabWidget::timerEvent (QTimerEvent * event) {
 }
 
 bool QtChatTabWidget::event(QEvent *event) {
-	if (event->type() == QEvent::KeyPress){
+	if (event->type() == QEvent::KeyPress) {
 		QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
 		if (keyEvent->key() == Qt::Key_Tab) {
 			if ( (keyEvent->modifiers() & Qt::ControlModifier) == Qt::ControlModifier) {
@@ -81,6 +78,7 @@ bool QtChatTabWidget::event(QEvent *event) {
 			}
 		}
 	}
+
 	return QTabWidget::event(event);
 }
 

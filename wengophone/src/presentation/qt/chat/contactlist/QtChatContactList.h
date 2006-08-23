@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,42 +17,35 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef OWQTCHATWIDGETMANAGER_H
-#define OWQTCHATWIDGETMANAGER_H
+#ifndef OWQTCHATCONTACTLIST_H
+#define OWQTCHATCONTACTLIST_H
 
-#include <QtGui/QtGui>
+//namespace Ui { class ChatContactList; }
+
+#include <QtGui/QWidget>
+#include <QtCore/QMap>
+
+class QtChatContactListItem;
+
 
 /**
- * Class to manage the QTextEdit widget in the chat window
+ * Chat contact list.
  *
- * @ingroup presentation
- * @author Mr K.
+ * @author Mathieu Stute
  */
-class QtChatWidgetManager : public QObject
-{
+class QtChatContactList : public QWidget {
 	Q_OBJECT
-
 public:
 
-	QtChatWidgetManager (QObject * parent = 0, QTextEdit * target = 0);
+	QtChatContactList(QWidget * parent);
 
-Q_SIGNALS:
+	void addContact(QPixmap picture, const QString & nickname);
 
-	void enterPressed(Qt::KeyboardModifiers modifier);
+private:
 
-	void ctrlTabPressed();
+	typedef QMap<int, QtChatContactListItem *> WidgetMap;
 
-	void deletePressed();
-
-protected:
-
-	bool eventFilter(QObject *obj, QEvent *event);
-
-	bool keyPress(QObject *obj, QEvent *event);
-
-	QTextEdit * _target;
-
-	QObject * _parent;
+	WidgetMap _widgetMap;
 };
 
-#endif //OWQTCHATWIDGETMANAGER_H
+#endif	//OWQTCHATCONTACTLIST_H

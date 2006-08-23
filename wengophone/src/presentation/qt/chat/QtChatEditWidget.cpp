@@ -19,39 +19,34 @@
 
 #include "QtChatEditWidget.h"
 
-#include <util/Logger.h>
-
 #include <QtGui/QtGui>
 
-#include <stdio.h>
+#include <util/Logger.h>
 
 QtChatEditWidget::QtChatEditWidget(QWidget *parent)
-: QTextEdit(parent){
-	setAcceptDrops(true);
+: QTextEdit(parent) {
 	setFrameStyle(QFrame::NoFrame | QFrame::Plain);
+	setAcceptDrops(true);
+	setLineWrapMode(QTextEdit::WidgetWidth);
 }
 
-void QtChatEditWidget::dragEnterEvent(QDragEnterEvent *event){
-	LOG_DEBUG("dragEnterEvent");
-	if(event->mimeData()->hasFormat("text/uri-list")){
+void QtChatEditWidget::dragEnterEvent(QDragEnterEvent *event) {
+	if(event->mimeData()->hasFormat("text/uri-list")) {
 		event->acceptProposedAction();
 	}
 }
 
-void QtChatEditWidget::dragMoveEvent(QDragMoveEvent *event){
-	LOG_DEBUG("dragMoveEvent");
+void QtChatEditWidget::dragMoveEvent(QDragMoveEvent *event) {
 	event->acceptProposedAction();
 }
 
-void QtChatEditWidget::dragLeaveEvent(QDragLeaveEvent * event){
-	LOG_DEBUG("dragLeaveEvent");
+void QtChatEditWidget::dragLeaveEvent(QDragLeaveEvent * event) {
 	event->accept();
 }
 
-void QtChatEditWidget::dropEvent(QDropEvent *event){
-	LOG_DEBUG("dropEvent\n");
+void QtChatEditWidget::dropEvent(QDropEvent *event) {
     const QMimeData *mimeData = event->mimeData();
-	if(mimeData->hasUrls()){
+	if(mimeData->hasUrls()) {
 		QList<QUrl> urls = mimeData->urls();
 		for(QList<QUrl>::iterator i(urls.begin()); i != urls.end(); i++){
 			QString fileName;
@@ -60,13 +55,15 @@ void QtChatEditWidget::dropEvent(QDropEvent *event){
 			LOG_DEBUG((*i).toLocalFile().toStdString());
 			QFile fileToSend((*i).toLocalFile());
 			QFileInfo fileInfo(fileToSend);
-			if(fileInfo.exists() && fileInfo.isReadable()){
+			if(fileInfo.exists() && fileInfo.isReadable()) {
 				fileName = fileInfo.fileName();
-				LOG_DEBUG(fileName.toStdString());
 				fileSize = fileInfo.size();
-				LOG_DEBUG(String::fromLongLong((long long)fileSize));
 				fileType = fileInfo.completeSuffix();
-				LOG_DEBUG(fileType.toStdString());
+				LOG_DEBUG(
+					"filename: " + fileName.toStdString() +
+					"size: " + String::fromLongLong((long long)fileSize) +
+					"type: " + fileType.toStdString()
+				);
 				// TODO add the contact name (wengo_id)
 				// TODO make a call to send it all to a file transfer plugin (via a controller)
 			}
@@ -74,4 +71,3 @@ void QtChatEditWidget::dropEvent(QDropEvent *event){
 	}
     event->acceptProposedAction();
 }
-

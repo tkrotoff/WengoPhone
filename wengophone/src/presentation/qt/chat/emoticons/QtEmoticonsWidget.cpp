@@ -21,22 +21,15 @@
 #include "QtEmoticonButton.h"
 #include "QtEmoticonsManager.h"
 
-#include <model/config/ConfigManager.h>
-#include <model/config/Config.h>
-
 #include <util/Logger.h>
-
 #include <cutil/global.h>
 
 #include <QtXml/QtXml>
 
-EmoticonsWidget::EmoticonsWidget(QtEmoticonsManager * qtEmoticonsManager, QWidget * parent, Qt::WFlags flags)
+EmoticonsWidget::EmoticonsWidget(QWidget * parent, Qt::WFlags flags)
 	: QWidget(parent, flags) {
 
 	_layout = NULL;
-	Config & config = ConfigManager::getInstance().getCurrentConfig();
-	_qtEmoticonsManager = qtEmoticonsManager;
-	_qtEmoticonsManager->loadFromFile(QString::fromStdString(config.getResourcesDir() + "emoticons/icondef2.xml"));
 	_stat = Popup;
 	_buttonX = 0;
 	_buttonY = 0;
@@ -70,7 +63,8 @@ void EmoticonsWidget::initButtons(const QString & protocol) {
 	_layout->setMargin(0);
 	_buttonX = 0;
 	_buttonY = 0;
-	QtEmoticonsManager::QtEmoticonsList emoticonsList = _qtEmoticonsManager->getQtEmoticonsList(protocol);
+	QtEmoticonsManager * qtEmoticonsManager = QtEmoticonsManager::getInstance();
+	QtEmoticonsManager::QtEmoticonsList emoticonsList = qtEmoticonsManager->getQtEmoticonsList(protocol);
 	QtEmoticonsManager::QtEmoticonsList::iterator it;
 	for (it = emoticonsList.begin(); it != emoticonsList.end(); it++) {
 		addButton((*it));

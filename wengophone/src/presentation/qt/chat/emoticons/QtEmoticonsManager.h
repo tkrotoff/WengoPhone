@@ -19,26 +19,27 @@
 #ifndef OWQTEMOTICONSMANAGER_H
 #define OWQTEMOTICONSMANAGER_H
 
+#include "QtEmoticon.h"
+
 #include <QtGui/QtGui>
 #include <QtXml/QtXml>
-#include "QtEmoticon.h"
 
 /**
  *
  * @ingroup presentation
  * @author Mr K.
+ * @author Mathieu Stute
  */
-class QtEmoticonsManager : public QObject
-{
-	Q_OBJECT
-
+class QtEmoticonsManager {
 public:
 
 	typedef QList<QtEmoticon> QtEmoticonsList;
 
 	typedef QHash<QString, QtEmoticonsList> ProtocolsList;
 
-	QtEmoticonsManager(QObject * parent);
+	static QtEmoticonsManager * getInstance();
+
+	QtEmoticonsManager();
 
 	QtEmoticon getEmoticon(const QString & text, const QString & protocol);
 
@@ -66,7 +67,7 @@ private:
 
 	QtEmoticonsList _qtEmoticonsList;
 
+	static QtEmoticonsManager * _instance;
 };
-
 
 #endif //OWQTEMOTICONSMANAGER_H

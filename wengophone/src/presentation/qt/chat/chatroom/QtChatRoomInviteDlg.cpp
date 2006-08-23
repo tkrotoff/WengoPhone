@@ -34,9 +34,8 @@
 #include <model/contactlist/ContactGroup.h>
 
 QtChatRoomInviteDlg::QtChatRoomInviteDlg(IMChatSession & chatSession, CContactList & cContactList, QWidget * parent , Qt::WFlags f ) :
-QDialog(parent,f), _cContactList(cContactList), _chatSession(chatSession)
-{
-	_widget = WidgetFactory::create(":/forms/chat/ChatRoomInviteWidget.ui", this);
+QDialog(parent,f), _cContactList(cContactList), _chatSession(chatSession) {
+	_widget = WidgetFactory::create(":/forms/chat/chatroom/ChatRoomInviteWidget.ui", this);
 	QGridLayout * layout = new QGridLayout();
 	layout->addWidget(_widget);
 	layout->setMargin(0);

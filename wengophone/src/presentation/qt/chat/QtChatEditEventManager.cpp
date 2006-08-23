@@ -17,21 +17,18 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "QtChatWidgetManager.h"
+#include "QtChatEditEventManager.h"
 
 #include <util/Logger.h>
 
-QtChatWidgetManager::QtChatWidgetManager(QObject * parent, QTextEdit * target) : QObject (parent)
-{
+QtChatEditEventManager::QtChatEditEventManager(QObject * parent, QTextEdit * target) : QObject (parent) {
 	_parent = parent;
 	_target = target;
-
 	_target->installEventFilter(this);
 	_target->viewport()->installEventFilter(this);
 }
 
-bool QtChatWidgetManager::eventFilter(QObject *obj, QEvent *event)
-{
+bool QtChatEditEventManager::eventFilter(QObject *obj, QEvent *event) {
 	if (event->type() == QEvent::KeyPress) {
 		if (keyPress(obj,event)) {
 			return true;
@@ -40,8 +37,7 @@ bool QtChatWidgetManager::eventFilter(QObject *obj, QEvent *event)
 	return QObject::eventFilter(obj, event);
 }
 
-bool QtChatWidgetManager::keyPress(QObject *obj, QEvent *event)
-{
+bool QtChatEditEventManager::keyPress(QObject *obj, QEvent *event) {
 	QKeyEvent * e = static_cast<QKeyEvent *>(event);
 	if ((e->key() == Qt::Key_Enter) || (e->key() == Qt::Key_Return)) {
 		event->accept();

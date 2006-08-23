@@ -17,47 +17,29 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef OWQTCHATHISTORYWIDGET_H
-#define OWQTCHATHISTORYWIDGET_H
+#include "QtChatUserFrame.h"
 
-#include <QtGui/QTextBrowser>
+#include "ui_UserFrame.h"
 
-class QPoint;
-class QAction;
-class QWidget;
+#include <QtGui/QtGui>
 
-/**
- * Implements the chat text zone with a custom context menu.
- *
- * TODO: verify that there is nothing left elsewhere that could be brought inhere (slots, ...)
- * @author Nicolas Couturier
- */
-class QtChatHistoryWidget : public QTextBrowser {
-	Q_OBJECT
-public:
+QtChatUserFrame::QtChatUserFrame(QWidget * parent)
+	: QWidget(parent) {
 
-	QtChatHistoryWidget(QWidget * parent);
+	_ui = new Ui::UserFrame();
+	_ui->setupUi(this);
+}
 
-public Q_SLOTS:
+void QtChatUserFrame::setPixmap(QPixmap pixmap) {
 
-	void showContextMenuSlot(const QPoint & pos);
+	QPixmap background = QPixmap(":/pics/fond_avatar.png");
 
-	void saveHistoryAsHtmlSlot();
-
-private Q_SLOTS:
-
-	/**
-	 * An URL has been clicked we must open a web browser
-	 *
-	 * @param link the clicked url
-	 */
-	void urlClicked(const QUrl & link);
-
-private:
-
-	void makeActions();
-
-	QAction * _saveAsAction;
-};
-
-#endif	//OWQTCHATHISTORYWIDGET_H
+	if (!pixmap.isNull()) {
+		QPainter painter(& background);
+		painter.drawPixmap(5, 5, pixmap.scaled(60, 60, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+		painter.end();
+		_ui->avatarLabel->setPixmap(background);
+	} else {
+		_ui->avatarLabel->setPixmap(background);
+	}
+}

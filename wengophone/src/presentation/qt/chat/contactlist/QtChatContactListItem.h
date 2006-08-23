@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,61 +17,51 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef OWQTEMOTICONSWIDGET_H
-#define OWQTEMOTICONSWIDGET_H
+#ifndef OWQTCHATCONTACTLISTITEM_H
+#define OWQTCHATCONTACTLISTITEM_H
 
-#include <QtGui/QtGui>
+namespace Ui { class ChatContactListItem; }
 
-#include "QtEmoticon.h"
-#include "QtEmoticonButton.h"
+#include <QtGui/QWidget>
 
 /**
+ * Chat contact list.
  *
- * @ingroup presentation
- * @author Mr K.
+ * @author Mathieu Stute
  */
-class EmoticonsWidget : public QWidget {
+class QtChatContactListItem : public QWidget {
 	Q_OBJECT
 public:
 
-	enum EmoticonsWidgetStat {
-		Window,
-		Popup
+	enum PictureMode {
+		BIG,			// 96x96
+		MEDIUM,			// 48x48
+		SMALL,			// 24x24
+		TINY,			// 12x12
 	};
 
-	EmoticonsWidget(QWidget * parent, Qt::WFlags flags);
+	enum NicknameMode {
+		RIGHT,
+		LEFT,
+		TOP,
+		BOTTOM,
+		NONE,
+	};
 
-	void initButtons(const QString & protocol);
-
-public Q_SLOTS:
-
-	void changeStat();
-
-	void buttonClicked(QtEmoticon emoticon);
-
-Q_SIGNALS:
-
-	void emoticonClicked(QtEmoticon emoticon);
-
-	void closed();
+	QtChatContactListItem(QWidget * parent, QPixmap picture,
+		const QString & nickname, PictureMode pmode = SMALL/*, NicknameMode nmode = RIGHT*/);
 
 private:
 
-	virtual void closeEvent(QCloseEvent * event);
+	void setupPixmap(QPixmap pixmap);
 
-	void addButton(QtEmoticon emoticon);
+	void setupNickname(const QString & nickname);
 
-	QWidget * _widget;
+	PictureMode _pictureMode;
 
-	QStringList _iconName;
+	//NicknameMode _nicknameMode;
 
-	EmoticonsWidgetStat _stat;
-
-	int _buttonX;
-
-	int _buttonY;
-
-	QGridLayout * _layout;
+	Ui::ChatContactListItem * _ui;
 };
 
-#endif	//OWQTEMOTICONSWIDGET_H
+#endif	//OWQTCHATCONTACTLISTITEM_H

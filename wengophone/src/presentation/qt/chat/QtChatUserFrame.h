@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,61 +17,29 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef OWQTEMOTICONSWIDGET_H
-#define OWQTEMOTICONSWIDGET_H
+#ifndef OWQTCHATUSERFRAME_H
+#define OWQTCHATUSERFRAME_H
 
-#include <QtGui/QtGui>
+namespace Ui { class UserFrame; }
 
-#include "QtEmoticon.h"
-#include "QtEmoticonButton.h"
+#include <QtGui/QWidget>
 
 /**
+ * User frame widget.
  *
- * @ingroup presentation
- * @author Mr K.
+ * @author Mathieu Stute
  */
-class EmoticonsWidget : public QWidget {
+class QtChatUserFrame : public QWidget {
 	Q_OBJECT
 public:
 
-	enum EmoticonsWidgetStat {
-		Window,
-		Popup
-	};
+	QtChatUserFrame(QWidget * parent);
 
-	EmoticonsWidget(QWidget * parent, Qt::WFlags flags);
-
-	void initButtons(const QString & protocol);
-
-public Q_SLOTS:
-
-	void changeStat();
-
-	void buttonClicked(QtEmoticon emoticon);
-
-Q_SIGNALS:
-
-	void emoticonClicked(QtEmoticon emoticon);
-
-	void closed();
+	void setPixmap(QPixmap pixmap);
 
 private:
 
-	virtual void closeEvent(QCloseEvent * event);
-
-	void addButton(QtEmoticon emoticon);
-
-	QWidget * _widget;
-
-	QStringList _iconName;
-
-	EmoticonsWidgetStat _stat;
-
-	int _buttonX;
-
-	int _buttonY;
-
-	QGridLayout * _layout;
+	Ui::UserFrame * _ui;
 };
 
-#endif	//OWQTEMOTICONSWIDGET_H
+#endif	//OWQTCHATUSERFRAME_H
