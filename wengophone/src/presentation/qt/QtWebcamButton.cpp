@@ -27,7 +27,7 @@
 
 #include <QtGui/QtGui>
 
-QtWebcamButton::QtWebcamButton(QPushButton * webcamButton)
+QtWebcamButton::QtWebcamButton(QAction * webcamButton)
 	: QObjectThreadSafe(webcamButton) {
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
@@ -37,7 +37,7 @@ QtWebcamButton::QtWebcamButton(QPushButton * webcamButton)
 
 	config.valueChangedEvent += boost::bind(&QtWebcamButton::configChangedEventHandler, this, _1, _2);
 
-	connect(_webcamButton, SIGNAL(clicked()), SLOT(enableVideo()));
+	connect(_webcamButton, SIGNAL(triggered()), SLOT(enableVideo()));
 
 	configChangedEventHandler(config, Config::VIDEO_ENABLE_KEY);
 }

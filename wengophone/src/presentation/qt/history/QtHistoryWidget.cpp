@@ -113,7 +113,7 @@ void QtHistoryWidget::addSMSItem(const QString & text,const QDate & date, const 
 	QtHistoryItem * item = new QtHistoryItem(_treeWidget);
 
 	item->setText(QtHistoryItem::COLUMN_TYPE, text);
-	item->setIcon(QtHistoryItem::COLUMN_TYPE, QIcon(QPixmap(":/pics/history/sms_send.png")));
+	item->setIcon(QtHistoryItem::COLUMN_TYPE, QIcon(QPixmap(":/pics/history/sms_sent.png")));
 	item->setText(QtHistoryItem::COLUMN_DATE, date.toString("yyyy-MM-dd") + QString(" %1").arg(time.toString(Qt::TextDate)) );
 	item->setText(QtHistoryItem::COLUMN_DURATION, duration.toString(Qt::TextDate) );
 	item->setText(QtHistoryItem::COLUMN_PEERS, name);

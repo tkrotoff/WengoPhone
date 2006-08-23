@@ -174,30 +174,12 @@ void QtWengoPhone::initThreadSafe() {
 		this, SLOT(phoneComboBoxClicked()), Qt::LeftButton);
 	_phoneComboBox->installEventFilter(leftMouseFilter);
 
-	//Add contact button
-	connect(_ui->addContactButton, SIGNAL(clicked()), SLOT(addContact()));
-
-	// Search button
-	connect(_ui->findContactButton, SIGNAL(clicked()), SLOT(showSearchContactWindows()));
-
-	// Send sms button
-	connect(_ui->sendSmsButton, SIGNAL(clicked()), SLOT(sendSms()));
-
-	// Start conference button
-	connect(_ui->startConferenceButton, SIGNAL(clicked()), SLOT(showCreateConferenceCall()));
-
 	// Open chat window button
-	_ui->openChatWindowButton->setEnabled(false);
-	connect (_ui->openChatWindowButton, SIGNAL(clicked()), SLOT(showChatWindow()));
-
-	// Search button
-	connect(_ui->findContactButton, SIGNAL(clicked()), SLOT(showSearchContactWindows()));
-
-	// Send sms button
-	connect(_ui->sendSmsButton, SIGNAL(clicked()), SLOT(sendSms()));
+	_ui->actionOpenChatWindow->setEnabled(false);
+	connect(_ui->actionOpenChatWindow, SIGNAL(triggered()), SLOT(showChatWindow()));
 
 	//webcamButton
-	new QtWebcamButton(_ui->webcamButton);
+	new QtWebcamButton(_ui->actionEnableVideo);
 
 	//Buttons initialization
 	initButtons();
@@ -243,31 +225,31 @@ void QtWengoPhone::initThreadSafe() {
 	//actionFaq
 	connect(_ui->actionFaq, SIGNAL (triggered()), SLOT(showFaq()));
 
-	//actionCallOutService
-	connect(_ui->actionCallOutService, SIGNAL(triggered()), SLOT (showCallOut()));
+	//actionWengoServices
+	connect(_ui->actionWengoServices, SIGNAL(triggered()), SLOT (showCallOut()));
 
 	//Show / Hide groups
 	connect(_ui->actionHideContactGroups, SIGNAL(triggered()), SLOT(showHideGroups()));
 
-	//actionIM_Account_Settings
+	//actionIMAccountSettings
 	connect(_ui->actionIMAccountSettings, SIGNAL(triggered()), SLOT(showAccountSettings()));
 
-	//actionShow_Hide_contacts_offline
+	//actionShowHideContactsOffline
 	connect(_ui->actionHideContactsOffline, SIGNAL(triggered()), SLOT(showHideOffLineContacts()));
 
 	//actionCreateConferenceCall
 	connect(_ui->actionCreateConferenceCall, SIGNAL(triggered()), SLOT(showCreateConferenceCall()));
 
-	//actionOutgoing_Calls
+	//actionOutgoingCalls
 	connect(_ui->actionOutgoingCalls, SIGNAL(triggered()), SLOT(eraseHistoryOutgoingCalls()));
 
-	//actionIncoming_Calls
+	//actionIncomingCalls
 	connect(_ui->actionIncomingCalls, SIGNAL(triggered()), SLOT(eraseHistoryIncomingCalls()));
 
-	//actionMissed_Calls
+	//actionMissedCalls
 	connect(_ui->actionMissedCalls, SIGNAL(triggered()), SLOT(eraseHistoryMissedCalls()));
 
-	//actionChat_Sessions
+	//actionChatSessions
 	connect(_ui->actionChatSessions, SIGNAL(triggered()), SLOT(eraseHistoryChatSessions()));
 
 	//actionSMS
@@ -924,7 +906,7 @@ void QtWengoPhone::phoneComboBoxClicked() {
 					QString::fromStdString(sipAddress.getUserName()));
 				break;
 			case HistoryMemento::OutgoingSmsOk:
-				_phoneComboBox->addItem(QIcon(QPixmap(":/pics/history/sms_send.png")),
+				_phoneComboBox->addItem(QIcon(QPixmap(":/pics/history/sms_sent.png")),
 					QString::fromStdString(sipAddress.getUserName()));
 				break;
 			case HistoryMemento::OutgoingSmsNok:
@@ -979,13 +961,12 @@ QMenu * QtWengoPhone::createStatusMenu() {
 }
 
 void QtWengoPhone::setChatWindow(QWidget * chatWindow) {
-	if (chatWindow == NULL) {
-		_chatWindow = NULL;
-		_ui->openChatWindowButton->setEnabled(false);
+	if (!chatWindow) {
+		_ui->actionOpenChatWindow->setEnabled(false);
 	}
 	else {
 		_chatWindow = chatWindow;
-		_ui->openChatWindowButton->setEnabled(true);
+		_ui->actionOpenChatWindow->setEnabled(true);
 	}
 }
 

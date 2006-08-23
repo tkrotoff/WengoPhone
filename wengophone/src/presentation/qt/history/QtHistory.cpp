@@ -106,7 +106,7 @@ void QtHistory::addHistoryMemento(HistoryMemento::State state, const std::string
 			qdate, qtime, qduration, formattedName, id);
 		break;
 	case HistoryMemento::MissedCall:
-		_historyWidget->addMissedCallItem("Missed call",
+		_historyWidget->addMissedCallItem(tr("Missed call"),
 			qdate, qtime, qduration, formattedName, id);
 		break;
 	case HistoryMemento::RejectedCall:
@@ -126,7 +126,7 @@ void QtHistory::addHistoryMemento(HistoryMemento::State state, const std::string
 	case HistoryMemento::Any:
 		break;
 	default:
-		LOG_FATAL("Unknown HistoryMemento::State" + String::fromNumber(state));
+		LOG_FATAL("unknown HistoryMemento::State=" + String::fromNumber(state));
 	}
 }
 
@@ -182,8 +182,6 @@ void QtHistory::clearRejectedCallEntries() {
 }
 
 void QtHistory::replayItem(QtHistoryItem * item) {
-	QString text;
-	QString phoneNumber;
 	QtWengoPhone * qtWengoPhone = (QtWengoPhone *) _cHistory.getCWengoPhone().getPresentation();
 
 	QMessageBox mb(tr("WengoPhone - Replay Call"),
@@ -194,12 +192,12 @@ void QtHistory::replayItem(QtHistoryItem * item) {
 		QMessageBox::NoButton, _historyWidget);
 
 	switch (item->getItemType()) {
-	case QtHistoryItem::Sms:
+	case QtHistoryItem::Sms: {
 		//Retrieve info & configure the Sms widget
-		text = QString::fromUtf8(
+		QString text = QString::fromUtf8(
 			_cHistory.getMementoData(item->getId()).c_str(),
 			_cHistory.getMementoData(item->getId()).size());
-		phoneNumber = QString::fromStdString(_cHistory.getMementoPeer(item->getId()));
+		QString phoneNumber = QString::fromStdString(_cHistory.getMementoPeer(item->getId()));
 
 		//Test existance of Sms (available only if a WengoAccount has been created)
 		if (qtWengoPhone->getSms()) {
@@ -208,6 +206,7 @@ void QtHistory::replayItem(QtHistoryItem * item) {
 			qtWengoPhone->getSms()->getWidget()->show();
 		}
 		break;
+	}
 
 	case QtHistoryItem::OutGoingCall:
 		if (mb.exec() == QMessageBox::Yes) {
@@ -232,6 +231,6 @@ void QtHistory::replayItem(QtHistoryItem * item) {
 }
 
 void QtHistory::removeItem(unsigned id) {
-	LOG_DEBUG("QtHistory::removeItem");
+	LOG_DEBUG("item removed=" + String::fromNumber(id));
 	_cHistory.removeHistoryMemento(id);
 }

@@ -26,7 +26,7 @@
 
 class Settings;
 
-class QPushButton;
+class QAction;
 
 /**
  * Handles the webcam button from the main window.
@@ -37,7 +37,7 @@ class QtWebcamButton : public QObjectThreadSafe, public Trackable {
 	Q_OBJECT
 public:
 
-	QtWebcamButton(QPushButton * webcamButton);
+	QtWebcamButton(QAction * webcamButton);
 
 	virtual ~QtWebcamButton();
 
@@ -55,7 +55,7 @@ private:
 
 	void changeWebcamButtonState();
 
-	QPushButton * _webcamButton;
+	QAction * _webcamButton;
 
 	bool _enableVideo;
 };

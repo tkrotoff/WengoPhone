@@ -343,7 +343,7 @@
         <string/>
        </property>
        <property name="pixmap" >
-        <pixmap resource="../wengophone.qrc" >:/pics/Help-32x32.png</pixmap>
+        <pixmap resource="../wengophone.qrc" >:/pics/help.png</pixmap>
        </property>
       </widget>
      </item>

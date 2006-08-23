@@ -13,7 +13,7 @@
    </rect>
   </property>
   <property name="windowTitle" >
-   <string>WengoPhone Configuration</string>
+   <string>WengoPhone - Configuration</string>
   </property>
   <layout class="QGridLayout" >
    <property name="margin" >
@@ -171,7 +171,6 @@
  </widget>
  <pixmapfunction></pixmapfunction>
  <resources>
-  <include location="wengoconfigdata.qrc" />
   <include location="../wengophone.qrc" />
  </resources>
  <connections>

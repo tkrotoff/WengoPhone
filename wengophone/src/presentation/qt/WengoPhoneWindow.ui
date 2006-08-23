@@ -8,8 +8,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>329</width>
-    <height>602</height>
+    <width>283</width>
+    <height>517</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -24,49 +24,37 @@
      <number>0</number>
     </property>
     <property name="spacing" >
-     <number>0</number>
+     <number>6</number>
     </property>
-    <item row="2" column="0" >
-     <widget class="QFrame" name="frame" >
-      <property name="frameShape" >
-       <enum>QFrame::NoFrame</enum>
+    <item row="4" column="0" >
+     <widget class="QStackedWidget" name="configPanel" >
+      <property name="sizePolicy" >
+       <sizepolicy>
+        <hsizetype>5</hsizetype>
+        <vsizetype>0</vsizetype>
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
       </property>
-      <property name="frameShadow" >
-       <enum>QFrame::Raised</enum>
+      <property name="currentIndex" >
+       <number>-1</number>
       </property>
-      <layout class="QGridLayout" >
-       <property name="margin" >
-        <number>9</number>
-       </property>
-       <property name="spacing" >
-        <number>6</number>
-       </property>
-       <item row="1" column="0" >
-        <widget class="QTabWidget" name="tabWidget" >
-         <property name="autoFillBackground" >
-          <bool>false</bool>
-         </property>
-         <widget class="QWidget" name="tabContactList" >
-          <attribute name="title" >
-           <string>Contacts</string>
-          </attribute>
-         </widget>
-         <widget class="QWidget" name="tabHistory" >
-          <attribute name="title" >
-           <string>History</string>
-          </attribute>
-         </widget>
-         <widget class="QWidget" name="tabDialpad" >
-          <attribute name="title" >
-           <string>Dialpad</string>
-          </attribute>
-         </widget>
-        </widget>
-       </item>
-      </layout>
      </widget>
     </item>
     <item row="3" column="0" >
+     <widget class="QLabel" name="configPanelLabel" >
+      <property name="cursor" >
+       <cursor>13</cursor>
+      </property>
+      <property name="text" >
+       <string>&lt;u>Click to change Audio and Video Settings&lt;/u></string>
+      </property>
+      <property name="indent" >
+       <number>15</number>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0" >
      <widget class="QFrame" name="callBarFrame" >
       <property name="minimumSize" >
        <size>
@@ -89,257 +77,6 @@
      </widget>
     </item>
     <item row="0" column="0" >
-     <widget class="QFrame" name="iconBar" >
-      <property name="maximumSize" >
-       <size>
-        <width>300</width>
-        <height>16777215</height>
-       </size>
-      </property>
-      <property name="autoFillBackground" >
-       <bool>false</bool>
-      </property>
-      <layout class="QGridLayout" >
-       <property name="margin" >
-        <number>9</number>
-       </property>
-       <property name="spacing" >
-        <number>6</number>
-       </property>
-       <item row="0" column="1" >
-        <widget class="QPushButton" name="findContactButton" >
-         <property name="minimumSize" >
-          <size>
-           <width>38</width>
-           <height>38</height>
-          </size>
-         </property>
-         <property name="maximumSize" >
-          <size>
-           <width>38</width>
-           <height>38</height>
-          </size>
-         </property>
-         <property name="toolTip" >
-          <string>Search for a contact</string>
-         </property>
-         <property name="icon" >
-          <iconset resource="wengophone.qrc" >:/pics/iconbar/search_contact.png</iconset>
-         </property>
-         <property name="iconSize" >
-          <size>
-           <width>32</width>
-           <height>32</height>
-          </size>
-         </property>
-         <property name="flat" >
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="4" >
-        <widget class="QPushButton" name="sendSmsButton" >
-         <property name="minimumSize" >
-          <size>
-           <width>38</width>
-           <height>38</height>
-          </size>
-         </property>
-         <property name="maximumSize" >
-          <size>
-           <width>38</width>
-           <height>38</height>
-          </size>
-         </property>
-         <property name="toolTip" >
-          <string>Sends a SMS</string>
-         </property>
-         <property name="icon" >
-          <iconset resource="wengophone.qrc" >:/pics/iconbar/sms.png</iconset>
-         </property>
-         <property name="iconSize" >
-          <size>
-           <width>32</width>
-           <height>32</height>
-          </size>
-         </property>
-         <property name="flat" >
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="6" >
-        <spacer>
-         <property name="orientation" >
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" >
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="0" column="2" >
-        <widget class="QPushButton" name="startConferenceButton" >
-         <property name="minimumSize" >
-          <size>
-           <width>38</width>
-           <height>38</height>
-          </size>
-         </property>
-         <property name="maximumSize" >
-          <size>
-           <width>38</width>
-           <height>38</height>
-          </size>
-         </property>
-         <property name="toolTip" >
-          <string>Create a conference call</string>
-         </property>
-         <property name="icon" >
-          <iconset resource="wengophone.qrc" >:/pics/iconbar/conference.png</iconset>
-         </property>
-         <property name="iconSize" >
-          <size>
-           <width>32</width>
-           <height>32</height>
-          </size>
-         </property>
-         <property name="flat" >
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="5" >
-        <widget class="QPushButton" name="webcamButton" >
-         <property name="minimumSize" >
-          <size>
-           <width>38</width>
-           <height>38</height>
-          </size>
-         </property>
-         <property name="maximumSize" >
-          <size>
-           <width>38</width>
-           <height>38</height>
-          </size>
-         </property>
-         <property name="toolTip" >
-          <string>Enable/disable video calls</string>
-         </property>
-         <property name="icon" >
-          <iconset resource="wengophone.qrc" >:/pics/iconbar/webcam.png</iconset>
-         </property>
-         <property name="iconSize" >
-          <size>
-           <width>32</width>
-           <height>32</height>
-          </size>
-         </property>
-         <property name="flat" >
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0" >
-        <widget class="QPushButton" name="addContactButton" >
-         <property name="minimumSize" >
-          <size>
-           <width>38</width>
-           <height>38</height>
-          </size>
-         </property>
-         <property name="maximumSize" >
-          <size>
-           <width>38</width>
-           <height>38</height>
-          </size>
-         </property>
-         <property name="toolTip" >
-          <string>Add a contact</string>
-         </property>
-         <property name="icon" >
-          <iconset resource="wengophone.qrc" >:/pics/iconbar/add_contact.png</iconset>
-         </property>
-         <property name="iconSize" >
-          <size>
-           <width>32</width>
-           <height>32</height>
-          </size>
-         </property>
-         <property name="flat" >
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="3" >
-        <widget class="QPushButton" name="openChatWindowButton" >
-         <property name="minimumSize" >
-          <size>
-           <width>38</width>
-           <height>38</height>
-          </size>
-         </property>
-         <property name="maximumSize" >
-          <size>
-           <width>38</width>
-           <height>38</height>
-          </size>
-         </property>
-         <property name="toolTip" >
-          <string>Open the chat window</string>
-         </property>
-         <property name="text" >
-          <string/>
-         </property>
-         <property name="icon" >
-          <iconset resource="wengophone.qrc" >:/pics/iconbar/iconBarchat.png</iconset>
-         </property>
-         <property name="iconSize" >
-          <size>
-           <width>38</width>
-           <height>38</height>
-          </size>
-         </property>
-         <property name="flat" >
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </item>
-    <item row="5" column="0" >
-     <widget class="QStackedWidget" name="configPanel" >
-      <property name="sizePolicy" >
-       <sizepolicy>
-        <hsizetype>5</hsizetype>
-        <vsizetype>0</vsizetype>
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="currentIndex" >
-       <number>-1</number>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="0" >
-     <widget class="QLabel" name="configPanelLabel" >
-      <property name="cursor" >
-       <cursor>13</cursor>
-      </property>
-      <property name="text" >
-       <string>&lt;u>Click to change Audio and Video Settings&lt;/u></string>
-      </property>
-      <property name="indent" >
-       <number>15</number>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="0" >
      <widget class="QStackedWidget" name="profileBar" >
       <property name="sizePolicy" >
        <sizepolicy>
@@ -354,6 +91,49 @@
       </property>
      </widget>
     </item>
+    <item row="1" column="0" >
+     <widget class="QFrame" name="frame" >
+      <property name="frameShape" >
+       <enum>QFrame::NoFrame</enum>
+      </property>
+      <property name="frameShadow" >
+       <enum>QFrame::Raised</enum>
+      </property>
+      <layout class="QGridLayout" >
+       <property name="margin" >
+        <number>0</number>
+       </property>
+       <property name="spacing" >
+        <number>6</number>
+       </property>
+       <item row="1" column="0" >
+        <widget class="QTabWidget" name="tabWidget" >
+         <property name="autoFillBackground" >
+          <bool>false</bool>
+         </property>
+         <property name="currentIndex" >
+          <number>2</number>
+         </property>
+         <widget class="QWidget" name="tabContactList" >
+          <attribute name="title" >
+           <string>Contacts</string>
+          </attribute>
+         </widget>
+         <widget class="QWidget" name="tabHistory" >
+          <attribute name="title" >
+           <string>History</string>
+          </attribute>
+         </widget>
+         <widget class="QWidget" name="tabDialpad" >
+          <attribute name="title" >
+           <string>Dialpad</string>
+          </attribute>
+         </widget>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menuBar" >
@@ -361,10 +141,34 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>329</width>
+     <width>283</width>
      <height>19</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuContacts" >
+    <property name="title" >
+     <string>&amp;Contacts</string>
+    </property>
+    <addaction name="actionAddContact" />
+    <addaction name="actionSearchWengoUsers" />
+    <addaction name="separator" />
+    <addaction name="actionHideContactsOffline" />
+    <addaction name="actionHideContactGroups" />
+   </widget>
+   <widget class="QMenu" name="menuFile" >
+    <property name="title" >
+     <string>&amp;Wengo</string>
+    </property>
+    <addaction name="actionShowWengoAccount" />
+    <addaction name="actionEditMyProfile" />
+    <addaction name="actionLogOff" />
+    <addaction name="separator" />
+    <addaction name="actionChangeProfile" />
+    <addaction name="separator" />
+    <addaction name="actionWengoServices" />
+    <addaction name="separator" />
+    <addaction name="actionClose" />
+   </widget>
    <widget class="QMenu" name="menuHelp" >
     <property name="title" >
      <string>&amp;Help</string>
@@ -373,6 +177,18 @@
     <addaction name="actionFaq" />
     <addaction name="separator" />
     <addaction name="actionShowAbout" />
+   </widget>
+   <widget class="QMenu" name="menuActions" >
+    <property name="title" >
+     <string>&amp;Actions</string>
+    </property>
+    <addaction name="actionSendSms" />
+    <addaction name="separator" />
+    <addaction name="actionCreateConferenceCall" />
+    <addaction name="separator" />
+    <addaction name="actionAccept" />
+    <addaction name="actionHangup" />
+    <addaction name="actionHoldResume" />
    </widget>
    <widget class="QMenu" name="menuTools" >
     <property name="title" >
@@ -395,57 +211,38 @@
     <addaction name="separator" />
     <addaction name="menuClearHistory" />
    </widget>
-   <widget class="QMenu" name="menuActions" >
-    <property name="title" >
-     <string>&amp;Actions</string>
-    </property>
-    <addaction name="actionSendSms" />
-    <addaction name="separator" />
-    <addaction name="actionCreateConferenceCall" />
-    <addaction name="separator" />
-    <addaction name="actionAccept" />
-    <addaction name="actionHangup" />
-    <addaction name="actionHoldResume" />
-   </widget>
-   <widget class="QMenu" name="menuContacts" >
-    <property name="title" >
-     <string>&amp;Contacts</string>
-    </property>
-    <addaction name="actionAddContact" />
-    <addaction name="actionSearchWengoUsers" />
-    <addaction name="separator" />
-    <addaction name="actionHideContactsOffline" />
-    <addaction name="actionHideContactGroups" />
-   </widget>
-   <widget class="QMenu" name="menuFile" >
-    <property name="title" >
-     <string>&amp;Wengo</string>
-    </property>
-    <addaction name="actionShowWengoAccount" />
-    <addaction name="actionEditMyProfile" />
-    <addaction name="actionLogOff" />
-    <addaction name="separator" />
-    <addaction name="actionChangeProfile" />
-    <addaction name="separator" />
-    <addaction name="actionCallOutService" />
-    <addaction name="separator" />
-    <addaction name="actionClose" />
-   </widget>
    <addaction name="menuFile" />
    <addaction name="menuContacts" />
    <addaction name="menuActions" />
    <addaction name="menuTools" />
    <addaction name="menuHelp" />
   </widget>
-  <widget class="QStatusBar" name="statusBar" >
-   <property name="geometry" >
-    <rect>
-     <x>0</x>
-     <y>583</y>
-     <width>329</width>
-     <height>19</height>
-    </rect>
+  <widget class="QStatusBar" name="statusBar" />
+  <widget class="QToolBar" name="toolBar" >
+   <property name="windowTitle" >
+    <string>ToolBar</string>
    </property>
+   <property name="movable" >
+    <bool>false</bool>
+   </property>
+   <property name="orientation" >
+    <enum>Qt::Horizontal</enum>
+   </property>
+   <property name="iconSize" >
+    <size>
+     <width>32</width>
+     <height>32</height>
+    </size>
+   </property>
+   <attribute name="toolBarArea" >
+    <number>4</number>
+   </attribute>
+   <addaction name="actionAddContact" />
+   <addaction name="actionSearchWengoUsers" />
+   <addaction name="actionCreateConferenceCall" />
+   <addaction name="actionOpenChatWindow" />
+   <addaction name="actionSendSms" />
+   <addaction name="actionEnableVideo" />
   </widget>
   <action name="actionShowWengoAccount" >
    <property name="text" >
@@ -468,8 +265,11 @@
    </property>
   </action>
   <action name="actionAddContact" >
+   <property name="icon" >
+    <iconset resource="wengophone.qrc" >:/pics/iconbar/add_contact.png</iconset>
+   </property>
    <property name="text" >
-    <string>&amp;Add Contact</string>
+    <string>Add &amp;Contact</string>
    </property>
   </action>
   <action name="actionConfiguration" >
@@ -478,8 +278,11 @@
    </property>
   </action>
   <action name="actionSendSms" >
+   <property name="icon" >
+    <iconset resource="wengophone.qrc" >:/pics/iconbar/sms.png</iconset>
+   </property>
    <property name="text" >
-    <string>&amp;Send a short text message (SMS)</string>
+    <string>Send a Short Text &amp;Message (SMS)</string>
    </property>
   </action>
   <action name="actionEditMyProfile" >
@@ -488,28 +291,87 @@
    </property>
   </action>
   <action name="actionCreateConferenceCall" >
+   <property name="icon" >
+    <iconset resource="wengophone.qrc" >:/pics/iconbar/conference.png</iconset>
+   </property>
    <property name="text" >
-    <string>Create Conference C&amp;all</string>
+    <string>Create &amp;Conference Call</string>
    </property>
   </action>
   <action name="actionFaq" >
    <property name="text" >
-    <string>&amp;Wiki / Faq</string>
+    <string>&amp;Wiki/Faq</string>
    </property>
   </action>
-  <action name="actionCallOutService" >
+  <action name="actionWengoServices" >
    <property name="text" >
-    <string>&amp;Learn more about Wengo Services</string>
+    <string>Learn more about &amp;Wengo Services</string>
    </property>
   </action>
   <action name="actionHideContactsOffline" >
    <property name="text" >
-    <string>Show / Hide &amp;Contacts Offline</string>
+    <string>Show/Hide Offline &amp;Contacts</string>
    </property>
   </action>
   <action name="actionIMAccountSettings" >
    <property name="text" >
-    <string>Instant Messaging Accounts</string>
+    <string>&amp;Instant Messaging Accounts</string>
+   </property>
+  </action>
+  <action name="actionChatSessions" >
+   <property name="text" >
+    <string>&amp;Chat Sessions</string>
+   </property>
+  </action>
+  <action name="actionAll" >
+   <property name="text" >
+    <string>&amp;All</string>
+   </property>
+  </action>
+  <action name="actionSearchWengoUsers" >
+   <property name="icon" >
+    <iconset resource="wengophone.qrc" >:/pics/iconbar/search_contact.png</iconset>
+   </property>
+   <property name="text" >
+    <string>&amp;Search for Wengo Users</string>
+   </property>
+  </action>
+  <action name="actionAccept" >
+   <property name="text" >
+    <string>&amp;Accept</string>
+   </property>
+  </action>
+  <action name="actionHangup" >
+   <property name="text" >
+    <string>&amp;Hangup</string>
+   </property>
+  </action>
+  <action name="actionHoldResume" >
+   <property name="text" >
+    <string>&amp;Hold/Resume</string>
+   </property>
+  </action>
+  <action name="actionHideContactGroups" >
+   <property name="text" >
+    <string>Show/Hide &amp;Groups</string>
+   </property>
+  </action>
+  <action name="actionChangeProfile" >
+   <property name="text" >
+    <string>Change &amp;Profile...</string>
+   </property>
+  </action>
+  <action name="actionLogOff" >
+   <property name="text" >
+    <string>Log &amp;Off</string>
+   </property>
+  </action>
+  <action name="actionOpenChatWindow" >
+   <property name="icon" >
+    <iconset resource="wengophone.qrc" >:/pics/iconbar/chat.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Open &amp;Chat Window</string>
    </property>
   </action>
   <action name="actionOutgoingCalls" >
@@ -527,64 +389,23 @@
     <string>&amp;Missed Calls</string>
    </property>
   </action>
-  <action name="actionChatSessions" >
-   <property name="text" >
-    <string>&amp;Chat Sessions</string>
-   </property>
-  </action>
   <action name="actionSMS" >
    <property name="text" >
-    <string>Short text messages (SMS)</string>
+    <string>Short Text &amp;Messages (SMS)</string>
    </property>
   </action>
-  <action name="actionAll" >
-   <property name="text" >
-    <string>&amp;All</string>
+  <action name="actionEnableVideo" >
+   <property name="icon" >
+    <iconset resource="wengophone.qrc" >:/pics/config/video.png</iconset>
    </property>
-  </action>
-  <action name="actionSearchWengoUsers" >
    <property name="text" >
-    <string>&amp;Search for Wengo Users</string>
-   </property>
-  </action>
-  <action name="actionAccept" >
-   <property name="text" >
-    <string>Accept</string>
-   </property>
-  </action>
-  <action name="actionHangup" >
-   <property name="text" >
-    <string>Hangup</string>
-   </property>
-  </action>
-  <action name="actionHoldResume" >
-   <property name="text" >
-    <string>Hold / Resume</string>
-   </property>
-  </action>
-  <action name="actionHideContactGroups" >
-   <property name="text" >
-    <string>Show / Hide groups</string>
-   </property>
-  </action>
-  <action name="actionChangeProfile" >
-   <property name="text" >
-    <string>Change Profile...</string>
-   </property>
-  </action>
-  <action name="actionLogOff" >
-   <property name="text" >
-    <string>Log Off</string>
+    <string>Enable/Disable &amp;Video Calls</string>
    </property>
   </action>
  </widget>
  <pixmapfunction></pixmapfunction>
  <tabstops>
   <tabstop>tabWidget</tabstop>
-  <tabstop>addContactButton</tabstop>
-  <tabstop>findContactButton</tabstop>
-  <tabstop>startConferenceButton</tabstop>
-  <tabstop>sendSmsButton</tabstop>
  </tabstops>
  <resources>
   <include location="wengophone.qrc" />

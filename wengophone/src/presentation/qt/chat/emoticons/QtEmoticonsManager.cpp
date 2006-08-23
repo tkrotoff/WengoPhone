@@ -26,7 +26,7 @@ QtEmoticonsManager * QtEmoticonsManager::_instance = NULL;
 
 QtEmoticonsManager::QtEmoticonsManager() {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
-	loadFromFile(QString::fromStdString(config.getResourcesDir() + "emoticons/icondef2.xml"));
+	loadFromFile(QString::fromStdString(config.getResourcesDir() + "emoticons/icondef.xml"));
 }
 
 QtEmoticonsManager * QtEmoticonsManager::getInstance() {
