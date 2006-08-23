@@ -52,12 +52,14 @@ void QtChatHistoryWidget::saveHistoryAsHtmlSlot(){
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	QString contentToSave = toHtml();
 	QString filePath = QFileDialog::getSaveFileName(this, tr("Save As"), QString::fromStdString(config.getLastChatHistorySaveDir()), "HTML (*.htm *.html)");
-	if(!filePath.endsWith(QString(".htm"), Qt::CaseInsensitive) && !filePath.endsWith(QString(".html"), Qt::CaseInsensitive)){
-		filePath.append(QString(".html"));
+	if(filePath.length() > 0){
+		if(!filePath.endsWith(QString(".htm"), Qt::CaseInsensitive) && !filePath.endsWith(QString(".html"), Qt::CaseInsensitive)){
+			filePath.append(QString(".html"));
+		}
+		QFile fileToSave(filePath);
+		config.set(Config::LAST_CHAT_HISTORY_SAVE_DIR_KEY, QFileInfo(fileToSave).absolutePath().toStdString());
+		fileToSave.open(QIODevice::WriteOnly);
+		fileToSave.write(contentToSave.toStdString().c_str(), (long long)contentToSave.length());
+		fileToSave.close();
 	}
-	QFile fileToSave(filePath);
-	config.set(Config::LAST_CHAT_HISTORY_SAVE_DIR_KEY, QFileInfo(fileToSave).absolutePath().toStdString());
-	fileToSave.open(QIODevice::WriteOnly);
-	fileToSave.write(contentToSave.toStdString().c_str(), (long long)contentToSave.length());
-	fileToSave.close();
 }
