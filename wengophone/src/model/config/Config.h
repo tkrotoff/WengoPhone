@@ -419,6 +419,10 @@ public:
 	/** Location of configuration files on the hard disk. */
 	static const std::string CONFIG_DIR_KEY;
 	std::string getConfigDir() const;
+	
+	/** Last location where a chat history has benn saved */
+	static const std::string LAST_CHAT_HISTORY_SAVE_DIR_KEY;
+	std::string getLastChatHistorySaveDir() const;
 
 	/**
 	 * Resources directory.

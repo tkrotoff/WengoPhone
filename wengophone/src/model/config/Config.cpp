@@ -123,6 +123,7 @@ const std::string Config::WENGO_CIRPACK_PATH_KEY = "wengo.cirpack.path";
 const std::string Config::WENGO_DIRECTORY_PATH_KEY = "wengo.directory.path";
 
 const std::string Config::CONFIG_DIR_KEY = "config.dir";
+const std::string Config::LAST_CHAT_HISTORY_SAVE_DIR_KEY = "last.chat.history.save.dir";
 const std::string Config::RESOURCES_DIR_KEY = "resources.dir";
 
 const std::string Config::WENBOX_ENABLE_KEY = "wenbox.enable";
@@ -260,6 +261,8 @@ Config::Config(const std::string & name)
 	_keyDefaultValueMap[CMDLINE_PLACECALL_KEY] = empty;
 
 	_keyDefaultValueMap[CMDSERVER_AUTHORIZED_KEY] = empty;
+	
+	_keyDefaultValueMap[LAST_CHAT_HISTORY_SAVE_DIR_KEY] = Path::getHomeDirPath();
 }
 
 Config::~Config() {
@@ -343,6 +346,10 @@ bool Config::getAudioHalfDuplex() const {
 
 std::string Config::getConfigDir() const {
 	return getStringKeyValue(CONFIG_DIR_KEY);
+}
+
+std::string Config::getLastChatHistorySaveDir() const {
+	return getStringKeyValue(LAST_CHAT_HISTORY_SAVE_DIR_KEY);
 }
 
 std::string Config::getResourcesDir() const {
