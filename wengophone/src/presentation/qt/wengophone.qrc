@@ -61,6 +61,7 @@
         <file>pics/exit.png</file>
         <file>pics/fond_avatar.png</file>
         <file>pics/group_close.png</file>
+        <file>pics/group_close_reverse.png</file>
         <file>pics/group_open.png</file>
         <file>pics/headers/IM.png</file>
         <file>pics/headers/conference.png</file>
@@ -149,8 +150,8 @@
         <file>pics/systray/offline.png</file>
         <file>pics/systray/online.png</file>
         <file>pics/toaster/chat.png</file>
-        <file>pics/toaster/pickup.png</file>
         <file>pics/toaster/hangup.png</file>
+        <file>pics/toaster/pickup.png</file>
         <file>pics/update.png</file>
         <file>pics/video_flip.png</file>
         <file>pics/video_fullscreen.png</file>
@@ -223,8 +224,8 @@
         <file>pics/emoticons/face-wink48.png</file>
     </qresource>
     <qresource prefix="/forms" >
-        <file>chat/chatroom/ChatRoomInviteWidget.ui</file>
         <file>chat/ChatRoomWidget.ui</file>
+        <file>chat/chatroom/ChatRoomInviteWidget.ui</file>
         <file>phonecall/ConferenceCallWidget.ui</file>
     </qresource>
 </RCC>
