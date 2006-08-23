@@ -19,6 +19,9 @@
 
 #include "QtChatHistoryWidget.h"
 
+#include <model/config/Config.h>
+#include <model/config/ConfigManager.h>
+
 #include <util/Logger.h>
 
 #include <QtGui/QtGui>
@@ -46,11 +49,14 @@ void QtChatHistoryWidget::makeActions(){
 
 void QtChatHistoryWidget::saveHistoryAsHtmlSlot(){
 	LOG_DEBUG("saveHistoryAsHtmlSlot");
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	QString contentToSave = toHtml();
-	// FIXME Qt HTML
-	QFile fileToSave(QFileDialog::getSaveFileName(this, tr("Save As"), "/", "HTML (*.htm *.html)"));
-	// TODO add extension to filename
-	// TODO find home directory
+	QString filePath = QFileDialog::getSaveFileName(this, tr("Save As"), QString::fromStdString(config.getLastChatHistorySaveDir()), "HTML (*.htm *.html)");
+	if(!filePath.endsWith(QString(".htm"), Qt::CaseInsensitive) && !filePath.endsWith(QString(".html"), Qt::CaseInsensitive)){
+		filePath.append(QString(".html"));
+	}
+	QFile fileToSave(filePath);
+	config.set(Config::LAST_CHAT_HISTORY_SAVE_DIR_KEY, QFileInfo(fileToSave).absolutePath().toStdString());
 	fileToSave.open(QIODevice::WriteOnly);
 	fileToSave.write(contentToSave.toStdString().c_str(), (long long)contentToSave.length());
 	fileToSave.close();
