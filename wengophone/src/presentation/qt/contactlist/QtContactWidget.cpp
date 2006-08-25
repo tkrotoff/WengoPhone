@@ -18,6 +18,7 @@
  */
 
 #include "QtContactWidget.h"
+
 #include "QtContactListManager.h"
 #include "QtContact.h"
 
@@ -32,14 +33,11 @@
 #include <presentation/qt/profile/QtProfileDetails.h>
 
 #include <util/Picture.h>
-
-#include <qtutil/WidgetFactory.h>
-
 #include <util/Logger.h>
 
 #include <QtGui/QtGui>
 
-const QString QtContactWidget::AVATAR_BACKGROUND = ":/pics/fond_avatar.png";
+const QString QtContactWidget::AVATAR_BACKGROUND = ":/pics/avatar_background.png";
 
 QtContactWidget::QtContactWidget(const std::string & contactId,
 	CWengoPhone & cWengoPhone, QWidget * parent)
@@ -49,31 +47,37 @@ QtContactWidget::QtContactWidget(const std::string & contactId,
 	_contactId = contactId;
 	contactProfileUpdated();
 
-	_ui.setupUi(this);
-	_ui.avatarLabel->setPixmap(createAvatar());
+	_ui = new Ui::ContactWidget();
+	_ui->setupUi(this);
+
+	_ui->avatarLabel->setPixmap(createAvatar());
 
 	QString str = QString::fromUtf8(_contactProfile.getHomePhone().c_str());
 	if (!str.isEmpty()) {
-		_ui.homePhoneLabel->setText(str);
+		_ui->landlineLabel->setText(str);
 	}
 	str = QString::fromUtf8(_contactProfile.getMobilePhone().c_str());
 	if (!str.isEmpty()) {
-		_ui.cellPhoneLabel->setText(str);
+		_ui->mobileLabel->setText(str);
 	}
 	else {
-		_ui.smsButton->setEnabled(false);
+		_ui->smsButton->setEnabled(false);
 	}
 	if (!_contactProfile.hasFreeCall()) {
-		_ui.callButton->setEnabled(false);
+		_ui->callButton->setEnabled(false);
 	}
 	if (!_contactProfile.hasIM()) {
-		_ui.chatButton->setEnabled(false);
+		_ui->chatButton->setEnabled(false);
 	}
-	connect(_ui.callButton, SIGNAL(clicked()), SLOT(callButtonClicked()));
-	connect(_ui.chatButton, SIGNAL(clicked()), SLOT(chatButtonClicked()));
-	connect(_ui.smsButton, SIGNAL(clicked()), SLOT(smsButtonClicked()));
-	connect(_ui.landLineButton, SIGNAL(clicked()), SLOT(landLineButtonClicked()));
-	connect(_ui.mobileButton, SIGNAL(clicked()), SLOT(mobileButtonClicked()));
+	connect(_ui->callButton, SIGNAL(clicked()), SLOT(callButtonClicked()));
+	connect(_ui->chatButton, SIGNAL(clicked()), SLOT(chatButtonClicked()));
+	connect(_ui->smsButton, SIGNAL(clicked()), SLOT(smsButtonClicked()));
+	connect(_ui->landlineButton, SIGNAL(clicked()), SLOT(landlineButtonClicked()));
+	connect(_ui->mobileButton, SIGNAL(clicked()), SLOT(mobileButtonClicked()));
+}
+
+QtContactWidget::~QtContactWidget() {
+	delete _ui;
 }
 
 void QtContactWidget::callButtonClicked() {
@@ -104,13 +108,13 @@ void QtContactWidget::contactProfileUpdated() {
 }
 
 QLabel * QtContactWidget::getAvatarLabel() const {
-	return _ui.avatarLabel;
+	return _ui->avatarLabel;
 }
 
 void QtContactWidget::mobileButtonClicked() {
 	QtContactListManager * ul = QtContactListManager::getInstance();
 	if (!ul->getMobilePhone(QString::fromStdString(_contactId)).isEmpty()) {
-		ul->startCall(QString::fromStdString(_contactId), _ui.cellPhoneLabel->text());
+		ul->startCall(QString::fromStdString(_contactId), _ui->mobileLabel->text());
 	} else {
 		ContactProfile contactProfile =
 			_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCContactList().getContactProfile(_text.toStdString());
@@ -121,10 +125,10 @@ void QtContactWidget::mobileButtonClicked() {
 	}
 }
 
-void QtContactWidget::landLineButtonClicked() {
+void QtContactWidget::landlineButtonClicked() {
 	QtContactListManager * ul = QtContactListManager::getInstance();
 	if (!ul->getHomePhone(QString::fromStdString(_contactId)).isEmpty()) {
-		ul->startCall(QString::fromStdString(_contactId), _ui.homePhoneLabel->text());
+		ul->startCall(QString::fromStdString(_contactId), _ui->landlineLabel->text());
 	} else {
 		ContactProfile contactProfile =
 			_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCContactList().getContactProfile(_text.toStdString());
@@ -139,7 +143,7 @@ QPixmap QtContactWidget::createAvatar() {
 	QPixmap background = QPixmap(AVATAR_BACKGROUND);
 	QPixmap avatar = getIcon();
 	if (!avatar.isNull()) {
-		QRect rect = _ui.avatarLabel->rect();
+		QRect rect = _ui->avatarLabel->rect();
 		QPainter pixpainter(&background);
 		pixpainter.drawPixmap(5, 5, avatar.scaled(60, 60));
 		pixpainter.end();
@@ -151,14 +155,14 @@ void QtContactWidget::paintEvent(QPaintEvent *) {
 	QPalette p = palette();
 	QRect r = rect();
 
-	QLinearGradient lg(QPointF(1,r.top()),QPointF(1,r.bottom()));
-	QColor dest = QColor(193,223,255);
-	lg.setColorAt(0,dest);
-	float red = ((float)dest.red()) / 1.4f;
-	float blue = ((float)dest.blue()) / 1.4f;
-	float green = ((float)dest.green()) / 1.4f;
-	dest = QColor((int)red,(int)green,(int)blue);
-	lg.setColorAt (1,dest);
+	QLinearGradient lg(QPointF(1, r.top()), QPointF(1, r.bottom()));
+	QColor dest = QColor(193, 223, 255);
+	lg.setColorAt(0, dest);
+	float red = ((float) dest.red()) / 1.4f;
+	float blue = ((float) dest.blue()) / 1.4f;
+	float green = ((float) dest.green()) / 1.4f;
+	dest = QColor((int) red, (int) green, (int) blue);
+	lg.setColorAt(1, dest);
 	QPainter painter(this);
 	painter.fillRect(r, QBrush(lg));
 	paintContact(&painter, r);
@@ -167,23 +171,19 @@ void QtContactWidget::paintEvent(QPaintEvent *) {
 
 void QtContactWidget::paintContact(QPainter * painter, const QRect & rect) {
 	QtContactListManager * ul = QtContactListManager::getInstance();
-	QRect r;
-	QPixmap px;
-	QtContactPixmap * spx;
-	int x;
-	QPalette p = palette();
 
 	QtContact * qtContact = ul->getContact(QString::fromStdString(_contactId));
 	if (!qtContact) {
 		return;
 	}
 
-	spx = QtContactPixmap::getInstance();
+	QPalette p = palette();
+	QtContactPixmap * spx = QtContactPixmap::getInstance();
 	painter->setPen(p.text().color());
-	// Draw the status pixmap
-	px = spx->getPixmap(qtContact->getStatus());
-	r = rect;
-	x = r.left();
+	//Draw the status pixmap
+	QPixmap px = spx->getPixmap(qtContact->getStatus());
+	QRect r = rect;
+	int x = r.left();
 
 	int centeredPx_y = (QtContact::UserSize - px.size().height()) / 2;
 
@@ -191,7 +191,7 @@ void QtContactWidget::paintContact(QPainter * painter, const QRect & rect) {
 	x += px.width() + 5;
 	r.setLeft(x);
 
-	// Draw the user
+	//Draw the user
 	QRect textRect = r;
 	int centeredText_y = (QtContact::UserSize - QFontMetrics(font()).height()) / 2;
 	textRect.setTop(textRect.top() + centeredText_y);

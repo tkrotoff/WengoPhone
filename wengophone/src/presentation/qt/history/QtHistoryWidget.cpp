@@ -22,15 +22,17 @@
 #include <util/Logger.h>
 
 HistoryTreeEventManager::HistoryTreeEventManager(QTreeWidget * target, QtHistoryWidget * historyWidget)
-	: QObject(target), _historyWidget(historyWidget) {
+	: QObject(target),
+	_historyWidget(historyWidget) {
+
 	target->viewport()->installEventFilter(this);
 }
 
-bool HistoryTreeEventManager::eventFilter(QObject *obj, QEvent *event) {
+bool HistoryTreeEventManager::eventFilter(QObject * obj, QEvent * event) {
 	if (event->type() == QEvent::MouseButtonPress) {
-		QMouseEvent * mouseEvent = static_cast<QMouseEvent *>(event);
+		QMouseEvent * mouseEvent = (QMouseEvent *) event;
 
-		if( mouseEvent->button() == Qt::RightButton) {
+		if (mouseEvent->button() == Qt::RightButton) {
 			_historyWidget->showPopupMenu(mouseEvent->pos());
 			return QObject::eventFilter(obj, event);
 		}
@@ -38,12 +40,14 @@ bool HistoryTreeEventManager::eventFilter(QObject *obj, QEvent *event) {
 	return QObject::eventFilter(obj, event);
 }
 
-QtHistoryWidget::QtHistoryWidget ( QWidget * parent , Qt::WFlags f ) : QWidget(parent,f)
-{
+
+QtHistoryWidget::QtHistoryWidget(QWidget * parent)
+	: QWidget(parent) {
+
 	QGridLayout * gridLayout = new QGridLayout(this);
 
 	_treeWidget = new QTreeWidget(this);
-	_treeWidget->setRootIsDecorated ( false );
+	_treeWidget->setRootIsDecorated(false);
 	_treeWidget->setIndentation(0);
 
 	_historyTreeEventManager = new HistoryTreeEventManager(_treeWidget, this);
@@ -59,210 +63,214 @@ QtHistoryWidget::QtHistoryWidget ( QWidget * parent , Qt::WFlags f ) : QWidget(p
 	headerLabels << tr("Duration");
 
 	_treeWidget->setHeaderLabels(headerLabels);
-	_treeWidget->setSortingEnabled ( false );
+	_treeWidget->setSortingEnabled(false);
 
-	_header->resizeSection (0, 150);
+	_header->resizeSection(0, 150);
 	_header->setStretchLastSection(true);
 
-	gridLayout->addWidget(_treeWidget,0,0);
+	gridLayout->addWidget(_treeWidget, 0, 0);
 
 	_menu = new QMenu();
 
 	QAction * action;
 
-	action = _menu->addAction( tr ("Outgoing SMS") );
-	connect (action, SIGNAL( triggered(bool) ),SLOT( showSMSCall(bool) ));
+	action = _menu->addAction(tr("Outgoing SMS"));
+	connect(action, SIGNAL(triggered(bool)), SLOT(showSMSCall(bool)));
 
-	action = _menu->addAction( tr ("Outgoing call") );
-	connect (action, SIGNAL( triggered(bool) ),SLOT( showOutGoingCall(bool) ));
+	action = _menu->addAction(tr("Outgoing call"));
+	connect(action, SIGNAL(triggered(bool)), SLOT(showOutGoingCall(bool)));
 
-	action = _menu->addAction( tr ("Missed call") );
-	connect (action, SIGNAL( triggered(bool) ),SLOT( showMissedCall (bool) ));
+	action = _menu->addAction(tr("Missed call"));
+	connect(action, SIGNAL(triggered(bool)), SLOT(showMissedCall(bool)));
 
-	action = _menu->addAction( tr ("Incoming call") );
-	connect (action, SIGNAL( triggered(bool) ),SLOT( showIncoming(bool) ));
+	action = _menu->addAction(tr("Incoming call"));
+	connect(action, SIGNAL(triggered(bool)), SLOT(showIncoming(bool)));
 
-	action = _menu->addAction( tr ("Chat") );
-	connect (action, SIGNAL( triggered(bool) ),SLOT( showChat(bool) ));
+	action = _menu->addAction(tr("Chat"));
+	connect(action, SIGNAL(triggered(bool)), SLOT(showChat(bool)));
 
-	action = _menu->addAction( tr ("All") );
-	connect (action, SIGNAL( triggered(bool) ),SLOT( showAll(bool) ));
+	action = _menu->addAction(tr("All"));
+	connect(action, SIGNAL(triggered(bool)), SLOT(showAll(bool)));
 
-	connect (_treeWidget, SIGNAL( itemDoubleClicked ( QTreeWidgetItem *, int ) ),SLOT (itemDoubleClicked ( QTreeWidgetItem *, int) ) );
+	connect(_treeWidget, SIGNAL(itemDoubleClicked(QTreeWidgetItem *, int)), SLOT(itemDoubleClicked(QTreeWidgetItem *, int)));
 
 	connect(_treeWidget, SIGNAL(itemClicked(QTreeWidgetItem *,int)), SLOT(itemClicked()));
 
-	connect (_header,SIGNAL(sectionClicked (int)),SLOT(headerClicked(int)) );
+	connect(_header, SIGNAL(sectionClicked(int)), SLOT(headerClicked(int)));
 
 
 	_popupMenu = new QMenu();
 
-	action = _popupMenu->addAction( tr ("Erase entry") );
-	connect (action, SIGNAL( triggered(bool) ),SLOT( eraseEntry() ));
+	action = _popupMenu->addAction(tr("Erase entry"));
+	connect(action, SIGNAL(triggered(bool)), SLOT(eraseEntry()));
 
-	action = _popupMenu->addAction( tr ("Replay entry") );
-	connect (action, SIGNAL( triggered(bool) ),SLOT( replayEntry() ));
+	action = _popupMenu->addAction(tr("Replay entry"));
+	connect(action, SIGNAL(triggered(bool)), SLOT(replayEntry()));
 }
 
 QtHistoryWidget::~QtHistoryWidget() {
 	delete _historyTreeEventManager;
 }
 
-void QtHistoryWidget::addSMSItem(const QString & text,const QDate & date, const QTime & time, const QTime & duration, const QString & name, unsigned int id) {
+void QtHistoryWidget::addSMSItem(const QString & text, const QDate & date, const QTime & time, const QTime & duration, const QString & name, unsigned id) {
 
 	QtHistoryItem * item = new QtHistoryItem(_treeWidget);
 
 	item->setText(QtHistoryItem::COLUMN_TYPE, text);
 	item->setIcon(QtHistoryItem::COLUMN_TYPE, QIcon(QPixmap(":/pics/history/sms_sent.png")));
-	item->setText(QtHistoryItem::COLUMN_DATE, date.toString("yyyy-MM-dd") + QString(" %1").arg(time.toString(Qt::TextDate)) );
-	item->setText(QtHistoryItem::COLUMN_DURATION, duration.toString(Qt::TextDate) );
+	item->setText(QtHistoryItem::COLUMN_DATE, date.toString("yyyy-MM-dd") + QString(" %1").arg(time.toString(Qt::TextDate)));
+	item->setText(QtHistoryItem::COLUMN_DURATION, duration.toString(Qt::TextDate));
 	item->setText(QtHistoryItem::COLUMN_PEERS, name);
 	item->setId(id);
 	item->setItemType(QtHistoryItem::Sms);
-    resizeColumns();
+	resizeColumns();
 	sortHistory();
 }
 
 
-void QtHistoryWidget::addOutGoingCallItem(const QString & text,const QDate & date, const QTime & time, const QTime & duration, const QString & name, unsigned int id) {
+void QtHistoryWidget::addOutGoingCallItem(const QString & text, const QDate & date, const QTime & time, const QTime & duration, const QString & name, unsigned id) {
 
 	QtHistoryItem * item = new QtHistoryItem(_treeWidget);
 
-	item->setText(QtHistoryItem::COLUMN_TYPE, text );
+	item->setText(QtHistoryItem::COLUMN_TYPE, text);
 	item->setIcon(QtHistoryItem::COLUMN_TYPE, QIcon(QPixmap(":/pics/history/call_outgoing.png")));
-	item->setText(QtHistoryItem::COLUMN_DATE, date.toString("yyyy-MM-dd") + QString(" %1").arg(time.toString(Qt::TextDate)) );
-	item->setText(QtHistoryItem::COLUMN_DURATION, duration.toString(Qt::TextDate) );
+	item->setText(QtHistoryItem::COLUMN_DATE, date.toString("yyyy-MM-dd") + QString(" %1").arg(time.toString(Qt::TextDate)));
+	item->setText(QtHistoryItem::COLUMN_DURATION, duration.toString(Qt::TextDate));
 	item->setText(QtHistoryItem::COLUMN_PEERS, name);
-	item->setId( id );
+	item->setId(id);
 	item->setItemType(QtHistoryItem::OutGoingCall);
-    resizeColumns();
+	resizeColumns();
 	sortHistory();
 }
 
-void QtHistoryWidget::addIncomingCallItem(const QString & text,const QDate & date, const QTime & time, const QTime & duration, const QString & name, unsigned int id){
+void QtHistoryWidget::addIncomingCallItem(const QString & text, const QDate & date, const QTime & time, const QTime & duration, const QString & name, unsigned id) {
 
 	QtHistoryItem * item = new QtHistoryItem(_treeWidget);
 
-	item->setText(QtHistoryItem::COLUMN_TYPE, text );
+	item->setText(QtHistoryItem::COLUMN_TYPE, text);
 	item->setIcon(QtHistoryItem::COLUMN_TYPE, QIcon(QPixmap(":/pics/history/call_incoming.png")));
-	item->setText(QtHistoryItem::COLUMN_DATE, date.toString("yyyy-MM-dd") + QString(" %1").arg(time.toString(Qt::TextDate)) );
-	item->setText(QtHistoryItem::COLUMN_DURATION, duration.toString(Qt::TextDate) );
+	item->setText(QtHistoryItem::COLUMN_DATE, date.toString("yyyy-MM-dd") + QString(" %1").arg(time.toString(Qt::TextDate)));
+	item->setText(QtHistoryItem::COLUMN_DURATION, duration.toString(Qt::TextDate));
 	item->setText(QtHistoryItem::COLUMN_PEERS, name);
-	item->setId( id );
+	item->setId(id);
 	item->setItemType(QtHistoryItem::IncomingCall);
-    resizeColumns();
+	resizeColumns();
 	sortHistory();
 }
 
-void QtHistoryWidget::addChatItem(const QString & text,const QDate & date, const QTime & time, const QTime & duration, const QString & name, unsigned int id) {
+void QtHistoryWidget::addChatItem(const QString & text, const QDate & date, const QTime & time, const QTime & duration, const QString & name, unsigned id) {
 
 	QtHistoryItem * item = new QtHistoryItem(_treeWidget);
 
-	item->setText(QtHistoryItem::COLUMN_TYPE, text );
-	item->setText(QtHistoryItem::COLUMN_DATE, date.toString("yyyy-MM-dd") + QString(" %1").arg(time.toString(Qt::TextDate)) );
-	item->setText(QtHistoryItem::COLUMN_DURATION, duration.toString(Qt::TextDate) );
+	item->setText(QtHistoryItem::COLUMN_TYPE, text);
+	item->setText(QtHistoryItem::COLUMN_DATE, date.toString("yyyy-MM-dd") + QString(" %1").arg(time.toString(Qt::TextDate)));
+	item->setText(QtHistoryItem::COLUMN_DURATION, duration.toString(Qt::TextDate));
 	item->setText(QtHistoryItem::COLUMN_PEERS, name);
-	item->setId( id );
+	item->setId(id);
 	item->setItemType(QtHistoryItem::Chat);
-    resizeColumns();
+	resizeColumns();
 	sortHistory();
 }
 
-void QtHistoryWidget::addMissedCallItem(const QString & text,const QDate & date, const QTime & time, const QTime & duration, const QString & name, unsigned int id) {
+void QtHistoryWidget::addMissedCallItem(const QString & text, const QDate & date, const QTime & time, const QTime & duration, const QString & name, unsigned id) {
 	QtHistoryItem * item = new QtHistoryItem(_treeWidget);
 
-	item->setText(QtHistoryItem::COLUMN_TYPE, text );
+	item->setText(QtHistoryItem::COLUMN_TYPE, text);
 	item->setIcon(QtHistoryItem::COLUMN_TYPE, QIcon(QPixmap(":/pics/history/call_missed.png")));
-	item->setText(QtHistoryItem::COLUMN_DATE, date.toString("yyyy-MM-dd") + QString(" %1").arg(time.toString(Qt::TextDate)) );
-	item->setText(QtHistoryItem::COLUMN_DURATION, duration.toString(Qt::TextDate) );
+	item->setText(QtHistoryItem::COLUMN_DATE, date.toString("yyyy-MM-dd") + QString(" %1").arg(time.toString(Qt::TextDate)));
+	item->setText(QtHistoryItem::COLUMN_DURATION, duration.toString(Qt::TextDate));
 	item->setText(QtHistoryItem::COLUMN_PEERS, name);
-	item->setId( id );
+	item->setId(id);
 	item->setItemType(QtHistoryItem::MissedCall);
-    resizeColumns();
+	resizeColumns();
 	sortHistory();
 }
 
-
-void QtHistoryWidget::addRejectedCallItem(const QString & text,const QDate & date, const QTime & time, const QTime & duration, const QString & name, int unsigned id) {
+void QtHistoryWidget::addRejectedCallItem(const QString & text, const QDate & date, const QTime & time, const QTime & duration, const QString & name, int unsigned id) {
 	QtHistoryItem * item = new QtHistoryItem(_treeWidget);
 
-	item->setText(QtHistoryItem::COLUMN_TYPE, text );
+	item->setText(QtHistoryItem::COLUMN_TYPE, text);
 	item->setIcon(QtHistoryItem::COLUMN_TYPE, QIcon(QPixmap(":/pics/history/call_missed.png")));
-	item->setText(QtHistoryItem::COLUMN_DATE, date.toString("yyyy-MM-dd") + QString(" %1").arg(time.toString(Qt::TextDate)) );
-	item->setText(QtHistoryItem::COLUMN_DURATION, duration.toString(Qt::TextDate) );
+	item->setText(QtHistoryItem::COLUMN_DATE, date.toString("yyyy-MM-dd") + QString(" %1").arg(time.toString(Qt::TextDate)));
+	item->setText(QtHistoryItem::COLUMN_DURATION, duration.toString(Qt::TextDate));
 	item->setText(QtHistoryItem::COLUMN_PEERS, name);
-	item->setId( id );
+	item->setId(id);
 	item->setItemType(QtHistoryItem::RejectedCall);
-    resizeColumns();
+	resizeColumns();
 	sortHistory();
 }
 
-void QtHistoryWidget::editItem(const QString & text,const QDate & date, const QTime & time, const QTime & duration, const QString & name, unsigned int id) {
+void QtHistoryWidget::editItem(const QString & text, const QDate & date, const QTime & time, const QTime & duration, const QString & name, unsigned id) {
 
 	QList<QTreeWidgetItem *>  itemList = _treeWidget->findItems("*", Qt::MatchWildcard);
 
-	QList<QTreeWidgetItem *>::iterator iter;
+	QList<QTreeWidgetItem *>::iterator it;
 
-	for ( iter = itemList.begin(); iter != itemList.end(); iter++){
-		QtHistoryItem * item = dynamic_cast<QtHistoryItem *> ( (*iter) );
-		if ( item->getId() == id ){
-			item->setText(QtHistoryItem::COLUMN_TYPE, text );
-			item->setText(QtHistoryItem::COLUMN_DATE, date.toString("yyyy-MM-dd") + QString(" %1").arg(time.toString(Qt::TextDate)) );
-			item->setText(QtHistoryItem::COLUMN_DURATION, duration.toString(Qt::TextDate) );
+	for (it = itemList.begin(); it != itemList.end(); it++) {
+		QtHistoryItem * item = (QtHistoryItem *) *it;
+		if (item->getId() == id) {
+			item->setText(QtHistoryItem::COLUMN_TYPE, text);
+			item->setText(QtHistoryItem::COLUMN_DATE, date.toString("yyyy-MM-dd") + QString(" %1").arg(time.toString(Qt::TextDate)));
+			item->setText(QtHistoryItem::COLUMN_DURATION, duration.toString(Qt::TextDate));
 			item->setText(QtHistoryItem::COLUMN_PEERS, name);
-            resizeColumns();
+			resizeColumns();
 			break;
 		}
 	}
 	_treeWidget->viewport()->update();
 }
 
-void QtHistoryWidget::itemDoubleClicked ( QTreeWidgetItem * item, int column ){
-	QtHistoryItem * hItem = dynamic_cast<QtHistoryItem *>(item);
+void QtHistoryWidget::itemDoubleClicked(QTreeWidgetItem * item, int column) {
+	QtHistoryItem * hItem = (QtHistoryItem *) item;
 	replayItem(hItem);
 }
 
-void QtHistoryWidget::headerClicked(int logicalIndex){
-	if ( !logicalIndex == 0)
+void QtHistoryWidget::headerClicked(int logicalIndex) {
+	if (!logicalIndex == 0) {
 		return;
+	}
 	QCursor cursor;
 	_menu->popup(cursor.pos());
-
 }
 
-void QtHistoryWidget::showSMSCall(bool ){
+void QtHistoryWidget::showSMSCall(bool) {
 	QAbstractItemModel * model = _header->model();
-	model->setHeaderData(0,Qt::Horizontal,QVariant( tr("SMS") ),Qt::DisplayRole);
+	model->setHeaderData(0, Qt::Horizontal, QVariant(tr("SMS")), Qt::DisplayRole);
+}
 
-}
-void QtHistoryWidget::showOutGoingCall(bool){
+void QtHistoryWidget::showOutGoingCall(bool) {
 	QAbstractItemModel * model = _header->model();
-	model->setHeaderData(0,Qt::Horizontal,QVariant( tr("Outgoing call") ),Qt::DisplayRole);
+	model->setHeaderData(0, Qt::Horizontal, QVariant(tr("Outgoing call")), Qt::DisplayRole);
 }
-void QtHistoryWidget::showIncoming(bool){
+
+void QtHistoryWidget::showIncoming(bool) {
 	QAbstractItemModel * model = _header->model();
-	model->setHeaderData(0,Qt::Horizontal,QVariant( tr("Incoming call") ),Qt::DisplayRole);
+	model->setHeaderData(0, Qt::Horizontal, QVariant(tr("Incoming call")), Qt::DisplayRole);
 }
-void QtHistoryWidget::showChat(bool){
+
+void QtHistoryWidget::showChat(bool) {
 	QAbstractItemModel * model = _header->model();
-	model->setHeaderData(0,Qt::Horizontal,QVariant( tr("Chat") ),Qt::DisplayRole);
+	model->setHeaderData(0, Qt::Horizontal, QVariant(tr("Chat")), Qt::DisplayRole);
 }
-void QtHistoryWidget::showAll(bool){
+
+void QtHistoryWidget::showAll(bool) {
 	QAbstractItemModel * model = _header->model();
-	model->setHeaderData(0,Qt::Horizontal,QVariant( tr("All") ),Qt::DisplayRole);
+	model->setHeaderData(0, Qt::Horizontal, QVariant(tr("All")), Qt::DisplayRole);
 }
-void QtHistoryWidget::showMissedCall(bool){
+
+void QtHistoryWidget::showMissedCall(bool) {
 	QAbstractItemModel * model = _header->model();
-	model->setHeaderData(0,Qt::Horizontal,QVariant( tr("Missed call") ),Qt::DisplayRole);
+	model->setHeaderData(0, Qt::Horizontal, QVariant(tr("Missed call")), Qt::DisplayRole);
 }
+
 void QtHistoryWidget::clearHistory() {
 	_treeWidget->clear();
 }
 
 void QtHistoryWidget::showPopupMenu(const QPoint & pos) {
 	QTreeWidgetItem * item = _treeWidget->itemAt(pos);
-	QtHistoryItem * hItem = dynamic_cast<QtHistoryItem *>(item);
-	if( hItem ) {
+	QtHistoryItem * hItem = (QtHistoryItem *) item;
+	if (hItem) {
 		_currentItem = hItem;
 		QCursor cursor;
 		_popupMenu->popup(cursor.pos());
@@ -270,13 +278,13 @@ void QtHistoryWidget::showPopupMenu(const QPoint & pos) {
 }
 
 void QtHistoryWidget::eraseEntry() {
-	if( _currentItem ) {
+	if (_currentItem) {
 		removeItem(_currentItem->getId());
 	}
 }
 
 void QtHistoryWidget::replayEntry() {
-	if( _currentItem ) {
+	if (_currentItem) {
 		replayItem(_currentItem);
 	}
 }
@@ -290,8 +298,8 @@ void QtHistoryWidget::itemClicked() {
 }
 
 void QtHistoryWidget::resizeColumns() {
-    _treeWidget->resizeColumnToContents (QtHistoryItem::COLUMN_TYPE);
-    _treeWidget->resizeColumnToContents (QtHistoryItem::COLUMN_DATE);
-    _treeWidget->resizeColumnToContents (QtHistoryItem::COLUMN_DURATION);
-    _treeWidget->resizeColumnToContents (QtHistoryItem::COLUMN_PEERS);
+	_treeWidget->resizeColumnToContents(QtHistoryItem::COLUMN_TYPE);
+	_treeWidget->resizeColumnToContents(QtHistoryItem::COLUMN_DATE);
+	_treeWidget->resizeColumnToContents(QtHistoryItem::COLUMN_DURATION);
+	_treeWidget->resizeColumnToContents(QtHistoryItem::COLUMN_PEERS);
 }

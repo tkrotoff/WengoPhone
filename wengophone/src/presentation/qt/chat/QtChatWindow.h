@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,6 +36,7 @@
 
 class QtChatTabWidget;
 class QtWengoPhone;
+class WengoStyleLabel;
 
 /**
  *
@@ -127,11 +128,11 @@ private:
 
 	QFrame * _inviteFrame;
 
-	QtWengoStyleLabel * _callLabel;
+	WengoStyleLabel * _callLabel;
 
-	QtWengoStyleLabel * _inviteLabel;
+	WengoStyleLabel * _inviteLabel;
 
-	QWidget	* _window;
+	QWidget * _window;
 
 	CChatHandler & _cChatHandler;
 

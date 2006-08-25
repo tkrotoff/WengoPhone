@@ -17,38 +17,28 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef OWWIDGET_H
-#define OWWIDGET_H
+#include <qtutil/ClickableLabel.h>
 
-#include <util/NonCopyable.h>
+#include <QtGui/QtGui>
 
-class QWidget;
-class QGridLayout;
-class QDialog;
+ClickableLabel::ClickableLabel(QWidget * parent)
+	: QLabel(parent) {
+}
 
-/**
- * Helper functions for QWidget.
- *
- * @author Tanguy Krotoff
- */
-class Widget : NonCopyable {
-public:
+void ClickableLabel::mouseReleaseEvent(QMouseEvent * event) {
+	//Gets the widget rect
+	const QRect rect = this->rect();
 
-	/**
-	 * Creates a QGridLayout inside a widget.
-	 *
-	 * @param parent QWidget where to create the layout
-	 * @return QGridLayout
-	 */
-	static QGridLayout * createLayout(QWidget * parent);
+	//Gets the mouse position relative to this widget
+	QPoint mousePosition = event->pos();
 
-	/**
-	 * Transforms a QWidget into a QDialog.
-	 *
-	 * @param widget QWidget to transform into a QDialog
-	 * @return the QDialog created
-	 */
-	static QDialog * transformToWindow(QWidget * widget);
-};
-
-#endif	//OWWIDGET_H
+	if ((mousePosition.x() >= rect.x()) && (mousePosition.x() <= rect.width())) {
+		if ((mousePosition.y() >= rect.y()) && (mousePosition.y() <= rect.height())) {
+			if (event->button() == Qt::LeftButton) {
+				clicked();
+			} else if (event->button() == Qt::RightButton) {
+				rightClicked();
+			}
+		}
+	}
+}

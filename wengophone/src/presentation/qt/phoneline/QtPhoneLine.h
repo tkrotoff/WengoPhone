@@ -31,7 +31,6 @@ class CWengoPhone;
 class CPhoneCall;
 class QtPhoneCall;
 class QtWengoPhone;
-class QtWengoStyleLabel;
 
 class QtPhoneLine : public QObjectThreadSafe, public PPhoneLine, public Trackable {
 	Q_OBJECT
@@ -46,8 +45,6 @@ public:
 	void addPhoneCall(QtPhoneCall * qtPhoneCall);
 
 private Q_SLOTS:
-
-	void hangUpButtonClicked();
 
 	void callButtonClicked();
 
@@ -72,10 +69,6 @@ private:
 	CPhoneLine & _cPhoneLine;
 
 	QtWengoPhone * _qtWengoPhone;
-
-	QtWengoStyleLabel * _hangUpButton;
-
-	QtWengoStyleLabel * _callButton;
 
 	CPhoneCall * _activeCPhoneCall;
 };

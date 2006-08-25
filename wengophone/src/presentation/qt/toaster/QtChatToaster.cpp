@@ -19,9 +19,9 @@
 
 #include "QtChatToaster.h"
 
-#include "QtToaster.h"
-
 #include "ui_QtChatToaster.h"
+
+#include "QtToaster.h"
 
 #include <QtGui/QtGui>
 

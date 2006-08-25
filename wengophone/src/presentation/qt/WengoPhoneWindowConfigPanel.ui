@@ -36,7 +36,7 @@
         <number>0</number>
        </property>
        <item>
-        <widget class="QtClickableLabel" name="mic_vol0" >
+        <widget class="ClickableLabel" name="mic_vol0" >
          <property name="text" >
           <string/>
          </property>
@@ -46,7 +46,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QtClickableLabel" name="mic_vol1" >
+        <widget class="ClickableLabel" name="mic_vol1" >
          <property name="text" >
           <string/>
          </property>
@@ -56,7 +56,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QtClickableLabel" name="mic_vol2" >
+        <widget class="ClickableLabel" name="mic_vol2" >
          <property name="text" >
           <string/>
          </property>
@@ -66,7 +66,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QtClickableLabel" name="mic_vol3" >
+        <widget class="ClickableLabel" name="mic_vol3" >
          <property name="text" >
           <string/>
          </property>
@@ -76,7 +76,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QtClickableLabel" name="mic_vol4" >
+        <widget class="ClickableLabel" name="mic_vol4" >
          <property name="text" >
           <string/>
          </property>
@@ -86,7 +86,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QtClickableLabel" name="mic_vol5" >
+        <widget class="ClickableLabel" name="mic_vol5" >
          <property name="text" >
           <string/>
          </property>
@@ -96,7 +96,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QtClickableLabel" name="mic_vol6" >
+        <widget class="ClickableLabel" name="mic_vol6" >
          <property name="text" >
           <string/>
          </property>
@@ -207,7 +207,7 @@
         <number>0</number>
        </property>
        <item>
-        <widget class="QtClickableLabel" name="hp_vol0" >
+        <widget class="ClickableLabel" name="hp_vol0" >
          <property name="text" >
           <string/>
          </property>
@@ -217,7 +217,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QtClickableLabel" name="hp_vol1" >
+        <widget class="ClickableLabel" name="hp_vol1" >
          <property name="text" >
           <string/>
          </property>
@@ -227,7 +227,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QtClickableLabel" name="hp_vol2" >
+        <widget class="ClickableLabel" name="hp_vol2" >
          <property name="text" >
           <string/>
          </property>
@@ -237,7 +237,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QtClickableLabel" name="hp_vol3" >
+        <widget class="ClickableLabel" name="hp_vol3" >
          <property name="text" >
           <string/>
          </property>
@@ -247,7 +247,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QtClickableLabel" name="hp_vol4" >
+        <widget class="ClickableLabel" name="hp_vol4" >
          <property name="text" >
           <string/>
          </property>
@@ -257,7 +257,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QtClickableLabel" name="hp_vol5" >
+        <widget class="ClickableLabel" name="hp_vol5" >
          <property name="text" >
           <string/>
          </property>
@@ -267,7 +267,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QtClickableLabel" name="hp_vol6" >
+        <widget class="ClickableLabel" name="hp_vol6" >
          <property name="text" >
           <string/>
          </property>
@@ -328,9 +328,9 @@
  <pixmapfunction></pixmapfunction>
  <customwidgets>
   <customwidget>
-   <class>QtClickableLabel</class>
+   <class>ClickableLabel</class>
    <extends>QLabel</extends>
-   <header>QtClickableLabel_proxy.h</header>
+   <header>ClickableLabelProxy.h</header>
    <container>0</container>
    <pixmap></pixmap>
   </customwidget>

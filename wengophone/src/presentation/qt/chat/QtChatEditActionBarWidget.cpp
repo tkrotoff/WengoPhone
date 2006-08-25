@@ -21,7 +21,7 @@
 
 #include <presentation/qt/chat/QtChatWidget.h>
 
-#include <qtutil/QtWengoStyleLabel.h>
+#include <qtutil/WengoStyleLabel.h>
 
 #include <QtCore/QString>
 
@@ -42,7 +42,7 @@ QtChatEditActionBarWidget::QtChatEditActionBarWidget(QtChatWidget * chatWidget, 
 	setMaximumSize(QSize(10000, 70));
 	setMinimumSize(QSize(16, 70));
 
-	_emoticonsLabel = new QtWengoStyleLabel(this);
+	_emoticonsLabel = new WengoStyleLabel(this);
 	_emoticonsLabel->setPixmaps(
 		QPixmap(CHAT_EMOTICONS_LABEL_OFF_BEGIN),
 		QPixmap(CHAT_EMOTICONS_LABEL_OFF_END),
@@ -58,7 +58,7 @@ QtChatEditActionBarWidget::QtChatEditActionBarWidget(QtChatWidget * chatWidget, 
 	_emoticonsLabel->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
 	connect(_emoticonsLabel, SIGNAL(clicked()), SLOT(emoticonsLabelClickedSlot()));
 
-	_endLabel = new QtWengoStyleLabel(this);
+	_endLabel = new WengoStyleLabel(this);
 	_endLabel->setPixmaps(
 		QPixmap(),
 		QPixmap(":/pics/profilebar/bar_end.png"),

@@ -17,38 +17,38 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef OWWIDGET_H
-#define OWWIDGET_H
+#ifndef OWCLICKABLELABEL_H
+#define OWCLICKABLELABEL_H
 
-#include <util/NonCopyable.h>
+#include <QtGui/QLabel>
 
-class QWidget;
-class QGridLayout;
-class QDialog;
+class QMouseEvent;
 
 /**
- * Helper functions for QWidget.
+ * Clickable QLabel.
+ *
+ * ClickableLabel is QLabel with QPushButton signals.
  *
  * @author Tanguy Krotoff
+ * @author Mathieu Stute
  */
-class Widget : NonCopyable {
+class ClickableLabel : public QLabel {
+	Q_OBJECT
 public:
 
-	/**
-	 * Creates a QGridLayout inside a widget.
-	 *
-	 * @param parent QWidget where to create the layout
-	 * @return QGridLayout
-	 */
-	static QGridLayout * createLayout(QWidget * parent);
+	ClickableLabel(QWidget * parent);
 
-	/**
-	 * Transforms a QWidget into a QDialog.
-	 *
-	 * @param widget QWidget to transform into a QDialog
-	 * @return the QDialog created
-	 */
-	static QDialog * transformToWindow(QWidget * widget);
+Q_SIGNALS:
+
+	/** Left click signal. */
+	void clicked();
+
+	/** Right click signal. */
+	void rightClicked();
+
+private:
+
+	void mouseReleaseEvent(QMouseEvent * event);
 };
 
-#endif	//OWWIDGET_H
+#endif	//OWCLICKABLELABEL_H

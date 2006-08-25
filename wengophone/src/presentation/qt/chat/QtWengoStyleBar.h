@@ -25,7 +25,7 @@
 #include <QtCore/QList>
 #include <QtCore/QMutex>
 
-class QtWengoStyleLabel;
+class WengoStyleLabel;
 class QString;
 
 /**
@@ -45,7 +45,7 @@ public:
 	/**
 	 * Initialize the bar with the first & the last label.
 	 */
-	void init(QtWengoStyleLabel * firstLabel, QtWengoStyleLabel * endLabel);
+	void init(WengoStyleLabel * firstLabel, WengoStyleLabel * endLabel);
 
 	/**
 	 * Adds a new button in the action bar associated to a unique text-based identifier.
@@ -83,29 +83,29 @@ public:
 	/**
 	 * Used to keep track of the added labels by string indentifiers.
 	 */
-	QMap<QString, QtWengoStyleLabel *> _labels;
+	QMap<QString, WengoStyleLabel *> _labels;
 
 private:
 
 	/**
-	 * The first QtWengoStyleLabel.
+	 * The first WengoStyleLabel.
 	 */
-	QtWengoStyleLabel * _firstLabel;
+	WengoStyleLabel * _firstLabel;
 
 	/**
 	 * The "unremovable" end of the action bar.
 	 */
-	QtWengoStyleLabel * _endLabel;
+	WengoStyleLabel * _endLabel;
 
 	/**
 	 * Used to keep track of the indexes of the labels in the layout and be abel to get them.
 	 */
-	QList<QtWengoStyleLabel *> _labelsIndexes;
+	QList<WengoStyleLabel *> _labelsIndexes;
 
 	/**
 	 * Used to keep track of the separators.
 	 */
-	QList<QtWengoStyleLabel *> _separators;
+	QList<WengoStyleLabel *> _separators;
 
 	QMutex _mutex;
 };

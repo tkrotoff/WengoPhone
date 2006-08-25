@@ -20,10 +20,6 @@
 #ifndef QTPROFILEBAR_H
 #define QTPROFILEBAR_H
 
-#include "QtNickNameWidget.h"
-#include "QtEventWidget.h"
-#include "QtCreditWidget.h"
-
 #include <model/webservices/info/WsInfo.h>
 
 #include <imwrapper/EnumPresenceState.h>
@@ -32,9 +28,13 @@
 
 #include <QtGui/QtGui>
 
+class QtIMProfile;
+class QtEventWidget;
+class QtCreditWidget;
+
 class CWengoPhone;
 class IPhoneLine;
-class QtWengoStyleLabel;
+class WengoStyleLabel;
 class CUserProfile;
 class ConnectHandler;
 class IMAccount;
@@ -56,80 +56,6 @@ public:
 		ConnectHandler & connectHandler, QWidget * parent);
 
 	~QtProfileBar();
-
-Q_SIGNALS:
-
-	void connectedEventSignal(IMAccount * imAccount);
-
-	void disconnectedEventSignal(IMAccount * imAccount, bool connectionError, const QString & reason);
-
-	void connectionProgressEventSignal(IMAccount * imAccount, int currentStep, int totalSteps, const QString & infoMessage);
-
-	void myPresenceStatusEventSignal(QVariant status);
-
-	void updatedTranslationSignal();
-
-	void wsInfoWengosEvent(float wengos);
-	void wsInfoVoiceMailEvent(int count);
-	void wsInfoPtsnNumberEvent(const QString & number);
-	void wsCallForwardInfoEvent(const QString & mode);
-	void phoneLineCreatedEvent();
-
-protected:
-
-	ConnectHandler & _connectHandler;
-
-	QGridLayout * _gridlayout;
-
-	QGridLayout * _widgetLayout;
-
-	QtWengoStyleLabel * _statusLabel;
-
-	QtWengoStyleLabel * _nicknameLabel;
-
-	QtWengoStyleLabel * _eventsLabel;
-
-	QtWengoStyleLabel * _creditLabel;
-
-	QtNickNameWidget * _nickNameWidget;
-
-	QtCreditWidget * _creditWidget;
-
-	QtEventWidget * _eventWidget;
-
-	bool _nickNameWidgetVisible;
-
-	bool _eventsWidgetVisible;
-
-	bool _crediWidgetVisible;
-
-	bool _isOpen;
-
-	QPixmap _statusPixmap;
-
-	QMenu * _statusMenu;
-
-	CUserProfile & _cUserProfile;
-
-	CWengoPhone & _cWengoPhone;
-
-	void createStatusMenu();
-
-	void showNickNameWidget();
-
-	void removeNickNameWidget();
-
-	void showEventsWidget();
-
-	void removeEventsWidget();
-
-	void showCreditWidget();
-
-	void removeCreditWidget();
-
-	void setOpen(bool opened);
-
-	void paintEvent ( QPaintEvent * event );
 
 public Q_SLOTS:
 
@@ -164,11 +90,29 @@ public Q_SLOTS:
 
 	void slotTranslationChanged();
 
+Q_SIGNALS:
+
+	void connectedEventSignal(IMAccount * imAccount);
+
+	void disconnectedEventSignal(IMAccount * imAccount, bool connectionError, const QString & reason);
+
+	void connectionProgressEventSignal(IMAccount * imAccount, int currentStep, int totalSteps, const QString & infoMessage);
+
+	void myPresenceStatusEventSignal(QVariant status);
+
+	void updatedTranslationSignal();
+
+	void wsInfoWengosEvent(float wengos);
+	void wsInfoVoiceMailEvent(int count);
+	void wsInfoLandlineNumberEvent(const QString & number);
+	void wsCallForwardInfoEvent(const QString & mode);
+	void phoneLineCreatedEvent();
+
 private Q_SLOTS:
 
 	void wsInfoWengosEventSlot(float wengos);
 	void wsInfoVoiceMailEventSlot(int count);
-	void wsInfoPtsnNumberEventSlot(const QString & number);
+	void wsInfoLandlineNumberEventSlot(const QString & number);
 	void wsCallForwardInfoEventSlot(const QString & mode);
 	void phoneLineCreatedEventSlot();
 
@@ -196,7 +140,7 @@ private:
 
 	void wsInfoVoiceMailEventHandler(WsInfo & sender, int id, WsInfo::WsInfoStatus status, int voicemail);
 
-	void wsInfoPtsnNumberEventHandler(WsInfo & sender, int id, WsInfo::WsInfoStatus status, std::string number);
+	void wsInfoLandlineNumberEventHandler(WsInfo & sender, int id, WsInfo::WsInfoStatus status, std::string number);
 
 	void wsCallForwardInfoEventHandler(WsInfo & sender, int id, WsInfo::WsInfoStatus status,
 		WsInfo::WsInfoCallForwardMode mode, bool voicemail, std::string dest1, std::string dest2, std::string dest3);
@@ -208,6 +152,62 @@ private:
 	void phoneLineCreatedEventHandler(UserProfile & sender, IPhoneLine & phoneLine);
 
 	void setStatusLabel(const QString & on, const QString & off);
+
+
+	void createStatusMenu();
+
+	void showNickNameWidget();
+
+	void removeNickNameWidget();
+
+	void showEventsWidget();
+
+	void removeEventsWidget();
+
+	void showCreditWidget();
+
+	void removeCreditWidget();
+
+	void setOpen(bool opened);
+
+	void paintEvent ( QPaintEvent * event );
+
+
+	ConnectHandler & _connectHandler;
+
+	QGridLayout * _gridlayout;
+
+	QGridLayout * _widgetLayout;
+
+	WengoStyleLabel * _statusLabel;
+
+	WengoStyleLabel * _nicknameLabel;
+
+	WengoStyleLabel * _eventsLabel;
+
+	WengoStyleLabel * _creditLabel;
+
+	QtIMProfile * _qtImProfileWidget;
+
+	QtCreditWidget * _creditWidget;
+
+	QtEventWidget * _eventWidget;
+
+	bool _nickNameWidgetVisible;
+
+	bool _eventsWidgetVisible;
+
+	bool _creditWidgetVisible;
+
+	bool _isOpen;
+
+	QPixmap _statusPixmap;
+
+	QMenu * _statusMenu;
+
+	CUserProfile & _cUserProfile;
+
+	CWengoPhone & _cWengoPhone;
 };
 
 #endif	//QTPROFILEBAR_H

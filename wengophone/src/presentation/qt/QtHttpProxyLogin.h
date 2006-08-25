@@ -31,7 +31,7 @@ class QDialog;
 namespace Ui { class HttpProxyLoginWindow; }
 
 /**
- * Window for entering the local HTTP proxy login/password.
+ * Window asking for the local HTTP proxy login/password.
  *
  * @author Tanguy Krotoff
  */

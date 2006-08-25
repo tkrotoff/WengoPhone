@@ -1,1 +1,0 @@
-#include <qtutil/QtClickableLabel.h>

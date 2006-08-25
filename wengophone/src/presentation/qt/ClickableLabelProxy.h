@@ -17,38 +17,4 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef OWWIDGET_H
-#define OWWIDGET_H
-
-#include <util/NonCopyable.h>
-
-class QWidget;
-class QGridLayout;
-class QDialog;
-
-/**
- * Helper functions for QWidget.
- *
- * @author Tanguy Krotoff
- */
-class Widget : NonCopyable {
-public:
-
-	/**
-	 * Creates a QGridLayout inside a widget.
-	 *
-	 * @param parent QWidget where to create the layout
-	 * @return QGridLayout
-	 */
-	static QGridLayout * createLayout(QWidget * parent);
-
-	/**
-	 * Transforms a QWidget into a QDialog.
-	 *
-	 * @param widget QWidget to transform into a QDialog
-	 * @return the QDialog created
-	 */
-	static QDialog * transformToWindow(QWidget * widget);
-};
-
-#endif	//OWWIDGET_H
+#include <qtutil/ClickableLabel.h>

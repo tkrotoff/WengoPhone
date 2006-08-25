@@ -74,7 +74,7 @@ public:
 
 	void clearRejectedCallEntries();
 
-	QWidget * getWidget();
+	QWidget * getWidget() const;
 
 public Q_SLOTS:
 

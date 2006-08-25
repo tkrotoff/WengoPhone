@@ -36,12 +36,12 @@ const std::string WsInfo::ACTIVEMAIL_TAG = "ucf.email.isactive";
 const std::string WsInfo::UNREADVOICEMAILCOUNT_TAG = "tph.mbox.unseencount";
 const std::string WsInfo::ACTIVEVOICEMAIL_TAG = "tph.mbox.isactive";
 const std::string WsInfo::CALLFORWARD_TAG = "tph.callforward";
-const std::string WsInfo::PSTNNUMBER_TAG = "contract.option.pstnnum";
+const std::string WsInfo::LANDLINENUMBER_TAG = "contract.option.pstnnum";
 
 const std::string WsInfo::CALLFORWARD_MODE_TAG = "tph.callforward.mode";
-const std::string WsInfo::CALLFORWARD_TOPSTN_DEST1_TAG = "tph.callforward.destination1";
-const std::string WsInfo::CALLFORWARD_TOPSTN_DEST2_TAG = "tph.callforward.destination2";
-const std::string WsInfo::CALLFORWARD_TOPSTN_DEST3_TAG = "tph.callforward.destination3";
+const std::string WsInfo::CALLFORWARD_TO_LANDLINE_DEST1_TAG = "tph.callforward.destination1";
+const std::string WsInfo::CALLFORWARD_TO_LANDLINE_DEST2_TAG = "tph.callforward.destination2";
+const std::string WsInfo::CALLFORWARD_TO_LANDLINE_DEST3_TAG = "tph.callforward.destination3";
 
 WsInfo::WsInfo(WengoAccount * wengoAccount)
 	: WengoWebService(wengoAccount) {
@@ -53,7 +53,7 @@ WsInfo::WsInfo(WengoAccount * wengoAccount)
 	_activeMail = false;
 	_unreadVoiceMail = false;
 	_callForward = false;
-	_pstnNumber = false;
+	_landlineNumber = false;
 
 	//setup info web service
 	setHostname(config.getWengoServerHostname());
@@ -86,8 +86,8 @@ void WsInfo::getCallForwardInfo(bool callForward) {
 	_callForward = callForward;
 }
 
-void WsInfo::getPstnNumber(bool pstnNumber) {
-	_pstnNumber = pstnNumber;
+void WsInfo::getLandlineNumber(bool landlineNumber) {
+	_landlineNumber = landlineNumber;
 }
 
 int WsInfo::execute() {
@@ -107,8 +107,8 @@ int WsInfo::execute() {
 		query += UNREADVOICEMAILCOUNT_TAG + "|";
 		query += ACTIVEVOICEMAIL_TAG + "|";
 	}
-	if (_pstnNumber) {
-		query += PSTNNUMBER_TAG + "|";
+	if (_landlineNumber) {
+		query += LANDLINENUMBER_TAG + "|";
 	}
 	if (_callForward) {
 		query += CALLFORWARD_TAG + "|";
@@ -211,31 +211,31 @@ void WsInfo::answerReceived(const std::string & answer, int id) {
 					}
 
 				//call forward
-				} else if (key == CALLFORWARD_TOPSTN_DEST1_TAG) {
-					value = getValueFromKey(element, CALLFORWARD_TOPSTN_DEST1_TAG);
+				} else if (key == CALLFORWARD_TO_LANDLINE_DEST1_TAG) {
+					value = getValueFromKey(element, CALLFORWARD_TO_LANDLINE_DEST1_TAG);
 					if (value) {
 						dest1 = std::string(value);
 					}
 
 				//call forward
-				} else if (key == CALLFORWARD_TOPSTN_DEST2_TAG) {
-					value = getValueFromKey(element, CALLFORWARD_TOPSTN_DEST2_TAG);
+				} else if (key == CALLFORWARD_TO_LANDLINE_DEST2_TAG) {
+					value = getValueFromKey(element, CALLFORWARD_TO_LANDLINE_DEST2_TAG);
 					if (value) {
 						dest2 = std::string(value);
 					}
 
 				//call forward
-				} else if (key == CALLFORWARD_TOPSTN_DEST3_TAG) {
-					value = getValueFromKey(element, CALLFORWARD_TOPSTN_DEST3_TAG);
+				} else if (key == CALLFORWARD_TO_LANDLINE_DEST3_TAG) {
+					value = getValueFromKey(element, CALLFORWARD_TO_LANDLINE_DEST3_TAG);
 					if (value) {
 						dest3 = std::string(value);
 					}
 
-				//pstn number
-				} else if (key == PSTNNUMBER_TAG) {
-					value = getValueFromKey(element, PSTNNUMBER_TAG);
+				//landline number
+				} else if (key == LANDLINENUMBER_TAG) {
+					value = getValueFromKey(element, LANDLINENUMBER_TAG);
 					if (value) {
-						wsInfoPtsnNumberEvent(*this, id, WsInfoStatusOk, std::string(value));
+						wsInfoLandlineNumberEvent(*this, id, WsInfoStatusOk, std::string(value));
 					}
 
 				}

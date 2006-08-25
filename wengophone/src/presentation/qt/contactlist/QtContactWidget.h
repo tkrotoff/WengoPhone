@@ -20,7 +20,7 @@
 #ifndef QTCONTACTWIDGET_H
 #define QTCONTACTWIDGET_H
 
-#include "ui_UserWidget.h"
+#include "ui_ContactWidget.h"
 
 #include <model/contactlist/ContactProfile.h>
 
@@ -31,6 +31,7 @@ class CContact;
 class CWengoPhone;
 class QLabel;
 class QPushButton;
+namespace Ui { class ContactWidget; }
 
 /**
  * Qt user widget.
@@ -43,8 +44,9 @@ class QtContactWidget : public QWidget {
 	Q_OBJECT
 public:
 
-	QtContactWidget(const std::string & contactId, CWengoPhone & cWengoPhone,
-			QWidget * parent = 0);
+	QtContactWidget(const std::string & contactId, CWengoPhone & cWengoPhone, QWidget * parent);
+
+	~QtContactWidget();
 
 	void setText(const QString & text) {
 		_text = text;
@@ -72,19 +74,17 @@ private Q_SLOTS:
 
 	void mobileButtonClicked();
 
-	void landLineButtonClicked();
+	void landlineButtonClicked();
 
 private:
 
-	virtual void paintEvent(QPaintEvent *);
+	void paintEvent(QPaintEvent *);
 
 	void paintContact(QPainter * painter, const QRect & rect);
 
 	QPixmap createAvatar();
 
 	static const QString AVATAR_BACKGROUND;
-
-	QWidget * _widget;
 
 	std::string _contactId;
 
@@ -94,7 +94,7 @@ private:
 
 	QString _text;
 
-	Ui::UserWidget _ui;
+	Ui::ContactWidget * _ui;
 };
 
 #endif	//QTCONTACTWIDGET_H

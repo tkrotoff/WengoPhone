@@ -44,7 +44,7 @@
 
 #include <util/Logger.h>
 #include <cutil/global.h>
-#include <qtutil/QtWengoStyleLabel.h>
+#include <qtutil/WengoStyleLabel.h>
 
 #include <QtGui/QtGui>
 
@@ -157,7 +157,7 @@ void QtChatWidget::setVisible(bool visible) {
 
 void QtChatWidget::showInviteDialog() {
 	if (canDoMultiChat()) {
-		QtChatRoomInviteDlg dlg(*_imChatSession, 
+		QtChatRoomInviteDlg dlg(*_imChatSession,
 			_cChatHandler.getCUserProfile().getCContactList(),this);
 		dlg.exec();
 	}
@@ -286,7 +286,7 @@ void QtChatWidget::addToHistory(const QString & senderName, const QString & str)
 
 	// insert message html code
 	QString table = QString("<table border=\"0\" width=\"98%\" cellspacing=\"0\" cellpadding=\"5\">") +
-		QString("<tr><td>") + 
+		QString("<tr><td>") +
 		QtChatUtils::decodeMessage(_imChatSession->getIMChat().getIMAccount().getProtocol(), str) +
 		QString("</td></tr></table>");
 	_chatHistory->insertHtml(table);
@@ -423,5 +423,5 @@ void QtChatWidget::deletePressed() {
 ////
 
 void QtChatWidget::updateChatContactList() {
-	
+
 }

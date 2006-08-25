@@ -21,11 +21,11 @@
 
 #include "ui_CreditWidget.h"
 
-#include <model/webservices/url/WsUrl.h>
-#include <control/CWengoPhone.h>
 #include <presentation/qt/config/QtWengoConfigDialog.h>
 
-#include <qtutil/MouseEventFilter.h>
+#include <control/CWengoPhone.h>
+
+#include <model/webservices/url/WsUrl.h>
 
 #include <QtGui/QtGui>
 
@@ -48,13 +48,11 @@ void QtCreditWidget::initThreadSafe() {
 	_ui = new Ui::CreditWidget();
 	_ui->setupUi(_widget);
 
-	MousePressEventFilter * callForwardMouseFilter = new MousePressEventFilter(
-			this, SLOT(callforwardModeClicked()), Qt::LeftButton);
-	_ui->callForwardLabel->installEventFilter(callForwardMouseFilter);
+	//callForwardButton
+	connect(_ui->callForwardButton, SIGNAL(clicked()), SLOT(callforwardModeClicked()));
 
-	MousePressEventFilter * mouseFilter = new MousePressEventFilter(
-		this, SLOT(buyOutClicked()), Qt::LeftButton);
-	_ui->buyCreditsLabel->installEventFilter(mouseFilter);
+	//buyCreditsButton
+	connect(_ui->buyCreditsButton, SIGNAL(clicked()), SLOT(buyCreditsClicked()));
 }
 
 QWidget * QtCreditWidget::getWidget() const {
@@ -69,30 +67,16 @@ void QtCreditWidget::updatePresentation() {
 
 void QtCreditWidget::updatePresentationThreadSafe() {
 	if (!_callForwardMode.isEmpty()) {
-		_ui->callForwardLabel->setText(_callForwardMode);
-
-		QPalette palette = _ui->callForwardLabel->palette();
-		palette.setColor(QPalette::WindowText, Qt::blue);
-		_ui->callForwardLabel->setPalette(palette);
-
-		QFont font = _ui->callForwardLabel->font();
-		font.setUnderline(true);
-		_ui->callForwardLabel->setFont(font);
-
-		QCursor cursor = _ui->callForwardLabel->cursor();
-		cursor.setShape(Qt::PointingHandCursor);
-		_ui->callForwardLabel->setCursor(cursor);
-
-		_ui->callForwardLabel->setToolTip(tr("Click here to change your call forward settings"));
+		_ui->callForwardButton->setText(_callForwardMode);
 	}
 
-	if (!_pstnNumber.isEmpty()) {
-		_ui->pstnNumberLabel->setText(_pstnNumber);
+	if (!_landlineNumber.isEmpty()) {
+		_ui->landlineNumberLabel->setText(_landlineNumber);
 	}
 }
 
-void QtCreditWidget::setPstnNumber(const QString & number) {
-	_pstnNumber = number;
+void QtCreditWidget::setLandlineNumber(const QString & number) {
+	_landlineNumber = number;
 	updatePresentation();
 }
 
@@ -101,7 +85,7 @@ void QtCreditWidget::setCallForwardMode(const QString & callForwardMode) {
 	updatePresentation();
 }
 
-void QtCreditWidget::buyOutClicked() {
+void QtCreditWidget::buyCreditsClicked() {
 	WsUrl::showWengoBuyWengos();
 }
 

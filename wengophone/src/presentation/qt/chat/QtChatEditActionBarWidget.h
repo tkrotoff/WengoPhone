@@ -23,7 +23,7 @@
 #include "QtWengoStyleBar.h"
 
 class QtChatWidget;
-class QtWengoStyleLabel;
+class WengoStyleLabel;
 class QString;
 
 /**
@@ -56,9 +56,9 @@ private:
 
 	QtChatWidget * _chatWidget;
 
-	QtWengoStyleLabel * _emoticonsLabel;
+	WengoStyleLabel * _emoticonsLabel;
 
-	QtWengoStyleLabel * _endLabel;
+	WengoStyleLabel * _endLabel;
 };
 
 #endif	//OWQTCHATEDITACTIONBARWIDGET_H

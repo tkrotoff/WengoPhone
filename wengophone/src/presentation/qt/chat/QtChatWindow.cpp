@@ -37,7 +37,7 @@
 #include <imwrapper/IMChatSession.h>
 #include <imwrapper/IMAccount.h>
 
-#include <qtutil/QtWengoStyleLabel.h>
+#include <qtutil/WengoStyleLabel.h>
 #include <qtutil/Object.h>
 
 #include <util/Logger.h>

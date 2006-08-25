@@ -13,7 +13,7 @@
    </rect>
   </property>
   <property name="windowTitle" >
-   <string>Rename group</string>
+   <string>WengoPhone - Rename Contact Group</string>
   </property>
   <layout class="QGridLayout" >
    <property name="margin" >

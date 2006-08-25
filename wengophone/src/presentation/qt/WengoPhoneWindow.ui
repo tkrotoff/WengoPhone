@@ -145,6 +145,18 @@
      <height>19</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuActions" >
+    <property name="title" >
+     <string>&amp;Actions</string>
+    </property>
+    <addaction name="actionSendSms" />
+    <addaction name="separator" />
+    <addaction name="actionCreateConferenceCall" />
+    <addaction name="separator" />
+    <addaction name="actionAccept" />
+    <addaction name="actionHangup" />
+    <addaction name="actionHoldResume" />
+   </widget>
    <widget class="QMenu" name="menuContacts" >
     <property name="title" >
      <string>&amp;Contacts</string>
@@ -177,18 +189,6 @@
     <addaction name="actionFaq" />
     <addaction name="separator" />
     <addaction name="actionShowAbout" />
-   </widget>
-   <widget class="QMenu" name="menuActions" >
-    <property name="title" >
-     <string>&amp;Actions</string>
-    </property>
-    <addaction name="actionSendSms" />
-    <addaction name="separator" />
-    <addaction name="actionCreateConferenceCall" />
-    <addaction name="separator" />
-    <addaction name="actionAccept" />
-    <addaction name="actionHangup" />
-    <addaction name="actionHoldResume" />
    </widget>
    <widget class="QMenu" name="menuTools" >
     <property name="title" >
@@ -242,6 +242,7 @@
    <addaction name="actionCreateConferenceCall" />
    <addaction name="actionOpenChatWindow" />
    <addaction name="actionSendSms" />
+   <addaction name="actionIMAccountSettings" />
    <addaction name="actionEnableVideo" />
   </widget>
   <action name="actionShowWengoAccount" >
@@ -314,8 +315,17 @@
    </property>
   </action>
   <action name="actionIMAccountSettings" >
+   <property name="icon" >
+    <iconset resource="wengophone.qrc" >:/pics/config/advanced.png</iconset>
+   </property>
    <property name="text" >
     <string>&amp;Instant Messaging Accounts</string>
+   </property>
+   <property name="iconText" >
+    <string>Configure My Instant Messaging Accounts</string>
+   </property>
+   <property name="toolTip" >
+    <string>Configure My Instant Messaging Accounts</string>
    </property>
   </action>
   <action name="actionChatSessions" >

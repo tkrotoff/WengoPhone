@@ -30,7 +30,7 @@ class Settings;
 class UserProfile;
 
 /**
- * Detects idle status.
+ * Detects idle status for IM presence.
  *
  * @see Idle
  * @author Tanguy Krotoff

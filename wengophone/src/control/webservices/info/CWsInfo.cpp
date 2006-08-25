@@ -19,14 +19,14 @@
 
 #include "CWsInfo.h"
 
-CWsInfo::CWsInfo(WsInfo & wsInfo, CWengoPhone & cWengoPhone) 
+CWsInfo::CWsInfo(WsInfo & wsInfo, CWengoPhone & cWengoPhone)
 	: _wsInfo(wsInfo), _cWengoPhone(cWengoPhone) {
-	
+
 	_wsInfo.wsInfoWengosEvent += wsInfoWengosEvent;
 	_wsInfo.wsInfoSmsCountEvent += wsInfoSmsCountEvent;
 	_wsInfo.wsInfoActiveMailEvent += wsInfoActiveMailEvent;
 	_wsInfo.wsInfoVoiceMailEvent += wsInfoVoiceMailEvent;
-	_wsInfo.wsInfoPtsnNumberEvent += wsInfoPtsnNumberEvent;
+	_wsInfo.wsInfoLandlineNumberEvent += wsInfoLandlineNumberEvent;
 	_wsInfo.wsCallForwardInfoEvent += wsCallForwardInfoEvent;
 }
 
@@ -57,8 +57,8 @@ void CWsInfo::getCallForwardInfo() {
 	_wsInfo.getCallForwardInfo(true);
 	_wsInfo.execute();
 }
-	
-void CWsInfo::getPstnNumber() {
-	_wsInfo.getPstnNumber(true);
+
+void CWsInfo::getLandlineNumber() {
+	_wsInfo.getLandlineNumber(true);
 	_wsInfo.execute();
 }

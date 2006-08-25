@@ -25,6 +25,8 @@
 
 #include <imwrapper/IMAccount.h>
 
+#include <QtGui/QtGui>
+
 QtIMMenu::QtIMMenu(CUserProfile & cUserProfile, IMAccount & imAccount, QWidget * parent)
 	: QMenu(QString::fromStdString(imAccount.getLogin()), parent),
 	_cUserProfile(cUserProfile),

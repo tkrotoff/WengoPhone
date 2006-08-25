@@ -57,9 +57,9 @@ public:
 	Event<void (WsInfo & sender, int id, WsInfo::WsInfoStatus status, int voicemail)> wsInfoVoiceMailEvent;
 
 	/**
-	 * @see WsWengoInfo::wsInfoPtsnNumberEvent
+	 * @see WsWengoInfo::wsInfoLandlineNumberEvent
 	 */
-	Event<void (WsInfo & sender, int id, WsInfo::WsInfoStatus status, std::string number)> wsInfoPtsnNumberEvent;
+	Event<void (WsInfo & sender, int id, WsInfo::WsInfoStatus status, std::string number)> wsInfoLandlineNumberEvent;
 
 	/**
 	 * @see WsWengoInfo::wsCallForwardInfoEvent
@@ -70,7 +70,7 @@ public:
 
 	/**
 	 * default constructor.
-	 * 
+	 *
 	 * @param wsInfo reference to WsWengoInfo.
 	 * @param cWengoPhone reference to CWengoPhone.
 	 */
@@ -83,7 +83,7 @@ public:
 
 	/**
 	 * Get a reference to CWengoPhone.
-	 * 
+	 *
 	 * @return _cWengoPhone.
 	 */
 	CWengoPhone & getCWengoPhone() const {
@@ -116,9 +116,9 @@ public:
 	void getCallForwardInfo();
 
 	/**
-	 * pstn number request.
+	 * Landline number request.
 	 */
-	void getPstnNumber();
+	void getLandlineNumber();
 
 private:
 

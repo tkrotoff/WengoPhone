@@ -28,46 +28,60 @@
  * @author Mr K
  */
 class QtHistoryItem : public QTreeWidgetItem {
-    friend class QtHistory;
-    friend class QtHistoryWidget;
+	friend class QtHistory;
+	friend class QtHistoryWidget;
 public:
 
-	enum HistoryType{ Sms, OutGoingCall, IncomingCall,MissedCall, RejectedCall, Chat,  };
+	enum HistoryType {
+		Sms,
+		OutGoingCall,
+		IncomingCall,
+		MissedCall,
+		RejectedCall,
+		Chat
+	};
 
 	QtHistoryItem(int type = Type);
-	QtHistoryItem ( const QStringList & strings, int type = Type );
-	QtHistoryItem ( QTreeWidget * parent, int type = Type );
-	QtHistoryItem ( QTreeWidget * parent, const QStringList & strings, int type = Type );
-	QtHistoryItem ( QTreeWidget * parent, QtHistoryItem * preceding, int type = Type );
-	QtHistoryItem ( QtHistoryItem * parent, int type = Type );
-	QtHistoryItem ( QtHistoryItem * parent, const QStringList & strings, int type = Type );
-	QtHistoryItem ( QtHistoryItem * parent, QtHistoryItem * preceding, int type = Type );
-	QtHistoryItem ( const QtHistoryItem & other );
-	virtual ~QtHistoryItem();
 
-	unsigned int getId() const;
+	QtHistoryItem(const QStringList & strings, int type = Type);
 
-	void setId(unsigned int id);
+	QtHistoryItem(QTreeWidget * parent, int type = Type);
+
+	QtHistoryItem(QTreeWidget * parent, const QStringList & strings, int type = Type);
+
+	QtHistoryItem(QTreeWidget * parent, QtHistoryItem * preceding, int type = Type);
+
+	QtHistoryItem(QtHistoryItem * parent, int type = Type);
+
+	QtHistoryItem(QtHistoryItem * parent, const QStringList & strings, int type = Type);
+
+	QtHistoryItem(QtHistoryItem * parent, QtHistoryItem * preceding, int type = Type);
+
+	QtHistoryItem(const QtHistoryItem & other);
+
+	~QtHistoryItem();
+
+	unsigned getId() const;
+
+	void setId(unsigned id);
 
 	void setItemType(QtHistoryItem::HistoryType type);
 
 	QtHistoryItem::HistoryType getItemType() const;
 
-protected:
+private:
 
-	unsigned int _id;
+	unsigned _id;
 
 	HistoryType _type;
 
-private:
-    
-    static const int COLUMN_TYPE;
+	static const int COLUMN_TYPE;
 
-    static const int COLUMN_DATE;
+	static const int COLUMN_DATE;
 
-    static const int COLUMN_DURATION;
+	static const int COLUMN_DURATION;
 
-    static const int COLUMN_PEERS;
+	static const int COLUMN_PEERS;
 };
 
 #endif // QTHISTORYITEM_H

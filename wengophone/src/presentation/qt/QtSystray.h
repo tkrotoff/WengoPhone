@@ -35,6 +35,11 @@ class QMenu;
 class QAction;
 class QPoint;
 
+/**
+ * Systray class.
+ *
+ * @author Tanguy Krotoff
+ */
 class QtSystray : public QObjectThreadSafe, public Trackable {
 	Q_OBJECT
 public:

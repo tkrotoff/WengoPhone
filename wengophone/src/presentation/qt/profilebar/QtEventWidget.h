@@ -31,7 +31,7 @@ namespace Ui { class EventWidget; }
 /**
  * Event widget of the profile bar.
  *
- * Shows
+ * Shows missed calls and voice mail messages.
  *
  * @author Mathieu Stute
  */
@@ -41,7 +41,7 @@ public:
 
 	QtEventWidget(CWengoPhone & cWengoPhone, CUserProfile & cUserProfile, QWidget * parent);
 
-	virtual ~QtEventWidget();
+	~QtEventWidget();
 
 	void setVoiceMail(int count);
 

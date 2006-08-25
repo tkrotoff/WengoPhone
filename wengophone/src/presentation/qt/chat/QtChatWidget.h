@@ -42,8 +42,8 @@ class QtChatTabWidget;
 class QtChatUserFrame;
 class QtChatContactList;
 class QtWengoPhone;
-class QtWengoStyleLabel;
 class EmoticonsWidget;
+
 class QFont;
 class QUrl;
 class QTimerEvent;
@@ -133,11 +133,11 @@ private Q_SLOTS:
 private:
 
 	typedef QHash<QString, QString> UserColorHash;
-	
+
 	QString getUserColor(const QString & nickName) const {
 		return _userColorHash[nickName];
 	}
-	
+
 	virtual void timerEvent(QTimerEvent * event);
 
 	void sendMessage();

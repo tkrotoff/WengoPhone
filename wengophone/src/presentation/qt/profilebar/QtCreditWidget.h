@@ -32,7 +32,7 @@ namespace Ui { class CreditWidget; }
 /**
  * Credit widget of the profile bar
  *
- * Shows the Wengo's credit available for the user.
+ * Shows the Wengo's credit available for the user + call forward status.
  *
  * @author Mathieu Stute
  */
@@ -44,7 +44,7 @@ public:
 
 	virtual ~QtCreditWidget();
 
-	void setPstnNumber(const QString & number);
+	void setLandlineNumber(const QString & number);
 
 	void setCallForwardMode(const QString & callForwardMode);
 
@@ -54,7 +54,7 @@ public:
 
 private Q_SLOTS:
 
-	void buyOutClicked();
+	void buyCreditsClicked();
 
 	void callforwardModeClicked();
 
@@ -64,7 +64,7 @@ private:
 
 	QString _callForwardMode;
 
-	QString _pstnNumber;
+	QString _landlineNumber;
 
 	void initThreadSafe();
 

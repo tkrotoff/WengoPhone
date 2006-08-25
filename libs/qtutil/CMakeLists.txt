@@ -33,9 +33,9 @@ set(owqtutil_SRCS
 	src/NonResizeableWidget.cpp
 	src/StringListConvert.cpp
 	src/Widget.cpp
-	src/QtWengoStyleLabel.cpp
+	src/WengoStyleLabel.cpp
 	src/ToolTipLineEdit.cpp
-	src/QtClickableLabel.cpp
+	src/ClickableLabel.cpp
 	src/WidgetBackgroundImage.cpp
 	src/Wizard.cpp
 	src/ThreadEventFilter.cpp

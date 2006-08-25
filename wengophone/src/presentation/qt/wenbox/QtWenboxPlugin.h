@@ -25,15 +25,19 @@
 #include <QtCore/QObject>
 
 class CWenboxPlugin;
-class QComboBox;
 class Timer;
 
+/**
+ * Interaction between the Wenbox and the GUI.
+ *
+ * @author Tanguy Krotoff
+ */
 class QtWenboxPlugin : public QObject, public PWenboxPlugin {
 public:
 
 	QtWenboxPlugin(CWenboxPlugin & cWenboxPlugin);
 
-	virtual ~QtWenboxPlugin();
+	~QtWenboxPlugin();
 
 	void phoneNumberBufferUpdatedEvent(const std::string & phoneNumberBuffer);
 
@@ -44,8 +48,6 @@ private:
 	void timeoutEventHandler();
 
 	CWenboxPlugin & _cWenboxPlugin;
-
-	QComboBox * _phoneComboBox;
 
 	Timer * _timer;
 };

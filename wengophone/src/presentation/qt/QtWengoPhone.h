@@ -54,18 +54,11 @@ class QtSms;
 class QtStatusBar;
 class QtSubscribe;
 class QtToaster;
-class QtWengoStyleLabel;
 class QtWsDirectory;
 class QtSystray;
 class UserProfile;
 
-class QPushButton;
-class QComboBox;
-class QTabWidget;
 class QLayout;
-class QLabel;
-class QFrame;
-class QStackedWidget;
 class QWidget;
 class QMenu;
 namespace Ui { class WengoPhoneWindow; }
@@ -83,7 +76,7 @@ public:
 
 	QtWengoPhone(CWengoPhone & cWengoPhone);
 
-	virtual ~QtWengoPhone();
+	~QtWengoPhone();
 
 	void addPhoneCall(QtPhoneCall * qtPhoneCall);
 
@@ -128,15 +121,9 @@ public:
 
 	QtStatusBar & getStatusBar() const;
 
+	QtCallBar & getCallBar() const;
+
 	QtSystray & getSystray() const;
-
-	QtWengoStyleLabel * getCallButton() const {
-		return _callButton;
-	}
-
-	QComboBox * getPhoneComboBox() const {
-		return _phoneComboBox;
-	}
 
 	QtLanguage * getQtLanguage() {
 		return _qtLanguage;
@@ -174,7 +161,7 @@ private Q_SLOTS:
 
 	void callButtonClicked();
 
-	void hangupButtonClicked();
+	void hangUpButtonClicked();
 
 	void enableCallButton();
 
@@ -292,12 +279,6 @@ private:
 	Ui::WengoPhoneWindow * _ui;
 
 	QMainWindow * _wengoPhoneWindow;
-
-	QtWengoStyleLabel * _callButton;
-
-	QtWengoStyleLabel * _hangUpButton;
-
-	QComboBox * _phoneComboBox;
 
 	QtSystray * _qtSystray;
 

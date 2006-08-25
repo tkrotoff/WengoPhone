@@ -17,91 +17,132 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-//#include "QtProfileLabel.h"
 #include "QtCallBar.h"
 
-#include <qtutil/QtWengoStyleLabel.h>
+#include <qtutil/WengoStyleLabel.h>
 #include <qtutil/MouseEventFilter.h>
 #include <qtutil/ToolTipLineEdit.h>
+#include <qtutil/MouseEventFilter.h>
 
-QtCallBar::QtCallBar(QWidget * parent , Qt::WFlags f) : QFrame(parent,f) {
+#include <QtGui/QtGui>
+
+QtCallBar::QtCallBar(QWidget * parent)
+	: QFrame(parent) {
 
 	setFrameShape(QFrame::NoFrame);
-	_callBarButton = new QtWengoStyleLabel(this);
-	_callBarButton->setPixmaps(
-	                  QPixmap(), // Start
-					  QPixmap(":/pics/callbar/call_bar_button.png"), // End
-					  QPixmap(), // Fill
 
-					  QPixmap(), // Start
-					  QPixmap(":/pics/callbar/call_bar_button_on.png"), // End
-					  QPixmap() // Fill
-					  );
+	//callButton
+	_callButton = new WengoStyleLabel(this);
+	_callButton->setPixmaps(
+			QPixmap(), //Start
+			QPixmap(":/pics/callbar/call_bar_button.png"), //End
+			QPixmap(), //Fill
 
-	_callBarButtonOff = new QtWengoStyleLabel (this);
-	_callBarButtonOff->setPixmaps(
-					  QPixmap(":/pics/callbar/call_bar_button_hangup.png"), // Start
-					  QPixmap(), // End
-					  QPixmap(), // Fill
+			QPixmap(), //Start
+			QPixmap(":/pics/callbar/call_bar_button_on.png"), //End
+			QPixmap() //Fill
+			);
+	_callButton->setMaximumSize(QSize(45, 65));
+	connect(_callButton, SIGNAL(clicked()), SLOT(callButtonClickedSlot()));
 
-					  QPixmap(":/pics/callbar/call_bar_button_hangup_on.png"), // Start
-					  QPixmap(), // End
-					  QPixmap() // Fill
-					  );
+	//hangUpButton
+	_hangUpButton = new WengoStyleLabel(this);
+	_hangUpButton->setPixmaps(
+			QPixmap(":/pics/callbar/call_bar_button_hangup.png"), //Start
+			QPixmap(), //End
+			QPixmap(), //Fill
 
-	_callBarComboContainer = new QtWengoStyleLabel (this);
-	_callBarComboContainer->setPixmaps(
-					  QPixmap(":/pics/callbar/call_bar_start.png"), // Start
-					  QPixmap(), // End
-					  QPixmap(":/pics/callbar/call_bar_fill.png"), // Fill
+			QPixmap(":/pics/callbar/call_bar_button_hangup_on.png"), //Start
+			QPixmap(), //End
+			QPixmap() //Fill
+			);
+	_hangUpButton->setMaximumSize(QSize(25, 65));
+	_hangUpButton->setMinimumSize(QSize(25, 65));
+	connect(_hangUpButton, SIGNAL(clicked()), SLOT(hangUpButtonClickedSlot()));
 
-					  QPixmap(":/pics/callbar/call_bar_start.png"), // Start
-					  QPixmap(), // End
-					  QPixmap(":/pics/callbar/call_bar_fill.png") // Fill
-					  );
+	//phoneComboBoxContainerLabel
+	WengoStyleLabel * phoneComboBoxContainerLabel = new WengoStyleLabel(this);
+	phoneComboBoxContainerLabel->setPixmaps(
+			QPixmap(":/pics/callbar/call_bar_start.png"), //Start
+			QPixmap(), //End
+			QPixmap(":/pics/callbar/call_bar_fill.png"), //Fill
 
+			QPixmap(":/pics/callbar/call_bar_start.png"), //Start
+			QPixmap(), //End
+			QPixmap(":/pics/callbar/call_bar_fill.png") //Fill
+			);
+	QGridLayout * comboContainterLayout = new QGridLayout(phoneComboBoxContainerLabel);
 
-
-	QGridLayout * comboContLayout = new QGridLayout(_callBarComboContainer);
-	_phoneComboBox = new QComboBox(_callBarComboContainer);
+	//phoneComboBox
+	_phoneComboBox = new QComboBox(phoneComboBoxContainerLabel);
 	//_phoneComboBox->setLineEdit(new ToolTipLineEdit(_phoneComboBox));
 	_phoneComboBox->setEditable(true);
 	//_phoneComboBox->setEditText(tr("Enter a phone number, a Wengo nickname or a SIP address"));
-	_phoneComboBox->setMaximumSize(QSize(10000,22));
-	_phoneComboBox->setAutoCompletion ( false );
+	_phoneComboBox->setMaximumSize(QSize(10000, 22));
+	_phoneComboBox->setAutoCompletion(false);
+	connect(_phoneComboBox->lineEdit(), SIGNAL(returnPressed()), SLOT(phoneComboBoxReturnPressedSlot()));
+	connect(_phoneComboBox, SIGNAL(editTextChanged(const QString &)), SLOT(phoneComboBoxEditTextChangedSlot(const QString &)));
+	MousePressEventFilter * leftMouseFilter = new MousePressEventFilter(this, SLOT(phoneComboBoxClickedSlot()), Qt::LeftButton);
+	_phoneComboBox->installEventFilter(leftMouseFilter);
 
-	comboContLayout->addWidget(_phoneComboBox);
+	comboContainterLayout->addWidget(_phoneComboBox);
 
-	QGridLayout *  layout = new QGridLayout(this);
+	QGridLayout * layout = new QGridLayout(this);
 	layout->setMargin(0);
 	layout->setSpacing(0);
 
-	layout->addWidget(_callBarComboContainer,0,0);
-	layout->addWidget(_callBarButtonOff,0,1);
-	layout->addWidget(_callBarButton,0,2);
-
-	_callBarButton->setMaximumSize(QSize(45,65));
-
-	_callBarButtonOff->setMaximumSize(QSize(25,65));
-    _callBarButtonOff->setMinimumSize(QSize(25,65));
-
-	connect (_callBarButton, SIGNAL(clicked()),SLOT(callBarButtonClicked()));
-	connect (_callBarButtonOff, SIGNAL(clicked()),SLOT(callBarButtonOffClicked()));
-
+	layout->addWidget(phoneComboBoxContainerLabel, 0, 0);
+	layout->addWidget(_hangUpButton, 0, 1);
+	layout->addWidget(_callButton, 0, 2);
 }
 
-void QtCallBar::callBarButtonOffClicked(){
-	OffClicked();
+QtCallBar::~QtCallBar() {
 }
 
-void QtCallBar::callBarButtonClicked() {
-	ButtonClicked();
+void QtCallBar::setEnabledCallButton(bool enable) {
+	_callButton->setEnabled(enable);
 }
 
-QComboBox * QtCallBar::getComboBox() {
-	return _phoneComboBox;
+void QtCallBar::setEnabledHangUpButton(bool enable) {
+	_hangUpButton->setEnabled(enable);
 }
 
-void QtCallBar::slotUpdatedTranslation() {
-	//_phoneComboBox->setEditText(tr("Enter a phone number, a Wengo nickname or a SIP address"));
+std::string QtCallBar::getPhoneComboBoxCurrentText() const {
+	return _phoneComboBox->currentText().toStdString();
+}
+
+void QtCallBar::clearPhoneComboBox() {
+	_phoneComboBox->clear();
+}
+
+void QtCallBar::clearPhoneComboBoxEditText() {
+	_phoneComboBox->clearEditText();
+}
+
+void QtCallBar::setPhoneComboBoxEditText(const std::string & text) {
+	_phoneComboBox->setEditText(QString::fromStdString(text));
+}
+
+void QtCallBar::addPhoneComboBoxItem(const QIcon & icon, const std::string & text) {
+	_phoneComboBox->addItem(icon, QString::fromStdString(text));
+}
+
+void QtCallBar::callButtonClickedSlot() {
+	callButtonClicked();
+}
+
+void QtCallBar::hangUpButtonClickedSlot() {
+	hangUpButtonClicked();
+}
+
+void QtCallBar::phoneComboBoxReturnPressedSlot() {
+	phoneComboBoxReturnPressed();
+}
+
+void QtCallBar::phoneComboBoxEditTextChangedSlot(const QString & text) {
+	phoneComboBoxEditTextChanged(text);
+}
+
+void QtCallBar::phoneComboBoxClickedSlot() {
+	phoneComboBoxClicked();
 }

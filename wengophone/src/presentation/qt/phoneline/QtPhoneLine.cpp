@@ -23,13 +23,13 @@
 #include <presentation/qt/QtWengoPhone.h>
 #include <presentation/qt/statusbar/QtStatusBar.h>
 #include <presentation/qt/QtSystray.h>
+#include <presentation/qt/callbar/QtCallBar.h>
 
 #include <control/phoneline/CPhoneLine.h>
 #include <control/phonecall/CPhoneCall.h>
 #include <control/CWengoPhone.h>
 
 #include <util/Logger.h>
-#include <qtutil/QtWengoStyleLabel.h>
 
 #include <QtGui/QtGui>
 
@@ -54,8 +54,7 @@ QtPhoneLine::~QtPhoneLine() {
 
 void QtPhoneLine::initThreadSafe() {
 	//callButton
-	_callButton = _qtWengoPhone->getCallButton();
-	connect(_callButton, SIGNAL(clicked()), SLOT(callButtonClicked()));
+	connect(&_qtWengoPhone->getCallBar(), SIGNAL(callButtonClicked()), SLOT(callButtonClicked()));
 }
 
 void QtPhoneLine::updatePresentation() {
@@ -100,15 +99,9 @@ void QtPhoneLine::phoneCallClosedEventHandlerThreadSafe(CPhoneCall & cPhoneCall)
 	}
 }
 
-void QtPhoneLine::hangUpButtonClicked() {
-	if (_activeCPhoneCall) {
-		_activeCPhoneCall->hangUp();
-	}
-}
-
 void QtPhoneLine::callButtonClicked() {
 	if (_activeCPhoneCall) {
 		_activeCPhoneCall->accept();
-		_callButton->setEnabled(false);
+		_qtWengoPhone->getCallBar().setEnabledCallButton(false);
 	}
 }

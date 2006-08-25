@@ -46,7 +46,7 @@
         <file>pics/config/video.png</file>
         <file>pics/contact/call.png</file>
         <file>pics/contact/chat.png</file>
-        <file>pics/contact/fixe.png</file>
+        <file>pics/contact/landline.png</file>
         <file>pics/contact/home.png</file>
         <file>pics/contact/mobile.png</file>
         <file>pics/contact/sms.png</file>
@@ -55,11 +55,11 @@
         <file>pics/contact_border.png</file>
         <file>pics/help.png</file>
         <file>pics/add.png</file>
-        <file>pics/default-avatar.png</file>
+        <file>pics/avatar_default.png</file>
+        <file>pics/avatar_background.png</file>
         <file>pics/delete.png</file>
         <file>pics/edit.png</file>
         <file>pics/exit.png</file>
-        <file>pics/fond_avatar.png</file>
         <file>pics/group_close.png</file>
         <file>pics/group_close_reverse.png</file>
         <file>pics/group_open.png</file>
@@ -104,10 +104,10 @@
         <file>pics/profilebar/bar_start_status_green.png</file>
         <file>pics/profilebar/bar_start_status_orange.png</file>
         <file>pics/profilebar/bar_start_status_red.png</file>
-        <file>pics/profilebar/credit/mobile-redirect.png</file>
+        <file>pics/profilebar/credit/call_forward.png</file>
         <file>pics/profilebar/credit/wengos.png</file>
-        <file>pics/profilebar/event/missed-calls.png</file>
-        <file>pics/profilebar/event/new-message.png</file>
+        <file>pics/profilebar/event/call_missed.png</file>
+        <file>pics/profilebar/event/voicemessage_new.png</file>
         <file>pics/protocols/aim.png</file>
         <file>pics/protocols/aim_error.png</file>
         <file>pics/protocols/aim_off.png</file>

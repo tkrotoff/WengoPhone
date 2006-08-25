@@ -17,24 +17,23 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QTIMMENU_H
-#define QTIMMENU_H
+#ifndef OWQTIMMENU_H
+#define OWQTIMMENU_H
 
-#include <QtGui/QtGui>
+#include <QtGui/QMenu>
 
 class CUserProfile;
 class IMAccount;
 
 /**
- * Menu for IMAccounts. This menu displays entries to set the PresenceState
- * of an IMAccount
+ * Menu for IMAccounts.
  *
- * @author Philippe BERNERY
+ * This menu displays entries to set the PresenceState of an IMAccount.
+ *
+ * @author Philippe Bernery
  */
-class QtIMMenu : public QMenu
-{
+class QtIMMenu : public QMenu {
 	Q_OBJECT
-
 public:
 
 	/**
@@ -42,7 +41,7 @@ public:
 	 * @param imAccount the IMAccount to change the PresenceState of
 	 * @param parent the parent QWidget
 	 */
-	QtIMMenu(CUserProfile & cUserProfile, IMAccount & imAccount, QWidget * parent = NULL);
+	QtIMMenu(CUserProfile & cUserProfile, IMAccount & imAccount, QWidget * parent);
 
 private Q_SLOTS:
 
@@ -65,7 +64,6 @@ private:
 	IMAccount & _imAccount;
 
 	CUserProfile & _cUserProfile;
-
 };
 
-#endif //QTIMMENU_H
+#endif	//OWQTIMMENU_H

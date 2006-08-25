@@ -19,7 +19,8 @@
 
 #include "QtWenboxPlugin.h"
 
-#include "presentation/qt/QtWengoPhone.h"
+#include <presentation/qt/QtWengoPhone.h>
+#include <presentation/qt/callbar/QtCallBar.h>
 
 #include <control/CWengoPhone.h>
 #include <control/profile/CUserProfile.h>
@@ -36,11 +37,6 @@ QtWenboxPlugin::QtWenboxPlugin(CWenboxPlugin & cWenboxPlugin)
 
 	_timer = new Timer();
 	_timer->timeoutEvent += boost::bind(&QtWenboxPlugin::timeoutEventHandler, this);
-
-	//FIXME we should avoid to get QtWengoPhone via CWenboxPlugin and it should
-	//be given in constructor.
-	QtWengoPhone * qtWengoPhone = (QtWengoPhone *) _cWenboxPlugin.getCWengoPhone().getPresentation();
-	_phoneComboBox = qtWengoPhone->getPhoneComboBox();
 }
 
 QtWenboxPlugin::~QtWenboxPlugin() {
@@ -51,7 +47,11 @@ QtWenboxPlugin::~QtWenboxPlugin() {
 void QtWenboxPlugin::phoneNumberBufferUpdatedEvent(const std::string & phoneNumberBuffer) {
 	static const unsigned TIMEOUT = 3 * 1000;	//3 seconds
 
-	_phoneComboBox->setEditText(QString::fromStdString(phoneNumberBuffer));
+	//FIXME we should avoid to get QtWengoPhone via CWenboxPlugin and it should
+	//be given in constructor.
+	QtWengoPhone * qtWengoPhone = (QtWengoPhone *) _cWenboxPlugin.getCWengoPhone().getPresentation();
+	qtWengoPhone->getCallBar().setPhoneComboBoxEditText(phoneNumberBuffer);
+
 	_timer->stop();
 	if (!phoneNumberBuffer.empty()) {
 		_timer->start(TIMEOUT, TIMEOUT);
@@ -61,6 +61,10 @@ void QtWenboxPlugin::phoneNumberBufferUpdatedEvent(const std::string & phoneNumb
 void QtWenboxPlugin::timeoutEventHandler() {
 	_timer->stop();
 
+	//FIXME we should avoid to get QtWengoPhone via CWenboxPlugin and it should
+	//be given in constructor.
+	QtWengoPhone * qtWengoPhone = (QtWengoPhone *) _cWenboxPlugin.getCWengoPhone().getPresentation();
+
 	CWengoPhone & cWengoPhone = _cWenboxPlugin.getCWengoPhone();
-	cWengoPhone.getCUserProfileHandler().getCUserProfile()->makeCall(_phoneComboBox->currentText().toStdString());
+	cWengoPhone.getCUserProfileHandler().getCUserProfile()->makeCall(qtWengoPhone->getCallBar().getPhoneComboBoxCurrentText());
 }

@@ -489,7 +489,7 @@ void UserProfile::wsCallForwardEventHandler(WsCallForward & sender,
 		_wsInfo->getSmsCount(false);
 		_wsInfo->getActiveMail(false);
 		_wsInfo->getUnreadVoiceMail(false);
-		_wsInfo->getPstnNumber(false);
+		_wsInfo->getLandlineNumber(false);
 		_wsInfo->getCallForwardInfo(true);
 		_wsInfo->execute();
 	}

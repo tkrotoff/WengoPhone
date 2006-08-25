@@ -19,7 +19,7 @@
 
 #include "QtWengoStyleBar.h"
 
-#include <qtutil/QtWengoStyleLabel.h>
+#include <qtutil/WengoStyleLabel.h>
 
 #include <QtGui/QGridLayout>
 #include <QtCore/QString>
@@ -28,7 +28,7 @@ QtWengoStyleBar::QtWengoStyleBar(QWidget * parent) :
 	QWidget(parent) {
 }
 
-void QtWengoStyleBar::init(QtWengoStyleLabel * firstLabel, QtWengoStyleLabel * endLabel) {
+void QtWengoStyleBar::init(WengoStyleLabel * firstLabel, WengoStyleLabel * endLabel) {
 	_firstLabel = firstLabel;
 	_endLabel = endLabel;
 
@@ -46,7 +46,7 @@ void QtWengoStyleBar::addLabel(const QString & identifier,
 	QMutexLocker locker(& _mutex);
 	if(!_labels.contains(identifier)){
 		QGridLayout * glayout = dynamic_cast<QGridLayout *>(layout());
-		QtWengoStyleLabel * label = new QtWengoStyleLabel(this);
+		WengoStyleLabel * label = new WengoStyleLabel(this);
 		label->setPixmaps(normalPixmap, QPixmap(), QPixmap(), pressedPixmap, QPixmap(), QPixmap());
 		label->setMinimumSize(size);
 		label->setMaximumSize(size);
@@ -70,7 +70,7 @@ void QtWengoStyleBar::addLabel(const QString & identifier,
 void QtWengoStyleBar::removeLabel(const QString & identifier){
 	if(_labels.contains(identifier)){
 		QGridLayout * glayout = dynamic_cast<QGridLayout *>(layout());
-		QtWengoStyleLabel * label = _labels.take(identifier);
+		WengoStyleLabel * label = _labels.take(identifier);
 		_labelsIndexes.removeAll(label);
 		glayout->removeWidget(label);
 		delete label;
@@ -80,7 +80,7 @@ void QtWengoStyleBar::removeLabel(const QString & identifier){
 void QtWengoStyleBar::addSeparator(const QString & pixmap, int position) {
 	QMutexLocker locker(& _mutex);
 	QGridLayout * glayout = dynamic_cast<QGridLayout *>(layout());
-	QtWengoStyleLabel * label = new QtWengoStyleLabel(this);
+	WengoStyleLabel * label = new WengoStyleLabel(this);
 	label->setPixmaps(
 		QPixmap(pixmap),
 		QPixmap(),
@@ -113,7 +113,7 @@ void QtWengoStyleBar::removeSeparator(int ord) {
 		return;
 	}
 	QGridLayout * glayout = dynamic_cast<QGridLayout *>(layout());
-	QtWengoStyleLabel * label = _separators.takeAt(ord);
+	WengoStyleLabel * label = _separators.takeAt(ord);
 	_labelsIndexes.removeAll(label);
 	_separators.removeAt(ord);
 	glayout->removeWidget(label);

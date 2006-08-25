@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QTHISTORYWIDGET_H
-#define QTHISTORYWIDGET_H
+#ifndef OWQTHISTORYWIDGET_H
+#define OWQTHISTORYWIDGET_H
 
 #include <QtGui/QtGui>
 #include <QtCore/QObject>
@@ -36,12 +36,10 @@ class HistoryTreeEventManager;
  * @author Mathieu Stute
  */
 class QtHistoryWidget : public QWidget {
-
 	Q_OBJECT
-
 public:
 
-	QtHistoryWidget ( QWidget * parent = 0, Qt::WFlags f = 0);
+	QtHistoryWidget(QWidget * parent);
 
 	~QtHistoryWidget();
 
@@ -50,25 +48,25 @@ public:
 	void sortHistory();
 
 	void addSMSItem(const QString & text,const QDate & date,
-		const QTime & time, const QTime & duration, const QString & name, unsigned int id);
+		const QTime & time, const QTime & duration, const QString & name, unsigned id);
 
 	void addOutGoingCallItem(const QString & text,const QDate & date,
-		const QTime & time, const QTime & duration, const QString & name, unsigned int id);
+		const QTime & time, const QTime & duration, const QString & name, unsigned id);
 
 	void addIncomingCallItem(const QString & text,const QDate & date,
-		const QTime & time, const QTime & duration, const QString & name, unsigned int id);
+		const QTime & time, const QTime & duration, const QString & name, unsigned id);
 
 	void addChatItem(const QString & text,const QDate & date,
-		const QTime & time, const QTime & duration, const QString & name, unsigned int id);
+		const QTime & time, const QTime & duration, const QString & name, unsigned id);
 
 	void addMissedCallItem(const QString & text,const QDate & date,
-		const QTime & time, const QTime & duration, const QString & name, unsigned int id);
+		const QTime & time, const QTime & duration, const QString & name, unsigned id);
 
 	void addRejectedCallItem(const QString & text,const QDate & date,
-		const QTime & time, const QTime & duration, const QString & name, unsigned int id);
+		const QTime & time, const QTime & duration, const QString & name, unsigned id);
 
 	void editItem(const QString & text,const QDate & date,
-		const QTime & time, const QTime & duration, const QString & name, unsigned int id);
+		const QTime & time, const QTime & duration, const QString & name, unsigned id);
 
 	void showPopupMenu(const QPoint & point);
 
@@ -88,7 +86,7 @@ public Q_SLOTS:
 
 	void showAll(bool checked);
 
-	void itemDoubleClicked ( QTreeWidgetItem * item, int column );
+	void itemDoubleClicked(QTreeWidgetItem * item, int column);
 
 	void headerClicked(int logicalIndex);
 
@@ -98,9 +96,9 @@ public Q_SLOTS:
 
 Q_SIGNALS:
 
-	void replayItem( QtHistoryItem * item );
+	void replayItem( QtHistoryItem * item);
 
-	void removeItem( unsigned int id );
+	void removeItem( unsigned id);
 
 	void missedCallsSeen();
 
@@ -108,7 +106,7 @@ private Q_SLOTS:
 
 	void itemClicked();
 
-protected:
+private:
 
 	QTreeWidget * _treeWidget;
 
@@ -136,4 +134,4 @@ private:
 	QtHistoryWidget * _historyWidget;
 };
 
-#endif
+#endif	//OWQTHISTORYWIDGET_H

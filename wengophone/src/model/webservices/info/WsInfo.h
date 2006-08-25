@@ -34,7 +34,7 @@ public:
 		/** The information could not be retrieved. */
 		WsInfoStatusError,
 
-		/** Retrieve information successfully */
+		/** Retrieve information successfully. */
 		WsInfoStatusOk
 	};
 
@@ -53,7 +53,7 @@ public:
 	};
 
 	/**
-	 * default constructor
+	 * Default constructor
 	 *
 	 * @param wengoAccount the WengoAccount used for web services
 	 */
@@ -100,14 +100,14 @@ public:
 	Event<void (WsInfo & sender, int id, WsInfoStatus status, int voicemail)> wsInfoVoiceMailEvent;
 
 	/**
-	 * An anwser about unread voice mail has been received.
+	 * An anwser about the landline number has been received.
 	 *
 	 * @param sender this class
 	 * @param id unique identifier of the request
 	 * @param status the request status (ok or error)
-	 * @param number unread voice mail count
+	 * @param number landline number
 	 */
-	Event<void (WsInfo & sender, int id, WsInfoStatus status, std::string number)> wsInfoPtsnNumberEvent;
+	Event<void (WsInfo & sender, int id, WsInfoStatus status, std::string number)> wsInfoLandlineNumberEvent;
 
 	/**
 	 * An anwser about unread voice mail has been received.
@@ -116,9 +116,9 @@ public:
 	 * @param id unique identifier of the request
 	 * @param status the request status (ok or error)
 	 * @param voicemail if true forward to voice mail else to the given number
-	 * @param dest1	first forward number
-	 * @param dest2	second forward number (meaningfull only if voicemail is true)
-	 * @param dest3	third forward number (meaningfull only if voicemail is true)
+	 * @param dest1 first forward number
+	 * @param dest2 second forward number (meaningfull only if voicemail is true)
+	 * @param dest3 third forward number (meaningfull only if voicemail is true)
 	 */
 	Event<void (WsInfo & sender, int id, WsInfoStatus status,
 		WsInfoCallForwardMode mode, bool voicemail, std::string dest1, std::string dest2, std::string dest3)> wsCallForwardInfoEvent;
@@ -168,11 +168,11 @@ public:
 	void getCallForwardInfo(bool callForward);
 
 	/**
-	 * Set/unset pstn number request
+	 * Set/unset landline number request
 	 *
-	 * @param wengos if true enable pstn number request
+	 * @param landlineNumber if true enable landline number request
 	 */
-	void getPstnNumber(bool pstnNumber);
+	void getLandlineNumber(bool landlineNumber);
 
 	/**
 	 * Sends the request.
@@ -203,8 +203,8 @@ private:
 	/** activate unread voice mail count */
 	bool _callForward;
 
-	/** activate pstn number request*/
-	bool _pstnNumber;
+	/** activate landline number request */
+	bool _landlineNumber;
 
 	static const std::string WENGOSCOUNT_TAG;
 
@@ -216,17 +216,17 @@ private:
 
 	static const std::string ACTIVEVOICEMAIL_TAG;
 
-	static const std::string PSTNNUMBER_TAG;
+	static const std::string LANDLINENUMBER_TAG;
 
 	static const std::string CALLFORWARD_TAG;
 
 	static const std::string CALLFORWARD_MODE_TAG;
 
-	static const std::string CALLFORWARD_TOPSTN_DEST1_TAG;
+	static const std::string CALLFORWARD_TO_LANDLINE_DEST1_TAG;
 
-	static const std::string CALLFORWARD_TOPSTN_DEST2_TAG;
+	static const std::string CALLFORWARD_TO_LANDLINE_DEST2_TAG;
 
-	static const std::string CALLFORWARD_TOPSTN_DEST3_TAG;
+	static const std::string CALLFORWARD_TO_LANDLINE_DEST3_TAG;
 };
 
 #endif	//OWWSINFO_H

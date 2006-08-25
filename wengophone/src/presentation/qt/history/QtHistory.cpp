@@ -40,7 +40,7 @@ QtHistory::QtHistory(CHistory & cHistory)
 	: QObject(NULL),
 	_cHistory(cHistory) {
 
-	_historyWidget = new QtHistoryWidget();
+	_historyWidget = new QtHistoryWidget(NULL);
 
 	connect(_historyWidget, SIGNAL(replayItem(QtHistoryItem *)), SLOT(replayItem(QtHistoryItem *)));
 	connect(_historyWidget, SIGNAL(removeItem(unsigned)), SLOT(removeItem(unsigned)));
@@ -55,7 +55,7 @@ QtHistory::~QtHistory() {
 	qtWengoPhone->removeHistory();
 }
 
-QWidget * QtHistory::getWidget() {
+QWidget * QtHistory::getWidget() const {
 	return _historyWidget;
 }
 
@@ -99,23 +99,23 @@ void QtHistory::addHistoryMemento(HistoryMemento::State state, const std::string
 	switch(state) {
 	case HistoryMemento::IncomingCall:
 		_historyWidget->addIncomingCallItem(tr("Incoming call"),
-			qdate, qtime, qduration, formattedName, id);
+				qdate, qtime, qduration, formattedName, id);
 		break;
 	case HistoryMemento::OutgoingCall:
 		_historyWidget->addOutGoingCallItem(tr("Outgoing call"),
-			qdate, qtime, qduration, formattedName, id);
+				qdate, qtime, qduration, formattedName, id);
 		break;
 	case HistoryMemento::MissedCall:
 		_historyWidget->addMissedCallItem(tr("Missed call"),
-			qdate, qtime, qduration, formattedName, id);
+				qdate, qtime, qduration, formattedName, id);
 		break;
 	case HistoryMemento::RejectedCall:
 		_historyWidget->addRejectedCallItem(tr("Rejected call"),
-			qdate, qtime, qduration, formattedName, id);
+				qdate, qtime, qduration, formattedName, id);
 		break;
 	case HistoryMemento::OutgoingSmsOk:
 		_historyWidget->addSMSItem(tr("Outgoing SMS"),
-			qdate, qtime, qduration, formattedName, id);
+				qdate, qtime, qduration, formattedName, id);
 		break;
 	case HistoryMemento::OutgoingSmsNok:
 		break;

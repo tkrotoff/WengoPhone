@@ -24,7 +24,7 @@
 
 class QtWengoPhone;
 class QtChatWidget;
-class QtWengoStyleLabel;
+class WengoStyleLabel;
 class QString;
 class QWidget;
 
@@ -56,9 +56,9 @@ private:
 
 	QtChatWidget * _chatWidget;
 
-	QtWengoStyleLabel * _callLabel;
+	WengoStyleLabel * _callLabel;
 
-	QtWengoStyleLabel * _endLabel;
+	WengoStyleLabel * _endLabel;
 };
 
 #endif	//OWQTCHATACTIONBARWIDGET_H

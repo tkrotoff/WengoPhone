@@ -73,14 +73,14 @@
 #include <qtutil/WidgetFactory.h>
 #include <qtutil/Widget.h>
 #include <qtutil/Object.h>
-#include <qtutil/MouseEventFilter.h>
 #include <qtutil/WidgetBackgroundImage.h>
+#include <qtutil/MouseEventFilter.h>
+
+#include <QtBrowser.h>
 
 #include <thread/Thread.h>
 #include <util/Logger.h>
-#include <QtBrowser.h>
 #include <cutil/global.h>
-#include <qtutil/QtWengoStyleLabel.h>
 
 #include <QtGui/QtGui>
 
@@ -114,7 +114,7 @@ QtWengoPhone::QtWengoPhone(CWengoPhone & cWengoPhone)
 		boost::bind(&QtWengoPhone::proxyNeedsAuthenticationEventHandler, this, _1, _2);
 	NetworkProxyDiscovery::getInstance().wrongProxyAuthenticationEvent +=
 		boost::bind(&QtWengoPhone::wrongProxyAuthenticationEventHandler, this, _1, _2);
-	// Check if the event has not already been sent
+	//Check if the event has not already been sent
 	if (NetworkProxyDiscovery::getInstance().getState() ==
 		NetworkProxyDiscovery::NetworkProxyDiscoveryStateNeedsAuthentication) {
 		proxyNeedsAuthenticationEventHandler(NetworkProxyDiscovery::getInstance(),
@@ -147,7 +147,7 @@ void QtWengoPhone::initThreadSafe() {
 	connect(_qtLanguage, SIGNAL(translationChangedSignal()), SLOT(slotTranslationChanged()));
 	_qtLanguage->updateTranslation();
 
-	// Install the close event filter
+	//Install the close event filter
 	QtWengoPhoneEventFilter * qtWengoPhoneEventFilter;
 	qtWengoPhoneEventFilter = new QtWengoPhoneEventFilter(this);
 	_wengoPhoneWindow->installEventFilter(qtWengoPhoneEventFilter);
@@ -162,19 +162,10 @@ void QtWengoPhone::initThreadSafe() {
 	callBarLayout->setMargin(0);
 	callBarLayout->setSpacing(0);
 
-	//callButton
-	_callButton = _qtCallBar->getCallButton();
-
-	//hangUpButton
-	_hangUpButton = _qtCallBar->getHangButton();
-
 	//phoneComboBox
-	_phoneComboBox = _qtCallBar->getComboBox();
-	MousePressEventFilter * leftMouseFilter = new MousePressEventFilter(
-		this, SLOT(phoneComboBoxClicked()), Qt::LeftButton);
-	_phoneComboBox->installEventFilter(leftMouseFilter);
+	connect(_qtCallBar, SIGNAL(phoneComboBoxClicked()), SLOT(phoneComboBoxClicked()));
 
-	// Open chat window button
+	//Open chat window button
 	_ui->actionOpenChatWindow->setEnabled(false);
 	connect(_ui->actionOpenChatWindow, SIGNAL(triggered()), SLOT(showChatWindow()));
 
@@ -266,20 +257,20 @@ void QtWengoPhone::initThreadSafe() {
 		dynamic_cast<QtUserProfileHandler *>(_cWengoPhone.getCUserProfileHandler().getPresentation());
 	connect(_ui->actionChangeProfile, SIGNAL(triggered()), qtUserProfileHandler, SLOT(showLoginWindow()));
 
-	//actionLog_off
+	//actionLogOff
 	connect(_ui->actionLogOff, SIGNAL(triggered()), SLOT(logoff()));
 
 	// Tab selection
 	connect(_ui->tabWidget, SIGNAL(currentChanged(int)), SLOT(tabSelectionChanged(int)));
 
 	// Accept a call
-	connect (_ui->actionAccept, SIGNAL(triggered()), SLOT(acceptCall()));
+	connect(_ui->actionAccept, SIGNAL(triggered()), SLOT(acceptCall()));
 
 	// Resume a call
-	connect (_ui->actionHoldResume, SIGNAL(triggered()), SLOT(resumeCall()));
+	connect(_ui->actionHoldResume, SIGNAL(triggered()), SLOT(resumeCall()));
 
 	// Hangup a call
-	connect (_ui->actionHangup, SIGNAL(triggered()), SLOT(hangupCall()));
+	connect(_ui->actionHangup, SIGNAL(triggered()), SLOT(hangupCall()));
 
 	connect(this, SIGNAL(connectionStatusEventHandlerSignal(int, int, QString)),
 		SLOT(connectionStatusEventHandlerSlot(int, int, QString)));
@@ -312,8 +303,8 @@ void QtWengoPhone::initThreadSafe() {
 	_ui->configPanelLabel->installEventFilter(mousePressEventFilter);
 
 	updatePresentation();
-	_wengoPhoneWindow->resize(QSize(config.getProfileWidth(),config.getProfileHeight()));
-	_wengoPhoneWindow->move(QPoint(config.getProfilePosX(),config.getProfilePoxY()));
+	_wengoPhoneWindow->resize(QSize(config.getProfileWidth(), config.getProfileHeight()));
+	_wengoPhoneWindow->move(QPoint(config.getProfilePosX(), config.getProfilePoxY()));
 
 	if (!config.getCmdLineBackgroundModeEnable()) {
 		_wengoPhoneWindow->show();
@@ -324,25 +315,24 @@ void QtWengoPhone::initThreadSafe() {
 
 void QtWengoPhone::initButtons() {
 	//callButton
-	connect(_qtCallBar, SIGNAL(ButtonClicked()), SLOT(callButtonClicked()));
-	connect(_qtCallBar, SIGNAL(OffClicked()), SLOT(hangupButtonClicked()));
+	connect(_qtCallBar, SIGNAL(callButtonClicked()), SLOT(callButtonClicked()));
 	enableCallButton();
 
 	//hangUpButton
-	_hangUpButton->setEnabled(false);
+	connect(_qtCallBar, SIGNAL(hangUpButtonClicked()), SLOT(hangUpButtonClicked()));
+	_qtCallBar->setEnabledHangUpButton(false);
 
 	//phoneComboBox
-	connect(_phoneComboBox->lineEdit(), SIGNAL(returnPressed ()), SLOT(callButtonClicked()));
-	connect(_phoneComboBox, SIGNAL(editTextChanged(const QString &)), SLOT(enableCallButton()));
+	connect(_qtCallBar, SIGNAL(phoneComboBoxReturnPressed()), SLOT(callButtonClicked()));
+	connect(_qtCallBar, SIGNAL(phoneComboBoxEditTextChanged(const QString &)), SLOT(enableCallButton()));
 }
 
 void QtWengoPhone::enableCallButton() {
-	std::string phoneNumber = _phoneComboBox->currentText().toStdString();
-	_callButton->setEnabled(!phoneNumber.empty());
-	//_videoCallButton->setEnabled(!phoneNumber.empty());
+	std::string phoneNumber = _qtCallBar->getPhoneComboBoxCurrentText();
+	_qtCallBar->setEnabledCallButton(!phoneNumber.empty());
 }
 
-void QtWengoPhone::hangupButtonClicked() {
+void QtWengoPhone::hangUpButtonClicked() {
 	QtContactCallListWidget * widget =
 		dynamic_cast<QtContactCallListWidget *>(_ui->tabWidget->currentWidget());
 	if (widget) {
@@ -385,13 +375,13 @@ int QtWengoPhone::findFirstCallTab() {
 
 void QtWengoPhone::callButtonClicked() {
 	if (_cWengoPhone.getCUserProfileHandler().getCUserProfile()) {
-		std::string phoneNumber = _phoneComboBox->currentText().toStdString();
+		std::string phoneNumber = _qtCallBar->getPhoneComboBoxCurrentText();
 		if (!phoneNumber.empty()) {
 			CUserProfile * cUserProfile = _cWengoPhone.getCUserProfileHandler().getCUserProfile();
 			cUserProfile->makeCallErrorEvent += boost::bind(&QtWengoPhone::makeCallErrorEventHandler, this);
 			cUserProfile->makeCall(phoneNumber);
 		}
-		_phoneComboBox->clearEditText();
+		_qtCallBar->clearPhoneComboBoxEditText();
 	}
 }
 
@@ -418,10 +408,10 @@ void QtWengoPhone::addPhoneCall(QtPhoneCall * qtPhoneCall) {
 	connect(qtContactCallListWidget, SIGNAL(startConferenceSignal(PhoneCall *, PhoneCall *)),
 	        SLOT(addToConference(PhoneCall *, PhoneCall *)));
 
-	_hangUpButton->setEnabled(true);
+	_qtCallBar->setEnabledHangUpButton(true);
 
 	if (qtPhoneCall->isIncoming()) {
-		_callButton->setEnabled(true);
+		_qtCallBar->setEnabledCallButton(true);
 	}
 
 	_wengoPhoneWindow->showMinimized();
@@ -541,7 +531,7 @@ void QtWengoPhone::addToConference(QtPhoneCall * qtPhoneCall) {
 	_ui->tabWidget->addTab(qtContactCallListWidget, tr("Conference"));
 	_ui->tabWidget->setCurrentWidget(qtContactCallListWidget);
 	qtContactCallListWidget->addPhoneCall(qtPhoneCall);
-	_hangUpButton->setEnabled(true);
+	_qtCallBar->setEnabledHangUpButton(true);
 }
 
 void QtWengoPhone::setContactList(QtContactList * qtContactList) {
@@ -602,6 +592,10 @@ QtSystray & QtWengoPhone::getSystray() const {
 	return *_qtSystray;
 }
 
+QtCallBar & QtWengoPhone::getCallBar() const {
+	return *_qtCallBar;
+}
+
 void QtWengoPhone::setSubscribe(QtSubscribe * qtSubscribe) {
 	_qtSubscribe = qtSubscribe;
 }
@@ -649,7 +643,7 @@ void QtWengoPhone::dialpad(const std::string & tone, const std::string & soundFi
 				phoneCall->playSoundFile(soundFile);
 			}
 		} else {
-			_phoneComboBox->setEditText(_phoneComboBox->currentText() + QString::fromStdString(tone));
+			_qtCallBar->setPhoneComboBoxEditText(_qtCallBar->getPhoneComboBoxCurrentText() + tone);
 		}
 	}
 }
@@ -881,8 +875,8 @@ void QtWengoPhone::phoneComboBoxClicked() {
 	if (_qtHistoryWidget) {
 		HistoryMementoCollection * mementos =
 			_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCHistory()->getMementos(HistoryMemento::OutgoingCall, 10);
-		_phoneComboBox->clear();
-		_phoneComboBox->clearEditText();
+		_qtCallBar->clearPhoneComboBox();
+		_qtCallBar->clearPhoneComboBoxEditText();
 		for (HistoryMap::iterator it = mementos->begin(); it != mementos->end(); it++) {
 			HistoryMemento * memento = (*it).second;
 			SipAddress sipAddress(memento->getPeer());
@@ -890,24 +884,24 @@ void QtWengoPhone::phoneComboBoxClicked() {
 			HistoryMemento::State state = memento->getState();
 			switch (state) {
 			case HistoryMemento::IncomingCall:
-				_phoneComboBox->addItem(QIcon(QPixmap(":/pics/history/call_incoming.png")),
-					QString::fromStdString(sipAddress.getUserName()));
+				_qtCallBar->addPhoneComboBoxItem(QIcon(QPixmap(":/pics/history/call_incoming.png")),
+					sipAddress.getUserName());
 				break;
 			case HistoryMemento::OutgoingCall:
-				_phoneComboBox->addItem(QIcon(QPixmap(":/pics/history/call_outgoing.png")),
-					QString::fromStdString(sipAddress.getUserName()));
+				_qtCallBar->addPhoneComboBoxItem(QIcon(QPixmap(":/pics/history/call_outgoing.png")),
+					sipAddress.getUserName());
 				break;
 			case HistoryMemento::MissedCall:
-				_phoneComboBox->addItem(QIcon(QPixmap(":/pics/history/call_missed.png")),
-					QString::fromStdString(sipAddress.getUserName()));
+				_qtCallBar->addPhoneComboBoxItem(QIcon(QPixmap(":/pics/history/call_missed.png")),
+					sipAddress.getUserName());
 				break;
 			case HistoryMemento::RejectedCall:
-				_phoneComboBox->addItem(QIcon(QPixmap(":/pics/history/call_missed.png")),
-					QString::fromStdString(sipAddress.getUserName()));
+				_qtCallBar->addPhoneComboBoxItem(QIcon(QPixmap(":/pics/history/call_missed.png")),
+					sipAddress.getUserName());
 				break;
 			case HistoryMemento::OutgoingSmsOk:
-				_phoneComboBox->addItem(QIcon(QPixmap(":/pics/history/sms_sent.png")),
-					QString::fromStdString(sipAddress.getUserName()));
+				_qtCallBar->addPhoneComboBoxItem(QIcon(QPixmap(":/pics/history/sms_sent.png")),
+					sipAddress.getUserName());
 				break;
 			case HistoryMemento::OutgoingSmsNok:
 				break;

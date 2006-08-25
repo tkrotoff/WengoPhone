@@ -602,7 +602,7 @@
          </spacer>
         </item>
         <item row="0" column="0" >
-         <widget class="QtWengoStyleLabel" name="hangUpButton" >
+         <widget class="WengoStyleLabel" name="hangUpButton" >
           <property name="frameShape" >
            <enum>QFrame::NoFrame</enum>
           </property>
@@ -612,7 +612,7 @@
          </widget>
         </item>
         <item row="0" column="1" >
-         <widget class="QtWengoStyleLabel" name="pickUpButton" >
+         <widget class="WengoStyleLabel" name="pickUpButton" >
           <property name="frameShape" >
            <enum>QFrame::NoFrame</enum>
           </property>
@@ -701,9 +701,9 @@
  <pixmapfunction></pixmapfunction>
  <customwidgets>
   <customwidget>
-   <class>QtWengoStyleLabel</class>
+   <class>WengoStyleLabel</class>
    <extends>QLabel</extends>
-   <header>QtWengoStyleLabel_proxy.h</header>
+   <header>WengoStyleLabelProxy.h</header>
    <container>0</container>
    <pixmap></pixmap>
   </customwidget>

@@ -20,51 +20,78 @@
 #ifndef OWQTCALLBAR_H
 #define OWQTCALLBAR_H
 
-class QtWengoStyleLabel;
+#include <QtGui/QFrame>
 
-#include <QtGui/QtGui>
+#include <string>
 
+class WengoStyleLabel;
+class QComboBox;
+class QString;
+class QIcon;
+
+/**
+ * Call bar inside the main window.
+ *
+ * The call bas is composed with:
+ * - a call button
+ * - a hang up button
+ * - a phone number combo box
+ *
+ * @author Tanguy Krotoff
+ */
 class QtCallBar : public QFrame {
 	Q_OBJECT
 public:
 
-	QtCallBar(QWidget * parent  = 0, Qt::WFlags f = 0);
+	QtCallBar(QWidget * parent);
 
-	QComboBox * getComboBox();
+	~QtCallBar();
 
-	QtWengoStyleLabel * getCallButton() const {
-		return _callBarButton;
-	}
+	void setEnabledCallButton(bool enable);
 
-	QtWengoStyleLabel * getHangButton() const {
-		return _callBarButtonOff;
-	}
+	void setEnabledHangUpButton(bool enable);
+
+	std::string getPhoneComboBoxCurrentText() const;
+
+	void clearPhoneComboBox();
+
+	void clearPhoneComboBoxEditText();
+
+	void setPhoneComboBoxEditText(const std::string & text);
+
+	void addPhoneComboBoxItem(const QIcon & icon, const std::string & text);
 
 Q_SIGNALS:
 
-	void VideoClicked();
+	void callButtonClicked();
 
-	void OffClicked();
+	void hangUpButtonClicked();
 
-	void ButtonClicked();
+	void phoneComboBoxReturnPressed();
 
-protected:
+	void phoneComboBoxEditTextChanged(const QString & text);
 
-	QtWengoStyleLabel * _callBarButton;
+	void phoneComboBoxClicked();
 
+private Q_SLOTS:
 
-	QtWengoStyleLabel * _callBarButtonOff;
+	void callButtonClickedSlot();
 
-	QtWengoStyleLabel * _callBarComboContainer;
+	void hangUpButtonClickedSlot();
+
+	void phoneComboBoxReturnPressedSlot();
+
+	void phoneComboBoxEditTextChangedSlot(const QString & text);
+
+	void phoneComboBoxClickedSlot();
+
+private:
+
+	WengoStyleLabel * _callButton;
+
+	WengoStyleLabel * _hangUpButton;
 
 	QComboBox * _phoneComboBox;
-
-protected Q_SLOTS:
-
-	void callBarButtonOffClicked();
-
-	void callBarButtonClicked();
-
-	void slotUpdatedTranslation();
 };
-#endif
+
+#endif	//OWQTCALLBAR_H

@@ -29,8 +29,6 @@
 #include <model/profile/UserProfile.h>
 #include <model/phoneline/IPhoneLine.h>
 
-#include <qtutil/MouseEventFilter.h>
-
 #include <QtGui/QtGui>
 
 static const char * VOICE_MAIL_CALL = "123";
@@ -58,15 +56,11 @@ void QtEventWidget::initThreadSafe() {
 	_ui = new Ui::EventWidget();
 	_ui->setupUi(_widget);
 
-	MousePressEventFilter * mouseFilter = new MousePressEventFilter(
-		this, SLOT(voiceMailClicked()), Qt::LeftButton);
-	_ui->voiceMailIconLabel->installEventFilter(mouseFilter);
-	_ui->voiceMailIconLabel->setToolTip(tr("Click here to call your voice mail"));
+	//missedCallButton
+	connect(_ui->missedCallButton, SIGNAL(clicked()), SLOT(missedCallClicked()));
 
-	MousePressEventFilter * mouseFilter2 = new MousePressEventFilter(
-		this, SLOT(missedCallClicked()), Qt::LeftButton);
-	_ui->missedCallIconLabel->installEventFilter(mouseFilter2);
-	_ui->missedCallIconLabel->setToolTip(tr("Click here to see missed call(s)"));
+	//voiceMailButton
+	connect(_ui->voiceMailButton, SIGNAL(clicked()), SLOT(voiceMailClicked()));
 
 	updatePresentation();
 }

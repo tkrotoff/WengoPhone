@@ -28,7 +28,7 @@
 #include <presentation/qt/chat/QtChatWidget.h>
 #include <presentation/qt/QtWengoPhone.h>
 
-#include <qtutil/QtWengoStyleLabel.h>
+#include <qtutil/WengoStyleLabel.h>
 
 #include <util/String.h>
 
@@ -44,7 +44,7 @@ QtChatActionBarWidget::QtChatActionBarWidget(QtWengoPhone * qtWengoPhone, QtChat
 	setMaximumSize(QSize(10000, 70));
 	setMinimumSize(QSize(16, 70));
 
-	_callLabel = new QtWengoStyleLabel(this);
+	_callLabel = new WengoStyleLabel(this);
 	_callLabel->setPixmaps(
 		QPixmap(":/pics/chat/chat_call_bar_button.png"),
 		QPixmap(),
@@ -57,7 +57,7 @@ QtChatActionBarWidget::QtChatActionBarWidget(QtWengoPhone * qtWengoPhone, QtChat
 	_callLabel->setMinimumSize(QSize(46, 46));
 	connect(_callLabel, SIGNAL(clicked()), SLOT(callContact()));
 
-	_endLabel = new QtWengoStyleLabel(this);
+	_endLabel = new WengoStyleLabel(this);
 	_endLabel->setPixmaps(
 		QPixmap(),
 		QPixmap(":/pics/profilebar/bar_end.png"),
@@ -69,7 +69,7 @@ QtChatActionBarWidget::QtChatActionBarWidget(QtWengoPhone * qtWengoPhone, QtChat
 	_endLabel->setMinimumSize(QSize(16, 65));
 
 	init(_callLabel, _endLabel);
-	
+
 	addLabel(QString("inviteLabel"),
 		QPixmap(":/pics/chat/invite.png"),
 		QPixmap(":/pics/chat/invite_on.png"),

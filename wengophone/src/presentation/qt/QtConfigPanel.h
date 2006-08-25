@@ -25,15 +25,14 @@
 #include <util/Trackable.h>
 
 class Settings;
-class QtSliderManager;
+class QtVolumeSlider;
 class CWengoPhone;
 
 class QWidget;
-
 namespace Ui { class WengoPhoneWindowConfigPanel; }
 
 /**
- * Audio and video configuration panel.
+ * Audio and video configuration panel inside the main window.
  *
  * @author Tanguy Krotoff
  */
@@ -43,7 +42,7 @@ public:
 
 	QtConfigPanel(CWengoPhone & cWengoPhone, QWidget * parent);
 
-	virtual ~QtConfigPanel();
+	~QtConfigPanel();
 
 	QWidget * getWidget() const {
 		return _configPanelWidget;
@@ -51,9 +50,9 @@ public:
 
 private Q_SLOTS:
 
-	void inputSoundSliderValueChanged(int value);
+	void inputVolumeSliderValueChanged(int value);
 
-	void outputSoundSliderValueChanged(int value);
+	void outputVolumeSliderValueChanged(int value);
 
 	void enableWenboxCheckBoxToggled(bool checked);
 
@@ -77,9 +76,9 @@ private:
 
 	QWidget * _configPanelWidget;
 
-	QtSliderManager * _inputSoundSlider;
+	QtVolumeSlider * _inputVolumeSlider;
 
-	QtSliderManager * _outputSoundSlider;
+	QtVolumeSlider * _outputVolumeSlider;
 
 	CWengoPhone & _cWengoPhone;
 };

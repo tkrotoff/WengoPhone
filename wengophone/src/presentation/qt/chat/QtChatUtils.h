@@ -36,7 +36,7 @@ class QtChatUtils {
 public:
 
 	/**
-	 * Get a string representing the given protocol.
+	 * Gets a string representing the given protocol.
 	 *
 	 * @param protocol the protocol.
 	 * @return a string representing the protocol.
@@ -63,8 +63,8 @@ public:
 	static const QString decodeMessage(EnumIMProtocol::IMProtocol protocol, const QString & message);
 
 	/**
-	 * Return a html table to display the nickName and the current time.
-	 * 
+	 * Gets a HTML table to display the nickName and the current time.
+	 *
 	 * @param bgColor background color.
 	 * @param textColor text color.
 	 * @param nickName the nickname.
@@ -75,7 +75,7 @@ public:
 private:
 
 	/**
-	 * Replace urls by href html code.
+	 * Replaces urls by href html code.
 	 *
 	 * @param str the message in plain text.
 	 * @param htmlstr the message in html.
