@@ -18,7 +18,9 @@ args = {
 	'multiimwrapper' : 1,
 	'nullsipwrapper' : 0,
 	'enable-phapi-audio-arts' : 0,
-	'portaudio-oss' : 0,
+	'enable-phapi-audio-esd' : 0,
+	'portaudio-oss' : 1,
+	'portaudio-alsa' : 1,
 	'enable-xv-hwaccel' : 1,
 
 	#if 0 wmme support
@@ -40,7 +42,7 @@ if not WengoOSMacOSX():
 	args['enable-libsound-portaudio'] = 1
 
 if WengoOSLinux() or WengoOSBSD():
-	args['enable-samplerate'] = 1
+	args['enable-samplerate'] = 1 
 else:
     args['enable-samplerate'] = 0
 

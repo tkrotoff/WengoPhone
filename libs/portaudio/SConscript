@@ -121,14 +121,19 @@ if WengoOSLinux() or WengoOSBSD():
 	libs += ['pthread', 'm']
 	sources += sources_linux
 	headers += headers_linux
-	if WengoGetConsoleArgument('portaudio-oss') == 0:
+
+	if WengoGetConsoleArgument('portaudio-oss') == 1:
+		defines['PA_USE_OSS'] = 1
+		sources += sources_oss
+	if WengoGetConsoleArgument('portaudio-alsa') == 1:
 		defines['PA_USE_ALSA'] = 1
 		libs += ['libasound']
 		sources += sources_alsa
 		headers += headers_alsa
-	else:
-		defines['PA_USE_OSS'] = 1
-		sources += sources_oss
+	elif WengoGetConsoleArgument('portaudio-oss') == 0:
+		print "ERROR in portaudio: you have to enable at least oss or alsa support"
+		print "Please see SOptions and enable portaudio-alsa or/and portaudio-oss"
+		env.Exit(1)
 
 elif WengoOSMacOSX():
 	defines['PA_BIG_ENDIAN'] = 1
