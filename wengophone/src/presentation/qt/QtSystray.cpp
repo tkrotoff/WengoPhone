@@ -141,6 +141,8 @@ QMenu * QtSystray::createStatusMenu() {
 	case EnumPresenceState::PresenceStateDoNotDisturb:
 		menu->setIcon(QIcon(":/pics/status/donotdisturb.png"));
 		break;
+	case EnumPresenceState::PresenceStateUnknown:
+		break;
 	default:
 		LOG_FATAL("unknown presenceState=" + String::fromNumber(presenceState));
 		break;
@@ -283,6 +285,8 @@ void QtSystray::updateCallMenu() {
 				case EnumPresenceState::PresenceStateDoNotDisturb:
 					tmpAction->setIcon(QIcon(":/pics/status/donotdisturb.png"));
 					break;
+				case EnumPresenceState::PresenceStateUnknown:
+					break;
 				default:
 					LOG_FATAL("unknown presenceState=" + String::fromNumber(presenceState));
 					break;
@@ -318,6 +322,8 @@ void QtSystray::setSystrayIcon(QVariant status) {
 		case EnumPresenceState::PresenceStateDoNotDisturb:
 			_trayIcon->setIcon(QPixmap(":/pics/systray/donotdisturb.png"));
 			_trayIcon->setToolTip(QString("WengoPhone - ") + tr("Do Not Disturb"));
+			break;
+		case EnumPresenceState::PresenceStateUnknown:
 			break;
 		default:
 			LOG_FATAL("unknown presenceState=" + String::fromNumber(presenceState));
