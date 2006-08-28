@@ -1,0 +1,80 @@
+<ui version="4.0" >
+ <author></author>
+ <comment></comment>
+ <exportmacro></exportmacro>
+ <class>StatusBarWidget</class>
+ <widget class="QWidget" name="StatusBarWidget" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>120</width>
+    <height>22</height>
+   </rect>
+  </property>
+  <layout class="QGridLayout" >
+   <property name="margin" >
+    <number>0</number>
+   </property>
+   <property name="spacing" >
+    <number>3</number>
+   </property>
+   <item row="0" column="2" >
+    <widget class="QToolButton" name="soundButton" >
+     <property name="toolTip" >
+      <string>Audio Configuration Error</string>
+     </property>
+     <property name="icon" >
+      <iconset resource="../wengophone.qrc" >:/pics/statusbar/audio_status_error.png</iconset>
+     </property>
+     <property name="autoRaise" >
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1" >
+    <widget class="QLabel" name="sipConnectionLabel" >
+     <property name="maximumSize" >
+      <size>
+       <width>22</width>
+       <height>22</height>
+      </size>
+     </property>
+     <property name="toolTip" >
+      <string>Not Connected</string>
+     </property>
+     <property name="pixmap" >
+      <pixmap resource="../wengophone.qrc" >:/pics/statusbar/network_status_error.png</pixmap>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0" >
+    <widget class="QLabel" name="internetConnectionLabel" >
+     <property name="maximumSize" >
+      <size>
+       <width>22</width>
+       <height>22</height>
+      </size>
+     </property>
+     <property name="toolTip" >
+      <string>Not Connected</string>
+     </property>
+     <property name="pixmap" >
+      <pixmap resource="../wengophone.qrc" >:/pics/statusbar/internet_status_error.png</pixmap>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <pixmapfunction></pixmapfunction>
+ <resources>
+  <include location="../wengophone.qrc" />
+ </resources>
+ <connections/>
+</ui>

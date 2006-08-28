@@ -133,15 +133,15 @@
         <file>pics/status/offline.png</file>
         <file>pics/status/online.png</file>
         <file>pics/status/unknown.png</file>
-        <file>pics/statusbar/status-audio-offline.png</file>
-        <file>pics/statusbar/status-audio-online.png</file>
-        <file>pics/statusbar/status-earth-connecting.mng</file>
-        <file>pics/statusbar/status-earth-offline.png</file>
-        <file>pics/statusbar/status-earth-online.mng</file>
-        <file>pics/statusbar/status-network-connecting.mng</file>
-        <file>pics/statusbar/status-network-offline.png</file>
-        <file>pics/statusbar/status-network-online-static.png</file>
-        <file>pics/statusbar/status-network-online.mng</file>
+        <file>pics/statusbar/audio_status_error.png</file>
+        <file>pics/statusbar/audio_status_ok.png</file>
+        <file>pics/statusbar/internet_status_connecting.mng</file>
+        <file>pics/statusbar/internet_status_error.png</file>
+        <file>pics/statusbar/internet_status_ok.mng</file>
+        <file>pics/statusbar/network_status_connecting.mng</file>
+        <file>pics/statusbar/network_status_error.png</file>
+        <file>pics/statusbar/network_status_ok.png</file>
+        <file>pics/statusbar/network_status_ok.mng</file>
         <file>pics/systray/away.png</file>
         <file>pics/systray/connecting.png</file>
         <file>pics/systray/disconnected.png</file>

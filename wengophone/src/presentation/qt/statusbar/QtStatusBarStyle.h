@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QTSTATUSBARSTYLE_H
-#define QTSTATUSBARSTYLE_H
+#ifndef OWQTSTATUSBARSTYLE_H
+#define OWQTSTATUSBARSTYLE_H
 
 #include <QtGui/QCommonStyle>
 
@@ -32,7 +32,9 @@ class QWidget;
  *
  * The ugly frame is present under Windows XP with classic style and
  * under Linux. (it should be present under all platforms, only
- * Windows XP with XP style does not have this problem.)
+ * Windows XP with XP style does not have this problem)
+ *
+ * @author Tanguy Krotoff
  */
 class QtStatusBarStyle : public QCommonStyle {
 	Q_OBJECT
@@ -42,8 +44,8 @@ public:
 
 	~QtStatusBarStyle();
 
-	virtual void drawPrimitive(PrimitiveElement elem, const QStyleOption * option,
+	void drawPrimitive(PrimitiveElement elem, const QStyleOption * option,
 			QPainter * painter, const QWidget * widget = 0) const;
 };
 
-#endif	//QTSTATUSBARSTYLE_H
+#endif	//OWQTSTATUSBARSTYLE_H

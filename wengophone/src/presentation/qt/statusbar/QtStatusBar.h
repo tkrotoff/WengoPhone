@@ -20,8 +20,6 @@
 #ifndef OWQTSTATUSBAR_H
 #define OWQTSTATUSBAR_H
 
-#include <model/account/SipAccount.h>
-
 #include <sipwrapper/EnumPhoneLineState.h>
 
 #include <util/Trackable.h>
@@ -32,13 +30,14 @@ class CWengoPhone;
 class Settings;
 
 class QStatusBar;
-class QLabel;
 class QMovie;
+class QWidget;
+namespace Ui { class StatusBarWidget; }
 
 /**
  * Main window status bar.
  *
- * Contains status icons for Internet connection, sound status, IM status...
+ * Contains status icons for Internet connection, sound status, SIP (network) status...
  *
  * @author Tanguy Krotoff
  */
@@ -48,7 +47,7 @@ public:
 
 	QtStatusBar(CWengoPhone & cWengoPhone, QStatusBar * statusBar);
 
-	virtual ~QtStatusBar();
+	~QtStatusBar();
 
 	/**
 	 * @see QStatusBar::showMessage()
@@ -72,7 +71,7 @@ private:
 
 	void checkSoundConfig(Settings & sender, const std::string & key);
 
-	void checkSoundConfigThreadSafe(Settings & sender, const std::string & key);
+	void checkSoundConfigThreadSafe(const std::string & key);
 
 	void connectionIsUpEventHandler();
 
@@ -84,11 +83,9 @@ private:
 
 	QStatusBar * _statusBar;
 
-	QLabel * _phoneLineStateLabel;
+	Ui::StatusBarWidget * _ui;
 
-	QLabel * _internetConnectionStateLabel;
-
-	QLabel * _soundStateLabel;
+	QWidget * _statusBarWidget;
 
 	QMovie * _internetConnectionMovie;
 

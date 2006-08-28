@@ -153,6 +153,8 @@ public Q_SLOTS:
 
 	void editMyProfile();
 
+	void expandConfigPanel();
+
 private Q_SLOTS:
 
 	void removeHistorySlot();
@@ -200,8 +202,6 @@ private Q_SLOTS:
 	void showVoiceMail();
 
 	void showHideOffLineContacts();
-
-	void expandConfigPanel();
 
 	void eraseHistoryOutgoingCalls();
 

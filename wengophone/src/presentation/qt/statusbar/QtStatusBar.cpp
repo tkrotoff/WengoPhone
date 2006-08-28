@@ -18,7 +18,12 @@
  */
 
 #include "QtStatusBar.h"
+
+#include "ui_StatusBarWidget.h"
+
 #include "QtStatusBarStyle.h"
+
+#include <presentation/qt/QtWengoPhone.h>
 
 #include <control/CWengoPhone.h>
 #include <control/profile/CUserProfile.h>
@@ -45,60 +50,50 @@ QtStatusBar::QtStatusBar(CWengoPhone & cWengoPhone, QStatusBar * statusBar)
 	_cWengoPhone(cWengoPhone) {
 
 	_statusBar = statusBar;
+
+	_statusBarWidget = new QWidget(NULL);
+
+	_statusBar->addPermanentWidget(_statusBarWidget);
+
+	_ui = new Ui::StatusBarWidget();
+	_ui->setupUi(_statusBarWidget);
+
+	//QtStatusBarStyle
 	QtStatusBarStyle * qtStatusBarstyle = new QtStatusBarStyle();
 	_statusBar->setStyle(qtStatusBarstyle);
 
-	QWidget * statusGroup = new QWidget(_statusBar);
-	new QHBoxLayout(statusGroup);
-	statusGroup->layout()->setMargin(0);
-	statusGroup->layout()->setSpacing(3);
+	//_cWengoPhone.networkDiscoveryStateChangedEvent += boost::bind(&QtStatusBar::networkDiscoveryStateChangedEventHandler, this, _1, _2);
 
-	//_cWengoPhone.networkDiscoveryStateChangedEvent +=
-	//	boost::bind(&QtStatusBar::networkDiscoveryStateChangedEventHandler, this, _1, _2);
+	NetworkObserver::getInstance().connectionIsDownEvent += boost::bind(&QtStatusBar::connectionIsDownEventHandler, this);
+	NetworkObserver::getInstance().connectionIsUpEvent += boost::bind(&QtStatusBar::connectionIsUpEventHandler, this);
 
-	NetworkObserver::getInstance().connectionIsDownEvent +=
-		boost::bind(&QtStatusBar::connectionIsDownEventHandler, this);
-
-	NetworkObserver::getInstance().connectionIsUpEvent +=
-		boost::bind(&QtStatusBar::connectionIsUpEventHandler, this);
-
-	//internetConnectionStateLabel
-	_internetConnectionMovie = new QMovie(":/pics/statusbar/status-earth-connecting.mng", MNG_FORMAT, _statusBar);
-	_internetConnectionStateLabel = new QLabel(statusGroup);
-	_internetConnectionStateLabel->setMovie(_internetConnectionMovie);
-	_internetConnectionStateLabel->setToolTip(tr("Not Connected"));
-	statusGroup->layout()->addWidget(_internetConnectionStateLabel);
+	//internetConnectionLabel
+	_internetConnectionMovie = new QMovie(":/pics/statusbar/internet_status_connecting.mng", MNG_FORMAT, _statusBarWidget);
+	_ui->internetConnectionLabel->setMovie(_internetConnectionMovie);
 	_internetConnectionMovie->start();
 	if (NetworkObserver::getInstance().isConnected()) {
 		connectionIsUpEventHandler();
 	}
 
-
-	//phoneLineStateLabel
-	_sipConnectionMovie = new QMovie(":/pics/statusbar/status-network-connecting.mng", MNG_FORMAT, _statusBar);
-	_phoneLineStateLabel = new QLabel(statusGroup);
-	_phoneLineStateLabel->setMovie(_sipConnectionMovie);
-	_phoneLineStateLabel->setToolTip(tr("Not Connected"));
-	statusGroup->layout()->addWidget(_phoneLineStateLabel);
+	//sipConnectionLabel
+	_sipConnectionMovie = new QMovie(":/pics/statusbar/network_status_connecting.mng", MNG_FORMAT, _statusBarWidget);
+	_ui->sipConnectionLabel->setMovie(_sipConnectionMovie);
 	_sipConnectionMovie->start();
 
-	//soundStateLabel
-	_soundStateLabel = new QLabel(statusGroup);
-	_soundStateLabel->setPixmap(QPixmap(":/pics/statusbar/status-audio-offline.png"));
-	_soundStateLabel->setToolTip(tr("Audio Configuration Error"));
-	statusGroup->layout()->addWidget(_soundStateLabel);
-
-	_statusBar->addPermanentWidget(statusGroup);
+	//soundButton
+	QtWengoPhone * qtWengoPhone = (QtWengoPhone *) cWengoPhone.getPresentation();
+	connect(_ui->soundButton, SIGNAL(clicked()), qtWengoPhone, SLOT(expandConfigPanel()));
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	config.valueChangedEvent += boost::bind(&QtStatusBar::checkSoundConfig, this, _1, _2);
-	checkSoundConfigThreadSafe(config, Config::AUDIO_OUTPUT_DEVICEID_KEY);
+	checkSoundConfigThreadSafe(Config::AUDIO_OUTPUT_DEVICEID_KEY);
 
 	init();
 }
 
 QtStatusBar::~QtStatusBar() {
 	//TODO: unregister events, delete created objects
+	delete _ui;
 }
 
 void QtStatusBar::showMessage(const QString & message, int timeout) {
@@ -106,12 +101,12 @@ void QtStatusBar::showMessage(const QString & message, int timeout) {
 }
 
 void QtStatusBar::checkSoundConfig(Settings & sender, const std::string & key) {
-	typedef PostEvent2<void (Settings & sender, const std::string &), Settings &, std::string> MyPostEvent;
-	MyPostEvent * event = new MyPostEvent(boost::bind(&QtStatusBar::checkSoundConfigThreadSafe, this, _1, _2), sender, key);
+	typedef PostEvent1<void (const std::string &), std::string> MyPostEvent;
+	MyPostEvent * event = new MyPostEvent(boost::bind(&QtStatusBar::checkSoundConfigThreadSafe, this, _1), key);
 	postEvent(event);
 }
 
-void QtStatusBar::checkSoundConfigThreadSafe(Settings & sender, const std::string & key) {
+void QtStatusBar::checkSoundConfigThreadSafe(const std::string & key) {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
 	if (key == Config::AUDIO_OUTPUT_DEVICEID_KEY ||
@@ -129,8 +124,8 @@ void QtStatusBar::checkSoundConfigThreadSafe(Settings & sender, const std::strin
 			/*outputVolumeControl.getLevel() > 0 &&*/
 			!inputVolumeControl.isMuted()/* &&
 			inputVolumeControl.getLevel() > 0*/) {
-			_soundStateLabel->setPixmap(QPixmap(":/pics/statusbar/status-audio-online.png"));
-			_soundStateLabel->setToolTip(tr("Audio Configuration OK"));
+			_ui->soundButton->setIcon(QPixmap(":/pics/statusbar/audio_status_ok.png"));
+			_ui->soundButton->setToolTip(tr("Audio Configuration OK"));
 		}
 	}
 }
@@ -161,14 +156,14 @@ void QtStatusBar::connectionStateEventHandlerThreadSafe(bool connected) {
 
 	if (connected) {
 		tooltip = tr("Internet Connection OK");
-		pixmap = ":/pics/statusbar/status-earth-connecting.mng";
+		pixmap = ":/pics/statusbar/internet_status_connecting.mng";
 	} else {
 		tooltip = tr("Internet Connection Error");
-		pixmap = ":/pics/statusbar/status-earth-offline.png";
+		pixmap = ":/pics/statusbar/internet_status_error.png";
 	}
 
-	_internetConnectionStateLabel->setPixmap(pixmap);
-	_internetConnectionStateLabel->setToolTip(tooltip);
+	_ui->internetConnectionLabel->setPixmap(pixmap);
+	_ui->internetConnectionLabel->setToolTip(tooltip);
 }
 
 void QtStatusBar::updateInternetConnectionState() {
@@ -193,33 +188,33 @@ void QtStatusBar::updatePhoneLineState() {
 		switch (state) {
 		case EnumPhoneLineState::PhoneLineStateUnknown:
 			tooltip = tr("Not connected");
-			pixmap = ":/pics/statusbar/status-network-offline.png";
+			pixmap = ":/pics/statusbar/network_status_error.png";
 			break;
 
 		case EnumPhoneLineState::PhoneLineStateServerError:
 			tooltip = tr("An error occured");
-			pixmap = ":/pics/statusbar/status-network-offline.png";
+			pixmap = ":/pics/statusbar/network_status_error.png";
 			break;
 
 		case EnumPhoneLineState::PhoneLineStateTimeout:
 			tooltip = tr("An error occured");
-			pixmap = ":/pics/statusbar/status-network-offline.png";
+			pixmap = ":/pics/statusbar/network_status_error.png";
 			break;
 
 		case EnumPhoneLineState::PhoneLineStateOk:
 			tooltip = tr("Register done");
-			pixmap = ":/pics/statusbar/status-network-online-static.png";
+			pixmap = ":/pics/statusbar/network_status_ok.png";
 			break;
 
 		case EnumPhoneLineState::PhoneLineStateClosed:
 			tooltip = tr("Unregister done");
-			pixmap = ":/pics/statusbar/status-network-offline.png";
+			pixmap = ":/pics/statusbar/network_status_error.png";
 			break;
 
 		case EnumPhoneLineState::PhoneLineStateProgress:
-			_sipConnectionMovie = new QMovie(":/pics/statusbar/status-network-connecting.mng", MNG_FORMAT, _statusBar);
-			_phoneLineStateLabel->setMovie(_sipConnectionMovie);
-			_phoneLineStateLabel->setToolTip(tr("Connecting"));
+			_sipConnectionMovie = new QMovie(":/pics/statusbar/network_status_connecting.mng", MNG_FORMAT, _statusBarWidget);
+			_ui->sipConnectionLabel->setMovie(_sipConnectionMovie);
+			_ui->sipConnectionLabel->setToolTip(tr("Connecting"));
 			_sipConnectionMovie->start();
 			return;
 
@@ -227,8 +222,8 @@ void QtStatusBar::updatePhoneLineState() {
 			LOG_FATAL("unknown state=" + EnumPhoneLineState::toString(state));
 		};
 
-		_phoneLineStateLabel->setPixmap(pixmap);
-		_phoneLineStateLabel->setToolTip(tooltip);
+		_ui->sipConnectionLabel->setPixmap(pixmap);
+		_ui->sipConnectionLabel->setToolTip(tooltip);
 	}
 }
 

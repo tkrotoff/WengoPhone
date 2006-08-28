@@ -300,9 +300,6 @@ void QtWengoPhone::initThreadSafe() {
 	_ui->configPanel->setCurrentIndex(configPanelIndex);
 	_ui->configPanel->hide();
 
-	MousePressEventFilter * mousePressEventFilter = new MousePressEventFilter(this, SLOT(expandConfigPanel()));
-	_ui->configPanelLabel->installEventFilter(mousePressEventFilter);
-
 	updatePresentation();
 	_wengoPhoneWindow->resize(QSize(config.getProfileWidth(), config.getProfileHeight()));
 	_wengoPhoneWindow->move(QPoint(config.getProfilePosX(), config.getProfilePoxY()));

@@ -24,10 +24,10 @@
      <number>0</number>
     </property>
     <property name="spacing" >
-     <number>6</number>
+     <number>0</number>
     </property>
-    <item row="4" column="0" >
-     <widget class="QStackedWidget" name="configPanel" >
+    <item row="0" column="0" >
+     <widget class="QStackedWidget" name="profileBar" >
       <property name="sizePolicy" >
        <sizepolicy>
         <hsizetype>5</hsizetype>
@@ -38,19 +38,6 @@
       </property>
       <property name="currentIndex" >
        <number>-1</number>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="0" >
-     <widget class="QLabel" name="configPanelLabel" >
-      <property name="cursor" >
-       <cursor>13</cursor>
-      </property>
-      <property name="text" >
-       <string>&lt;u>Click to change Audio and Video Settings&lt;/u></string>
-      </property>
-      <property name="indent" >
-       <number>15</number>
       </property>
      </widget>
     </item>
@@ -76,8 +63,8 @@
       </property>
      </widget>
     </item>
-    <item row="0" column="0" >
-     <widget class="QStackedWidget" name="profileBar" >
+    <item row="3" column="0" >
+     <widget class="QStackedWidget" name="configPanel" >
       <property name="sizePolicy" >
        <sizepolicy>
         <hsizetype>5</hsizetype>

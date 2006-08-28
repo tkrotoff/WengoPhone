@@ -21,7 +21,8 @@
 
 #include <QtGui/QtGui>
 
-QtStatusBarStyle::QtStatusBarStyle() : QCommonStyle() {
+QtStatusBarStyle::QtStatusBarStyle()
+	: QCommonStyle() {
 }
 
 QtStatusBarStyle::~QtStatusBarStyle() {
