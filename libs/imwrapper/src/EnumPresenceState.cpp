@@ -42,9 +42,6 @@ string EnumPresenceState::toString(PresenceState presenceState) {
 	case PresenceStateDoNotDisturb:
 		result = "donotdisturb";
 		break;
-	case PresenceStateForward:
-		result = "forward";
-		break;
 	case PresenceStateUnknown:
 		result = "unknown";
 		break;
@@ -71,10 +68,8 @@ EnumPresenceState::PresenceState EnumPresenceState::fromString(const string & pr
 		result = PresenceStateAway;
 	} else if (presenceState == "donotdisturb") {
 		result = PresenceStateDoNotDisturb;
-	} else if (presenceState == "forward") {
-		result = PresenceStateForward;
 	} else if (presenceState == "userdefined") {
-		result = PresenceStateForward;
+		result = PresenceStateUserDefined;
 	} else if (presenceState == "unknown") {
 		result = PresenceStateUnknown;
 	} else {

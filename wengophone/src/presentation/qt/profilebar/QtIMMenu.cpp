@@ -56,14 +56,6 @@ QtIMMenu::QtIMMenu(CUserProfile & cUserProfile, IMAccount & imAccount, QWidget *
 	}
 	connect(action, SIGNAL(triggered(bool)), SLOT(awayClicked(bool)));
 
-	if (_imAccount.getProtocol() == EnumIMProtocol::IMProtocolWengo) {
-		action = addAction(tr("Forward"));
-		if (_imAccount.getPresenceState() == EnumPresenceState::PresenceStateForward) {
-			action->setChecked(true);
-		}
-		connect(action, SIGNAL(triggered(bool)), SLOT(forwardClicked(bool)));
-	}
-
 	addSeparator();
 
 	if (_imAccount.isConnected()) {
@@ -89,10 +81,6 @@ void QtIMMenu::invisibleClicked(bool checked) {
 
 void QtIMMenu::awayClicked(bool checked) {
 	_cUserProfile.getUserProfile().setPresenceState(EnumPresenceState::PresenceStateAway, &_imAccount);
-}
-
-void QtIMMenu::forwardClicked(bool checked) {
-	_cUserProfile.getUserProfile().setPresenceState(EnumPresenceState::PresenceStateForward, &_imAccount);
 }
 
 void QtIMMenu::disconnectClicked(bool checked) {

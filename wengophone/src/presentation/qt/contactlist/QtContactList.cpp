@@ -49,7 +49,6 @@ const QString QtContactList::STATUS_OFFLINE_PIXMAP = ":/pics/status/offline.png"
 const QString QtContactList::STATUS_DND_PIXMAP = ":/pics/status/donotdisturb.png";
 const QString QtContactList::STATUS_INVISIBLE_PIXMAP = ":/pics/status/invisible.png";
 const QString QtContactList::STATUS_AWAY_PIXMAP = ":/pics/status/away.png";
-const QString QtContactList::STATUS_FORWARD_PIXMAP = ":/pics/status/forward.png";
 const QString QtContactList::STATUS_CONTACT_IM_PIXMAP = ":/pics/contact_im.png";
 const QString QtContactList::STATUS_CONTACT_CALL_PIXMAP = ":/pics/contact_call.png";
 const QString QtContactList::STATUS_CONTACT_VIDEO_PIXMAP = ":/pics/contact_video.png";
@@ -91,7 +90,6 @@ QtContactList::QtContactList(CContactList & cContactList, CWengoPhone & cWengoPh
 	spx->setPixmap(QtContactPixmap::ContactDND, scalePixmap(STATUS_DND_PIXMAP));
 	spx->setPixmap(QtContactPixmap::ContactInvisible, scalePixmap(STATUS_INVISIBLE_PIXMAP));
 	spx->setPixmap(QtContactPixmap::ContactAway, scalePixmap(STATUS_AWAY_PIXMAP));
-	spx->setPixmap(QtContactPixmap::ContactForward, scalePixmap(STATUS_FORWARD_PIXMAP));
 
 	//Functions icons
 	spx->setPixmap(QtContactPixmap::ContactIM, scalePixmap(STATUS_CONTACT_IM_PIXMAP));

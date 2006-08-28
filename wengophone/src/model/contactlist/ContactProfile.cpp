@@ -24,7 +24,6 @@
 #include "ContactPresenceStateOffline.h"
 #include "ContactPresenceStateAway.h"
 #include "ContactPresenceStateDoNotDisturb.h"
-#include "ContactPresenceStateForward.h"
 
 #include <imwrapper/IMAccount.h>
 #include <imwrapper/IMContact.h>
@@ -46,7 +45,6 @@ static ContactPresenceStateOnline contactPresenceStateOnline;
 static ContactPresenceStateOffline contactPresenceStateOffline;
 static ContactPresenceStateAway contactPresenceStateAway;
 static ContactPresenceStateDoNotDisturb contactPresenceStateDoNotDisturb;
-static ContactPresenceStateForward contactPresenceStateForward;
 
 ContactProfile::ContactProfile() {
 	_sex = EnumSex::SexUnknown;
@@ -63,7 +61,6 @@ ContactProfile::ContactProfile() {
 	_presenceStateMap[contactPresenceStateOffline.getCode()] = &contactPresenceStateOffline;
 	_presenceStateMap[contactPresenceStateAway.getCode()] = &contactPresenceStateAway;
 	_presenceStateMap[contactPresenceStateDoNotDisturb.getCode()] = &contactPresenceStateDoNotDisturb;
-	_presenceStateMap[contactPresenceStateForward.getCode()] = &contactPresenceStateForward;
 }
 
 ContactProfile::ContactProfile(const ContactProfile & contactProfile) {

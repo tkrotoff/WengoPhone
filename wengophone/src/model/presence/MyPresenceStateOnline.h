@@ -37,10 +37,8 @@ public:
 	MyPresenceState * doNotDisturb() throw(MyPresenceStateException);
 
 	MyPresenceState * away() throw(MyPresenceStateException);
-	
-	MyPresenceState * invisible() throw(MyPresenceStateException);
 
-	MyPresenceState * forward() throw(MyPresenceStateException);
+	MyPresenceState * invisible() throw(MyPresenceStateException);
 
 	std::string toString() const {
 		return toString_static();
@@ -48,7 +46,7 @@ public:
 
 	static MyPresenceState * getInstance() {
 		static MyPresenceStateOnline presenceState;
-		
+
 		return &presenceState;
 	}
 

@@ -88,10 +88,10 @@ void QtContact::paint(QPainter * painter, const QStyleOptionViewItem & option, c
 }
 
 void QtContact::paintSelection(QPainter * painter, const QStyleOptionViewItem & option) {
-		QRect qrect = option.rect;
-		qrect.adjust(0, 0, 1, 1);
-		painter->fillRect(qrect, QBrush(SELECTION_BACKGROUND));
-		painter->setPen(option.palette.text().color());
+	QRect qrect = option.rect;
+	qrect.adjust(0, 0, 1, 1);
+	painter->fillRect(qrect, QBrush(SELECTION_BACKGROUND));
+	painter->setPen(option.palette.text().color());
 }
 
 QString QtContact::getId() const {
@@ -123,9 +123,6 @@ QtContactPixmap::ContactPixmap QtContact::getStatus() const {
 		break;
 	case EnumPresenceState::PresenceStateInvisible:
 		status = QtContactPixmap::ContactInvisible;
-		break;
-	case EnumPresenceState::PresenceStateForward:
-		status = QtContactPixmap::ContactForward;
 		break;
 	default:
 		LOG_FATAL("unknown state=" + String::fromNumber(_contactProfile.getPresenceState()));

@@ -38,7 +38,6 @@ public:
 		ContactDND,
 		ContactInvisible,
 		ContactAway,
-		ContactForward,
 		ContactIM,
 		ContactCall,
 		ContactVideo,
@@ -56,9 +55,10 @@ private:
 
 	QtContactPixmap();
 
-	QtContactPixmap(const QtContactPixmap & other) : _contactPixmap(other._contactPixmap) { }
+	QtContactPixmap(const QtContactPixmap & other)
+		: _contactPixmap(other._contactPixmap) { }
 
-	QtContactPixmap & operator = (const QtContactPixmap & other) {
+	QtContactPixmap & operator=(const QtContactPixmap & other) {
 		_contactPixmap = other._contactPixmap;
 		return * this;
 	}

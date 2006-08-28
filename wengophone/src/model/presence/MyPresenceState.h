@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef MYPRESENCESTATE_H
-#define MYPRESENCESTATE_H
+#ifndef OWMYPRESENCESTATE_H
+#define OWMYPRESENCESTATE_H
 
 #include "MyPresenceStateException.h"
 
@@ -78,17 +78,9 @@ public:
 	virtual MyPresenceState * invisible() throw (MyPresenceStateException) = 0;
 
 	/**
-	 * Switchs the presence status to away.
-	 *
-	 * @exception MyPresenceStateException if the switch cannot be done
-	 * @return the new MyPresenceState that corresponds to the away presence status
+	 * @return the string identifying the state.
 	 */
-	virtual MyPresenceState * forward() throw (MyPresenceStateException) = 0;
-
- 	/**
- 	 * @return the string identifying the state.
- 	 */
 	virtual std::string toString() const = 0;
 };
 
-#endif	//MYPRESENCESTATE_H
+#endif	//OWMYPRESENCESTATE_H

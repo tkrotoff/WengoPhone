@@ -261,7 +261,7 @@ void Contact::merge(const Contact & contact) {
 		_otherEmail = contact._otherEmail;
 	}
 
-	// TODO: how can we detect that streetAddress is not fulled
+	//TODO: how can we detect that streetAddress is not fulled
 	//_streetAddress = contact._streetAddress;
 
 	if (_notes.empty()) {

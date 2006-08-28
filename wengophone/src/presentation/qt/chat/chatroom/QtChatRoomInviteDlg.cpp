@@ -142,9 +142,6 @@ void QtChatRoomInviteDlg::fillGroup(QTreeWidgetItem * group, const QString & gro
 				case EnumPresenceState::PresenceStateInvisible:
 					status = QtContactPixmap::ContactInvisible;
 					break;
-				case EnumPresenceState::PresenceStateForward:
-					status = QtContactPixmap::ContactForward;
-					break;
 			}
 		item->setIcon(0,QIcon(QtContactPixmap::getInstance()->getPixmap(status)));
 		}

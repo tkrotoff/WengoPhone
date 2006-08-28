@@ -51,7 +51,6 @@ public:
 	static const QString STATUS_DND_PIXMAP;
 	static const QString STATUS_INVISIBLE_PIXMAP;
 	static const QString STATUS_AWAY_PIXMAP;
-	static const QString STATUS_FORWARD_PIXMAP;
 	static const QString STATUS_CONTACT_IM_PIXMAP;
 	static const QString STATUS_CONTACT_CALL_PIXMAP;
 	static const QString STATUS_CONTACT_VIDEO_PIXMAP;

@@ -23,7 +23,6 @@
 #include "MyPresenceStateOffline.h"
 #include "MyPresenceStateDoNotDisturb.h"
 #include "MyPresenceStateInvisible.h"
-#include "MyPresenceStateForward.h"
 #include "MyPresenceStateException.h"
 
 MyPresenceState * MyPresenceStateOnline::offline() throw(MyPresenceStateException) {
@@ -44,8 +43,4 @@ MyPresenceState * MyPresenceStateOnline::away() throw(MyPresenceStateException) 
 
 MyPresenceState * MyPresenceStateOnline::invisible() throw(MyPresenceStateException) {
 	return MyPresenceStateInvisible::getInstance();
-}
-
-MyPresenceState * MyPresenceStateOnline::forward() throw(MyPresenceStateException) {
-	return MyPresenceStateForward::getInstance();
 }

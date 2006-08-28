@@ -53,8 +53,6 @@ private Q_SLOTS:
 
 	void awayClicked(bool checked);
 
-	void forwardClicked(bool checked);
-
 	void disconnectClicked(bool checked);
 
 	void connectClicked(bool checked);

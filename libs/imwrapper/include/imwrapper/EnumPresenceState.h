@@ -51,9 +51,6 @@ public:
 		/** Buddy user defined status by a simple string ("I'm on the phone", "Under the shower"...). */
 		PresenceStateUserDefined,
 
-		/** Forward call to phone. */
-		PresenceStateForward,
-
 		/** Not used for the moment. */
 		PresenceStateUnknown
 	};

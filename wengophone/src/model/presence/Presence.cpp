@@ -102,9 +102,6 @@ void Presence::setState(EnumPresenceState::PresenceState state) {
 	case EnumPresenceState::PresenceStateInvisible:
 		_state = _state->invisible();
 		break;
-	case EnumPresenceState::PresenceStateForward:
-		_state = _state->forward();
-		break;
 	default:
 		LOG_FATAL("unknown presence state=" + String::fromNumber(state));
 	}

@@ -17,7 +17,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "QtIMProfile.h"
+#include "QtIMProfileWidget.h"
 
 #include "ui_IMProfileWidget.h"
 
@@ -60,7 +60,7 @@ static const char * PICS_JABBER_ON = ":pics/protocols/jabber.png";
 static const char * PICS_JABBER_OFF = ":pics/protocols/jabber_off.png";
 static const char * PICS_JABBER_ERROR = ":pics/protocols/jabber_error.png";
 
-QtIMProfile::QtIMProfile(CUserProfile & cUserProfile, CWengoPhone & cWengoPhone, QWidget * parent)
+QtIMProfileWidget::QtIMProfileWidget(CUserProfile & cUserProfile, CWengoPhone & cWengoPhone, QWidget * parent)
 	: QObject(parent),
 	_cUserProfile(cUserProfile),
 	_cWengoPhone(cWengoPhone) {
@@ -88,21 +88,21 @@ QtIMProfile::QtIMProfile(CUserProfile & cUserProfile, CWengoPhone & cWengoPhone,
 	connect(_ui->editProfileButton, SIGNAL(clicked()), SLOT(editProfileClicked()));
 
 	//UserProfile changed event connection
-	_cUserProfile.getUserProfile().profileChangedEvent += boost::bind(&QtIMProfile::profileChangedEventHandler, this);
+	_cUserProfile.getUserProfile().profileChangedEvent += boost::bind(&QtIMProfileWidget::profileChangedEventHandler, this);
 
 	//Widget initialization
 	init();
 }
 
-QtIMProfile::~QtIMProfile() {
+QtIMProfileWidget::~QtIMProfileWidget() {
 	delete _ui;
 }
 
-QWidget * QtIMProfile::getWidget() const {
+QWidget * QtIMProfileWidget::getWidget() const {
 	return _imProfileWidget;
 }
 
-void QtIMProfile::connected(IMAccount * pImAccount) {
+void QtIMProfileWidget::connected(IMAccount * pImAccount) {
 	EnumIMProtocol::IMProtocol imProtocol = pImAccount->getProtocol();
 
 	switch (imProtocol) {
@@ -136,7 +136,7 @@ void QtIMProfile::connected(IMAccount * pImAccount) {
 	}
 }
 
-void QtIMProfile::disconnected(IMAccount * pImAccount, bool connectionError, const QString & reason) {
+void QtIMProfileWidget::disconnected(IMAccount * pImAccount, bool connectionError, const QString & reason) {
 	EnumIMProtocol::IMProtocol imProtocol = pImAccount->getProtocol();
 
 	QString tooltip;
@@ -203,7 +203,7 @@ void QtIMProfile::disconnected(IMAccount * pImAccount, bool connectionError, con
 	}
 }
 
-void QtIMProfile::connectionProgress(IMAccount * pImAccount,
+void QtIMProfileWidget::connectionProgress(IMAccount * pImAccount,
 	int currentStep, int totalSteps, const QString & infoMessage) {
 
 	EnumIMProtocol::IMProtocol imProtocol = pImAccount->getProtocol();
@@ -239,7 +239,7 @@ void QtIMProfile::connectionProgress(IMAccount * pImAccount,
 	}
 }
 
-void QtIMProfile::imButtonClicked(QMenu * imMenu, EnumIMProtocol::IMProtocol imProtocol) {
+void QtIMProfileWidget::imButtonClicked(QMenu * imMenu, EnumIMProtocol::IMProtocol imProtocol) {
 	std::set<IMAccount *> list = _cUserProfile.getIMAccountsOfProtocol(imProtocol);
 	if (!list.empty()) {
 		showIMMenu(imMenu, imProtocol);
@@ -248,7 +248,7 @@ void QtIMProfile::imButtonClicked(QMenu * imMenu, EnumIMProtocol::IMProtocol imP
 	}
 }
 
-void QtIMProfile::showIMMenu(QMenu * imMenu, EnumIMProtocol::IMProtocol imProtocol) {
+void QtIMProfileWidget::showIMMenu(QMenu * imMenu, EnumIMProtocol::IMProtocol imProtocol) {
 	if (imMenu) {
 		delete imMenu;
 		imMenu = NULL;
@@ -267,41 +267,41 @@ void QtIMProfile::showIMMenu(QMenu * imMenu, EnumIMProtocol::IMProtocol imProtoc
 	imMenu->exec();
 }
 
-void QtIMProfile::msnClicked() {
+void QtIMProfileWidget::msnClicked() {
 	imButtonClicked(_msnIMAccountMenu, EnumIMProtocol::IMProtocolMSN);
 }
 
-void QtIMProfile::yahooClicked() {
+void QtIMProfileWidget::yahooClicked() {
 	imButtonClicked(_yahooIMAccountMenu, EnumIMProtocol::IMProtocolYahoo);
 }
 
-void QtIMProfile::wengoClicked() {
+void QtIMProfileWidget::wengoClicked() {
 	imButtonClicked(_wengoIMAccountMenu, EnumIMProtocol::IMProtocolWengo);
 }
 
-void QtIMProfile::aimClicked() {
+void QtIMProfileWidget::aimClicked() {
 	imButtonClicked(_aimIMAccountMenu, EnumIMProtocol::IMProtocolAIMICQ);
 }
 
-void QtIMProfile::jabberClicked() {
+void QtIMProfileWidget::jabberClicked() {
 	imButtonClicked(_jabberIMAccountMenu, EnumIMProtocol::IMProtocolJabber);
 }
 
-void QtIMProfile::changeAvatarClicked() {
+void QtIMProfileWidget::changeAvatarClicked() {
 	QtProfileDetails qtProfileDetails(_cUserProfile, _cUserProfile.getUserProfile(), _imProfileWidget);
 	//TODO UserProfile must be updated if QtProfileDetails was accepted
 	qtProfileDetails.changeUserProfileAvatar();
 	updateAvatar();
 }
 
-void QtIMProfile::editProfileClicked() {
+void QtIMProfileWidget::editProfileClicked() {
 	QtProfileDetails qtProfileDetails(_cUserProfile, _cUserProfile.getUserProfile(), _imProfileWidget);
 	//TODO UserProfile must be updated if QtProfileDetails was accepted
 	qtProfileDetails.show();
 	updateAvatar();
 }
 
-void QtIMProfile::init() {
+void QtIMProfileWidget::init() {
 	if (!_cUserProfile.getUserProfile().getAlias().empty()) {
 		_ui->aliasLineEdit->setText(QString::fromStdString(_cUserProfile.getUserProfile().getAlias()));
 	}
@@ -321,7 +321,7 @@ void QtIMProfile::init() {
 	}
 }
 
-void QtIMProfile::updateAvatar() {
+void QtIMProfileWidget::updateAvatar() {
 	QPixmap background = QPixmap(":/pics/avatar_background.png");
 	std::string myData = _cUserProfile.getUserProfile().getIcon().getData();
 
@@ -338,12 +338,12 @@ void QtIMProfile::updateAvatar() {
 	}
 }
 
-void QtIMProfile::showImAccountManager() {
+void QtIMProfileWidget::showImAccountManager() {
 	QtIMAccountManager imAccountManager(_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getUserProfile(),
 		true, _imProfileWidget);
 }
 
-void QtIMProfile::aliasTextChanged(const QString & text) {
+void QtIMProfileWidget::aliasTextChanged(const QString & text) {
 	//Update alias text
 	std::string alias(_ui->aliasLineEdit->text().toUtf8().constData());
 	_cUserProfile.getUserProfile().setAlias(alias, NULL);
@@ -356,8 +356,8 @@ void QtIMProfile::aliasTextChanged(const QString & text) {
 	_ui->aliasLineEdit->update();
 }
 
-void QtIMProfile::profileChangedEventHandler() {
+void QtIMProfileWidget::profileChangedEventHandler() {
 	typedef ThreadEvent0<void ()> MyThreadEvent;
-	MyThreadEvent * event = new MyThreadEvent(boost::bind(&QtIMProfile::init, this));
+	MyThreadEvent * event = new MyThreadEvent(boost::bind(&QtIMProfileWidget::init, this));
 	PFactory::postEvent(event);
 }

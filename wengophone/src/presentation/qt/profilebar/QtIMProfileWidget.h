@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef OWQTIMPROFILE_H
-#define OWQTIMPROFILE_H
+#ifndef OWQTIMPROFILEWIDGET_H
+#define OWQTIMPROFILEWIDGET_H
 
 #include <imwrapper/EnumIMProtocol.h>
 
@@ -43,13 +43,13 @@ namespace Ui { class IMProfileWidget; }
  * @author Tanguy Krotoff
  * @author Mathieu Stute
  */
-class QtIMProfile : public QObject, public Trackable {
+class QtIMProfileWidget : public QObject, public Trackable {
 	Q_OBJECT
 public:
 
-	QtIMProfile(CUserProfile & userProfile, CWengoPhone & cWengoPhone, QWidget * parent);
+	QtIMProfileWidget(CUserProfile & userProfile, CWengoPhone & cWengoPhone, QWidget * parent);
 
-	~QtIMProfile();
+	~QtIMProfileWidget();
 
 	QWidget * getWidget() const;
 
@@ -121,4 +121,4 @@ private:
 	CWengoPhone & _cWengoPhone;
 };
 
-#endif	//OWQTIMPROFILE_H
+#endif	//OWQTIMPROFILEWIDGET_H

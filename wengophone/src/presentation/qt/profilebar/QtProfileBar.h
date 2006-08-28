@@ -28,7 +28,7 @@
 
 #include <QtGui/QtGui>
 
-class QtIMProfile;
+class QtIMProfileWidget;
 class QtEventWidget;
 class QtCreditWidget;
 
@@ -187,7 +187,7 @@ private:
 
 	WengoStyleLabel * _creditLabel;
 
-	QtIMProfile * _qtImProfileWidget;
+	QtIMProfileWidget * _qtImProfileWidget;
 
 	QtCreditWidget * _creditWidget;
 

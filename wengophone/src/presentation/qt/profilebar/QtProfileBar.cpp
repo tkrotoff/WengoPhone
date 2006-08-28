@@ -19,7 +19,7 @@
 
 #include "QtProfileBar.h"
 
-#include "QtIMProfile.h"
+#include "QtIMProfileWidget.h"
 #include "QtEventWidget.h"
 #include "QtCreditWidget.h"
 
@@ -150,7 +150,7 @@ QtProfileBar::QtProfileBar(CWengoPhone & cWengoPhone, CUserProfile & cUserProfil
 
 
 	//create internal widgets
-	_qtImProfileWidget = new QtIMProfile(_cUserProfile, _cWengoPhone, this);
+	_qtImProfileWidget = new QtIMProfileWidget(_cUserProfile, _cWengoPhone, this);
 	_qtImProfileWidget->getWidget()->setVisible(false);
 	//connect(this, SIGNAL(updatedTranslationSignal()), _qtImProfileWidget, SLOT(slotUpdatedTranslation()));
 
