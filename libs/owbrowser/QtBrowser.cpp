@@ -46,7 +46,7 @@ QtBrowser::QtBrowser(QWidget * parent, BrowserMode mode) : QObject() {
 	_qtBrowser = NULL;
 
 	_layout = new QVBoxLayout(_browserWidget);
-	_layout->setMargin(1);
+	_layout->setMargin(0);
 	_layout->setSpacing(0);
 
 	setMode(mode);

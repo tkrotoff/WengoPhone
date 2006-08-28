@@ -390,7 +390,7 @@ void QtWengoPhone::makeCallErrorEventHandler() {
 }
 
 void QtWengoPhone::makeCallErrorEventHandlerThreadSafe() {
-	QMessageBox::information(_wengoPhoneWindow, tr("WengoPhone - Make call error"),
+	QMessageBox::information(_wengoPhoneWindow, tr("WengoPhone - Call Error"),
 		tr("Please hold all the phone calls before to place a new one"), QMessageBox::Ok);
 }
 

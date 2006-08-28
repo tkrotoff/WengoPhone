@@ -66,7 +66,7 @@ QtProfileDetails::QtProfileDetails(CUserProfile & cUserProfile, ContactProfile &
 		}
 	}
 
-	_profileDetailsWindow->setWindowTitle(tr("WengoPhone - Contact details"));
+	_profileDetailsWindow->setWindowTitle(tr("WengoPhone - Contact Details"));
 
 	QtIMContactManager * qtIMContactManager = new QtIMContactManager(contactProfile,
 		_cUserProfile, _profileDetailsWindow);
@@ -83,7 +83,7 @@ QtProfileDetails::QtProfileDetails(CUserProfile & cUserProfile, UserProfile & us
 	_profile(userProfile) {
 
 	init(parent);
-	_profileDetailsWindow->setWindowTitle(tr("WengoPhone - My profile details"));
+	_profileDetailsWindow->setWindowTitle(tr("WengoPhone - My Profile Details"));
 
 	//Not needed for UserProfile
 	_ui->groupLabel->hide();
@@ -180,7 +180,7 @@ void QtProfileDetails::saveContact() {
 
 	if (_ui->groupComboBox->currentText().isEmpty()) {
 		QMessageBox::warning(_profileDetailsWindow,
-			tr("WengoPhone -- No group selected"),
+			tr("WengoPhone - No Group Selected"),
 			tr("A contact must have a group, please set a group."),
 			QMessageBox::NoButton,
 			QMessageBox::NoButton,

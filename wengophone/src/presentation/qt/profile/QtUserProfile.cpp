@@ -147,7 +147,7 @@ void QtUserProfile::authorizationRequestEventHandlerSlot(PresenceHandler * sende
 	}
 
 	int buttonClicked = QMessageBox::question(_qtWengoPhone.getWidget(),
-		tr("WengoPhone - Authorization request"), request,
+		tr("WengoPhone - Authorization Request"), request,
 		tr("&Authorize"), tr("&Block"));
 
 	if (buttonClicked == 0) {
