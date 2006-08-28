@@ -17,15 +17,18 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QTHISTORYITEM_H
-#define QTHISTORYITEM_H
+#ifndef OWQTHISTORYITEM_H
+#define OWQTHISTORYITEM_H
 
-#include <QtGui/QtGui>
+#include <QtGui/QTreeWidgetItem>
+
+class QStringList;
+class QTreeWidget;
 
 /**
  * History item widget.
  *
- * @author Mr K
+ * @author Tanguy Krotoff
  */
 class QtHistoryItem : public QTreeWidgetItem {
 	friend class QtHistory;
@@ -84,4 +87,4 @@ private:
 	static const int COLUMN_PEERS;
 };
 
-#endif // QTHISTORYITEM_H
+#endif // OWQTHISTORYITEM_H

@@ -1,5 +1,4 @@
 /*
-
  * WengoPhone, a voice over Internet phone
  * Copyright (C) 2004-2006  Wengo
  *
@@ -20,15 +19,15 @@
 
 #include "QtWengoPhoneEventFilter.h"
 
-QtWengoPhoneEventFilter::QtWengoPhoneEventFilter(QObject * parent) : QObject(parent){
+QtWengoPhoneEventFilter::QtWengoPhoneEventFilter(QObject * parent)
+	: QObject(parent) {
 }
 
-bool QtWengoPhoneEventFilter::eventFilter(QObject *obj, QEvent *event){
-
-    if (event->type() == QEvent::Close) {
-        event->ignore();
-        closeWindow();
-        return true;
-    }
-    return false;
+bool QtWengoPhoneEventFilter::eventFilter(QObject * object, QEvent * event) {
+	if (event->type() == QEvent::Close) {
+		event->ignore();
+		closeWindow();
+		return true;
+	}
+	return false;
 }

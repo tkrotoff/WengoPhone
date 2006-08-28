@@ -33,8 +33,7 @@
 
 #include <util/Logger.h>
 
-#include <QtCore/QDate>
-#include <QtCore/QTime>
+#include <QtGui/QtGui>
 
 QtHistory::QtHistory(CHistory & cHistory)
 	: QObject(NULL),
@@ -56,7 +55,7 @@ QtHistory::~QtHistory() {
 }
 
 QWidget * QtHistory::getWidget() const {
-	return _historyWidget;
+	return _historyWidget->getWidget();
 }
 
 void QtHistory::historyLoadedEvent() {
@@ -189,7 +188,7 @@ void QtHistory::replayItem(QtHistoryItem * item) {
 		QMessageBox::Question,
 		QMessageBox::Yes | QMessageBox::Default,
 		QMessageBox::No | QMessageBox::Escape,
-		QMessageBox::NoButton, _historyWidget);
+		QMessageBox::NoButton, _historyWidget->getWidget());
 
 	switch (item->getItemType()) {
 	case QtHistoryItem::Sms: {

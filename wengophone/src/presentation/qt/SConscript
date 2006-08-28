@@ -298,6 +298,7 @@ forms = [
 	'phonecall/PhoneCallWidget.ui',
 	'phonecall/VideoWindow.ui',
 	'filetransfer/AcceptDialog.ui',
+	'history/HistoryWidget.ui',
 ]
 
 for form in forms:

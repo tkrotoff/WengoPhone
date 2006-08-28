@@ -27,6 +27,7 @@
 #include <control/CWengoPhone.h>
 #include <control/profile/CUserProfile.h>
 #include <control/profile/CUserProfileHandler.h>
+#include <control/history/CHistory.h>
 
 #include <model/account/wengo/WengoAccount.h>
 #include <model/config/ConfigManager.h>
@@ -547,7 +548,7 @@ void QtWengoPhone::setContactList(QtContactList * qtContactList) {
 
 void QtWengoPhone::setHistory(QtHistoryWidget * qtHistoryWidget) {
 	if (qtHistoryWidget != NULL) {
-		Widget::createLayout(_ui->tabHistory)->addWidget(qtHistoryWidget);
+		Widget::createLayout(_ui->tabHistory)->addWidget(qtHistoryWidget->getWidget());
 	} else {
 		delete _ui->tabHistory->layout();
 	}

@@ -20,28 +20,31 @@
 #ifndef OWQTHISTORYWIDGET_H
 #define OWQTHISTORYWIDGET_H
 
-#include <QtGui/QtGui>
 #include <QtCore/QObject>
 
 #include "QtHistoryItem.h"
 
-#include <control/history/CHistory.h>
-
 class HistoryTreeEventManager;
+
+namespace Ui { class HistoryWidget; }
 
 /**
  * History Widget.
  *
- * @author Mr K
+ * Shows call/sms history
+ *
  * @author Mathieu Stute
+ * @author Tanguy Krotoff
  */
-class QtHistoryWidget : public QWidget {
+class QtHistoryWidget : public QObject {
 	Q_OBJECT
 public:
 
 	QtHistoryWidget(QWidget * parent);
 
 	~QtHistoryWidget();
+
+	QWidget * getWidget() const;
 
 	void clearHistory();
 
@@ -96,9 +99,9 @@ public Q_SLOTS:
 
 Q_SIGNALS:
 
-	void replayItem( QtHistoryItem * item);
+	void replayItem(QtHistoryItem * item);
 
-	void removeItem( unsigned id);
+	void removeItem(unsigned id);
 
 	void missedCallsSeen();
 
@@ -108,9 +111,20 @@ private Q_SLOTS:
 
 private:
 
-	QTreeWidget * _treeWidget;
+	/**
+	 * Code factorization.
+	 */
+	void addItem(const QString & text, const QIcon & icon, const QDate & date, const QTime & time,
+		const QTime & duration, const QString & name, unsigned id, QtHistoryItem::HistoryType type);
 
-	QHeaderView * _header;
+	/**
+	 * Code factorization.
+	 */
+	void showItem(const QString & text);
+
+	Ui::HistoryWidget * _ui;
+
+	QWidget * _historyWidget;
 
 	QMenu * _menu;
 
@@ -125,12 +139,13 @@ private:
 class HistoryTreeEventManager : public QObject {
 	Q_OBJECT
 public:
+
 	HistoryTreeEventManager(QTreeWidget * target, QtHistoryWidget * historyWidget);
 
-protected:
-	bool eventFilter(QObject *obj, QEvent *event);
-
 private:
+
+	bool eventFilter(QObject * object, QEvent * event);
+
 	QtHistoryWidget * _historyWidget;
 };
 

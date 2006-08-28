@@ -19,6 +19,8 @@
 
 #include "QtHistoryItem.h"
 
+#include <QtGui/QtGui>
+
 const int QtHistoryItem::COLUMN_TYPE = 0;
 const int QtHistoryItem::COLUMN_PEERS = 1;
 const int QtHistoryItem::COLUMN_DATE = 2;
@@ -63,7 +65,7 @@ QtHistoryItem::QtHistoryItem(const QtHistoryItem & other)
 QtHistoryItem::~QtHistoryItem() {
 }
 
-unsigned QtHistoryItem::getId() const{
+unsigned QtHistoryItem::getId() const {
 	return _id;
 }
 
