@@ -29,6 +29,13 @@
 /**
  * Instant Messaging protocols.
  *
+ * This class duplicates EnumIMProtocol because
+ * protocols at network level are not always the one that we want to show
+ * to the user.
+ *
+ * For example at network level there is no GoogleTalk protocol but just Jabber protocol;
+ * at graphical level there is a GoogleTalk protocol for the user because it's easier.
+ *
  * @see EnumIMProtocol
  * @author Philippe Bernery
  * @author Tanguy Krotoff

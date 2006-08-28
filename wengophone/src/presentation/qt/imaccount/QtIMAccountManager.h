@@ -49,8 +49,7 @@ class QtIMAccountManager : public QObject, NonCopyable {
 	Q_OBJECT
 public:
 
-	QtIMAccountManager(UserProfile & userProfile, bool showAsDialog,
-		QWidget * parent);
+	QtIMAccountManager(UserProfile & userProfile, bool showAsDialog, QWidget * parent);
 
 	~QtIMAccountManager();
 

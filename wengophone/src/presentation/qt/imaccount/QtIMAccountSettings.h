@@ -24,12 +24,12 @@
 
 #include <QtCore/QObject>
 
-namespace Ui { class IMAccountTemplate; }
-
 class QtIMAccountPlugin;
 class UserProfile;
 class IMAccount;
+
 class QWidget;
+namespace Ui { class IMAccountTemplate; }
 
 /**
  * Handles QtIMAccountPlugin: IM accounts (MSN, Yahoo, Jabber, AIM...).

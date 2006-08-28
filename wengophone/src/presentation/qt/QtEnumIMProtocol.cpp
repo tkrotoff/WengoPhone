@@ -48,8 +48,7 @@ QString QtEnumIMProtocol::toString(IMProtocol protocol) {
 QtEnumIMProtocol::IMProtocol QtEnumIMProtocol::toIMProtocol(const QString & protocol) {
 	init();
 	for (ProtocolMap::const_iterator it = _protocolMap.begin();
-		it != _protocolMap.end();
-		++it) {
+		it != _protocolMap.end(); ++it) {
 
 		if ((*it).second == protocol) {
 			return (*it).first;
