@@ -58,9 +58,9 @@ QtStatusBar::QtStatusBar(CWengoPhone & cWengoPhone, QStatusBar * statusBar)
 	_ui = new Ui::StatusBarWidget();
 	_ui->setupUi(_statusBarWidget);
 
-	//QtStatusBarStyle
-	QtStatusBarStyle * qtStatusBarStyle = new QtStatusBarStyle();
-	_statusBar->setStyle(qtStatusBarStyle);
+	//StatusBarStyle
+	StatusBarStyle * statusBarStyle = new StatusBarStyle();
+	_statusBar->setStyle(statusBarStyle);
 
 	//_cWengoPhone.networkDiscoveryStateChangedEvent += boost::bind(&QtStatusBar::networkDiscoveryStateChangedEventHandler, this, _1, _2);
 

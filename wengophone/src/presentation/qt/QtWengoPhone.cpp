@@ -191,9 +191,9 @@ void QtWengoPhone::initThreadSafe() {
 	//StatusBar
 	_statusBar = new QtStatusBar(_cWengoPhone, _ui->statusBar);
 
-	//QtToolBarStyle
-	QtToolBarStyle * qtToolBarStyle = new QtToolBarStyle();
-	_ui->toolBar->setStyle(qtToolBarStyle);
+	//ToolBarStyle
+	ToolBarStyle * toolBarStyle = new ToolBarStyle();
+	_ui->toolBar->setStyle(toolBarStyle);
 
 	//actionShowWengoAccount
 	connect(_ui->actionShowWengoAccount, SIGNAL(triggered()), SLOT(showWengoAccount()));
