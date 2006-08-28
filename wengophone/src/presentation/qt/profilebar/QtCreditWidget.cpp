@@ -43,10 +43,13 @@ QtCreditWidget::~QtCreditWidget() {
 }
 
 void QtCreditWidget::initThreadSafe() {
-	_widget = new QWidget();
+	_creditWidget = new QWidget();
 
 	_ui = new Ui::CreditWidget();
-	_ui->setupUi(_widget);
+	_ui->setupUi(_creditWidget);
+
+	//landlineNumberButton
+	connect(_ui->landlineNumberButton, SIGNAL(clicked()), SLOT(landlineNumberClicked()));
 
 	//callForwardButton
 	connect(_ui->callForwardButton, SIGNAL(clicked()), SLOT(callforwardModeClicked()));
@@ -56,7 +59,7 @@ void QtCreditWidget::initThreadSafe() {
 }
 
 QWidget * QtCreditWidget::getWidget() const {
-	return _widget;
+	return _creditWidget;
 }
 
 void QtCreditWidget::updatePresentation() {
@@ -67,7 +70,7 @@ void QtCreditWidget::updatePresentation() {
 
 void QtCreditWidget::updatePresentationThreadSafe() {
 	if (!_callForwardMode.isEmpty()) {
-		_ui->callForwardButton->setText(_callForwardMode);
+		_ui->callForwardLabel->setText(_callForwardMode);
 	}
 
 	if (!_landlineNumber.isEmpty()) {
@@ -90,12 +93,16 @@ void QtCreditWidget::buyCreditsClicked() {
 }
 
 void QtCreditWidget::callforwardModeClicked() {
-	QtWengoConfigDialog dialog(_cWengoPhone, _widget);
+	QtWengoConfigDialog dialog(_cWengoPhone, _creditWidget);
 	dialog.showCallForwardPage();
 	dialog.show();
 }
 
+void QtCreditWidget::landlineNumberClicked() {
+	WsUrl::showWengoPhoneNumber();
+}
+
 void QtCreditWidget::slotUpdatedTranslation() {
-	_ui->retranslateUi(_widget);
+	_ui->retranslateUi(_creditWidget);
 	updatePresentationThreadSafe();
 }

@@ -93,6 +93,11 @@ public:
 	 */
 	static void showWengoDownload();
 
+	/**
+	 * Opens a web browser and shows the Wengo phone number associated with the Wengo account.
+	 */
+	static void showWengoPhoneNumber();
+
 private:
 
 	/**

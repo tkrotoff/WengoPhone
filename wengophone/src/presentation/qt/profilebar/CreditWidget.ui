@@ -8,109 +8,88 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>235</width>
-    <height>94</height>
+    <width>193</width>
+    <height>66</height>
    </rect>
   </property>
   <layout class="QGridLayout" >
    <property name="margin" >
-    <number>9</number>
+    <number>0</number>
    </property>
    <property name="spacing" >
-    <number>6</number>
+    <number>0</number>
    </property>
-   <item row="2" column="0" >
-    <widget class="QLabel" name="buyCreditsIconLabel" >
-     <property name="sizePolicy" >
-      <sizepolicy>
-       <hsizetype>4</hsizetype>
-       <vsizetype>5</vsizetype>
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="pixmap" >
-      <pixmap resource="../wengophone.qrc" >:/pics/profilebar/credit/wengos.png</pixmap>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="0" >
-    <widget class="QLabel" name="landlineNumberIconlabel" >
-     <property name="sizePolicy" >
-      <sizepolicy>
-       <hsizetype>4</hsizetype>
-       <vsizetype>5</vsizetype>
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="pixmap" >
-      <pixmap resource="../wengophone.qrc" >:/pics/contact/landline.png</pixmap>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0" >
-    <widget class="QLabel" name="callForwardIconLabel" >
-     <property name="sizePolicy" >
-      <sizepolicy>
-       <hsizetype>4</hsizetype>
-       <vsizetype>5</vsizetype>
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="pixmap" >
-      <pixmap resource="../wengophone.qrc" >:/pics/profilebar/credit/call_forward.png</pixmap>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="1" colspan="3" >
-    <widget class="QToolButton" name="buyCreditsButton" >
-     <property name="toolTip" >
-      <string>Click here to buy Wengo's credits</string>
-     </property>
-     <property name="text" >
-      <string>Purchase Call Out Credits</string>
-     </property>
-     <property name="autoRaise" >
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="3" >
-    <widget class="QToolButton" name="callForwardButton" >
-     <property name="toolTip" >
-      <string>Click here to change your call forward settings</string>
-     </property>
-     <property name="text" >
-      <string>Not Available</string>
-     </property>
-     <property name="autoRaise" >
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="1" colspan="2" >
-    <widget class="QLabel" name="callForwardTextLabel" >
-     <property name="text" >
-      <string>&lt;b>Call forward mode:&lt;/b></string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="2" colspan="2" >
+   <item row="0" column="1" >
     <widget class="QLabel" name="landlineNumberLabel" >
      <property name="toolTip" >
       <string>Your Wengo phone number</string>
      </property>
      <property name="text" >
-      <string>Not available</string>
+      <string>Not Available</string>
      </property>
     </widget>
    </item>
-   <item row="0" column="1" >
-    <widget class="QLabel" name="landlineNumberTextLabel" >
+   <item row="0" column="0" >
+    <widget class="QToolButton" name="landlineNumberButton" >
      <property name="text" >
-      <string>&lt;b>Your number:&lt;/b></string>
+      <string>Your phone number:</string>
+     </property>
+     <property name="icon" >
+      <iconset resource="../wengophone.qrc" >:/pics/contact/landline.png</iconset>
+     </property>
+     <property name="toolButtonStyle" >
+      <enum>Qt::ToolButtonTextBesideIcon</enum>
+     </property>
+     <property name="autoRaise" >
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0" >
+    <widget class="QToolButton" name="callForwardButton" >
+     <property name="toolTip" >
+      <string>Click here to change your call forward settings</string>
+     </property>
+     <property name="text" >
+      <string>Call forward mode:</string>
+     </property>
+     <property name="icon" >
+      <iconset resource="../wengophone.qrc" >:/pics/profilebar/credit/call_forward.png</iconset>
+     </property>
+     <property name="toolButtonStyle" >
+      <enum>Qt::ToolButtonTextBesideIcon</enum>
+     </property>
+     <property name="autoRaise" >
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0" colspan="2" >
+    <widget class="QToolButton" name="buyCreditsButton" >
+     <property name="toolTip" >
+      <string>Click here to buy Wengo's credits</string>
+     </property>
+     <property name="text" >
+      <string>Purchase call out credits</string>
+     </property>
+     <property name="icon" >
+      <iconset resource="../wengophone.qrc" >:/pics/profilebar/credit/wengos.png</iconset>
+     </property>
+     <property name="toolButtonStyle" >
+      <enum>Qt::ToolButtonTextBesideIcon</enum>
+     </property>
+     <property name="autoRaise" >
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1" >
+    <widget class="QLabel" name="callForwardLabel" >
+     <property name="toolTip" >
+      <string>Call Forward Method</string>
+     </property>
+     <property name="text" >
+      <string>Not Available</string>
      </property>
     </widget>
    </item>

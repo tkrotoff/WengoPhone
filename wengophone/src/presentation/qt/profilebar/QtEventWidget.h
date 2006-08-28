@@ -69,7 +69,7 @@ private:
 
 	CWengoPhone & _cWengoPhone;
 
-	QWidget * _widget;
+	QWidget * _eventWidget;
 
 	Ui::EventWidget * _ui;
 

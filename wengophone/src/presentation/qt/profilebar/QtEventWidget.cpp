@@ -51,10 +51,10 @@ QtEventWidget::~QtEventWidget() {
 }
 
 void QtEventWidget::initThreadSafe() {
-	_widget = new QWidget();
+	_eventWidget = new QWidget();
 
 	_ui = new Ui::EventWidget();
-	_ui->setupUi(_widget);
+	_ui->setupUi(_eventWidget);
 
 	//missedCallButton
 	connect(_ui->missedCallButton, SIGNAL(clicked()), SLOT(missedCallClicked()));
@@ -66,7 +66,7 @@ void QtEventWidget::initThreadSafe() {
 }
 
 QWidget * QtEventWidget::getWidget() const {
-	return _widget;
+	return _eventWidget;
 }
 
 void QtEventWidget::updatePresentation() {
@@ -97,7 +97,7 @@ void QtEventWidget::voiceMailClicked() {
 		QMessageBox::Question,
 		QMessageBox::Yes | QMessageBox::Default,
 		QMessageBox::No | QMessageBox::Escape,
-		QMessageBox::NoButton, _widget);
+		QMessageBox::NoButton, _eventWidget);
 
 	if (mb.exec() == QMessageBox::Yes) {
 		IPhoneLine * phoneLine = _cUserProfile.getUserProfile().getActivePhoneLine();
@@ -114,6 +114,6 @@ void QtEventWidget::missedCallClicked() {
 }
 
 void QtEventWidget::slotUpdatedTranslation() {
-	_ui->retranslateUi(_widget);
+	_ui->retranslateUi(_eventWidget);
 	updatePresentationThreadSafe();
 }

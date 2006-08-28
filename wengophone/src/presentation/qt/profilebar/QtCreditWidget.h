@@ -58,6 +58,8 @@ private Q_SLOTS:
 
 	void callforwardModeClicked();
 
+	void landlineNumberClicked();
+
 	void slotUpdatedTranslation();
 
 private:
@@ -72,7 +74,7 @@ private:
 
 	CWengoPhone & _cWengoPhone;
 
-	QWidget * _widget;
+	QWidget * _creditWidget;
 
 	Ui::CreditWidget * _ui;
 };

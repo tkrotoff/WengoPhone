@@ -39,6 +39,7 @@ static const std::string URL_WENGO_FAQ = "http://www.wengo.fr/public/public.php?
 static const std::string URL_WENGO_ACCOUNT = "https://www.wengo.fr/auth/auth.php?page=homepage";
 static const std::string URL_WENGO_BUYWENGOS = "https://www.wengo.fr/auth/auth.php?page=reload";
 static const std::string URL_WENGO_DOWNLOAD = "http://www.wengo.fr/public/public.php?page=download";
+static const std::string URL_WENGO_PHONENUMBER = "https://www.wengo.fr/auth/auth.php?page=homepage";
 
 WengoAccount * WsUrl::_wengoAccount = NULL;
 
@@ -111,4 +112,8 @@ void WsUrl::showWengoBuyWengos() {
 
 void WsUrl::showWengoDownload() {
 	openWengoUrlWithAuth(URL_WENGO_DOWNLOAD);
+}
+
+void WsUrl::showWengoPhoneNumber() {
+	openWengoUrlWithAuth(URL_WENGO_PHONENUMBER);
 }
