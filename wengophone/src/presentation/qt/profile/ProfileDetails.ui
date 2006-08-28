@@ -103,7 +103,7 @@
            <string>Home phone</string>
           </property>
           <property name="pixmap" >
-           <pixmap resource="../wengophone.qrc" >:/pics/contact/fixe.png</pixmap>
+           <pixmap/>
           </property>
          </widget>
         </item>
@@ -132,7 +132,7 @@
         </spacer>
        </item>
        <item row="1" column="0" >
-        <widget class="QPushButton" name="avatarPixmapButton" >
+        <widget class="QToolButton" name="avatarPixmapButton" >
          <property name="minimumSize" >
           <size>
            <width>90</width>
@@ -149,7 +149,7 @@
           <string>Click to change avatar</string>
          </property>
          <property name="icon" >
-          <iconset resource="../wengophone.qrc" >:/pics/default-avatar.png</iconset>
+          <iconset/>
          </property>
          <property name="iconSize" >
           <size>
@@ -157,7 +157,7 @@
            <height>90</height>
           </size>
          </property>
-         <property name="flat" >
+         <property name="autoRaise" >
           <bool>true</bool>
          </property>
         </widget>
