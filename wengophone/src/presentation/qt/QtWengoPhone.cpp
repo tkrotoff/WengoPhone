@@ -76,6 +76,7 @@
 #include <qtutil/Object.h>
 #include <qtutil/WidgetBackgroundImage.h>
 #include <qtutil/MouseEventFilter.h>
+#include <qtutil/ToolBarStyle.h>
 
 #include <QtBrowser.h>
 
@@ -187,8 +188,12 @@ void QtWengoPhone::initThreadSafe() {
 	//Systray
 	_qtSystray = new QtSystray(this);
 
-	//Status bar
+	//StatusBar
 	_statusBar = new QtStatusBar(_cWengoPhone, _ui->statusBar);
+
+	//QtToolBarStyle
+	QtToolBarStyle * qtToolBarStyle = new QtToolBarStyle();
+	_ui->toolBar->setStyle(qtToolBarStyle);
 
 	//actionShowWengoAccount
 	connect(_ui->actionShowWengoAccount, SIGNAL(triggered()), SLOT(showWengoAccount()));

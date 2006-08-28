@@ -28,6 +28,8 @@ headers = [
 	'include/qtutil/Wizard.h',
 	'include/qtutil/QtThreadEvent.h',
 	'include/qtutil/ThreadEventFilter.h',
+	'include/qtutil/StatusBarStyle.h',
+	'include/qtutil/ToolBarStyle.h',
 ]
 sources = [
 	'src/EventFilter.cpp',
@@ -48,6 +50,8 @@ sources = [
 	'src/WidgetBackgroundImage.cpp',
 	'src/Wizard.cpp',
 	'src/ThreadEventFilter.cpp',
+	'src/StatusBarStyle.cpp',
+	'src/ToolBarStyle.cpp',
 ]
 forms = [
 	'src/Wizard.ui',

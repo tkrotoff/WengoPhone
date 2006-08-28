@@ -17,35 +17,23 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef OWQTSTATUSBARSTYLE_H
-#define OWQTSTATUSBARSTYLE_H
+#include "QtToolBarStyle.h"
 
-#include <QtGui/QCommonStyle>
+#include <QtGui/QtGui>
 
-class PrimitiveElement;
-class QStyleOption;
-class QPainter;
-class QWidget;
+QtToolBarStyle::QtToolBarStyle()
+	: QCommonStyle() {
+}
 
-/**
- * Removes the ugly frame/marging around the status bar icons.
- *
- * The ugly frame is present under Windows XP with classic style and
- * under Linux. (it should be present under all platforms, only
- * Windows XP with XP style does not have this problem)
- *
- * @author Tanguy Krotoff
- */
-class QtStatusBarStyle : public QCommonStyle {
-	Q_OBJECT
-public:
+QtToolBarStyle::~QtToolBarStyle() {
+}
 
-	QtStatusBarStyle();
+void QtToolBarStyle::drawControl(ControlElement element, const QStyleOption * option,
+		QPainter * painter, const QWidget * widget) const {
 
-	~QtStatusBarStyle();
+	if (element == CE_ToolBar) {
+		return;
+	}
 
-	void drawPrimitive(PrimitiveElement elem, const QStyleOption * option,
-			QPainter * painter, const QWidget * widget = 0) const;
-};
-
-#endif	//OWQTSTATUSBARSTYLE_H
+	QCommonStyle::drawControl(element, option, painter, widget);
+}

@@ -17,23 +17,31 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "QtStatusBarStyle.h"
+#ifndef OWQTTOOLBARSTYLE_H
+#define OWQTTOOLBARSTYLE_H
 
-#include <QtGui/QtGui>
+#include <QtGui/QCommonStyle>
 
-QtStatusBarStyle::QtStatusBarStyle()
-	: QCommonStyle() {
-}
+class ControlElement;
+class QStyleOption;
+class QPainter;
+class QWidget;
 
-QtStatusBarStyle::~QtStatusBarStyle() {
-}
+/**
+ * Removes the ugly toolbar bottom line.
+ *
+ * @author Tanguy Krotoff
+ */
+class QtToolBarStyle : public QCommonStyle {
+	Q_OBJECT
+public:
 
-void QtStatusBarStyle::drawPrimitive(PrimitiveElement elem, const QStyleOption * option,
-		QPainter * painter, const QWidget * widget) const {
+	QtToolBarStyle();
 
-	if (elem == PE_FrameStatusBar) {
-		return;
-	}
+	~QtToolBarStyle();
 
-	QCommonStyle::drawPrimitive(elem, option, painter, widget);
-}
+	void drawControl(ControlElement element, const QStyleOption * option,
+			QPainter * painter, const QWidget * widget = 0) const;
+};
+
+#endif	//OWQTTOOLBARSTYLE_H

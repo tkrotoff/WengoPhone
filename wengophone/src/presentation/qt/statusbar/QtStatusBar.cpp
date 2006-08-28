@@ -21,8 +21,6 @@
 
 #include "ui_StatusBarWidget.h"
 
-#include "QtStatusBarStyle.h"
-
 #include <presentation/qt/QtWengoPhone.h>
 
 #include <control/CWengoPhone.h>
@@ -40,6 +38,8 @@
 #include <sound/AudioDevice.h>
 
 #include <util/Logger.h>
+
+#include <qtutil/StatusBarStyle.h>
 
 #include <QtGui/QtGui>
 
@@ -59,8 +59,8 @@ QtStatusBar::QtStatusBar(CWengoPhone & cWengoPhone, QStatusBar * statusBar)
 	_ui->setupUi(_statusBarWidget);
 
 	//QtStatusBarStyle
-	QtStatusBarStyle * qtStatusBarstyle = new QtStatusBarStyle();
-	_statusBar->setStyle(qtStatusBarstyle);
+	QtStatusBarStyle * qtStatusBarStyle = new QtStatusBarStyle();
+	_statusBar->setStyle(qtStatusBarStyle);
 
 	//_cWengoPhone.networkDiscoveryStateChangedEvent += boost::bind(&QtStatusBar::networkDiscoveryStateChangedEventHandler, this, _1, _2);
 

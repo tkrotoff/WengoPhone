@@ -21,6 +21,18 @@
    </property>
    <item row="0" column="2" >
     <widget class="QToolButton" name="soundButton" >
+     <property name="minimumSize" >
+      <size>
+       <width>22</width>
+       <height>22</height>
+      </size>
+     </property>
+     <property name="maximumSize" >
+      <size>
+       <width>22</width>
+       <height>22</height>
+      </size>
+     </property>
      <property name="toolTip" >
       <string>Audio Configuration Error</string>
      </property>
@@ -34,6 +46,12 @@
    </item>
    <item row="0" column="1" >
     <widget class="QLabel" name="sipConnectionLabel" >
+     <property name="minimumSize" >
+      <size>
+       <width>22</width>
+       <height>22</height>
+      </size>
+     </property>
      <property name="maximumSize" >
       <size>
        <width>22</width>
@@ -53,6 +71,12 @@
    </item>
    <item row="0" column="0" >
     <widget class="QLabel" name="internetConnectionLabel" >
+     <property name="minimumSize" >
+      <size>
+       <width>22</width>
+       <height>22</height>
+      </size>
+     </property>
      <property name="maximumSize" >
       <size>
        <width>22</width>
