@@ -35,8 +35,8 @@ namespace boost { class thread; }
  * Example:
  * <pre>
  * class MyThread : public Thread {
- * protected:
- *     virtual void run() {
+ * private:
+ *     void run() {
  *         std::cout << "Hello World!" << std::endl;
  *     }
  * };

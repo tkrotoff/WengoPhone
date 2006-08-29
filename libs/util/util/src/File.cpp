@@ -94,16 +94,14 @@ bool File::remove() {
 		// Removing all files in dir recursively
 		StringList dirList = getDirectoryList();
 		for (StringList::const_iterator it = dirList.begin();
-			it != dirList.end();
-			++it) {
+			it != dirList.end(); ++it) {
 			File subDir(_filename + getPathSeparator() + (*it));
 			subDir.remove();
 		}
 
 		StringList fileList = getFileList();
 		for (StringList::const_iterator it = fileList.begin();
-			it != fileList.end();
-			++it) {
+			it != fileList.end(); ++it) {
 			File subFile(_filename + getPathSeparator() + (*it));
 			subFile.remove();
 		}
@@ -117,13 +115,15 @@ bool File::remove() {
 }
 
 bool File::move(const std::string & newName, bool overwrite) {
-	if (exists(newName) && overwrite)
+	if (exists(newName) && overwrite) {
 		::remove(newName.c_str());
+	}
 
-	if (!rename(_filename.c_str(), newName.c_str()))
+	if (!rename(_filename.c_str(), newName.c_str())) {
 		return true;
-	else
+	} else {
 		return false;
+	}
 }
 
 std::string File::getPath() const {
@@ -224,6 +224,7 @@ void File::createPath(const std::string & path) {
 }
 
 File File::createTemporaryFile() {
+	//FIXME not safe, should use mkstemp() instead
 	return File(tempnam(NULL, NULL));
 }
 
