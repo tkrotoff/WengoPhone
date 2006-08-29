@@ -25,18 +25,18 @@
 class QKeyEvent;
 class QTreeWidget;
 class QTreeWidgetItem;
+
 /**
  * Qt Key filter for Contact list
  *
  * @author Mr K
- * @author mstute
+ * @author Mathieu Stute
  */
-
 class QtContactTreeKeyFilter : public QObject {
 	Q_OBJECT
 public:
 
-	QtContactTreeKeyFilter(QObject * parent = 0, QTreeWidget * target = 0);
+	QtContactTreeKeyFilter(QObject * parent, QTreeWidget * target);
 
 Q_SIGNALS:
 

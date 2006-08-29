@@ -52,7 +52,7 @@ public:
 	typedef QList <QtContactInfo> QtContactInfoList;
 
 	QtContactManager(CUserProfile & cUserProfile, CWengoPhone & cWengoPhone,
-		QtContactList & qtContactList, QObject * parent = 0, QTreeWidget * target = 0);
+		QtContactList & qtContactList, QObject * parent, QTreeWidget * target);
 
 	void removeContact(const QString & contactId);
 
@@ -61,7 +61,7 @@ public:
 
 	bool groupsAreHidden();
 
-	virtual bool event(QEvent * event);
+	bool event(QEvent * event);
 
 public Q_SLOTS:
 
@@ -133,7 +133,7 @@ private:
 
 	QMenu * createMenu();
 
-	virtual void timerEvent(QTimerEvent * event);
+	void timerEvent(QTimerEvent * event);
 
 	bool _hideUsers;
 

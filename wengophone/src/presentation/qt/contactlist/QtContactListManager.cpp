@@ -69,11 +69,13 @@ void QtContactListManager::mouseOn(const QString & contactId) {
 	QtContact * qtContact;
 	if (contains(contactId)) {
 		qtContact = _contactList[contactId];
-		if (qtContact)
+		if (qtContact) {
 			qtContact->setMouseOn(true);
+		}
 		qtContact = _contactList[_lastMouseOn];
-		if (qtContact)
+		if (qtContact) {
 			qtContact->setMouseOn(false);
+		}
 		_lastMouseOn = contactId;
 	}
 }
@@ -91,7 +93,7 @@ QString QtContactListManager::getPreferredNumber(const QString & contactId) cons
 	if (contains(contactId)) {
 		return _contactList[contactId]->getPreferredNumber();
 	}
-	return QString();
+	return QString::null;
 }
 
 QString QtContactListManager::getMobilePhone(const QString & contactId) const {
@@ -99,7 +101,7 @@ QString QtContactListManager::getMobilePhone(const QString & contactId) const {
 	if (contains(contactId)) {
 		return _contactList[contactId]->getMobilePhone();
 	}
-	return QString();
+	return QString::null;
 }
 
 QString QtContactListManager::getHomePhone(const QString & contactId) const {
@@ -107,7 +109,7 @@ QString QtContactListManager::getHomePhone(const QString & contactId) const {
 	if (contains(contactId)) {
 		return _contactList[contactId]->getHomePhone();
 	}
-	return QString();
+	return QString::null;
 }
 
 QString QtContactListManager::getWorkPhone(const QString & contactId) const {
@@ -115,7 +117,7 @@ QString QtContactListManager::getWorkPhone(const QString & contactId) const {
 	if (contains(contactId)) {
 		return _contactList[contactId]->getHomePhone();
 	}
-	return QString();
+	return QString::null;
 }
 
 bool QtContactListManager::contains(const QString & contactId) const {
@@ -135,7 +137,7 @@ QString QtContactListManager::getWengoPhoneNumber(const QString & contactId) con
 	if (contains(contactId)) {
 		return _contactList[contactId]->getWengoPhoneNumber();
 	}
-	return QString();
+	return QString::null;
 }
 
 bool QtContactListManager::hasIM(const QString & contactId) const {

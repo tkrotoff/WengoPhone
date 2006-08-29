@@ -8,8 +8,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>293</width>
-    <height>168</height>
+    <width>277</width>
+    <height>144</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -85,18 +85,12 @@
       <number>0</number>
      </property>
      <item row="0" column="1" >
-      <widget class="QLabel" name="forgotPasswordLabel" >
-       <property name="cursor" >
-        <cursor>13</cursor>
-       </property>
+      <widget class="QToolButton" name="forgotPasswordButton" >
        <property name="text" >
-        <string>&lt;span style=" text-decoration: underline; color:#0000ff;">Forgot your GoogleTalk password?&lt;/span></string>
+        <string>Forgot your GoogleTalk password?</string>
        </property>
-       <property name="textFormat" >
-        <enum>Qt::AutoText</enum>
-       </property>
-       <property name="alignment" >
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       <property name="autoRaise" >
+        <bool>true</bool>
        </property>
       </widget>
      </item>
@@ -106,20 +100,17 @@
         <string/>
        </property>
        <property name="pixmap" >
-        <pixmap resource="../wengophone.qrc" >:/pics/Help-32x32.png</pixmap>
+        <pixmap resource="../wengophone.qrc" >:/pics/help.png</pixmap>
        </property>
       </widget>
      </item>
      <item row="1" column="1" >
-      <widget class="QLabel" name="createAccountLabel" >
-       <property name="cursor" >
-        <cursor>13</cursor>
-       </property>
+      <widget class="QToolButton" name="createAccountButton" >
        <property name="text" >
-        <string>&lt;span style=" text-decoration: underline; color:#0000ff;">Get a new GoogleTalk Account&lt;/span></string>
+        <string>Get a new GoogleTalk Account</string>
        </property>
-       <property name="alignment" >
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       <property name="autoRaise" >
+        <bool>true</bool>
        </property>
       </widget>
      </item>

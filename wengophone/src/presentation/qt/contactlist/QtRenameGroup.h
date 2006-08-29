@@ -24,10 +24,7 @@
 #include <QtGui/QDialog>
 
 class QWidget;
-
-namespace Ui {
-	class RenameGroupDialog;
-}
+namespace Ui { class RenameGroupDialog; }
 
 /**
  * Dialog to rename a group.
@@ -40,7 +37,7 @@ public:
 
 	QtRenameGroup(const QString & groupName, QWidget * parent);
 
-	virtual ~QtRenameGroup();
+	~QtRenameGroup();
 
 	QString getGroupName() const;
 

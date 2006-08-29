@@ -25,8 +25,6 @@
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
 
-#include <qtutil/MouseEventFilter.h>
-
 #include <util/WebBrowser.h>
 #include <util/Logger.h>
 
@@ -50,14 +48,9 @@ void QtMSNSettings::init() {
 	_ui = new Ui::MSNSettings();
 	_ui->setupUi(_IMSettingsWidget);
 
-	MousePressEventFilter * mouseFilterForgotPassword = new MousePressEventFilter(
-		this, SLOT(forgotPasswordLabelClicked()), Qt::LeftButton);
-	_ui->forgotPasswordLabel->installEventFilter(mouseFilterForgotPassword);
+	connect(_ui->forgotPasswordButton, SIGNAL(clicked()), SLOT(forgotPasswordButtonClicked()));
 
-	MousePressEventFilter * mouseFilterCreateAccount = new MousePressEventFilter(
-		this, SLOT(createAccountLabelClicked()), Qt::LeftButton);
-	_ui->createAccountLabel->installEventFilter(mouseFilterCreateAccount);
-
+	connect(_ui->createAccountButton, SIGNAL(clicked()), SLOT(createAccountButtonClicked()));
 
 	if (!_imAccount) {
 		return;
@@ -94,7 +87,7 @@ void QtMSNSettings::save() {
 	_userProfile.getConnectHandler().connect(*_imAccount);
 }
 
-void QtMSNSettings::forgotPasswordLabelClicked() {
+void QtMSNSettings::forgotPasswordButtonClicked() {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	std::string lang = config.getLanguage();
 
@@ -105,7 +98,7 @@ void QtMSNSettings::forgotPasswordLabelClicked() {
 	}
 }
 
-void QtMSNSettings::createAccountLabelClicked() {
+void QtMSNSettings::createAccountButtonClicked() {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	std::string lang = config.getLanguage();
 

@@ -17,16 +17,22 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QTJABBERSETTINGS_H
-#define QTJABBERSETTINGS_H
+#ifndef OWQTJABBERSETTINGS_H
+#define OWQTJABBERSETTINGS_H
 
 #include "QtIMAccountPlugin.h"
 
 class IMAccount;
 class UserProfile;
+
 class QWidget;
 namespace Ui { class JabberSettings; }
 
+/**
+ * Jabber settings for the user.
+ *
+ * @author Tanguy Krotoff
+ */
 class QtJabberSettings : public QtIMAccountPlugin {
 	Q_OBJECT
 public:
@@ -50,4 +56,4 @@ private:
 	QWidget * _IMSettingsWidget;
 };
 
-#endif	//QTJABBERSETTINGS_H
+#endif	//OWQTJABBERSETTINGS_H

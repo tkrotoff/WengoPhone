@@ -19,6 +19,8 @@
 
 #include "QtContactWidget.h"
 
+#include "ui_ContactWidget.h"
+
 #include "QtContactListManager.h"
 #include "QtContact.h"
 
@@ -50,7 +52,7 @@ QtContactWidget::QtContactWidget(const std::string & contactId,
 	_ui = new Ui::ContactWidget();
 	_ui->setupUi(this);
 
-	_ui->avatarLabel->setPixmap(createAvatar());
+	_ui->avatarButton->setIcon(createAvatar());
 
 	QString str = QString::fromUtf8(_contactProfile.getHomePhone().c_str());
 	if (!str.isEmpty()) {
@@ -74,6 +76,7 @@ QtContactWidget::QtContactWidget(const std::string & contactId,
 	connect(_ui->smsButton, SIGNAL(clicked()), SLOT(smsButtonClicked()));
 	connect(_ui->landlineButton, SIGNAL(clicked()), SLOT(landlineButtonClicked()));
 	connect(_ui->mobileButton, SIGNAL(clicked()), SLOT(mobileButtonClicked()));
+	connect(_ui->avatarButton, SIGNAL(clicked()), SLOT(avatarButtonClicked()));
 }
 
 QtContactWidget::~QtContactWidget() {
@@ -107,21 +110,16 @@ void QtContactWidget::contactProfileUpdated() {
 	_contactProfile = _cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCContactList().getContactProfile(_contactId);
 }
 
-QLabel * QtContactWidget::getAvatarLabel() const {
+/*QLabel * QtContactWidget::getAvatarLabel() const {
 	return _ui->avatarLabel;
-}
+}*/
 
 void QtContactWidget::mobileButtonClicked() {
 	QtContactListManager * ul = QtContactListManager::getInstance();
 	if (!ul->getMobilePhone(QString::fromStdString(_contactId)).isEmpty()) {
 		ul->startCall(QString::fromStdString(_contactId), _ui->mobileButton->text());
 	} else {
-		ContactProfile contactProfile =
-			_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCContactList().getContactProfile(_text.toStdString());
-		QtProfileDetails qtProfileDetails(*_cWengoPhone.getCUserProfileHandler().getCUserProfile(), contactProfile, this);
-		if (qtProfileDetails.show()) {
-			_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCContactList().updateContact(contactProfile);
-		}
+		showContactProfile();
 	}
 }
 
@@ -130,12 +128,20 @@ void QtContactWidget::landlineButtonClicked() {
 	if (!ul->getHomePhone(QString::fromStdString(_contactId)).isEmpty()) {
 		ul->startCall(QString::fromStdString(_contactId), _ui->landlineButton->text());
 	} else {
-		ContactProfile contactProfile =
-			_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCContactList().getContactProfile(_text.toStdString());
-		QtProfileDetails qtProfileDetails(*_cWengoPhone.getCUserProfileHandler().getCUserProfile(), contactProfile, this);
-		if (qtProfileDetails.show()) {
-			_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCContactList().updateContact(contactProfile);
-		}
+		showContactProfile();
+	}
+}
+
+void QtContactWidget::avatarButtonClicked() {
+	showContactProfile();
+}
+
+void QtContactWidget::showContactProfile() {
+	ContactProfile contactProfile =
+		_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCContactList().getContactProfile(_text.toStdString());
+	QtProfileDetails qtProfileDetails(*_cWengoPhone.getCUserProfileHandler().getCUserProfile(), contactProfile, this);
+	if (qtProfileDetails.show()) {
+		_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCContactList().updateContact(contactProfile);
 	}
 }
 
@@ -143,7 +149,7 @@ QPixmap QtContactWidget::createAvatar() {
 	QPixmap background = QPixmap(AVATAR_BACKGROUND);
 	QPixmap avatar = getIcon();
 	if (!avatar.isNull()) {
-		QRect rect = _ui->avatarLabel->rect();
+		QRect rect = _ui->avatarButton->rect();
 		QPainter pixpainter(&background);
 		pixpainter.drawPixmap(5, 5, avatar.scaled(60, 60));
 		pixpainter.end();

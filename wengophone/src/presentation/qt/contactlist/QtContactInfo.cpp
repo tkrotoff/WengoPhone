@@ -68,7 +68,7 @@ int QtContactInfo::getIndex() const {
 	return _index;
 }
 
-bool QtContactInfo::operator < (const QtContactInfo & other) const {
+bool QtContactInfo::operator<(const QtContactInfo & other) const {
 	QtContactListManager * ul = QtContactListManager::getInstance();
 	QtContact * qtContact = ul->getContact(_contactId);
 	QtContact * otherQtContact = ul->getContact(other._contactId);

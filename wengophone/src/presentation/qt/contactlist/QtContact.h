@@ -49,7 +49,7 @@ public:
 
 	enum SizeHint { UserSize = 22 };
 
-	QtContact(const std::string & contactId, CWengoPhone & wengoPhone, QObject * parent = 0);
+	QtContact(const std::string & contactId, CWengoPhone & wengoPhone, QObject * parent);
 
 	virtual void paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index);
 

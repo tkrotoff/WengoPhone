@@ -8,186 +8,241 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>417</width>
-    <height>436</height>
+    <width>400</width>
+    <height>308</height>
    </rect>
   </property>
   <layout class="QGridLayout" >
    <property name="margin" >
-    <number>9</number>
+    <number>0</number>
    </property>
    <property name="spacing" >
-    <number>6</number>
+    <number>0</number>
    </property>
-   <item row="2" column="0" >
-    <layout class="QGridLayout" >
-     <property name="margin" >
+   <item row="0" column="0" >
+    <widget class="QTabWidget" name="tabWidget" >
+     <property name="currentIndex" >
       <number>0</number>
      </property>
-     <property name="spacing" >
-      <number>6</number>
-     </property>
-     <item row="0" column="0" >
-      <widget class="QGroupBox" name="groupBox_3" >
-       <property name="title" >
-        <string>Phone Numbers</string>
-       </property>
-       <layout class="QGridLayout" >
-        <property name="margin" >
-         <number>9</number>
-        </property>
-        <property name="spacing" >
-         <number>6</number>
-        </property>
-        <item row="0" column="0" >
-         <widget class="QLabel" name="label_15" >
-          <property name="sizePolicy" >
-           <sizepolicy>
-            <hsizetype>0</hsizetype>
-            <vsizetype>5</vsizetype>
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="toolTip" >
-           <string>Mobile phone</string>
-          </property>
-          <property name="pixmap" >
-           <pixmap resource="../wengophone.qrc" >:/pics/contact/mobile.png</pixmap>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1" >
-         <widget class="QLineEdit" name="mobilePhoneLineEdit" />
-        </item>
-        <item row="1" column="3" >
-         <widget class="QLineEdit" name="workPhoneLineEdit" />
-        </item>
-        <item row="1" column="2" >
-         <widget class="QLabel" name="label_18" >
-          <property name="toolTip" >
-           <string>Work phone</string>
-          </property>
-          <property name="pixmap" >
-           <pixmap resource="../wengophone.qrc" >:/pics/contact/work.png</pixmap>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1" >
-         <widget class="QLineEdit" name="wengoPhoneLineEdit" />
-        </item>
-        <item row="0" column="3" >
-         <widget class="QLineEdit" name="homePhoneLineEdit" />
-        </item>
-        <item row="1" column="0" >
-         <widget class="QLabel" name="label_16" >
-          <property name="toolTip" >
-           <string>Wengo phone</string>
-          </property>
-          <property name="pixmap" >
-           <pixmap resource="../wengophone.qrc" >:/pics/contact/wengo.png</pixmap>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="2" >
-         <widget class="QLabel" name="label_17" >
-          <property name="sizePolicy" >
-           <sizepolicy>
-            <hsizetype>0</hsizetype>
-            <vsizetype>5</vsizetype>
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="toolTip" >
-           <string>Home phone</string>
-          </property>
-          <property name="pixmap" >
-           <pixmap resource="../wengophone.qrc" >:/pics/contact/landline.png</pixmap>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-     </item>
-     <item rowspan="2" row="0" column="1" >
+     <widget class="QWidget" name="tabGeneral" >
+      <attribute name="title" >
+       <string>General</string>
+      </attribute>
       <layout class="QGridLayout" >
        <property name="margin" >
-        <number>0</number>
+        <number>9</number>
        </property>
        <property name="spacing" >
         <number>6</number>
        </property>
-       <item row="2" column="0" >
-        <spacer>
-         <property name="orientation" >
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" >
-          <size>
-           <width>90</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
        <item row="1" column="0" >
-        <widget class="QToolButton" name="avatarPixmapButton" >
-         <property name="minimumSize" >
-          <size>
-           <width>90</width>
-           <height>90</height>
-          </size>
+        <widget class="QGroupBox" name="groupBox_3" >
+         <property name="title" >
+          <string>Phone Numbers</string>
          </property>
-         <property name="maximumSize" >
-          <size>
-           <width>90</width>
-           <height>90</height>
-          </size>
-         </property>
-         <property name="toolTip" >
-          <string>Click to change avatar</string>
-         </property>
-         <property name="icon" >
-          <iconset/>
-         </property>
-         <property name="iconSize" >
-          <size>
-           <width>90</width>
-           <height>90</height>
-          </size>
-         </property>
-         <property name="autoRaise" >
-          <bool>true</bool>
-         </property>
+         <layout class="QGridLayout" >
+          <property name="margin" >
+           <number>9</number>
+          </property>
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <item row="0" column="2" >
+           <widget class="QLabel" name="label_17" >
+            <property name="sizePolicy" >
+             <sizepolicy>
+              <hsizetype>0</hsizetype>
+              <vsizetype>5</vsizetype>
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="toolTip" >
+             <string>Home phone</string>
+            </property>
+            <property name="pixmap" >
+             <pixmap resource="../wengophone.qrc" >:/pics/contact/landline.png</pixmap>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3" >
+           <widget class="QLineEdit" name="homePhoneLineEdit" />
+          </item>
+          <item row="0" column="1" >
+           <widget class="QLineEdit" name="mobilePhoneLineEdit" />
+          </item>
+          <item row="0" column="0" >
+           <widget class="QLabel" name="label_15" >
+            <property name="sizePolicy" >
+             <sizepolicy>
+              <hsizetype>0</hsizetype>
+              <vsizetype>5</vsizetype>
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="toolTip" >
+             <string>Mobile phone</string>
+            </property>
+            <property name="pixmap" >
+             <pixmap resource="../wengophone.qrc" >:/pics/contact/mobile.png</pixmap>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </item>
-       <item row="0" column="0" >
+       <item row="2" column="0" >
+        <widget class="QStackedWidget" name="imStackedWidget" />
+       </item>
+       <item row="3" column="0" >
         <spacer>
          <property name="orientation" >
           <enum>Qt::Vertical</enum>
          </property>
          <property name="sizeHint" >
           <size>
-           <width>90</width>
+           <width>20</width>
            <height>40</height>
           </size>
          </property>
         </spacer>
        </item>
+       <item row="0" column="0" >
+        <widget class="QGroupBox" name="groupBox" >
+         <property name="layoutDirection" >
+          <enum>Qt::LeftToRight</enum>
+         </property>
+         <property name="title" >
+          <string>Contact</string>
+         </property>
+         <layout class="QGridLayout" >
+          <property name="margin" >
+           <number>9</number>
+          </property>
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <item row="0" column="0" >
+           <layout class="QGridLayout" >
+            <property name="margin" >
+             <number>0</number>
+            </property>
+            <property name="spacing" >
+             <number>6</number>
+            </property>
+            <item row="0" column="0" >
+             <widget class="QLabel" name="groupLabel" >
+              <property name="text" >
+               <string>Group:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1" >
+             <widget class="QLineEdit" name="lastNameLineEdit" >
+              <property name="maxLength" >
+               <number>20</number>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1" >
+             <widget class="QLineEdit" name="firstNameLineEdit" >
+              <property name="maxLength" >
+               <number>20</number>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0" >
+             <widget class="QLabel" name="label_6" >
+              <property name="text" >
+               <string>Last Name:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0" >
+             <widget class="QLabel" name="label_5" >
+              <property name="text" >
+               <string>First Name:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="1" >
+             <spacer>
+              <property name="orientation" >
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" >
+               <size>
+                <width>20</width>
+                <height>21</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="0" column="1" >
+             <widget class="QComboBox" name="groupComboBox" >
+              <property name="sizePolicy" >
+               <sizepolicy>
+                <hsizetype>7</hsizetype>
+                <vsizetype>0</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="editable" >
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="0" column="1" >
+           <widget class="QToolButton" name="avatarPixmapButton" >
+            <property name="minimumSize" >
+             <size>
+              <width>90</width>
+              <height>90</height>
+             </size>
+            </property>
+            <property name="maximumSize" >
+             <size>
+              <width>90</width>
+              <height>90</height>
+             </size>
+            </property>
+            <property name="toolTip" >
+             <string>Click to change avatar</string>
+            </property>
+            <property name="icon" >
+             <iconset resource="../wengophone.qrc" >:/pics/avatar_background.png</iconset>
+            </property>
+            <property name="iconSize" >
+             <size>
+              <width>90</width>
+              <height>90</height>
+             </size>
+            </property>
+            <property name="autoRaise" >
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
       </layout>
-     </item>
-     <item row="1" column="0" >
+     </widget>
+     <widget class="QWidget" name="tabDetails" >
+      <attribute name="title" >
+       <string>Details</string>
+      </attribute>
       <layout class="QGridLayout" >
        <property name="margin" >
-        <number>0</number>
+        <number>9</number>
        </property>
        <property name="spacing" >
         <number>6</number>
        </property>
-       <item row="0" column="1" >
-        <widget class="QLineEdit" name="emailLineEdit" />
-       </item>
        <item row="0" column="0" >
         <widget class="QLabel" name="label_19" >
          <property name="text" >
@@ -195,179 +250,145 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="1" >
-        <widget class="QLineEdit" name="webLineEdit" />
-       </item>
        <item row="1" column="0" >
         <widget class="QLabel" name="label_21" >
          <property name="text" >
-          <string>Web / blog:</string>
+          <string>Web/blog:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1" >
+        <widget class="QComboBox" name="countryComboBox" />
+       </item>
+       <item row="5" column="1" >
+        <widget class="QLineEdit" name="cityLineEdit" >
+         <property name="maxLength" >
+          <number>20</number>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0" >
+        <widget class="QLabel" name="label_8" >
+         <property name="text" >
+          <string>City:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1" >
+        <widget class="QLineEdit" name="stateLineEdit" >
+         <property name="maxLength" >
+          <number>20</number>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0" >
+        <widget class="QLabel" name="label_12" >
+         <property name="text" >
+          <string>State:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0" >
+        <widget class="QLabel" name="label_11" >
+         <property name="text" >
+          <string>Country/Region:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="9" column="1" >
+        <spacer>
+         <property name="orientation" >
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" >
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="8" column="0" >
+        <widget class="QLabel" name="label_7" >
+         <property name="text" >
+          <string>Birth Date:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="1" >
+        <widget class="QDateEdit" name="birthDate" >
+         <property name="displayFormat" >
+          <string>dd MMMM yyyy</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="0" >
+        <widget class="QLabel" name="label_10" >
+         <property name="text" >
+          <string>Gender:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="1" >
+        <widget class="QComboBox" name="genderComboBox" >
+         <item>
+          <property name="text" >
+           <string>Unknown</string>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>Male</string>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>Female</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="1" column="1" >
+        <widget class="QLineEdit" name="webLineEdit" />
+       </item>
+       <item row="0" column="1" >
+        <widget class="QLineEdit" name="emailLineEdit" />
+       </item>
+       <item row="2" column="0" colspan="2" >
+        <widget class="Line" name="line" >
+         <property name="orientation" >
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="0" colspan="2" >
+        <widget class="Line" name="line_2" >
+         <property name="orientation" >
+          <enum>Qt::Horizontal</enum>
          </property>
         </widget>
        </item>
       </layout>
-     </item>
-    </layout>
-   </item>
-   <item row="0" column="0" >
-    <widget class="QGroupBox" name="groupBox" >
-     <property name="layoutDirection" >
-      <enum>Qt::LeftToRight</enum>
-     </property>
-     <property name="title" >
-      <string>General Details</string>
-     </property>
-     <layout class="QGridLayout" >
-      <property name="margin" >
-       <number>9</number>
-      </property>
-      <property name="spacing" >
-       <number>6</number>
-      </property>
-      <item row="0" column="0" >
-       <layout class="QGridLayout" >
-        <property name="margin" >
-         <number>0</number>
-        </property>
-        <property name="spacing" >
-         <number>6</number>
-        </property>
-        <item row="3" column="0" >
-         <widget class="QLabel" name="label_7" >
-          <property name="text" >
-           <string>Birth Date:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0" >
-         <widget class="QLabel" name="label_5" >
-          <property name="text" >
-           <string>First Name:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="1" >
-         <widget class="QLineEdit" name="lastNameLineEdit" >
-          <property name="maxLength" >
-           <number>20</number>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="0" >
-         <widget class="QLabel" name="groupLabel" >
-          <property name="text" >
-           <string>Group:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="1" >
-         <widget class="QDateEdit" name="birthDate" >
-          <property name="displayFormat" >
-           <string>dd MMMM yyyy</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="0" >
-         <widget class="QLabel" name="label_6" >
-          <property name="text" >
-           <string>Last Name:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1" >
-         <widget class="QLineEdit" name="firstNameLineEdit" >
-          <property name="maxLength" >
-           <number>20</number>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1" >
-         <widget class="QComboBox" name="groupComboBox" >
-          <property name="editable" >
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item row="0" column="1" >
-       <layout class="QGridLayout" >
-        <property name="margin" >
-         <number>0</number>
-        </property>
-        <property name="spacing" >
-         <number>6</number>
-        </property>
-        <item row="2" column="0" >
-         <widget class="QLabel" name="label_12" >
-          <property name="text" >
-           <string>State:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="0" >
-         <widget class="QLabel" name="label_10" >
-          <property name="text" >
-           <string>Gender:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="1" >
-         <widget class="QLineEdit" name="cityLineEdit" >
-          <property name="maxLength" >
-           <number>20</number>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="0" >
-         <widget class="QLabel" name="label_8" >
-          <property name="text" >
-           <string>City:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0" >
-         <widget class="QLabel" name="label_11" >
-          <property name="text" >
-           <string>Country / Region:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1" >
-         <widget class="QComboBox" name="countryComboBox" />
-        </item>
-        <item row="0" column="1" >
-         <widget class="QComboBox" name="genderComboBox" >
-          <item>
-           <property name="text" >
-            <string>Unknown</string>
-           </property>
-          </item>
-          <item>
-           <property name="text" >
-            <string>Male</string>
-           </property>
-          </item>
-          <item>
-           <property name="text" >
-            <string>Female</string>
-           </property>
-          </item>
-         </widget>
-        </item>
-        <item row="2" column="1" >
-         <widget class="QLineEdit" name="stateLineEdit" >
-          <property name="maxLength" >
-           <number>20</number>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-     </layout>
+     </widget>
+     <widget class="QWidget" name="tabNotes" >
+      <attribute name="title" >
+       <string>Notes</string>
+      </attribute>
+      <layout class="QGridLayout" >
+       <property name="margin" >
+        <number>9</number>
+       </property>
+       <property name="spacing" >
+        <number>6</number>
+       </property>
+       <item row="0" column="0" >
+        <widget class="QTextEdit" name="textEdit" />
+       </item>
+      </layout>
+     </widget>
     </widget>
    </item>
-   <item row="4" column="0" >
+   <item row="1" column="0" >
     <layout class="QGridLayout" >
      <property name="margin" >
       <number>0</number>
@@ -410,22 +431,6 @@
      </item>
     </layout>
    </item>
-   <item row="1" column="0" >
-    <widget class="QStackedWidget" name="imStackedWidget" />
-   </item>
-   <item row="3" column="0" >
-    <spacer>
-     <property name="orientation" >
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" >
-      <size>
-       <width>20</width>
-       <height>16</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
   </layout>
  </widget>
  <pixmapfunction></pixmapfunction>
@@ -439,11 +444,7 @@
   <tabstop>stateLineEdit</tabstop>
   <tabstop>cityLineEdit</tabstop>
   <tabstop>mobilePhoneLineEdit</tabstop>
-  <tabstop>wengoPhoneLineEdit</tabstop>
   <tabstop>homePhoneLineEdit</tabstop>
-  <tabstop>workPhoneLineEdit</tabstop>
-  <tabstop>emailLineEdit</tabstop>
-  <tabstop>webLineEdit</tabstop>
   <tabstop>avatarPixmapButton</tabstop>
   <tabstop>saveButton</tabstop>
   <tabstop>cancelButton</tabstop>

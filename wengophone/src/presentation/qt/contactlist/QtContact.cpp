@@ -135,7 +135,7 @@ void QtContact::startChat() {
 }
 
 void QtContact::startSMS() {
-	QtWengoPhone * qwengophone = dynamic_cast <QtWengoPhone *> (_cWengoPhone.getPresentation());
+	QtWengoPhone * qwengophone = (QtWengoPhone *) _cWengoPhone.getPresentation();
 	if (!qwengophone) {
 		return;
 	}

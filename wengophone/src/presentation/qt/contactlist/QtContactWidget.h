@@ -20,8 +20,6 @@
 #ifndef QTCONTACTWIDGET_H
 #define QTCONTACTWIDGET_H
 
-#include "ui_ContactWidget.h"
-
 #include <model/contactlist/ContactProfile.h>
 
 #include <QtGui/QWidget>
@@ -56,9 +54,7 @@ public:
 		return _text;
 	}
 
-	QLabel * getAvatarLabel() const;
-
-	QPixmap getIcon() const;
+	//QLabel * getAvatarLabel() const;
 
 public Q_SLOTS:
 
@@ -76,11 +72,20 @@ private Q_SLOTS:
 
 	void landlineButtonClicked();
 
+	void avatarButtonClicked();
+
 private:
+
+	/**
+	 * Code factorization.
+	 */
+	void showContactProfile();
 
 	void paintEvent(QPaintEvent *);
 
 	void paintContact(QPainter * painter, const QRect & rect);
+
+	QPixmap getIcon() const;
 
 	QPixmap createAvatar();
 

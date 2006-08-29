@@ -42,7 +42,7 @@ public :
 
 	static const QString WENGO_MIME_TYPE;
 
-	QtContactTreeMouseFilter(CContactList & cContactList, QObject * parent = 0, QTreeWidget * treeWidget = 0);
+	QtContactTreeMouseFilter(CContactList & cContactList, QObject * parent, QTreeWidget * treeWidget);
 
 Q_SIGNALS:
 
@@ -54,17 +54,17 @@ private:
 
 	bool eventFilter(QObject * obj, QEvent * event);
 
-	virtual void mousePressEvent(QMouseEvent * event);
+	void mousePressEvent(QMouseEvent * event);
 
-	virtual void mouseMoveEvent(QMouseEvent * event);
+	void mouseMoveEvent(QMouseEvent * event);
 
-	virtual void dragEnterEvent(QDragEnterEvent * event);
+	void dragEnterEvent(QDragEnterEvent * event);
 
-	virtual void dropEvent(QDropEvent * event);
+	void dropEvent(QDropEvent * event);
 
-	virtual void dragMoveEvent(QDragMoveEvent * event);
+	void dragMoveEvent(QDragMoveEvent * event);
 
-	virtual void mouseReleaseEvent(QMouseEvent * event);
+	void mouseReleaseEvent(QMouseEvent * event);
 
 	QTreeWidget * _tree;
 

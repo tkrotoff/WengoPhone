@@ -39,11 +39,11 @@ public:
 
 	static QtContactListManager * getInstance();
 
-	virtual ~QtContactListManager();
+	~QtContactListManager();
 
 	void addContact(QtContact * qtContact);
 
-	void removeContact(QtContact* qtContact);
+	void removeContact(QtContact * qtContact);
 
 	void paintContact(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & index);
 
@@ -113,7 +113,7 @@ private:
 	QtContactListManager & operator=(const QtContactListManager & other) {
 		_tree = other._tree;
 		_contactList = other._contactList;
-		return * this;
+		return *this;
 	}
 
 	QTreeWidget * _tree;

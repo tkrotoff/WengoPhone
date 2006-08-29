@@ -17,16 +17,22 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QTAIMSETTINGS_H
-#define QTAIMSETTINGS_H
+#ifndef OWQTAIMSETTINGS_H
+#define OWQTAIMSETTINGS_H
 
 #include "QtIMAccountPlugin.h"
 
 class IMAccount;
 class UserProfile;
+
 class QWidget;
 namespace Ui { class AIMSettings; }
 
+/**
+ * AIM settings for the user.
+ *
+ * @author Tanguy Krotoff
+ */
 class QtAIMSettings : public QtIMAccountPlugin {
 	Q_OBJECT
 public:
@@ -41,9 +47,9 @@ public Q_SLOTS:
 
 	void save();
 
-	void forgotPasswordLabelClicked();
+	void forgotPasswordButtonClicked();
 
-	void createAccountLabelClicked();
+	void createAccountButtonClicked();
 
 private:
 
@@ -54,4 +60,4 @@ private:
 	QWidget * _IMSettingsWidget;
 };
 
-#endif	//QTAIMSETTINGS_H
+#endif	//OWQTAIMSETTINGS_H

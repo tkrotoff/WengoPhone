@@ -34,7 +34,9 @@
 using namespace std;
 
 ContactGroupPopupMenu::ContactGroupPopupMenu(CContactList & cContactList, QWidget * parent)
-: QMenu(parent), _cContactList(cContactList) {
+	: QMenu(parent),
+	_cContactList(cContactList) {
+
 	addAction(QIcon(":/pics/contact_remove.png"), tr("Remove Contact Group"), this, SLOT(removeContactGroup()));
 	addAction(tr("Rename Contact Group"), this, SLOT(renameContactGroup()));
 	addAction(tr("Send SMS to group"), this, SLOT(sendSms()));
@@ -51,8 +53,7 @@ void ContactGroupPopupMenu::removeContactGroup() const {
 		tr("Do you really want to delete this group?"),
 		tr("&Yes"),
 		tr("&No"),
-		QString(),
-		0, 1) == 0) {
+		QString(), 0, 1) == 0) {
 			_cContactList.removeContactGroup(_groupId.toStdString());
 		}
 }

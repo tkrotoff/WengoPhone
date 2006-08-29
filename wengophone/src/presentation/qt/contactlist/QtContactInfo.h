@@ -36,11 +36,11 @@ class QtContactInfo : public QObject {
 	Q_OBJECT
 public:
 
-	QtContactInfo(QTreeWidgetItem * item, QTreeWidgetItem * parentItem, const QString & contactId, int index, QObject * parent = 0);
+	QtContactInfo(QTreeWidgetItem * item, QTreeWidgetItem * parentItem, const QString & contactId, int index, QObject * parent);
 
 	QtContactInfo(const QtContactInfo & other);
 
-	virtual ~QtContactInfo();
+	~QtContactInfo();
 
 	QTreeWidgetItem * getItem() const;
 
@@ -56,9 +56,9 @@ public:
 
 	QtContactPixmap::ContactPixmap getStatus() const;
 
-	virtual bool operator < (const QtContactInfo & other) const;
+	bool operator<(const QtContactInfo & other) const;
 
-	virtual QtContactInfo & operator = (const QtContactInfo & other);
+	QtContactInfo & operator=(const QtContactInfo & other);
 
 private:
 

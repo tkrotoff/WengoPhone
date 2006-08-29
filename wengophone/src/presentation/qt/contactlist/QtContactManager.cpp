@@ -84,7 +84,7 @@ QtContactManager::QtContactManager(CUserProfile & cUserProfile, CWengoPhone & cW
 	connect(keyFilter, SIGNAL(deleteItem(QTreeWidgetItem *)), SLOT(deleteContact()));
 	connect(keyFilter, SIGNAL(enterPressed(QTreeWidgetItem *)),SLOT(defaultAction(QTreeWidgetItem *)));
 
-	QtWengoPhone * qtWengoPhone = dynamic_cast <QtWengoPhone *> (_cWengoPhone.getPresentation());
+	QtWengoPhone * qtWengoPhone = (QtWengoPhone *) _cWengoPhone.getPresentation();
 
 	if (!connect(this, SIGNAL(inviteToConferenceClicked(QString, PhoneCall *)),
 		qtWengoPhone, SLOT(addToConference(QString, PhoneCall *)))) {
@@ -470,7 +470,7 @@ void QtContactManager::redrawContacts() {
 			newContact = new QTreeWidgetItem(group);
 			newContact->setText(0, QString::fromStdString((*it)));
 			newContact->setFlags(newContact->flags() | Qt::ItemIsEditable);
-			qtContact = new QtContact((*it),_cWengoPhone);
+			qtContact = new QtContact((*it), _cWengoPhone, _tree);
 			ul->addContact(qtContact);
 		}
 	}

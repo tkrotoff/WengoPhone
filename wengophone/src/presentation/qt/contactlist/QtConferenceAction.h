@@ -46,7 +46,7 @@ public:
 
 	PhoneCall * getPhoneCall() const;
 
-protected:
+private:
 
 	PhoneCall * _phoneCall;
 };

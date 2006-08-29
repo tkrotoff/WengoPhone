@@ -36,35 +36,34 @@ QtContactTreeMouseFilter::QtContactTreeMouseFilter(CContactList & cContactList, 
 	_cContactList(cContactList) {
 	_tree = treeWidget;
 
-	/* The event filter must be installed in the viewport of the QTreeWidget */
+	//The event filter must be installed in the viewport of the QTreeWidget
 	_tree->viewport()->installEventFilter(this);
 	_inDrag = false;
 	_selectedItem = QString::null;
-
 }
 
 bool QtContactTreeMouseFilter::eventFilter(QObject * obj, QEvent * event) {
 	switch (event->type()) {
 	case QEvent::MouseButtonPress:
-		mousePressEvent(dynamic_cast <QMouseEvent *> (event));
+		mousePressEvent((QMouseEvent *) event);
 		return false;
 	case QEvent::MouseButtonRelease:
-		mouseReleaseEvent(dynamic_cast <QMouseEvent *> (event));
+		mouseReleaseEvent((QMouseEvent *) event);
 		return false;
 	case QEvent::MouseMove:
-		mouseMoveEvent(dynamic_cast <QMouseEvent *> (event));
+		mouseMoveEvent((QMouseEvent *) event);
 		event->accept();
 		return true;
 	case QEvent::DragEnter:
-		dragEnterEvent(dynamic_cast <QDragEnterEvent *> (event));
+		dragEnterEvent((QDragEnterEvent *) event);
 		event->accept();
 		return true;
 	case QEvent::Drop:
-		dropEvent(dynamic_cast <QDropEvent *> (event));
+		dropEvent((QDropEvent *) event);
 		event->accept();
 		return true;
 	case QEvent::DragMove:
-		dragMoveEvent(dynamic_cast <QDragMoveEvent *> (event));
+		dragMoveEvent((QDragMoveEvent *) event);
 		event->accept();
 		return true;
 	default:
@@ -86,8 +85,9 @@ void QtContactTreeMouseFilter::mousePressEvent(QMouseEvent * event) {
 		QList<QTreeWidgetItem *>  list = _tree->findItems("*", Qt::MatchWildcard);
 		_groupCount = list.count();
 		ul->setButton(_selectedItem, event->button());
-		if (event->button() == Qt::LeftButton)
+		if (event->button() == Qt::LeftButton) {
 			_dstart = event->pos();
+		}
 	}
 }
 
@@ -112,7 +112,7 @@ void QtContactTreeMouseFilter::mouseMoveEvent(QMouseEvent * event) {
 		return;
 	}
 
-	// Define a new empty custom data
+	//Define a new empty custom data
 	QByteArray custom;
 	QDrag * drag = new QDrag(_tree);
 	QMimeData * mimeData = new QMimeData;
@@ -155,20 +155,20 @@ void QtContactTreeMouseFilter::dropEvent(QDropEvent * event) {
 			if ( (_cContactList.getContactProfile(_selectedItem.toStdString()).getGroupId() ==
 				_cContactList.getContactProfile(item->text(0).toStdString()).getGroupId())
 				|| (_groupCount == 1) ) {
-				// The destination and the source groups are the same
-				// This is a contact combination
+				//The destination and the source groups are the same
+				//This is a contact combination
 				mergeContacts(_selectedItem, item->text(0));
 			} else {
 				if (item->parent()) {
-					// The destination group and the source group are different
-					// This is a Contact move
+					//The destination group and the source group are different
+					//This is a Contact move
 					ContactProfile contactProfile = _cContactList.getContactProfile(_selectedItem.toStdString());
 					QString groupId = item->parent()->text(0);
 					contactProfile.setGroupId(groupId.toStdString());
 					_cContactList.updateContact(contactProfile);
 				} else {
-					// The destination is a group, not a contact, add the contact to the group
-					// This is a Contact move
+					//The destination is a group, not a contact, add the contact to the group
+					//This is a Contact move
 					ContactProfile contactProfile = _cContactList.getContactProfile(_selectedItem.toStdString());
 					QString groupId = item->text(0);
 					contactProfile.setGroupId(groupId.toStdString());

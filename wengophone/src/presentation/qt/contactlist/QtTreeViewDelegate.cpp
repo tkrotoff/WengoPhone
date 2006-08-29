@@ -46,6 +46,7 @@ void QtTreeViewDelegate::setParent(QWidget * parent) {
 
 QWidget * QtTreeViewDelegate::createEditor(QWidget * parent,
 	const QStyleOptionViewItem &, const QModelIndex & index) const {
+
 	QtContactListManager * ul = QtContactListManager::getInstance();
 	QtContact * qtContact = ul->getContact(index.data().toString());
 	QtContactWidget * widget = new QtContactWidget(qtContact->getId().toStdString(), _cWengoPhone, parent);
@@ -53,7 +54,7 @@ QWidget * QtTreeViewDelegate::createEditor(QWidget * parent,
 }
 
 void QtTreeViewDelegate::setEditorData(QWidget * editor, const QModelIndex & index) const {
-	QtContactWidget * widget = qobject_cast < QtContactWidget * > (editor);
+	QtContactWidget * widget = qobject_cast<QtContactWidget *>(editor);
 	if (!widget) {
 		return;
 	}
@@ -62,7 +63,8 @@ void QtTreeViewDelegate::setEditorData(QWidget * editor, const QModelIndex & ind
 
 void QtTreeViewDelegate::setModelData(QWidget * editor, QAbstractItemModel * model,
 	const QModelIndex & index) const {
-	QtContactWidget * widget = qobject_cast < QtContactWidget * > (editor);
+
+	QtContactWidget * widget = qobject_cast<QtContactWidget *>(editor);
 
 	if (!widget) {
 		return;

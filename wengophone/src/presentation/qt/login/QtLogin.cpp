@@ -29,7 +29,6 @@
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
 
-#include <qtutil/MouseEventFilter.h>
 #include <qtutil/WidgetBackgroundImage.h>
 
 #include <util/Logger.h>
@@ -47,24 +46,11 @@ QtLogin::QtLogin(QWidget * parent, CUserProfileHandler & cUserProfileHandler)
 
 	WidgetBackgroundImage::setBackgroundImage(_ui->loginLabel, ":pics/headers/login.png", true);
 
-	MousePressEventFilter * mouseFilterCreateWengoAccount = new MousePressEventFilter(
-		this, SLOT(createAccountLabelClicked()), Qt::LeftButton);
-	_ui->linkWengoAccountLabel->installEventFilter(mouseFilterCreateWengoAccount);
+	connect(_ui->createWengoAccountButton, SIGNAL(clicked()), SLOT(createWengoAccountButtonClicked()));
 
+	connect(_ui->helpButton, SIGNAL(clicked()), SLOT(helpButtonClicked()));
 
-	MousePressEventFilter * mouseFilterNeedHelp = new MousePressEventFilter(
-		this, SLOT(needHelpClicked()), Qt::LeftButton);
-	_ui->helpLabel->installEventFilter(mouseFilterNeedHelp);
-
-	MousePressEventFilter * mouseFilterForgotPassword = new MousePressEventFilter(
-		this, SLOT(forgotPasswordClicked()), Qt::LeftButton);
-	_ui->forgotPasswordLabel->installEventFilter(mouseFilterForgotPassword);
-
-	/*
-	MousePressEventFilter * mouseFilterUseWithoutAWengoAccount = new MousePressEventFilter(
-		this, SLOT(useWengoPhoneWithoutAWengoAccountClicked()), Qt::LeftButton);
-	_ui->linkUseWithoutAWengoAccountLabel->installEventFilter(mouseFilterUseWithoutAWengoAccount);
-	*/
+	connect(_ui->forgotPasswordButton, SIGNAL(clicked()), SLOT(forgotPasswordButtonClicked()));
 
 	connect(_ui->loginComboBox, SIGNAL(currentIndexChanged(const QString &)),
 		SLOT(currentIndexChanged(const QString &)));
@@ -130,7 +116,7 @@ int QtLogin::showWithWengoAccount(WengoAccount wengoAccount) {
 	return _loginWindow->exec();
 }
 
-void QtLogin::createAccountLabelClicked() {
+void QtLogin::createWengoAccountButtonClicked() {
 	/*if (_qtWengoPhone.getSubscribe()) {
 		_qtWengoPhone.getSubscribe()->show();
 	}*/
@@ -144,7 +130,7 @@ void QtLogin::createAccountLabelClicked() {
 	}
 }
 
-void QtLogin::needHelpClicked() {
+void QtLogin::helpButtonClicked() {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	std::string lang = config.getLanguage();
 
@@ -155,7 +141,7 @@ void QtLogin::needHelpClicked() {
 	}
 }
 
-void QtLogin::forgotPasswordClicked() {
+void QtLogin::forgotPasswordButtonClicked() {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	std::string lang = config.getLanguage();
 
@@ -164,13 +150,6 @@ void QtLogin::forgotPasswordClicked() {
 	} else {
 		WebBrowser::openUrl("https://www.wengo.com/index.php?yawl[S]=wengo.public.download&yawl[K]=wengo.public.displayLogin");
 	}
-}
-
-
-void QtLogin::useWengoPhoneWithoutAWengoAccountClicked() {
-	LOG_DEBUG("Will use WengoPhone without a Wengo account");
-	_cUserProfileHandler.createAndSetUserProfile(WengoAccount::empty);
-	_loginWindow->accept();
 }
 
 void QtLogin::setLogin(const QString & login) {

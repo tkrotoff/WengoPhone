@@ -25,8 +25,6 @@
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
 
-#include <qtutil/MouseEventFilter.h>
-
 #include <util/WebBrowser.h>
 #include <util/Logger.h>
 
@@ -49,13 +47,9 @@ void QtYahooSettings::init() {
 	_ui = new Ui::YahooSettings();
 	_ui->setupUi(_IMSettingsWidget);
 
-	MousePressEventFilter * mouseFilterForgotPassword = new MousePressEventFilter(
-		this, SLOT(forgotPasswordLabelClicked()), Qt::LeftButton);
-	_ui->forgotPasswordLabel->installEventFilter(mouseFilterForgotPassword);
+	connect(_ui->forgotPasswordButton, SIGNAL(clicked()), SLOT(forgotPasswordButtonClicked()));
 
-	MousePressEventFilter * mouseFilterCreateAccount = new MousePressEventFilter(
-		this, SLOT(createAccountLabelClicked()), Qt::LeftButton);
-	_ui->createAccountLabel->installEventFilter(mouseFilterCreateAccount);
+	connect(_ui->createAccountButton, SIGNAL(clicked()), SLOT(createAccountButtonClicked()));
 
 	if (!_imAccount) {
 		return;
@@ -96,7 +90,7 @@ void QtYahooSettings::save() {
 	_userProfile.getConnectHandler().connect(*_imAccount);
 }
 
-void QtYahooSettings::forgotPasswordLabelClicked() {
+void QtYahooSettings::forgotPasswordButtonClicked() {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	std::string lang = config.getLanguage();
 
@@ -107,7 +101,7 @@ void QtYahooSettings::forgotPasswordLabelClicked() {
 	}
 }
 
-void QtYahooSettings::createAccountLabelClicked() {
+void QtYahooSettings::createAccountButtonClicked() {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	std::string lang = config.getLanguage();
 

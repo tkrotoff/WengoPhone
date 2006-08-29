@@ -196,7 +196,7 @@ void QtContactList::contactAddedEvent(const std::string & contactId) {
 		}
 		//If the Contact has a group
 		if (!contactProfile.getGroupId().empty()) {
-			QList <QTreeWidgetItem *> list = _ui->treeWidget->findItems(groupId, Qt::MatchExactly);
+			QList<QTreeWidgetItem *> list = _ui->treeWidget->findItems(groupId, Qt::MatchExactly);
 			//No group exists. Creating the group
 			if (list.empty()) {
 				contactGroupAddedEvent(groupId.toStdString());
@@ -207,7 +207,7 @@ void QtContactList::contactAddedEvent(const std::string & contactId) {
 			newContact->setText(0, id);
 			newContact->setFlags(newContact->flags() | Qt::ItemIsEditable);
 
-			QtContact * qtContact = new QtContact(id.toStdString(), _cWengoPhone);
+			QtContact * qtContact = new QtContact(id.toStdString(), _cWengoPhone, _contactListWidget);
 			ul->addContact(qtContact);
 
 			updatePresentation();

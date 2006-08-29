@@ -30,7 +30,7 @@ bool QtContactTreeKeyFilter::eventFilter(QObject * obj, QEvent * event) {
 
 	switch (event->type()) {
 	case QEvent::KeyPress:
-		keyPress(dynamic_cast <QKeyEvent *> (event));
+		keyPress((QKeyEvent *) event);
 		return false;
 
 	default:

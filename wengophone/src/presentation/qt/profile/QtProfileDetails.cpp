@@ -127,8 +127,8 @@ void QtProfileDetails::readProfile() {
 
 	_ui->mobilePhoneLineEdit->setText(QString::fromStdString(_profile.getMobilePhone()));
 	_ui->homePhoneLineEdit->setText(QString::fromStdString(_profile.getHomePhone()));
-	_ui->wengoPhoneLineEdit->setText(QString::fromStdString(_profile.getWengoPhoneNumber()));
-	_ui->workPhoneLineEdit->setText(QString::fromStdString(_profile.getWorkPhone()));
+	//_ui->wengoPhoneLineEdit->setText(QString::fromStdString(_profile.getWengoPhoneNumber()));
+	//_ui->workPhoneLineEdit->setText(QString::fromStdString(_profile.getWorkPhone()));
 
 	_ui->emailLineEdit->setText(QString::fromStdString(_profile.getPersonalEmail()));
 	_ui->webLineEdit->setText(QString::fromStdString(_profile.getWebsite()));
@@ -166,8 +166,8 @@ void QtProfileDetails::saveProfile() {
 
 	_profile.setMobilePhone(_ui->mobilePhoneLineEdit->text().toStdString());
 	_profile.setHomePhone(_ui->homePhoneLineEdit->text().toStdString());
-	_profile.setWengoPhoneNumber(_ui->wengoPhoneLineEdit->text().toStdString());
-	_profile.setWorkPhone(_ui->workPhoneLineEdit->text().toStdString());
+	//_profile.setWengoPhoneNumber(_ui->wengoPhoneLineEdit->text().toStdString());
+	//_profile.setWorkPhone(_ui->workPhoneLineEdit->text().toStdString());
 
 	_profile.setPersonalEmail(_ui->emailLineEdit->text().toStdString());
 	_profile.setWebsite(_ui->webLineEdit->text().toStdString());

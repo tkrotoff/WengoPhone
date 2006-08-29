@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QTLOGIN_H
-#define QTLOGIN_H
+#ifndef OWQTLOGIN_H
+#define OWQTLOGIN_H
 
 #include <model/account/wengo/WengoAccount.h>
 
@@ -80,13 +80,11 @@ public Q_SLOTS:
 
 private Q_SLOTS:
 
-	void createAccountLabelClicked();
+	void createWengoAccountButtonClicked();
 
-	void needHelpClicked();
+	void helpButtonClicked();
 
-	void forgotPasswordClicked();
-
-	void useWengoPhoneWithoutAWengoAccountClicked();
+	void forgotPasswordButtonClicked();
 
 	void currentIndexChanged(const QString & profileName);
 
@@ -135,4 +133,4 @@ private:
 	CUserProfileHandler & _cUserProfileHandler;
 };
 
-#endif	//QTLOGIN_H
+#endif	//OWQTLOGIN_H

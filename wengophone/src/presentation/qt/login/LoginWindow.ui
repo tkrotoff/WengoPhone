@@ -8,8 +8,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>399</width>
-    <height>319</height>
+    <width>400</width>
+    <height>300</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -297,7 +297,7 @@
      </property>
     </widget>
    </item>
-   <item row="8" column="0" >
+   <item row="7" column="0" >
     <layout class="QGridLayout" >
      <property name="margin" >
       <number>0</number>
@@ -306,34 +306,25 @@
       <number>0</number>
      </property>
      <item row="1" column="1" >
-      <widget class="QLabel" name="forgotPasswordLabel" >
-       <property name="cursor" >
-        <cursor>13</cursor>
-       </property>
+      <widget class="QToolButton" name="forgotPasswordButton" >
        <property name="text" >
-        <string>&lt;span style=" text-decoration: underline; color:#0000ff;">Forgot your password?&lt;/span></string>
+        <string>Forgot your password?</string>
        </property>
-       <property name="alignment" >
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       <property name="autoRaise" >
+        <bool>true</bool>
        </property>
       </widget>
      </item>
      <item row="0" column="1" >
-      <widget class="QLabel" name="helpLabel" >
-       <property name="cursor" >
-        <cursor>13</cursor>
-       </property>
+      <widget class="QToolButton" name="helpButton" >
        <property name="layoutDirection" >
         <enum>Qt::LeftToRight</enum>
        </property>
        <property name="text" >
-        <string>&lt;span style=" text-decoration: underline; color:#0000ff;">Need help?&lt;/span></string>
+        <string>Need help?</string>
        </property>
-       <property name="textFormat" >
-        <enum>Qt::AutoText</enum>
-       </property>
-       <property name="alignment" >
-        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       <property name="autoRaise" >
+        <bool>true</bool>
        </property>
       </widget>
      </item>
@@ -369,7 +360,7 @@
      </property>
     </widget>
    </item>
-   <item row="4" column="0" >
+   <item row="3" column="0" >
     <layout class="QGridLayout" >
      <property name="margin" >
       <number>0</number>
@@ -457,83 +448,14 @@
      </item>
     </layout>
    </item>
-   <item row="1" column="0" >
-    <layout class="QGridLayout" >
-     <property name="margin" >
-      <number>0</number>
-     </property>
-     <property name="spacing" >
-      <number>6</number>
-     </property>
-     <item row="0" column="2" >
-      <widget class="QLabel" name="linkWengoAccountLabel" >
-       <property name="cursor" >
-        <cursor>13</cursor>
-       </property>
-       <property name="text" >
-        <string>&lt;span style=" text-decoration: underline; color:#0000ff;">Click here&lt;/span></string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1" >
-      <widget class="QLabel" name="label" >
-       <property name="text" >
-        <string>You don't have a Wengo account?</string>
-       </property>
-       <property name="textFormat" >
-        <enum>Qt::PlainText</enum>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="0" >
-      <spacer>
-       <property name="orientation" >
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" >
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item row="0" column="3" >
-      <spacer>
-       <property name="orientation" >
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" >
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-    </layout>
-   </item>
-   <item row="7" column="0" >
+   <item row="6" column="0" >
     <widget class="Line" name="line_2" >
      <property name="orientation" >
       <enum>Qt::Horizontal</enum>
      </property>
     </widget>
    </item>
-   <item row="3" column="0" >
-    <spacer>
-     <property name="orientation" >
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" >
-      <size>
-       <width>20</width>
-       <height>40</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="5" column="0" >
+   <item row="4" column="0" >
     <layout class="QHBoxLayout" >
      <property name="margin" >
       <number>0</number>
@@ -589,18 +511,64 @@
      </item>
     </layout>
    </item>
-   <item row="6" column="0" >
+   <item row="5" column="0" >
     <spacer>
      <property name="orientation" >
       <enum>Qt::Vertical</enum>
      </property>
      <property name="sizeHint" >
       <size>
-       <width>20</width>
-       <height>40</height>
+       <width>381</width>
+       <height>16</height>
       </size>
      </property>
     </spacer>
+   </item>
+   <item row="1" column="0" >
+    <layout class="QGridLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item row="0" column="0" >
+      <spacer>
+       <property name="orientation" >
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" >
+        <size>
+         <width>86</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="0" column="2" >
+      <spacer>
+       <property name="orientation" >
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" >
+        <size>
+         <width>85</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="0" column="1" >
+      <widget class="QToolButton" name="createWengoAccountButton" >
+       <property name="text" >
+        <string>You don't have a Wengo account?</string>
+       </property>
+       <property name="autoRaise" >
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>
