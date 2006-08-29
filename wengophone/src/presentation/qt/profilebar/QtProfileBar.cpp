@@ -23,6 +23,7 @@
 #include "QtEventWidget.h"
 #include "QtCreditWidget.h"
 
+#include <presentation/qt/QtUserProfilePresenceMenu.h>
 #include <presentation/qt/profile/QtUserProfile.h>
 #include <presentation/qt/profile/QtProfileDetails.h>
 
@@ -56,7 +57,6 @@ QtProfileBar::QtProfileBar(CWengoPhone & cWengoPhone, CUserProfile & cUserProfil
 	}
 	///
 
-	_statusMenu = NULL;
 	_isOpen = false;
 	_nickNameWidgetVisible = false;
 	_eventsWidgetVisible = false;
@@ -273,7 +273,7 @@ void QtProfileBar::myPresenceStatusEventSlot(QVariant status) {
 			setInvisible();
 			break;
 		case EnumPresenceState::PresenceStateDoNotDisturb:
-			setDND();
+			setDoNotDisturb();
 			break;
 		default:
 			LOG_DEBUG("Change presence state display to -- Not yet handled\n");
@@ -402,36 +402,27 @@ void QtProfileBar::removeCreditWidget() {
 }
 
 void QtProfileBar::createStatusMenu() {
-	if (_statusMenu) {
-		delete _statusMenu;
-	}
-	_statusMenu = new QMenu(this);
+	bool connected = _cUserProfile.getUserProfile().isConnected();
+	QtUserProfilePresenceMenu * menu = new QtUserProfilePresenceMenu(EnumPresenceState::PresenceStateUnknown, connected, QString::null, this);
 
-	QAction * action = _statusMenu->addAction(QIcon(":/pics/status/online.png"),tr("Online"));
-	connect(action, SIGNAL(triggered(bool)), SLOT(onlineClicked(bool)));
+	connect(menu, SIGNAL(onlineClicked()), SLOT(onlineClicked()));
 
-	action = _statusMenu->addAction(QIcon(":/pics/status/donotdisturb.png"), tr("Do Not Disturb"));
-	connect(action, SIGNAL(triggered(bool)), SLOT(dndClicked(bool)));
+	connect(menu, SIGNAL(doNotDisturbClicked()), SLOT(doNotDisturbClicked()));
 
-	action = _statusMenu->addAction(QIcon(":/pics/status/offline.png"), tr("Invisible"));
-	connect(action, SIGNAL(triggered(bool)), SLOT(invisibleClicked(bool)));
+	connect(menu, SIGNAL(invisibleClicked()), SLOT(invisibleClicked()));
 
-	action = _statusMenu->addAction(QIcon(":/pics/status/away.png"), tr("Away"));
-	connect(action, SIGNAL(triggered(bool)), SLOT(awayClicked(bool)));
-/*
-	action = _statusMenu->addAction(QIcon(":/pics/status/forward.png"), tr("Forward to cellphone"));
-	connect(action, SIGNAL(triggered(bool)), SLOT(forwardClicked(bool)));
-*/
+	connect(menu, SIGNAL(awayClicked()), SLOT(awayClicked()));
+
+	connect(menu, SIGNAL(disconnectClicked()), SLOT(disconnectClicked()));
+
+	connect(menu, SIGNAL(connectClicked()), SLOT(connectClicked()));
+
 	QPoint p = _statusLabel->pos();
-
 	p.setY(p.y() + _statusLabel->rect().bottom() - 18);
-
-	_statusMenu->setWindowOpacity(0.95);
-
-	_statusMenu->popup(mapToGlobal(p));
+	menu->popup(mapToGlobal(p));
 }
 
-void QtProfileBar::onlineClicked(bool) {
+void QtProfileBar::onlineClicked() {
 	_cUserProfile.getUserProfile().setPresenceState(EnumPresenceState::PresenceStateOnline, NULL);
 }
 
@@ -440,16 +431,16 @@ void QtProfileBar::setOnline() {
 		":/pics/profilebar/bar_on_start_status_green.png");
 }
 
-void QtProfileBar::dndClicked(bool) {
+void QtProfileBar::doNotDisturbClicked() {
 	_cUserProfile.getUserProfile().setPresenceState(EnumPresenceState::PresenceStateDoNotDisturb, NULL);
 }
 
-void QtProfileBar::setDND() {
+void QtProfileBar::setDoNotDisturb() {
 	setStatusLabel(":/pics/profilebar/bar_start_status_red.png",
 		":/pics/profilebar/bar_on_start_status_red.png");
 }
 
-void QtProfileBar::invisibleClicked(bool) {
+void QtProfileBar::invisibleClicked() {
 	_cUserProfile.getUserProfile().setPresenceState(EnumPresenceState::PresenceStateInvisible, NULL);
 }
 
@@ -458,18 +449,17 @@ void QtProfileBar::setInvisible() {
 		":/pics/profilebar/bar_on_start_status_gray.png");
 }
 
-void QtProfileBar::awayClicked(bool) {
+void QtProfileBar::awayClicked() {
 	_cUserProfile.getUserProfile().setPresenceState(EnumPresenceState::PresenceStateAway, NULL);
+}
+
+void QtProfileBar::disconnectClicked() {
+	_cUserProfile.getUserProfile().disconnect();
 }
 
 void QtProfileBar::setAway() {
 	setStatusLabel(":/pics/profilebar/bar_start_status_orange.png",
 		":/pics/profilebar/bar_on_start_status_orange.png");
-}
-
-void QtProfileBar::forwardClicked(bool) {
-	//We should switch to forward only on a Wengo account
-	//_userProfile.setPresenceState(EnumPresenceState::PresenceStateForward, NULL);
 }
 
 void QtProfileBar::wsInfoCreatedEventHandler(UserProfile & sender, WsInfo & wsInfo) {

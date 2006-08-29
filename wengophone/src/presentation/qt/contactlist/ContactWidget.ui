@@ -8,7 +8,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>257</width>
+    <width>302</width>
     <height>99</height>
    </rect>
   </property>
@@ -22,6 +22,19 @@
    <property name="spacing" >
     <number>0</number>
    </property>
+   <item rowspan="2" row="0" column="3" >
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="sizeHint" >
+      <size>
+       <width>101</width>
+       <height>81</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
    <item row="1" column="2" >
     <layout class="QGridLayout" >
      <property name="margin" >
@@ -38,33 +51,29 @@
        <property name="spacing" >
         <number>6</number>
        </property>
-       <item row="0" column="2" >
+       <item row="0" column="1" >
         <spacer>
          <property name="orientation" >
           <enum>Qt::Horizontal</enum>
          </property>
          <property name="sizeHint" >
           <size>
-           <width>325</width>
+           <width>16</width>
            <height>22</height>
           </size>
          </property>
         </spacer>
        </item>
-       <item row="0" column="1" >
-        <widget class="QLabel" name="mobileLabel" >
-         <property name="text" >
-          <string>No cell phone number set</string>
-         </property>
-         <property name="textFormat" >
-          <enum>Qt::PlainText</enum>
-         </property>
-        </widget>
-       </item>
        <item row="0" column="0" >
         <widget class="QToolButton" name="mobileButton" >
+         <property name="text" >
+          <string>No mobile phone number set</string>
+         </property>
          <property name="icon" >
           <iconset resource="../wengophone.qrc" >:/pics/contact/mobile.png</iconset>
+         </property>
+         <property name="toolButtonStyle" >
+          <enum>Qt::ToolButtonTextBesideIcon</enum>
          </property>
          <property name="autoRaise" >
           <bool>true</bool>
@@ -81,14 +90,14 @@
        <property name="spacing" >
         <number>6</number>
        </property>
-       <item row="0" column="2" >
+       <item row="0" column="1" >
         <spacer>
          <property name="orientation" >
           <enum>Qt::Horizontal</enum>
          </property>
          <property name="sizeHint" >
           <size>
-           <width>343</width>
+           <width>16</width>
            <height>22</height>
           </size>
          </property>
@@ -96,27 +105,67 @@
        </item>
        <item row="0" column="0" >
         <widget class="QToolButton" name="landlineButton" >
+         <property name="text" >
+          <string>No landline phone number set</string>
+         </property>
          <property name="icon" >
           <iconset resource="../wengophone.qrc" >:/pics/contact/landline.png</iconset>
+         </property>
+         <property name="toolButtonStyle" >
+          <enum>Qt::ToolButtonTextBesideIcon</enum>
          </property>
          <property name="autoRaise" >
           <bool>true</bool>
          </property>
         </widget>
        </item>
-       <item row="0" column="1" >
-        <widget class="QLabel" name="landlineLabel" >
-         <property name="text" >
-          <string>No phone number set</string>
-         </property>
-         <property name="textFormat" >
-          <enum>Qt::PlainText</enum>
-         </property>
-        </widget>
-       </item>
       </layout>
      </item>
      <item row="2" column="0" >
+      <spacer>
+       <property name="orientation" >
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" >
+        <size>
+         <width>158</width>
+         <height>28</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item row="1" column="1" >
+    <layout class="QVBoxLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item>
+      <widget class="QLabel" name="avatarLabel" >
+       <property name="sizePolicy" >
+        <sizepolicy>
+         <hsizetype>0</hsizetype>
+         <vsizetype>0</vsizetype>
+         <horstretch>0</horstretch>
+         <verstretch>7</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="minimumSize" >
+        <size>
+         <width>70</width>
+         <height>70</height>
+        </size>
+       </property>
+       <property name="text" >
+        <string>Avatar</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <spacer>
        <property name="orientation" >
         <enum>Qt::Vertical</enum>
@@ -130,28 +179,6 @@
       </spacer>
      </item>
     </layout>
-   </item>
-   <item row="0" column="0" colspan="3" >
-    <widget class="QFrame" name="userTitleFrame" >
-     <property name="minimumSize" >
-      <size>
-       <width>16</width>
-       <height>21</height>
-      </size>
-     </property>
-     <property name="maximumSize" >
-      <size>
-       <width>16777215</width>
-       <height>21</height>
-      </size>
-     </property>
-     <property name="frameShape" >
-      <enum>QFrame::NoFrame</enum>
-     </property>
-     <property name="frameShadow" >
-      <enum>QFrame::Plain</enum>
-     </property>
-    </widget>
    </item>
    <item row="1" column="0" >
     <layout class="QVBoxLayout" >
@@ -212,49 +239,27 @@
      </item>
     </layout>
    </item>
-   <item row="1" column="1" >
-    <layout class="QVBoxLayout" >
-     <property name="margin" >
-      <number>0</number>
+   <item row="0" column="0" colspan="3" >
+    <widget class="QFrame" name="userTitleFrame" >
+     <property name="minimumSize" >
+      <size>
+       <width>16</width>
+       <height>21</height>
+      </size>
      </property>
-     <property name="spacing" >
-      <number>6</number>
+     <property name="maximumSize" >
+      <size>
+       <width>16777215</width>
+       <height>21</height>
+      </size>
      </property>
-     <item>
-      <widget class="QLabel" name="avatarLabel" >
-       <property name="sizePolicy" >
-        <sizepolicy>
-         <hsizetype>0</hsizetype>
-         <vsizetype>0</vsizetype>
-         <horstretch>0</horstretch>
-         <verstretch>7</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="minimumSize" >
-        <size>
-         <width>70</width>
-         <height>70</height>
-        </size>
-       </property>
-       <property name="text" >
-        <string>Avatar</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <spacer>
-       <property name="orientation" >
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeHint" >
-        <size>
-         <width>20</width>
-         <height>40</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-    </layout>
+     <property name="frameShape" >
+      <enum>QFrame::NoFrame</enum>
+     </property>
+     <property name="frameShadow" >
+      <enum>QFrame::Plain</enum>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>

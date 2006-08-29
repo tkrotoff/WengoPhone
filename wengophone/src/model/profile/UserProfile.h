@@ -378,6 +378,13 @@ public:
 	}
 
 	/**
+	 * Checks if at least one IMAccount is in connected state.
+	 *
+	 * @return true if at least 1 IMAccount is connected; false otherwise
+	 */
+	bool isConnected() const;
+
+	/**
 	 * Changes the PresenceState of this user.
 	 *
 	 * @param presenceState the PresenceState to set

@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QTENUMIMPROTOCOL_H
-#define QTENUMIMPROTOCOL_H
+#ifndef OWQTENUMIMPROTOCOL_H
+#define OWQTENUMIMPROTOCOL_H
 
 #include <util/NonCopyable.h>
 
@@ -68,6 +68,8 @@ public:
 	 */
 	static IMProtocol toIMProtocol(const QString & protocol);
 
+	//static QPixmap getPixmap(IMProtocol protocol);
+
 	/**
 	 * Converts an EnumIMProtocol into a QtEnumIMProtocol.
 	 *
@@ -76,4 +78,4 @@ public:
 	static IMProtocol toIMProtocol(EnumIMProtocol::IMProtocol protocol);
 };
 
-#endif	//QTENUMIMPROTOCOL_H
+#endif	//OWQTENUMIMPROTOCOL_H

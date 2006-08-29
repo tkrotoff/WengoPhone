@@ -21,7 +21,7 @@
 
 #include "ui_IMProfileWidget.h"
 
-#include "QtIMMenu.h"
+#include "QtIMAccountPresenceMenu.h"
 
 #include <presentation/qt/profile/QtProfileDetails.h>
 #include <presentation/qt/imaccount/QtIMAccountManager.h>
@@ -69,12 +69,6 @@ QtIMProfileWidget::QtIMProfileWidget(CUserProfile & cUserProfile, CWengoPhone & 
 
 	_ui = new Ui::IMProfileWidget();
 	_ui->setupUi(_imProfileWidget);
-
-	_msnIMAccountMenu = NULL;
-	_yahooIMAccountMenu = NULL;
-	_jabberIMAccountMenu = NULL;
-	_wengoIMAccountMenu = NULL;
-	_aimIMAccountMenu = NULL;
 
 	//Widget connections
 	connect(_ui->msnButton, SIGNAL(clicked()), SLOT(msnClicked()));
@@ -239,52 +233,51 @@ void QtIMProfileWidget::connectionProgress(IMAccount * pImAccount,
 	}
 }
 
-void QtIMProfileWidget::imButtonClicked(QMenu * imMenu, EnumIMProtocol::IMProtocol imProtocol) {
+void QtIMProfileWidget::imButtonClicked(EnumIMProtocol::IMProtocol imProtocol) {
 	std::set<IMAccount *> list = _cUserProfile.getIMAccountsOfProtocol(imProtocol);
 	if (!list.empty()) {
-		showIMMenu(imMenu, imProtocol);
+		showIMMenu(imProtocol);
 	} else {
 		showImAccountManager();
 	}
 }
 
-void QtIMProfileWidget::showIMMenu(QMenu * imMenu, EnumIMProtocol::IMProtocol imProtocol) {
-	if (imMenu) {
-		delete imMenu;
-		imMenu = NULL;
-	}
-
-	imMenu = new QMenu(_imProfileWidget);
+void QtIMProfileWidget::showIMMenu(EnumIMProtocol::IMProtocol imProtocol) {
+	QMenu * imMenu = new QMenu(_imProfileWidget);
 
 	std::set<IMAccount *> list = _cUserProfile.getIMAccountsOfProtocol(imProtocol);
 
 	for (std::set<IMAccount *>::const_iterator it = list.begin();
 		it != list.end(); ++it) {
-		QtIMMenu * menu = new QtIMMenu(_cUserProfile, *(*it), imMenu);
+		QtIMAccountPresenceMenu * menu = new QtIMAccountPresenceMenu(_cUserProfile, *(*it), imMenu);
 		imMenu->addMenu(menu);
 	}
 
-	imMenu->exec();
+	/*QPoint p = _msnLabel->pos();
+	p.setY(p.y() + _msnLabel->rect().bottom());
+	_msnIMAccountMenu->popup(mapToGlobal(p));*/
+
+	imMenu->exec(QCursor::pos());
 }
 
 void QtIMProfileWidget::msnClicked() {
-	imButtonClicked(_msnIMAccountMenu, EnumIMProtocol::IMProtocolMSN);
+	imButtonClicked(EnumIMProtocol::IMProtocolMSN);
 }
 
 void QtIMProfileWidget::yahooClicked() {
-	imButtonClicked(_yahooIMAccountMenu, EnumIMProtocol::IMProtocolYahoo);
+	imButtonClicked(EnumIMProtocol::IMProtocolYahoo);
 }
 
 void QtIMProfileWidget::wengoClicked() {
-	imButtonClicked(_wengoIMAccountMenu, EnumIMProtocol::IMProtocolWengo);
+	imButtonClicked(EnumIMProtocol::IMProtocolWengo);
 }
 
 void QtIMProfileWidget::aimClicked() {
-	imButtonClicked(_aimIMAccountMenu, EnumIMProtocol::IMProtocolAIMICQ);
+	imButtonClicked(EnumIMProtocol::IMProtocolAIMICQ);
 }
 
 void QtIMProfileWidget::jabberClicked() {
-	imButtonClicked(_jabberIMAccountMenu, EnumIMProtocol::IMProtocolJabber);
+	imButtonClicked(EnumIMProtocol::IMProtocolJabber);
 }
 
 void QtIMProfileWidget::changeAvatarClicked() {

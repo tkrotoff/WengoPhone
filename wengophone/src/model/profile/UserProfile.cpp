@@ -155,8 +155,8 @@ void UserProfile::connect() {
 void UserProfile::connectIMAccounts() {
 	//Connects all IMAccounts
 	for (IMAccountHandler::const_iterator it = _imAccountHandler->begin();
-		it != _imAccountHandler->end();
-		++it) {
+		it != _imAccountHandler->end(); ++it) {
+
 		newIMAccountAddedEvent(*this, (IMAccount &)*it);
 		//FIXME: hack for phApi connection
 		if (((*it).getProtocol() != EnumIMProtocol::IMProtocolSIPSIMPLE)
@@ -191,8 +191,7 @@ void UserProfile::disconnect() {
 
 void UserProfile::disconnectIMAccounts() {
 	for (IMAccountHandler::const_iterator it = _imAccountHandler->begin();
-		it != _imAccountHandler->end();
-		++it) {
+		it != _imAccountHandler->end(); ++it) {
 		_connectHandler.disconnect((IMAccount &)*it);
 	}
 }
@@ -320,6 +319,17 @@ void UserProfile::_removeIMAccount(const IMAccount & imAccount) {
 }
 
 void UserProfile::setPresenceState(EnumPresenceState::PresenceState presenceState, IMAccount * imAccount) {
+	//When we change the presence state this means we should be connected automatically
+	if (imAccount) {
+		if (!imAccount->isConnected()) {
+			_connectHandler.connect(*imAccount);
+		}
+	} else {
+		if (!isConnected()) {
+			connect();
+		}
+	}
+
 	_presenceState = presenceState;
 	_presenceHandler.changeMyPresenceState(presenceState, String::null, imAccount);
 }
@@ -484,7 +494,6 @@ void UserProfile::wsCallForwardEventHandler(WsCallForward & sender,
 	int id, WsCallForward::WsCallForwardStatus status) {
 
 	if (status == WsCallForward::WsCallForwardStatusOk) {
-
 		_wsInfo->getWengosCount(false);
 		_wsInfo->getSmsCount(false);
 		_wsInfo->getActiveMail(false);
@@ -520,4 +529,17 @@ bool UserProfile::isWengoAccountValid() {
 	}
 
 	return result;
+}
+
+bool UserProfile::isConnected() const {
+	//Checks all IMAccounts
+	for (IMAccountHandler::const_iterator it = _imAccountHandler->begin();
+		it != _imAccountHandler->end(); ++it) {
+
+		if ((*it).isConnected()) {
+			return true;
+		}
+	}
+
+	return false;
 }

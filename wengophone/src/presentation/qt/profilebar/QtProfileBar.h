@@ -43,10 +43,12 @@ class UserProfile;
 class CHistory;
 
 /**
- * Credit widget
+ * Profile bar: shows the user profile at the top of the main window.
  *
- * @author Mr K.
+ * TODO refactor, class too big, no .ui file ect...
+ *
  * @author Mathieu Stute
+ * @author Tanguy Krotoff
  */
 class QtProfileBar : public QWidget, public Trackable {
 	Q_OBJECT
@@ -71,20 +73,20 @@ public Q_SLOTS:
 
 	void setInvisible();
 
-	void setDND();
+	void setDoNotDisturb();
 
 	void setOnline();
 
 	// Status menu actions
-	void onlineClicked(bool checked);
+	void onlineClicked();
 
-	void dndClicked(bool checked);
+	void doNotDisturbClicked();
 
-	void invisibleClicked(bool checked);
+	void invisibleClicked();
 
-	void awayClicked(bool checked);
+	void awayClicked();
 
-	void forwardClicked(bool checked);
+	void disconnectClicked();
 
 	void myPresenceStatusEventSlot(QVariant status);
 
@@ -170,7 +172,7 @@ private:
 
 	void setOpen(bool opened);
 
-	void paintEvent ( QPaintEvent * event );
+	void paintEvent(QPaintEvent * event);
 
 
 	ConnectHandler & _connectHandler;
@@ -202,8 +204,6 @@ private:
 	bool _isOpen;
 
 	QPixmap _statusPixmap;
-
-	QMenu * _statusMenu;
 
 	CUserProfile & _cUserProfile;
 

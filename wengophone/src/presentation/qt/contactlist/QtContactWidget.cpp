@@ -54,11 +54,11 @@ QtContactWidget::QtContactWidget(const std::string & contactId,
 
 	QString str = QString::fromUtf8(_contactProfile.getHomePhone().c_str());
 	if (!str.isEmpty()) {
-		_ui->landlineLabel->setText(str);
+		_ui->landlineButton->setText(str);
 	}
 	str = QString::fromUtf8(_contactProfile.getMobilePhone().c_str());
 	if (!str.isEmpty()) {
-		_ui->mobileLabel->setText(str);
+		_ui->mobileButton->setText(str);
 	}
 	else {
 		_ui->smsButton->setEnabled(false);
@@ -114,7 +114,7 @@ QLabel * QtContactWidget::getAvatarLabel() const {
 void QtContactWidget::mobileButtonClicked() {
 	QtContactListManager * ul = QtContactListManager::getInstance();
 	if (!ul->getMobilePhone(QString::fromStdString(_contactId)).isEmpty()) {
-		ul->startCall(QString::fromStdString(_contactId), _ui->mobileLabel->text());
+		ul->startCall(QString::fromStdString(_contactId), _ui->mobileButton->text());
 	} else {
 		ContactProfile contactProfile =
 			_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCContactList().getContactProfile(_text.toStdString());
@@ -128,7 +128,7 @@ void QtContactWidget::mobileButtonClicked() {
 void QtContactWidget::landlineButtonClicked() {
 	QtContactListManager * ul = QtContactListManager::getInstance();
 	if (!ul->getHomePhone(QString::fromStdString(_contactId)).isEmpty()) {
-		ul->startCall(QString::fromStdString(_contactId), _ui->landlineLabel->text());
+		ul->startCall(QString::fromStdString(_contactId), _ui->landlineButton->text());
 	} else {
 		ContactProfile contactProfile =
 			_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCContactList().getContactProfile(_text.toStdString());

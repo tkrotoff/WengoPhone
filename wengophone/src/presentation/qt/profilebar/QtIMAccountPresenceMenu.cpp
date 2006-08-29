@@ -17,7 +17,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "QtIMMenu.h"
+#include "QtIMAccountPresenceMenu.h"
 
 #include <control/profile/CUserProfile.h>
 
@@ -27,67 +27,47 @@
 
 #include <QtGui/QtGui>
 
-QtIMMenu::QtIMMenu(CUserProfile & cUserProfile, IMAccount & imAccount, QWidget * parent)
-	: QMenu(QString::fromStdString(imAccount.getLogin()), parent),
+QtIMAccountPresenceMenu::QtIMAccountPresenceMenu(CUserProfile & cUserProfile, IMAccount & imAccount, QWidget * parent)
+	: QtUserProfilePresenceMenu(imAccount.getPresenceState(), imAccount.isConnected(),
+			QString::fromStdString(imAccount.getLogin()), parent),
 	_cUserProfile(cUserProfile),
 	_imAccount(imAccount) {
 
-	QAction * action = addAction(tr("Online"));
-	if (_imAccount.getPresenceState() == EnumPresenceState::PresenceStateOnline) {
-		action->setChecked(true);
-	}
-	connect(action, SIGNAL(triggered(bool)), SLOT(onlineClicked(bool)));
+	connect(this, SIGNAL(onlineClicked()), SLOT(onlineClicked()));
 
-	action = addAction(tr("Do Not Disturb"));
-	if (_imAccount.getPresenceState() == EnumPresenceState::PresenceStateDoNotDisturb) {
-		action->setChecked(true);
-	}
-	connect(action, SIGNAL(triggered(bool)), SLOT(dndClicked(bool)));
+	connect(this, SIGNAL(doNotDisturbClicked()), SLOT(doNotDisturbClicked()));
 
-	action = addAction(tr("Invisible"));
-	if (_imAccount.getPresenceState() == EnumPresenceState::PresenceStateInvisible) {
-		action->setChecked(true);
-	}
-	connect(action, SIGNAL(triggered(bool)), SLOT(invisibleClicked(bool)));
+	connect(this, SIGNAL(invisibleClicked()), SLOT(invisibleClicked()));
 
-	action = addAction(tr("Away"));
-	if (_imAccount.getPresenceState() == EnumPresenceState::PresenceStateAway) {
-		action->setChecked(true);
-	}
-	connect(action, SIGNAL(triggered(bool)), SLOT(awayClicked(bool)));
+	connect(this, SIGNAL(awayClicked()), SLOT(awayClicked()));
 
-	addSeparator();
-
-	if (_imAccount.isConnected()) {
-		action = addAction(tr("Disconnect"));
-		connect(action, SIGNAL(triggered(bool)), SLOT(disconnectClicked(bool)));
-	} else {
-		action = addAction(tr("Connect"));
-		connect(action, SIGNAL(triggered(bool)), SLOT(connectClicked(bool)));
-	}
+	connect(this, SIGNAL(disconnectClicked()), SLOT(disconnectClicked()));
 }
 
-void QtIMMenu::onlineClicked(bool checked) {
+QtIMAccountPresenceMenu::~QtIMAccountPresenceMenu() {
+}
+
+void QtIMAccountPresenceMenu::onlineClicked() {
 	_cUserProfile.getUserProfile().setPresenceState(EnumPresenceState::PresenceStateOnline, &_imAccount);
 }
 
-void QtIMMenu::dndClicked(bool checked) {
+void QtIMAccountPresenceMenu::doNotDisturbClicked() {
 	_cUserProfile.getUserProfile().setPresenceState(EnumPresenceState::PresenceStateDoNotDisturb, &_imAccount);
 }
 
-void QtIMMenu::invisibleClicked(bool checked) {
+void QtIMAccountPresenceMenu::invisibleClicked() {
 	_cUserProfile.getUserProfile().setPresenceState(EnumPresenceState::PresenceStateInvisible, &_imAccount);
 }
 
-void QtIMMenu::awayClicked(bool checked) {
+void QtIMAccountPresenceMenu::awayClicked() {
 	_cUserProfile.getUserProfile().setPresenceState(EnumPresenceState::PresenceStateAway, &_imAccount);
 }
 
-void QtIMMenu::disconnectClicked(bool checked) {
+void QtIMAccountPresenceMenu::disconnectClicked() {
 	_cUserProfile.getUserProfile().setPresenceState(EnumPresenceState::PresenceStateOffline, &_imAccount);
 	_cUserProfile.getUserProfile().getConnectHandler().disconnect(_imAccount);
 }
 
-void QtIMMenu::connectClicked(bool checked) {
+void QtIMAccountPresenceMenu::connectClicked() {
 	_cUserProfile.getUserProfile().getConnectHandler().connect(_imAccount);
 }

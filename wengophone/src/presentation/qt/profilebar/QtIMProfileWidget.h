@@ -91,12 +91,12 @@ private:
 	/**
 	 * Internal code factorization.
 	 */
-	void showIMMenu(QMenu * imMenu, EnumIMProtocol::IMProtocol imProtocol);
+	void showIMMenu(EnumIMProtocol::IMProtocol imProtocol);
 
 	/**
 	 * Internal code factorization.
 	 */
-	void imButtonClicked(QMenu * imMenu, EnumIMProtocol::IMProtocol imProtocol);
+	void imButtonClicked(EnumIMProtocol::IMProtocol imProtocol);
 
 	void showImAccountManager();
 
@@ -105,16 +105,6 @@ private:
 	Ui::IMProfileWidget * _ui;
 
 	QWidget * _imProfileWidget;
-
-	QMenu * _msnIMAccountMenu;
-
-	QMenu * _yahooIMAccountMenu;
-
-	QMenu * _wengoIMAccountMenu;
-
-	QMenu * _aimIMAccountMenu;
-
-	QMenu * _jabberIMAccountMenu;
 
 	CUserProfile & _cUserProfile;
 

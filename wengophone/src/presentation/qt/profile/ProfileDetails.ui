@@ -103,7 +103,7 @@
            <string>Home phone</string>
           </property>
           <property name="pixmap" >
-           <pixmap/>
+           <pixmap resource="../wengophone.qrc" >:/pics/contact/landline.png</pixmap>
           </property>
          </widget>
         </item>
@@ -411,9 +411,7 @@
     </layout>
    </item>
    <item row="1" column="0" >
-    <widget class="QStackedWidget" name="imStackedWidget" >
-     <widget class="QWidget" name="page" />
-    </widget>
+    <widget class="QStackedWidget" name="imStackedWidget" />
    </item>
    <item row="3" column="0" >
     <spacer>

@@ -20,6 +20,7 @@
 #include "QtSystray.h"
 
 #include "QtWengoPhone.h"
+#include "QtUserProfilePresenceMenu.h"
 #include "profilebar/QtProfileBar.h"
 #include "contactlist/QtContactListManager.h"
 #include "webservices/sms/QtSms.h"
@@ -120,47 +121,26 @@ void QtSystray::setTrayMenu() {
 }
 
 QMenu * QtSystray::createStatusMenu() {
-	QMenu * menu = new QMenu(tr("Status"));
 	CWengoPhone & cWengoPhone = _qtWengoPhone->getCWengoPhone();
 
 	//FIXME GUI must not access model directly
-	EnumPresenceState::PresenceState presenceState = cWengoPhone.getCUserProfileHandler().getCUserProfile()->getUserProfile().getPresenceState();
-	switch (presenceState) {
-	case EnumPresenceState::PresenceStateAway:
-		menu->setIcon(QIcon(":/pics/status/away.png"));
-		break;
-	case EnumPresenceState::PresenceStateOnline:
-		menu->setIcon(QIcon(":/pics/status/online.png"));
-		break;
-	case EnumPresenceState::PresenceStateOffline:
-		menu->setIcon(QIcon(":/pics/status/offline.png"));
-		break;
-	case EnumPresenceState::PresenceStateInvisible:
-		menu->setIcon(QIcon(":/pics/status/offline.png"));
-		break;
-	case EnumPresenceState::PresenceStateDoNotDisturb:
-		menu->setIcon(QIcon(":/pics/status/donotdisturb.png"));
-		break;
-	case EnumPresenceState::PresenceStateUnknown:
-		break;
-	default:
-		LOG_FATAL("unknown presenceState=" + String::fromNumber(presenceState));
-		break;
-	}
+	UserProfile & userProfile = cWengoPhone.getCUserProfileHandler().getCUserProfile()->getUserProfile();
+	EnumPresenceState::PresenceState presenceState = userProfile.getPresenceState();
+	bool connected = userProfile.isConnected();
+
+	QtUserProfilePresenceMenu * menu = new QtUserProfilePresenceMenu(presenceState, connected, tr("Status"), NULL);
 
 	QtProfileBar * profileBar = _qtWengoPhone->getProfileBar();
 
-	QAction * action = menu->addAction(QIcon(":/pics/status/online.png"), tr("Online"));
-	connect(action, SIGNAL(triggered(bool)), profileBar, SLOT(onlineClicked(bool)));
+	connect(menu, SIGNAL(onlineClicked()), profileBar, SLOT(onlineClicked()));
 
-	action = menu->addAction(QIcon(":/pics/status/donotdisturb.png"), tr("Do Not Disturb"));
-	connect(action, SIGNAL(triggered(bool)), profileBar, SLOT(dndClicked(bool)));
+	connect(menu, SIGNAL(doNotDisturbClicked()), profileBar, SLOT(doNotDisturbClicked()));
 
-	action = menu->addAction(QIcon(":/pics/status/offline.png"), tr("Invisible"));
-	connect(action, SIGNAL(triggered(bool)), profileBar, SLOT(invisibleClicked(bool)));
+	connect(menu, SIGNAL(invisibleClicked()), profileBar, SLOT(invisibleClicked()));
 
-	action = menu->addAction(QIcon(":/pics/status/away.png"), tr("Away"));
-	connect(action, SIGNAL(triggered(bool)), profileBar, SLOT(awayClicked(bool)));
+	connect(menu, SIGNAL(awayClicked()), profileBar, SLOT(awayClicked()));
+
+	connect(menu, SIGNAL(disconnectClicked()), profileBar, SLOT(disconnectClicked()));
 
 	return menu;
 }
@@ -172,7 +152,7 @@ void QtSystray::updateCallMenu() {
 	if (!_sendSmsMenu) {
 		_sendSmsMenu = new QMenu(_qtWengoPhone->getWidget());
 		_sendSmsMenu->setIcon(QIcon(":/pics/contact/sms.png"));
-		connect(_sendSmsMenu,SIGNAL(triggered(QAction *)), SLOT(slotSystrayMenuSendSms(QAction *)));
+		connect(_sendSmsMenu, SIGNAL(triggered(QAction *)), SLOT(slotSystrayMenuSendSms(QAction *)));
 	}
 	_sendSmsMenu->clear();
 	_sendSmsMenu->setTitle(tr("Send a SMS"));

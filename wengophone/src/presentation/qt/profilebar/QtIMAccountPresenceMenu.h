@@ -17,10 +17,10 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef OWQTIMMENU_H
-#define OWQTIMMENU_H
+#ifndef OWQTIMACCOUNTPRESENCEMENU_H
+#define OWQTIMACCOUNTPRESENCEMENU_H
 
-#include <QtGui/QMenu>
+#include <presentation/qt/QtUserProfilePresenceMenu.h>
 
 class CUserProfile;
 class IMAccount;
@@ -31,8 +31,9 @@ class IMAccount;
  * This menu displays entries to set the PresenceState of an IMAccount.
  *
  * @author Philippe Bernery
+ * @author Tanguy Krotoff
  */
-class QtIMMenu : public QMenu {
+class QtIMAccountPresenceMenu : public QtUserProfilePresenceMenu {
 	Q_OBJECT
 public:
 
@@ -41,21 +42,23 @@ public:
 	 * @param imAccount the IMAccount to change the PresenceState of
 	 * @param parent the parent QWidget
 	 */
-	QtIMMenu(CUserProfile & cUserProfile, IMAccount & imAccount, QWidget * parent);
+	QtIMAccountPresenceMenu(CUserProfile & cUserProfile, IMAccount & imAccount, QWidget * parent);
+
+	~QtIMAccountPresenceMenu();
 
 private Q_SLOTS:
 
-	void onlineClicked(bool checked);
+	void onlineClicked();
 
-	void dndClicked(bool checked);
+	void doNotDisturbClicked();
 
-	void invisibleClicked(bool checked);
+	void invisibleClicked();
 
-	void awayClicked(bool checked);
+	void awayClicked();
 
-	void disconnectClicked(bool checked);
+	void disconnectClicked();
 
-	void connectClicked(bool checked);
+	void connectClicked();
 
 private:
 
@@ -64,4 +67,4 @@ private:
 	CUserProfile & _cUserProfile;
 };
 
-#endif	//OWQTIMMENU_H
+#endif	//OWQTIMACCOUNTPRESENCEMENU_H
