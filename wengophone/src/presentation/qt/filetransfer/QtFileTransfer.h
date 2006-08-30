@@ -22,6 +22,8 @@
 
 #include <QtCore/QObject>
 
+#include <util/Trackable.h>
+
 class CoIpManager;
 class FileSessionManager;
 class ReceiveFileSession;
@@ -30,8 +32,9 @@ class ReceiveFileSession;
  * Qt file transfer object.
  *
  * @author Mathieu Stute
+ * @author Philippe Bernery
  */
-class QtFileTransfer : public QObject {
+class QtFileTransfer : public QObject, public Trackable {
 	Q_OBJECT
 public:
 
@@ -42,12 +45,20 @@ public:
 
 	~QtFileTransfer();
 
+Q_SIGNALS:
+
+	void newReceiveFileSessionCreatedEventHandlerSignal(ReceiveFileSession * fileSession);
+
+private Q_SLOTS:
+
+	void newReceiveFileSessionCreatedEventHandlerSlot(ReceiveFileSession * fileSession);
+
+private:
+
 	/**
 	 * @see FileSessionManager::newReceiveFileSessionCreatedEvent
 	 */
-	void newReceiveFileSessionCreatedEventHanlder(FileSessionManager & sender, ReceiveFileSession * fileSession);
-
-private:
+	void newReceiveFileSessionCreatedEventHandler(FileSessionManager & sender, ReceiveFileSession * fileSession);
 
 	CoIpManager * _coIpManager;
 };

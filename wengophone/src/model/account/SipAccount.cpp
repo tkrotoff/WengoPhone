@@ -19,7 +19,8 @@
 
 #include "SipAccount.h"
 
-SipAccount::SipAccount() {
+SipAccount::SipAccount() 
+	: Account(EnumIMProtocol::IMProtocolSIP) {
 	_registerServerPort = 0;
 	_sipProxyServerPort = 0;
 	_httpTunnelServerPort = 0;
@@ -33,11 +34,36 @@ SipAccount::SipAccount() {
 	_lastLoginState = EnumSipLoginState::SipLoginStateUnknown;
 }
 
-SipAccount::SipAccount(const SipAccount & sipAccount) {
+SipAccount::SipAccount(const SipAccount & sipAccount)
+	: Account(sipAccount) {
 	copy(sipAccount);
 }
 
 SipAccount::~SipAccount() {
+}
+
+void SipAccount::copyTo(Account * account) const {
+	Account::copyTo(account);
+
+	SipAccount * sipAccount = dynamic_cast<SipAccount *>(account);
+	sipAccount->_registerServerHostname = _registerServerHostname;
+	sipAccount->_registerServerPort = _registerServerPort;
+	sipAccount->_sipProxyServerHostname = _sipProxyServerHostname;
+	sipAccount->_sipProxyServerPort = _sipProxyServerPort;
+	sipAccount->_httpTunnelServerHostname = _httpTunnelServerHostname;
+	sipAccount->_httpTunnelServerPort = _httpTunnelServerPort;
+	sipAccount->_needsHttpTunnel = _needsHttpTunnel;
+	sipAccount->_httpTunnelWithSSL = _httpTunnelWithSSL;
+	sipAccount->_localSIPPort = _localSIPPort;
+	sipAccount->_isConnected = _isConnected;
+	sipAccount->_autoLogin = _autoLogin;
+	sipAccount->_displayName = _displayName;
+	sipAccount->_identity = _identity;
+	sipAccount->_username = _username;
+	sipAccount->_password = _password;
+	sipAccount->_realm = _realm;
+	sipAccount->_lastNetworkDiscoveryState = _lastNetworkDiscoveryState;
+	sipAccount->_lastLoginState = _lastLoginState;
 }
 
 void SipAccount::copy(const SipAccount & sipAccount) {

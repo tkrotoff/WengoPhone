@@ -22,6 +22,8 @@
 
 #include "EnumSipLoginState.h"
 
+#include <imwrapper/Account.h>
+
 #include <util/Event.h>
 #include <util/Interface.h>
 
@@ -36,7 +38,7 @@
  * @author Tanguy Krotoff
  * @author Philippe Bernery
  */
-class SipAccount : Interface {
+class SipAccount : public Account {
 public:
 
 	/**
@@ -87,6 +89,17 @@ public:
 	 * Discover network and set configuration.
 	 */
 	virtual void init() = 0;
+
+	/**
+	 * @return the full identity
+	 * e.g: identity: toto
+	 * realm: voip.wengo.fr
+	 * full identity: sip:toto@voip.wengo.fr
+	 */
+	const std::string getFullIdentity() const {
+		return std::string("sip:") + getIdentity() 
+			+ std::string("@") + getRealm();
+	}
 
 	/**
 	 * @return the user identity
@@ -228,7 +241,25 @@ public:
 		return _lastLoginState;
 	}
 
+	/**
+	 * Gets the VLine used by this SipAccount.
+	 */
+	int getVLineID() const {
+		return _vLineId;
+	}
+
+	/**
+	 * Sets the VLine ID used by this SipAccount.
+	 */
+	void setVLineID(int vLineId) {
+		_vLineId = vLineId;
+	}
+
 protected:
+	
+	// Inherited from Account
+	virtual void copyTo(Account * account) const;
+	////
 
 	/**
 	 * Copy a SipAccount.
@@ -294,6 +325,9 @@ protected:
 
 	/** Used to remember the last LoginState. */
 	EnumSipLoginState::SipLoginState _lastLoginState;
+
+	/** VLine ID used by this SipAccount. */
+	int _vLineId;
 };
 
 #endif	//OWSIPACCOUNT_H

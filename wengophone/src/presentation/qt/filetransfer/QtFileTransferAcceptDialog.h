@@ -22,22 +22,34 @@
 
 #include <QtGui/QDialog>
 
+#include <string>
+
 namespace Ui { class AcceptDialog; }
 
 /**
  * Qt file transfer accept dialog.
  *
  * @author Mathieu Stute
+ * @author Philippe Bernery
  */
 class QtFileTransferAcceptDialog : public QDialog {
 	Q_OBJECT
 public:
 
-	/**
-	 * Default constructor.
-	 */
 	QtFileTransferAcceptDialog(QWidget * parent);
 
+	~QtFileTransferAcceptDialog();
+
+	/**
+ 	 * Sets the file name label.
+	 */
+	void setFileName(const std::string & fileName);
+
+	/**
+	 * Sets the Contact name label.
+	 */
+	void setContactName(const std::string & contactName);
+	
 private:
 
 	Ui::AcceptDialog * _ui;

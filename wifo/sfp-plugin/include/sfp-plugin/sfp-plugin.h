@@ -101,24 +101,43 @@ extern "C" {
 	* Callbacks for the plugin to notify a top level program
 	*/
 	struct sfp_callbacks{
+		/* An invitation to transfer a file has been sent to peer */
 		void (*inviteToTransfer)(int cid, char * uri, char * short_filename, char * file_type, char * file_size);
+		/* An invitation to transfer a file has been received from a peer */
 		void (*newIncomingFile)(int cid, char * username, char * short_filename, char * file_type, char * file_size);
+		/* The peer received the invitation and the user is waiting for him to accept / refuse */
 		void (*waitingForAnswer)(int cid, char * uri);
+		/* The transfer has been cancelled by the user */
 		void (*transferCancelled)(int cid, char * short_filename, char * file_type, char * file_size);
+		/* The transfer has been cancelled by peer */
 		void (*transferCancelledByPeer)(int cid, char * username, char * short_filename, char * file_type, char * file_size);
+		/* The transfer is starting */
 		void (*sendingFileBegin)(int cid, char * username, char * short_filename, char * file_type, char * file_size);
+		/* The peer closed the SIP call */
 		void (*transferClosedByPeer)(int cid, char * username, char * short_filename, char * file_type, char * file_size);
+		/* The user closed the SIP call */
 		void (*transferClosed)(int cid, char * username, char * short_filename, char * file_type, char * file_size);
+		/* Transfer complete and OK */
 		void (*transferFromPeerFinished)(int cid, char * username, char * short_filename, char * file_type, char * file_size);
+		/* Transfer complete and OK */
 		void (*transferToPeerFinished)(int cid, char * username, char * short_filename, char * file_type, char * file_size);
+		/* A SIP failure occured */
 		void (*transferFromPeerFailed)(int cid, char * username, char * short_filename, char * file_type, char * file_size);
+		/* A SIP failure occured */
 		void (*transferToPeerFailed)(int cid, char * username, char * short_filename, char * file_type, char * file_size);
+		/* The transfer has been closed before being complete (socket closed, transfer incomplete) */
 		void (*transferFromPeerStopped)(int cid, char * username, char * short_filename, char * file_type, char * file_size);
+		/* The transfer has been closed before being complete (socket closed, transfer incomplete) */
 		void (*transferToPeerStopped)(int cid, char * username, char * short_filename, char * file_type, char * file_size);
+		/* Progression of the file transfer */
 		void (*transferProgression)(int cid, int percentage);
+		/* The peer paused the transfer */
 		void (*transferPausedByPeer)(int cid, char * username, char * short_filename, char * file_type, char * file_size);
+		/* The user paused the transfer */
 		void (*transferPaused)(int cid, char * username, char * short_filename, char * file_type, char * file_size);
+		/* The peer resumed the transfer */
 		void (*transferResumedByPeer)(int cid, char * username, char * short_filename, char * file_type, char * file_size);
+		/* The user resumed the transfer */
 		void (*transferResumed)(int cid, char * username, char * short_filename, char * file_type, char * file_size);
 	};
 	typedef struct sfp_callbacks sfp_callbacks_t;
@@ -144,7 +163,7 @@ extern "C" {
 	*
 	* @param	[in]	cbks : the callbacks
 	*/
-	SFP_PLUGIN_EXPORTS void sfp_set_plugin_callbacks(sfp_callbacks_t * cbks);
+	SFP_PLUGIN_EXPORTS void sfp_set_plugin_callbacks(const sfp_callbacks_t * cbks);
 
 	/**
 	* Sends a file (send an INVITE to the transfer)
@@ -155,7 +174,7 @@ extern "C" {
 	* @param	[in]	short_filename : the "short" file name (without the path) to send
 	* @param	[in]	file_type : the file type
 	* @param	[in]	file_size : the exact file size in bytes
-	* @return	TRUE if the transfer initiation succeeded; FALSE else
+	* @return	the call id if the transfer initiation succeeded
 	*/
 	SFP_PLUGIN_EXPORTS int sfp_send_file(int vlid, void *userdata, char * uri, char * filename, char * short_filename, char * file_type, char * file_size);
 

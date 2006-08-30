@@ -162,7 +162,7 @@ SFP_PLUGIN_EXPORTS unsigned int sfp_unregister_plugin(){
 *
 * @param	[in]	cbks : the callbacks
 */
-SFP_PLUGIN_EXPORTS void sfp_set_plugin_callbacks(sfp_callbacks_t * cbks){
+SFP_PLUGIN_EXPORTS void sfp_set_plugin_callbacks(const sfp_callbacks_t * cbks){
 	sfp_cbks = cbks;
 }
 
@@ -229,7 +229,7 @@ SFP_PLUGIN_EXPORTS void sfp_set_protocol(const char * protocol, char * packet_si
 * @param	[in]	short_filename : the "short" file name (without the path) to send
 * @param	[in]	file_type : the file type
 * @param	[in]	file_size : the exact file size in bytes
-* @return	TRUE if the transfer initiation succeeded; FALSE else
+* @return	the call id if the transfer initiation succeeded
 */
 SFP_PLUGIN_EXPORTS int sfp_send_file(int vlid, void *userdata, char * uri, char * filename, char * short_filename, char * file_type, char * file_size){
 	char * body;
@@ -284,7 +284,7 @@ SFP_PLUGIN_EXPORTS int sfp_send_file(int vlid, void *userdata, char * uri, char 
 	// notify GUI
 	if(sfp_cbks != NULL && sfp_cbks->inviteToTransfer) sfp_cbks->inviteToTransfer(call_id, uri, short_filename, file_type, file_size);
 
-	return return_value;
+	return call_id;
 }
 
 /**

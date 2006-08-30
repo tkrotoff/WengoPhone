@@ -177,6 +177,24 @@ bool Contact::checkAndSetIMContact(const IMContact & imContact) {
 	return false;
 }
 
+const IMContact * Contact::getFirstValidIMContact(const IMAccount & imAccount) const {
+	const IMContact * result = NULL;
+
+	for (IMContactSet::const_iterator it = _imContactSet.begin();
+		it != _imContactSet.end();
+		++it) {
+		if ((*it).getIMAccount() 
+			&& ((*(*it).getIMAccount()) == imAccount)
+			&& (((*it).getPresenceState() != EnumPresenceState::PresenceStateUnknown)
+				|| ((*it).getPresenceState() != EnumPresenceState::PresenceStateOffline))) {
+			result = &(*it);
+			break;
+		}
+	}
+
+	return result;	
+}
+
 void Contact::imContactChangedEventHandler(IMContact & sender) {
 	updatePresenceState();
 	contactChangedEvent(*this);

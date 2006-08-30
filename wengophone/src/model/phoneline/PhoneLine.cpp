@@ -184,8 +184,11 @@ void PhoneLine::connect() {
 		_sipAccount.getSIPProxyServerHostname(),
 		_sipAccount.getRegisterServerHostname());
 
-	LOG_DEBUG("connect username=" + _sipAccount.getUsername() + " server=" + _sipAccount.getRegisterServerHostname() +
-			" lineId=" + String::fromNumber(_lineId));
+	_sipAccount.setVLineID(_lineId);
+
+	LOG_DEBUG("connect username=" + _sipAccount.getUsername() 
+		+ " server=" + _sipAccount.getRegisterServerHostname() 
+		+ " lineId=" + String::fromNumber(_lineId));
 }
 
 void PhoneLine::disconnect(bool now) {

@@ -39,7 +39,8 @@ public:
 		IMProtocolYahoo,
 		IMProtocolAIMICQ,
 		IMProtocolJabber,
-		IMProtocolSIPSIMPLE,
+		IMProtocolSIPSIMPLE, // Kept for compatibility with previous version of WengoPhone. @see ConfigImporter
+		IMProtocolSIP,
 		IMProtocolWengo
 	};
 

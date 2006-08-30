@@ -23,22 +23,33 @@
 #include <coipmanager/CoIpManager.h>
 #include <filesessionmanager/ReceiveFileSession.h>
 
+#include <util/Macro.h>
+
 #include <QtGui/QtGui>
 
 QtFileTransfer::QtFileTransfer(QObject * parent, CoIpManager * coIpManager)
 	: QObject(parent), _coIpManager(coIpManager) {
 
+
+	connect(this, SIGNAL(newReceiveFileSessionCreatedEventHandlerSignal(ReceiveFileSession *)),
+		SLOT(newReceiveFileSessionCreatedEventHandlerSlot(ReceiveFileSession *)));
 	_coIpManager->getFileSessionManager().newReceiveFileSessionCreatedEvent +=
-		boost::bind(&QtFileTransfer::newReceiveFileSessionCreatedEventHanlder, this, _1, _2);
+		boost::bind(&QtFileTransfer::newReceiveFileSessionCreatedEventHandler, this, _1, _2);
 }
 
 QtFileTransfer::~QtFileTransfer() {
 }
 
-void QtFileTransfer::newReceiveFileSessionCreatedEventHanlder(
-	FileSessionManager & sender, ReceiveFileSession * fileSession) {
+void QtFileTransfer::newReceiveFileSessionCreatedEventHandler(FileSessionManager & sender, 
+	ReceiveFileSession * fileSession) {
 
+	newReceiveFileSessionCreatedEventHandlerSignal(fileSession);
+}
+
+void QtFileTransfer::newReceiveFileSessionCreatedEventHandlerSlot(ReceiveFileSession * fileSession) {
 	QtFileTransferAcceptDialog qtFileTransferAcceptDialog(0);
+	qtFileTransferAcceptDialog.setFileName(fileSession->getFileName());
+	qtFileTransferAcceptDialog.setContactName(fileSession->getIMContact().getContactId());
 
 	if (qtFileTransferAcceptDialog.exec() == QDialog::Accepted) {
 		QString dir = QFileDialog::getExistingDirectory(
@@ -51,6 +62,9 @@ void QtFileTransfer::newReceiveFileSessionCreatedEventHanlder(
 		if (!dir.isEmpty()) {
 			fileSession->setFilePath(dir.toStdString());
 			fileSession->start();
+		} else {
+			fileSession->stop();
+			SAFE_DELETE(fileSession);
 		}
 	}
 }

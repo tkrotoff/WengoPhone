@@ -21,7 +21,21 @@
 
 #include "ui_AcceptDialog.h"
 
+#include <util/Macro.h>
+
 QtFileTransferAcceptDialog::QtFileTransferAcceptDialog(QWidget * parent) : QDialog(parent) {
 	_ui = new Ui::AcceptDialog();
 	_ui->setupUi(this);
+}
+
+QtFileTransferAcceptDialog::~QtFileTransferAcceptDialog() {
+	SAFE_DELETE(_ui);
+}
+
+void QtFileTransferAcceptDialog::setFileName(const std::string & fileName) {
+	_ui->filenameLabel->setText(QString::fromStdString(fileName));
+}
+
+void QtFileTransferAcceptDialog::setContactName(const std::string & contactName) {
+	_ui->contactLabel->setText(QString::fromStdString(contactName));
 }

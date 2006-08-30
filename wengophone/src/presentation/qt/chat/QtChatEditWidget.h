@@ -38,6 +38,10 @@ public:
 
 	QtChatEditWidget(QWidget *parent);
 
+Q_SIGNALS:
+
+	void fileDragged(const QString & filename);
+
 protected:
 
 	void dragEnterEvent(QDragEnterEvent * event);

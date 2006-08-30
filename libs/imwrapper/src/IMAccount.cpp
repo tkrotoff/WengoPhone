@@ -23,41 +23,69 @@
 
 using namespace std;
 
-IMAccount::IMAccount() {
+IMAccount::IMAccount() 
+	: Account(EnumIMProtocol::IMProtocolUnknown) {
 	_connected = false;
 	_presenceState = EnumPresenceState::PresenceStateOnline;
-	_protocol = EnumIMProtocol::IMProtocolUnknown;
 	_imAccountParameters.valueChangedEvent +=
 		boost::bind(&IMAccount::valueChangedEventHandler, this, _1, _2);
 }
 
-IMAccount::IMAccount(const std::string & login, const std::string & password, EnumIMProtocol::IMProtocol protocol) {
+IMAccount::IMAccount(const std::string & login, const std::string & password, EnumIMProtocol::IMProtocol protocol) 
+	: Account(protocol) {
 	_connected = false;
 	_presenceState = EnumPresenceState::PresenceStateOnline;
 	_login = correctedLogin(login, protocol);
 	_password = password;
-	_protocol = protocol;
 	_imAccountParameters.valueChangedEvent +=
 		boost::bind(&IMAccount::valueChangedEventHandler, this, _1, _2);
 }
 
-IMAccount::IMAccount(const IMAccount & imAccount) {
+IMAccount::IMAccount(const IMAccount & imAccount) 
+	: Account(imAccount) {
+	copy(imAccount);
+}
+
+IMAccount & IMAccount::operator = (const IMAccount & imAccount) {
+	Account::copy((const Account &) imAccount);
+	copy(imAccount);
+	return *this;
+}
+
+Account * IMAccount::createCopy() const {
+	Account * result = new IMAccount();
+
+	copyTo(result);
+
+	return result;
+}
+
+void IMAccount::copyTo(Account * account) const {
+	Account::copyTo(account);
+	IMAccount * imAccount = dynamic_cast<IMAccount *>(account);
+	imAccount->_connected = _connected;
+	imAccount->_presenceState = _presenceState;
+	imAccount->_login = _login;
+	imAccount->_password = _password;
+	imAccount->_imAccountParameters = _imAccountParameters;
+}
+
+void IMAccount::copy(const IMAccount & imAccount) {
 	_connected = imAccount._connected;
 	_presenceState = imAccount._presenceState;
 	_login = imAccount._login;
 	_password = imAccount._password;
-	_protocol = imAccount._protocol;
 	_imAccountParameters = imAccount._imAccountParameters;
 	//FIXME: we should copy the events
 	_imAccountParameters.valueChangedEvent +=
 		boost::bind(&IMAccount::valueChangedEventHandler, this, _1, _2);
 }
-
+	
 IMAccount::~IMAccount() {
 	imAccountWillDieEvent(*this);
 	imAccountDeadEvent(*this);
 }
-
+	
 bool IMAccount::operator == (const IMAccount & imAccount) const {
 	return ((_login == imAccount._login)
 			&& (_protocol == imAccount._protocol));
@@ -66,6 +94,12 @@ bool IMAccount::operator == (const IMAccount & imAccount) const {
 bool IMAccount::operator < (const IMAccount & imAccount) const {
 	return ((_login < imAccount._login)
 			|| ((_login == imAccount._login) && (_protocol < imAccount._protocol)));
+}
+
+bool IMAccount::empty() const {
+	return _login.empty() 
+		&& _password.empty() 
+		&& (_protocol == EnumIMProtocol::IMProtocolUnknown);
 }
 
 void IMAccount::setLogin(const std::string & login) {

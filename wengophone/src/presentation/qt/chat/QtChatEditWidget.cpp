@@ -56,7 +56,7 @@ void QtChatEditWidget::dropEvent(QDropEvent *event) {
 			QFile fileToSend((*i).toLocalFile());
 			QFileInfo fileInfo(fileToSend);
 			if(fileInfo.exists() && fileInfo.isReadable()) {
-				fileName = fileInfo.fileName();
+				fileName = fileInfo.absoluteFilePath();
 				fileSize = fileInfo.size();
 				fileType = fileInfo.completeSuffix();
 				LOG_DEBUG(
@@ -66,6 +66,7 @@ void QtChatEditWidget::dropEvent(QDropEvent *event) {
 				);
 				// TODO add the contact name (wengo_id)
 				// TODO make a call to send it all to a file transfer plugin (via a controller)
+				fileDragged(fileName);
 			}
 		}
 	}

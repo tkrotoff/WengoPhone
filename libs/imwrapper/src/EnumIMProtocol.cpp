@@ -34,6 +34,7 @@ static void init() {
 	_protocolMap[EnumIMProtocol::IMProtocolAIMICQ] = "AIM/ICQ";
 	_protocolMap[EnumIMProtocol::IMProtocolJabber] = "Jabber";
 	_protocolMap[EnumIMProtocol::IMProtocolSIPSIMPLE] = "SIP/SIMPLE";
+	_protocolMap[EnumIMProtocol::IMProtocolSIP] = "SIP";
 	_protocolMap[EnumIMProtocol::IMProtocolWengo] = "Wengo";
 }
 

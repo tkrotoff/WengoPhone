@@ -24,13 +24,23 @@ libs = [
 	'owsound',
 	'netlib',
 	'qt4',
+	'multiimwrapper',
 ]
+
 if WengoCCMSVC():
 	libs.append('owmemorydump')
 
 lib_path = []
-include_path = ['.']
+
+include_path = [
+	'.',
+	'model/coipmanager/include',
+	'model/coipmanager/chatsessionmanager/include',
+	'model/coipmanager/filesessionmanager/include',
+]
+
 defines = {}
+
 headers = []
 
 envBuildId = WengoGetEnvironment()
@@ -147,6 +157,29 @@ sources = [
 	'model/classic/ClassicExterminator.cpp',
 	'model/commandserver/CommandServer.cpp',
 
+	# FIXME: This part will be removed when coipmanager wille be moved to libs
+	'model/coipmanager/src/CoIpManager.cpp',
+	'model/coipmanager/src/Session.cpp',
+
+	'model/coipmanager/filesessionmanager/src/FileSessionManager.cpp',
+	'model/coipmanager/filesessionmanager/src/IFileSession.cpp',
+	'model/coipmanager/filesessionmanager/src/IFileSessionManager.cpp',
+	'model/coipmanager/filesessionmanager/src/IReceiveFileSession.cpp',
+	'model/coipmanager/filesessionmanager/src/ISendFileSession.cpp',
+	'model/coipmanager/filesessionmanager/src/ReceiveFileSession.cpp',
+	'model/coipmanager/filesessionmanager/src/SendFileSession.cpp',
+	'model/coipmanager/filesessionmanager/implementation/test/src/TestSendFileSession.cpp',
+	'model/coipmanager/filesessionmanager/implementation/test/src/TestFileSessionManager.cpp',
+	'model/coipmanager/filesessionmanager/implementation/phapi/src/PhApiSendFileSession.cpp',
+	'model/coipmanager/filesessionmanager/implementation/phapi/src/PhApiReceiveFileSession.cpp',
+	'model/coipmanager/filesessionmanager/implementation/phapi/src/PhApiFileSessionManager.cpp',
+
+	'model/coipmanager/chatsessionmanager/src/ChatSession.cpp',
+	'model/coipmanager/chatsessionmanager/src/ChatSessionManager.cpp',
+	'model/coipmanager/chatsessionmanager/src/IChatSession.cpp',
+	'model/coipmanager/chatsessionmanager/src/IChatSessionManager.cpp',
+	##
+
 	'control/wenbox/CWenboxPlugin.cpp',
 	'control/CWengoPhone.cpp',
 	'control/chat/CChatHandler.cpp',
@@ -174,3 +207,5 @@ env.WengoAddIncludePath(include_path)
 env.WengoAddDefines(defines)
 env.WengoUseLibraries(libs)
 env.WengoStaticLibrary('wengophone', sources)
+
+env.SConscript('model/coipmanager/tests/SConscript')

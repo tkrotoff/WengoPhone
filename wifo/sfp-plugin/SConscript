@@ -26,4 +26,7 @@ env.WengoAddLibPath(lib_path)
 env.WengoUseLibraries(libs)
 env.WengoAddIncludePath(include_path)
 
-env.WengoSharedLibrary('sfp-plugin', sources)
+if WengoOSMacOSX():
+	env.WengoStaticLibrary('sfp-plugin', sources)
+else:
+	env.WengoSharedLibrary('sfp-plugin', sources)

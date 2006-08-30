@@ -57,6 +57,7 @@ class QtToaster;
 class QtWsDirectory;
 class QtSystray;
 class UserProfile;
+class QtFileTransfer;
 
 class QLayout;
 class QWidget;
@@ -313,6 +314,8 @@ private:
 	QWidget * _chatWindow;
 
 	QWidget * _activeTabBeforeCall;
+
+    QtFileTransfer * _qtFileTransfer;
 
 	static const std::string ANCHOR_CONTACTLIST;
 

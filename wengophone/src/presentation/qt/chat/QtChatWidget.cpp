@@ -30,8 +30,13 @@
 #include "contactlist/QtChatContactList.h"
 #include "emoticons/QtEmoticonsWidget.h"
 
+#include <coipmanager/CoIpManager.h>
+#include <filesessionmanager/SendFileSession.h>
+
+#include <model/WengoPhone.h>
 #include <model/profile/UserProfile.h>
 
+#include <control/CWengoPhone.h>
 #include <control/contactlist/CContactList.h>
 #include <control/profile/CUserProfile.h>
 
@@ -39,12 +44,13 @@
 #include <presentation/qt/contactlist/QtContactList.h>
 #include <presentation/qt/contactlist/QtContactListManager.h>
 
-#include <imwrapper/IMContactSet.h>
+#include <imwrapper/Account.h>
 #include <imwrapper/EnumIMProtocol.h>
+#include <imwrapper/IMContactSet.h>
 
+#include <util/File.h>
 #include <util/Logger.h>
 #include <cutil/global.h>
-#include <qtutil/WengoStyleLabel.h>
 
 #include <QtGui/QtGui>
 
@@ -114,6 +120,7 @@ QtChatWidget::QtChatWidget(CChatHandler & cChatHandler,
 	connect(_emoticonsWidget, SIGNAL(emoticonClicked(QtEmoticon)), SLOT(emoticonSelected(QtEmoticon)));
 	connect(_emoticonsWidget, SIGNAL(closed()), _chatEdit, SLOT(setFocus()));
 	connect(_chatEdit, SIGNAL(textChanged()), SLOT(chatEditTextChanged()));
+	connect(_chatEdit, SIGNAL(fileDragged(const QString &)), SLOT(fileDraggedSlot(const QString &)));
 	connect (this, SIGNAL(contactAddedEventSignal()), SLOT(contactAddedEventSlot()));
 	connect (this, SIGNAL(contactRemovedEventSignal()), SLOT(contactRemovedEventSlot()));
 	connect(_ui.historyFoldButton, SIGNAL(clicked()), SLOT(historyFoldButtonClicked()));
@@ -157,7 +164,7 @@ void QtChatWidget::setVisible(bool visible) {
 
 void QtChatWidget::showInviteDialog() {
 	if (canDoMultiChat()) {
-		QtChatRoomInviteDlg dlg(*_imChatSession,
+		QtChatRoomInviteDlg dlg(*_imChatSession, 
 			_cChatHandler.getCUserProfile().getCContactList(),this);
 		dlg.exec();
 	}
@@ -286,7 +293,7 @@ void QtChatWidget::addToHistory(const QString & senderName, const QString & str)
 
 	// insert message html code
 	QString table = QString("<table border=\"0\" width=\"98%\" cellspacing=\"0\" cellpadding=\"5\">") +
-		QString("<tr><td>") +
+		QString("<tr><td>") + 
 		QtChatUtils::decodeMessage(_imChatSession->getIMChat().getIMAccount().getProtocol(), str) +
 		QString("</td></tr></table>");
 	_chatHistory->insertHtml(table);
@@ -423,5 +430,22 @@ void QtChatWidget::deletePressed() {
 ////
 
 void QtChatWidget::updateChatContactList() {
+	
+}
 
+void QtChatWidget::fileDraggedSlot(const QString & filename) {
+	QtContactList * qtContactList = _qtWengoPhone->getContactList();
+	CContactList & cContactList = qtContactList->getCContactList();
+	SendFileSession * fileSession =
+		_cChatHandler.getCWengoPhone().getWengoPhone().getCoIpManager()->getFileSessionManager().createSendFileSession();
+	IMContactSet imContactSet = _imChatSession->getIMContactSet();
+	for (IMContactSet::const_iterator it = imContactSet.begin();
+		it != imContactSet.end();
+		++it) {
+		std::string contactId = cContactList.findContactThatOwns(*it);
+		fileSession->addContact(contactId);
+	}
+
+	fileSession->addFile(File(filename.toStdString()));
+	fileSession->start();
 }

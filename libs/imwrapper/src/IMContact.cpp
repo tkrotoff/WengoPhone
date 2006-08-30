@@ -45,8 +45,18 @@ IMContact::IMContact(EnumIMProtocol::IMProtocol protocol, const std::string & co
 	_protocol = protocol;
 }
 
-IMContact::IMContact(const IMContact & imContact)
-	: _imAccount(imContact._imAccount) {
+IMContact::IMContact(const IMContact & imContact) {
+	copy(imContact);
+}
+
+IMContact & IMContact::operator = (const IMContact & imContact) {
+	copy(imContact);
+
+	return *this;
+}
+
+void IMContact::copy(const IMContact & imContact) {
+	_imAccount = imContact._imAccount;
 	_contactId = imContact._contactId;
 	_presenceState = imContact._presenceState;
 	_protocol = imContact._protocol;

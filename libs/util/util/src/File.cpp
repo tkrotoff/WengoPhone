@@ -57,8 +57,13 @@ File::File(const File & file)
 	: _filename(file._filename) {
 }
 
+File & File::operator = (const File & file) {
+	_filename = file._filename;
+	return *this;
+}
+	
 std::string File::getExtension() const {
-	int posLastElm = _filename.find_last_of(getPathSeparator());
+	/*int posLastElm = _filename.find_last_of(getPathSeparator());
 
 	if ((posLastElm == -1) || (posLastElm == _filename.length())) {
 		return String::null;
@@ -71,6 +76,16 @@ std::string File::getExtension() const {
 		return String::null;
 	} else {
 		return last.substr(++posExt, last.length() - posExt);
+	}*/
+	String path = _filename;
+
+	string::size_type pos = path.rfind('.');
+
+	if (pos == string::npos) {
+		return String::null;
+	} else {
+		path = path.substr(pos+1);
+		return path;
 	}
 }
 
@@ -144,6 +159,20 @@ std::string File::getFullPath() const {
 	return _filename;
 }
 
+std::string File::getFileName() const {
+	String path = _filename;
+	path = convertPathSeparators(path);
+
+	string::size_type pos = path.rfind(getPathSeparator());
+
+	if (pos == string::npos) {
+		return path;
+	} else {
+		path = path.substr(pos+1);
+		return path;
+	}
+}
+
 StringList File::getDirectoryList() const {
 	//Same code as File::getFileList()
 
@@ -192,6 +221,16 @@ StringList File::getFileList() const {
 	closedir(dp);
 
 	return fileList;
+}
+
+unsigned File::getSize() const {
+	struct stat sb;
+
+	if (stat(_filename.c_str(), &sb) == 0) {
+		return sb.st_size;
+	} else {
+		return 0;
+	}
 }
 
 std::string File::convertPathSeparators(const std::string & path) {

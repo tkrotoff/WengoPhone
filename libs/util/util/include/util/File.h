@@ -47,6 +47,8 @@ public:
 	virtual ~File() {
 	}
 
+	File & operator = (const File & file);
+
 	/**
 	 * Gets the file extension.
 	 *
@@ -88,6 +90,13 @@ public:
 	std::string getFullPath() const;
 
 	/**
+	* Gets the name of the file without its path.
+	*
+	* @return the name of the file without its path
+	*/
+	std::string getFileName() const;
+
+	/**
 	 * Gets directory list.
 	 *
 	 * @return a list of directories contained in 'this' directory
@@ -102,6 +111,13 @@ public:
 	 * @return a list of files contained in 'this' directory
 	 */
 	StringList getFileList() const;
+
+	/**
+	 * Gets the file size.
+	 *
+	 * @return the file size in bytes.
+	 */
+	unsigned getSize() const;
 
 	/**
 	 * Gets pathName with the '/' separators converted to separators that are appropriate for the underlying operating system.

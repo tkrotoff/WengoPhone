@@ -29,7 +29,9 @@
 
 #include <string>
 
+class CoIpManager;
 class ConfigImporter;
+class UserProfile;
 class UserProfileHandler;
 class WsSubscribe;
 
@@ -88,13 +90,20 @@ public:
 
 	WengoPhone();
 
-	~WengoPhone();
+	virtual ~WengoPhone();
 
 	/**
 	 * Gets the UserProfileHandler.
 	 */
 	UserProfileHandler & getUserProfileHandler() {
 		return *_userProfileHandler;
+	}
+
+	/**
+	 * Gets the CoIpManager.
+	 */
+	CoIpManager * getCoIpManager() {
+		return _coIpManager;
 	}
 
 	/**
@@ -108,9 +117,20 @@ public:
 	/**
 	 * Starts the thread of the model component.
 	 */
-	void run();
+	virtual void run();
 
 private:
+
+	/**
+	 * @see UserProfileHandler::currentUserProfileWillDieEvent
+	 */
+	void currentUserProfileWillDieEventHandler(UserProfileHandler & sender);
+
+	/**
+	 * @see UserProfileHandler::userProfileInitializedEvent
+	 */
+	void userProfileInitializedEventHandler(UserProfileHandler & sender,
+		UserProfile & userProfile);
 
 	/**
 	 * Entry point of the application, equivalent to main().
@@ -137,6 +157,8 @@ private:
 	void exitAfterTimeout();
 
 	UserProfileHandler * _userProfileHandler;
+
+	CoIpManager * _coIpManager;
 
 	StartupSettingListener * _startupSettingListener;
 };

@@ -107,6 +107,15 @@ public:
 	bool checkAndSetIMContact(const IMContact & imContact);
 
 	/**
+	 * Gets the first valid IMContact given an IMAccount.
+	 *
+	 * A valid IMContact is a connected IMContact linked to the given IMAcccount.
+	 *
+	 * @return the found IMContact or NULL if not found.
+	 */
+	const IMContact * getFirstValidIMContact(const IMAccount & imAccount) const;
+
+	/**
 	 * Avoid this contact to see my presence.
 	 */
 	void block();

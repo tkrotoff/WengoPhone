@@ -51,9 +51,13 @@ public:
 
 	WengoAccount(const std::string & login, const std::string & password, bool autoLogin);
 
-	~WengoAccount();
+	virtual ~WengoAccount();
 
 	WengoAccount(const WengoAccount & wengoAccount);
+
+	// Inherited from Account
+	virtual Account * createCopy() const;
+	////
 
 	WengoAccount & operator = (const WengoAccount & wengoAccount);
 
@@ -73,6 +77,10 @@ public:
 	}
 
 private:
+
+	// Inherited from Account
+	virtual void copyTo(Account * account) const;
+	////
 
 	void copy(const WengoAccount & wengoAccount);
 

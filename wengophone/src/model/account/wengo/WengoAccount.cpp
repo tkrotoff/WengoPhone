@@ -44,6 +44,7 @@ WengoAccount::WengoAccount()
 	: SipAccount(),
 	WengoWebService(this) {
 
+	_protocol = EnumIMProtocol::IMProtocolWengo;
 	_ssoRequestOk = false;
 	_wengoLoginOk = false;
 	_ssoWithSSL = false;
@@ -63,6 +64,7 @@ WengoAccount::WengoAccount(const std::string & login, const std::string & passwo
 	: SipAccount(),
 	WengoWebService(this) {
 
+	_protocol = EnumIMProtocol::IMProtocolWengo;
 	_wengoLogin = login;
 	_wengoPassword = password;
 	_autoLogin = autoLogin;
@@ -84,10 +86,32 @@ WengoAccount::WengoAccount(const WengoAccount & wengoAccount) : WengoWebService(
 	copy(wengoAccount);
 }
 
-WengoAccount & WengoAccount::operator=(const WengoAccount & wengoAccount) {
+WengoAccount & WengoAccount::operator = (const WengoAccount & wengoAccount) {
 	copy(wengoAccount);
 
 	return *this;
+}
+
+Account * WengoAccount::createCopy() const {
+	Account * result = new WengoAccount();
+
+	copyTo(result);
+
+	return result;
+}
+
+void WengoAccount::copyTo(Account * account) const {
+	SipAccount::copyTo(account);
+
+	WengoAccount * wengoAccount = dynamic_cast<WengoAccount *>(account);
+	wengoAccount->_wengoLogin = _wengoLogin;
+	wengoAccount->_wengoPassword = _wengoPassword;
+	wengoAccount->_autoLogin = _autoLogin;
+	wengoAccount->_ssoRequestOk = _ssoRequestOk;
+	wengoAccount->_wengoLoginOk = _wengoLoginOk;
+	wengoAccount->_ssoWithSSL = _ssoWithSSL;
+	wengoAccount->_stunServer = _stunServer;
+	wengoAccount->_lastNetworkDiscoveryState = _lastNetworkDiscoveryState;
 }
 
 void WengoAccount::copy(const WengoAccount & wengoAccount) {

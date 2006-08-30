@@ -20,6 +20,7 @@
 #ifndef OWIMACCOUNT_H
 #define OWIMACCOUNT_H
 
+#include <imwrapper/Account.h>
 #include <imwrapper/EnumIMProtocol.h>
 #include <imwrapper/EnumPresenceState.h>
 #include <imwrapper/IMAccountParameters.h>
@@ -39,7 +40,7 @@
  * @author Tanguy Krotoff
  * @author Philippe Bernery
  */
-class IMAccount : NonCopyable, public Trackable {
+class IMAccount : public Account, public Trackable {
 	friend class IMAccountXMLSerializer;
 	friend class IMConnect;
 	friend class IMPresence;
@@ -72,7 +73,13 @@ public:
 
 	IMAccount(const IMAccount & imAccount);
 
-	~IMAccount();
+	virtual ~IMAccount();
+
+	IMAccount & operator = (const IMAccount & imAccount);
+
+	// Inherited from Account
+	virtual Account * createCopy() const;
+	////
 
 	const std::string & getLogin() const {
 		return _login;
@@ -86,10 +93,6 @@ public:
 
 	void setPassword(const std::string & password);
 
-	EnumIMProtocol::IMProtocol getProtocol() const {
-		return _protocol;
-	}
-
 	EnumPresenceState::PresenceState getPresenceState() const {
 		return _presenceState;
 	}
@@ -102,11 +105,23 @@ public:
 		return _imAccountParameters;
 	}
 
-	bool operator==(const IMAccount & imAccount) const;
+	bool operator == (const IMAccount & imAccount) const;
 
-	bool operator<(const IMAccount & imAccount) const;
+	bool operator < (const IMAccount & imAccount) const;
+
+	/** 
+	 * @return true if this IMAccount is empty.
+	 */
+	bool empty() const;
 
 private:
+
+	// Inherited from Account
+	virtual void copyTo(Account * account) const;
+	////
+
+	/** Copy an IMAccount in this object. */
+	void copy(const IMAccount & imAccount);
 
 	/**
 	 * Used by IMPresence to set the PresenceState.
@@ -142,8 +157,6 @@ private:
 	std::string _login;
 
 	std::string _password;
-
-	EnumIMProtocol::IMProtocol _protocol;
 
 	/** This Settings is used to contain more parameters (eg.: "use_http => true" for MSN protocol). */
 	IMAccountParameters _imAccountParameters;

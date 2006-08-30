@@ -22,29 +22,32 @@
 #include <model/profile/UserProfileHandler.h>
 
 #include "classic/ClassicExterminator.h"
-#include "config/ConfigImporter.h"
-#include "config/ConfigManagerFileStorage.h"
-#include "config/ConfigManager.h"
+#include "commandserver/CommandServer.h"
 #include "config/Config.h"
+#include "config/ConfigImporter.h"
+#include "config/ConfigManager.h"
+#include "config/ConfigManagerFileStorage.h"
 #include "network/NetworkObserver.h"
 #include "network/NetworkProxyDiscovery.h"
 #include "webservices/subscribe/WsSubscribe.h"
-#include "commandserver/CommandServer.h"
 
 #include "WengoPhoneBuildId.h"
 
+#include <coipmanager/CoIpManager.h>
+#include <cutil/global.h>
 #include <http/HttpRequest.h>
+#include <system/RegisterProtocol.h>
 #include <thread/Timer.h>
 #include <util/Logger.h>
-#include <system/RegisterProtocol.h>
+#include <util/Macro.h>
 #include <util/Path.h>
-#include <cutil/global.h>
 
 #include <sstream>
 
 WengoPhone::WengoPhone() {
 	_startupSettingListener = new StartupSettingListener();
 	_wsSubscribe = NULL;
+	_coIpManager = NULL;
 
 	//set HttpRequest User Agent
 	std::stringstream ss;
@@ -74,6 +77,10 @@ WengoPhone::WengoPhone() {
 
 	//Creating the UserProfileHandler instance
 	_userProfileHandler = new UserProfileHandler();
+	_userProfileHandler->currentUserProfileWillDieEvent +=
+		boost::bind(&WengoPhone::currentUserProfileWillDieEventHandler, this, _1);
+	_userProfileHandler->userProfileInitializedEvent +=
+		boost::bind(&WengoPhone::userProfileInitializedEventHandler, this, _1, _2);
 	////
 
 #ifdef OS_WINDOWS
@@ -98,13 +105,11 @@ WengoPhone::~WengoPhone() {
 	}*/
 
 	//Deleting created objects
-	if (_userProfileHandler) {
-		delete _userProfileHandler;
-	}
+	SAFE_DELETE(_coIpManager);
 
-	if (_startupSettingListener) {
-		delete _startupSettingListener;
-	}
+	SAFE_DELETE(_userProfileHandler);
+
+	SAFE_DELETE(_startupSettingListener);
 	////
 
 	saveConfiguration();
@@ -168,4 +173,14 @@ void WengoPhone::saveConfiguration() {
 
 void WengoPhone::valueChangedEventHandler(Settings & sender, const std::string & key) {
 	saveConfiguration();
+}
+
+void WengoPhone::currentUserProfileWillDieEventHandler(UserProfileHandler & sender) {
+	//TODO: must check if no is using the CoIpManager.
+	SAFE_DELETE(_coIpManager);
+}
+
+void WengoPhone::userProfileInitializedEventHandler(UserProfileHandler & sender,
+	UserProfile & userProfile) {
+	_coIpManager = new CoIpManager(userProfile);
 }

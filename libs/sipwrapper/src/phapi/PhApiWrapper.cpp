@@ -21,6 +21,8 @@
 
 #include "PhApiCodecList.h"
 
+#include "PhApiSFPWrapper.h"
+
 #include <imwrapper/IMChatSession.h>
 #include <imwrapper/IMContact.h>
 
@@ -118,6 +120,8 @@ PhApiWrapper::PhApiWrapper(PhApiCallbacks & callbacks) {
 	//FIXME ugly hack for conference
 	phoneCallStateChangedEvent +=
 		boost::bind(&PhApiWrapper::phoneCallStateChangedEventHandler, this, _1, _2, _3, _4);
+
+	phApiSFPWrapper = PhApiSFPWrapper::getInstance();
 }
 
 PhApiWrapper::~PhApiWrapper() {
@@ -948,6 +952,7 @@ void PhApiWrapper::init() {
 
 	int ret = phInit(&phApiCallbacks, (char *) phApiServer.c_str(), asynchronousMode);
 	if (ret == PhApiResultNoError) {
+
 		_isInitialized = true;
 		LOG_DEBUG("phApi successfully initialized");
 	} else {

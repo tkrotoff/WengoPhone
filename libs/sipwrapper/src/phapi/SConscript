@@ -4,6 +4,7 @@ libs = [
 	'owthread',
 	'owutil',
 	'phapi',
+	'sfp-plugin',
 	'ortp',
 	'stun',
 	'httptunnel',
@@ -43,6 +44,9 @@ sources = [
 	'PhApiIMConnect.cpp',
 	'PhApiIMPresence.cpp',
 	'PhApiCodecList.cpp',
+	'PhApiSFPCallbacks.cpp',
+	'PhApiSFPWrapper.cpp',
+	'PhApiSFPEvent.cpp',
 ]
 
 env.WengoAddIncludePath(include_path)

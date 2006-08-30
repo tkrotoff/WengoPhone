@@ -40,6 +40,8 @@
 
 #include <string>
 
+class PhApiSFPWrapper;
+
 /**
  * SIP wrapper for PhApi.
  *
@@ -355,6 +357,8 @@ private:
 	Timer _publishTimer;
 
 	bool _registered;
+
+	PhApiSFPWrapper * phApiSFPWrapper;
 };
 
 #endif	//OWPHAPIWRAPPER_H
