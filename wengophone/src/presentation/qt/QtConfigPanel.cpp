@@ -33,8 +33,6 @@
 
 #include <util/Logger.h>
 
-#include <qtutil/MouseEventFilter.h>
-
 #include <QtGui/QtGui>
 
 QtConfigPanel::QtConfigPanel(CWengoPhone & cWengoPhone, QWidget * parent)
@@ -82,13 +80,11 @@ QtConfigPanel::QtConfigPanel(CWengoPhone & cWengoPhone, QWidget * parent)
 	configChangedEventHandler(config, Config::WENBOX_ENABLE_KEY);
 	configChangedEventHandler(config, Config::AUDIO_HALFDUPLEX_KEY);
 
-	MousePressEventFilter * mouseFilter = new MousePressEventFilter(
-		this, SLOT(videoSettingsClicked()), Qt::LeftButton);
-	_ui->videoSettingsLabel->installEventFilter(mouseFilter);
+	//videoSettingsButton
+	connect(_ui->videoSettingsButton, SIGNAL(clicked()), SLOT(videoSettingsClicked()));
 
-	MousePressEventFilter * mouseFilter2 = new MousePressEventFilter(
-		this, SLOT(audioSettingsClicked()), Qt::LeftButton);
-	_ui->audioSettingsLabel->installEventFilter(mouseFilter2);
+	//audioSettingsButton
+	connect(_ui->audioSettingsButton, SIGNAL(clicked()), SLOT(audioSettingsClicked()));
 }
 
 QtConfigPanel::~QtConfigPanel() {

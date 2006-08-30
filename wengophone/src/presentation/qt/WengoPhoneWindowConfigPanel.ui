@@ -8,7 +8,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>267</width>
+    <width>290</width>
     <height>122</height>
    </rect>
   </property>
@@ -287,22 +287,34 @@
         <number>6</number>
        </property>
        <item row="0" column="0" >
-        <widget class="QLabel" name="videoSettingsLabel" >
-         <property name="cursor" >
-          <cursor>13</cursor>
-         </property>
+        <widget class="QToolButton" name="videoSettingsButton" >
          <property name="text" >
-          <string>&lt;u>Video Settings&lt;/u></string>
+          <string>Video Settings</string>
+         </property>
+         <property name="icon" >
+          <iconset resource="wengophone.qrc" >:/pics/config/video.png</iconset>
+         </property>
+         <property name="toolButtonStyle" >
+          <enum>Qt::ToolButtonTextBesideIcon</enum>
+         </property>
+         <property name="autoRaise" >
+          <bool>true</bool>
          </property>
         </widget>
        </item>
        <item row="1" column="0" >
-        <widget class="QLabel" name="audioSettingsLabel" >
-         <property name="cursor" >
-          <cursor>13</cursor>
-         </property>
+        <widget class="QToolButton" name="audioSettingsButton" >
          <property name="text" >
-          <string>&lt;u>Audio Settings&lt;/u></string>
+          <string>Audio Settings</string>
+         </property>
+         <property name="icon" >
+          <iconset resource="wengophone.qrc" >:/pics/config/audio.png</iconset>
+         </property>
+         <property name="toolButtonStyle" >
+          <enum>Qt::ToolButtonTextBesideIcon</enum>
+         </property>
+         <property name="autoRaise" >
+          <bool>true</bool>
          </property>
         </widget>
        </item>

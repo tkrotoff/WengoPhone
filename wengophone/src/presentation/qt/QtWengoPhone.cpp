@@ -58,7 +58,6 @@
 #include "phonecall/QtContactCallListWidget.h"
 #include "profile/QtProfileDetails.h"
 #include "imaccount/QtIMAccountManager.h"
-#include "imcontact/QtSimpleAddIMContact.h"
 #include "contactlist/QtContactList.h"
 #include "QtDialpad.h"
 #include "QtAbout.h"
@@ -266,16 +265,16 @@ void QtWengoPhone::initThreadSafe() {
 	//actionLogOff
 	connect(_ui->actionLogOff, SIGNAL(triggered()), SLOT(logoff()));
 
-	// Tab selection
+	//Tab selection
 	connect(_ui->tabWidget, SIGNAL(currentChanged(int)), SLOT(tabSelectionChanged(int)));
 
-	// Accept a call
+	//Accept a call
 	connect(_ui->actionAccept, SIGNAL(triggered()), SLOT(acceptCall()));
 
-	// Resume a call
+	//Resume a call
 	connect(_ui->actionHoldResume, SIGNAL(triggered()), SLOT(resumeCall()));
 
-	// Hangup a call
+	//Hangup a call
 	connect(_ui->actionHangup, SIGNAL(triggered()), SLOT(hangupCall()));
 
 	connect(this, SIGNAL(connectionStatusEventHandlerSignal(int, int, QString)),
@@ -465,7 +464,7 @@ void QtWengoPhone::logoff() {
 
 void QtWengoPhone::addToConference(PhoneCall * sourceCall, PhoneCall * targetCall) {
 	if (_cWengoPhone.getCUserProfileHandler().getCUserProfile()) {
-		// Bad and Ugly but works...
+		//Bad and Ugly but works...
 
 		int nbtab = _ui->tabWidget->count();
 
@@ -485,7 +484,7 @@ void QtWengoPhone::addToConference(PhoneCall * sourceCall, PhoneCall * targetCal
 						ConferenceCall * confCall = new ConferenceCall(*phoneLine);
 						confCall->addPhoneCall(*targetCall);
 						confCall->addPhoneCall(*sourceCall);
-						// Add the target to source and remove the target tab
+						//Add the target to source and remove the target tab
 						for (int j = 0; j < _ui->tabWidget->count(); j++) {
 							QtContactCallListWidget * toRemove =
 								dynamic_cast<QtContactCallListWidget *>(_ui->tabWidget->widget(j));
@@ -519,7 +518,7 @@ void QtWengoPhone::addToConference(QtPhoneCall * qtPhoneCall) {
 
 	for (int i = 0; i < nbtab; i++) {
 		if (_ui->tabWidget->tabText(i) == QString(tr("Conference"))) {
-			// i is the index of the conference tab
+			//i is the index of the conference tab
 			qtContactCallListWidget = dynamic_cast<QtContactCallListWidget *>(_ui->tabWidget->widget(i));
 			qtContactCallListWidget->addPhoneCall(qtPhoneCall);
 			_ui->tabWidget->setCurrentWidget(qtContactCallListWidget);
@@ -529,7 +528,7 @@ void QtWengoPhone::addToConference(QtPhoneCall * qtPhoneCall) {
 
 	_activeTabBeforeCall = _ui->tabWidget->currentWidget();
 
-	// conference tab not found, create a new one
+	//conference tab not found, create a new one
 	qtContactCallListWidget = new QtContactCallListWidget(_cWengoPhone,_wengoPhoneWindow);
 	_ui->tabWidget->addTab(qtContactCallListWidget, tr("Conference"));
 	_ui->tabWidget->setCurrentWidget(qtContactCallListWidget);
@@ -676,12 +675,12 @@ void QtWengoPhone::exitApplication() {
 	_qtSystray->hide();
 	delete _qtSystray;
 
-	// Save the window size
+	//Save the window size
 	QSize winsize = _wengoPhoneWindow->size();
 	config.set(Config::PROFILE_WIDTH,winsize.width());
 	config.set(Config::PROFILE_HEIGHT,winsize.height());
 
-	// Save the window position
+	//Save the window position
 	QPoint winpos = _wengoPhoneWindow->pos();
 	config.set(Config::PROFILE_POSX,winpos.x());
 	config.set(Config::PROFILE_POSY,winpos.y());
@@ -692,12 +691,12 @@ void QtWengoPhone::exitApplication() {
 }
 
 void QtWengoPhone::addContact() {
-	if (_cWengoPhone.getCUserProfileHandler().getCUserProfile()) {
+	 if (_cWengoPhone.getCUserProfileHandler().getCUserProfile()) {
 		//FIXME: this method should not be called if no UserProfile has been set
 		ContactProfile contactProfile;
-		QtSimpleAddIMContact qtSimpleAddIMContact(*_cWengoPhone.getCUserProfileHandler().getCUserProfile(),
-			contactProfile, _wengoPhoneWindow);
-		if (qtSimpleAddIMContact.show() == QDialog::Accepted) {
+		QtProfileDetails qtProfileDetails(*_cWengoPhone.getCUserProfileHandler().getCUserProfile(),
+		 		contactProfile, _wengoPhoneWindow);
+		if (qtProfileDetails.show()) {
 			_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCContactList().addContact(contactProfile);
 		}
 	}
@@ -1077,7 +1076,7 @@ void QtWengoPhone::currentUserProfileWillDieEventHandlerSlot() {
 		delete _contactListTabLayout;
 		_contactListTabLayout = NULL;
 		_contactList->cleanup();
-		// _contactList is deleted in CContactList
+		//_contactList is deleted in CContactList
 		_contactList = NULL;
 	}
 }
@@ -1087,7 +1086,7 @@ void QtWengoPhone::userProfileInitializedEventHandlerSlot() {
 	//FIXME: QtIdle must not use UserProfile but CUserProfile
 	_qtIdle = new QtIdle(_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getUserProfile(), _wengoPhoneWindow);
 
-	// Create the profilebar
+	//Create the profilebar
 	//FIXME: QtProfileBar must not use ConnectHandler directly
 	_qtProfileBar = new QtProfileBar(_cWengoPhone,
 		*_cWengoPhone.getCUserProfileHandler().getCUserProfile(),

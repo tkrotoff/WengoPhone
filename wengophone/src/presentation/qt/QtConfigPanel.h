@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QTCONFIGPANEL_H
-#define QTCONFIGPANEL_H
+#ifndef OWQTCONFIGPANEL_H
+#define OWQTCONFIGPANEL_H
 
 #include <qtutil/QObjectThreadSafe.h>
 
@@ -83,4 +83,4 @@ private:
 	CWengoPhone & _cWengoPhone;
 };
 
-#endif	//QTCONFIGPANEL_H
+#endif	//OWQTCONFIGPANEL_H

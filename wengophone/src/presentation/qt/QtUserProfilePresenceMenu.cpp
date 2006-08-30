@@ -53,18 +53,16 @@ QtUserProfilePresenceMenu::QtUserProfilePresenceMenu(EnumPresenceState::Presence
 	QAction * action = addAction(QPixmap(":/pics/status/online.png"), tr("Online"));
 	connect(action, SIGNAL(triggered(bool)), SLOT(onlineClicked(bool)));
 
+	action = addAction(QPixmap(":/pics/status/away.png"), tr("Away"));
+	connect(action, SIGNAL(triggered(bool)), SLOT(awayClicked(bool)));
+
 	action = addAction(QPixmap(":/pics/status/donotdisturb.png"), tr("Do Not Disturb"));
 	connect(action, SIGNAL(triggered(bool)), SLOT(doNotDisturbClicked(bool)));
 
 	action = addAction(QPixmap(":/pics/status/invisible.png"), tr("Invisible"));
 	connect(action, SIGNAL(triggered(bool)), SLOT(invisibleClicked(bool)));
 
-	action = addAction(QPixmap(":/pics/status/away.png"), tr("Away"));
-	connect(action, SIGNAL(triggered(bool)), SLOT(awayClicked(bool)));
-
-	addSeparator();
-
-	action = addAction(QPixmap(":/pics/status/offline.png"), tr("Disconnect (Offline)"));
+	action = addAction(QPixmap(":/pics/status/offline.png"), tr("Offline (Disconnect)"));
 	action->setEnabled(connected);
 	connect(action, SIGNAL(triggered(bool)), SLOT(disconnectClicked(bool)));
 }
