@@ -13,10 +13,7 @@ env.WengoUseLibraries(libs)
 
 configure_command = './configure'
 
-if WengoOSMacOSX():
-	configure_command += ' --extra-cflags=-fno-common --extra-ldflags=-fno-common'
-
-	if WengoArchX86():
+if WengoOSMacOSX() and  WengoArchX86():
 		configure_command += '--disable-mmx --enable-memalign-hack'
 
 env.WengoAutoconf('avcodec', ['libavcodec/libavcodec.a'],
