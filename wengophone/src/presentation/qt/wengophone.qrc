@@ -1,5 +1,7 @@
 <RCC>
     <qresource prefix="/" >
+        <file>pics/Help-32x32.png</file>
+        <file>pics/add.png</file>
         <file>pics/audio/microphone.png</file>
         <file>pics/audio/play.png</file>
         <file>pics/audio/progress_1.png</file>
@@ -26,11 +28,15 @@
         <file>pics/callbar/call_bar_fill.png</file>
         <file>pics/callbar/call_bar_start.png</file>
         <file>pics/cancel.png</file>
+        <file>pics/chat/block-a.png</file>
+        <file>pics/chat/block-b.png</file>
+        <file>pics/chat/chat-room.png</file>
         <file>pics/chat/chat_call_bar_button.png</file>
         <file>pics/chat/chat_call_bar_button_on.png</file>
         <file>pics/chat/chat_emoticon_button.png</file>
         <file>pics/chat/chat_emoticon_button_on.png</file>
         <file>pics/chat/chat_send.png</file>
+        <file>pics/chat/contact-details.png</file>
         <file>pics/chat/invite.png</file>
         <file>pics/chat/invite_on.png</file>
         <file>pics/close_normal.png</file>
@@ -46,20 +52,18 @@
         <file>pics/config/video.png</file>
         <file>pics/contact/call.png</file>
         <file>pics/contact/chat.png</file>
-        <file>pics/contact/landline.png</file>
+        <file>pics/contact/fixe.png</file>
         <file>pics/contact/home.png</file>
         <file>pics/contact/mobile.png</file>
         <file>pics/contact/sms.png</file>
         <file>pics/contact/wengo.png</file>
         <file>pics/contact/work.png</file>
         <file>pics/contact_border.png</file>
-        <file>pics/help.png</file>
-        <file>pics/add.png</file>
-        <file>pics/avatar_default.png</file>
-        <file>pics/avatar_background.png</file>
+        <file>pics/default-avatar.png</file>
         <file>pics/delete.png</file>
         <file>pics/edit.png</file>
         <file>pics/exit.png</file>
+        <file>pics/fond_avatar.png</file>
         <file>pics/group_close.png</file>
         <file>pics/group_close_reverse.png</file>
         <file>pics/group_open.png</file>
@@ -72,10 +76,10 @@
         <file>pics/history/call_incoming.png</file>
         <file>pics/history/call_missed.png</file>
         <file>pics/history/call_outgoing.png</file>
-        <file>pics/history/sms_sent.png</file>
+        <file>pics/history/sms_send.png</file>
         <file>pics/iconbar/add_contact.png</file>
         <file>pics/iconbar/conference.png</file>
-        <file>pics/iconbar/chat.png</file>
+        <file>pics/iconbar/iconBarchat.png</file>
         <file>pics/iconbar/search_contact.png</file>
         <file>pics/iconbar/sms.png</file>
         <file>pics/iconbar/webcam-off.png</file>
@@ -104,10 +108,10 @@
         <file>pics/profilebar/bar_start_status_green.png</file>
         <file>pics/profilebar/bar_start_status_orange.png</file>
         <file>pics/profilebar/bar_start_status_red.png</file>
-        <file>pics/profilebar/credit/call_forward.png</file>
+        <file>pics/profilebar/credit/mobile-redirect.png</file>
         <file>pics/profilebar/credit/wengos.png</file>
-        <file>pics/profilebar/event/call_missed.png</file>
-        <file>pics/profilebar/event/voicemessage_new.png</file>
+        <file>pics/profilebar/event/missed-calls.png</file>
+        <file>pics/profilebar/event/new-message.png</file>
         <file>pics/protocols/aim.png</file>
         <file>pics/protocols/aim_error.png</file>
         <file>pics/protocols/aim_off.png</file>
@@ -128,19 +132,20 @@
         <file>pics/protocols/yahoo_off.png</file>
         <file>pics/status/away.png</file>
         <file>pics/status/donotdisturb.png</file>
+        <file>pics/status/forward.png</file>
         <file>pics/status/invisible.png</file>
         <file>pics/status/offline.png</file>
         <file>pics/status/online.png</file>
         <file>pics/status/unknown.png</file>
-        <file>pics/statusbar/audio_status_error.png</file>
-        <file>pics/statusbar/audio_status_ok.png</file>
-        <file>pics/statusbar/internet_status_connecting.mng</file>
-        <file>pics/statusbar/internet_status_error.png</file>
-        <file>pics/statusbar/internet_status_ok.mng</file>
-        <file>pics/statusbar/network_status_connecting.mng</file>
-        <file>pics/statusbar/network_status_error.png</file>
-        <file>pics/statusbar/network_status_ok.png</file>
-        <file>pics/statusbar/network_status_ok.mng</file>
+        <file>pics/statusbar/status-audio-offline.png</file>
+        <file>pics/statusbar/status-audio-online.png</file>
+        <file>pics/statusbar/status-earth-connecting.mng</file>
+        <file>pics/statusbar/status-earth-offline.png</file>
+        <file>pics/statusbar/status-earth-online.mng</file>
+        <file>pics/statusbar/status-network-connecting.mng</file>
+        <file>pics/statusbar/status-network-offline.png</file>
+        <file>pics/statusbar/status-network-online-static.png</file>
+        <file>pics/statusbar/status-network-online.mng</file>
         <file>pics/systray/away.png</file>
         <file>pics/systray/connecting.png</file>
         <file>pics/systray/disconnected.png</file>
@@ -149,8 +154,8 @@
         <file>pics/systray/offline.png</file>
         <file>pics/systray/online.png</file>
         <file>pics/toaster/chat.png</file>
-        <file>pics/toaster/pickup.png</file>
         <file>pics/toaster/hangup.png</file>
+        <file>pics/toaster/pickup.png</file>
         <file>pics/update.png</file>
         <file>pics/video_flip.png</file>
         <file>pics/video_fullscreen.png</file>
@@ -223,8 +228,8 @@
         <file>pics/emoticons/face-wink48.png</file>
     </qresource>
     <qresource prefix="/forms" >
-        <file>chat/chatroom/ChatRoomInviteWidget.ui</file>
         <file>chat/ChatRoomWidget.ui</file>
+        <file>chat/chatroom/ChatRoomInviteWidget.ui</file>
         <file>phonecall/ConferenceCallWidget.ui</file>
     </qresource>
 </RCC>
