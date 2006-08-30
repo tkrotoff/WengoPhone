@@ -409,6 +409,9 @@ public:
 	static const std::string VIDEO_QUALITY_KEY;
 	int getVideoQuality() const;
 
+	static const std::string VIDEO_ENABLE_XVIDEO;
+	bool getXVideoEnable() const;
+
 	/** @} */
 
 	/**

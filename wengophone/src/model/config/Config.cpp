@@ -112,6 +112,7 @@ const std::string Config::PRIVACY_SIGN_AS_INVISIBLE_KEY = "privacy.sign.as.invis
 const std::string Config::VIDEO_ENABLE_KEY = "video.enable";
 const std::string Config::VIDEO_WEBCAM_DEVICE_KEY = "video.webcam.device";
 const std::string Config::VIDEO_QUALITY_KEY = "video.quality";
+const std::string Config::VIDEO_ENABLE_XVIDEO = "video.xvideo.enable";
 
 const std::string Config::WENGO_SERVER_HOSTNAME_KEY = "wengo.server.hostname";
 const std::string Config::WENGO_SMS_PATH_KEY = "wengo.sms.path";
@@ -244,6 +245,7 @@ Config::Config(const std::string & name)
 	_keyDefaultValueMap[VIDEO_ENABLE_KEY] = true;
 	_keyDefaultValueMap[VIDEO_WEBCAM_DEVICE_KEY] = WebcamDriver::getInstance()->getDefaultDevice();
 	_keyDefaultValueMap[VIDEO_QUALITY_KEY] = (int) EnumVideoQuality::VideoQualityNormal;
+	_keyDefaultValueMap[VIDEO_ENABLE_XVIDEO] = true;
 
 	_keyDefaultValueMap[WENGO_SERVER_HOSTNAME_KEY] = std::string("ws.wengo.fr");
 	_keyDefaultValueMap[WENGO_SMS_PATH_KEY] = std::string("/sms/sendsms.php");
@@ -629,6 +631,10 @@ std::string Config::getVideoWebcamDevice() const {
 
 int Config::getVideoQuality() const {
 	return EnumVideoQuality::checkValue(getIntegerKeyValue(VIDEO_QUALITY_KEY));
+}
+
+bool Config::getXVideoEnable() const {
+	return getBooleanKeyValue(VIDEO_ENABLE_XVIDEO);
 }
 
 bool Config::getWenboxEnable() const {
