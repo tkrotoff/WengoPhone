@@ -17,56 +17,49 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef OWQTSIMPLEADDIMCONTACT_H
-#define OWQTSIMPLEADDIMCONTACT_H
+#ifndef OWQTSIMPLEIMCONTACTMANAGER_H
+#define OWQTSIMPLEIMCONTACTMANAGER_H
 
-#include <imwrapper/EnumIMProtocol.h>
+#include <util/NonCopyable.h>
 
 #include <QtCore/QObject>
 
-#include <vector>
-
-class CUserProfile;
 class ContactProfile;
+class CUserProfile;
 
-class QDialog;
 class QWidget;
-namespace Ui { class SimpleAddIMAccount; }
+namespace Ui { class SimpleIMContactManager; }
 
 /**
- * Simplified window for adding an IM contact to a given contact.
+ * Simplified widget for adding an IM contact to a given contact.
+ *
+ * @see QtIMContactManager
+ * @author Tanguy Krotoff
  */
-class QtSimpleAddIMContact : public QObject {
+class QtSimpleIMContactManager : public QObject, NonCopyable {
 	Q_OBJECT
 public:
 
-	QtSimpleAddIMContact(CUserProfile & cUserProfile, ContactProfile & contactProfile, QWidget * parent);
+	QtSimpleIMContactManager(ContactProfile & contactProfile,
+		CUserProfile & cUserProfile, QWidget * parent);
 
-	~QtSimpleAddIMContact();
+	~QtSimpleIMContactManager();
 
-	int show();
+	QWidget * getWidget() const;
 
 private Q_SLOTS:
 
-	void saveContact();
-
-	void advanced();
-
-	void currentIndexChanged(const QString & text);
+	void advancedClicked();
 
 private:
 
-	bool hasAccount(EnumIMProtocol::IMProtocol imProtocol) const;
+	Ui::SimpleIMContactManager * _ui;
 
-	typedef std::vector< std::pair<std::string, std::string> > ContactGroupVector;
-
-	QDialog * _addIMAccountDialog;
-
-	Ui::SimpleAddIMAccount * _ui;
+	QWidget * _imContactManagerWidget;
 
 	CUserProfile & _cUserProfile;
 
 	ContactProfile & _contactProfile;
 };
 
-#endif	//OWQTSIMPLEADDIMCONTACT_H
+#endif	//OWQTSIMPLEIMCONTACTMANAGER_H

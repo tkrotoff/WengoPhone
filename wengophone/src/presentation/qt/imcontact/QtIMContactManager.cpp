@@ -35,7 +35,8 @@ QtIMContactManager::QtIMContactManager(ContactProfile & contactProfile,
 	CUserProfile & cUserProfile, QWidget * parent)
 	: QObject(parent),
 	_contactProfile(contactProfile),
-	_cUserProfile(cUserProfile) {
+	_cUserProfile(cUserProfile),
+	_parent(parent) {
 
 	_imContactManagerWidget = new QWidget(NULL);
 

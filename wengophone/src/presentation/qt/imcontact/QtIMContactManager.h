@@ -24,7 +24,6 @@
 
 #include <QtCore/QObject>
 
-class UserProfile;
 class ContactProfile;
 class CUserProfile;
 
@@ -41,6 +40,7 @@ namespace Ui { class IMContactManager; }
  * @see QtIMAccountManager
  * @see Contact
  * @see IMContact
+ * @see QtSimpleIMContactManager
  * @author Tanguy Krotoff
  */
 class QtIMContactManager : public QObject, NonCopyable {
@@ -69,6 +69,8 @@ private:
 	Ui::IMContactManager * _ui;
 
 	QWidget * _imContactManagerWidget;
+
+	QWidget * _parent;
 
 	CUserProfile & _cUserProfile;
 

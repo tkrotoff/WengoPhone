@@ -21,7 +21,7 @@
 
 #include "ui_ProfileDetails.h"
 
-#include <presentation/qt/imcontact/QtIMContactManager.h>
+#include <presentation/qt/imcontact/QtSimpleIMContactManager.h>
 #include <presentation/qt/imaccount/QtIMAccountManager.h>
 
 #include <control/contactlist/CContactList.h>
@@ -68,8 +68,8 @@ QtProfileDetails::QtProfileDetails(CUserProfile & cUserProfile, ContactProfile &
 
 	_profileDetailsWindow->setWindowTitle(tr("WengoPhone - Contact Details"));
 
-	QtIMContactManager * qtIMContactManager = new QtIMContactManager(contactProfile,
-		_cUserProfile, _profileDetailsWindow);
+	QtSimpleIMContactManager * qtIMContactManager = new QtSimpleIMContactManager(contactProfile,
+			_cUserProfile, _profileDetailsWindow);
 
 	int index = _ui->imStackedWidget->addWidget(qtIMContactManager->getWidget());
 	_ui->imStackedWidget->setCurrentIndex(index);
