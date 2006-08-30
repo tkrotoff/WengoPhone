@@ -54,8 +54,6 @@ public:
 		return _text;
 	}
 
-	//QLabel * getAvatarLabel() const;
-
 public Q_SLOTS:
 
 	void contactProfileUpdated();
@@ -85,11 +83,7 @@ private:
 
 	void paintContact(QPainter * painter, const QRect & rect);
 
-	QPixmap getIcon() const;
-
-	QPixmap createAvatar();
-
-	static const QString AVATAR_BACKGROUND;
+	void createAvatar();
 
 	std::string _contactId;
 

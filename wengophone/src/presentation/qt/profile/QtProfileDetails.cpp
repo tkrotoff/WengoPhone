@@ -33,6 +33,7 @@
 #include <model/profile/UserProfile.h>
 
 #include <qtutil/StringListConvert.h>
+#include <qtutil/PixmapMerging.h>
 
 #include <util/Logger.h>
 #include <cutil/global.h>
@@ -55,8 +56,7 @@ QtProfileDetails::QtProfileDetails(CUserProfile & cUserProfile, ContactProfile &
 	//FIXME we should keep in memory the UUID of the group
 	std::vector< std::pair<std::string, std::string> > tmp = _cUserProfile.getCContactList().getContactGroups();
 	for (std::vector< std::pair<std::string, std::string> >::const_iterator it = tmp.begin();
-		it != tmp.end();
-		++it) {
+		it != tmp.end(); ++it) {
 
 		_ui->groupComboBox->addItem(QString::fromUtf8((*it).second.c_str()), QString::fromStdString((*it).first.c_str()));
 		std::string str1 = (*it).first;
@@ -137,13 +137,10 @@ void QtProfileDetails::readProfile() {
 }
 
 void QtProfileDetails::readProfileAvatar() {
-	std::string data = _profile.getIcon().getData();
-	if (!data.empty()) {
-		QPixmap pixmap;
-		pixmap.loadFromData((uchar *) data.c_str(), data.size());
-		_ui->avatarPixmapButton->setIcon(pixmap.scaled(_ui->avatarPixmapButton->rect().size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
-		_ui->avatarPixmapButton->setIconSize(_ui->avatarPixmapButton->rect().size());
-	}
+	std::string backgroundPixmapFilename = ":/pics/avatar_background.png";
+	std::string foregroundPixmapData = _profile.getIcon().getData();
+
+	_ui->avatarPixmapButton->setIcon(PixmapMerging::merge(foregroundPixmapData, backgroundPixmapFilename));
 }
 
 void QtProfileDetails::saveProfile() {
@@ -241,8 +238,9 @@ void QtProfileDetails::setProfileAvatarFileName(UserProfile & userProfile, const
 
 		//QImage is optimised for I/O manipulations
 		QImage image(fileName);
-		QSize size(96, 96); // Size of Wengo avatars
-		// Image is scaled to not save a big picture in userprofile.xml
+		//Size of Wengo avatars
+		QSize size(96, 96);
+		//Image is scaled to not save a big picture in userprofile.xml
 		image.scaled(size, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
 		QBuffer buffer;

@@ -24,22 +24,24 @@
 #include "QtContactListManager.h"
 #include "QtContact.h"
 
-#include <model/contactlist/ContactProfile.h>
+#include <presentation/qt/contactlist/QtContactListManager.h>
+#include <presentation/qt/profile/QtProfileDetails.h>
 
 #include <control/CWengoPhone.h>
 #include <control/contactlist/CContactList.h>
 #include <control/profile/CUserProfile.h>
 #include <control/profile/CUserProfileHandler.h>
 
-#include <presentation/qt/contactlist/QtContactListManager.h>
-#include <presentation/qt/profile/QtProfileDetails.h>
+#include <model/contactlist/ContactProfile.h>
 
 #include <util/Picture.h>
 #include <util/Logger.h>
 
+#include <qtutil/PixmapMerging.h>
+
 #include <QtGui/QtGui>
 
-const QString QtContactWidget::AVATAR_BACKGROUND = ":/pics/avatar_background.png";
+static const std::string AVATAR_BACKGROUND = ":/pics/avatar_background.png";
 
 QtContactWidget::QtContactWidget(const std::string & contactId,
 	CWengoPhone & cWengoPhone, QWidget * parent)
@@ -52,7 +54,7 @@ QtContactWidget::QtContactWidget(const std::string & contactId,
 	_ui = new Ui::ContactWidget();
 	_ui->setupUi(this);
 
-	_ui->avatarButton->setIcon(createAvatar());
+	createAvatar();
 
 	QString str = QString::fromUtf8(_contactProfile.getHomePhone().c_str());
 	if (!str.isEmpty()) {
@@ -98,21 +100,9 @@ void QtContactWidget::chatButtonClicked() {
 	ul->startChat(QString::fromStdString(_contactId));
 }
 
-QPixmap QtContactWidget::getIcon() const {
-	Picture picture = _contactProfile.getIcon();
-	std::string data = picture.getData();
-	QPixmap result;
-	result.loadFromData((uchar *) data.c_str(), data.size());
-	return result;
-}
-
 void QtContactWidget::contactProfileUpdated() {
 	_contactProfile = _cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCContactList().getContactProfile(_contactId);
 }
-
-/*QLabel * QtContactWidget::getAvatarLabel() const {
-	return _ui->avatarLabel;
-}*/
 
 void QtContactWidget::mobileButtonClicked() {
 	QtContactListManager * ul = QtContactListManager::getInstance();
@@ -145,16 +135,9 @@ void QtContactWidget::showContactProfile() {
 	}
 }
 
-QPixmap QtContactWidget::createAvatar() {
-	QPixmap background = QPixmap(AVATAR_BACKGROUND);
-	QPixmap avatar = getIcon();
-	if (!avatar.isNull()) {
-		QRect rect = _ui->avatarButton->rect();
-		QPainter pixpainter(&background);
-		pixpainter.drawPixmap(5, 5, avatar.scaled(60, 60));
-		pixpainter.end();
-	}
-	return background;
+void QtContactWidget::createAvatar() {
+	std::string foregroundPixmapData = _contactProfile.getIcon().getData();
+	_ui->avatarButton->setIcon(PixmapMerging::merge(foregroundPixmapData, AVATAR_BACKGROUND));
 }
 
 void QtContactWidget::paintEvent(QPaintEvent *) {

@@ -37,6 +37,7 @@
 #include <thread/ThreadEvent.h>
 
 #include <qtutil/ToolTipLineEdit.h>
+#include <qtutil/PixmapMerging.h>
 
 #include <QtGui/QtGui>
 
@@ -253,10 +254,6 @@ void QtIMProfileWidget::showIMMenu(EnumIMProtocol::IMProtocol imProtocol) {
 		imMenu->addMenu(menu);
 	}
 
-	/*QPoint p = _msnLabel->pos();
-	p.setY(p.y() + _msnLabel->rect().bottom());
-	_msnIMAccountMenu->popup(mapToGlobal(p));*/
-
 	imMenu->exec(QCursor::pos());
 }
 
@@ -315,20 +312,10 @@ void QtIMProfileWidget::init() {
 }
 
 void QtIMProfileWidget::updateAvatar() {
-	QPixmap background = QPixmap(":/pics/avatar_background.png");
-	std::string myData = _cUserProfile.getUserProfile().getIcon().getData();
+	std::string backgroundPixmapFilename = ":/pics/avatar_background.png";
+	std::string foregroundPixmapData = _cUserProfile.getUserProfile().getIcon().getData();
 
-	QPixmap pixmap;
-	pixmap.loadFromData((uchar *) myData.c_str(), myData.size());
-
-	if (!pixmap.isNull()) {
-		QPainter painter(& background);
-		painter.drawPixmap(5, 5, pixmap.scaled(60, 60, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
-		painter.end();
-		_ui->avatarButton->setIcon(background);
-	} else {
-		_ui->avatarButton->setIcon(background);
-	}
+	_ui->avatarButton->setIcon(PixmapMerging::merge(foregroundPixmapData, backgroundPixmapFilename));
 }
 
 void QtIMProfileWidget::showImAccountManager() {
