@@ -319,20 +319,24 @@ void QtPhoneCall::stateChangedEvent(EnumPhoneCallState::PhoneCallState state) {
 }
 
 void QtPhoneCall::videoFrameReceivedEvent(piximage * remoteVideoFrame, piximage * localVideoFrame) {
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
 #ifdef XV_HWACCEL
 	if (!_videoWindow) {
 		_remoteVideoFrame = remoteVideoFrame;
 		_localVideoFrame = localVideoFrame;
 
 		_showVideo = true;
-		_videoWindow = new QtVideoXV(_phoneCallWidget, remoteVideoFrame->width, remoteVideoFrame->height,
-			localVideoFrame->width, localVideoFrame->height);
-		//Fallback if XV is not available
-		if (!_videoWindow->isInitialized()) {
-			delete _videoWindow;
+		if (config.getXVideoEnable()) {
+			_videoWindow = new QtVideoXV(_phoneCallWidget, remoteVideoFrame->width, remoteVideoFrame->height,
+				localVideoFrame->width, localVideoFrame->height);
+			//Fallback if XV is not available
+			if (!_videoWindow->isInitialized()) {
+				delete _videoWindow;
+				_videoWindow = new QtVideoQt(_phoneCallWidget);
+			}
+		} else {
 			_videoWindow = new QtVideoQt(_phoneCallWidget);
 		}
-		showVideoWidget();
 	}
 #else
 	if (!_videoWindow) {
@@ -341,9 +345,9 @@ void QtPhoneCall::videoFrameReceivedEvent(piximage * remoteVideoFrame, piximage 
 
 		_showVideo = true;
 		_videoWindow = new QtVideoQt(_phoneCallWidget);
-		showVideoWidget();
 	}
 #endif
+	showVideoWidget();
 	_videoWindow->showImage(remoteVideoFrame, localVideoFrame);
 }
 
