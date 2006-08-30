@@ -22,7 +22,6 @@
 #include <filesessionmanager/ReceiveFileSession.h>
 #include <filesessionmanager/SendFileSession.h>
 
-#include "../implementation/test/include/testfilesessionmanager/TestFileSessionManager.h"
 #include "../implementation/phapi/include/phapifilesessionmanager/PhApiFileSessionManager.h"
 
 #include <imwrapper/Account.h>
@@ -32,7 +31,6 @@
 FileSessionManager::FileSessionManager(UserProfile & userProfile)
 	: _userProfile(userProfile) {
 
-	_fileSessionManagerVector.push_back(new TestFileSessionManager(_userProfile));
 	PhApiFileSessionManager * phapiManager = new PhApiFileSessionManager(_userProfile);
 	phapiManager->newIReceiveFileSessionCreatedEvent += boost::bind(&FileSessionManager::newIReceiveFileSessionCreatedEventHandler, this, _1, _2);
 	_fileSessionManagerVector.push_back(phapiManager);

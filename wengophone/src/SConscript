@@ -168,8 +168,6 @@ sources = [
 	'model/coipmanager/filesessionmanager/src/ISendFileSession.cpp',
 	'model/coipmanager/filesessionmanager/src/ReceiveFileSession.cpp',
 	'model/coipmanager/filesessionmanager/src/SendFileSession.cpp',
-	'model/coipmanager/filesessionmanager/implementation/test/src/TestSendFileSession.cpp',
-	'model/coipmanager/filesessionmanager/implementation/test/src/TestFileSessionManager.cpp',
 	'model/coipmanager/filesessionmanager/implementation/phapi/src/PhApiSendFileSession.cpp',
 	'model/coipmanager/filesessionmanager/implementation/phapi/src/PhApiReceiveFileSession.cpp',
 	'model/coipmanager/filesessionmanager/implementation/phapi/src/PhApiFileSessionManager.cpp',
