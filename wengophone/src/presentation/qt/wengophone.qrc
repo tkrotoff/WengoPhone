@@ -1,7 +1,5 @@
 <RCC>
     <qresource prefix="/" >
-        <file>pics/Help-32x32.png</file>
-        <file>pics/add.png</file>
         <file>pics/audio/microphone.png</file>
         <file>pics/audio/play.png</file>
         <file>pics/audio/progress_1.png</file>
@@ -19,7 +17,6 @@
         <file>pics/audio/progress_7.png</file>
         <file>pics/audio/progress_7_off.png</file>
         <file>pics/audio/speaker.png</file>
-        <file>pics/browse.png</file>
         <file>pics/callbar/call_bar_button.png</file>
         <file>pics/callbar/call_bar_button_hangup.png</file>
         <file>pics/callbar/call_bar_button_hangup_on.png</file>
@@ -27,7 +24,6 @@
         <file>pics/callbar/call_bar_button_on.png</file>
         <file>pics/callbar/call_bar_fill.png</file>
         <file>pics/callbar/call_bar_start.png</file>
-        <file>pics/cancel.png</file>
         <file>pics/chat/block-a.png</file>
         <file>pics/chat/block-b.png</file>
         <file>pics/chat/chat-room.png</file>
@@ -39,8 +35,6 @@
         <file>pics/chat/contact-details.png</file>
         <file>pics/chat/invite.png</file>
         <file>pics/chat/invite_on.png</file>
-        <file>pics/close_normal.png</file>
-        <file>pics/close_on.png</file>
         <file>pics/config/accounts.png</file>
         <file>pics/config/advanced.png</file>
         <file>pics/config/audio.png</file>
@@ -58,17 +52,6 @@
         <file>pics/contact/sms.png</file>
         <file>pics/contact/wengo.png</file>
         <file>pics/contact/work.png</file>
-        <file>pics/contact_border.png</file>
-        <file>pics/avatar_default.png</file>
-		<file>pics/avatar_background.png</file>
-        <file>pics/delete.png</file>
-        <file>pics/edit.png</file>
-        <file>pics/exit.png</file>
-        <file>pics/filetransfer/receive-file.png</file>
-        <file>pics/filetransfer/send-file.png</file>
-        <file>pics/group_close.png</file>
-        <file>pics/group_close_reverse.png</file>
-        <file>pics/group_open.png</file>
         <file>pics/headers/IM.png</file>
         <file>pics/headers/conference.png</file>
         <file>pics/headers/login.png</file>
@@ -87,7 +70,6 @@
         <file>pics/iconbar/sms.png</file>
         <file>pics/iconbar/webcam-off.png</file>
         <file>pics/iconbar/webcam.png</file>
-        <file>pics/open.png</file>
         <file>pics/profilebar/bar_end.png</file>
         <file>pics/profilebar/bar_fill.png</file>
         <file>pics/profilebar/bar_on_end.png</file>
@@ -140,15 +122,15 @@
         <file>pics/status/offline.png</file>
         <file>pics/status/online.png</file>
         <file>pics/status/unknown.png</file>
-		<file>pics/statusbar/audio_status_error.png</file>
-		<file>pics/statusbar/audio_status_ok.png</file>
-		<file>pics/statusbar/internet_status_connecting.mng</file>
-		<file>pics/statusbar/internet_status_error.png</file>
-		<file>pics/statusbar/internet_status_ok.mng</file>
-		<file>pics/statusbar/network_status_connecting.mng</file>
-		<file>pics/statusbar/network_status_error.png</file>
-		<file>pics/statusbar/network_status_ok.mng</file>
-		<file>pics/statusbar/network_status_ok.png</file>
+        <file>pics/statusbar/audio_status_error.png</file>
+        <file>pics/statusbar/audio_status_ok.png</file>
+        <file>pics/statusbar/internet_status_connecting.mng</file>
+        <file>pics/statusbar/internet_status_error.png</file>
+        <file>pics/statusbar/internet_status_ok.mng</file>
+        <file>pics/statusbar/network_status_connecting.mng</file>
+        <file>pics/statusbar/network_status_error.png</file>
+        <file>pics/statusbar/network_status_ok.mng</file>
+        <file>pics/statusbar/network_status_ok.png</file>
         <file>pics/systray/away.png</file>
         <file>pics/systray/connecting.png</file>
         <file>pics/systray/disconnected.png</file>
@@ -164,6 +146,23 @@
         <file>pics/video_fullscreen.png</file>
         <file>pics/video_unfullscreen.png</file>
         <file>pics/wengo.png</file>
+        <file>pics/contact_border.png</file>
+        <file>pics/avatar_default.png</file>
+        <file>pics/avatar_background.png</file>
+        <file>pics/cancel.png</file>
+        <file>pics/browse.png</file>
+        <file>pics/add.png</file>
+        <file>pics/close_normal.png</file>
+        <file>pics/close_on.png</file>
+        <file>pics/delete.png</file>
+        <file>pics/edit.png</file>
+        <file>pics/exit.png</file>
+        <file>pics/filetransfer/receive-file.png</file>
+        <file>pics/filetransfer/send-file.png</file>
+        <file>pics/group_close.png</file>
+        <file>pics/group_close_reverse.png</file>
+        <file>pics/group_open.png</file>
+        <file>pics/open.png</file>
     </qresource>
     <qresource prefix="/data" >
         <file>AUTHORS</file>
