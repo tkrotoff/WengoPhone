@@ -29,6 +29,7 @@
 #include <control/profile/CUserProfileHandler.h>
 #include <control/history/CHistory.h>
 
+#include <model/WengoPhone.h>
 #include <model/account/wengo/WengoAccount.h>
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
@@ -48,40 +49,45 @@
 #include <imwrapper/EnumIMProtocol.h>
 #include <imwrapper/EnumPresenceState.h>
 
-#include "QtWengoPhoneEventFilter.h"
-#include "QtWebcamButton.h"
-#include "QtIdle.h"
-#include "QtLanguage.h"
-#include "statusbar/QtStatusBar.h"
-#include "phoneline/QtPhoneLine.h"
-#include "phonecall/QtPhoneCall.h"
-#include "phonecall/QtContactCallListWidget.h"
-#include "profile/QtProfileDetails.h"
-#include "imaccount/QtIMAccountManager.h"
-#include "contactlist/QtContactList.h"
-#include "QtDialpad.h"
 #include "QtAbout.h"
 #include "QtConfigPanel.h"
-#include "webservices/sms/QtSms.h"
-#include "webservices/directory/QtWsDirectory.h"
-#include "config/QtWengoConfigDialog.h"
-#include "profilebar/QtProfileBar.h"
-#include "history/QtHistoryWidget.h"
-#include "toaster/QtToaster.h"
+#include "QtDialpad.h"
+#include "QtIdle.h"
+#include "QtLanguage.h"
+#include "QtWebcamButton.h"
+#include "QtWengoPhoneEventFilter.h"
 #include "callbar/QtCallBar.h"
+#include "config/QtWengoConfigDialog.h"
+#include "contactlist/QtContactList.h"
+#include "filetransfer/QtFileTransfer.h"
+#include "history/QtHistoryWidget.h"
+#include "imaccount/QtIMAccountManager.h"
+#include "imcontact/QtSimpleAddIMContact.h"
+#include "phonecall/QtContactCallListWidget.h"
+#include "phonecall/QtPhoneCall.h"
+#include "phoneline/QtPhoneLine.h"
+#include "profile/QtProfileDetails.h"
+#include "profilebar/QtProfileBar.h"
+#include "statusbar/QtStatusBar.h"
+#include "toaster/QtToaster.h"
+#include "webservices/directory/QtWsDirectory.h"
+#include "webservices/sms/QtSms.h"
 
-#include <qtutil/WidgetFactory.h>
-#include <qtutil/Widget.h>
-#include <qtutil/Object.h>
-#include <qtutil/WidgetBackgroundImage.h>
+
 #include <qtutil/MouseEventFilter.h>
+#include <qtutil/Object.h>
 #include <qtutil/ToolBarStyle.h>
+#include <qtutil/Widget.h>
+#include <qtutil/WidgetBackgroundImage.h>
+#include <qtutil/WidgetFactory.h>
+
 
 #include <QtBrowser.h>
 
+#include <cutil/global.h>
 #include <thread/Thread.h>
 #include <util/Logger.h>
-#include <cutil/global.h>
+#include <util/Macro.h>
 
 #include <QtGui/QtGui>
 
@@ -108,7 +114,7 @@ QtWengoPhone::QtWengoPhone(CWengoPhone & cWengoPhone)
 	_activeTabBeforeCall = NULL;
 	_contactList = NULL;
 	_contactListTabLayout = NULL;
-
+	_qtFileTransfer = NULL;
 	_chatWindow = NULL;
 
 	NetworkProxyDiscovery::getInstance().proxyNeedsAuthenticationEvent +=
@@ -1061,15 +1067,13 @@ void QtWengoPhone::slotTranslationChanged() {
 }
 
 void QtWengoPhone::currentUserProfileWillDieEventHandlerSlot() {
-	if (_qtIdle) {
-		delete _qtIdle;
-		_qtIdle = NULL;
-	}
+	SAFE_DELETE(_qtFileTransfer);
+
+	SAFE_DELETE(_qtIdle);
 
 	if (_qtProfileBar) {
 		_ui->profileBar->layout()->removeWidget(_qtProfileBar);
-		delete _qtProfileBar;
-		_qtProfileBar = NULL;
+		SAFE_DELETE(_qtProfileBar);
 	}
 
 	if (_contactList) {
@@ -1104,6 +1108,8 @@ void QtWengoPhone::userProfileInitializedEventHandlerSlot() {
 
 	_qtSystray->setTrayMenu();
 	_qtSystray->setSystrayIcon(EnumPresenceState::MyPresenceStatusOk);
+
+	_qtFileTransfer = new QtFileTransfer(this, _cWengoPhone.getWengoPhone().getCoIpManager());
 }
 
 void QtWengoPhone::showHideGroups() {

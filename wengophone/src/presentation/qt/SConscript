@@ -137,6 +137,8 @@ headers = [
 	'history/QtHistoryWidget.h',
 	'history/QtHistoryItem.h',
 	'history/QtHistory.h',
+	'filetransfer/QtFileTransfer.h',
+	'filetransfer/QtFileTransferAcceptDialog.h',
 ]
 
 sources = [
@@ -245,6 +247,8 @@ sources = [
 	'history/QtHistoryWidget.cpp',
 	'history/QtHistoryItem.cpp',
 	'history/QtHistory.cpp',
+	'filetransfer/QtFileTransfer.cpp',
+	'filetransfer/QtFileTransferAcceptDialog.cpp',
 	env.WengoCompileQt4Resource('wengophone.qrc'),
 ]
 

@@ -45,6 +45,7 @@ class QtBrowser;
 class QtCallBar;
 class QtContactCallListWidget;
 class QtContactList;
+class QtFileTransfer;
 class QtHistoryWidget;
 class QtIdle;
 class QtLanguage;
@@ -53,11 +54,11 @@ class QtProfileBar;
 class QtSms;
 class QtStatusBar;
 class QtSubscribe;
+class QtSystray;
 class QtToaster;
 class QtWsDirectory;
-class QtSystray;
 class UserProfile;
-class QtFileTransfer;
+
 
 class QLayout;
 class QWidget;

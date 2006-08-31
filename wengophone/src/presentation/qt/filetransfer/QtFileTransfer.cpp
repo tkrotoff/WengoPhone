@@ -30,7 +30,6 @@
 QtFileTransfer::QtFileTransfer(QObject * parent, CoIpManager * coIpManager)
 	: QObject(parent), _coIpManager(coIpManager) {
 
-
 	connect(this, SIGNAL(newReceiveFileSessionCreatedEventHandlerSignal(ReceiveFileSession *)),
 		SLOT(newReceiveFileSessionCreatedEventHandlerSlot(ReceiveFileSession *)));
 	_coIpManager->getFileSessionManager().newReceiveFileSessionCreatedEvent +=
