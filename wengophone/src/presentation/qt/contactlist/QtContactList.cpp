@@ -236,6 +236,7 @@ void QtContactList::contactChangedEvent(const std::string & contactId) {
 	} else {
 		contactAddedEvent(contactId);
 	}
+	contactChangedEventSignal(QString::fromStdString(contactId));
 }
 
 QTreeWidgetItem * QtContactList::addGroup(QString contactGroupId) {

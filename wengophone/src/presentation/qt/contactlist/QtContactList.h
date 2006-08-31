@@ -88,6 +88,10 @@ public:
 
 	CContactList & getCContactList() const;
 
+Q_SIGNALS:
+
+	void contactChangedEventSignal(QString contactId);
+
 public Q_SLOTS:
 
 	void cleanup();
