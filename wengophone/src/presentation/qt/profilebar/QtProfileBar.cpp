@@ -74,6 +74,7 @@ QtProfileBar::QtProfileBar(CWengoPhone & cWengoPhone, CUserProfile & cUserProfil
 
 	//The status widget
 	_statusLabel = new WengoStyleLabel(this);
+	_statusLabel->setToolTip(tr("Click here to change your status"));
 	_statusLabel->setMinimumSize(QSize(46, 65));
 	_statusLabel->setMaximumSize(QSize(46, 65));
 	_statusLabel->setPixmaps(QPixmap(":/pics/profilebar/bar_start_status_green.png"),
