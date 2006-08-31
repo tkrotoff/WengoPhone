@@ -39,7 +39,7 @@
        <string>Audio Smileys</string>
       </property>
       <property name="icon" >
-       <iconset resource="wengophone.qrc" >:/emoticons/chat/emoticons/face-devil-grin16.png</iconset>
+       <iconset resource="wengophone.qrc" >:/pics/chat/emoticons/face-devil-grin16.png</iconset>
       </property>
      </item>
     </widget>
@@ -77,7 +77,7 @@
         <string/>
        </property>
        <property name="icon" >
-        <iconset resource="wengophone.qrc" >:/dialpad/pics/dialpad/2_on.png</iconset>
+        <iconset resource="wengophone.qrc" >:/pics/dialpad/2_on.png</iconset>
        </property>
        <property name="iconSize" >
         <size>
@@ -102,7 +102,7 @@
         <string/>
        </property>
        <property name="icon" >
-        <iconset resource="wengophone.qrc" >:/dialpad/pics/dialpad/11_on.png</iconset>
+        <iconset resource="wengophone.qrc" >:/pics/dialpad/11_on.png</iconset>
        </property>
        <property name="iconSize" >
         <size>
@@ -135,7 +135,7 @@
         <string/>
        </property>
        <property name="icon" >
-        <iconset resource="wengophone.qrc" >:/dialpad/pics/dialpad/12_on.png</iconset>
+        <iconset resource="wengophone.qrc" >:/pics/dialpad/12_on.png</iconset>
        </property>
        <property name="iconSize" >
         <size>
@@ -166,7 +166,7 @@
         <string/>
        </property>
        <property name="icon" >
-        <iconset resource="wengophone.qrc" >:/dialpad/pics/dialpad/5_on.png</iconset>
+        <iconset resource="wengophone.qrc" >:/pics/dialpad/5_on.png</iconset>
        </property>
        <property name="iconSize" >
         <size>
@@ -191,7 +191,7 @@
         <string/>
        </property>
        <property name="icon" >
-        <iconset resource="wengophone.qrc" >:/dialpad/pics/dialpad/1_on.png</iconset>
+        <iconset resource="wengophone.qrc" >:/pics/dialpad/1_on.png</iconset>
        </property>
        <property name="iconSize" >
         <size>
@@ -216,7 +216,7 @@
         <string/>
        </property>
        <property name="icon" >
-        <iconset resource="wengophone.qrc" >:/dialpad/pics/dialpad/3_on.png</iconset>
+        <iconset resource="wengophone.qrc" >:/pics/dialpad/3_on.png</iconset>
        </property>
        <property name="iconSize" >
         <size>
@@ -241,7 +241,7 @@
         <string/>
        </property>
        <property name="icon" >
-        <iconset resource="wengophone.qrc" >:/dialpad/pics/dialpad/10_on.png</iconset>
+        <iconset resource="wengophone.qrc" >:/pics/dialpad/10_on.png</iconset>
        </property>
        <property name="iconSize" >
         <size>
@@ -266,7 +266,7 @@
         <string/>
        </property>
        <property name="icon" >
-        <iconset resource="wengophone.qrc" >:/dialpad/pics/dialpad/7_on.png</iconset>
+        <iconset resource="wengophone.qrc" >:/pics/dialpad/7_on.png</iconset>
        </property>
        <property name="iconSize" >
         <size>
@@ -291,7 +291,7 @@
         <string/>
        </property>
        <property name="icon" >
-        <iconset resource="wengophone.qrc" >:/dialpad/pics/dialpad/9_on.png</iconset>
+        <iconset resource="wengophone.qrc" >:/pics/dialpad/9_on.png</iconset>
        </property>
        <property name="iconSize" >
         <size>
@@ -316,7 +316,7 @@
         <string/>
        </property>
        <property name="icon" >
-        <iconset resource="wengophone.qrc" >:/dialpad/pics/dialpad/6_on.png</iconset>
+        <iconset resource="wengophone.qrc" >:/pics/dialpad/6_on.png</iconset>
        </property>
        <property name="iconSize" >
         <size>
@@ -341,7 +341,7 @@
         <string/>
        </property>
        <property name="icon" >
-        <iconset resource="wengophone.qrc" >:/dialpad/pics/dialpad/4_on.png</iconset>
+        <iconset resource="wengophone.qrc" >:/pics/dialpad/4_on.png</iconset>
        </property>
        <property name="iconSize" >
         <size>
@@ -366,7 +366,7 @@
         <string/>
        </property>
        <property name="icon" >
-        <iconset resource="wengophone.qrc" >:/dialpad/pics/dialpad/8_on.png</iconset>
+        <iconset resource="wengophone.qrc" >:/pics/dialpad/8_on.png</iconset>
        </property>
        <property name="iconSize" >
         <size>
