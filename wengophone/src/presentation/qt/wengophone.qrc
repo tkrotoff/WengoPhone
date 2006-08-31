@@ -20,6 +20,18 @@
         <file>pics/chat/chat_emoticon_button_on.png</file>
         <file>pics/chat/chat_send.png</file>
         <file>pics/chat/contact-details.png</file>
+		<file>pics/chat/chat_history.png</file>
+		<file>pics/chat/font_bold_on.png</file>
+		<file>pics/chat/font_bold.png</file>
+		<file>pics/chat/font_italic_on.png</file>
+		<file>pics/chat/font_italic.png</file>
+		<file>pics/chat/font_underline_on.png</file>
+		<file>pics/chat/font_underline.png</file>
+		<file>pics/chat/new_chat.png</file>
+		<file>pics/chat/font_police_on.png</file>
+		<file>pics/chat/font_police.png</file>
+		<file>pics/chat/font_color.png</file>
+		<file>pics/chat/font_color_on.png</file>
 
         <file>pics/config/accounts.png</file>
         <file>pics/config/advanced.png</file>
