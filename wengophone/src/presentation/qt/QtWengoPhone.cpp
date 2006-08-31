@@ -421,7 +421,6 @@ void QtWengoPhone::addPhoneCall(QtPhoneCall * qtPhoneCall) {
 		_qtCallBar->setEnabledCallButton(true);
 	}
 
-	_wengoPhoneWindow->showMinimized();
 	_wengoPhoneWindow->showNormal();
 	_wengoPhoneWindow->raise();
 	_wengoPhoneWindow->setVisible(true);
