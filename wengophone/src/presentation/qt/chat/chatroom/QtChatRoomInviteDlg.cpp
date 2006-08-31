@@ -44,16 +44,15 @@ QDialog(parent,f), _cContactList(cContactList), _chatSession(chatSession) {
 }
 
 void QtChatRoomInviteDlg::setupGui() {
-
 	_contactListTreeWidget = Object::findChild<QTreeWidget *>(_widget,"contactListTreeWidget");
 	_inviteListWidget = Object::findChild<QListWidget *>(_widget,"inviteListWidget");
 	_addPushButton = Object::findChild<QPushButton *>(_widget,"addPushButton");
 	_removePushButton = Object::findChild<QPushButton *>(_widget,"removePushButton");
 	_startPushButton = Object::findChild<QPushButton *>(_widget,"startPushButton");
 
-	connect (_addPushButton,SIGNAL(clicked()), SLOT(addToConference()));
-	connect (_removePushButton,SIGNAL(clicked()),SLOT(removeFromConference()));
-	connect (_startPushButton,SIGNAL(clicked()),SLOT(startConference()));
+	connect (_addPushButton, SIGNAL(clicked()), SLOT(addToConference()));
+	connect (_removePushButton, SIGNAL(clicked()), SLOT(removeFromConference()));
+	connect (_startPushButton, SIGNAL(clicked()), SLOT(startConference()));
 	// Remove the column header
 	_contactListTreeWidget->header()->hide();
 	fillContact();
@@ -125,7 +124,7 @@ void QtChatRoomInviteDlg::fillGroup(QTreeWidgetItem * group, const QString & gro
 		ContactProfile contactProfile = _cContactList.getContactProfile((*it).toStdString());
 		if (contactProfile.getFirstAvailableIMContact(_chatSession) != NULL) {
 			QtChatRoomTreeWidgetItem * item = new QtChatRoomTreeWidgetItem (contactProfile,group );
-			item->setText(0,QString::fromStdString (contactProfile.getDisplayName()));
+			item->setText(0, QString::fromStdString (contactProfile.getDisplayName()));
 			switch ( contactProfile.getPresenceState()) {
 				case EnumPresenceState::PresenceStateOnline:
 					status = QtContactPixmap::ContactOnline;
@@ -142,6 +141,14 @@ void QtChatRoomInviteDlg::fillGroup(QTreeWidgetItem * group, const QString & gro
 				case EnumPresenceState::PresenceStateInvisible:
 					status = QtContactPixmap::ContactInvisible;
 					break;
+				case EnumPresenceState::PresenceStateUserDefined:
+					status = QtContactPixmap::ContactOnline;
+					break;
+				case EnumPresenceState::PresenceStateUnknown:
+					status = QtContactPixmap::ContactUnknown;
+					break;
+				default:
+					status = QtContactPixmap::ContactUnknown;
 			}
 		item->setIcon(0,QIcon(QtContactPixmap::getInstance()->getPixmap(status)));
 		}

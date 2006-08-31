@@ -112,7 +112,6 @@ headers = [
 	'chat/QtChatHandler.h',
 	'chat/QtChatWidget.h',
 	'chat/QtChatWindow.h',
-	'chat/QtChatActionBarWidget.h',
 	'chat/QtChatEditWidget.h',
 	'chat/QtChatHistoryWidget.h',
 	'chat/QtChatEditActionBarWidget.h',
@@ -239,7 +238,6 @@ sources = [
 	'chat/QtChatWidget.cpp',
 	'chat/QtChatEditEventManager.cpp',
 	'chat/QtChatWindow.cpp',
-	'chat/QtChatActionBarWidget.cpp',
 	'chat/QtChatEditWidget.cpp',
 	'chat/QtChatHistoryWidget.cpp',
 	'chat/QtChatEditActionBarWidget.cpp',
@@ -330,8 +328,8 @@ forms = [
 	'config/PrivacySettings.ui',
 	'config/VideoSettings.ui',
 	'config/WengoConfigDialog.ui',
-
-	'chat/ChatRoomWidget.ui',
+	'chat/ChatMainWindow.ui',
+	'chat/ChatWidget.ui',
 	'chat/UserFrame.ui',
 	'chat/contactlist/ChatContactListItem.ui',
 

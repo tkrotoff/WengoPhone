@@ -41,17 +41,35 @@ void QtWengoStyleBar::init(WengoStyleLabel * firstLabel, WengoStyleLabel * endLa
 
 void QtWengoStyleBar::addLabel(const QString & identifier,
 	const QPixmap & normalPixmap, const QPixmap & pressedPixmap,
-	const QSize & size, int position) {
+	const QSize & size, bool isToggled, bool isText, int position) {
 
 	QMutexLocker locker(& _mutex);
-	if(!_labels.contains(identifier)){
+	if (!_labels.contains(identifier)) {
 		QGridLayout * glayout = dynamic_cast<QGridLayout *>(layout());
-		WengoStyleLabel * label = new WengoStyleLabel(this);
-		label->setPixmaps(normalPixmap, QPixmap(), QPixmap(), pressedPixmap, QPixmap(), QPixmap());
+
+		WengoStyleLabel * label;
+		if (isToggled) {
+			label = new WengoStyleLabel(this, WengoStyleLabel::Toggled);
+		} else {
+			label = new WengoStyleLabel(this, WengoStyleLabel::Normal);
+		}
+
+		if (!isText) {
+			label->setPixmaps(
+				normalPixmap,
+				QPixmap(),
+				QPixmap(),
+				pressedPixmap,
+				QPixmap(),
+				QPixmap()
+			);
+		} else {
+			label->setPixmaps(normalPixmap, normalPixmap, normalPixmap, pressedPixmap, pressedPixmap, pressedPixmap);
+		}
 		label->setMinimumSize(size);
 		label->setMaximumSize(size);
 		_labels.insert(identifier, label);
-		if(position < 0 || position > _labelsIndexes.size()){
+		if (position < 0 || position > _labelsIndexes.size()) {
 			position = _labelsIndexes.size();
 		}
 		_labelsIndexes.insert(position, label);
@@ -59,7 +77,7 @@ void QtWengoStyleBar::addLabel(const QString & identifier,
 		// first deplace the end
 		glayout->addWidget(_endLabel, 0, glayout->columnCount());
 		// then shift the buttons
-		for(int i=glayout->columnCount()-3; i>=position+1; i--){
+		for (int i=glayout->columnCount()-3; i>=position+1; i--) {
 			glayout->addWidget(_labelsIndexes[i], 0, i+1);
 		}
 		// then add the button
@@ -68,7 +86,7 @@ void QtWengoStyleBar::addLabel(const QString & identifier,
 }
 
 void QtWengoStyleBar::removeLabel(const QString & identifier){
-	if(_labels.contains(identifier)){
+	if (_labels.contains(identifier)) {
 		QGridLayout * glayout = dynamic_cast<QGridLayout *>(layout());
 		WengoStyleLabel * label = _labels.take(identifier);
 		_labelsIndexes.removeAll(label);
@@ -91,7 +109,7 @@ void QtWengoStyleBar::addSeparator(const QString & pixmap, int position) {
 	);
 	label->setMinimumSize(QSize(3,65));
 	label->setMaximumSize(QSize(3,65));
-	if(position < 0 || position > _labelsIndexes.size()) {
+	if (position < 0 || position > _labelsIndexes.size()) {
 		position = _labelsIndexes.size();
 	}
 	_labelsIndexes.insert(position, label);
@@ -100,7 +118,7 @@ void QtWengoStyleBar::addSeparator(const QString & pixmap, int position) {
 	// first deplace the end
 	glayout->addWidget(_endLabel, 0, glayout->columnCount());
 	// then shift the buttons
-	for(int i=glayout->columnCount()-3; i>=position+1; i--) {
+	for (int i=glayout->columnCount()-3; i>=position+1; i--) {
 		glayout->addWidget(_labelsIndexes[i], 0, i+1);
 	}
 	// then add the button
@@ -109,7 +127,7 @@ void QtWengoStyleBar::addSeparator(const QString & pixmap, int position) {
 
 void QtWengoStyleBar::removeSeparator(int ord) {
 	QMutexLocker locker(& _mutex);
-	if(ord < 1 || ord >= _separators.size()) {
+	if (ord < 1 || ord >= _separators.size()) {
 		return;
 	}
 	QGridLayout * glayout = dynamic_cast<QGridLayout *>(layout());

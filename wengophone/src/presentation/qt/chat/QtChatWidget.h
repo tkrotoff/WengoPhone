@@ -20,7 +20,7 @@
 #ifndef OWQTCHATWIDGET_H
 #define OWQTCHATWIDGET_H
 
-#include "ui_ChatRoomWidget.h"
+#include "ui_ChatWidget.h"
 
 #include "emoticons/QtEmoticon.h"
 
@@ -34,7 +34,7 @@
 
 #include <QtGui/QtGui>
 
-class QtChatActionBarWidget;
+//class QtChatActionBarWidget;
 class QtChatEditActionBarWidget;
 class QtChatEditWidget;
 class QtChatHistoryWidget;
@@ -110,9 +110,9 @@ public Q_SLOTS:
 
 	void showInviteDialog();
 
-	void contactAddedEventSlot();
+	void contactAddedEventSlot(IMChatSession & sender, const IMContact & imContact);
 
-	void contactRemovedEventSlot();
+	void contactRemovedEventSlot(IMChatSession & sender, const IMContact & imContact);
 
 	virtual void setVisible(bool visible);
 
@@ -122,15 +122,23 @@ Q_SIGNALS:
 
 	void newMessage(IMChatSession* session,const QString & msg);
 
-	void contactAddedEventSignal();
+	void contactAddedEventSignal(IMChatSession & sender, const IMContact & imContact);
 
-	void contactRemovedEventSignal();
+	void contactRemovedEventSignal(IMChatSession & sender, const IMContact & imContact);
 
 private Q_SLOTS:
 
 	void historyFoldButtonClicked();
 
 	void editFoldButtonClicked();
+
+	void changeFontColor();
+
+	void boldClickedSlot();
+
+	void italicClickedSlot();
+
+	void underlineClickedSlot();
 
 private:
 
@@ -215,8 +223,6 @@ private:
 
 	mutable QMutex _mutex;
 
-	QtChatActionBarWidget * _actionBar;
-
 	QtChatEditActionBarWidget * _editActionBar;
 
 	QtChatEditWidget * _chatEdit;
@@ -229,7 +235,15 @@ private:
 
 	EmoticonsWidget * _emoticonsWidget;
 
-	Ui::ChatRoomWidget _ui;
+	Ui::ChatWidget _ui;
+
+	// font style settings
+	QFont _currentFont;
+	QColor _currentColor;
+	bool _bold;
+	bool _italic;
+	bool _underline;
+	////
 };
 
 #endif //OWQTCHATWIDGET_H

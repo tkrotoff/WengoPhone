@@ -57,7 +57,7 @@ public:
 	 * @param position : if specified, th e button is inserted at that position, else inserted at the end.
 	 */
 	void addLabel(const QString & identifier, const QPixmap & normalPixmap,
-		const QPixmap & pressedPixmap, const QSize & size, int position = -1);
+		const QPixmap & pressedPixmap, const QSize & size, bool isToggled = false, bool isText = false, int position = -1);
 
 	/**
 	 * Removes the button associated to the text-based identifier.

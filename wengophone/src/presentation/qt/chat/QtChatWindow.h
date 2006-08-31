@@ -20,47 +20,46 @@
 #ifndef OWQTCHATWINDOW_H
 #define OWQTCHATWINDOW_H
 
+#include "ui_ChatMainWindow.h"
+
+#include <QtGui/QMainWindow>
+
 #include <control/chat/CChatHandler.h>
 
-#include <imwrapper/IMContact.h>
-#include <imwrapper/IMChatSession.h>
+#include <imwrapper/IMChat.h>
 
 #include <util/Trackable.h>
-
-#include "QtChatWidget.h"
-//#include "QtChatContactWidget.h"
-
-#include <QtGui/QtGui>
 
 #include <string>
 
 class QtChatTabWidget;
 class QtWengoPhone;
-class WengoStyleLabel;
+class QtChatWidget;
+class IMContact;
+class IMChatSession;
+class ContactProfile;
 
 /**
  *
  * @ingroup presentation
  * @author Mr K.
- * @author Mathieu Stute
+ * @author Mathieu Stute.
  */
-class QtChatWindow : public QObject, public Trackable {
+class QtChatWindow : public QMainWindow, public Trackable {
 	Q_OBJECT
 public:
 
-	QtChatWindow(CChatHandler & cChatHandler, IMChatSession & imChatSession);
+	QtChatWindow(QWidget * parent, CChatHandler & cChatHandler, IMChatSession & imChatSession, QtWengoPhone & qtWengoPhone);
 
 	~QtChatWindow();
 
+	//TODO: rename these methods
 	void addChat(IMChatSession * session, const IMContact & from);
-
 	void addChatSession(IMChatSession * imChatSession);
 
-	QWidget * getWidget() {return _window;}
-
-	void enableChatButton();
-
-	bool chatIsVisible();
+	bool chatIsVisible() {
+		return (isVisible() && (!isMinimized()));
+	}
 
 	void imContactChangedEventHandler(IMContact & sender);
 
@@ -76,29 +75,43 @@ Q_SIGNALS:
 
 public Q_SLOTS:
 
-	void tabSelectionChanged(int index);
-
-	void show();
-
-	void openContactListFrame();
-
-	void closeContactListFrame();
+	void activeTabChanged(int index);
 
 	void messageReceivedSlot(IMChatSession * sender);
 
-	void typingStateChangedThreadSafe(const IMChatSession * sender, const IMContact * imContact,const IMChat::TypingState * state);
+	void show();
 
-	void callContact();
+	void typingStateChangedThreadSafe(const IMChatSession * sender, const IMContact * imContact, const IMChat::TypingState * state);
 
-	void closeTab();
+	void callActiveTabContact();
 
-	void ctrlTabPressed();
+	void sendSmsToActiveTabContact();
+
+	void sendFileToActiveTabContact();
+
+	void createChatConference();
+
+	void showActiveTabContactInfo();
+
+	void blockActiveTabContact();
+
+	void closeActiveTab();
 
 	void statusChangedSlot(QString contactId);
 
 private:
 
-	//typedef QMap <int, QtChatContactWidget *> ChatContactWidgets;
+	QtChatWidget * getActiveTabWidget();
+
+	const QString getActiveTabContactId();
+
+	ContactProfile getContactProfileFromContactId(const QString & contactId);
+
+	void setupMenuBarActions();
+
+	void setupToolBarActions();
+
+	void updateToolBarActions();
 
 	void messageReceivedEventHandler(IMChatSession & sender);
 
@@ -106,15 +119,9 @@ private:
 
 	void flashWindow();
 
-	void createInviteFrame();
-
-	void createMenu();
-
 	void showMinimized();
 
 	void showChatWindow();
-
-	QMainWindow * findMainWindow();
 
 	QString getShortDisplayName(const QString & contactId, const QString & defaultName) const;
 
@@ -122,31 +129,13 @@ private:
 
 	QtChatTabWidget * _tabWidget;
 
-	QMenuBar * _menuBar;
-
-	QFrame * _contactListFrame;
-
-	QFrame * _inviteFrame;
-
-	WengoStyleLabel * _callLabel;
-
-	WengoStyleLabel * _inviteLabel;
-
-	QWidget * _window;
-
 	CChatHandler & _cChatHandler;
 
 	IMChatSession * _imChatSession;
 
-	//ChatContactWidgets * _chatContactWidgets;
+	QtWengoPhone & _qtWengoPhone;
 
-	QtWengoPhone * _qtWengoPhone;
-
-	int _flashTimerId;
-
-	bool _flashStat;
-
-	int _flashCount;
+	Ui::chatMainWindow _ui;
 };
 
 #endif //OWQTCHATWINDOW_H

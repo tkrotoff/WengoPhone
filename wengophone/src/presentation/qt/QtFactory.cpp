@@ -146,7 +146,11 @@ PWenboxPlugin * QtFactory::createPresentationWenboxPlugin(CWenboxPlugin & cWenbo
 
 PChatHandler * QtFactory::createPresentationChatHandler(CChatHandler & cChatHandler) {
 	if (!_qtChatHandler) {
-		_qtChatHandler = new QtChatHandler(cChatHandler);
+		if (!_qtWengoPhone) {
+			LOG_FATAL("PWengoPhone must be created before PContactList");
+		} else {
+			_qtChatHandler = new QtChatHandler(cChatHandler, *_qtWengoPhone);
+		}
 	}
 	return _qtChatHandler;
 }

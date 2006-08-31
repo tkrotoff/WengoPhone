@@ -48,8 +48,8 @@ public:
 		NONE,
 	};
 
-	QtChatContactListItem(QWidget * parent, QPixmap picture,
-		const QString & nickname, PictureMode pmode = SMALL/*, NicknameMode nmode = RIGHT*/);
+	QtChatContactListItem(QWidget * parent, const QString & contactId, QPixmap picture,
+		const QString & nickname, PictureMode pmode = SMALL, NicknameMode nmode = NONE);
 
 private:
 
@@ -59,7 +59,9 @@ private:
 
 	PictureMode _pictureMode;
 
-	//NicknameMode _nicknameMode;
+	NicknameMode _nicknameMode;
+
+	QString _contactId;
 
 	Ui::ChatContactListItem * _ui;
 };

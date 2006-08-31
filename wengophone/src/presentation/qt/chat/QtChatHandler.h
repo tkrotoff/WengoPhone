@@ -28,6 +28,7 @@ class CChatHandler;
 class IMAccount;
 class IMContactSet;
 class QtChatWindow;
+class QtWengoPhone;
 
 /**
  *
@@ -39,7 +40,7 @@ class QtChatHandler : public QObject, public PChatHandler {
 	Q_OBJECT
 public:
 
-	QtChatHandler(CChatHandler & cChatHandler);
+	QtChatHandler(CChatHandler & cChatHandler, QtWengoPhone & qtWengoPhone);
 
 	~QtChatHandler();
 
@@ -54,6 +55,8 @@ private:
 	CChatHandler & _cChatHandler;
 
 	QtChatWindow * _qtChatWindow;
+
+	QtWengoPhone & _qtWengoPhone;
 };
 
 #endif	//OWQTCHATHANDLER_H

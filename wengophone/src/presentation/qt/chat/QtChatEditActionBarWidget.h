@@ -38,23 +38,41 @@ public:
 	/**
 	 * Constructor.
 	 */
-	QtChatEditActionBarWidget(QtChatWidget * chatWidget, QWidget * parent);
+	QtChatEditActionBarWidget(QWidget * parent);
 
 Q_SIGNALS:
 
+	/**
+	 * Emoticon label has been clicked.
+	 */
 	void emoticonsLabelClicked();
 
+	/**
+	 * Font label has been clicked.
+	 */
 	void fontLabelClicked();
 
-private Q_SLOTS:
+	/**
+	 * Font color label has been clicked.
+	 */
+	void fontColorLabelClicked();
 
-	void emoticonsLabelClickedSlot();
+	/**
+	 * Bold label has been clicked.
+	 */
+	void boldLabelClicked();
 
-	void fontLabelClickedSlot();
+	/**
+	 * Italic label has been clicked.
+	 */
+	void italicLabelClicked();
+
+	/**
+	 * Underline label has been clicked.
+	 */
+	void underlineLabelClicked();
 
 private:
-
-	QtChatWidget * _chatWidget;
 
 	WengoStyleLabel * _emoticonsLabel;
 

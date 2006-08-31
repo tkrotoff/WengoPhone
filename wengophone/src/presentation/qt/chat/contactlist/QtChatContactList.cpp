@@ -31,16 +31,23 @@ QtChatContactList::QtChatContactList(QWidget * parent)
 	glayout->setMargin(0);
 	glayout->setSpacing(0);
 	setLayout(glayout);
-
-	LOG_DEBUG("\n\n\n\n\n\nQtChatContactList\n\n\n\n\n\n");
 }
 
-void QtChatContactList::addContact(QPixmap picture, const QString & nickname) {
-	QtChatContactListItem * item = new QtChatContactListItem(this, picture, nickname, QtChatContactListItem::SMALL);
-	_widgetMap[_widgetMap.count() + 1] = item;
+void QtChatContactList::addContact(const QString & contactId, QPixmap picture,
+ const QString & nickname) {
+
+	 QtChatContactListItem * item = new QtChatContactListItem(this, contactId, picture, nickname);
+	_widgetMap[contactId] = item;
 
 	QGridLayout * glayout = dynamic_cast<QGridLayout *>(layout());
-	glayout->addWidget(item, 0, _widgetMap.count());
-	LOG_DEBUG("\n\n\n\n\n\naddContact: " + nickname.toStdString() + "\n\n\n\n\n\n");
+	glayout->addWidget(item, _widgetMap.count(), 0);
+}
+
+void QtChatContactList::removeContact(const QString & contactId) {
+
+	QtChatContactListItem * item = _widgetMap[contactId];
+	item->hide();
+	_widgetMap.remove(contactId);
+	delete item;
 }
 

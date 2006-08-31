@@ -19,45 +19,34 @@
 
 #include "QtChatEditActionBarWidget.h"
 
-#include <presentation/qt/chat/QtChatWidget.h>
-
 #include <qtutil/WengoStyleLabel.h>
+
+#include <util/Logger.h>
 
 #include <QtCore/QString>
 
-static const QString CHAT_EMOTICONS_LABEL_OFF_BEGIN = ":/pics/chat/chat_emoticon_button.png";
-static const QString CHAT_EMOTICONS_LABEL_OFF_END = ":/pics/profilebar/bar_separator.png";
-static const QString CHAT_EMOTICONS_LABEL_OFF_FILL = ":/pics/profilebar/bar_fill.png";
-static const QString CHAT_EMOTICONS_LABEL_ON_BEGIN = ":/pics/chat/chat_emoticon_button_on.png";
-static const QString CHAT_EMOTICONS_LABEL_ON_END = ":/pics/profilebar/bar_separator.png";
-static const QString CHAT_EMOTICONS_LABEL_ON_FILL = ":/pics/profilebar/bar_on_fill.png";
-static const QString CHAT_FONT_LABEL_OFF_END = ":/pics/profilebar/bar_end.png";
-static const QString CHAT_FONT_LABEL_OFF_FILL = ":/pics/profilebar/bar_fill.png";
-static const QString CHAT_FONT_LABEL_ON_END = ":/pics/profilebar/bar_on_end.png";
-static const QString CHAT_FONT_LABEL_ON_FILL = ":/pics/profilebar/bar_on_fill.png";
+QtChatEditActionBarWidget::QtChatEditActionBarWidget(QWidget * parent) :
+	QtWengoStyleBar(parent) {
 
-QtChatEditActionBarWidget::QtChatEditActionBarWidget(QtChatWidget * chatWidget, QWidget * parent) :
-	QtWengoStyleBar(parent), _chatWidget(chatWidget) {
+	setMaximumSize(QSize(10000, 65));
+	setMinimumSize(QSize(16, 65));
 
-	setMaximumSize(QSize(10000, 70));
-	setMinimumSize(QSize(16, 70));
-
+	// configure the first label
 	_emoticonsLabel = new WengoStyleLabel(this);
 	_emoticonsLabel->setPixmaps(
-		QPixmap(CHAT_EMOTICONS_LABEL_OFF_BEGIN),
-		QPixmap(CHAT_EMOTICONS_LABEL_OFF_END),
-		QPixmap(CHAT_EMOTICONS_LABEL_OFF_FILL),
-		QPixmap(CHAT_EMOTICONS_LABEL_ON_BEGIN),
-		QPixmap(CHAT_EMOTICONS_LABEL_ON_END),
-		QPixmap(CHAT_EMOTICONS_LABEL_ON_FILL)
+		QPixmap(":/pics/chat/chat_emoticon_button.png"),
+		QPixmap(":/pics/profilebar/bar_separator.png"),
+		QPixmap(":/pics/profilebar/bar_fill.png"),
+		QPixmap(":/pics/chat/chat_emoticon_button_on.png"),
+		QPixmap(":/pics/profilebar/bar_separator.png"),
+		QPixmap(":/pics/profilebar/bar_fill.png")
 	);
-	_emoticonsLabel->setMaximumSize(QSize(120,65));
-	_emoticonsLabel->setMinimumSize(QSize(120,65));
-	_emoticonsLabel->setText(tr(" emoticons  "));
-	_emoticonsLabel->setTextColor(Qt::white);
-	_emoticonsLabel->setTextAlignment(Qt::AlignRight | Qt::AlignVCenter);
-	connect(_emoticonsLabel, SIGNAL(clicked()), SLOT(emoticonsLabelClickedSlot()));
+	_emoticonsLabel->setMaximumSize(QSize(48,65));
+	_emoticonsLabel->setMinimumSize(QSize(48,65));
+	connect(_emoticonsLabel, SIGNAL(clicked()), SIGNAL(emoticonsLabelClicked()));
+	////
 
+	// configure end label
 	_endLabel = new WengoStyleLabel(this);
 	_endLabel->setPixmaps(
 		QPixmap(),
@@ -68,24 +57,55 @@ QtChatEditActionBarWidget::QtChatEditActionBarWidget(QtChatWidget * chatWidget, 
 		QPixmap(":/pics/profilebar/bar_fill.png")
 	);
 	_endLabel->setMinimumSize(QSize(16, 65));
+	////
 
 	init(_emoticonsLabel, _endLabel);
 
 	// add font label
 	addLabel(QString("fontLabel"),
-			 QPixmap(":/pics/chat/invite.png"),
-			 QPixmap(":/pics/chat/invite_on.png"),
-			 QSize(36, 65)
+		QPixmap(":/pics/chat/font_police.png"),
+		QPixmap(":/pics/chat/font_police_on.png"),
+		QSize(36, 65)
 	);
-
-	connect(_labels["fontLabel"], SIGNAL(clicked()), SLOT(fontLabelClickedSlot()));
+	connect(_labels["fontLabel"], SIGNAL(clicked()), SIGNAL(fontLabelClicked()));
 	////
-}
 
-void QtChatEditActionBarWidget::emoticonsLabelClickedSlot() {
-	emoticonsLabelClicked();
-}
+	// add font color label
+	addLabel(QString("fontColorLabel"),
+		QPixmap(":/pics/chat/font_color.png"),
+		QPixmap(":/pics/chat/font_color_on.png"),
+		QSize(36, 65)
+	);
+	connect(_labels["fontColorLabel"], SIGNAL(clicked()), SIGNAL(fontColorLabelClicked()));
+	////
 
-void QtChatEditActionBarWidget::fontLabelClickedSlot() {
-	fontLabelClicked();
+	// add bold label
+	addLabel(QString("boldLabel"),
+		QPixmap(":/pics/chat/font_bold.png"),
+		QPixmap(":/pics/chat/font_bold_on.png"),
+		QSize(36, 65),
+		true
+	);
+	connect(_labels["boldLabel"], SIGNAL(clicked()), SIGNAL(boldLabelClicked()));
+	////
+
+	// add italic label
+	addLabel(QString("italicLabel"),
+		QPixmap(":/pics/chat/font_italic.png"),
+		QPixmap(":/pics/chat/font_italic_on.png"),
+		QSize(36, 65),
+		true
+	);
+	connect(_labels["italicLabel"], SIGNAL(clicked()), SIGNAL(italicLabelClicked()));
+	////
+
+	// add underline label
+	addLabel(QString("underlineLabel"),
+		QPixmap(":/pics/chat/font_underline.png"),
+		QPixmap(":/pics/chat/font_underline_on.png"),
+		QSize(36, 65),
+		true
+	);
+	connect(_labels["underlineLabel"], SIGNAL(clicked()), SIGNAL(underlineLabelClicked()));
+	////
 }

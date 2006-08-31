@@ -32,7 +32,7 @@ QtChatUserFrame::QtChatUserFrame(QWidget * parent)
 
 void QtChatUserFrame::setPixmap(QPixmap pixmap) {
 
-	QPixmap background = QPixmap(":/pics/fond_avatar.png");
+	QPixmap background = QPixmap(":/pics/avatar_background.png");
 
 	if (!pixmap.isNull()) {
 		QPainter painter(& background);

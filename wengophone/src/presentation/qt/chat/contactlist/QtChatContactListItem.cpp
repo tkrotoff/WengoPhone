@@ -25,41 +25,54 @@
 
 #include <util/Logger.h>
 
-QtChatContactListItem::QtChatContactListItem(
-	QWidget * parent, QPixmap picture, const QString & nickname,
-	PictureMode pmode/*, NicknameMode nmode*/)
-	: QWidget(parent), _pictureMode(pmode) {
+QtChatContactListItem::QtChatContactListItem(QWidget * parent, const QString & contactId,
+	QPixmap picture, const QString & nickname, PictureMode pmode, NicknameMode nmode)
+	: QWidget(parent), _contactId(contactId), _pictureMode(pmode), _nicknameMode(nmode) {
 
 	_ui = new Ui::ChatContactListItem();
 	_ui->setupUi(this);
 	setupPixmap(picture);
-	setupNickname(nickname);
+	_ui->pictureLabel->setToolTip(nickname);
+	/*
+	if (_nicknameMode != NONE) {
+		setupNickname(nickname);
+	} else {
+		_ui->nicknameLabel->hide();
+	}*/
 }
 
 void QtChatContactListItem::setupPixmap(QPixmap pixmap) {
 
-	QPixmap background = QPixmap(":/pics/fond_avatar.png");
+	//TODO:: resize fond_avatar.png
+	QPixmap background = QPixmap(":/pics/avatar_background.png");
 	QPainter painter(& background);
 
 	if (!pixmap.isNull()) {
-
+		/*
 		switch (_pictureMode) {
 			case BIG:
 				painter.drawPixmap(5, 5, pixmap.scaled(96, 96, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+				_ui->pictureLabel->resize(96, 96);
 				break;
 			case MEDIUM:
 				painter.drawPixmap(5, 5, pixmap.scaled(48, 48, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+				_ui->pictureLabel->resize(48, 48);
 				break;
 			case SMALL:
 				painter.drawPixmap(5, 5, pixmap.scaled(24, 24, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+				_ui->pictureLabel->resize(24, 24);
 				break;
 			case TINY:
 				painter.drawPixmap(5, 5, pixmap.scaled(12, 12, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+				_ui->pictureLabel->resize(12, 12);
 				break;
 			default:
 				LOG_WARN("unknown picture mode: " + String::fromNumber(_pictureMode));
 		}
+		*/
 	}
+	painter.drawPixmap(5, 5, pixmap.scaled(60, 60, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+	_ui->pictureLabel->resize(60, 60);
 
 	painter.end();
 	_ui->pictureLabel->setPixmap(background);
@@ -67,5 +80,5 @@ void QtChatContactListItem::setupPixmap(QPixmap pixmap) {
 
 void QtChatContactListItem::setupNickname(const QString & nickname) {
 	//TODO: limit string length
-	_ui->nicknameLabel->setText(nickname);
+	//_ui->nicknameLabel->setText(nickname);
 }

@@ -23,11 +23,14 @@
 
 #include <control/chat/CChatHandler.h>
 
+#include <presentation/qt/QtWengoPhone.h>
+
 #include <util/Logger.h>
 
-QtChatHandler::QtChatHandler(CChatHandler & cChatHandler)
+QtChatHandler::QtChatHandler(CChatHandler & cChatHandler, QtWengoPhone & qtWengoPhone)
 	: QObject(NULL),
-	_cChatHandler(cChatHandler) {
+	_cChatHandler(cChatHandler),
+	_qtWengoPhone(qtWengoPhone) {
 
 	_qtChatWindow = NULL;
 }
@@ -37,7 +40,7 @@ QtChatHandler::~QtChatHandler() {
 
 void QtChatHandler::newIMChatSessionCreatedEvent(IMChatSession & imChatSession) {
 	if (!_qtChatWindow) {
-		_qtChatWindow =  new QtChatWindow(_cChatHandler, imChatSession);
+		_qtChatWindow =  new QtChatWindow(_qtWengoPhone.getWidget(), _cChatHandler, imChatSession, _qtWengoPhone);
 		_qtChatWindow->showToaster(&imChatSession);
 	} else {
 		_qtChatWindow->addChatSession(&imChatSession);

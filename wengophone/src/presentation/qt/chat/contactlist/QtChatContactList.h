@@ -39,11 +39,13 @@ public:
 
 	QtChatContactList(QWidget * parent);
 
-	void addContact(QPixmap picture, const QString & nickname);
+	void addContact(const QString & contactId, QPixmap picture, const QString & nickname);
+
+	void removeContact(const QString & contactId);
 
 private:
 
-	typedef QMap<int, QtChatContactListItem *> WidgetMap;
+	typedef QMap<QString, QtChatContactListItem *> WidgetMap;
 
 	WidgetMap _widgetMap;
 };
