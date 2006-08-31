@@ -178,6 +178,11 @@ public:
 	std::string getDisplayName() const;
 
 	/**
+	 * @return a display name in a short way.
+	 */
+	std::string getShortDisplayName() const;
+
+	/**
 	 * Gets the PresenceState of this Contact.
 	 *
 	 * @return the PresenceState of this Contact

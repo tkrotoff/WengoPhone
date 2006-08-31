@@ -302,6 +302,15 @@ string ContactProfile::getDisplayName() const {
 	return result;
 }
 
+std::string ContactProfile::getShortDisplayName() const {
+	std::string toReturn = getFirstName();
+	if (toReturn.empty()) {
+		toReturn = getLastName();
+	}
+
+	return std::string(toReturn);
+}
+
 IMContact * ContactProfile::getFirstAvailableIMContact(IMChatSession & imChatSession) const {
 	IMContact * result = NULL;
 
@@ -341,6 +350,7 @@ std::string ContactProfile::getFirstAvailableWengoId() const {
 	for (IMContactSet::const_iterator it = _imContactSet.begin();
 		it != _imContactSet.end();
 		++it) {
+			
 		if (((*it).getProtocol() == EnumIMProtocol::IMProtocolWengo)
 			&& ((*it).getPresenceState() != EnumPresenceState::PresenceStateOffline)) {
 			result = (*it).getContactId();
