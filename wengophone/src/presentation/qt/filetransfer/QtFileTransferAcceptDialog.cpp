@@ -21,7 +21,7 @@
 
 #include "ui_AcceptDialog.h"
 
-#include <util/Macro.h>
+#include <util/SafeDelete.h>
 
 QtFileTransferAcceptDialog::QtFileTransferAcceptDialog(QWidget * parent) : QDialog(parent) {
 	_ui = new Ui::AcceptDialog();
@@ -29,7 +29,7 @@ QtFileTransferAcceptDialog::QtFileTransferAcceptDialog(QWidget * parent) : QDial
 }
 
 QtFileTransferAcceptDialog::~QtFileTransferAcceptDialog() {
-	SAFE_DELETE(_ui);
+	OWSAFE_DELETE(_ui);
 }
 
 void QtFileTransferAcceptDialog::setFileName(const std::string & fileName) {

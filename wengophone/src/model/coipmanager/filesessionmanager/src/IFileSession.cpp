@@ -20,18 +20,18 @@
 #include <filesessionmanager/IFileSession.h>
 
 #include <imwrapper/Account.h>
-#include <util/Macro.h>
+#include <util/SafeDelete.h>
 
 IFileSession::IFileSession() {
 	_account = NULL;
 }
 
 IFileSession::~IFileSession() {
-	SAFE_DELETE(_account);
+	OWSAFE_DELETE(_account);
 }
 
 void IFileSession::setAccount(const Account * account) {
-	SAFE_DELETE(_account);
+	OWSAFE_DELETE(_account);
 
 	_account = account->createCopy();
 }

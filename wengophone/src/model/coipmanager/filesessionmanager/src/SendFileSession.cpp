@@ -30,15 +30,15 @@
 #include <imwrapper/IMContactSet.h>
 
 #include <util/Logger.h>
-#include <util/Macro.h>
+#include <util/SafeDelete.h>
 
-SendFileSession::SendFileSession(FileSessionManager & fileSessionManager, UserProfile & userProfile) 
+SendFileSession::SendFileSession(FileSessionManager & fileSessionManager, UserProfile & userProfile)
 	: Session(userProfile), _fileSessionManager(fileSessionManager) {
 	_currentFileSessionImp = NULL;
 }
 
 SendFileSession::~SendFileSession() {
-	SAFE_DELETE(_currentFileSessionImp);
+	OWSAFE_DELETE(_currentFileSessionImp);
 }
 
 void SendFileSession::start() {
@@ -62,7 +62,7 @@ void SendFileSession::start() {
 		IMAccount imAccount = findFirstValidAccount(contact);
 		if (!imAccount.empty()) {
 			done = true;
-			ISendFileSession * fileSessionImp = 
+			ISendFileSession * fileSessionImp =
 				_fileSessionManager.createFileSessionForAccount(imAccount);
 			if (fileSessionImp) {
 				_currentFileSessionImp = fileSessionImp;
@@ -83,7 +83,7 @@ void SendFileSession::start() {
 						imContactSet.insert(*imContact);
 					}
 				}
-				
+
 				_currentFileSessionImp->setIMContactSet(imContactSet);
 				////
 
@@ -130,7 +130,7 @@ void SendFileSession::moduleFinishedEventHandler(CoIpModule & sender) {
 	RecursiveMutex::ScopedLock scopedLock(_mutex);
 
 	//Removing Contacts from the _contactIdList
-	ISendFileSession & fileSessionImp = 
+	ISendFileSession & fileSessionImp =
 		dynamic_cast<ISendFileSession &>(sender);
 	IMContactSet imContactSet = fileSessionImp.getIMContactSet();
 	for (IMContactSet::const_iterator imIt = imContactSet.begin();
@@ -151,19 +151,19 @@ void SendFileSession::moduleFinishedEventHandler(CoIpModule & sender) {
 		}
 	}
 	////
-	
-	SAFE_DELETE(_currentFileSessionImp);
+
+	OWSAFE_DELETE(_currentFileSessionImp);
 	start(); // Recall start to launch the next FileSession.
 }
 
 
-void SendFileSession::fileTransferEventHandler(IFileSession & sender, 
+void SendFileSession::fileTransferEventHandler(IFileSession & sender,
 	IFileSession::IFileSessionEvent event, IMContact imContact, File sentFile) {
-	
+
 	fileTransferEvent(*this, event, imContact, sentFile);
 }
 
-void SendFileSession::fileTransferProgressionEventHandler(IFileSession & sender, 
+void SendFileSession::fileTransferProgressionEventHandler(IFileSession & sender,
 	IFileSession::IFileSessionEvent event, IMContact imContact, File sentFile, int percentage) {
 
 	fileTransferProgressionEvent(*this, event, imContact, sentFile, percentage);

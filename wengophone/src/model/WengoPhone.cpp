@@ -39,7 +39,7 @@
 #include <system/RegisterProtocol.h>
 #include <thread/Timer.h>
 #include <util/Logger.h>
-#include <util/Macro.h>
+#include <util/SafeDelete.h>
 #include <util/Path.h>
 
 #include <sstream>
@@ -105,11 +105,11 @@ WengoPhone::~WengoPhone() {
 	}*/
 
 	//Deleting created objects
-	SAFE_DELETE(_coIpManager);
+	OWSAFE_DELETE(_coIpManager);
 
-	SAFE_DELETE(_userProfileHandler);
+	OWSAFE_DELETE(_userProfileHandler);
 
-	SAFE_DELETE(_startupSettingListener);
+	OWSAFE_DELETE(_startupSettingListener);
 	////
 
 	saveConfiguration();
@@ -177,7 +177,7 @@ void WengoPhone::valueChangedEventHandler(Settings & sender, const std::string &
 
 void WengoPhone::currentUserProfileWillDieEventHandler(UserProfileHandler & sender) {
 	//TODO: must check if no is using the CoIpManager.
-	SAFE_DELETE(_coIpManager);
+	OWSAFE_DELETE(_coIpManager);
 }
 
 void WengoPhone::userProfileInitializedEventHandler(UserProfileHandler & sender,

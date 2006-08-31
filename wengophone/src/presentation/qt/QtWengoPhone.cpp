@@ -86,7 +86,7 @@
 #include <cutil/global.h>
 #include <thread/Thread.h>
 #include <util/Logger.h>
-#include <util/Macro.h>
+#include <util/SafeDelete.h>
 
 #include <QtGui/QtGui>
 
@@ -1065,13 +1065,13 @@ void QtWengoPhone::slotTranslationChanged() {
 }
 
 void QtWengoPhone::currentUserProfileWillDieEventHandlerSlot() {
-	SAFE_DELETE(_qtFileTransfer);
+	OWSAFE_DELETE(_qtFileTransfer);
 
-	SAFE_DELETE(_qtIdle);
+	OWSAFE_DELETE(_qtIdle);
 
 	if (_qtProfileBar) {
 		_ui->profileBar->layout()->removeWidget(_qtProfileBar);
-		SAFE_DELETE(_qtProfileBar);
+		OWSAFE_DELETE(_qtProfileBar);
 	}
 
 	if (_contactList) {

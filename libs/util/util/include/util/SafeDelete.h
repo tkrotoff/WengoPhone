@@ -17,16 +17,16 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef OWMACRO_H
-#define OWMACRO_H
+#ifndef OWSAFEDELETE_H
+#define OWSAFEDELETE_H
 
 /**
  * Deletes a pointer if it valid and set it to NULL.
  */
-#define SAFE_DELETE(x) \
-if (x) { \
-	delete x; \
-	x = NULL; \
+#define OWSAFE_DELETE(p) \
+if (p) { \
+	delete (p); \
+	(p) = NULL; \
 }
 
-#endif //OWMACRO_H
+#endif //OWSAFEDELETE_H

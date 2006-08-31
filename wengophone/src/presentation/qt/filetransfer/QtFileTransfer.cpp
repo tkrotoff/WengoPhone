@@ -23,7 +23,7 @@
 #include <coipmanager/CoIpManager.h>
 #include <filesessionmanager/ReceiveFileSession.h>
 
-#include <util/Macro.h>
+#include <util/SafeDelete.h>
 
 #include <QtGui/QtGui>
 
@@ -39,7 +39,7 @@ QtFileTransfer::QtFileTransfer(QObject * parent, CoIpManager * coIpManager)
 QtFileTransfer::~QtFileTransfer() {
 }
 
-void QtFileTransfer::newReceiveFileSessionCreatedEventHandler(FileSessionManager & sender, 
+void QtFileTransfer::newReceiveFileSessionCreatedEventHandler(FileSessionManager & sender,
 	ReceiveFileSession * fileSession) {
 
 	newReceiveFileSessionCreatedEventHandlerSignal(fileSession);
@@ -53,7 +53,7 @@ void QtFileTransfer::newReceiveFileSessionCreatedEventHandlerSlot(ReceiveFileSes
 	if (qtFileTransferAcceptDialog.exec() == QDialog::Accepted) {
 		QString dir = QFileDialog::getExistingDirectory(
 			0,
-			tr("Choose a directory"), 
+			tr("Choose a directory"),
 			"",
 			QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks
 		);
@@ -63,7 +63,7 @@ void QtFileTransfer::newReceiveFileSessionCreatedEventHandlerSlot(ReceiveFileSes
 			fileSession->start();
 		} else {
 			fileSession->stop();
-			SAFE_DELETE(fileSession);
+			OWSAFE_DELETE(fileSession);
 		}
 	}
 }

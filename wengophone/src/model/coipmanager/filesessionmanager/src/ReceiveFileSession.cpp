@@ -21,17 +21,17 @@
 
 #include <filesessionmanager/IReceiveFileSession.h>
 
-#include <util/Macro.h>
+#include <util/SafeDelete.h>
 
 ReceiveFileSession::ReceiveFileSession(UserProfile & userProfile,
-	IReceiveFileSession * fileSessionImp) 
+	IReceiveFileSession * fileSessionImp)
 	: Session(userProfile) {
 
 	_currentFileSessionImp = fileSessionImp;
 }
 
 ReceiveFileSession::~ReceiveFileSession() {
-	SAFE_DELETE(_currentFileSessionImp);
+	OWSAFE_DELETE(_currentFileSessionImp);
 }
 
 void ReceiveFileSession::start() {
@@ -98,16 +98,16 @@ unsigned ReceiveFileSession::getFileSize() const {
 
 void ReceiveFileSession::moduleFinishedEventHandler(CoIpModule & sender) {
 	moduleFinishedEvent(*this);
-	SAFE_DELETE(_currentFileSessionImp);
+	OWSAFE_DELETE(_currentFileSessionImp);
 }
 
-void ReceiveFileSession::fileTransferEventHandler(IFileSession & sender, 
+void ReceiveFileSession::fileTransferEventHandler(IFileSession & sender,
 	IFileSession::IFileSessionEvent event, IMContact imContact, File sentFile) {
-	
+
 	fileTransferEvent(*this, event, imContact, sentFile);
 }
 
-void ReceiveFileSession::fileTransferProgressionEventHandler(IFileSession & sender, 
+void ReceiveFileSession::fileTransferProgressionEventHandler(IFileSession & sender,
 	IFileSession::IFileSessionEvent event, IMContact imContact, File sentFile, int percentage) {
 
 	fileTransferProgressionEvent(*this, event, imContact, sentFile, percentage);

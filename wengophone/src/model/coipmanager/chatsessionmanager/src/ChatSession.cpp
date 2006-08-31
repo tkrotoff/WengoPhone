@@ -23,7 +23,7 @@
 #include <model/profile/UserProfile.h>
 
 #include <util/Logger.h>
-#include <util/Macro.h>
+#include <util/SafeDelete.h>
 
 ChatSession::ChatSession(ChatSessionManager & chatSessionManager, UserProfile & userProfile)
 	: Session(userProfile), _chatSessionManager(chatSessionManager) {
@@ -31,7 +31,7 @@ ChatSession::ChatSession(ChatSessionManager & chatSessionManager, UserProfile & 
 	_currentIChatSession = NULL;
 }
 
-ChatSession::ChatSession(ChatSessionManager & chatSessionManager, UserProfile & userProfile, 
+ChatSession::ChatSession(ChatSessionManager & chatSessionManager, UserProfile & userProfile,
 	IChatSession * iChatSessionImp)
 	: Session(userProfile), _chatSessionManager(chatSessionManager) {
 
@@ -39,7 +39,7 @@ ChatSession::ChatSession(ChatSessionManager & chatSessionManager, UserProfile & 
 }
 
 ChatSession::~ChatSession() {
-	SAFE_DELETE(_currentIChatSession);
+	OWSAFE_DELETE(_currentIChatSession);
 }
 
 void ChatSession::start() {
@@ -85,9 +85,9 @@ void ChatSession::addContact(const std::string & contactId) {
 	Account * account = findCommonAccount(contactIdList);
 	if (account) {
 		Session::addContact(contactId);
-	
+
 		if (_currentIChatSession) {
-			// Check if the found IMAccount is the same as the one in the 
+			// Check if the found IMAccount is the same as the one in the
 			// current IChatSession
 			if ((*account) == _currentIChatSession->getAccount()) {
 				_userProfile.getContactList().lock();
@@ -101,7 +101,7 @@ void ChatSession::addContact(const std::string & contactId) {
 				_userProfile.getContactList().unlock();
 			}
 		} else {
-			SAFE_DELETE(_currentIChatSession);
+			OWSAFE_DELETE(_currentIChatSession);
 			start();
 		}
 	} else {
@@ -135,7 +135,7 @@ void ChatSession::setContactList(const StringList & contactList) {
 		Session::setContactList(contactList);
 
 		if (_currentIChatSession) {
-			SAFE_DELETE(_currentIChatSession);
+			OWSAFE_DELETE(_currentIChatSession);
 			start();
 		}
 	} else {

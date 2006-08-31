@@ -33,7 +33,7 @@
 
 #include <util/File.h>
 #include <util/Logger.h>
-#include <util/Macro.h>
+#include <util/SafeDelete.h>
 
 static Contact * contact1 = NULL;
 static Contact * contact2 = NULL;
@@ -90,7 +90,7 @@ int main(int argc, char **argv) {
 
 	// Creating the file session
 	SendFileSession * fileSession = fileSessionManager.createSendFileSession();
-	
+
 	File file("/Users/philou/Desktop/La_chanson_de_l_informatique.pps");
 	LOG_DEBUG("size: " + String::fromNumber(file.getSize()));
 	fileSession->addFile(file);
@@ -108,11 +108,11 @@ int main(int argc, char **argv) {
 	return 0;
 }
 
-void newReceiveFileSessionCreatedEventHandler(FileSessionManager & sender, 
+void newReceiveFileSessionCreatedEventHandler(FileSessionManager & sender,
 	ReceiveFileSession * fileSession) {
 	LOG_DEBUG("ReceiveFileSession created");
-	
-	SAFE_DELETE(fileSession);
+
+	OWSAFE_DELETE(fileSession);
 }
 
 void moduleFinishedEventHandler(CoIpModule & sender) {
