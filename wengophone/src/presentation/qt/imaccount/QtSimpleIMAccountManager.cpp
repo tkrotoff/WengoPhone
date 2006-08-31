@@ -17,45 +17,38 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "QtSimpleIMContactManager.h"
+#include "QtSimpleIMAccountManager.h"
 
-#include "ui_SimpleIMContactManager.h"
+#include "ui_SimpleIMAccountManager.h"
 
-#include "QtIMContactManager.h"
-
-#include <control/contactlist/CContactList.h>
-#include <control/profile/CUserProfile.h>
-
-#include <model/contactlist/ContactProfile.h>
+#include <model/profile/UserProfile.h>
 
 #include <util/Logger.h>
 
 #include <QtGui/QtGui>
 
-QtSimpleIMContactManager::QtSimpleIMContactManager(ContactProfile & contactProfile,
-	CUserProfile & cUserProfile, QWidget * parent)
+QtSimpleIMAccountManager::QtSimpleIMAccountManager(UserProfile & userProfile, QWidget * parent)
 	: QObject(parent),
-	_contactProfile(contactProfile),
-	_cUserProfile(cUserProfile) {
+	_userProfile(userProfile) {
 
-	_imContactManagerWidget = new QWidget(NULL);
+	_imAccountManagerWidget = new QWidget(NULL);
 
-	_ui = new Ui::SimpleIMContactManager();
-	_ui->setupUi(_imContactManagerWidget);
+	_ui = new Ui::SimpleIMAccountManager();
+	_ui->setupUi(_imAccountManagerWidget);
 
 	connect(_ui->advancedButton, SIGNAL(clicked()), SLOT(advancedClickedSlot()));
 
 	//loadIMContacts();
 }
 
-QtSimpleIMContactManager::~QtSimpleIMContactManager() {
+QtSimpleIMAccountManager::~QtSimpleIMAccountManager() {
 	delete _ui;
 }
 
-QWidget * QtSimpleIMContactManager::getWidget() const {
-	return _imContactManagerWidget;
+QWidget * QtSimpleIMAccountManager::getWidget() const {
+	return _imAccountManagerWidget;
 }
 
-void QtSimpleIMContactManager::advancedClickedSlot() {
+void QtSimpleIMAccountManager::advancedClickedSlot() {
 	advancedClicked();
 }

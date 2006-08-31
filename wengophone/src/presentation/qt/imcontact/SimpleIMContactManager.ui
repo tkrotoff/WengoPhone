@@ -39,45 +39,57 @@
         <property name="spacing" >
          <number>6</number>
         </property>
-        <item row="0" column="0" >
+        <item row="0" column="1" >
          <spacer>
           <property name="orientation" >
            <enum>Qt::Horizontal</enum>
           </property>
           <property name="sizeHint" >
            <size>
-            <width>40</width>
-            <height>20</height>
+            <width>281</width>
+            <height>26</height>
            </size>
           </property>
          </spacer>
         </item>
-        <item row="0" column="1" >
-         <widget class="QPushButton" name="advancedButton" >
+        <item row="0" column="0" >
+         <widget class="QToolButton" name="advancedButton" >
           <property name="text" >
-           <string>Advanced ></string>
+           <string>Advanced >></string>
           </property>
           <property name="icon" >
            <iconset resource="../wengophone.qrc" >:/pics/config/advanced.png</iconset>
+          </property>
+          <property name="toolButtonStyle" >
+           <enum>Qt::ToolButtonTextBesideIcon</enum>
+          </property>
+          <property name="autoRaise" >
+           <bool>true</bool>
           </property>
          </widget>
         </item>
        </layout>
       </item>
-      <item row="4" column="2" colspan="2" >
-       <widget class="QLineEdit" name="jabberLineEdit" />
+      <item row="2" column="0" >
+       <widget class="QLabel" name="label_8" >
+        <property name="pixmap" >
+         <pixmap resource="../wengophone.qrc" >:/pics/protocols/aim.png</pixmap>
+        </property>
+       </widget>
       </item>
-      <item row="3" column="2" colspan="2" >
-       <widget class="QLineEdit" name="aimLineEdit" />
+      <item row="1" column="0" >
+       <widget class="QLabel" name="label_3" >
+        <property name="pixmap" >
+         <pixmap resource="../wengophone.qrc" >:/pics/protocols/msn.png</pixmap>
+        </property>
+       </widget>
       </item>
-      <item row="1" column="2" colspan="2" >
-       <widget class="QLineEdit" name="msnLineEdit" />
-      </item>
-      <item row="0" column="2" >
-       <widget class="QLineEdit" name="wengoLineEdit" />
-      </item>
-      <item row="2" column="2" colspan="2" >
-       <widget class="QLineEdit" name="yahooLineEdit" />
+      <item row="0" column="0" >
+       <widget class="QLabel" name="label" >
+        <property name="pixmap" >
+         <pixmap resource="../wengophone.qrc" >:/pics/protocols/wengo.png</pixmap>
+        </property>
+       </widget>
       </item>
       <item row="0" column="3" >
        <widget class="QPushButton" name="searchWengoContactButton" >
@@ -89,17 +101,23 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="0" >
+      <item row="6" column="2" >
+       <spacer>
+        <property name="orientation" >
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" >
+         <size>
+          <width>61</width>
+          <height>16</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="3" column="0" >
        <widget class="QLabel" name="label_6" >
         <property name="pixmap" >
          <pixmap resource="../wengophone.qrc" >:/pics/protocols/yahoo.png</pixmap>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="0" >
-       <widget class="QLabel" name="label_8" >
-        <property name="pixmap" >
-         <pixmap resource="../wengophone.qrc" >:/pics/protocols/aim.png</pixmap>
         </property>
        </widget>
       </item>
@@ -117,38 +135,23 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="0" >
-       <widget class="QLabel" name="label_3" >
-        <property name="pixmap" >
-         <pixmap resource="../wengophone.qrc" >:/pics/protocols/msn.png</pixmap>
-        </property>
-       </widget>
+      <item row="4" column="2" colspan="2" >
+       <widget class="QLineEdit" name="jabberLineEdit" />
+      </item>
+      <item row="3" column="2" colspan="2" >
+       <widget class="QLineEdit" name="yahooLineEdit" />
       </item>
       <item row="3" column="1" >
-       <widget class="QLabel" name="label_7" >
-        <property name="text" >
-         <string>AIM/ICQ ID:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1" >
-       <widget class="QLabel" name="label_4" >
-        <property name="text" >
-         <string>MSN ID:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1" >
        <widget class="QLabel" name="label_5" >
         <property name="text" >
          <string>Yahoo! ID:</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="0" >
-       <widget class="QLabel" name="label" >
-        <property name="pixmap" >
-         <pixmap resource="../wengophone.qrc" >:/pics/protocols/wengo.png</pixmap>
+      <item row="2" column="1" >
+       <widget class="QLabel" name="label_7" >
+        <property name="text" >
+         <string>AIM/ICQ ID:</string>
         </property>
        </widget>
       </item>
@@ -159,18 +162,21 @@
         </property>
        </widget>
       </item>
-      <item row="6" column="1" colspan="2" >
-       <spacer>
-        <property name="orientation" >
-         <enum>Qt::Vertical</enum>
+      <item row="1" column="1" >
+       <widget class="QLabel" name="label_4" >
+        <property name="text" >
+         <string>MSN ID:</string>
         </property>
-        <property name="sizeHint" >
-         <size>
-          <width>61</width>
-          <height>16</height>
-         </size>
-        </property>
-       </spacer>
+       </widget>
+      </item>
+      <item row="0" column="2" >
+       <widget class="QLineEdit" name="wengoLineEdit" />
+      </item>
+      <item row="1" column="2" colspan="2" >
+       <widget class="QLineEdit" name="msnLineEdit" />
+      </item>
+      <item row="2" column="2" colspan="2" >
+       <widget class="QLineEdit" name="aimLineEdit" />
       </item>
      </layout>
     </widget>

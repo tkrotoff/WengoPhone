@@ -17,34 +17,33 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef OWQTSIMPLEIMCONTACTMANAGER_H
-#define OWQTSIMPLEIMCONTACTMANAGER_H
+#ifndef OWQTSIMPLEIMACCOUNTMANAGER_H
+#define OWQTSIMPLEIMACCOUNTMANAGER_H
 
 #include <util/NonCopyable.h>
 
 #include <QtCore/QObject>
 
-class ContactProfile;
-class CUserProfile;
+class CWengoPhone;
+class UserProfile;
 
 class QWidget;
-namespace Ui { class SimpleIMContactManager; }
+namespace Ui { class SimpleIMAccountManager; }
 
 /**
- * Simplified widget for adding an IM contact to a given contact.
+ * Simplified widget for adding an IM accounts.
  *
- * @see QtIMContactManager
- * @see QtSimpleIMAccountManager
+ * @see QtIMAccountManager
+ * @see QtSimpleIMContactManager
  * @author Tanguy Krotoff
  */
-class QtSimpleIMContactManager : public QObject, NonCopyable {
+class QtSimpleIMAccountManager : public QObject, NonCopyable {
 	Q_OBJECT
 public:
 
-	QtSimpleIMContactManager(ContactProfile & contactProfile,
-		CUserProfile & cUserProfile, QWidget * parent);
+	QtSimpleIMAccountManager(UserProfile & userProfile, QWidget * parent);
 
-	~QtSimpleIMContactManager();
+	~QtSimpleIMAccountManager();
 
 	QWidget * getWidget() const;
 
@@ -58,13 +57,11 @@ private Q_SLOTS:
 
 private:
 
-	Ui::SimpleIMContactManager * _ui;
+	UserProfile & _userProfile;
 
-	QWidget * _imContactManagerWidget;
+	Ui::SimpleIMAccountManager * _ui;
 
-	CUserProfile & _cUserProfile;
-
-	ContactProfile & _contactProfile;
+	QWidget * _imAccountManagerWidget;
 };
 
-#endif	//OWQTSIMPLEIMCONTACTMANAGER_H
+#endif	//OWQTSIMPLEIMACCOUNTMANAGER_H

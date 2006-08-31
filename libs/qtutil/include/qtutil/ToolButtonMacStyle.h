@@ -17,54 +17,31 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef OWQTVOLUMESLIDER_H
-#define OWQTVOLUMESLIDER_H
+#ifndef OWTOOLBARSTYLE_H
+#define OWTOOLBARSTYLE_H
 
-#include <QtCore/QObject>
-#include <QtCore/QString>
-#include <QtCore/QList>
+#include <QtGui/QCommonStyle>
 
-class ClickableLabel;
+class ControlElement;
+class QStyleOption;
+class QPainter;
+class QWidget;
 
 /**
- * Volume slider control inside the main window.
+ * Removes the ugly toolbar bottom line.
  *
- * @see QtConfigPanel
  * @author Tanguy Krotoff
  */
-class QtVolumeSlider : public QObject {
+class ToolBarStyle : public QCommonStyle {
 	Q_OBJECT
 public:
 
-	QtVolumeSlider(QObject * parent);
+	ToolBarStyle();
 
-	void setVolume(int volume);
+	~ToolBarStyle();
 
-	void addLabel(ClickableLabel * label, const QString & activePixmapFilename, const QString & pixmapFilename);
-
-Q_SIGNALS:
-
-	void volumeChanged(int volume);
-
-private Q_SLOTS:
-
-	void labelClicked();
-
-private:
-
-	void updateLabels();
-
-	typedef struct _privateData {
-		ClickableLabel * _label;
-		QString _activePixmapFilename;
-		QString _pixmapFilename;
-	} privateData;
-
-	typedef QList<privateData> DataList;
-
-	DataList _dataList;
-
-	int _volume;
+	void drawControl(ControlElement element, const QStyleOption * option,
+			QPainter * painter, const QWidget * widget = 0) const;
 };
 
-#endif	//OWQTVOLUMESLIDER_H
+#endif	//OWTOOLBARSTYLE_H

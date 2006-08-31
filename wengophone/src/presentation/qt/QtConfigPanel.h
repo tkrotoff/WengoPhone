@@ -25,7 +25,6 @@
 #include <util/Trackable.h>
 
 class Settings;
-class QtVolumeSlider;
 class CWengoPhone;
 
 class QWidget;
@@ -75,10 +74,6 @@ private:
 	Ui::WengoPhoneWindowConfigPanel * _ui;
 
 	QWidget * _configPanelWidget;
-
-	QtVolumeSlider * _inputVolumeSlider;
-
-	QtVolumeSlider * _outputVolumeSlider;
 
 	CWengoPhone & _cWengoPhone;
 };

@@ -1,0 +1,231 @@
+<ui version="4.0" >
+ <author></author>
+ <comment></comment>
+ <exportmacro></exportmacro>
+ <class>SimpleIMAccountManager</class>
+ <widget class="QWidget" name="SimpleIMAccountManager" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <layout class="QGridLayout" >
+   <property name="margin" >
+    <number>0</number>
+   </property>
+   <property name="spacing" >
+    <number>0</number>
+   </property>
+   <item row="0" column="0" >
+    <widget class="QGroupBox" name="groupBox" >
+     <property name="title" >
+      <string>My Instant Messaging Accounts</string>
+     </property>
+     <layout class="QGridLayout" >
+      <property name="margin" >
+       <number>9</number>
+      </property>
+      <property name="spacing" >
+       <number>6</number>
+      </property>
+      <item row="5" column="0" colspan="5" >
+       <layout class="QGridLayout" >
+        <property name="margin" >
+         <number>0</number>
+        </property>
+        <property name="spacing" >
+         <number>6</number>
+        </property>
+        <item row="0" column="1" >
+         <spacer>
+          <property name="orientation" >
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" >
+           <size>
+            <width>281</width>
+            <height>26</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="0" column="0" >
+         <widget class="QToolButton" name="advancedButton" >
+          <property name="text" >
+           <string>Advanced >></string>
+          </property>
+          <property name="icon" >
+           <iconset resource="../wengophone.qrc" >:/pics/config/advanced.png</iconset>
+          </property>
+          <property name="toolButtonStyle" >
+           <enum>Qt::ToolButtonTextBesideIcon</enum>
+          </property>
+          <property name="autoRaise" >
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="0" column="4" >
+       <widget class="QLineEdit" name="msnPasswordLineEdit" />
+      </item>
+      <item row="0" column="3" >
+       <widget class="QLabel" name="label" >
+        <property name="text" >
+         <string>Password:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2" >
+       <widget class="QLineEdit" name="msnLineEdit" />
+      </item>
+      <item row="1" column="2" >
+       <widget class="QLineEdit" name="aimLineEdit" />
+      </item>
+      <item row="1" column="1" >
+       <widget class="QLabel" name="label_7" >
+        <property name="text" >
+         <string>AIM/ICQ login:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1" >
+       <widget class="QLabel" name="label_4" >
+        <property name="text" >
+         <string>MSN login:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0" >
+       <widget class="QLabel" name="label_3" >
+        <property name="pixmap" >
+         <pixmap resource="../wengophone.qrc" >:/pics/protocols/msn.png</pixmap>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0" >
+       <widget class="QLabel" name="label_8" >
+        <property name="pixmap" >
+         <pixmap resource="../wengophone.qrc" >:/pics/protocols/aim.png</pixmap>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="3" >
+       <widget class="QLabel" name="label_2" >
+        <property name="text" >
+         <string>Password:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0" >
+       <widget class="QLabel" name="label_6" >
+        <property name="pixmap" >
+         <pixmap resource="../wengophone.qrc" >:/pics/protocols/yahoo.png</pixmap>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1" >
+       <widget class="QLabel" name="label_5" >
+        <property name="text" >
+         <string>Yahoo! login:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="3" >
+       <widget class="QLabel" name="label_13" >
+        <property name="text" >
+         <string>Password:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="4" >
+       <widget class="QLineEdit" name="msnPasswordLineEdit_3" />
+      </item>
+      <item row="3" column="4" >
+       <widget class="QLineEdit" name="msnPasswordLineEdit_4" />
+      </item>
+      <item row="3" column="3" >
+       <widget class="QLabel" name="label_14" >
+        <property name="text" >
+         <string>Password:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="2" >
+       <widget class="QLineEdit" name="jabberLineEdit" />
+      </item>
+      <item row="3" column="1" >
+       <widget class="QLabel" name="label_9" >
+        <property name="text" >
+         <string>Jabber login:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0" >
+       <widget class="QLabel" name="label_10" >
+        <property name="pixmap" >
+         <pixmap resource="../wengophone.qrc" >:/pics/protocols/jabber.png</pixmap>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0" >
+       <widget class="QLabel" name="label_11" >
+        <property name="pixmap" >
+         <pixmap resource="../wengophone.qrc" >:/pics/protocols/jabber.png</pixmap>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1" >
+       <widget class="QLabel" name="label_12" >
+        <property name="text" >
+         <string>GoogleTalk login:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="2" >
+       <widget class="QLineEdit" name="googleTalkLineEdit" />
+      </item>
+      <item row="4" column="3" >
+       <widget class="QLabel" name="label_15" >
+        <property name="text" >
+         <string>Password:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="4" >
+       <widget class="QLineEdit" name="msnPasswordLineEdit_5" />
+      </item>
+      <item row="2" column="2" >
+       <widget class="QLineEdit" name="yahooLineEdit" />
+      </item>
+      <item row="1" column="4" >
+       <widget class="QLineEdit" name="aimPasswordLineEdit" />
+      </item>
+      <item row="6" column="2" >
+       <spacer>
+        <property name="orientation" >
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeHint" >
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <pixmapfunction></pixmapfunction>
+ <resources>
+  <include location="../wengophone.qrc" />
+ </resources>
+ <connections/>
+</ui>

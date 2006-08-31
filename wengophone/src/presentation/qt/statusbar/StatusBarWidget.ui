@@ -39,6 +39,9 @@
      <property name="icon" >
       <iconset resource="../wengophone.qrc" >:/pics/statusbar/audio_status_error.png</iconset>
      </property>
+     <property name="checkable" >
+      <bool>true</bool>
+     </property>
      <property name="autoRaise" >
       <bool>true</bool>
      </property>

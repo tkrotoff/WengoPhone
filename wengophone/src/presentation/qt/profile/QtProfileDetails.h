@@ -69,6 +69,22 @@ private Q_SLOTS:
 
 	void cancelButtonClicked();
 
+	/**
+	 * Switch from simple (QtSimpleIMContactManager) to advanced (QtIMContactManager).
+	 *
+	 * The button advanced from QtSimpleIMContactManager has been clicked.
+	 * Changes _ui->imStackedWidget widget.
+	 */
+	void imContactManagerAdvancedClicked();
+
+	/**
+	 * Switch from simple (QtSimpleIMAccountManager) to advanced (QtIMAccountManager).
+	 *
+	 * The button advanced from QtSimpleIMAccountManager has been clicked.
+	 * Changes _ui->imStackedWidget widget.
+	 */
+	void imAccountManagerAdvancedClicked();
+
 private:
 
 	void init(QWidget * parent);

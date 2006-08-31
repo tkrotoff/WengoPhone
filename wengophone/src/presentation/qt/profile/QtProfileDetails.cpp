@@ -21,8 +21,10 @@
 
 #include "ui_ProfileDetails.h"
 
+#include <presentation/qt/imcontact/QtIMContactManager.h>
 #include <presentation/qt/imcontact/QtSimpleIMContactManager.h>
 #include <presentation/qt/imaccount/QtIMAccountManager.h>
+#include <presentation/qt/imaccount/QtSimpleIMAccountManager.h>
 
 #include <control/contactlist/CContactList.h>
 #include <control/profile/CUserProfile.h>
@@ -68,13 +70,20 @@ QtProfileDetails::QtProfileDetails(CUserProfile & cUserProfile, ContactProfile &
 
 	_profileDetailsWindow->setWindowTitle(tr("WengoPhone - Contact Details"));
 
-	QtSimpleIMContactManager * qtIMContactManager = new QtSimpleIMContactManager(contactProfile,
-			_cUserProfile, _profileDetailsWindow);
+	//QtSimpleIMContactManager
+	QtSimpleIMContactManager * qtIMContactManager =
+		new QtSimpleIMContactManager(contactProfile, _cUserProfile, _profileDetailsWindow);
+	connect(qtIMContactManager, SIGNAL(advancedClicked()), SLOT(imContactManagerAdvancedClicked()));
 
 	int index = _ui->imStackedWidget->addWidget(qtIMContactManager->getWidget());
 	_ui->imStackedWidget->setCurrentIndex(index);
 
+	//saveButton
 	connect(_ui->saveButton, SIGNAL(clicked()), SLOT(saveContact()));
+
+	//avatarPixmapButton
+	_ui->avatarPixmapButton->setToolTip("");
+	_ui->avatarPixmapButton->setEnabled(false);
 }
 
 QtProfileDetails::QtProfileDetails(CUserProfile & cUserProfile, UserProfile & userProfile, QWidget * parent)
@@ -89,12 +98,18 @@ QtProfileDetails::QtProfileDetails(CUserProfile & cUserProfile, UserProfile & us
 	_ui->groupLabel->hide();
 	_ui->groupComboBox->hide();
 
-	QtIMAccountManager * qtIMAccountManager =
-		new QtIMAccountManager(userProfile, false, _profileDetailsWindow);
+	//QtSimpleIMAccountManager
+	QtSimpleIMAccountManager * qtIMAccountManager =
+		new QtSimpleIMAccountManager(userProfile, _profileDetailsWindow);
+	connect(qtIMAccountManager, SIGNAL(advancedClicked()), SLOT(imAccountManagerAdvancedClicked()));
+
 	int index = _ui->imStackedWidget->addWidget(qtIMAccountManager->getWidget());
 	_ui->imStackedWidget->setCurrentIndex(index);
 
+	//saveButton
 	connect(_ui->saveButton, SIGNAL(clicked()), SLOT(saveUserProfile()));
+
+	//avatarPixmapButton
 	connect(_ui->avatarPixmapButton, SIGNAL(clicked()), SLOT(changeUserProfileAvatar()));
 }
 
@@ -256,4 +271,20 @@ void QtProfileDetails::setProfileAvatarFileName(UserProfile & userProfile, const
 
 		userProfile.setIcon(picture, NULL);
 	}
+}
+
+void QtProfileDetails::imContactManagerAdvancedClicked() {
+	QtIMContactManager * qtIMContactManager =
+		new QtIMContactManager((ContactProfile &) _profile, _cUserProfile, _profileDetailsWindow);
+
+	int index = _ui->imStackedWidget->addWidget(qtIMContactManager->getWidget());
+	_ui->imStackedWidget->setCurrentIndex(index);
+}
+
+void QtProfileDetails::imAccountManagerAdvancedClicked() {
+	QtIMAccountManager * qtIMAccountManager =
+		new QtIMAccountManager((UserProfile &) _profile, false, _profileDetailsWindow);
+
+	int index = _ui->imStackedWidget->addWidget(qtIMAccountManager->getWidget());
+	_ui->imStackedWidget->setCurrentIndex(index);
 }

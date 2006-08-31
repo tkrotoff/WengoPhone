@@ -21,8 +21,6 @@
 
 #include "ui_WengoPhoneWindowConfigPanel.h"
 
-#include "QtVolumeSlider.h"
-
 #include <presentation/qt/config/QtWengoConfigDialog.h>
 
 #include <model/config/ConfigManager.h>
@@ -47,27 +45,11 @@ QtConfigPanel::QtConfigPanel(CWengoPhone & cWengoPhone, QWidget * parent)
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	config.valueChangedEvent += boost::bind(&QtConfigPanel::configChangedEventHandler, this, _1, _2);
 
-	//inputVolumeSlider
-	_inputVolumeSlider = new QtVolumeSlider(this);
-	_inputVolumeSlider->addLabel(_ui->mic_vol0, ":pics/audio/progress_1.png", ":pics/audio/progress_1_off.png");
-	_inputVolumeSlider->addLabel(_ui->mic_vol1, ":pics/audio/progress_2.png", ":pics/audio/progress_2_off.png");
-	_inputVolumeSlider->addLabel(_ui->mic_vol2, ":pics/audio/progress_3.png", ":pics/audio/progress_3_off.png");
-	_inputVolumeSlider->addLabel(_ui->mic_vol3, ":pics/audio/progress_4.png", ":pics/audio/progress_4_off.png");
-	_inputVolumeSlider->addLabel(_ui->mic_vol4, ":pics/audio/progress_5.png", ":pics/audio/progress_5_off.png");
-	_inputVolumeSlider->addLabel(_ui->mic_vol5, ":pics/audio/progress_6.png", ":pics/audio/progress_6_off.png");
-	_inputVolumeSlider->addLabel(_ui->mic_vol6, ":pics/audio/progress_7.png", ":pics/audio/progress_7_off.png");
-	connect(_inputVolumeSlider, SIGNAL(volumeChanged(int)), SLOT(inputVolumeSliderValueChanged(int)));
+	//inputSoundSlider
+	connect(_ui->inputSoundSlider, SIGNAL(valueChanged(int)), SLOT(inputSoundSliderValueChanged(int)));
 
-	//outputVolumeSlider
-	_outputVolumeSlider = new QtVolumeSlider(this);
-	_outputVolumeSlider->addLabel(_ui->hp_vol0, ":pics/audio/progress_1.png", ":pics/audio/progress_1_off.png");
-	_outputVolumeSlider->addLabel(_ui->hp_vol1, ":pics/audio/progress_2.png", ":pics/audio/progress_2_off.png");
-	_outputVolumeSlider->addLabel(_ui->hp_vol2, ":pics/audio/progress_3.png", ":pics/audio/progress_3_off.png");
-	_outputVolumeSlider->addLabel(_ui->hp_vol3, ":pics/audio/progress_4.png", ":pics/audio/progress_4_off.png");
-	_outputVolumeSlider->addLabel(_ui->hp_vol4, ":pics/audio/progress_5.png", ":pics/audio/progress_5_off.png");
-	_outputVolumeSlider->addLabel(_ui->hp_vol5, ":pics/audio/progress_6.png", ":pics/audio/progress_6_off.png");
-	_outputVolumeSlider->addLabel(_ui->hp_vol6, ":pics/audio/progress_7.png", ":pics/audio/progress_7_off.png");
-	connect(_outputVolumeSlider, SIGNAL(volumeChanged(int)), SLOT(outputVolumeSliderValueChanged(int)));
+	//outputSoundSlider
+	connect(_ui->outputSoundSlider, SIGNAL(valueChanged(int)), SLOT(outputSoundSliderValueChanged(int)));
 
 	//enableWenboxCheckBox
 	connect(_ui->enableWenboxCheckBox, SIGNAL(toggled(bool)), SLOT(enableWenboxCheckBoxToggled(bool)));
@@ -123,15 +105,15 @@ void QtConfigPanel::configChangedEventHandlerThreadSafe(Settings & sender, const
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
 	if (key == Config::AUDIO_INPUT_DEVICEID_KEY) {
-		//inputVolumeSlider
+		//inputSoundSlider
 		VolumeControl inputVolumeControl(AudioDevice(config.getAudioInputDeviceId()));
-		_inputVolumeSlider->setVolume(inputVolumeControl.getLevel());
+		_ui->inputSoundSlider->setValue(inputVolumeControl.getLevel());
 	}
 
 	if (key == Config::AUDIO_OUTPUT_DEVICEID_KEY) {
-		//outputVolumeSlider
+		//outputSoundSlider
 		VolumeControl outputVolumeControl(AudioDevice(config.getAudioOutputDeviceId()));
-		_outputVolumeSlider->setVolume(outputVolumeControl.getLevel());
+		_ui->outputSoundSlider->setValue(outputVolumeControl.getLevel());
 	}
 
 	if (key == Config::WENBOX_ENABLE_KEY) {

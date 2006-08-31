@@ -132,42 +132,6 @@
      <height>19</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuActions" >
-    <property name="title" >
-     <string>&amp;Actions</string>
-    </property>
-    <addaction name="actionSendSms" />
-    <addaction name="separator" />
-    <addaction name="actionCreateConferenceCall" />
-    <addaction name="separator" />
-    <addaction name="actionAccept" />
-    <addaction name="actionHangup" />
-    <addaction name="actionHoldResume" />
-   </widget>
-   <widget class="QMenu" name="menuContacts" >
-    <property name="title" >
-     <string>&amp;Contacts</string>
-    </property>
-    <addaction name="actionAddContact" />
-    <addaction name="actionSearchWengoUsers" />
-    <addaction name="separator" />
-    <addaction name="actionHideContactsOffline" />
-    <addaction name="actionHideContactGroups" />
-   </widget>
-   <widget class="QMenu" name="menuFile" >
-    <property name="title" >
-     <string>&amp;Wengo</string>
-    </property>
-    <addaction name="actionShowWengoAccount" />
-    <addaction name="actionEditMyProfile" />
-    <addaction name="actionLogOff" />
-    <addaction name="separator" />
-    <addaction name="actionChangeProfile" />
-    <addaction name="separator" />
-    <addaction name="actionWengoServices" />
-    <addaction name="separator" />
-    <addaction name="actionClose" />
-   </widget>
    <widget class="QMenu" name="menuHelp" >
     <property name="title" >
      <string>&amp;Help</string>
@@ -197,6 +161,42 @@
     <addaction name="actionConfiguration" />
     <addaction name="separator" />
     <addaction name="menuClearHistory" />
+   </widget>
+   <widget class="QMenu" name="menuActions" >
+    <property name="title" >
+     <string>&amp;Actions</string>
+    </property>
+    <addaction name="actionCreateConferenceCall" />
+    <addaction name="separator" />
+    <addaction name="actionSendSms" />
+    <addaction name="separator" />
+    <addaction name="actionAccept" />
+    <addaction name="actionHangup" />
+    <addaction name="actionHoldResume" />
+   </widget>
+   <widget class="QMenu" name="menuContacts" >
+    <property name="title" >
+     <string>&amp;Contacts</string>
+    </property>
+    <addaction name="actionAddContact" />
+    <addaction name="actionSearchWengoUsers" />
+    <addaction name="separator" />
+    <addaction name="actionHideContactsOffline" />
+    <addaction name="actionHideContactGroups" />
+   </widget>
+   <widget class="QMenu" name="menuFile" >
+    <property name="title" >
+     <string>&amp;Wengo</string>
+    </property>
+    <addaction name="actionShowWengoAccount" />
+    <addaction name="actionEditMyProfile" />
+    <addaction name="actionLogOff" />
+    <addaction name="separator" />
+    <addaction name="actionChangeProfile" />
+    <addaction name="separator" />
+    <addaction name="actionWengoServices" />
+    <addaction name="separator" />
+    <addaction name="actionClose" />
    </widget>
    <addaction name="menuFile" />
    <addaction name="menuContacts" />

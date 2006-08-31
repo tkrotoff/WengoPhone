@@ -8,17 +8,89 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>290</width>
-    <height>122</height>
+    <width>334</width>
+    <height>72</height>
    </rect>
   </property>
   <layout class="QGridLayout" >
    <property name="margin" >
-    <number>9</number>
+    <number>0</number>
    </property>
    <property name="spacing" >
-    <number>6</number>
+    <number>0</number>
    </property>
+   <item row="0" column="4" >
+    <layout class="QGridLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item row="0" column="0" >
+      <widget class="QToolButton" name="videoSettingsButton" >
+       <property name="text" >
+        <string>Video Settings</string>
+       </property>
+       <property name="icon" >
+        <iconset resource="wengophone.qrc" >:/pics/config/video.png</iconset>
+       </property>
+       <property name="toolButtonStyle" >
+        <enum>Qt::ToolButtonTextBesideIcon</enum>
+       </property>
+       <property name="autoRaise" >
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0" >
+      <widget class="QToolButton" name="audioSettingsButton" >
+       <property name="text" >
+        <string>Audio Settings</string>
+       </property>
+       <property name="icon" >
+        <iconset resource="wengophone.qrc" >:/pics/config/audio.png</iconset>
+       </property>
+       <property name="toolButtonStyle" >
+        <enum>Qt::ToolButtonTextBesideIcon</enum>
+       </property>
+       <property name="autoRaise" >
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="0" column="2" >
+    <layout class="QGridLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item row="0" column="0" >
+      <widget class="QCheckBox" name="enableWenboxCheckBox" >
+       <property name="toolTip" >
+        <string>Enable Wenbox usage</string>
+       </property>
+       <property name="text" >
+        <string>Wenbox USB</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0" >
+      <widget class="QCheckBox" name="halfDuplexCheckBox" >
+       <property name="toolTip" >
+        <string>Enable half-duplex mode</string>
+       </property>
+       <property name="text" >
+        <string>Loud speakers mode</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
    <item row="0" column="0" >
     <layout class="QGridLayout" >
      <property name="margin" >
@@ -28,325 +100,52 @@
       <number>6</number>
      </property>
      <item row="0" column="1" >
-      <layout class="QHBoxLayout" >
-       <property name="margin" >
-        <number>0</number>
-       </property>
-       <property name="spacing" >
-        <number>0</number>
-       </property>
-       <item>
-        <widget class="ClickableLabel" name="mic_vol0" >
-         <property name="text" >
-          <string/>
-         </property>
-         <property name="pixmap" >
-          <pixmap/>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="ClickableLabel" name="mic_vol1" >
-         <property name="text" >
-          <string/>
-         </property>
-         <property name="pixmap" >
-          <pixmap/>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="ClickableLabel" name="mic_vol2" >
-         <property name="text" >
-          <string/>
-         </property>
-         <property name="pixmap" >
-          <pixmap/>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="ClickableLabel" name="mic_vol3" >
-         <property name="text" >
-          <string/>
-         </property>
-         <property name="pixmap" >
-          <pixmap/>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="ClickableLabel" name="mic_vol4" >
-         <property name="text" >
-          <string/>
-         </property>
-         <property name="pixmap" >
-          <pixmap/>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="ClickableLabel" name="mic_vol5" >
-         <property name="text" >
-          <string/>
-         </property>
-         <property name="pixmap" >
-          <pixmap/>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="ClickableLabel" name="mic_vol6" >
-         <property name="text" >
-          <string/>
-         </property>
-         <property name="pixmap" >
-          <pixmap/>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item row="0" column="2" >
-      <spacer>
+      <widget class="QSlider" name="inputSoundSlider" >
        <property name="orientation" >
         <enum>Qt::Horizontal</enum>
        </property>
-       <property name="sizeHint" >
-        <size>
-         <width>40</width>
-         <height>44</height>
-        </size>
-       </property>
-      </spacer>
+      </widget>
      </item>
-     <item row="1" column="0" colspan="3" >
-      <layout class="QGridLayout" >
-       <property name="margin" >
-        <number>0</number>
+     <item row="1" column="0" >
+      <widget class="QLabel" name="outputSoundLabel" >
+       <property name="pixmap" >
+        <pixmap resource="wengophone.qrc" >:/pics/audio/speaker.png</pixmap>
        </property>
-       <property name="spacing" >
-        <number>6</number>
-       </property>
-       <item row="0" column="0" >
-        <widget class="QCheckBox" name="enableWenboxCheckBox" >
-         <property name="toolTip" >
-          <string>Enable Wenbox usage</string>
-         </property>
-         <property name="text" >
-          <string>USB audio device (Wenbox)</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0" >
-        <widget class="QCheckBox" name="halfDuplexCheckBox" >
-         <property name="toolTip" >
-          <string>Enable half-duplex mode</string>
-         </property>
-         <property name="text" >
-          <string>Loud speakers mode</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
+      </widget>
      </item>
      <item row="0" column="0" >
       <widget class="QLabel" name="inputSoundLabel" >
-       <property name="minimumSize" >
-        <size>
-         <width>25</width>
-         <height>44</height>
-        </size>
-       </property>
-       <property name="maximumSize" >
-        <size>
-         <width>25</width>
-         <height>44</height>
-        </size>
-       </property>
        <property name="pixmap" >
         <pixmap resource="wengophone.qrc" >:/pics/audio/microphone.png</pixmap>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1" >
+      <widget class="QSlider" name="outputSoundSlider" >
+       <property name="orientation" >
+        <enum>Qt::Horizontal</enum>
        </property>
       </widget>
      </item>
     </layout>
    </item>
    <item row="0" column="1" >
-    <layout class="QGridLayout" >
-     <property name="margin" >
-      <number>0</number>
+    <widget class="Line" name="line" >
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
      </property>
-     <property name="spacing" >
-      <number>6</number>
+    </widget>
+   </item>
+   <item row="0" column="3" >
+    <widget class="Line" name="line_2" >
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
      </property>
-     <item row="0" column="0" >
-      <widget class="QLabel" name="outputSoundLabel" >
-       <property name="minimumSize" >
-        <size>
-         <width>25</width>
-         <height>44</height>
-        </size>
-       </property>
-       <property name="maximumSize" >
-        <size>
-         <width>25</width>
-         <height>44</height>
-        </size>
-       </property>
-       <property name="pixmap" >
-        <pixmap resource="wengophone.qrc" >:/pics/audio/speaker.png</pixmap>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1" >
-      <layout class="QHBoxLayout" >
-       <property name="margin" >
-        <number>0</number>
-       </property>
-       <property name="spacing" >
-        <number>0</number>
-       </property>
-       <item>
-        <widget class="ClickableLabel" name="hp_vol0" >
-         <property name="text" >
-          <string/>
-         </property>
-         <property name="pixmap" >
-          <pixmap/>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="ClickableLabel" name="hp_vol1" >
-         <property name="text" >
-          <string/>
-         </property>
-         <property name="pixmap" >
-          <pixmap/>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="ClickableLabel" name="hp_vol2" >
-         <property name="text" >
-          <string/>
-         </property>
-         <property name="pixmap" >
-          <pixmap/>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="ClickableLabel" name="hp_vol3" >
-         <property name="text" >
-          <string/>
-         </property>
-         <property name="pixmap" >
-          <pixmap/>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="ClickableLabel" name="hp_vol4" >
-         <property name="text" >
-          <string/>
-         </property>
-         <property name="pixmap" >
-          <pixmap/>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="ClickableLabel" name="hp_vol5" >
-         <property name="text" >
-          <string/>
-         </property>
-         <property name="pixmap" >
-          <pixmap/>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="ClickableLabel" name="hp_vol6" >
-         <property name="text" >
-          <string/>
-         </property>
-         <property name="pixmap" >
-          <pixmap/>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item row="1" column="0" colspan="3" >
-      <layout class="QGridLayout" >
-       <property name="margin" >
-        <number>0</number>
-       </property>
-       <property name="spacing" >
-        <number>6</number>
-       </property>
-       <item row="0" column="0" >
-        <widget class="QToolButton" name="videoSettingsButton" >
-         <property name="text" >
-          <string>Video Settings</string>
-         </property>
-         <property name="icon" >
-          <iconset resource="wengophone.qrc" >:/pics/config/video.png</iconset>
-         </property>
-         <property name="toolButtonStyle" >
-          <enum>Qt::ToolButtonTextBesideIcon</enum>
-         </property>
-         <property name="autoRaise" >
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0" >
-        <widget class="QToolButton" name="audioSettingsButton" >
-         <property name="text" >
-          <string>Audio Settings</string>
-         </property>
-         <property name="icon" >
-          <iconset resource="wengophone.qrc" >:/pics/config/audio.png</iconset>
-         </property>
-         <property name="toolButtonStyle" >
-          <enum>Qt::ToolButtonTextBesideIcon</enum>
-         </property>
-         <property name="autoRaise" >
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item row="0" column="2" >
-      <spacer>
-       <property name="orientation" >
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" >
-        <size>
-         <width>40</width>
-         <height>44</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-    </layout>
+    </widget>
    </item>
   </layout>
  </widget>
  <pixmapfunction></pixmapfunction>
- <customwidgets>
-  <customwidget>
-   <class>ClickableLabel</class>
-   <extends>QLabel</extends>
-   <header>ClickableLabelProxy.h</header>
-   <container>0</container>
-   <pixmap></pixmap>
-  </customwidget>
- </customwidgets>
  <tabstops>
   <tabstop>enableWenboxCheckBox</tabstop>
  </tabstops>
