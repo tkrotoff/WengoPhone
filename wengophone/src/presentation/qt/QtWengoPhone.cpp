@@ -62,7 +62,7 @@
 #include "filetransfer/QtFileTransfer.h"
 #include "history/QtHistoryWidget.h"
 #include "imaccount/QtIMAccountManager.h"
-#include "imcontact/QtSimpleAddIMContact.h"
+#include "imcontact/QtSimpleIMContactManager.cpp"
 #include "phonecall/QtContactCallListWidget.h"
 #include "phonecall/QtPhoneCall.h"
 #include "phoneline/QtPhoneLine.h"
