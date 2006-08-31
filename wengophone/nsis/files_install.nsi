@@ -56,6 +56,9 @@ File "${BUILD_DIR}\phspeexplugin.dll"
 File "${BUILD_DIR}\phamrplugin.dll"
 File "${BUILD_DIR}\owcurl.dll"
 
+/** File Transfer **/
+File "${BUILD_DIR}\sfp-plugin.dll"
+
 /** Wenbox. */
 File "${BUILD_DIR}\wenboxplugin.dll"
 File "${BUILD_DIR}\YLTELBOX.dll"
