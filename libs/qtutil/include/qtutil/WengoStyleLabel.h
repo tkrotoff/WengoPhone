@@ -34,7 +34,12 @@ class WengoStyleLabel : public QLabel {
 	Q_OBJECT
 public:
 
-	WengoStyleLabel(QWidget * parent);
+	enum Mode {
+		Normal,
+		Toggled,
+	};
+	
+	WengoStyleLabel(QWidget * parent, Mode = Normal);
 
 	~WengoStyleLabel();
 
@@ -106,6 +111,10 @@ private:
 	QWidget * _parent;
 
 	int _alignment;
+
+	bool _toggled;
+
+	Mode _mode;
 };
 
 #endif	//OWWENGOSTYLELABEL_H

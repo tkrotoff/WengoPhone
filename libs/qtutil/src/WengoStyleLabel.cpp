@@ -21,12 +21,13 @@
 
 #include <QtGui/QtGui>
 
-WengoStyleLabel::WengoStyleLabel(QWidget * parent)
-	: QLabel(parent) {
+WengoStyleLabel::WengoStyleLabel(QWidget * parent, Mode mode)
+	: QLabel(parent), _mode(mode) {
 
 	_parent = parent;
 	_pressed = false;
 	_selected = false;
+	_toggled = false;
 
 	//Default background color
 	_backgroundColor = _parent->palette().color(QPalette::Window);
@@ -182,7 +183,16 @@ void WengoStyleLabel::mouseReleaseEvent(QMouseEvent * event) {
 	if ((mousePosition.x() >= rect.x()) && (mousePosition.x() <= rect.width())) {
 		if ((mousePosition.y() >= rect.y()) && (mousePosition.y() <= rect.height())) {
 			clicked();
-			_pressed = false;
+			if (_mode == Toggled) {
+				_toggled = !_toggled;
+				if (_toggled) {
+					_pressed = true;
+				} else {
+					_pressed = false;
+				}
+			} else {
+				_pressed = false;
+			}
 			update();
 		}
 	}
