@@ -80,14 +80,14 @@ extern "C" {
 		char * remote_ip;
 		char * remote_port;
 		char * ip_protocol;
-		char * required_bandwidth; /* bytes per second */
-		char * packet_size; /* bytes */ // TODO rename to udp_packet_size
+		char * required_bandwidth; /** bytes per second */
+		char * packet_size; /** bytes */ // TODO rename to udp_packet_size
 		char * key_info;
 		char * crypted_key;
 		char * filename;
 		char * short_filename;
 		char * file_type;
-		char * file_size; /* bytes */
+		char * file_size; /** bytes */
 		// TODO uri?
 		struct sockaddr_in local_address;
 		SOCKET local_socket;
@@ -101,43 +101,43 @@ extern "C" {
 	* Callbacks for the plugin to notify a top level program
 	*/
 	struct sfp_callbacks{
-		/* An invitation to transfer a file has been sent to peer */
+		/** An invitation to transfer a file has been sent to peer */
 		void (*inviteToTransfer)(int cid, char * uri, char * short_filename, char * file_type, char * file_size);
-		/* An invitation to transfer a file has been received from a peer */
+		/** An invitation to transfer a file has been received from a peer */
 		void (*newIncomingFile)(int cid, char * username, char * short_filename, char * file_type, char * file_size);
-		/* The peer received the invitation and the user is waiting for him to accept / refuse */
+		/** The peer received the invitation and the user is waiting for him to accept / refuse */
 		void (*waitingForAnswer)(int cid, char * uri);
-		/* The transfer has been cancelled by the user */
+		/** The transfer has been cancelled by the user */
 		void (*transferCancelled)(int cid, char * short_filename, char * file_type, char * file_size);
-		/* The transfer has been cancelled by peer */
+		/** The transfer has been cancelled by peer */
 		void (*transferCancelledByPeer)(int cid, char * username, char * short_filename, char * file_type, char * file_size);
-		/* The transfer is starting */
+		/** The transfer is starting */
 		void (*sendingFileBegin)(int cid, char * username, char * short_filename, char * file_type, char * file_size);
-		/* The peer closed the SIP call */
+		/** The peer closed the SIP call */
 		void (*transferClosedByPeer)(int cid, char * username, char * short_filename, char * file_type, char * file_size);
-		/* The user closed the SIP call */
+		/** The user closed the SIP call */
 		void (*transferClosed)(int cid, char * username, char * short_filename, char * file_type, char * file_size);
-		/* Transfer complete and OK */
+		/** Transfer complete and OK */
 		void (*transferFromPeerFinished)(int cid, char * username, char * short_filename, char * file_type, char * file_size);
-		/* Transfer complete and OK */
+		/** Transfer complete and OK */
 		void (*transferToPeerFinished)(int cid, char * username, char * short_filename, char * file_type, char * file_size);
-		/* A SIP failure occured */
+		/** A SIP failure occured */
 		void (*transferFromPeerFailed)(int cid, char * username, char * short_filename, char * file_type, char * file_size);
-		/* A SIP failure occured */
+		/** A SIP failure occured */
 		void (*transferToPeerFailed)(int cid, char * username, char * short_filename, char * file_type, char * file_size);
-		/* The transfer has been closed before being complete (socket closed, transfer incomplete) */
+		/** The transfer has been closed before being complete (socket closed, transfer incomplete) */
 		void (*transferFromPeerStopped)(int cid, char * username, char * short_filename, char * file_type, char * file_size);
-		/* The transfer has been closed before being complete (socket closed, transfer incomplete) */
+		/** The transfer has been closed before being complete (socket closed, transfer incomplete) */
 		void (*transferToPeerStopped)(int cid, char * username, char * short_filename, char * file_type, char * file_size);
-		/* Progression of the file transfer */
+		/** Progression of the file transfer */
 		void (*transferProgression)(int cid, int percentage);
-		/* The peer paused the transfer */
+		/** The peer paused the transfer */
 		void (*transferPausedByPeer)(int cid, char * username, char * short_filename, char * file_type, char * file_size);
-		/* The user paused the transfer */
+		/** The user paused the transfer */
 		void (*transferPaused)(int cid, char * username, char * short_filename, char * file_type, char * file_size);
-		/* The peer resumed the transfer */
+		/** The peer resumed the transfer */
 		void (*transferResumedByPeer)(int cid, char * username, char * short_filename, char * file_type, char * file_size);
-		/* The user resumed the transfer */
+		/** The user resumed the transfer */
 		void (*transferResumed)(int cid, char * username, char * short_filename, char * file_type, char * file_size);
 	};
 	typedef struct sfp_callbacks sfp_callbacks_t;
