@@ -186,12 +186,18 @@ PaStream *pa_dev_open(phastream_t *as, int output, char *name, int rate, int fra
     inputParameters.device = atoi(in + 3);
   } else {
     inputParameters.device = Pa_GetDefaultInputDevice();
+    if (inputParameters.device == paNoDevice) {
+      return 0;
+    }
   }
 
   if (out = strstr(name,"OUT=")) {
     outputParameters.device = atoi(out + 4);
   } else {
     outputParameters.device = Pa_GetDefaultOutputDevice();
+    if (outputParameters.device == paNoDevice) {
+      return 0;
+    }
   }
 
   DBG_DYNA_AUDIO_DRV("pa_dev_open: PA Input %d, PA Output %d\n", inputParameters.device, outputParameters.device,0,0);
