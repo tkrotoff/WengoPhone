@@ -74,8 +74,6 @@ public:
 	 */
 	ReceiveFileSession(UserProfile & userProfile, IReceiveFileSession * fileSessionImp);
 
-	ReceiveFileSession(const ReceiveFileSession & receiveFileSession);
-
 	virtual ~ReceiveFileSession();
 
 	// Inherited from Session
@@ -140,7 +138,6 @@ private:
 
 	/** Pointer to running IFileSession. */
 	IReceiveFileSession * _currentFileSessionImp;
-
 };
 
 #endif //OWRECEIVEFILESESSION_H

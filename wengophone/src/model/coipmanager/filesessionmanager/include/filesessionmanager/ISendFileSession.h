@@ -38,10 +38,6 @@ public:
 
 	ISendFileSession();
 
-	ISendFileSession(const ISendFileSession & iSendFileSession);
-
-	virtual ISendFileSession * clone() const = 0;
-
 	virtual ~ISendFileSession();
 
 	/**

@@ -67,10 +67,6 @@ PhApiReceiveFileSession::PhApiReceiveFileSession(const PhApiReceiveFileSession &
 	PhApiSFPEvent::transferResumedEvent += boost::bind(&PhApiReceiveFileSession::transferResumedEventHandler, this, _1, _2, _3, _4, _5, _6);
 }
 
-PhApiReceiveFileSession * PhApiReceiveFileSession::clone() const {
-	return new PhApiReceiveFileSession(*this);
-}
-
 PhApiReceiveFileSession::~PhApiReceiveFileSession(){}
 
 void PhApiReceiveFileSession::start() {

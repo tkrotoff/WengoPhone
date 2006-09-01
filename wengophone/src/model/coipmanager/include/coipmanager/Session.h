@@ -42,8 +42,6 @@ public:
 
 	Session(UserProfile & userProfile);
 
-	Session(const Session & session);
-
 	virtual ~Session();
 
 	/**

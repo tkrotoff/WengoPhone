@@ -37,13 +37,6 @@ SendFileSession::SendFileSession(FileSessionManager & fileSessionManager, UserPr
 	_currentFileSessionImp = NULL;
 }
 
-SendFileSession::SendFileSession(const SendFileSession & sendFileSession) 
-	: Session(sendFileSession),
-	_fileSessionManager(sendFileSession._fileSessionManager) {
-	_fileVector = sendFileSession._fileVector;
-	_currentFileSessionImp = sendFileSession._currentFileSessionImp->clone();
-}
-
 SendFileSession::~SendFileSession() {
 	OWSAFE_DELETE(_currentFileSessionImp);
 }

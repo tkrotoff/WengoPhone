@@ -73,8 +73,6 @@ public:
 	 */
 	SendFileSession(FileSessionManager & fileSessionManager, UserProfile & userProfile);
 
-	SendFileSession(const SendFileSession & sendFileSession);
-
 	virtual ~SendFileSession();
 
 	// Inherited from Session

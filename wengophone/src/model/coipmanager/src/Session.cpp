@@ -31,11 +31,6 @@ Session::Session(UserProfile & userProfile)
 	: _userProfile(userProfile) {
 }
 
-Session::Session(const Session & session) 
-	: _userProfile(session._userProfile) {
-	_contactIdList = session._contactIdList;
-}
-
 Session::~Session() {
 }
 

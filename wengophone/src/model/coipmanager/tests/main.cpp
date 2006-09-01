@@ -39,7 +39,7 @@ static Contact * contact1 = NULL;
 static Contact * contact2 = NULL;
 
 void newReceiveFileSessionCreatedEventHandler(FileSessionManager & sender,
-	ReceiveFileSession fileSession);
+	ReceiveFileSession * fileSession);
 
 void moduleFinishedEventHandler(CoIpModule & sender);
 
@@ -109,8 +109,10 @@ int main(int argc, char **argv) {
 }
 
 void newReceiveFileSessionCreatedEventHandler(FileSessionManager & sender,
-	ReceiveFileSession fileSession) {
+	ReceiveFileSession * fileSession) {
 	LOG_DEBUG("ReceiveFileSession created");
+
+	OWSAFE_DELETE(fileSession);
 }
 
 void moduleFinishedEventHandler(CoIpModule & sender) {

@@ -30,9 +30,8 @@
 QtFileTransfer::QtFileTransfer(QObject * parent, CoIpManager * coIpManager)
 	: QObject(parent), _coIpManager(coIpManager) {
 
-	qRegisterMetaType<ReceiveFileSession>("ReceiveFileSession");
-	connect(this, SIGNAL(newReceiveFileSessionCreatedEventHandlerSignal(ReceiveFileSession)),
-		SLOT(newReceiveFileSessionCreatedEventHandlerSlot(ReceiveFileSession)));
+	connect(this, SIGNAL(newReceiveFileSessionCreatedEventHandlerSignal(ReceiveFileSession *)),
+		SLOT(newReceiveFileSessionCreatedEventHandlerSlot(ReceiveFileSession *)));
 	_coIpManager->getFileSessionManager().newReceiveFileSessionCreatedEvent +=
 		boost::bind(&QtFileTransfer::newReceiveFileSessionCreatedEventHandler, this, _1, _2);
 }
@@ -41,15 +40,15 @@ QtFileTransfer::~QtFileTransfer() {
 }
 
 void QtFileTransfer::newReceiveFileSessionCreatedEventHandler(FileSessionManager & sender,
-	ReceiveFileSession fileSession) {
+	ReceiveFileSession * fileSession) {
 
 	newReceiveFileSessionCreatedEventHandlerSignal(fileSession);
 }
 
-void QtFileTransfer::newReceiveFileSessionCreatedEventHandlerSlot(ReceiveFileSession fileSession) {
+void QtFileTransfer::newReceiveFileSessionCreatedEventHandlerSlot(ReceiveFileSession * fileSession) {
 	QtFileTransferAcceptDialog qtFileTransferAcceptDialog(0);
-	qtFileTransferAcceptDialog.setFileName(fileSession.getFileName());
-	qtFileTransferAcceptDialog.setContactName(fileSession.getIMContact().getContactId());
+	qtFileTransferAcceptDialog.setFileName(fileSession->getFileName());
+	qtFileTransferAcceptDialog.setContactName(fileSession->getIMContact().getContactId());
 
 	if (qtFileTransferAcceptDialog.exec() == QDialog::Accepted) {
 		QString dir = QFileDialog::getExistingDirectory(
@@ -60,10 +59,11 @@ void QtFileTransfer::newReceiveFileSessionCreatedEventHandlerSlot(ReceiveFileSes
 		);
 
 		if (!dir.isEmpty()) {
-			fileSession.setFilePath(dir.toStdString());
-			fileSession.start();
+			fileSession->setFilePath(dir.toStdString());
+			fileSession->start();
 		} else {
-			fileSession.stop();
+			fileSession->stop();
+			OWSAFE_DELETE(fileSession);
 		}
 	}
 }

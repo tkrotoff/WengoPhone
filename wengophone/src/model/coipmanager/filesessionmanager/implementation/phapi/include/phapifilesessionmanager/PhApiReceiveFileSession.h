@@ -39,9 +39,7 @@ public:
 
 	PhApiReceiveFileSession(int callID, std::string contactID, std::string fileName, unsigned int fileSize);
 
-	virtual PhApiReceiveFileSession * clone() const;
-
-	virtual ~PhApiReceiveFileSession();
+	~PhApiReceiveFileSession();
 
 	void start();
 

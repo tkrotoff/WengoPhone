@@ -36,11 +36,6 @@ ReceiveFileSession::ReceiveFileSession(UserProfile & userProfile,
 		boost::bind(&ReceiveFileSession::fileTransferProgressionEventHandler, this, _1, _2, _3, _4);
 }
 
-ReceiveFileSession::ReceiveFileSession(const ReceiveFileSession & receiveFileSession) 
-	: Session(receiveFileSession) {
-	_currentFileSessionImp = receiveFileSession._currentFileSessionImp->clone();
-}
-
 ReceiveFileSession::~ReceiveFileSession() {
 	OWSAFE_DELETE(_currentFileSessionImp);
 }
