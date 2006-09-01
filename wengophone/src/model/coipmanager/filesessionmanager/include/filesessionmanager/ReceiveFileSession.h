@@ -63,8 +63,8 @@ public:
 	 * @param sentFile the sent File
 	 * @param percentage completion of the transfer in percentage
 	 */
-	Event< void (ReceiveFileSession & sender, IFileSession::IFileSessionEvent event,
-		IMContact imContact, File sentFile, int percentage) > fileTransferProgressionEvent;
+	Event< void (ReceiveFileSession & sender, IMContact imContact, 
+		File sentFile, int percentage) > fileTransferProgressionEvent;
 
 	/**
 	 * Creates a ReceiveFileSession.
@@ -123,7 +123,7 @@ private:
 	 * @see IFileSession::fileTransferProgressionEvent
 	 */
 	void fileTransferProgressionEventHandler(IFileSession & sender, 
-		IFileSession::IFileSessionEvent event, IMContact imContact, File sentFile, int percentage);
+		IMContact imContact, File sentFile, int percentage);
 
 	// Inherited from Session
 	virtual void addContact(const std::string & contactId) { }

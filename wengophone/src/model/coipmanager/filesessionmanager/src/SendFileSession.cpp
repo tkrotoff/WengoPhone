@@ -69,6 +69,10 @@ void SendFileSession::start() {
 				_currentFileSessionImp->setAccount(&imAccount);
 				_currentFileSessionImp->moduleFinishedEvent +=
 					boost::bind(&SendFileSession::moduleFinishedEventHandler, this, _1);
+				_currentFileSessionImp->fileTransferEvent +=
+					boost::bind(&SendFileSession::fileTransferEventHandler, this, _1, _2, _3, _4);
+				_currentFileSessionImp->fileTransferProgressionEvent +=
+					boost::bind(&SendFileSession::fileTransferProgressionEventHandler, this, _1, _2, _3, _4);
 
 				_currentFileSessionImp->setFileList(_fileVector);
 
@@ -164,7 +168,7 @@ void SendFileSession::fileTransferEventHandler(IFileSession & sender,
 }
 
 void SendFileSession::fileTransferProgressionEventHandler(IFileSession & sender,
-	IFileSession::IFileSessionEvent event, IMContact imContact, File sentFile, int percentage) {
+	IMContact imContact, File sentFile, int percentage) {
 
-	fileTransferProgressionEvent(*this, event, imContact, sentFile, percentage);
+	fileTransferProgressionEvent(*this, imContact, sentFile, percentage);
 }

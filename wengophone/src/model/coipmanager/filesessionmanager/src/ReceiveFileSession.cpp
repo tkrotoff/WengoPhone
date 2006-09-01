@@ -28,6 +28,12 @@ ReceiveFileSession::ReceiveFileSession(UserProfile & userProfile,
 	: Session(userProfile) {
 
 	_currentFileSessionImp = fileSessionImp;
+	_currentFileSessionImp->moduleFinishedEvent +=
+		boost::bind(&ReceiveFileSession::moduleFinishedEventHandler, this, _1);
+	_currentFileSessionImp->fileTransferEvent +=
+		boost::bind(&ReceiveFileSession::fileTransferEventHandler, this, _1, _2, _3, _4);
+	_currentFileSessionImp->fileTransferProgressionEvent +=
+		boost::bind(&ReceiveFileSession::fileTransferProgressionEventHandler, this, _1, _2, _3, _4);
 }
 
 ReceiveFileSession::~ReceiveFileSession() {
@@ -68,13 +74,13 @@ IMContact ReceiveFileSession::getIMContact() const {
 
 void ReceiveFileSession::setFilePath(const std::string & path) {
 	if (_currentFileSessionImp) {
-		_currentFileSessionImp->setFilePath(path+File::getPathSeparator());
+		_currentFileSessionImp->setFilePath(path + File::getPathSeparator());
 	}
 }
 
 std::string ReceiveFileSession::getFilePath() const {
 	if (_currentFileSessionImp) {
-		_currentFileSessionImp->start();
+		_currentFileSessionImp->getFilePath();
 	} else {
 		return String::null;
 	}
@@ -108,7 +114,7 @@ void ReceiveFileSession::fileTransferEventHandler(IFileSession & sender,
 }
 
 void ReceiveFileSession::fileTransferProgressionEventHandler(IFileSession & sender,
-	IFileSession::IFileSessionEvent event, IMContact imContact, File sentFile, int percentage) {
+	IMContact imContact, File sentFile, int percentage) {
 
-	fileTransferProgressionEvent(*this, event, imContact, sentFile, percentage);
+	fileTransferProgressionEvent(*this, imContact, sentFile, percentage);
 }
