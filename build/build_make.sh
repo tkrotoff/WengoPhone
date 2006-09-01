@@ -16,5 +16,5 @@ done
 BUILDDIR=$(dirname ${SCRIPT})
 
 cd ${BUILDDIR}
-cmake .. -DCMAKE_INSTALL_PREFIX=/usr "$@" && make
+cmake .. -DCMAKE_INSTALL_PREFIX=/usr "$@" # && make
 

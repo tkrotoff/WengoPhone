@@ -1,0 +1,29 @@
+project(<LIBNAME>)
+
+set(<LIBNAME>_LIBRARY ${PROJECT_NAME})
+
+set(<LIBNAME>_INCLUDE_DIRS
+  ${CMAKE_CURRENT_SOURCE_DIR}/include
+  ${OTHERPOJECT_INCLUDE_DIRS}
+)
+
+set(<LIBNAME>_LIBRARIES
+  ${PROJECT_NAME}
+  ${OTHERPROJECT_LIBRARIES}
+)
+
+include_directories(
+  ${<LIBNAME>_INCLUDE_DIRS}
+)
+
+set(<LIBNAME>_SRCS
+  files.c
+)
+
+add_library(<LIBNAME> STATIC ${<LIBNAME>_SRCS})
+
+target_link_libraries(
+  <LIBNAME>
+  ${OTHERPROJECT_LIBRARIES}
+)
+
