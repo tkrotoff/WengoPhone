@@ -63,6 +63,8 @@ private Q_SLOTS:
 
 	void slotTranslationChanged();
 
+	void paintEvent(QEvent * event);
+
 private:
 
 	void initThreadSafe() { }

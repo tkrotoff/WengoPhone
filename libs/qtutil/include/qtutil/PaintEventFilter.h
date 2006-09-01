@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef PAINTEVENTFILTER_H
-#define PAINTEVENTFILTER_H
+#ifndef OWPAINTEVENTFILTER_H
+#define OWPAINTEVENTFILTER_H
 
 #include <qtutil/EventFilter.h>
 
@@ -37,4 +37,4 @@ protected:
 	virtual bool eventFilter(QObject * watched, QEvent * event);
 };
 
-#endif	//PAINTEVENTFILTER_H
+#endif	//OWPAINTEVENTFILTER_H

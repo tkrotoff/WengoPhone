@@ -31,6 +31,8 @@
 
 #include <util/Logger.h>
 
+#include <qtutil/PaintEventFilter.h>
+
 #include <QtGui/QtGui>
 
 QtConfigPanel::QtConfigPanel(CWengoPhone & cWengoPhone, QWidget * parent)
@@ -151,12 +153,12 @@ void QtConfigPanel::slotTranslationChanged() {
 }
 
 void QtConfigPanel::paintEvent(QEvent * event) {
-	QRect r = rect();
+	QRect rect = _configPanelWidget->rect();
 
-	QLinearGradient lg(QPointF(1, r.top()), QPointF(1, r.bottom()));
+	QLinearGradient lg(QPointF(1, rect.top()), QPointF(1, rect.bottom()));
 
-	lg.setColorAt(0, palette().color(QPalette::Window));
-	QColor dest = palette().color(QPalette::Window);
+	lg.setColorAt(0, _configPanelWidget->palette().color(QPalette::Window));
+	QColor dest = _configPanelWidget->palette().color(QPalette::Window);
 
 	float red = ((float) dest.red()) / 1.3f;
 	float blue = ((float) dest.blue()) / 1.3f;
@@ -165,7 +167,7 @@ void QtConfigPanel::paintEvent(QEvent * event) {
 	dest = QColor((int) red, (int) green, (int) blue);
 	lg.setColorAt(1, dest);
 
-	QPainter painter(this);
-	painter.fillRect(r, QBrush(lg));
+	QPainter painter(_configPanelWidget);
+	painter.fillRect(rect, QBrush(lg));
 	painter.end();
 }

@@ -44,7 +44,7 @@
 
 QtProfileBar::QtProfileBar(CWengoPhone & cWengoPhone, CUserProfile & cUserProfile,
 		ConnectHandler & connectHandler, QWidget * parent)
-	: QWidget (parent),
+	: QWidget(parent),
 	_cUserProfile(cUserProfile),
 	_cWengoPhone(cWengoPhone),
 	_connectHandler(connectHandler) {

@@ -22,7 +22,7 @@
 #include <QtCore/QEvent>
 
 PaintEventFilter::PaintEventFilter(QObject * receiver, const char * member)
-: EventFilter(receiver, member) {
+	: EventFilter(receiver, member) {
 }
 
 bool PaintEventFilter::eventFilter(QObject * watched, QEvent * event) {
