@@ -74,8 +74,7 @@ void QtAddIMContact::addIMContact() {
 	std::string contactId = _ui->contactIdLineEdit->text().toStdString();
 	QString protocolName = _ui->protocolComboBox->currentText();
 
-	EnumIMProtocol::IMProtocol imProtocol =
-		EnumIMProtocol::toIMProtocol(protocolName.toStdString());
+	EnumIMProtocol::IMProtocol imProtocol = EnumIMProtocol::toIMProtocol(protocolName.toStdString());
 	IMContact imContact(imProtocol, contactId);
 
 	std::set<IMAccount *> imAccounts = getSelectedIMAccounts(imProtocol);

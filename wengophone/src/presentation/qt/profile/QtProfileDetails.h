@@ -28,6 +28,8 @@ class UserProfile;
 class ContactProfile;
 class CUserProfile;
 class Profile;
+class QtSimpleIMContactManager;
+class QtSimpleIMAccountManager;
 
 class QWidget;
 class QDialog;
@@ -102,6 +104,18 @@ private:
 	CUserProfile & _cUserProfile;
 
 	Profile & _profile;
+
+	QtSimpleIMContactManager * _qtIMContactManager;
+
+	QtSimpleIMAccountManager * _qtIMAccountManager;
+
+	/**
+	 * If we are in simple or advanced mode.
+	 *
+	 * If we use QtSimpleIMContactManager and QtSimpleIMAccountManager (-> simple mode)
+	 * or if we use QtIMContactManager and QtIMAccountManager (-> advanced mode)
+	 */
+	bool _advancedMode;
 };
 
 #endif	//QTPROFILEDETAILS_H

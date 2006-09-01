@@ -47,6 +47,8 @@ public:
 
 	QWidget * getWidget() const;
 
+	void saveIMContacts();
+
 Q_SIGNALS:
 
 	void advancedClicked();

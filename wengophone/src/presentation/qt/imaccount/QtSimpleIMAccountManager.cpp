@@ -52,3 +52,6 @@ QWidget * QtSimpleIMAccountManager::getWidget() const {
 void QtSimpleIMAccountManager::advancedClickedSlot() {
 	advancedClicked();
 }
+
+void QtSimpleIMAccountManager::saveIMContacts() {
+}

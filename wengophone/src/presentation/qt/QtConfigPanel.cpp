@@ -67,6 +67,9 @@ QtConfigPanel::QtConfigPanel(CWengoPhone & cWengoPhone, QWidget * parent)
 
 	//audioSettingsButton
 	connect(_ui->audioSettingsButton, SIGNAL(clicked()), SLOT(audioSettingsClicked()));
+
+	PaintEventFilter * paintFilter = new PaintEventFilter(this, SLOT(paintEvent(QEvent *)));
+	_configPanelWidget->installEventFilter(paintFilter);
 }
 
 QtConfigPanel::~QtConfigPanel() {
@@ -106,13 +109,17 @@ void QtConfigPanel::configChangedEventHandlerThreadSafe(Settings & sender, const
 
 	if (key == Config::AUDIO_INPUT_DEVICEID_KEY) {
 		//inputSoundSlider
-		VolumeControl inputVolumeControl(AudioDevice(config.getAudioInputDeviceId()));
+		AudioDevice audioDevice(config.getAudioInputDeviceId());
+		VolumeControl inputVolumeControl(audioDevice);
+		_ui->inputSoundSlider->setToolTip(tr("Input: ") + QString::fromStdString(audioDevice.getName()));
 		_ui->inputSoundSlider->setValue(inputVolumeControl.getLevel());
 	}
 
 	if (key == Config::AUDIO_OUTPUT_DEVICEID_KEY) {
 		//outputSoundSlider
-		VolumeControl outputVolumeControl(AudioDevice(config.getAudioOutputDeviceId()));
+		AudioDevice audioDevice(config.getAudioOutputDeviceId());
+		VolumeControl outputVolumeControl(audioDevice);
+		_ui->outputSoundSlider->setToolTip(tr("Output: ") + QString::fromStdString(audioDevice.getName()));
 		_ui->outputSoundSlider->setValue(outputVolumeControl.getLevel());
 	}
 
@@ -141,4 +148,24 @@ void QtConfigPanel::audioSettingsClicked() {
 
 void QtConfigPanel::slotTranslationChanged() {
 	_ui->retranslateUi(_configPanelWidget);
+}
+
+void QtConfigPanel::paintEvent(QEvent * event) {
+	QRect r = rect();
+
+	QLinearGradient lg(QPointF(1, r.top()), QPointF(1, r.bottom()));
+
+	lg.setColorAt(0, palette().color(QPalette::Window));
+	QColor dest = palette().color(QPalette::Window);
+
+	float red = ((float) dest.red()) / 1.3f;
+	float blue = ((float) dest.blue()) / 1.3f;
+	float green = ((float) dest.green()) / 1.3f;
+
+	dest = QColor((int) red, (int) green, (int) blue);
+	lg.setColorAt(1, dest);
+
+	QPainter painter(this);
+	painter.fillRect(r, QBrush(lg));
+	painter.end();
 }

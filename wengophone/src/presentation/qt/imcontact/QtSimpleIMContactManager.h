@@ -22,8 +22,13 @@
 
 #include <util/NonCopyable.h>
 
+#include <imwrapper/EnumIMProtocol.h>
+
 #include <QtCore/QObject>
 
+#include <set>
+
+class IMContact;
 class ContactProfile;
 class CUserProfile;
 
@@ -48,6 +53,8 @@ public:
 
 	QWidget * getWidget() const;
 
+	void saveIMContacts();
+
 Q_SIGNALS:
 
 	void advancedClicked();
@@ -56,7 +63,26 @@ private Q_SLOTS:
 
 	void advancedClickedSlot();
 
+	void searchWengoContactButtonClicked();
+
 private:
+
+	void loadIMContacts();
+
+	/**
+	 * Code factorization.
+	 */
+	std::set<IMContact *> findIMContactsOfProtocol(EnumIMProtocol::IMProtocol imProtocol) const;
+
+	/**
+	 * Code factorization.
+	 */
+	QString getIMContactsOfProtocol(EnumIMProtocol::IMProtocol imProtocol) const;
+
+	/**
+	 * Code factorization.
+	 */
+	void addIMContact(EnumIMProtocol::IMProtocol imProtocol, const QString & text);
 
 	Ui::SimpleIMContactManager * _ui;
 

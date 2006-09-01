@@ -415,7 +415,7 @@
   <tabstop>closeButton</tabstop>
  </tabstops>
  <resources>
-  <include location="wengophone.qrc" />
+  <include location="../wengophone.qrc" />
  </resources>
  <connections>
   <connection>
