@@ -90,6 +90,14 @@ public:
 	Event<void (IMChatSession & sender)> messageReceivedEvent;
 
 	/**
+	 * Emitted when a message has been sent.
+	 *
+	 * @param sender this class
+	 * @param message the text that has been sent
+	 */
+	Event<void (IMChatSession & sender, std::string message)> messageSentEvent;
+
+	/**
 	 * Emitted when a status message has been received. (e.g "Joe is connected")
 	 *
 	 * @param sender this class
@@ -148,13 +156,15 @@ public:
 		std::string _message;
 	};
 
+	typedef std::vector<IMChatMessage *> IMChatMessageList; // TODO NCOUTURIER rename?
+
 	/**
 	 * Gets the first message queued in IMChatSession. Delete it from the queue.
 	 *
 	 * @return the first message of the queue. NULL if no message in the queue.
 	 * The returned IMChatMessage must be freed by the called.
 	 */
-	IMChatMessage * getReceivedMessage();
+	const IMChatMessageList getReceivedMessage(unsigned int fromIndex);
 
 	/**
 	 * Constructs a chat session given a IMChat.
@@ -250,8 +260,6 @@ private:
 	IMContactSet _imContactSet;
 
 	IMChat & _imChat;
-
-	typedef std::list<IMChatMessage *> IMChatMessageList;
 
 	IMChatMessageList _receivedIMChatMessageList;
 

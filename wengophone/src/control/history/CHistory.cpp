@@ -18,25 +18,34 @@
  */
 
 #include "CHistory.h"
+#include <model/history/HistoryMemento.h>
 
 #include <presentation/PFactory.h>
 #include <presentation/PHistory.h>
 
 #include <control/CWengoPhone.h>
+#include <control/profile/CUserProfileHandler.h>
+#include <control/profile/CUserProfile.h>
 
 #include <model/WengoPhone.h>
+#include <model/chat/ChatHandler.h>
+#include <model/profile/UserProfile.h>
 
 #include <util/Logger.h>
 #include <thread/ThreadEvent.h>
 
-CHistory::CHistory(History & history, CWengoPhone & cWengoPhone)
+CHistory::CHistory(History & history, CWengoPhone & cWengoPhone, CUserProfile & cUserProfile)
 	: _history(history),
-	_cWengoPhone(cWengoPhone) {
+	_cWengoPhone(cWengoPhone),
+	_cUserProfile(cUserProfile) {
 
 	_pHistory = NULL;
 	typedef ThreadEvent0<void ()> MyThreadEvent;
 	MyThreadEvent * event = new MyThreadEvent(boost::bind(&CHistory::initPresentationThreadSafe, this));
 	PFactory::postEvent(event);
+
+	// TODO NCOUTURIER bind handler
+	_cUserProfile.getUserProfile().getChatHandler().newIMChatSessionCreatedEvent += boost::bind(&CHistory::newIMChatSessionCreatedEventHandler, this, _1, _2);
 }
 
 CHistory::~CHistory() {
@@ -169,4 +178,43 @@ void CHistory::resetUnseenMissedCallsThreadSafe() {
 
 int CHistory::getUnseenMissedCalls() {
 	return _history.getUnseenMissedCalls();
+}
+
+void CHistory::newIMChatSessionCreatedEventHandler(ChatHandler & sender, IMChatSession & imChatSession) {
+	if(_history.addChatMementoSession(imChatSession.getId())){
+		_lastReceivedMesssageIndex[imChatSession.getId()] = -1;
+		imChatSession.imChatSessionWillDieEvent += boost::bind(&CHistory::imChatSessionWillDieEventHandler, this, _1);
+		imChatSession.messageReceivedEvent += boost::bind(&CHistory::messageReceivedEventHandler, this, _1);
+		imChatSession.messageSentEvent += boost::bind(&CHistory::messageSentEventHandler, this, _1, _2);
+	}
+}
+
+void CHistory::imChatSessionWillDieEventHandler(IMChatSession & sender) {
+	_history.removeChatMementoSession(sender.getId());
+	_lastReceivedMesssageIndex.erase(sender.getId());
+}
+
+void CHistory::messageReceivedEventHandler(IMChatSession & sender) {
+	IMChatSession::IMChatMessageList imChatMessageList = sender.getReceivedMessage(_lastReceivedMesssageIndex[sender.getId()]+1);
+	if(imChatMessageList.size() > 0) {
+		_lastReceivedMesssageIndex[sender.getId()] += imChatMessageList.size();
+		IMChatSession::IMChatMessageList::iterator imChatMessageListIterator = imChatMessageList.begin();
+		while(imChatMessageListIterator < imChatMessageList.end()) {
+			IMChatSession::IMChatMessage * imChatMessage = * imChatMessageListIterator;
+			HistoryMemento * memento = new HistoryMemento(HistoryMemento::ChatSession,
+				imChatMessage->getIMContact().getContactId(),
+				-1, /* don't care about the call id */
+				imChatMessage->getMessage());
+			_history.addChatMemento(memento, sender.getId());
+			imChatMessageListIterator++;
+		}
+	}
+}
+
+void CHistory::messageSentEventHandler(IMChatSession & sender, std::string message) {
+	HistoryMemento * memento = new HistoryMemento(HistoryMemento::ChatSession,
+		((SipAccount *)_cUserProfile.getUserProfile().getWengoAccount())->getDisplayName(),
+		-1, /* don't care about the call id */
+		message);
+	_history.addChatMemento(memento, sender.getId());
 }

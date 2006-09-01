@@ -21,14 +21,19 @@
 #define OWCHISTORY_H
 
 #include <model/history/History.h>
+#include <model/chat/ChatHandler.h>
 
 #include <control/Control.h>
 
+#include <imwrapper/IMChatSession.h>
+
 #include <string>
+#include <map>
 
 class Presentation;
 class CWengoPhone;
 class PHistory;
+class CUserProfile;
 
 /**
  * Control for History.
@@ -42,7 +47,7 @@ public:
 	/**
 	 * Default constructor.
 	 */
-	CHistory(History & history, CWengoPhone & cWengoPhone);
+	CHistory(History & history, CWengoPhone & cWengoPhone, CUserProfile & cUserProfile);
 
 	~CHistory();
 
@@ -125,6 +130,14 @@ private:
 	void unseenMissedCallsChangedEventhandler(History & sender, int count);
 	void unseenMissedCallsChangedEventHandlerThreadSafe(int count);
 
+	void newIMChatSessionCreatedEventHandler(ChatHandler & sender, IMChatSession & imChatSession);
+
+	void imChatSessionWillDieEventHandler(IMChatSession & sender);
+
+	void messageReceivedEventHandler(IMChatSession & sender);
+
+	void messageSentEventHandler(IMChatSession & sender, std::string message);
+
 	void removeHistoryMementoThreadSafe(unsigned id);
 
 	void clearThreadSafe(HistoryMemento::State state);
@@ -139,8 +152,14 @@ private:
 	/** Link to the CWengoPhone. */
 	CWengoPhone & _cWengoPhone;
 
+	/** Link to the CUserProfile **/
+	CUserProfile & _cUserProfile;
+
 	/** Link to the presentation via an interface. */
 	PHistory * _pHistory;
+
+	/** Index of the last message recorded in the History for each sessionID **/
+	std::map<int, int> _lastReceivedMesssageIndex;
 };
 
 #endif	//OWCHISTORY_H

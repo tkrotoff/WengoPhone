@@ -87,6 +87,7 @@ void IMChatSession::removeAllIMContact() {
 void IMChatSession::sendMessage(const std::string & message) {
 	LOG_DEBUG("sending raw message=" + message);
 	_imChat.sendMessage(*this, message);
+	messageSentEvent(*this, message);
 }
 
 void IMChatSession::changeTypingState(IMChat::TypingState state) {
@@ -188,12 +189,15 @@ bool IMChatSession::canDoMultiChat() const {
 	}
 }
 
-IMChatSession::IMChatMessage * IMChatSession::getReceivedMessage() {
-	IMChatMessage * result = NULL;
+const IMChatSession::IMChatMessageList IMChatSession::getReceivedMessage(unsigned int fromIndex) {
+	IMChatSession::IMChatMessageList result;
 
 	if (_receivedIMChatMessageList.size() > 0) {
-		result = *_receivedIMChatMessageList.begin();
-		_receivedIMChatMessageList.pop_front();
+		if (fromIndex >= 0 && fromIndex < _receivedIMChatMessageList.size()) {
+			for(unsigned int i = fromIndex; i < _receivedIMChatMessageList.size(); i++) {
+				result.push_back(_receivedIMChatMessageList.at(i));
+			}
+		}
 	}
 
 	return result;

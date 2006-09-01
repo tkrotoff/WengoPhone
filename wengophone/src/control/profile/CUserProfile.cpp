@@ -192,7 +192,7 @@ void CUserProfile::wsSoftUpdateCreatedEventHandler(UserProfile & sender, WsSoftU
 }
 
 void CUserProfile::historyLoadedEventHandler(History & history) {
-	_cHistory = new CHistory(history, _cWengoPhone);
+	_cHistory = new CHistory(history, _cWengoPhone, *this);
 }
 
 void CUserProfile::disconnect() {

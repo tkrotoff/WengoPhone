@@ -27,7 +27,11 @@
 #include <serialization/Serializable.h>
 #include <thread/Mutex.h>
 
+#include <map>
+#include <string>
+
 class UserProfile;
+class IMContactSet;
 
 /**
  * History (Care Taker in the Memento pattern)
@@ -69,6 +73,11 @@ public:
 	 * A memento has been added.
 	 */
 	Event<void (History &, unsigned int id)> mementoAddedEvent;
+
+	/**
+	 * A chat memento has been added.
+	 */
+	Event<void (History &, unsigned int id)> chatMementoAddedEvent;
 
 	/**
 	 * A memento has been updated.
@@ -204,6 +213,31 @@ public:
 	 * @return unseen missed calls count
 	 */
 	int getUnseenMissedCalls();
+	
+	/**
+	 * Creates a new collection of History Memento for new a chat session
+	 *
+	 * @param	chatSessionID : the ID of the chat sesssion
+	 * @return	true if the session has been added; false else
+	 */
+	bool addChatMementoSession(int chatSessionID);
+
+	/**
+	 * Removes a collection of History Memento of a closing chat session
+	 *
+	 * @param	chatSessionID : the ID of the chat sesssion
+	 */
+	void removeChatMementoSession(int chatSessionID);
+
+	/**
+	 * add memento into the right chat memento collection
+	 *
+	 * @param memento the memento to add
+	 * @param chatSessionID the ID of the chat sesssion to which the memento belongs
+	 * @return the id of the memento
+	 */
+	unsigned addChatMemento(HistoryMemento * memento, int chatSessionID);
+
 
 private:
 
@@ -222,6 +256,12 @@ private:
 	 * all HistoryMemento objects.
 	 */
 	HistoryMementoCollection *_collection;
+
+	/**
+	* Set of History Memento Collection that store every message
+	* of a chat session.
+	*/
+	std::map<int, HistoryMementoCollection *> _chatSessionsMementos;
 
 	/** A ref to UserProfile */
 	UserProfile & _userProfile;

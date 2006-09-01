@@ -184,3 +184,25 @@ int History::getUnseenMissedCalls() {
 
 	return _missedCallCount;
 }
+
+bool History::addChatMementoSession(int chatSessionID) {
+	if(_chatSessionsMementos[chatSessionID] == NULL){
+		_chatSessionsMementos[chatSessionID] = new HistoryMementoCollection();
+		return true;
+	}
+	return false;
+}
+
+void History::removeChatMementoSession(int chatSessionID){
+	HistoryMementoCollection * collection = NULL;
+	if((collection = _chatSessionsMementos[chatSessionID]) != NULL){
+		_chatSessionsMementos.erase(chatSessionID);
+		delete collection;
+	}
+}
+
+unsigned History::addChatMemento(HistoryMemento * memento, int chatSessionID) {
+	unsigned id = _chatSessionsMementos[chatSessionID]->addMemento(memento);
+	chatMementoAddedEvent(*this, id);
+	return id;
+}

@@ -31,6 +31,7 @@
 #include <util/Trackable.h>
 
 #include <string>
+#include <map>
 
 class QtChatTabWidget;
 class QtWengoPhone;
@@ -117,6 +118,8 @@ private:
 
 	void typingStateChangedEventHandler(IMChatSession & sender, const IMContact & imContact, IMChat::TypingState state);
 
+	void imChatSessionWillDieEventHandler(IMChatSession & sender);
+
 	void flashWindow();
 
 	void showMinimized();
@@ -136,6 +139,9 @@ private:
 	QtWengoPhone & _qtWengoPhone;
 
 	Ui::chatMainWindow _ui;
+	
+	/** Index of the last message printed on screen for ecah sessionID **/
+	std::map<int, int> _lastReceivedMessageIndex;
 };
 
 #endif //OWQTCHATWINDOW_H
