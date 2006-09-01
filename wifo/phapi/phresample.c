@@ -165,10 +165,12 @@ void *ph_resample_init()
 {
   struct phresamplectx *ctx = calloc(sizeof(struct phresamplectx), 1);
 
-  ctx->filt = fid_design("LpBu4", 16000, 3600, 0, 0, 0);
-  ctx->run = fid_run_new(ctx->filt, &ctx->funcp);
-  ctx->upsamplebuf = fid_run_newbuf(ctx->run);
-  ctx->downsamplebuf = fid_run_newbuf(ctx->run);
+  if ( ctx ) {
+	  ctx->filt = fid_design("LpBu4", 16000, 3600, 0, 0, 0);
+	  ctx->run = fid_run_new(ctx->filt, &ctx->funcp);
+	  ctx->upsamplebuf = fid_run_newbuf(ctx->run);
+	  ctx->downsamplebuf = fid_run_newbuf(ctx->run);
+  }
 
   return ctx;
 }
