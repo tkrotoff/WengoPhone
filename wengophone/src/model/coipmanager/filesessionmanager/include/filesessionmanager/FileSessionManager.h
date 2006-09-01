@@ -54,7 +54,7 @@ public:
 	 * Here the FileSession is a pointer because the received of the event is
 	 * responsible of the deleting of this object.
 	 */
-	Event< void (FileSessionManager & sender, ReceiveFileSession * fileSession)> newReceiveFileSessionCreatedEvent;
+	Event< void (FileSessionManager & sender, ReceiveFileSession fileSession)> newReceiveFileSessionCreatedEvent;
 
 	FileSessionManager(UserProfile & userProfile);
 

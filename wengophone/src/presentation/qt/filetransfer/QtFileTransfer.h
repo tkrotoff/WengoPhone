@@ -24,9 +24,7 @@
 
 #include <util/Trackable.h>
 
-class CoIpManager;
-class FileSessionManager;
-class ReceiveFileSession;
+#include <filesessionmanager/FileSessionManager.h>
 
 /**
  * Qt file transfer object.
@@ -47,18 +45,18 @@ public:
 
 Q_SIGNALS:
 
-	void newReceiveFileSessionCreatedEventHandlerSignal(ReceiveFileSession * fileSession);
+	void newReceiveFileSessionCreatedEventHandlerSignal(ReceiveFileSession fileSession);
 
 private Q_SLOTS:
 
-	void newReceiveFileSessionCreatedEventHandlerSlot(ReceiveFileSession * fileSession);
+	void newReceiveFileSessionCreatedEventHandlerSlot(ReceiveFileSession fileSession);
 
 private:
 
 	/**
 	 * @see FileSessionManager::newReceiveFileSessionCreatedEvent
 	 */
-	void newReceiveFileSessionCreatedEventHandler(FileSessionManager & sender, ReceiveFileSession * fileSession);
+	void newReceiveFileSessionCreatedEventHandler(FileSessionManager & sender, ReceiveFileSession fileSession);
 
 	CoIpManager * _coIpManager;
 };

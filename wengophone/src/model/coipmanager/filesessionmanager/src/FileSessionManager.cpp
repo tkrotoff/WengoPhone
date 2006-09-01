@@ -27,6 +27,7 @@
 #include <imwrapper/Account.h>
 
 #include <util/Logger.h>
+#include <util/SafeDelete.h>
 
 FileSessionManager::FileSessionManager(UserProfile & userProfile)
 	: _userProfile(userProfile) {
@@ -68,10 +69,13 @@ ISendFileSession * FileSessionManager::createFileSessionForAccount(const Account
 	return result;
 }
 
-void FileSessionManager::newIReceiveFileSessionCreatedEventHandler(IFileSessionManager & sender, IReceiveFileSession * iReceiveFileSession) {
+void FileSessionManager::newIReceiveFileSessionCreatedEventHandler(IFileSessionManager & sender,
+	IReceiveFileSession * iReceiveFileSession) {
 	LOG_DEBUG("new IReceiveFileSession created event");
 
-	ReceiveFileSession * newFileSession = new ReceiveFileSession(_userProfile, iReceiveFileSession);
+	ReceiveFileSession receiveFileSession(_userProfile, iReceiveFileSession);
 
-	newReceiveFileSessionCreatedEvent(*this, newFileSession);
+	OWSAFE_DELETE(iReceiveFileSession);
+
+	newReceiveFileSessionCreatedEvent(*this, receiveFileSession);
 }
