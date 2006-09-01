@@ -308,10 +308,15 @@ void ph_resample_audio0(void *ctx, void *inbuf, int inbsize, void *outbuf, int *
 {
   float finbuf[2048];
   float foutbuf[2048];
-  struct phresamplectx *ctx_filter = (struct phresamplectx *)ctx;
+  struct phresamplectx *ctx_filter;
   int errorCode = 0;
   //outbsize is the excepted frame size after resampling
   int postsampling_framesize = *outbsize;
+
+  if (!ctx) {
+    return;
+  }    
+  ctx_filter = (struct phresamplectx *)ctx;
 
   if (!postsampling_framesize) {
     postsampling_framesize = (int)(inbsize*ctx_filter->src_data->src_ratio);
