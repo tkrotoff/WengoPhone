@@ -23,5 +23,12 @@ IReceiveFileSession::IReceiveFileSession() {
 	_fileSize = 0;
 }
 
+IReceiveFileSession::IReceiveFileSession(const IReceiveFileSession & iReceiveFileSession) {
+	_filePath = iReceiveFileSession._filePath;
+	_fileName = iReceiveFileSession._fileName;
+ 	_fileSize = iReceiveFileSession._fileSize;
+	_imContact = iReceiveFileSession._imContact;
+}
+
 IReceiveFileSession::~IReceiveFileSession() {
 }

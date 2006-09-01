@@ -51,6 +51,27 @@ PhApiSendFileSession::PhApiSendFileSession(UserProfile & userProfile)
 	PhApiSFPEvent::transferResumedEvent += boost::bind(&PhApiSendFileSession::transferResumedEventHandler, this, _1, _2, _3, _4, _5, _6);
 }
 
+PhApiSendFileSession::PhApiSendFileSession(const PhApiSendFileSession & phApiSendFileSession)
+: ISendFileSession(phApiSendFileSession), _userProfile(phApiSendFileSession._userProfile) {
+	_initialized = phApiSendFileSession._initialized;
+	_currentCallID = phApiSendFileSession._currentCallID;
+	
+	PhApiSFPEvent::inviteToTransferEvent += boost::bind(&PhApiSendFileSession::inviteToTransferEventHandler, this, _1, _2, _3, _4, _5, _6);
+	PhApiSFPEvent::waitingForAnswerEvent += boost::bind(&PhApiSendFileSession::waitingForAnswerEventHandler, this, _1, _2, _3);
+	PhApiSFPEvent::transferCancelledEvent += boost::bind(&PhApiSendFileSession::transferCancelledEventHandler, this, _1, _2, _3, _4, _5);
+	PhApiSFPEvent::transferCancelledByPeerEvent += boost::bind(&PhApiSendFileSession::transferCancelledByPeerEventHandler, this, _1, _2, _3, _4, _5, _6);
+	PhApiSFPEvent::sendingFileBeginEvent += boost::bind(&PhApiSendFileSession::sendingFileBeginEventHandler, this, _1, _2, _3, _4, _5, _6);
+	PhApiSFPEvent::transferFromPeerFinishedEvent += boost::bind(&PhApiSendFileSession::transferFromPeerFinishedEventHandler, this, _1, _2, _3, _4, _5, _6);
+	PhApiSFPEvent::transferToPeerFinishedEvent += boost::bind(&PhApiSendFileSession::transferToPeerFinishedEventHandler, this, _1, _2, _3, _4, _5, _6);
+	PhApiSFPEvent::transferFromPeerFailedEvent += boost::bind(&PhApiSendFileSession::transferFromPeerFailedEventHandler, this, _1, _2, _3, _4, _5, _6);
+	PhApiSFPEvent::transferToPeerFailedEvent += boost::bind(&PhApiSendFileSession::transferToPeerFailedEventHandler, this, _1, _2, _3, _4, _5, _6);
+	PhApiSFPEvent::transferProgressionEvent += boost::bind(&PhApiSendFileSession::transferProgressionEventHandler, this, _1, _2, _3);
+	PhApiSFPEvent::transferPausedByPeerEvent += boost::bind(&PhApiSendFileSession::transferPausedByPeerEventHandler, this, _1, _2, _3, _4, _5, _6);
+	PhApiSFPEvent::transferPausedEvent += boost::bind(&PhApiSendFileSession::transferPausedEventHandler, this, _1, _2, _3, _4, _5, _6);
+	PhApiSFPEvent::transferResumedByPeerEvent += boost::bind(&PhApiSendFileSession::transferResumedByPeerEventHandler, this, _1, _2, _3, _4, _5, _6);
+	PhApiSFPEvent::transferResumedEvent += boost::bind(&PhApiSendFileSession::transferResumedEventHandler, this, _1, _2, _3, _4, _5, _6);
+}
+
 PhApiSendFileSession::~PhApiSendFileSession() {
 }
 

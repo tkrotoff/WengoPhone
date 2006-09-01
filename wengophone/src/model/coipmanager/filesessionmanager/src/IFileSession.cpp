@@ -26,6 +26,10 @@ IFileSession::IFileSession() {
 	_account = NULL;
 }
 
+IFileSession::IFileSession(const IFileSession & iFileSession) {
+	_account = iFileSession._account->createCopy();
+}
+
 IFileSession::~IFileSession() {
 	OWSAFE_DELETE(_account);
 }

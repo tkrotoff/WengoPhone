@@ -25,11 +25,33 @@
 
 PhApiReceiveFileSession::PhApiReceiveFileSession(){}
 
-PhApiReceiveFileSession::PhApiReceiveFileSession(int callID, std::string contactID, std::string fileName, unsigned int fileSize){
+PhApiReceiveFileSession::PhApiReceiveFileSession(int callID, std::string contactID, std::string fileName, unsigned int fileSize) 
+: IReceiveFileSession() {
 	_imContact = IMContact(EnumIMProtocol::IMProtocolWengo, contactID);
 	_fileName = fileName;
 	_fileSize = fileSize;
 	_currentCallID = callID;
+
+	PhApiSFPEvent::transferCancelledEvent += boost::bind(&PhApiReceiveFileSession::transferCancelledEventHandler, this, _1, _2, _3, _4, _5);
+	PhApiSFPEvent::transferCancelledByPeerEvent += boost::bind(&PhApiReceiveFileSession::transferCancelledByPeerEventHandler, this, _1, _2, _3, _4, _5, _6);
+	PhApiSFPEvent::sendingFileBeginEvent += boost::bind(&PhApiReceiveFileSession::sendingFileBeginEventHandler, this, _1, _2, _3, _4, _5, _6);
+	PhApiSFPEvent::transferFromPeerFinishedEvent += boost::bind(&PhApiReceiveFileSession::transferFromPeerFinishedEventHandler, this, _1, _2, _3, _4, _5, _6);
+	PhApiSFPEvent::transferToPeerFinishedEvent += boost::bind(&PhApiReceiveFileSession::transferToPeerFinishedEventHandler, this, _1, _2, _3, _4, _5, _6);
+	PhApiSFPEvent::transferFromPeerFailedEvent += boost::bind(&PhApiReceiveFileSession::transferFromPeerFailedEventHandler, this, _1, _2, _3, _4, _5, _6);
+	PhApiSFPEvent::transferToPeerFailedEvent += boost::bind(&PhApiReceiveFileSession::transferToPeerFailedEventHandler, this, _1, _2, _3, _4, _5, _6);
+	PhApiSFPEvent::transferProgressionEvent += boost::bind(&PhApiReceiveFileSession::transferProgressionEventHandler, this, _1, _2, _3);
+	PhApiSFPEvent::transferPausedByPeerEvent += boost::bind(&PhApiReceiveFileSession::transferPausedByPeerEventHandler, this, _1, _2, _3, _4, _5, _6);
+	PhApiSFPEvent::transferPausedEvent += boost::bind(&PhApiReceiveFileSession::transferPausedEventHandler, this, _1, _2, _3, _4, _5, _6);
+	PhApiSFPEvent::transferResumedByPeerEvent += boost::bind(&PhApiReceiveFileSession::transferResumedByPeerEventHandler, this, _1, _2, _3, _4, _5, _6);
+	PhApiSFPEvent::transferResumedEvent += boost::bind(&PhApiReceiveFileSession::transferResumedEventHandler, this, _1, _2, _3, _4, _5, _6);
+}
+
+PhApiReceiveFileSession::PhApiReceiveFileSession(const PhApiReceiveFileSession & phApiReceiveFileSession)
+: IReceiveFileSession(phApiReceiveFileSession) {
+	_imContact = phApiReceiveFileSession._imContact;
+	_fileName = phApiReceiveFileSession._fileName;
+	_fileSize = phApiReceiveFileSession._fileSize;
+	_currentCallID = phApiReceiveFileSession._currentCallID;
 
 	PhApiSFPEvent::transferCancelledEvent += boost::bind(&PhApiReceiveFileSession::transferCancelledEventHandler, this, _1, _2, _3, _4, _5);
 	PhApiSFPEvent::transferCancelledByPeerEvent += boost::bind(&PhApiReceiveFileSession::transferCancelledByPeerEventHandler, this, _1, _2, _3, _4, _5, _6);

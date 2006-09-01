@@ -22,5 +22,10 @@
 ISendFileSession::ISendFileSession() {
 }
 
+ISendFileSession::ISendFileSession(const ISendFileSession & iSendFileSession) {
+	_imContactSet = iSendFileSession._imContactSet;
+	_fileVector = iSendFileSession._fileVector;
+}
+
 ISendFileSession::~ISendFileSession() {
 }

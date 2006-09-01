@@ -94,6 +94,8 @@ public:
 		File sentFile, int percentage) > fileTransferProgressionEvent;
 
 	IFileSession();
+	
+	IFileSession(const IFileSession & iFileSession);
 
 	virtual ~IFileSession();
 

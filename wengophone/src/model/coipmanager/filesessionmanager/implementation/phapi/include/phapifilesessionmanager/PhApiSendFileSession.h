@@ -36,6 +36,8 @@ public:
 
 	PhApiSendFileSession(UserProfile & userProfile);
 
+	PhApiSendFileSession(const PhApiSendFileSession & phApiSendFileSession);
+
 	~PhApiSendFileSession();
 
 	void start();

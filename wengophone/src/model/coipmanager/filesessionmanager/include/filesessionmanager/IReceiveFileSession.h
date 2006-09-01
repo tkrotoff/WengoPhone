@@ -36,6 +36,8 @@ public:
 
 	IReceiveFileSession();
 
+	IReceiveFileSession(const IReceiveFileSession & iReceiveFileSession);
+
 	virtual ~IReceiveFileSession();
 
 	/**

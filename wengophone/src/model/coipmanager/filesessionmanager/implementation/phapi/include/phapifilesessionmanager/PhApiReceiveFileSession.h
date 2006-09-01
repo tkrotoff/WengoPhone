@@ -35,6 +35,8 @@ public:
 
 	PhApiReceiveFileSession();
 
+	PhApiReceiveFileSession(const PhApiReceiveFileSession & phApiReceiveFileSession);
+
 	PhApiReceiveFileSession(int callID, std::string contactID, std::string fileName, unsigned int fileSize);
 
 	~PhApiReceiveFileSession();
