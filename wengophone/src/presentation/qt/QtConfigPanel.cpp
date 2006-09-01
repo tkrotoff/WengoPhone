@@ -46,10 +46,10 @@ QtConfigPanel::QtConfigPanel(CWengoPhone & cWengoPhone, QWidget * parent)
 	config.valueChangedEvent += boost::bind(&QtConfigPanel::configChangedEventHandler, this, _1, _2);
 
 	//inputSoundSlider
-	connect(_ui->inputSoundSlider, SIGNAL(valueChanged(int)), SLOT(inputSoundSliderValueChanged(int)));
+	connect(_ui->inputSoundSlider, SIGNAL(valueChanged(int)), SLOT(inputVolumeSliderValueChanged(int)));
 
 	//outputSoundSlider
-	connect(_ui->outputSoundSlider, SIGNAL(valueChanged(int)), SLOT(outputSoundSliderValueChanged(int)));
+	connect(_ui->outputSoundSlider, SIGNAL(valueChanged(int)), SLOT(outputVolumeSliderValueChanged(int)));
 
 	//enableWenboxCheckBox
 	connect(_ui->enableWenboxCheckBox, SIGNAL(toggled(bool)), SLOT(enableWenboxCheckBoxToggled(bool)));
