@@ -58,9 +58,9 @@ QtChatEditActionBarWidget::QtChatEditActionBarWidget(QWidget * parent) :
 	);
 	_endLabel->setMinimumSize(QSize(16, 65));
 	////
-
 	init(_emoticonsLabel, _endLabel);
 
+	/*
 	// add font label
 	addLabel(QString("fontLabel"),
 		QPixmap(":/pics/chat/font_police.png"),
@@ -69,7 +69,9 @@ QtChatEditActionBarWidget::QtChatEditActionBarWidget(QWidget * parent) :
 	);
 	connect(_labels["fontLabel"], SIGNAL(clicked()), SIGNAL(fontLabelClicked()));
 	////
+	*/
 
+	/*
 	// add font color label
 	addLabel(QString("fontColorLabel"),
 		QPixmap(":/pics/chat/font_color.png"),
@@ -78,6 +80,7 @@ QtChatEditActionBarWidget::QtChatEditActionBarWidget(QWidget * parent) :
 	);
 	connect(_labels["fontColorLabel"], SIGNAL(clicked()), SIGNAL(fontColorLabelClicked()));
 	////
+	*/
 
 	// add bold label
 	addLabel(QString("boldLabel"),

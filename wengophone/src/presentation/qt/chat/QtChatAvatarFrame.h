@@ -17,53 +17,43 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef OWQTCHATCONTACTLISTITEM_H
-#define OWQTCHATCONTACTLISTITEM_H
+#ifndef OWQTCHATAVATARFRAME_H
+#define OWQTCHATAVATARFRAME_H
 
-namespace Ui { class ChatContactListItem; }
+#include "ui_AvatarFrame.h"
 
 #include <QtGui/QWidget>
+#include <QtCore/QList>
+
+class QHBoxLayout;
+class QtChatAvatarWidget;
 
 /**
- * Chat contact list.
+ * Avatar frame widget.
  *
  * @author Mathieu Stute
  */
-class QtChatContactListItem : public QWidget {
+class QtChatAvatarFrame : public QWidget {
 	Q_OBJECT
 public:
 
-	enum PictureMode {
-		BIG,			// 96x96
-		MEDIUM,			// 48x48
-		SMALL,			// 24x24
-		TINY,			// 12x12
-	};
+	QtChatAvatarFrame(QWidget * parent);
 
-	enum NicknameMode {
-		RIGHT,
-		LEFT,
-		TOP,
-		BOTTOM,
-		NONE,
-	};
+	void setUserPixmap(QPixmap pixmap);
 
-	QtChatContactListItem(QWidget * parent, const QString & contactId, QPixmap picture,
-		const QString & nickname, PictureMode pmode = SMALL, NicknameMode nmode = NONE);
+	void addRemoteContact(const QString & contactId, const QString & displayName, QPixmap avatar);
+
+	void removeRemoteContact(const QString & contactId);
 
 private:
 
-	void setupPixmap(QPixmap pixmap);
+	typedef QList<QtChatAvatarWidget*> WidgetList;
 
-	void setupNickname(const QString & nickname);
+	WidgetList _widgetList;
 
-	PictureMode _pictureMode;
+	QVBoxLayout * _layout;
 
-	NicknameMode _nicknameMode;
-
-	QString _contactId;
-
-	Ui::ChatContactListItem * _ui;
+	Ui::AvatarFrame _ui;
 };
 
-#endif	//OWQTCHATCONTACTLISTITEM_H
+#endif	//OWQTCHATAVATARFRAME_H

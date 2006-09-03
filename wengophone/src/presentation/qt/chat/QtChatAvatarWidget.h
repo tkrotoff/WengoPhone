@@ -17,29 +17,58 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef OWQTCHATUSERFRAME_H
-#define OWQTCHATUSERFRAME_H
+#ifndef OWQTCHATAVATARWIDGET_H
+#define OWQTCHATAVATARWIDGET_H
 
-namespace Ui { class UserFrame; }
+#include "ui_AvatarWidget.h"
 
 #include <QtGui/QWidget>
 
 /**
- * User frame widget.
+ * Chat contact list.
  *
  * @author Mathieu Stute
  */
-class QtChatUserFrame : public QWidget {
+class QtChatAvatarWidget : public QWidget {
 	Q_OBJECT
 public:
 
-	QtChatUserFrame(QWidget * parent);
+	enum PictureMode {
+		HUGE,			// 96x96
+		BIG,			// 60x60
+		MEDIUM,			// 48x48
+		SMALL,			// 24x24
+		TINY,			// 12x12
+	};
 
-	void setPixmap(QPixmap pixmap);
+	enum NicknameMode {
+		RIGHT,
+		LEFT,
+		TOP,
+		BOTTOM,
+		NONE,
+	};
+
+	QtChatAvatarWidget(QWidget * parent, const QString & contactId, QPixmap picture,
+		const QString & nickname, PictureMode pmode = SMALL, NicknameMode nmode = NONE);
+
+	const QString getContactId() {
+		return _contactId;
+	}
 
 private:
 
-	Ui::UserFrame * _ui;
+	void setupPixmap(QPixmap pixmap);
+
+	void setupNickname(const QString & nickname);
+
+	PictureMode _pictureMode;
+
+	NicknameMode _nicknameMode;
+
+	QString _contactId;
+
+	Ui::AvatarWidget _ui;
 };
 
-#endif	//OWQTCHATUSERFRAME_H
+#endif	//OWQTCHATAVATARWIDGET_H

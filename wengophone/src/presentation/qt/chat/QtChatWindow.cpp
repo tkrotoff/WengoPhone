@@ -41,6 +41,9 @@
 #include <imwrapper/IMChatSession.h>
 #include <imwrapper/IMAccount.h>
 #include <imwrapper/IMContact.h>
+#include <imwrapper/EnumIMProtocol.h>
+#include <imwrapper/IMContactSet.h>
+
 
 #include <qtutil/Object.h>
 #include <qtutil/ToolBarStyle.h>
@@ -274,12 +277,25 @@ void QtChatWindow::typingStateChangedEventHandler(IMChatSession & sender, const 
 	typingStateChangedSignal(&sender,&imContact,tmpState);
 }
 
-void QtChatWindow::typingStateChangedThreadSafe(const IMChatSession * sender, const IMContact *,const IMChat::TypingState * state) {
+void QtChatWindow::typingStateChangedThreadSafe(const IMChatSession * sender, const IMContact * from,const IMChat::TypingState * state) {
 	int tabs=_tabWidget->count();
 	for (int i=0; i<tabs;i++) {
 		QtChatWidget * widget = dynamic_cast<QtChatWidget *>(_tabWidget->widget(i) );
 		if (widget->getSessionId() == sender->getId()) {
-			widget->setRemoteTypingState(*sender,*state);
+			QString remoteName = QString::fromUtf8(from->getContactId().c_str());
+			switch (*state) {
+				case IMChat::TypingStateNotTyping:
+					statusBar()->showMessage(QString::null);
+					break;
+				case IMChat::TypingStateTyping:
+					statusBar()->showMessage(remoteName + tr(" is typing"));
+					break;
+				case IMChat::TypingStateStopTyping:
+					statusBar()->showMessage(QString::null);
+					break;
+				default:
+					break;
+			}
 		}
 	}
 	delete state;

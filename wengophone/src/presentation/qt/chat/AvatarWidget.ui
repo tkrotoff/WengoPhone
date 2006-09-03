@@ -2,8 +2,8 @@
  <author></author>
  <comment></comment>
  <exportmacro></exportmacro>
- <class>ChatContactListItem</class>
- <widget class="QWidget" name="ChatContactListItem" >
+ <class>AvatarWidget</class>
+ <widget class="QWidget" name="AvatarWidget" >
   <property name="geometry" >
    <rect>
     <x>0</x>
@@ -14,8 +14,8 @@
   </property>
   <property name="minimumSize" >
    <size>
-    <width>60</width>
-    <height>60</height>
+    <width>70</width>
+    <height>70</height>
    </size>
   </property>
   <property name="windowTitle" >
@@ -33,7 +33,7 @@
      <property name="sizePolicy" >
       <sizepolicy>
        <hsizetype>1</hsizetype>
-       <vsizetype>5</vsizetype>
+       <vsizetype>1</vsizetype>
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>

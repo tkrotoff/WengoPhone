@@ -34,13 +34,11 @@
 
 #include <QtGui/QtGui>
 
-//class QtChatActionBarWidget;
 class QtChatEditActionBarWidget;
 class QtChatEditWidget;
 class QtChatHistoryWidget;
 class QtChatTabWidget;
-class QtChatUserFrame;
-class QtChatContactList;
+class QtChatAvatarFrame;
 class QtWengoPhone;
 class QtWengoStyleLabel;
 class EmoticonsWidget;
@@ -87,8 +85,6 @@ public:
 
 	void addToHistory(const QString & senderName,const QString & str);
 
-	void setRemoteTypingState(const IMChatSession & sender,const IMChat::TypingState state);
-
 public Q_SLOTS:
 
 	/**
@@ -128,9 +124,7 @@ Q_SIGNALS:
 
 private Q_SLOTS:
 
-	void historyFoldButtonClicked();
-
-	void editFoldButtonClicked();
+	void avatarFrameButtonClicked();
 
 	void changeFontColor();
 
@@ -152,7 +146,9 @@ private:
 
 	void sendMessage();
 
-	void updateChatContactList();
+	void updateAvatarFrame();
+
+	void updateUserAvatar();
 
 	bool hasUserColor(const QString & nickname) const;
 
@@ -166,30 +162,9 @@ private:
 	 */
 	void stopStoppedTypingTimer();
 
-	/**
-	 * @brief update the QtUserFrame widget pixmap
-	 */
-	void updateUserFrame();
+	void addAvatarFrame();
 
-	/**
-	 * @brief add the QtChatContactList frame
-	 */
-	void addContactListFrame();
-
-	/**
-	 * @brief remove the QtChatContactList frame
-	 */
-	void removeContactListFrame();
-
-	/**
-	 * @brief add the QtChatUserPicture frame
-	 */
-	void addUserPictureFrame();
-
-	/**
-	 * @brief remove the QtChatUserPicture frame
-	 */
-	void removeUserPictureFrame();
+	void removeAvatarFrame();
 
 	QString getNewBackgroundColor() const;
 
@@ -213,9 +188,7 @@ private:
 
 	bool _isTyping;
 
-	bool _isContactListFrameOpened;
-
-	bool _isUserPictureFrameOpened;
+	bool _isAvatarFrameOpened;
 
 	QString _nickName;
 
@@ -229,9 +202,7 @@ private:
 
 	QtChatHistoryWidget * _chatHistory;
 
-	QtChatUserFrame * _qtChatUserFrame;
-
-	QtChatContactList * _qtChatContactList;
+	QtChatAvatarFrame * _avatarFrame;
 
 	EmoticonsWidget * _emoticonsWidget;
 

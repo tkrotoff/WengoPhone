@@ -19,15 +19,13 @@
 
 #include "QtChatWidget.h"
 #include "QtChatTabWidget.h"
-//#include "QtChatActionBarWidget.h"
 #include "QtChatEditEventManager.h"
 #include "QtChatEditActionBarWidget.h"
 #include "QtChatEditWidget.h"
 #include "QtChatHistoryWidget.h"
 #include "QtChatUtils.h"
-#include "QtChatUserFrame.h"
+#include "QtChatAvatarFrame.h"
 #include "chatroom/QtChatRoomInviteDlg.h"
-#include "contactlist/QtChatContactList.h"
 #include "emoticons/QtEmoticonsWidget.h"
 
 #include <coipmanager/CoIpManager.h>
@@ -72,9 +70,8 @@ QtChatWidget::QtChatWidget(CChatHandler & cChatHandler,
 	_isTyping = false;
 	_sessionId = sessionId;
 	_lastBackGroundColor = QColor("#D0FFE6");
-	_isContactListFrameOpened = false;
-	_isUserPictureFrameOpened = false;
-	
+	_isAvatarFrameOpened = true;
+
 	_bold = false;
 	_italic = false;
 	_underline = false;
@@ -94,8 +91,7 @@ QtChatWidget::QtChatWidget(CChatHandler & cChatHandler,
 	_editActionBar = new QtChatEditActionBarWidget(this);
 	_chatEdit = new QtChatEditWidget(this);
 	_chatHistory = new QtChatHistoryWidget(this);
-	_qtChatUserFrame = new QtChatUserFrame(this);
-	_qtChatContactList = new QtChatContactList(this);
+	_avatarFrame = new QtChatAvatarFrame(this);
 	////
 
 	//create QtChatEditEventManager
@@ -130,15 +126,12 @@ QtChatWidget::QtChatWidget(CChatHandler & cChatHandler,
 		SLOT(contactAddedEventSlot(IMChatSession &, const IMContact &)));
 	connect (this, SIGNAL(contactRemovedEventSignal(IMChatSession &, const IMContact &)),
 		SLOT(contactRemovedEventSlot(IMChatSession &, const IMContact &)));
-	connect(_ui.historyFoldButton, SIGNAL(clicked()), SLOT(historyFoldButtonClicked()));
-	connect(_ui.editFoldButton, SIGNAL(clicked()), SLOT(editFoldButtonClicked()));
-	////
+	
 
-	addUserPictureFrame();
-	addContactListFrame();
-	updateUserFrame();
+	connect(_ui.avatarFrameButton, SIGNAL(clicked()), SLOT(avatarFrameButtonClicked()));
+	addAvatarFrame();
 	_cChatHandler.getCUserProfile().getUserProfile().profileChangedEvent +=
-		boost::bind(&QtChatWidget::updateUserFrame, this);
+		boost::bind(&QtChatWidget::updateUserAvatar, this);
 }
 
 QtChatWidget::~QtChatWidget() {
@@ -216,38 +209,13 @@ void QtChatWidget::contactRemovedEventHandler(IMChatSession & sender, const IMCo
 }
 
 void QtChatWidget::contactAddedEventSlot(IMChatSession & sender, const IMContact & imContact) {
-	/*
-	QMutexLocker locker(&_mutex);
-
-	QtContactList * qtContactList = _qtWengoPhone->getContactList();
-	CContactList & cContactList = qtContactList->getCContactList();
-
-	std::string contactId = cContactList.findContactThatOwns(imContact);
-	ContactProfile profile = cContactList.getContactProfile(contactId);
-	std::string data = profile.getIcon().getData();
-	LOG_DEBUG("\n\n\n\n contactid: " + contactId + "\ndata: " + data + "\n\n\n\n");
-
-	QPixmap pixmap;
-	pixmap.loadFromData((uchar *)data.c_str(), data.size());
-	_qtChatContactList->addContact(QString::fromStdString(contactId), pixmap,
-		QString::fromStdString(profile.getDisplayName()));
-	*/
-
-	//LOG_DEBUG("\n\n\n\n contactAddedEventSlot \n\n\n\n");
-	updateChatContactList();
+	//TODO:
+	//updateAvatarFrame();
 }
 
 void QtChatWidget::contactRemovedEventSlot(IMChatSession & sender, const IMContact & imContact) {
-	/*
-	QMutexLocker locker(&_mutex);
-
-	QtContactList * qtContactList = _qtWengoPhone->getContactList();
-	CContactList & cContactList = qtContactList->getCContactList();
-	std::string contactId = cContactList.findContactThatOwns(imContact);
-	_qtChatContactList->removeContact(QString::fromStdString(contactId));
-	*/
-	//LOG_DEBUG("\n\n\n\n contactRemovedEventSlot \n\n\n\n");
-	updateChatContactList();
+	//TODO:
+	//updateAvatarFrame();
 }
 
 void QtChatWidget::sendButtonClicked() {
@@ -268,19 +236,11 @@ QString QtChatWidget::getNewBackgroundColor() const {
 	return QString("%1").arg(_lastBackGroundColor.name());
 }
 
-void QtChatWidget::historyFoldButtonClicked() {
-	if (_isContactListFrameOpened) {
-		removeContactListFrame();
+void QtChatWidget::avatarFrameButtonClicked() {
+	if (_isAvatarFrameOpened) {
+		removeAvatarFrame();
 	} else {
-		addContactListFrame();
-	}
-}
-
-void QtChatWidget::editFoldButtonClicked() {
-	if (_isUserPictureFrameOpened) {
-		removeUserPictureFrame();
-	} else {
-		addUserPictureFrame();
+		addAvatarFrame();
 	}
 }
 
@@ -294,52 +254,26 @@ void QtChatWidget::enterPressed(Qt::KeyboardModifiers modifier) {
 	}
 }
 
-void QtChatWidget::addUserPictureFrame() {
-	QGridLayout * glayout = dynamic_cast<QGridLayout *>(_ui.EditFrame->layout());
-	_qtChatUserFrame->setVisible(true);
-	_qtChatUserFrame->setMinimumSize(65, 65);
-	glayout->addWidget(_qtChatUserFrame, 0, 2);
+void QtChatWidget::addAvatarFrame() {
+	QBoxLayout * glayout = dynamic_cast<QBoxLayout *>(layout());
+	_avatarFrame->setVisible(true);
+	//_avatarFrame->setMinimumSize(64, 0);
+	glayout->insertWidget(1, _avatarFrame);
 
-	_isUserPictureFrameOpened = true;
-	_ui.editFoldButton->setIcon(QIcon(":pics/group_close.png"));
+	_isAvatarFrameOpened = true;
+	_ui.avatarFrameButton->setIcon(QIcon(":pics/group_close_reverse.png"));
+	update();
 }
 
-void QtChatWidget::removeUserPictureFrame() {
-	QGridLayout * glayout = dynamic_cast<QGridLayout *>(_ui.EditFrame->layout());
-	_qtChatUserFrame->setVisible(false);
-	_qtChatUserFrame->setMinimumSize(0, 0);
-	glayout->removeWidget(_qtChatUserFrame);
+void QtChatWidget::removeAvatarFrame() {
+	QBoxLayout * glayout = dynamic_cast<QBoxLayout *>(layout());
+	_avatarFrame->setVisible(false);
+	_avatarFrame->setMinimumSize(0, 0);
+	glayout->removeWidget(_avatarFrame);
 
-	_isUserPictureFrameOpened = false;
-	_ui.editFoldButton->setIcon(QIcon(":pics/group_close_reverse.png"));
-}
-
-void QtChatWidget::addContactListFrame() {
-	QGridLayout * glayout = dynamic_cast<QGridLayout *>(_ui.HistoryFrame->layout());
-	_qtChatContactList->setVisible(true);
-	_qtChatContactList->setMinimumSize(65, 0);
-	//_qtChatContactList->setMaximumSize(65, 0);
-	glayout->addWidget(_qtChatContactList, 0, 2);
-
-	_isContactListFrameOpened = true;
-	_ui.historyFoldButton->setIcon(QIcon(":pics/group_close.png"));
-}
-
-void QtChatWidget::removeContactListFrame() {
-	QGridLayout * glayout = dynamic_cast<QGridLayout *>(_ui.HistoryFrame->layout());
-	_qtChatContactList->setVisible(false);
-	_qtChatContactList->setMinimumSize(0, 0);
-	glayout->removeWidget(_qtChatContactList);
-
-	_isContactListFrameOpened = false;
-	_ui.historyFoldButton->setIcon(QIcon(":pics/group_close_reverse.png"));
-}
-
-void QtChatWidget::updateUserFrame() {
-	QPixmap pixmap;
-	std::string myData = _cChatHandler.getCUserProfile().getUserProfile().getIcon().getData();
-	pixmap.loadFromData((uchar *)myData.c_str(), myData.size());
-	_qtChatUserFrame->setPixmap(pixmap);
+	_isAvatarFrameOpened = false;
+	_ui.avatarFrameButton->setIcon(QIcon(":pics/group_close.png"));
+	update();
 }
 
 void QtChatWidget::addToHistory(const QString & senderName, const QString & str) {
@@ -408,9 +342,7 @@ void QtChatWidget::sendMessage() {
 }
 
 void QtChatWidget::setIMChatSession(IMChatSession * imChatSession) {
-	
-	LOG_DEBUG("\n\n\n\n setIMChatSession \n\n\n\n");
-	
+
 	std::string tmpNickName = imChatSession->getIMChat().getIMAccount().getLogin();
 	QString nickName = QString::fromUtf8(tmpNickName.c_str());
 	_userColorHash[nickName] = CHAT_USER_BACKGOUND_COLOR;
@@ -424,8 +356,8 @@ void QtChatWidget::setIMChatSession(IMChatSession * imChatSession) {
 		boost::bind(&QtChatWidget::contactRemovedEventHandler, this, _1, _2);
 	_imChatSession->changeTypingState(IMChat::TypingStateNotTyping);
 	
-	//TODO: remove this call
-	updateChatContactList();
+	updateAvatarFrame();
+	updateUserAvatar();
 }
 
 void QtChatWidget::chatEditTextChanged() {
@@ -445,24 +377,6 @@ void QtChatWidget::chatEditTextChanged() {
 		_stoppedTypingTimerId = startTimer(CHAT_STOPPED_TYPING_DELAY);
 	}
 	////
-}
-
-void QtChatWidget::setRemoteTypingState(const IMChatSession & sender,const IMChat::TypingState state) {
-	IMContact from = * sender.getIMContactSet().begin();
-	QString remoteName = QString::fromUtf8(from.getContactId().c_str());
-	switch (state) {
-		case IMChat::TypingStateNotTyping:
-			_ui.typingStateLabel->setText(QString::null);
-			break;
-		case IMChat::TypingStateTyping:
-			_ui.typingStateLabel->setText(remoteName + tr(" is typing"));
-			break;
-		case IMChat::TypingStateStopTyping:
-			_ui.typingStateLabel->setText(QString::null);
-			break;
-		default:
-			break;
-	}
 }
 
 void QtChatWidget::timerEvent(QTimerEvent * event) {
@@ -509,7 +423,7 @@ void QtChatWidget::deletePressed() {
 }
 ////
 
-void QtChatWidget::updateChatContactList() {
+void QtChatWidget::updateAvatarFrame() {
 	QMutexLocker locker(&_mutex);
 
 	QtContactList * qtContactList = _qtWengoPhone->getContactList();
@@ -523,12 +437,23 @@ void QtChatWidget::updateChatContactList() {
 		ContactProfile profile = cContactList.getContactProfile(contactId);
 
 		std::string data = profile.getIcon().getData();
-		QPixmap pixmap;
+			QPixmap pixmap;
 		pixmap.loadFromData((uchar *)data.c_str(), data.size());
-		_qtChatContactList->addContact(QString::fromStdString(contactId), pixmap,
-			QString::fromStdString(profile.getDisplayName()));
+		_avatarFrame->addRemoteContact(
+			QString::fromStdString(contactId),
+			QString::fromStdString(profile.getDisplayName()),
+			pixmap
+		);
 	}
 }
+
+void QtChatWidget::updateUserAvatar() {
+	QPixmap pixmap;
+	std::string myData = _cChatHandler.getCUserProfile().getUserProfile().getIcon().getData();
+	pixmap.loadFromData((uchar *)myData.c_str(), myData.size());
+	_avatarFrame->setUserPixmap(pixmap);
+}
+
 
 void QtChatWidget::fileDraggedSlot(const QString & filename) {
 	QtContactList * qtContactList = _qtWengoPhone->getContactList();
