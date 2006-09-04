@@ -95,6 +95,8 @@ public:
 
 	IFileSession();
 
+	IFileSession(const IFileSession & iFileSession);
+
 	virtual ~IFileSession();
 
 	/**

@@ -38,6 +38,8 @@ public:
 
 	ISendFileSession();
 
+	ISendFileSession(const ISendFileSession & iSendFileSession)
+
 	virtual ~ISendFileSession();
 
 	/**
