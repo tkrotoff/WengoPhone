@@ -205,18 +205,22 @@ void init_chat_event()
 	void *handle = gaim_wg_get_handle();
 
 	gaim_signal_connect(gaim_conversations_get_handle(), "buddy-typing",
-						handle, GAIM_CALLBACK(update_buddy_typing_cb), NULL);
+		handle, GAIM_CALLBACK(update_buddy_typing_cb), NULL);
+	
 	gaim_signal_connect(gaim_conversations_get_handle(), "buddy-typing-stopped",
-						handle, GAIM_CALLBACK(update_buddy_typing_cb), NULL);
+		handle, GAIM_CALLBACK(update_buddy_typing_cb), NULL);
 
 	gaim_signal_connect(gaim_conversations_get_handle(), "chat-invited",
-						handle, GAIM_CALLBACK(chat_invite_request_cb), NULL);
+		handle, GAIM_CALLBACK(chat_invite_request_cb), NULL);
 
 	gaim_signal_connect(gaim_conversations_get_handle(), "chat-joined",
-						handle, GAIM_CALLBACK(chat_joined_cb), NULL);
+		handle, GAIM_CALLBACK(chat_joined_cb), NULL);
+
+	gaim_signal_connect(gaim_conversations_get_handle(), "chat-left",
+		handle, GAIM_CALLBACK(chat_joined_cb), NULL);
 
 	gaim_signal_connect(gaim_conversations_get_handle(), "received-im-msg",
-						handle, GAIM_CALLBACK(received_im_msg_cb), NULL);
+		handle, GAIM_CALLBACK(received_im_msg_cb), NULL);
 }
 
 /* ************************************************** */
@@ -372,7 +376,7 @@ void GaimChatMngr::ChatAddUsersCbk(GaimConversation *conv, GList *users,
 
 			if (chatSession->getIMContactSet().find(imContact) != chatSession->getIMContactSet().end())
 			{
-				LOG_ERROR("IMContact for " + imContact.getContactId() + " already in IMContactList");
+				LOG_ERROR("IMContact for " + imContact.getContactId() + " already in IMContactSet");
 			}
 			else
 			{
@@ -381,7 +385,7 @@ void GaimChatMngr::ChatAddUsersCbk(GaimConversation *conv, GList *users,
 				if (chatSession->getIMContactSet().size() == 1)
 					mChat->newIMChatSessionCreatedEvent(*mChat, *chatSession);
 
-				LOG_DEBUG("IMContact " + imContact.getContactId() + " added to IMContactList");
+				LOG_DEBUG("IMContact " + imContact.getContactId() + " added to IMContactSet");
 				mChat->contactAddedEvent(*mChat, *chatSession, imContact);
 			}
 		}
@@ -395,6 +399,41 @@ void GaimChatMngr::ChatRenameUserCbk(GaimConversation *conv, const char *old_nam
 
 void GaimChatMngr::ChatRemoveUsersCbk(GaimConversation *conv, GList *users)
 {
+	GList *l;
+	GaimAccount *gAccount = gaim_conversation_get_account(conv);
+	const char *gPrclId = gaim_account_get_protocol_id(gAccount);
+	IMAccount *account = _accountMngr->FindIMAccount(gaim_account_get_username(gAccount),
+								GaimIMPrcl::GetEnumIMProtocol(gPrclId));
+	mConvInfo_t *mConv = NULL;
+	IMChatSession *chatSession = NULL;
+	GaimIMChat *mChat = FindIMChat(*account);
+
+	if (!mChat)
+		LOG_FATAL("Can't find IMChat !");
+
+	mConv = (mConvInfo_t *) conv->ui_data;
+	chatSession = (IMChatSession *) mConv->conv_session;
+
+	for (l = users; l != NULL; l = l->next)
+	{
+		if (strcmp(gaim_account_get_username(gAccount), (char *) l->data))
+		{
+			std::string buddy((char *) l->data);
+			IMContact imContact(*account, buddy);
+
+			if (chatSession->getIMContactSet().find(imContact) == chatSession->getIMContactSet().end())
+			{
+				LOG_ERROR("IMContact for " + imContact.getContactId() + " not in IMContactSet");
+			}
+			else
+			{
+				((IMContactSet &) chatSession->getIMContactSet()).erase(imContact);
+
+				LOG_DEBUG("IMContact " + imContact.getContactId() + " removed from IMContactSet");
+				mChat->contactRemovedEvent(*mChat, *chatSession, buddy);
+			}
+		}
+	}
 }
 
 void GaimChatMngr::ChatUpdateUserCbk(GaimConversation *conv, const char *user)
