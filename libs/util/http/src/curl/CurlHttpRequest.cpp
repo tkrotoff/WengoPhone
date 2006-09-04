@@ -103,13 +103,15 @@ void CurlHttpRequest::run() {
 		} else {
 			answerReceivedEvent(NULL, _lastRequestId, entireResponse, HttpRequest::NoError);
 		}
-
+		
+		/*
 		curl_easy_getinfo(_curl, CURLINFO_RESPONSE_CODE, &response);
 		if (!response) {
 			LOG_DEBUG("no server response code has been received");
 		} else {
 			LOG_DEBUG("server response code=" + String::fromNumber(response));
 		}
+		*/
 
 		if (_verbose) {
 			char * effectiveUrl = NULL;
