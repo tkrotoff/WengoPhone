@@ -30,7 +30,7 @@ QtWengoStyle::~QtWengoStyle() {
 void QtWengoStyle::drawComplexControl(ComplexControl control, const QStyleOptionComplex * option,
 		QPainter * painter, const QWidget * widget) const {
 
-#if OS_MACOSX
+#if defined(OS_MACOSX)
 	//QToolButton
 	//Changes QToolButton style under MacOSX
 	if (control == CC_ToolButton) {
