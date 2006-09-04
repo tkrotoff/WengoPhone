@@ -24,7 +24,7 @@
 
 #include <util/StringList.h>
 #include <util/Event.h>
-#include <thread/Mutex.h>
+#include <thread/RecursiveMutex.h>
 
 #include <boost/any.hpp>
 #include <map>
@@ -193,7 +193,7 @@ protected:
 private:
 
 	/** Mutex for thread-safe. */
-	mutable Mutex _mutex;
+	mutable RecursiveMutex _mutex;
 };
 
 #endif	//OWSETTINGS_H

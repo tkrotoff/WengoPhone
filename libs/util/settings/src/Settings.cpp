@@ -55,7 +55,7 @@ StringList Settings::getAllKeys() const {
 }
 
 void Settings::remove(const std::string & key) {
-	Mutex::ScopedLock scopedLock(_mutex);
+	RecursiveMutex::ScopedLock scopedLock(_mutex);
 
 	Keys::iterator it = _keyMap.find(key);
 	if (it != _keyMap.end()) {
@@ -79,7 +79,7 @@ void Settings::remove(const std::string & key) {
 }
 
 bool Settings::contains(const std::string & key) const {
-	Mutex::ScopedLock scopedLock(_mutex);
+	RecursiveMutex::ScopedLock scopedLock(_mutex);
 
 	Keys::const_iterator it = _keyMap.find(key);
 	if (it != _keyMap.end()) {
@@ -89,28 +89,28 @@ bool Settings::contains(const std::string & key) const {
 }
 
 void Settings::set(const std::string & key, const std::string & value) {
-	Mutex::ScopedLock scopedLock(_mutex);
+	RecursiveMutex::ScopedLock scopedLock(_mutex);
 
 	_keyMap[key] = value;
 	valueChangedEvent(*this, key);
 }
 
 void Settings::set(const std::string & key, const StringList & value) {
-	Mutex::ScopedLock scopedLock(_mutex);
+	RecursiveMutex::ScopedLock scopedLock(_mutex);
 
 	_keyMap[key] = value;
 	valueChangedEvent(*this, key);
 }
 
 void Settings::set(const std::string & key, bool value) {
-	Mutex::ScopedLock scopedLock(_mutex);
+	RecursiveMutex::ScopedLock scopedLock(_mutex);
 
 	_keyMap[key] = value;
 	valueChangedEvent(*this, key);
 }
 
 void Settings::set(const std::string & key, int value) {
-	Mutex::ScopedLock scopedLock(_mutex);
+	RecursiveMutex::ScopedLock scopedLock(_mutex);
 
 	_keyMap[key] = value;
 	valueChangedEvent(*this, key);
