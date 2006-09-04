@@ -45,7 +45,7 @@ SendFileSession::SendFileSession(const SendFileSession & sendFileSession)
 	_fileVector = sendFileSession._fileVector;
 
 	if (sendFileSession._currentFileSessionImp) {
-		_currentFileSessionImp = sendFileSession._currentFileSessionImp.clone();
+		_currentFileSessionImp = sendFileSession._currentFileSessionImp->clone();
 	} else {
 		_currentFileSessionImp = NULL;
 	}
