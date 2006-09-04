@@ -172,7 +172,7 @@ void QtChatWindow::showMinimized() {
 #ifdef OS_WINDOWS
 	HWND topWindow = GetForegroundWindow();
 #endif
-	showMinimized();
+	QMainWindow::showMinimized();
 #ifdef OS_WINDOWS
 	SetForegroundWindow(topWindow);
 #endif
