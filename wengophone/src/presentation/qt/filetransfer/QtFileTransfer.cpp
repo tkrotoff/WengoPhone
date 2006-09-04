@@ -21,7 +21,6 @@
 #include "QtFileTransferAcceptDialog.h"
 
 #include <coipmanager/CoIpManager.h>
-#include <filesessionmanager/ReceiveFileSession.h>
 
 #include <util/SafeDelete.h>
 
@@ -40,9 +39,9 @@ QtFileTransfer::~QtFileTransfer() {
 }
 
 void QtFileTransfer::newReceiveFileSessionCreatedEventHandler(FileSessionManager & sender,
-	ReceiveFileSession * fileSession) {
+	ReceiveFileSession fileSession) {
 
-	newReceiveFileSessionCreatedEventHandlerSignal(fileSession);
+	//newReceiveFileSessionCreatedEventHandlerSignal(fileSession);
 }
 
 void QtFileTransfer::newReceiveFileSessionCreatedEventHandlerSlot(ReceiveFileSession * fileSession) {

@@ -22,11 +22,12 @@
 
 #include <QtCore/QObject>
 
+#include <filesessionmanager/ReceiveFileSession.h>
+
 #include <util/Trackable.h>
 
 class CoIpManager;
 class FileSessionManager;
-class ReceiveFileSession;
 
 /**
  * Qt file transfer object.
@@ -58,7 +59,7 @@ private:
 	/**
 	 * @see FileSessionManager::newReceiveFileSessionCreatedEvent
 	 */
-	void newReceiveFileSessionCreatedEventHandler(FileSessionManager & sender, ReceiveFileSession * fileSession);
+	void newReceiveFileSessionCreatedEventHandler(FileSessionManager & sender, ReceiveFileSession fileSession);
 
 	CoIpManager * _coIpManager;
 };
