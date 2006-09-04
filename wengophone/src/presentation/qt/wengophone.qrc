@@ -202,9 +202,4 @@
     <qresource prefix="/data" >
         <file>AUTHORS</file>
     </qresource>
-    <qresource prefix="/forms" >
-        <file>chat/chatroom/ChatRoomInviteWidget.ui</file>
-        <file>chat/ChatRoomWidget.ui</file>
-        <file>phonecall/ConferenceCallWidget.ui</file>
-    </qresource>
 </RCC>
