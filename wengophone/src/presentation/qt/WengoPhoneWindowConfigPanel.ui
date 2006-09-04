@@ -12,6 +12,17 @@
     <height>59</height>
    </rect>
   </property>
+  <property name="font" >
+   <font>
+    <family>Lucida Grande</family>
+    <pointsize>11</pointsize>
+    <weight>50</weight>
+    <italic>false</italic>
+    <bold>false</bold>
+    <underline>false</underline>
+    <strikeout>false</strikeout>
+   </font>
+  </property>
   <layout class="QGridLayout" >
    <property name="margin" >
     <number>0</number>
@@ -247,6 +258,17 @@
      </property>
      <item row="0" column="0" >
       <widget class="QCheckBox" name="enableWenboxCheckBox" >
+       <property name="font" >
+        <font>
+         <family>Lucida Grande</family>
+         <pointsize>11</pointsize>
+         <weight>50</weight>
+         <italic>false</italic>
+         <bold>false</bold>
+         <underline>false</underline>
+         <strikeout>false</strikeout>
+        </font>
+       </property>
        <property name="toolTip" >
         <string>Enable Wenbox usage</string>
        </property>
@@ -257,6 +279,17 @@
      </item>
      <item row="1" column="0" >
       <widget class="QCheckBox" name="halfDuplexCheckBox" >
+       <property name="font" >
+        <font>
+         <family>Lucida Grande</family>
+         <pointsize>11</pointsize>
+         <weight>50</weight>
+         <italic>false</italic>
+         <bold>false</bold>
+         <underline>false</underline>
+         <strikeout>false</strikeout>
+        </font>
+       </property>
        <property name="toolTip" >
         <string>Enable half-duplex mode</string>
        </property>
@@ -271,7 +304,12 @@
  </widget>
  <pixmapfunction></pixmapfunction>
  <tabstops>
+  <tabstop>outputSoundSlider</tabstop>
+  <tabstop>inputSoundSlider</tabstop>
   <tabstop>enableWenboxCheckBox</tabstop>
+  <tabstop>halfDuplexCheckBox</tabstop>
+  <tabstop>videoSettingsButton</tabstop>
+  <tabstop>audioSettingsButton</tabstop>
  </tabstops>
  <resources>
   <include location="wengophone.qrc" />

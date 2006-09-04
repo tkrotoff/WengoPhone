@@ -113,7 +113,7 @@ void QtConfigPanel::configChangedEventHandlerThreadSafe(Settings & sender, const
 		//inputSoundSlider
 		AudioDevice audioDevice(config.getAudioInputDeviceId());
 		VolumeControl inputVolumeControl(audioDevice);
-		_ui->inputSoundSlider->setToolTip(tr("Input: ") + QString::fromStdString(audioDevice.getName()));
+		_ui->inputSoundSlider->setToolTip(tr("Input: ") + QString::fromUtf8(audioDevice.getName().c_str()));
 		_ui->inputSoundSlider->setValue(inputVolumeControl.getLevel());
 	}
 
@@ -121,7 +121,7 @@ void QtConfigPanel::configChangedEventHandlerThreadSafe(Settings & sender, const
 		//outputSoundSlider
 		AudioDevice audioDevice(config.getAudioOutputDeviceId());
 		VolumeControl outputVolumeControl(audioDevice);
-		_ui->outputSoundSlider->setToolTip(tr("Output: ") + QString::fromStdString(audioDevice.getName()));
+		_ui->outputSoundSlider->setToolTip(tr("Output: ") + QString::fromUtf8(audioDevice.getName().c_str()));
 		_ui->outputSoundSlider->setValue(outputVolumeControl.getLevel());
 	}
 
