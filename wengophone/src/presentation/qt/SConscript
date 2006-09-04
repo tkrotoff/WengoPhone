@@ -48,6 +48,7 @@ headers = [
 	'QtSystray.h',
 	'QtFactory.h',
 	'QtUserProfilePresenceMenu.h',
+	'QtWengoStyle.h',
 
 	'phoneline/QtPhoneLine.h',
 
@@ -170,6 +171,7 @@ sources = [
 	'QtSystray.cpp',
 	'QtFactory.cpp',
 	'QtUserProfilePresenceMenu.cpp',
+	'QtWengoStyle.cpp',
 
 	'phoneline/QtPhoneLine.cpp',
 
@@ -326,7 +328,7 @@ forms = [
 	'config/PrivacySettings.ui',
 	'config/VideoSettings.ui',
 	'config/WengoConfigDialog.ui',
-	
+
 	'chat/ChatMainWindow.ui',
 	'chat/ChatWidget.ui',
 	'chat/UserFrame.ui',

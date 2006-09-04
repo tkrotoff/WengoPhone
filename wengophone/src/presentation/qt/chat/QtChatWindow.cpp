@@ -46,7 +46,7 @@
 
 
 #include <qtutil/Object.h>
-#include <qtutil/ToolBarStyle.h>
+
 #include <util/Logger.h>
 #include <cutil/global.h>
 
@@ -66,8 +66,6 @@ QtChatWindow::QtChatWindow(QWidget * parent, CChatHandler & cChatHandler, IMChat
 	_ui.setupUi(this);
 	setupMenuBarActions();
 	setupToolBarActions();
-	ToolBarStyle * toolBarStyle = new ToolBarStyle();
-	_ui.toolBar->setStyle(toolBarStyle);
 
 	_imChatSession->messageReceivedEvent +=
 		boost::bind(&QtChatWindow::messageReceivedEventHandler, this, _1);
@@ -361,18 +359,18 @@ void QtChatWindow::setupMenuBarActions() {
 	connect(_ui.actionEditMyProfile, SIGNAL(triggered()), &_qtWengoPhone, SLOT(editMyProfile()));
 	connect(_ui.actionLogOff, SIGNAL(triggered()), &_qtWengoPhone, SLOT(logoff()));
 	connect(_ui.actionLearnMoreAboutWengoServices, SIGNAL(triggered()), &_qtWengoPhone, SLOT(showCallOut()));
-	
+
 	// TODO: what do we want for this action?
 	connect(_ui.actionClose, SIGNAL(triggered()), &_qtWengoPhone, SLOT(hide()));
 	////
-	
+
 	// TODO: put this in a slot of QtWengoPhone
 	QtUserProfileHandler * qtUserProfileHandler =
 		dynamic_cast<QtUserProfileHandler *>(_qtWengoPhone.getCWengoPhone().getCUserProfileHandler().getPresentation());
 	connect(_ui.actionChangeProfile, SIGNAL(triggered()), qtUserProfileHandler, SLOT(showLoginWindow()));
 	////
 	////
-	
+
 	// setup "contact" menubar
 	connect(_ui.actionAddContact, SIGNAL(triggered()), &_qtWengoPhone, SLOT(addContact()));
 	connect(_ui.actionSearchForWengoUsers, SIGNAL(triggered()), &_qtWengoPhone, SLOT(showSearchContactWindows()));
@@ -440,7 +438,7 @@ void QtChatWindow::updateToolBarActions() {
 void QtChatWindow::messageReceivedSlot(IMChatSession * sender) {
 	showToaster(sender);
 	// TODO NCOUTURIER new way to get messages
-	IMChatSession::IMChatMessageList imChatMessageList = sender->getReceivedMessage(_lastReceivedMessageIndex[sender->getId()]+1);	
+	IMChatSession::IMChatMessageList imChatMessageList = sender->getReceivedMessage(_lastReceivedMessageIndex[sender->getId()]+1);
 	if (imChatMessageList.size() > 0) {
 		_lastReceivedMessageIndex[sender->getId()] += imChatMessageList.size();
 		IMChatSession::IMChatMessageList::iterator imChatMessageListIterator = imChatMessageList.begin();
@@ -462,7 +460,7 @@ void QtChatWindow::messageReceivedSlot(IMChatSession * sender) {
 			} else {
 				flashWindow();
 			}
-		
+
 			int tabs = _tabWidget->count();
 			for (int i = 0; i < tabs; i++) {
 				QtChatWidget * widget = dynamic_cast<QtChatWidget *>(_tabWidget->widget(i));

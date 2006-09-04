@@ -20,6 +20,7 @@
 #include "QtFactory.h"
 
 #include "QtWengoPhone.h"
+#include "QtWengoStyle.h"
 #include "chat/QtChatHandler.h"
 #include "contactlist/QtContactList.h"
 #include "history/QtHistory.h"
@@ -52,6 +53,10 @@ PFactory * PFactory::_factory = NULL;
 
 QtFactory::QtFactory(int argc, char * argv[]) {
 	_app = new QApplication(argc, argv);
+
+	//QtWengoStyle
+	QtWengoStyle * qtWengoStyle = new QtWengoStyle();
+	_app->setStyle(qtWengoStyle);
 
 	//Filter for post event (=thread event)
 	ThreadEventFilter * threadEventFilter = new ThreadEventFilter();

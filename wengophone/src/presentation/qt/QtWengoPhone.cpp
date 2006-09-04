@@ -75,7 +75,6 @@
 
 #include <qtutil/MouseEventFilter.h>
 #include <qtutil/Object.h>
-#include <qtutil/ToolBarStyle.h>
 #include <qtutil/Widget.h>
 #include <qtutil/WidgetBackgroundImage.h>
 #include <qtutil/WidgetFactory.h>
@@ -194,10 +193,6 @@ void QtWengoPhone::initThreadSafe() {
 
 	//StatusBar
 	_statusBar = new QtStatusBar(_cWengoPhone, _ui->statusBar);
-
-	//ToolBarStyle
-	ToolBarStyle * toolBarStyle = new ToolBarStyle();
-	_ui->toolBar->setStyle(toolBarStyle);
 
 	//actionShowWengoAccount
 	connect(_ui->actionShowWengoAccount, SIGNAL(triggered()), SLOT(showWengoAccount()));

@@ -28,8 +28,6 @@ headers = [
 	'include/qtutil/Wizard.h',
 	'include/qtutil/QtThreadEvent.h',
 	'include/qtutil/ThreadEventFilter.h',
-	'include/qtutil/StatusBarStyle.h',
-	'include/qtutil/ToolBarStyle.h',
 	'include/qtutil/PixmapMerging.h',
 ]
 sources = [
@@ -51,8 +49,6 @@ sources = [
 	'src/WidgetBackgroundImage.cpp',
 	'src/Wizard.cpp',
 	'src/ThreadEventFilter.cpp',
-	'src/StatusBarStyle.cpp',
-	'src/ToolBarStyle.cpp',
 	'src/PixmapMerging.cpp',
 ]
 forms = [
