@@ -74,6 +74,8 @@ public:
 	 */
 	ReceiveFileSession(UserProfile & userProfile, IReceiveFileSession * fileSessionImp);
 
+	ReceiveFileSession(const ReceiveFileSession & receiveFileSession);
+
 	virtual ~ReceiveFileSession();
 
 	// Inherited from Session

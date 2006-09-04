@@ -20,6 +20,8 @@
 #ifndef OWFILESESSIONMANAGER_H
 #define OWFILESESSIONMANAGER_H
 
+#include <filesessionmanager/ReceiveFileSession.h>
+
 #include <util/Event.h>
 
 #include <vector>
@@ -28,7 +30,6 @@ class Account;
 class IFileSessionManager;
 class IReceiveFileSession;
 class ISendFileSession;
-class ReceiveFileSession;
 class SendFileSession;
 class UserProfile;
 
@@ -54,7 +55,7 @@ public:
 	 * Here the FileSession is a pointer because the received of the event is
 	 * responsible of the deleting of this object.
 	 */
-	Event< void (FileSessionManager & sender, ReceiveFileSession * fileSession)> newReceiveFileSessionCreatedEvent;
+	Event< void (FileSessionManager & sender, ReceiveFileSession fileSession)> newReceiveFileSessionCreatedEvent;
 
 	FileSessionManager(UserProfile & userProfile);
 
