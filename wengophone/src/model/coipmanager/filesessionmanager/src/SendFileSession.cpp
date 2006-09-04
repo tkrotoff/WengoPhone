@@ -39,7 +39,7 @@ SendFileSession::SendFileSession(FileSessionManager & fileSessionManager, UserPr
 }
 
 SendFileSession::SendFileSession(const SendFileSession & sendFileSession) 
-	: Session(sendFileSession)
+	: Session(sendFileSession),
 	_fileSessionManager(fileSessionManager) {
 
 	_fileVector = sendFileSession._fileVector;
