@@ -27,10 +27,6 @@ ISendFileSession::ISendFileSession(const ISendFileSession & iSendFileSession) {
 	_fileVector = iSendFileSession._fileVector;
 }
 
-ISendFileSession * ISendFileSession::clone() const {
-	return new ISendFileSession(*this);
-}
-
 ISendFileSession::~ISendFileSession() {
 }
 	

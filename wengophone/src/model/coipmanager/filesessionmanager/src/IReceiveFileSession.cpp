@@ -30,9 +30,5 @@ IReceiveFileSession::IReceiveFileSession(const IReceiveFileSession & iReceiveFil
 	_imContact = iReceiveFileSession._imContact;
 }
 
-IReceiveFileSession * IReceiveFileSession::clone() const {
-	return new IReceiveFileSession(*this);
-}
-
 IReceiveFileSession::~IReceiveFileSession() {
 }

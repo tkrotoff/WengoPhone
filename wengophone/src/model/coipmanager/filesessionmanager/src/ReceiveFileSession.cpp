@@ -39,7 +39,7 @@ ReceiveFileSession::ReceiveFileSession(UserProfile & userProfile,
 ReceiveFileSession::ReceiveFileSession(const ReceiveFileSession & receiveFileSession)	
 	: Session(receiveFileSession) {
 	if (receiveFileSession._currentFileSessionImp) {
-		_currentFileSessionImp = receiveFileSession._currentFileSessionImp.clone();
+		_currentFileSessionImp = receiveFileSession._currentFileSessionImp->clone();
 	} else {
 		_currentFileSessionImp = NULL;
 	}
@@ -89,7 +89,7 @@ void ReceiveFileSession::setFilePath(const std::string & path) {
 
 std::string ReceiveFileSession::getFilePath() const {
 	if (_currentFileSessionImp) {
-		_currentFileSessionImp->getFilePath();
+		return _currentFileSessionImp->getFilePath();
 	} else {
 		return String::null;
 	}

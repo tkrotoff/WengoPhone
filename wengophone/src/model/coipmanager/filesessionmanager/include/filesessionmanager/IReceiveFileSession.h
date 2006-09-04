@@ -38,7 +38,7 @@ public:
 
 	IReceiveFileSession(const IReceiveFileSession & iReceiveFileSession);
 
-	virtual IReceiveFileSession * clone() const;
+	virtual IReceiveFileSession * clone() const = 0;
 
 	virtual ~IReceiveFileSession();
 
