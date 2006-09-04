@@ -34,7 +34,7 @@ void QtWengoStyle::drawComplexControl(ComplexControl control, const QStyleOption
 	//QToolButton
 	//Changes QToolButton style under MacOSX
 	if (control == CC_ToolButton) {
-		QCommonStyle::drawComplexControl(control, option, painter, widget);
+		QWindowsStyle::drawComplexControl(control, option, painter, widget);
 		return;
 	}
 #endif
