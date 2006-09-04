@@ -38,6 +38,8 @@ public:
 
 	PhApiSendFileSession(const PhApiSendFileSession & phApiSendFileSession);
 
+	virtual PhApiSendFileSession * clone() const;
+
 	virtual ~PhApiSendFileSession();
 
 	void start();

@@ -72,6 +72,10 @@ PhApiSendFileSession::PhApiSendFileSession(const PhApiSendFileSession & phApiSen
 	PhApiSFPEvent::transferResumedEvent += boost::bind(&PhApiSendFileSession::transferResumedEventHandler, this, _1, _2, _3, _4, _5, _6);
 }
 
+PhApiSendFileSession * PhApiSendFileSession::clone() const {
+	return new PhApiSendFileSession(*this);
+}
+
 PhApiSendFileSession::~PhApiSendFileSession() {
 }
 
