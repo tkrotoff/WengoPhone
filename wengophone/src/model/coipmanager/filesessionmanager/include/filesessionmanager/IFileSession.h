@@ -97,6 +97,8 @@ public:
 
 	IFileSession(const IFileSession & iFileSession);
 
+	virtual IFileSession * clone() const = 0;
+
 	virtual ~IFileSession();
 
 	/**
