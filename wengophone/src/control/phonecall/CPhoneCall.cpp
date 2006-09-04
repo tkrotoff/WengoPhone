@@ -86,6 +86,7 @@ void CPhoneCall::stateChangedEventHandlerThreadSafe(EnumPhoneCallState::PhoneCal
 	}
 
 	if (state == EnumPhoneCallState::PhoneCallStateClosed) {
+        _phoneCall.videoFrameReceivedEvent -= boost::bind(&CPhoneCall::videoFrameReceivedEventHandler, this, _1, _2, _3);
 		_pPhoneCall->close();
 		_pPhoneCall = NULL;
 	} else {
