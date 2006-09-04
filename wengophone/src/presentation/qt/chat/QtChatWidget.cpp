@@ -126,7 +126,6 @@ QtChatWidget::QtChatWidget(CChatHandler & cChatHandler,
 		SLOT(contactAddedEventSlot(IMChatSession &, const IMContact &)));
 	connect (this, SIGNAL(contactRemovedEventSignal(IMChatSession &, const IMContact &)),
 		SLOT(contactRemovedEventSlot(IMChatSession &, const IMContact &)));
-	
 
 	connect(_ui.avatarFrameButton, SIGNAL(clicked()), SLOT(avatarFrameButtonClicked()));
 	addAvatarFrame();
@@ -339,6 +338,7 @@ void QtChatWidget::sendMessage() {
 		_chatEdit->setFontWeight(QFont::Normal);
 	}
 	_chatEdit->setFocus();
+	_chatEdit->ensureCursorVisible();
 }
 
 void QtChatWidget::setIMChatSession(IMChatSession * imChatSession) {
