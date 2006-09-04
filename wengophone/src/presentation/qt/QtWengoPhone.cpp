@@ -145,7 +145,7 @@ void QtWengoPhone::initThreadSafe() {
 	_ui->setupUi(_wengoPhoneWindow);
 
 #ifdef OS_LINUX
-	_wengoPhoneWindow->setWindowIcon(QIcon(QPixmap(":/pics/default-avatar.png")));
+	_wengoPhoneWindow->setWindowIcon(QIcon(QPixmap(":/pics/avatar_default.png")));
 #endif
 
 	//Translation
