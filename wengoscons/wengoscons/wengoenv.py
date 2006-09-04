@@ -1607,8 +1607,9 @@ class WengoSConsEnvironment(SConsEnvironment):
 		os.chdir(dir)
 
 		outputFile = os.path.basename(qrcFile) + '.cpp'
-
-		os.system(rcc + ' ' + os.path.basename(qrcFile) + ' -o ' + outputFile)
+		errcode = os.system(rcc + ' ' + os.path.basename(qrcFile) + ' -o ' + outputFile)
+		if errcode > 0:
+			raise Exception("error while executing rcc")
 		return os.path.join(dir, outputFile)
 
 	def WengoCompileQt4UiFile(self, uiFile):
