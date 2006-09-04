@@ -33,8 +33,22 @@
 #include <util/SafeDelete.h>
 
 SendFileSession::SendFileSession(FileSessionManager & fileSessionManager, UserProfile & userProfile)
-	: Session(userProfile), _fileSessionManager(fileSessionManager) {
+	: Session(userProfile),
+	_fileSessionManager(fileSessionManager) {
 	_currentFileSessionImp = NULL;
+}
+
+SendFileSession::SendFileSession(const SendFileSession & sendFileSession) 
+	: Session(sendFileSession)
+	_fileSessionManager(fileSessionManager) {
+
+	_fileVector = sendFileSession._fileVector;
+
+	if (sendFileSession._currentFileSessionImp) {
+		_currentFileSessionImp = sendFileSession._currentFileSessionImp.clone();
+	} else {
+		_currentFileSessionImp = NULL;
+	}
 }
 
 SendFileSession::~SendFileSession() {

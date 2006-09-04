@@ -39,7 +39,7 @@ public:
 
 	PhApiReceiveFileSession(int callID, std::string contactID, std::string fileName, unsigned int fileSize);
 
-	~PhApiReceiveFileSession();
+	virtual ~PhApiReceiveFileSession();
 
 	void start();
 

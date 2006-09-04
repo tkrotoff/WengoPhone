@@ -38,7 +38,7 @@ public:
 
 	PhApiSendFileSession(const PhApiSendFileSession & phApiSendFileSession);
 
-	~PhApiSendFileSession();
+	virtual ~PhApiSendFileSession();
 
 	void start();
 

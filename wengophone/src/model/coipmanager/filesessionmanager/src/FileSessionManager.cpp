@@ -19,7 +19,6 @@
 
 #include <filesessionmanager/FileSessionManager.h>
 
-#include <filesessionmanager/ReceiveFileSession.h>
 #include <filesessionmanager/SendFileSession.h>
 
 #include "../implementation/phapi/include/phapifilesessionmanager/PhApiFileSessionManager.h"
@@ -71,7 +70,7 @@ ISendFileSession * FileSessionManager::createFileSessionForAccount(const Account
 void FileSessionManager::newIReceiveFileSessionCreatedEventHandler(IFileSessionManager & sender, IReceiveFileSession * iReceiveFileSession) {
 	LOG_DEBUG("new IReceiveFileSession created event");
 
-	ReceiveFileSession * newFileSession = new ReceiveFileSession(_userProfile, iReceiveFileSession);
+	ReceiveFileSession newFileSession(_userProfile, iReceiveFileSession);
 
 	newReceiveFileSessionCreatedEvent(*this, newFileSession);
 }
