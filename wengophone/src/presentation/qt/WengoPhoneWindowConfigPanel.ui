@@ -8,28 +8,159 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>293</width>
-    <height>59</height>
+    <width>311</width>
+    <height>77</height>
    </rect>
-  </property>
-  <property name="font" >
-   <font>
-    <family>Lucida Grande</family>
-    <pointsize>11</pointsize>
-    <weight>50</weight>
-    <italic>false</italic>
-    <bold>false</bold>
-    <underline>false</underline>
-    <strikeout>false</strikeout>
-   </font>
   </property>
   <layout class="QGridLayout" >
    <property name="margin" >
-    <number>0</number>
+    <number>9</number>
    </property>
    <property name="spacing" >
     <number>6</number>
    </property>
+   <item row="0" column="2" >
+    <layout class="QGridLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item row="0" column="0" >
+      <widget class="QCheckBox" name="enableWenboxCheckBox" >
+       <property name="toolTip" >
+        <string>Enable Wenbox usage</string>
+       </property>
+       <property name="text" >
+        <string>Wenbox USB</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0" >
+      <widget class="QCheckBox" name="halfDuplexCheckBox" >
+       <property name="toolTip" >
+        <string>Enable half-duplex mode</string>
+       </property>
+       <property name="text" >
+        <string>Loud Speakers</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="0" column="4" >
+    <layout class="QGridLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item rowspan="2" row="0" column="0" >
+      <spacer>
+       <property name="orientation" >
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" >
+        <size>
+         <width>40</width>
+         <height>31</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="1" column="1" >
+      <widget class="QToolButton" name="audioSettingsButton" >
+       <property name="text" >
+        <string>Audio Settings</string>
+       </property>
+       <property name="icon" >
+        <iconset resource="wengophone.qrc" >:/pics/config/audio.png</iconset>
+       </property>
+       <property name="toolButtonStyle" >
+        <enum>Qt::ToolButtonTextBesideIcon</enum>
+       </property>
+       <property name="autoRaise" >
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1" >
+      <widget class="QToolButton" name="videoSettingsButton" >
+       <property name="text" >
+        <string>Video Settings</string>
+       </property>
+       <property name="icon" >
+        <iconset resource="wengophone.qrc" >:/pics/config/video.png</iconset>
+       </property>
+       <property name="toolButtonStyle" >
+        <enum>Qt::ToolButtonTextBesideIcon</enum>
+       </property>
+       <property name="autoRaise" >
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item rowspan="2" row="0" column="2" >
+      <spacer>
+       <property name="orientation" >
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" >
+        <size>
+         <width>40</width>
+         <height>31</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item row="0" column="1" >
+    <widget class="QFrame" name="frame" >
+     <property name="minimumSize" >
+      <size>
+       <width>3</width>
+       <height>16</height>
+      </size>
+     </property>
+     <property name="maximumSize" >
+      <size>
+       <width>3</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="frameShape" >
+      <enum>QFrame::VLine</enum>
+     </property>
+     <property name="frameShadow" >
+      <enum>QFrame::Sunken</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="3" >
+    <widget class="QFrame" name="frame_2" >
+     <property name="minimumSize" >
+      <size>
+       <width>3</width>
+       <height>16</height>
+      </size>
+     </property>
+     <property name="maximumSize" >
+      <size>
+       <width>3</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="frameShape" >
+      <enum>QFrame::VLine</enum>
+     </property>
+     <property name="frameShadow" >
+      <enum>QFrame::Sunken</enum>
+     </property>
+    </widget>
+   </item>
    <item row="0" column="0" >
     <layout class="QGridLayout" >
      <property name="margin" >
@@ -131,170 +262,6 @@
        </property>
        <property name="scaledContents" >
         <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item row="0" column="3" >
-    <widget class="QFrame" name="frame_2" >
-     <property name="minimumSize" >
-      <size>
-       <width>3</width>
-       <height>16</height>
-      </size>
-     </property>
-     <property name="maximumSize" >
-      <size>
-       <width>3</width>
-       <height>16777215</height>
-      </size>
-     </property>
-     <property name="frameShape" >
-      <enum>QFrame::VLine</enum>
-     </property>
-     <property name="frameShadow" >
-      <enum>QFrame::Sunken</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="1" >
-    <widget class="QFrame" name="frame" >
-     <property name="minimumSize" >
-      <size>
-       <width>3</width>
-       <height>16</height>
-      </size>
-     </property>
-     <property name="maximumSize" >
-      <size>
-       <width>3</width>
-       <height>16777215</height>
-      </size>
-     </property>
-     <property name="frameShape" >
-      <enum>QFrame::VLine</enum>
-     </property>
-     <property name="frameShadow" >
-      <enum>QFrame::Sunken</enum>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="4" >
-    <layout class="QGridLayout" >
-     <property name="margin" >
-      <number>0</number>
-     </property>
-     <property name="spacing" >
-      <number>6</number>
-     </property>
-     <item rowspan="2" row="0" column="0" >
-      <spacer>
-       <property name="orientation" >
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" >
-        <size>
-         <width>40</width>
-         <height>31</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item row="1" column="1" >
-      <widget class="QToolButton" name="audioSettingsButton" >
-       <property name="text" >
-        <string>Audio Settings</string>
-       </property>
-       <property name="icon" >
-        <iconset resource="wengophone.qrc" >:/pics/config/audio.png</iconset>
-       </property>
-       <property name="toolButtonStyle" >
-        <enum>Qt::ToolButtonTextBesideIcon</enum>
-       </property>
-       <property name="autoRaise" >
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1" >
-      <widget class="QToolButton" name="videoSettingsButton" >
-       <property name="text" >
-        <string>Video Settings</string>
-       </property>
-       <property name="icon" >
-        <iconset resource="wengophone.qrc" >:/pics/config/video.png</iconset>
-       </property>
-       <property name="toolButtonStyle" >
-        <enum>Qt::ToolButtonTextBesideIcon</enum>
-       </property>
-       <property name="autoRaise" >
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item rowspan="2" row="0" column="2" >
-      <spacer>
-       <property name="orientation" >
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" >
-        <size>
-         <width>40</width>
-         <height>31</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-    </layout>
-   </item>
-   <item row="0" column="2" >
-    <layout class="QGridLayout" >
-     <property name="margin" >
-      <number>0</number>
-     </property>
-     <property name="spacing" >
-      <number>6</number>
-     </property>
-     <item row="0" column="0" >
-      <widget class="QCheckBox" name="enableWenboxCheckBox" >
-       <property name="font" >
-        <font>
-         <family>Lucida Grande</family>
-         <pointsize>11</pointsize>
-         <weight>50</weight>
-         <italic>false</italic>
-         <bold>false</bold>
-         <underline>false</underline>
-         <strikeout>false</strikeout>
-        </font>
-       </property>
-       <property name="toolTip" >
-        <string>Enable Wenbox usage</string>
-       </property>
-       <property name="text" >
-        <string>Wenbox USB</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0" >
-      <widget class="QCheckBox" name="halfDuplexCheckBox" >
-       <property name="font" >
-        <font>
-         <family>Lucida Grande</family>
-         <pointsize>11</pointsize>
-         <weight>50</weight>
-         <italic>false</italic>
-         <bold>false</bold>
-         <underline>false</underline>
-         <strikeout>false</strikeout>
-        </font>
-       </property>
-       <property name="toolTip" >
-        <string>Enable half-duplex mode</string>
-       </property>
-       <property name="text" >
-        <string>Loud Speakers</string>
        </property>
       </widget>
      </item>
