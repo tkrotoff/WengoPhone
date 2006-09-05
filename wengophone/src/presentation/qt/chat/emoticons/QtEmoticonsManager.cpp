@@ -162,7 +162,6 @@ void QtEmoticonsManager::readIcon(QDomNode node, QString protocol) {
 
 QString QtEmoticonsManager::text2Emoticon(const QString & text, const QString protocol) {
 
-	int pos;
 	QtEmoticonsList emoticonList;
 	QtEmoticonsList::iterator it;
 	QStringList stringList;
@@ -183,7 +182,7 @@ QString QtEmoticonsManager::text2Emoticon(const QString & text, const QString pr
 }
 
 QString QtEmoticonsManager::emoticons2Text(const QString & text, const QString protocol) {
-	int pos;
+	
 	QtEmoticonsList emoticonList;
 	QtEmoticonsList::iterator it;
 	QStringList stringList;
