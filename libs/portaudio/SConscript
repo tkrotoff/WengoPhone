@@ -127,7 +127,7 @@ if WengoOSLinux() or WengoOSBSD():
 		sources += sources_oss
 	if WengoGetConsoleArgument('portaudio-alsa') == 1:
 		defines['PA_USE_ALSA'] = 1
-		libs += ['libasound']
+		libs += ['asound']
 		sources += sources_alsa
 		headers += headers_alsa
 	elif WengoGetConsoleArgument('portaudio-oss') == 0:
