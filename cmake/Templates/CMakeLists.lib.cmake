@@ -1,6 +1,7 @@
 project(<LIBNAME>)
 
 # needed include directories to build <LIBNAME>
+# saves the variable in internal cache for later use
 set(<LIBNAME>_INCLUDE_DIRS
   ${CMAKE_CURRENT_SOURCE_DIR}
   ${CMAKE_CURRENT_SOURCE_DIR}/include
@@ -9,6 +10,7 @@ set(<LIBNAME>_INCLUDE_DIRS
 )
 
 # <LIBNAME> lib and dependencies
+# saves the variable in internal cache for later use
 set(<LIBNAME>_LIBRARIES
   <LIBNAME>
   ${OTHERPROJECT_LIBRARIES}
