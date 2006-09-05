@@ -14,7 +14,7 @@ env.WengoUseLibraries(libs)
 configure_command = './configure'
 
 if WengoOSMacOSX() and  WengoArchX86():
-		configure_command += '--disable-mmx --enable-memalign-hack'
+		configure_command += ' --disable-mmx --enable-memalign-hack'
 
 env.WengoAutoconf('avcodec', ['libavcodec/libavcodec.a'],
 	configure_command, 'cd libavcodec && make',
