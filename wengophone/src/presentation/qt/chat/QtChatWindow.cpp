@@ -451,7 +451,7 @@ void QtChatWindow::messageReceivedSlot(IMChatSession * sender) {
 		QtContactList * qtContactList = _qtWengoPhone.getContactList();
 			CContactList & cContactList = qtContactList->getCContactList();
 			QString contactId = QString::fromStdString(cContactList.findContactThatOwns(from));
-			QString senderDisplayName = getShortDisplayName(contactId,QString::fromStdString(from.getContactId()));
+			QString senderDisplayName = getShortDisplayName(contactId, QString::fromStdString(from.getContactId()));
 			QString msg = QString::fromUtf8(message.c_str());
 
 		if (!isVisible()) {
@@ -552,9 +552,9 @@ void QtChatWindow::addChat(IMChatSession * session, const IMContact & from) {
 
 	connect(qtContactList,SIGNAL(contactChangedEventSignal(QString )), SLOT(statusChangedSlot(QString)));
 	if (_tabWidget->count() > 0) {
-		tabNumber = _tabWidget->insertTab(_tabWidget->count(),_chatWidget,senderName);
+		tabNumber = _tabWidget->insertTab(_tabWidget->count(), _chatWidget, senderName);
 	} else {
-		tabNumber = _tabWidget->insertTab(0,_chatWidget,senderName);
+		tabNumber = _tabWidget->insertTab(0, _chatWidget, senderName);
 	}
 	if (session->isUserCreated()) {
 		_tabWidget->setCurrentIndex(tabNumber);

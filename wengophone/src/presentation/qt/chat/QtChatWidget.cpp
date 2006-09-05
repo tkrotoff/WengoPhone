@@ -122,10 +122,10 @@ QtChatWidget::QtChatWidget(CChatHandler & cChatHandler,
 	connect(_emoticonsWidget, SIGNAL(closed()), _chatEdit, SLOT(setFocus()));
 	connect(_chatEdit, SIGNAL(textChanged()), SLOT(chatEditTextChanged()));
 	connect(_chatEdit, SIGNAL(fileDragged(const QString &)), SLOT(fileDraggedSlot(const QString &)));
-	connect (this, SIGNAL(contactAddedEventSignal(IMChatSession &, const IMContact &)),
-		SLOT(contactAddedEventSlot(IMChatSession &, const IMContact &)));
-	connect (this, SIGNAL(contactRemovedEventSignal(IMChatSession &, const IMContact &)),
-		SLOT(contactRemovedEventSlot(IMChatSession &, const IMContact &)));
+	connect (this, SIGNAL(contactAddedEventSignal(const IMContact &)),
+		SLOT(contactAddedEventSlot(const IMContact &)));
+	connect (this, SIGNAL(contactRemovedEventSignal(const IMContact &)),
+		SLOT(contactRemovedEventSlot(const IMContact &)));
 
 	connect(_ui.avatarFrameButton, SIGNAL(clicked()), SLOT(avatarFrameButtonClicked()));
 	addAvatarFrame();
@@ -200,21 +200,43 @@ void QtChatWidget::showInviteDialog() {
 }
 
 void QtChatWidget::contactAddedEventHandler(IMChatSession & sender, const IMContact & imContact) {
-	contactAddedEventSignal(sender, imContact);
+	contactAddedEventSignal(imContact);
 }
 
 void QtChatWidget::contactRemovedEventHandler(IMChatSession & sender, const IMContact & imContact) {
-	contactRemovedEventSignal(sender, imContact);
+	contactRemovedEventSignal(imContact);
 }
 
-void QtChatWidget::contactAddedEventSlot(IMChatSession & sender, const IMContact & imContact) {
-	//TODO:
-	//updateAvatarFrame();
+void QtChatWidget::contactAddedEventSlot(const IMContact & imContact) {
+
+	QtContactList * qtContactList = _qtWengoPhone->getContactList();
+	CContactList & cContactList = qtContactList->getCContactList();
+	std::string contactId = cContactList.findContactThatOwns(imContact);
+	ContactProfile profile = cContactList.getContactProfile(contactId);
+
+	std::string data = profile.getIcon().getData();
+	QPixmap pixmap;
+	pixmap.loadFromData((uchar *)data.c_str(), data.size());
+	_avatarFrame->addRemoteContact(
+		QString::fromStdString(contactId),
+		QString::fromStdString(profile.getDisplayName()),
+		pixmap
+	);
+
+	addToHistory(QString::null,
+		"<font color=\"#FF0000\">" + QString::fromStdString(imContact.getContactId()) + tr(" has joined the chat") + "</font>"
+	);
 }
 
-void QtChatWidget::contactRemovedEventSlot(IMChatSession & sender, const IMContact & imContact) {
-	//TODO:
-	//updateAvatarFrame();
+void QtChatWidget::contactRemovedEventSlot(const IMContact & imContact) {
+	addToHistory(QString::null,
+		"<font color=\"#FF0000\">" + QString::fromStdString(imContact.getContactId()) + tr(" has left the chat") + "</font>"
+	);
+
+	QtContactList * qtContactList = _qtWengoPhone->getContactList();
+	CContactList & cContactList = qtContactList->getCContactList();
+	std::string contactId = cContactList.findContactThatOwns(imContact);
+	_avatarFrame->removeRemoteContact(QString::fromStdString(contactId));
 }
 
 void QtChatWidget::sendButtonClicked() {
@@ -288,10 +310,10 @@ void QtChatWidget::addToHistory(const QString & senderName, const QString & str)
 	QString header = QtChatUtils::getUserHeader(getUserColor(senderName),CHAT_USER_FORGROUND_COLOR, senderName);
 	_chatHistory->insertHtml(header);
 	////
-
+	
 	// insert message html code
 	QString table = QString("<table border=\"0\" width=\"98%\" cellspacing=\"0\" cellpadding=\"5\">") +
-		QString("<tr><td>") + 
+		QString("<tr><td>") +
 		QtChatUtils::decodeMessage(_imChatSession->getIMChat().getIMAccount().getProtocol(), str) +
 		QString("</td></tr></table>");
 	_chatHistory->insertHtml(table);

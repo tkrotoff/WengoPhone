@@ -83,7 +83,7 @@ public:
 
 	void setIMChatSession(IMChatSession * imChatSession);
 
-	void addToHistory(const QString & senderName,const QString & str);
+	void addToHistory(const QString & senderName, const QString & str);
 
 public Q_SLOTS:
 
@@ -106,9 +106,9 @@ public Q_SLOTS:
 
 	void showInviteDialog();
 
-	void contactAddedEventSlot(IMChatSession & sender, const IMContact & imContact);
+	void contactAddedEventSlot(const IMContact & imContact);
 
-	void contactRemovedEventSlot(IMChatSession & sender, const IMContact & imContact);
+	void contactRemovedEventSlot(const IMContact & imContact);
 
 	virtual void setVisible(bool visible);
 
@@ -118,9 +118,9 @@ Q_SIGNALS:
 
 	void newMessage(IMChatSession* session,const QString & msg);
 
-	void contactAddedEventSignal(IMChatSession & sender, const IMContact & imContact);
+	void contactAddedEventSignal(const IMContact & imContact);
 
-	void contactRemovedEventSignal(IMChatSession & sender, const IMContact & imContact);
+	void contactRemovedEventSignal(const IMContact & imContact);
 
 private Q_SLOTS:
 

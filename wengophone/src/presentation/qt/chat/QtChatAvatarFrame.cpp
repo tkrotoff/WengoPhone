@@ -61,7 +61,9 @@ void QtChatAvatarFrame::addRemoteContact(const QString & contactId, const QStrin
 void QtChatAvatarFrame::removeRemoteContact(const QString & contactId) {
 	for(int i = 0; i < _widgetList.size(); i++) {
 		if(_widgetList[i]->getContactId() == contactId) {
-			_layout->removeWidget(_widgetList[i]);
+			QGridLayout * glayout = dynamic_cast<QGridLayout *>(_ui.remoteAvatarFrame->layout());
+			glayout->removeWidget(_widgetList[i]);
+			glayout->update();
 			delete _widgetList[i];
 		}
 	}
