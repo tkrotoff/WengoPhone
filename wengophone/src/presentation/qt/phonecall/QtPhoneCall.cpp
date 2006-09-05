@@ -144,10 +144,8 @@ QtPhoneCall::QtPhoneCall(CPhoneCall & cPhoneCall)
 }
 
 QtPhoneCall::~QtPhoneCall() {
-	if (_remoteVideoFrame && _localVideoFrame) {
-		pix_free(_remoteVideoFrame);
-		pix_free(_localVideoFrame);
-	}
+	if (_remoteVideoFrame) pix_free(_remoteVideoFrame);
+	if (_localVideoFrame) pix_free(_localVideoFrame);
 	delete _ui;
 }
 

@@ -22,6 +22,11 @@
 
 #include "QtVideo.h"
 
+//must be above XVWindow.h
+#include <QtGui/QtGui>
+
+#include "XVWindow.h"
+
 class QFrame;
 class XVWindow;
 
@@ -55,7 +60,11 @@ private:
 
 	XVWindow * _localWindow;
 
+	Display* _localDisplay;
+
 	XVWindow * _remoteWindow;
+
+	Display* _remoteDisplay;
 };
 
 #endif	//OWQTVIDEOXV_H

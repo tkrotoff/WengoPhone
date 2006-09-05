@@ -177,7 +177,7 @@ int XVWindow::init(Display* dp, Window rootWindow, int x, int y, int windowWidth
 				}
 		}
 	}
-	XFree(xvainfo);
+	XvFreeAdaptorInfo(xvainfo);
 
 	if (!_XVPort) {
 		if (busyPorts) {
@@ -216,7 +216,9 @@ XVWindow::~XVWindow() {
 	if (_isInitialized && _XShmInfo.shmaddr) {
 		XShmDetach(_display, &_XShmInfo);
 		shmdt(_XShmInfo.shmaddr);
-//		XFree(&_XShmInfo);
+	}
+	if (_XVImage) {
+		XFree(_XVImage);
 	}
 	if (_gc) {
 		XFree(_gc);
@@ -224,9 +226,6 @@ XVWindow::~XVWindow() {
 	if (_XVWindow) {
 		XUnmapWindow(_display, _XVWindow);
 		XDestroyWindow(_display, _XVWindow);
-	}
-	if (_display) {
-		XCloseDisplay(_display);
 	}
 }
 
@@ -314,8 +313,8 @@ void XVWindow::putFrame(piximage * frame) {
 
 void XVWindow::toggleFullscreen() {
 	int newX, newY, newWidth, newHeight;
-	Window* childWindow=(Window*) malloc(sizeof(Window));
-	XWindowAttributes* xwattributes=(XWindowAttributes*) malloc(sizeof(XWindowAttributes));
+	Window childWindow;
+	XWindowAttributes xwattributes;
 
 	if (_state.fullscreen) {
 		// not needed with EWMH fs
@@ -343,10 +342,10 @@ void XVWindow::toggleFullscreen() {
 			setDecoration(false);
 			XFlush(_display);
 			XTranslateCoordinates(_display, _XVWindow, RootWindow(_display, DefaultScreen(_display)),
-						0,0,&_state.oldx,&_state.oldy, childWindow);
-			XGetWindowAttributes(_display, _XVWindow, xwattributes);
-			_state.oldWidth = xwattributes->width;
-			_state.oldHeight = xwattributes->height;
+						0,0,&_state.oldx,&_state.oldy, &childWindow);
+			XGetWindowAttributes(_display, _XVWindow, &xwattributes);
+			_state.oldWidth = xwattributes.width;
+			_state.oldHeight = xwattributes.height;
 		}
 	}
 	 // not needed with EWMH fs - create a screen-filling window on top and turn of decorations

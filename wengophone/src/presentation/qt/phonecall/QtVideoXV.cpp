@@ -21,11 +21,6 @@
 
 #include "ui_VideoWindow.h"
 
-//must be above XVWindow.h
-#include <QtGui/QtGui>
-
-#include "XVWindow.h"
-
 #include <webcam/WebcamDriver.h>
 
 #include <util/Logger.h>
@@ -44,12 +39,14 @@ QtVideoXV::QtVideoXV(QWidget * parent,
 	connect(_ui->fullScreenButton, SIGNAL(clicked()), SLOT(fullScreenButtonClicked()));
 
 	_remoteWindow = new XVWindow();
-	if (_remoteWindow->init(XOpenDisplay(NULL), DefaultRootWindow(
-		   XOpenDisplay(NULL)), 0, 0, remoteVideoFrameWidth * 2, remoteVideoFrameHeight * 2, remoteVideoFrameWidth, remoteVideoFrameHeight)) {
+	_remoteDisplay=XOpenDisplay(NULL);
+	if (_remoteWindow->init(_remoteDisplay, DefaultRootWindow(_remoteDisplay),
+		     0, 0, remoteVideoFrameWidth * 2, remoteVideoFrameHeight * 2, remoteVideoFrameWidth, remoteVideoFrameHeight)) {
 			_localWindow = new XVWindow();
 			LOG_DEBUG("remote window initialization: success");
 
-			if (_localWindow->init(XOpenDisplay(NULL), _remoteWindow->getWindow(), 0, 0, localVideoFrameWidth, localVideoFrameHeight, localVideoFrameWidth, localVideoFrameHeight)) {
+    			_localDisplay=XOpenDisplay(NULL);
+			if (_localWindow->init(_localDisplay, _remoteWindow->getWindow(), 0, 0, localVideoFrameWidth, localVideoFrameHeight, localVideoFrameWidth, localVideoFrameHeight)) {
 
 				_remoteWindow->registerSlave(_localWindow);
 				_localWindow->registerMaster(_remoteWindow);
@@ -57,6 +54,7 @@ QtVideoXV::QtVideoXV(QWidget * parent,
 
 			} else {
 				delete _localWindow;
+				XCloseDisplay(_localDisplay);
 				_localWindow = NULL;
 
 				//TODO in this case to have the local video image
@@ -67,6 +65,7 @@ QtVideoXV::QtVideoXV(QWidget * parent,
 
 	} else {
 		delete _remoteWindow;
+		XCloseDisplay(_remoteDisplay);
 		_remoteWindow = NULL;
 		_localWindow = NULL;
 		LOG_DEBUG("remote window initialization: failed");
@@ -74,13 +73,15 @@ QtVideoXV::QtVideoXV(QWidget * parent,
 }
 
 QtVideoXV::~QtVideoXV() {
-	if (_localWindow) {
-		_localWindow->registerMaster(NULL);
-		delete _localWindow;
-	}
 	if (_remoteWindow) {
 		_remoteWindow->registerSlave(NULL);
+		if (_localWindow) {
+			_localWindow->registerMaster(NULL);
+			delete _localWindow;
+			XCloseDisplay(_localDisplay);
+		}
 		delete _remoteWindow;
+		XCloseDisplay(_remoteDisplay);
 	}
 }
 

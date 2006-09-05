@@ -3,6 +3,7 @@
  * High-level class offering X-Video hardware acceleration
  *
  * Matthias Schneider <ma30002000@yahoo.de>
+ * 31-August-2006: fixed some memory leaks
  * 22-June-2006: varios cosmetic changes
  * 07-May-2006: initial version
  *
