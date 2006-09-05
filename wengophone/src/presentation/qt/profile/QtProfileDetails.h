@@ -73,19 +73,14 @@ private Q_SLOTS:
 
 	/**
 	 * Switch from simple (QtSimpleIMContactManager) to advanced (QtIMContactManager).
+	 * Switch from simple (QtSimpleIMAccountManager) to advanced (QtIMAccountManager).
 	 *
 	 * The button advanced from QtSimpleIMContactManager has been clicked.
 	 * Changes _ui->imStackedWidget widget.
-	 */
-	void imContactManagerAdvancedClicked();
-
-	/**
-	 * Switch from simple (QtSimpleIMAccountManager) to advanced (QtIMAccountManager).
-	 *
 	 * The button advanced from QtSimpleIMAccountManager has been clicked.
 	 * Changes _ui->imStackedWidget widget.
 	 */
-	void imAccountManagerAdvancedClicked();
+	void advancedButtonClicked();
 
 private:
 
@@ -110,12 +105,9 @@ private:
 	QtSimpleIMAccountManager * _qtIMAccountManager;
 
 	/**
-	 * If we are in simple or advanced mode.
-	 *
-	 * If we use QtSimpleIMContactManager and QtSimpleIMAccountManager (-> simple mode)
-	 * or if we use QtIMContactManager and QtIMAccountManager (-> advanced mode)
+	 * QtProfileDetails shows a Contact rather than a UserProfile if true.
 	 */
-	bool _advancedMode;
+	bool _showContact;
 };
 
 #endif	//QTPROFILEDETAILS_H

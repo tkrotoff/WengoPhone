@@ -168,35 +168,35 @@ private:
 	 */
 	void contactAddedEventHandler(ContactList & sender, Contact & contact);
 
-	void contactAddedEventHandlerThreadSafe(Contact & contact);
+	void contactAddedEventHandlerThreadSafe(std::string contactId);
 
 	/**
 	 * @see ContactList::contactRemovedEvent
 	 */
 	void contactRemovedEventHandler(ContactList & sender, Contact & contact);
 
-	void contactRemovedEventHandlerThreadSafe(Contact & contact);
+	void contactRemovedEventHandlerThreadSafe(std::string contactId);
 
 	/**
 	 * @see ContactList::contactGroupAddedEvent
 	 */
 	void contactGroupAddedEventHandler(ContactList & sender, ContactGroup & contactGroup);
 
-	void contactGroupAddedEventHandlerThreadSafe(ContactGroup & contactGroup);
+	void contactGroupAddedEventHandlerThreadSafe(std::string groupId);
 
 	/**
 	 * @see ContactList::contactGroupRemovedEvent
 	 */
 	void contactGroupRemovedEventHandler(ContactList & sender, ContactGroup & contactGroup);
 
-	void contactGroupRemovedEventHandlerThreadSafe(ContactGroup & contactGroup);
+	void contactGroupRemovedEventHandlerThreadSafe(std::string groupId);
 
 	/**
 	 * @see ContactList::contactGroupRenamedEvent
 	 */
 	void contactGroupRenamedEventHandler(ContactList & sender, ContactGroup & contactGroup);
 
-	void contactGroupRenamedEventHandlerThreadSafe(ContactGroup & contactGroup);
+	void contactGroupRenamedEventHandlerThreadSafe(std::string groupId);
 
 	/**
 	 * @see ContactList::contactGroupMovedEvent
@@ -204,15 +204,14 @@ private:
 	void contactMovedEventHandler(ContactList & sender, ContactGroup & dstContactGroup,
 		ContactGroup & srcContactGroup, Contact & contact);
 
-	void contactMovedEventHandlerThreadSafe(ContactGroup & dstContactGroup, ContactGroup & srcContactGroup,
-		Contact & contact);
+	void contactMovedEventHandlerThreadSafe(std::string dstGroupId, std::string srcGroupId, std::string contactId);
 
 	/**
 	 * @see ContactList::contactChangedEvent
 	 */
 	void contactChangedEventHandler(ContactList & sender, Contact & contact);
 
-	void contactChangedEventHandlerThreadSafe(Contact & contact);
+	void contactChangedEventHandlerThreadSafe(std::string contactId);
 
 	/**
 	 * @see addContact

@@ -23,10 +23,15 @@
 
 #include "QtIMContactManager.h"
 
+#include <presentation/qt/QtWengoPhone.h>
+
 #include <control/contactlist/CContactList.h>
 #include <control/profile/CUserProfile.h>
+#include <control/CWengoPhone.h>
 
 #include <model/contactlist/ContactProfile.h>
+
+#include <imwrapper/IMAccount.h>
 
 #include <util/Logger.h>
 
@@ -45,8 +50,6 @@ QtSimpleIMContactManager::QtSimpleIMContactManager(ContactProfile & contactProfi
 	_ui = new Ui::SimpleIMContactManager();
 	_ui->setupUi(_imContactManagerWidget);
 
-	connect(_ui->advancedButton, SIGNAL(clicked()), SLOT(advancedClickedSlot()));
-
 	connect(_ui->searchWengoContactButton, SIGNAL(clicked()), SLOT(searchWengoContactButtonClicked()));
 
 	loadIMContacts();
@@ -58,10 +61,6 @@ QtSimpleIMContactManager::~QtSimpleIMContactManager() {
 
 QWidget * QtSimpleIMContactManager::getWidget() const {
 	return _imContactManagerWidget;
-}
-
-void QtSimpleIMContactManager::advancedClickedSlot() {
-	advancedClicked();
 }
 
 std::set<IMContact *> QtSimpleIMContactManager::findIMContactsOfProtocol(EnumIMProtocol::IMProtocol imProtocol) const {
@@ -86,13 +85,38 @@ QString QtSimpleIMContactManager::getIMContactsOfProtocol(EnumIMProtocol::IMProt
 		imContacts += QString::fromStdString(imContact->getContactId());
 		imContacts += IMCONTACT_TEXT_SEPARATOR;
 	}
+
+	//Remove the last IMCONTACT_TEXT_SEPARATOR
 	int index = imContacts.lastIndexOf(IMCONTACT_TEXT_SEPARATOR);
 	imContacts.remove(index, 1);
 
 	return imContacts;
 }
 
+void QtSimpleIMContactManager::changeIMProtocolPixmaps(EnumIMProtocol::IMProtocol imProtocol,
+			QLabel * imProtocolLabel, const char * connectedPixmap, QLineEdit * imProtocolLineEdit) {
+
+	std::set<IMAccount *> imAccounts = _cUserProfile.getIMAccountsOfProtocol(imProtocol);
+	if (!imAccounts.empty()) {
+		imProtocolLineEdit->setEnabled(true);
+		imProtocolLabel->setPixmap(QPixmap(connectedPixmap));
+	}
+}
+
 void QtSimpleIMContactManager::loadIMContacts() {
+	//Update presentation depending if IM accounts exist
+	changeIMProtocolPixmaps(EnumIMProtocol::IMProtocolWengo,
+				_ui->wengoLabel, ":pics/protocols/wengo.png", _ui->wengoLineEdit);
+	changeIMProtocolPixmaps(EnumIMProtocol::IMProtocolMSN,
+				_ui->msnLabel, ":pics/protocols/msn.png", _ui->msnLineEdit);
+	changeIMProtocolPixmaps(EnumIMProtocol::IMProtocolAIMICQ,
+				_ui->aimLabel, ":pics/protocols/aim.png", _ui->aimLineEdit);
+	changeIMProtocolPixmaps(EnumIMProtocol::IMProtocolYahoo,
+				_ui->yahooLabel, ":pics/protocols/yahoo.png", _ui->yahooLineEdit);
+	changeIMProtocolPixmaps(EnumIMProtocol::IMProtocolJabber,
+				_ui->jabberLabel, ":pics/protocols/jabber.png", _ui->jabberLineEdit);
+
+	//Loads all the IM contacts
 	_ui->wengoLineEdit->setText(getIMContactsOfProtocol(EnumIMProtocol::IMProtocolWengo));
 	_ui->msnLineEdit->setText(getIMContactsOfProtocol(EnumIMProtocol::IMProtocolMSN));
 	_ui->aimLineEdit->setText(getIMContactsOfProtocol(EnumIMProtocol::IMProtocolAIMICQ));
@@ -100,50 +124,57 @@ void QtSimpleIMContactManager::loadIMContacts() {
 	_ui->jabberLineEdit->setText(getIMContactsOfProtocol(EnumIMProtocol::IMProtocolJabber));
 }
 
-void QtSimpleIMContactManager::saveIMContacts() {
-	const IMContactSet & imContactSet = _contactProfile.getIMContactSet();
+void QtSimpleIMContactManager::addIMContactsOfProtocol(EnumIMProtocol::IMProtocol imProtocol, const QString & text) {
+	QString imContactsBefore = getIMContactsOfProtocol(imProtocol);
+	QStringList contactIdListBefore = imContactsBefore.split(IMCONTACT_TEXT_SEPARATOR);
+	QString imContactsAfter = text;
+	QStringList contactIdListAfter = imContactsAfter.split(IMCONTACT_TEXT_SEPARATOR);
 
-	//Remove all IMContacts
-	for (IMContactSet::const_iterator it = imContactSet.begin(); it != imContactSet.end(); it++) {
-		IMContact * imContact = (IMContact *) &(*it);
+	//Remove IMContacts
+	for (int i = 0; i < contactIdListBefore.size(); i++) {
+		QString contactId = contactIdListBefore[i];
 
-		//Bypass SIP and Jabber protocols
-		if (imContact->getProtocol() == EnumIMProtocol::IMProtocolSIPSIMPLE ||
-			imContact->getProtocol() == EnumIMProtocol::IMProtocolJabber) {
-
-			continue;
+		if (imContactsAfter.contains(contactId)) {
+			//Do nothing
+		} else {
+			//Remove the imContact from the contactProfile
+			IMContact imContact(imProtocol, contactId.toStdString());
+			_contactProfile.removeIMContact(imContact);
 		}
-
-		_contactProfile.removeIMContact(*imContact);
 	}
 
-	//Save all IMContacts
-	addIMContact(EnumIMProtocol::IMProtocolWengo, _ui->wengoLineEdit->text());
-	addIMContact(EnumIMProtocol::IMProtocolMSN, _ui->msnLineEdit->text());
-	addIMContact(EnumIMProtocol::IMProtocolAIMICQ, _ui->aimLineEdit->text());
-	addIMContact(EnumIMProtocol::IMProtocolYahoo, _ui->yahooLineEdit->text());
-	addIMContact(EnumIMProtocol::IMProtocolJabber, _ui->jabberLineEdit->text());
+	//Add IMContacts
+	for (int i = 0; i < contactIdListAfter.size(); i++) {
+		QString contactId = contactIdListAfter[i];
+
+		if (imContactsBefore.contains(contactId)) {
+			//Do nothing
+		} else {
+			//Add the imContact to the contactProfile
+			IMContact imContact(imProtocol, contactId.toStdString());
+
+			//IMAccount to associate with the IMContact
+			std::set<IMAccount *> imAccounts = _cUserProfile.getIMAccountsOfProtocol(imProtocol);
+			std::set<IMAccount *>::const_iterator it = imAccounts.begin();
+			if (it != imAccounts.end()) {
+				imContact.setIMAccount(*it);
+			}
+
+			_contactProfile.addIMContact(imContact);
+		}
+	}
 }
 
-void QtSimpleIMContactManager::addIMContact(EnumIMProtocol::IMProtocol imProtocol, const QString & text) {
-	if (text.isEmpty()) {
-		return;
-	}
-
-	QStringList contactIdList = text.split(IMCONTACT_TEXT_SEPARATOR);
-	for (int i = 0; i < contactIdList.size(); i++) {
-		IMContact imContact(imProtocol, contactIdList.at(i).toStdString());
-
-		//IMAccount to associate with the IMContact
-		std::set<IMAccount *> imAccounts = _cUserProfile.getIMAccountsOfProtocol(imProtocol);
-		std::set<IMAccount *>::const_iterator it = imAccounts.begin();
-		if (it != imAccounts.end()) {
-			imContact.setIMAccount(*it);
-		}
-
-		_contactProfile.addIMContact(imContact);
-	}
+void QtSimpleIMContactManager::saveIMContacts() {
+	addIMContactsOfProtocol(EnumIMProtocol::IMProtocolWengo, _ui->wengoLineEdit->text());
+	addIMContactsOfProtocol(EnumIMProtocol::IMProtocolMSN, _ui->msnLineEdit->text());
+	addIMContactsOfProtocol(EnumIMProtocol::IMProtocolAIMICQ, _ui->aimLineEdit->text());
+	addIMContactsOfProtocol(EnumIMProtocol::IMProtocolYahoo, _ui->yahooLineEdit->text());
+	addIMContactsOfProtocol(EnumIMProtocol::IMProtocolJabber, _ui->jabberLineEdit->text());
 }
 
 void QtSimpleIMContactManager::searchWengoContactButtonClicked() {
+	//_imContactManagerWidget->parentWidget()->close();
+	QtWengoPhone * qtWengoPhone = (QtWengoPhone *) _cUserProfile.getCWengoPhone().getPresentation();
+	qtWengoPhone->searchWengoContact();
 }

@@ -32,6 +32,8 @@ class IMContact;
 class ContactProfile;
 class CUserProfile;
 
+class QLineEdit;
+class QLabel;
 class QWidget;
 namespace Ui { class SimpleIMContactManager; }
 
@@ -55,13 +57,7 @@ public:
 
 	void saveIMContacts();
 
-Q_SIGNALS:
-
-	void advancedClicked();
-
 private Q_SLOTS:
-
-	void advancedClickedSlot();
 
 	void searchWengoContactButtonClicked();
 
@@ -82,7 +78,13 @@ private:
 	/**
 	 * Code factorization.
 	 */
-	void addIMContact(EnumIMProtocol::IMProtocol imProtocol, const QString & text);
+	void addIMContactsOfProtocol(EnumIMProtocol::IMProtocol imProtocol, const QString & text);
+
+	/**
+	 * Code factorization.
+	 */
+	void changeIMProtocolPixmaps(EnumIMProtocol::IMProtocol imProtocol,
+			QLabel * imProtocolLabel, const char * connectedPixmap, QLineEdit * imProtocolLineEdit);
 
 	Ui::SimpleIMContactManager * _ui;
 

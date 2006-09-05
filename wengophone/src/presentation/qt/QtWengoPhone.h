@@ -157,6 +157,8 @@ public Q_SLOTS:
 
 	void expandConfigPanel();
 
+	void searchWengoContact();
+
 private Q_SLOTS:
 
 	void removeHistorySlot();
@@ -198,8 +200,6 @@ private Q_SLOTS:
 	void showCallOut();
 
 	void showSms();
-
-	void showSearchContactWindows();
 
 	void showVoiceMail();
 

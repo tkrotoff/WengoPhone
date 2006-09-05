@@ -36,8 +36,6 @@ QtSimpleIMAccountManager::QtSimpleIMAccountManager(UserProfile & userProfile, QW
 	_ui = new Ui::SimpleIMAccountManager();
 	_ui->setupUi(_imAccountManagerWidget);
 
-	connect(_ui->advancedButton, SIGNAL(clicked()), SLOT(advancedClickedSlot()));
-
 	//loadIMContacts();
 }
 
@@ -47,10 +45,6 @@ QtSimpleIMAccountManager::~QtSimpleIMAccountManager() {
 
 QWidget * QtSimpleIMAccountManager::getWidget() const {
 	return _imAccountManagerWidget;
-}
-
-void QtSimpleIMAccountManager::advancedClickedSlot() {
-	advancedClicked();
 }
 
 void QtSimpleIMAccountManager::saveIMContacts() {

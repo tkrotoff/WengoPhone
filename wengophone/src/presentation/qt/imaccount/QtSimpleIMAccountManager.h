@@ -49,14 +49,6 @@ public:
 
 	void saveIMContacts();
 
-Q_SIGNALS:
-
-	void advancedClicked();
-
-private Q_SLOTS:
-
-	void advancedClickedSlot();
-
 private:
 
 	UserProfile & _userProfile;

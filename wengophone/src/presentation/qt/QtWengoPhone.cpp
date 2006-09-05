@@ -255,7 +255,7 @@ void QtWengoPhone::initThreadSafe() {
 	connect(_ui->actionAll, SIGNAL(triggered()), SLOT(eraseHistory()));
 
 	//actionSearchContact
-	connect(_ui->actionSearchWengoUsers, SIGNAL(triggered()), SLOT(showSearchContactWindows()));
+	connect(_ui->actionSearchWengoUsers, SIGNAL(triggered()), SLOT(searchWengoContact()));
 
 	//actionChangeProfile
 	QtUserProfileHandler * qtUserProfileHandler =
@@ -725,7 +725,7 @@ void QtWengoPhone::showSms() {
 	WsUrl::showWengoSMS();
 }
 
-void QtWengoPhone::showSearchContactWindows() {
+void QtWengoPhone::searchWengoContact() {
 	if (_qtWsDirectory) {
 		_qtWsDirectory->show();
 	}
