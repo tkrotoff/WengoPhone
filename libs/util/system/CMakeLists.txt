@@ -26,18 +26,18 @@ if (WIN32)
 	)
 endif (WIN32)
 
-if (APPLE)
-	set(owsystem_SRCS ${owsystem_SRCS}
-		src/null/Processes.cpp
-		src/mac/Startup.cpp
-	)
-endif (APPLE)
-
 if (UNIX)
-	set(owsystem_SRCS ${owsystem_SRCS}
-		src/unix/Processes.cpp
-		src/null/Startup.cpp
-	)
+	if (APPLE)
+		set(owsystem_SRCS ${owsystem_SRCS}
+			src/null/Processes.cpp
+			src/mac/Startup.mm
+		)
+	else (APPLE)
+		set(owsystem_SRCS ${owsystem_SRCS}
+			src/unix/Processes.cpp
+			src/null/Startup.cpp
+		)
+	endif (APPLE)
 endif (UNIX)
 
 #owsystem

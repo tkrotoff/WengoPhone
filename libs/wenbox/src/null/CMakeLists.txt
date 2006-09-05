@@ -16,7 +16,7 @@ set(ownullwenbox_SRCS
 )
 
 #owwenbox
-add_library(ownullwenbox SHARED ${ownullwenbox_SRCS})
+add_library(ownullwenbox STATIC ${ownullwenbox_SRCS})
 
 #owwenbox dependency
 target_link_libraries(ownullwenbox owwenbox)

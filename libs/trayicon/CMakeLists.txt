@@ -20,16 +20,16 @@ if (WIN32)
 	)
 endif (WIN32)
 
-if (APPLE)
-	set(owtrayicon_SRCS ${owtrayicon_SRCS}
-		trayicon_mac.cpp
-	)
-endif (APPLE)
-
 if (UNIX)
-	set(owtrayicon_SRCS ${owtrayicon_SRCS}
-		trayicon_x11.cpp
-	)
+	if (APPLE)
+		set(owtrayicon_SRCS ${owtrayicon_SRCS}
+			trayicon_mac.cpp
+		)
+	else (APPLE)
+		set(owtrayicon_SRCS ${owtrayicon_SRCS}
+			trayicon_x11.cpp
+		)
+	endif (APPLE)
 endif (UNIX)
 
 qt4_automoc(${owtrayicon_SRCS})
