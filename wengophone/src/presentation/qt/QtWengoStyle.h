@@ -29,8 +29,8 @@
 	#include <QtGui/QMacStyle>
 	class SystemStyle : public QMacStyle {};
 #else
-	#include <QtGui/QWindowsStyle>
-	class SystemStyle : public QWindowsStyle {};
+	#include <QtGui/QPlastiqueStyle>
+	class SystemStyle : public QPlastiqueStyle {};
 #endif
 
 /**
