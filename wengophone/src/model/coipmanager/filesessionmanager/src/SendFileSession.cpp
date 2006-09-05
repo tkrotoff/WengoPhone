@@ -46,6 +46,12 @@ SendFileSession::SendFileSession(const SendFileSession & sendFileSession)
 
 	if (sendFileSession._currentFileSessionImp) {
 		_currentFileSessionImp = sendFileSession._currentFileSessionImp->clone();
+		_currentFileSessionImp->moduleFinishedEvent +=
+			boost::bind(&SendFileSession::moduleFinishedEventHandler, this, _1);
+		_currentFileSessionImp->fileTransferEvent +=
+			boost::bind(&SendFileSession::fileTransferEventHandler, this, _1, _2, _3, _4);
+		_currentFileSessionImp->fileTransferProgressionEvent +=
+			boost::bind(&SendFileSession::fileTransferProgressionEventHandler, this, _1, _2, _3, _4);
 	} else {
 		_currentFileSessionImp = NULL;
 	}

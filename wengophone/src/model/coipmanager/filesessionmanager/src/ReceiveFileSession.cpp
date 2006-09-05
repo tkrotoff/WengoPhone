@@ -40,6 +40,12 @@ ReceiveFileSession::ReceiveFileSession(const ReceiveFileSession & receiveFileSes
 	: Session(receiveFileSession) {
 	if (receiveFileSession._currentFileSessionImp) {
 		_currentFileSessionImp = receiveFileSession._currentFileSessionImp->clone();
+		_currentFileSessionImp->moduleFinishedEvent +=
+			boost::bind(&ReceiveFileSession::moduleFinishedEventHandler, this, _1);
+		_currentFileSessionImp->fileTransferEvent +=
+			boost::bind(&ReceiveFileSession::fileTransferEventHandler, this, _1, _2, _3, _4);
+		_currentFileSessionImp->fileTransferProgressionEvent +=
+			boost::bind(&ReceiveFileSession::fileTransferProgressionEventHandler, this, _1, _2, _3, _4);
 	} else {
 		_currentFileSessionImp = NULL;
 	}
