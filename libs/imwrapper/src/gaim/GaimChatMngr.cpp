@@ -427,8 +427,6 @@ void GaimChatMngr::ChatRemoveUsersCbk(GaimConversation *conv, GList *users)
 			}
 			else
 			{
-				((IMContactSet &) chatSession->getIMContactSet()).erase(imContact);
-
 				LOG_DEBUG("IMContact " + imContact.getContactId() + " removed from IMContactSet");
 				mChat->contactRemovedEvent(*mChat, *chatSession, buddy);
 			}
