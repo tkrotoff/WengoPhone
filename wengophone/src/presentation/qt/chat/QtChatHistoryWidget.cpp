@@ -33,6 +33,7 @@ QtChatHistoryWidget::QtChatHistoryWidget(QWidget * parent) : QTextBrowser(parent
 	setFrameStyle(QFrame::NoFrame | QFrame::Plain);
 	setContextMenuPolicy(Qt::CustomContextMenu);
 	setLineWrapMode(QTextEdit::WidgetWidth);
+	setWordWrapMode(QTextOption::WrapAnywhere);
 	makeActions();
 	connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), SLOT(showContextMenuSlot(const QPoint &)));
 	connect (this, SIGNAL(anchorClicked(const QUrl &)), this, SLOT(urlClicked(const QUrl &)));
