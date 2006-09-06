@@ -19,6 +19,8 @@
 
 #include <qtutil/Wizard.h>
 
+#include <qtutil/SafeConnect.h>
+
 #include "ui_Wizard.h"
 
 #include <util/Logger.h>
@@ -31,9 +33,9 @@ Wizard::Wizard(QWidget * parent) {
 	_ui = new Ui::Wizard();
 	_ui->setupUi(_wizardDialog);
 
-	connect(_ui->backButton, SIGNAL(clicked()), SLOT(backButtonClicked()));
-	connect(_ui->nextButton, SIGNAL(clicked()), SLOT(nextButtonClicked()));
-	connect(_ui->finishButton, SIGNAL(clicked()), SLOT(finishedButtonClicked()));
+	SAFE_CONNECT(_ui->backButton, SIGNAL(clicked()), SLOT(backButtonClicked()));
+	SAFE_CONNECT(_ui->nextButton, SIGNAL(clicked()), SLOT(nextButtonClicked()));
+	SAFE_CONNECT(_ui->finishButton, SIGNAL(clicked()), SLOT(finishedButtonClicked()));
 }
 
 Wizard::~Wizard() {

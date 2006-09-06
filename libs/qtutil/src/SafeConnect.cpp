@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,30 +17,20 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <qtutil/KeyEventFilter.h>
+#include <qtutil/SafeConnect.h>
 
-#include <QtCore/QEvent>
+#include <util/Logger.h>
 
-KeyPressEventFilter::KeyPressEventFilter(QObject * receiver, const char * member)
-	: EventFilter(receiver, member) {
-}
+#include <QtCore/QObject>
 
-bool KeyPressEventFilter::eventFilter(QObject * watched, QEvent * event) {
-	if (event->type() == QEvent::KeyPress) {
-		filter(event);
-		return false;
+void SafeConnect::connect(const QObject * sender, const char * signal, const QObject * receiver, const char * method, Qt::ConnectionType type) {
+	if (!QObject::connect(sender, signal, receiver, method, type)) {
+		LOG_FATAL("couldn't connect signal=" + String(signal) + " to method=" + String(method));
 	}
-	return EventFilter::eventFilter(watched, event);
 }
 
-KeyReleaseEventFilter::KeyReleaseEventFilter(QObject * receiver, const char * member)
-	: EventFilter(receiver, member) {
-}
-
-bool KeyReleaseEventFilter::eventFilter(QObject * watched, QEvent * event) {
-	if (event->type() == QEvent::KeyRelease) {
-		filter(event);
-		return false;
+void SafeConnect::disconnect(const QObject * sender, const char * signal, const QObject * receiver, const char * method) {
+	if (!QObject::disconnect(sender, signal, receiver, method)) {
+		LOG_FATAL("couldn't disconnect signal=" + String(signal) + " to method=" + String(method));
 	}
-	return EventFilter::eventFilter(watched, event);
 }

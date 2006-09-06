@@ -63,14 +63,16 @@ void WengoStyleLabel::paintEvent(QPaintEvent * event) {
 			QBrush brush(_normalFillPixmap);
 
 			QRect fillRect = rect;
-			if (! _normalLeftPixmap.isNull())
+			if (!_normalLeftPixmap.isNull()) {
 				fillRect.adjust(_normalLeftPixmap.rect().width()-1,0,0,0);
-			if (! _normalRightPixmap.isNull())
+			}
+			if (!_normalRightPixmap.isNull()) {
 				fillRect.adjust(0,0,0-_normalRightPixmap.rect().width(),0);
+			}
 			painter.fillRect(fillRect,brush);
 		}
 		//Draw the right side
-		if (! _normalRightPixmap.isNull()) {
+		if (!_normalRightPixmap.isNull()) {
 			painter.drawPixmap( (rect.width()-1) - _normalRightPixmap.rect().width(),0,_normalRightPixmap);
 		}
 

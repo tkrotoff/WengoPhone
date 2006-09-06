@@ -19,11 +19,13 @@
 
 #include <qtutil/EventFilter.h>
 
+#include <qtutil/SafeConnect.h>
+
 #include <QtCore/QEvent>
 
 EventFilter::EventFilter(QObject * receiver, const char * member)
 	: QObject() {
-	connect(this, SIGNAL(activate(QEvent *)), receiver, member);
+	SAFE_CONNECT_RECEIVER(this, SIGNAL(activate(QEvent *)), receiver, member);
 }
 
 void EventFilter::filter(QEvent * event) {
