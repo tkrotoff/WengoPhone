@@ -30,6 +30,7 @@ headers = [
 	'include/qtutil/ThreadEventFilter.h',
 	'include/qtutil/PixmapMerging.h',
 	'include/qtutil/SafeConnect.h',
+	'include/qtutil/LanguageChangeEventFilter.h',
 ]
 sources = [
 	'src/EventFilter.cpp',
@@ -52,6 +53,7 @@ sources = [
 	'src/ThreadEventFilter.cpp',
 	'src/PixmapMerging.cpp',
 	'src/SafeConnect.cpp',
+	'src/LanguageChangeEventFilter.cpp',
 ]
 forms = [
 	'src/Wizard.ui',

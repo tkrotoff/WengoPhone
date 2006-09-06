@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef NONRESIZEABLEWIDGET_H
-#define NONRESIZEABLEWIDGET_H
+#ifndef OWNONRESIZEABLEWIDGET_H
+#define OWNONRESIZEABLEWIDGET_H
 
 #include <QtCore/QObject>
 
@@ -44,4 +44,4 @@ private:
 	QWidget * _widget;
 };
 
-#endif	//NONRESIZEABLEWIDGET_H
+#endif	//OWNONRESIZEABLEWIDGET_H

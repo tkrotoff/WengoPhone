@@ -21,7 +21,9 @@
 #define OWSAFEDELETE_H
 
 /**
- * Deletes a pointer if it valid and set it to NULL.
+ * Deletes a valid pointer and sets it to NULL.
+ *
+ * @author Philippe Bernery
  */
 #define OWSAFE_DELETE(p) \
 if (p) { \
@@ -29,4 +31,4 @@ if (p) { \
 	(p) = NULL; \
 }
 
-#endif //OWSAFEDELETE_H
+#endif	//OWSAFEDELETE_H

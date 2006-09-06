@@ -23,7 +23,7 @@
 #include <qtutil/EventFilter.h>
 
 /**
- * Catch Paint.
+ * Catch Paint event.
  *
  * @author Tanguy Krotoff
  */
@@ -32,7 +32,7 @@ public:
 
 	PaintEventFilter(QObject * receiver, const char * member);
 
-protected:
+private:
 
 	virtual bool eventFilter(QObject * watched, QEvent * event);
 };

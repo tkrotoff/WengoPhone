@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,13 +17,13 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef RESIZEEVENTFILTER_H
-#define RESIZEEVENTFILTER_H
+#ifndef OWRESIZEEVENTFILTER_H
+#define OWRESIZEEVENTFILTER_H
 
 #include <qtutil/EventFilter.h>
 
 /**
- * Catch Resize.
+ * Catch Resize event.
  *
  * @author Tanguy Krotoff
  */
@@ -32,9 +32,9 @@ public:
 
 	ResizeEventFilter(QObject * receiver, const char * member);
 
-protected:
+private:
 
 	virtual bool eventFilter(QObject * watched, QEvent * event);
 };
 
-#endif	//RESIZEEVENTFILTER_H
+#endif	//OWRESIZEEVENTFILTER_H

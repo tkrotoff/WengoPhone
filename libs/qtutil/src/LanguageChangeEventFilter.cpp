@@ -17,41 +17,18 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef OWKEYEVENTFILTER_H
-#define OWKEYEVENTFILTER_H
+#include <qtutil/LanguageChangeEventFilter.h>
 
-#include <qtutil/EventFilter.h>
+#include <QtCore/QEvent>
 
-/**
- * Catch KeyPress event.
- *
- * @author Philippe Bernery
- */
-class KeyPressEventFilter : public EventFilter {
-public:
+LanguageChangeEventFilter::LanguageChangeEventFilter(QObject * receiver, const char * member)
+	: EventFilter(receiver, member) {
+}
 
-	KeyPressEventFilter(QObject * receiver, const char * member);
-
-private:
-
-	virtual bool eventFilter(QObject * watched, QEvent * event);
-};
-
-
-/**
- * Catch KeyRelease event.
- *
- * @author Philippe Bernery
- */
-class KeyReleaseEventFilter : public EventFilter {
-public:
-
-	KeyReleaseEventFilter(QObject * receiver, const char * member);
-
-private:
-
-	virtual bool eventFilter(QObject * watched, QEvent * event);
-};
-
-
-#endif	//OWKEYEVENTFILTER_H
+bool LanguageChangeEventFilter::eventFilter(QObject * watched, QEvent * event) {
+	if (event->type() == QEvent::LanguageChange) {
+		filter(event);
+		return false;
+	}
+	return EventFilter::eventFilter(watched, event);
+}

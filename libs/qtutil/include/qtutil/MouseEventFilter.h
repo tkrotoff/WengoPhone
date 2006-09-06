@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,13 +17,13 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef MOUSEEVENTFILTER_H
-#define MOUSEEVENTFILTER_H
+#ifndef OWMOUSEEVENTFILTER_H
+#define OWMOUSEEVENTFILTER_H
 
 #include <qtutil/EventFilter.h>
 
 /**
- * Catch MouseMove.
+ * Catch MouseMove event.
  *
  * @author Tanguy Krotoff
  */
@@ -32,14 +32,14 @@ public:
 
 	MouseMoveEventFilter(QObject * receiver, const char * member);
 
-protected:
+private:
 
 	virtual bool eventFilter(QObject * watched, QEvent * event);
 };
 
 
 /**
- * Catch MouseButtonPress.
+ * Catch MouseButtonPress event.
  *
  * @author Tanguy Krotoff
  */
@@ -48,17 +48,16 @@ public:
 
 	MousePressEventFilter(QObject * receiver, const char * member, Qt::MouseButton button = Qt::NoButton);
 
-protected:
+private:
 
 	virtual bool eventFilter(QObject * watched, QEvent * event);
 
-private:
 	Qt::MouseButton _button;
 };
 
 
 /**
- * Catch MouseButtonRelease.
+ * Catch MouseButtonRelease event.
  *
  * @author Tanguy Krotoff
  */
@@ -67,17 +66,16 @@ public:
 
 	MouseReleaseEventFilter(QObject * receiver, const char * member, Qt::MouseButton button = Qt::NoButton);
 
-protected:
+private:
 
 	virtual bool eventFilter(QObject * watched, QEvent * event);
 
-private:
 	Qt::MouseButton _button;
 };
 
 
 /**
- * Catch HoverEnter.
+ * Catch HoverEnter event.
  *
  * @author Tanguy Krotoff
  */
@@ -86,14 +84,14 @@ public:
 
 	MouseHoverEnterEventFilter(QObject * receiver, const char * member);
 
-protected:
+private:
 
 	virtual bool eventFilter(QObject * watched, QEvent * event);
 };
 
 
 /**
- * Catch HoverLeave.
+ * Catch HoverLeave event.
  *
  * @author Tanguy Krotoff
  */
@@ -102,9 +100,9 @@ public:
 
 	MouseHoverLeaveEventFilter(QObject * receiver, const char * member);
 
-protected:
+private:
 
 	virtual bool eventFilter(QObject * watched, QEvent * event);
 };
 
-#endif	//MOUSEEVENTFILTER_H
+#endif	//OWMOUSEEVENTFILTER_H
