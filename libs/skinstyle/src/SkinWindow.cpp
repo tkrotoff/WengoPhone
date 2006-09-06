@@ -22,10 +22,10 @@
 #include <qtutil/MouseEventFilter.h>
 
 #include <QtGui/QWidget>
-#include <QPalette>
-#include <QPixmap>
-#include <QBrush>
-#include <QMouseEvent>
+#include <QtGui/QPalette>
+#include <QtGui/QPixmap>
+#include <QtGui/QBrush>
+#include <QtGui/QMouseEvent>
 
 #include <iostream>
 using namespace std;

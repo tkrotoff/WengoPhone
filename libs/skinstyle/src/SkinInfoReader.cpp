@@ -19,9 +19,9 @@
 
 #include "SkinInfoReader.h"
 
-#include <QSettings>
-#include <QDir>
-#include <QStringList>
+#include <QtCore/QSettings>
+#include <QtCore/QDir>
+#include <QtCore/QStringList>
 
 #include <iostream>
 using namespace std;

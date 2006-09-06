@@ -8,6 +8,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/Modules)
 
 include(DefineWengoDefaults)
 include(DefineCompilerFlags)
+include(DefineWengoOptions)
 
 #set(CMAKE_START_TEMP_FILE "")
 #set(CMAKE_END_TEMP_FILE "")
@@ -18,8 +19,8 @@ set(CMAKE_BUILD_TYPE RelWithDebInfo)
 #Compatibility between Qt4 and Boost
 add_definitions(-DQT_NO_KEYWORDS)
 
-set(ENABLE_SSL $ENV{ENABLE_SSL} CACHE INTERNAL "")
-set(ENABLE_SSL true CACHE INTERNAL "")
+#set(ENABLE_SSL $ENV{ENABLE_SSL} CACHE INTERNAL "")
+#set(ENABLE_SSL true CACHE INTERNAL "")
 
 subdirs(
   libs

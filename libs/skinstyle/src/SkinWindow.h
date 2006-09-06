@@ -23,7 +23,7 @@
 #include "SkinWidget.h"
 
 #include <QtCore/QObject>
-#include <QPoint>
+#include <QtCore/QPoint>
 
 class QWidget;
 class QEvent;
@@ -42,7 +42,7 @@ public:
 
 	virtual void setBackgroundPixmap(QPixmap * pixmap);
 
-private slots:
+private Q_SLOTS:
 
 	void mouseMoveEvent(QEvent * event);
 

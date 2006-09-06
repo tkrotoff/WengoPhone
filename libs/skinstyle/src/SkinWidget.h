@@ -73,7 +73,7 @@ public:
 
 	virtual void hide();
 
-protected slots:
+protected Q_SLOTS:
 
 	void mousePressEvent();
 

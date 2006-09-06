@@ -28,9 +28,9 @@
 #include <qtutil/Object.h>
 
 #include <QtGui/QWidget>
-#include <QPixmap>
-#include <QBitmap>
-#include <QPainter>
+#include <QtGui/QPixmap>
+#include <QtGui/QBitmap>
+#include <QtGui/QPainter>
 
 #include <iostream>
 using namespace std;

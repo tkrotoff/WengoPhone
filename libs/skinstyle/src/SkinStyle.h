@@ -25,13 +25,13 @@
 #include <cutil/global.h>
 
 #ifdef OS_WINDOWS
-	#include <QWindowsXPStyle>
+	#include <QtGui/QWindowsXPStyle>
 	class SystemStyle : public QWindowsXPStyle {};
 #elif defined(OS_MACOSX)
-	#include <QMacStyle>
+	#include <QtGui/QMacStyle>
 	class SystemStyle : public QMacStyle {};
 #else
-	#include <QWindowsStyle>
+	#include <QtGui/QWindowsStyle>
 	class SystemStyle : public QWindowsStyle {};
 #endif
 

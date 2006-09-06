@@ -11,5 +11,8 @@ subdirs(
   softupdater
   pixertool
   webcam
+  samplerate
+  skinstyle
+  sound
 )
 
