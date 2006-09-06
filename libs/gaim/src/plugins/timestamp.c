@@ -45,7 +45,7 @@ do_timestamp(gpointer data)
 	GaimConversation *c = (GaimConversation *)data;
 	GaimGtkConversation *conv = GAIM_GTK_CONVERSATION(c);
 	GtkTextIter iter;
-	char mdate[7];
+	const char *mdate;
 	int is_conversation_active;
 	time_t tim = time(NULL);
 
@@ -63,7 +63,7 @@ do_timestamp(gpointer data)
 		GtkTextBuffer *buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(imhtml));
 		gtk_text_buffer_get_end_iter(buffer, &iter);
 		gaim_conversation_set_data(c, "timestamp-conv-active", GINT_TO_POINTER(FALSE));
-		strftime(mdate, sizeof(mdate), "\n%H:%M", localtime(&tim));
+		mdate = gaim_utf8_strftime("\n%H:%M", localtime(&tim));
 		gtk_text_view_get_visible_rect(GTK_TEXT_VIEW(imhtml), &rect);
 		gtk_text_view_get_line_yrange(GTK_TEXT_VIEW(imhtml), &iter, &y, &height);
 		if(((y + height) - (rect.y + rect.height)) > height
@@ -82,8 +82,8 @@ do_timestamp(gpointer data)
 
 
 static gboolean
-timestamp_displaying_conv_msg(GaimAccount *account, GaimConversation *conv,
-							  char **buffer, GaimMessageFlags flags, void *data)
+timestamp_displaying_conv_msg(GaimAccount *account, const char *who, char **buffer,
+				GaimConversation *conv, GaimMessageFlags flags, void *data)
 {
 	int is_timestamp_enabled;
 
@@ -109,8 +109,6 @@ static void timestamp_new_convo(GaimConversation *conv)
 
 	if (!g_list_find(gaim_get_conversations(), conv))
 		return;
-
-	gtk_imhtml_show_comments(GTK_IMHTML(c->imhtml), FALSE);
 
 	/*
 	This if statement stops conversations that have already been initialized for timestamps
@@ -230,15 +228,7 @@ plugin_load(GaimPlugin *plugin)
 static gboolean
 plugin_unload(GaimPlugin *plugin)
 {
-	GList *cnvs;
-
 	destroy_timer_list();
-
-	for (cnvs = gaim_get_conversations(); cnvs != NULL; cnvs = cnvs->next) {
-		GaimConversation *c = cnvs->data;
-		GaimGtkConversation *conv = GAIM_GTK_CONVERSATION(c);
-		gtk_imhtml_show_comments(GTK_IMHTML(conv->imhtml), TRUE);
-	}
 
 	return TRUE;
 }

@@ -119,7 +119,7 @@ gint  gaim_dbus_pointer_to_id_error(gpointer ptr, DBusError *error)
     gint id = gaim_dbus_pointer_to_id(ptr);
 
     if (ptr != NULL && id == 0)
-	dbus_set_error(error, "org.gaim.ObjectNotFound",
+	dbus_set_error(error, "net.sf.gaim.ObjectNotFound",
 		       "The return object is not mapped (this is a Gaim error)");
 
     return id;
@@ -131,7 +131,7 @@ gpointer gaim_dbus_id_to_pointer_error(gint id, GaimDBusType *type,
     gpointer ptr = gaim_dbus_id_to_pointer(id, type);
 
     if (ptr == NULL && id != 0) 
-	dbus_set_error(error, "org.gaim.InvalidHandle",
+	dbus_set_error(error, "net.sf.gaim.InvalidHandle",
 		       "%s object with ID = %i not found", typename, id);	
     
     return ptr;
@@ -656,10 +656,10 @@ static void gaim_dbus_message_append_gaim_values(DBusMessageIter *iter,
 	    break;
 	case GAIM_TYPE_SUBTYPE: /* registered pointers only! */
 	case GAIM_TYPE_POINTER:
-	case GAIM_TYPE_OBJECT: 
-	case GAIM_TYPE_BOXED:		
+	case GAIM_TYPE_OBJECT:
+	case GAIM_TYPE_BOXED:
 	    id = gaim_dbus_pointer_to_id(my_arg(gpointer));
-	    dbus_message_iter_append_basic(iter, DBUS_TYPE_INT32, &id);
+	    dbus_message_iter_append_basic(iter, (sizeof(void *) == 4) ? DBUS_TYPE_UINT32 : DBUS_TYPE_UINT64, &id);
 	    break;
 	default:		/* no conversion implemented */
 	    g_return_if_reached();

@@ -70,18 +70,20 @@ void gaim_setup_imhtml(GtkWidget *imhtml);
  * functions puts both widgets in a nice GtkFrame.  They're separate by an
  * attractive GtkSeparator.
  *
- * @param editable TRUE if this imhtml should be editable.  If this is FALSE,
+ * @param editable @c TRUE if this imhtml should be editable.  If this is @c FALSE,
  *        then the toolbar will NOT be created.  If this imthml should be
  *        read-only at first, but may become editable later, then pass in
- *        TRUE here and then manually call gtk_imhtml_set_editable() later.
+ *        @c TRUE here and then manually call gtk_imhtml_set_editable() later.
  * @param imhtml_ret A pointer to a pointer to a GtkWidget.  This pointer
  *        will be set to the imhtml when this function exits.
  * @param toolbar_ret A pointer to a pointer to a GtkWidget.  If editable is
  *        TRUE then this will be set to the toolbar when this function exits.
- *        Otherwise this will be set to NULL.
+ *        Otherwise this will be set to @c NULL.
+ * @param sw_ret This will be filled with a pointer to the scrolled window
+ *        widget which contains the imhtml.
  * @return The GtkFrame containing the toolbar and imhtml.
  */
-GtkWidget *gaim_gtk_create_imhtml(gboolean editable, GtkWidget **imhtml_ret, GtkWidget **toolbar_ret);
+GtkWidget *gaim_gtk_create_imhtml(gboolean editable, GtkWidget **imhtml_ret, GtkWidget **toolbar_ret, GtkWidget **sw_ret);
 
 /**
  * Toggles the sensitivity of a widget.
@@ -248,6 +250,17 @@ GaimAccount *gaim_gtk_account_option_menu_get_selected(GtkWidget *optmenu);
 void gaim_gtk_account_option_menu_set_selected(GtkWidget *optmenu, GaimAccount *account);
 
 /**
+ * Add autocompletion of screenames to an entry.
+ *
+ * @param entry     The GtkEntry on which to setup autocomplete.
+ * @param optmenu   A menu for accounts, returned by gaim_gtk_account_option_menu_new().
+ *                  If @a optmenu is not @c NULL, it'll be updated when a screenname is chosen
+ *                  from the autocomplete list.
+ * @param all       Whether to include screennames from disconnected accounts.
+ */
+void gaim_gtk_setup_screenname_autocomplete(GtkWidget *entry, GtkWidget *optmenu, gboolean all);
+
+/**
  * Check if the given path is a directory or not.  If it is, then modify
  * the given GtkFileSelection dialog so that it displays the given path.
  * If the given path is not a directory, then do nothing.
@@ -355,21 +368,63 @@ void gaim_gtk_buddy_icon_get_scale_size(GdkPixbuf *buf, GaimBuddyIconSpec *spec,
  * Returns the base image to represent the account, based on
  * the currently selected theme.
  *
- * @param account The account.
+ * @param account      The account.
+ * @param scale_factor The amount to scale to the original image.
+ *                     The default size is 32x32 pixels.  A scale
+ *                     factor of 1 means no scaling will be done.
+ *                     A scale factor of 0.5 means the length
+ *                     and width will be 16 pixels each.
  *
- * @return The icon.
+ * @return A newly-created pixbuf with a reference count of 1,
+ *         or NULL if any of several error conditions occurred:
+ *         the file could not be opened, there was no loader
+ *         for the file's format, there was not enough memory
+ *         to allocate the image buffer, or the image file
+ *         contained invalid data.
  */
-GdkPixbuf *gaim_gtk_create_prpl_icon(GaimAccount *account);
+GdkPixbuf *gaim_gtk_create_prpl_icon(GaimAccount *account, double scale_factor);
 
 /**
- * Create a protocol-icon with the status emblem.
+ * Create a protocol icon with the status emblem overlayed in
+ * the lower right corner.
  *
- * @param account     The account.
- * @param status_type The status type to set the emblem for.
+ * @param account      The account.
+ * @param status_type  The status type of the emblem to overlay.
+ * @param scale_factor The amount to scale to the original image.
+ *                     The default size is 32x32 pixels.  A scale
+ *                     factor of 1 means no scaling will be done.
+ *                     A scale factor of 0.5 means the length
+ *                     and width will be 16 pixels each.
  *
- * @return The icon.
+ * @return A newly-created pixbuf with a reference count of 1,
+ *         or NULL if any of several error conditions occurred:
+ *         the file could not be opened, there was no loader
+ *         for the file's format, there was not enough memory
+ *         to allocate the image buffer, or the image file
+ *         contained invalid data.
  */
-GdkPixbuf * gaim_gtk_create_prpl_icon_with_status(GaimAccount *account, GaimStatusType *status_type);
+GdkPixbuf *gaim_gtk_create_prpl_icon_with_status(GaimAccount *account, GaimStatusType *status_type, double scale_factor);
+
+/**
+ * Create a Gaim running-man icon with the status emblem overlayed
+ * in the lower right corner.
+ *
+ * @param status_type  The status type to set the emblem for.
+ * @param scale_factor The amount to scale to the original image.
+ *                     The default size is 32x32 pixels.  A scale
+ *                     factor of 1 means no scaling will be done.
+ *                     A scale factor of 0.5 means the length
+ *                     and width will be 16 pixels each.
+ *
+ * @return A newly-created pixbuf with a reference count of 1,
+ *         or NULL if any of several error conditions occurred:
+ *         the file could not be opened, there was no loader for
+ *         the file's format, there was not enough memory to
+ *         allocate the image buffer, or the image file contained
+ *         invalid data.
+ */
+GdkPixbuf *gaim_gtk_create_gaim_icon_with_status(GaimStatusPrimitive primitve, double scale_factor);
+
 
 /**
  * Append a GaimMenuAction to a menu.
@@ -382,5 +437,29 @@ GdkPixbuf * gaim_gtk_create_prpl_icon_with_status(GaimAccount *account, GaimStat
  */
 void gaim_gtk_append_menu_action(GtkWidget *menu, GaimMenuAction *act,
                                  gpointer gobject);
+
+/**
+ * Sets the mouse pointer for a GtkWidget.
+ *
+ * After setting the cursor, the display is flushed, so the change will
+ * take effect immediately.
+ *
+ * If the window for @a widget is @c NULL, this function simply returns.
+ *
+ * @param widget      The widget for which to set the mouse pointer
+ * @param cursor_type The type of cursor to set
+ */
+void gaim_gtk_set_cursor(GtkWidget *widget, GdkCursorType cursor_type);
+
+/**
+ * Sets the mouse point for a GtkWidget back to that of its parent window.
+ *
+ * If @a widget is @c NULL, this function simply returns.
+ *
+ * If the window for @a widget is @c NULL, this function simply returns.
+ *
+ * @note The display is not flushed from this function.
+ */
+void gaim_gtk_clear_cursor(GtkWidget *widget);
 
 #endif /* _GAIM_GTKUTILS_H_ */

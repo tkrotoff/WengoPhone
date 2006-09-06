@@ -22,7 +22,8 @@
 #define PLUGIN_NAME     N_("Psychic Mode")
 #define PLUGIN_SUMMARY  N_("Psychic mode for incoming conversation")
 #define PLUGIN_DESC     N_("Causes conversation windows to appear as other" \
-			   " users begin to message you")
+			   " users begin to message you.  This works for" \
+			   " AIM, ICQ, Jabber, Sametime, and Yahoo!")
 #define PLUGIN_AUTHOR   "Christopher O'Brien <siege@preoccupied.net>"
 
 
@@ -57,9 +58,11 @@ buddy_typing_cb(GaimAccount *acct, const char *name, void *data) {
     if(gaim_prefs_get_bool(PREF_NOTICE)) {
       gaim_conversation_write(gconv, NULL,
 			      _("You feel a disturbance in the force..."),
-			      GAIM_MESSAGE_SYSTEM | GAIM_MESSAGE_NO_LOG,
+			      GAIM_MESSAGE_SYSTEM | GAIM_MESSAGE_NO_LOG | GAIM_MESSAGE_ACTIVE_ONLY,
 			      time(NULL));
     }
+
+    gaim_conv_im_set_typing_state(GAIM_CONV_IM(gconv), GAIM_TYPING);
   }
 }
 

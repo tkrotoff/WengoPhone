@@ -41,6 +41,7 @@
 #include <conversation.h>
 #include <debug.h>
 #include <ft.h>
+#include <gaim_buffer.h>
 #include <imgstore.h>
 #include <mime.h>
 #include <notify.h>
@@ -224,6 +225,10 @@ struct mwGaimPluginData {
 
   /** socket fd */
   int socket;
+  gint outpa;  /* like inpa, but the other way */
+
+  /** circular buffer for outgoing data */
+  GaimCircBuffer *sock_buf;
 
   GaimConnection *gc;
 };
@@ -337,10 +342,42 @@ static GaimConnection *session_to_gc(struct mwSession *session) {
 }
 
 
+static void write_cb(gpointer data, gint source, GaimInputCondition cond) {
+  struct mwGaimPluginData *pd = data;
+  GaimCircBuffer *circ = pd->sock_buf;
+  gsize avail;
+  int ret;
+
+  DEBUG_INFO("write_cb\n");
+
+  g_return_if_fail(circ != NULL);
+
+  avail = gaim_circ_buffer_get_max_read(circ);
+  if(BUF_LONG < avail) avail = BUF_LONG;
+
+  while(avail) {
+    ret = write(pd->socket, circ->outptr, avail);
+    
+    if(ret <= 0)
+      break;
+
+    gaim_circ_buffer_mark_read(circ, ret);
+    avail = gaim_circ_buffer_get_max_read(circ);
+    if(BUF_LONG < avail) avail = BUF_LONG;
+  }
+
+  if(! avail) {
+    gaim_input_remove(pd->outpa);
+    pd->outpa = 0;
+  }
+}
+
+
 static int mw_session_io_write(struct mwSession *session,
 			       const guchar *buf, gsize len) {
   struct mwGaimPluginData *pd;
   int ret = 0;
+  int err = 0;
 
   pd = mwSession_getClientData(session);
 
@@ -348,13 +385,32 @@ static int mw_session_io_write(struct mwSession *session,
   if(pd->socket == 0)
     return 1;
 
-  while(len) {
-    ret = write(pd->socket, buf, len);
-    if(ret <= 0) break;
-    len -= ret;
+  if(pd->outpa) {
+    DEBUG_INFO("already pending INPUT_WRITE, buffering\n");
+    gaim_circ_buffer_append(pd->sock_buf, buf, len);
+    return 0;
   }
 
-  if(len > 0) {
+  while(len) {
+    ret = write(pd->socket, buf, (len > BUF_LEN)? BUF_LEN: len);
+
+    if(ret <= 0)
+      break;
+
+    len -= ret;
+    buf += ret;
+  }
+
+  if(ret <= 0)
+    err = errno;
+
+  if(err == EAGAIN) {
+    /* append remainder to circular buffer */
+    DEBUG_INFO("EAGAIN\n");
+    gaim_circ_buffer_append(pd->sock_buf, buf, len);
+    pd->outpa = gaim_input_add(pd->socket, GAIM_INPUT_WRITE, write_cb, pd);
+
+  } else if(len > 0) {
     DEBUG_ERROR("write returned %i, %i bytes left unwritten\n", ret, len);
     gaim_connection_error(pd->gc, _("Connection closed (writing)"));
 
@@ -379,11 +435,16 @@ static void mw_session_io_close(struct mwSession *session) {
 
   gc = pd->gc;
   
+  if(pd->outpa) {
+    gaim_input_remove(pd->outpa);
+    pd->outpa = 0;
+  }
+
   if(pd->socket) {
     close(pd->socket);
     pd->socket = 0;
   }
-    
+  
   if(gc->inpa) {
     gaim_input_remove(gc->inpa);
     gc->inpa = 0;
@@ -440,12 +501,14 @@ static void mw_aware_list_on_aware(struct mwAwareList *list,
   id = aware->id.user;
 
   /* not sure which client sends this yet */
-  if(idle == 0xdeadbeef) {
+  if(idle == 0xdeadbeef || idle < 0 || idle > time(NULL)) {
     /* knock knock!
        who's there?
        rude interrupting cow.
        rude interr...
        MOO! */
+
+    DEBUG_INFO("%s has messy idle value 0x%x\n", NSTR(id), idle);
     idle = -1;
   }
 
@@ -1394,7 +1457,7 @@ static void mw_session_stateChange(struct mwSession *session,
 				   gpointer info) {
   struct mwGaimPluginData *pd;
   GaimConnection *gc;
-  char *msg = NULL;
+  const char *msg = NULL;
 
   pd = mwSession_getClientData(session);
   gc = pd->gc;
@@ -1448,9 +1511,9 @@ static void mw_session_stateChange(struct mwSession *session,
 
   case mwSession_STOPPING:
     if(GPOINTER_TO_UINT(info) & ERR_FAILURE) {
-      msg = mwError(GPOINTER_TO_UINT(info));
-      gaim_connection_error(gc, msg);
-      g_free(msg);
+      char *err = mwError(GPOINTER_TO_UINT(info));
+      gaim_connection_error(gc, err);
+      g_free(err);
     }
     break;
 
@@ -1528,6 +1591,7 @@ static void mw_session_admin(struct mwSession *session,
   GaimConnection *gc;
   GaimAccount *acct;
   const char *host;
+  const char *msg;
   char *prim;
 
   gc = session_to_gc(session);
@@ -1538,9 +1602,9 @@ static void mw_session_admin(struct mwSession *session,
 
   host = gaim_account_get_string(acct, MW_KEY_HOST, NULL);
 
-  prim = _("A Sametime administrator has issued the following announcement"
+  msg = _("A Sametime administrator has issued the following announcement"
 	   " on server %s");
-  prim = g_strdup_printf(prim, NSTR(host));
+  prim = g_strdup_printf(msg, NSTR(host));
 
   gaim_notify_message(gc, GAIM_NOTIFY_MSG_INFO,
 		      _("Sametime Administrator Announcement"),
@@ -1566,19 +1630,12 @@ static int read_recv(struct mwSession *session, int sock) {
 
 /** callback triggered from gaim_input_add, watches the socked for
     available data to be processed by the session */
-static void read_cb(gpointer data, gint source,
-		    GaimInputCondition cond) {
-
+static void read_cb(gpointer data, gint source, GaimInputCondition cond) {
   struct mwGaimPluginData *pd = data;
   int ret = 0, err = 0;
 
-  /* How the heck can this happen? Fix submitted to Gaim so that it
-     won't happen anymore. */
-  if(! cond) return;
-
   g_return_if_fail(pd != NULL);
-  g_return_if_fail(cond & GAIM_INPUT_READ);
-
+ 
   ret = read_recv(pd->session, pd->socket);
 
   /* normal operation ends here */
@@ -1650,7 +1707,8 @@ static void connect_cb(gpointer data, gint source,
   }
 
   pd->socket = source;
-  gc->inpa = gaim_input_add(source, GAIM_INPUT_READ, read_cb, pd);
+  gc->inpa = gaim_input_add(source, GAIM_INPUT_READ,
+			    read_cb, pd);
 
   mwSession_start(pd->session);
 }
@@ -1968,6 +2026,10 @@ static struct mwServiceConference *mw_srvc_conf_new(struct mwSession *s) {
 }
 
 
+/** size of an outgoing file transfer chunk */
+#define MW_FT_LEN  (BUF_LONG * 2)
+
+
 static void ft_incoming_cancel(GaimXfer *xfer) {
   /* incoming transfer rejected or canceled in-progress */
   struct mwFileTransfer *ft = xfer->data;
@@ -2047,43 +2109,32 @@ static void mw_ft_offered(struct mwFileTransfer *ft) {
 
 
 static void ft_send(struct mwFileTransfer *ft, FILE *fp) {
-  guchar buf[BUF_LONG];
-  struct mwOpaque o = { .data = buf, .len = BUF_LONG };
+  guchar buf[MW_FT_LEN];
+  struct mwOpaque o = { .data = buf, .len = MW_FT_LEN };
   guint32 rem;
   GaimXfer *xfer;
 
   xfer = mwFileTransfer_getClientData(ft);
 
   rem = mwFileTransfer_getRemaining(ft);
-  if(rem < BUF_LONG) o.len = rem;
+  if(rem < MW_FT_LEN) o.len = rem;
   
   if(fread(buf, (size_t) o.len, 1, fp)) {
 
-    /* calculate progress first. update is displayed upon ack */
+    /* calculate progress and display it */
     xfer->bytes_sent += o.len;
     xfer->bytes_remaining -= o.len;
+    gaim_xfer_update_progress(xfer);
 
-    /* ... send data second */
     mwFileTransfer_send(ft, &o);
 
   } else {
     int err = errno;
-    DEBUG_WARN("problem reading from file %s: %s",
+    DEBUG_WARN("problem reading from file %s: %s\n",
 	       NSTR(mwFileTransfer_getFileName(ft)), strerror(err));
 
     mwFileTransfer_cancel(ft);
   }
-}
-
-
-static gboolean ft_idle_cb(struct mwFileTransfer *ft) {
-  GaimXfer *xfer = mwFileTransfer_getClientData(ft);
-  g_return_val_if_fail(xfer != NULL, FALSE);
-  
-  xfer->watcher = 0;
-  ft_send(ft, xfer->dest_fp);
-
-  return FALSE;
 }
 
 
@@ -2103,11 +2154,9 @@ static void mw_ft_opened(struct mwFileTransfer *ft) {
     g_return_if_reached();
   }
 
-  gaim_xfer_update_progress(xfer);
-
   if(gaim_xfer_get_type(xfer) == GAIM_XFER_SEND) {
-    xfer->watcher = g_idle_add((GSourceFunc)ft_idle_cb, ft);
     xfer->dest_fp = g_fopen(xfer->local_filename, "rb");
+    ft_send(ft, xfer->dest_fp);
   }  
 }
 
@@ -2125,7 +2174,7 @@ static void mw_ft_closed(struct mwFileTransfer *ft, guint32 code) {
   if(xfer) {
     xfer->data = NULL;
 
-    if(mwFileTransfer_isDone(ft)) {
+    if(! mwFileTransfer_getRemaining(ft)) {
       gaim_xfer_set_completed(xfer, TRUE);
       gaim_xfer_end(xfer);
 
@@ -2186,10 +2235,13 @@ static void mw_ft_ack(struct mwFileTransfer *ft) {
   g_return_if_fail(xfer != NULL);
   g_return_if_fail(xfer->watcher == 0);
 
-  gaim_xfer_update_progress(xfer);
+  if(! mwFileTransfer_getRemaining(ft)) {
+    gaim_xfer_set_completed(xfer, TRUE);
+    gaim_xfer_end(xfer);
 
-  if(mwFileTransfer_isOpen(ft))
-    xfer->watcher = g_idle_add((GSourceFunc)ft_idle_cb, ft);
+  } else if(mwFileTransfer_isOpen(ft)) {
+    ft_send(ft, xfer->dest_fp);
+  }
 }
 
 
@@ -3016,6 +3068,7 @@ static struct mwGaimPluginData *mwGaimPluginData_new(GaimConnection *gc) {
   pd->srvc_resolve = mw_srvc_resolve_new(pd->session);
   pd->srvc_store = mw_srvc_store_new(pd->session);
   pd->group_list_map = g_hash_table_new(g_direct_hash, g_direct_equal);
+  pd->sock_buf = gaim_circ_buffer_new(0);
 
   mwSession_addService(pd->session, MW_SERVICE(pd->srvc_aware));
   mwSession_addService(pd->session, MW_SERVICE(pd->srvc_conf));
@@ -3062,6 +3115,7 @@ static void mwGaimPluginData_free(struct mwGaimPluginData *pd) {
   mwSession_free(pd->session);
 
   g_hash_table_destroy(pd->group_list_map);
+  gaim_circ_buffer_destroy(pd->sock_buf);
 
   g_free(pd);
 }
@@ -3150,8 +3204,8 @@ static gboolean user_supports(struct mwServiceAware *srvc,
 
 
 static char *user_supports_text(struct mwServiceAware *srvc, const char *who) {
-  char *feat[] = {NULL, NULL, NULL, NULL, NULL};
-  char **f = feat;
+  const char *feat[] = {NULL, NULL, NULL, NULL, NULL};
+  const char **f = feat;
   
   if(user_supports(srvc, who, mwAttribute_AV_PREFS_SET)) {
     gboolean mic, speak, video;
@@ -3168,7 +3222,7 @@ static char *user_supports_text(struct mwServiceAware *srvc, const char *who) {
   if(user_supports(srvc, who, mwAttribute_FILE_TRANSFER))
     *f++ = _("File Transfer");
   
-  return (*feat)? g_strjoinv(", ", feat): NULL;
+  return (*feat)? g_strjoinv(", ", (char **)feat): NULL;
   /* jenni loves siege */
 }
 
@@ -3288,7 +3342,9 @@ static void blist_menu_conf_create(GaimBuddy *buddy, const char *msg) {
   GaimAccount *acct;
   GaimConnection *gc;
 
-  char *msgA, *msgB;
+  const char *msgA;
+  const char *msgB;
+  char *msg1;
   
   g_return_if_fail(buddy != NULL);
 
@@ -3312,14 +3368,14 @@ static void blist_menu_conf_create(GaimBuddy *buddy, const char *msg) {
   msgA = _("Create conference with user");
   msgB = _("Please enter a topic for the new conference, and an invitation"
 	   " message to be sent to %s");
-  msgB = g_strdup_printf(msgB, buddy->name);
+  msg1 = g_strdup_printf(msgB, buddy->name);
 
   gaim_request_fields(gc, _("New Conference"),
-		      msgA, msgB, fields,
+		      msgA, msg1, fields,
 		      _("Create"), G_CALLBACK(conf_create_prompt_join),
 		      _("Cancel"), G_CALLBACK(conf_create_prompt_cancel),
 		      buddy);
-  g_free(msgB);
+  g_free(msg1);
 }
 
 
@@ -3365,7 +3421,9 @@ static void blist_menu_conf_list(GaimBuddy *buddy,
   GaimAccount *acct;
   GaimConnection *gc;
 
-  char *msgA, *msgB;
+  const char *msgA;
+  const char *msgB;
+  char *msg;
 
   acct = buddy->account;
   g_return_if_fail(acct != NULL);
@@ -3395,14 +3453,14 @@ static void blist_menu_conf_list(GaimBuddy *buddy,
   msgB = _("Select a conference from the list below to send an invite to"
 	   " user %s. Select \"Create New Conference\" if you'd like to"
 	   " create a new conference to invite this user to.");
-  msgB = g_strdup_printf(msgB, buddy->name);
+  msg = g_strdup_printf(msgB, buddy->name);
 
   gaim_request_fields(gc, _("Invite to Conference"),
-		      msgA, msgB, fields,
+		      msgA, msg, fields,
 		      _("Invite"), G_CALLBACK(conf_select_prompt_invite),
 		      _("Cancel"), G_CALLBACK(conf_select_prompt_cancel),
 		      buddy);
-  g_free(msgB);
+  g_free(msg);
 }
 
 
@@ -3442,6 +3500,42 @@ static void blist_menu_conf(GaimBlistNode *node, gpointer data) {
 }
 
 
+#if 0
+static void blist_menu_announce(GaimBlistNode *node, gpointer data) {
+  GaimBuddy *buddy = (GaimBuddy *) node;
+  GaimAccount *acct;
+  GaimConnection *gc;
+  struct mwGaimPluginData *pd;
+  struct mwSession *session;
+  char *rcpt_name;
+  GList *rcpt;
+
+  g_return_if_fail(node != NULL);
+  g_return_if_fail(GAIM_BLIST_NODE_IS_BUDDY(node));
+
+  acct = buddy->account;
+  g_return_if_fail(acct != NULL);
+
+  gc = gaim_account_get_connection(acct);
+  g_return_if_fail(gc != NULL);
+
+  pd = gc->proto_data;
+  g_return_if_fail(pd != NULL);
+
+  rcpt_name = g_strdup_printf("@U %s", buddy->name);
+  rcpt = g_list_prepend(NULL, rcpt_name);
+
+  session = pd->session;
+  mwSession_sendAnnounce(session, FALSE,
+			 "This is a TEST announcement. Please ignore.",
+			 rcpt);
+
+  g_list_free(rcpt);
+  g_free(rcpt_name);
+}
+#endif
+
+
 static GList *mw_prpl_blist_node_menu(GaimBlistNode *node) {
   GList *l = NULL;
   GaimMenuAction *act;
@@ -3454,6 +3548,12 @@ static GList *mw_prpl_blist_node_menu(GaimBlistNode *node) {
   act = gaim_menu_action_new(_("Invite to Conference..."),
                              GAIM_CALLBACK(blist_menu_conf), NULL, NULL);
   l = g_list_append(l, act);
+
+#if 0
+  act = gaim_menu_action_new(_("Send TEST Announcement"),
+			     GAIM_CALLBACK(blist_menu_announce), NULL, NULL);
+  l = g_list_append(l, act);
+#endif
 
   /** note: this never gets called for a GaimGroup, have to use the
       blist-node-extended-menu signal for that. The function
@@ -3515,13 +3615,14 @@ static void prompt_host_ok_cb(GaimConnection *gc, const char *host) {
 
 static void prompt_host(GaimConnection *gc) {
   GaimAccount *acct;
+  const char *msgA;
   char *msg;
   
   acct = gaim_connection_get_account(gc);
-  msg = _("No host or IP address has been configured for the"
+  msgA = _("No host or IP address has been configured for the"
 	  " Meanwhile account %s. Please enter one below to"
 	  " continue logging in.");
-  msg = g_strdup_printf(msg, NSTR(gaim_account_get_username(acct)));
+  msg = g_strdup_printf(msgA, NSTR(gaim_account_get_username(acct)));
   
   gaim_request_input(gc, _("Meanwhile Connection Setup"),
 		     _("No Sametime Community Server Specified"), msg,
@@ -4151,7 +4252,9 @@ static void notify_close(gpointer data) {
 static void multi_resolved_query(struct mwResolveResult *result,
 				 GaimConnection *gc) {
   GList *l;
-  char *msgA, *msgB;
+  const char *msgA;
+  const char *msgB;
+  char *msg;
 
   GaimNotifySearchResults *sres;
   GaimNotifySearchColumn *scol;
@@ -4189,12 +4292,12 @@ static void multi_resolved_query(struct mwResolveResult *result,
   msgB = _("The identifier '%s' may possibly refer to any of the following"
 	   " users. Please select the correct user from the list below to"
 	   " add them to your buddy list.");
-  msgB = g_strdup_printf(msgB, result->name);
+  msg = g_strdup_printf(msgB, result->name);
 
   gaim_notify_searchresults(gc, _("Select User"),
-			    msgA, msgB, sres, notify_close, NULL);
+			    msgA, msg, sres, notify_close, NULL);
 
-  g_free(msgB);
+  g_free(msg);
 }
 
 
@@ -4257,18 +4360,20 @@ static void add_buddy_resolved(struct mwServiceResolve *srvc,
 
   if(res && res->name) {
     /* compose and display an error message */
-    char *msgA, *msgB;
+    const char *msgA;
+    const char *msgB;
+    char *msg;
 
     msgA = _("Unable to add user: user not found");
 
     msgB = _("The identifier '%s' did not match any users in your"
 	     " Sametime community. This entry has been removed from"
 	     " your buddy list.");
-    msgB = g_strdup_printf(msgB, NSTR(res->name));
+    msg = g_strdup_printf(msgB, NSTR(res->name));
 
-    gaim_notify_error(gc, _("Unable to add user"), msgA, msgB);
+    gaim_notify_error(gc, _("Unable to add user"), msgA, msg);
 
-    g_free(msgB);
+    g_free(msg);
   }
 }
 
@@ -4833,6 +4938,8 @@ static void ft_outgoing_init(GaimXfer *xfer) {
   filesize = gaim_xfer_get_size(xfer);
   idb.user = xfer->who;
 
+  gaim_xfer_update_progress(xfer);
+
   /* test that we can actually send the file */
   fp = g_fopen(filename, "rb");
   if(! fp) {
@@ -4861,6 +4968,9 @@ static void ft_outgoing_init(GaimXfer *xfer) {
 
 static void ft_outgoing_cancel(GaimXfer *xfer) {
   struct mwFileTransfer *ft = xfer->data;
+  
+  DEBUG_INFO("ft_outgoing_cancel called\n");
+
   if(ft) mwFileTransfer_cancel(ft);
 }
 
@@ -4874,7 +4984,7 @@ static GaimXfer *mw_prpl_new_xfer(GaimConnection *gc, const char *who) {
   xfer = gaim_xfer_new(acct, GAIM_XFER_SEND, who);
   gaim_xfer_set_init_fnc(xfer, ft_outgoing_init);
   gaim_xfer_set_cancel_send_fnc(xfer, ft_outgoing_cancel);
-
+  
   return xfer;
 }
 
@@ -4954,7 +5064,6 @@ static GaimPluginProtocolInfo mw_prpl_info = {
   .new_xfer                  = mw_prpl_new_xfer,
   .offline_message           = NULL,
   .whiteboard_prpl_ops       = NULL,
-  .media_prpl_ops            = NULL,
 };
 
 
@@ -5002,7 +5111,7 @@ static void st_import_action_cb(GaimConnection *gc, char *filename) {
 
   GString *str;
 
-  file = fopen(filename, "r");
+  file = g_fopen(filename, "r");
   g_return_if_fail(file != NULL);
 
   str = g_string_new(NULL);
@@ -5044,7 +5153,7 @@ static void st_export_action_cb(GaimConnection *gc, char *filename) {
   char *str;
   FILE *file;
 
-  file = fopen(filename, "w");
+  file = g_fopen(filename, "w");
   g_return_if_fail(file != NULL);
 
   l = mwSametimeList_new();
@@ -5116,15 +5225,17 @@ static void remote_group_done(struct mwGaimPluginData *pd,
   /* collision checking */
   group = gaim_find_group(name);
   if(group) {
-    char *msgA, *msgB;
+    const char *msgA;
+    const char *msgB;
+    char *msg;
 
     msgA = _("Unable to add group: group exists");
     msgB = _("A group named '%s' already exists in your buddy list.");
-    msgB = g_strdup_printf(msgB, name);
+    msg = g_strdup_printf(msgB, name);
 
-    gaim_notify_error(gc, _("Unable to add group"), msgA, msgB);
+    gaim_notify_error(gc, _("Unable to add group"), msgA, msg);
 
-    g_free(msgB);
+    g_free(msg);
     return;
   }
 
@@ -5170,7 +5281,9 @@ static void remote_group_multi(struct mwResolveResult *result,
   GaimRequestFieldGroup *g;
   GaimRequestField *f;
   GList *l;
-  char *msgA, *msgB;
+  const char *msgA;
+  const char *msgB;
+  char *msg;
 
   GaimConnection *gc = pd->gc;
 
@@ -5199,15 +5312,15 @@ static void remote_group_multi(struct mwResolveResult *result,
   msgB = _("The identifier '%s' may possibly refer to any of the following"
 	  " Notes Address Book groups. Please select the correct group from"
 	  " the list below to add it to your buddy list.");
-  msgB = g_strdup_printf(msgB, result->name);
+  msg = g_strdup_printf(msgB, result->name);
 
   gaim_request_fields(gc, _("Select Notes Address Book"),
-		      msgA, msgB, fields,
+		      msgA, msg, fields,
 		      _("Add Group"), G_CALLBACK(remote_group_multi_cb),
 		      _("Cancel"), G_CALLBACK(remote_group_multi_cleanup),
 		      pd);
 
-  g_free(msgB);
+  g_free(msg);
 }
 
 
@@ -5239,17 +5352,19 @@ static void remote_group_resolved(struct mwServiceResolve *srvc,
   }
 
   if(res && res->name) {
-    char *msgA, *msgB;
+    const char *msgA;
+    const char *msgB;
+    char *msg;
 
     msgA = _("Unable to add group: group not found");
 
     msgB = _("The identifier '%s' did not match any Notes Address Book"
 	    " groups in your Sametime community.");
-    msgB = g_strdup_printf(msgB, res->name);
+    msg = g_strdup_printf(msgB, res->name);
 
-    gaim_notify_error(gc, _("Unable to add group"), msgA, msgB);
+    gaim_notify_error(gc, _("Unable to add group"), msgA, msg);
 
-    g_free(msgB);
+    g_free(msg);
   }
 }
 
@@ -5279,7 +5394,8 @@ static void remote_group_action_cb(GaimConnection *gc, const char *name) {
 
 static void remote_group_action(GaimPluginAction *act) {
   GaimConnection *gc;
-  const char *msgA, *msgB;
+  const char *msgA;
+  const char *msgB;
 
   gc = act->context;
 
@@ -5298,7 +5414,10 @@ static void remote_group_action(GaimPluginAction *act) {
 static void search_notify(struct mwResolveResult *result,
 			  GaimConnection *gc) {
   GList *l;
-  char *msgA, *msgB;
+  const char *msgA;
+  const char *msgB;
+  char *msg1;
+  char *msg2;
 
   GaimNotifySearchResults *sres;
   GaimNotifySearchColumn *scol;
@@ -5334,14 +5453,14 @@ static void search_notify(struct mwResolveResult *result,
 	   " users. You may add these users to your buddy list or send them"
 	   " messages with the action buttons below.");
 
-  msgA = g_strdup_printf(msgA, result->name);
-  msgB = g_strdup_printf(msgB, result->name);
+  msg1 = g_strdup_printf(msgA, result->name);
+  msg2 = g_strdup_printf(msgB, result->name);
 
   gaim_notify_searchresults(gc, _("Search Results"),
-			    msgA, msgB, sres, notify_close, NULL);
+			    msg1, msg2, sres, notify_close, NULL);
 
-  g_free(msgA);
-  g_free(msgB);
+  g_free(msg1);
+  g_free(msg2);
 }
 
 
@@ -5358,15 +5477,18 @@ static void search_resolved(struct mwServiceResolve *srvc,
     search_notify(res, gc);
 
   } else {
-    char *msgA, *msgB;
+    const char *msgA;
+    const char *msgB;
+    char *msg;
+
     msgA = _("No matches");
-    msgB = _("The identifier '%s' did not match and users in your"
+    msgB = _("The identifier '%s' did not match any users in your"
 	     " Sametime community.");
-    msgB = g_strdup_printf(msgB, NSTR(res->name));
+    msg = g_strdup_printf(msgB, NSTR(res->name));
 
-    gaim_notify_error(gc, _("No Matches"), msgA, msgB);
+    gaim_notify_error(gc, _("No Matches"), msgA, msg);
 
-    g_free(msgB);
+    g_free(msg);
   }
 }
 
@@ -5396,7 +5518,8 @@ static void search_action_cb(GaimConnection *gc, const char *name) {
 
 static void search_action(GaimPluginAction *act) {
   GaimConnection *gc;
-  const char *msgA, *msgB;
+  const char *msgA;
+  const char *msgB;
 
   gc = act->context;
 

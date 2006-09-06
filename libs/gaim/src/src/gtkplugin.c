@@ -26,6 +26,7 @@
 #include "gtkgaim.h"
 #include "gtkplugin.h"
 #include "gtkpluginpref.h"
+#include "gtkutils.h"
 #include "debug.h"
 #include "prefs.h"
 #include "request.h"
@@ -255,14 +256,12 @@ static void plugin_toggled(GtkCellRendererToggle *cell, gchar *pth, gpointer dat
 
 	if (!gaim_plugin_is_loaded(plug))
 	{
-		GdkCursor *wait = gdk_cursor_new (GDK_WATCH);
-		gdk_window_set_cursor(plugin_dialog->window, wait);
-		gdk_cursor_unref(wait);
+		gaim_gtk_set_cursor(plugin_dialog, GDK_WATCH);
 
 		gaim_plugin_load(plug);
 		plugin_toggled_stage_two(plug, model, iter, FALSE);
 
-		gdk_window_set_cursor(plugin_dialog->window, NULL);
+		gaim_gtk_clear_cursor(plugin_dialog);
 	}
 	else
 	{
@@ -294,7 +293,7 @@ static void plugin_toggled(GtkCellRendererToggle *cell, gchar *pth, gpointer dat
 			                    _("Multiple plugins will be unloaded."),
 			                    tmp->str, 0, cb_data, 2,
 			                    _("Unload Plugins"), G_CALLBACK(plugin_unload_confirm_cb),
-			                    _("Cancel"), NULL);
+			                    _("Cancel"), g_free);
 			g_string_free(tmp, TRUE);
 		}
 		else
@@ -309,13 +308,11 @@ static void plugin_toggled_stage_two(GaimPlugin *plug, GtkTreeModel *model, GtkT
 
 	if (unload)
 	{
-		GdkCursor *wait = gdk_cursor_new (GDK_WATCH);
-		gdk_window_set_cursor(plugin_dialog->window, wait);
-		gdk_cursor_unref(wait);
+		gaim_gtk_set_cursor(plugin_dialog, GDK_WATCH);
 
 		gaim_plugin_unload(plug);
 
-		gdk_window_set_cursor(plugin_dialog->window, NULL);
+		gaim_gtk_clear_cursor(plugin_dialog);
 	}
 
 	gtk_widget_set_sensitive(pref_button,

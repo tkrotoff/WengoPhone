@@ -23,6 +23,7 @@
 
 #include <stdlib.h>
 
+#include "internal.h"
 #include "blist.h"
 #include "debug.h"
 
@@ -34,7 +35,7 @@
 static void gaim_gtk_whiteboard_create(GaimWhiteboard *wb);
 
 static void gaim_gtk_whiteboard_destroy(GaimWhiteboard *wb);
-static void gaim_gtk_whiteboard_exit(GtkWidget *widget, gpointer data);
+static gboolean whiteboard_close_cb(GtkWidget *widget, GdkEvent *event, GaimGtkWhiteboard *gtkwb);
 
 /*static void gaim_gtkwhiteboard_button_start_press(GtkButton *button, gpointer data); */
 
@@ -71,8 +72,6 @@ GList *buttonList = NULL;
 GdkColor DefaultColor[PALETTE_NUM_COLORS];
 */
 
-static gboolean LocalShutdownRequest;
-
 static int LastX;       /* Tracks last position of the mouse when drawing */
 static int LastY;
 static int MotionCount; /* Tracks how many brush motions made */
@@ -97,7 +96,7 @@ GaimWhiteboardUiOps *gaim_gtk_whiteboard_get_ui_ops(void)
 	return &ui_ops;
 }
 
-void gaim_gtk_whiteboard_create(GaimWhiteboard *wb)
+static void gaim_gtk_whiteboard_create(GaimWhiteboard *wb)
 {
 	GtkWidget *window;
 	GtkWidget *drawing_area;
@@ -156,8 +155,8 @@ void gaim_gtk_whiteboard_create(GaimWhiteboard *wb)
 
 	gtk_window_set_resizable((GtkWindow*)(window), FALSE);
 
-	g_signal_connect(G_OBJECT(window), "destroy",
-					 G_CALLBACK(gaim_gtk_whiteboard_exit), gtkwb);
+	g_signal_connect(G_OBJECT(window), "delete_event",
+					 G_CALLBACK(whiteboard_close_cb), gtkwb);
 
 #if 0
 	int i;
@@ -273,9 +272,13 @@ void gaim_gtk_whiteboard_create(GaimWhiteboard *wb)
 	*/
 }
 
-void gaim_gtk_whiteboard_destroy(GaimWhiteboard *wb)
+static void gaim_gtk_whiteboard_destroy(GaimWhiteboard *wb)
 {
-	GaimGtkWhiteboard *gtkwb = wb->ui_data;
+	GaimGtkWhiteboard *gtkwb;
+
+	g_return_if_fail(wb != NULL);
+	gtkwb = wb->ui_data;
+	g_return_if_fail(gtkwb != NULL);
 
 	/* TODO Ask if user wants to save picture before the session is closed */
 
@@ -291,34 +294,21 @@ void gaim_gtk_whiteboard_destroy(GaimWhiteboard *wb)
 		gtk_widget_destroy(gtkwb->window);
 		gtkwb->window = NULL;
 	}
+	g_free(gtkwb);
+	wb->ui_data = NULL;
 }
 
-void gaim_gtk_whiteboard_exit(GtkWidget *widget, gpointer data)
+static gboolean whiteboard_close_cb(GtkWidget *widget, GdkEvent *event, GaimGtkWhiteboard *gtkwb)
 {
-	GaimGtkWhiteboard *gtkwb = (GaimGtkWhiteboard*)data;
-	GaimWhiteboard *wb = gtkwb->wb;
+	GaimWhiteboard *wb;
 
-	if(gtkwb->window && gtkwb->pixmap)
-	{
-		LocalShutdownRequest = TRUE;
+	g_return_val_if_fail(gtkwb != NULL, FALSE);
+	wb = gtkwb->wb;
+	g_return_val_if_fail(wb != NULL, FALSE);
 
-		gaim_gtk_whiteboard_destroy(wb);
-	}
-	else
-		LocalShutdownRequest = FALSE;
+	gaim_whiteboard_destroy(wb);
 
-	if(gtkwb)
-	{
-		g_free(gtkwb);
-
-		wb->ui_data = NULL;
-	}
-
-	/* Destroy whiteboard core, if the local user exited the whiteboard window */
-	if(wb && LocalShutdownRequest)
-	{
-		gaim_whiteboard_destroy(wb);
-	}
+	return FALSE;
 }
 
 /*
@@ -326,7 +316,7 @@ void gaim_gtk_whiteboard_exit(GtkWidget *widget, gpointer data)
  * and use new prpl_info member?)
  */
 #if 0
-void gaim_gtkwhiteboard_button_start_press(GtkButton *button, gpointer data)
+static void gaim_gtkwhiteboard_button_start_press(GtkButton *button, gpointer data)
 {
 	GaimConversation *conv = data;
 	GaimAccount *account = gaim_conversation_get_account(conv);
@@ -341,7 +331,10 @@ void gaim_gtkwhiteboard_button_start_press(GtkButton *button, gpointer data)
 	/* Write a local message to this conversation showing that a request for a
 	 * Doodle session has been made
 	 */
-	gaim_conv_im_write(GAIM_CONV_IM(conv), "", _("Sent Doodle request."),
+	/* XXXX because otherwise gettext will see this string, even though it's
+	 * in an #if 0 block. Remove the XXXX if you want to use this code.
+	 * But, it really shouldn't be a Yahoo-specific string. ;) */
+	gaim_conv_im_write(GAIM_CONV_IM(conv), "", XXXX_("Sent Doodle request."),
 					   GAIM_MESSAGE_NICK | GAIM_MESSAGE_RECV, time(NULL));
 
 	yahoo_doodle_command_send_request(gc, to);
@@ -354,7 +347,7 @@ void gaim_gtkwhiteboard_button_start_press(GtkButton *button, gpointer data)
 }
 #endif
 
-gboolean gaim_gtk_whiteboard_configure_event(GtkWidget *widget, GdkEventConfigure *event, gpointer data)
+static gboolean gaim_gtk_whiteboard_configure_event(GtkWidget *widget, GdkEventConfigure *event, gpointer data)
 {
 	GaimGtkWhiteboard *gtkwb = (GaimGtkWhiteboard*)data;
 
@@ -380,7 +373,7 @@ gboolean gaim_gtk_whiteboard_configure_event(GtkWidget *widget, GdkEventConfigur
 	return TRUE;
 }
 
-gboolean gaim_gtk_whiteboard_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data)
+static gboolean gaim_gtk_whiteboard_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data)
 {
 	GaimGtkWhiteboard *gtkwb = (GaimGtkWhiteboard*)(data);
 	GdkPixmap *pixmap = gtkwb->pixmap;
@@ -395,7 +388,7 @@ gboolean gaim_gtk_whiteboard_expose_event(GtkWidget *widget, GdkEventExpose *eve
 	return FALSE;
 }
 
-gboolean gaim_gtk_whiteboard_brush_down(GtkWidget *widget, GdkEventButton *event, gpointer data)
+static gboolean gaim_gtk_whiteboard_brush_down(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
 	GaimGtkWhiteboard *gtkwb = (GaimGtkWhiteboard*)data;
 	GdkPixmap *pixmap = gtkwb->pixmap;
@@ -441,7 +434,7 @@ gboolean gaim_gtk_whiteboard_brush_down(GtkWidget *widget, GdkEventButton *event
 	return TRUE;
 }
 
-gboolean gaim_gtk_whiteboard_brush_motion(GtkWidget *widget, GdkEventMotion *event, gpointer data)
+static gboolean gaim_gtk_whiteboard_brush_motion(GtkWidget *widget, GdkEventMotion *event, gpointer data)
 {
 	int x;
 	int y;
@@ -528,7 +521,7 @@ gboolean gaim_gtk_whiteboard_brush_motion(GtkWidget *widget, GdkEventMotion *eve
 	return TRUE;
 }
 
-gboolean gaim_gtk_whiteboard_brush_up(GtkWidget *widget, GdkEventButton *event, gpointer data)
+static gboolean gaim_gtk_whiteboard_brush_up(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
 	GaimGtkWhiteboard *gtkwb = (GaimGtkWhiteboard*)data;
 	GdkPixmap *pixmap = gtkwb->pixmap;
@@ -584,7 +577,7 @@ gboolean gaim_gtk_whiteboard_brush_up(GtkWidget *widget, GdkEventButton *event, 
 	return TRUE;
 }
 
-void gaim_gtk_whiteboard_draw_brush_point(GaimWhiteboard *wb, int x, int y, int color, int size)
+static void gaim_gtk_whiteboard_draw_brush_point(GaimWhiteboard *wb, int x, int y, int color, int size)
 {
 	GaimGtkWhiteboard *gtkwb = wb->ui_data;
 	GtkWidget *widget = gtkwb->drawing_area;
@@ -637,7 +630,7 @@ void gaim_gtk_whiteboard_draw_brush_point(GaimWhiteboard *wb, int x, int y, int 
 }
 
 /* Uses Bresenham's algorithm (as provided by Wikipedia) */
-void gaim_gtk_whiteboard_draw_brush_line(GaimWhiteboard *wb, int x0, int y0, int x1, int y1, int color, int size)
+static void gaim_gtk_whiteboard_draw_brush_line(GaimWhiteboard *wb, int x0, int y0, int x1, int y1, int color, int size)
 {
 	int temp;
 
@@ -703,7 +696,7 @@ void gaim_gtk_whiteboard_draw_brush_line(GaimWhiteboard *wb, int x0, int y0, int
 	}
 }
 
-void gaim_gtk_whiteboard_set_dimensions(GaimWhiteboard *wb, int width, int height)
+static void gaim_gtk_whiteboard_set_dimensions(GaimWhiteboard *wb, int width, int height)
 {
 	GaimGtkWhiteboard *gtkwb = wb->ui_data;
 
@@ -711,7 +704,7 @@ void gaim_gtk_whiteboard_set_dimensions(GaimWhiteboard *wb, int width, int heigh
 	gtkwb->height = height;
 }
 
-void gaim_gtk_whiteboard_set_brush(GaimWhiteboard *wb, int size, int color)
+static void gaim_gtk_whiteboard_set_brush(GaimWhiteboard *wb, int size, int color)
 {
 	GaimGtkWhiteboard *gtkwb = wb->ui_data;
 
@@ -719,7 +712,7 @@ void gaim_gtk_whiteboard_set_brush(GaimWhiteboard *wb, int size, int color)
 	gtkwb->brush_color = color;
 }
 
-void gaim_gtk_whiteboard_clear(GaimWhiteboard *wb)
+static void gaim_gtk_whiteboard_clear(GaimWhiteboard *wb)
 {
 	GaimGtkWhiteboard *gtkwb = wb->ui_data;
 	GdkPixmap *pixmap = gtkwb->pixmap;
@@ -738,7 +731,7 @@ void gaim_gtk_whiteboard_clear(GaimWhiteboard *wb)
 							   drawing_area->allocation.height);
 }
 
-void gaim_gtk_whiteboard_button_clear_press(GtkWidget *widget, gpointer data)
+static void gaim_gtk_whiteboard_button_clear_press(GtkWidget *widget, gpointer data)
 {
 	GaimGtkWhiteboard *gtkwb = (GaimGtkWhiteboard*)(data);
 
@@ -750,7 +743,7 @@ void gaim_gtk_whiteboard_button_clear_press(GtkWidget *widget, gpointer data)
 	gaim_whiteboard_send_clear(gtkwb->wb);
 }
 
-void gaim_gtk_whiteboard_button_save_press(GtkWidget *widget, gpointer data)
+static void gaim_gtk_whiteboard_button_save_press(GtkWidget *widget, gpointer data)
 {
 	GaimGtkWhiteboard *gtkwb = (GaimGtkWhiteboard*)(data);
 	GdkPixbuf *pixbuf;
@@ -760,7 +753,7 @@ void gaim_gtk_whiteboard_button_save_press(GtkWidget *widget, gpointer data)
 	int result;
 
 #if GTK_CHECK_VERSION(2,4,0) /* FILECHOOSER */
-	dialog = gtk_file_chooser_dialog_new ("Save File",
+	dialog = gtk_file_chooser_dialog_new (_("Save File"),
 										  GTK_WINDOW(gtkwb->window),
 										  GTK_FILE_CHOOSER_ACTION_SAVE,
 										  GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
@@ -779,7 +772,7 @@ void gaim_gtk_whiteboard_button_save_press(GtkWidget *widget, gpointer data)
 		gtk_file_chooser_set_filename (GTK_FILE_CHOOSER (dialog), filename_for_existing_document);
 	*/
 #else
-	dialog = gtk_file_selection_new("Save File");
+	dialog = gtk_file_selection_new(_("Save File"));
 	gtk_file_selection_set_filename(GTK_FILE_SELECTION(dialog), "whiteboard.jpg");
 #endif
 	result = gtk_dialog_run(GTK_DIALOG(dialog));
@@ -817,7 +810,7 @@ void gaim_gtk_whiteboard_button_save_press(GtkWidget *widget, gpointer data)
 	}
 }
 
-void gaim_gtk_whiteboard_set_canvas_as_icon(GaimGtkWhiteboard *gtkwb)
+static void gaim_gtk_whiteboard_set_canvas_as_icon(GaimGtkWhiteboard *gtkwb)
 {
 	GdkPixbuf *pixbuf;
 
@@ -832,7 +825,7 @@ void gaim_gtk_whiteboard_set_canvas_as_icon(GaimGtkWhiteboard *gtkwb)
 	gtk_window_set_icon((GtkWindow*)(gtkwb->window), pixbuf);
 }
 
-void gaim_gtk_whiteboard_rgb24_to_rgb48(int color_rgb, GdkColor *color)
+static void gaim_gtk_whiteboard_rgb24_to_rgb48(int color_rgb, GdkColor *color)
 {
 	color->red   = (color_rgb >> 8) | 0xFF;
 	color->green = (color_rgb & 0xFF00) | 0xFF;
@@ -867,7 +860,7 @@ static void color_select_dialog(GtkWidget *widget, GaimGtkWhiteboard *gtkwb)
 	GdkColor color;
 	GtkColorSelectionDialog *dialog;
 	
-	dialog = (GtkColorSelectionDialog *)gtk_color_selection_dialog_new("Select color");
+	dialog = (GtkColorSelectionDialog *)gtk_color_selection_dialog_new(_("Select color"));
 
 	g_signal_connect(G_OBJECT(dialog->colorsel), "color-changed",
 					G_CALLBACK(change_color_cb), gtkwb);

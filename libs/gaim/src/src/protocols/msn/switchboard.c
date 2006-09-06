@@ -292,8 +292,7 @@ msn_switchboard_add_user(MsnSwitchBoard *swboard, const char *user)
 	}
 	else if (swboard->conv == NULL)
 	{
-		/* XXX - I think this should probably be GAIM_CONV_TYPE_CHAT, but I'm hedging */
-		swboard->conv = gaim_find_conversation_with_account(GAIM_CONV_TYPE_ANY,
+		swboard->conv = gaim_find_conversation_with_account(GAIM_CONV_TYPE_IM,
 															user, account);
 	}
 	else
@@ -316,9 +315,8 @@ msn_switchboard_get_conv(MsnSwitchBoard *swboard)
 
 	account = swboard->session->account;
 
-	/* XXX - I think this should probably be GAIM_CONV_TYPE_IM, but I'm hedging */
-	return gaim_find_conversation_with_account(GAIM_CONV_TYPE_IM,
-											   swboard->im_user, account);
+	return (swboard->conv = gaim_conversation_new(GAIM_CONV_TYPE_IM,
+												  account, swboard->im_user));
 }
 
 static void
@@ -340,7 +338,8 @@ swboard_error_helper(MsnSwitchBoard *swboard, int reason, const char *passport)
 {
 	g_return_if_fail(swboard != NULL);
 
-	gaim_debug_info("msg", "Error: Unable to call the user %s\n", passport);
+	gaim_debug_warning("msg", "Error: Unable to call the user %s for reason %i\n",
+					   passport ? passport : "(null)", reason);
 
 	/* TODO: if current_users > 0, this is probably a chat and an invite failed,
 	 * we should report that in the chat or something */
@@ -363,6 +362,8 @@ cal_error_helper(MsnTransaction *trans, int reason)
 	passport = params[0];
 
 	swboard = trans->data;
+
+	gaim_debug_warning("msn", "cal_error_helper: command %s failed for reason %i\n",trans->command,reason);
 
 	swboard_error_helper(swboard, reason, passport);
 
@@ -421,6 +422,10 @@ msg_error_helper(MsnCmdProc *cmdproc, MsnMessage *msg, MsnMsgErrorType error)
 					str_reason = _("Message could not be sent "
 								   "because a connection error occurred:");
 					break;
+				case MSN_SB_ERROR_TOO_FAST:
+					str_reason = _("Message could not be sent "
+								   "because we are sending too quickly:");
+					break;					
 				default:
 					str_reason = _("Message could not be sent "
 								   "because an error with "
@@ -1043,6 +1048,8 @@ got_cal(MsnCmdProc *cmdproc, MsnCommand *cmd)
 static void
 cal_timeout(MsnCmdProc *cmdproc, MsnTransaction *trans)
 {
+	gaim_debug_warning("msn", "cal_timeout: command %s timed out\n", trans->command);
+
 	cal_error_helper(trans, MSN_SB_ERROR_UNKNOWN);
 }
 
@@ -1060,6 +1067,8 @@ cal_error(MsnCmdProc *cmdproc, MsnTransaction *trans, int error)
 	{
 		reason = MSN_SB_ERROR_USER_OFFLINE;
 	}
+
+	gaim_debug_warning("msn", "cal_error: command %s gave error %i\n", trans->command, error);
 
 	cal_error_helper(trans, reason);
 }
@@ -1122,8 +1131,14 @@ xfr_error(MsnCmdProc *cmdproc, MsnTransaction *trans, int error)
 
 	if (error == 913)
 		reason = MSN_SB_ERROR_OFFLINE;
+	else if (error == 800)
+		reason = MSN_SB_ERROR_TOO_FAST;
 
 	swboard = trans->data;
+
+	gaim_debug_info("msn", "xfr_error %i for %s: trans %x, command %s, reason %i\n",
+					error, (swboard->im_user ? swboard->im_user : "(null)"), trans,
+					(trans->command ? trans->command : "(null)"), reason);
 
 	swboard_error_helper(swboard, reason, swboard->im_user);
 }

@@ -4,11 +4,14 @@ EXTRA_DIST = \
 		gaim.pc.in \
 		gaim.spec.in \
 		gaim.apspec.in \
-		gaim.desktop \
+		gaim.desktop.in \
+		gaim.service.in \
 		gaim-installer.nsi \
 		HACKING \
+		intltool-extract.in \
+		intltool-merge.in \
+		intltool-update.in \
 		PROGRAMMING_NOTES \
-		setup-gettext \
 		ChangeLog.win32 \
 		config.h.mingw \
 		Makefile.mingw \
@@ -29,6 +32,11 @@ gaiminclude_HEADERS = config.h
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = gaim.pc
 
+if ENABLE_DBUS
+dbus_servicedir=$(DBUS_SERVICES_DIR)
+dbus_service_DATA=gaim.service
+endif
+
 dist-hook: gaim.spec
 	cp gaim.spec $(distdir)
 
@@ -36,9 +44,11 @@ distcheck-hook: plugins/perl/common/Gaim.pm
 #	cp plugins/perl/common/Gaim.pm $(distdir)/plugins/perl/common
 
 appsdir = $(datadir)/applications
-apps_DATA = gaim.desktop
+apps_in_files = gaim.desktop.in
+apps_DATA = $(apps_in_files:.desktop.in=.desktop)
+@INTLTOOL_DESKTOP_RULE@
 
-SUBDIRS = doc intl m4macros pixmaps plugins po sounds src
+SUBDIRS = doc m4macros pixmaps plugins po sounds src
 
 docs: Doxyfile
 if HAVE_DOXYGEN
@@ -54,6 +64,4 @@ endif
 
 distuninstallcheck_listfiles = \
 	find . -type f -print | grep -v perl | grep -v Gaim.3pm
-
-ACLOCAL_AMFLAGS = -I m4
 

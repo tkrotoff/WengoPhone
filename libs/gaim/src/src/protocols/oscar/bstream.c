@@ -1,13 +1,30 @@
 /*
- * bstream.c
+ * Gaim's oscar protocol plugin
+ * This file is the legal property of its developers.
+ * Please see the AUTHORS file distributed alongside this file.
  *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+*/
+
+/*
  * This file contains all functions needed to use bstreams.
  */
 
-#define FAIM_INTERNAL
-#include <aim.h>
+#include "oscar.h"
 
-faim_internal int aim_bstream_init(aim_bstream_t *bs, fu8_t *data, int len)
+faim_internal int aim_bstream_init(ByteStream *bs, guint8 *data, int len)
 {
 
 	if (!bs)
@@ -20,17 +37,17 @@ faim_internal int aim_bstream_init(aim_bstream_t *bs, fu8_t *data, int len)
 	return 0;
 }
 
-faim_internal int aim_bstream_empty(aim_bstream_t *bs)
+faim_internal int aim_bstream_empty(ByteStream *bs)
 {
 	return bs->len - bs->offset;
 }
 
-faim_internal int aim_bstream_curpos(aim_bstream_t *bs)
+faim_internal int aim_bstream_curpos(ByteStream *bs)
 {
 	return bs->offset;
 }
 
-faim_internal int aim_bstream_setpos(aim_bstream_t *bs, unsigned int off)
+faim_internal int aim_bstream_setpos(ByteStream *bs, unsigned int off)
 {
 
 	if (off > bs->len)
@@ -41,7 +58,7 @@ faim_internal int aim_bstream_setpos(aim_bstream_t *bs, unsigned int off)
 	return off;
 }
 
-faim_internal void aim_bstream_rewind(aim_bstream_t *bs)
+faim_internal void aim_bstream_rewind(ByteStream *bs)
 {
 
 	aim_bstream_setpos(bs, 0);
@@ -54,7 +71,7 @@ faim_internal void aim_bstream_rewind(aim_bstream_t *bs)
  * in a bstream.  I'm not sure if libfaim actually does
  * this anywhere...
  */
-faim_internal int aim_bstream_advance(aim_bstream_t *bs, int n)
+faim_internal int aim_bstream_advance(ByteStream *bs, int n)
 {
 
 	if ((aim_bstream_curpos(bs) + n < 0) || (aim_bstream_empty(bs) < n))
@@ -65,7 +82,7 @@ faim_internal int aim_bstream_advance(aim_bstream_t *bs, int n)
 	return n;
 }
 
-faim_internal fu8_t aimbs_get8(aim_bstream_t *bs)
+faim_internal guint8 aimbs_get8(ByteStream *bs)
 {
 
 	if (aim_bstream_empty(bs) < 1)
@@ -76,7 +93,7 @@ faim_internal fu8_t aimbs_get8(aim_bstream_t *bs)
 	return aimutil_get8(bs->data + bs->offset - 1);
 }
 
-faim_internal fu16_t aimbs_get16(aim_bstream_t *bs)
+faim_internal guint16 aimbs_get16(ByteStream *bs)
 {
 
 	if (aim_bstream_empty(bs) < 2)
@@ -87,7 +104,7 @@ faim_internal fu16_t aimbs_get16(aim_bstream_t *bs)
 	return aimutil_get16(bs->data + bs->offset - 2);
 }
 
-faim_internal fu32_t aimbs_get32(aim_bstream_t *bs)
+faim_internal guint32 aimbs_get32(ByteStream *bs)
 {
 
 	if (aim_bstream_empty(bs) < 4)
@@ -98,7 +115,7 @@ faim_internal fu32_t aimbs_get32(aim_bstream_t *bs)
 	return aimutil_get32(bs->data + bs->offset - 4);
 }
 
-faim_internal fu8_t aimbs_getle8(aim_bstream_t *bs)
+faim_internal guint8 aimbs_getle8(ByteStream *bs)
 {
 
 	if (aim_bstream_empty(bs) < 1)
@@ -109,7 +126,7 @@ faim_internal fu8_t aimbs_getle8(aim_bstream_t *bs)
 	return aimutil_getle8(bs->data + bs->offset - 1);
 }
 
-faim_internal fu16_t aimbs_getle16(aim_bstream_t *bs)
+faim_internal guint16 aimbs_getle16(ByteStream *bs)
 {
 
 	if (aim_bstream_empty(bs) < 2)
@@ -120,7 +137,7 @@ faim_internal fu16_t aimbs_getle16(aim_bstream_t *bs)
 	return aimutil_getle16(bs->data + bs->offset - 2);
 }
 
-faim_internal fu32_t aimbs_getle32(aim_bstream_t *bs)
+faim_internal guint32 aimbs_getle32(ByteStream *bs)
 {
 
 	if (aim_bstream_empty(bs) < 4)
@@ -131,7 +148,7 @@ faim_internal fu32_t aimbs_getle32(aim_bstream_t *bs)
 	return aimutil_getle32(bs->data + bs->offset - 4);
 }
 
-faim_internal int aimbs_getrawbuf(aim_bstream_t *bs, fu8_t *buf, int len)
+faim_internal int aimbs_getrawbuf(ByteStream *bs, guint8 *buf, int len)
 {
 
 	if (aim_bstream_empty(bs) < len)
@@ -143,9 +160,9 @@ faim_internal int aimbs_getrawbuf(aim_bstream_t *bs, fu8_t *buf, int len)
 	return len;
 }
 
-faim_internal fu8_t *aimbs_getraw(aim_bstream_t *bs, int len)
+faim_internal guint8 *aimbs_getraw(ByteStream *bs, int len)
 {
-	fu8_t *ob;
+	guint8 *ob;
 
 	if (!(ob = malloc(len)))
 		return NULL;
@@ -158,14 +175,14 @@ faim_internal fu8_t *aimbs_getraw(aim_bstream_t *bs, int len)
 	return ob;
 }
 
-faim_internal char *aimbs_getstr(aim_bstream_t *bs, int len)
+faim_internal char *aimbs_getstr(ByteStream *bs, int len)
 {
 	char *ob;
 
 	if (!(ob = malloc(len + 1)))
 		return NULL;
 
-	if (aimbs_getrawbuf(bs, (fu8_t *)ob, len) < len) {
+	if (aimbs_getrawbuf(bs, (guint8 *)ob, len) < len) {
 		free(ob);
 		return NULL;
 	}
@@ -175,7 +192,7 @@ faim_internal char *aimbs_getstr(aim_bstream_t *bs, int len)
 	return ob;
 }
 
-faim_internal int aimbs_put8(aim_bstream_t *bs, fu8_t v)
+faim_internal int aimbs_put8(ByteStream *bs, guint8 v)
 {
 
 	if (aim_bstream_empty(bs) < 1)
@@ -186,7 +203,7 @@ faim_internal int aimbs_put8(aim_bstream_t *bs, fu8_t v)
 	return 1;
 }
 
-faim_internal int aimbs_put16(aim_bstream_t *bs, fu16_t v)
+faim_internal int aimbs_put16(ByteStream *bs, guint16 v)
 {
 
 	if (aim_bstream_empty(bs) < 2)
@@ -197,7 +214,7 @@ faim_internal int aimbs_put16(aim_bstream_t *bs, fu16_t v)
 	return 2;
 }
 
-faim_internal int aimbs_put32(aim_bstream_t *bs, fu32_t v)
+faim_internal int aimbs_put32(ByteStream *bs, guint32 v)
 {
 
 	if (aim_bstream_empty(bs) < 4)
@@ -208,7 +225,7 @@ faim_internal int aimbs_put32(aim_bstream_t *bs, fu32_t v)
 	return 1;
 }
 
-faim_internal int aimbs_putle8(aim_bstream_t *bs, fu8_t v)
+faim_internal int aimbs_putle8(ByteStream *bs, guint8 v)
 {
 
 	if (aim_bstream_empty(bs) < 1)
@@ -219,7 +236,7 @@ faim_internal int aimbs_putle8(aim_bstream_t *bs, fu8_t v)
 	return 1;
 }
 
-faim_internal int aimbs_putle16(aim_bstream_t *bs, fu16_t v)
+faim_internal int aimbs_putle16(ByteStream *bs, guint16 v)
 {
 
 	if (aim_bstream_empty(bs) < 2)
@@ -230,7 +247,7 @@ faim_internal int aimbs_putle16(aim_bstream_t *bs, fu16_t v)
 	return 2;
 }
 
-faim_internal int aimbs_putle32(aim_bstream_t *bs, fu32_t v)
+faim_internal int aimbs_putle32(ByteStream *bs, guint32 v)
 {
 
 	if (aim_bstream_empty(bs) < 4)
@@ -242,7 +259,7 @@ faim_internal int aimbs_putle32(aim_bstream_t *bs, fu32_t v)
 }
 
 
-faim_internal int aimbs_putraw(aim_bstream_t *bs, const fu8_t *v, int len)
+faim_internal int aimbs_putraw(ByteStream *bs, const guint8 *v, int len)
 {
 
 	if (aim_bstream_empty(bs) < len)
@@ -254,12 +271,12 @@ faim_internal int aimbs_putraw(aim_bstream_t *bs, const fu8_t *v, int len)
 	return len;
 }
 
-faim_internal int aimbs_putstr(aim_bstream_t *bs, const char *str)
+faim_internal int aimbs_putstr(ByteStream *bs, const char *str)
 {
-	return aimbs_putraw(bs, (fu8_t *)str, strlen(str));
+	return aimbs_putraw(bs, (guint8 *)str, strlen(str));
 }
 
-faim_internal int aimbs_putbs(aim_bstream_t *bs, aim_bstream_t *srcbs, int len)
+faim_internal int aimbs_putbs(ByteStream *bs, ByteStream *srcbs, int len)
 {
 
 	if (aim_bstream_empty(srcbs) < len)

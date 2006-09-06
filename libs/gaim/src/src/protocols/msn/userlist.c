@@ -432,7 +432,8 @@ msn_got_lst_user(MsnSession *session, MsnUser *user,
 		}
 
 		/* FIXME: It might be a real alias */
-		/* serv_got_alias(gc, passport, store); */
+		/* Umm, what? This might fix bug #1385130 */
+		serv_got_alias(gc, passport, store);
 	}
 
 	if (list_op & MSN_LIST_AL_OP)
@@ -488,7 +489,11 @@ msn_userlist_new(MsnSession *session)
 
 	userlist->session = session;
 	userlist->buddy_icon_requests = g_queue_new();
-	userlist->buddy_icon_window = 5;
+	
+	/* buddy_icon_window is the number of allowed simultaneous buddy icon requests.
+	 * XXX With smarter rate limiting code, we could allow more at once... 5 was the limit set when
+	 * we weren't retrieiving any more than 5 per MSN session. */
+	userlist->buddy_icon_window = 1;
 
 	return userlist;
 }
@@ -513,6 +518,10 @@ msn_userlist_destroy(MsnUserList *userlist)
 	g_list_free(userlist->groups);
 
 	g_queue_free(userlist->buddy_icon_requests);
+
+	if (userlist->buddy_icon_request_timer)
+		gaim_timeout_remove(userlist->buddy_icon_request_timer);
+
 	g_free(userlist);
 }
 

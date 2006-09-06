@@ -37,7 +37,7 @@
 #include "util.h"
 #include "request.h"
 
-#include "lib/libgadu.h"
+#include <libgadu.h>
 
 #include "gg.h"
 #include "confer.h"
@@ -54,6 +54,42 @@ static GaimPlugin *my_protocol = NULL;
 
 /* ----- HELPERS -------------------------------------------------------- */
 
+/**
+ * Set up libgadu's proxy.
+ *
+ * @param account Account for which to set up the proxy.
+ *
+ * @return Zero if proxy setup is valid, otherwise -1.
+ */
+/* static int ggp_setup_proxy(GaimAccount *account) {{{ */
+static int ggp_setup_proxy(GaimAccount *account)
+{
+	GaimProxyInfo *gpi;
+
+	gpi = gaim_proxy_get_setup(account);
+
+	if ((gaim_proxy_info_get_type(gpi) != GAIM_PROXY_NONE) &&
+	    (gaim_proxy_info_get_host(gpi) == NULL ||
+	     gaim_proxy_info_get_port(gpi) <= 0)) {
+
+		gg_proxy_enabled = 0;
+		gaim_notify_error(NULL, NULL, _("Invalid proxy settings"),
+				  _("Either the host name or port number specified for your given proxy type is invalid."));
+		return -1;
+	} else if (gaim_proxy_info_get_type(gpi) != GAIM_PROXY_NONE) {
+		gg_proxy_enabled = 1;
+		gg_proxy_host = g_strdup(gaim_proxy_info_get_host(gpi));
+		gg_proxy_port = gaim_proxy_info_get_port(gpi);
+		gg_proxy_username = g_strdup(gaim_proxy_info_get_username(gpi));
+		gg_proxy_password = g_strdup(gaim_proxy_info_get_password(gpi));
+	} else {
+		gg_proxy_enabled = 0;
+	}
+
+	return 0;
+}
+/* }}} */
+
 /*
  */
 /* static void ggp_async_token_handler(gpointer _gc, gint fd, GaimInputCondition cond) {{{ */
@@ -66,7 +102,6 @@ static void ggp_async_token_handler(gpointer _gc, gint fd, GaimInputCondition co
 
 	struct gg_token *t = NULL;
 
-	gaim_debug_info("gg", "token_handler: token->req->fd = %d\n", token->req->fd);
 	gaim_debug_info("gg", "token_handler: token->req: check = %d; state = %d;\n",
 			token->req->check, token->req->state);
 
@@ -129,11 +164,19 @@ static void ggp_async_token_handler(gpointer _gc, gint fd, GaimInputCondition co
 /* static void ggp_token_request(GaimConnection *gc, GGPTokenCallback cb) {{{ */
 static void ggp_token_request(GaimConnection *gc, GGPTokenCallback cb)
 {
-	GGPInfo *info = gc->proto_data;
+	GaimAccount *account;
 	struct gg_http *req;
+	GGPInfo *info;
+
+	account = gaim_connection_get_account(gc);
+
+	if (ggp_setup_proxy(account) == -1)
+		return;
+
+	info = gc->proto_data;
 
 	if ((req = gg_token(1)) == NULL) {
-		gaim_notify_error(gaim_connection_get_account(gc),
+		gaim_notify_error(account,
 				  _("Token Error"),
 				  _("Unable to fetch the token.\n"), NULL);
 		return;
@@ -422,7 +465,7 @@ static void ggp_register_user_dialog(GaimConnection *gc)
 	gaim_request_fields_add_group(fields, group);
 
 	field = gaim_request_field_string_new("email",
-			_("e-Mail"), "", FALSE);
+			_("E-mail"), "", FALSE);
 	gaim_request_field_string_set_masked(field, FALSE);
 	gaim_request_field_group_add_field(group, field);
 
@@ -800,9 +843,8 @@ static void ggp_bmenu_add_to_chat(GaimBlistNode *node, gpointer ignored)
 	}
 	gaim_request_field_group_add_field(group, field);
 
-	/* TODO: s/screenname/alias/ */
 	msg = g_strdup_printf(_("Select a chat for buddy: %s"),
-			      gaim_buddy_get_name(buddy));
+			      gaim_buddy_get_alias(buddy));
 	gaim_request_fields(gc,
 			_("Add to chat..."),
 			_("Add to chat..."),
@@ -936,6 +978,7 @@ static void ggp_sr_close_cb(GaimAccount *account)
 /* static void ggp_pubdir_reply_handler(GaimConnection *gc, gg_pubdir50_t req) {{{ */
 static void ggp_pubdir_reply_handler(GaimConnection *gc, gg_pubdir50_t req)
 {
+	GaimAccount *account = gaim_connection_get_account(gc);
 	GGPInfo *info = gc->proto_data;
 	GaimNotifySearchResults *results;
 	GaimNotifySearchColumn *column;
@@ -949,6 +992,7 @@ static void ggp_pubdir_reply_handler(GaimConnection *gc, gg_pubdir50_t req)
 		gaim_notify_error(gc, NULL,
 			_("No matching users found"),
 			_("There are no users matching your search criteria."));
+		ggp_sr_close_cb(account);
 		return;
 	}
 	res_count = (res_count > 20) ? 20 : res_count;
@@ -961,14 +1005,14 @@ static void ggp_pubdir_reply_handler(GaimConnection *gc, gg_pubdir50_t req)
 		gaim_notify_error(gc, NULL,
 				  _("Unable to display the search results."),
 				  NULL);
-		ggp_sr_close_cb(gaim_connection_get_account(gc));
+		ggp_sr_close_cb(account);
 		return;
 	}
 
 	column = gaim_notify_searchresults_column_new(_("UIN"));
 	gaim_notify_searchresults_column_add(results, column);
 
-	column = gaim_notify_searchresults_column_new(_("First name"));
+	column = gaim_notify_searchresults_column_new(_("First Name"));
 	gaim_notify_searchresults_column_add(results, column);
 
 	column = gaim_notify_searchresults_column_new(_("Nickname"));
@@ -977,7 +1021,7 @@ static void ggp_pubdir_reply_handler(GaimConnection *gc, gg_pubdir50_t req)
 	column = gaim_notify_searchresults_column_new(_("City"));
 	gaim_notify_searchresults_column_add(results, column);
 
-	column = gaim_notify_searchresults_column_new(_("Birth year"));
+	column = gaim_notify_searchresults_column_new(_("Birth Year"));
 	gaim_notify_searchresults_column_add(results, column);
 
 	gaim_debug_info("gg", "Going with %d entries\n", res_count);
@@ -1020,7 +1064,7 @@ static void ggp_pubdir_reply_handler(GaimConnection *gc, gg_pubdir50_t req)
 				_("Gadu-Gadu Public Directory"),
 				_("Search results"), NULL, results,
 				(GaimNotifyCloseCallback)ggp_sr_close_cb,
-				gaim_connection_get_account(gc));
+				account);
 
 		if (h == NULL) {
 			gaim_debug_error("gg", "ggp_pubdir_reply_handler: "
@@ -1028,7 +1072,7 @@ static void ggp_pubdir_reply_handler(GaimConnection *gc, gg_pubdir50_t req)
 			gaim_notify_error(gc, NULL,
 					  _("Unable to display the search results."),
 					  NULL);
-			ggp_sr_close_cb(gaim_connection_get_account(gc));
+			ggp_sr_close_cb(account);
 			return;
 		}
 
@@ -1395,13 +1439,9 @@ static void ggp_tooltip_text(GaimBuddy *b, GString *str, gboolean full)
 	name = gaim_status_get_name(status);
 
 	if (msg != NULL) {
-		char *tmp = gaim_markup_strip_html(msg);
-		text = g_markup_escape_text(tmp, -1);
-		g_free(tmp);
-
+		text = g_markup_escape_text(msg, -1);
 		g_string_append_printf(str, "\n<b>%s:</b> %s: %s",
 				       _("Status"), name, text);
-
 		g_free(text);
 	} else {
 		g_string_append_printf(str, "\n<b>%s:</b> %s",
@@ -1507,9 +1547,16 @@ static GList *ggp_chat_info(GaimConnection *gc)
 /* static void ggp_login(GaimAccount *account) {{{ */
 static void ggp_login(GaimAccount *account)
 {
-	GaimConnection *gc = gaim_account_get_connection(account);
-	struct gg_login_params *glp = g_new0(struct gg_login_params, 1);
-	GGPInfo *info = g_new0(GGPInfo, 1);
+	GaimConnection *gc;
+	struct gg_login_params *glp;
+	GGPInfo *info;
+
+	if (ggp_setup_proxy(account) == -1)
+		return;
+
+	gc = gaim_account_get_connection(account);
+	glp = g_new0(struct gg_login_params, 1);
+	info = g_new0(GGPInfo, 1);
 
 	/* Probably this should be moved to *_new() function. */
 	info->session = NULL;
@@ -1669,14 +1716,12 @@ static void ggp_set_status(GaimAccount *account, GaimStatus *status)
 	} else {
 		gchar *tmp, *new_msg;
 
-		tmp = gaim_markup_strip_html(msg);
-		new_msg = g_markup_escape_text(tmp, -1);
+		tmp = charset_convert(msg, "UTF-8", "CP1250");
+		new_msg = gaim_markup_strip_html(tmp);
 		g_free(tmp);
 
-		tmp = charset_convert(new_msg, "UTF-8", "CP1250");
-		gg_change_status_descr(info->session, new_status_descr, tmp);
+		gg_change_status_descr(info->session, new_status_descr, new_msg);
 		g_free(new_msg);
-		g_free(tmp);
 	}
 }
 /* }}} */
@@ -1864,6 +1909,13 @@ static GList *ggp_actions(GaimPlugin *plugin, gpointer context)
 }
 /* }}} */
 
+/* static gboolean ggp_offline_message(const GaimBuddy *buddy) {{{ */
+static gboolean ggp_offline_message(const GaimBuddy *buddy)
+{
+	return TRUE;
+}
+/* }}} */
+
 /* prpl_info setup {{{ */
 static GaimPluginProtocolInfo prpl_info =
 {
@@ -1925,9 +1977,8 @@ static GaimPluginProtocolInfo prpl_info =
 	NULL,				/* can_receive_file */
 	NULL,				/* send_file */
 	NULL,				/* new_xfer */
-	NULL,				/* offline_message */
+	ggp_offline_message,		/* offline_message */
 	NULL,				/* whiteboard_prpl_ops */
-	NULL,				/* media_prpl_ops */
 };
 /* }}} */
 

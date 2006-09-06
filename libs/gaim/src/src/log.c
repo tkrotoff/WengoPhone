@@ -45,12 +45,13 @@ static GHashTable *logsize_users = NULL;
 
 static void log_get_log_sets_common(GHashTable *sets);
 
-static void html_logger_write(GaimLog *log, GaimMessageFlags type,
+static gsize html_logger_write(GaimLog *log, GaimMessageFlags type,
 							  const char *from, time_t time, const char *message);
 static void html_logger_finalize(GaimLog *log);
 static GList *html_logger_list(GaimLogType type, const char *sn, GaimAccount *account);
 static GList *html_logger_list_syslog(GaimAccount *account);
 static char *html_logger_read(GaimLog *log, GaimLogReadFlags *flags);
+static int html_logger_total_size(GaimLogType type, const char *name, GaimAccount *account);
 
 static GList *old_logger_list(GaimLogType type, const char *sn, GaimAccount *account);
 static int old_logger_total_size(GaimLogType type, const char *name, GaimAccount *account);
@@ -59,20 +60,21 @@ static int old_logger_size (GaimLog *log);
 static void old_logger_get_log_sets(GaimLogSetCallback cb, GHashTable *sets);
 static void old_logger_finalize(GaimLog *log);
 
-static void txt_logger_write(GaimLog *log,
+static gsize txt_logger_write(GaimLog *log,
 							 GaimMessageFlags type,
 							 const char *from, time_t time, const char *message);
 static void txt_logger_finalize(GaimLog *log);
 static GList *txt_logger_list(GaimLogType type, const char *sn, GaimAccount *account);
 static GList *txt_logger_list_syslog(GaimAccount *account);
 static char *txt_logger_read(GaimLog *log, GaimLogReadFlags *flags);
+static int txt_logger_total_size(GaimLogType type, const char *name, GaimAccount *account);
 
 /**************************************************************************
  * PUBLIC LOGGING FUNCTIONS ***********************************************
  **************************************************************************/
 
 GaimLog *gaim_log_new(GaimLogType type, const char *name, GaimAccount *account,
-					  GaimConversation *conv, time_t time)
+                      GaimConversation *conv, time_t time, const struct tm *tm)
 {
 	GaimLog *log = g_new0(GaimLog, 1);
 	log->name = g_strdup(gaim_normalize(account, name));
@@ -81,6 +83,24 @@ GaimLog *gaim_log_new(GaimLogType type, const char *name, GaimAccount *account,
 	log->time = time;
 	log->type = type;
 	log->logger_data = NULL;
+	if (tm != NULL)
+	{
+		log->tm = g_new0(struct tm, 1);
+		*(log->tm) = *tm;
+
+#ifdef HAVE_STRUCT_TM_TM_ZONE
+		/* XXX: This is so wrong... */
+		if (log->tm->tm_zone != NULL)
+		{
+			char *tmp = g_locale_from_utf8(log->tm->tm_zone, -1, NULL, NULL, NULL);
+			if (tmp != NULL)
+				log->tm->tm_zone = (const char *)tmp;
+			else
+				/* Just shove the UTF-8 bytes in and hope... */
+				log->tm->tm_zone = (const char *)g_strdup(log->tm->tm_zone);
+		}
+#endif
+	}
 	log->logger = gaim_log_logger_get();
 	if (log->logger && log->logger->create)
 		log->logger->create(log);
@@ -93,6 +113,16 @@ void gaim_log_free(GaimLog *log)
 	if (log->logger && log->logger->finalize)
 		log->logger->finalize(log);
 	g_free(log->name);
+
+	if (log->tm != NULL)
+	{
+#ifdef HAVE_STRUCT_TM_TM_ZONE
+		/* XXX: This is so wrong... */
+		g_free((char *)log->tm->tm_zone);
+#endif
+		g_free(log->tm);
+	}
+
 	g_free(log);
 }
 
@@ -100,20 +130,28 @@ void gaim_log_write(GaimLog *log, GaimMessageFlags type,
 		    const char *from, time_t time, const char *message)
 {
 	struct _gaim_logsize_user *lu;
+	gsize written, total = 0;
+	gpointer ptrsize;
 
 	g_return_if_fail(log);
 	g_return_if_fail(log->logger);
 	g_return_if_fail(log->logger->write);
 
-	(log->logger->write)(log, type, from, time, message);
+	written = (log->logger->write)(log, type, from, time, message);
 
 	lu = g_new(struct _gaim_logsize_user, 1);
 
 	lu->name = g_strdup(gaim_normalize(log->account, log->name));
 	lu->account = log->account;
-	g_hash_table_remove(logsize_users, lu);
-	g_free(lu->name);
-	g_free(lu);
+
+	if(g_hash_table_lookup_extended(logsize_users, lu, NULL, &ptrsize)) {
+		total = GPOINTER_TO_INT(ptrsize);
+		total += written;
+		g_hash_table_replace(logsize_users, lu, GINT_TO_POINTER(total));
+	} else {
+		g_free(lu->name);
+		g_free(lu);
+	}
 
 }
 
@@ -126,7 +164,7 @@ char *gaim_log_read(GaimLog *log, GaimLogReadFlags *flags)
 		gaim_str_strip_char(ret, '\r');
 		return ret;
 	}
-	return (_("<b><font color=\"red\">The logger has no read function</font></b>"));
+	return g_strdup(_("<b><font color=\"red\">The logger has no read function</font></b>"));
 }
 
 int gaim_log_get_size(GaimLog *log)
@@ -146,7 +184,7 @@ static guint _gaim_logsize_user_hash(struct _gaim_logsize_user *lu)
 static guint _gaim_logsize_user_equal(struct _gaim_logsize_user *lu1,
 		struct _gaim_logsize_user *lu2)
 {
-	return ((!strcmp(lu1->name, lu2->name)) && lu1->account == lu2->account);
+	return (lu1->account == lu2->account && (!strcmp(lu1->name, lu2->name)));
 }
 
 static void _gaim_logsize_user_free_key(struct _gaim_logsize_user *lu)
@@ -181,12 +219,10 @@ int gaim_log_get_total_size(GaimLogType type, const char *name, GaimAccount *acc
 				int this_size = 0;
 
 				while (logs) {
-					GList *logs2 = logs->next;
 					GaimLog *log = (GaimLog*)(logs->data);
 					this_size += gaim_log_get_size(log);
 					gaim_log_free(log);
-					g_list_free_1(logs);
-					logs = logs2;
+					logs = g_list_delete_link(logs, logs);
 				}
 
 				size += this_size;
@@ -261,7 +297,7 @@ GaimLogLogger *gaim_log_logger_new(const char *id, const char *name, int functio
 {
 #if 0
 				void(*create)(GaimLog *),
-				void(*write)(GaimLog *, GaimMessageFlags, const char *, time_t, const char *),
+				gsize(*write)(GaimLog *, GaimMessageFlags, const char *, time_t, const char *),
 				void(*finalize)(GaimLog *),
 				GList*(*list)(GaimLogType type, const char*, GaimAccount*),
 				char*(*read)(GaimLog*, GaimLogReadFlags*),
@@ -515,7 +551,7 @@ void gaim_log_init(void)
 									  html_logger_list,
 									  html_logger_read,
 									  gaim_log_common_sizer,
-									  NULL,
+									  html_logger_total_size,
 									  html_logger_list_syslog);
 	gaim_log_logger_add(html_logger);
 
@@ -526,7 +562,7 @@ void gaim_log_init(void)
 									 txt_logger_list,
 									 txt_logger_read,
 									 gaim_log_common_sizer,
-									 NULL,
+									 txt_logger_total_size,
 									 txt_logger_list_syslog);
 	gaim_log_logger_add(txt_logger);
 
@@ -577,30 +613,28 @@ static char *log_get_timestamp(GaimLog *log, time_t when)
 	date = gaim_signal_emit_return_1(gaim_log_get_handle(),
 	                          "log-timestamp",
 	                          log, &tm);
-	if (date == NULL)
-	{
-		char buf[64];
+	if (date != NULL)
+		return date;
 
-		if (log->type == GAIM_LOG_SYSTEM || time(NULL) > when + 20*60)
-			strftime(buf, sizeof(buf), "%x %X", &tm);
-		else
-			strftime(buf, sizeof(buf), "%X", &tm);
-
-		date = g_strdup(buf);
-	}
-
-	return date;
+	if (log->type == GAIM_LOG_SYSTEM || time(NULL) > when + 20*60)
+		return g_strdup(gaim_date_format_long(&tm));
+	else
+		return g_strdup(gaim_time_format(&tm));
 }
 
 void gaim_log_common_writer(GaimLog *log, const char *ext)
 {
-	char date[64];
 	GaimLogCommonLoggerData *data = log->logger_data;
 
 	if (data == NULL)
 	{
 		/* This log is new */
-		char *dir, *filename, *path;
+		char *dir;
+		struct tm *tm;
+		const char *tz;
+		const char *date;
+		char *filename;
+		char *path;
 
 		dir = gaim_log_get_log_dir(log->type, log->name, log->account);
 		if (dir == NULL)
@@ -608,9 +642,11 @@ void gaim_log_common_writer(GaimLog *log, const char *ext)
 
 		gaim_build_dir (dir, S_IRUSR | S_IWUSR | S_IXUSR);
 
-		strftime(date, sizeof(date), "%Y-%m-%d.%H%M%S", localtime(&log->time));
+		tm = localtime(&log->time);
+		tz = gaim_escape_filename(gaim_utf8_strftime("%Z", tm));
+		date = gaim_utf8_strftime("%Y-%m-%d.%H%M%S%z", tm);
 
-		filename = g_strdup_printf("%s%s", date, ext ? ext : "");
+		filename = g_strdup_printf("%s%s%s", date, tz, ext ? ext : "");
 
 		path = g_build_filename(dir, filename, NULL);
 		g_free(dir);
@@ -662,9 +698,35 @@ GList *gaim_log_common_lister(GaimLogType type, const char *name, GaimAccount *a
 		{
 			GaimLog *log;
 			GaimLogCommonLoggerData *data;
-			time_t stamp = gaim_str_to_time(filename, FALSE);
+			struct tm tm;
+#if defined (HAVE_TM_GMTOFF) && defined (HAVE_STRUCT_TM_TM_ZONE)
+			long tz_off;
+			const char *rest;
+			time_t stamp = gaim_str_to_time(gaim_unescape_filename(filename), FALSE, &tm, &tz_off, &rest);
+			char *end;
 
-			log = gaim_log_new(type, name, account, NULL, stamp);
+			/* As zero is a valid offset, GAIM_NO_TZ_OFF means no offset was
+			 * provided. See util.h. Yes, it's kinda ugly. */
+			if (tz_off != GAIM_NO_TZ_OFF)
+				tm.tm_gmtoff = tz_off - tm.tm_gmtoff;
+
+			if (rest == NULL || (end = strchr(rest, '.')) == NULL || strchr(rest, ' ') != NULL)
+			{
+				log = gaim_log_new(type, name, account, NULL, stamp, NULL);
+			}
+			else
+			{
+				char *tmp = g_strndup(rest, end - rest);
+				tm.tm_zone = tmp;
+				log = gaim_log_new(type, name, account, NULL, stamp, &tm);
+				g_free(tmp);
+			}
+#else
+			time_t stamp = gaim_str_to_time(filename, FALSE, &tm, NULL, NULL);
+
+			log = gaim_log_new(type, name, account, NULL, stamp, &tm);
+#endif
+
 			log->logger = logger;
 			log->logger_data = data = g_new0(GaimLogCommonLoggerData, 1);
 			data->path = g_build_filename(path, filename, NULL);
@@ -674,6 +736,48 @@ GList *gaim_log_common_lister(GaimLogType type, const char *name, GaimAccount *a
 	g_dir_close(dir);
 	g_free(path);
 	return list;
+}
+
+int gaim_log_common_total_sizer(GaimLogType type, const char *name, GaimAccount *account, const char *ext)
+{
+	GDir *dir;
+	int size = 0;
+	const char *filename;
+	char *path;
+
+	if(!account)
+		return 0;
+
+	path = gaim_log_get_log_dir(type, name, account);
+	if (path == NULL)
+		return 0;
+
+	if (!(dir = g_dir_open(path, 0, NULL)))
+	{
+		g_free(path);
+		return 0;
+	}
+
+	while ((filename = g_dir_read_name(dir)))
+	{
+		if (gaim_str_has_suffix(filename, ext) &&
+		    strlen(filename) >= (17 + strlen(ext)))
+		{
+			char *tmp = g_build_filename(path, filename, NULL);
+			struct stat st;
+			if (g_stat(tmp, &st))
+			{
+				gaim_debug_error("log", "Error stating log file: %s\n", tmp);
+				g_free(tmp);
+				continue;
+			}
+			g_free(tmp);
+			size += st.st_size;
+		}
+	}
+	g_dir_close(dir);
+	g_free(path);
+	return size;
 }
 
 int gaim_log_common_sizer(GaimLog *log)
@@ -817,7 +921,6 @@ static void xml_logger_write(GaimLog *log,
 			     GaimMessageFlags type,
 			     const char *from, time_t time, const char *message)
 {
-	char *date;
 	char *xhtml = NULL;
 
 	if (!log->logger_data) {
@@ -825,19 +928,27 @@ static void xml_logger_write(GaimLog *log,
 		 * creating a new file there would result in empty files in the case
 		 * that you open a convo with someone, but don't say anything.
 		 */
-		char buf[64];
+		struct tm *tm;
+		const char *tz;
+		const char *date;
 		char *dir = gaim_log_get_log_dir(log->type, log->name, log->account);
-		FILE *file;
+		char *name;
+		char *filename;
 
 		if (dir == NULL)
 			return;
 
-		strftime(buf, sizeof(buf), "%Y-%m-%d.%H%M%S.xml", localtime(&log->time));
+		tm = localtime(&log->time);
+		tz = gaim_escape_filename(gaim_utf8_strftime("%Z", tm);
+		date = gaim_utf8_strftime("%Y-%m-%d.%H%M%S%z", tm);
+
+		name = g_strdup_printf("%s%s%s", date, tz, ext ? ext : "");
 
 		gaim_build_dir (dir, S_IRUSR | S_IWUSR | S_IXUSR);
 
-		char *filename = g_build_filename(dir, buf, NULL);
+		filename = g_build_filename(dir, name, NULL);
 		g_free(dir);
+		g_free(name);
 
 		log->logger_data = g_fopen(filename, "a");
 		if (!log->logger_data) {
@@ -849,7 +960,7 @@ static void xml_logger_write(GaimLog *log,
 		fprintf(log->logger_data, "<?xml version='1.0' encoding='UTF-8' ?>\n"
 			"<?xml-stylesheet href='file:///usr/src/web/htdocs/log-stylesheet.xsl' type='text/xml' ?>\n");
 
-		strftime(buf, sizeof(buf), "%Y-%m-%d %H:%M:%S", localtime(&log->time));
+		date = gaim_utf8_strftime("%Y-%m-%d %H:%M:%S", localtime(&log->time));
 		fprintf(log->logger_data, "<conversation time='%s' screenname='%s' protocol='%s'>\n",
 			date, log->name, prpl);
 	}
@@ -908,77 +1019,93 @@ static GaimLogLogger xml_logger =  {
  ** HTML LOGGER *************
  ****************************/
 
-static void html_logger_write(GaimLog *log, GaimMessageFlags type,
+static gsize html_logger_write(GaimLog *log, GaimMessageFlags type,
 							  const char *from, time_t time, const char *message)
 {
 	char *msg_fixed;
 	char *date;
+	char *header;
 	GaimPlugin *plugin = gaim_find_prpl(gaim_account_get_protocol_id(log->account));
 	GaimLogCommonLoggerData *data = log->logger_data;
+	gsize written = 0;
 
 	if(!data) {
-		char buf[64];
 		const char *prpl =
 			GAIM_PLUGIN_PROTOCOL_INFO(plugin)->list_icon(log->account, NULL);
+		const char *date;
 		gaim_log_common_writer(log, ".html");
 
 		data = log->logger_data;
 
 		/* if we can't write to the file, give up before we hurt ourselves */
 		if(!data->file)
-			return;
+			return 0;
 
-		strftime(buf, sizeof(buf), "%c", localtime(&log->time));
-		fprintf(data->file, "<html><head>");
-		fprintf(data->file, "<meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\">");
-		fprintf(data->file, "<title>");
-		fprintf(data->file, "Conversation with %s at %s on %s (%s)",
-			log->name, buf, gaim_account_get_username(log->account), prpl);
-		fprintf(data->file, "</title></head><body>");
-		fprintf(data->file,
-			"<h3>Conversation with %s at %s on %s (%s)</h3>\n",
-			log->name, buf, gaim_account_get_username(log->account), prpl);
+		date = gaim_date_format_full(localtime(&log->time));
+
+		written += fprintf(data->file, "<html><head>");
+		written += fprintf(data->file, "<meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\">");
+		written += fprintf(data->file, "<title>");
+		if (log->type == GAIM_LOG_SYSTEM)
+			header = g_strdup_printf("System log for account %s (%s) connected at %s",
+					gaim_account_get_username(log->account), prpl, date);
+		else
+			header = g_strdup_printf("Conversation with %s at %s on %s (%s)",
+					log->name, date, gaim_account_get_username(log->account), prpl);
+
+		written += fprintf(data->file, "%s", header);
+		written += fprintf(data->file, "</title></head><body>");
+		written += fprintf(data->file, "<h3>%s</h3>\n", header);
+		g_free(header);
 	}
 
 	/* if we can't write to the file, give up before we hurt ourselves */
 	if(!data->file)
-		return;
+		return 0;
 
 	gaim_markup_html_to_xhtml(message, &msg_fixed, NULL);
 	date = log_get_timestamp(log, time);
 
 	if(log->type == GAIM_LOG_SYSTEM){
-		fprintf(data->file, "---- %s @ %s ----<br/>\n", msg_fixed, date);
+		written += fprintf(data->file, "---- %s @ %s ----<br/>\n", msg_fixed, date);
 	} else {
 		if (type & GAIM_MESSAGE_SYSTEM)
-			fprintf(data->file, "<font size=\"2\">(%s)</font><b> %s</b><br/>\n", date, msg_fixed);
+			written += fprintf(data->file, "<font size=\"2\">(%s)</font><b> %s</b><br/>\n", date, msg_fixed);
+		else if (type & GAIM_MESSAGE_ERROR)
+			written += fprintf(data->file, "<font color=\"#FF0000\"><font size=\"2\">(%s)</font><b> %s</b></font><br/>\n", date, msg_fixed);
 		else if (type & GAIM_MESSAGE_WHISPER)
-			fprintf(data->file, "<font color=\"#6C2585\"><font size=\"2\">(%s)</font><b> %s:</b></font> %s<br/>\n",
+			written += fprintf(data->file, "<font color=\"#6C2585\"><font size=\"2\">(%s)</font><b> %s:</b></font> %s<br/>\n",
 					date, from, msg_fixed);
 		else if (type & GAIM_MESSAGE_AUTO_RESP) {
 			if (type & GAIM_MESSAGE_SEND)
-				fprintf(data->file, _("<font color=\"#16569E\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTO-REPLY&gt;:</b></font> %s<br/>\n"), date, from, msg_fixed);
+				written += fprintf(data->file, _("<font color=\"#16569E\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTO-REPLY&gt;:</b></font> %s<br/>\n"), date, from, msg_fixed);
 			else if (type & GAIM_MESSAGE_RECV)
-				fprintf(data->file, _("<font color=\"#A82F2F\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTO-REPLY&gt;:</b></font> %s<br/>\n"), date, from, msg_fixed);
+				written += fprintf(data->file, _("<font color=\"#A82F2F\"><font size=\"2\">(%s)</font> <b>%s &lt;AUTO-REPLY&gt;:</b></font> %s<br/>\n"), date, from, msg_fixed);
 		} else if (type & GAIM_MESSAGE_RECV) {
 			if(gaim_message_meify(msg_fixed, -1))
-				fprintf(data->file, "<font color=\"#062585\"><font size=\"2\">(%s)</font> <b>***%s</b></font> %s<br/>\n",
+				written += fprintf(data->file, "<font color=\"#062585\"><font size=\"2\">(%s)</font> <b>***%s</b></font> %s<br/>\n",
 						date, from, msg_fixed);
 			else
-				fprintf(data->file, "<font color=\"#A82F2F\"><font size=\"2\">(%s)</font> <b>%s:</b></font> %s<br/>\n",
+				written += fprintf(data->file, "<font color=\"#A82F2F\"><font size=\"2\">(%s)</font> <b>%s:</b></font> %s<br/>\n",
 						date, from, msg_fixed);
 		} else if (type & GAIM_MESSAGE_SEND) {
 			if(gaim_message_meify(msg_fixed, -1))
-				fprintf(data->file, "<font color=\"#062585\"><font size=\"2\">(%s)</font> <b>***%s</b></font> %s<br/>\n",
+				written += fprintf(data->file, "<font color=\"#062585\"><font size=\"2\">(%s)</font> <b>***%s</b></font> %s<br/>\n",
 						date, from, msg_fixed);
 			else
-				fprintf(data->file, "<font color=\"#16569E\"><font size=\"2\">(%s)</font> <b>%s:</b></font> %s<br/>\n",
+				written += fprintf(data->file, "<font color=\"#16569E\"><font size=\"2\">(%s)</font> <b>%s:</b></font> %s<br/>\n",
+						date, from, msg_fixed);
+		} else {
+			gaim_debug_error("log", "Unhandled message type.");
+			written += fprintf(data->file, "<font size=\"2\">(%s)</font><b> %s:</b></font> %s<br/>\n",
 						date, from, msg_fixed);
 		}
 	}
 	g_free(date);
 	g_free(msg_fixed);
 	fflush(data->file);
+
+	return written;
 }
 
 static void html_logger_finalize(GaimLog *log)
@@ -1025,13 +1152,17 @@ static char *html_logger_read(GaimLog *log, GaimLogReadFlags *flags)
 	return g_strdup_printf(_("<font color=\"red\"><b>Could not read file: %s</b></font>"), data->path);
 }
 
+static int html_logger_total_size(GaimLogType type, const char *name, GaimAccount *account)
+{
+	return gaim_log_common_total_sizer(type, name, account, ".html");
+}
 
 
 /****************************
  ** PLAIN TEXT LOGGER *******
  ****************************/
 
-static void txt_logger_write(GaimLog *log,
+static gsize txt_logger_write(GaimLog *log,
 							 GaimMessageFlags type,
 							 const char *from, time_t time, const char *message)
 {
@@ -1040,12 +1171,13 @@ static void txt_logger_write(GaimLog *log,
 	GaimLogCommonLoggerData *data = log->logger_data;
 	char *stripped = NULL;
 
+	gsize written = 0;
+
 	if (data == NULL) {
 		/* This log is new.  We could use the loggers 'new' function, but
 		 * creating a new file there would result in empty files in the case
 		 * that you open a convo with someone, but don't say anything.
 		 */
-		char buf[64];
 		const char *prpl =
 			GAIM_PLUGIN_PROTOCOL_INFO(plugin)->list_icon(log->account, NULL);
 		gaim_log_common_writer(log, ".txt");
@@ -1054,51 +1186,58 @@ static void txt_logger_write(GaimLog *log,
 
 		/* if we can't write to the file, give up before we hurt ourselves */
 		if(!data->file)
-			return;
+			return 0;
 
-		strftime(buf, sizeof(buf), "%c", localtime(&log->time));
-		fprintf(data->file, "Conversation with %s at %s on %s (%s)\n",
-			log->name, buf, gaim_account_get_username(log->account), prpl);
+		if (log->type == GAIM_LOG_SYSTEM)
+			written += fprintf(data->file, "System log for account %s (%s) connected at %s\n",
+				gaim_account_get_username(log->account), prpl,
+				gaim_date_format_full(localtime(&log->time)));
+		else
+			written += fprintf(data->file, "Conversation with %s at %s on %s (%s)\n",
+				log->name, gaim_date_format_full(localtime(&log->time)),
+				gaim_account_get_username(log->account), prpl);
 	}
 
 	/* if we can't write to the file, give up before we hurt ourselves */
 	if(!data->file)
-		return;
+		return 0;
 
 	stripped = gaim_markup_strip_html(message);
 	date = log_get_timestamp(log, time);
 
 	if(log->type == GAIM_LOG_SYSTEM){
-		fprintf(data->file, "---- %s @ %s ----\n", stripped, date);
+		written += fprintf(data->file, "---- %s @ %s ----\n", stripped, date);
 	} else {
 		if (type & GAIM_MESSAGE_SEND ||
 			type & GAIM_MESSAGE_RECV) {
 			if (type & GAIM_MESSAGE_AUTO_RESP) {
-				fprintf(data->file, _("(%s) %s <AUTO-REPLY>: %s\n"), date,
+				written += fprintf(data->file, _("(%s) %s <AUTO-REPLY>: %s\n"), date,
 						from, stripped);
 			} else {
 				if(gaim_message_meify(stripped, -1))
-					fprintf(data->file, "(%s) ***%s %s\n", date, from,
+					written += fprintf(data->file, "(%s) ***%s %s\n", date, from,
 							stripped);
 				else
-					fprintf(data->file, "(%s) %s: %s\n", date, from,
+					written += fprintf(data->file, "(%s) %s: %s\n", date, from,
 							stripped);
 			}
 		} else if (type & GAIM_MESSAGE_SYSTEM)
-			fprintf(data->file, "(%s) %s\n", date, stripped);
+			written += fprintf(data->file, "(%s) %s\n", date, stripped);
 		else if (type & GAIM_MESSAGE_NO_LOG) {
 			/* This shouldn't happen */
 			g_free(stripped);
-			return;
+			return written;
 		} else if (type & GAIM_MESSAGE_WHISPER)
-			fprintf(data->file, "(%s) *%s* %s", date, from, stripped);
+			written += fprintf(data->file, "(%s) *%s* %s", date, from, stripped);
 		else
-			fprintf(data->file, "(%s) %s%s %s\n", date, from ? from : "",
+			written += fprintf(data->file, "(%s) %s%s %s\n", date, from ? from : "",
 					from ? ":" : "", stripped);
 	}
 	g_free(date);
 	g_free(stripped);
 	fflush(data->file);
+
+	return written;
 }
 
 static void txt_logger_finalize(GaimLog *log)
@@ -1139,11 +1278,17 @@ static char *txt_logger_read(GaimLog *log, GaimLogReadFlags *flags)
 		g_free(read);
 		minus_header2 = g_markup_escape_text(minus_header, -1);
 		g_free(minus_header);
-		return minus_header2;
+		read = gaim_markup_linkify(minus_header2);
+		g_free(minus_header2);
+		return read;
 	}
 	return g_strdup_printf(_("<font color=\"red\"><b>Could not read file: %s</b></font>"), data->path);
 }
 
+static int txt_logger_total_size(GaimLogType type, const char *name, GaimAccount *account)
+{
+	return gaim_log_common_total_sizer(type, name, account, ".txt");
+}
 
 
 /****************
@@ -1162,14 +1307,19 @@ struct old_logger_data {
 
 static GList *old_logger_list(GaimLogType type, const char *sn, GaimAccount *account)
 {
+	char *logfile = g_strdup_printf("%s.log", gaim_normalize(account, sn));
+	char *pathstr = g_build_filename(gaim_user_dir(), "logs", logfile, NULL);
+	GaimStringref *pathref = gaim_stringref_new(pathstr);
+	struct stat st;
+	time_t log_last_modified;
+	FILE *index;
 	FILE *file;
+	int index_fd;
+	char *index_tmp;
 	char buf[BUF_LONG];
 	struct tm tm;
 	char month[4];
 	struct old_logger_data *data = NULL;
-	char *logfile = g_strdup_printf("%s.log", gaim_normalize(account, sn));
-	char *pathstr = g_build_filename(gaim_user_dir(), "logs", logfile, NULL);
-	GaimStringref *pathref = gaim_stringref_new(pathstr);
 	char *newlog;
 	int logfound = 0;
 	int lastoff = 0;
@@ -1180,11 +1330,90 @@ static GList *old_logger_list(GaimLogType type, const char *sn, GaimAccount *acc
 	GList *list = NULL;
 
 	g_free(logfile);
-	g_free(pathstr);
+
+	if (g_stat(gaim_stringref_value(pathref), &st))
+	{
+		gaim_stringref_unref(pathref);
+		g_free(pathstr);
+		return NULL;
+	}
+	else
+		log_last_modified = st.st_mtime;
+
+	/* Change the .log extension to .idx */
+	strcpy(pathstr + strlen(pathstr) - 3, "idx");
+
+	if (g_stat(pathstr, &st) == 0)
+	{
+		if (st.st_mtime < log_last_modified)
+		{
+			gaim_debug_warning("log", "Index \"%s\" exists, but is older than the log.\n", pathstr);
+		}
+		else
+		{
+			/* The index file exists and is at least as new as the log, so open it. */
+			if (!(index = g_fopen(pathstr, "rb")))
+			{
+				gaim_debug_error("log", "Failed to open index file \"%s\" for reading: %s\n",
+				                 pathstr, strerror(errno));
+
+				/* Fall through so that we'll parse the log file. */
+			}
+			else
+			{
+				gaim_debug_info("log", "Using index: %s\n", pathstr);
+				g_free(pathstr);
+				while (fgets(buf, BUF_LONG, index))
+				{
+					unsigned long idx_time;
+					if (sscanf(buf, "%d\t%d\t%lu", &lastoff, &newlen, &idx_time) == 3)
+					{
+						log = gaim_log_new(GAIM_LOG_IM, sn, account, NULL, -1, NULL);
+						log->logger = old_logger;
+						log->time = (time_t)idx_time;
+						data = g_new0(struct old_logger_data, 1);
+						data->offset = lastoff;
+						data->length = newlen;
+						data->pathref = gaim_stringref_ref(pathref);
+						log->logger_data = data;
+						list = g_list_prepend(list, log);
+					}
+				}
+				fclose(index);
+
+				return list;
+			}
+		}
+	}
 
 	if (!(file = g_fopen(gaim_stringref_value(pathref), "rb"))) {
+		gaim_debug_error("log", "Failed to open log file \"%s\" for reading: %s\n",
+		                   gaim_stringref_value(pathref), strerror(errno));
 		gaim_stringref_unref(pathref);
+		g_free(pathstr);
 		return NULL;
+	}
+
+	index_tmp = g_strdup_printf("%s.XXXXXX", pathstr);
+	if ((index_fd = g_mkstemp(index_tmp)) == -1) {
+		gaim_debug_error("log", "Failed to open index temp file: %s\n",
+		                 strerror(errno));
+		g_free(pathstr);
+		g_free(index_tmp);
+		index = NULL;
+	} else {
+		if ((index = fdopen(index_fd, "wb")) == NULL)
+		{
+			gaim_debug_error("log", "Failed to fdopen() index temp file: %s\n",
+			                 strerror(errno));
+			close(index_fd);
+			if (index_tmp != NULL)
+			{
+				g_unlink(index_tmp);
+				g_free(index_tmp);
+			}
+			g_free(pathstr);
+		}
 	}
 
 	while (fgets(buf, BUF_LONG, file)) {
@@ -1218,7 +1447,7 @@ static GList *old_logger_list(GaimLogType type, const char *sn, GaimAccount *acc
 					newlen--;
 
 				if (newlen != 0) {
-					log = gaim_log_new(GAIM_LOG_IM, sn, account, NULL, -1);
+					log = gaim_log_new(GAIM_LOG_IM, sn, account, NULL, -1, NULL);
 					log->logger = old_logger;
 					log->time = lasttime;
 					data = g_new0(struct old_logger_data, 1);
@@ -1227,6 +1456,10 @@ static GList *old_logger_list(GaimLogType type, const char *sn, GaimAccount *acc
 					data->pathref = gaim_stringref_ref(pathref);
 					log->logger_data = data;
 					list = g_list_prepend(list, log);
+
+					/* XXX: There is apparently Is there a proper way to print a time_t? */
+					if (index != NULL)
+						fprintf(index, "%d\t%d\t%lu\n", data->offset, data->length, (unsigned long)log->time);
 				}
 			}
 
@@ -1269,7 +1502,7 @@ static GList *old_logger_list(GaimLogType type, const char *sn, GaimAccount *acc
 
 	if (logfound) {
 		if ((newlen = ftell(file) - lastoff) != 0) {
-			log = gaim_log_new(GAIM_LOG_IM, sn, account, NULL, -1);
+			log = gaim_log_new(GAIM_LOG_IM, sn, account, NULL, -1, NULL);
 			log->logger = old_logger;
 			log->time = lasttime;
 			data = g_new0(struct old_logger_data, 1);
@@ -1278,11 +1511,37 @@ static GList *old_logger_list(GaimLogType type, const char *sn, GaimAccount *acc
 			data->pathref = gaim_stringref_ref(pathref);
 			log->logger_data = data;
 			list = g_list_prepend(list, log);
+
+			/* XXX: Is there a proper way to print a time_t? */
+			if (index != NULL)
+				fprintf(index, "%d\t%d\t%d\n", data->offset, data->length, (int)log->time);
 		}
 	}
 
 	gaim_stringref_unref(pathref);
 	fclose(file);
+	if (index != NULL)
+	{
+		fclose(index);
+
+		if (index_tmp == NULL)
+		{
+			g_free(pathstr);
+			g_return_val_if_reached(list);
+		}
+
+		if (g_rename(index_tmp, pathstr))
+		{
+			gaim_debug_warning("log", "Failed to rename index temp file \"%s\" to \"%s\": %s\n",
+			                   index_tmp, pathstr, strerror(errno));
+			g_unlink(index_tmp);
+			g_free(index_tmp);
+		}
+		else
+			gaim_debug_info("log", "Built index: %s\n", pathstr);
+
+		g_free(pathstr);
+	}
 	return list;
 }
 
@@ -1319,7 +1578,8 @@ static char * old_logger_read (GaimLog *log, GaimLogReadFlags *flags)
 	else {
 		tmp = g_markup_escape_text(read, -1);
 		g_free(read);
-		read = tmp;
+		read = gaim_markup_linkify(tmp);
+		g_free(tmp);
 	}
 	return read;
 }

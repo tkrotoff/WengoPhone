@@ -25,6 +25,11 @@
 #ifndef _GAIM_NETWORK_H_
 #define _GAIM_NETWORK_H_
 
+/*
+ * TODO: This API needs a way to cancel pending calls to
+ *       gaim_network_listen_range() and company.
+ */
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -136,7 +141,7 @@ gboolean gaim_network_listen(unsigned short port, int socket_type,
  * If a range is specified in preferences, these values are used.
  * If a non-0 values are passed to the function as parameters, these
  * values are used.
- * Otherwise a port is chosen at random by the kernel.
+ * Otherwise a port is chosen at random by the operating system.
  *
  * This opens a listening port. The caller will want to set up a watcher
  * of type GAIM_INPUT_READ on the fd returned in cb. It will probably call
@@ -171,17 +176,6 @@ gboolean gaim_network_listen_range(unsigned short start, unsigned short end,
  * @return The port number, in host byte order.
  */
 unsigned short gaim_network_get_port_from_fd(int fd);
-
-/**
- * Utility function that performs a setsockopt call to active the SO_NOSIGPIPE flag
- * on platforms where MSG_NOSIGNAL send function's flag is no supported.
- *
- * Parameters are identical to the socket (3) function.	
- * @return The return values of the implicit call to the socket (3) function call.
- */
-#ifdef __APPLE__
-int gaim_socket_setsockopt(int domain, int type, int protocol); 
-#endif
 
 /**
  * Initializes the network subsystem.

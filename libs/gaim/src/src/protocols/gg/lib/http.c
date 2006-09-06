@@ -1,4 +1,4 @@
-/* $Id: http.c,v 1.3 2005/11/25 00:32:45 rlaager Exp $ */
+/* $Id: http.c 14520 2005-11-25 00:32:45Z rlaager $ */
 
 /*
  *  (C) Copyright 2001-2002 Wojtek Kaniewski <wojtekka@irc.pl>

@@ -1227,20 +1227,28 @@ gaim_account_set_alias(GaimAccount *account, const char *alias,
 
 	g_return_if_fail(account != NULL);
 
-	g_free(account->alias);
-	account->alias = (alias == NULL ? NULL : g_strdup(alias));
-
-	if (remote_update && alias != NULL)
+	if ((!alias && account->alias) || (alias && !account->alias) ||
+			g_utf8_collate(account->alias, alias))
 	{
-		if (gc != NULL && gc->prpl != NULL)
-			prpl_info = GAIM_PLUGIN_PROTOCOL_INFO(gc->prpl);
-		
-		if (prpl_info != NULL && g_list_find(gaim_connections_get_all(), gc) &&
-			prpl_info->set_alias != NULL)
-			prpl_info->set_alias(gc, alias);
-	}
+		char *old = account->alias;
 
-	schedule_accounts_save();
+		account->alias = (alias == NULL ? NULL : g_strdup(alias));
+		gaim_signal_emit(gaim_accounts_get_handle(), "account-alias-changed",
+						 account, old);
+		g_free(old);
+
+		if (remote_update && alias != NULL)
+		{
+			if (gc != NULL && gc->prpl != NULL)
+				prpl_info = GAIM_PLUGIN_PROTOCOL_INFO(gc->prpl);
+		
+			if (prpl_info != NULL && g_list_find(gaim_connections_get_all(), gc) &&
+				prpl_info->set_alias != NULL)
+				prpl_info->set_alias(gc, alias);
+		}
+
+		schedule_accounts_save();
+	}
 }
 
 void
@@ -1948,11 +1956,11 @@ gaim_account_get_ui_bool(const GaimAccount *account, const char *ui,
 }
 
 GaimLog *
-gaim_account_get_log(GaimAccount *account)
+gaim_account_get_log(GaimAccount *account, gboolean create)
 {
 	g_return_val_if_fail(account != NULL, NULL);
 
-	if(!account->system_log){
+	if(!account->system_log && create){
 		GaimPresence *presence;
 		int login_time;
 
@@ -1961,7 +1969,7 @@ gaim_account_get_log(GaimAccount *account)
 
 		account->system_log	 = gaim_log_new(GAIM_LOG_SYSTEM,
 				gaim_account_get_username(account), account, NULL,
-				(login_time != 0) ? login_time : time(NULL));
+				(login_time != 0) ? login_time : time(NULL), NULL);
 	}
 
 	return account->system_log;
@@ -2407,6 +2415,12 @@ gaim_accounts_init(void)
 										GAIM_SUBTYPE_STATUS),
 						 gaim_value_new(GAIM_TYPE_SUBTYPE,
 										GAIM_SUBTYPE_STATUS));
+
+	gaim_signal_register(handle, "account-alias-changed",
+						 gaim_marshal_VOID__POINTER_POINTER, NULL, 2,
+						 gaim_value_new(GAIM_TYPE_SUBTYPE,
+							 			GAIM_SUBTYPE_ACCOUNT),
+						 gaim_value_new(GAIM_TYPE_STRING));
 	
 	load_accounts();
 

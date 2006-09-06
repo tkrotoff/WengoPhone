@@ -45,6 +45,8 @@ EXTRA_DIST = \
 		win32/nsis/translations/italian.nsh \
 		win32/nsis/translations/japanese.nsh \
 		win32/nsis/translations/korean.nsh \
+		win32/nsis/translations/kurdish.nsh \
+		win32/nsis/translations/lithuanian.nsh \
 		win32/nsis/translations/norwegian.nsh \
 		win32/nsis/translations/polish.nsh \
 		win32/nsis/translations/portuguese.nsh \
@@ -60,11 +62,7 @@ EXTRA_DIST = \
 		win32/nsis/translations/trad-chinese.nsh \
 		win32/nsis/translations/vietnamese.nsh
 
-if HAVE_VV
-SUBDIRS = protocols mediastreamer 
-else
 SUBDIRS = protocols
-endif
 
 gaim_coresources = \
 	account.c \
@@ -80,10 +78,10 @@ gaim_coresources = \
 	desktopitem.c \
 	eventloop.c \
 	ft.c \
+	gaim_buffer.c \
 	idle.c \
 	imgstore.c \
 	log.c \
-	media.c \
 	mime.c \
 	network.c \
 	ntlm.c \
@@ -128,10 +126,10 @@ gaim_coreheaders = \
 	desktopitem.h \
 	eventloop.h \
 	ft.h \
+	gaim_buffer.h \
 	idle.h \
 	imgstore.h \
 	log.h \
-	media.h \
 	mime.h \
 	network.h \
 	notify.h \
@@ -139,7 +137,6 @@ gaim_coreheaders = \
 	plugin.h \
 	pluginpref.h \
 	pounce.h \
-	prefix.h \
 	prefs.h \
 	privacy.h \
 	proxy.h \
@@ -162,8 +159,6 @@ gaim_coreheaders = \
 	xmlnode.h \
 	whiteboard.h
 
-
-
 if ENABLE_DBUS
 
 CLEANFILES = \
@@ -181,7 +176,7 @@ CLEANFILES = \
 dbus_sources  = dbus-server.c dbus-useful.c
 dbus_headers  = dbus-bindings.h dbus-gaim.h dbus-server.h dbus-useful.h dbus-define-api.h
 
-dbus_exported = dbus-useful.h dbus-define-api.h account.h blist.h connection.h conversation.h core.h roomlist.h status.h server.h
+dbus_exported = dbus-useful.h dbus-define-api.h account.h blist.h buddyicon.h connection.h conversation.h core.h roomlist.h status.h server.h
 
 gaim_build_coreheaders = $(addprefix $(srcdir)/, $(gaim_coreheaders))
 dbus_build_exported = $(addprefix $(srcdir)/, $(dbus_exported))
@@ -213,7 +208,6 @@ gaim-client-bindings.h: dbus-analyze-types.py dbus-analyze-functions.py $(gaim_c
 
 $(libgaim_client_la_OBJECTS): gaim-client-bindings.h gaim-client-bindings.c
 
-
 # gaim-client-example
 
 gaim_client_example_SOURCES = gaim-client-example.c
@@ -233,19 +227,6 @@ gaim-client-example.$(OBJEXT): gaim-client-bindings.h
 # scripts
 
 bin_SCRIPTS = gaim-remote.py gaim-notifications-example.py gaim-send gaim-send-async
-
-
-# gaim.service
-
-gaim.service:
-	echo "[Gaim]" > $@
-	echo "Name=org.gaim.GaimService" >> $@
-	echo "Exec=$(bindir)/gaim" >> $@
-
-#Ideally, this directory should be autodetected, and the user should
-#be able to specify it as an option to "configure"
-dbus_sessiondir = $(DBUS_SESSION_DIR)
-dbus_session_DATA = gaim.service
 
 endif
 
@@ -274,7 +255,6 @@ gaim_SOURCES = \
 	gtkimhtmltoolbar.c \
 	gtklog.c \
 	gtkmain.c \
-	gtkmedia.c \
 	gtkmenutray.c \
 	gtknotify.c \
 	gtkplugin.c \
@@ -320,7 +300,6 @@ gaim_headers = \
 	gtkimhtml.h \
 	gtkimhtmltoolbar.h \
 	gtklog.h \
-	gtkmedia.h \
 	gtkmenutray.h \
 	gtknickcolors.h \
 	gtknotify.h \
@@ -339,18 +318,17 @@ gaim_headers = \
 	gtkstock.h \
 	gtkthemes.h \
 	gtkutils.h \
-	internal.h \
 	gtkwhiteboard.h
+
+noinst_HEADERS= \
+	internal.h \
+	prefix.h
 
 gaimincludedir=$(includedir)/gaim
 gaiminclude_HEADERS = \
 	$(gaim_coreheaders) \
 	$(gaim_headers)
 
-if HAVE_VV
-MS_LIBS=$(top_srcdir)/src/mediastreamer/libmediastreamer.la
-MS_INCLUDES=-I$(top_srcdir)/src/mediastreamer
-endif
 
 gaim_DEPENDENCIES = @LIBOBJS@ $(STATIC_LINK_LIBS) $(MS_LIBS)
 gaim_LDFLAGS = -export-dynamic
@@ -364,9 +342,7 @@ gaim_LDADD = \
 	$(SM_LIBS) \
 	$(INTLLIBS) \
 	$(GTKSPELL_LIBS) \
-	$(STARTUP_NOTIFICATION_LIBS) \
-	$(VV_LIBS) \
-	$(MS_LIBS)
+	$(STARTUP_NOTIFICATION_LIBS) 
 
 AM_CPPFLAGS = \
 	-DBR_PTHREADS=0 \
@@ -375,8 +351,6 @@ AM_CPPFLAGS = \
 	-DLOCALEDIR=\"$(datadir)/locale\" \
 	-DSYSCONFDIR=\"$(sysconfdir)\" \
 	-I$(top_srcdir)/plugins \
-	$(MS_INCLUDES) \
-	$(VV_CFLAGS) \
 	$(AUDIOFILE_CFLAGS) \
 	$(AO_CFLAGS) \
 	$(DEBUG_CFLAGS) \

@@ -25,6 +25,16 @@
 
 #include "internal.h"
 
+#ifndef _WIN32
+#include <net/if.h>
+#include <sys/ioctl.h>
+#endif
+
+/* Solaris */
+#if defined (__SVR4) && defined (__sun)
+#include <sys/sockio.h>
+#endif
+
 #include "debug.h"
 #include "account.h"
 #include "network.h"
@@ -76,75 +86,56 @@ gaim_network_set_public_ip(const char *ip)
 const char *
 gaim_network_get_public_ip(void)
 {
-	const char *ip;
-	GaimStunNatDiscovery *stun;
-
-	ip = gaim_prefs_get_string("/core/network/public_ip");
-
-	if (ip == NULL || *ip == '\0') {
-		/* Check if STUN discovery was already done */
-		stun = gaim_stun_discover(NULL);
-		if (stun != NULL && stun->status == GAIM_STUN_STATUS_DISCOVERED)
-			return stun->publicip;
-		return NULL;
-	}	
-
-	return ip;
-}
-
-static const char *
-gaim_network_get_local_ip_from_fd(int fd)
-{
-	struct sockaddr_in addr;
-	socklen_t len;
-	static char ip[16];
-	const char *tmp;
-
-	g_return_val_if_fail(fd >= 0, NULL);
-
-	len = sizeof(addr);
-	if (getsockname(fd, (struct sockaddr *) &addr, &len) == -1) {
-		gaim_debug_warning("network", "getsockname: %s\n", strerror(errno));
-		return NULL;
-	}
-
-	tmp = inet_ntoa(addr.sin_addr);
-	strncpy(ip, tmp, sizeof(ip));
-
-	return ip;
+	return gaim_prefs_get_string("/core/network/public_ip");
 }
 
 const char *
 gaim_network_get_local_system_ip(int fd)
 {
-	struct hostent *host;
-	char localhost[129];
-	long unsigned add;
-	static char ip[46];
-	const char *tmp = NULL;
+	char buffer[1024];
+	static char ip[16];
+	char *tmp;
+	struct ifconf ifc;
+	struct ifreq *ifr;
+	struct sockaddr_in *sinptr;
+	guint32 lhost = htonl(127 * 256 * 256 * 256 + 1);
+	long unsigned int add;
+	int source = fd;
 
-	if (fd >= 0)
-		tmp = gaim_network_get_local_ip_from_fd(fd);
+	if (fd < 0)
+		source = socket(PF_INET,SOCK_STREAM, 0);
 
-	if (tmp)
-		return tmp;
+	ifc.ifc_len = sizeof(buffer);
+	ifc.ifc_req = (struct ifreq *)buffer;
+	ioctl(source, SIOCGIFCONF, &ifc);
 
-	if (gethostname(localhost, 128) < 0)
-		return NULL;
+	if (fd < 0)
+		close(source);
 
-	if ((host = gethostbyname(localhost)) == NULL)
-		return NULL;
+	tmp = buffer;
+	while (tmp < buffer + ifc.ifc_len)
+	{
+		ifr = (struct ifreq *)tmp;
+		tmp += sizeof(struct ifreq);
 
-	memcpy(&add, host->h_addr_list[0], 4);
-	add = htonl(add);
+		if (ifr->ifr_addr.sa_family == AF_INET)
+		{
+			sinptr = (struct sockaddr_in *)&ifr->ifr_addr;
+			if (sinptr->sin_addr.s_addr != lhost)
+			{
+				add = ntohl(sinptr->sin_addr.s_addr);
+				g_snprintf(ip, 16, "%lu.%lu.%lu.%lu",
+					((add >> 24) & 255),
+					((add >> 16) & 255),
+					((add >> 8) & 255),
+					add & 255);
 
-	g_snprintf(ip, 16, "%lu.%lu.%lu.%lu",
-			   ((add >> 24) & 255),
-			   ((add >> 16) & 255),
-			   ((add >>  8) & 255),
-			   add & 255);
+				return ip;
+			}
+		}
+	}
 
-	return ip;
+	return "0.0.0.0";
 }
 
 const char *
@@ -156,22 +147,19 @@ gaim_network_get_my_ip(int fd)
 	/* Check if the user specified an IP manually */
 	if (!gaim_prefs_get_bool("/core/network/auto_ip")) {
 		ip = gaim_network_get_public_ip();
-		if (ip != NULL)
+		if ((ip != NULL) && (*ip != '\0'))
 			return ip;
 	}
 
-	if (ip == NULL || *ip == '\0') {
-		/* Check if STUN discovery was already done */
-		stun = gaim_stun_discover(NULL);
-		if (stun != NULL && stun->status == GAIM_STUN_STATUS_DISCOVERED)
-			return stun->publicip;
+	/* Check if STUN discovery was already done */
+	stun = gaim_stun_discover(NULL);
+	if ((stun != NULL) && (stun->status == GAIM_STUN_STATUS_DISCOVERED))
+		return stun->publicip;
 
-		/* attempt to get the ip from a NAT device */
-		ip = gaim_upnp_get_public_ip();
-
-		if (ip != NULL)
-		  return ip;
-	}
+	/* Attempt to get the IP from a NAT device using UPnP */
+	ip = gaim_upnp_get_public_ip();
+	if (ip != NULL)
+	  return ip;
 
 	/* Just fetch the IP of the local system */
 	return gaim_network_get_local_system_ip(fd);
@@ -218,7 +206,7 @@ gaim_network_do_listen(unsigned short port, int socket_type, GaimNetworkListenCa
 	int listenfd = -1;
 	const int on = 1;
 	ListenUPnPData *ld;
-#if HAVE_GETADDRINFO
+#ifdef HAVE_GETADDRINFO
 	int errnum;
 	struct addrinfo hints, *res, *next;
 	char serv[6];
@@ -359,25 +347,6 @@ gaim_network_get_port_from_fd(int fd)
 
 	return ntohs(addr.sin_port);
 }
-
-#ifdef __APPLE__
-#include <sys/syscall.h>
-int
-gaim_socket_setsockopt(int domain, int type, int protocol) 
-{
-	int val = 1; 
-	int ret = 0;
-	int ret_socket = 0;
-	
-	ret_socket = syscall(SYS_socket, domain, type, protocol); 	
-	if (ret_socket == -1)
-		return ret_socket;
-	ret = setsockopt(domain, SOL_SOCKET, SO_NOSIGPIPE, &val, sizeof(val));
-	if (ret == -1)
-		return ret;
-	return ret_socket;
-}
-#endif /* __APPLE__ */
 
 void
 gaim_network_init(void)

@@ -40,8 +40,6 @@ static void historize(GaimConversation *c)
 	char *history;
 	GaimGtkConversation *gtkconv;
 	GtkIMHtmlOptions options = GTK_IMHTML_NO_COLOURS;
-	time_t tm;
-	char day[64];
 	char *header;
 	char *protocol;
 
@@ -116,12 +114,15 @@ static void historize(GaimConversation *c)
 	gtk_imhtml_set_protocol_name(GTK_IMHTML(gtkconv->imhtml),
 							      gaim_account_get_protocol_name(((GaimLog*)logs->data)->account));
 
-	tm = ((GaimLog *)logs->data)->time;
-	gaim_strftime(day, sizeof(day), "%c", localtime(&tm));
-	header = g_strdup_printf("<b>Conversation with %s on %s:</b><br>", alias, day);
+	if (gtk_text_buffer_get_char_count(gtk_text_view_get_buffer(GTK_TEXT_VIEW(gtkconv->imhtml))))
+		gtk_imhtml_append_text(GTK_IMHTML(gtkconv->imhtml), "<BR>", options);
+
+	header = g_strdup_printf(_("<b>Conversation with %s on %s:</b><br>"), alias,
+							 gaim_date_format_full(localtime(&((GaimLog *)logs->data)->time)));
 	gtk_imhtml_append_text(GTK_IMHTML(gtkconv->imhtml), header, options);
 	g_free(header);
 
+	g_strchomp(history);
 	gtk_imhtml_append_text(GTK_IMHTML(gtkconv->imhtml), history, options);
 	g_free(history);
 

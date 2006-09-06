@@ -141,6 +141,8 @@ SetDateSave on
   !insertmacro MUI_LANGUAGE "Italian"
   !insertmacro MUI_LANGUAGE "Japanese"
   !insertmacro MUI_LANGUAGE "Korean"
+  !insertmacro MUI_LANGUAGE "Kurdish"
+  !insertmacro MUI_LANGUAGE "Lithuanian"
   !insertmacro MUI_LANGUAGE "Hungarian"
   !insertmacro MUI_LANGUAGE "Dutch"
   !insertmacro MUI_LANGUAGE "Norwegian"
@@ -177,6 +179,8 @@ SetDateSave on
   !insertmacro GAIM_MACRO_INCLUDE_LANGFILE "ITALIAN"		"${GAIM_NSIS_INCLUDE_PATH}\translations\italian.nsh"
   !insertmacro GAIM_MACRO_INCLUDE_LANGFILE "JAPANESE"		"${GAIM_NSIS_INCLUDE_PATH}\translations\japanese.nsh"
   !insertmacro GAIM_MACRO_INCLUDE_LANGFILE "KOREAN"		"${GAIM_NSIS_INCLUDE_PATH}\translations\korean.nsh"
+  !insertmacro GAIM_MACRO_INCLUDE_LANGFILE "KURDISH"		"${GAIM_NSIS_INCLUDE_PATH}\translations\kurdish.nsh"
+  !insertmacro GAIM_MACRO_INCLUDE_LANGFILE "LITHUANIAN"		"${GAIM_NSIS_INCLUDE_PATH}\translations\lithuanian.nsh"
   !insertmacro GAIM_MACRO_INCLUDE_LANGFILE "NORWEGIAN"		"${GAIM_NSIS_INCLUDE_PATH}\translations\norwegian.nsh"
   !insertmacro GAIM_MACRO_INCLUDE_LANGFILE "POLISH"		"${GAIM_NSIS_INCLUDE_PATH}\translations\polish.nsh"
   !insertmacro GAIM_MACRO_INCLUDE_LANGFILE "PORTUGUESE"		"${GAIM_NSIS_INCLUDE_PATH}\translations\portuguese.nsh"
@@ -713,7 +717,9 @@ Section Uninstall
     Delete "$INSTDIR\plugins\libsimple.dll"
     Delete "$INSTDIR\plugins\libtoc.dll"
     Delete "$INSTDIR\plugins\libyahoo.dll"
+    Delete "$INSTDIR\plugins\notify.dll"
     Delete "$INSTDIR\plugins\perl.dll"
+    Delete "$INSTDIR\plugins\psychic.dll"
     Delete "$INSTDIR\plugins\relnot.dll"
     Delete "$INSTDIR\plugins\spellchk.dll"
     Delete "$INSTDIR\plugins\ssl-nss.dll"
@@ -726,10 +732,10 @@ Section Uninstall
     Delete "$INSTDIR\plugins\win2ktrans.dll"
     Delete "$INSTDIR\plugins\winprefs.dll"
     RMDir "$INSTDIR\plugins"
-    Delete "$INSTDIR\sounds\gaim\arrive.wav"
-    Delete "$INSTDIR\sounds\gaim\leave.wav"
+    Delete "$INSTDIR\sounds\gaim\alert.wav"
+    Delete "$INSTDIR\sounds\gaim\login.wav"
+    Delete "$INSTDIR\sounds\gaim\logout.wav"
     Delete "$INSTDIR\sounds\gaim\receive.wav"
-    Delete "$INSTDIR\sounds\gaim\redalert.wav"
     Delete "$INSTDIR\sounds\gaim\send.wav"
     RMDir "$INSTDIR\sounds\gaim"
     RMDir "$INSTDIR\sounds"
@@ -902,8 +908,8 @@ Function CanWeInstallATheme
       Exch $1
 FunctionEnd
 
-
-Function CheckUserInstallRights
+!macro CheckUserInstallRightsMacro UN
+Function ${UN}CheckUserInstallRights
   Push $0
   Push $1
   ClearErrors
@@ -937,41 +943,9 @@ Function CheckUserInstallRights
     Exch
     Pop $0
 FunctionEnd
-
-Function un.CheckUserInstallRights
-  Push $0
-  Push $1
-  ClearErrors
-  UserInfo::GetName
-  IfErrors Win9x
-  Pop $0
-  UserInfo::GetAccountType
-  Pop $1
-
-  StrCmp $1 "Admin" 0 +3
-    StrCpy $1 "HKLM"
-    Goto done
-  StrCmp $1 "Power" 0 +3
-    StrCpy $1 "HKLM"
-    Goto done
-  StrCmp $1 "User" 0 +3
-    StrCpy $1 "HKCU"
-    Goto done
-  StrCmp $1 "Guest" 0 +3
-    StrCpy $1 "NONE"
-    Goto done
-  ; Unknown error
-  StrCpy $1 "NONE"
-  Goto done
-
-  Win9x:
-    StrCpy $1 "HKLM"
-
-  done:
-    Exch $1
-    Exch
-    Pop $0
-FunctionEnd
+!macroend
+!insertmacro CheckUserInstallRightsMacro ""
+!insertmacro CheckUserInstallRightsMacro "un."
 
 ;
 ; Usage:
@@ -1226,17 +1200,9 @@ Function DoWeNeedGtk
   Pop $3
 FunctionEnd
 
-Function RunCheck
-  Push $R0
-  System::Call 'kernel32::OpenMutex(i 2031617, b 0, t "gaim_is_running") i .R0'
-  IntCmp $R0 0 done
-  MessageBox MB_OK|MB_ICONEXCLAMATION $(GAIM_IS_RUNNING) IDOK
-    Abort
-  done:
-  Pop $R0
-FunctionEnd
 
-Function un.RunCheck
+!macro RunCheckMacro UN
+Function ${UN}RunCheck
   Push $R0
   System::Call 'kernel32::OpenMutex(i 2031617, b 0, t "gaim_is_running") i .R0'
   IntCmp $R0 0 done
@@ -1245,6 +1211,9 @@ Function un.RunCheck
   done:
   Pop $R0
 FunctionEnd
+!macroend
+!insertmacro RunCheckMacro ""
+!insertmacro RunCheckMacro "un."
 
 Function .onInit
   Push $R0
@@ -1859,8 +1828,8 @@ Function InstallAspellDictionary
 
   check:
   ClearErrors
-  ReadRegStr $R1 HKLM "${ASPELL_REG_KEY}-$R0" ""
-  StrCmp $R1 "" 0 installed
+  ReadRegStr $R2 HKLM "${ASPELL_REG_KEY}-$R0" ""
+  StrCmp $R2 "" 0 installed
 
   ; If this is the check after installation, don't infinite loop on failure
   StrCmp $R1 "$TEMP\aspell_dict-$R0.exe" 0 +3

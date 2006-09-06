@@ -1,4 +1,4 @@
-/* $Id: compat.h,v 1.1 2005/08/28 22:46:01 boler Exp $ */
+/* $Id: compat.h 13582 2005-08-28 22:46:01Z boler $ */
 
 /*
  *  (C) Copyright 2001-2002 Wojtek Kaniewski <wojtekka@irc.pl>

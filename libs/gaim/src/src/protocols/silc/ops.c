@@ -1072,7 +1072,7 @@ silcgaim_whois_more(SilcClientEntry client_entry, gint id)
 			for (i = 0; i < vcard.num_emails; i++) {
 				if (vcard.emails[i].address)
 					g_string_append_printf(s, "%s:\t\t%s\n",
-							       _("EMail"),
+							       _("E-Mail"),
 							       vcard.emails[i].address);
 			}
 			if (vcard.note)
@@ -1180,7 +1180,7 @@ silc_command_reply(SilcClient client, SilcClientConnection conn,
 			g_free(tmp2);
 			if (client_entry->realname) {
 				tmp2 = g_markup_escape_text(client_entry->realname, -1);
-				g_string_append_printf(s, "<br><b>%s:</b> %s", _("Realname"), tmp2);
+				g_string_append_printf(s, "<br><b>%s:</b> %s", _("Real Name"), tmp2);
 				g_free(tmp2);
 			}
 			if (client_entry->username) {
@@ -1329,7 +1329,7 @@ silc_command_reply(SilcClient client, SilcClientConnection conn,
 			g_free(tmp);
 			if (realname) {
 				tmp = g_markup_escape_text(realname, -1);
-				g_string_append_printf(s, "<br><b>%s:</b> %s", _("Realname"), tmp);
+				g_string_append_printf(s, "<br><b>%s:</b> %s", _("Real Name"), tmp);
 				g_free(tmp);
 			}
 			if (username) {
@@ -1359,7 +1359,7 @@ silc_command_reply(SilcClient client, SilcClientConnection conn,
 			}
 
 			buf = g_string_free(s, FALSE);
-			gaim_notify_userinfo(gc, client_entry->nickname, buf, NULL, NULL);
+			gaim_notify_userinfo(gc, nickname, buf, NULL, NULL);
 			g_free(buf);
 		}
 		break;
@@ -1669,14 +1669,14 @@ silc_connected(SilcClient client, SilcClientConnection conn,
 	       SilcClientConnectionStatus status)
 {
 	GaimConnection *gc = client->application;
-	SilcGaim sg = gc->proto_data;
+	SilcGaim sg;
 	gboolean reject_watch, block_invites, block_ims;
 
-	if (!gc) {
-		sg->conn = NULL;
+	if (gc == NULL) {
 		silc_client_close_connection(client, conn);
 		return;
 	}
+	sg = gc->proto_data;
 
 	switch (status) {
 	case SILC_CLIENT_CONN_SUCCESS:

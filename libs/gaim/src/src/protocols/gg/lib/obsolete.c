@@ -1,4 +1,4 @@
-/* $Id: obsolete.c,v 1.1 2005/08/28 22:46:01 boler Exp $ */
+/* $Id: obsolete.c 13582 2005-08-28 22:46:01Z boler $ */
 
 /*
  *  (C) Copyright 2001-2003 Wojtek Kaniewski <wojtekka@irc.pl>

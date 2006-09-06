@@ -95,6 +95,25 @@ version 2.0.0:
 	  may now pass NULL if you're not interested in a specific formatting.
 	* Smiley Themes: Backslashes must be backslash-escaped.
 	* Plugins: Depedencies are now honored when unloading plugins.
+	* gaim_markup_extract_info_field(): Added format_cb parameter.
+	* gaim_str_to_time(): Added support for parsing the MM/DD/YYYY format.
+	* gaim_plugin_action_new(): label is now const char *
+	* gaim_plugin_pref_new_with_name(): name is now const char *
+	* gaim_plugin_pref_new_with_label(): label is now const char *
+	* gaim_plugin_pref_new_with_name_and_label(): name and label are
+	  now const char *
+	* gaim_plugin_pref_set_name(): name is now const char *
+	* gaim_plugin_pref_get_name(): return type is now const char *
+	* gaim_plugin_pref_set_label(): label is now const char *
+	* gaim_plugin_pref_get_label(): return type is now const char *
+	* gaim_plugin_pref_add_choice(): label is now const char *
+	* struct proto_chat_entry: label is now const char *
+	* struct proto_chat_entry: identifier is now const char *
+	* All network activity has been updated to use non-blocking sockets.
+	  This means that plugins must be updated to expect such a socket from
+	  gaim_proxy_connect() and gaim_network_listen*().
+	* gaim_gtk_create_imhtml(): Added sw_ret() parameter
+	* gaim_account_get_log(): Added create parameter
 
 	Removed:
 	* gaim_gtk_sound_{get,set}_mute() (replaced by the /gaim/gtk/sound/mute
@@ -146,7 +165,12 @@ version 2.0.0:
 	  so GAIM_TYPE_BOXED is used for the signal types
 	* gaim_gtk_privacy_is_showable(): We do fallback privacy in the core
 	  now, so this would always be TRUE now.
+	* GaimBlistNodeAction: See GaimMenuAction
 	* gaim_blist_node_action_new(); use gaim_menu_action_new() instead
+	* gaim_date()
+	* gaim_date_full(): See gaim_date_format_full()
+	* gaim_strftime(): See gaim_utf8_strftime()
+	* GAIM_MESSAGE_COLORIZE
 
 	Added:
 	* gaim_prefs_disconnect_by_handle()
@@ -241,7 +265,24 @@ version 2.0.0:
 	* gaim_gtk_log_get_handle()
 	* gaim_gtk_log_uninit()
 	* gaim_url_fetch_request()
+	* GaimMenuAction
 	* gaim_menu_action_new()
+	* gaim_menu_action_free()
+	* GaimInfoFieldFormatCallback
+	* gaim_utf8_strftime()
+	* gaim_date_format_short()
+	* gaim_date_format_long()
+	* gaim_date_format_full()
+	* gaim_time_format()
+	* gaim_plugin_action_free()
+	* GaimRequestType: Added GAIM_REQUEST_FOLDER
+	* GaimRequestUiOps: Added request_folder
+	* gaim_request_folder()
+	* gaim_gtk_setup_screenname_autocomplete()
+	* gaim_gtk_set_cursor()
+	* gaim_gtk_clear_cursor()
+	* GAIM_MESSAGE_ACTIVE_ONLY
+	* gaim_proxy_get_setup()
 
 	Signals - Changed:  (See the Doxygen docs for details on all signals.)
 	* Signal propagation now stops after a handler returns a non-NULL value.
@@ -262,20 +303,27 @@ version 2.0.0:
 	  conversation pointer and flags
 	* "receiving-im-msg" and "receving-chat-msg" to match, both now pass a
 	  conversation pointer and a pointer to the flags.
+	* "writing-im-msg", "wrote-im-msg", "writing-chat-msg", "wrote-chat-msg":
+	  Now emitted from a difference place in the message handling code.
+	  The arguments also changed.
+	* "displaying-im-msg", "displayed-im-msg", "displaying-chat-msg",
+	  "displayed-chat-msg": Added "who" argument, which changes the order
+	  of the existing arguments.
 
 	Signals - Added:  (See the Doxygen docs for details on all signals.)
 	* "account-disabled"
 	* "account-status-changed"
+	* "account-alias-changed"
 	* "cipher-added"
 	* "cipher-removed"
 	* "conversation-dragging"
 	* "dbus-method-called"
 	* "dbus-introspect"
-	* "cipher-removed"
 	* "file-recv-accept"
 	* "file-recv-start"
 	* "file-recv-cancel"
 	* "file-recv-complete"
+	* "file-recv-request"
 	* "file-send-accept"
 	* "file-send-start"
 	* "file-send-cancel"
@@ -290,6 +338,7 @@ version 2.0.0:
 	* "gtkblist-hiding"
 	* "gtkblist-unhiding"
 	* "log-displaying"
+	* "savedstatus-changed"
 
 	Signals - Removed:
 	* "account-away": replaced by account-status-changed

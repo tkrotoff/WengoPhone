@@ -1,4 +1,24 @@
 /*
+ * Gaim's oscar protocol plugin
+ * This file is the legal property of its developers.
+ * Please see the AUTHORS file distributed alongside this file.
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+*/
+
+/*
  *
  * Various SNAC-related dodads...
  *
@@ -12,13 +32,12 @@
  *
  */
 
-#define FAIM_INTERNAL
-#include <aim.h>
+#include "oscar.h"
 
 /*
- * Called from aim_session_init() to initialize the hash.
+ * Called from oscar_session_new() to initialize the hash.
  */
-faim_internal void aim_initsnachash(aim_session_t *sess)
+faim_internal void aim_initsnachash(OscarSession *sess)
 {
 	int i;
 
@@ -28,7 +47,7 @@ faim_internal void aim_initsnachash(aim_session_t *sess)
 	return;
 }
 
-faim_internal aim_snacid_t aim_cachesnac(aim_session_t *sess, const fu16_t family, const fu16_t type, const fu16_t flags, const void *data, const int datalen)
+faim_internal aim_snacid_t aim_cachesnac(OscarSession *sess, const guint16 family, const guint16 type, const guint16 flags, const void *data, const int datalen)
 {
 	aim_snac_t snac;
 
@@ -51,7 +70,7 @@ faim_internal aim_snacid_t aim_cachesnac(aim_session_t *sess, const fu16_t famil
  * Clones the passed snac structure and caches it in the
  * list/hash.
  */
-faim_internal aim_snacid_t aim_newsnac(aim_session_t *sess, aim_snac_t *newsnac)
+faim_internal aim_snacid_t aim_newsnac(OscarSession *sess, aim_snac_t *newsnac)
 {
 	aim_snac_t *snac;
 	int index;
@@ -79,7 +98,7 @@ faim_internal aim_snacid_t aim_newsnac(aim_session_t *sess, aim_snac_t *newsnac)
  * The returned structure must be freed by the caller.
  *
  */
-faim_internal aim_snac_t *aim_remsnac(aim_session_t *sess, aim_snacid_t id) 
+faim_internal aim_snac_t *aim_remsnac(OscarSession *sess, aim_snacid_t id) 
 {
 	aim_snac_t *cur, **prev;
 	int index;
@@ -108,7 +127,7 @@ faim_internal aim_snac_t *aim_remsnac(aim_session_t *sess, aim_snacid_t id)
  * maxage is the _minimum_ age in seconds to keep SNACs.
  *
  */
-faim_export void aim_cleansnacs(aim_session_t *sess, int maxage)
+faim_export void aim_cleansnacs(OscarSession *sess, int maxage)
 {
 	int i;
 
@@ -136,7 +155,7 @@ faim_export void aim_cleansnacs(aim_session_t *sess, int maxage)
 	return;
 }
 
-faim_internal int aim_putsnac(aim_bstream_t *bs, fu16_t family, fu16_t subtype, fu16_t flags, aim_snacid_t snacid)
+faim_internal int aim_putsnac(ByteStream *bs, guint16 family, guint16 subtype, guint16 flags, aim_snacid_t snacid)
 {
 
 	aimbs_put16(bs, family);

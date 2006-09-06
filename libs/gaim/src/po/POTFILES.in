@@ -1,3 +1,5 @@
+
+gaim.desktop.in
 plugins/ciphertest.c
 plugins/contact_priority.c
 plugins/crazychat/cc_gaim_plugin.c
@@ -27,6 +29,7 @@ plugins/mono/loader/mono.c
 plugins/musicmessaging/musicmessaging.c
 plugins/notify.c
 plugins/perl/perl.c
+plugins/psychic.c
 plugins/raw.c
 plugins/relnot.c
 plugins/signals-test.c
@@ -39,6 +42,7 @@ plugins/statenotify.c
 plugins/tcl/tcl.c
 plugins/ticker/ticker.c
 plugins/timestamp.c
+plugins/timestamp_format.c
 plugins/win32/transparency/win2ktrans.c
 plugins/win32/winprefs/winprefs.c
 src/account.c
@@ -55,12 +59,12 @@ src/gtkconn.c
 src/gtkconv.c
 src/gtkdebug.c
 src/gtkdialogs.c
+src/gtkexpander.c
 src/gtkft.c
 src/gtkimhtml.c
 src/gtkimhtmltoolbar.c
 src/gtklog.c
 src/gtkmain.c
-src/gtkmedia.c
 src/gtknotify.c
 src/gtkplugin.c
 src/gtkpounce.c
@@ -78,6 +82,7 @@ src/log.c
 src/plugin.c
 src/protocols/bonjour/bonjour.c
 src/protocols/bonjour/bonjour.h
+src/protocols/bonjour/jabber.c
 src/protocols/gg/gg.c
 src/protocols/irc/cmds.c
 src/protocols/irc/dcc_send.c
@@ -122,6 +127,7 @@ src/protocols/toc/toc.c
 src/protocols/yahoo/yahoo.c
 src/protocols/yahoo/yahoo_doodle.c
 src/protocols/yahoo/yahoo_filexfer.c
+src/protocols/yahoo/yahoo_packet.c
 src/protocols/yahoo/yahoo_profile.c
 src/protocols/yahoo/yahoochat.c
 src/protocols/yahoo/ycht.c

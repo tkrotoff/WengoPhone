@@ -144,12 +144,15 @@ static void
 silcgaim_login_connected(gpointer data, gint source, GaimInputCondition cond)
 {
 	GaimConnection *gc = data;
-	SilcGaim sg = gc->proto_data;
+	SilcGaim sg;
 	SilcClient client;
 	SilcClientConnection conn;
-	GaimAccount *account = sg->account;
+	GaimAccount *account;
 	SilcClientConnectionParams params;
 	const char *dfile;
+
+	g_return_if_fail(gc != NULL);
+	sg = gc->proto_data;
 
 	if (source < 0) {
 		gaim_connection_error(gc, _("Connection failed"));
@@ -160,6 +163,7 @@ silcgaim_login_connected(gpointer data, gint source, GaimInputCondition cond)
 		return;
 
 	client = sg->client;
+	account = sg->account;
 
 	if (!g_list_find(gaim_connections_get_all(), gc)) {
 		close(source);
@@ -677,7 +681,7 @@ silcgaim_attrs(GaimPluginAction *action)
 	gaim_request_field_group_add_field(g, f);
 	f = gaim_request_field_bool_new("mood_invincible", _("Invincible"), minvincible);
 	gaim_request_field_group_add_field(g, f);
-	f = gaim_request_field_bool_new("mood_inlove", _("In Love"), minlove);
+	f = gaim_request_field_bool_new("mood_inlove", _("In love"), minlove);
 	gaim_request_field_group_add_field(g, f);
 	f = gaim_request_field_bool_new("mood_sleepy", _("Sleepy"), msleepy);
 	gaim_request_field_group_add_field(g, f);
@@ -692,7 +696,7 @@ silcgaim_attrs(GaimPluginAction *action)
 	gaim_request_field_group_add_field(g, f);
 	f = gaim_request_field_bool_new("contact_chat", _("Chat"), cchat);
 	gaim_request_field_group_add_field(g, f);
-	f = gaim_request_field_bool_new("contact_email", _("Email"), cemail);
+	f = gaim_request_field_bool_new("contact_email", _("E-mail"), cemail);
 	gaim_request_field_group_add_field(g, f);
 	f = gaim_request_field_bool_new("contact_call", _("Phone"), ccall);
 	gaim_request_field_group_add_field(g, f);
@@ -700,7 +704,7 @@ silcgaim_attrs(GaimPluginAction *action)
 	gaim_request_field_group_add_field(g, f);
 	f = gaim_request_field_bool_new("contact_mms", _("MMS"), cmms);
 	gaim_request_field_group_add_field(g, f);
-	f = gaim_request_field_bool_new("contact_video", _("Video Conferencing"), cvideo);
+	f = gaim_request_field_bool_new("contact_video", _("Video conferencing"), cvideo);
 	gaim_request_field_group_add_field(g, f);
 	gaim_request_fields_add_group(fields, g);
 
@@ -917,11 +921,11 @@ silcgaim_create_keypair(GaimPluginAction *action)
 	fields = gaim_request_fields_new();
 
 	g = gaim_request_field_group_new(NULL);
-	f = gaim_request_field_string_new("key", _("Key Length"), "2048", FALSE);
+	f = gaim_request_field_string_new("key", _("Key length"), "2048", FALSE);
 	gaim_request_field_group_add_field(g, f);
-	f = gaim_request_field_string_new("pkfile", _("Public Key File"), pkd, FALSE);
+	f = gaim_request_field_string_new("pkfile", _("Public key file"), pkd, FALSE);
 	gaim_request_field_group_add_field(g, f);
-	f = gaim_request_field_string_new("prfile", _("Private Key File"), prd, FALSE);
+	f = gaim_request_field_string_new("prfile", _("Private key file"), prd, FALSE);
 	gaim_request_field_group_add_field(g, f);
 	gaim_request_fields_add_group(fields, g);
 
@@ -930,9 +934,9 @@ silcgaim_create_keypair(GaimPluginAction *action)
 	gaim_request_field_group_add_field(g, f);
 	f = gaim_request_field_string_new("hn", _("Hostname"), hostname ? hostname : "", FALSE);
 	gaim_request_field_group_add_field(g, f);
-	f = gaim_request_field_string_new("rn", _("Real Name"), realname ? realname : "", FALSE);
+	f = gaim_request_field_string_new("rn", _("Real name"), realname ? realname : "", FALSE);
 	gaim_request_field_group_add_field(g, f);
-	f = gaim_request_field_string_new("e", _("Email"), tmp, FALSE);
+	f = gaim_request_field_string_new("e", _("E-mail"), tmp, FALSE);
 	gaim_request_field_group_add_field(g, f);
 	f = gaim_request_field_string_new("o", _("Organization"), "", FALSE);
 	gaim_request_field_group_add_field(g, f);
@@ -944,7 +948,7 @@ silcgaim_create_keypair(GaimPluginAction *action)
 	f = gaim_request_field_string_new("pass1", _("Passphrase"), "", FALSE);
 	gaim_request_field_string_set_masked(f, TRUE);
 	gaim_request_field_group_add_field(g, f);
-	f = gaim_request_field_string_new("pass2", _("Re-type Passphrase"), "", FALSE);
+	f = gaim_request_field_string_new("pass2", _("Passphrase (retype)"), "", FALSE);
 	gaim_request_field_string_set_masked(f, TRUE);
 	gaim_request_field_group_add_field(g, f);
 	gaim_request_fields_add_group(fields, g);
@@ -1799,7 +1803,6 @@ static GaimPluginProtocolInfo prpl_info =
 	silcgaim_ftp_new_xfer,		/* new_xfer */
 	NULL,						/* offline_message */
 	&silcgaim_wb_ops,			/* whiteboard_prpl_ops */
-	NULL,						/* media_prpl_ops */
 };
 
 static GaimPluginInfo info =

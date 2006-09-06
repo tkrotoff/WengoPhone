@@ -391,6 +391,19 @@ gaim_prefs_load()
 	g_free(filename);
 	prefs_loaded = TRUE;
 
+	/* I introduced a bug in 2.0.0beta2.  This fixes the broken
+	 * scores on upgrade.  This can be removed sometime shortly
+	 * after 2.0.0 final is released. -- rlaager */
+	if (gaim_prefs_get_int("/core/status/scores/offline") == -500 &&
+	    gaim_prefs_get_int("/core/status/scores/available") == 100 &&
+	    gaim_prefs_get_int("/core/status/scores/invisible") == -50 &&
+	    gaim_prefs_get_int("/core/status/scores/away") == -100 &&
+	    gaim_prefs_get_int("/core/status/scores/extended_away") == -200 &&
+	    gaim_prefs_get_int("/core/status/scores/idle") == -400)
+	{
+		gaim_prefs_set_int("/core/status/scores/idle", -10);
+	}
+
 	return TRUE;
 }
 
@@ -1067,6 +1080,7 @@ gaim_prefs_update_old()
 	gaim_prefs_remove("/core/logging/log_idle_state");
 	gaim_prefs_remove("/core/logging/log_away_state");
 	gaim_prefs_remove("/core/logging/log_own_states");
+	gaim_prefs_remove("/core/status/scores/hidden");
 	gaim_prefs_remove("/plugins/core/autorecon/hide_connected_error");
 	gaim_prefs_remove("/plugins/core/autorecon/hide_connecting_error");
 	gaim_prefs_remove("/plugins/core/autorecon/hide_reconnecting_dialog");

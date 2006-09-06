@@ -136,8 +136,8 @@ static int primitive_scores[] =
 
 static GHashTable *buddy_presences = NULL;
 
-#define SCORE_IDLE      7
-#define SCORE_IDLE_TIME 8
+#define SCORE_IDLE      8
+#define SCORE_IDLE_TIME 9
 
 /**************************************************************************
  * GaimStatusPrimitive API
@@ -182,10 +182,10 @@ gaim_primitive_get_name_from_type(GaimStatusPrimitive type)
     for (i = 0; i < GAIM_STATUS_NUM_PRIMITIVES; i++)
     {
 	if (type == status_primitive_map[i].type)
-		return status_primitive_map[i].name;
+		return _(status_primitive_map[i].name);
     }
 
-    return status_primitive_map[0].name;
+    return _(status_primitive_map[0].name);
 }
 
 GaimStatusPrimitive
@@ -233,7 +233,7 @@ gaim_status_type_new_full(GaimStatusPrimitive primitive, const char *id,
 	if (name != NULL)
 		status_type->name = g_strdup(name);
 	else
-		status_type->name = g_strdup(_(gaim_primitive_get_name_from_type(primitive)));
+		status_type->name = g_strdup(gaim_primitive_get_name_from_type(primitive));
 
 	return status_type;
 }
@@ -614,39 +614,39 @@ notify_buddy_status_update(GaimBuddy *buddy, GaimPresence *presence,
 	{
 		time_t current_time = time(NULL);
 		const char *buddy_alias = gaim_buddy_get_alias(buddy);
-		char *tmp = NULL;
+		char *tmp;
+		GaimLog *log;
 
-		if (gaim_status_is_available(new_status))
+		if (old_status != NULL)
 		{
-			if (((old_status == NULL) || !gaim_status_is_online(old_status)))
+			tmp = g_strdup_printf(_("%s changed status from %s to %s"), buddy_alias,
+			                      gaim_status_get_name(old_status),
+			                      gaim_status_get_name(new_status));
+		}
+		else
+		{
+			/* old_status == NULL when an independent status is toggled. */
+
+			if (gaim_status_is_active(new_status))
 			{
-				tmp = g_strdup_printf(_("%s signed on"), buddy_alias);
+				tmp = g_strdup_printf(_("%s is now %s"), buddy_alias,
+				                      gaim_status_get_name(new_status));
 			}
-			else if (!gaim_status_is_available(old_status))
+			else
 			{
-				tmp = g_strdup_printf(_("%s came back"), buddy_alias);
+				tmp = g_strdup_printf(_("%s is no longer %s"), buddy_alias,
+				                      gaim_status_get_name(new_status));
 			}
 		}
-		else if ((old_status != NULL) && gaim_status_is_available(old_status))
-		{
-			if (!gaim_status_is_online(new_status))
-			{
-				tmp = g_strdup_printf(_("%s signed off"), buddy_alias);
-			}
-			else if (!gaim_status_is_available(new_status))
-			{
-				tmp = g_strdup_printf(_("%s went away"), buddy_alias);
-			}
-		}
 
-		if (tmp != NULL)
+		log = gaim_account_get_log(buddy->account, FALSE);
+		if (log != NULL)
 		{
-			GaimLog *log = gaim_account_get_log(buddy->account);
-
 			gaim_log_write(log, GAIM_MESSAGE_SYSTEM, buddy_alias,
-			current_time, tmp);
-			g_free(tmp);
+			               current_time, tmp);
 		}
+
+		g_free(tmp);
 	}
 
 	if (ops != NULL && ops->update != NULL)
@@ -713,7 +713,7 @@ status_has_changed(GaimStatus *status)
 void
 gaim_status_set_active(GaimStatus *status, gboolean active)
 {
-	gaim_status_set_active_with_attrs(status, active, NULL);
+	gaim_status_set_active_with_attrs_list(status, active, NULL);
 }
 
 /*
@@ -747,7 +747,9 @@ gaim_status_set_active_with_attrs_list(GaimStatus *status, gboolean active,
 									   const GList *attrs)
 {
 	gboolean changed = FALSE;
-	const gchar *id;
+	const GList *l;
+	GList *specified_attr_ids = NULL;
+	GaimStatusType *status_type;
 
 	g_return_if_fail(status != NULL);
 
@@ -767,26 +769,30 @@ gaim_status_set_active_with_attrs_list(GaimStatus *status, gboolean active,
 	status->active = active;
 
 	/* Set any attributes */
-	while (attrs)
+	l = attrs;
+	while (l != NULL)
 	{
+		const gchar *id;
 		GaimValue *value;
 
-		id = attrs->data;
-		attrs = attrs->next;
+		id = l->data;
+		l = l->next;
 		value = gaim_status_get_attr_value(status, id);
 		if (value == NULL)
 		{
 			gaim_debug_warning("status", "The attribute \"%s\" on the status \"%s\" is "
 							   "not supported.\n", id, status->type->name);
 			/* Skip over the data and move on to the next attribute */
-			attrs = attrs->next;
+			l = l->next;
 			continue;
 		}
 
+		specified_attr_ids = g_list_prepend(specified_attr_ids, (gpointer)id);
+
 		if (value->type == GAIM_TYPE_STRING)
 		{
-			const gchar *string_data = attrs->data;
-			attrs = attrs->next;
+			const gchar *string_data = l->data;
+			l = l->next;
 			if (((string_data == NULL) && (value->data.string_data == NULL)) ||
 				((string_data != NULL) && (value->data.string_data != NULL) &&
 				!strcmp(string_data, value->data.string_data)))
@@ -798,8 +804,8 @@ gaim_status_set_active_with_attrs_list(GaimStatus *status, gboolean active,
 		}
 		else if (value->type == GAIM_TYPE_INT)
 		{
-			int int_data = GPOINTER_TO_INT(attrs->data);
-			attrs = attrs->next;
+			int int_data = GPOINTER_TO_INT(l->data);
+			l = l->next;
 			if (int_data == value->data.int_data)
 				continue;
 			gaim_status_set_attr_int(status, id, int_data);
@@ -807,19 +813,47 @@ gaim_status_set_active_with_attrs_list(GaimStatus *status, gboolean active,
 		}
 		else if (value->type == GAIM_TYPE_BOOLEAN)
 		{
-			gboolean boolean_data = GPOINTER_TO_INT(attrs->data);
-			attrs = attrs->next;
+			gboolean boolean_data = GPOINTER_TO_INT(l->data);
+			l = l->next;
 			if (boolean_data == value->data.boolean_data)
 				continue;
-			gaim_status_set_attr_int(status, id, boolean_data);
+			gaim_status_set_attr_boolean(status, id, boolean_data);
 			changed = TRUE;
 		}
 		else
 		{
 			/* We don't know what the data is--skip over it */
-			attrs = attrs->next;
+			l = l->next;
 		}
 	}
+
+	/* Reset any unspecified attributes to their default value */
+	status_type = gaim_status_get_type(status);
+	l = gaim_status_type_get_attrs(status_type);
+	while (l != NULL)
+	{
+		GaimStatusAttr *attr;
+
+		attr = l->data;
+		if (!g_list_find_custom(specified_attr_ids, attr->id, (GCompareFunc)strcmp))
+		{
+			GaimValue *default_value;
+			default_value = gaim_status_attr_get_value(attr);
+			if (default_value->type == GAIM_TYPE_STRING)
+				gaim_status_set_attr_string(status, attr->id,
+						gaim_value_get_string(default_value));
+			else if (default_value->type == GAIM_TYPE_INT)
+				gaim_status_set_attr_int(status, attr->id,
+						gaim_value_get_int(default_value));
+			else if (default_value->type == GAIM_TYPE_BOOLEAN)
+				gaim_status_set_attr_boolean(status, attr->id,
+						gaim_value_get_boolean(default_value));
+			changed = TRUE;
+		}
+
+		l = l->next;
+	}
+	g_list_free(specified_attr_ids);
 
 	if (!changed)
 		return;
@@ -889,7 +923,6 @@ gaim_status_set_attr_string(GaimStatus *status, const char *id,
                                  "this!\n", id,
 				 gaim_status_type_get_name(gaim_status_get_type(status)));
 		return;
-				 				 
 	}
 	g_return_if_fail(gaim_value_get_type(attr_value) == GAIM_TYPE_STRING);
 
@@ -1280,26 +1313,34 @@ update_buddy_idle(GaimBuddy *buddy, GaimPresence *presence,
 	{
 		if (gaim_prefs_get_bool("/core/logging/log_system"))
 		{
-			GaimLog *log = gaim_account_get_log(buddy->account);
-			char *tmp = g_strdup_printf(_("%s became idle"),
-			gaim_buddy_get_alias(buddy));
+			GaimLog *log = gaim_account_get_log(buddy->account, FALSE);
 
-			gaim_log_write(log, GAIM_MESSAGE_SYSTEM,
-			gaim_buddy_get_alias(buddy), current_time, tmp);
-			g_free(tmp);
+			if (log != NULL)
+			{
+				char *tmp = g_strdup_printf(_("%s became idle"),
+				gaim_buddy_get_alias(buddy));
+
+				gaim_log_write(log, GAIM_MESSAGE_SYSTEM,
+				gaim_buddy_get_alias(buddy), current_time, tmp);
+				g_free(tmp);
+			}
 		}
 	}
 	else if (old_idle && !idle)
 	{
 		if (gaim_prefs_get_bool("/core/logging/log_system"))
 		{
-			GaimLog *log = gaim_account_get_log(buddy->account);
-			char *tmp = g_strdup_printf(_("%s became unidle"),
-			gaim_buddy_get_alias(buddy));
+			GaimLog *log = gaim_account_get_log(buddy->account, FALSE);
 
-			gaim_log_write(log, GAIM_MESSAGE_SYSTEM,
-			gaim_buddy_get_alias(buddy), current_time, tmp);
-			g_free(tmp);
+			if (log != NULL)
+			{
+				char *tmp = g_strdup_printf(_("%s became unidle"),
+				gaim_buddy_get_alias(buddy));
+
+				gaim_log_write(log, GAIM_MESSAGE_SYSTEM,
+				gaim_buddy_get_alias(buddy), current_time, tmp);
+				g_free(tmp);
+			}
 		}
 	}
 
@@ -1352,17 +1393,21 @@ gaim_presence_set_idle(GaimPresence *presence, gboolean idle, time_t idle_time)
 
 		if (gaim_prefs_get_bool("/core/logging/log_system"))
 		{
-			GaimLog *log = gaim_account_get_log(account);
-			char *msg;
+			GaimLog *log = gaim_account_get_log(account, FALSE);
 
-			if (idle)
-				msg = g_strdup_printf(_("+++ %s became idle"), gaim_account_get_username(account));
-			else
-				msg = g_strdup_printf(_("+++ %s became unidle"), gaim_account_get_username(account));
-			gaim_log_write(log, GAIM_MESSAGE_SYSTEM,
-						   gaim_account_get_username(account),
-						   idle_time, msg);
-			g_free(msg);
+			if (log != NULL)
+			{
+				char *msg;
+
+				if (idle)
+					msg = g_strdup_printf(_("+++ %s became idle"), gaim_account_get_username(account));
+				else
+					msg = g_strdup_printf(_("+++ %s became unidle"), gaim_account_get_username(account));
+				gaim_log_write(log, GAIM_MESSAGE_SYSTEM,
+							   gaim_account_get_username(account),
+							   idle_time, msg);
+				g_free(msg);
+			}
 		}
 
 		gc = gaim_account_get_connection(account);

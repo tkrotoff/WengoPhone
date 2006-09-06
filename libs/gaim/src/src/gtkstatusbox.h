@@ -96,18 +96,19 @@ struct _GtkGaimStatusBox
 	GdkPixbuf *typing_pixbufs[4];
 
 	gboolean connecting;
-	gboolean typing;
-
+	guint typing;
 
 	GtkTreeIter iter;
-	GdkPixbuf *pixbuf;
-	char *title;
-	char *desc;
 	char *error;
 
 	gulong status_changed_signal;
 
-	/* Widgets for renderin' */
+	/*
+	 * These widgets are made for renderin'
+	 * That's just what they'll do
+	 * One of these days these widgets
+	 * Are gonna render all over you
+	 */
 	GtkWidget *hbox;
 	GtkWidget *toggle_button;
 	GtkWidget *vsep;
@@ -138,9 +139,6 @@ gtk_gaim_status_box_add(GtkGaimStatusBox *status_box, GtkGaimStatusBoxItemType t
 
 void
 gtk_gaim_status_box_add_separator(GtkGaimStatusBox *status_box);
-
-void
-gtk_gaim_status_box_set_error(GtkGaimStatusBox *status_box, const gchar *error);
 
 void
 gtk_gaim_status_box_set_connecting(GtkGaimStatusBox *status_box, gboolean connecting);

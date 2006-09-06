@@ -29,10 +29,12 @@
 #endif
 
 #include "internal.h"
+
 #include "account.h"
 #include "accountopt.h"
-#include "version.h"
 #include "debug.h"
+#include "util.h"
+#include "version.h"
 
 #include "bonjour.h"
 #include "dns_sd.h"
@@ -42,7 +44,9 @@
 /*
  * TODO: Should implement an add_buddy callback that removes the buddy
  *       from the local list.  Bonjour manages buddies for you, and
- *       adding someone locally by hand is stupid.
+ *       adding someone locally by hand is stupid.  Or, maybe even better,
+ *       if a PRPL does not have an add_buddy callback then do not allow
+ *       users to add buddies.
  */
 
 static char *default_firstname;
@@ -154,7 +158,7 @@ bonjour_login(GaimAccount *account)
 static void
 bonjour_close(GaimConnection *connection)
 {
-	GaimGroup *bonjour_group = gaim_find_group(BONJOUR_GROUP_NAME);
+	GaimGroup *bonjour_group;
 	BonjourData *bd = (BonjourData*)connection->proto_data;
 
 	/* Stop looking for buddies in the LAN */
@@ -175,7 +179,9 @@ bonjour_close(GaimConnection *connection)
 	bonjour_removeallfromlocal(connection);
 
 	/* Delete the bonjour group */
-	gaim_blist_remove_group(bonjour_group);
+	bonjour_group = gaim_find_group(BONJOUR_GROUP_NAME);
+	if (bonjour_group != NULL)
+		gaim_blist_remove_group(bonjour_group);
 
 }
 
@@ -204,6 +210,7 @@ bonjour_set_status(GaimAccount *account, GaimStatus *status)
 	int primitive;
 	GaimPresence *presence;
 	const char *message, *bonjour_status;
+	gchar *stripped;
 
 	gc = gaim_account_get_connection(account);
 	bd = gc->proto_data;
@@ -215,6 +222,7 @@ bonjour_set_status(GaimAccount *account, GaimStatus *status)
 	message = gaim_status_get_attr_string(status, "message");
 	if (message == NULL)
 		message = "";
+	stripped = gaim_markup_strip_html(message);
 
 	/*
 	 * The three possible status for Bonjour are
@@ -230,7 +238,8 @@ bonjour_set_status(GaimAccount *account, GaimStatus *status)
 	else
 		bonjour_status = "dnd";
 
-	bonjour_dns_sd_send_status(bd->dns_sd_data, bonjour_status, message);
+	bonjour_dns_sd_send_status(bd->dns_sd_data, bonjour_status, stripped);
+	g_free(stripped);
 }
 
 static GList *
@@ -404,7 +413,6 @@ static GaimPluginProtocolInfo prpl_info =
 	NULL,                                                    /* new_xfer */
 	NULL,                                                    /* offline_message */
 	NULL,                                                    /* whiteboard_prpl_ops */
-	NULL,                                                    /* media_prpl_ops */
 };
 
 static GaimPluginInfo info =
@@ -441,12 +449,16 @@ static GaimPluginInfo info =
 static void
 initialize_default_account_values()
 {
+#ifdef _WIN32
 	char *fullname = NULL;
+#else
+	struct passwd *info;
+	const char *fullname = NULL;
+#endif
 	char *splitpoint = NULL;
 	char hostname[255];
-#ifndef _WIN32
-	struct passwd *info;
 
+#ifndef _WIN32
 	/* Try to figure out the user's real name */
 	info = getpwuid(getuid());
 	if ((info != NULL) && (info->pw_gecos != NULL) && (info->pw_gecos[0] != '\0'))
@@ -457,6 +469,15 @@ initialize_default_account_values()
 		;
 	else
 		fullname = _("Gaim User");
+
+	/* Make sure fullname is valid UTF-8.  If not, try to convert it. */
+	if (!g_utf8_validate(fullname, -1, NULL))
+	{
+		gchar *tmp;
+		tmp = g_locale_to_utf8(fullname, -1, NULL, NULL, NULL);
+		if ((tmp == NULL) || (*tmp == '\0'))
+			fullname = _("Gaim User");
+	}
 
 #else
 	FARPROC myNetUserGetInfo = wgaim_find_and_loadproc("Netapi32.dll",
@@ -564,7 +585,7 @@ init_plugin(GaimPlugin *plugin)
 	option = gaim_account_option_string_new(_("Last name"), "last", default_lastname);
 	prpl_info.protocol_options = g_list_append(prpl_info.protocol_options, option);
 
-	option = gaim_account_option_string_new(_("Email"), "email", "");
+	option = gaim_account_option_string_new(_("E-mail"), "email", "");
 	prpl_info.protocol_options = g_list_append(prpl_info.protocol_options, option);
 
 	my_protocol = plugin;

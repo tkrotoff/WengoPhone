@@ -1,4 +1,4 @@
-/* $Id: pubdir50.c,v 1.2 2005/12/06 19:22:13 rlaager Exp $ */
+/* $Id: pubdir50.c 14676 2005-12-06 19:22:13Z rlaager $ */
 
 /*
  *  (C) Copyright 2003 Wojtek Kaniewski <wojtekka@irc.pl>

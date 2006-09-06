@@ -181,9 +181,11 @@ static void
 remove_old_transient_statuses()
 {
 	GList *l, *next;
-	GaimSavedStatus *saved_status;
+	GaimSavedStatus *saved_status, *current_status;
 	int count;
 	time_t creation_time;
+
+	current_status = gaim_savedstatus_get_current();
 
 	/*
 	 * Iterate through the list of saved statuses.  Delete all
@@ -199,10 +201,13 @@ remove_old_transient_statuses()
 		{
 			if (count == MAX_TRANSIENTS)
 			{
-				saved_statuses = g_list_remove(saved_statuses, saved_status);
-				creation_time = gaim_savedstatus_get_creation_time(saved_status);
-				g_hash_table_remove(creation_times, &creation_time);
-				free_saved_status(saved_status);
+				if (saved_status != current_status)
+				{
+					saved_statuses = g_list_remove(saved_statuses, saved_status);
+					creation_time = gaim_savedstatus_get_creation_time(saved_status);
+					g_hash_table_remove(creation_times, &creation_time);
+					free_saved_status(saved_status);
+				}
 			}
 			else
 				count++;
@@ -578,7 +583,10 @@ gaim_savedstatus_set_message(GaimSavedStatus *status, const char *message)
 	g_return_if_fail(status != NULL);
 
 	g_free(status->message);
-	status->message = g_strdup(message);
+	if ((message != NULL) && (*message == '\0'))
+		status->message = NULL;
+	else
+		status->message = g_strdup(message);
 
 	schedule_save();
 }
@@ -733,6 +741,8 @@ gaim_savedstatus_get_current()
 		 * using?  In any case, add a default status.
 		 */
 		saved_status = gaim_savedstatus_new(NULL, GAIM_STATUS_AVAILABLE);
+		gaim_prefs_set_int("/core/savedstatus/current",
+						   gaim_savedstatus_get_creation_time(saved_status));
 	}
 
 	return saved_status;
@@ -755,6 +765,8 @@ gaim_savedstatus_get_idleaway()
 		 */
 		saved_status = gaim_savedstatus_new(NULL, GAIM_STATUS_AWAY);
 		gaim_savedstatus_set_message(saved_status, _("I'm not here right now"));
+		gaim_prefs_set_int("/core/savedstatus/idleaway",
+						   gaim_savedstatus_get_creation_time(saved_status));
 	}
 	else
 	{
@@ -799,8 +811,8 @@ gaim_savedstatus_find_by_creation_time(time_t creation_time)
 }
 
 GaimSavedStatus *
-gaim_savedstatus_find_by_type_and_message(GaimStatusPrimitive type,
-										  const char *message)
+gaim_savedstatus_find_transient_by_type_and_message(GaimStatusPrimitive type,
+													const char *message)
 {
 	GList *iter;
 	GaimSavedStatus *status;
@@ -808,7 +820,7 @@ gaim_savedstatus_find_by_type_and_message(GaimStatusPrimitive type,
 	for (iter = saved_statuses; iter != NULL; iter = iter->next)
 	{
 		status = (GaimSavedStatus *)iter->data;
-		if ((status->type == type) &&
+		if ((status->type == type) && gaim_savedstatus_is_transient(status) &&
 			(((status->message == NULL) && (message == NULL)) ||
 			((status->message != NULL) && (message != NULL) && !strcmp(status->message, message))))
 		{
@@ -938,6 +950,7 @@ void
 gaim_savedstatus_activate(GaimSavedStatus *saved_status)
 {
 	GList *accounts, *node;
+	GaimSavedStatus *old = gaim_savedstatus_get_current();
 
 	g_return_if_fail(saved_status != NULL);
 
@@ -961,6 +974,10 @@ gaim_savedstatus_activate(GaimSavedStatus *saved_status)
 
 	gaim_prefs_set_int("/core/savedstatus/current",
 					   gaim_savedstatus_get_creation_time(saved_status));
+
+	gaim_signal_emit(gaim_savedstatuses_get_handle(), "savedstatus-changed",
+					 saved_status, old);
+
 }
 
 void
@@ -1012,6 +1029,8 @@ gaim_savedstatuses_get_handle(void)
 void
 gaim_savedstatuses_init(void)
 {
+	void *handle = gaim_savedstatuses_get_handle();
+
 	creation_times = g_hash_table_new(g_int_hash, g_int_equal);
 
 	/*
@@ -1028,6 +1047,13 @@ gaim_savedstatuses_init(void)
 	gaim_prefs_add_int("/core/savedstatus/idleaway", 0);
 
 	load_statuses();
+
+	gaim_signal_register(handle, "savedstatus-changed",
+					 gaim_marshal_VOID__POINTER_POINTER, NULL, 2,
+					 gaim_value_new(GAIM_TYPE_SUBTYPE,
+									GAIM_SUBTYPE_SAVEDSTATUS),
+					 gaim_value_new(GAIM_TYPE_SUBTYPE,
+									GAIM_SUBTYPE_SAVEDSTATUS));
 }
 
 void
@@ -1049,5 +1075,7 @@ gaim_savedstatuses_uninit(void)
 	}
 
 	g_hash_table_destroy(creation_times);
+
+	gaim_signals_unregister_by_instance(gaim_savedstatuses_get_handle());
 }
 
