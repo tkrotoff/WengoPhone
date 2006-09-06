@@ -129,7 +129,7 @@ int wav_create_header(int fd)
 }
 
 /* Update the RIFF structure with proper values. CreateWavHeader must be called first */
-int wav_upadte_header(int fd)
+int wav_update_header(int fd)
 {
   unsigned long filelen, riff_length, data_length;
 
