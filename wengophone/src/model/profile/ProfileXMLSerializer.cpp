@@ -224,7 +224,7 @@ bool ProfileXMLSerializer::unserializeContent(TiXmlHandle & rootElt) {
 
 	// Retrieving phone numbers
 	TiXmlNode * tel = NULL;
-	while ((tel = rootElt.Node()->IterateChildren("tel", tel))) {
+	while ((rootElt.Node()) && (tel = rootElt.Node()->IterateChildren("tel", tel))) {
 		TiXmlElement * telElt = tel->ToElement();
 		string typeAttr = string(telElt->Attribute("type"));
 		if (typeAttr == "home") {
