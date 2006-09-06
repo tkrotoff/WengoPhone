@@ -9,5 +9,7 @@ subdirs(
   owbrowser
   trayicon
   softupdater
+  pixertool
+  webcam
 )
 
