@@ -1,0 +1,91 @@
+#!/usr/bin/env ruby
+
+# simple script to generate CMakeLists.txt for wengophone libs
+# Copyright (c) 2006 Andreas Schneider <mail@cynapses.org>
+# usage: generate_lib_file
+# then you will be prompted to enter the required parameters
+
+print("Name of project: ")
+project=gets.chomp
+
+printf("\n")
+
+print("Other projects to includes (e.g. \"owutil tinyxml\", leave emtpy to skip): ")
+otherprojects=gets.chomp
+
+printf("\n")
+
+print("Defininitions (leave empty to skip): ")
+definitions=gets.chomp
+
+cmakeIncDirName = project.upcase+"_INCLUDE_DIRS"
+cmakeLibName = project.upcase+"_LIBRARIES"
+cmakeDefsName = project.upcase+"_DEFINITIONS"
+
+file=File.new("CMakeLists.txt", "w+")
+
+file.printf("project(#{project})\n")
+file.printf("\n")
+file.printf("# needed include directories to build #{project}\n")
+file.printf("# saves the variable in internal cache for later use\n")
+file.printf("set(#{cmakeIncDirName}\n")
+file.printf("  ${CMAKE_CURRENT_SOURCE_DIR}\n")
+file.printf("  ${CMAKE_CURRENT_SOURCE_DIR}/include\n")
+otherprojects.split(" ").each do |otherproject|
+	file.printf("  ${#{otherproject.upcase}_INCLUDE_DIRS}\n")
+end
+file.printf("  CACHE INTERNAL \"#{project} include directories\"\n")
+file.printf(")\n")
+
+file.printf("\n")
+
+file.printf("# #{project} lib and dependencies\n")
+file.printf("# saves the variable in internal cache for later use\n")
+file.printf("set(#{cmakeLibName}\n")
+file.printf("  #{project}\n")
+otherprojects.split(" ").each do |otherproject|
+	file.printf("  ${#{otherproject.upcase}_LIBRARIES}\n")
+end
+file.printf("  CACHE INTERNAL \"#{project} libraries\"\n")
+file.printf(")\n")
+
+if not definitions.empty?
+	file.printf("\n")
+
+	file.printf("set(#{cmakeDefsName}\n")
+	file.prinft("  #{definitons}\n")
+	file.printf(")\n")
+end
+
+file.printf("\n")
+
+file.printf("include_directories(\n")
+file.printf("  ${#{cmakeIncDirName}}\n")
+file.printf(")\n")
+
+file.printf("\n")
+
+if not definitions.empty?
+	file.printf("add_definitions(\n")
+	file.printf("  ${#{cmakeDefsName}}\n")
+	file.printf(")\n")
+
+	file.printf("\n")
+end
+
+file.printf("set(#{project}_SRCS\n")
+file.printf("  files.c\n")
+file.printf(")\n")
+
+file.printf("\n")
+
+file.printf("add_library(#{project} STATIC ${#{project}_SRCS})\n")
+
+file.printf("\n")
+
+file.printf("target_link_libraries(${#{cmakeLibName}})\n")
+
+file.printf("\n")
+
+printf("Generated CMakeLists.txt for #{project}\n")
+
