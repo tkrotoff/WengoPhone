@@ -1,29 +1,42 @@
 project(owwenboxplugin)
 
-#Boost dependency
 find_package(Boost REQUIRED)
-link_directories(${Boost_LIBRARY_DIRS})
 
-#owwenbox dependency
-link_directories(${owwenbox_BINARY_DIR})
-include_directories(${owwenbox_INCLUDE_DIR})
-
-#ylusbtel.lib dependency
-link_directories(${owwenboxplugin_SOURCE_DIR})
-
-#includes
-include_directories(.)
-
-#sources
-set(owwenboxplugin_SRCS
-	YealinkWenbox.cpp
+# find precompiled ylusbtel
+find_library(YLUSBTEL_LIBRARIES
+  NAMES
+    ylusbtel
+  PATH
+    ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-#owwenboxplugin
+# needed include directories to build owwenboxplugin
+# saves the variable in internal cache for later use
+set(OWWENBOXPLUGIN_INCLUDE_DIRS
+  ${CMAKE_CURRENT_SOURCE_DIR}
+  ${OWWENBOX_INCLUDE_DIRS}
+  ${Boost_INCLUDE_DIRS}
+  CACHE INTERNAL "owwenboxplugin include directories"
+)
+
+# owwenboxplugin lib and dependencies
+# saves the variable in internal cache for later use
+set(OWWENBOXPLUGIN_LIBRARIES
+  owwenboxplugin
+  ${YLUSBTEL_LIBRARIES}
+  ${OWWENBOX_LIBRARIES}
+  CACHE INTERNAL "owwenboxplugin libraries"
+)
+
+include_directories(
+  ${OWWENBOXPLUGIN_INCLUDE_DIRS}
+)
+
+set(owwenboxplugin_SRCS
+  YealinkWenbox.cpp
+)
+
 add_library(owwenboxplugin SHARED ${owwenboxplugin_SRCS})
 
-#owwenbox dependency
-target_link_libraries(owwenboxplugin owwenbox)
+target_link_libraries(${OWWENBOXPLUGIN_LIBRARIES})
 
-#ylusbtel
-target_link_libraries(owwenboxplugin ylusbtel)

@@ -1,32 +1,36 @@
 project(owcutil)
 
-#includes
-set(owcutil_INCLUDE_DIR
-	${owcutil_SOURCE_DIR}/include
-	CACHE INTERNAL ""
+set(OWCUTIL_INCLUDE_DIRS
+  ${CMAKE_CURRENT_SOURCE_DIR}/include
+  CACHE INTERNAL "owcutil include directory"
 )
 
 if (MSVC)
-	set(owcutil_INCLUDE_DIR ${owcutil_INCLUDE_DIR}
-		${owcutil_SOURCE_DIR}/include/cutil/msvc
-		CACHE INTERNAL ""
-	)
+  set(OWCUTIL_INCLUDE_DIRS
+    ${owcutil_SOURCE_DIR}/include/cutil/msvc
+    CACHE INTERNAL "owcutil include directory"
+  )
 endif (MSVC)
 
-include_directories(${owcutil_INCLUDE_DIR})
+set(OWCUTIL_LIBRARIES
+  owcutil
+  CACHE INTERNAL "owcutil libraries"
+)
 
-#sources
+include_directories(${OWCUTIL_INCLUDE_DIRS})
+
 set(owcutil_SRCS
-	src/fake.c
-	src/strlcat.c
-	src/strlcpy.c
+  src/fake.c
+  src/strlcat.c
+  src/strlcpy.c
 )
 
 if (MSVC)
-	set(owcutil_SRCS ${owcutil_SRCS}
-		src/msvc/dirent.c
-	)
+  set(owcutil_SRCS
+    ${owcutil_SRCS}
+    src/msvc/dirent.c
+  )
 endif (MSVC)
 
-#owcutil
 add_library(owcutil STATIC ${owcutil_SRCS})
+

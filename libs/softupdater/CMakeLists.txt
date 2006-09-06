@@ -1,24 +1,30 @@
 project(owsoftupdater)
 
-#owhttp dependency
-include_directories(${owhttp_INCLUDE_DIR})
-link_directories(${owhttp_BINARY_DIR})
-
-#includes
-set(owsoftupdater_INCLUDE_DIR
-	${owsoftupdater_SOURCE_DIR}/include
-	CACHE INTERNAL ""
+# needed include directories to build owsoftupdater
+# saves the variable in internal cache for later use
+set(OWSOFTUPDATER_INCLUDE_DIRS
+  ${CMAKE_CURRENT_SOURCE_DIR}/include
+  ${OWHTTP_INCLUDE_DIRS}
+  CACHE INTERNAL "owsoftupdater include directories"
 )
 
-include_directories(${owsoftupdater_INCLUDE_DIR})
+# owsoftupdater lib and dependencies
+# saves the variable in internal cache for later use
+set(OWSOFTUPDATER_LIBRARIES
+  owsoftupdater
+  ${OWHTTP_LIBRARIES}
+  CACHE INTERNAL "owsoftupdater libraries"
+)
 
-#sources
+include_directories(
+  ${OWSOFTUPDATER_INCLUDE_DIRS}
+)
+
 set(owsoftupdater_SRCS
-	src/SoftUpdater.cpp
+  src/SoftUpdater.cpp
 )
 
-#owsoftupdater
 add_library(owsoftupdater STATIC ${owsoftupdater_SRCS})
 
-#owhttp dependency
-target_link_libraries(owsoftupdater owhttp)
+target_link_libraries(${OWSOFTUPDATER_LIBRARIES})
+

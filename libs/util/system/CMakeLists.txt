@@ -1,47 +1,53 @@
 project(owsystem)
 
-#owutil dependency
-link_directories(${owutil_BINARY_DIR})
-
-#includes
-set(owsystem_INCLUDE_DIR
-	${owsystem_SOURCE_DIR}/include
-	${owutil_INCLUDE_DIR}
-	CACHE INTERNAL ""
+# needed include directories to build owsystem
+# saves the variable in internal cache for later use
+set(OWSYSTEM_INCLUDE_DIRS
+  ${CMAKE_CURRENT_SOURCE_DIR}/include
+  ${OWUTIL_INCLUDE_DIRS}
+  CACHE INTERNAL "owsystem include directories"
 )
 
-include_directories(${owsystem_INCLUDE_DIR})
+# owsystem lib and dependencies
+# saves the variable in internal cache for later use
+set(OWSYSTEM_LIBRARIES
+  owsystem
+  ${OWUTIL_LIBRARIES}
+  CACHE INTERNAL "owsystem libraries"
+)
+
+include_directories(
+  ${OWSYSTEM_INCLUDE_DIRS}
+)
 
 #sources
 set(owsystem_SRCS
-	src/RegisterProtocol.cpp
+  src/RegisterProtocol.cpp
 )
 
 if (WIN32)
-	set(owsystem_SRCS ${owsystem_SRCS}
-		src/win/Startup.cpp
-		src/win/Processes.cpp
-		src/win/WindowsVersion.c
-		src/win/WindowsRegistry.cpp
-	)
+  set(owsystem_SRCS ${owsystem_SRCS}
+    src/win/Startup.cpp
+    src/win/Processes.cpp
+    src/win/WindowsVersion.c
+    src/win/WindowsRegistry.cpp
+  )
 endif (WIN32)
 
 if (UNIX)
-	if (APPLE)
-		set(owsystem_SRCS ${owsystem_SRCS}
-			src/null/Processes.cpp
-			src/mac/Startup.mm
-		)
-	else (APPLE)
-		set(owsystem_SRCS ${owsystem_SRCS}
-			src/unix/Processes.cpp
-			src/null/Startup.cpp
-		)
-	endif (APPLE)
+  if (APPLE)
+    set(owsystem_SRCS ${owsystem_SRCS}
+      src/null/Processes.cpp
+      src/mac/Startup.mm
+    )
+  else (APPLE)
+    set(owsystem_SRCS ${owsystem_SRCS}
+      src/unix/Processes.cpp
+      src/null/Startup.cpp
+    )
+  endif (APPLE)
 endif (UNIX)
 
-#owsystem
 add_library(owsystem STATIC ${owsystem_SRCS})
 
-#owutil dependency
-target_link_libraries(owsystem owutil)
+target_link_libraries(${OWSYSTEM_LIBRARIES})

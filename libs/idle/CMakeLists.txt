@@ -1,31 +1,35 @@
 project(owidle)
 
-#Qt4 dependency
 find_package(Qt4 REQUIRED)
+include(${QT_USE_FILE})
+
+# needed include directories to build owidle
+# saves the variable in internal cache for later use
+set(OWIDLE_INCLUDE_DIRS
+  ${CMAKE_CURRENT_SOURCE_DIR}/include
+  ${OWQTUTIL_INCLUDE_DIRS}
+  CACHE INTERNAL "owidle include directories"
+)
+
+# owidle lib and dependencies
+# saves the variable in internal cache for later use
+set(OWIDLE_LIBRARIES
+  owidle
+  ${OWQTUTIL_LIBRARIES}
+  CACHE INTERNAL "owidle libraries"
+)
+
 include_directories(
-	${QT_INCLUDE_DIR}
+  ${OWIDLE_INCLUDE_DIRS}
 )
 
-#owqtutil dependency
-include_directories(${owqtutil_INCLUDE_DIR})
-
-#includes
-set(owidle_INCLUDE_DIR
-	${owidle_SOURCE_DIR}/include
-	CACHE INTERNAL ""
-)
-
-include_directories(${owidle_INCLUDE_DIR})
-
-#sources
 set(owidle_SRCS
-	src/Idle.cpp
+  src/Idle.cpp
 )
 
 qt4_automoc(${owidle_SRCS})
 
-#owidle
 add_library(owidle STATIC ${owidle_SRCS})
 
-#owqtutil dependency
-target_link_libraries(owidle owqtutil)
+target_link_libraries(${OWIDLE_LIBRARIES})
+

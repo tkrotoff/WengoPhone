@@ -1,33 +1,36 @@
 project(owwenbox)
 
-#owutil dependency
-include_directories(${owutil_INCLUDE_DIR})
-link_directories(${owutil_BINARY_DIR})
-
-#owshlibloader dependency
-include_directories(${owshlibloader_INCLUDE_DIR})
-link_directories(${owshlibloader_BINARY_DIR})
-
-#includes
-set(owwenbox_INCLUDE_DIR
-	${owwenbox_SOURCE_DIR}/include
-	CACHE INTERNAL ""
+# needed include directories to build owwenbox
+# saves the variable in internal cache for later use
+set(OWWENBOX_INCLUDE_DIRS
+  ${CMAKE_CURRENT_SOURCE_DIR}/include
+  ${OWSHLIBLOADER_INCLUDE_DIRS}
+  CACHE INTERNAL "owwenbox include directories"
 )
 
-include_directories(${owwenbox_INCLUDE_DIR})
+# owwenbox lib and dependencies
+# saves the variable in internal cache for later use
+set(OWWENBOX_LIBRARIES
+  owwenbox
+  ${OWSHLIBLOADER_LIBRARIES}
+  CACHE INTERNAL "owwenbox libraries"
+)
+
+include_directories(
+  ${OWWENBOX_INCLUDE_DIRS}
+)
+
 
 #sources
 set(owwenbox_SRCS
-	src/Wenbox.cpp
+  src/Wenbox.cpp
 )
 
-#owwenbox
 add_library(owwenbox STATIC ${owwenbox_SRCS})
 
-#owutil dependency
-target_link_libraries(owwenbox owutil)
+target_link_libraries(${OWWENBOX_LIBRARIES})
 
 subdirs(src/null)
 if (WIN32)
-	subdirs(src/yealink)
+  subdirs(src/yealink)
 endif (WIN32)

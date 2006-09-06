@@ -1,31 +1,31 @@
-project(<LIBNAME>)
+project(<PROJECTNAME>)
 
-# needed include directories to build <LIBNAME>
+# needed include directories to build <PROJECTNAME>
 # saves the variable in internal cache for later use
 set(<LIBNAME>_INCLUDE_DIRS
   ${CMAKE_CURRENT_SOURCE_DIR}
   ${CMAKE_CURRENT_SOURCE_DIR}/include
   ${OTHERPOJECT_INCLUDE_DIRS}
-  CACHE INTERNAL "<LIBNAME> include directories"
+  CACHE INTERNAL "<PROJECTNAME> include directories"
 )
 
-# <LIBNAME> lib and dependencies
+# <PROJECTNAME> lib and dependencies
 # saves the variable in internal cache for later use
 set(<LIBNAME>_LIBRARIES
-  <LIBNAME>
+  <PROJECTNAME>
   ${OTHERPROJECT_LIBRARIES}
-  CACHE INTERNAL "<LIBNAME libraries"
+  CACHE INTERNAL "<PROJECTNAME> libraries"
 )
 
 include_directories(
   ${<LIBNAME>_INCLUDE_DIRS}
 )
 
-set(<LIBNAME>_SRCS
+set(<PROJECTNAME>_SRCS
   files.c
 )
 
-add_library(<LIBNAME> STATIC ${<LIBNAME>_SRCS})
+add_library(<PROJECTNAME> STATIC ${<PROJECTNAME>_SRCS})
 
 target_link_libraries(${<LIBNAME>_LIBRARIES})
 

@@ -1,35 +1,34 @@
 project(owhttp)
 
-#owutil dependency
-link_directories(${owutil_BINARY_DIR})
-
-#owcurl dependency
-link_directories(${owcurl_BINARY_DIR})
-include_directories(${owcurl_INCLUDE_DIR})
-
-#owthread dependency
-link_directories(${owthread_BINARY_DIR})
-
-#includes
-set(owhttp_INCLUDE_DIR
-	${owhttp_SOURCE_DIR}/include
-	${owutil_INCLUDE_DIR}
-	${owthread_INCLUDE_DIR}
-	CACHE INTERNAL ""
+# needed include directories to build owhttp
+# saves the variable in internal cache for later use
+set(OWHTTP_INCLUDE_DIRS
+  ${CMAKE_CURRENT_SOURCE_DIR}/include
+  ${OWTHREAD_INCLUDE_DIRS}
+  CACHE INTERNAL "owhttp include directories"
 )
 
-include_directories(${owhttp_INCLUDE_DIR})
+# owhttp lib and dependencies
+# saves the variable in internal cache for later use
+set(OWHTTP_LIBRARIES
+  owhttp
+  ${OWTHREAD_LIBRARIES}
+  CACHE INTERNAL "owhttp libraries"
+)
+
+include_directories(
+  ${OWHTTP_INCLUDE_DIRS}
+)
 
 #sources
 set(owhttp_SRCS
-	src/HttpRequest.cpp
-	src/null/NullHttpRequest.cpp
-	src/curl/CurlHttpRequest.cpp
-	#src/qt/QtHttpRequest.cpp
+  src/HttpRequest.cpp
+  src/null/NullHttpRequest.cpp
+  src/curl/CurlHttpRequest.cpp
+  #src/qt/QtHttpRequest.cpp
 )
 
-#owhttp
 add_library(owhttp STATIC ${owhttp_SRCS})
 
-#owutil dependency
-target_link_libraries(owhttp owutil)
+target_link_libraries(${OWTHREAD_LIBRARIES})
+

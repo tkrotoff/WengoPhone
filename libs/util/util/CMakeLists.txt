@@ -4,54 +4,64 @@ project(owutil)
 find_package(Boost REQUIRED)
 
 #owcutil dependency
-link_directories(${owcutil_BINARY_DIR})
+#link_directories(${owcutil_BINARY_DIR})
 
 #includes
-set(owutil_INCLUDE_DIR
-	${owutil_SOURCE_DIR}/include
-	${owcutil_INCLUDE_DIR}
-	${Boost_INCLUDE_DIR}
-	CACHE INTERNAL ""
+set(OWUTIL_INCLUDE_DIRS
+  ${CMAKE_CURRENT_SOURCE_DIR}/include
+  ${OWCUTIL_INCLUDE_DIRS}
+  ${Boost_INCLUDE_DIRS}
+  CACHE INTERNAL "owutil include directories"
 )
 
-include_directories(${owutil_INCLUDE_DIR})
+set(OWUTIL_LIBRARIES
+  owutil
+  owcuitl
+)
+
+include_directories(
+  ${OWUTIL_INCLUDE_DIRS}
+  ${OWCUTIL_INCLUDE_DIRS}
+  CACHE INTERNAL "owutil libraries"
+)
 
 #sources
 set(owutil_SRCS
-	src/exception/Exception.cpp
-	src/Base64.cpp
-	src/Date.cpp
-	src/File.cpp
-	src/Logger.cpp
-	src/Path.cpp
-	src/Picture.cpp
-	src/String.cpp
-	src/StringList.cpp
-	src/Time.cpp
-	src/Uuid.cpp
-	src/WebBrowser.cpp
+  src/exception/Exception.cpp
+  src/Base64.cpp
+  src/Date.cpp
+  src/File.cpp
+  src/Logger.cpp
+  src/Path.cpp
+  src/Picture.cpp
+  src/String.cpp
+  src/StringList.cpp
+  src/Time.cpp
+  src/Uuid.cpp
+  src/WebBrowser.cpp
 )
 
 if (WIN32)
-	set(owutil_SRCS ${owutil_SRCS}
-		src/win/UuidWin.cpp
-	)
+  set(owutil_SRCS ${owutil_SRCS}
+    src/win/UuidWin.cpp
+  )
 endif (WIN32)
 
 if (APPLE)
-	set(owutil_SRCS ${owutil_SRCS}
-		src/mac/UuidMac.cpp
-	)
+  set(owutil_SRCS ${owutil_SRCS}
+    src/mac/UuidMac.cpp
+  )
 endif (APPLE)
 
 if (UNIX)
-	set(owutil_SRCS ${owutil_SRCS}
-		src/unix/UuidUnix.cpp
-	)
+  set(owutil_SRCS ${owutil_SRCS}
+    src/unix/UuidUnix.cpp
+  )
 endif (UNIX)
 
 #owutil
 add_library(owutil STATIC ${owutil_SRCS})
 
 #owcutil dependency
-target_link_libraries(owutil owcutil)
+#target_link_libraries(owutil owcutil)
+target_link_libraries(${OWUTIL_LIBRARIES})

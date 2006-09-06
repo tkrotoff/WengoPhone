@@ -1,53 +1,54 @@
 project(owqtutil)
 
-#Qt4 dependency
 find_package(Qt4 REQUIRED)
-include_directories(
-	${QT_INCLUDE_DIR}
-)
 include(${QT_USE_FILE})
 
-#owthread dependency
-include_directories(${owthread_INCLUDE_DIR})
-
-#includes
-set(owqtutil_INCLUDE_DIR
-	${owqtutil_SOURCE_DIR}/include
-	${owutil_INCLUDE_DIR}
-	CACHE INTERNAL ""
+# needed include directories to build owqtutil
+# saves the variable in internal cache for later use
+set(OWQTUTIL_INCLUDE_DIRS
+  ${CMAKE_CURRENT_SOURCE_DIR}/include
+  ${OWTHREAD_INCLUDE_DIRS}
+  ${QT_INCLUDE_DIR}
+  CACHE INTERNAL "owqtutil include directories"
 )
 
-include_directories(${owqtutil_INCLUDE_DIR})
+# owqtutil lib and dependencies
+# saves the variable in internal cache for later use
+set(OWQTUTIL_LIBRARIES
+  owqtutil
+  ${OWTHREAD_LIBRARIES}
+  CACHE INTERNAL "owqtutil libraries"
+)
 
-#sources
+include_directories(
+  ${OWQTUTIL_INCLUDE_DIRS}
+)
+
 set(owqtutil_SRCS
-	src/EventFilter.cpp
-	src/KeyEventFilter.cpp
-	src/MouseEventFilter.cpp
-	src/PaintEventFilter.cpp
-	src/EnabledChangeEventFilter.cpp
-	src/WidgetFactory.cpp
-	src/Object.cpp
-	src/QObjectThreadSafe.cpp
-	src/ResizeEventFilter.cpp
-	src/NonResizeableWidget.cpp
-	src/StringListConvert.cpp
-	src/Widget.cpp
-	src/WengoStyleLabel.cpp
-	src/ToolTipLineEdit.cpp
-	src/ClickableLabel.cpp
-	src/WidgetBackgroundImage.cpp
-	src/Wizard.cpp
-	src/ThreadEventFilter.cpp
+  src/EventFilter.cpp
+  src/KeyEventFilter.cpp
+  src/MouseEventFilter.cpp
+  src/PaintEventFilter.cpp
+  src/EnabledChangeEventFilter.cpp
+  src/WidgetFactory.cpp
+  src/Object.cpp
+  src/QObjectThreadSafe.cpp
+  src/ResizeEventFilter.cpp
+  src/NonResizeableWidget.cpp
+  src/StringListConvert.cpp
+  src/Widget.cpp
+  src/WengoStyleLabel.cpp
+  src/ToolTipLineEdit.cpp
+  src/ClickableLabel.cpp
+  src/WidgetBackgroundImage.cpp
+  src/Wizard.cpp
+  src/ThreadEventFilter.cpp
+  src/SafeConnect.cpp
 )
 
 qt4_automoc(${owqtutil_SRCS})
-
-include_directories(${owqtutil_BINARY_DIR})
 qt4_wrap_ui(owqtutil_SRCS src/Wizard.ui)
 
-#owqtutil
 add_library(owqtutil STATIC ${owqtutil_SRCS})
 
-#owutil dependency
-target_link_libraries(owqtutil owutil)
+target_link_libraries(${OWQTUTIL_LIBRARIES})

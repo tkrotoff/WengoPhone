@@ -1,29 +1,32 @@
 project(owsocket)
 
-#owutil dependency
-link_directories(${owutil_BINARY_DIR})
-include_directories(${owutil_INCLUDE_DIR})
-
-#owthread dependency
-link_directories(${owthread_BINARY_DIR})
-include_directories(${owthread_INCLUDE_DIR})
-
-#includes
-set(owsocket_INCLUDE_DIR
-	${owsocket_SOURCE_DIR}/include
-	CACHE INTERNAL ""
+# needed include directories to build owsocket
+# saves the variable in internal cache for later use
+set(OWSOCKET_INCLUDE_DIRS
+  ${CMAKE_CURRENT_SOURCE_DIR}/include
+  ${OWTHREAD_INCLUDE_DIRS}
+  CACHE INTERNAL "owsocket include directories"
 )
 
-include_directories(${owsocket_INCLUDE_DIR})
+# owsocket lib and dependencies
+# saves the variable in internal cache for later use
+set(OWSOCKET_LIBRARIES
+  owsocket
+  ${OWTHREAD_LIBRARIES}
+  CACHE INTERNAL "owsocket libraries"
+)
+
+include_directories(
+  ${OWSOCKET_INCLUDE_DIRS}
+)
 
 #sources
 set(owsocket_SRCS
-	src/ServerSocket.cpp
-	src/ClientSocket.cpp
+  src/ServerSocket.cpp
+  src/ClientSocket.cpp
 )
 
-#owsocket
 add_library(owsocket STATIC ${owsocket_SRCS})
 
-#owutil dependency
-target_link_libraries(owsocket owutil)
+target_link_libraries(${OWSOCKET_LIBRARIES})
+

@@ -1,38 +1,38 @@
 project(owsettings)
 
-#owutil dependency
-link_directories(${owutil_BINARY_DIR})
-
-#owserialization dependency
-include_directories(${owserialization_INCLUDE_DIR})
-link_directories(${owserialization_BINARY_DIR})
-
-#owthread dependency
-include_directories(${owthread_INCLUDE_DIR})
-link_directories(${owthread_BINARY_DIR})
-
-#tinyxml dependency
-include_directories(${tinyxml_INCLUDE_DIR})
-
-#includes
-set(owsettings_INCLUDE_DIR
-	${owsettings_SOURCE_DIR}/include
-	${owutil_INCLUDE_DIR}
-	CACHE INTERNAL ""
+# needed include directories to build owsettings
+# saves the variable in internal cache for later use
+set(OWSETTINGS_INCLUDE_DIRS
+  ${CMAKE_CURRENT_SOURCE_DIR}/include
+  ${OWSERIALIZATION_INCLUDE_DIRS}
+  ${OWTHREAD_INCLUDE_DIRS}
+  ${TINYXML_INCLUDE_DIRS}
+  CACHE INTERNAL "owsettings include directories"
 )
 
-include_directories(${owsettings_INCLUDE_DIR})
+# owsettings lib and dependencies
+# saves the variable in internal cache for later use
+set(OWSETTINGS_LIBRARIES
+  owsettings
+  ${OWSERIALIZATION_LIBRARIES}
+  ${OWTHREAD_LIBRARIES}
+  ${TINYXML_LIBRARIES}
+  CACHE INTERNAL "owsettings libraries"
+)
 
-#sources
+include_directories(
+  ${OWSETTINGS_INCLUDE_DIRS}
+)
+
 set(owsettings_SRCS
-	src/Settings.cpp
-	src/AutomaticSettings.cpp
-	src/StringListXMLSerializer.cpp
-	src/SettingsXMLSerializer.cpp
+  src/Settings.cpp
+  src/AutomaticSettings.cpp
+  src/StringListXMLSerializer.cpp
+  src/SettingsXMLSerializer.cpp
 )
 
 #owsettings
 add_library(owsettings STATIC ${owsettings_SRCS})
 
 #owutil dependency
-target_link_libraries(owsettings owutil)
+target_link_libraries(${OWSETTINGS_LIBRARIES})
