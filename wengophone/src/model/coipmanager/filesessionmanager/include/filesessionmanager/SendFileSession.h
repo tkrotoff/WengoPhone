@@ -96,6 +96,11 @@ public:
 	 */
 	void addFile(const File & file);
 
+	/**
+	 * Gets the File list.
+	 */
+	std::vector<File> getFileList() const { return _fileVector; }
+
 private:
 
 	/**
