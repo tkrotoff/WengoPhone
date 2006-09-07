@@ -135,6 +135,8 @@ const std::string Config::CMDLINE_PLACECALL_KEY = "cmdline.placecall";
 
 const std::string Config::CMDSERVER_AUTHORIZED_KEY = "cmdserver.authorized";
 
+const std::string Config::FILETRANSFER_DOWNLOAD_FOLDER = "filetransfer.downloadfolder";
+
 Config::Config(const std::string & name)
 	: AutomaticSettings() {
 
@@ -265,6 +267,8 @@ Config::Config(const std::string & name)
 	_keyDefaultValueMap[CMDSERVER_AUTHORIZED_KEY] = empty;
 	
 	_keyDefaultValueMap[LAST_CHAT_HISTORY_SAVE_DIR_KEY] = Path::getHomeDirPath();
+
+	_keyDefaultValueMap[FILETRANSFER_DOWNLOAD_FOLDER] = empty;
 }
 
 Config::~Config() {
@@ -656,3 +660,8 @@ bool Config::getCmdLineBackgroundModeEnable() const {
 std::string Config::getCmdServerAuthorized() const {
 	return getStringKeyValue(CMDSERVER_AUTHORIZED_KEY);
 }
+
+std::string Config::getFileTransferDownloadFolder() const {
+	return getStringKeyValue(FILETRANSFER_DOWNLOAD_FOLDER);
+}
+

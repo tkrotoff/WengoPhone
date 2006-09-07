@@ -481,6 +481,17 @@ public:
 
 	/** @} */
 
+	/**
+	 * @name File Transfer Options
+	 * @{
+	 */
+
+	/** download folder. */
+	static const std::string FILETRANSFER_DOWNLOAD_FOLDER;
+	std::string getFileTransferDownloadFolder() const;
+
+	/** @} */
+
 private:
 
 	/** Name of this configuration. */
