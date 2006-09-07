@@ -19,15 +19,23 @@
 
 #include "QtFileTransfer.h"
 #include "QtFileTransferAcceptDialog.h"
+#include "QtFileTransferWidget.h"
+
+#include <model/config/ConfigManager.h>
+#include <model/config/Config.h>
 
 #include <coipmanager/CoIpManager.h>
 
 #include <util/SafeDelete.h>
+#include <util/Logger.h>
 
 #include <QtGui/QtGui>
 
 QtFileTransfer::QtFileTransfer(QObject * parent, CoIpManager * coIpManager)
 	: QObject(parent), _coIpManager(coIpManager) {
+
+	_qtFileTransferWidget = new QtFileTransferWidget();
+	_qtFileTransferWidget->show();
 
 	connect(this, SIGNAL(newReceiveFileSessionCreatedEventHandlerSignal(ReceiveFileSession *)),
 		SLOT(newReceiveFileSessionCreatedEventHandlerSlot(ReceiveFileSession *)));
@@ -41,28 +49,56 @@ QtFileTransfer::~QtFileTransfer() {
 void QtFileTransfer::newReceiveFileSessionCreatedEventHandler(FileSessionManager & sender,
 	ReceiveFileSession fileSession) {
 
-	//newReceiveFileSessionCreatedEventHandlerSignal(fileSession);
+	ReceiveFileSession * newFileSession = new ReceiveFileSession(fileSession);
+	newReceiveFileSessionCreatedEventHandlerSignal(newFileSession);
 }
 
 void QtFileTransfer::newReceiveFileSessionCreatedEventHandlerSlot(ReceiveFileSession * fileSession) {
+
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	QString downloadFolder;
+
+	LOG_DEBUG("incoming file: " + fileSession->getFileName() + "from: " + fileSession->getIMContact().getContactId());
+
 	QtFileTransferAcceptDialog qtFileTransferAcceptDialog(0);
 	qtFileTransferAcceptDialog.setFileName(fileSession->getFileName());
 	qtFileTransferAcceptDialog.setContactName(fileSession->getIMContact().getContactId());
 
+	// the user accept the file transfer
 	if (qtFileTransferAcceptDialog.exec() == QDialog::Accepted) {
-		QString dir = QFileDialog::getExistingDirectory(
-			0,
-			tr("Choose a directory"),
-			"",
-			QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks
-		);
+	
+		// if no download folder set then choose one
+		if (config.getFileTransferDownloadFolder().empty()) {
+	
+			downloadFolder = QFileDialog::getExistingDirectory(
+				0,
+				tr("Choose a directory"),
+				"",
+				QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks
+			);
 
-		if (!dir.isEmpty()) {
-			fileSession->setFilePath(dir.toStdString());
-			fileSession->start();
+			if (!downloadFolder.isEmpty()) {
+				config.set(Config::FILETRANSFER_DOWNLOAD_FOLDER, downloadFolder.toStdString());
+			} else {
+				//TODO: warn the user is has set no download folder.
+				fileSession->stop();
+				OWSAFE_DELETE(fileSession);
+				return;
+			}
 		} else {
-			fileSession->stop();
-			OWSAFE_DELETE(fileSession);
+			//TODO: check if the folder exists
+			downloadFolder = QString::fromStdString(config.getFileTransferDownloadFolder());
 		}
+
+		// here we're sure to have a download folder.
+		_qtFileTransferWidget->setDownloadFolder(downloadFolder);
+		_qtFileTransferWidget->addReceiveItem(fileSession);
+		fileSession->setFilePath(downloadFolder.toStdString());
+		fileSession->start();
+
+	// the user refuse the file transfer.
+	} else {
+		fileSession->stop();
+		OWSAFE_DELETE(fileSession);
 	}
 }

@@ -154,6 +154,8 @@ headers = [
 
 	'filetransfer/QtFileTransfer.h',
 	'filetransfer/QtFileTransferAcceptDialog.h',
+	'filetransfer/QtFileTransferWidget.h',
+	'filetransfer/QtFileTransferItem.h',
 ]
 
 sources = [
@@ -280,6 +282,8 @@ sources = [
 
 	'filetransfer/QtFileTransfer.cpp',
 	'filetransfer/QtFileTransferAcceptDialog.cpp',
+	'filetransfer/QtFileTransferWidget.cpp',
+	'filetransfer/QtFileTransferItem.cpp',
 
 	env.WengoCompileQt4Resource('wengophone.qrc'),
 ]
@@ -334,6 +338,7 @@ forms = [
 	'chat/UserFrame.ui',
 	'chat/AvatarFrame.ui',
 	'chat/AvatarWidget.ui',
+#	'chat/chatroom/ChatRoomInviteWidget.ui',
 
 	'contactlist/RenameGroupDialog.ui',
 	'contactlist/ContactWidget.ui',
@@ -348,8 +353,11 @@ forms = [
 
 	'phonecall/PhoneCallWidget.ui',
 	'phonecall/VideoWindow.ui',
+#	'phonecall/ConferenceCallWidget.ui',
 
 	'filetransfer/AcceptDialog.ui',
+	'filetransfer/FileTransferWidget.ui',
+	'filetransfer/FileTransferItem.ui',
 
 	'history/HistoryWidget.ui',
 

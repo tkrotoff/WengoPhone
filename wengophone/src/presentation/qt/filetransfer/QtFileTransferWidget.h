@@ -17,54 +17,48 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef OWQTFILETRANSFER_H
-#define OWQTFILETRANSFER_H
+#ifndef OWQTFILETRANSFERWIDGET_H
+#define OWQTFILETRANSFERWIDGET_H
 
-#include <QtCore/QObject>
+#include <QtGui/QWidget>
 
-#include <filesessionmanager/ReceiveFileSession.h>
+#include "ui_FileTransferWidget.h"
 
-#include <util/Trackable.h>
-
-class CoIpManager;
-class FileSessionManager;
-class QtFileTransferWidget;
+class ReceiveFileSession;
 
 /**
- * Qt file transfer object.
+ * Qt file transfer widget.
  *
  * @author Mathieu Stute
- * @author Philippe Bernery
  */
-class QtFileTransfer : public QObject, public Trackable {
+class QtFileTransferWidget : public QWidget {
 	Q_OBJECT
 public:
 
 	/**
 	 * Default constructor.
 	 */
-	QtFileTransfer(QObject * parent, CoIpManager * coIpManager);
+	QtFileTransferWidget(QWidget * parent = 0);
 
-	~QtFileTransfer();
+	void setDownloadFolder(const QString & folder);
 
-Q_SIGNALS:
-
-	void newReceiveFileSessionCreatedEventHandlerSignal(ReceiveFileSession * fileSession);
+	void addReceiveItem(ReceiveFileSession * fileSession);
 
 private Q_SLOTS:
 
-	void newReceiveFileSessionCreatedEventHandlerSlot(ReceiveFileSession * fileSession);
+	/**
+	 * Clean button has been clicked.
+	 */
+	void cleanButtonClicked();
+	
+	/**
+	 * Path button has been clicked.
+	 */
+	void pathButtonClicked();
 
 private:
 
-	/**
-	 * @see FileSessionManager::newReceiveFileSessionCreatedEvent
-	 */
-	void newReceiveFileSessionCreatedEventHandler(FileSessionManager & sender, ReceiveFileSession fileSession);
-
-	QtFileTransferWidget * _qtFileTransferWidget;
-
-	CoIpManager * _coIpManager;
+	Ui::FileTransferWidget _ui;
 };
 
-#endif	//OWQTFILETRANSFER_H
+#endif	//OWQTFILETRANSFERWIDGET_H

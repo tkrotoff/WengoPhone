@@ -1,0 +1,165 @@
+<ui version="4.0" >
+ <author></author>
+ <comment></comment>
+ <exportmacro></exportmacro>
+ <class>FileTransferItem</class>
+ <widget class="QWidget" name="FileTransferItem" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>338</width>
+    <height>66</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" >
+   <property name="margin" >
+    <number>0</number>
+   </property>
+   <property name="spacing" >
+    <number>3</number>
+   </property>
+   <item row="0" column="1" >
+    <widget class="QLabel" name="contactLabel" >
+     <property name="font" >
+      <font>
+       <family>Sans Serif</family>
+       <pointsize>9</pointsize>
+       <weight>75</weight>
+       <italic>false</italic>
+       <bold>true</bold>
+       <underline>false</underline>
+       <strikeout>false</strikeout>
+      </font>
+     </property>
+     <property name="text" >
+      <string/>
+     </property>
+     <property name="pixmap" >
+      <pixmap resource="../wengophone.qrc" >:/pics/config/accounts.png</pixmap>
+     </property>
+     <property name="scaledContents" >
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="3" >
+    <layout class="QVBoxLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item>
+      <widget class="QPushButton" name="cancelOpenButton" >
+       <property name="maximumSize" >
+        <size>
+         <width>64</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="text" >
+        <string>Cancel</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="removePauseResumeButton" >
+       <property name="maximumSize" >
+        <size>
+         <width>64</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="text" >
+        <string>Pause</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="0" column="0" >
+    <widget class="QLabel" name="stateImageLabel" >
+     <property name="text" >
+      <string/>
+     </property>
+     <property name="pixmap" >
+      <pixmap/>
+     </property>
+     <property name="scaledContents" >
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="2" >
+    <layout class="QVBoxLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>3</number>
+     </property>
+     <item>
+      <widget class="QLabel" name="filenameLabel" >
+       <property name="font" >
+        <font>
+         <family>Sans Serif</family>
+         <pointsize>9</pointsize>
+         <weight>75</weight>
+         <italic>false</italic>
+         <bold>true</bold>
+         <underline>false</underline>
+         <strikeout>false</strikeout>
+        </font>
+       </property>
+       <property name="text" >
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QProgressBar" name="progressBar" >
+       <property name="minimumSize" >
+        <size>
+         <width>0</width>
+         <height>16</height>
+        </size>
+       </property>
+       <property name="maximumSize" >
+        <size>
+         <width>16777215</width>
+         <height>16</height>
+        </size>
+       </property>
+       <property name="value" >
+        <number>0</number>
+       </property>
+       <property name="orientation" >
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="invertedAppearance" >
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="statusLabel" >
+       <property name="text" >
+        <string/>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <pixmapfunction></pixmapfunction>
+ <resources>
+  <include location="../wengophone.qrc" />
+ </resources>
+ <connections/>
+</ui>
