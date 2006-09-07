@@ -22,7 +22,7 @@ if WengoOSWindows():
 elif WengoOSMacOSX():
 	sources += [
 		'src/null/Processes.cpp',
-		'src/mac/Startup.mm',
+		'src/mac/Startup.cpp',
 	]
 
 	link_flags += ['-framework Cocoa']
