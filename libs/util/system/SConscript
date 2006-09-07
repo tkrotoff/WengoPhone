@@ -25,6 +25,8 @@ elif WengoOSMacOSX():
 		'src/mac/Startup.cpp',
 	]
 
+	cc_flags += ['-x objective-c++']
+
 	link_flags += ['-framework Cocoa']
 
 elif WengoOSPosix():
