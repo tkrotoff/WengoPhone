@@ -18,9 +18,11 @@
  */
 
 #include "QtFileTransferWidget.h"
-#include "QtFileTransferItem.h"
+#include "QtFileTransferDownloadItem.h"
+#include "QtFileTransferUploadItem.h"
 
 #include <filesessionmanager/ReceiveFileSession.h>
+#include <filesessionmanager/SendFileSession.h>
 
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
@@ -51,19 +53,20 @@ QtFileTransferWidget::QtFileTransferWidget(QWidget * parent) : QWidget(parent) {
 }
 
 void QtFileTransferWidget::cleanButtonClicked() {
+
 	_ui.downloadTransferListWidget->clear();
 	//delete items and widgetItem over rows
 	for (int i = 0; i < _ui.downloadTransferListWidget->count(); i++) {
 		QListWidgetItem * item = _ui.downloadTransferListWidget->item(i);
-		QtFileTransferItem * widgetItem = (QtFileTransferItem*)_ui.downloadTransferListWidget->itemWidget(item);
+		QtFileTransferDownloadItem * widgetItem = (QtFileTransferDownloadItem*)_ui.downloadTransferListWidget->itemWidget(item);
 		_ui.downloadTransferListWidget->takeItem(i);
 		delete widgetItem;
 	}
 }
 
 void QtFileTransferWidget::pathButtonClicked() {
-	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	QString startFolder = QString::fromStdString(config.getFileTransferDownloadFolder());
 	QString dirName = QFileDialog::getExistingDirectory(this, "Select a directory", startFolder);
 	if (!dirName.isEmpty()) {
@@ -73,12 +76,39 @@ void QtFileTransferWidget::pathButtonClicked() {
 
 void QtFileTransferWidget::addReceiveItem(ReceiveFileSession * fileSession) {
 
-	QtFileTransferItem * fileTransferItem = new QtFileTransferItem(this, fileSession);
-
+	QtFileTransferDownloadItem * fileTransferItem = new QtFileTransferDownloadItem(this, fileSession);
 	QListWidgetItem * item = new QListWidgetItem(_ui.downloadTransferListWidget);
 	item->setSizeHint(fileTransferItem->minimumSizeHint());
 	_ui.downloadTransferListWidget->setItemWidget(item, fileTransferItem);
 	show();
+}
+
+void QtFileTransferWidget::addSendItem(SendFileSession * fileSession) {
+
+	//TODO: put this code in QtFileTransfer
+
+	std::vector<File> fileList =  fileSession->getFileList();
+	
+	std::vector<File>::iterator it;
+	for (it = fileList.begin(); it != fileList.end(); it++) {
+		std::string filename = (*it).getFileName();
+
+		StringList contactList = fileSession->getContactList();
+		for(int i = 0; i < contactList.size(); i++) {
+			QtFileTransferUploadItem * fileTransferItem = new QtFileTransferUploadItem(
+				this,
+				fileSession,
+				filename,
+				contactList[i]
+			);
+
+			QListWidgetItem * item = new QListWidgetItem(_ui.uploadTransferListWidget);
+			item->setSizeHint(fileTransferItem->minimumSizeHint());
+			_ui.uploadTransferListWidget->setItemWidget(item, fileTransferItem);
+			show();
+
+		}
+	}
 }
 
 void QtFileTransferWidget::setDownloadFolder(const QString & folder) {

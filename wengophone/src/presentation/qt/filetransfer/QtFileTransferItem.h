@@ -28,10 +28,6 @@
 
 #include <filesessionmanager/IFileSession.h>
 
-class ReceiveFileSession;
-class File;
-class IMContact;
-
 /**
  * Qt file transfer item widget.
  * Represents graphically one file transfer.
@@ -39,7 +35,7 @@ class IMContact;
  * For example if the transfer is finished the progress bar
  * is removed...
  *
- * TODO: delete _fileSession
+ * TODO: delete file Session objects
  *
  * @author Mathieu Stute
  */
@@ -50,13 +46,16 @@ public:
 	/**
 	 * Default constructor.
 	 */
-	QtFileTransferItem(QWidget * parent, ReceiveFileSession * fileSession);
+	QtFileTransferItem(QWidget * parent);
 
 Q_SIGNALS:
 
 	void stateChangeEvent(const QString & state);
 
 	void progressChangeEvent(int progress);
+
+	// the int is a IFileSession::IFileSessionEvent
+	void updateStateEvent(int event);
 
 private Q_SLOTS:
 
@@ -72,20 +71,10 @@ private Q_SLOTS:
 	 */
 	void setState(const QString & state);
 
-	/**
-	 * @see ReceiveFileSession::pause().
-	 */
-	void pause();
+	// the int is a IFileSession::IFileSessionEvent
+	void updateState(int event);
 
-	/**
-	 * @see ReceiveFileSession::resume().
-	 */
-	void resume();
-
-	/**
-	 * @see ReceiveFileSession::stop().
-	 */
-	void stop();
+protected Q_SLOTS:
 
 	/**
 	 * TODO:
@@ -97,7 +86,22 @@ private Q_SLOTS:
 	 */
 	void open();
 
-private:
+	/**
+	 * @see ReceiveFileSession::pause().
+	 */
+	virtual void pause() = 0;
+
+	/**
+	 * @see ReceiveFileSession::resume().
+	 */
+	virtual void resume() = 0;
+
+	/**
+	 * @see ReceiveFileSession::stop().
+	 */
+	virtual void stop() = 0;
+
+protected:
 
 	/**
 	 * Set the tranfer filename.
@@ -113,23 +117,13 @@ private:
 
 	void disconnectButtons();
 
+	
 	void updateButtonsFinished();
 
 	void updateButtonsPaused();
 
 	void updateButtonsDownloading();
-
-	void fileTransferProgressionEventHandler(ReceiveFileSession & sender,
-		IMContact imContact, File sentFile, int percentage);
-
-	void fileTransferEventHandler(ReceiveFileSession & sender,
-		IFileSession::IFileSessionEvent event, IMContact imContact, File sentFile);
-
-	bool _isFinished;
-
-	bool _upload;
-
-	ReceiveFileSession * _fileSession;
+	
 
 	Ui::FileTransferItem _ui;
 };

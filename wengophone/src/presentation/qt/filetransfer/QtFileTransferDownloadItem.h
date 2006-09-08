@@ -17,51 +17,57 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef OWQTFILETRANSFERWIDGET_H
-#define OWQTFILETRANSFERWIDGET_H
+#ifndef OWQTFILETRANSFERDOWNLOADITEM_H
+#define OWQTFILETRANSFERDOWNLOADITEM_H
 
-#include <QtGui/QWidget>
+#include "QtFileTransferItem.h"
 
-#include "ui_FileTransferWidget.h"
+#include <filesessionmanager/IFileSession.h>
 
 class ReceiveFileSession;
 class SendFileSession;
+class File;
+class IMContact;
 
 /**
- * Qt file transfer widget.
  *
  * @author Mathieu Stute
  */
-class QtFileTransferWidget : public QWidget {
+class QtFileTransferDownloadItem : public QtFileTransferItem {
 	Q_OBJECT
 public:
 
 	/**
 	 * Default constructor.
 	 */
-	QtFileTransferWidget(QWidget * parent = 0);
-
-	void setDownloadFolder(const QString & folder);
-
-	void addReceiveItem(ReceiveFileSession * fileSession);
-
-	void addSendItem(SendFileSession * fileSession);
+	QtFileTransferDownloadItem(QWidget * parent, ReceiveFileSession * fileSession);
 
 private Q_SLOTS:
 
 	/**
-	 * Clean button has been clicked.
+	 * @see ReceiveFileSession::pause().
 	 */
-	void cleanButtonClicked();
-	
+	void pause();
+
 	/**
-	 * Path button has been clicked.
+	 * @see ReceiveFileSession::resume().
 	 */
-	void pathButtonClicked();
+	void resume();
+
+	/**
+	 * @see ReceiveFileSession::stop().
+	 */
+	void stop();
 
 private:
 
-	Ui::FileTransferWidget _ui;
+	void fileTransferProgressionEventHandler(ReceiveFileSession & sender,
+		IMContact imContact, File sentFile, int percentage);
+
+	void fileTransferEventHandler(ReceiveFileSession & sender,
+		IFileSession::IFileSessionEvent event, IMContact imContact, File sentFile);
+
+	ReceiveFileSession * _receiveFileSession;
 };
 
-#endif	//OWQTFILETRANSFERWIDGET_H
+#endif	//OWQTFILETRANSFERDOWNLOADITEM_H

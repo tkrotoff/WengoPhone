@@ -102,3 +102,25 @@ void QtFileTransfer::newReceiveFileSessionCreatedEventHandlerSlot(ReceiveFileSes
 		OWSAFE_DELETE(fileSession);
 	}
 }
+
+void QtFileTransfer::addSendFileSession(SendFileSession * fileSession) {
+	_qtFileTransferWidget->addSendItem(fileSession);
+}
+
+void QtFileTransfer::sendFileToPeer(const std::string contactId, const std::string filename) {
+	SendFileSession * fileSession = _coIpManager->getFileSessionManager().createSendFileSession();
+	fileSession->addContact(contactId);
+	fileSession->addFile(filename);
+	_qtFileTransferWidget->addSendItem(fileSession);
+	fileSession->start();
+}
+
+void QtFileTransfer::sendFileToPeers(List<std::string> contactIdList, const std::string filename) {
+	SendFileSession * fileSession = _coIpManager->getFileSessionManager().createSendFileSession();
+	for(unsigned int i = 0; i < contactIdList.size(); i++) {
+		fileSession->addContact(contactIdList[i]);
+	}
+	fileSession->addFile(filename);
+	_qtFileTransferWidget->addSendItem(fileSession);
+	fileSession->start();
+}

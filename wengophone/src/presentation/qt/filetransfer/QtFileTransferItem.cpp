@@ -19,39 +19,29 @@
 
 #include "QtFileTransferItem.h"
 
-#include <filesessionmanager/ReceiveFileSession.h>
-
 #include <util/Logger.h>
 
 #include <qtutil/SafeConnect.h>
 
 #include <QtGui/QtGui>
 
-QtFileTransferItem::QtFileTransferItem(QWidget * parent, ReceiveFileSession * fileSession)
-	: QWidget(parent), _fileSession(fileSession) {
-
-	_isFinished = false;
-	_upload = false;
+QtFileTransferItem::QtFileTransferItem(QWidget * parent) : QWidget(parent) {
 
 	//init main widget
 	_ui.setupUi(this);
 	_ui.progressBar->setMaximum(100);
 	setProgress(0);
-	setFilename(QString::fromStdString(fileSession->getFileName()));
 	setState(tr("Starting"));
 	updateButtonsDownloading();
 	////
 
-	// bind to fileSession events
-	_fileSession->fileTransferProgressionEvent +=
-		boost::bind(&QtFileTransferItem::fileTransferProgressionEventHandler, this, _1, _2, _3, _4);
-	_fileSession->fileTransferEvent +=
-		boost::bind(&QtFileTransferItem::fileTransferEventHandler, this, _1, _2, _3, _4);
-	////
-
 	// SIGNAL/SLOT for thread safe
-	SAFE_CONNECT(this, SIGNAL(progressChangeEvent(int)), SLOT(setProgress(int)));
-	SAFE_CONNECT(this, SIGNAL(stateChangeEvent(const QString &)), SLOT(setState(const QString &)));
+	SAFE_CONNECT(this, SIGNAL(progressChangeEvent(int)),
+		SLOT(setProgress(int)));
+	SAFE_CONNECT(this, SIGNAL(stateChangeEvent(const QString &)),
+		SLOT(setState(const QString &)));
+	SAFE_CONNECT(this, SIGNAL(updateStateEvent(int)),
+		SLOT(updateState(int)));
 	////
 }
 
@@ -70,12 +60,16 @@ void QtFileTransferItem::setProgress(int progress) {
 	_ui.progressBar->setValue(progress);
 }
 
+
 void QtFileTransferItem::updateButtonsFinished() {
 	disconnectButtons();
 	SAFE_CONNECT(_ui.cancelOpenButton, SIGNAL(clicked()), SLOT(open()));
 	SAFE_CONNECT(_ui.removePauseResumeButton, SIGNAL(clicked()), SLOT(remove()));
 	_ui.cancelOpenButton->setText(tr("Open"));
 	_ui.removePauseResumeButton->setText(tr("Remove"));
+
+	//TODO: remove the status bar from its layout
+	//_ui.progressBar->hide();
 }
 
 void QtFileTransferItem::updateButtonsPaused() {
@@ -93,22 +87,10 @@ void QtFileTransferItem::updateButtonsDownloading() {
 	_ui.cancelOpenButton->setText(tr("Cancel"));
 	_ui.removePauseResumeButton->setText(tr("Pause"));
 }
-	
+
 void QtFileTransferItem::disconnectButtons() {
 	_ui.cancelOpenButton->disconnect(SIGNAL(clicked()));
 	_ui.removePauseResumeButton->disconnect(SIGNAL(clicked()));
-}
-
-void QtFileTransferItem::pause() {
-	_fileSession->pause();
-}
-
-void QtFileTransferItem::resume() {
-	_fileSession->resume();
-}
-
-void QtFileTransferItem::stop() {
-	_fileSession->stop();
 }
 
 void QtFileTransferItem::remove() {
@@ -119,17 +101,9 @@ void QtFileTransferItem::open() {
 	//TODO:
 }
 
-void QtFileTransferItem::fileTransferProgressionEventHandler(
-	ReceiveFileSession & sender, IMContact imContact, File sentFile, int percentage) {
+void QtFileTransferItem::updateState(int e) {
 
-	LOG_DEBUG("progress: " + String::fromNumber(percentage));
-	progressChangeEvent(percentage);
-}
-
-void QtFileTransferItem::fileTransferEventHandler(ReceiveFileSession & sender,
-	IFileSession::IFileSessionEvent event, IMContact imContact, File sentFile) {
-
-	LOG_DEBUG("filetransfer event: " + String::fromNumber(event));
+	IFileSession::IFileSessionEvent event = (IFileSession::IFileSessionEvent)e;
 
 	switch(event) {
 
@@ -142,12 +116,10 @@ void QtFileTransferItem::fileTransferEventHandler(ReceiveFileSession & sender,
 			updateButtonsDownloading();
 			break;
 		case IFileSession::IFileSessionEventFileTransferFinished:
-			_isFinished = true;
 			stateChangeEvent(tr("Done"));
 			updateButtonsFinished();
 			break;
 		case IFileSession::IFileSessionEventFileTransferFailed:
-			_isFinished = true;
 			stateChangeEvent(tr("Failed"));
 			updateButtonsFinished();
 			break;
@@ -168,12 +140,10 @@ void QtFileTransferItem::fileTransferEventHandler(ReceiveFileSession & sender,
 			updateButtonsDownloading();
 			break;
 		case IFileSession::IFileSessionEventFileTransferCancelled:
-			_isFinished = true;
 			stateChangeEvent(tr("Cancelled"));
 			updateButtonsFinished();
 			break;
 		case IFileSession::IFileSessionEventFileTransferCancelledByPeer:
-			_isFinished = true;
 			stateChangeEvent(tr("Cancelled by peer"));
 			updateButtonsFinished();
 			break;

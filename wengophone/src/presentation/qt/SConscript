@@ -156,6 +156,8 @@ headers = [
 	'filetransfer/QtFileTransferAcceptDialog.h',
 	'filetransfer/QtFileTransferWidget.h',
 	'filetransfer/QtFileTransferItem.h',
+	'filetransfer/QtFileTransferDownloadItem.h',
+	'filetransfer/QtFileTransferUploadItem.h',
 ]
 
 sources = [
@@ -284,6 +286,8 @@ sources = [
 	'filetransfer/QtFileTransferAcceptDialog.cpp',
 	'filetransfer/QtFileTransferWidget.cpp',
 	'filetransfer/QtFileTransferItem.cpp',
+	'filetransfer/QtFileTransferDownloadItem.cpp',
+	'filetransfer/QtFileTransferUploadItem.cpp',
 
 	env.WengoCompileQt4Resource('wengophone.qrc'),
 ]

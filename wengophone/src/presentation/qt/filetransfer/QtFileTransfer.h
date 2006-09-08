@@ -23,8 +23,11 @@
 #include <QtCore/QObject>
 
 #include <filesessionmanager/ReceiveFileSession.h>
+#include <filesessionmanager/SendFileSession.h>
 
 #include <util/Trackable.h>
+
+#include <util/List.h>
 
 class CoIpManager;
 class FileSessionManager;
@@ -46,6 +49,12 @@ public:
 	QtFileTransfer(QObject * parent, CoIpManager * coIpManager);
 
 	~QtFileTransfer();
+
+	void sendFileToPeer(const std::string contactId, const std::string filename);
+
+	void sendFileToPeers(List<std::string> contactIdList, const std::string filename);
+
+	void addSendFileSession(SendFileSession * fileSession);
 
 Q_SIGNALS:
 
