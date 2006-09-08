@@ -46,12 +46,10 @@ QtHistory::QtHistory(CHistory & cHistory)
 	connect(_historyWidget, SIGNAL(missedCallsSeen()), SLOT(resetUnseenMissedCalls()));
 
 	QtWengoPhone * qtWengoPhone = (QtWengoPhone *) _cHistory.getCWengoPhone().getPresentation();
-	qtWengoPhone->setHistory(_historyWidget);
+	qtWengoPhone->setQtHistoryWidget(_historyWidget);
 }
 
 QtHistory::~QtHistory() {
-	QtWengoPhone * qtWengoPhone = (QtWengoPhone *) _cHistory.getCWengoPhone().getPresentation();
-	qtWengoPhone->removeHistory();
 }
 
 QWidget * QtHistory::getWidget() const {
@@ -199,10 +197,11 @@ void QtHistory::replayItem(QtHistoryItem * item) {
 		QString phoneNumber = QString::fromStdString(_cHistory.getMementoPeer(item->getId()));
 
 		//Test existance of Sms (available only if a WengoAccount has been created)
-		if (qtWengoPhone->getSms()) {
-			qtWengoPhone->getSms()->setText(text);
-			qtWengoPhone->getSms()->setPhoneNumber(phoneNumber);
-			qtWengoPhone->getSms()->getWidget()->show();
+		QtSms * sms = qtWengoPhone->getQtSms();
+		if (sms) {
+			sms->setText(text);
+			sms->setPhoneNumber(phoneNumber);
+			sms->getWidget()->show();
 		}
 		break;
 	}

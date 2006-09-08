@@ -27,6 +27,8 @@
 
 #include <model/webservices/url/WsUrl.h>
 
+#include <qtutil/LanguageChangeEventFilter.h>
+
 #include <QtGui/QtGui>
 
 QtCreditWidget::QtCreditWidget(CWengoPhone & cWengoPhone, QWidget * parent)
@@ -56,6 +58,8 @@ void QtCreditWidget::initThreadSafe() {
 
 	//buyCreditsButton
 	connect(_ui->buyCreditsButton, SIGNAL(clicked()), SLOT(buyCreditsClicked()));
+
+	LANGUAGE_CHANGE();
 }
 
 QWidget * QtCreditWidget::getWidget() const {
@@ -102,7 +106,7 @@ void QtCreditWidget::landlineNumberClicked() {
 	WsUrl::showWengoPhoneNumber();
 }
 
-void QtCreditWidget::slotUpdatedTranslation() {
+void QtCreditWidget::languageChanged() {
 	_ui->retranslateUi(_creditWidget);
 	updatePresentationThreadSafe();
 }

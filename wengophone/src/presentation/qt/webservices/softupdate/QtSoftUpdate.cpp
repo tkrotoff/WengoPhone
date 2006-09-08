@@ -31,7 +31,10 @@
 #include <softupdater/SoftUpdater.h>
 
 #include <util/Logger.h>
+#include <util/SafeDelete.h>
 #include <cutil/global.h>
+
+#include <qtutil/SafeConnect.h>
 
 #include <QtGui/QtGui>
 
@@ -57,15 +60,8 @@ void QtSoftUpdate::initThreadSafe() {
 }
 
 QtSoftUpdate::~QtSoftUpdate() {
-	if (_softUpdater) {
-		delete _softUpdater;
-		_softUpdater = NULL;
-	}
-
-	if (_ui) {
-		delete _ui;
-		_ui = NULL;
-	}
+	OWSAFE_DELETE(_softUpdater);
+	OWSAFE_DELETE(_ui);
 }
 
 void QtSoftUpdate::updateWengoPhoneEventHandler(const std::string & downloadUrl,
@@ -91,7 +87,7 @@ void QtSoftUpdate::updateWengoPhoneEventHandlerThreadSafe(const std::string & do
 	_ui = new Ui::SoftUpdateWindow();
 	_ui->setupUi(_softUpdateWindow);
 
-	connect(_softUpdateWindow, SIGNAL(rejected()), SLOT(abortDownload()));
+	SAFE_CONNECT(_softUpdateWindow, SIGNAL(rejected()), SLOT(abortDownload()));
 
 	//updateTextLabel
 	_originalLabelText = _ui->updateTextLabel->text()
@@ -159,7 +155,7 @@ void QtSoftUpdate::abortDownload() {
 
 void QtSoftUpdate::launchUpdateProcess() {
 	QProcess * updateProcess = new QProcess();
-	connect(updateProcess, SIGNAL(error(QProcess::ProcessError)), SLOT(updateProcessError(QProcess::ProcessError)));
+	SAFE_CONNECT(updateProcess, SIGNAL(error(QProcess::ProcessError)), SLOT(updateProcessError(QProcess::ProcessError)));
 	updateProcess->start(UPDATE_PROGRAM);
 }
 

@@ -28,6 +28,7 @@
 #include <control/wenbox/CWenboxPlugin.h>
 
 #include <thread/Timer.h>
+#include <util/SafeDelete.h>
 
 #include <QtGui/QtGui>
 
@@ -41,7 +42,7 @@ QtWenboxPlugin::QtWenboxPlugin(CWenboxPlugin & cWenboxPlugin)
 
 QtWenboxPlugin::~QtWenboxPlugin() {
 	_timer->stop();
-	delete _timer;
+	OWSAFE_DELETE(_timer);
 }
 
 void QtWenboxPlugin::phoneNumberBufferUpdatedEvent(const std::string & phoneNumberBuffer) {
@@ -50,7 +51,7 @@ void QtWenboxPlugin::phoneNumberBufferUpdatedEvent(const std::string & phoneNumb
 	//FIXME we should avoid to get QtWengoPhone via CWenboxPlugin and it should
 	//be given in constructor.
 	QtWengoPhone * qtWengoPhone = (QtWengoPhone *) _cWenboxPlugin.getCWengoPhone().getPresentation();
-	qtWengoPhone->getCallBar().setPhoneComboBoxEditText(phoneNumberBuffer);
+	qtWengoPhone->getQtCallBar().setPhoneComboBoxEditText(phoneNumberBuffer);
 
 	_timer->stop();
 	if (!phoneNumberBuffer.empty()) {
@@ -66,5 +67,5 @@ void QtWenboxPlugin::timeoutEventHandler() {
 	QtWengoPhone * qtWengoPhone = (QtWengoPhone *) _cWenboxPlugin.getCWengoPhone().getPresentation();
 
 	CWengoPhone & cWengoPhone = _cWenboxPlugin.getCWengoPhone();
-	cWengoPhone.getCUserProfileHandler().getCUserProfile()->makeCall(qtWengoPhone->getCallBar().getPhoneComboBoxCurrentText());
+	cWengoPhone.getCUserProfileHandler().getCUserProfile()->makeCall(qtWengoPhone->getQtCallBar().getPhoneComboBoxCurrentText());
 }

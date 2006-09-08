@@ -123,7 +123,7 @@ QtContactList::QtContactList(CContactList & cContactList, CWengoPhone & cWengoPh
 		SLOT(groupRightClickedSlot(const QString &)));
 
 	QtWengoPhone * qtWengoPhone = (QtWengoPhone *) _cWengoPhone.getPresentation();
-	qtWengoPhone->setContactList(this);
+	qtWengoPhone->setQtContactList(this);
 	_ui->treeWidget->viewport()->setFocus();
 
 	initContent();

@@ -61,8 +61,6 @@ private Q_SLOTS:
 
 	void audioSettingsClicked();
 
-	void slotTranslationChanged();
-
 	void paintEvent(QEvent * event);
 
 private:

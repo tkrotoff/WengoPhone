@@ -148,10 +148,6 @@ void QtConfigPanel::audioSettingsClicked() {
 	dialog.show();
 }
 
-void QtConfigPanel::slotTranslationChanged() {
-	_ui->retranslateUi(_configPanelWidget);
-}
-
 void QtConfigPanel::paintEvent(QEvent * event) {
 	QRect rect = _configPanelWidget->rect();
 

@@ -31,6 +31,8 @@
 
 #include <util/Logger.h>
 
+#include <qtutil/SafeConnect.h>
+
 #include <QtGui/QtGui>
 
 QtPhoneLine::QtPhoneLine(CPhoneLine & cPhoneLine)
@@ -54,7 +56,7 @@ QtPhoneLine::~QtPhoneLine() {
 
 void QtPhoneLine::initThreadSafe() {
 	//callButton
-	connect(&_qtWengoPhone->getCallBar(), SIGNAL(callButtonClicked()), SLOT(callButtonClicked()));
+	SAFE_CONNECT(&_qtWengoPhone->getQtCallBar(), SIGNAL(callButtonClicked()), SLOT(callButtonClicked()));
 }
 
 void QtPhoneLine::updatePresentation() {
@@ -73,8 +75,8 @@ void QtPhoneLine::stateChangedEventHandler(EnumPhoneLineState::PhoneLineState st
 }
 
 void QtPhoneLine::stateChangedEventHandlerThreadSafe(EnumPhoneLineState::PhoneLineState state) {
-	_qtWengoPhone->getStatusBar().phoneLineStateChanged(state);
-	_qtWengoPhone->getSystray().phoneLineStateChanged(state);
+	_qtWengoPhone->getQtStatusBar().phoneLineStateChanged(state);
+	_qtWengoPhone->getQtSystray().phoneLineStateChanged(state);
 }
 
 void QtPhoneLine::phoneCallCreatedEventHandler(CPhoneCall & cPhoneCall) {
@@ -102,6 +104,6 @@ void QtPhoneLine::phoneCallClosedEventHandlerThreadSafe(CPhoneCall & cPhoneCall)
 void QtPhoneLine::callButtonClicked() {
 	if (_activeCPhoneCall) {
 		_activeCPhoneCall->accept();
-		_qtWengoPhone->getCallBar().setEnabledCallButton(false);
+		_qtWengoPhone->getQtCallBar().setEnabledCallButton(false);
 	}
 }

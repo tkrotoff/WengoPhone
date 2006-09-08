@@ -20,14 +20,100 @@
 #ifndef OWQTTOOLBAR_H
 #define OWQTTOOLBAR_H
 
+#include <QtCore/QObject>
+
+#include <util/NonCopyable.h>
+
+class QtWengoPhone;
+class CWengoPhone;
+
+class QWidget;
+namespace Ui { class WengoPhoneWindow; }
+
 /**
- * Tool bar from the main window.
+ * Tool bar and menu actions from the main window.
  *
  * @author Tanguy Krotoff
  */
-class QtToolBar : public QObject {
+class QtToolBar : public QObject, NonCopyable {
 	Q_OBJECT
 public:
+
+	QtToolBar(QtWengoPhone & qtWengoPhone, Ui::WengoPhoneWindow * qtWengoPhoneUi, QWidget * parent);
+
+	~QtToolBar();
+
+	QWidget * getWidget() const;
+
+public Q_SLOTS:
+
+	/**
+	 * Expands the volume config panel from the main window.
+	 */
+	void expandVolumePanel();
+
+	void showWengoAccount();
+
+	void editMyProfile();
+
+	void addContact();
+
+	void showConfig();
+
+	void showWengoForum();
+
+	void showAbout();
+
+	void sendSms();
+
+	void showWengoFAQ();
+
+	void showWengoServices();
+
+	void showHideContactGroups();
+
+	void showIMAccountSettings();
+
+	void showHideOfflineContacts();
+
+	void createConferenceCall();
+
+	void clearHistoryOutgoingCalls();
+
+	void clearHistoryIncomingCalls();
+
+	void clearHistoryMissedCalls();
+
+	void clearHistoryChatSessions();
+
+	void clearHistorySms();
+
+	void clearHistoryAll();
+
+	void searchWengoContact();
+
+	void logOff();
+
+	void acceptCall();
+
+	void holdResumeCall();
+
+	void hangUpCall();
+
+	void showChatWindow();
+
+private:
+
+	/**
+	 * Ugly code to remove.
+	 */
+	int findFirstCallTab();
+
+	QtWengoPhone & _qtWengoPhone;
+
+	CWengoPhone & _cWengoPhone;
+
+	Ui::WengoPhoneWindow * _ui;
 };
 
 #endif	//OWQTTOOLBAR_H

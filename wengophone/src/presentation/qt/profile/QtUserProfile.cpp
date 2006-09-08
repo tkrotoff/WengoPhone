@@ -21,12 +21,10 @@
 
 #include <presentation/qt/QtWengoPhone.h>
 #include <presentation/qt/profile/QtProfileDetails.h>
+#include <presentation/qt/QtBrowserWidget.h>
 
 #include <control/profile/CUserProfile.h>
 
-#include <model/account/wengo/WengoAccount.h>
-#include <model/config/Config.h>
-#include <model/config/ConfigManager.h>
 #include <model/contactlist/ContactProfile.h>
 #include <model/presence/PresenceHandler.h>
 #include <model/profile/UserProfile.h>
@@ -34,9 +32,9 @@
 #include <imwrapper/IMContact.h>
 
 #include <util/Logger.h>
+#include <util/SafeDelete.h>
 
-#include <QtBrowser.h>
-#include <WengoPhoneBuildId.h>
+#include <qtutil/SafeConnect.h>
 
 #include <QtGui/QtGui>
 
@@ -53,16 +51,14 @@ QtUserProfile::QtUserProfile(CUserProfile & cUserProfile, QtWengoPhone & qtWengo
 void QtUserProfile::initThreadSafe() {
 	qRegisterMetaType<IMContact>("IMContact");
 
-	connect(this, SIGNAL(loginStateChangedEventHandlerSignal(SipAccount *, int)),
+	SAFE_CONNECT_TYPE(this, SIGNAL(loginStateChangedEventHandlerSignal(SipAccount *, int)),
 		SLOT(loginStateChangedEventHandlerSlot(SipAccount *, int)), Qt::QueuedConnection);
-	connect(this, SIGNAL(networkDiscoveryStateChangedEventHandlerSignal(SipAccount *, int)),
+	SAFE_CONNECT_TYPE(this, SIGNAL(networkDiscoveryStateChangedEventHandlerSignal(SipAccount *, int)),
 		SLOT(networkDiscoveryStateChangedEventHandlerSlot(SipAccount *, int)), Qt::QueuedConnection);
-	connect(this, SIGNAL(authorizationRequestEventHandlerSignal(PresenceHandler *, IMContact, QString)),
+	SAFE_CONNECT_TYPE(this, SIGNAL(authorizationRequestEventHandlerSignal(PresenceHandler *, IMContact, QString)),
 		SLOT(authorizationRequestEventHandlerSlot(PresenceHandler *, IMContact, QString)), Qt::QueuedConnection);
 
-	if (_cUserProfile.getUserProfile().getActivePhoneLine()) {
-		setBrowserUrlToAccount();
-	}
+	_qtWengoPhone.getQtBrowserWidget().loadAccountURL();
 }
 
 QtUserProfile::~QtUserProfile() {
@@ -90,29 +86,19 @@ void QtUserProfile::authorizationRequestEventHandler(PresenceHandler & sender,
 }
 
 void QtUserProfile::loginStateChangedEventHandlerSlot(SipAccount * sender, int iState) {
-
 	EnumSipLoginState::SipLoginState state = (EnumSipLoginState::SipLoginState) iState;
-
-#ifdef OS_WINDOWS
-	Config & config = ConfigManager::getInstance().getCurrentConfig();
-#endif
 
 	switch (state) {
 	case EnumSipLoginState::SipLoginStateReady:
-		//setBrowserUrlToAccount();
+		//_qtWengoPhone.getQtBrowserWidget().loadAccountURL();
 		break;
 
 	case EnumSipLoginState::SipLoginStateConnected:
-		setBrowserUrlToAccount();
+		_qtWengoPhone.getQtBrowserWidget().loadAccountURL();
 		break;
 
 	case EnumSipLoginState::SipLoginStateDisconnected:
-#ifdef OS_WINDOWS
-		if (config.getIEActiveXEnable() && (sender->getType() == SipAccount::SipAccountTypeWengo)) {
-			_qtWengoPhone.getQtBrowser()->setUrl(qApp->applicationDirPath().toStdString() +
-				"/" + QtWengoPhone::LOCAL_WEB_DIR + "/loading.html");
-		}
-#endif
+		_qtWengoPhone.getQtBrowserWidget().loadDefaultURL();
 		break;
 
 	case EnumSipLoginState::SipLoginStatePasswordError:
@@ -158,8 +144,7 @@ void QtUserProfile::authorizationRequestEventHandlerSlot(PresenceHandler * sende
 			//If the contact is not in our ContactList
 			ContactProfile contactProfile;
 			contactProfile.addIMContact(imContact);
-			QtProfileDetails qtProfileDetails(_cUserProfile, contactProfile,
-				_qtWengoPhone.getWidget());
+			QtProfileDetails qtProfileDetails(_cUserProfile, contactProfile, _qtWengoPhone.getWidget());
 			if (qtProfileDetails.show()) {
 				_cUserProfile.getCContactList().addContact(contactProfile);
 			}
@@ -169,29 +154,4 @@ void QtUserProfile::authorizationRequestEventHandlerSlot(PresenceHandler * sende
 		//TODO: avoid direct access to model (as we are in the GUI thread)
 		sender->authorizeContact(imContact, false, String::null);
 	}
-}
-
-void QtUserProfile::setBrowserUrlToAccount() {
-#ifdef OS_WINDOWS
-	Config & config = ConfigManager::getInstance().getCurrentConfig();
-
-	if (config.getIEActiveXEnable() && _cUserProfile.getUserProfile().getActivePhoneLine()) {
-		WengoAccount wengoAccount = *_cUserProfile.getUserProfile().getWengoAccount();
-		std::string data = "login=" + wengoAccount.getWengoLogin() +
-			"&password=" + wengoAccount.getWengoPassword() +
-			"&lang=" + config.getLanguage() +
-			"&wl=" + std::string(WengoPhoneBuildId::SOFTPHONE_NAME) +
-			"&page=softphoneng-web";
-		if (_qtWengoPhone.getQtBrowser()) {
-			NetworkProxy::ProxyAuthType proxyAuthType = NetworkProxyDiscovery::getInstance().getNetworkProxy().getProxyAuthType();
-			if (proxyAuthType == NetworkProxy::ProxyAuthTypeDigest) {
-				//HTTPS cannot be used when the HTTP proxy is in digest:
-				//ActiveX Internet Explorer crashes!
-				_qtWengoPhone.getQtBrowser()->setUrl(std::string("http://www.wengo.fr/auth/auth.php"), data, true);
-			} else {
-				_qtWengoPhone.getQtBrowser()->setUrl(std::string("https://www.wengo.fr/auth/auth.php"), data, true);
-			}
-		}
-	}
-#endif
 }

@@ -18,11 +18,13 @@
  */
 
 #include "QtChatWindow.h"
+
 #include "QtChatWidget.h"
 #include "QtChatTabWidget.h"
 #include "emoticons/QtEmoticonsManager.h"
 
 #include <presentation/qt/QtWengoPhone.h>
+#include <presentation/qt/QtToolBar.h>
 #include <presentation/qt/contactlist/QtContactList.h>
 #include <presentation/qt/contactlist/QtContactListManager.h>
 #include <presentation/qt/toaster/QtChatToaster.h>
@@ -44,8 +46,8 @@
 #include <imwrapper/EnumIMProtocol.h>
 #include <imwrapper/IMContactSet.h>
 
-
 #include <qtutil/Object.h>
+#include <qtutil/SafeConnect.h>
 
 #include <util/Logger.h>
 #include <cutil/global.h>
@@ -92,17 +94,17 @@ QtChatWindow::QtChatWindow(QWidget * parent, CChatHandler & cChatHandler, IMChat
 		}
 		QCoreApplication::processEvents();
 		flashWindow();
-    }
+	}
 
 	IMContact from = *_imChatSession->getIMContactSet().begin();
 	addChat(_imChatSession,from);
 
-	connect(_tabWidget, SIGNAL(closeButtonClicked()), SLOT(closeActiveTab()));
-	connect(_tabWidget, SIGNAL(currentChanged(int)), SLOT(activeTabChanged(int)));
-	connect(this,SIGNAL(typingStateChangedSignal(const IMChatSession *,const IMContact *,const  IMChat::TypingState *)),
-		SLOT(typingStateChangedThreadSafe(const IMChatSession *,const IMContact *,const IMChat::TypingState *)),Qt::QueuedConnection);
-	connect(this, SIGNAL(messageReceivedSignal(IMChatSession *)),
-		SLOT(messageReceivedSlot(IMChatSession *)),Qt::QueuedConnection);
+	SAFE_CONNECT(_tabWidget, SIGNAL(closeButtonClicked()), SLOT(closeActiveTab()));
+	SAFE_CONNECT(_tabWidget, SIGNAL(currentChanged(int)), SLOT(activeTabChanged(int)));
+	SAFE_CONNECT_TYPE(this, SIGNAL(typingStateChangedSignal(const IMChatSession *, const IMContact *, const  IMChat::TypingState *)),
+		SLOT(typingStateChangedThreadSafe(const IMChatSession *, const IMContact *, const IMChat::TypingState *)), Qt::QueuedConnection);
+	SAFE_CONNECT_TYPE(this, SIGNAL(messageReceivedSignal(IMChatSession *)),
+		SLOT(messageReceivedSlot(IMChatSession *)), Qt::QueuedConnection);
 
 	updateToolBarActions();
 }
@@ -127,18 +129,18 @@ const QString QtChatWindow::getActiveTabContactId() {
 	QtChatWidget * widget = getActiveTabWidget();
 	if (widget) {
 		contactId = widget->getContactId();
-		}
-	return contactId;
 	}
+	return contactId;
+}
 
 ContactProfile QtChatWindow::getContactProfileFromContactId(const QString & contactId) {
-	return _qtWengoPhone.getContactList()->getCContactList().getContactProfile(contactId.toStdString());
+	return _qtWengoPhone.getQtContactList()->getCContactList().getContactProfile(contactId.toStdString());
 }
 
 void QtChatWindow::closeActiveTab() {
 	QtChatWidget * widget = getActiveTabWidget();
 	delete widget;
-	if (_tabWidget->count() == 0 ) {
+	if (_tabWidget->count() == 0) {
 		hide();
 		_qtWengoPhone.setChatWindow(NULL);
 	}
@@ -206,9 +208,10 @@ void QtChatWindow::sendSmsToActiveTabContact() {
 	////
 
 	// configure & show the sms widget
-	if (_qtWengoPhone.getSms()) {
-		_qtWengoPhone.getSms()->setPhoneNumber(phoneNumber);
-		_qtWengoPhone.getSms()->getWidget()->show();
+	QtSms * sms = _qtWengoPhone.getQtSms();
+	if (sms) {
+		sms->setPhoneNumber(phoneNumber);
+		sms->getWidget()->show();
 	}
 	////
 }
@@ -277,8 +280,8 @@ void QtChatWindow::typingStateChangedEventHandler(IMChatSession & sender, const 
 
 void QtChatWindow::typingStateChangedThreadSafe(const IMChatSession * sender, const IMContact * from,const IMChat::TypingState * state) {
 	int tabs=_tabWidget->count();
-	for (int i=0; i<tabs;i++) {
-		QtChatWidget * widget = dynamic_cast<QtChatWidget *>(_tabWidget->widget(i) );
+	for (int i = 0; i < tabs; i++) {
+		QtChatWidget * widget = (QtChatWidget *) _tabWidget->widget(i);
 		if (widget->getSessionId() == sender->getId()) {
 			QString remoteName = QString::fromUtf8(from->getContactId().c_str());
 			switch (*state) {
@@ -301,14 +304,14 @@ void QtChatWindow::typingStateChangedThreadSafe(const IMChatSession * sender, co
 
 void QtChatWindow::imContactChangedEventHandler(IMContact & sender) {
 	statusChangedSignal(&sender);
-	}
+}
 
 void QtChatWindow::messageReceivedEventHandler(IMChatSession & sender) {
 	messageReceivedSignal(&sender);
 }
 
 QString QtChatWindow::getShortDisplayName(const QString & contactId, const QString & defaultName) const {
-	QtContactList * qtContactList = _qtWengoPhone.getContactList();
+	QtContactList * qtContactList = _qtWengoPhone.getQtContactList();
 	CContactList & cContactList = qtContactList->getCContactList();
 	std::string tmpSendername = cContactList.getContactProfile(contactId.toStdString()).getShortDisplayName();
 	if (tmpSendername.empty()) {
@@ -319,14 +322,14 @@ QString QtChatWindow::getShortDisplayName(const QString & contactId, const QStri
 }
 
 void QtChatWindow::statusChangedSlot(QString contactId) {
-	QtContactList * qtContactList = _qtWengoPhone.getContactList();
+	QtContactList * qtContactList = _qtWengoPhone.getQtContactList();
 	std::string sdname = qtContactList->getCContactList().getContactProfile(contactId.toStdString()).getDisplayName();
 	EnumPresenceState::PresenceState pstate = qtContactList->getCContactList().getContactProfile(contactId.toStdString()).getPresenceState();
 	QString displayName = QString::fromStdString(sdname);
 
 	// search for the tab that contain sender
 	for (int i = 0; i < _tabWidget->count(); i++) {
-		QtChatWidget * widget = dynamic_cast<QtChatWidget *>(_tabWidget->widget(i));
+		QtChatWidget * widget = (QtChatWidget *) _tabWidget->widget(i);
 		if (widget) {
 			if (widget->getContactId() == contactId) {
 				switch(pstate) {
@@ -352,65 +355,108 @@ void QtChatWindow::statusChangedSlot(QString contactId) {
 	}
 }
 
+void QtChatWindow::copyQAction(QObject * actionParent, QAction * action) {
+	QAction * tmp = actionParent->findChild<QAction *>(action->objectName());
+	if (!tmp) {
+		LOG_FATAL("QAction is null, cannot copy it");
+	}
+	action->setIcon(tmp->icon());
+	action->setIconText(tmp->iconText());
+	action->setText(tmp->text());
+	action->setToolTip(tmp->toolTip());
+	action->setShortcut(tmp->shortcut());
+}
+
 void QtChatWindow::setupMenuBarActions() {
+	QtToolBar * qtToolBar = &_qtWengoPhone.getQtToolBar();
+	QWidget * toolBar = qtToolBar->getWidget();
 
 	// setup "Wengo" menu
-	connect(_ui.actionViewMyWengoAccount, SIGNAL(triggered()), &_qtWengoPhone, SLOT(showWengoAccount()));
-	connect(_ui.actionEditMyProfile, SIGNAL(triggered()), &_qtWengoPhone, SLOT(editMyProfile()));
-	connect(_ui.actionLogOff, SIGNAL(triggered()), &_qtWengoPhone, SLOT(logoff()));
-	connect(_ui.actionLearnMoreAboutWengoServices, SIGNAL(triggered()), &_qtWengoPhone, SLOT(showCallOut()));
+	copyQAction(toolBar, _ui.actionShowWengoAccount);
+	SAFE_CONNECT_RECEIVER(_ui.actionShowWengoAccount, SIGNAL(triggered()), qtToolBar, SLOT(showWengoAccount()));
+	copyQAction(toolBar, _ui.actionEditMyProfile);
+	SAFE_CONNECT_RECEIVER(_ui.actionEditMyProfile, SIGNAL(triggered()), qtToolBar, SLOT(editMyProfile()));
+	copyQAction(toolBar, _ui.actionLogOff);
+	SAFE_CONNECT_RECEIVER(_ui.actionLogOff, SIGNAL(triggered()), qtToolBar, SLOT(logOff()));
+	copyQAction(toolBar, _ui.actionWengoServices);
+	SAFE_CONNECT_RECEIVER(_ui.actionWengoServices, SIGNAL(triggered()), qtToolBar, SLOT(showWengoServices()));
 
 	// TODO: what do we want for this action?
-	connect(_ui.actionClose, SIGNAL(triggered()), &_qtWengoPhone, SLOT(hide()));
+	copyQAction(toolBar, _ui.actionClose);
+	SAFE_CONNECT_RECEIVER(_ui.actionClose, SIGNAL(triggered()), &_qtWengoPhone, SLOT(closeWindow()));
 	////
 
 	// TODO: put this in a slot of QtWengoPhone
 	QtUserProfileHandler * qtUserProfileHandler =
-		dynamic_cast<QtUserProfileHandler *>(_qtWengoPhone.getCWengoPhone().getCUserProfileHandler().getPresentation());
-	connect(_ui.actionChangeProfile, SIGNAL(triggered()), qtUserProfileHandler, SLOT(showLoginWindow()));
+		(QtUserProfileHandler *) _qtWengoPhone.getCWengoPhone().getCUserProfileHandler().getPresentation();
+	copyQAction(toolBar, _ui.actionChangeProfile);
+	SAFE_CONNECT_RECEIVER(_ui.actionChangeProfile, SIGNAL(triggered()), qtUserProfileHandler, SLOT(showLoginWindow()));
 	////
 	////
 
 	// setup "contact" menubar
-	connect(_ui.actionAddContact, SIGNAL(triggered()), &_qtWengoPhone, SLOT(addContact()));
-	connect(_ui.actionSearchForWengoUsers, SIGNAL(triggered()), &_qtWengoPhone, SLOT(showSearchContactWindows()));
-	connect(_ui.actionShowHideOfflineUsers, SIGNAL(triggered()), &_qtWengoPhone, SLOT(showHideOffLineContacts()));
-	connect(_ui.actionShowHideGroups, SIGNAL(triggered()), &_qtWengoPhone, SLOT(showHideGroups()));
+	copyQAction(toolBar, _ui.actionAddContact);
+	SAFE_CONNECT_RECEIVER(_ui.actionAddContact, SIGNAL(triggered()), qtToolBar, SLOT(addContact()));
+	copyQAction(toolBar, _ui.actionSearchWengoContact);
+	SAFE_CONNECT_RECEIVER(_ui.actionSearchWengoContact, SIGNAL(triggered()), qtToolBar, SLOT(searchWengoContact()));
+	copyQAction(toolBar, _ui.actionShowHideOfflineContacts);
+	SAFE_CONNECT_RECEIVER(_ui.actionShowHideOfflineContacts, SIGNAL(triggered()), qtToolBar, SLOT(showHideOfflineContacts()));
+	copyQAction(toolBar, _ui.actionShowHideContactGroups);
+	SAFE_CONNECT_RECEIVER(_ui.actionShowHideContactGroups, SIGNAL(triggered()), qtToolBar, SLOT(showHideContactGroups()));
 	////
 
 	// setup "actions" menu
-	connect(_ui.actionSendSMS, SIGNAL(triggered()), &_qtWengoPhone, SLOT(sendSms()));
-	connect(_ui.actionCreateConferenceCall, SIGNAL(triggered()), &_qtWengoPhone, SLOT(showCreateConferenceCall()));
-	connect(_ui.actionAcceptCall, SIGNAL(triggered()), &_qtWengoPhone, SLOT(acceptCall()));
-	connect(_ui.actionHangupCall, SIGNAL(triggered()), &_qtWengoPhone, SLOT(hangupCall()));
-	connect(_ui.actionHoldResumeCall, SIGNAL(triggered()), &_qtWengoPhone, SLOT(resumeCall()));
+	copyQAction(toolBar, _ui.actionCreateConferenceCall);
+	SAFE_CONNECT_RECEIVER(_ui.actionCreateConferenceCall, SIGNAL(triggered()), qtToolBar, SLOT(createConferenceCall()));
+	copyQAction(toolBar, _ui.actionSendSMS);
+	SAFE_CONNECT_RECEIVER(_ui.actionSendSMS, SIGNAL(triggered()), qtToolBar, SLOT(sendSms()));
+	copyQAction(toolBar, _ui.actionAcceptCall);
+	SAFE_CONNECT_RECEIVER(_ui.actionAcceptCall, SIGNAL(triggered()), qtToolBar, SLOT(acceptCall()));
+	copyQAction(toolBar, _ui.actionHangUpCall);
+	SAFE_CONNECT_RECEIVER(_ui.actionHangUpCall, SIGNAL(triggered()), qtToolBar, SLOT(hangUpCall()));
+	copyQAction(toolBar, _ui.actionHoldResumeCall);
+	SAFE_CONNECT_RECEIVER(_ui.actionHoldResumeCall, SIGNAL(triggered()), qtToolBar, SLOT(holdResumeCall()));
 	////
 
 	// setup "tools" menu
-	connect(_ui.actionInstantMessagingAccounts, SIGNAL(triggered()), &_qtWengoPhone, SLOT(showAccountSettings()));
-	connect(_ui.actionConfiguration, SIGNAL(triggered()), &_qtWengoPhone, SLOT(showConfig()));
-	connect(_ui.actionClearOutgoingCalls, SIGNAL(triggered()), &_qtWengoPhone, SLOT(eraseHistoryOutgoingCalls()));
-	connect(_ui.actionClearIncomingCalls, SIGNAL(triggered()), &_qtWengoPhone, SLOT(eraseHistoryIncomingCalls()));
-	connect(_ui.actionClearMissedCalls, SIGNAL(triggered()), &_qtWengoPhone, SLOT(eraseHistoryMissedCalls()));
-	connect(_ui.actionClearChatSessions, SIGNAL(triggered()), &_qtWengoPhone, SLOT(eraseHistoryChatSessions()));
-	connect(_ui.actionClearSMS, SIGNAL(triggered()), &_qtWengoPhone, SLOT(eraseHistorySms()));
-	connect(_ui.actionClearAll, SIGNAL(triggered()), &_qtWengoPhone, SLOT(eraseHistory()));
+	copyQAction(toolBar, _ui.actionShowIMAccountSettings);
+	SAFE_CONNECT_RECEIVER(_ui.actionShowIMAccountSettings, SIGNAL(triggered()), qtToolBar, SLOT(showIMAccountSettings()));
+	copyQAction(toolBar, _ui.actionShowConfig);
+	SAFE_CONNECT_RECEIVER(_ui.actionShowConfig, SIGNAL(triggered()), qtToolBar, SLOT(showConfig()));
+	copyQAction(toolBar, _ui.actionShowVolumePanel);
+	SAFE_CONNECT_RECEIVER(_ui.actionShowVolumePanel, SIGNAL(triggered()), qtToolBar, SLOT(expandVolumePanel()));
+	// menu clear history
+	copyQAction(toolBar, _ui.actionClearOutgoingCalls);
+	SAFE_CONNECT_RECEIVER(_ui.actionClearOutgoingCalls, SIGNAL(triggered()), qtToolBar, SLOT(clearHistoryOutgoingCalls()));
+	copyQAction(toolBar, _ui.actionClearIncomingCalls);
+	SAFE_CONNECT_RECEIVER(_ui.actionClearIncomingCalls, SIGNAL(triggered()), qtToolBar, SLOT(clearHistoryIncomingCalls()));
+	copyQAction(toolBar, _ui.actionClearMissedCalls);
+	SAFE_CONNECT_RECEIVER(_ui.actionClearMissedCalls, SIGNAL(triggered()), qtToolBar, SLOT(clearHistoryMissedCalls()));
+	copyQAction(toolBar, _ui.actionClearChatSessions);
+	SAFE_CONNECT_RECEIVER(_ui.actionClearChatSessions, SIGNAL(triggered()), qtToolBar, SLOT(clearHistoryChatSessions()));
+	copyQAction(toolBar, _ui.actionClearSMS);
+	SAFE_CONNECT_RECEIVER(_ui.actionClearSMS, SIGNAL(triggered()), qtToolBar, SLOT(clearHistorySms()));
+	copyQAction(toolBar, _ui.actionClearAll);
+	SAFE_CONNECT_RECEIVER(_ui.actionClearAll, SIGNAL(triggered()), qtToolBar, SLOT(clearHistoryAll()));
 	////
 
 	// setup "help" menu
-	connect(_ui.actionForum, SIGNAL(triggered()), &_qtWengoPhone, SLOT(showForum()));
-	connect(_ui.actionWikiFaq, SIGNAL(triggered()), &_qtWengoPhone, SLOT(showFaq()));
-	connect(_ui.actionAbout, SIGNAL(triggered()), &_qtWengoPhone, SLOT(showAbout()));
+	copyQAction(toolBar, _ui.actionForum);
+	SAFE_CONNECT_RECEIVER(_ui.actionForum, SIGNAL(triggered()), qtToolBar, SLOT(showWengoForum()));
+	copyQAction(toolBar, _ui.actionWikiFAQ);
+	SAFE_CONNECT_RECEIVER(_ui.actionWikiFAQ, SIGNAL(triggered()), qtToolBar, SLOT(showWengoFAQ()));
+	copyQAction(toolBar, _ui.actionAbout);
+	SAFE_CONNECT_RECEIVER(_ui.actionAbout, SIGNAL(triggered()), qtToolBar, SLOT(showAbout()));
 	////
 }
 
 void QtChatWindow::setupToolBarActions() {
-	connect(_ui.actionCallContact, SIGNAL(triggered()), SLOT(callActiveTabContact()));
-	connect(_ui.actionSendSMS, SIGNAL(triggered()), SLOT(sendSmsToActiveTabContact()));
-	connect(_ui.actionSendFile, SIGNAL(triggered()), SLOT(sendFileToActiveTabContact()));
-	connect(_ui.actionCreateChatConf, SIGNAL(triggered()), SLOT(createChatConference()));
-	connect(_ui.actionContactInfo, SIGNAL(triggered()), SLOT(showActiveTabContactInfo()));
-	connect(_ui.actionBlockContact, SIGNAL(triggered()), SLOT(blockActiveTabContact()));
+	SAFE_CONNECT(_ui.actionCallContact, SIGNAL(triggered()), SLOT(callActiveTabContact()));
+	SAFE_CONNECT(_ui.actionSendSMS, SIGNAL(triggered()), SLOT(sendSmsToActiveTabContact()));
+	SAFE_CONNECT(_ui.actionSendFile, SIGNAL(triggered()), SLOT(sendFileToActiveTabContact()));
+	SAFE_CONNECT(_ui.actionCreateChatConf, SIGNAL(triggered()), SLOT(createChatConference()));
+	SAFE_CONNECT(_ui.actionContactInfo, SIGNAL(triggered()), SLOT(showActiveTabContactInfo()));
+	SAFE_CONNECT(_ui.actionBlockContact, SIGNAL(triggered()), SLOT(blockActiveTabContact()));
 }
 
 void QtChatWindow::updateToolBarActions() {
@@ -420,7 +466,7 @@ void QtChatWindow::updateToolBarActions() {
 	ContactProfile contactProfile;
 	if (widget) {
 		contactId = widget->getContactId();
-		qtContactList = _qtWengoPhone.getContactList();
+		qtContactList = _qtWengoPhone.getQtContactList();
 		contactProfile = qtContactList->getCContactList().getContactProfile(contactId.toStdString());
 
 		_ui.actionCallContact->setEnabled(contactProfile.hasCall());
@@ -448,7 +494,7 @@ void QtChatWindow::messageReceivedSlot(IMChatSession * sender) {
 			std::string message = imChatMessage->getMessage();
 			QString senderName = QString::fromStdString(from.getContactId());
 
-		QtContactList * qtContactList = _qtWengoPhone.getContactList();
+		QtContactList * qtContactList = _qtWengoPhone.getQtContactList();
 			CContactList & cContactList = qtContactList->getCContactList();
 			QString contactId = QString::fromStdString(cContactList.findContactThatOwns(from));
 			QString senderDisplayName = getShortDisplayName(contactId, QString::fromStdString(from.getContactId()));
@@ -536,21 +582,21 @@ void QtChatWindow::addChatSession(IMChatSession * imChatSession) {
 
 void QtChatWindow::addChat(IMChatSession * session, const IMContact & from) {
 
-	QtContactList * qtContactList = _qtWengoPhone.getContactList();
+	QtContactList * qtContactList = _qtWengoPhone.getQtContactList();
 	CContactList & cContactList = qtContactList->getCContactList();
 
 	QString contactId = QString::fromStdString(cContactList.findContactThatOwns(from));
 	std::string tmpNickName = session->getIMChat().getIMAccount().getLogin();
 	QString nickName = QString::fromUtf8(tmpNickName.c_str());
 
-	QString senderName = getShortDisplayName(contactId,QString::fromStdString(from.getContactId()));
+	QString senderName = getShortDisplayName(contactId, QString::fromStdString(from.getContactId()));
 	int tabNumber;
 
-	_chatWidget = new QtChatWidget(_cChatHandler,&_qtWengoPhone, session->getId(), _tabWidget, _tabWidget);
+	_chatWidget = new QtChatWidget(_cChatHandler, &_qtWengoPhone, session->getId(), _tabWidget, _tabWidget);
 	_chatWidget->setIMChatSession(session);
 	_chatWidget->setContactId(QString::fromStdString(qtContactList->getCContactList().findContactThatOwns(from)));
 
-	connect(qtContactList,SIGNAL(contactChangedEventSignal(QString )), SLOT(statusChangedSlot(QString)));
+	SAFE_CONNECT(qtContactList, SIGNAL(contactChangedEventSignal(QString )), SLOT(statusChangedSlot(QString)));
 	if (_tabWidget->count() > 0) {
 		tabNumber = _tabWidget->insertTab(_tabWidget->count(), _chatWidget, senderName);
 	} else {
@@ -593,7 +639,7 @@ void QtChatWindow::showToaster(IMChatSession * imChatSession) {
 		return;
 	}
 
-	QtContactList * qtContactList = _qtWengoPhone.getContactList();
+	QtContactList * qtContactList = _qtWengoPhone.getQtContactList();
 	CContactList & cContactList = qtContactList->getCContactList();
 	QPixmap result;
 	QPixmap background = QPixmap(":/pics/avatar_background.png");
@@ -634,7 +680,7 @@ void QtChatWindow::showToaster(IMChatSession * imChatSession) {
 		pixpainter.end();
 	}
 	toaster->setPixmap(background);
-	connect(toaster, SIGNAL(chatButtonClicked()), SLOT(show()));
+	SAFE_CONNECT(toaster, SIGNAL(chatButtonClicked()), SLOT(show()));
 	toaster->show();
 }
 

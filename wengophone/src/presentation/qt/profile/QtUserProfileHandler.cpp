@@ -25,6 +25,8 @@
 
 #include <control/profile/CUserProfileHandler.h>
 
+#include <qtutil/SafeConnect.h>
+
 #include <QtGui/QtGui>
 
 QtUserProfileHandler::QtUserProfileHandler(CUserProfileHandler & cUserProfileHandler,
@@ -39,25 +41,21 @@ QtUserProfileHandler::QtUserProfileHandler(CUserProfileHandler & cUserProfileHan
 }
 
 void QtUserProfileHandler::initThreadSafe() {
-	// Connection for UserProfile change
-	connect(this, SIGNAL(noCurrentUserProfileSetEventHandlerSignal()),
+	//Connection for UserProfile change
+	SAFE_CONNECT_TYPE(this, SIGNAL(noCurrentUserProfileSetEventHandlerSignal()),
 		SLOT(noCurrentUserProfileSetEventHandlerSlot()), Qt::QueuedConnection);
-	connect(this, SIGNAL(currentUserProfileWillDieEventHandlerSignal()),
+	SAFE_CONNECT_TYPE(this, SIGNAL(currentUserProfileWillDieEventHandlerSignal()),
 		SLOT(currentUserProfileWillDieEventHandlerSlot()), Qt::QueuedConnection);
-	connect(this, SIGNAL(userProfileInitializedEventHandlerSignal()),
+	SAFE_CONNECT_TYPE(this, SIGNAL(userProfileInitializedEventHandlerSignal()),
 		SLOT(userProfileInitializedEventHandlerSlot()), Qt::QueuedConnection);
 	qRegisterMetaType<WengoAccount>("WengoAccount");
-	connect(this, SIGNAL(wengoAccountNotValidEventHandlerSignal(WengoAccount)),
+	SAFE_CONNECT_TYPE(this, SIGNAL(wengoAccountNotValidEventHandlerSignal(WengoAccount)),
 		SLOT(wengoAccountNotValidEventHandlerSlot(WengoAccount)), Qt::QueuedConnection);
-	connect(this, SIGNAL(defaultUserProfileExistsEventHandlerSignal(QString)),
+	SAFE_CONNECT_TYPE(this, SIGNAL(defaultUserProfileExistsEventHandlerSignal(QString)),
 		SLOT(defaultUserProfileExistsEventHandlerSlot(QString)), Qt::QueuedConnection);
-	////
 
-	// Login Window
+	//Login Window
 	_qtLogin = new QtLogin(_qtWengoPhone.getWidget(), _cUserProfileHandler);
-	connect(_qtWengoPhone.getQtLanguage(), SIGNAL(translationChangedSignal()),
-		_qtLogin, SLOT(slotUpdatedTranslation()));
-	////
 }
 
 void QtUserProfileHandler::updatePresentation() {
@@ -67,8 +65,8 @@ void QtUserProfileHandler::updatePresentationThreadSafe() {
 }
 
 QtUserProfileHandler::~QtUserProfileHandler() {
-	// FIXME: these objects should be deleted in GUI thread but this
-	// destructor is called in model thread.
+	//FIXME: these objects should be deleted in GUI thread but this
+	//destructor is called in model thread.
 	/*
 	if (_qtLogin) {
 		delete _qtLogin;

@@ -60,32 +60,23 @@ Q_SIGNALS:
 
 	//FIXME: here we should be very careful with pointer as
 	// we are changing the Thread and pointer may not be valid when used.
-	void loginStateChangedEventHandlerSignal(SipAccount * sender,
-		int iState);
+	void loginStateChangedEventHandlerSignal(SipAccount * sender, int iState);
 
-	void networkDiscoveryStateChangedEventHandlerSignal(SipAccount * sender,
-		int iState);
+	void networkDiscoveryStateChangedEventHandlerSignal(SipAccount * sender, int iState);
 
 	void authorizationRequestEventHandlerSignal(PresenceHandler * sender,
 		IMContact imContact, QString message);
 
 private Q_SLOTS:
 
-	void loginStateChangedEventHandlerSlot(SipAccount * sender,
-		int iState);
+	void loginStateChangedEventHandlerSlot(SipAccount * sender, int iState);
 
-	void networkDiscoveryStateChangedEventHandlerSlot(SipAccount * sender,
-		int iState);
+	void networkDiscoveryStateChangedEventHandlerSlot(SipAccount * sender, int iState);
 
 	void authorizationRequestEventHandlerSlot(PresenceHandler * sender,
 		IMContact imContact, QString message);
 
 private:
-
-	/**
-	 * Sets the browser URL to the WengoAccount one.
-	 */
-	void setBrowserUrlToAccount();
 
 	void initThreadSafe();
 

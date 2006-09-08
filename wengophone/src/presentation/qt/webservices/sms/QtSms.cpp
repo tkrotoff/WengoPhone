@@ -21,13 +21,16 @@
 
 #include "ui_SmsWindow.h"
 
-#include <control/CWengoPhone.h>
-
 #include <presentation/qt/QtWengoPhone.h>
 
-#include <QtGui/QtGui>
+#include <control/CWengoPhone.h>
 
 #include <util/Logger.h>
+#include <util/SafeDelete.h>
+
+#include <qtutil/SafeConnect.h>
+
+#include <QtGui/QtGui>
 
 static const QString SIGNATURE_SEPARATOR = " -- ";
 
@@ -45,7 +48,9 @@ QtSms::QtSms(CSms & cSms)
 
 QtSms::~QtSms() {
 	//TODO: unregister events, delete created objects
-	_qtWengoPhone->setSms(NULL);
+	_qtWengoPhone->setQtSms(NULL);
+
+	OWSAFE_DELETE(_ui);
 }
 
 void QtSms::initThreadSafe() {
@@ -54,9 +59,9 @@ void QtSms::initThreadSafe() {
 	_ui = new Ui::SmsWindow();
 	_ui->setupUi(_smsWindow);
 
-	connect(_ui->sendButton, SIGNAL(clicked()), SLOT(sendButtonClicked()));
+	SAFE_CONNECT(_ui->sendButton, SIGNAL(clicked()), SLOT(sendButtonClicked()));
 
-	_qtWengoPhone->setSms(this);
+	_qtWengoPhone->setQtSms(this);
 }
 
 QWidget * QtSms::getWidget() const {

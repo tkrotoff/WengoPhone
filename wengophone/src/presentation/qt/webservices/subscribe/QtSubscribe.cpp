@@ -69,7 +69,7 @@ void QtSubscribe::initThreadSafe() {
 	connect(_ui->subscribeButton, SIGNAL(clicked()), SLOT(sendRequest()));
 
 	showErrorMessage(QString::null);
-	_qtWengoPhone->setSubscribe(this);
+	_qtWengoPhone->setQtSubscribe(this);
 }
 
 void QtSubscribe::showErrorMessage(const QString & errorMessage) {

@@ -76,8 +76,6 @@ public Q_SLOTS:
 	 */
 	int showWithWengoAccount(WengoAccount wengoAccount);
 
-	void slotUpdatedTranslation();
-
 private Q_SLOTS:
 
 	void createWengoAccountButtonClicked();

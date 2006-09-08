@@ -153,14 +153,11 @@ QtProfileBar::QtProfileBar(CWengoPhone & cWengoPhone, CUserProfile & cUserProfil
 	//create internal widgets
 	_qtImProfileWidget = new QtIMProfileWidget(_cUserProfile, _cWengoPhone, this);
 	_qtImProfileWidget->getWidget()->setVisible(false);
-	//connect(this, SIGNAL(updatedTranslationSignal()), _qtImProfileWidget, SLOT(slotUpdatedTranslation()));
 
 	_eventWidget = new QtEventWidget(_cWengoPhone, _cUserProfile, this);
-	connect(this, SIGNAL(updatedTranslationSignal()), _eventWidget, SLOT(slotUpdatedTranslation()));
 	//_eventWidget->getWidget()->setVisible(false);
 
 	_creditWidget = new QtCreditWidget(_cWengoPhone, this);
-	connect(this, SIGNAL(updatedTranslationSignal()), _creditWidget, SLOT(slotUpdatedTranslation()));
 
 	_cUserProfile.getUserProfile().wsInfoCreatedEvent +=
 		boost::bind(&QtProfileBar::wsInfoCreatedEventHandler, this, _1, _2);
@@ -575,12 +572,6 @@ void QtProfileBar::cHistoryCreatedEventHandlerSlot() {
 
 void QtProfileBar::unseenMissedCallsChangedEventHandler(CHistory &, int count) {
 	_eventWidget->setMissedCall(count);
-}
-
-void QtProfileBar::slotTranslationChanged() {
-	_eventsLabel->setText(tr("events"));
-	_eventsLabel->setTextColor(Qt::white);
-	updatedTranslationSignal();
 }
 
 void QtProfileBar::wsInfoWengosEventSlot(float wengos) {

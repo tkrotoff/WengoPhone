@@ -44,11 +44,12 @@ headers = [
 	'QtIdle.h',
 	'QtEnumIMProtocol.h',
 	'QtLanguage.h',
-	'QtWengoPhoneEventFilter.h',
+	'QtToolBar.h',
 	'QtSystray.h',
 	'QtFactory.h',
 	'QtUserProfilePresenceMenu.h',
 	'QtWengoStyle.h',
+	'QtBrowserWidget.h',
 
 	'phoneline/QtPhoneLine.h',
 
@@ -171,11 +172,12 @@ sources = [
 	'QtIdle.cpp',
 	'QtEnumIMProtocol.cpp',
 	'QtLanguage.cpp',
-	'QtWengoPhoneEventFilter.cpp',
+	'QtToolBar.cpp',
 	'QtSystray.cpp',
 	'QtFactory.cpp',
 	'QtUserProfilePresenceMenu.cpp',
 	'QtWengoStyle.cpp',
+	'QtBrowserWidget.cpp',
 
 	'phoneline/QtPhoneLine.cpp',
 

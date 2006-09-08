@@ -189,10 +189,6 @@ void QtLogin::currentIndexChanged(const QString & profileName) {
 	}
 }
 
-void QtLogin::slotUpdatedTranslation() {
-	_ui->retranslateUi(_loginWindow);
-}
-
 void QtLogin::loginClicked() {
 	std::string login = _ui->loginComboBox->currentText().toStdString();
 

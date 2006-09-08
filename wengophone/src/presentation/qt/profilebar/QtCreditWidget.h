@@ -60,7 +60,7 @@ private Q_SLOTS:
 
 	void landlineNumberClicked();
 
-	void slotUpdatedTranslation();
+	void languageChanged();
 
 private:
 

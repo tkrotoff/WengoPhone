@@ -17,23 +17,24 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef OWQTWENGOPHONEEVENTFILTER_H
-#define OWQTWENGOPHONEEVENTFILTER_H
+#ifndef OWCLOSEEVENTFILTER_H
+#define OWCLOSEEVENTFILTER_H
 
-#include <QtGui/QtGui>
+#include <qtutil/EventFilter.h>
 
-class QtWengoPhoneEventFilter : public QObject {
-	Q_OBJECT
+/**
+ * Catch Close event.
+ *
+ * @author Tanguy Krotoff
+ */
+class CloseEventFilter : public EventFilter {
 public:
-	QtWengoPhoneEventFilter(QObject * parent);
 
-Q_SIGNALS:
-
-	void closeWindow();
+	CloseEventFilter(QObject * receiver, const char * member);
 
 private:
 
-	bool eventFilter(QObject * object, QEvent * event);
+	virtual bool eventFilter(QObject * watched, QEvent * event);
 };
 
-#endif	//OWQTWENGOPHONEEVENTFILTER_H
+#endif	//OWCLOSEEVENTFILTER_H

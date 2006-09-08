@@ -41,7 +41,6 @@ class IMContact;
 class PPhoneLine;
 class PhoneCall;
 class PresenceHandler;
-class QtBrowser;
 class QtCallBar;
 class QtContactCallListWidget;
 class QtContactList;
@@ -53,14 +52,14 @@ class QtPhoneCall;
 class QtProfileBar;
 class QtSms;
 class QtStatusBar;
+class QtToolBar;
 class QtSubscribe;
 class QtSystray;
 class QtToaster;
 class QtWsDirectory;
+class QtBrowserWidget;
 class UserProfile;
 
-
-class QLayout;
 class QWidget;
 class QMenu;
 namespace Ui { class WengoPhoneWindow; }
@@ -74,8 +73,6 @@ class QtWengoPhone : public QObjectThreadSafe, public PWengoPhone, public Tracka
 	Q_OBJECT
 public:
 
-	static const std::string LOCAL_WEB_DIR;
-
 	QtWengoPhone(CWengoPhone & cWengoPhone);
 
 	~QtWengoPhone();
@@ -84,68 +81,48 @@ public:
 
 	void addToConference(QtPhoneCall * qtPhoneCall);
 
-	void setContactList(QtContactList * qtContactList);
-
-	QtContactList * getContactList() { return _contactList;}
-
-	void setHistory(QtHistoryWidget * qtHistoryWidget);
-
-	/**
-	 * Removes the history widget inside the history tab.
-	 *
-	 * Thread-safe, can be called from another thread.
-	 */
-	void removeHistory();
-
-	void setPhoneCall(QtContactCallListWidget * qtContactCallListWidget);
-
-	void setSms(QtSms * qtSms);
-
-	void setWsDirectory(QtWsDirectory * qtWsDirectory);
-
-	QtSms * getSms() const;
-
-	QtWsDirectory * getQtWsDirectory() const;
-
-	void setSubscribe(QtSubscribe * qtSubscribe);
-
-	QtSubscribe * getSubscribe() const;
-
 	void updatePresentation();
 
 	void dialpad(const std::string & tone, const std::string & soundFile);
 
 	void connectionStatusEventHandler(int totalSteps, int currentStep, const std::string & infoMsg);
 
-	QWidget * getWidget() const {
-		return _wengoPhoneWindow;
-	}
+	QWidget * getWidget() const;
 
-	QtStatusBar & getStatusBar() const;
+	void setQtContactList(QtContactList * qtContactList);
+	QtContactList * getQtContactList() const;
 
-	QtCallBar & getCallBar() const;
+	void setQtHistoryWidget(QtHistoryWidget * qtHistoryWidget);
 
-	QtSystray & getSystray() const;
+	void setQtSms(QtSms * qtSms);
+	QtSms * getQtSms() const;
 
-	QtLanguage * getQtLanguage() {
-		return _qtLanguage;
-	}
+	void setQtWsDirectory(QtWsDirectory * qtWsDirectory);
+	QtWsDirectory * getQtWsDirectory() const;
 
-	QtBrowser * getQtBrowser();
+	void setQtSubscribe(QtSubscribe * qtSubscribe);
+	QtSubscribe * getQtSubscribe() const;
+
+	QtStatusBar & getQtStatusBar() const;
+
+	QtToolBar & getQtToolBar() const;
+
+	QtCallBar & getQtCallBar() const;
+
+	QtSystray & getQtSystray() const;
+
+	QtLanguage & getQtLanguage() const;
+
+	QtProfileBar * getQtProfileBar() const;
+
+	QtBrowserWidget & getQtBrowserWidget() const;
+
+	CWengoPhone & getCWengoPhone() const;
 
 	void setChatWindow(QWidget * chatWindow);
+	QWidget * getChatWindow() const;
 
 	void showHistory();
-
-	CWengoPhone & getCWengoPhone() { return _cWengoPhone; }
-
-	QtProfileBar * getProfileBar() { return _qtProfileBar; }
-
-Q_SIGNALS:
-
-	void connectionStatusEventHandlerSignal(int totalSteps, int currentStep, QString infoMsg);
-
-	void removeHistorySignal();
 
 public Q_SLOTS:
 
@@ -153,17 +130,7 @@ public Q_SLOTS:
 
 	void userProfileInitializedEventHandlerSlot();
 
-	void editMyProfile();
-
-	void expandConfigPanel();
-
-	void searchWengoContact();
-
 private Q_SLOTS:
-
-	void removeHistorySlot();
-
-	void connectionStatusEventHandlerSlot(int totalSteps, int currentStep, QString infoMsg);
 
 	void callButtonClicked();
 
@@ -171,51 +138,7 @@ private Q_SLOTS:
 
 	void enableCallButton();
 
-	void showWengoAccount();
-
 	void exitApplication();
-
-	void addContact();
-
-	void showConfig();
-
-	void showForum();
-
-	void showHelp();
-
-	void showAbout();
-
-	void showContactList();
-
-	void showChatWindow();
-
-	void sendSms();
-
-	void showCreateConferenceCall();
-
-	void showAccountSettings();
-
-	void showFaq();
-
-	void showCallOut();
-
-	void showSms();
-
-	void showVoiceMail();
-
-	void showHideOffLineContacts();
-
-	void eraseHistoryOutgoingCalls();
-
-	void eraseHistoryIncomingCalls();
-
-	void eraseHistoryMissedCalls();
-
-	void eraseHistoryChatSessions();
-
-	void eraseHistorySms();
-
-	void eraseHistory();
 
 	void phoneComboBoxClicked();
 
@@ -223,23 +146,7 @@ private Q_SLOTS:
 
 	void addToConference(PhoneCall * sourceCall, PhoneCall * targetCall);
 
-	void logoff();
-
-	void tabSelectionChanged(int index);
-
-	void acceptCall();
-
-	void resumeCall();
-
-	void hangupCall();
-
-	void hideMainWindow();
-
-	void slotSystrayMenuCallBlank(bool checked);
-
-	void slotTranslationChanged();
-
-	void showHideGroups();
+	void closeWindow();
 
 private:
 
@@ -251,7 +158,7 @@ private:
 	 * This is called by QtPhoneCall to re-initialize the buttons
 	 * since QtPhoneCall modifies the behaviour of this buttons.
 	 */
-	void initButtons();
+	void initCallButtons();
 
 	void updatePresentationThreadSafe();
 
@@ -261,19 +168,11 @@ private:
 
 	void wrongProxyAuthenticationEventHandler(NetworkProxyDiscovery & sender, NetworkProxy networkProxy);
 
-	void urlClickedEventHandler(std::string url);
-
 	void makeCallErrorEventHandler();
 
 	void makeCallErrorEventHandlerThreadSafe();
 
-	int findFirstCallTab();
-
-	QMenu * createStatusMenu();
-
 	void exitEvent();
-
-	QMenu * createCallMenu();
 
 	/** Direct link to the control. */
 	CWengoPhone & _cWengoPhone;
@@ -290,15 +189,11 @@ private:
 
 	QtSubscribe * _qtSubscribe;
 
-	QtBrowser * _browser;
-
-	QtContactList * _contactList;
-
-	QLayout * _contactListTabLayout;
+	QtContactList * _qtContactList;
 
 	QtHistoryWidget * _qtHistoryWidget;
 
-	QtContactCallListWidget * _contactCallListWidget;
+	QtContactCallListWidget * _qtContactCallListWidget;
 
 	QtProfileBar * _qtProfileBar;
 
@@ -308,29 +203,17 @@ private:
 
 	QtCallBar * _qtCallBar;
 
-	QWidget * _configPanelWidget;
+	QtToolBar * _qtToolBar;
 
-	QtStatusBar * _statusBar;
+	QtStatusBar * _qtStatusBar;
+
+	QtFileTransfer * _qtFileTransfer;
+
+	QtBrowserWidget * _qtBrowserWidget;
 
 	QWidget * _chatWindow;
 
 	QWidget * _activeTabBeforeCall;
-
-    QtFileTransfer * _qtFileTransfer;
-
-	static const std::string ANCHOR_CONTACTLIST;
-
-	static const std::string ANCHOR_HISTORY;
-
-	static const std::string ANCHOR_CONFIGURATION;
-
-	static const std::string ANCHOR_DIALPAD;
-
-	static const std::string ANCHOR_ADDCONTACT;
-
-	static const std::string ANCHOR_SELFCARE;
-
-	static const std::string ANCHOR_FORUM;
 };
 
 #endif	//OWQTWENGOPHONE_H

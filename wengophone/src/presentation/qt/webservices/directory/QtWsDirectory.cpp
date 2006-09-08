@@ -35,8 +35,10 @@
 #include <model/profile/UserProfile.h>
 
 #include <util/Logger.h>
+#include <util/SafeDelete.h>
 
 #include <qtutil/WidgetBackgroundImage.h>
+#include <qtutil/SafeConnect.h>
 
 #include <QtGui/QtGui>
 
@@ -63,14 +65,16 @@ void QtWsDirectory::initThreadSafe() {
 
 	_qtWengoPhone = (QtWengoPhone *) _cWsDirectory.getCWengoPhone().getPresentation();
 	_cWsDirectory.contactFoundEvent += boost::bind(&QtWsDirectory::contactFoundEventHandler, this, _1, _2, _3);
-	connect(_ui->searchButton, SIGNAL(clicked()), SLOT(searchButtonClicked()));
+	SAFE_CONNECT(_ui->searchButton, SIGNAL(clicked()), SLOT(searchButtonClicked()));
 
-	_qtWengoPhone->setWsDirectory(this);
+	_qtWengoPhone->setQtWsDirectory(this);
 }
 
 QtWsDirectory::~QtWsDirectory() {
-	_qtWengoPhone->setWsDirectory(NULL);
-	delete _ui;
+	//TODO: unregister events, delete created objects
+	_qtWengoPhone->setQtWsDirectory(NULL);
+
+	OWSAFE_DELETE(_ui);
 }
 
 QWidget * QtWsDirectory::getWidget() const {

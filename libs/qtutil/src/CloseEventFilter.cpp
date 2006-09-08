@@ -17,4 +17,18 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <qtutil/ClickableLabel.h>
+#include <qtutil/CloseEventFilter.h>
+
+#include <QtCore/QEvent>
+
+CloseEventFilter::CloseEventFilter(QObject * receiver, const char * member)
+	: EventFilter(receiver, member) {
+}
+
+bool CloseEventFilter::eventFilter(QObject * watched, QEvent * event) {
+	if (event->type() == QEvent::Close) {
+		filter(event);
+		return true;
+	}
+	return EventFilter::eventFilter(watched, event);
+}

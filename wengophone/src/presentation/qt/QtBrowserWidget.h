@@ -17,65 +17,57 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef OWQTEVENTWIDGET_H
-#define OWQTEVENTWIDGET_H
+#ifndef OWQTBROWSERWIDGET_H
+#define OWQTBROWSERWIDGET_H
 
-#include <qtutil/QObjectThreadSafe.h>
+#include <QtCore/QObject>
 
-class CUserProfile;
-class CWengoPhone;
+#include <util/NonCopyable.h>
+
+#include <string>
+
+class QtBrowser;
+class QtWengoPhone;
 
 class QWidget;
-namespace Ui { class EventWidget; }
 
 /**
- * Event widget of the profile bar.
+ * Embedded HTML browser widget inside the main window.
  *
- * Shows missed calls and voice mail messages.
+ * Works only under Windows for the moment using a ActiveX control.
  *
+ * @author Tanguy Krotoff
  * @author Mathieu Stute
  */
-class QtEventWidget : public QObjectThreadSafe {
+class QtBrowserWidget : public QObject, NonCopyable {
 	Q_OBJECT
 public:
 
-	QtEventWidget(CWengoPhone & cWengoPhone, CUserProfile & cUserProfile, QWidget * parent);
+	QtBrowserWidget(QtWengoPhone & qtWengoPhone);
 
-	~QtEventWidget();
-
-	void setVoiceMail(int count);
-
-	void setMissedCall(int count);
-
-	void updatePresentation();
+	~QtBrowserWidget();
 
 	QWidget * getWidget() const;
 
+	/**
+	 * Loads the default URL, loaded at startup.
+	 */
+	void loadDefaultURL();
+
+	/**
+	 * Loads the URL when the user is connected.
+	 */
+	void loadAccountURL();
+
 private Q_SLOTS:
-
-	void voiceMailClicked();
-
-	void missedCallClicked();
-
-	void languageChanged();
 
 private:
 
-	void initThreadSafe();
+	void urlClickedEventHandler(std::string url);
 
-	void updatePresentationThreadSafe();
+	QtWengoPhone & _qtWengoPhone;
 
-	CUserProfile & _cUserProfile;
-
-	CWengoPhone & _cWengoPhone;
-
-	QWidget * _eventWidget;
-
-	Ui::EventWidget * _ui;
-
-	int _voiceMailCount;
-
-	int _missedCallCount;
+	QtBrowser * _qtBrowser;
 };
 
-#endif	//OWQTEVENTWIDGET_H
+#endif	//OWQTBROWSERWIDGET_H

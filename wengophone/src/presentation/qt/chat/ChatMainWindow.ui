@@ -34,16 +34,52 @@
      <x>0</x>
      <y>0</y>
      <width>351</width>
-     <height>29</height>
+     <height>19</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuToolls" >
+   <widget class="QMenu" name="menuWengo" >
+    <property name="title" >
+     <string>&amp;Wengo</string>
+    </property>
+    <addaction name="actionShowWengoAccount" />
+    <addaction name="actionEditMyProfile" />
+    <addaction name="actionLogOff" />
+    <addaction name="separator" />
+    <addaction name="actionChangeProfile" />
+    <addaction name="separator" />
+    <addaction name="actionWengoServices" />
+    <addaction name="separator" />
+    <addaction name="actionClose" />
+   </widget>
+   <widget class="QMenu" name="menuContact" >
+    <property name="title" >
+     <string>&amp;Contact</string>
+    </property>
+    <addaction name="actionAddContact" />
+    <addaction name="actionSearchWengoContact" />
+    <addaction name="separator" />
+    <addaction name="actionShowHideOfflineContacts" />
+    <addaction name="actionShowHideContactGroups" />
+   </widget>
+   <widget class="QMenu" name="menuActions" >
+    <property name="title" >
+     <string>&amp;Actions</string>
+    </property>
+    <addaction name="actionCreateConferenceCall" />
+    <addaction name="separator" />
+    <addaction name="actionSendSMS" />
+    <addaction name="separator" />
+    <addaction name="actionAcceptCall" />
+    <addaction name="actionHangUpCall" />
+    <addaction name="actionHoldResumeCall" />
+   </widget>
+   <widget class="QMenu" name="menuTools" >
     <property name="title" >
      <string>&amp;Tools</string>
     </property>
     <widget class="QMenu" name="menuClearHistory" >
      <property name="title" >
-      <string>Clear &amp;History</string>
+      <string/>
      </property>
      <addaction name="actionClearOutgoingCalls" />
      <addaction name="actionClearIncomingCalls" />
@@ -53,8 +89,9 @@
      <addaction name="separator" />
      <addaction name="actionClearAll" />
     </widget>
-    <addaction name="actionInstantMessagingAccounts" />
-    <addaction name="actionConfiguration" />
+    <addaction name="actionShowIMAccountSettings" />
+    <addaction name="actionShowVolumePanel" />
+    <addaction name="actionShowConfig" />
     <addaction name="separator" />
     <addaction name="menuClearHistory" />
    </widget>
@@ -63,61 +100,17 @@
      <string>&amp;Help</string>
     </property>
     <addaction name="actionForum" />
-    <addaction name="actionWikiFaq" />
+    <addaction name="actionWikiFAQ" />
     <addaction name="separator" />
     <addaction name="actionAbout" />
-   </widget>
-   <widget class="QMenu" name="menuContact" >
-    <property name="title" >
-     <string>&amp;Contact</string>
-    </property>
-    <addaction name="actionAddContact" />
-    <addaction name="actionSearchForWengoUsers" />
-    <addaction name="separator" />
-    <addaction name="actionShowHideOfflineUsers" />
-    <addaction name="actionShowHideGroups" />
-   </widget>
-   <widget class="QMenu" name="menuActions" >
-    <property name="title" >
-     <string>&amp;Actions</string>
-    </property>
-    <addaction name="actionSendSMS" />
-    <addaction name="separator" />
-    <addaction name="actionCreateConferenceCall" />
-    <addaction name="separator" />
-    <addaction name="actionAcceptCall" />
-    <addaction name="actionHangupCall" />
-    <addaction name="actionHoldResumeCall" />
-   </widget>
-   <widget class="QMenu" name="menuWengo" >
-    <property name="title" >
-     <string>&amp;Wengo</string>
-    </property>
-    <addaction name="actionViewMyWengoAccount" />
-    <addaction name="actionEditMyProfile" />
-    <addaction name="actionLogOff" />
-    <addaction name="separator" />
-    <addaction name="actionChangeProfile" />
-    <addaction name="separator" />
-    <addaction name="actionLearnMoreAboutWengoServices" />
-    <addaction name="separator" />
-    <addaction name="actionClose" />
    </widget>
    <addaction name="menuWengo" />
    <addaction name="menuContact" />
    <addaction name="menuActions" />
-   <addaction name="menuToolls" />
+   <addaction name="menuTools" />
    <addaction name="menuHelp" />
   </widget>
   <widget class="QStatusBar" name="statusbar" >
-   <property name="geometry" >
-    <rect>
-     <x>0</x>
-     <y>520</y>
-     <width>351</width>
-     <height>22</height>
-    </rect>
-   </property>
    <property name="autoFillBackground" >
     <bool>false</bool>
    </property>
@@ -143,139 +136,33 @@
    <addaction name="actionContactInfo" />
    <addaction name="actionBlockContact" />
   </widget>
-  <action name="actionViewMyWengoAccount" >
-   <property name="text" >
-    <string>View My &amp;Wengo Account</string>
-   </property>
-  </action>
-  <action name="actionEditMyProfile" >
-   <property name="text" >
-    <string>Edit My &amp;Profile</string>
-   </property>
-  </action>
-  <action name="actionLogOff" >
-   <property name="text" >
-    <string>Log Off</string>
-   </property>
-  </action>
-  <action name="actionChangeProfile" >
-   <property name="text" >
-    <string>Change Profile...</string>
-   </property>
-  </action>
-  <action name="actionLearnMoreAboutWengoServices" >
-   <property name="text" >
-    <string>Learn more about Wengo Services</string>
-   </property>
-  </action>
-  <action name="actionClose" >
-   <property name="text" >
-    <string>Close</string>
-   </property>
-  </action>
-  <action name="actionAddContact" >
-   <property name="text" >
-    <string>&amp;Add Contact</string>
-   </property>
-  </action>
-  <action name="actionSearchForWengoUsers" >
-   <property name="text" >
-    <string>&amp;Search for Wengo Users</string>
-   </property>
-  </action>
-  <action name="actionShowHideOfflineUsers" >
-   <property name="text" >
-    <string>Show / Hide Contact Offline</string>
-   </property>
-  </action>
-  <action name="actionShowHideGroups" >
-   <property name="text" >
-    <string>Show / Hide Groups</string>
-   </property>
-  </action>
-  <action name="actionSendSMS" >
-   <property name="icon" >
-    <iconset resource="../wengophone.qrc" >:/pics/contact/sms.png</iconset>
-   </property>
-   <property name="text" >
-    <string>&amp;Send a short text message (SMS)</string>
-   </property>
-  </action>
-  <action name="actionCreateConferenceCall" >
-   <property name="text" >
-    <string>Create Conference C&amp;all</string>
-   </property>
-  </action>
-  <action name="actionAcceptCall" >
-   <property name="text" >
-    <string>Accept</string>
-   </property>
-  </action>
-  <action name="actionHangupCall" >
-   <property name="text" >
-    <string>Hangup</string>
-   </property>
-  </action>
-  <action name="actionHoldResumeCall" >
-   <property name="text" >
-    <string>Hold / Resume</string>
-   </property>
-  </action>
-  <action name="actionInstantMessagingAccounts" >
-   <property name="text" >
-    <string>Instant Messaging Accounts</string>
-   </property>
-  </action>
-  <action name="actionConfiguration" >
-   <property name="text" >
-    <string>&amp;Configuration</string>
-   </property>
-  </action>
-  <action name="actionClearOutgoingCalls" >
-   <property name="text" >
-    <string>&amp;Outgoing Calls</string>
-   </property>
-  </action>
-  <action name="actionClearIncomingCalls" >
-   <property name="text" >
-    <string>&amp;Incoming Calls</string>
-   </property>
-  </action>
-  <action name="actionClearMissedCalls" >
-   <property name="text" >
-    <string>&amp;Missed Calls</string>
-   </property>
-  </action>
-  <action name="actionClearChatSessions" >
-   <property name="text" >
-    <string>&amp;Chat Sessions</string>
-   </property>
-  </action>
-  <action name="actionClearSMS" >
-   <property name="text" >
-    <string>Short text messages (SMS)</string>
-   </property>
-  </action>
-  <action name="actionClearAll" >
-   <property name="text" >
-    <string>&amp;All</string>
-   </property>
-  </action>
-  <action name="actionForum" >
-   <property name="text" >
-    <string>&amp;Forum</string>
-   </property>
-  </action>
-  <action name="actionWikiFaq" >
-   <property name="text" >
-    <string>&amp;Wiki / Faq</string>
-   </property>
-  </action>
-  <action name="actionAbout" >
-   <property name="text" >
-    <string>&amp;About</string>
-   </property>
-  </action>
+  <action name="actionShowWengoAccount" />
+  <action name="actionEditMyProfile" />
+  <action name="actionLogOff" />
+  <action name="actionChangeProfile" />
+  <action name="actionWengoServices" />
+  <action name="actionClose" />
+  <action name="actionAddContact" />
+  <action name="actionSearchWengoContact" />
+  <action name="actionShowHideOfflineContacts" />
+  <action name="actionShowHideContactGroups" />
+  <action name="actionSendSMS" />
+  <action name="actionCreateConferenceCall" />
+  <action name="actionAcceptCall" />
+  <action name="actionHangUpCall" />
+  <action name="actionHoldResumeCall" />
+  <action name="actionShowIMAccountSettings" />
+  <action name="actionShowConfig" />
+  <action name="actionClearOutgoingCalls" />
+  <action name="actionClearIncomingCalls" />
+  <action name="actionClearMissedCalls" />
+  <action name="actionClearChatSessions" />
+  <action name="actionClearSMS" />
+  <action name="actionClearAll" />
+  <action name="actionForum" />
+  <action name="actionWikiFAQ" />
+  <action name="actionAbout" />
+  <action name="actionShowVolumePanel" />
   <action name="actionCallContact" >
    <property name="icon" >
     <iconset resource="../wengophone.qrc" >:/pics/contact/call.png</iconset>
@@ -290,6 +177,14 @@
    </property>
    <property name="text" >
     <string>sendFile</string>
+   </property>
+  </action>
+  <action name="actionSendSMS" >
+   <property name="icon" >
+    <iconset resource="../wengophone.qrc" >:/pics/contact/sms.png</iconset>
+   </property>
+   <property name="text" >
+    <string>&amp;Send a short text message (SMS)</string>
    </property>
   </action>
   <action name="actionCreateChatConf" >
@@ -327,7 +222,6 @@
  </widget>
  <pixmapfunction></pixmapfunction>
  <resources>
-  <include location="ow/ng/wengophone/src/presentation/qt/wengophone.qrc" />
   <include location="../wengophone.qrc" />
  </resources>
  <connections/>

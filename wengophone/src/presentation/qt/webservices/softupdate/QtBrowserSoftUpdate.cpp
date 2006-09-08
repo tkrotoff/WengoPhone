@@ -24,8 +24,10 @@
 #include <model/webservices/url/WsUrl.h>
 
 #include <util/Logger.h>
+#include <util/SafeDelete.h>
 
 #include <qtutil/MouseEventFilter.h>
+#include <qtutil/SafeConnect.h>
 
 #include <QtGui/QtGui>
 
@@ -52,7 +54,7 @@ QtBrowserSoftUpdate::QtBrowserSoftUpdate(const std::string & downloadUrl,
 }
 
 QtBrowserSoftUpdate::~QtBrowserSoftUpdate() {
-	delete _ui;
+	OWSAFE_DELETE(_ui);
 }
 
 void QtBrowserSoftUpdate::showWengoDownloadWebPage() {

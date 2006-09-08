@@ -193,7 +193,7 @@ void QtChatWidget::setVisible(bool visible) {
 
 void QtChatWidget::showInviteDialog() {
 	if (canDoMultiChat()) {
-		QtChatRoomInviteDlg dlg(*_imChatSession, 
+		QtChatRoomInviteDlg dlg(*_imChatSession,
 			_cChatHandler.getCUserProfile().getCContactList(), this);
 		dlg.exec();
 	}
@@ -209,7 +209,7 @@ void QtChatWidget::contactRemovedEventHandler(IMChatSession & sender, const IMCo
 
 void QtChatWidget::contactAddedEventSlot(const IMContact & imContact) {
 
-	QtContactList * qtContactList = _qtWengoPhone->getContactList();
+	QtContactList * qtContactList = _qtWengoPhone->getQtContactList();
 	CContactList & cContactList = qtContactList->getCContactList();
 	std::string contactId = cContactList.findContactThatOwns(imContact);
 	ContactProfile profile = cContactList.getContactProfile(contactId);
@@ -233,7 +233,7 @@ void QtChatWidget::contactRemovedEventSlot(const IMContact & imContact) {
 		"<font color=\"#FF0000\">" + QString::fromStdString(imContact.getContactId()) + tr(" has left the chat") + "</font>"
 	);
 
-	QtContactList * qtContactList = _qtWengoPhone->getContactList();
+	QtContactList * qtContactList = _qtWengoPhone->getQtContactList();
 	CContactList & cContactList = qtContactList->getCContactList();
 	std::string contactId = cContactList.findContactThatOwns(imContact);
 	_avatarFrame->removeRemoteContact(QString::fromStdString(contactId));
@@ -310,7 +310,7 @@ void QtChatWidget::addToHistory(const QString & senderName, const QString & str)
 	QString header = QtChatUtils::getUserHeader(getUserColor(senderName),CHAT_USER_FORGROUND_COLOR, senderName);
 	_chatHistory->insertHtml(header);
 	////
-	
+
 	// insert message html code
 	QString table = QString("<table border=\"0\" width=\"98%\" cellspacing=\"0\" cellpadding=\"5\">") +
 		QString("<tr><td>") +
@@ -377,7 +377,7 @@ void QtChatWidget::setIMChatSession(IMChatSession * imChatSession) {
 	_imChatSession->contactRemovedEvent +=
 		boost::bind(&QtChatWidget::contactRemovedEventHandler, this, _1, _2);
 	_imChatSession->changeTypingState(IMChat::TypingStateNotTyping);
-	
+
 	updateAvatarFrame();
 	updateUserAvatar();
 }
@@ -448,7 +448,7 @@ void QtChatWidget::deletePressed() {
 void QtChatWidget::updateAvatarFrame() {
 	QMutexLocker locker(&_mutex);
 
-	QtContactList * qtContactList = _qtWengoPhone->getContactList();
+	QtContactList * qtContactList = _qtWengoPhone->getQtContactList();
 	CContactList & cContactList = qtContactList->getCContactList();
 
 	IMContactSet imContactSet = _imChatSession->getIMContactSet();
@@ -478,7 +478,7 @@ void QtChatWidget::updateUserAvatar() {
 
 
 void QtChatWidget::fileDraggedSlot(const QString & filename) {
-	QtContactList * qtContactList = _qtWengoPhone->getContactList();
+	QtContactList * qtContactList = _qtWengoPhone->getQtContactList();
 	CContactList & cContactList = qtContactList->getCContactList();
 	SendFileSession * fileSession =
 		_cChatHandler.getCWengoPhone().getWengoPhone().getCoIpManager()->getFileSessionManager().createSendFileSession();

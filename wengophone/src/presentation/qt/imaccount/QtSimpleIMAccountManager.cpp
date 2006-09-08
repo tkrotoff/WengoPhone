@@ -24,6 +24,9 @@
 #include <model/profile/UserProfile.h>
 
 #include <util/Logger.h>
+#include <util/SafeDelete.h>
+
+#include <qtutil/SafeConnect.h>
 
 #include <QtGui/QtGui>
 
@@ -40,7 +43,7 @@ QtSimpleIMAccountManager::QtSimpleIMAccountManager(UserProfile & userProfile, QW
 }
 
 QtSimpleIMAccountManager::~QtSimpleIMAccountManager() {
-	delete _ui;
+	OWSAFE_DELETE(_ui);
 }
 
 QWidget * QtSimpleIMAccountManager::getWidget() const {

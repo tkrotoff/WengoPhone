@@ -29,6 +29,8 @@
 #include <model/profile/UserProfile.h>
 #include <model/phoneline/IPhoneLine.h>
 
+#include <qtutil/LanguageChangeEventFilter.h>
+
 #include <QtGui/QtGui>
 
 static const char * VOICE_MAIL_CALL = "123";
@@ -61,6 +63,8 @@ void QtEventWidget::initThreadSafe() {
 
 	//voiceMailButton
 	connect(_ui->voiceMailButton, SIGNAL(clicked()), SLOT(voiceMailClicked()));
+
+	LANGUAGE_CHANGE();
 
 	updatePresentation();
 }
@@ -113,7 +117,7 @@ void QtEventWidget::missedCallClicked() {
 	pWengoPhone->showHistory();
 }
 
-void QtEventWidget::slotUpdatedTranslation() {
+void QtEventWidget::languageChanged() {
 	_ui->retranslateUi(_eventWidget);
 	updatePresentationThreadSafe();
 }

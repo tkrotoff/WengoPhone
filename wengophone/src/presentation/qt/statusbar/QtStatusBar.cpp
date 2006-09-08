@@ -22,6 +22,7 @@
 #include "ui_StatusBarWidget.h"
 
 #include <presentation/qt/QtWengoPhone.h>
+#include <presentation/qt/QtToolBar.h>
 
 #include <control/CWengoPhone.h>
 #include <control/profile/CUserProfile.h>
@@ -38,6 +39,9 @@
 #include <sound/AudioDevice.h>
 
 #include <util/Logger.h>
+#include <util/SafeDelete.h>
+
+#include <qtutil/SafeConnect.h>
 
 #include <QtGui/QtGui>
 
@@ -76,7 +80,7 @@ QtStatusBar::QtStatusBar(CWengoPhone & cWengoPhone, QStatusBar * statusBar)
 
 	//soundButton
 	QtWengoPhone * qtWengoPhone = (QtWengoPhone *) cWengoPhone.getPresentation();
-	connect(_ui->soundButton, SIGNAL(clicked()), qtWengoPhone, SLOT(expandConfigPanel()));
+	SAFE_CONNECT_RECEIVER(_ui->soundButton, SIGNAL(clicked()), &qtWengoPhone->getQtToolBar(), SLOT(expandVolumePanel()));
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	config.valueChangedEvent += boost::bind(&QtStatusBar::checkSoundConfig, this, _1, _2);
@@ -87,7 +91,7 @@ QtStatusBar::QtStatusBar(CWengoPhone & cWengoPhone, QStatusBar * statusBar)
 
 QtStatusBar::~QtStatusBar() {
 	//TODO: unregister events, delete created objects
-	delete _ui;
+	OWSAFE_DELETE(_ui);
 }
 
 void QtStatusBar::showMessage(const QString & message, int timeout) {
@@ -145,8 +149,7 @@ void QtStatusBar::connectionStateEventHandlerThreadSafe(bool connected) {
 	QString pixmap;
 
 	//Stops animated pixmap
-	delete _internetConnectionMovie;
-	_internetConnectionMovie = NULL;
+	OWSAFE_DELETE(_internetConnectionMovie);
 
 	if (connected) {
 		tooltip = tr("Internet Connection OK");
@@ -176,8 +179,7 @@ void QtStatusBar::updatePhoneLineState() {
 		QString pixmap;
 
 		//Stops animated pixmap
-		delete _sipConnectionMovie;
-		_sipConnectionMovie = NULL;
+		OWSAFE_DELETE(_sipConnectionMovie);
 
 		switch (state) {
 		case EnumPhoneLineState::PhoneLineStateUnknown:

@@ -58,17 +58,13 @@ public Q_SLOTS:
 
 private Q_SLOTS:
 
-	void sysTrayDoubleClicked(const QPoint &);
+	void systrayDoubleClicked(const QPoint &);
 
-	void slotSystrayMenuCallWengo(QAction * action);
+	void makeCall(QAction * action);
 
-	void slotSystrayMenuCallMobile(QAction * action);
+	void startChat(QAction * action);
 
-	void slotSystrayMenuCallLandLine(QAction * action);
-
-	void slotSystrayMenuStartChat(QAction * action);
-
-	void slotSystrayMenuSendSms(QAction * action);
+	void sendSms(QAction * action);
 
 private:
 
@@ -98,7 +94,7 @@ private:
 
 	QMenu * _callMobileMenu;
 
-	QMenu * _callLandLineMenu;
+	QMenu * _callLandlineMenu;
 
 	TrayIcon * _trayIcon;
 };

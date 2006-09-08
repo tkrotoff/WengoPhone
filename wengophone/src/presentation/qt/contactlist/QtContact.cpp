@@ -135,16 +135,13 @@ void QtContact::startChat() {
 }
 
 void QtContact::startSMS() {
-	QtWengoPhone * qwengophone = (QtWengoPhone *) _cWengoPhone.getPresentation();
-	if (!qwengophone) {
-		return;
-	}
-	if (qwengophone->getSms()) {
-		QString mobilePhone = QString::fromStdString(_contactProfile.getMobilePhone());
-		qwengophone->getSms()->setPhoneNumber(mobilePhone);
-		qwengophone->getSms()->setText(QString::null);
-		qwengophone->getSms()->setSignature(QString::null);
-		qwengophone->getSms()->getWidget()->show();
+	QtWengoPhone * qtWengoPhone = (QtWengoPhone *) _cWengoPhone.getPresentation();
+	QtSms * sms = qtWengoPhone->getQtSms();
+	if (sms) {
+		sms->setPhoneNumber(getMobilePhone());
+		sms->setText(QString::null);
+		sms->setSignature(QString::null);
+		sms->getWidget()->show();
 	}
 }
 
@@ -168,29 +165,23 @@ int QtContact::getHeight() const {
 }
 
 QString QtContact::getMobilePhone() const {
-	QString mphone = QString::fromStdString(_contactProfile.getMobilePhone());
-	return mphone;
+	return QString::fromStdString(_contactProfile.getMobilePhone());
 }
 
 QString QtContact::getHomePhone() const {
-	QString hphone = QString::fromStdString(_contactProfile.getHomePhone());
-	return hphone;
+	return QString::fromStdString(_contactProfile.getHomePhone());
 }
 
 QString QtContact::getWorkPhone() const {
-	QString wphone = QString::fromStdString(_contactProfile.getWorkPhone());
-	return wphone;
+	return QString::fromStdString(_contactProfile.getWorkPhone());
 }
 
 QString QtContact::getWengoPhoneNumber() const {
-	QString result = QString::fromStdString(_contactProfile.getFirstAvailableWengoId());
-
-	return result;
+	return QString::fromStdString(_contactProfile.getFirstAvailableWengoId());
 }
 
 QString QtContact::getPreferredNumber() const {
-	QString wphone = QString::fromStdString(_contactProfile.getPreferredNumber());
-	return wphone;
+	return QString::fromStdString(_contactProfile.getPreferredNumber());
 }
 
 bool QtContact::hasPhoneNumber() const {

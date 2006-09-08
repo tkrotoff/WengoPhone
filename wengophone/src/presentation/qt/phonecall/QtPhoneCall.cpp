@@ -46,6 +46,9 @@
 #include <sipwrapper/SipWrapper.h>
 
 #include <util/Logger.h>
+#include <util/SafeDelete.h>
+
+#include <qtutil/SafeConnect.h>
 
 #include <QtGui/QtGui>
 
@@ -96,43 +99,43 @@ QtPhoneCall::QtPhoneCall(CPhoneCall & cPhoneCall)
 
 	//Accept call
 	_actionAcceptCall = new QAction(tr("Accept"), _phoneCallWidget);
-	connect(_actionAcceptCall, SIGNAL(triggered(bool)), SLOT(acceptActionTriggered(bool)));
+	SAFE_CONNECT(_actionAcceptCall, SIGNAL(triggered(bool)), SLOT(acceptActionTriggered(bool)));
 
 	//Hand-up call - Qt::QueuedConnection is needed ! Don't remove it !!!
 	_actionHangupCall = new QAction(tr("Hang-up"), _phoneCallWidget);
-	connect(_actionHangupCall, SIGNAL(triggered(bool)), SLOT(rejectActionTriggered(bool)), Qt::QueuedConnection);
+	SAFE_CONNECT_TYPE(_actionHangupCall, SIGNAL(triggered(bool)), SLOT(rejectActionTriggered(bool)), Qt::QueuedConnection);
 
 	//Hold
 	_actionHold = new QAction(tr("Hold"), _phoneCallWidget);
-	connect(_actionHold, SIGNAL(triggered(bool)), SLOT(holdResumeActionTriggered(bool)));
+	SAFE_CONNECT(_actionHold, SIGNAL(triggered(bool)), SLOT(holdResumeActionTriggered(bool)));
 
 	//Resume
 	_actionResume = new QAction(tr("Resume"), _phoneCallWidget);
-	connect(_actionResume, SIGNAL(triggered(bool)), SLOT(holdResumeActionTriggered(bool)));
+	SAFE_CONNECT(_actionResume, SIGNAL(triggered(bool)), SLOT(holdResumeActionTriggered(bool)));
 	_actionResume->setEnabled(false);
 
 	//Invite to conference
 	_actionInvite = new QAction(tr("Invite to conference"), _phoneCallWidget);
-	connect(_actionInvite, SIGNAL(triggered(bool)), SLOT(inviteToConference(bool)));
+	SAFE_CONNECT(_actionInvite, SIGNAL(triggered(bool)), SLOT(inviteToConference(bool)));
 	//_actionInvite->setEnabled(false);
 
 	//Start/stop video
 	_actionSwitchVideo = new QAction(tr("Stop video"), _phoneCallWidget);
-	connect(_actionSwitchVideo, SIGNAL(triggered(bool)), SLOT(switchVideo(bool)));
+	SAFE_CONNECT(_actionSwitchVideo, SIGNAL(triggered(bool)), SLOT(switchVideo(bool)));
 
 	//Add contact
 	_actionAddContact = new QAction(tr("Add contact"), _phoneCallWidget);
-	connect(_actionAddContact, SIGNAL(triggered(bool)), SLOT(addContactActionTriggered(bool)));
+	SAFE_CONNECT(_actionAddContact, SIGNAL(triggered(bool)), SLOT(addContactActionTriggered(bool)));
 
 	_popupMenu = createMenu();
 
 	//Computes the call duration
 	_callTimer = new QTimer(_phoneCallWidget);
-	connect(_callTimer, SIGNAL(timeout()), SLOT(updateCallDuration()));
+	SAFE_CONNECT(_callTimer, SIGNAL(timeout()), SLOT(updateCallDuration()));
 
 	QtPhoneCallEventFilter * filter = new QtPhoneCallEventFilter(_phoneCallWidget);
 	_phoneCallWidget->installEventFilter(filter);
-	connect(filter, SIGNAL(openPopup(int, int)), SLOT(openPopup(int, int)));
+	SAFE_CONNECT(filter, SIGNAL(openPopup(int, int)), SLOT(openPopup(int, int)));
 
 	showToaster(userInfo);
 
@@ -144,9 +147,13 @@ QtPhoneCall::QtPhoneCall(CPhoneCall & cPhoneCall)
 }
 
 QtPhoneCall::~QtPhoneCall() {
-	if (_remoteVideoFrame) pix_free(_remoteVideoFrame);
-	if (_localVideoFrame) pix_free(_localVideoFrame);
-	delete _ui;
+	if (_remoteVideoFrame) {
+		pix_free(_remoteVideoFrame);
+	}
+	if (_localVideoFrame) {
+		pix_free(_localVideoFrame);
+	}
+	OWSAFE_DELETE(_ui);
 }
 
 QString QtPhoneCall::getDisplayName(QString str) {
@@ -215,7 +222,7 @@ QMenu * QtPhoneCall::createInviteMenu() const {
 			QString str = QString::fromStdString((*it)->getPeerSipAddress().getUserName());
 			if (str != me) {
 				QAction * action = menu->addAction(str);
-				connect(action, SIGNAL(triggered(bool)), SLOT(inviteToConference(bool)));
+				SAFE_CONNECT(action, SIGNAL(triggered(bool)), SLOT(inviteToConference(bool)));
 				menu->addAction(action);
 			}
 		}
@@ -231,7 +238,7 @@ void QtPhoneCall::stateChangedEvent(EnumPhoneCallState::PhoneCallState state) {
 	if (_cPhoneCall.getVideoCodecUsed() != CodecList::VideoCodecError) {
 		codecs += "/" + CodecList::toString(_cPhoneCall.getVideoCodecUsed());
 	}
-	_qtWengoPhone->getStatusBar().showMessage(QString::fromStdString(codecs));
+	_qtWengoPhone->getQtStatusBar().showMessage(QString::fromStdString(codecs));
 
 
 	switch (state) {
@@ -329,7 +336,7 @@ void QtPhoneCall::videoFrameReceivedEvent(piximage * remoteVideoFrame, piximage 
 				localVideoFrame->width, localVideoFrame->height);
 			//Fallback if XV is not available
 			if (!_videoWindow->isInitialized()) {
-				delete _videoWindow;
+				OWSAFE_DELETE(_videoWindow);
 				_videoWindow = new QtVideoQt(_phoneCallWidget);
 			}
 		} else {
@@ -411,7 +418,7 @@ void QtPhoneCall::openPopup(int x, int y) {
 		_popupMenu->exec(QPoint(x, y));
 		_actionInvite->setMenu(NULL);
 		_actionInvite->setEnabled(true);
-		delete menu;
+		OWSAFE_DELETE(menu);
 	} else {
 		_popupMenu->exec(QPoint(x, y));
 	}
@@ -516,8 +523,8 @@ void QtPhoneCall::showToaster(const QString & userName) {
 
 	QtCallToaster * toaster = new QtCallToaster();
 	toaster->setMessage(userName);
-	connect(toaster, SIGNAL(pickUpButtonClicked()), SLOT(acceptCall()));
-	connect(toaster, SIGNAL(hangUpButtonClicked()), SLOT(rejectCall()));
+	SAFE_CONNECT(toaster, SIGNAL(pickUpButtonClicked()), SLOT(acceptCall()));
+	SAFE_CONNECT(toaster, SIGNAL(hangUpButtonClicked()), SLOT(rejectCall()));
 	toaster->setPixmap(QPixmap(":/pics/default-avatar.png"));
 	toaster->show();
 }

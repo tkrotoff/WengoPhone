@@ -40,10 +40,11 @@ class IMContact;
 class IMChatSession;
 class ContactProfile;
 
+class QAction;
+
 /**
  *
  * @ingroup presentation
- * @author Mr K.
  * @author Mathieu Stute.
  */
 class QtChatWindow : public QMainWindow, public Trackable {
@@ -126,6 +127,15 @@ private:
 
 	void showChatWindow();
 
+	/**
+	 * Finds an QAction and copies its properties to another QAction.
+	 * Code factorization.
+	 *
+	 * @param actionParent where to find the original QAction
+	 * @param action QAction to modify
+	 */
+	static void copyQAction(QObject * actionParent, QAction * action);
+
 	QString getShortDisplayName(const QString & contactId, const QString & defaultName) const;
 
 	QtChatWidget * _chatWidget;
@@ -139,7 +149,7 @@ private:
 	QtWengoPhone & _qtWengoPhone;
 
 	Ui::chatMainWindow _ui;
-	
+
 	/** Index of the last message printed on screen for ecah sessionID **/
 	std::map<int, int> _lastReceivedMessageIndex;
 };

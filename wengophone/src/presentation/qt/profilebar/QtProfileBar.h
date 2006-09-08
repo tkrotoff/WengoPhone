@@ -90,8 +90,6 @@ public Q_SLOTS:
 
 	void myPresenceStatusEventSlot(QVariant status);
 
-	void slotTranslationChanged();
-
 Q_SIGNALS:
 
 	void connectedEventSignal(IMAccount * imAccount);
@@ -101,8 +99,6 @@ Q_SIGNALS:
 	void connectionProgressEventSignal(IMAccount * imAccount, int currentStep, int totalSteps, const QString & infoMessage);
 
 	void myPresenceStatusEventSignal(QVariant status);
-
-	void updatedTranslationSignal();
 
 	void wsInfoWengosEvent(float wengos);
 	void wsInfoVoiceMailEvent(int count);

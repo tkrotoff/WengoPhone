@@ -34,6 +34,9 @@
 #include <imwrapper/IMAccount.h>
 
 #include <util/Logger.h>
+#include <util/SafeDelete.h>
+
+#include <qtutil/SafeConnect.h>
 
 #include <QtGui/QtGui>
 
@@ -50,13 +53,13 @@ QtSimpleIMContactManager::QtSimpleIMContactManager(ContactProfile & contactProfi
 	_ui = new Ui::SimpleIMContactManager();
 	_ui->setupUi(_imContactManagerWidget);
 
-	connect(_ui->searchWengoContactButton, SIGNAL(clicked()), SLOT(searchWengoContactButtonClicked()));
+	SAFE_CONNECT(_ui->searchWengoContactButton, SIGNAL(clicked()), SLOT(searchWengoContactButtonClicked()));
 
 	loadIMContacts();
 }
 
 QtSimpleIMContactManager::~QtSimpleIMContactManager() {
-	delete _ui;
+	OWSAFE_DELETE(_ui);
 }
 
 QWidget * QtSimpleIMContactManager::getWidget() const {
@@ -176,5 +179,5 @@ void QtSimpleIMContactManager::saveIMContacts() {
 void QtSimpleIMContactManager::searchWengoContactButtonClicked() {
 	//_imContactManagerWidget->parentWidget()->close();
 	QtWengoPhone * qtWengoPhone = (QtWengoPhone *) _cUserProfile.getCWengoPhone().getPresentation();
-	qtWengoPhone->searchWengoContact();
+	//qtWengoPhone->searchWengoContact();
 }

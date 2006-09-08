@@ -41,6 +41,8 @@
 #include <util/SafeDelete.h>
 #include <cutil/global.h>
 
+#include <qtutil/SafeConnect.h>
+
 #include <QtGui/QtGui>
 
 #ifdef OS_WINDOWS
@@ -77,7 +79,7 @@ QtProfileDetails::QtProfileDetails(CUserProfile & cUserProfile, ContactProfile &
 	_ui->imStackedWidget->setCurrentIndex(index);
 
 	//saveButton
-	connect(_ui->saveButton, SIGNAL(clicked()), SLOT(saveContact()));
+	SAFE_CONNECT(_ui->saveButton, SIGNAL(clicked()), SLOT(saveContact()));
 
 	//avatarPixmapButton
 	_ui->avatarPixmapButton->setToolTip("");
@@ -103,10 +105,10 @@ QtProfileDetails::QtProfileDetails(CUserProfile & cUserProfile, UserProfile & us
 	_ui->imStackedWidget->setCurrentIndex(index);
 
 	//saveButton
-	connect(_ui->saveButton, SIGNAL(clicked()), SLOT(saveUserProfile()));
+	SAFE_CONNECT(_ui->saveButton, SIGNAL(clicked()), SLOT(saveUserProfile()));
 
 	//avatarPixmapButton
-	connect(_ui->avatarPixmapButton, SIGNAL(clicked()), SLOT(changeUserProfileAvatar()));
+	SAFE_CONNECT(_ui->avatarPixmapButton, SIGNAL(clicked()), SLOT(changeUserProfileAvatar()));
 }
 
 void QtProfileDetails::init(QWidget * parent) {
@@ -115,8 +117,8 @@ void QtProfileDetails::init(QWidget * parent) {
 	_ui = new Ui::ProfileDetails();
 	_ui->setupUi(_profileDetailsWindow);
 
-	connect(_ui->cancelButton, SIGNAL(clicked()), SLOT(cancelButtonClicked()));
-	connect(_ui->advancedButton, SIGNAL(clicked()), SLOT(advancedButtonClicked()));
+	SAFE_CONNECT(_ui->cancelButton, SIGNAL(clicked()), SLOT(cancelButtonClicked()));
+	SAFE_CONNECT(_ui->advancedButton, SIGNAL(clicked()), SLOT(advancedButtonClicked()));
 
 	_qtIMContactManager = NULL;
 	_qtIMAccountManager = NULL;

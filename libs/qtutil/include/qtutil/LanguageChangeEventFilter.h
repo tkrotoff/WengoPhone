@@ -23,7 +23,7 @@
 #include <qtutil/EventFilter.h>
 
 #define LANGUAGE_CHANGE() \
-new LanguageChangeEventFilter(this, SLOT(languageChanged()))
+this->installEventFilter(new LanguageChangeEventFilter(this, SLOT(languageChanged())))
 
 /**
  * Catch LanguageChange event.

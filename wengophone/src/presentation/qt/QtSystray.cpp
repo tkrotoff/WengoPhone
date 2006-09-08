@@ -34,6 +34,8 @@
 
 #include <util/Logger.h>
 
+#include <qtutil/SafeConnect.h>
+
 #include <QtGui/QtGui>
 
 #include <trayicon.h>
@@ -48,7 +50,7 @@ QtSystray::QtSystray(QObject * parent)
 	_startChatMenu = NULL;
 	_callWengoMenu = NULL;
 	_callMobileMenu = NULL;
-	_callLandLineMenu = NULL;
+	_callLandlineMenu = NULL;
 
 
 	//Check Internet connection status
@@ -60,11 +62,11 @@ QtSystray::QtSystray(QObject * parent)
 
 	//trayMenu
 	_trayMenu = new QMenu(_qtWengoPhone->getWidget());
-	connect(_trayMenu, SIGNAL(aboutToShow()), SLOT(setTrayMenu()));
+	SAFE_CONNECT(_trayMenu, SIGNAL(aboutToShow()), SLOT(setTrayMenu()));
 
 	//trayIcon
 	_trayIcon = new TrayIcon(QPixmap(":pics/status/online.png"), QString("WengoPhone"), _trayMenu, _qtWengoPhone->getWidget());
-	connect(_trayIcon, SIGNAL(doubleClicked(const QPoint &)), SLOT(sysTrayDoubleClicked(const QPoint &)));
+	SAFE_CONNECT(_trayIcon, SIGNAL(doubleClicked(const QPoint &)), SLOT(systrayDoubleClicked(const QPoint &)));
 	phoneLineStateChanged(EnumPhoneLineState::PhoneLineStateProgress);
 	_trayIcon->show();
 
@@ -106,15 +108,15 @@ void QtSystray::setTrayMenu() {
 #ifdef OS_LINUX
 	if (gdmSession == "gnome") {
 		LOG_DEBUG("GDMSESSION running");
-		connect(openAction, SIGNAL(triggered()), _qtWengoPhone->getWidget(), SLOT(show()));
-		connect(quitAction, SIGNAL(triggered()), _qtWengoPhone, SLOT(exitApplication()));
+		SAFE_CONNECT_RECEIVER(openAction, SIGNAL(triggered()), _qtWengoPhone->getWidget(), SLOT(show()));
+		SAFE_CONNECT_RECEIVER(quitAction, SIGNAL(triggered()), _qtWengoPhone, SLOT(exitApplication()));
 	} else {
-		connect(openAction, SIGNAL(triggered()), _qtWengoPhone->getWidget(), SLOT(show()));
-		connect(quitAction, SIGNAL(triggered()), _qtWengoPhone, SLOT(exitApplication()));
+		SAFE_CONNECT_RECEIVER(openAction, SIGNAL(triggered()), _qtWengoPhone->getWidget(), SLOT(show()));
+		SAFE_CONNECT_RECEIVER(quitAction, SIGNAL(triggered()), _qtWengoPhone, SLOT(exitApplication()));
 	}
 #else
-	connect(openAction, SIGNAL(triggered()), _qtWengoPhone->getWidget(), SLOT(show()));
-	connect(quitAction, SIGNAL(triggered()), _qtWengoPhone, SLOT(exitApplication()));
+	SAFE_CONNECT_RECEIVER(openAction, SIGNAL(triggered()), _qtWengoPhone->getWidget(), SLOT(show()));
+	SAFE_CONNECT_RECEIVER(quitAction, SIGNAL(triggered()), _qtWengoPhone, SLOT(exitApplication()));
 #endif
 
 	_trayIcon->setPopup(_trayMenu);
@@ -130,17 +132,17 @@ QMenu * QtSystray::createStatusMenu() {
 
 	QtUserProfilePresenceMenu * menu = new QtUserProfilePresenceMenu(presenceState, connected, tr("Status"), NULL);
 
-	QtProfileBar * profileBar = _qtWengoPhone->getProfileBar();
+	QtProfileBar * qtProfileBar = _qtWengoPhone->getQtProfileBar();
 
-	connect(menu, SIGNAL(onlineClicked()), profileBar, SLOT(onlineClicked()));
+	SAFE_CONNECT_RECEIVER(menu, SIGNAL(onlineClicked()), qtProfileBar, SLOT(onlineClicked()));
 
-	connect(menu, SIGNAL(doNotDisturbClicked()), profileBar, SLOT(doNotDisturbClicked()));
+	SAFE_CONNECT_RECEIVER(menu, SIGNAL(doNotDisturbClicked()), qtProfileBar, SLOT(doNotDisturbClicked()));
 
-	connect(menu, SIGNAL(invisibleClicked()), profileBar, SLOT(invisibleClicked()));
+	SAFE_CONNECT_RECEIVER(menu, SIGNAL(invisibleClicked()), qtProfileBar, SLOT(invisibleClicked()));
 
-	connect(menu, SIGNAL(awayClicked()), profileBar, SLOT(awayClicked()));
+	SAFE_CONNECT_RECEIVER(menu, SIGNAL(awayClicked()), qtProfileBar, SLOT(awayClicked()));
 
-	connect(menu, SIGNAL(disconnectClicked()), profileBar, SLOT(disconnectClicked()));
+	SAFE_CONNECT_RECEIVER(menu, SIGNAL(disconnectClicked()), qtProfileBar, SLOT(disconnectClicked()));
 
 	return menu;
 }
@@ -152,7 +154,7 @@ void QtSystray::updateCallMenu() {
 	if (!_sendSmsMenu) {
 		_sendSmsMenu = new QMenu(_qtWengoPhone->getWidget());
 		_sendSmsMenu->setIcon(QIcon(":/pics/contact/sms.png"));
-		connect(_sendSmsMenu, SIGNAL(triggered(QAction *)), SLOT(slotSystrayMenuSendSms(QAction *)));
+		SAFE_CONNECT(_sendSmsMenu, SIGNAL(triggered(QAction *)), SLOT(sendSms(QAction *)));
 	}
 	_sendSmsMenu->clear();
 	_sendSmsMenu->setTitle(tr("Send a SMS"));
@@ -166,7 +168,7 @@ void QtSystray::updateCallMenu() {
 	if (!_startChatMenu) {
 		_startChatMenu = new QMenu(_qtWengoPhone->getWidget());
 		_startChatMenu->setIcon(QIcon(":/pics/contact/chat.png"));
-		connect(_startChatMenu, SIGNAL(triggered(QAction *)), SLOT(slotSystrayMenuStartChat(QAction *)));
+		SAFE_CONNECT(_startChatMenu, SIGNAL(triggered(QAction *)), SLOT(startChat(QAction *)));
 	}
 	_startChatMenu->clear();
 	_startChatMenu->setTitle(tr("Start a chat"));
@@ -176,13 +178,13 @@ void QtSystray::updateCallMenu() {
 	//_callWengoMenu
 	if (!_callWengoMenu) {
 		_callWengoMenu = new QMenu(_qtWengoPhone->getWidget());
-		connect(_callWengoMenu, SIGNAL(triggered(QAction *)),SLOT(slotSystrayMenuCallWengo(QAction *)));
+		SAFE_CONNECT(_callWengoMenu, SIGNAL(triggered(QAction *)), SLOT(makeCall(QAction *)));
 	}
 	_callWengoMenu->clear();
 	_callWengoMenu->setTitle(tr("Call SIP"));
 
 	QAction * placeCallBlankAction =_callMenu->addAction(QIcon(":/pics/contact/call.png"), tr("Place Call"));
-	connect(placeCallBlankAction, SIGNAL(triggered(bool)), _qtWengoPhone, SLOT(slotSystrayMenuCallBlank(bool)));
+	//SAFE_CONNECT_RECEIVER(placeCallBlankAction, SIGNAL(triggered(bool)), _qtWengoPhone, SLOT(slotSystrayMenuCallBlank(bool)));
 	placeCallBlankAction->setData(String::null);
 	_callMenu->addMenu(_callWengoMenu);
 
@@ -190,21 +192,21 @@ void QtSystray::updateCallMenu() {
 	//_callMobileMenu
 	if (!_callMobileMenu) {
 		_callMobileMenu = new QMenu(_qtWengoPhone->getWidget());
-		connect(_callMobileMenu, SIGNAL(triggered(QAction *)), SLOT(slotSystrayMenuCallMobile(QAction *)));
+		SAFE_CONNECT(_callMobileMenu, SIGNAL(triggered(QAction *)), SLOT(makeCall(QAction *)));
 	}
 	_callMobileMenu->clear();
 	_callMobileMenu->setTitle(tr("Call Mobile"));
 	_callMenu->addMenu(_callMobileMenu);
 
 
-	//_callLandLineMenu
-	if (!_callLandLineMenu) {
-		_callLandLineMenu = new QMenu(_qtWengoPhone->getWidget());
-		connect(_callLandLineMenu, SIGNAL(triggered(QAction *)), SLOT(slotSystrayMenuCallLandLine(QAction *)));
+	//_callLandlineMenu
+	if (!_callLandlineMenu) {
+		_callLandlineMenu = new QMenu(_qtWengoPhone->getWidget());
+		SAFE_CONNECT(_callLandlineMenu, SIGNAL(triggered(QAction *)), SLOT(makeCall(QAction *)));
 	}
-	_callLandLineMenu->clear();
-	_callLandLineMenu->setTitle(tr("Call land line"));
-	_callMenu->addMenu(_callLandLineMenu);
+	_callLandlineMenu->clear();
+	_callLandlineMenu->setTitle(tr("Call land line"));
+	_callMenu->addMenu(_callLandlineMenu);
 
 
 	CUserProfile * currentCUserProfile = cWengoPhone.getCUserProfileHandler().getCUserProfile();
@@ -238,7 +240,7 @@ void QtSystray::updateCallMenu() {
 			if (!tmpContactProfile.getHomePhone().empty()) {
 				QString homePhone = QString::fromStdString(tmpContactProfile.getHomePhone());
 
-				QAction * tmpAction = _callLandLineMenu->addAction(displayName + ": " + homePhone);
+				QAction * tmpAction = _callLandlineMenu->addAction(displayName + ": " + homePhone);
 				tmpAction->setData(QVariant(homePhone));
 			}
 
@@ -367,7 +369,7 @@ void QtSystray::connectionStateEventHandlerThreadSafe(bool connected) {
 	}
 }
 
-void QtSystray::sysTrayDoubleClicked(const QPoint &) {
+void QtSystray::systrayDoubleClicked(const QPoint &) {
 	if (_qtWengoPhone->getWidget()->isVisible()) {
 		_qtWengoPhone->getWidget()->setVisible(false);
 	}
@@ -381,7 +383,7 @@ void QtSystray::hide() {
 	_trayIcon->hide();
 }
 
-void QtSystray::slotSystrayMenuCallWengo(QAction * action) {
+void QtSystray::makeCall(QAction * action) {
 	CWengoPhone & cWengoPhone = _qtWengoPhone->getCWengoPhone();
 	if (action) {
 		LOG_DEBUG("call=" + action->data().toString().toStdString());
@@ -391,27 +393,7 @@ void QtSystray::slotSystrayMenuCallWengo(QAction * action) {
 	}
 }
 
-void QtSystray::slotSystrayMenuCallMobile(QAction * action) {
-	CWengoPhone & cWengoPhone = _qtWengoPhone->getCWengoPhone();
-	if (action) {
-		LOG_DEBUG("call=" + action->data().toString().toStdString());
-		cWengoPhone.getCUserProfileHandler().getCUserProfile()->makeCall(action->data().toString().toStdString());
-	} else {
-		LOG_FATAL("QAction cannot be NULL");
-	}
-}
-
-void QtSystray::slotSystrayMenuCallLandLine(QAction * action) {
-	CWengoPhone & cWengoPhone = _qtWengoPhone->getCWengoPhone();
-	if (action) {
-		LOG_DEBUG("call=" + action->data().toString().toStdString());
-		cWengoPhone.getCUserProfileHandler().getCUserProfile()->makeCall(action->data().toString().toStdString());
-	} else {
-		LOG_FATAL("QAction cannot be NULL");
-	}
-}
-
-void QtSystray::slotSystrayMenuStartChat(QAction * action) {
+void QtSystray::startChat(QAction * action) {
 	if (action) {
 		QtContactListManager * contactListManager = QtContactListManager::getInstance();
 		if (contactListManager) {
@@ -425,18 +407,18 @@ void QtSystray::slotSystrayMenuStartChat(QAction * action) {
 	}
 }
 
-void QtSystray::slotSystrayMenuSendSms(QAction * action) {
+void QtSystray::sendSms(QAction * action) {
 	CWengoPhone & cWengoPhone = _qtWengoPhone->getCWengoPhone();
 	if (action) {
-		if (_qtWengoPhone->getSms() &&
+		if (_qtWengoPhone->getQtSms() &&
 			cWengoPhone.getCUserProfileHandler().getCUserProfile() &&
 			cWengoPhone.getCUserProfileHandler().getCUserProfile()->getUserProfile().hasWengoAccount() &&
 			cWengoPhone.getCUserProfileHandler().getCUserProfile()->getUserProfile().getWengoAccount()->isConnected()) {
 
-			_qtWengoPhone->getSms()->getWidget()->show();
+			_qtWengoPhone->getQtSms()->getWidget()->show();
 			_qtWengoPhone->getWidget()->show();
 			_qtWengoPhone->getWidget()->setWindowState(_qtWengoPhone->getWidget()->windowState() & ~Qt::WindowMinimized | Qt::WindowActive);
-			_qtWengoPhone->getSms()->setPhoneNumber(action->data().toString());
+			_qtWengoPhone->getQtSms()->setPhoneNumber(action->data().toString());
 		} else {
 			QMessageBox::warning(_qtWengoPhone->getWidget(),
 				QObject::tr("WengoPhone"),

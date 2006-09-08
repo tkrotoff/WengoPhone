@@ -18,11 +18,32 @@
  */
 
 #include "QtWengoPhone.h"
+
 #include "ui_WengoPhoneWindow.h"
 
 #include <presentation/PFactory.h>
-#include <presentation/qt/QtHttpProxyLogin.h>
-#include <presentation/qt/profile/QtUserProfileHandler.h>
+
+#include "QtSystray.h"
+#include "QtHttpProxyLogin.h"
+#include "QtConfigPanel.h"
+#include "QtDialpad.h"
+#include "QtIdle.h"
+#include "QtLanguage.h"
+#include "QtToolBar.h"
+#include "QtWebcamButton.h"
+#include "QtBrowserWidget.h"
+#include "callbar/QtCallBar.h"
+#include "contactlist/QtContactList.h"
+#include "filetransfer/QtFileTransfer.h"
+#include "history/QtHistoryWidget.h"
+#include "imaccount/QtIMAccountManager.h"
+#include "phonecall/QtContactCallListWidget.h"
+#include "phonecall/QtPhoneCall.h"
+#include "phoneline/QtPhoneLine.h"
+#include "profilebar/QtProfileBar.h"
+#include "statusbar/QtStatusBar.h"
+#include "webservices/directory/QtWsDirectory.h"
+#include "webservices/sms/QtSms.h"
 
 #include <control/CWengoPhone.h>
 #include <control/profile/CUserProfile.h>
@@ -30,7 +51,6 @@
 #include <control/history/CHistory.h>
 
 #include <model/WengoPhone.h>
-#include <model/account/wengo/WengoAccount.h>
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
 #include <model/connect/ConnectHandler.h>
@@ -42,45 +62,12 @@
 #include <model/phonecall/ConferenceCall.h>
 #include <model/phoneline/IPhoneLine.h>
 #include <model/profile/UserProfile.h>
-#include <model/webservices/url/WsUrl.h>
 
-#include <sipwrapper/SipWrapper.h>
-
-#include <imwrapper/EnumIMProtocol.h>
 #include <imwrapper/EnumPresenceState.h>
 
-#include "QtAbout.h"
-#include "QtConfigPanel.h"
-#include "QtDialpad.h"
-#include "QtIdle.h"
-#include "QtLanguage.h"
-#include "QtWebcamButton.h"
-#include "QtWengoPhoneEventFilter.h"
-#include "callbar/QtCallBar.h"
-#include "config/QtWengoConfigDialog.h"
-#include "contactlist/QtContactList.h"
-#include "filetransfer/QtFileTransfer.h"
-#include "history/QtHistoryWidget.h"
-#include "imaccount/QtIMAccountManager.h"
-#include "phonecall/QtContactCallListWidget.h"
-#include "phonecall/QtPhoneCall.h"
-#include "phoneline/QtPhoneLine.h"
-#include "profile/QtProfileDetails.h"
-#include "profilebar/QtProfileBar.h"
-#include "statusbar/QtStatusBar.h"
-#include "toaster/QtToaster.h"
-#include "webservices/directory/QtWsDirectory.h"
-#include "webservices/sms/QtSms.h"
-
-
-#include <qtutil/MouseEventFilter.h>
-#include <qtutil/Object.h>
+#include <qtutil/CloseEventFilter.h>
 #include <qtutil/Widget.h>
-#include <qtutil/WidgetBackgroundImage.h>
-#include <qtutil/WidgetFactory.h>
-
-
-#include <QtBrowser.h>
+#include <qtutil/SafeConnect.h>
 
 #include <cutil/global.h>
 #include <thread/Thread.h>
@@ -89,18 +76,7 @@
 
 #include <QtGui/QtGui>
 
-#include "QtSystray.h"
-
 using namespace std;
-
-const std::string QtWengoPhone::ANCHOR_CONTACTLIST = "openwengo_phonebook";
-const std::string QtWengoPhone::ANCHOR_HISTORY = "openwengo_log";
-const std::string QtWengoPhone::ANCHOR_CONFIGURATION = "openwengo_configuration";
-const std::string QtWengoPhone::ANCHOR_DIALPAD = "openwengo_dial";
-const std::string QtWengoPhone::ANCHOR_ADDCONTACT = "openwengo_addcontact";
-const std::string QtWengoPhone::ANCHOR_SELFCARE = "openwengo_selfcare";
-const std::string QtWengoPhone::ANCHOR_FORUM = "openwengo_forum";
-const std::string QtWengoPhone::LOCAL_WEB_DIR = "webpages/windows";
 
 QtWengoPhone::QtWengoPhone(CWengoPhone & cWengoPhone)
 	: QObjectThreadSafe(NULL),
@@ -110,8 +86,7 @@ QtWengoPhone::QtWengoPhone(CWengoPhone & cWengoPhone)
 	_qtWsDirectory = NULL;
 	_qtProfileBar = NULL;
 	_activeTabBeforeCall = NULL;
-	_contactList = NULL;
-	_contactListTabLayout = NULL;
+	_qtContactList = NULL;
 	_qtFileTransfer = NULL;
 	_chatWindow = NULL;
 
@@ -119,6 +94,7 @@ QtWengoPhone::QtWengoPhone(CWengoPhone & cWengoPhone)
 		boost::bind(&QtWengoPhone::proxyNeedsAuthenticationEventHandler, this, _1, _2);
 	NetworkProxyDiscovery::getInstance().wrongProxyAuthenticationEvent +=
 		boost::bind(&QtWengoPhone::wrongProxyAuthenticationEventHandler, this, _1, _2);
+
 	//Check if the event has not already been sent
 	if (NetworkProxyDiscovery::getInstance().getState() ==
 		NetworkProxyDiscovery::NetworkProxyDiscoveryStateNeedsAuthentication) {
@@ -132,13 +108,15 @@ QtWengoPhone::QtWengoPhone(CWengoPhone & cWengoPhone)
 }
 
 QtWengoPhone::~QtWengoPhone() {
-	//TODO:  delete created objects
+	//TODO delete created objects
 }
 
 void QtWengoPhone::initThreadSafe() {
-	_wengoPhoneWindow = new QMainWindow(NULL);
-	QApplication::setQuitOnLastWindowClosed (false );
+	QApplication::setQuitOnLastWindowClosed(false);
+
 	qRegisterMetaType<QVariant>("QVariant");
+
+	_wengoPhoneWindow = new QMainWindow(NULL);
 
 	_ui = new Ui::WengoPhoneWindow();
 	_ui->setupUi(_wengoPhoneWindow);
@@ -149,184 +127,172 @@ void QtWengoPhone::initThreadSafe() {
 
 	//Translation
 	_qtLanguage = new QtLanguage(_wengoPhoneWindow);
-	connect(_qtLanguage, SIGNAL(translationChangedSignal()), SLOT(slotTranslationChanged()));
-	_qtLanguage->updateTranslation();
 
 	//Install the close event filter
-	QtWengoPhoneEventFilter * qtWengoPhoneEventFilter;
-	qtWengoPhoneEventFilter = new QtWengoPhoneEventFilter(this);
-	_wengoPhoneWindow->installEventFilter(qtWengoPhoneEventFilter);
-	if (!connect (qtWengoPhoneEventFilter, SIGNAL(closeWindow()),_wengoPhoneWindow, SLOT(hide()))) {
-		LOG_FATAL("can't connect closeWindow() signal");
-	}
+	CloseEventFilter * closeEventFilter = new CloseEventFilter(this, SLOT(closeWindow()));
+	_wengoPhoneWindow->installEventFilter(closeEventFilter);
 
-	QGridLayout * callBarLayout = new QGridLayout(_ui->callBarFrame);
+	//QtCallBar
 	_qtCallBar = new QtCallBar(_ui->callBarFrame);
-	connect(_qtLanguage, SIGNAL(translationChangedSignal()), _qtCallBar, SLOT(slotUpdatedTranslation()));
-	callBarLayout->addWidget(_qtCallBar);
-	callBarLayout->setMargin(0);
-	callBarLayout->setSpacing(0);
+	Widget::createLayout(_ui->callBarFrame)->addWidget(_qtCallBar);
+
+	//QtToolBar
+	_qtToolBar = new QtToolBar(*this, _ui, _wengoPhoneWindow);
 
 	//phoneComboBox
-	connect(_qtCallBar, SIGNAL(phoneComboBoxClicked()), SLOT(phoneComboBoxClicked()));
+	SAFE_CONNECT(_qtCallBar, SIGNAL(phoneComboBoxClicked()), SLOT(phoneComboBoxClicked()));
 
-	//Open chat window button
-	_ui->actionOpenChatWindow->setEnabled(false);
-	connect(_ui->actionOpenChatWindow, SIGNAL(triggered()), SLOT(showChatWindow()));
-
-	//webcamButton
+	//QtWebcamButton
 	new QtWebcamButton(_ui->actionEnableVideo);
 
 	//Buttons initialization
-	initButtons();
+	initCallButtons();
 
-	//Dialpad
+	//QtDialpad
 	QtDialpad * qtDialpad = new QtDialpad(this);
-
 	Widget::createLayout(_ui->tabDialpad)->addWidget(qtDialpad->getWidget());
-	qtDialpad->getWidget()->setMaximumSize(196,228);
 
+	//QtHistoryWidget
 	_qtHistoryWidget = NULL;
 
-	//Systray
+	//QtSystray
 	_qtSystray = new QtSystray(this);
 
-	//StatusBar
-	_statusBar = new QtStatusBar(_cWengoPhone, _ui->statusBar);
-
-	//actionShowWengoAccount
-	connect(_ui->actionShowWengoAccount, SIGNAL(triggered()), SLOT(showWengoAccount()));
-
-	//actionEditMyProfile
-	connect(_ui->actionEditMyProfile, SIGNAL(triggered()), SLOT(editMyProfile()));
-
-	//actionClose
-	connect(_ui->actionClose, SIGNAL(triggered()), _wengoPhoneWindow, SLOT(hide()));
-
-	//actionAddContact
-	connect(_ui->actionAddContact, SIGNAL(triggered()), SLOT(addContact()));
-
-	//actionConfiguration
-	connect(_ui->actionConfiguration, SIGNAL(triggered()), SLOT(showConfig()));
-
-	//actionShowForum
-	connect(_ui->actionShowForum, SIGNAL(triggered()), SLOT(showForum()));
-
-	//actionShowAbout
-	connect(_ui->actionShowAbout, SIGNAL(triggered()), SLOT(showAbout()));
-
-	//actionSendSms
-	connect(_ui->actionSendSms, SIGNAL(triggered()), SLOT(sendSms()));
-
-	//actionFaq
-	connect(_ui->actionFaq, SIGNAL (triggered()), SLOT(showFaq()));
-
-	//actionWengoServices
-	connect(_ui->actionWengoServices, SIGNAL(triggered()), SLOT (showCallOut()));
-
-	//Show / Hide groups
-	connect(_ui->actionHideContactGroups, SIGNAL(triggered()), SLOT(showHideGroups()));
-
-	//actionIMAccountSettings
-	connect(_ui->actionIMAccountSettings, SIGNAL(triggered()), SLOT(showAccountSettings()));
-
-	//actionShowHideContactsOffline
-	connect(_ui->actionHideContactsOffline, SIGNAL(triggered()), SLOT(showHideOffLineContacts()));
-
-	//actionCreateConferenceCall
-	connect(_ui->actionCreateConferenceCall, SIGNAL(triggered()), SLOT(showCreateConferenceCall()));
-
-	//actionOutgoingCalls
-	connect(_ui->actionOutgoingCalls, SIGNAL(triggered()), SLOT(eraseHistoryOutgoingCalls()));
-
-	//actionIncomingCalls
-	connect(_ui->actionIncomingCalls, SIGNAL(triggered()), SLOT(eraseHistoryIncomingCalls()));
-
-	//actionMissedCalls
-	connect(_ui->actionMissedCalls, SIGNAL(triggered()), SLOT(eraseHistoryMissedCalls()));
-
-	//actionChatSessions
-	connect(_ui->actionChatSessions, SIGNAL(triggered()), SLOT(eraseHistoryChatSessions()));
-
-	//actionSMS
-	connect(_ui->actionSMS, SIGNAL(triggered()), SLOT(eraseHistorySms()));
-
-	//actionAll
-	connect(_ui->actionAll, SIGNAL(triggered()), SLOT(eraseHistory()));
-
-	//actionSearchContact
-	connect(_ui->actionSearchWengoUsers, SIGNAL(triggered()), SLOT(searchWengoContact()));
-
-	//actionChangeProfile
-	QtUserProfileHandler * qtUserProfileHandler =
-		dynamic_cast<QtUserProfileHandler *>(_cWengoPhone.getCUserProfileHandler().getPresentation());
-	connect(_ui->actionChangeProfile, SIGNAL(triggered()), qtUserProfileHandler, SLOT(showLoginWindow()));
-
-	//actionLogOff
-	connect(_ui->actionLogOff, SIGNAL(triggered()), SLOT(logoff()));
-
-	//Tab selection
-	connect(_ui->tabWidget, SIGNAL(currentChanged(int)), SLOT(tabSelectionChanged(int)));
-
-	//Accept a call
-	connect(_ui->actionAccept, SIGNAL(triggered()), SLOT(acceptCall()));
-
-	//Resume a call
-	connect(_ui->actionHoldResume, SIGNAL(triggered()), SLOT(resumeCall()));
-
-	//Hangup a call
-	connect(_ui->actionHangup, SIGNAL(triggered()), SLOT(hangupCall()));
-
-	connect(this, SIGNAL(connectionStatusEventHandlerSignal(int, int, QString)),
-		SLOT(connectionStatusEventHandlerSlot(int, int, QString)));
-
-	connect(this, SIGNAL(removeHistorySignal()),
-		SLOT(removeHistorySlot()), Qt::QueuedConnection);
+	//QtStatusBar
+	_qtStatusBar = new QtStatusBar(_cWengoPhone, _ui->statusBar);
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
+	//QtBrowserWidget
+	_qtBrowserWidget = new QtBrowserWidget(*this);
 #if (defined OS_WINDOWS) && (defined QT_COMMERCIAL)
 	if (config.getIEActiveXEnable()) {
-		//Embedded Browser
-		_browser = new QtBrowser(NULL);
-		_browser->urlClickedEvent += boost::bind(&QtWengoPhone::urlClickedEventHandler, this, _1);
-		_ui->tabWidget->insertTab(_ui->tabWidget->count(), (QWidget*) _browser->getWidget(), tr("Home"));
-		_browser->setUrl(qApp->applicationDirPath().toStdString() + "/" + LOCAL_WEB_DIR + "/loading.html");
-		_ui->tabWidget->setCurrentWidget((QWidget*) _browser->getWidget());
+		_ui->tabWidget->insertTab(_ui->tabWidget->count(), _qtBrowserWidget->getWidget(), tr("Home"));
+		_ui->tabWidget->setCurrentWidget(_qtBrowserWidget->getWidget());
 	}
 #endif
 
-	//configPanel
+	//QtConfigPanel
 	QtConfigPanel * qtConfigPanel = new QtConfigPanel(_cWengoPhone, _wengoPhoneWindow);
-	connect(_qtLanguage, SIGNAL(translationChangedSignal()), qtConfigPanel, SLOT(slotTranslationChanged()));
-	_configPanelWidget = qtConfigPanel->getWidget();
-	int configPanelIndex = _ui->configPanel->addWidget(_configPanelWidget);
+	int configPanelIndex = _ui->configPanel->addWidget(qtConfigPanel->getWidget());
 	_ui->configPanel->setCurrentIndex(configPanelIndex);
 	_ui->configPanel->hide();
 
 	updatePresentation();
+
+	//Main window size and position saved
 	_wengoPhoneWindow->resize(QSize(config.getProfileWidth(), config.getProfileHeight()));
 	_wengoPhoneWindow->move(QPoint(config.getProfilePosX(), config.getProfilePoxY()));
 
 	if (!config.getCmdLineBackgroundModeEnable()) {
 		_wengoPhoneWindow->show();
 	}
-
-	_qtLanguage->updateTranslation();
 }
 
-void QtWengoPhone::initButtons() {
+QWidget * QtWengoPhone::getWidget() const {
+	return _wengoPhoneWindow;
+}
+
+QtLanguage & QtWengoPhone::getQtLanguage() const {
+	return *_qtLanguage;
+}
+
+QtProfileBar * QtWengoPhone::getQtProfileBar() const {
+	return _qtProfileBar;
+}
+
+QtBrowserWidget & QtWengoPhone::getQtBrowserWidget() const {
+	return *_qtBrowserWidget;
+}
+
+CWengoPhone & QtWengoPhone::getCWengoPhone() const {
+	return _cWengoPhone;
+}
+
+void QtWengoPhone::setQtSms(QtSms * qtSms) {
+	_qtSms = qtSms;
+}
+
+QtSms * QtWengoPhone::getQtSms() const {
+	return _qtSms;
+}
+
+void QtWengoPhone::setQtWsDirectory(QtWsDirectory * qtWsDirectory) {
+	_qtWsDirectory = qtWsDirectory;
+}
+
+QtWsDirectory * QtWengoPhone::getQtWsDirectory() const {
+	return _qtWsDirectory;
+}
+
+QtToolBar & QtWengoPhone::getQtToolBar() const {
+	return *_qtToolBar;
+}
+
+QtStatusBar & QtWengoPhone::getQtStatusBar() const {
+	return *_qtStatusBar;
+}
+
+QtSystray & QtWengoPhone::getQtSystray() const {
+	return *_qtSystray;
+}
+
+QtCallBar & QtWengoPhone::getQtCallBar() const {
+	return *_qtCallBar;
+}
+
+void QtWengoPhone::setQtSubscribe(QtSubscribe * qtSubscribe) {
+	_qtSubscribe = qtSubscribe;
+}
+
+QtSubscribe * QtWengoPhone::getQtSubscribe() const {
+	return _qtSubscribe;
+}
+
+void QtWengoPhone::setChatWindow(QWidget * chatWindow) {
+	if (!chatWindow) {
+		_ui->actionOpenChatWindow->setEnabled(false);
+	}
+	else {
+		_chatWindow = chatWindow;
+		_ui->actionOpenChatWindow->setEnabled(true);
+	}
+}
+
+QWidget * QtWengoPhone::getChatWindow() const {
+	return _chatWindow;
+}
+
+void QtWengoPhone::setQtContactList(QtContactList * qtContactList) {
+	_qtContactList = qtContactList;
+	Widget::createLayout(_ui->tabContactList)->addWidget(qtContactList->getWidget());
+
+	LOG_DEBUG("QtContactList added");
+}
+
+QtContactList * QtWengoPhone::getQtContactList() const {
+	return _qtContactList;
+}
+
+void QtWengoPhone::setQtHistoryWidget(QtHistoryWidget * qtHistoryWidget) {
+	_qtHistoryWidget = qtHistoryWidget;
+	Widget::createLayout(_ui->tabHistory)->addWidget(_qtHistoryWidget->getWidget());
+
+	LOG_DEBUG("QtHistoryWidget added");
+}
+
+void QtWengoPhone::initCallButtons() {
 	//callButton
-	connect(_qtCallBar, SIGNAL(callButtonClicked()), SLOT(callButtonClicked()));
+	SAFE_CONNECT(_qtCallBar, SIGNAL(callButtonClicked()), SLOT(callButtonClicked()));
 	enableCallButton();
 
 	//hangUpButton
-	connect(_qtCallBar, SIGNAL(hangUpButtonClicked()), SLOT(hangUpButtonClicked()));
+	SAFE_CONNECT(_qtCallBar, SIGNAL(hangUpButtonClicked()), SLOT(hangUpButtonClicked()));
 	_qtCallBar->setEnabledHangUpButton(false);
 
 	//phoneComboBox
-	connect(_qtCallBar, SIGNAL(phoneComboBoxReturnPressed()), SLOT(callButtonClicked()));
-	connect(_qtCallBar, SIGNAL(phoneComboBoxEditTextChanged(const QString &)), SLOT(enableCallButton()));
+	SAFE_CONNECT(_qtCallBar, SIGNAL(phoneComboBoxReturnPressed()), SLOT(callButtonClicked()));
+	SAFE_CONNECT(_qtCallBar, SIGNAL(phoneComboBoxEditTextChanged(const QString &)), SLOT(enableCallButton()));
 }
 
 void QtWengoPhone::enableCallButton() {
@@ -336,7 +302,7 @@ void QtWengoPhone::enableCallButton() {
 
 void QtWengoPhone::hangUpButtonClicked() {
 	QtContactCallListWidget * widget =
-		dynamic_cast<QtContactCallListWidget *>(_ui->tabWidget->currentWidget());
+		(QtContactCallListWidget *) _ui->tabWidget->currentWidget();
 	if (widget) {
 		widget->hangup();
 		//Widget is deleted automagically
@@ -350,7 +316,7 @@ void QtWengoPhone::hangUpButtonClicked() {
 	}
 
 	for (int i = 0; i < _ui->tabWidget->count(); i++) {
-		widget = dynamic_cast<QtContactCallListWidget *>(_ui->tabWidget->widget(i));
+		widget = (QtContactCallListWidget *) _ui->tabWidget->widget(i);
 		if (widget) {
 			widget->hangup();
 			//set the last active page
@@ -362,17 +328,6 @@ void QtWengoPhone::hangUpButtonClicked() {
 			return;
 		}
 	}
-}
-
-int QtWengoPhone::findFirstCallTab() {
-	QtContactCallListWidget * widget;
-	for (int i = 0; i < _ui->tabWidget->count(); i++) {
-		widget = dynamic_cast<QtContactCallListWidget *>(_ui->tabWidget->widget(i));
-		if (widget) {
-			return i;
-		}
-	}
-	return -1;
 }
 
 void QtWengoPhone::callButtonClicked() {
@@ -399,7 +354,6 @@ void QtWengoPhone::makeCallErrorEventHandlerThreadSafe() {
 }
 
 void QtWengoPhone::addPhoneCall(QtPhoneCall * qtPhoneCall) {
-
 	_activeTabBeforeCall = _ui->tabWidget->currentWidget();
 
 	QtContactCallListWidget * qtContactCallListWidget = new QtContactCallListWidget(_cWengoPhone,_wengoPhoneWindow);
@@ -407,8 +361,8 @@ void QtWengoPhone::addPhoneCall(QtPhoneCall * qtPhoneCall) {
 	_ui->tabWidget->setCurrentWidget(qtContactCallListWidget);
 	qtContactCallListWidget->addPhoneCall(qtPhoneCall);
 
-	connect(qtContactCallListWidget, SIGNAL(startConferenceSignal(PhoneCall *, PhoneCall *)),
-	        SLOT(addToConference(PhoneCall *, PhoneCall *)));
+	SAFE_CONNECT(qtContactCallListWidget, SIGNAL(startConferenceSignal(PhoneCall *, PhoneCall *)),
+			SLOT(addToConference(PhoneCall *, PhoneCall *)));
 
 	_qtCallBar->setEnabledHangUpButton(true);
 
@@ -457,10 +411,6 @@ void QtWengoPhone::addToConference(QString phoneNumber, PhoneCall * targetCall) 
 	}
 }
 
-void QtWengoPhone::logoff() {
-	_cWengoPhone.getCUserProfileHandler().setCurrentUserProfile(String::null, WengoAccount::empty);
-}
-
 void QtWengoPhone::addToConference(PhoneCall * sourceCall, PhoneCall * targetCall) {
 	if (_cWengoPhone.getCUserProfileHandler().getCUserProfile()) {
 		//Bad and Ugly but works...
@@ -486,7 +436,7 @@ void QtWengoPhone::addToConference(PhoneCall * sourceCall, PhoneCall * targetCal
 						//Add the target to source and remove the target tab
 						for (int j = 0; j < _ui->tabWidget->count(); j++) {
 							QtContactCallListWidget * toRemove =
-								dynamic_cast<QtContactCallListWidget *>(_ui->tabWidget->widget(j));
+								(QtContactCallListWidget *) _ui->tabWidget->widget(j);
 							if (toRemove) {
 								if (toRemove->hasPhoneCall(targetCall)) {
 									QtPhoneCall * qtPhoneCall = toRemove->takeQtPhoneCall(targetCall);
@@ -518,7 +468,7 @@ void QtWengoPhone::addToConference(QtPhoneCall * qtPhoneCall) {
 	for (int i = 0; i < nbtab; i++) {
 		if (_ui->tabWidget->tabText(i) == QString(tr("Conference"))) {
 			//i is the index of the conference tab
-			qtContactCallListWidget = dynamic_cast<QtContactCallListWidget *>(_ui->tabWidget->widget(i));
+			qtContactCallListWidget = (QtContactCallListWidget *) _ui->tabWidget->widget(i);
 			qtContactCallListWidget->addPhoneCall(qtPhoneCall);
 			_ui->tabWidget->setCurrentWidget(qtContactCallListWidget);
 			return;
@@ -535,76 +485,6 @@ void QtWengoPhone::addToConference(QtPhoneCall * qtPhoneCall) {
 	_qtCallBar->setEnabledHangUpButton(true);
 }
 
-void QtWengoPhone::setContactList(QtContactList * qtContactList) {
-	if (!_contactListTabLayout) {
-		_contactListTabLayout = Widget::createLayout(_ui->tabContactList);
-	}
-
-	_contactList = qtContactList;
-	_contactListTabLayout->addWidget(_contactList->getWidget());
-
-	LOG_DEBUG("QtContactList added");
-}
-
-void QtWengoPhone::setHistory(QtHistoryWidget * qtHistoryWidget) {
-	if (qtHistoryWidget != NULL) {
-		Widget::createLayout(_ui->tabHistory)->addWidget(qtHistoryWidget->getWidget());
-	} else {
-		delete _ui->tabHistory->layout();
-	}
-
-	_qtHistoryWidget = qtHistoryWidget;
-}
-
-void QtWengoPhone::removeHistory() {
-	removeHistorySignal();
-}
-
-void QtWengoPhone::removeHistorySlot() {
-	delete _qtHistoryWidget;
-	_qtHistoryWidget = NULL;
-	delete _ui->tabHistory->layout();
-}
-
-void QtWengoPhone::setPhoneCall(QtContactCallListWidget * qtContactCallListWidget) {
-}
-
-void QtWengoPhone::setSms(QtSms * qtSms) {
-	_qtSms = qtSms;
-}
-
-void QtWengoPhone::setWsDirectory(QtWsDirectory * qtWsDirectory) {
-	_qtWsDirectory = qtWsDirectory;
-}
-
-QtSms * QtWengoPhone::getSms() const {
-	return _qtSms;
-}
-
-QtWsDirectory * QtWengoPhone::getQtWsDirectory() const {
-	return _qtWsDirectory;
-}
-
-QtStatusBar & QtWengoPhone::getStatusBar() const {
-	return *_statusBar;
-}
-
-QtSystray & QtWengoPhone::getSystray() const {
-	return *_qtSystray;
-}
-
-QtCallBar & QtWengoPhone::getCallBar() const {
-	return *_qtCallBar;
-}
-
-void QtWengoPhone::setSubscribe(QtSubscribe * qtSubscribe) {
-	_qtSubscribe = qtSubscribe;
-}
-
-QtSubscribe * QtWengoPhone::getSubscribe() const {
-	return _qtSubscribe;
-}
-
 void QtWengoPhone::updatePresentation() {
 	typedef PostEvent0<void ()> MyPostEvent;
 	MyPostEvent * event = new MyPostEvent(boost::bind(&QtWengoPhone::updatePresentationThreadSafe, this));
@@ -619,7 +499,7 @@ void QtWengoPhone::updatePresentationThreadSafe() {
 		_ui->actionShowWengoAccount->setEnabled(hasWengoAccount);
 		_ui->actionSendSms->setEnabled(hasWengoAccount);
 		_ui->actionCreateConferenceCall->setEnabled(hasWengoAccount);
-		_ui->actionSearchWengoUsers->setEnabled(hasWengoAccount);
+		_ui->actionSearchWengoContact->setEnabled(hasWengoAccount);
 	}
 }
 
@@ -649,30 +529,11 @@ void QtWengoPhone::dialpad(const std::string & tone, const std::string & soundFi
 	}
 }
 
-void QtWengoPhone::showWengoAccount() {
-	if (_cWengoPhone.getCUserProfileHandler().getCUserProfile()) {
-		//FIXME: should not be called when no UserProfile set
-		WsUrl::showWengoAccount();
-	}
-}
-
-void QtWengoPhone::editMyProfile() {
-	if (_cWengoPhone.getCUserProfileHandler().getCUserProfile()) {
-		//FIXME: this method should not be called if no UserProfile has been set
-		QtProfileDetails qtProfileDetails(*_cWengoPhone.getCUserProfileHandler().getCUserProfile(),
-			_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getUserProfile(), _wengoPhoneWindow);
-		//TODO: UserProfile must be updated if QtProfileDetails was accepted
-		qtProfileDetails.show();
-
-		LOG_DEBUG("edit user profile");
-	}
-}
-
 void QtWengoPhone::exitApplication() {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
 	_qtSystray->hide();
-	delete _qtSystray;
+	OWSAFE_DELETE(_qtSystray);
 
 	//Save the window size
 	QSize winsize = _wengoPhoneWindow->size();
@@ -687,188 +548,6 @@ void QtWengoPhone::exitApplication() {
 	QApplication::closeAllWindows();
 	QCoreApplication::processEvents();
 	QCoreApplication::exit(EXIT_SUCCESS);
-}
-
-void QtWengoPhone::addContact() {
-	 if (_cWengoPhone.getCUserProfileHandler().getCUserProfile()) {
-		//FIXME: this method should not be called if no UserProfile has been set
-		ContactProfile contactProfile;
-		QtProfileDetails qtProfileDetails(*_cWengoPhone.getCUserProfileHandler().getCUserProfile(),
-		 		contactProfile, _wengoPhoneWindow);
-		if (qtProfileDetails.show()) {
-			_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCContactList().addContact(contactProfile);
-		}
-	}
-}
-
-void QtWengoPhone::showConfig() {
-	QtWengoConfigDialog dialog(_cWengoPhone, _wengoPhoneWindow);
-	dialog.show();
-}
-
-void QtWengoPhone::showForum() {
-	WsUrl::showWengoForum();
-}
-
-void QtWengoPhone::showHelp() {
-}
-
-void QtWengoPhone::showFaq() {
-	WsUrl::showWengoFAQ();
-}
-
-void QtWengoPhone::showCallOut() {
-	WsUrl::showWengoCallOut();
-}
-
-void QtWengoPhone::showSms() {
-	WsUrl::showWengoSMS();
-}
-
-void QtWengoPhone::searchWengoContact() {
-	if (_qtWsDirectory) {
-		_qtWsDirectory->show();
-	}
-}
-
-void QtWengoPhone::showAbout() {
-	static QtAbout * aboutWindow = new QtAbout(_wengoPhoneWindow);
-	aboutWindow->getWidget()->show();
-}
-
-void QtWengoPhone::showVoiceMail() {
-	WsUrl::showWengoVoiceMail();
-}
-
-void QtWengoPhone::showContactList() {
-}
-
-void QtWengoPhone::sendSms() {
-	if (_qtSms) {
-		_qtSms->getWidget()->show();
-	}
-}
-
-void QtWengoPhone::showAccountSettings() {
-	if (_cWengoPhone.getCUserProfileHandler().getCUserProfile()) {
-		//FIXME: IMAccountManager must not use UserProfile but only CUserProfile
-		QtIMAccountManager imAccountManager(_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getUserProfile(),
-			true, _wengoPhoneWindow);
-	}
-}
-
-//FIXME hack hack hack hack tired of it
-void QtWengoPhone::showCreateConferenceCall() {
-	if (_cWengoPhone.getCUserProfileHandler().getCUserProfile()) {
-		QDialog * conferenceDialog = qobject_cast<QDialog *>(WidgetFactory::create(":/forms/phonecall/ConferenceCallWidget.ui", _wengoPhoneWindow));
-
-		QLabel * conferenceLabel = Object::findChild<QLabel *>(conferenceDialog, "conferenceLabel");
-		WidgetBackgroundImage::setBackgroundImage(conferenceLabel, ":pics/headers/conference.png", true);
-
-		int ret = conferenceDialog->exec();
-
-		QLineEdit * phoneNumber1LineEdit = Object::findChild<QLineEdit *>(conferenceDialog, "phoneNumber1LineEdit");
-		QLineEdit * phoneNumber2LineEdit = Object::findChild<QLineEdit *>(conferenceDialog, "phoneNumber2LineEdit");
-
-		if (ret == QDialog::Accepted) {
-			IPhoneLine * phoneLine = _cWengoPhone.getCUserProfileHandler().getCUserProfile()->getUserProfile().getActivePhoneLine();
-
-			if (phoneLine != NULL) {
-				ConferenceCall * confCall = new ConferenceCall(*phoneLine);
-				confCall->addPhoneNumber(phoneNumber1LineEdit->text().toStdString());
-				confCall->addPhoneNumber(phoneNumber2LineEdit->text().toStdString());
-			} else {
-				LOG_DEBUG("phoneLine is NULL");
-			}
-		}
-	}
-}
-//!FIXME
-
-void QtWengoPhone::urlClickedEventHandler(std::string url) {
-	LOG_DEBUG(url);
-
-	//find anchor
-	std::string anchor;
-	int sharpPos = QString::fromStdString(url).indexOf('#');
-	if (sharpPos != -1) {
-		anchor = QString::fromStdString(url).right(url.length() - sharpPos - 1).toStdString();
-	}
-
-	if (anchor == ANCHOR_CONTACTLIST) {
-		showContactList();
-	}
-	else if (anchor == ANCHOR_HISTORY) {
-		showHistory();
-	}
-	else if (anchor == ANCHOR_CONFIGURATION) {
-		showConfig();
-	}
-	else if (anchor == ANCHOR_DIALPAD) {
-
-	}
-	else if (anchor == ANCHOR_ADDCONTACT) {
-		addContact();
-	}
-	else if (anchor == ANCHOR_SELFCARE) {
-		showWengoAccount();
-	}
-	else if (anchor == ANCHOR_FORUM) {
-		showForum();
-	}
-}
-
-void QtWengoPhone::expandConfigPanel() {
-	static bool expand = true;
-
-	if (expand) {
-		_ui->configPanel->show();
-	} else {
-		_ui->configPanel->hide();
-	}
-	expand = !expand;
-}
-
-void QtWengoPhone::eraseHistoryOutgoingCalls() {
-	if (_cWengoPhone.getCUserProfileHandler().getCUserProfile() &&
-		_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCHistory()) {
-		_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCHistory()->clear(HistoryMemento::OutgoingCall);
-	}
-}
-
-void QtWengoPhone::eraseHistoryIncomingCalls() {
-	if (_cWengoPhone.getCUserProfileHandler().getCUserProfile() &&
-		_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCHistory()) {
-		_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCHistory()->clear(HistoryMemento::IncomingCall);
-	}
-}
-
-void QtWengoPhone::eraseHistoryMissedCalls() {
-	if (_cWengoPhone.getCUserProfileHandler().getCUserProfile() &&
-		_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCHistory()) {
-		_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCHistory()->clear(HistoryMemento::MissedCall);
-	}
-}
-
-void QtWengoPhone::eraseHistoryChatSessions() {
-	if (_cWengoPhone.getCUserProfileHandler().getCUserProfile() &&
-		_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCHistory()) {
-		_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCHistory()->clear(HistoryMemento::ChatSession);
-	}
-}
-
-void QtWengoPhone::eraseHistorySms() {
-	if (_cWengoPhone.getCUserProfileHandler().getCUserProfile() &&
-		_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCHistory()) {
-		_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCHistory()->clear(HistoryMemento::OutgoingSmsOk);
-	}
-}
-
-void QtWengoPhone::eraseHistory() {
-	if (_cWengoPhone.getCUserProfileHandler().getCUserProfile() &&
-		_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCHistory()) {
-		_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCHistory()->clear(HistoryMemento::Any);
-	}
 }
 
 void QtWengoPhone::phoneComboBoxClicked() {
@@ -919,144 +598,12 @@ void QtWengoPhone::phoneComboBoxClicked() {
 	}
 }
 
-QMenu * QtWengoPhone::createStatusMenu() {
-	QMenu * menu = new QMenu(tr("Status"));
-
-	switch (_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getUserProfile().getPresenceState()) {
-	case EnumPresenceState::PresenceStateAway:
-		menu->setIcon(QIcon(":/pics/status/away.png"));
-		break;
-	case EnumPresenceState::PresenceStateOnline:
-		menu->setIcon(QIcon(":/pics/status/online.png"));
-		break;
-	case EnumPresenceState::PresenceStateInvisible:
-		menu->setIcon(QIcon(":/pics/status/offline.png"));
-		break;
-	case EnumPresenceState::PresenceStateDoNotDisturb:
-		menu->setIcon(QIcon(":/pics/status/donotdisturb.png"));
-		break;
-	default:
-		menu->setIcon(QIcon(":/pics/status/online.png"));
-		break;
-	}
-
-	QAction * action = menu->addAction(QIcon(":/pics/status/online.png"), tr("Online"));
-	connect(action, SIGNAL(triggered(bool)), _qtProfileBar, SLOT(onlineClicked(bool)));
-
-	action = menu->addAction(QIcon(":/pics/status/donotdisturb.png"), tr("DND"));
-	connect(action, SIGNAL(triggered(bool)), _qtProfileBar, SLOT(dndClicked(bool)));
-
-	action = menu->addAction(QIcon(":/pics/status/offline.png"), tr("Invisible"));
-	connect(action, SIGNAL(triggered(bool)), _qtProfileBar, SLOT(invisibleClicked(bool)));
-
-	action = menu->addAction(QIcon(":/pics/status/away.png"), tr("Away"));
-	connect(action, SIGNAL(triggered(bool)), _qtProfileBar, SLOT(awayClicked(bool)));
-
-	return menu;
-}
-
-void QtWengoPhone::setChatWindow(QWidget * chatWindow) {
-	if (!chatWindow) {
-		_ui->actionOpenChatWindow->setEnabled(false);
-	}
-	else {
-		_chatWindow = chatWindow;
-		_ui->actionOpenChatWindow->setEnabled(true);
-	}
-}
-
-void QtWengoPhone::showChatWindow() {
-	if (_chatWindow) {
-		_chatWindow->showNormal();
-		_chatWindow->activateWindow();
-	}
-}
-
-void QtWengoPhone::slotSystrayMenuCallBlank(bool checked) {
-	LOG_DEBUG("Placing a blank call from systray.");
-	_ui->tabWidget->setCurrentIndex(2);
-	getWidget()->show();
-	getWidget()->raise();
-	getWidget()->setWindowState(getWidget()->windowState() & ~Qt::WindowMinimized | Qt::WindowActive);
-}
-
 void QtWengoPhone::exitEvent() {
 	QCoreApplication::exit(EXIT_SUCCESS);
 }
 
 void QtWengoPhone::showHistory() {
 	_ui->tabWidget->setCurrentWidget(_ui->tabHistory);
-}
-
-void QtWengoPhone::connectionStatusEventHandler(int totalSteps, int currentStep, const std::string & infoMsg) {
-	connectionStatusEventHandlerSignal(totalSteps, currentStep, QString::fromStdString(infoMsg));
-}
-
-void QtWengoPhone::connectionStatusEventHandlerSlot(int totalSteps, int currentStep, QString infoMsg) {
-
-	//int buttonClicked;
-
-	//if (totalSteps == 0 && curStep == 0)
-	//	buttonClicked = QMessageBox::information(_wengoPhoneWindow, tr("WengoPhone - Network information"),
-	//		infoMsg, QMessageBox::Ok);
-}
-
-void QtWengoPhone::tabSelectionChanged(int index) {
-
-}
-
-void QtWengoPhone::acceptCall() {
-	int callIndex = findFirstCallTab();
-	if (callIndex == -1) {
-		return;
-	}
-	QtContactCallListWidget * widget = dynamic_cast<QtContactCallListWidget *>(_ui->tabWidget->widget(callIndex));
-	if (!widget) {
-		return;
-	}
-
-	QtPhoneCall * qtPhoneCall = widget->getFirstQtPhoneCall();
-	if (qtPhoneCall) {
-		qtPhoneCall->acceptActionTriggered(true);
-	}
-}
-
-void QtWengoPhone::resumeCall() {
-	int callIndex = findFirstCallTab();
-	if (callIndex == -1) {
-		return;
-	}
-	QtContactCallListWidget * widget = dynamic_cast<QtContactCallListWidget *>(_ui->tabWidget->widget(callIndex));
-	if (!widget) {
-		return;
-	}
-
-	QtPhoneCall * qtPhoneCall = widget->getFirstQtPhoneCall();
-	if (qtPhoneCall) {
-		qtPhoneCall->holdResumeActionTriggered(true);
-	}
-}
-
-void QtWengoPhone::hangupCall() {
-	int callIndex = findFirstCallTab();
-	if (callIndex == -1) {
-		return;
-	}
-	QtContactCallListWidget * widget;
-
-	widget = dynamic_cast<QtContactCallListWidget *> (_ui->tabWidget->widget(callIndex));
-	if (!widget) {
-		return;
-	}
-	widget->hangup();
-}
-
-void QtWengoPhone::hideMainWindow() {
-	_wengoPhoneWindow->hide();
-}
-
-void QtWengoPhone::slotTranslationChanged() {
-	_ui->retranslateUi(_wengoPhoneWindow);
 }
 
 void QtWengoPhone::currentUserProfileWillDieEventHandlerSlot() {
@@ -1069,12 +616,16 @@ void QtWengoPhone::currentUserProfileWillDieEventHandlerSlot() {
 		OWSAFE_DELETE(_qtProfileBar);
 	}
 
-	if (_contactList) {
-		delete _contactListTabLayout;
-		_contactListTabLayout = NULL;
-		_contactList->cleanup();
+	if (_qtContactList) {
+		_ui->profileBar->layout()->removeWidget(_qtContactList->getWidget());
+		_qtContactList->cleanup();
 		//_contactList is deleted in CContactList
-		_contactList = NULL;
+		OWSAFE_DELETE(_qtContactList);
+	}
+
+	if (_qtHistoryWidget) {
+		_ui->tabHistory->layout()->removeWidget(_qtHistoryWidget->getWidget());
+		OWSAFE_DELETE(_qtHistoryWidget);
 	}
 }
 
@@ -1089,10 +640,8 @@ void QtWengoPhone::userProfileInitializedEventHandlerSlot() {
 		*_cWengoPhone.getCUserProfileHandler().getCUserProfile(),
 		_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getUserProfile().getConnectHandler(),
 		_ui->profileBar);
-	connect(_qtProfileBar, SIGNAL(myPresenceStatusEventSignal(QVariant )),
-		_qtSystray, SLOT(setSystrayIcon(QVariant )), Qt::QueuedConnection);
-	connect(_qtLanguage, SIGNAL(translationChangedSignal()),
-		_qtProfileBar, SLOT(slotTranslationChanged()));
+	SAFE_CONNECT_RECEIVER_TYPE(_qtProfileBar, SIGNAL(myPresenceStatusEventSignal(QVariant)),
+		_qtSystray, SLOT(setSystrayIcon(QVariant)), Qt::QueuedConnection);
 
 	//Add the profile bar
 	int profileBarIndex = _ui->profileBar->addWidget(_qtProfileBar);
@@ -1103,33 +652,6 @@ void QtWengoPhone::userProfileInitializedEventHandlerSlot() {
 	_qtSystray->setSystrayIcon(EnumPresenceState::MyPresenceStatusOk);
 
 	_qtFileTransfer = new QtFileTransfer(this, _cWengoPhone.getWengoPhone().getCoIpManager());
-}
-
-void QtWengoPhone::showHideGroups() {
-	if (_contactList) {
-		Config & config = ConfigManager::getInstance().getCurrentConfig();
-		bool showHide = config.getShowGroups();
-		if (showHide) {
-			config.set(Config::GENERAL_SHOW_GROUPS_KEY,false);
-			_contactList->showHideGroups();
-		} else {
-			config.set(Config::GENERAL_SHOW_GROUPS_KEY,true);
-			_contactList->showHideGroups();
-		}
-	}
-}
-
-void QtWengoPhone::showHideOffLineContacts() {
-	if (_contactList) {
-		Config & config = ConfigManager::getInstance().getCurrentConfig();
-		bool showHide = config.getShowOfflineContacts();
-		if (showHide) {
-			config.set(Config::GENERAL_SHOW_OFFLINE_CONTACTS_KEY, false);
-		} else {
-			config.set(Config::GENERAL_SHOW_OFFLINE_CONTACTS_KEY, true);
-		}
-		_contactList->hideOffLineContacts();
-	}
 }
 
 void QtWengoPhone::proxyNeedsAuthenticationEventHandler(NetworkProxyDiscovery & sender, NetworkProxy networkProxy) {
@@ -1164,6 +686,7 @@ void QtWengoPhone::proxyNeedsAuthenticationEventHandlerThreadSafe(NetworkProxy n
 	}
 }
 
-QtBrowser * QtWengoPhone::getQtBrowser() {
-	return _browser;
+void QtWengoPhone::closeWindow() {
+	_wengoPhoneWindow->showMinimized();
+	_wengoPhoneWindow->hide();
 }
