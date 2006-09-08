@@ -71,6 +71,10 @@ public:
 	 */
 	 virtual void setContactList(const StringList & contactList);
 
+	 StringList getContactList() const {
+		 return _contactIdList;
+	 }
+
 protected:
 
 	/**
