@@ -68,13 +68,13 @@
 
 #ifdef DO_ECHO_CAN
 
-/*
 #define ECHO_SYNC_LOCK(x) if (s->ec) g_mutex_lock(s->ecmux)
 #define ECHO_SYNC_UNLOCK(x) if (s->ec) g_mutex_unlock(s->ecmux)
-*/
 
+/*
 #define ECHO_SYNC_LOCK(x)
 #define ECHO_SYNC_UNLOCK(x)
+*/
 
 #define NO_ECHO__SUPPRESSOR 1	
 #define abs(x) ((x>=0)?x:(-x))
@@ -834,8 +834,10 @@ ph_handle_network_data(phastream_t *stream)
   struct timeval now, now2;
 
   DBG_DYNA_AUDIO_RX("ph_handle_network_data :: start\n");
+#ifdef DO_ECHO_CAN
   DBG_DYNA_AUDIO_ECHO("echo cirbuf size %d\n", stream->sent_cnt - stream->read_cnt);
-
+#endif
+  
 #if 0
   freespace = audio_stream_get_out_space(stream, &used); 
   if (used*2 >= codec->decoded_framesize)
@@ -973,6 +975,7 @@ ph_media_retrieve_decoded_frame(phastream_t *stream, ph_mediabuf_t *mbf, int clo
       mbf->next = decodedlen;
       stream->ms.rxts_inc += decodedlen/2;
       resampledlen = decodedlen << 1;
+      DBG_DYNA_AUDIO_RX("post resampling:(%d,%d,%d,%d)\n", codedlen, decodedlen, resampledlen, framesize);
     }
   }
 #else
@@ -1044,10 +1047,8 @@ ph_audio_play_cbk(phastream_t *stream, void *playbuf, int playbufsize)
   }
 #endif
 
-  // while start :
-  // read packets from the network
-  // the best case scenario is that one packet is ready to go
-  // we do not try to read more than 4 packets in a row
+
+  // prepare next increment for the RTP polling
   stream->ms.rxts_inc = 0;
 #ifdef DO_CONF
   if (stream->to_mix)
@@ -1056,173 +1057,213 @@ ph_audio_play_cbk(phastream_t *stream, void *playbuf, int playbufsize)
   }
 #endif
 
-  while (stream->ms.running && (playbufsize >= internal_framesize))
-  {
-    ph_mediabuf_t spkrbuf;
-    ph_mediabuf_init(&spkrbuf, playbuf, internal_framesize);
+	// while start :
+	// read packets from the network
+	// the best case scenario is that one packet is ready to go
+	// we do not try to read more than 4 packets in a row
+	while (stream->ms.running && (playbufsize >= internal_framesize))
+	{
+		ph_mediabuf_t spkrbuf;
+		ph_mediabuf_init(&spkrbuf, playbuf, internal_framesize);
 
+        // FLOWGRAPH STEP
+        // SPIKE_AUDIO_FLOWGRAPH: pull data from the network, resample and potential conf join
+        // BEGIN GRAPH NODE
 #ifdef DO_CONF
-    if (stream->to_mix)
-    {
-      CONF_LOCK(stream);
-      if (stream->to_mix && !stream->to_mix->ms.suspended)
-      {
-        int len2;
-        len = ph_media_retrieve_decoded_frame(stream, &stream->data_in, internal_clockrate);
-        len2 = ph_media_retrieve_decoded_frame(stream->to_mix, &stream->to_mix->data_in, internal_clockrate);
-        ph_mediabuf_mixmedia2(&spkrbuf, &stream->data_in, &stream->to_mix->data_in, internal_framesize/2);
-        len = spkrbuf.next * 2;
-      }
-      CONF_UNLOCK(stream);
-    }
-    else
-    {
-      len = ph_media_retrieve_decoded_frame(stream, &spkrbuf, internal_clockrate);
-    }
+		if (stream->to_mix)
+		{
+			// pull data for all the conf participants
+			CONF_LOCK(stream);
+			if (stream->to_mix && !stream->to_mix->ms.suspended)
+			{
+				int len2;
+				len = ph_media_retrieve_decoded_frame(stream, &stream->data_in, internal_clockrate);
+				len2 = ph_media_retrieve_decoded_frame(stream->to_mix, &stream->to_mix->data_in, internal_clockrate);
+				ph_mediabuf_mixmedia2(&spkrbuf, &stream->data_in, &stream->to_mix->data_in, internal_framesize/2);
+				len = spkrbuf.next * 2;
+			}
+			CONF_UNLOCK(stream);
+		}
+		else
+		{
+			// pull data for the stream
+			len = ph_media_retrieve_decoded_frame(stream, &spkrbuf, internal_clockrate);
+		}
 #else
-    len = ph_media_retrieve_decoded_frame(stream, &spkrbuf, internal_clockrate);
+		// pull data for the stream
+		len = ph_media_retrieve_decoded_frame(stream, &spkrbuf, internal_clockrate);
 #endif
 
-    if (!len)
-    {
-      break;
-    }
+        // if nothing could be retrieved the flowgraph stops here
+        if (!len)
+        {
+            break;
+        }
 
-    // Here we have managed to retrieve audio data from the RX path at frequency 'internal_clockrate'
+        // Here we have managed to retrieve audio data from the RX path at frequency 'internal_clockrate'
 
-    // SPIKE_HDX: if (mode == MIC has priority) and MIC is playing, attenuate SPK
-    if ((stream->hdxmode == PH_HDX_MODE_MIC) && !stream->hdxsilence)
-    {
-      short *samples = (short *) playbuf;
-      int nsamples = len >> 1;
-      const int HDXSHIFT = 7;
-      while(nsamples--)
-      {
-        *samples = *samples >> HDXSHIFT;
-        samples++;
-      }
-    }
+        // FLOWGRAPH STEP
+        // SPIKE_AUDIO_FLOWGRAPH: half-duplex: MIC driven attenuation of SPK
+        // BEGIN GRAPH NODE
+        if ((stream->hdxmode == PH_HDX_MODE_MIC) && !stream->hdxsilence)
+        {
+            short *samples = (short *) playbuf;
+            int nsamples = len >> 1;
+            const int HDXSHIFT = 7;
+            while(nsamples--)
+            {
+                *samples = *samples >> HDXSHIFT;
+                samples++;
+            }
+        }
 
+        // FLOWGRAPH STEP
+        // SPIKE_AUDIO_FLOWGRAPH: snapshot of SPK datas for the AEC
+        // BEGIN GRAPH NODE
 #ifdef DO_ECHO_CAN
-    if (stream->using_out_callback)
-    {
-      store_pcm(stream, playbuf, len);
-    }
+        if (stream->using_out_callback)
+        {
+            store_pcm(stream, playbuf, len);
+        }
 #endif
 
-    // SPIKE_HDX: if (mode == SPK has priority) update SPK voice activity detection
-    if (stream->hdxmode == PH_HDX_MODE_SPK)
-    {
-      stream->spksilence = ph_vad_update0(&stream->cngo, playbuf, len);
-    }
+        // FLOWGRAPH STEP
+        // SPIKE_AUDIO_FLOWGRAPH: half-duplex: SPK driven analysys of the SPK activity
+        // BEGIN GRAPH NODE
+        // SPIKE_HDX: if (mode == SPK has priority) update SPK voice activity detection
+        if (stream->hdxmode == PH_HDX_MODE_SPK)
+        {
+            stream->spksilence = ph_vad_update0(&stream->cngo, playbuf, len);
+        }
 
-    /* save played data */
-    if (stream->lastframe)
-    {
-      memcpy(stream->lastframe, playbuf, len);
-    }
+        /* if we need the last saved frame, save it */
+        // note: in 28/07/2006 code it is always 0
+        if (stream->lastframe)
+        {
+            memcpy(stream->lastframe, playbuf, len);
+        }
 
 #ifdef PH_USE_RESAMPLE
-    if (needResample)
-    {
-      DBG_DYNA_AUDIO("RESAMPLE: ph_audio_play_cbk: need resampling with recbufsize: %d\n", len);
-      resampledLen = 0;
-      ph_resample_audio0(stream->resample_audiodrv_ctx_spk, playbuf, len, savedPlayBuf, &resampledLen);
-      DBG_DYNA_AUDIO("RESAMPLE: ph_audio_play_cbk: after resampling with resampledSize: %d\n", resampledLen);
-      savedPlayBuf += resampledLen;
-      savedBufSize -= resampledLen;
-      if (resampledLen!=0)
-      {
-        played += len;
-      }
-      audio_drv_played += resampledLen;
-      if (savedBufSize <= 0)
-      {
-          break;
-      }
-    }
-    else
+        if (needResample)
+        {
+            DBG_DYNA_AUDIO("RESAMPLE: ph_audio_play_cbk: need resampling with recbufsize: %d\n", len);
+            resampledLen = 0;
+            ph_resample_audio0(stream->resample_audiodrv_ctx_spk, playbuf, len, savedPlayBuf, &resampledLen);
+            DBG_DYNA_AUDIO("RESAMPLE: ph_audio_play_cbk: after resampling with resampledSize: %d\n", resampledLen);
+            savedPlayBuf += resampledLen;
+            savedBufSize -= resampledLen;
+            if (resampledLen!=0)
+            {
+                played += len;
+            }
+            audio_drv_played += resampledLen;
+            if (savedBufSize <= 0)
+            {
+                break;
+            }
+        }
+        else
 #endif
-    {
-      // updating the placeholder for the next decode loop
-      playbuf = len + (char *) playbuf;
-      playbufsize -= len;
-      played += len;
-      audio_drv_played += len;
-    }
+        {
+            // updating the placeholder for the next decode loop
+            playbuf = len + (char *) playbuf;
+            playbufsize -= len;
+            played += len;
+            audio_drv_played += len;
+        }
 
-    /* exit loop if we've played 4 full size packets */
-    if (played >= internal_framesize * 4)
-    {
-      break;
-    }
+        /* exit loop if we've played 4 full size packets */
+        if (played >= internal_framesize * 4)
+        {
+            break;
+        }
 
-  } // while end : read packets from the network
+    } // while end : read packets from the network
 
 
-  stream->ms.rxtstamp += stream->ms.rxts_inc;
+    // refresh rx timestamp according to what we pulled from the network
+    stream->ms.rxtstamp += stream->ms.rxts_inc;
 #ifdef DO_CONF
-  if (stream->to_mix) 
-  {
-    CONF_LOCK(stream);
-    if (stream->to_mix)
+    if (stream->to_mix) 
     {
-      stream->to_mix->ms.rxtstamp += stream->to_mix->ms.rxts_inc;
+        CONF_LOCK(stream);
+        if (stream->to_mix)
+        {
+            stream->to_mix->ms.rxtstamp += stream->to_mix->ms.rxts_inc;
+        }
+        CONF_UNLOCK(stream);
     }
-    CONF_UNLOCK(stream);
-  }
 #endif
 
-  if (played == 0)
-  {
-    /* if no data for at least NOISE_START_DELAY ms, start sending noise audio data */
-    if (stream->ms.running && stream->cngi.cng)
+    // what happens when nothing could be pulled from the network
+    if (played == 0)
     {
-      int len;
-      len = ph_generate_comfort_noice(stream, playbuf);
-      if (len)
-      {
+        DBG_DYNA_AUDIO_RX("RX path is starving !\n");
+        /* if no data for at least NOISE_START_DELAY ms, start sending noise audio data */
+        if (stream->ms.running && stream->cngi.cng)
+        {
+            int len;
+            len = ph_generate_comfort_noice(stream, playbuf);
+            if (len)
+            {
 #ifdef DO_ECHO_CAN
-      if (stream->using_out_callback)
-      {
-        store_pcm(stream, playbuf, len);
-      }
+                if (stream->using_out_callback)
+                {
+                    store_pcm(stream, playbuf, len);
+                }
 #endif
-      }
-      played += len;
-      playbufsize -= len;
-    }
+            }
 
 #ifdef PH_USE_RESAMPLE
-    if (needResample)
-    {
-      resampledLen = 0;
-      ph_resample_audio0(stream->resample_audiodrv_ctx_spk, playbuf, len, savedPlayBuf, &resampledLen);
-    }
+            if (needResample)
+            {
+                resampledLen = 0;
+                ph_resample_audio0(stream->resample_audiodrv_ctx_spk, playbuf, len, savedPlayBuf, &resampledLen);
+                savedPlayBuf += resampledLen;
+                savedBufSize -= resampledLen;
+                if (resampledLen!=0)
+                {
+                    played += len;
+                }
+                audio_drv_played += resampledLen;
+            }
+            else
 #endif
+            {
+                playbuf = len + (char *) playbuf;
+                playbufsize -= len;
+                played += len;
+                audio_drv_played += len;
+            }
+            DBG_DYNA_AUDIO_RX("generated %d driver len of Confort Noise\n", audio_drv_played);
 
-  } // if(played == 0)
+        } // cng
+
+    } // if(played == 0)
 
 
-  if (stream->lastframe != 0 && playbufsize)
-  {
-    /* we did not fill the buffer completely */
-    int morebytes = playbufsize;
-    if (morebytes > codec->decoded_framesize)
+    // what happens when the required buffer is not filled totally ?
+    // note: in 28/07/2006 code, this is dead code since lastframe=0
+    if (stream->lastframe != 0 && playbufsize)
     {
-      morebytes = codec->decoded_framesize;
-    }
+        /* we did not fill the buffer completely */
+        int morebytes = playbufsize;
+        if (morebytes > codec->decoded_framesize)
+        {
+            morebytes = codec->decoded_framesize;
+        }
 
 #ifdef DO_ECHO_CAN
-    if (stream->using_out_callback)
-    {
-      store_pcm(stream, playbuf, morebytes);
-    }
+        if (stream->using_out_callback)
+        {
+            store_pcm(stream, playbuf, morebytes);
+        }
 #endif
-    played += morebytes;
-  }
+        played += morebytes;
+    }
 
-  return audio_drv_played;
+    DBG_DYNA_AUDIO_RX("audio_driver_played: %d\n", audio_drv_played);
+	return audio_drv_played;
 }
 
 
