@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005 Wengo SAS
+ * Copyright (C) 2005-2006 Wengo SAS
  *
  * This is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -51,7 +51,7 @@ int h263_encode(void *ctx, const void *src, int srcsize, void *dst, int dstsize)
 
 ph_avcodec_meta_ctx_t * _h263_meta_init(ph_avcodec_meta_ctx_t * meta, phvstream_t *s) {
 
-	meta->avcodec_encoder_id = CODEC_ID_H263P;
+	meta->avcodec_encoder_id = CODEC_ID_H263;
 	meta->avcodec_decoder_id = CODEC_ID_H263;
 	meta->frame_rate = 10;
 	meta->frame_width = PHMEDIA_VIDEO_FRAME_WIDTH;
@@ -70,8 +70,8 @@ void *h263_encoder_init(void *ctx) {
 
 	phcodec_avcodec_encoder_init(&h263t->encoder_ctx, &h263t->meta, s);
 
-	h263t->encoder_ctx.context->flags |= CODEC_FLAG_QP_RD;
-	h263t->encoder_ctx.context->flags |= CODEC_FLAG_H263P_SLICE_STRUCT;
+	//h263t->encoder_ctx.context->flags |= CODEC_FLAG_QP_RD;
+	//h263t->encoder_ctx.context->flags |= CODEC_FLAG_H263P_SLICE_STRUCT;
 	h263t->encoder_ctx.context->flags |= CODEC_FLAG_QSCALE;
 
 	//h263t->encoder_ctx.context->flags |= CODEC_FLAG_INPUT_PRESERVED;

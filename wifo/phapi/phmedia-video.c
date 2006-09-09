@@ -78,9 +78,20 @@ void phmedia_video_rtpsend_callback (void *ctx, void *data, int size,
 {
 	phvstream_t *video_stream = (phvstream_t *) ctx;
 	mblk_t *m1 ;
+	uint8_t *encap_data_tmp, *encap_data;
 
-	m1 = rtp_session_create_packet (video_stream->ms.rtp_session,
-			RTP_FIXED_HEADER_SIZE, (char *)data, size);
+	// HACK: fake RFC2190 encapsulation for quick interop solution
+    encap_data_tmp=(uint8_t*)malloc(4+size);
+	encap_data=encap_data_tmp;
+	*encap_data_tmp++=0x00;
+	*encap_data_tmp++=0x40;
+	*encap_data_tmp++=0x00;
+	*encap_data_tmp++=0x19;
+	memcpy(encap_data_tmp,(uint8_t*)data,size);
+    
+
+	m1 = rtp_session_create_packet(video_stream->ms.rtp_session,
+			RTP_FIXED_HEADER_SIZE, (uint8_t *)encap_data, size+4);
 	if (!m1)
 		return;
 
@@ -90,7 +101,7 @@ void phmedia_video_rtpsend_callback (void *ctx, void *data, int size,
 
 	rtp_session_sendm_with_ts(video_stream->ms.rtp_session, m1,
 			ts);
-
+	free(encap_data);	
 }
 
 /**
@@ -672,10 +683,10 @@ int ph_media_video_flush_queue(phvstream_t *stream, unsigned long seqnumber_star
 #endif
 
 		memcpy(video_decoder->data_dec + video_decoder->buf_index,
-			phvs->mp->b_cont->b_rptr, len_received);
+			phvs->mp->b_cont->b_rptr+4, len_received-4);
 
 		counter +=1;
-		video_decoder->buf_index += len_received;
+		video_decoder->buf_index += (len_received-4);
 	}
 
 	for (it = q_size - 1; it >= 0; it -= 1) {
