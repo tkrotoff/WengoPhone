@@ -20,6 +20,7 @@
 #include <shlibloader/SharedLibLoader.h>
 
 #include <util/String.h>
+#include <util/SafeDelete.h>
 
 #include <cutil/global.h>
 
@@ -49,7 +50,7 @@ SharedLibLoader::SharedLibLoader(const std::string & fileName) {
 }
 
 SharedLibLoader::~SharedLibLoader() {
-	delete _loaderPrivate;
+	OWSAFE_DELETE(_loaderPrivate);
 }
 
 bool SharedLibLoader::load() {

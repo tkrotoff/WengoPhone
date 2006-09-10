@@ -17,22 +17,22 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef DIRECTXWEBCAMDRIVERFACTORY_H
-#define DIRECTXWEBCAMDRIVERFACTORY_H
+#ifndef OWDIRECTXWEBCAMDRIVERFACTORY_H
+#define OWDIRECTXWEBCAMDRIVERFACTORY_H
 
 #include <webcam/WebcamDriverFactory.h>
 #include <webcam/DirectXWebcamDriver.h>
 
 /**
- * Webcam driver factory for Direct X.
+ * Webcam driver factory for DirectX.
  *
  * @author Philippe Bernery
  */
 class DirectXWebcamDriverFactory : public WebcamDriverFactory {
 public:
-	IWebcamDriver * create(WebcamDriver *driver, int flags) const {
+	IWebcamDriver * create(WebcamDriver * driver, int flags) const {
 		return new DirectXWebcamDriver(driver, flags);
 	}
 };
 
-#endif	//DIRECTXWEBCAMDRIVERFACTORY_H
+#endif	//OWDIRECTXWEBCAMDRIVERFACTORY_H

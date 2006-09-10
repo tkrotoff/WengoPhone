@@ -20,6 +20,7 @@
 #include <thread/Timer.h>
 
 #include <thread/Thread.h>
+#include <util/SafeDelete.h>
 
 class PrivateThread : Thread {
 public:
@@ -116,7 +117,7 @@ Timer::Timer() {
 Timer::~Timer() {
 	stop();
 	for (register unsigned i = 0; i != _threadList.size(); i++) {
-		delete _threadList[i];
+		OWSAFE_DELETE(_threadList[i]);
 	}
 	_threadList.clear();
 }

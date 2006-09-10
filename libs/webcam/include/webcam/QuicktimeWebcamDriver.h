@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QUICKTIMEWEBCAMDRIVER_H
-#define QUICKTIMEWEBCAMDRIVER_H
+#ifndef OWQUICKTIMEWEBCAMDRIVER_H
+#define OWQUICKTIMEWEBCAMDRIVER_H
 
 #include <webcam/IWebcamDriver.h>
 
@@ -183,4 +183,4 @@ private:
 	void initializeCommonComponents();
 };
 
-#endif	//QUICKTIMEWEBCAMDRIVER_H
+#endif	//OWQUICKTIMEWEBCAMDRIVER_H

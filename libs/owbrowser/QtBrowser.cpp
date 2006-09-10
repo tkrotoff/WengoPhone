@@ -20,6 +20,9 @@
 #include "QtBrowser.h"
 
 #include <util/Logger.h>
+#include <util/SafeDelete.h>
+
+#include <qtutil/SafeConnect.h>
 
 #include <QtGui/QtGui>
 
@@ -31,13 +34,14 @@
 	#include <initguid.h>
 	#include <exdisp.h>
 	#include <memory.h>
-
 #endif
 
 #include <iostream>
 using namespace std;
 
-QtBrowser::QtBrowser(QWidget * parent, BrowserMode mode) : QObject() {
+QtBrowser::QtBrowser(QWidget * parent, BrowserMode mode)
+	: QObject(parent) {
+
 	_browserWidget = new QWidget(parent);
 
 #if (defined OS_WINDOWS) && (defined QT_COMMERCIAL)
@@ -122,25 +126,23 @@ void QtBrowser::initBrowser() {
 
 	if (_mode == QTMODE) {
 #if (defined OS_WINDOWS) && (defined QT_COMMERCIAL)
-		//clean ie browser
+		//Clean ie browser
 		if (_ieBrowser) {
 			_layout->removeWidget(_ieBrowser);
-			delete _ieBrowser;
-			_ieBrowser = NULL;
+			OWSAFE_DELETE(_ieBrowser);
 		}
 #endif
 		//Init Qt browser
 		_qtBrowser = new QTextBrowser(_browserWidget);
-		connect(_qtBrowser, SIGNAL(anchorClicked(const QUrl &)),
-			SLOT(beforeNavigate(const QUrl &)));
+		SAFE_CONNECT(_qtBrowser, SIGNAL(anchorClicked(const QUrl &)),
+				SLOT(beforeNavigate(const QUrl &)));
 		_layout->addWidget(_qtBrowser);
 	} else {
 #if (defined OS_WINDOWS) && (defined QT_COMMERCIAL)
 		//Clean qt browser
 		if (_qtBrowser) {
 			_layout->removeWidget(_qtBrowser);
-			delete _qtBrowser;
-			_qtBrowser = NULL;
+			OWSAFE_DELETE(_qtBrowser);
 		}
 
 		//Init IE browser
@@ -148,7 +150,7 @@ void QtBrowser::initBrowser() {
 		_ieBrowser->setControl(QString::fromUtf8("{8856F961-340A-11D0-A96B-00C04FD705A2}"));
 		_ieBrowser->setObjectName(QString::fromUtf8("IEBrowser"));
 		_ieBrowser->setFocusPolicy(Qt::StrongFocus);
-		connect(_ieBrowser, SIGNAL(BeforeNavigate(const QString &, int, const QString &, const QVariant &, const QString &, bool &)),
+		SAFE_CONNECT(_ieBrowser, SIGNAL(BeforeNavigate(const QString &, int, const QString &, const QVariant &, const QString &, bool &)),
 			SLOT(beforeNavigate(const QString &, int, const QString &, const QVariant &, const QString &, bool &)));
 		_layout->addWidget(_ieBrowser);
 #endif
@@ -156,24 +158,21 @@ void QtBrowser::initBrowser() {
 }
 
 #if (defined OS_WINDOWS) && (defined QT_COMMERCIAL)
-bool initPostData(LPVARIANT pvPostData,const std::string & postData) {
-	HRESULT hr;
-	LPSAFEARRAY psa;
-
-	LPCTSTR cszPostData = (LPCTSTR)postData.c_str();
+bool initPostData(LPVARIANT pvPostData, const std::string & postData) {
+	LPCTSTR cszPostData = (LPCTSTR) postData.c_str();
 	UINT cElems = lstrlen(cszPostData);
-	LPSTR pPostData;
 
 	if (!pvPostData) {
 		return false;
 	}
 	VariantInit(pvPostData);
-	psa = SafeArrayCreateVector(VT_UI1, 0, cElems);
+	LPSAFEARRAY psa = SafeArrayCreateVector(VT_UI1, 0, cElems);
 	if (!psa) {
 		return false;
 	}
 
-	hr = SafeArrayAccessData(psa, (LPVOID*)&pPostData);
+	LPSTR pPostData;
+	HRESULT hr = SafeArrayAccessData(psa, (LPVOID*) &pPostData);
 	memcpy(pPostData, cszPostData, cElems);
 	hr = SafeArrayUnaccessData(psa);
 
@@ -183,24 +182,22 @@ bool initPostData(LPVARIANT pvPostData,const std::string & postData) {
 }
 #endif
 
-void QtBrowser::setPost(const std::string & url,const std::string & postData) {
+void QtBrowser::setPost(const std::string & url, const std::string & postData) {
 #if (defined OS_WINDOWS) && (defined QT_COMMERCIAL)
-	BSTR bstrHeaders = NULL;
-	BSTR bstrURL = NULL;
-	VARIANT vFlags= {0};
+	VARIANT vFlags = {0};
 	VARIANT vPostData = {0};
 	VARIANT vHeaders = {0};
 
 	//unicode..
 	OLECHAR oleUri[1024];
-	MultiByteToWideChar(CP_ACP, 0, url.c_str(), -1, oleUri, sizeof(oleUri)-1);
-	bstrURL = SysAllocString(oleUri);
+	MultiByteToWideChar(CP_ACP, 0, url.c_str(), -1, oleUri, sizeof(oleUri) - 1);
+	BSTR bstrURL = SysAllocString(oleUri);
 	if (!bstrURL) {
 		goto finalize;
 	}
 
 	//unicode..
-	bstrHeaders = SysAllocString(L"Content-Type: application/x-www-form-urlencoded\r\n");
+	BSTR bstrHeaders = SysAllocString(L"Content-Type: application/x-www-form-urlencoded\r\n");
 	if (!bstrHeaders) {
 		goto finalize;
 	}
@@ -209,21 +206,21 @@ void QtBrowser::setPost(const std::string & url,const std::string & postData) {
 	if (!initPostData(&vPostData, postData)) {
 		goto finalize;
 	}
-	IWebBrowser *webBrowser = 0;
-	_ieBrowser->queryInterface( IID_IWebBrowser, (void**)&webBrowser );
-	if ( webBrowser ) {
+	IWebBrowser * webBrowser = 0;
+	_ieBrowser->queryInterface( IID_IWebBrowser, (void**) &webBrowser );
+	if (webBrowser) {
 		//use POST method
-		webBrowser->Navigate(bstrURL,&vFlags,NULL,&vPostData, &vHeaders);
+		webBrowser->Navigate(bstrURL, &vFlags, NULL, &vPostData, &vHeaders);
 		webBrowser->Release();
 	}
 
 finalize:
-		if (bstrURL) {
-			SysFreeString(bstrURL);
-		}
-		if (bstrHeaders) {
-			SysFreeString(bstrHeaders);
-		}
-		VariantClear(&vPostData);
+	if (bstrURL) {
+		SysFreeString(bstrURL);
+	}
+	if (bstrHeaders) {
+		SysFreeString(bstrHeaders);
+	}
+	VariantClear(&vPostData);
 #endif
 }

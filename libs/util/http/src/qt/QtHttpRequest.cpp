@@ -22,6 +22,7 @@
 #include <http/HttpRequest.h>
 
 #include <util/Logger.h>
+#include <util/SafeDelete.h>
 
 #include <QHttp>
 
@@ -34,7 +35,7 @@ QtHttpRequest::QtHttpRequest() {
 QtHttpRequest::~QtHttpRequest() {
 	//Deletes all the QHttp components
 	for (unsigned int i = 0; i < _requestList.size(); i++) {
-		delete _requestList[i];
+		OWSAFE_DELETE(_requestList[i]);
 	}
 
 	_requestList.clear();

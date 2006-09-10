@@ -74,8 +74,8 @@ HRESULT FindMyCaptureDevice(IBaseFilter * * pF, BSTR bstrName) {
 		pMoniker = NULL; // Release for the next loop.
 	}
 	if (pFilter) {
-		* pF = pFilter;
-		(* pF)->AddRef(); // Add ref on the way out.
+		*pF = pFilter;
+		(*pF)->AddRef(); // Add ref on the way out.
 	}
 	return hr;
 }

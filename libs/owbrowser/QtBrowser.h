@@ -31,8 +31,9 @@ class QWidget;
 class QTextBrowser;
 class QVBoxLayout;
 class QUrl;
+
 #if (defined OS_WINDOWS) && (defined QT_COMMERCIAL)
-class QAxWidget;
+	class QAxWidget;
 #endif
 
 /**
@@ -49,8 +50,8 @@ class QtBrowser : public QObject, public OWBrowser {
 public:
 
 	/**
-	* Browser mode enum
-	*/
+	 * Browser mode enum
+	 */
 	enum BrowserMode {
 		QTMODE,
 		IEMODE
@@ -102,7 +103,7 @@ private:
 	 */
 	void initBrowser();
 
-	void setPost(const std::string & url,const std::string & postData);
+	void setPost(const std::string & url, const std::string & postData);
 
 	/**
 	 * BrowserMode: Qt or IE.

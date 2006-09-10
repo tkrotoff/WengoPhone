@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QTHTTPREQUEST_H
-#define QTHTTPREQUEST_H
+#ifndef OWQTHTTPREQUEST_H
+#define OWQTHTTPREQUEST_H
 
 #include <http/IHttpRequest.h>
 
@@ -72,4 +72,4 @@ private:
 	Requests _requestList;
 };
 
-#endif	//QTHTTPREQUEST_H
+#endif	//OWQTHTTPREQUEST_H

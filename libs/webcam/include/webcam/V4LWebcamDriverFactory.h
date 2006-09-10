@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef V4LWEBCAMDRIVERFACTORY_H
-#define V4LWEBCAMDRIVERFACTORY_H
+#ifndef OWV4LWEBCAMDRIVERFACTORY_H
+#define OWV4LWEBCAMDRIVERFACTORY_H
 
 #include <webcam/WebcamDriverFactory.h>
 #include <webcam/V4LWebcamDriver.h>
@@ -31,9 +31,9 @@
 class V4LWebcamDriverFactory : public WebcamDriverFactory {
 public:
 
-	IWebcamDriver * create(WebcamDriver *driver, int flags) const {
+	IWebcamDriver * create(WebcamDriver * driver, int flags) const {
 		return new V4LWebcamDriver(driver, flags);
 	}
 };
 
-#endif	//V4LWEBCAMDRIVERFACTORY_H
+#endif	//OWV4LWEBCAMDRIVERFACTORY_H

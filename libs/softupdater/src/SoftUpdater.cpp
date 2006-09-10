@@ -21,6 +21,7 @@
 
 #include <util/Logger.h>
 #include <util/File.h>
+#include <util/SafeDelete.h>
 
 #include <ctime>
 
@@ -31,9 +32,7 @@ SoftUpdater::SoftUpdater(const std::string & url, const std::string & fileName) 
 }
 
 SoftUpdater::~SoftUpdater() {
-	if (_httpRequest) {
-		delete _httpRequest;
-	}
+	OWSAFE_DELETE(_httpRequest);
 }
 
 void SoftUpdater::start() {
@@ -74,6 +73,5 @@ void SoftUpdater::answerReceivedEventHandler(IHttpRequest * sender, int requestI
 	//sender == _httpRequest
 	/*delete sender;
 	sender = NULL;*/
-	delete _httpRequest;
-	_httpRequest = NULL;
+	OWSAFE_DELETE(_httpRequest);
 }

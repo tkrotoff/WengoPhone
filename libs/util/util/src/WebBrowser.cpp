@@ -29,7 +29,7 @@
 #include <unistd.h>
 #include <stdio.h>
 
-void tux_open_url(const char * url) {
+void linux_open_url(const char * url) {
 	if (!fork()) {
 
 		//use $BROWSER if it exists
@@ -96,10 +96,10 @@ bool WebBrowser::openUrl(const std::string & url) {
 	return false;
 
 #elif defined OS_LINUX
-	tux_open_url(url.c_str());
+	linux_open_url(url.c_str());
 #elif defined OS_MACOSX
 	return mac_open_url(url.c_str());
 #else
 	return false;
-#endif	//OS_WINDOWS
+#endif
 }

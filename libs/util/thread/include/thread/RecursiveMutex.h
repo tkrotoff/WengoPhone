@@ -23,7 +23,7 @@
 #include <boost/thread/recursive_mutex.hpp>
 
 /**
- * Recursive Mutex helper for boost.
+ * Recursive Mutex helper for Boost.
  *
  * @see Mutex
  * @author Philippe Bernery

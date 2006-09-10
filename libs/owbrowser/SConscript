@@ -5,6 +5,7 @@ include_path = ['.']
 
 libs = [
 	'owutil',
+	'qtutil',
 	'qt4',
 ]
 

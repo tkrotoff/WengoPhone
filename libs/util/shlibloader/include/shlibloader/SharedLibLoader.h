@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef SHAREDLIBLOADER_H
-#define SHAREDLIBLOADER_H
+#ifndef OWSHAREDLIBLOADER_H
+#define OWSHAREDLIBLOADER_H
 
 #include <shlibloader/ISharedLibLoader.h>
 
@@ -63,4 +63,4 @@ private:
 	ISharedLibLoader * _loaderPrivate;
 };
 
-#endif	//SHAREDLIBLOADER_H
+#endif	//OWSHAREDLIBLOADER_H

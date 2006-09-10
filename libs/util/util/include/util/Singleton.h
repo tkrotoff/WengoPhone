@@ -17,43 +17,42 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef __OWSINGLETON_H__
-#define __OWSINGLETON_H__
+#ifndef OWSINGLETON_H
+#define OWSINGLETON_H
+
+#include <util/SafeDelete.h>
 
 /**
-* Template class to do singleton class
-*
-* @author Nicolas Couturier
-*/
+ * Template class to do singleton class.
+ *
+ * @author Nicolas Couturier
+ */
 template <typename T>
-class Singleton{
-
+class Singleton {
 protected:
-	Singleton(){ }
-	~Singleton(){ }
+
+	Singleton() { }
+	~Singleton() { }
 
 public:
 
-	static T * getInstance(){
-		if(NULL == _singleton){
+	static T * getInstance() {
+		if (!_singleton) {
 			_singleton = new T;
 		}
-		return (static_cast<T*> (_singleton));
+		return (static_cast<T*>(_singleton));
 	}
 
-	static void deleteInstance(){
-		if(NULL != _singleton){
-			delete _singleton;
-			_singleton = NULL;
-		}
+	static void deleteInstance() {
+		OWSAFE_DELETE(_singleton);
 	}
 
 private:
-	static T * _singleton;
 
+	static T * _singleton;
 };
 
 template <typename T>
-T *Singleton<T>::_singleton = NULL;
+T * Singleton<T>::_singleton = NULL;
 
-#endif // __OWSINGLETON_H__
+#endif	//OWSINGLETON_H

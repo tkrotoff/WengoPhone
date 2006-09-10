@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef WEBCAM_H
-#define WEBCAM_H
+#ifndef OWWEBCAM_H
+#define OWWEBCAM_H
 
 #include <pixertool/pixertool.h>
 
@@ -227,4 +227,4 @@ int webcam_get_contrast(webcam * wc);
 }
 #endif /*__cplusplus*/
 
-#endif	/*WEBCAM_H*/
+#endif	/*OWWEBCAM_H*/

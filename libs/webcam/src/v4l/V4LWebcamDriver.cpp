@@ -270,7 +270,6 @@ V4LWebcamDriver::DevNameArray V4LWebcamDriver::getDevices2_6() {
 	File sysDir(dir);
 	StringList list = sysDir.getDirectoryList();
 
-
 	for (register unsigned i = 0 ; i < list.size() ; i++) {
 		if (list[i][0] != '.') {
 			ifstream nameFile((dir + "/" + list[i] + "/name").c_str());

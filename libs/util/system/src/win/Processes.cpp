@@ -19,18 +19,13 @@
 
 #include <system/Processes.h>
 
-#include <cutil/global.h>
-
 #include <util/Logger.h>
 
-#ifdef OS_WINDOWS
-	#include <windows.h>
-	#include <tlhelp32.h>
-#endif
+#include <windows.h>
+#include <tlhelp32.h>
 
 bool Processes::isRunning(const std::string & processName) {
-#ifdef OS_WINDOWS
-	//check if another instance is already running
+	//Check if another instance is already running
 	int instance_counter = 0;
 	HANDLE hSnapShot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
 	PROCESSENTRY32 * processInfo = new PROCESSENTRY32;
@@ -43,24 +38,19 @@ bool Processes::isRunning(const std::string & processName) {
 		}
 	}
 
-	//if another instance is detected, exit
+	//If another instance is detected, exit
 	if (instance_counter == 2) {
 		return true;
 	}
 	return false;
-#else
-	//FIXME: Need implementation on other platforms
-	return false;
-#endif
 }
 
 bool Processes::killProcess(const std::string & processName) {
-#ifdef OS_WINDOWS
  	HANDLE hSnapShot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
 	PROCESSENTRY32 * processInfo = new PROCESSENTRY32;
 	processInfo->dwSize = sizeof(PROCESSENTRY32);
 
-	//retrieve the pid
+	//Retrieve the pid
 	while (Process32Next(hSnapShot,processInfo) != FALSE) {
 		std::string s(processInfo->szExeFile);
 		if (s == processName) {
@@ -69,8 +59,4 @@ bool Processes::killProcess(const std::string & processName) {
 		}
 	}
 	return false;
-#else
-	//FIXME: Need implementation on other platforms
-	return false;
-#endif
 }

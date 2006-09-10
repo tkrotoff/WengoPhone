@@ -22,7 +22,7 @@
 using namespace std;
 
 NullWebcamDriver::NullWebcamDriver(WebcamDriver *driver, int flags)
-: IWebcamDriver(flags) {
+	: IWebcamDriver(flags) {
 }
 
 NullWebcamDriver::~NullWebcamDriver() {

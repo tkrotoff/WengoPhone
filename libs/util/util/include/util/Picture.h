@@ -25,9 +25,9 @@
 /**
  * Represents a picture.
  *
- * TODO:
- *	- Detect the picture format from header.
- *	- Return the format of the loaded picture and its size
+ * TODO
+ * - Detect the picture format from header.
+ * - Return the format of the loaded picture and its size
  *
  * @author Philippe Bernery
  */

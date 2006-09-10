@@ -24,7 +24,7 @@
 #include <string>
 
 /**
- * Represents a Time.
+ * Represents a time.
  *
  * @author Mathieu Stute
  */

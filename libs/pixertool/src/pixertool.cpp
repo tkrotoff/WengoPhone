@@ -36,7 +36,7 @@
  * @param height image height
  * @return converted data
  */
-static uint8_t * _nv12_to_yuv420p(uint8_t *data, unsigned width, unsigned height);
+static uint8_t * _nv12_to_yuv420p(uint8_t * data, unsigned width, unsigned height);
 
 piximage * pix_alloc(pixosi pix, unsigned width, unsigned height) {
 	piximage * image = (piximage *) malloc(sizeof(piximage));
@@ -117,7 +117,7 @@ pixerrorcode pix_convert(int flags, piximage *img_dst, piximage *img_src) {
 			return PIX_NOK;
 		}
 
-		//TODO: optimize this part but will need the preparation of contexts
+		//TODO optimize this part but will need the preparation of contexts
 		ImgReSampleContext * resample_context = img_resample_init(img_dst->width, img_dst->height,
 			img_src->width, img_src->height);
 
@@ -164,7 +164,7 @@ pixerrorcode pix_convert(int flags, piximage *img_dst, piximage *img_src) {
 	return PIX_OK;
 }
 
-static uint8_t * _nv12_to_yuv420p(uint8_t *data, unsigned width, unsigned height) {
+static uint8_t * _nv12_to_yuv420p(uint8_t * data, unsigned width, unsigned height) {
 
 	uint8_t * buf_source = data;
 	int len_target = (width * height * 3) / 2;

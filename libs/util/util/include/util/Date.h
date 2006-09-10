@@ -24,7 +24,7 @@
 #include <string>
 
 /**
- * Represents a Date.
+ * Represents a date.
  *
  * @author Philippe Bernery
  */

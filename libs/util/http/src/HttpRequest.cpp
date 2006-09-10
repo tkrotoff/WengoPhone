@@ -23,6 +23,7 @@
 
 #include <util/StringList.h>
 #include <util/Logger.h>
+#include <util/SafeDelete.h>
 
 #include <iostream>
 using namespace std;
@@ -48,7 +49,7 @@ HttpRequest::HttpRequest() {
 }
 
 HttpRequest::~HttpRequest() {
-	delete _httpRequestPrivate;
+	OWSAFE_DELETE(_httpRequestPrivate);
 }
 
 int HttpRequest::sendRequest(bool sslProtocol,

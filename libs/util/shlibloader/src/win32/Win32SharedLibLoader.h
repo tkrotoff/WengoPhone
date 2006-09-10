@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef WIN32SHAREDLIBLOADER_H
-#define WIN32SHAREDLIBLOADER_H
+#ifndef OWWIN32SHAREDLIBLOADER_H
+#define OWWIN32SHAREDLIBLOADER_H
 
 #include <shlibloader/ISharedLibLoader.h>
 
@@ -45,4 +45,4 @@ private:
 	HINSTANCE _pHnd;
 };
 
-#endif	//WIN32SHAREDLIBLOADER_H
+#endif	//OWWIN32SHAREDLIBLOADER_H

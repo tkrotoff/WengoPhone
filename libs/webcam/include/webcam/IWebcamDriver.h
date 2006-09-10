@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef IWEBCAMDRIVER_H
-#define IWEBCAMDRIVER_H
+#ifndef OWIWEBCAMDRIVER_H
+#define OWIWEBCAMDRIVER_H
 
 #include <webcam/webcam.h>
 
@@ -208,4 +208,4 @@ public:
 	virtual void flipHorizontally(bool flip) = 0;
 };
 
-#endif	//IWEBCAMDRIVER_H
+#endif	//OWIWEBCAMDRIVER_H

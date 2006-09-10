@@ -33,7 +33,7 @@ class WindowsRegistry {
 public:
 
 	/**
-	 * test the existence of a registry key.
+	 * Tests the existence of a registry key.
 	 *
 	 * @param rootKey the root key of type HKEY (HKEY_CLASSES_ROOT, HKEY_CURRENT_USER, ...).
 	 * @param key the key to test.
@@ -42,7 +42,7 @@ public:
 	static bool keyExists(HKEY rootKey, const std::string & key);
 
 	/**
-	 * test the existence of a registry entry.
+	 * Tests the existence of a registry entry.
 	 *
 	 * @param rootKey the root key of type HKEY (HKEY_CLASSES_ROOT, HKEY_CURRENT_USER, ...).
 	 * @param subkey the subkey where the search the entry.
@@ -52,7 +52,7 @@ public:
 	static bool entryExists(HKEY rootKey, const std::string & subkey, const std::string & entry);
 
 	/**
-	 * return the value of a registry entry.
+	 * Gets the value of a registry entry.
 	 *
 	 * @param rootKey the root key of type HKEY (HKEY_CLASSES_ROOT, HKEY_CURRENT_USER, ...).
 	 * @param subkey the subkey where the search the entry.
@@ -62,7 +62,7 @@ public:
 	static std::string getValue(HKEY rootKey, const std::string & subkey, const std::string & entry);
 
 	/**
-	 * create a registry entry.
+	 * Creates a registry entry.
 	 *
 	 * @param rootKey the root key of type HKEY (HKEY_CLASSES_ROOT, HKEY_CURRENT_USER, ...).
 	 * @param subkey the subkey where the key must be created.
@@ -72,7 +72,7 @@ public:
 	static bool createKey(HKEY rootKey, const std::string & subkey, const std::string & key, const std::string & defaultValue = "");
 
 	/**
-	 * delete a registry entry.
+	 * Deletes a registry entry.
 	 *
 	 * @param rootKey the root key of type HKEY (HKEY_CLASSES_ROOT, HKEY_CURRENT_USER, ...).
 	 * @param subkey the subkey where the key is.
@@ -82,7 +82,7 @@ public:
 	static bool deleteKey(HKEY rootKey, const std::string & subkey, const std::string & key);
 
 	/**
-	 * create an entry in a registry key.
+	 * Creates an entry in a registry key.
 	 *
 	 * @param rootKey the root key of type HKEY (HKEY_CLASSES_ROOT, HKEY_CURRENT_USER, ...).
 	 * @param subkey the subkey where the entry will be.
@@ -93,7 +93,7 @@ public:
 	static bool createEntry(HKEY rootKey, const std::string & subkey, const std::string & entry, const std::string & value);
 
 	/**
-	 * remove an entry to a registry key.
+	 * Removes an entry to a registry key.
 	 *
 	 * @param rootKey the root key of type HKEY (HKEY_CLASSES_ROOT, HKEY_CURRENT_USER, ...).
 	 * @param subkey the subkey where the entry is.

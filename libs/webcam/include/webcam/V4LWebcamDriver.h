@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef V4LWEBCAMDRIVER_H
-#define V4LWEBCAMDRIVER_H
+#ifndef OWV4LWEBCAMDRIVER_H
+#define OWV4LWEBCAMDRIVER_H
 
 #include <webcam/WebcamDriver.h>
 
@@ -117,4 +117,4 @@ private:
 	DevNameArray getDevices2_6();
 };
 
-#endif	//V4LWEBCAMDRIVER_H
+#endif	//OWV4LWEBCAMDRIVER_H

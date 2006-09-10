@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef WEBCAMDRIVERFACTORY_H
-#define WEBCAMDRIVERFACTORY_H
+#ifndef OWWEBCAMDRIVERFACTORY_H
+#define OWWEBCAMDRIVERFACTORY_H
 
 class IWebcamDriver;
 class WebcamDriver;
@@ -44,7 +44,7 @@ public:
 	 * @param flags set the webcam driver
 	 * @return new webcam object
 	 */
-	virtual IWebcamDriver * create(WebcamDriver *driver, int flags) const = 0;
+	virtual IWebcamDriver * create(WebcamDriver * driver, int flags) const = 0;
 };
 
-#endif	//WEBCAMDRIVERFACTORY_H
+#endif	//OWWEBCAMDRIVERFACTORY_H

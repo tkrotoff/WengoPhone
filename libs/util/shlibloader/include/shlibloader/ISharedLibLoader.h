@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef ISHAREDLIBLOADER_H
-#define ISHAREDLIBLOADER_H
+#ifndef OWISHAREDLIBLOADER_H
+#define OWISHAREDLIBLOADER_H
 
 #include <util/Interface.h>
 
@@ -71,4 +71,4 @@ protected:
 	std::string _fileName;
 };
 
-#endif	//ISHAREDLIBLOADER_H
+#endif	//OWISHAREDLIBLOADER_H

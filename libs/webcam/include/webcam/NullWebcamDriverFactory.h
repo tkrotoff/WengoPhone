@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef NULLWEBCAMDRIVERFACTORY_H
-#define NULLWEBCAMDRIVERFACTORY_H
+#ifndef OWNULLWEBCAMDRIVERFACTORY_H
+#define OWNULLWEBCAMDRIVERFACTORY_H
 
 #include <webcam/WebcamDriverFactory.h>
 #include <webcam/NullWebcamDriver.h>
@@ -31,9 +31,9 @@
 class NullWebcamDriverFactory : public WebcamDriverFactory {
 public:
 
-	IWebcamDriver * create(WebcamDriver *driver, int flags) const {
+	IWebcamDriver * create(WebcamDriver * driver, int flags) const {
 		return new NullWebcamDriver(driver, flags);
 	}
 };
 
-#endif	//NULLWEBCAMDRIVERFACTORY_H
+#endif	//OWNULLWEBCAMDRIVERFACTORY_H

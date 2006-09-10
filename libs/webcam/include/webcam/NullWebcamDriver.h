@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef NULLWEBCAMDRIVER_H
-#define NULLWEBCAMDRIVER_H
+#ifndef OWNULLWEBCAMDRIVER_H
+#define OWNULLWEBCAMDRIVER_H
 
 #include <webcam/WebcamDriver.h>
 
@@ -30,7 +30,7 @@
 class NullWebcamDriver : public IWebcamDriver {
 public:
 
-	NullWebcamDriver(WebcamDriver *driver, int flags);
+	NullWebcamDriver(WebcamDriver * driver, int flags);
 
 	virtual ~NullWebcamDriver();
 
@@ -53,6 +53,7 @@ public:
 	void startCapture();
 
 	void pauseCapture();
+
 	void stopCapture();
 
 	webcamerrorcode setPalette(pixosi palette);
@@ -80,4 +81,4 @@ public:
 	void flipHorizontally(bool flip);
 };
 
-#endif	//NULLWEBCAMDRIVER_H
+#endif	//OWNULLWEBCAMDRIVER_H

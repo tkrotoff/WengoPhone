@@ -30,7 +30,7 @@ class IThreadEvent;
 namespace boost { class thread; }
 
 /**
- * Thread helper for boost.
+ * Thread helper for Boost.
  *
  * Example:
  * <pre>

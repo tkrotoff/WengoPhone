@@ -23,7 +23,7 @@
 #include <boost/thread/mutex.hpp>
 
 /**
- * Mutex helper for boost.
+ * Mutex helper for Boost.
  *
  * Example:
  * <pre>

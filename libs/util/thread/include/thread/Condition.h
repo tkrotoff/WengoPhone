@@ -23,7 +23,7 @@
 #include <boost/thread/condition.hpp>
 
 /**
- * Condition wrapper for boost.
+ * Condition wrapper for Boost.
  *
  * @author Philippe Bernery
  */

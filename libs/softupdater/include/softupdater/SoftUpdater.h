@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef SOFTUPDATER_H
-#define SOFTUPDATER_H
+#ifndef OWSOFTUPDATER_H
+#define OWSOFTUPDATER_H
 
 #include <string>
 
@@ -82,4 +82,4 @@ private:
 	HttpRequest * _httpRequest;
 };
 
-#endif	//SOFTUPDATER_H
+#endif	//OWSOFTUPDATER_H

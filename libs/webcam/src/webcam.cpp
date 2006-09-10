@@ -57,13 +57,13 @@ static void webcam_frame_captured_event_handler(IWebcamDriver *sender, piximage 
 webcamdevicelist * webcam_get_device_list(webcam *) {
 	IWebcamDriver * driver = WebcamDriver::getInstance();
 	StringList deviceList = driver->getDeviceList();
-	webcamdevicelist *devlist = (webcamdevicelist *)malloc(sizeof(webcamdevicelist));
+	webcamdevicelist *devlist = (webcamdevicelist *) malloc(sizeof(webcamdevicelist));
 
 	devlist->count = deviceList.size();
-	devlist->name = (const char **)malloc(devlist->count * sizeof(const char *));
+	devlist->name = (const char **) malloc(devlist->count * sizeof(const char *));
 
 	for (register unsigned i = 0; i < devlist->count; i++) {
-		devlist->name[i] = (const char *)malloc(deviceList[i].size());
+		devlist->name[i] = (const char *) malloc(deviceList[i].size());
 		sprintf((char *) devlist->name[i], deviceList[i].c_str(), deviceList[i].size());
 	}
 
@@ -111,11 +111,7 @@ void webcam_unset_flags(webcam * wc, int flags) {
 }
 
 int webcam_is_flag_set(webcam * wc, int flag) {
-	if (wc->driver->isFlagSet(flag)) {
-		return 1;
-	} else {
-		return 0;
-	}
+	return wc->driver->isFlagSet(flag);
 }
 
 void webcam_release(webcam * wc) {
@@ -126,7 +122,7 @@ void webcam_release(webcam * wc) {
 		free(wc);
 
 		cur = cbks;
-		while(cur) {
+		while (cur) {
 			nxt = cur->next;
 			free(cur);
 			cur = nxt;
@@ -140,7 +136,7 @@ webcamerrorcode webcam_set_device(webcam * wc, const char * device_name) {
 }
 
 void webcam_add_callback(webcam * wc, webcamcallback * callback, void * userData) {
-	webcamcallbacklist *cur;
+	webcamcallbacklist * cur;
 
 	if (cbks == NULL) {
 		cbks = (webcamcallbacklist *) malloc(sizeof(webcamcallbacklist));
@@ -209,11 +205,7 @@ webcamerrorcode webcam_set_palette(webcam * wc, pixosi palette) {
 }
 
 int webcam_is_open(webcam * wc) {
-	if (wc->driver->isOpen()) {
-		return 1;
-	} else {
-		return 0;
-	}
+	return wc->driver->isOpen();
 }
 
 webcamerrorcode webcam_set_fps(webcam * wc, unsigned fps) {
@@ -229,11 +221,7 @@ void webcam_set_resolution(webcam * wc, unsigned width, unsigned height) {
 }
 
 void webcam_flip_horizontally(webcam * wc, int flip) {
-	if (flip) {
-		wc->driver->flipHorizontally(true);
-	} else {
-		wc->driver->flipHorizontally(false);
-	}
+	wc->driver->flipHorizontally(flip);
 }
 
 void webcam_set_brightness(webcam * wc, int brightness) {

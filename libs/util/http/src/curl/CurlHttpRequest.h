@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef CURLHTTPREQUEST_H
-#define CURLHTTPREQUEST_H
+#ifndef OWCURLHTTPREQUEST_H
+#define OWCURLHTTPREQUEST_H
 
 #include <http/IHttpRequest.h>
 
@@ -147,4 +147,4 @@ private:
 	bool _postMethod;
 };
 
-#endif	//CURLHTTPREQUEST_H
+#endif	//OWCURLHTTPREQUEST_H

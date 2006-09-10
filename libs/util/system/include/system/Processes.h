@@ -25,14 +25,27 @@
 #include <string>
 
 /**
+ * Check if a process is running or not + kill a running process.
  *
  * @author Mathieu Stute
  */
- class Processes : NonCopyable {
+class Processes : NonCopyable {
 public:
 
+	/**
+	 * Checks if a process is running.
+	 *
+	 * @param processName name of the process
+	 * @return true if the process is running; false otherwise
+	 */
 	static bool isRunning(const std::string & processName);
 
+	/**
+	 * Kills a running process.
+	 *
+	 * @param processName name of the process
+	 * @return true if the process was killed; false otherwise
+	 */
 	static bool killProcess(const std::string & processName);
 };
 

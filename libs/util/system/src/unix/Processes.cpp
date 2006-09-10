@@ -27,14 +27,14 @@
 #define PROCESSNAMESIZE 512
 
 bool Processes::isRunning(const std::string & searchName) {
-	struct dirent *ent;
-	DIR *proc;
+	struct dirent * ent;
+	DIR * proc;
 
 	proc = opendir("/proc");
 	int count = 0;
 	while (ent = readdir (proc)) {
 
-		if(isdigit(ent->d_name[0])) {
+		if (isdigit(ent->d_name[0])) {
 			int pid = atoi(ent->d_name);
 			char statusFilename[FILENAMESIZE], processName[PROCESSNAMESIZE], buffer[BUFFERSIZE];
 			int fd;
@@ -48,7 +48,7 @@ bool Processes::isRunning(const std::string & searchName) {
 			//printf("%d - %s\n", pid, processName);
 			if (std::string(processName) == searchName) {
 				count++;
-				if( count > 1) {
+				if (count > 1) {
 					return true;
 				}
 			}

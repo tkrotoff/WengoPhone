@@ -22,8 +22,9 @@
 #include <webcam/DefaultWebcamDriverFactory.h>
 
 #include <util/Logger.h>
+#include <util/SafeDelete.h>
 
-WebcamDriverFactory * WebcamDriver::_factory = 0;
+WebcamDriverFactory * WebcamDriver::_factory = NULL;
 
 #include <iostream>
 using namespace std;
@@ -39,7 +40,7 @@ WebcamDriver * WebcamDriver::getInstance() {
 }
 
 WebcamDriver::WebcamDriver(int flags)
-: IWebcamDriver(flags) {
+	: IWebcamDriver(flags) {
 	if (!_factory) {
 		_factory = new DefaultWebcamDriverFactory();
 	}
@@ -67,10 +68,11 @@ WebcamDriver::WebcamDriver(int flags)
 
 WebcamDriver::~WebcamDriver() {
 	stopCapture();
-	delete _webcamPrivate;
+	OWSAFE_DELETE(_webcamPrivate);
 
-	if (_convImage)
+	if (_convImage) {
 		pix_free(_convImage);
+	}
 }
 
 void WebcamDriver::cleanup() {
@@ -97,7 +99,7 @@ webcamerrorcode WebcamDriver::setDevice(const std::string & deviceName) {
 			actualDeviceName = getDefaultDevice();
 		}
 
-		LOG_DEBUG("desired device: " + deviceName + ", actual device: " + actualDeviceName);
+		LOG_DEBUG("desired device=" + deviceName + ", actual device=" + actualDeviceName);
 		return _webcamPrivate->setDevice(actualDeviceName);
 	} else {
 		LOG_WARN("WebcamDriver is running. Can't set a device.");
@@ -111,22 +113,22 @@ bool WebcamDriver::isOpen() const {
 
 void WebcamDriver::startCapture() {
 	if (!_isRunning) {
-		LOG_DEBUG("Starting capture");
+		LOG_DEBUG("starting capture");
 		_webcamPrivate->startCapture();
 		_isRunning = true;
 	} else {
-		LOG_INFO("Capture is already started");
+		LOG_INFO("capture is already started");
 	}
 }
 
 void WebcamDriver::pauseCapture() {
-	LOG_DEBUG("Pausing capture");
+	LOG_DEBUG("pausing capture");
 	_webcamPrivate->pauseCapture();
 }
 
 void WebcamDriver::stopCapture() {
 	if (_isRunning) {
-		LOG_DEBUG("Stopping capture");
+		LOG_DEBUG("stopping capture");
 		_webcamPrivate->stopCapture();
 		cleanup();
 		_isRunning = false;
@@ -136,9 +138,9 @@ void WebcamDriver::stopCapture() {
 webcamerrorcode WebcamDriver::setPalette(pixosi palette) {
 	if (!_isRunning) {
 		if (_webcamPrivate->setPalette(palette) == WEBCAM_NOK) {
-			LOG_DEBUG("This webcam does not support palette #" + String::fromNumber(palette));
+			LOG_DEBUG("this webcam does not support palette #" + String::fromNumber(palette));
 			if (isFormatForced()) {
-				LOG_DEBUG("Palette conversion will be forced");
+				LOG_DEBUG("palette conversion will be forced");
 				_desiredPalette = palette;
 				initializeConvImage();
 				return WEBCAM_OK;
@@ -146,12 +148,12 @@ webcamerrorcode WebcamDriver::setPalette(pixosi palette) {
 				return WEBCAM_NOK;
 			}
 		} else {
-			LOG_DEBUG("This webcam supports palette #" + String::fromNumber(palette));
+			LOG_DEBUG("this webcam supports palette #" + String::fromNumber(palette));
 			_desiredPalette = palette;
 			return WEBCAM_OK;
 		}
 	} else {
-		LOG_INFO("WebcamDriver is running. Can't set palette.");
+		LOG_INFO("WebcamDriver is running, can't set palette");
 		return WEBCAM_NOK;
 	}
 }
@@ -167,10 +169,10 @@ pixosi WebcamDriver::getPalette() const {
 webcamerrorcode WebcamDriver::setFPS(unsigned fps) {
 	if (!_isRunning) {
 		if (_webcamPrivate->setFPS(fps) == WEBCAM_NOK) {
-			LOG_DEBUG("This webcam does not support the desired fps(" + String::fromNumber(fps) + "). Will force it");
+			LOG_DEBUG("this webcam does not support the desired fps(" + String::fromNumber(fps) + "), will force it");
 			_forceFPS = true;
 		} else {
-			LOG_DEBUG("Webcam FPS changed to " + String::fromNumber(fps));
+			LOG_DEBUG("webcam FPS changed to=" + String::fromNumber(fps));
 			_forceFPS = false;
 		}
 
@@ -178,7 +180,7 @@ webcamerrorcode WebcamDriver::setFPS(unsigned fps) {
 
 		return WEBCAM_OK;
 	} else {
-		LOG_INFO("WebcamDriver is running. Can't set FPS.");
+		LOG_INFO("WebcamDriver is running, can't set FPS");
 		return WEBCAM_NOK;
 	}
 }
@@ -189,7 +191,7 @@ unsigned WebcamDriver::getFPS() const {
 
 webcamerrorcode WebcamDriver::setResolution(unsigned width, unsigned height) {
 	if (!_isRunning) {
-		LOG_DEBUG("try to change resolution: (width, height) = " + String::fromNumber(width) + "," + String::fromNumber(height));
+		LOG_DEBUG("try to change resolution: (width, height)=" + String::fromNumber(width) + "," + String::fromNumber(height));
 		if (_webcamPrivate->setResolution(width, height) == WEBCAM_NOK) {
 			if (isFormatForced()) {
 				_desiredWidth = width;
@@ -205,7 +207,7 @@ webcamerrorcode WebcamDriver::setResolution(unsigned width, unsigned height) {
 			return WEBCAM_OK;
 		}
 	} else {
-		LOG_INFO("WebcamDriver is running. Can't set resolution.");
+		LOG_INFO("WebcamDriver is running, can't set resolution");
 		return WEBCAM_NOK;
 	}
 }

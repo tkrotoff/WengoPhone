@@ -32,7 +32,7 @@
 using namespace std;
 
 #ifdef OS_WINDOWS
-static const char * STARTUP_REGISTRY_KEY = "Software\\Microsoft\\Windows\\CurrentVersion\\Run\\";
+	static const char * STARTUP_REGISTRY_KEY = "Software\\Microsoft\\Windows\\CurrentVersion\\Run\\";
 #endif
 
 Startup::Startup(const std::string & applicationName, const std::string & executablePath)

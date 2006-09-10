@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QUICKTIMEWEBCAMDRIVERFACTORY_H
-#define QUICKTIMEWEBCAMDRIVERFACTORY_H
+#ifndef OWQUICKTIMEWEBCAMDRIVERFACTORY_H
+#define OWQUICKTIMEWEBCAMDRIVERFACTORY_H
 
 #include <webcam/WebcamDriverFactory.h>
 #include <webcam/QuicktimeWebcamDriver.h>
@@ -30,9 +30,9 @@
  */
 class QuicktimeWebcamDriverFactory : public WebcamDriverFactory {
 public:
-	IWebcamDriver * create(WebcamDriver *driver, int flags) const {
+	IWebcamDriver * create(WebcamDriver * driver, int flags) const {
 		return new QuicktimeWebcamDriver(driver, flags);
 	}
 };
 
-#endif	//QUICKTIMEWEBCAMDRIVERFACTORY_H
+#endif	//OWQUICKTIMEWEBCAMDRIVERFACTORY_H
