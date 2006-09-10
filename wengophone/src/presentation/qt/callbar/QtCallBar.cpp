@@ -75,9 +75,9 @@ QtCallBar::QtCallBar(QWidget * parent)
 
 	//phoneComboBox
 	_phoneComboBox = new QComboBox(phoneComboBoxContainerLabel);
-	//_phoneComboBox->setLineEdit(new ToolTipLineEdit(_phoneComboBox));
+	_phoneComboBox->setLineEdit(new ToolTipLineEdit(_phoneComboBox));
 	_phoneComboBox->setEditable(true);
-	//_phoneComboBox->setEditText(tr("Enter a phone number, a Wengo nickname or a SIP address"));
+	_phoneComboBox->setEditText(tr("Enter a phone number, a Wengo nickname or a SIP address"));
 	_phoneComboBox->setMaximumSize(QSize(10000, 22));
 	_phoneComboBox->setAutoCompletion(false);
 	connect(_phoneComboBox->lineEdit(), SIGNAL(returnPressed()), SLOT(phoneComboBoxReturnPressedSlot()));

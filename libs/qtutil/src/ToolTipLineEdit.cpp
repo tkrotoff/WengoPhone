@@ -27,15 +27,37 @@ ToolTipLineEdit::ToolTipLineEdit(QWidget * parent)
 	_cleared = false;
 	_originalPalette = palette();
 
-	//Text color is grey
-	QPalette palette;
-	palette.setColor(QPalette::Text, Qt::gray);
-	setPalette(palette);
+	//Grey color
+	_greyPalette.setColor(QPalette::Text, Qt::gray);
 }
 
 void ToolTipLineEdit::setText(const QString & text) {
-	clearLineEdit();
-	QLineEdit::setText(text);
+	static already = true;
+
+	if (already) {
+		already = false;
+		_toolTip = text;
+		setToolTipText();
+	} else {
+		clearLineEdit();
+		QLineEdit::setText(text);
+	}
+}
+
+QString ToolTipLineEdit::text() const {
+	if (QLineEdit::text() == _toolTip) {
+		return QString::null;
+	} else {
+		return QLineEdit::text();
+	}
+}
+
+void ToolTipLineEdit::setToolTipText() {
+	//Text color is grey
+	setPalette(_greyPalette);
+
+	QLineEdit::setText(_toolTip);
+	_cleared = false;
 }
 
 void ToolTipLineEdit::clearLineEdit() {
@@ -58,4 +80,13 @@ void ToolTipLineEdit::keyPressEvent(QKeyEvent * event) {
 		clearLineEdit();
 	}
 	QLineEdit::keyPressEvent(event);
+}
+
+void ToolTipLineEdit::leaveEvent(QEvent * event) {
+	if (text().isEmpty()) {
+		setToolTipText();
+		//FIXME otherwise text is still black
+		setToolTipText();
+	}
+	QLineEdit::leaveEvent(event);
 }

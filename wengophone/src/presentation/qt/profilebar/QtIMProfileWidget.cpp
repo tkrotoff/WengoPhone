@@ -36,7 +36,6 @@
 #include <util/Logger.h>
 #include <thread/ThreadEvent.h>
 
-#include <qtutil/ToolTipLineEdit.h>
 #include <qtutil/PixmapMerging.h>
 
 #include <QtGui/QtGui>

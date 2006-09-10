@@ -17,15 +17,17 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef TOOLTIPLINEEDIT_H
-#define TOOLTIPLINEEDIT_H
+#ifndef OWTOOLTIPLINEEDIT_H
+#define OWTOOLTIPLINEEDIT_H
 
 #include <QtGui/QLineEdit>
 #include <QtGui/QPalette>
+#include <QtCore/QString>
 
 class QWidget;
 class QMouseEvent;
 class QKeyEvent;
+class QEvent;
 
 /**
  * QLineEdit with a tooltip that disappears when the user clicks on it.
@@ -39,21 +41,31 @@ public:
 
 	ToolTipLineEdit(QWidget * parent);
 
+	QString text() const;
+
 public Q_SLOTS:
 
 	void setText(const QString & text);
 
 private:
 
+	void setToolTipText();
+
+	void clearLineEdit();
+
 	void mousePressEvent(QMouseEvent * event);
 
 	void keyPressEvent(QKeyEvent * event);
 
-	void clearLineEdit();
+	void leaveEvent(QEvent * event);
 
 	bool _cleared;
 
+	QString _toolTip;
+
 	QPalette _originalPalette;
+
+	QPalette _greyPalette;
 };
 
-#endif	//TOOLTIPLINEEDIT_H
+#endif	//OWTOOLTIPLINEEDIT_H

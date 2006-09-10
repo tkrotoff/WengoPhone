@@ -179,14 +179,6 @@
     <string>sendFile</string>
    </property>
   </action>
-  <action name="actionSendSMS" >
-   <property name="icon" >
-    <iconset resource="../wengophone.qrc" >:/pics/contact/sms.png</iconset>
-   </property>
-   <property name="text" >
-    <string>&amp;Send a short text message (SMS)</string>
-   </property>
-  </action>
   <action name="actionCreateChatConf" >
    <property name="icon" >
     <iconset resource="../wengophone.qrc" >:/pics/chat/chat-room.png</iconset>

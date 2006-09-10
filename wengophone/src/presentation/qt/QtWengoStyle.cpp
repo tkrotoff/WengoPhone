@@ -21,7 +21,11 @@
 
 #include <QtGui/QtGui>
 
+#include <util/Logger.h>
+
 QtWengoStyle::QtWengoStyle() {
+	QStyle * style = QApplication::style();
+	LOG_DEBUG(String(style->metaObject()->className()));
 }
 
 QtWengoStyle::~QtWengoStyle() {
