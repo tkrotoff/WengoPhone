@@ -22,13 +22,16 @@
 #include <QtGui/QtGui>
 
 #include <util/Logger.h>
+#include <util/SafeDelete.h>
 
 QtWengoStyle::QtWengoStyle() {
-	QStyle * style = QApplication::style();
-	LOG_DEBUG(String(style->metaObject()->className()));
+	QString styleName = QApplication::style()->objectName();
+	LOG_DEBUG("style=" + styleName.toStdString());
+	_systemStyle = QStyleFactory::create(styleName);
 }
 
 QtWengoStyle::~QtWengoStyle() {
+	OWSAFE_DELETE(_systemStyle);
 }
 
 void QtWengoStyle::drawComplexControl(ComplexControl control, const QStyleOptionComplex * option,
@@ -43,7 +46,7 @@ void QtWengoStyle::drawComplexControl(ComplexControl control, const QStyleOption
 	}
 #endif
 
-	SystemStyle::drawComplexControl(control, option, painter, widget);
+	_systemStyle->drawComplexControl(control, option, painter, widget);
 }
 
 void QtWengoStyle::drawControl(ControlElement element, const QStyleOption * option,
@@ -55,7 +58,7 @@ void QtWengoStyle::drawControl(ControlElement element, const QStyleOption * opti
 		return;
 	}
 
-	SystemStyle::drawControl(element, option, painter, widget);
+	_systemStyle->drawControl(element, option, painter, widget);
 }
 
 void QtWengoStyle::drawPrimitive(PrimitiveElement element, const QStyleOption * option,
@@ -67,5 +70,5 @@ void QtWengoStyle::drawPrimitive(PrimitiveElement element, const QStyleOption * 
 		return;
 	}
 
-	SystemStyle::drawPrimitive(element, option, painter, widget);
+	_systemStyle->drawPrimitive(element, option, painter, widget);
 }
