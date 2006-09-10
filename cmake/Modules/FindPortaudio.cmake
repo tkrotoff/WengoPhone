@@ -6,6 +6,12 @@
 #  PORTAUDIO_LIBRARIES - Link these to use Portaudio
 #  PORTAUDIO_DEFINITIONS - Compiler switches required for using Portaudio
 #
+#  Copyright (c) 2006 Andreas Schneider <mail@cynapses.org>
+#
+#  Redistribution and use is allowed according to the terms of the New
+#  BSD license.
+#  For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+#
 
 
 if (PORTAUDIO_LIBRARIES AND PORTAUDIO_INCLUDE_DIRS)
@@ -18,6 +24,8 @@ else (PORTAUDIO_LIBRARIES AND PORTAUDIO_INCLUDE_DIRS)
     PATHS
       /usr/include
       /usr/local/include
+      /opt/local/include
+      /sw/include
   )
 
   find_library(PORTAUDIO_LIBRARY
@@ -26,6 +34,8 @@ else (PORTAUDIO_LIBRARIES AND PORTAUDIO_INCLUDE_DIRS)
     PATHS
       /usr/lib
       /usr/local/lib
+      /opt/local/lib
+      /sw/lib
   )
 
   set(PORTAUDIO_INCLUDE_DIRS

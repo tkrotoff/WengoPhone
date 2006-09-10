@@ -6,6 +6,12 @@
 #  FFMPEG_LIBRARIES - Link these to use FFMPEG
 #  FFMPEG_DEFINITIONS - Compiler switches required for using FFMPEG
 #
+#  Copyright (c) 2006 Andreas Schneider <mail@cynapses.org>
+#
+#  Redistribution and use is allowed according to the terms of the New
+#  BSD license.
+#  For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+#
 
 
 if (FFMPEG_LIBRARIES AND FFMPEG_INCLUDE_DIRS)
@@ -27,6 +33,8 @@ else (FFMPEG_LIBRARIES AND FFMPEG_INCLUDE_DIRS)
       ${_FFMPEGIncDir}
       /usr/include
       /usr/local/include
+      /opt/local/include
+      /sw/include
     PATH_SUFFIXES
       ffmpeg
   )
@@ -38,6 +46,8 @@ else (FFMPEG_LIBRARIES AND FFMPEG_INCLUDE_DIRS)
       ${_FFMPEGLinkDir}
       /usr/lib
       /usr/local/lib
+      /opt/local/lib
+      /sw/lib
   )
   find_library(AVCODEC_LIBRARY
     NAMES
@@ -46,6 +56,8 @@ else (FFMPEG_LIBRARIES AND FFMPEG_INCLUDE_DIRS)
       ${_FFMPEGLinkDir}
       /usr/lib
       /usr/local/lib
+      /opt/local/lib
+      /sw/lib
   )
   find_library(AVFORMAT_LIBRARY
     NAMES
@@ -54,6 +66,8 @@ else (FFMPEG_LIBRARIES AND FFMPEG_INCLUDE_DIRS)
       ${_FFMPEGLinkDir}
       /usr/lib
       /usr/local/lib
+      /opt/local/lib
+      /sw/lib
   )
 
   set(FFMPEG_INCLUDE_DIRS

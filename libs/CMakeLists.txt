@@ -1,5 +1,4 @@
 subdirs(
-  openssl
   curl
   tinyxml
   util
@@ -14,5 +13,6 @@ subdirs(
   samplerate
   skinstyle
   sound
+  timer
 )
 

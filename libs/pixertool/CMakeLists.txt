@@ -1,10 +1,9 @@
 project(pixertool)
 
-# TODO: static on windows
-if (UNIX AND NOT WIN32)
+if (WIN32)
+  find_package(FFMPEGInternal REQUIRED)
+else (WIN32)
   find_package(FFMPEG REQUIRED)
-else (UNIX AND NOT WIN32)
-  # TODO include compiled libs
 endif (UNIX AND NOT WIN32)
 
 # needed include directories to build pixertool
@@ -21,8 +20,8 @@ set(PIXERTOOL_INCLUDE_DIRS
 set(PIXERTOOL_LIBRARIES
   pixertool
   ${OWCUTIL_LIBRARIES}
-  ${AVUTIL_LIBRARIES}
-  ${AVCODEC_LIBRARIES}
+  ${AVUTIL_LIBRARY}
+  ${AVCODEC_LIBRARY}
   CACHE INTERNAL "pixertool libraries"
 )
 

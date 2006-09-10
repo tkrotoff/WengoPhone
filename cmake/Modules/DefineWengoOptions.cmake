@@ -1,4 +1,4 @@
-IF (WIN32)
-  OPTION(WITH_PORTAUDIO "Should WengoPhone compiled with Portaudio" OFF)
-ENDIF (WIN32)
+if (WIN32)
+  option(WITH_PORTAUDIO "Should WengoPhone compiled with Portaudio" OFF)
+endif (WIN32)
 
