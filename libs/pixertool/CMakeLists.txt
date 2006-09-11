@@ -11,7 +11,6 @@ endif (WIN32)
 set(PIXERTOOL_INCLUDE_DIRS
   ${CMAKE_CURRENT_SOURCE_DIR}/include
   ${OWCUTIL_INCLUDE_DIRS}
-  ${FFMPEG_INCLUDE_DIRS}
   CACHE INTERNAL "pixertool include directories"
 )
 
@@ -20,13 +19,12 @@ set(PIXERTOOL_INCLUDE_DIRS
 set(PIXERTOOL_LIBRARIES
   pixertool
   ${OWCUTIL_LIBRARIES}
-  ${AVUTIL_LIBRARY}
-  ${AVCODEC_LIBRARY}
   CACHE INTERNAL "pixertool libraries"
 )
 
 include_directories(
   ${PIXERTOOL_INCLUDE_DIRS}
+  ${FFMPEG_INCLUDE_DIRS}
 )
 
 set(pixertool_SRCS
@@ -64,5 +62,9 @@ endif (NOT WIN32)
 
 add_library(pixertool STATIC ${pixertool_SRCS})
 
-target_link_libraries(${PIXERTOOL_LIBRARIES})
+target_link_libraries(
+  ${PIXERTOOL_LIBRARIES}
+  ${AVUTIL_LIBRARY}
+  ${AVCODEC_LIBRARY}
+)
 

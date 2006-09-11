@@ -16,5 +16,26 @@ done
 BUILDDIR=$(dirname ${SCRIPT})
 
 cd ${BUILDDIR}
-cmake .. -DCMAKE_INSTALL_PREFIX=/usr "$@" # && make
+
+case $1 in
+	configure)
+		cmake -DCMAKE_INSTALL_PREFIX=/usr "$@" ..
+	;;
+	make)
+		cmake -DCMAKE_INSTALL_PREFIX=/usr "$@" ..
+		make
+	;;
+	graph)
+		cmake -DCMAKE_INSTALL_PREFIX=/usr --graphviz=${BUILDDIR}/wengophone.dot "$@" ..
+		dot -Lg -Tpng -o${BUILDDIR}/wengophone.png ${BUILDDIR}/wengophone.dot
+	;;
+	*)
+		echo "Usage: $(basename $0) (configure|make|graph)"
+		echo
+		echo "    configure - run cmake configure"
+		echo "    make - run configure and build wengophone"
+		echo "    graph - build a picture of the deps"
+		echo
+	;;
+esac
 
