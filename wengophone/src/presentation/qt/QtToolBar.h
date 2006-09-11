@@ -102,6 +102,8 @@ public Q_SLOTS:
 
 	void showChatWindow();
 
+	void showFileTransferWindow();
+
 private:
 
 	/**

@@ -32,6 +32,8 @@
 #include "phonecall/QtPhoneCall.h"
 #include "imaccount/QtIMAccountManager.h"
 #include "contactlist/QtContactList.h"
+#include "filetransfer/QtFileTransfer.h"
+#include "filetransfer/QtFileTransferWidget.h"
 
 #include <control/CWengoPhone.h>
 #include <control/profile/CUserProfile.h>
@@ -97,6 +99,7 @@ QtToolBar::QtToolBar(QtWengoPhone & qtWengoPhone, Ui::WengoPhoneWindow * qtWengo
 	SAFE_CONNECT(_ui->actionShowIMAccountSettings, SIGNAL(triggered()), SLOT(showIMAccountSettings()));
 	SAFE_CONNECT(_ui->actionShowVolumePanel, SIGNAL(triggered()), SLOT(expandVolumePanel()));
 	SAFE_CONNECT(_ui->actionShowConfig, SIGNAL(triggered()), SLOT(showConfig()));
+	SAFE_CONNECT(_ui->actionShowFileTransfer, SIGNAL(triggered()), SLOT(showFileTransferWindow()));
 
 	//menuClearHistory
 	SAFE_CONNECT(_ui->actionClearOutgoingCalls, SIGNAL(triggered()), SLOT(clearHistoryOutgoingCalls()));
@@ -359,5 +362,12 @@ void QtToolBar::showChatWindow() {
 	if (chatWindow) {
 		chatWindow->showNormal();
 		chatWindow->activateWindow();
+	}
+}
+
+void QtToolBar::showFileTransferWindow() {
+	QtFileTransfer * fileTransfer = _qtWengoPhone.getFileTransfer();
+	if (fileTransfer) {
+		fileTransfer->getFileTransferWidget()->show();
 	}
 }

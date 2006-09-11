@@ -485,6 +485,10 @@ void QtWengoPhone::addToConference(QtPhoneCall * qtPhoneCall) {
 	_qtCallBar->setEnabledHangUpButton(true);
 }
 
+QtFileTransfer * QtWengoPhone::getFileTransfer() const {
+	return _qtFileTransfer;
+}
+
 void QtWengoPhone::updatePresentation() {
 	typedef PostEvent0<void ()> MyPostEvent;
 	MyPostEvent * event = new MyPostEvent(boost::bind(&QtWengoPhone::updatePresentationThreadSafe, this));

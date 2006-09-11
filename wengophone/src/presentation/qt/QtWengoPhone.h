@@ -105,6 +105,8 @@ public:
 
 	QtStatusBar & getQtStatusBar() const;
 
+	QtFileTransfer * getFileTransfer() const;
+
 	QtToolBar & getQtToolBar() const;
 
 	QtCallBar & getQtCallBar() const;
