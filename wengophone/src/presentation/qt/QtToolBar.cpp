@@ -366,8 +366,15 @@ void QtToolBar::showChatWindow() {
 }
 
 void QtToolBar::showFileTransferWindow() {
+	static bool show = true;
+
 	QtFileTransfer * fileTransfer = _qtWengoPhone.getFileTransfer();
 	if (fileTransfer) {
-		fileTransfer->getFileTransferWidget()->show();
+		if (show) {
+			fileTransfer->getFileTransferWidget()->show();
+		} else {
+			fileTransfer->getFileTransferWidget()->hide();
+		}
 	}
+	show = !show;
 }

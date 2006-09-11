@@ -406,6 +406,9 @@
    </property>
   </action>
   <action name="actionShowVolumePanel" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
    <property name="icon" >
     <iconset resource="wengophone.qrc" >:/pics/statusbar/audio_status_ok.png</iconset>
    </property>
@@ -419,6 +422,9 @@
    </property>
   </action>
   <action name="actionShowFileTransfer" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
    <property name="icon" >
     <iconset resource="wengophone.qrc" >:/pics/icons-file-transfer.png</iconset>
    </property>
