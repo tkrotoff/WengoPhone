@@ -41,6 +41,7 @@
 #include <presentation/qt/QtWengoPhone.h>
 #include <presentation/qt/contactlist/QtContactList.h>
 #include <presentation/qt/contactlist/QtContactListManager.h>
+#include <presentation/qt/filetransfer/QtFileTransfer.h>
 
 #include <imwrapper/Account.h>
 #include <imwrapper/EnumIMProtocol.h>
@@ -476,7 +477,6 @@ void QtChatWidget::updateUserAvatar() {
 	_avatarFrame->setUserPixmap(pixmap);
 }
 
-
 void QtChatWidget::fileDraggedSlot(const QString & filename) {
 	QtContactList * qtContactList = _qtWengoPhone->getQtContactList();
 	CContactList & cContactList = qtContactList->getCContactList();
@@ -491,5 +491,9 @@ void QtChatWidget::fileDraggedSlot(const QString & filename) {
 	}
 
 	fileSession->addFile(File(filename.toStdString()));
+	QtFileTransfer * qtFileTransfer = _qtWengoPhone->getFileTransfer();
+	if (qtFileTransfer) {
+		qtFileTransfer->addSendFileSession(fileSession);
+	}
 	fileSession->start();
 }

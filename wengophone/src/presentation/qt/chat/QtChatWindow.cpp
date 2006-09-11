@@ -669,6 +669,7 @@ void QtChatWindow::showToaster(IMChatSession * imChatSession) {
 		}
 		toaster->setMessage(message);
 	}
+
 	if (!result.isNull()) {
 		QPainter pixpainter(& background);
 		pixpainter.drawPixmap(5, 5, result.scaled(60, 60));
