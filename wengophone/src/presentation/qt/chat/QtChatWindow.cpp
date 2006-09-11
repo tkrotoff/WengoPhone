@@ -425,6 +425,8 @@ void QtChatWindow::setupMenuBarActions() {
 	SAFE_CONNECT_RECEIVER(_ui.actionShowConfig, SIGNAL(triggered()), qtToolBar, SLOT(showConfig()));
 	copyQAction(toolBar, _ui.actionShowVolumePanel);
 	SAFE_CONNECT_RECEIVER(_ui.actionShowVolumePanel, SIGNAL(triggered()), qtToolBar, SLOT(expandVolumePanel()));
+	copyQAction(toolBar, _ui.actionShowFileTransfer);
+	SAFE_CONNECT_RECEIVER(_ui.actionShowFileTransfer, SIGNAL(triggered()), qtToolBar, SLOT(showFileTransferWindow()));
 	// menu clear history
 	copyQAction(toolBar, _ui.actionClearOutgoingCalls);
 	SAFE_CONNECT_RECEIVER(_ui.actionClearOutgoingCalls, SIGNAL(triggered()), qtToolBar, SLOT(clearHistoryOutgoingCalls()));
@@ -439,14 +441,15 @@ void QtChatWindow::setupMenuBarActions() {
 	copyQAction(toolBar, _ui.actionClearAll);
 	SAFE_CONNECT_RECEIVER(_ui.actionClearAll, SIGNAL(triggered()), qtToolBar, SLOT(clearHistoryAll()));
 	////
+	////
 
 	// setup "help" menu
-	copyQAction(toolBar, _ui.actionForum);
-	SAFE_CONNECT_RECEIVER(_ui.actionForum, SIGNAL(triggered()), qtToolBar, SLOT(showWengoForum()));
-	copyQAction(toolBar, _ui.actionWikiFAQ);
-	SAFE_CONNECT_RECEIVER(_ui.actionWikiFAQ, SIGNAL(triggered()), qtToolBar, SLOT(showWengoFAQ()));
-	copyQAction(toolBar, _ui.actionAbout);
-	SAFE_CONNECT_RECEIVER(_ui.actionAbout, SIGNAL(triggered()), qtToolBar, SLOT(showAbout()));
+	copyQAction(toolBar, _ui.actionShowWengoForum);
+	SAFE_CONNECT_RECEIVER(_ui.actionShowWengoForum, SIGNAL(triggered()), qtToolBar, SLOT(showWengoForum()));
+	copyQAction(toolBar, _ui.actionWengoFAQ);
+	SAFE_CONNECT_RECEIVER(_ui.actionWengoFAQ, SIGNAL(triggered()), qtToolBar, SLOT(showWengoFAQ()));
+	copyQAction(toolBar, _ui.actionShowAbout);
+	SAFE_CONNECT_RECEIVER(_ui.actionShowAbout, SIGNAL(triggered()), qtToolBar, SLOT(showAbout()));
 	////
 }
 

@@ -34,7 +34,7 @@
      <x>0</x>
      <y>0</y>
      <width>351</width>
-     <height>19</height>
+     <height>29</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuWengo" >
@@ -61,17 +61,14 @@
     <addaction name="actionShowHideOfflineContacts" />
     <addaction name="actionShowHideContactGroups" />
    </widget>
-   <widget class="QMenu" name="menuActions" >
+   <widget class="QMenu" name="menuHelp" >
     <property name="title" >
-     <string>&amp;Actions</string>
+     <string>&amp;Help</string>
     </property>
-    <addaction name="actionCreateConferenceCall" />
+    <addaction name="actionShowWengoForum" />
+    <addaction name="actionWengoFAQ" />
     <addaction name="separator" />
-    <addaction name="actionSendSMS" />
-    <addaction name="separator" />
-    <addaction name="actionAcceptCall" />
-    <addaction name="actionHangUpCall" />
-    <addaction name="actionHoldResumeCall" />
+    <addaction name="actionShowAbout" />
    </widget>
    <widget class="QMenu" name="menuTools" >
     <property name="title" >
@@ -79,7 +76,7 @@
     </property>
     <widget class="QMenu" name="menuClearHistory" >
      <property name="title" >
-      <string/>
+      <string>Clear &amp;History</string>
      </property>
      <addaction name="actionClearOutgoingCalls" />
      <addaction name="actionClearIncomingCalls" />
@@ -92,17 +89,21 @@
     <addaction name="actionShowIMAccountSettings" />
     <addaction name="actionShowVolumePanel" />
     <addaction name="actionShowConfig" />
+    <addaction name="actionShowFileTransfer" />
     <addaction name="separator" />
     <addaction name="menuClearHistory" />
    </widget>
-   <widget class="QMenu" name="menuHelp" >
+   <widget class="QMenu" name="menuActions" >
     <property name="title" >
-     <string>&amp;Help</string>
+     <string>&amp;Actions</string>
     </property>
-    <addaction name="actionForum" />
-    <addaction name="actionWikiFAQ" />
+    <addaction name="actionCreateConferenceCall" />
     <addaction name="separator" />
-    <addaction name="actionAbout" />
+    <addaction name="actionSendSMS" />
+    <addaction name="separator" />
+    <addaction name="actionAcceptCall" />
+    <addaction name="actionHangUpCall" />
+    <addaction name="actionHoldResumeCall" />
    </widget>
    <addaction name="menuWengo" />
    <addaction name="menuContact" />
@@ -111,6 +112,14 @@
    <addaction name="menuHelp" />
   </widget>
   <widget class="QStatusBar" name="statusbar" >
+   <property name="geometry" >
+    <rect>
+     <x>0</x>
+     <y>520</y>
+     <width>351</width>
+     <height>22</height>
+    </rect>
+   </property>
    <property name="autoFillBackground" >
     <bool>false</bool>
    </property>
@@ -146,7 +155,14 @@
   <action name="actionSearchWengoContact" />
   <action name="actionShowHideOfflineContacts" />
   <action name="actionShowHideContactGroups" />
-  <action name="actionSendSMS" />
+  <action name="actionSendSMS" >
+   <property name="icon" >
+    <iconset resource="../wengophone.qrc" >:/pics/history/sms_sent.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Send a SMS</string>
+   </property>
+  </action>
   <action name="actionCreateConferenceCall" />
   <action name="actionAcceptCall" />
   <action name="actionHangUpCall" />
@@ -159,9 +175,9 @@
   <action name="actionClearChatSessions" />
   <action name="actionClearSMS" />
   <action name="actionClearAll" />
-  <action name="actionForum" />
-  <action name="actionWikiFAQ" />
-  <action name="actionAbout" />
+  <action name="actionShowWengoForum" />
+  <action name="actionWengoFAQ" />
+  <action name="actionShowAbout" />
   <action name="actionShowVolumePanel" />
   <action name="actionCallContact" >
    <property name="icon" >
@@ -209,6 +225,11 @@
    </property>
    <property name="text" >
     <string>chatHistory</string>
+   </property>
+  </action>
+  <action name="actionShowFileTransfer" >
+   <property name="text" >
+    <string/>
    </property>
   </action>
  </widget>
