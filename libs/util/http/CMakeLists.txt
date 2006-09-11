@@ -32,7 +32,6 @@ include_directories(
 #sources
 set(owhttp_SRCS
   src/HttpRequest.cpp
-  src/null/NullHttpRequest.cpp
   src/curl/CurlHttpRequest.cpp
   #src/qt/QtHttpRequest.cpp
 )
@@ -42,10 +41,10 @@ add_library(owhttp STATIC ${owhttp_SRCS})
 target_link_libraries(${OWTHREAD_LIBRARIES})
 
 if (APPLE)
-  set_target_properties(
+  set_target_properties(owhttp
     PROPERTIES
       LINK_FLAGS
-        -framework CoreFoundation
+        "-framework CoreFoundation"
   )
 endif (APPLE)
 

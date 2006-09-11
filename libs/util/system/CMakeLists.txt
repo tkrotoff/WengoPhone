@@ -38,7 +38,13 @@ if (UNIX)
   if (APPLE)
     set(owsystem_SRCS ${owsystem_SRCS}
       src/null/Processes.cpp
-      src/mac/Startup.mm
+      src/mac/Startup.cpp
+    )
+
+    set_source_files_properties(${owsystem_SRCS}
+      PROPERTIES
+        COMPILE_FLAGS
+          "-x objective-c++"
     )
   else (APPLE)
     set(owsystem_SRCS ${owsystem_SRCS}

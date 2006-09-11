@@ -1,6 +1,8 @@
 project(owsound)
 
-find_package(Portaudio REQUIRED)
+if (NOT APPLE)
+  find_package(Portaudio REQUIRED)
+endif (NOT APPLE)
 
 # needed include directories to build owsound
 # saves the variable in internal cache for later use
@@ -58,12 +60,6 @@ if (UNIX AND NOT WIN32)
       src/mac/MacVolumeControl.cpp
       src/mac/Sound.cpp
     )
-    set_target_properties(owsound
-      PROPERTIES
-        LINK_FLAGS
-          -framework CoreAudio
-          -framework Cocoa
-    )
   else (APPLE)
     set(OWSOUND_LIBRARIES
       ${OWSOUND_LIBRARIES}
@@ -101,6 +97,20 @@ else (WITH_PORTAUDIO AND WIN32)
 endif (WITH_PORTAUDIO AND WIN32)
 
 add_library(owsound STATIC ${owsound_SRCS})
+
+if (APPLE)
+  set_target_properties(owsound
+    PROPERTIES
+      LINK_FLAGS
+        "-framework CoreAudio -framework Cocoa"
+  )
+
+  set_source_files_properties(${owsound_SRCS}
+    PROPERTIES
+      COMPILE_FLAGS
+        "-x objective-c++"
+  )
+endif (APPLE)
 
 target_link_libraries(${OWSOUND_LIBRARIES})
 

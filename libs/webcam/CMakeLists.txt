@@ -37,7 +37,6 @@ endif(UNIX AND NOT WIN32 OR APPLE)
 set(webcam_SRCS
   src/WebcamDriver.cpp
   src/webcam.cpp
-  src/null/NullWebcamDriver.cpp
 )
 
 if (MSVC)

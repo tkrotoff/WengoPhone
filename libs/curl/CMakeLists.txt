@@ -35,7 +35,7 @@ set(OWCURL_DEFINITIONS
 )
 
 if (APPLE)
-  find_package(ZILIB REQUIRED)
+  find_package(ZLIB REQUIRED)
 
   # FIXME: should be ${ZLIB_INCLUDE_DIRS} soon
   set(OWCURL_INCLUDE_DIRS
