@@ -50,6 +50,8 @@ public:
 
 	void unFullScreen();
 
+	void fullScreen();
+
 private Q_SLOTS:
 
 	void flipWebcamButtonClicked();

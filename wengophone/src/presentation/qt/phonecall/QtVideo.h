@@ -57,6 +57,10 @@ public:
 
 	virtual void unFullScreen() = 0;
 
+	virtual void fullScreen() = 0;
+
+	void toggleFullScreen();
+
 protected:
 
 	Ui::VideoWindow * _ui;

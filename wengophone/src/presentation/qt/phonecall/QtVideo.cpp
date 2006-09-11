@@ -33,3 +33,12 @@ QtVideo::QtVideo(QWidget * parent) {
 QtVideo::~QtVideo() {
 	delete _ui;
 };
+
+void QtVideo::toggleFullScreen() {
+	if (isFullScreen()) {
+		unFullScreen();
+	} else {
+		fullScreen();
+	}
+}
+

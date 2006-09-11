@@ -235,8 +235,12 @@ bool QtVideoQtEventManager::eventFilter(QObject * object, QEvent * event) {
 
 		if (keyEvent->key() == Qt::Key_Escape) {
 			_qtVideoQt->unFullScreen();
+		} else if ((keyEvent->key() == Qt::Key_F) && (keyEvent->modifiers() == Qt::ControlModifier)) {
+			_qtVideoQt->toggleFullScreen();
 		}
 
+	} else if (event->type() == QEvent::MouseButtonDblClick) {
+		_qtVideoQt->toggleFullScreen();
 	}
 
 	return QObject::eventFilter(object, event);

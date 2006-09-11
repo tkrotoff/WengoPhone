@@ -120,3 +120,9 @@ void QtVideoXV::unFullScreen() {
 		_remoteWindow->toggleFullscreen();
 	}
 }
+
+void QtVideoXV::fullScreen() {
+	if (!isFullScreen()) {
+		_remoteWindow->toggleFullscreen();
+	}
+}
