@@ -35,7 +35,6 @@ QtFileTransfer::QtFileTransfer(QObject * parent, CoIpManager * coIpManager)
 	: QObject(parent), _coIpManager(coIpManager) {
 
 	_qtFileTransferWidget = new QtFileTransferWidget();
-	_qtFileTransferWidget->show();
 
 	connect(this, SIGNAL(newReceiveFileSessionCreatedEventHandlerSignal(ReceiveFileSession *)),
 		SLOT(newReceiveFileSessionCreatedEventHandlerSlot(ReceiveFileSession *)));
