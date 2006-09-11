@@ -101,6 +101,7 @@ XVWindow::XVWindow() {
 	_XShmInfo.shmaddr = NULL;
 	_gc = NULL;
 	_isInitialized = false;
+	_XVImage = NULL;
 }
 
 int XVWindow::init(Display* dp, Window rootWindow, int x, int y, int windowWidth, int windowHeight, int imageWidth, int imageHeight) {
@@ -229,8 +230,13 @@ XVWindow::~XVWindow() {
 	}
 }
 
-void XVWindow::putFrame(piximage * frame) {
+void XVWindow::putFrame(uint8_t* frame, uint16_t width, uint16_t height) {
 	XEvent event;
+
+	if ((width!= _XVImage->width) || (height!=_XVImage->height)) {
+	    printf ("[x11] dynamic switching of resolution not supported\n");
+	    return;
+	}
 
 	// event handling
 	while (XPending(_display)) {
@@ -303,7 +309,7 @@ void XVWindow::putFrame(piximage * frame) {
 	}
 
 	// copy image to shared memory
-	memcpy(_XVImage->data, frame->data, (int) (frame->width* frame->height*1.5));
+	memcpy(_XVImage->data, frame, (int) (_XVImage->width * _XVImage->height * 3 /2));
 
 	XvShmPutImage(_display, _XVPort, _XVWindow, _gc, _XVImage, 0, 0, _XVImage->width, _XVImage->height,
 		_state.curX, _state.curY, _state.curWidth, _state.curHeight, True);

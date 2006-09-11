@@ -26,7 +26,7 @@
 #ifndef OWXVWINDOW_H
 #define OWXVWINDOW_H
 
-#include <pixertool/pixertool.h>
+#include <stdint.h>
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
@@ -58,7 +58,7 @@ public:
 	XVWindow();
 	~XVWindow();
 	int init(Display * dp, Window rootWindow, int x, int y, int windowWidth, int windowHeight, int imageWidth, int imageHeight);
-	void putFrame(piximage * frame);
+	void putFrame(uint8_t * frame, uint16_t width, uint16_t height);
 	void toggleFullscreen();
 	void toggleOntop();
 

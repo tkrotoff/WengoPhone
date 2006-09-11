@@ -95,9 +95,9 @@ QSize QtVideoXV::getFrameSize() const {
 
 void QtVideoXV::showImage(piximage * remoteVideoFrame, piximage * localVideoFrame) {
 	if (_remoteWindow) {
-		_remoteWindow->putFrame(remoteVideoFrame);
+		_remoteWindow->putFrame(remoteVideoFrame->data, remoteVideoFrame->width, remoteVideoFrame->height);
 		if (_localWindow) {
-			_localWindow->putFrame(localVideoFrame);
+			_localWindow->putFrame(localVideoFrame->data, localVideoFrame->width, localVideoFrame->height);
 		}
 	}
 }
