@@ -32,7 +32,7 @@ ToolTipLineEdit::ToolTipLineEdit(QWidget * parent)
 }
 
 void ToolTipLineEdit::setText(const QString & text) {
-	static already = true;
+	static bool already = true;
 
 	if (already) {
 		already = false;

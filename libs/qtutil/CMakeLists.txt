@@ -25,6 +25,7 @@ include_directories(
 )
 
 set(owqtutil_SRCS
+  src/CloseEventFilter.cpp
   src/EventFilter.cpp
   src/KeyEventFilter.cpp
   src/MouseEventFilter.cpp

@@ -4,7 +4,7 @@ if (WIN32)
   find_package(FFMPEGInternal REQUIRED)
 else (WIN32)
   find_package(FFMPEG REQUIRED)
-endif (UNIX AND NOT WIN32)
+endif (WIN32)
 
 # needed include directories to build pixertool
 # saves the variable in internal cache for later use
