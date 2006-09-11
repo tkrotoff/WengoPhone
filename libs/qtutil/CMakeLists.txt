@@ -12,13 +12,18 @@ set(OWQTUTIL_INCLUDE_DIRS
   CACHE INTERNAL "owqtutil include directories"
 )
 
+# TODO: Qt debug and release under windows
+
 # owqtutil lib and dependencies
 # saves the variable in internal cache for later use
 set(OWQTUTIL_LIBRARIES
   owqtutil
   ${OWTHREAD_LIBRARIES}
+  ${QT_QTCORE_LIBRARY}
+  ${QT_QTGUI_LIBRARY}
   CACHE INTERNAL "owqtutil libraries"
 )
+
 
 include_directories(
   ${OWQTUTIL_INCLUDE_DIRS}

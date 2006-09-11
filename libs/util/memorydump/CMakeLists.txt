@@ -1,24 +1,38 @@
 project(owmemorydump)
 
-#owutil dependency
-include_directories(${owutil_INCLUDE_DIR})
-link_directories(${owutil_BINARY_DIR})
-
-#includes
-set(owmemorydump_INCLUDE_DIR
-	${owmemorydump_SOURCE_DIR}/include
-	CACHE INTERNAL ""
+# needed include directories to build owmemorydump
+# saves the variable in internal cache for later use
+set(OWMEMORYDUMP_INCLUDE_DIRS
+  ${CMAKE_CURRENT_SOURCE_DIR}/include
+  ${OWUTIL_INCLUDE_DIRS}
+  CACHE INTERNAL "owmemorydump include directories"
 )
 
-include_directories(${owmemorydump_INCLUDE_DIR})
+# owmemorydump lib and dependencies
+# saves the variable in internal cache for later use
+set(OWMEMORYDUMP_LIBRARIES
+  owmemorydump
+  ${OWUTIL_LIBRARIES}
+  CACHE INTERNAL "owmemorydump libraries"
+)
 
-#sources
+if (MSVC)
+  set(OWMEMORYDUMP_LIBRARIES
+    ${set(OWMEMORYDUMP_LIBRARIES}
+    shlwapi
+    CACHE INTERNAL "owmemorydump libraries"
+  )
+endif (MSVC)
+
+include_directories(
+  ${OWMEMORYDUMP_INCLUDE_DIRS}
+)
+
 set(owmemorydump_SRCS
-	src/win32/MemoryDump.cpp
+  src/win32/MemoryDump.cpp
 )
 
-#owmemorydump
 add_library(owmemorydump STATIC ${owmemorydump_SRCS})
 
-#owutil dependency
-target_link_libraries(owmemorydump owutil)
+target_link_libraries(${OWMEMORYDUMP_LIBRARIES})
+
