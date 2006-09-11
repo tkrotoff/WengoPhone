@@ -56,6 +56,10 @@ public:
 
 	void addSendFileSession(SendFileSession * fileSession);
 
+	QtFileTransferWidget * getFileTransferWidget() {
+		return _qtFileTransferWidget;
+	}
+
 Q_SIGNALS:
 
 	void newReceiveFileSessionCreatedEventHandlerSignal(ReceiveFileSession * fileSession);
