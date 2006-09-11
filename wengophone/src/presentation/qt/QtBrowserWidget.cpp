@@ -111,9 +111,9 @@ void QtBrowserWidget::loadAccountURL() {
 			if (proxyAuthType == NetworkProxy::ProxyAuthTypeDigest) {
 				//HTTPS cannot be used when the HTTP proxy is in digest:
 				//ActiveX Internet Explorer crashes!
-				_qtBrowser->setUrl(std::string("http://www.wengo.fr/auth/auth.php"), data, true);
+				_qtBrowser->setUrl(std::string("http://www.wengo.fr/auth/auth.php"), data, false);
 			} else {
-				_qtBrowser->setUrl(std::string("https://www.wengo.fr/auth/auth.php"), data, true);
+				_qtBrowser->setUrl(std::string("https://www.wengo.fr/auth/auth.php"), data, false);
 			}
 		}
 	}
