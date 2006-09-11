@@ -10,6 +10,7 @@ endif (WIN32)
 # saves the variable in internal cache for later use
 set(OWCURL_INCLUDE_DIRS
   ${CMAKE_CURRENT_SOURCE_DIR}/include
+  ${CMAKE_CURRENT_SOURCE_DIR}/lib
   ${OPENSSL_INCLUDE_DIRS}
   CACHE INTERNAL "owcurl include directories"
 )
