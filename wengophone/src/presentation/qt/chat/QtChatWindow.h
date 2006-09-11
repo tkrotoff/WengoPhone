@@ -73,6 +73,8 @@ Q_SIGNALS:
 
 	void typingStateChangedSignal(const IMChatSession * sender, const IMContact * imContact,const IMChat::TypingState * state);
 
+	void statusMessageReceivedSignal(IMChatSession * sender, int status, const QString & message);
+
 	void statusChangedSignal(IMContact * sender);
 
 public Q_SLOTS:
@@ -101,6 +103,10 @@ public Q_SLOTS:
 
 	void statusChangedSlot(QString contactId);
 
+private Q_SLOTS:
+
+	void statusMessageReceivedSLot(IMChatSession * sender, int status, const QString & message);
+
 private:
 
 	QtChatWidget * getActiveTabWidget();
@@ -116,6 +122,8 @@ private:
 	void updateToolBarActions();
 
 	void messageReceivedEventHandler(IMChatSession & sender);
+
+	void statusMessageReceivedEventHandler(IMChatSession & sender, IMChat::StatusMessage status, const std::string & message);
 
 	void typingStateChangedEventHandler(IMChatSession & sender, const IMContact & imContact, IMChat::TypingState state);
 

@@ -71,6 +71,11 @@ QtChatWindow::QtChatWindow(QWidget * parent, CChatHandler & cChatHandler, IMChat
 
 	_imChatSession->messageReceivedEvent +=
 		boost::bind(&QtChatWindow::messageReceivedEventHandler, this, _1);
+	
+	//Event<void (IMChatSession & sender, IMChat::StatusMessage status, const std::string & message)> statusMessageReceivedEvent;
+	_imChatSession->statusMessageReceivedEvent +=
+			boost::bind(&QtChatWindow::statusMessageReceivedEventHandler, this, _1, _2, _3);
+
 	_imChatSession->imChatSessionWillDieEvent +=
 		boost::bind(&QtChatWindow::imChatSessionWillDieEventHandler, this, _1);
 
@@ -487,7 +492,7 @@ void QtChatWindow::updateToolBarActions() {
 void QtChatWindow::messageReceivedSlot(IMChatSession * sender) {
 	showToaster(sender);
 	// TODO NCOUTURIER new way to get messages
-	IMChatSession::IMChatMessageList imChatMessageList = sender->getReceivedMessage(_lastReceivedMessageIndex[sender->getId()]+1);
+	IMChatSession::IMChatMessageList imChatMessageList = sender->getReceivedMessage(_lastReceivedMessageIndex[sender->getId()] + 1);
 	if (imChatMessageList.size() > 0) {
 		_lastReceivedMessageIndex[sender->getId()] += imChatMessageList.size();
 		IMChatSession::IMChatMessageList::iterator imChatMessageListIterator = imChatMessageList.begin();
@@ -690,4 +695,31 @@ void QtChatWindow::showToaster(IMChatSession * imChatSession) {
 
 void QtChatWindow::imChatSessionWillDieEventHandler(IMChatSession & sender) {
 	_lastReceivedMessageIndex.erase(sender.getId());
+}
+
+void QtChatWindow::statusMessageReceivedEventHandler(
+	IMChatSession & sender, IMChat::StatusMessage status, const std::string & message) {
+
+	statusMessageReceivedSignal(&sender, (int)status, QString::fromStdString(message));
+}
+
+void QtChatWindow::statusMessageReceivedSLot(IMChatSession * sender, int status, const QString & message) {
+	int tabs = _tabWidget->count();
+	for (int i = 0; i < tabs; i++) {
+		QtChatWidget * widget = dynamic_cast<QtChatWidget *>(_tabWidget->widget(i));
+		if (widget->getSessionId() == sender->getId()) {
+			_chatWidget = qobject_cast<QtChatWidget *>(_tabWidget->widget(i));
+			_chatWidget->addToHistory("", message + tr(" has not been transmitted!"));
+			if (_tabWidget->currentWidget() != _chatWidget) {
+				if (isMinimized())
+					_tabWidget->setCurrentIndex(i);
+				else
+					_tabWidget->setBlinkingTab(i);
+			}
+			if (isMinimized()) {
+				flashWindow();
+			}
+			return;
+		}
+	}
 }
