@@ -8,7 +8,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>269</width>
+    <width>310</width>
     <height>517</height>
    </rect>
   </property>
@@ -128,34 +128,10 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>269</width>
+     <width>310</width>
      <height>29</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuWengo" >
-    <property name="title" >
-     <string>&amp;Wengo</string>
-    </property>
-    <addaction name="actionShowWengoAccount" />
-    <addaction name="actionEditMyProfile" />
-    <addaction name="actionLogOff" />
-    <addaction name="separator" />
-    <addaction name="actionChangeProfile" />
-    <addaction name="separator" />
-    <addaction name="actionWengoServices" />
-    <addaction name="separator" />
-    <addaction name="actionClose" />
-   </widget>
-   <widget class="QMenu" name="menuContacts" >
-    <property name="title" >
-     <string>&amp;Contacts</string>
-    </property>
-    <addaction name="actionAddContact" />
-    <addaction name="actionSearchWengoContact" />
-    <addaction name="separator" />
-    <addaction name="actionShowHideOfflineContacts" />
-    <addaction name="actionShowHideContactGroups" />
-   </widget>
    <widget class="QMenu" name="menuHelp" >
     <property name="title" >
      <string>&amp;Help</string>
@@ -177,6 +153,16 @@
     <addaction name="actionHangUpCall" />
     <addaction name="actionHoldResumeCall" />
    </widget>
+   <widget class="QMenu" name="menuContacts" >
+    <property name="title" >
+     <string>&amp;Contacts</string>
+    </property>
+    <addaction name="actionAddContact" />
+    <addaction name="actionSearchWengoContact" />
+    <addaction name="separator" />
+    <addaction name="actionShowHideOfflineContacts" />
+    <addaction name="actionShowHideContactGroups" />
+   </widget>
    <widget class="QMenu" name="menuTools" >
     <property name="title" >
      <string>&amp;Tools</string>
@@ -193,12 +179,25 @@
      <addaction name="separator" />
      <addaction name="actionClearAll" />
     </widget>
-    <addaction name="actionShowIMAccountSettings" />
     <addaction name="actionShowVolumePanel" />
     <addaction name="actionShowFileTransfer" />
     <addaction name="actionShowConfig" />
     <addaction name="separator" />
     <addaction name="menuClearHistory" />
+   </widget>
+   <widget class="QMenu" name="menuWengo" >
+    <property name="title" >
+     <string>&amp;Wengo</string>
+    </property>
+    <addaction name="actionShowWengoAccount" />
+    <addaction name="actionEditMyProfile" />
+    <addaction name="actionLogOff" />
+    <addaction name="separator" />
+    <addaction name="actionChangeProfile" />
+    <addaction name="separator" />
+    <addaction name="actionWengoServices" />
+    <addaction name="separator" />
+    <addaction name="actionClose" />
    </widget>
    <addaction name="menuWengo" />
    <addaction name="menuContacts" />
@@ -211,7 +210,7 @@
     <rect>
      <x>0</x>
      <y>495</y>
-     <width>269</width>
+     <width>310</width>
      <height>22</height>
     </rect>
    </property>
@@ -240,7 +239,7 @@
    <addaction name="actionCreateConferenceCall" />
    <addaction name="actionOpenChatWindow" />
    <addaction name="actionSendSms" />
-   <addaction name="actionShowIMAccountSettings" />
+   <addaction name="actionEditMyProfile" />
    <addaction name="actionEnableVideo" />
   </widget>
   <action name="actionShowWengoAccount" >
@@ -285,6 +284,9 @@
    </property>
   </action>
   <action name="actionEditMyProfile" >
+   <property name="icon" >
+    <iconset resource="wengophone.qrc" >:/pics/config/imaccounts.png</iconset>
+   </property>
    <property name="text" >
     <string>Edit My &amp;Profile</string>
    </property>
