@@ -140,10 +140,7 @@
    <addaction name="actionCallContact" />
    <addaction name="actionSendSMS" />
    <addaction name="actionSendFile" />
-   <addaction name="actionCreateChatConf" />
-   <addaction name="actionChatHistory" />
    <addaction name="actionContactInfo" />
-   <addaction name="actionBlockContact" />
   </widget>
   <action name="actionShowWengoAccount" />
   <action name="actionEditMyProfile" />
