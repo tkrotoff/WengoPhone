@@ -199,6 +199,7 @@
 		<file>pics/group_close.png</file>
 		<file>pics/group_close_reverse.png</file>
 		<file>pics/group_open.png</file>
+		<file>pics/icons-file-transfer.png</file>
 	</qresource>
 	<qresource prefix="/data" >
 		<file>AUTHORS</file>

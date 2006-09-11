@@ -129,7 +129,7 @@
      <x>0</x>
      <y>0</y>
      <width>283</width>
-     <height>19</height>
+     <height>29</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuWengo" >
@@ -195,6 +195,7 @@
     </widget>
     <addaction name="actionShowIMAccountSettings" />
     <addaction name="actionShowVolumePanel" />
+    <addaction name="actionShowFileTransfer" />
     <addaction name="actionShowConfig" />
     <addaction name="separator" />
     <addaction name="menuClearHistory" />
@@ -205,7 +206,16 @@
    <addaction name="menuTools" />
    <addaction name="menuHelp" />
   </widget>
-  <widget class="QStatusBar" name="statusBar" />
+  <widget class="QStatusBar" name="statusBar" >
+   <property name="geometry" >
+    <rect>
+     <x>0</x>
+     <y>495</y>
+     <width>283</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
   <widget class="QToolBar" name="toolBar" >
    <property name="windowTitle" >
     <string>ToolBar</string>
@@ -406,6 +416,17 @@
   <action name="actionClearSMS" >
    <property name="text" >
     <string>Short Text &amp;Messages (SMS)</string>
+   </property>
+  </action>
+  <action name="actionShowFileTransfer" >
+   <property name="icon" >
+    <iconset resource="wengophone.qrc" >:/pics/icons-file-transfer.png</iconset>
+   </property>
+   <property name="text" >
+    <string>Show File Transfer</string>
+   </property>
+   <property name="shortcut" >
+    <string/>
    </property>
   </action>
  </widget>
