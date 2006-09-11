@@ -77,7 +77,7 @@
        <string>Accounts</string>
       </property>
       <property name="icon" >
-       <iconset resource="..\wengophone.qrc" >:/pics/config/accounts.png</iconset>
+       <iconset resource="..\wengophone.qrc" >:/pics/config/imaccounts.png</iconset>
       </property>
      </item>
      <item>
