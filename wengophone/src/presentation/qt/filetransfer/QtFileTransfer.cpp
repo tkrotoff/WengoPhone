@@ -43,6 +43,8 @@ QtFileTransfer::QtFileTransfer(QObject * parent, CoIpManager * coIpManager)
 }
 
 QtFileTransfer::~QtFileTransfer() {
+		_qtFileTransferWidget->hide();
+		delete _qtFileTransferWidget;
 }
 
 void QtFileTransfer::newReceiveFileSessionCreatedEventHandler(FileSessionManager & sender,
