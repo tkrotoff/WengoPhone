@@ -39,7 +39,7 @@ std::string EnumDeviceType::toString(DeviceType deviceType) {
 	init();
 	std::string tmp = _deviceTypeMap[deviceType];
 	if (tmp.empty()) {
-		LOG_FATAL("unknown DeviceType=" + String::fromNumber(deviceType));
+		LOG_WARN("unknown DeviceType=" + String::fromNumber(deviceType));
 	}
 	return tmp;
 }
@@ -55,6 +55,6 @@ EnumDeviceType::DeviceType EnumDeviceType::toDeviceType(const std::string & devi
 		}
 	}
 
-	LOG_FATAL("unknown DeviceType=" + deviceType);
+	LOG_WARN("unknown DeviceType=" + deviceType);
 	return DeviceTypeMasterVolume;
 }
