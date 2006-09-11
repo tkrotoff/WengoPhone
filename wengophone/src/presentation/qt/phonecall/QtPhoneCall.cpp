@@ -263,7 +263,9 @@ void QtPhoneCall::stateChangedEvent(EnumPhoneCallState::PhoneCallState state) {
 		_actionHangupCall->setEnabled(true);
 		_ui->statusLabel->setText(tr("Talking"));
 
-		//FIXME Hack again... tired to hack hack hack hack
+		//FIXME Hack to put a modal window
+        //this lets the user explain to the participants that
+        //they are going to be put in a 3-way conf
 		ConferenceCall * conferenceCall = _cPhoneCall.getPhoneCall().getConferenceCall();
 		if (conferenceCall) {
 

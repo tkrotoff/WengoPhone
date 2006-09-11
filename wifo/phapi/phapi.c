@@ -868,6 +868,7 @@ phLinePlaceCall_withCa(int vlid, const char *uri, void *userdata, int rcid, int 
    public_voice_port[0] = 0;
 #endif
    
+   //streams = PH_STREAM_AUDIO;
    DBG_SIP_NEGO("phLinePlaceCall_withCa: a new call has been placed\n",0,0,0);
 
 
@@ -950,7 +951,7 @@ phLinePlaceCall_withCa(int vlid, const char *uri, void *userdata, int rcid, int 
 
 
   ca0->user_mflags = streams;
-  ca0->nego_mflags = streams;
+  ca0->nego_mflags = ca0->user_mflags;
 
   if (rcid)
     ca0->rcid = rcid;
@@ -1189,7 +1190,7 @@ phAcceptCall3(int cid, void *userData, int streams)
    local_video_port[0] = 0;
    local_voice_port[0] = 0;
 
-
+   //streams = PH_STREAM_AUDIO;
     DBG_SIP_NEGO("SIP NEGO: phAcceptCall3\n", 0, 0, 0);
     if (!ca) {
         return -PH_BADCID;
@@ -1564,14 +1565,6 @@ phHoldCall(int cid)
 	i = eXosip_on_hold_call(ca->did);
 	eXosip_unlock();
 
-	if (!i && ph_call_hasaudio(ca))
-	{
-#ifndef MEDIA_SUSPEND
-		ph_call_media_stop(ca);
-#else
-		ph_call_media_suspend(ca, 1);
-#endif
-	}
 	return i;
 
 }
@@ -3594,7 +3587,7 @@ ph_call_answered(eXosip_event_t *je)
     phCallStateInfo_t info;
     phcall_t *ca, *rca=0;
 
-    DBG_SIP_NEGO("SIP NEGO: ph_call_answered\n", 0, 0, 0);
+    DBG_SIP_NEGO("SIP NEGO: ph_call_answered remotely\n");
     clear(info);
     
     ca = ph_locate_call(je, 1);
@@ -3609,19 +3602,31 @@ ph_call_answered(eXosip_event_t *je)
 		ph_call_media_start(ca, je, ca->localresume);
 	}
 
+	if (ca->localhold && ph_call_hasaudio(ca))
+	{
+#ifndef MEDIA_SUSPEND
+		ph_call_media_stop(ca);
+#else
+		ph_call_media_suspend(ca, 1);
+#endif
+	}
+	
     info.localUri = je->local_uri;
     info.userData = je->external_reference;
     if (ca->localhold)
     {
         info.event = phHOLDOK;
+	    DBG_SIP_NEGO("SIP NEGO: phHOLDOK\n");
     }
     else if (ca->localresume)
     {
         info.event = phRESUMEOK;
+	    DBG_SIP_NEGO("SIP NEGO: phRESUMEOK\n");
         ca->localresume = 0;
     }
     else {
         info.event = phCALLOK;
+	    DBG_SIP_NEGO("SIP NEGO: phCALLOK, cid=%d\n", ca->cid);
     }
     
     info.u.remoteUri = je->remote_uri; 
@@ -3653,7 +3658,7 @@ ph_call_proceeding(eXosip_event_t *je)
     phcall_t *ca, *rca=0;
     int cng = 0;
     
-    DBG_SIP_NEGO("SIP NEGO: ph_call_proceeding\n", 0, 0, 0);
+    DBG_SIP_NEGO("SIP NEGO: ph_call_proceeding\n");
     clear(info);
     
     ca = ph_locate_call(je, 1);

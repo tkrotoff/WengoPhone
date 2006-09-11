@@ -259,9 +259,9 @@ void PhApiWrapper::closeCall(int callId) {
 }
 
 void PhApiWrapper::holdCall(int callId) {
-	Thread::sleep(3);
+	//Thread::sleep(3);
 	phHoldCall(callId);
-	Thread::sleep(3);
+	//Thread::sleep(3);
 }
 
 void PhApiWrapper::resumeCall(int callId) {
@@ -891,7 +891,7 @@ void PhApiWrapper::joinConference(int confId, int callId) {
 	}
 
 	if (callId1 != SipWrapper::CallIdError && callId2 != SipWrapper::CallIdError) {
-		Thread::sleep(5);
+		//Thread::sleep(5);
 		phConf(callId1, callId2);
 		LOG_DEBUG("conference call started");
 		resumeCall(callId1);
