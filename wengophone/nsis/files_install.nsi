@@ -68,9 +68,12 @@ File "${BUILD_DIR}\avcodec.dll"
 
 /** MemoryDump. */
 File "dll\dbghelp.dll"
-File "${BUILD_DIR}\qtwengophone.pdb"
-File "${BUILD_DIR}\phapi.pdb"
 File "${BUILD_DIR}\owcrashreport.exe"
+
+!ifndef WITHOUT_PDB
+    File "${BUILD_DIR}\qtwengophone.pdb"
+    File "${BUILD_DIR}\phapi.pdb"
+!endif
 
 /** Gaim plugins. */
 SetOutPath "$INSTDIR\plugins\"

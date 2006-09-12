@@ -31,6 +31,21 @@ nsis_defines['INSTALLER_NAME'] = installer_name
 
 env['NSISDEFINES'] = nsis_defines
 
+env_without_pdb = env.Copy()
+env_without_pdb['NSISDEFINES']['WITHOUT_PDB'] = ''
+if installer_tag != '' and installer_tag != None:
+	env_without_pdb['NSISDEFINES']['INSTALLER_NAME'] = nsis_defines['PRODUCT_NAME'] + '-setup-'\
+			+ compilation_mode + '-' + nsis_defines['PRODUCT_VERSION'] + '-without-pdb-%s.exe'\
+			% installer_tag
+else:
+	env_without_pdb['NSISDEFINES']['INSTALLER_NAME'] = nsis_defines['PRODUCT_NAME'] + '-setup-'\
+			+ compilation_mode + '-'\
+			+ nsis_defines['PRODUCT_VERSION'] + '-without-pdb.exe'
+
+
+
+nsis_inst_without_pdb = env_without_pdb.Installer('installer')
 nsis_inst = env.Installer('installer')
 
 env.Alias('qtwengophone-nsis-installer', nsis_inst)
+env.Alias('qtwengophone-nsis-installer-without-pdb', nsis_inst_without_pdb)
