@@ -33,7 +33,7 @@
         <string>Edit My Profile</string>
        </property>
        <property name="icon" >
-        <iconset resource="../wengophone.qrc" >:/pics/config/advanced.png</iconset>
+        <iconset resource="../wengophone.qrc" >:/pics/config/imaccounts.png</iconset>
        </property>
        <property name="iconSize" >
         <size>
