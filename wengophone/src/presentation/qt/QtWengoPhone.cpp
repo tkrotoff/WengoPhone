@@ -265,7 +265,12 @@ QWidget * QtWengoPhone::getChatWindow() const {
 
 void QtWengoPhone::setQtContactList(QtContactList * qtContactList) {
 	_qtContactList = qtContactList;
-	Widget::createLayout(_ui->tabContactList)->addWidget(qtContactList->getWidget());
+
+	if (!_ui->tabContactList->layout()) {
+		Widget::createLayout(_ui->tabContactList);
+	}
+
+	_ui->tabContactList->layout()->addWidget(_qtContactList->getWidget());
 
 	LOG_DEBUG("QtContactList added");
 }
@@ -276,7 +281,12 @@ QtContactList * QtWengoPhone::getQtContactList() const {
 
 void QtWengoPhone::setQtHistoryWidget(QtHistoryWidget * qtHistoryWidget) {
 	_qtHistoryWidget = qtHistoryWidget;
-	Widget::createLayout(_ui->tabHistory)->addWidget(_qtHistoryWidget->getWidget());
+
+	if (!_ui->tabHistory->layout()) {
+		Widget::createLayout(_ui->tabHistory);
+	}
+
+	_ui->tabHistory->layout()->addWidget(_qtHistoryWidget->getWidget());
 
 	LOG_DEBUG("QtHistoryWidget added");
 }
@@ -621,7 +631,7 @@ void QtWengoPhone::currentUserProfileWillDieEventHandlerSlot() {
 	}
 
 	if (_qtContactList) {
-		_ui->profileBar->layout()->removeWidget(_qtContactList->getWidget());
+		_ui->tabContactList->layout()->removeWidget(_qtContactList->getWidget());
 		_qtContactList->cleanup();
 		//_contactList is deleted in CContactList
 		OWSAFE_DELETE(_qtContactList);
@@ -661,14 +671,14 @@ void QtWengoPhone::userProfileInitializedEventHandlerSlot() {
 void QtWengoPhone::proxyNeedsAuthenticationEventHandler(NetworkProxyDiscovery & sender, NetworkProxy networkProxy) {
 	typedef PostEvent1<void (NetworkProxy networkProxy), NetworkProxy> MyPostEvent;
 	MyPostEvent * event =
-			new MyPostEvent(boost::bind(&QtWengoPhone::proxyNeedsAuthenticationEventHandlerThreadSafe, this, _1), networkProxy);
+		new MyPostEvent(boost::bind(&QtWengoPhone::proxyNeedsAuthenticationEventHandlerThreadSafe, this, _1), networkProxy);
 	postEvent(event);
 }
 
 void QtWengoPhone::wrongProxyAuthenticationEventHandler(NetworkProxyDiscovery & sender, NetworkProxy networkProxy) {
 	typedef PostEvent1<void (NetworkProxy networkProxy), NetworkProxy> MyPostEvent;
 	MyPostEvent * event =
-			new MyPostEvent(boost::bind(&QtWengoPhone::proxyNeedsAuthenticationEventHandlerThreadSafe, this, _1), networkProxy);
+		new MyPostEvent(boost::bind(&QtWengoPhone::proxyNeedsAuthenticationEventHandlerThreadSafe, this, _1), networkProxy);
 	postEvent(event);
 }
 
@@ -691,6 +701,9 @@ void QtWengoPhone::proxyNeedsAuthenticationEventHandlerThreadSafe(NetworkProxy n
 }
 
 void QtWengoPhone::closeWindow() {
+#if !defined(OS_MACOSX)
+	// Bad behavior on MacOS X
 	_wengoPhoneWindow->showMinimized();
+#endif
 	_wengoPhoneWindow->hide();
 }

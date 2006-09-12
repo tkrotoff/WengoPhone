@@ -141,6 +141,7 @@ void QtContactList::cleanup() {
 		delete _contactListWidget;
 		_contactListWidget = NULL;
 	}
+
 	if (_ui) {
 		delete _ui;
 		_ui = NULL;

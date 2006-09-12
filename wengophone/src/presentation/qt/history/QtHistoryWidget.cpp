@@ -26,6 +26,7 @@
 #include <control/history/CHistory.h>
 
 #include <util/Logger.h>
+#include <util/SafeDelete.h>
 
 #include <QtGui/QtGui>
 
@@ -102,8 +103,11 @@ QtHistoryWidget::QtHistoryWidget(QWidget * parent)
 }
 
 QtHistoryWidget::~QtHistoryWidget() {
-	delete _ui;
-	delete _historyTreeEventManager;
+	OWSAFE_DELETE(_popupMenu);
+	OWSAFE_DELETE(_menu);
+	OWSAFE_DELETE(_historyTreeEventManager);
+	OWSAFE_DELETE(_ui);
+	OWSAFE_DELETE(_historyWidget);
 }
 
 QWidget * QtHistoryWidget::getWidget() const {
@@ -111,7 +115,7 @@ QWidget * QtHistoryWidget::getWidget() const {
 }
 
 void QtHistoryWidget::addItem(const QString & text, const QIcon & icon, const QDate & date, const QTime & time,
-		const QTime & duration, const QString & name, unsigned id, QtHistoryItem::HistoryType type) {
+	const QTime & duration, const QString & name, unsigned id, QtHistoryItem::HistoryType type) {
 
 	QtHistoryItem * item = new QtHistoryItem(_ui->treeWidget);
 
