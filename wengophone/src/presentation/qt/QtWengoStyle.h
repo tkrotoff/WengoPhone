@@ -20,7 +20,15 @@
 #ifndef OWQTWENGOSTYLE_H
 #define OWQTWENGOSTYLE_H
 
-#include <QtGui/QStyle>
+#include <cutil/global.h>
+
+#ifdef OS_MACOSX
+	#include <QtGui/QMacStyle>
+	class SystemStyle : public QMacStyle { };
+#else
+	#include <QtGui/QStyle>
+	class SystemStyle : public QStyle { };
+#endif
 
 /**
  * General Qt style for correcting some bugs or ugly style.
@@ -31,7 +39,7 @@
  *
  * @author Tanguy Krotoff
  */
-class QtWengoStyle : public QStyle {
+class QtWengoStyle : public SystemStyle {
 public:
 
 	QtWengoStyle();
@@ -47,6 +55,7 @@ public:
 	void drawPrimitive(PrimitiveElement element, const QStyleOption * option,
 		QPainter * painter, const QWidget * widget = 0) const;
 
+#ifndef OS_MACOSX
 	void drawItemPixmap(QPainter * painter, const QRect & rectangle, int alignment, const QPixmap & pixmap) const {
 		_systemStyle->drawItemPixmap(painter, rectangle, alignment, pixmap);
 	}
@@ -123,6 +132,8 @@ public:
 	void unpolish(QApplication * application) {
 		_systemStyle->unpolish(application);
 	}
+
+#endif
 
 private:
 
