@@ -630,8 +630,8 @@
            </property>
            <property name="maximumSize" >
             <size>
-             <width>50</width>
-             <height>50</height>
+             <width>56</width>
+             <height>56</height>
             </size>
            </property>
            <property name="palette" >
@@ -991,17 +991,11 @@
       <number>0</number>
      </property>
      <item>
-      <widget class="QPushButton" name="avatarFrameButton" >
-       <property name="minimumSize" >
-        <size>
-         <width>16</width>
-         <height>16</height>
-        </size>
-       </property>
+      <widget class="QToolButton" name="avatarFrameButton" >
        <property name="maximumSize" >
         <size>
-         <width>16</width>
-         <height>16</height>
+         <width>22</width>
+         <height>22</height>
         </size>
        </property>
        <property name="text" >
@@ -1009,6 +1003,9 @@
        </property>
        <property name="icon" >
         <iconset resource="../wengophone.qrc" >:/pics/group_close_reverse.png</iconset>
+       </property>
+       <property name="autoRaise" >
+        <bool>true</bool>
        </property>
       </widget>
      </item>
