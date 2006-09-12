@@ -23,13 +23,14 @@
 
 #include <util/Logger.h>
 
-QtChatAvatarWidget::QtChatAvatarWidget(QWidget * parent, const QString & contactId,
-	QPixmap picture, const QString & nickname, PictureMode pmode, NicknameMode nmode)
-	: QWidget(parent), _pictureMode(pmode), _nicknameMode(nmode), _contactId(contactId) {
+QtChatAvatarWidget::QtChatAvatarWidget(QWidget * parent, const QString & id,
+	QPixmap picture, const QString & nickname, const QString & contactId, PictureMode pmode, NicknameMode nmode)
+	: QWidget(parent), _pictureMode(pmode), _nicknameMode(nmode), _contactId(id) {
 
 	_ui.setupUi(this);
 	setupPixmap(picture);
 	_ui.pictureLabel->setToolTip(nickname);
+	//setupNickname(contactId);
 	/*
 	if (_nicknameMode != NONE) {
 		setupNickname(nickname);
@@ -86,5 +87,14 @@ void QtChatAvatarWidget::setupPixmap(QPixmap pixmap) {
 
 void QtChatAvatarWidget::setupNickname(const QString & nickname) {
 	//TODO: limit string length
-	//_ui.nicknameLabel->setText(nickname);
+	QFontMetrics fontMetrics(_ui.nicknameLabel->font());
+	int width = 60;
+	QString temp;
+	for(int i = 0; i < nickname.length(); i++) {
+		if (fontMetrics.width(temp) > width) {
+			break;
+		}
+		temp += nickname[i];
+	}
+	_ui.nicknameLabel->setText(temp);
 }

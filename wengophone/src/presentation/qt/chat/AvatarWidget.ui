@@ -9,7 +9,7 @@
     <x>0</x>
     <y>0</y>
     <width>120</width>
-    <height>102</height>
+    <height>126</height>
    </rect>
   </property>
   <property name="minimumSize" >
@@ -26,8 +26,26 @@
     <number>0</number>
    </property>
    <property name="spacing" >
-    <number>0</number>
+    <number>4</number>
    </property>
+   <item row="1" column="0" >
+    <widget class="QLabel" name="nicknameLabel" >
+     <property name="sizePolicy" >
+      <sizepolicy>
+       <hsizetype>5</hsizetype>
+       <vsizetype>0</vsizetype>
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text" >
+      <string/>
+     </property>
+     <property name="alignment" >
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
    <item row="0" column="0" >
     <widget class="QLabel" name="pictureLabel" >
      <property name="sizePolicy" >

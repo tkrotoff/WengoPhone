@@ -61,6 +61,18 @@
     <addaction name="actionShowHideOfflineContacts" />
     <addaction name="actionShowHideContactGroups" />
    </widget>
+   <widget class="QMenu" name="menuActions" >
+    <property name="title" >
+     <string>&amp;Actions</string>
+    </property>
+    <addaction name="actionCreateConferenceCall" />
+    <addaction name="separator" />
+    <addaction name="actionSendSMS" />
+    <addaction name="separator" />
+    <addaction name="actionAcceptCall" />
+    <addaction name="actionHangUpCall" />
+    <addaction name="actionHoldResumeCall" />
+   </widget>
    <widget class="QMenu" name="menuHelp" >
     <property name="title" >
      <string>&amp;Help</string>
@@ -86,24 +98,11 @@
      <addaction name="separator" />
      <addaction name="actionClearAll" />
     </widget>
-    <addaction name="actionShowIMAccountSettings" />
     <addaction name="actionShowVolumePanel" />
     <addaction name="actionShowConfig" />
     <addaction name="actionShowFileTransfer" />
     <addaction name="separator" />
     <addaction name="menuClearHistory" />
-   </widget>
-   <widget class="QMenu" name="menuActions" >
-    <property name="title" >
-     <string>&amp;Actions</string>
-    </property>
-    <addaction name="actionCreateConferenceCall" />
-    <addaction name="separator" />
-    <addaction name="actionSendSMS" />
-    <addaction name="separator" />
-    <addaction name="actionAcceptCall" />
-    <addaction name="actionHangUpCall" />
-    <addaction name="actionHoldResumeCall" />
    </widget>
    <addaction name="menuWengo" />
    <addaction name="menuContact" />

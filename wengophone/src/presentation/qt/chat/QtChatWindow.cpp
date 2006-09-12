@@ -339,19 +339,19 @@ void QtChatWindow::statusChangedSlot(QString contactId) {
 			if (widget->getContactId() == contactId) {
 				switch(pstate) {
 				case EnumPresenceState::PresenceStateOnline:
-					_tabWidget->setTabIcon(i,QIcon(QPixmap(":/pics/status/online.png")));
+					_tabWidget->setTabIcon(i, QIcon(QPixmap(":/pics/status/online.png")));
 					break;
 				case EnumPresenceState::PresenceStateOffline:
-					_tabWidget->setTabIcon(i,QIcon(QPixmap(":/pics/status/offline.png")));
+					_tabWidget->setTabIcon(i, QIcon(QPixmap(":/pics/status/offline.png")));
 					break;
 				case EnumPresenceState::PresenceStateDoNotDisturb:
-					_tabWidget->setTabIcon(i,QIcon(QPixmap(":/pics/status/donotdisturb.png")));
+					_tabWidget->setTabIcon(i, QIcon(QPixmap(":/pics/status/donotdisturb.png")));
 					break;
 				case EnumPresenceState::PresenceStateAway:
-					_tabWidget->setTabIcon(i,QIcon(QPixmap(":/pics/status/away.png")));
+					_tabWidget->setTabIcon(i, QIcon(QPixmap(":/pics/status/away.png")));
 					break;
 				default:
-					_tabWidget->setTabIcon(i,QIcon(QPixmap(":/pics/contact/chat.png")));
+					_tabWidget->setTabIcon(i, QIcon(QPixmap(":/pics/contact/chat.png")));
 					break;
 				}
 				break;

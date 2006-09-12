@@ -37,7 +37,7 @@ QtChatTabWidget::QtChatTabWidget(QWidget * parent) : QTabWidget (parent) {
 	closeTabButton->setToolTip(tr("Close chat"));
 	closeTabButton->setFlat(true);
 
-	setCornerWidget(closeTabButton,Qt::TopRightCorner);
+	setCornerWidget(closeTabButton, Qt::TopRightCorner);
 	connect(closeTabButton, SIGNAL(clicked()), SIGNAL(closeButtonClicked()));
 }
 

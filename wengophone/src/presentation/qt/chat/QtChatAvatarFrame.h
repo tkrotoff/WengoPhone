@@ -41,7 +41,7 @@ public:
 
 	void setUserPixmap(QPixmap pixmap);
 
-	void addRemoteContact(const QString & contactId, const QString & displayName, QPixmap avatar);
+	void addRemoteContact(const QString & id, const QString & displayName, const QString & contactId, QPixmap avatar);
 
 	void removeRemoteContact(const QString & contactId);
 

@@ -49,8 +49,8 @@ public:
 		NONE,
 	};
 
-	QtChatAvatarWidget(QWidget * parent, const QString & contactId, QPixmap picture,
-		const QString & nickname, PictureMode pmode = SMALL, NicknameMode nmode = NONE);
+	QtChatAvatarWidget(QWidget * parent, const QString & id, QPixmap picture,
+		const QString & nickname, const QString & contactId, PictureMode pmode = SMALL, NicknameMode nmode = NONE);
 
 	const QString getContactId() {
 		return _contactId;

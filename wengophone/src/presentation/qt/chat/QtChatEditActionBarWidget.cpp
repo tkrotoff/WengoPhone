@@ -35,10 +35,10 @@ QtChatEditActionBarWidget::QtChatEditActionBarWidget(QWidget * parent) :
 	_emoticonsLabel = new WengoStyleLabel(this);
 	_emoticonsLabel->setPixmaps(
 		QPixmap(":/pics/chat/chat_emoticon_button.png"),
-		QPixmap(":/pics/profilebar/bar_separator.png"),
+		QPixmap(),
 		QPixmap(":/pics/profilebar/bar_fill.png"),
 		QPixmap(":/pics/chat/chat_emoticon_button_on.png"),
-		QPixmap(":/pics/profilebar/bar_separator.png"),
+		QPixmap(),
 		QPixmap(":/pics/profilebar/bar_fill.png")
 	);
 	_emoticonsLabel->setMaximumSize(QSize(48,65));
