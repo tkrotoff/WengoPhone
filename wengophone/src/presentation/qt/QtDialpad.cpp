@@ -29,6 +29,7 @@
 #include <sound/Sound.h>
 #include <sound/AudioDevice.h>
 
+#include <cutil/global.h>
 #include <util/File.h>
 #include <util/Logger.h>
 #include <util/StringList.h>
@@ -69,10 +70,17 @@ QtDialpad::QtDialpad(QtWengoPhone * qtWengoPhone)
 }
 
 QStringList QtDialpad::getListAudioSmileys() const {
+	QStringList listAudioSmileys;
+
+#if !defined(OS_MACOSX)
+	/*
+	 * Audio smileys are deactivated on MacOS X because Raw files cannot 
+	 * currently be played on this platform.
+	 */
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
 	QDir dir(QString::fromStdString(config.getAudioSmileysDir()));
-	QStringList listAudioSmileys = dir.entryList(QDir::Dirs);
+	listAudioSmileys = dir.entryList(QDir::Dirs);
 
 	int index = listAudioSmileys.indexOf(".");
 	if (index != -1) {
@@ -82,6 +90,7 @@ QStringList QtDialpad::getListAudioSmileys() const {
 	if (index != -1) {
 		listAudioSmileys.removeAt(index);
 	}
+#endif
 
 	return listAudioSmileys;
 }
