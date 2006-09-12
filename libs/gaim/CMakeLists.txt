@@ -1,7 +1,5 @@
 project(gaim)
 
-find_package(GTK2 REQUIRED)
-
 # needed include directories to build gaim
 # saves the variable in internal cache for later use
 set(GAIM_INCLUDE_DIRS

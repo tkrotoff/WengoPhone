@@ -10,17 +10,18 @@ include(DefineWengoDefaults)
 include(DefineCompilerFlags)
 include(DefineWengoOptions)
 
-#set(CMAKE_START_TEMP_FILE "")
-#set(CMAKE_END_TEMP_FILE "")
-#set(CMAKE_VERBOSE_MAKEFILE 1)
-
 set(CMAKE_BUILD_TYPE RelWithDebInfo)
 
-#Compatibility between Qt4 and Boost
+# Compatibility between Qt4 and Boost
 add_definitions(-DQT_NO_KEYWORDS)
 
-#set(ENABLE_SSL $ENV{ENABLE_SSL} CACHE INTERNAL "")
-#set(ENABLE_SSL true CACHE INTERNAL "")
+# Global requirements
+set(QT_MIN_VERSION 4.1.2)
+find_package(Qt4 REQUIRED)
+
+if (UNIX AND NOT WIN32)
+  find_package(GTK2 REQUIRED)
+endif (UNIX AND NOT WIN32)
 
 subdirs(
   libs

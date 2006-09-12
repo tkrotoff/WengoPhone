@@ -97,43 +97,43 @@ else (GAIM_LIBRARIES AND GAIM_INCLUDE_DIRS)
     PATHS
       ${CMAKE_SOURCE_DIR}/libs/gaim/binary-lib/msvc
   )
-  find_library(LIBATK-1.0-0_LIBRARY
+  find_library(GTK2_ATK_LIBRARY
     NAMES
       libatk-1.0-0
     PATHS
       ${CMAKE_SOURCE_DIR}/libs/gaim/binary-lib/msvc
   )
-  find_library(LIBGDK_PIXBUF-2.0-0_LIBRARY
+  find_library(GTK2_GDK_PIXBUF_LIBRARY
     NAMES
       libgdk_pixbuf-2.0-0
     PATHS
       ${CMAKE_SOURCE_DIR}/libs/gaim/binary-lib/msvc
   )
-  find_library(LIBGDK-WIN32-2.0-0_LIBRARY
+  find_library(GTK2_GDK_LIBRARY
     NAMES
       libgdk-win32-2.0-0
     PATHS
       ${CMAKE_SOURCE_DIR}/libs/gaim/binary-lib/msvc
   )
-  find_library(LIBGOBJECT-2.0-0_LIBRARY
+  find_library(GTK2_GOBJECT_LIBRARY
     NAMES
       libgobject-2.0-0
     PATHS
       ${CMAKE_SOURCE_DIR}/libs/gaim/binary-lib/msvc
   )
-  find_library(LIBGTK-WIN32-2.0-0_LIBRARY
+  find_library(GTK2_GTK_LIBRARY
     NAMES
       libgtk-win32-2.0-0
     PATHS
       ${CMAKE_SOURCE_DIR}/libs/gaim/binary-lib/msvc
   )
-  find_library(LIBPANGO-1.0-0_LIBRARY
+  find_library(GTK2_PANGO_LIBRARY
     NAMES
       libpango-1.0-0
     PATHS
       ${CMAKE_SOURCE_DIR}/libs/gaim/binary-lib/msvc
   )
-  find_library(LIBPANGOWIN32-1.0-0_LIBRARY
+  find_library(GTK2_PANGOWIN32_LIBRARY
     NAMES
       libpangowin32-1.0-0
     PATHS
@@ -156,13 +156,13 @@ else (GAIM_LIBRARIES AND GAIM_INCLUDE_DIRS)
     ${SSL3_LIBRARY}
     ${ZLIB1_LIBRARY}
     ${IDLETRACK_LIBRARY}
-    ${LIBATK-1.0-0_LIBRARY}
-    ${LIBGDK_PIXBUF-2.0-0_LIBRARY}
-    ${LIBGDK-WIN32-2.0-0_LIBRARY}
-    ${LIBGOBJECT-2.0-0_LIBRARY}
-    ${LIBGTK-WIN32-2.0-0_LIBRARY}
-    ${LIBPANGO-1.0-0_LIBRARY}
-    ${LIBPANGOWIN32-1.0-0_LIBRARY}
+    ${GTK2_ATK_LIBRARY}
+    ${GTK2_GDK_PIXBUF_LIBRARY}
+    ${GTK2_GDK_LIBRARY}
+    ${GTK2_GOBJECT_LIBRARY}
+    ${GTK2_GTK_LIBRARY}
+    ${GTK2_PANGO_LIBRARY}
+    ${GTK2_PANGOWIN32_LIBRARY}
 )
 
   if (GAIM_INCLUDE_DIRS AND GAIM_LIBRARIES)

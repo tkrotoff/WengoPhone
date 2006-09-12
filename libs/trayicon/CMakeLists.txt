@@ -1,8 +1,5 @@
 project(owtrayicon)
 
-#Qt4 dependency
-find_package(Qt4 REQUIRED)
-
 # needed include directories to build owtrayicon
 # saves the variable in internal cache for later use
 set(OWTRAYICON_INCLUDE_DIRS

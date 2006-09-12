@@ -14,6 +14,7 @@ subdirs(
   skinstyle
   sound
   timer
+  imwrapper
 )
 
 if (WIN32)

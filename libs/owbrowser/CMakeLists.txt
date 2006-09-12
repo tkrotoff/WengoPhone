@@ -1,8 +1,5 @@
 project(owbrowser)
 
-#Qt4 dependency
-find_package(Qt4 REQUIRED)
-
 # needed include directories to build owbrowser
 # saves the variable in internal cache for later use
 set(OWBROWSER_INCLUDE_DIRS
