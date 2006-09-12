@@ -14,8 +14,18 @@ set(PORTAUDIO_LIBRARIES
   CACHE INTERNAL "portaudio libraries"
 )
 
+set(PORTAUDIO_DEFINITIONS
+  -DPA_LITTLE_ENDIAN
+  -DPA_NO_ASIO
+  -DPA_NO_WDMKS
+)
+
 include_directories(
   ${PORTAUDIO_INCLUDE_DIRS}
+)
+
+add_definitions(
+  ${PORTAUDIO_DEFINITIONS}
 )
 
 set(portaudio_SRCS
@@ -49,12 +59,4 @@ endif (WITH_PORTAUDIO_DSOUND)
 add_library(portaudio STATIC ${portaudio_SRCS})
 
 target_link_libraries(${PORTAUDIO_LIBRARIES})
-
-set_source_files_properties(
-  PROPERTIES
-    COMPILE_FLAGS
-      -DPA_LITTLE_ENDIAN
-      -DPA_NO_ASIO
-      -DPA_NO_WDMKS
-)
 
