@@ -25,7 +25,8 @@
 #include <string>
 
 class WengoStyleLabel;
-class QComboBox;
+class QtPhoneComboBox;
+
 class QString;
 class QIcon;
 
@@ -91,7 +92,7 @@ private:
 
 	WengoStyleLabel * _hangUpButton;
 
-	QComboBox * _phoneComboBox;
+	QtPhoneComboBox * _phoneComboBox;
 };
 
 #endif	//OWQTCALLBAR_H

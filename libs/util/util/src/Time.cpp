@@ -19,20 +19,20 @@
 
 #include <util/Time.h>
 
-#include <util/String.h>
+#include <util/Logger.h>
 
 Time::Time() {
 	std::time_t curTime = time(NULL);
-	struct std::tm *timeinfo = std::localtime(&curTime);
-	_hour = timeinfo->tm_hour;
-	_minute = timeinfo->tm_min;
-	_second = timeinfo->tm_sec;
+	struct std::tm * timeinfo = std::localtime(&curTime);
+	setHour(timeinfo->tm_hour);
+	setMinute(timeinfo->tm_min);
+	setSecond(timeinfo->tm_sec);
 }
 
 Time::Time(const Time & time) {
-	_hour = time._hour;
-	_minute = time._minute;
-	_second = time._second;
+	setHour(time._hour);
+	setMinute(time._minute);
+	setSecond(time._second);
 }
 
 Time::Time(unsigned hour, unsigned minute, unsigned second) {
@@ -48,6 +48,48 @@ bool Time::operator==(const Time & time) const {
 	return ((_hour == time._hour)
 		&& (_minute == time._minute)
 		&& (_second == time._second));
+}
+
+unsigned Time::getHour() const {
+	return _hour;
+}
+
+void Time::setHour(unsigned hour) {
+	if (hour < 0) {
+		LOG_FATAL("hour cannot be < 0");
+	} else if (hour > 23) {
+		LOG_FATAL("hour cannot be > 23");
+	}
+
+	_hour = hour;
+}
+
+unsigned Time::getMinute() const {
+	return _minute;
+}
+
+void Time::setMinute(unsigned minute) {
+	if (minute < 0) {
+		LOG_FATAL("minute cannot be < 0");
+	} else if (minute > 59) {
+		LOG_FATAL("minute cannot be > 59");
+	}
+
+	_minute = minute;
+}
+
+unsigned Time::getSecond() const {
+	return _second;
+}
+
+void Time::setSecond(unsigned second) {
+	if (second < 0) {
+		LOG_FATAL("second cannot be < 0");
+	} else if (second > 59) {
+		LOG_FATAL("second cannot be > 59");
+	}
+
+	_second = second;
 }
 
 std::string Time::toString() const {

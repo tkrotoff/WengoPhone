@@ -19,20 +19,20 @@
 
 #include <util/Date.h>
 
-#include <util/String.h>
+#include <util/Logger.h>
 
 Date::Date() {
 	std::time_t curTime = time(NULL);
-	struct std::tm *timeinfo = std::localtime(&curTime);
-	_day = timeinfo->tm_mday;
-	_month = timeinfo->tm_mon + 1;
-	_year = timeinfo->tm_year + 1900;
+	struct std::tm * timeinfo = std::localtime(&curTime);
+	setDay(timeinfo->tm_mday);
+	setMonth(timeinfo->tm_mon + 1);
+	setYear(timeinfo->tm_year + 1900);
 }
 
 Date::Date(const Date & date) {
-	_day = date._day;
-	_month = date._month;
-	_year = date._year;
+	setDay(date._day);
+	setMonth(date._month);
+	setYear(date._year);
 }
 
 Date::Date(unsigned day, unsigned month, unsigned year) {
@@ -48,6 +48,42 @@ bool Date::operator==(const Date & date) const {
 	return ((_day == date._day)
 		&& (_month == date._month)
 		&& (_year == date._year));
+}
+
+unsigned Date::getDay() const {
+	return _day;
+}
+
+void Date::setDay(unsigned day) {
+	if (day < 1) {
+		LOG_FATAL("day cannot be < 1");
+	} else if (day > 31) {
+		LOG_FATAL("day cannot be > 31");
+	}
+
+	_day = day;
+}
+
+unsigned Date::getMonth() const {
+	return _month;
+}
+
+void Date::setMonth(unsigned month) {
+	if (month < 1) {
+		LOG_FATAL("month cannot be < 1");
+	} else if (month > 12) {
+		LOG_FATAL("month cannot be > 12");
+	}
+
+	_month = month;
+}
+
+unsigned Date::getYear() const {
+	return _year;
+}
+
+void Date::setYear(unsigned year) {
+	_year = year;
 }
 
 std::string Date::toString() const {

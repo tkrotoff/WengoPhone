@@ -58,56 +58,32 @@ public:
 	/**
 	 * @return the hour of the time. range: 0-23.
 	 */
-	unsigned getHour() const {
-		return _hour;
-	}
+	unsigned getHour() const;
 
 	/**
 	 * Sets the hour.
 	 */
-	void setHour(unsigned hour) {
-		if (hour < 0) {
-			hour = 0;
-		} else if (hour > 23) {
-			hour = 23;
-		}
-
-		_hour = hour;
-	}
+	void setHour(unsigned hour);
 
 	/**
 	 * @return the minute of the time. range: 0-59.
 	 */
-	unsigned getMinute() const {
-		return _minute;
-	}
+	unsigned getMinute() const;
 
 	/**
 	 * Sets the minute.
 	 */
-	void setMinute(unsigned minute) {
-		if (minute < 0) {
-			minute = 0;
-		} else if (minute > 60) {
-			minute = 59;
-		}
-
-		_minute = minute;
-	}
+	void setMinute(unsigned minute);
 
 	/**
 	 * Gets the second. range: 0-59.
 	 */
-	unsigned getSecond() const {
-		return _second;
-	}
+	unsigned getSecond() const;
 
 	/**
 	 * Sets second.
 	 */
-	void setSecond(unsigned second) {
-		_second = second;
-	}
+	void setSecond(unsigned second);
 
 	/**
 	 * @return a string representing the time. (e.g: "hh/mm/ss")

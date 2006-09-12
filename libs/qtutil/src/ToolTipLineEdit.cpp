@@ -85,8 +85,6 @@ void ToolTipLineEdit::keyPressEvent(QKeyEvent * event) {
 void ToolTipLineEdit::leaveEvent(QEvent * event) {
 	if (text().isEmpty()) {
 		setToolTipText();
-		//FIXME otherwise text is still black
-		setToolTipText();
 	}
 	QLineEdit::leaveEvent(event);
 }

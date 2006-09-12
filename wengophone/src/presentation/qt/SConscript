@@ -127,6 +127,7 @@ headers = [
 	'webservices/directory/QtWsDirectoryContact.h',
 
 	'callbar/QtCallBar.h',
+	'callbar/QtPhoneComboBox.h',
 
 	'statusbar/QtStatusBar.h',
 
@@ -259,6 +260,7 @@ sources = [
 	'webservices/directory/QtWsDirectoryContact.cpp',
 
 	'callbar/QtCallBar.cpp',
+	'callbar/QtPhoneComboBox.cpp',
 
 	'statusbar/QtStatusBar.cpp',
 

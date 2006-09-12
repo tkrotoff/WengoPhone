@@ -34,8 +34,10 @@
 #include <model/profile/UserProfile.h>
 
 #include <util/Logger.h>
+#include <util/SafeDelete.h>
 #include <thread/ThreadEvent.h>
 
+#include <qtutil/SafeConnect.h>
 #include <qtutil/PixmapMerging.h>
 
 #include <QtGui/QtGui>
@@ -71,15 +73,14 @@ QtIMProfileWidget::QtIMProfileWidget(CUserProfile & cUserProfile, CWengoPhone & 
 	_ui->setupUi(_imProfileWidget);
 
 	//Widget connections
-	connect(_ui->msnButton, SIGNAL(clicked()), SLOT(msnClicked()));
-	connect(_ui->yahooButton, SIGNAL(clicked()), SLOT(yahooClicked()));
-	connect(_ui->wengoButton, SIGNAL(clicked()), SLOT(wengoClicked()));
-	connect(_ui->aimButton, SIGNAL(clicked()), SLOT(aimClicked()));
-	connect(_ui->jabberButton, SIGNAL(clicked()), SLOT(jabberClicked()));
-	connect(_ui->aliasLineEdit, SIGNAL(returnPressed()), SLOT(aliasTextChanged()));
-	connect(_ui->aliasLineEdit, SIGNAL(textChanged(const QString &)), SLOT(aliasTextChanged(const QString &)));
-	connect(_ui->avatarButton, SIGNAL(clicked()), SLOT(changeAvatarClicked()));
-	connect(_ui->editProfileButton, SIGNAL(clicked()), SLOT(editProfileClicked()));
+	SAFE_CONNECT(_ui->msnButton, SIGNAL(clicked()), SLOT(msnClicked()));
+	SAFE_CONNECT(_ui->yahooButton, SIGNAL(clicked()), SLOT(yahooClicked()));
+	SAFE_CONNECT(_ui->wengoButton, SIGNAL(clicked()), SLOT(wengoClicked()));
+	SAFE_CONNECT(_ui->aimButton, SIGNAL(clicked()), SLOT(aimClicked()));
+	SAFE_CONNECT(_ui->jabberButton, SIGNAL(clicked()), SLOT(jabberClicked()));
+	SAFE_CONNECT(_ui->aliasLineEdit, SIGNAL(returnPressed()), SLOT(aliasTextChanged()));
+	SAFE_CONNECT(_ui->avatarButton, SIGNAL(clicked()), SLOT(changeAvatarClicked()));
+	SAFE_CONNECT(_ui->editProfileButton, SIGNAL(clicked()), SLOT(editProfileClicked()));
 
 	//UserProfile changed event connection
 	_cUserProfile.getUserProfile().profileChangedEvent += boost::bind(&QtIMProfileWidget::profileChangedEventHandler, this);
@@ -89,7 +90,7 @@ QtIMProfileWidget::QtIMProfileWidget(CUserProfile & cUserProfile, CWengoPhone & 
 }
 
 QtIMProfileWidget::~QtIMProfileWidget() {
-	delete _ui;
+	OWSAFE_DELETE(_ui);
 }
 
 QWidget * QtIMProfileWidget::getWidget() const {
@@ -295,7 +296,7 @@ void QtIMProfileWidget::init() {
 		_ui->aliasLineEdit->setText(QString::fromStdString(_cUserProfile.getUserProfile().getAlias()));
 	}
 
-	aliasTextChanged();
+	//aliasTextChanged();
 
 	updateAvatar();
 
@@ -322,15 +323,10 @@ void QtIMProfileWidget::showImAccountManager() {
 		true, _imProfileWidget);
 }
 
-void QtIMProfileWidget::aliasTextChanged(const QString & text) {
+void QtIMProfileWidget::aliasTextChanged() {
 	//Update alias text
 	std::string alias(_ui->aliasLineEdit->text().toUtf8().constData());
 	_cUserProfile.getUserProfile().setAlias(alias, NULL);
-
-	//Update alias text color
-	QPalette palette = _ui->aliasLineEdit->palette();
-	palette.setColor(QPalette::Text, Qt::black);
-	_ui->aliasLineEdit->setPalette(palette);
 
 	_ui->aliasLineEdit->update();
 }

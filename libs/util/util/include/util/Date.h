@@ -58,62 +58,38 @@ public:
 	/**
 	 * @return the day number of the date. Day range: 1-31.
 	 */
-	unsigned getDay() const {
-		return _day;
-	}
+	unsigned getDay() const;
 
 	/**
 	 * Sets the date day.
 	 *
 	 * @see getDay()
 	 */
-	void setDay(unsigned day) {
-		if (day < 1) {
-			day = 1;
-		} else if (day > 31) {
-			day = 31;
-		}
-
-		_day = day;
-	}
+	void setDay(unsigned day);
 
 	/**
 	 * @return the month number of the date. Month range: 1-12.
 	 */
-	unsigned getMonth() const {
-		return _month;
-	}
+	unsigned getMonth() const;
 
 	/**
 	 * Sets the date month.
 	 *
 	 * @see getMonth()
 	 */
-	void setMonth(unsigned month) {
-		if (month < 1) {
-			month = 1;
-		} else if (month > 12) {
-			month = 12;
-		}
-
-		_month = month;
-	}
+	void setMonth(unsigned month);
 
 	/**
 	 * Gets the date year. Year range: 0-infinite.
 	 */
-	unsigned getYear() const {
-		return _year;
-	}
+	unsigned getYear() const;
 
 	/**
 	 * Sets date year.
 	 *
 	 * @see getYear()
 	 */
-	void setYear(unsigned year) {
-		_year = year;
-	}
+	void setYear(unsigned year);
 
 	/**
 	 * @return a string representing the date. (e.g: "dd/mm/yyyy")

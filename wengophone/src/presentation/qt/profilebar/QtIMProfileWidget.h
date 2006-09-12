@@ -77,7 +77,7 @@ private Q_SLOTS:
 
 	void changeAvatarClicked();
 
-	void aliasTextChanged(const QString & text = QString::null);
+	void aliasTextChanged();
 
 private:
 
