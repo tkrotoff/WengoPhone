@@ -16,3 +16,7 @@ subdirs(
   timer
 )
 
+if (WIN32)
+  subdirs(
+    portaudio
+endif (WIN32)

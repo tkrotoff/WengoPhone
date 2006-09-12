@@ -27,7 +27,8 @@ case $1 in
 	;;
 	graph)
 		cmake -DCMAKE_INSTALL_PREFIX=/usr --graphviz=${BUILDDIR}/wengophone.dot "$@" ..
-		dot -Lg -Tpng -o${BUILDDIR}/wengophone.png ${BUILDDIR}/wengophone.dot
+		dot -Tpng -o${BUILDDIR}/wengophone.png ${BUILDDIR}/wengophone.dot
+		dot -Tsvg -o${BUILDDIR}/wengophone.svg ${BUILDDIR}/wengophone.dot
 	;;
 	*)
 		echo "Usage: $(basename $0) (configure|make|graph)"
