@@ -39,15 +39,13 @@ public:
 	~QtWengoStyle();
 
 	void drawComplexControl(ComplexControl control, const QStyleOptionComplex * option,
-				QPainter * painter, const QWidget * widget = 0) const;
+		QPainter * painter, const QWidget * widget = 0) const;
 
 	void drawControl(ControlElement element, const QStyleOption * option,
-				QPainter * painter, const QWidget * widget = 0) const;
+		QPainter * painter, const QWidget * widget = 0) const;
 
 	void drawPrimitive(PrimitiveElement element, const QStyleOption * option,
-				QPainter * painter, const QWidget * widget = 0) const;
-
-
+		QPainter * painter, const QWidget * widget = 0) const;
 
 	void drawItemPixmap(QPainter * painter, const QRect & rectangle, int alignment, const QPixmap & pixmap) const {
 		_systemStyle->drawItemPixmap(painter, rectangle, alignment, pixmap);
@@ -129,6 +127,10 @@ public:
 private:
 
 	QStyle * _systemStyle;
+
+	/** Used on MacOS X for QToolButton appearance. */
+	QStyle * _windowsStyle;
+
 };
 
 #endif	//OWQTWENGOSTYLE_H

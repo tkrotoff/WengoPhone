@@ -28,20 +28,22 @@ QtWengoStyle::QtWengoStyle() {
 	QString styleName = QApplication::style()->objectName();
 	LOG_DEBUG("style=" + styleName.toStdString());
 	_systemStyle = QStyleFactory::create(styleName);
+	_windowsStyle = new QWindowsStyle();
 }
 
 QtWengoStyle::~QtWengoStyle() {
 	OWSAFE_DELETE(_systemStyle);
+	OWSAFE_DELETE(_windowsStyle);
 }
 
 void QtWengoStyle::drawComplexControl(ComplexControl control, const QStyleOptionComplex * option,
-		QPainter * painter, const QWidget * widget) const {
+	QPainter * painter, const QWidget * widget) const {
 
 #if defined(OS_MACOSX)
 	//QToolButton
 	//Changes QToolButton style under MacOSX
 	if (control == CC_ToolButton) {
-		QWindowsStyle::drawComplexControl(control, option, painter, widget);
+		_windowsStyle->drawComplexControl(control, option, painter, widget);
 		return;
 	}
 #endif
@@ -50,7 +52,7 @@ void QtWengoStyle::drawComplexControl(ComplexControl control, const QStyleOption
 }
 
 void QtWengoStyle::drawControl(ControlElement element, const QStyleOption * option,
-		QPainter * painter, const QWidget * widget) const {
+	QPainter * painter, const QWidget * widget) const {
 
 	//QToolbar
 	//Removes the ugly toolbar bottom line
@@ -62,7 +64,7 @@ void QtWengoStyle::drawControl(ControlElement element, const QStyleOption * opti
 }
 
 void QtWengoStyle::drawPrimitive(PrimitiveElement element, const QStyleOption * option,
-		QPainter * painter, const QWidget * widget) const {
+	QPainter * painter, const QWidget * widget) const {
 
 	//QStatusBar
 	//Removes the ugly frame/marging around the status bar icons under Windows
