@@ -19,4 +19,9 @@ subdirs(
 if (WIN32)
   subdirs(
     portaudio
+  )
+else (WIN32)
+  subdirs(
+    gaim
+  )
 endif (WIN32)
