@@ -362,6 +362,8 @@ void QtChatWidget::sendMessage() {
 	}
 	_chatEdit->setFocus();
 	_chatEdit->ensureCursorVisible();
+	_chatEdit->insertPlainText(" ");
+	_chatEdit->setPlainText("");
 }
 
 void QtChatWidget::setIMChatSession(IMChatSession * imChatSession) {
