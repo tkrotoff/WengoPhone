@@ -114,48 +114,48 @@ struct ph_audio_driver ph_null_audio_driver = {
 };
 
 void ph_null_driver_init() {
-  DBG_DYNA_AUDIO_DRV("** Register and initialize null audio driver\n");
+  DBG_DYNA_AUDIO_DRV("phad_null: Register and initialize null audio driver\n");
   ph_register_audio_driver(&ph_null_audio_driver);
 }
 
 void null_start(phastream_t *as) {
   PH_UNREFERENCED_PARAMETER(as);
-  DBG_DYNA_AUDIO_DRV("** Starting audio stream\n");
+  DBG_DYNA_AUDIO_DRV("phad_null: Starting audio stream\n");
 }
 
 int null_open(phastream_t *as, const char *name, int rate, int framesize, ph_audio_cbk cbk) {
   PH_UNREFERENCED_PARAMETER(as);
-  DBG_DYNA_AUDIO_DRV("** Opening device %s with rate: %d, framesize: %d, and callback: %p\n",
+  DBG_DYNA_AUDIO_DRV("phad_null: Opening device %s with rate: %d, framesize: %d, and callback: %p\n",
     name, rate, framesize, cbk);
   return 0;
 }
 
 int null_write(phastream_t *as, void *buf, int len) {
   PH_UNREFERENCED_PARAMETER(as);
-  DBG_DYNA_AUDIO_DRV("** Writing %d bytes of data from buffer %p\n", len, buf);
+  DBG_DYNA_AUDIO_DRV("phad_null: Writing %d bytes of data from buffer %p\n", len, buf);
   return 0;
 }
 
 int null_read(phastream_t *as, void *buf, int len) {
   PH_UNREFERENCED_PARAMETER(as);
-  DBG_DYNA_AUDIO_DRV("** Reading %d bytes of data and putting it into buffer %p\n", len, buf);
+  DBG_DYNA_AUDIO_DRV("phad_null: Reading %d bytes of data and putting it into buffer %p\n", len, buf);
   return 0;
 }
 
 int null_get_out_space(phastream_t *as, int *used) {
   *used = 0;
   PH_UNREFERENCED_PARAMETER(as);
-  DBG_DYNA_AUDIO_DRV("** Out space used: 0\n", *used);
+  DBG_DYNA_AUDIO_DRV("phad_null: Out space used: 0\n", *used);
   return 0;
 }
 
 int null_get_avail_data(phastream_t *as) {
   PH_UNREFERENCED_PARAMETER(as);
-  DBG_DYNA_AUDIO_DRV("** Available data: 0\n");
+  DBG_DYNA_AUDIO_DRV("phad_null: Available data: 0\n");
   return 0;
 }
 
 void null_close(phastream_t *as) {
   PH_UNREFERENCED_PARAMETER(as);
-  DBG_DYNA_AUDIO_DRV("** Closing audio stream\n");
+  DBG_DYNA_AUDIO_DRV("phad_null: Closing audio stream\n");
 }
