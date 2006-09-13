@@ -1,7 +1,7 @@
 /*
  * phmedia video bandwidth control
  *
- * Copyright (C) 2005 Wengo SAS
+ * Copyright (C) 2005-2006 Wengo SAS
  *
  * This is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -38,6 +38,7 @@
 #include <webcam/webcam.h>
 #include <avcodec.h>
 
+#include "phlog.h"
 #include "phcodec.h"
 #include "phapi.h"
 //#include "phcall.h"
@@ -133,7 +134,7 @@ void ph_video_bwcontrol_apply_user_params(phvstream_t *stream) {
 
 	switch (msp->videoconfig) {
 		case PHAPI_VIDEO_LINE_128KBPS:
-			printf("video_bwcontrol: 128kbps\n");
+			DBG_MEDIA_ENGINE_VIDEO("...video_bwcontrol: 128kbps\n");
 			quality = 45;
 			b_rate = KB_PER_SEC(15);
 			fps = 10;
@@ -142,7 +143,7 @@ void ph_video_bwcontrol_apply_user_params(phvstream_t *stream) {
 			break;
 
 		case PHAPI_VIDEO_LINE_256KBPS:
-			printf("video_bwcontrol: 256kbps\n");
+			DBG_MEDIA_ENGINE_VIDEO("...video_bwcontrol: 256kbps\n");
 			b_rate = KB_PER_SEC(30);
 			quality = 45;
 			fps = 12;
@@ -151,7 +152,7 @@ void ph_video_bwcontrol_apply_user_params(phvstream_t *stream) {
 			break;
 
 		case PHAPI_VIDEO_LINE_512KBPS:
-			printf("video_bwcontrol: 512kbps\n");
+			DBG_MEDIA_ENGINE_VIDEO("...video_bwcontrol: 512kbps\n");
 			b_rate = KB_PER_SEC(60);
 			quality = 60;
 			fps = 17;
@@ -160,7 +161,7 @@ void ph_video_bwcontrol_apply_user_params(phvstream_t *stream) {
 			break;
 
 		case PHAPI_VIDEO_LINE_1024KBPS:
-			printf("video_bwcontrol: 1024kbps\n");
+			DBG_MEDIA_ENGINE_VIDEO("...video_bwcontrol: 1024kbps\n");
 			b_rate = KB_PER_SEC(120);
 			quality = 110;
 			fps = 25;
@@ -168,7 +169,7 @@ void ph_video_bwcontrol_apply_user_params(phvstream_t *stream) {
 			img_quality = 3;
 			break;
 		default:
-			printf("video_bwcontrol: default mode\n");
+			DBG_MEDIA_ENGINE_VIDEO("...video_bwcontrol: default mode\n");
 			quality = 45;
 			b_rate = KB_PER_SEC(15);
 			fps = 10;

@@ -612,6 +612,7 @@ int ph_msession_video_start(struct ph_msession_s *s, const char *deviceid)
 							       ph_video_bwcontrol_thread, video_stream);
   }
 
+  DBG_MEDIA_ENGINE_VIDEO("applying user defined quality settings...\n");
   ph_video_bwcontrol_apply_user_params(video_stream);
 
   sp->streamerData  = video_stream;

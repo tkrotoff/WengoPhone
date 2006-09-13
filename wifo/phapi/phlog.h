@@ -30,6 +30,7 @@
 /* 0 to disable, 1 log to file LOG_FILE and 2 log to stdout */
 #define ACTIVATE_SIPNEGO_DBG 0
 #define ACTIVATE_MEDIA_ENGINE_DBG 0
+#define ACTIVATE_MEDIA_ENGINE_VIDEO_DBG 1
 #define ACTIVATE_CODEC_LOOKUP_DBG 0
 #define ACTIVATE_DYNA_AUDIO_DBG 0
 #define ACTIVATE_DYNA_AUDIO_RESAMPLE_DBG 0
@@ -72,6 +73,18 @@ int logToFile(char *fmt, ...);
     #define DBG_MEDIA_ENGINE(...)
   #else
     #define DBG_MEDIA_ENGINE (void)
+  #endif
+#endif
+
+#if (ACTIVATE_MEDIA_ENGINE_VIDEO_DBG == 1)
+  #define DBG_MEDIA_ENGINE_VIDEO logToFile
+#elif (ACTIVATE_MEDIA_ENGINE_VIDEO_DBG == 2)
+  #define DBG_MEDIA_ENGINE_VIDEO print_dbg("DBG_MEDIA_ENGINE_VIDEO")
+#else
+  #ifndef _WIN32
+    #define DBG_MEDIA_ENGINE_VIDEO(...)
+  #else
+    #define DBG_MEDIA_ENGINE_VIDEO (void)
   #endif
 #endif
 
