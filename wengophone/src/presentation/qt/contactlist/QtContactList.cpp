@@ -71,6 +71,10 @@ QtContactList::QtContactList(CContactList & cContactList, CWengoPhone & cWengoPh
 	_ui = new Ui::ContactList();
 	_ui->setupUi(_contactListWidget);
 
+#if defined(OS_MACOSX)
+	_contactListWidget->layout()->setMargin(10);
+#endif
+
 	//treeWidget
 	_ui->treeWidget->setAcceptDrops(true);
 	_ui->treeWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);

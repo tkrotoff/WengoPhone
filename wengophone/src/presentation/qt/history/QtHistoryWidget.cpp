@@ -58,6 +58,10 @@ QtHistoryWidget::QtHistoryWidget(QWidget * parent)
 	_ui = new Ui::HistoryWidget();
 	_ui->setupUi(_historyWidget);
 
+#if defined(OS_MACOSX)
+	_historyWidget->layout()->setMargin(10);
+#endif
+
 	//treeWidget
 	connect(_ui->treeWidget, SIGNAL(itemDoubleClicked(QTreeWidgetItem *, int)), SLOT(itemDoubleClicked(QTreeWidgetItem *, int)));
 	connect(_ui->treeWidget, SIGNAL(itemClicked(QTreeWidgetItem *,int)), SLOT(itemClicked()));
