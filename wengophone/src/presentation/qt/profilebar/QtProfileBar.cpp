@@ -87,8 +87,8 @@ QtProfileBar::QtProfileBar(CWengoPhone & cWengoPhone, CUserProfile & cUserProfil
 					); //no fill
 
 	//Nickname label
-	_nicknameLabel = new WengoStyleLabel(this);
-	_nicknameLabel->setMinimumSize(QSize(46, 65));
+	_nicknameLabel = new WengoStyleLabel(this, WengoStyleLabel::Normal, Qt::AlignLeft);
+	_nicknameLabel->setMinimumSize(QSize(0, 65));
 	_nicknameLabel->setMaximumSize(QSize(1000, 65));
 	_nicknameLabel->setPixmaps(
 					QPixmap(), //no start
@@ -130,12 +130,11 @@ QtProfileBar::QtProfileBar(CWengoPhone & cWengoPhone, CUserProfile & cUserProfil
 	_gridlayout->addWidget(_creditLabel, 0, 3);
 
 	//_statusLabel->setText("S");
-	_nicknameLabel->setText(tr("NickName"));
+	_nicknameLabel->setText("  " + tr("NickName"));
 	_nicknameLabel->setTextColor(Qt::white);
 
 	_eventsLabel->setText(tr("events"));
 	_eventsLabel->setTextColor(Qt::white);
-
 
 	_creditLabel->setText(QString() + QChar(0x20ac) + QString(" 0.00"));
 	_creditLabel->setTextColor(Qt::white);
@@ -148,7 +147,6 @@ QtProfileBar::QtProfileBar(CWengoPhone & cWengoPhone, CUserProfile & cUserProfil
 
 	//resize
 	setMinimumSize(QSize(120, 65));
-
 
 	//create internal widgets
 	_qtImProfileWidget = new QtIMProfileWidget(_cUserProfile, _cWengoPhone, this);
@@ -535,7 +533,7 @@ void QtProfileBar::phoneLineCreatedEventHandler(UserProfile & sender, IPhoneLine
 }
 
 void QtProfileBar::phoneLineCreatedEventSlot() {
-	_nicknameLabel->setText(QString::fromStdString(_cUserProfile.getUserProfile().getWengoAccount()->getIdentity()));
+	_nicknameLabel->setText("  " + QString::fromStdString(_cUserProfile.getUserProfile().getWengoAccount()->getIdentity()));
 }
 
 void QtProfileBar::paintEvent(QPaintEvent * event) {
