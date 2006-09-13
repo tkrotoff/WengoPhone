@@ -42,6 +42,8 @@ QtCallForwardSettings::QtCallForwardSettings(CWengoPhone & cWengoPhone, QWidget 
 	_ui = new Ui::CallForwardSettings();
 	_ui->setupUi(_callForwardSettingsWidget);
 
+	_ui->groupBoxCellPhone->hide();
+
 	readConfig();
 }
 

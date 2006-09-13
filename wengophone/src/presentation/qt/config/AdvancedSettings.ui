@@ -40,7 +40,7 @@
     </spacer>
    </item>
    <item row="0" column="0" colspan="2" >
-    <widget class="QGroupBox" name="groupBox" >
+    <widget class="QGroupBox" name="advancedGroupBox" >
      <property name="enabled" >
       <bool>false</bool>
      </property>

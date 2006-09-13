@@ -33,6 +33,8 @@ QtAdvancedSettings::QtAdvancedSettings(QWidget * parent)
 	_ui = new Ui::AdvancedSettings();
 	_ui->setupUi(_advancedSettingsWidget);
 
+	_ui->advancedGroupBox->hide();
+
 	connect(_ui->advancedConfigWindowButton, SIGNAL(clicked()), SLOT(showAdvancedConfigWindow()));
 
 	readConfig();
