@@ -39,7 +39,7 @@ ContactGroupPopupMenu::ContactGroupPopupMenu(CContactList & cContactList, QWidge
 
 	addAction(QIcon(":/pics/contact_remove.png"), tr("Remove Contact Group"), this, SLOT(removeContactGroup()));
 	addAction(tr("Rename Contact Group"), this, SLOT(renameContactGroup()));
-	addAction(tr("Send SMS to group"), this, SLOT(sendSms()));
+	//addAction(tr("Send SMS to group"), this, SLOT(sendSms()));
 }
 
 void ContactGroupPopupMenu::showMenu(const QString & groupId) {
