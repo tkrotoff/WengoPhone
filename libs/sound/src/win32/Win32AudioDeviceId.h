@@ -33,20 +33,31 @@ class Win32AudioDeviceId : NonCopyable {
 public:
 
 	/**
-	 * Gets the wave out of the given device name.
+	 * Gets the wave out audio device id given its name.
 	 *
-	 * @param deviceName the name of the device we want the id
-	 * @return the id of the device
+	 * @param deviceName name of the wave out audio device (sound card)
+	 * @return the device id corresponding to the audio device, or 0 (the default one)
+	 *         or -1 if no audio device (sound card) are present on the system
 	 */
 	static int getWaveOutDeviceId(const std::string & deviceName);
 
 	/**
-	 * Gets the wave in of the given device name.
+	 * Gets the wave in audio device id given its name.
 	 *
-	 * @param deviceName the name of the device we want the id
-	 * @return the id of the device
+	 * @param deviceName name of the wave in audio device (sound card)
+	 * @return the device id corresponding to the audio device, or 0 (the default one)
+	 *         or -1 if no audio device (sound card) are present on the system
 	 */
 	static int getWaveInDeviceId(const std::string & deviceName);
+
+	/**
+	 * Gets the mixer audio device id given its name.
+	 *
+	 * @param mixerName name of the mixer audio device, can be a sound card, depends on the platform
+	 * @return the device id corresponding to the audio device, or 0 (the default one)
+	 *         or -1 if no audio device (sound card) are present on the system
+	 */
+	static int getMixerDeviceId(const std::string & mixerName);
 };
 
 #endif	//OWWIN32AUDIODEVICEID_H

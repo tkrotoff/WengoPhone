@@ -34,14 +34,7 @@ Win32VolumeControl::Win32VolumeControl(const AudioDevice & audioDevice) {
 
 	_hMixer = NULL;
 
-	int deviceId;
-	if (deviceType == EnumDeviceType::DeviceTypeMasterVolume) {
-		deviceId = Win32AudioDeviceId::getWaveOutDeviceId(deviceName);
-	} else if (deviceType == EnumDeviceType::DeviceTypeWaveIn) {
-		deviceId = Win32AudioDeviceId::getWaveInDeviceId(deviceName);
-	} else {
-		LOG_FATAL("unsupported deviceType=" + String::fromNumber(deviceType));
-	}
+	int deviceId = Win32AudioDeviceId::getMixerDeviceId(deviceName);
 
 	MMRESULT mr = initVolumeControl(deviceId, deviceType);
 	if (mr != MMSYSERR_NOERROR) {

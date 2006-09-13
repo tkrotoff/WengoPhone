@@ -64,3 +64,24 @@ int Win32AudioDeviceId::getWaveInDeviceId(const std::string & deviceName) {
 	//Default deviceId is 0
 	return 0;
 }
+
+int Win32AudioDeviceId::getMixerDeviceId(const std::string & mixerName) {
+	unsigned nbMixers = ::mixerGetNumDevs();
+	if (nbMixers == 0) {
+		//No audio mixer device are present
+		return -1;
+	}
+
+	MIXERCAPSA mixcaps;
+
+	for (unsigned mixerId = 0; mixerId < nbMixers; mixerId++) {
+		if (MMSYSERR_NOERROR == ::mixerGetDevCapsA(mixerId, &mixcaps, sizeof(MIXERCAPSA))) {
+			if (mixerName == mixcaps.szPname) {
+				return mixerId;
+			}
+		}
+	}
+
+	//Default deviceId is 0
+	return 0;
+}
