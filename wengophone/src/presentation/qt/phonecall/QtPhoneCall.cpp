@@ -197,7 +197,7 @@ QMenu * QtPhoneCall::createMenu() const {
 
 	menu->addAction(_actionAddContact);
 
-	menu->addAction(tr("Block contact"));
+//	menu->addAction(tr("Block contact"));
 
 	return menu;
 }
