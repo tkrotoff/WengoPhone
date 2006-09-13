@@ -414,8 +414,8 @@ void QtChatWindow::setupMenuBarActions() {
 	// setup "actions" menu
 	copyQAction(toolBar, _ui.actionCreateConferenceCall);
 	SAFE_CONNECT_RECEIVER(_ui.actionCreateConferenceCall, SIGNAL(triggered()), qtToolBar, SLOT(createConferenceCall()));
-	copyQAction(toolBar, _ui.actionSendSMS);
-	SAFE_CONNECT_RECEIVER(_ui.actionSendSMS, SIGNAL(triggered()), qtToolBar, SLOT(sendSms()));
+	copyQAction(toolBar, _ui.actionSendSms);
+	SAFE_CONNECT_RECEIVER(_ui.actionSendSms, SIGNAL(triggered()), qtToolBar, SLOT(sendSms()));
 	copyQAction(toolBar, _ui.actionAcceptCall);
 	SAFE_CONNECT_RECEIVER(_ui.actionAcceptCall, SIGNAL(triggered()), qtToolBar, SLOT(acceptCall()));
 	copyQAction(toolBar, _ui.actionHangUpCall);
@@ -459,7 +459,7 @@ void QtChatWindow::setupMenuBarActions() {
 
 void QtChatWindow::setupToolBarActions() {
 	SAFE_CONNECT(_ui.actionCallContact, SIGNAL(triggered()), SLOT(callActiveTabContact()));
-	SAFE_CONNECT(_ui.actionSendSMS, SIGNAL(triggered()), SLOT(sendSmsToActiveTabContact()));
+	SAFE_CONNECT(_ui.actionSendSms, SIGNAL(triggered()), SLOT(sendSmsToActiveTabContact()));
 	SAFE_CONNECT(_ui.actionSendFile, SIGNAL(triggered()), SLOT(sendFileToActiveTabContact()));
 	SAFE_CONNECT(_ui.actionCreateChatConf, SIGNAL(triggered()), SLOT(createChatConference()));
 	SAFE_CONNECT(_ui.actionContactInfo, SIGNAL(triggered()), SLOT(showActiveTabContactInfo()));
@@ -485,7 +485,7 @@ void QtChatWindow::updateToolBarActions() {
 		contactProfile = qtContactList->getCContactList().getContactProfile(contactId.toStdString());
 
 		_ui.actionCallContact->setEnabled(contactProfile.hasCall());
-		_ui.actionSendSMS->setEnabled(!contactProfile.getMobilePhone().empty());
+		_ui.actionSendSms->setEnabled(!contactProfile.getMobilePhone().empty());
 		_ui.actionSendFile->setEnabled(!contactProfile.getFirstWengoId().empty());
 		_ui.actionCreateChatConf->setEnabled(widget->canDoMultiChat());
 		_ui.actionContactInfo->setEnabled(true);

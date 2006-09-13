@@ -36,11 +36,15 @@ QtChatHandler::QtChatHandler(CChatHandler & cChatHandler, QtWengoPhone & qtWengo
 }
 
 QtChatHandler::~QtChatHandler() {
+	if (_qtChatWindow) {
+		_qtChatWindow->hide();
+		delete _qtChatWindow;
+	}
 }
 
 void QtChatHandler::newIMChatSessionCreatedEvent(IMChatSession & imChatSession) {
 	if (!_qtChatWindow) {
-		_qtChatWindow =  new QtChatWindow(_qtWengoPhone.getWidget(), _cChatHandler, imChatSession, _qtWengoPhone);
+		_qtChatWindow =  new QtChatWindow(0, _cChatHandler, imChatSession, _qtWengoPhone);
 		_qtChatWindow->showToaster(&imChatSession);
 	} else {
 		_qtChatWindow->addChatSession(&imChatSession);
