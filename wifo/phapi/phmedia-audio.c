@@ -1013,6 +1013,7 @@ ph_audio_play_cbk(phastream_t *stream, void *playbuf, int playbufsize)
   struct timeval now;
   int iter = 0;
   int played = 0;
+  char *audio_drv_playbuf = playbuf;
   int audio_drv_played=0;
 #ifdef PH_USE_RESAMPLE
   unsigned char resampleBuf[3000];
@@ -1262,6 +1263,10 @@ ph_audio_play_cbk(phastream_t *stream, void *playbuf, int playbufsize)
         played += morebytes;
     }
 
+    if (stream->record_spk_stream)
+    {
+        ph_media_audio_fast_recording_record(&stream->spk_stream_recorder, audio_drv_playbuf, audio_drv_played);
+    }
     DBG_DYNA_AUDIO_RX("audio_driver_played: %d\n", audio_drv_played);
 	return audio_drv_played;
 }
@@ -1894,6 +1899,11 @@ static void
 setup_recording(phastream_t *stream)
 {
   // recording activity
+    
+  ////////////////////////////////
+  // recorder for the AEC activity
+  // records a raw 3 channel file
+  ////////////////////////////////
   stream->activate_recorder = 0;
   if (getenv("PH_USE_RECORDER"))
   {
@@ -1914,6 +1924,9 @@ setup_recording(phastream_t *stream)
     ph_media_audio_recording_init(&stream->recorder, fname, 3, 4000);
   }
 
+  //////////////////////////////////////
+  // recorder of the post-encoder stream
+  //////////////////////////////////////
   stream->record_send_stream = 0;
   if (getenv("PH_RECORD_SEND_STREAM"))
   {
@@ -1934,6 +1947,10 @@ setup_recording(phastream_t *stream)
     ph_media_audio_fast_recording_init(&stream->send_stream_recorder, fname);
   }
 
+  ////////////////////////////////////////
+  // recorder of the untouched MIC stream
+  // records a raw 1 channel file
+  ////////////////////////////////////////
   stream->record_mic_stream = 0;
   if (getenv("PH_RECORD_MIC_STREAM"))
   {
@@ -1950,6 +1967,10 @@ setup_recording(phastream_t *stream)
     ph_media_audio_fast_recording_init(&stream->mic_stream_recorder, fname);
   }
 
+  ////////////////////////////////////////////////////
+  // recorder of the MIC stream right after resampling
+  // records a raw 1 channel file
+  ////////////////////////////////////////////////////
   stream->record_mic_resample_stream = 0;
   if (getenv("PH_RECORD_MIC_RESAMPLE_STREAM"))
   {
@@ -1965,6 +1986,28 @@ setup_recording(phastream_t *stream)
     snprintf(fname, 128, rname, mic_filename_index++);
     ph_media_audio_fast_recording_init(&stream->mic_resample_stream_recorder, fname);
   }
+
+  //////////////////////////////////////////////////////////////////////
+  // recorder of the SPK stream (stream as it is sent to the SPK driver)
+  // records a raw 1 channel file
+  //////////////////////////////////////////////////////////////////////
+  stream->record_spk_stream = 0;
+  if (getenv("PH_RECORD_SPK_STREAM"))
+  {
+    stream->record_spk_stream = atoi(getenv("PH_RECORD_SPK_STREAM"));
+  }
+
+  if (stream->record_spk_stream)
+  {
+    char *rname = NULL;
+    char fname[128];
+    static int spk_filename_index = 1;
+    rname = "spk_stream%d.data";
+    snprintf(fname, 128, rname, spk_filename_index++);
+    ph_media_audio_fast_recording_init(&stream->spk_stream_recorder, fname);
+  }
+  
+  
 }
 
 static void
@@ -1983,6 +2026,11 @@ cleanup_recording(phastream_t *stream)
   if (stream->record_mic_resample_stream)
   {
     ph_media_audio_recording_close(&stream->mic_resample_stream_recorder);
+  }
+
+  if (stream->record_spk_stream)
+  {
+    ph_media_audio_recording_close(&stream->spk_stream_recorder);
   }
 }
 

@@ -159,12 +159,14 @@ struct ph_audio_stream
   int record_recv_stream; /** 0/1 will init a recorder on "recording.raw" */
   int record_mic_stream; /** 0/1 will init a recorder of the pure MIC recorded sound */
   int record_mic_resample_stream; /** 0/1 will init a recorder of the pure MIC recorded sound */
+  int record_spk_stream; /** 0/1 will init a recorder of the pure SPK played sound */
 
   recording_t recorder; /** recording structure associated with the activate_recorder int */
   recording_t send_stream_recorder;
   recording_t recv_stream_recorder;
   recording_t mic_stream_recorder;
   recording_t mic_resample_stream_recorder;
+  recording_t spk_stream_recorder;
 
   /** used to choose the location where network data is recorded in the echo canceller circular buffer */
   int using_out_callback;
