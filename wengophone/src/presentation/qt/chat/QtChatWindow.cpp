@@ -425,8 +425,6 @@ void QtChatWindow::setupMenuBarActions() {
 	////
 
 	// setup "tools" menu
-	copyQAction(toolBar, _ui.actionShowIMAccountSettings);
-	SAFE_CONNECT_RECEIVER(_ui.actionShowIMAccountSettings, SIGNAL(triggered()), qtToolBar, SLOT(showIMAccountSettings()));
 	copyQAction(toolBar, _ui.actionShowConfig);
 	SAFE_CONNECT_RECEIVER(_ui.actionShowConfig, SIGNAL(triggered()), qtToolBar, SLOT(showConfig()));
 	copyQAction(toolBar, _ui.actionShowVolumePanel);
