@@ -160,6 +160,7 @@ struct ph_audio_stream
   int record_mic_stream; /** 0/1 will init a recorder of the pure MIC recorded sound */
   int record_mic_resample_stream; /** 0/1 will init a recorder of the pure MIC recorded sound */
   int record_spk_stream; /** 0/1 will init a recorder of the pure SPK played sound */
+  int record_flying_mono_stream; /** 0/1 will init a recorder that is flying (temporary) */
 
   recording_t recorder; /** recording structure associated with the activate_recorder int */
   recording_t send_stream_recorder;
@@ -167,6 +168,7 @@ struct ph_audio_stream
   recording_t mic_stream_recorder;
   recording_t mic_resample_stream_recorder;
   recording_t spk_stream_recorder;
+  recording_t flying_mono_stream_recorder;
 
   /** used to choose the location where network data is recorded in the echo canceller circular buffer */
   int using_out_callback;

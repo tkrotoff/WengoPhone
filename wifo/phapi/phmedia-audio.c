@@ -2006,6 +2006,26 @@ setup_recording(phastream_t *stream)
     snprintf(fname, 128, rname, spk_filename_index++);
     ph_media_audio_fast_recording_init(&stream->spk_stream_recorder, fname);
   }
+
+  //////////////////////////////////////////////////////////////////////
+  // recorder of the flying stream (stream as it is sent to the driver)
+  // records a raw 1 channel file
+  //////////////////////////////////////////////////////////////////////
+  stream->record_flying_mono_stream = 0;
+  if (getenv("PH_RECORD_FLYING_MONO_STREAM"))
+  {
+    stream->record_flying_mono_stream = atoi(getenv("PH_RECORD_FLYING_MONO_STREAM"));
+  }
+
+  if (stream->record_flying_mono_stream)
+  {
+    char *rname = NULL;
+    char fname[128];
+    static int flying_mono_filename_index = 1;
+    rname = "flying_mono_stream%d.data";
+    snprintf(fname, 128, rname, flying_mono_filename_index++);
+    ph_media_audio_fast_recording_init(&stream->flying_mono_stream_recorder, fname);
+  }
   
   
 }
@@ -2032,6 +2052,12 @@ cleanup_recording(phastream_t *stream)
   {
     ph_media_audio_recording_close(&stream->spk_stream_recorder);
   }
+
+  if (stream->record_flying_mono_stream)
+  {
+    ph_media_audio_recording_close(&stream->flying_mono_stream_recorder);
+  }
+
 }
 
 static int 
