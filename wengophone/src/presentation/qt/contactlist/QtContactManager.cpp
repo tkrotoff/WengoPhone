@@ -560,9 +560,9 @@ QMenu * QtContactManager::createMenu() {
 	connect(action, SIGNAL(triggered(bool)), this, SLOT(editContact(bool)));
 	action = menu->addAction(_trStringDeleteContact);
 	connect(action, SIGNAL(triggered(bool)), this, SLOT(deleteContact()));
-	menu->addSeparator();
-	menu->addAction(_trStringBlockContact);
-	menu->addAction(_trStringForwardToCellPhone);
+	//menu->addSeparator();
+	//menu->addAction(_trStringBlockContact);
+	//menu->addAction(_trStringForwardToCellPhone);
 	menu->setWindowOpacity(0.97);
 	return menu;
 }
