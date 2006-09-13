@@ -47,7 +47,7 @@ QtWengoConfigDialog::QtWengoConfigDialog(CWengoPhone & cWengoPhone, QWidget * pa
 	_settingsList += new QtGeneralSettings(cWengoPhone, _configDialog);
 	_settingsList += new QtNotificationSettings(_configDialog);
 	_settingsList += new QtAccountSettings(cWengoPhone, _configDialog);
-	_settingsList += new QtPrivacySettings(_configDialog);
+//	_settingsList += new QtPrivacySettings(_configDialog);
 	_settingsList += new QtAudioSettings(cWengoPhone, _configDialog);
 	_settingsList += new QtVideoSettings(cWengoPhone, _configDialog);
 	_settingsList += new QtAdvancedSettings(_configDialog);
