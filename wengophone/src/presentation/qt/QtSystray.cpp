@@ -43,7 +43,7 @@
 QtSystray::QtSystray(QObject * parent)
 	: QObjectThreadSafe(NULL) {
 
-	_qtWengoPhone = qobject_cast<QtWengoPhone *>(parent);
+	_qtWengoPhone = (QtWengoPhone *) parent;
 
 	_callMenu = NULL;
 	_sendSmsMenu = NULL;

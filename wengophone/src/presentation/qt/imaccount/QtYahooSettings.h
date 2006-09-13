@@ -22,6 +22,8 @@
 
 #include "QtIMAccountPlugin.h"
 
+#include <string>
+
 class IMAccount;
 class UserProfile;
 
@@ -38,6 +40,8 @@ class QtYahooSettings : public QtIMAccountPlugin {
 public:
 
 	QtYahooSettings(UserProfile & userProfile, IMAccount * imAccount, QWidget * parent);
+
+	~QtYahooSettings();
 
 	QWidget * getWidget() const {
 		return _IMSettingsWidget;

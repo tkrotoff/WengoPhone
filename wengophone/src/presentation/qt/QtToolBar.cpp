@@ -134,10 +134,11 @@ void QtToolBar::showWengoAccount() {
 
 void QtToolBar::editMyProfile() {
 	if (_cWengoPhone.getCUserProfileHandler().getCUserProfile()) {
+		QWidget * parent = qobject_cast<QWidget *>(sender()->parent());
 
 		//FIXME this method should not be called if no UserProfile has been set
 		QtProfileDetails qtProfileDetails(*_cWengoPhone.getCUserProfileHandler().getCUserProfile(),
-			_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getUserProfile(), _qtWengoPhone.getWidget());
+			_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getUserProfile(), parent);
 
 		//TODO UserProfile must be updated if QtProfileDetails was accepted
 		qtProfileDetails.show();
@@ -145,11 +146,13 @@ void QtToolBar::editMyProfile() {
 }
 
 void QtToolBar::addContact() {
-	 if (_cWengoPhone.getCUserProfileHandler().getCUserProfile()) {
+	if (_cWengoPhone.getCUserProfileHandler().getCUserProfile()) {
+		QWidget * parent = qobject_cast<QWidget *>(sender()->parent());
+
 		//FIXME this method should not be called if no UserProfile has been set
 		ContactProfile contactProfile;
 		QtProfileDetails qtProfileDetails(*_cWengoPhone.getCUserProfileHandler().getCUserProfile(),
-		 		contactProfile, _qtWengoPhone.getWidget());
+				contactProfile, parent);
 		if (qtProfileDetails.show()) {
 			_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCContactList().addContact(contactProfile);
 		}
@@ -157,7 +160,8 @@ void QtToolBar::addContact() {
 }
 
 void QtToolBar::showConfig() {
-	QtWengoConfigDialog dialog(_cWengoPhone, _qtWengoPhone.getWidget());
+	QWidget * parent = qobject_cast<QWidget *>(sender()->parent());
+	QtWengoConfigDialog dialog(_cWengoPhone, parent);
 	dialog.show();
 }
 
@@ -172,18 +176,23 @@ void QtToolBar::showWengoServices() {
 void QtToolBar::searchWengoContact() {
 	QtWsDirectory * qtWsDirectory = _qtWengoPhone.getQtWsDirectory();
 	if (qtWsDirectory) {
+		QWidget * parent = qobject_cast<QWidget *>(sender()->parent());
+		qtWsDirectory->getWidget()->setParent(parent);
 		qtWsDirectory->show();
 	}
 }
 
 void QtToolBar::showAbout() {
-	static QtAbout * qtAbout = new QtAbout(_qtWengoPhone.getWidget());
+	QWidget * parent = qobject_cast<QWidget *>(sender()->parent());
+	static QtAbout * qtAbout = new QtAbout(parent);
 	qtAbout->getWidget()->show();
 }
 
 void QtToolBar::sendSms() {
 	QtSms * qtSms = _qtWengoPhone.getQtSms();
 	if (qtSms) {
+		QWidget * parent = qobject_cast<QWidget *>(sender()->parent());
+		qtSms->getWidget()->setParent(parent);
 		qtSms->getWidget()->show();
 	}
 }
@@ -191,7 +200,9 @@ void QtToolBar::sendSms() {
 //FIXME hack hack hack hack tired of it
 void QtToolBar::createConferenceCall() {
 	if (_cWengoPhone.getCUserProfileHandler().getCUserProfile()) {
-		QDialog * conferenceDialog = qobject_cast<QDialog *>(WidgetFactory::create(":/forms/phonecall/ConferenceCallWidget.ui", _qtWengoPhone.getWidget()));
+		QWidget * parent = qobject_cast<QWidget *>(sender()->parent());
+
+		QDialog * conferenceDialog = qobject_cast<QDialog *>(WidgetFactory::create(":/forms/phonecall/ConferenceCallWidget.ui", parent));
 
 		QLabel * conferenceLabel = Object::findChild<QLabel *>(conferenceDialog, "conferenceLabel");
 		WidgetBackgroundImage::setBackgroundImage(conferenceLabel, ":pics/headers/conference.png", true);
@@ -218,9 +229,11 @@ void QtToolBar::createConferenceCall() {
 
 void QtToolBar::showIMAccountSettings() {
 	if (_cWengoPhone.getCUserProfileHandler().getCUserProfile()) {
+		QWidget * parent = qobject_cast<QWidget *>(sender()->parent());
+
 		//FIXME IMAccountManager must not use UserProfile but only CUserProfile
 		QtIMAccountManager imAccountManager(_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getUserProfile(),
-			true, _qtWengoPhone.getWidget());
+			true, parent);
 	}
 }
 

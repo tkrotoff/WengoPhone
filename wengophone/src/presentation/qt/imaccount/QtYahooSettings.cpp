@@ -27,6 +27,9 @@
 
 #include <util/WebBrowser.h>
 #include <util/Logger.h>
+#include <util/SafeDelete.h>
+
+#include <qtutil/SafeConnect.h>
 
 #include <QtGui/QtGui>
 
@@ -41,15 +44,19 @@ QtYahooSettings::QtYahooSettings(UserProfile & userProfile, IMAccount * imAccoun
 	init();
 }
 
+QtYahooSettings::~QtYahooSettings() {
+	OWSAFE_DELETE(_ui);
+}
+
 void QtYahooSettings::init() {
 	_IMSettingsWidget = new QWidget(_parentWidget);
 
 	_ui = new Ui::YahooSettings();
 	_ui->setupUi(_IMSettingsWidget);
 
-	connect(_ui->forgotPasswordButton, SIGNAL(clicked()), SLOT(forgotPasswordButtonClicked()));
+	SAFE_CONNECT(_ui->forgotPasswordButton, SIGNAL(clicked()), SLOT(forgotPasswordButtonClicked()));
 
-	connect(_ui->createAccountButton, SIGNAL(clicked()), SLOT(createAccountButtonClicked()));
+	SAFE_CONNECT(_ui->createAccountButton, SIGNAL(clicked()), SLOT(createAccountButtonClicked()));
 
 	if (!_imAccount) {
 		return;
@@ -63,7 +70,8 @@ void QtYahooSettings::init() {
 
 void QtYahooSettings::save() {
 	String login = _ui->loginLineEdit->text().toStdString();
-	String password = _ui->passwordLineEdit->text().toStdString();
+	std::string password = _ui->passwordLineEdit->text().toStdString();
+
 	static const String AT = "@";
 
 	//Test if login ends with @
@@ -76,6 +84,12 @@ void QtYahooSettings::save() {
 
 	if (!_imAccount) {
 		_imAccount = new IMAccount(login, password, EnumIMProtocol::IMProtocolYahoo);
+	} else {
+		//Check if the same account is not present already
+		if (_imAccount->getLogin() == login &&
+			_imAccount->getPassword() == password) {
+			return;
+		}
 	}
 
 	IMAccountParameters & params = _imAccount->getIMAccountParameters();

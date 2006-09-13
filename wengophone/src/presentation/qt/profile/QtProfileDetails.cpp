@@ -100,9 +100,18 @@ QtProfileDetails::QtProfileDetails(CUserProfile & cUserProfile, UserProfile & us
 	_ui->groupComboBox->hide();
 
 	//QtSimpleIMAccountManager
-	_qtIMAccountManager = new QtSimpleIMAccountManager(userProfile, _profileDetailsWindow);
+	//FIXME no more simple mode
+	/*_qtIMAccountManager = new QtSimpleIMAccountManager(userProfile, _profileDetailsWindow);
 	int index = _ui->imStackedWidget->addWidget(_qtIMAccountManager->getWidget());
+	_ui->imStackedWidget->setCurrentIndex(index);*/
+
+	//QtIMAccountManager
+	QtIMAccountManager * qtIMAccountManager =
+				new QtIMAccountManager((UserProfile &) _profile, false, _profileDetailsWindow);
+	int index = _ui->imStackedWidget->addWidget(qtIMAccountManager->getWidget());
 	_ui->imStackedWidget->setCurrentIndex(index);
+	_ui->advancedButton->hide();
+	/// no more simple mode
 
 	//saveButton
 	SAFE_CONNECT(_ui->saveButton, SIGNAL(clicked()), SLOT(saveUserProfile()));
@@ -189,7 +198,7 @@ void QtProfileDetails::saveProfile() {
 
 void QtProfileDetails::saveContact() {
 	if (_qtIMAccountManager) {
-		_qtIMAccountManager->saveIMContacts();
+		_qtIMAccountManager->saveIMAccounts();
 	} else if (_qtIMContactManager) {
 		_qtIMContactManager->saveIMContacts();
 	}

@@ -27,6 +27,9 @@
 #include <model/profile/UserProfile.h>
 
 #include <util/Logger.h>
+#include <util/SafeDelete.h>
+
+#include <qtutil/SafeConnect.h>
 
 #include <QtGui/QtGui>
 
@@ -46,7 +49,7 @@ QtIMAccountManager::QtIMAccountManager(UserProfile & userProfile, bool showAsDia
 	_ui->setupUi(_imAccountManagerWidget);
 
 	QMenu * addIMAccountMenu = new QMenu(_ui->addIMAccountButton);
-	connect(addIMAccountMenu, SIGNAL(triggered(QAction *)), SLOT(addIMAccount(QAction *)));
+	SAFE_CONNECT(addIMAccountMenu, SIGNAL(triggered(QAction *)), SLOT(addIMAccount(QAction *)));
 
 	addIMAccountMenu->addAction(QIcon(":pics/protocols/msn.png"),
 				QtEnumIMProtocol::toString(QtEnumIMProtocol::IMProtocolMSN));
@@ -60,22 +63,22 @@ QtIMAccountManager::QtIMAccountManager(UserProfile & userProfile, bool showAsDia
 				QtEnumIMProtocol::toString(QtEnumIMProtocol::IMProtocolGoogleTalk));
 	_ui->addIMAccountButton->setMenu(addIMAccountMenu);
 
-	connect(_ui->modifyIMAccountButton, SIGNAL(clicked()), SLOT(modifyIMAccount()));
+	SAFE_CONNECT(_ui->modifyIMAccountButton, SIGNAL(clicked()), SLOT(modifyIMAccount()));
 
-	connect(_ui->deleteIMAccountButton, SIGNAL(clicked()), SLOT(deleteIMAccount()));
+	SAFE_CONNECT(_ui->deleteIMAccountButton, SIGNAL(clicked()), SLOT(deleteIMAccount()));
 
 	if (showAsDialog) {
-		connect(_ui->closeButton, SIGNAL(clicked()), _imAccountManagerWidget, SLOT(accept()));
+		SAFE_CONNECT_RECEIVER(_ui->closeButton, SIGNAL(clicked()), _imAccountManagerWidget, SLOT(accept()));
 	} else {
 		_imAccountManagerWidget->layout()->setMargin(0);
 		_imAccountManagerWidget->layout()->setSpacing(0);
 		_ui->closeButton->hide();
 	}
 
-	connect(_ui->treeWidget, SIGNAL(itemDoubleClicked(QTreeWidgetItem *, int)),
+	SAFE_CONNECT(_ui->treeWidget, SIGNAL(itemDoubleClicked(QTreeWidgetItem *, int)),
 			SLOT(itemDoubleClicked(QTreeWidgetItem *, int)));
 
-	connect(_ui->treeWidget, SIGNAL(itemClicked(QTreeWidgetItem *, int)),
+	SAFE_CONNECT(_ui->treeWidget, SIGNAL(itemClicked(QTreeWidgetItem *, int)),
 			SLOT(itemClicked(QTreeWidgetItem *, int)));
 
 	loadIMAccounts();
@@ -86,7 +89,7 @@ QtIMAccountManager::QtIMAccountManager(UserProfile & userProfile, bool showAsDia
 }
 
 QtIMAccountManager::~QtIMAccountManager() {
-	delete _ui;
+	OWSAFE_DELETE(_ui);
 }
 
 void QtIMAccountManager::loadIMAccounts() {
@@ -154,7 +157,7 @@ void QtIMAccountManager::modifyIMAccount() {
 
 void QtIMAccountManager::itemClicked(QTreeWidgetItem * item, int column) {
 	if (column == COLUMN_ENABLE_BUTTON) {
-		QtIMAccountItem * imAccountItem = dynamic_cast<QtIMAccountItem *>(item);
+		QtIMAccountItem * imAccountItem = (QtIMAccountItem *) item;
 		IMAccount * imAccount = imAccountItem->getIMAccount();
 
 		if (item->checkState(column) == Qt::Checked) {

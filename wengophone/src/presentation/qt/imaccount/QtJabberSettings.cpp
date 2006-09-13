@@ -24,6 +24,9 @@
 #include <model/profile/UserProfile.h>
 
 #include <util/Logger.h>
+#include <util/SafeDelete.h>
+
+#include <qtutil/SafeConnect.h>
 
 #include <QtGui/QtGui>
 
@@ -31,6 +34,10 @@ QtJabberSettings::QtJabberSettings(UserProfile & userProfile, IMAccount * imAcco
 	: QtIMAccountPlugin(userProfile, imAccount, parent) {
 
 	init();
+}
+
+QtJabberSettings::~QtJabberSettings() {
+	OWSAFE_DELETE(_ui);
 }
 
 void QtJabberSettings::init() {
@@ -61,6 +68,12 @@ void QtJabberSettings::save() {
 
 	if (!_imAccount) {
 		_imAccount = new IMAccount(login, password, EnumIMProtocol::IMProtocolJabber);
+	} else {
+		//Check if the same account is not present already
+		if (_imAccount->getLogin() == login &&
+			_imAccount->getPassword() == password) {
+			return;
+		}
 	}
 
 	IMAccountParameters & params = _imAccount->getIMAccountParameters();

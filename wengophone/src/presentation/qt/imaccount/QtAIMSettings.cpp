@@ -27,6 +27,9 @@
 
 #include <util/WebBrowser.h>
 #include <util/Logger.h>
+#include <util/SafeDelete.h>
+
+#include <qtutil/SafeConnect.h>
 
 #include <QtGui/QtGui>
 
@@ -41,15 +44,19 @@ QtAIMSettings::QtAIMSettings(UserProfile & userProfile, IMAccount * imAccount, Q
 	init();
 }
 
+QtAIMSettings::~QtAIMSettings() {
+	OWSAFE_DELETE(_ui);
+}
+
 void QtAIMSettings::init() {
 	_IMSettingsWidget = new QWidget(_parentWidget);
 
 	_ui = new Ui::AIMSettings();
 	_ui->setupUi(_IMSettingsWidget);
 
-	connect(_ui->forgotPasswordButton, SIGNAL(clicked()), SLOT(forgotPasswordButtonClicked()));
+	SAFE_CONNECT(_ui->forgotPasswordButton, SIGNAL(clicked()), SLOT(forgotPasswordButtonClicked()));
 
-	connect(_ui->createAccountButton, SIGNAL(clicked()), SLOT(createAccountButtonClicked()));
+	SAFE_CONNECT(_ui->createAccountButton, SIGNAL(clicked()), SLOT(createAccountButtonClicked()));
 
 	if (!_imAccount) {
 		return;
@@ -61,23 +68,32 @@ void QtAIMSettings::init() {
 	_ui->passwordLineEdit->setText(QString::fromStdString(_imAccount->getPassword()));
 }
 
-void QtAIMSettings::save() {
-	std::string login = _ui->loginLineEdit->text().toStdString();
-	std::string password = _ui->passwordLineEdit->text().toStdString();
+void QtAIMSettings::save(UserProfile & userProfile, IMAccount * imAccount,
+		const std::string & login, const std::string & password) {
 
-	if (!_imAccount) {
-		_imAccount = new IMAccount(login, password, EnumIMProtocol::IMProtocolAIMICQ);
+	if (!imAccount) {
+		imAccount = new IMAccount(login, password, EnumIMProtocol::IMProtocolAIMICQ);
+	} else {
+		//Check if the same account is not present already
+		if (imAccount->getLogin() == login &&
+			imAccount->getPassword() == password) {
+			return;
+		}
 	}
 
-	IMAccountParameters & params = _imAccount->getIMAccountParameters();
+	IMAccountParameters & params = imAccount->getIMAccountParameters();
 
-	_imAccount->setLogin(login);
-	_imAccount->setPassword(password);
+	imAccount->setLogin(login);
+	imAccount->setPassword(password);
 	//FIXME to remove, must be done inside model
 	params.set(IMAccountParameters::OSCAR_PORT_KEY, 443);
 
-	_userProfile.addIMAccount(*_imAccount);
-	_userProfile.getConnectHandler().connect(*_imAccount);
+	userProfile.addIMAccount(*imAccount);
+	userProfile.getConnectHandler().connect(*imAccount);
+}
+
+void QtAIMSettings::save() {
+	save(_userProfile, _imAccount, _ui->loginLineEdit->text().toStdString(), _ui->passwordLineEdit->text().toStdString());
 }
 
 void QtAIMSettings::forgotPasswordButtonClicked() {

@@ -47,9 +47,11 @@ public:
 
 	QWidget * getWidget() const;
 
-	void saveIMContacts();
+	void saveIMAccounts();
 
 private:
+
+	void loadIMAccounts();
 
 	UserProfile & _userProfile;
 

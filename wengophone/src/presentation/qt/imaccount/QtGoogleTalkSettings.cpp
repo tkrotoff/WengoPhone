@@ -27,6 +27,9 @@
 
 #include <util/WebBrowser.h>
 #include <util/Logger.h>
+#include <util/SafeDelete.h>
+
+#include <qtutil/SafeConnect.h>
 
 #include <QtGui/QtGui>
 
@@ -44,15 +47,19 @@ QtGoogleTalkSettings::QtGoogleTalkSettings(UserProfile & userProfile, IMAccount 
 	init();
 }
 
+QtGoogleTalkSettings::~QtGoogleTalkSettings() {
+	OWSAFE_DELETE(_ui);
+}
+
 void QtGoogleTalkSettings::init() {
 	_IMSettingsWidget = new QWidget(_parentWidget);
 
 	_ui = new Ui::GoogleTalkSettings();
 	_ui->setupUi(_IMSettingsWidget);
 
-	connect(_ui->forgotPasswordButton, SIGNAL(clicked()), SLOT(forgotPasswordButtonClicked()));
+	SAFE_CONNECT(_ui->forgotPasswordButton, SIGNAL(clicked()), SLOT(forgotPasswordButtonClicked()));
 
-	connect(_ui->createAccountButton, SIGNAL(clicked()), SLOT(createAccountButtonClicked()));
+	SAFE_CONNECT(_ui->createAccountButton, SIGNAL(clicked()), SLOT(createAccountButtonClicked()));
 
 	if (!_imAccount) {
 		return;
@@ -64,30 +71,41 @@ void QtGoogleTalkSettings::init() {
 	_ui->passwordLineEdit->setText(QString::fromStdString(_imAccount->getPassword()));
 }
 
-void QtGoogleTalkSettings::save() {
-	String login = _ui->loginLineEdit->text().toStdString();
-	String password = _ui->passwordLineEdit->text().toStdString();
+void QtGoogleTalkSettings::save(UserProfile & userProfile, IMAccount * imAccount,
+		const std::string & login, const std::string & password) {
+
 	static const String AT = "@";
 
+	String tmpLogin = login;
 	//Test if login ends with @gmail.com
-	if (!login.contains(AT)) {
-		login = login + AT + GOOGLETALK_LOGIN_EXTENSION;
+	if (!tmpLogin.contains(AT)) {
+		tmpLogin = tmpLogin + AT + GOOGLETALK_LOGIN_EXTENSION;
 	}
 
-	if (!_imAccount) {
-		_imAccount = new IMAccount(login, password, EnumIMProtocol::IMProtocolJabber);
+	if (!imAccount) {
+		imAccount = new IMAccount(tmpLogin, password, EnumIMProtocol::IMProtocolJabber);
+	} else {
+		//Check if the same account is not present already
+		if (imAccount->getLogin() == tmpLogin &&
+			imAccount->getPassword() == password) {
+			return;
+		}
 	}
 
-	IMAccountParameters & params = _imAccount->getIMAccountParameters();
+	IMAccountParameters & params = imAccount->getIMAccountParameters();
 
-	_imAccount->setLogin(login);
-	_imAccount->setPassword(password);
+	imAccount->setLogin(tmpLogin);
+	imAccount->setPassword(password);
 	params.set(IMAccountParameters::JABBER_USE_TLS_KEY, true);
 	params.set(IMAccountParameters::JABBER_CONNECTION_SERVER_KEY, GOOGLETALK_SERVER);
 	params.set(IMAccountParameters::JABBER_PORT_KEY, GOOGLETALK_PORT);
 
-	_userProfile.addIMAccount(*_imAccount);
-	_userProfile.getConnectHandler().connect(*_imAccount);
+	userProfile.addIMAccount(*imAccount);
+	userProfile.getConnectHandler().connect(*imAccount);
+}
+
+void QtGoogleTalkSettings::save() {
+	save(_userProfile, _imAccount, _ui->loginLineEdit->text().toStdString(), _ui->passwordLineEdit->text().toStdString());
 }
 
 void QtGoogleTalkSettings::forgotPasswordButtonClicked() {

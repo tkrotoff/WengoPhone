@@ -566,7 +566,7 @@ void QtWengoPhone::exitApplication() {
 
 void QtWengoPhone::phoneComboBoxClicked() {
 	//if _qtHistoryWidget is set it means that History has been created
-	if (_qtHistoryWidget) {
+	/*if (_qtHistoryWidget) {
 		HistoryMementoCollection * mementos =
 			_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCHistory()->getMementos(HistoryMemento::OutgoingCall, 10);
 		_qtCallBar->clearPhoneComboBox();
@@ -609,7 +609,7 @@ void QtWengoPhone::phoneComboBoxClicked() {
 				LOG_FATAL("unknown HistoryMemento state=" + String::fromNumber(state));
 			}
 		}
-	}
+	}*/
 }
 
 void QtWengoPhone::exitEvent() {

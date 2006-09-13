@@ -8,7 +8,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>340</width>
+    <width>400</width>
     <height>164</height>
    </rect>
   </property>
@@ -19,7 +19,42 @@
    <property name="spacing" >
     <number>6</number>
    </property>
-   <item row="5" column="2" >
+   <item row="4" column="3" colspan="2" >
+    <widget class="QLineEdit" name="jabberLineEdit" >
+     <property name="enabled" >
+      <bool>false</bool>
+     </property>
+     <property name="text" >
+      <string>No Jabber/GoogleTalk Account</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="1" colspan="2" >
+    <widget class="QLabel" name="label_9" >
+     <property name="sizePolicy" >
+      <sizepolicy>
+       <hsizetype>0</hsizetype>
+       <vsizetype>5</vsizetype>
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text" >
+      <string>Jabber/GoogleTalk ID:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="4" >
+    <widget class="QPushButton" name="searchWengoContactButton" >
+     <property name="text" >
+      <string>Search</string>
+     </property>
+     <property name="icon" >
+      <iconset resource="../wengophone.qrc" >:/pics/iconbar/search_contact.png</iconset>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="3" >
     <spacer>
      <property name="orientation" >
       <enum>Qt::Vertical</enum>
@@ -32,76 +67,16 @@
      </property>
     </spacer>
    </item>
-   <item row="4" column="2" colspan="2" >
-    <widget class="QLineEdit" name="jabberLineEdit" >
-     <property name="enabled" >
-      <bool>false</bool>
+   <item row="0" column="0" >
+    <widget class="QLabel" name="wengoLabel" >
+     <property name="maximumSize" >
+      <size>
+       <width>22</width>
+       <height>22</height>
+      </size>
      </property>
-    </widget>
-   </item>
-   <item row="0" column="3" >
-    <widget class="QPushButton" name="searchWengoContactButton" >
-     <property name="text" >
-      <string>Search</string>
-     </property>
-     <property name="icon" >
-      <iconset resource="../wengophone.qrc" >:/pics/iconbar/search_contact.png</iconset>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="1" >
-    <widget class="QLabel" name="label_4" >
-     <property name="text" >
-      <string>MSN ID:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="2" colspan="2" >
-    <widget class="QLineEdit" name="msnLineEdit" >
-     <property name="enabled" >
-      <bool>false</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="0" >
-    <widget class="QLabel" name="jabberLabel" >
      <property name="pixmap" >
-      <pixmap resource="../wengophone.qrc" >:/pics/protocols/jabber_off.png</pixmap>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="0" >
-    <widget class="QLabel" name="aimLabel" >
-     <property name="pixmap" >
-      <pixmap resource="../wengophone.qrc" >:/pics/protocols/aim_off.png</pixmap>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="2" colspan="2" >
-    <widget class="QLineEdit" name="aimLineEdit" >
-     <property name="enabled" >
-      <bool>false</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="1" >
-    <widget class="QLabel" name="label_7" >
-     <property name="text" >
-      <string>AIM/ICQ ID:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="2" colspan="2" >
-    <widget class="QLineEdit" name="yahooLineEdit" >
-     <property name="enabled" >
-      <bool>false</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="2" >
-    <widget class="QLineEdit" name="wengoLineEdit" >
-     <property name="enabled" >
-      <bool>false</bool>
+      <pixmap resource="../wengophone.qrc" >:/pics/protocols/wengo_off.png</pixmap>
      </property>
     </widget>
    </item>
@@ -112,6 +87,13 @@
      </property>
     </widget>
    </item>
+   <item row="2" column="0" >
+    <widget class="QLabel" name="aimLabel" >
+     <property name="pixmap" >
+      <pixmap resource="../wengophone.qrc" >:/pics/protocols/aim_off.png</pixmap>
+     </property>
+    </widget>
+   </item>
    <item row="3" column="0" >
     <widget class="QLabel" name="yahooLabel" >
      <property name="pixmap" >
@@ -119,17 +101,39 @@
      </property>
     </widget>
    </item>
+   <item row="4" column="0" >
+    <widget class="QLabel" name="jabberLabel" >
+     <property name="pixmap" >
+      <pixmap resource="../wengophone.qrc" >:/pics/protocols/jabber_off.png</pixmap>
+     </property>
+    </widget>
+   </item>
    <item row="0" column="1" >
     <widget class="QLabel" name="label_2" >
+     <property name="sizePolicy" >
+      <sizepolicy>
+       <hsizetype>0</hsizetype>
+       <vsizetype>5</vsizetype>
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="text" >
       <string>Wengo ID:</string>
      </property>
     </widget>
    </item>
-   <item row="4" column="1" >
-    <widget class="QLabel" name="label_9" >
+   <item row="1" column="1" >
+    <widget class="QLabel" name="label_4" >
      <property name="text" >
-      <string>Jabber/GoogleTalk ID:</string>
+      <string>MSN ID:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1" >
+    <widget class="QLabel" name="label_7" >
+     <property name="text" >
+      <string>AIM/ICQ ID:</string>
      </property>
     </widget>
    </item>
@@ -140,10 +144,43 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="0" >
-    <widget class="QLabel" name="wengoLabel" >
-     <property name="pixmap" >
-      <pixmap resource="../wengophone.qrc" >:/pics/protocols/wengo_off.png</pixmap>
+   <item row="2" column="2" colspan="3" >
+    <widget class="QLineEdit" name="aimLineEdit" >
+     <property name="enabled" >
+      <bool>false</bool>
+     </property>
+     <property name="text" >
+      <string>No AIM/ICQ Account</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="2" colspan="3" >
+    <widget class="QLineEdit" name="msnLineEdit" >
+     <property name="enabled" >
+      <bool>false</bool>
+     </property>
+     <property name="text" >
+      <string>No MSN Account</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="2" colspan="2" >
+    <widget class="QLineEdit" name="wengoLineEdit" >
+     <property name="enabled" >
+      <bool>false</bool>
+     </property>
+     <property name="text" >
+      <string>No Wengo Account</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="2" colspan="3" >
+    <widget class="QLineEdit" name="yahooLineEdit" >
+     <property name="enabled" >
+      <bool>false</bool>
+     </property>
+     <property name="text" >
+      <string>No Yahoo Account</string>
      </property>
     </widget>
    </item>

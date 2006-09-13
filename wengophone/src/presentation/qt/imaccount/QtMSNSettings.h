@@ -22,6 +22,8 @@
 
 #include "QtIMAccountPlugin.h"
 
+#include <string>
+
 class IMAccount;
 class UserProfile;
 
@@ -39,9 +41,23 @@ public:
 
 	QtMSNSettings(UserProfile & userProfile, IMAccount * imAccount, QWidget * parent);
 
+	~QtMSNSettings();
+
 	QWidget * getWidget() const {
 		return _IMSettingsWidget;
 	}
+
+	/**
+	 * Code factorization.
+	 *
+	 * @see QtSimpleIMAccountManager
+	 * @param userProfile
+	 * @param imAccount if NULL then creates a new IMAccount
+	 * @param login
+	 * @param password
+	 */
+	static void save(UserProfile & userProfile, IMAccount * imAccount,
+		const std::string & login, const std::string & password);
 
 public Q_SLOTS:
 

@@ -120,11 +120,21 @@ void QtSimpleIMContactManager::loadIMContacts() {
 				_ui->jabberLabel, ":pics/protocols/jabber.png", _ui->jabberLineEdit);
 
 	//Loads all the IM contacts
-	_ui->wengoLineEdit->setText(getIMContactsOfProtocol(EnumIMProtocol::IMProtocolWengo));
-	_ui->msnLineEdit->setText(getIMContactsOfProtocol(EnumIMProtocol::IMProtocolMSN));
-	_ui->aimLineEdit->setText(getIMContactsOfProtocol(EnumIMProtocol::IMProtocolAIMICQ));
-	_ui->yahooLineEdit->setText(getIMContactsOfProtocol(EnumIMProtocol::IMProtocolYahoo));
-	_ui->jabberLineEdit->setText(getIMContactsOfProtocol(EnumIMProtocol::IMProtocolJabber));
+	if (_ui->wengoLineEdit->isEnabled()) {
+		_ui->wengoLineEdit->setText(getIMContactsOfProtocol(EnumIMProtocol::IMProtocolWengo));
+	}
+	if (_ui->msnLineEdit->isEnabled()) {
+		_ui->msnLineEdit->setText(getIMContactsOfProtocol(EnumIMProtocol::IMProtocolMSN));
+	}
+	if (_ui->aimLineEdit->isEnabled()) {
+		_ui->aimLineEdit->setText(getIMContactsOfProtocol(EnumIMProtocol::IMProtocolAIMICQ));
+	}
+	if (_ui->yahooLineEdit->isEnabled()) {
+		_ui->yahooLineEdit->setText(getIMContactsOfProtocol(EnumIMProtocol::IMProtocolYahoo));
+	}
+	if (_ui->jabberLineEdit->isEnabled()) {
+		_ui->jabberLineEdit->setText(getIMContactsOfProtocol(EnumIMProtocol::IMProtocolJabber));
+	}
 }
 
 void QtSimpleIMContactManager::addIMContactsOfProtocol(EnumIMProtocol::IMProtocol imProtocol, const QString & text) {

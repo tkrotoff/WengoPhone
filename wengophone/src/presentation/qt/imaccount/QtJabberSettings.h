@@ -22,6 +22,8 @@
 
 #include "QtIMAccountPlugin.h"
 
+#include <string>
+
 class IMAccount;
 class UserProfile;
 
@@ -38,6 +40,8 @@ class QtJabberSettings : public QtIMAccountPlugin {
 public:
 
 	QtJabberSettings(UserProfile & userProfile, IMAccount * imAccount, QWidget * parent);
+
+	~QtJabberSettings();
 
 	QWidget * getWidget() const {
 		return _IMSettingsWidget;

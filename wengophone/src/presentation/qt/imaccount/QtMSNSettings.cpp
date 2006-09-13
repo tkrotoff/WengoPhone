@@ -27,6 +27,9 @@
 
 #include <util/WebBrowser.h>
 #include <util/Logger.h>
+#include <util/SafeDelete.h>
+
+#include <qtutil/SafeConnect.h>
 
 #include <QtGui/QtGui>
 
@@ -42,15 +45,19 @@ QtMSNSettings::QtMSNSettings(UserProfile & userProfile, IMAccount * imAccount, Q
 	init();
 }
 
+QtMSNSettings::~QtMSNSettings() {
+	OWSAFE_DELETE(_ui);
+}
+
 void QtMSNSettings::init() {
 	_IMSettingsWidget = new QWidget(_parentWidget);
 
 	_ui = new Ui::MSNSettings();
 	_ui->setupUi(_IMSettingsWidget);
 
-	connect(_ui->forgotPasswordButton, SIGNAL(clicked()), SLOT(forgotPasswordButtonClicked()));
+	SAFE_CONNECT(_ui->forgotPasswordButton, SIGNAL(clicked()), SLOT(forgotPasswordButtonClicked()));
 
-	connect(_ui->createAccountButton, SIGNAL(clicked()), SLOT(createAccountButtonClicked()));
+	SAFE_CONNECT(_ui->createAccountButton, SIGNAL(clicked()), SLOT(createAccountButtonClicked()));
 
 	if (!_imAccount) {
 		return;
@@ -62,29 +69,41 @@ void QtMSNSettings::init() {
 	_ui->passwordLineEdit->setText(QString::fromStdString(_imAccount->getPassword()));
 }
 
-void QtMSNSettings::save() {
-	String login = _ui->loginLineEdit->text().toStdString();
-	String password = _ui->passwordLineEdit->text().toStdString();
+void QtMSNSettings::save(UserProfile & userProfile, IMAccount * imAccount,
+		const std::string & login, const std::string & password) {
+
 	static const String AT = "@";
 
+	String tmpLogin = login;
+
 	//Test if login ends with @hotmail.com
-	if (!login.contains(AT)) {
-		login = login + AT + MSN_LOGIN_DEFAULT_EXTENSION;
+	if (!tmpLogin.contains(AT)) {
+		tmpLogin = tmpLogin + AT + MSN_LOGIN_DEFAULT_EXTENSION;
 	}
 
-	if (!_imAccount) {
-		_imAccount = new IMAccount(login, password, EnumIMProtocol::IMProtocolMSN);
+	if (!imAccount) {
+		imAccount = new IMAccount(tmpLogin, password, EnumIMProtocol::IMProtocolMSN);
+	} else {
+		//Check if the same account is not present already
+		if (imAccount->getLogin() == tmpLogin &&
+			imAccount->getPassword() == password) {
+			return;
+		}
 	}
 
-	IMAccountParameters & params = _imAccount->getIMAccountParameters();
+	IMAccountParameters & params = imAccount->getIMAccountParameters();
 
-	_imAccount->setLogin(login);
-	_imAccount->setPassword(password);
+	imAccount->setLogin(tmpLogin);
+	imAccount->setPassword(password);
 	//FIXME to remove, must be done inside model
 	params.set(IMAccountParameters::MSN_USE_HTTP_KEY, true);
 
-	_userProfile.addIMAccount(*_imAccount);
-	_userProfile.getConnectHandler().connect(*_imAccount);
+	userProfile.addIMAccount(*imAccount);
+	userProfile.getConnectHandler().connect(*imAccount);
+}
+
+void QtMSNSettings::save() {
+	save(_userProfile, _imAccount, _ui->loginLineEdit->text().toStdString(), _ui->passwordLineEdit->text().toStdString());
 }
 
 void QtMSNSettings::forgotPasswordButtonClicked() {
