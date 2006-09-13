@@ -70,7 +70,7 @@ void pa_stream_close(phastream_t *as);
 #define PH_PA_OUTPUT 1
 #define PH_PA_INOUT 2
 
-static int ph_pa_latency = 60;
+static int ph_pa_latency = 100;
 
 struct ph_audio_driver ph_pa_driver = {
   "pa",
@@ -141,7 +141,11 @@ ph_pa_ocallback(const void *input, void *output,
 
   needMore = frameCount*2 - outCount;
   if (needMore > 0)
+  {
+    DBG_DYNA_AUDIO_DRV("phad_pa - pa_ocallback: completing with %d chars of pure silence\n", needMore);
     memset(outCount + (char *)output, 0, needMore);
+  }
+
 
   return as->ms.running ? paContinue : paAbort;
 }
@@ -176,7 +180,7 @@ PaStream *pa_dev_open(phastream_t *as, int output, char *name, int rate, int fra
   int rateIndex;
   double drate = (double) rate;
 
-  DBG_DYNA_AUDIO_DRV("pa_dev_open: asking for (name: \"%s\", rate: %d, framesize: %d)\n", name, rate, framesize, 0);
+  DBG_DYNA_AUDIO_DRV("phad_pa - pa_dev_open: asking for (name: \"%s\", rate: %d, framesize: %d)\n", name, rate, framesize, 0);
 
   if (!strncasecmp(name, "pa:", 3)) {
     name += 3;
