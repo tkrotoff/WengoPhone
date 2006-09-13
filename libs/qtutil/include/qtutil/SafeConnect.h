@@ -44,7 +44,7 @@ SafeConnect::connect(sender, signal, receiver, method, type)
 SafeConnect::disconnect(NULL, NULL, NULL, NULL)
 
 #define SAFE_DISCONNECT_SIGNAL(signal) \
-SafeConnect::disconnect(this, signal, NULL, NULL)
+SafeConnect::disconnect(signal, NULL, NULL)
 
 #define SAFE_DISCONNECT_SIGNAL_RECEIVER(signal, receiver) \
 SafeConnect::disconnect(this, signal, receiver, NULL)

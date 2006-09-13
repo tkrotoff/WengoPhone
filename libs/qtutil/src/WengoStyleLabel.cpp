@@ -21,7 +21,7 @@
 
 #include <QtGui/QtGui>
 
-WengoStyleLabel::WengoStyleLabel(QWidget * parent, Mode mode)
+WengoStyleLabel::WengoStyleLabel(QWidget * parent, Mode mode, Qt::AlignmentFlag hAlign)
 	: QLabel(parent), _mode(mode) {
 
 	_parent = parent;
@@ -34,7 +34,7 @@ WengoStyleLabel::WengoStyleLabel(QWidget * parent, Mode mode)
 	//Default text color
 	_textColor = _parent->palette().color(QPalette::Text);
 
-	_alignment = Qt::AlignCenter;
+	_alignment = Qt::AlignVCenter | hAlign;
 }
 
 WengoStyleLabel::~WengoStyleLabel() {

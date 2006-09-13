@@ -39,7 +39,7 @@ public:
 		Toggled,
 	};
 	
-	WengoStyleLabel(QWidget * parent, Mode = Normal);
+	WengoStyleLabel(QWidget * parent, Mode = Normal, Qt::AlignmentFlag hAlign = Qt::AlignHCenter);
 
 	~WengoStyleLabel();
 
