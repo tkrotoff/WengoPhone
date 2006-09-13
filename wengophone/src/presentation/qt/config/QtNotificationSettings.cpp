@@ -38,6 +38,9 @@ QtNotificationSettings::QtNotificationSettings(QWidget * parent)
 	_ui = new Ui::NotificationSettings();
 	_ui->setupUi(_notificationSettingsWidget);
 
+	_ui->standardNotificationsGroupBox->hide();
+	_ui->advancedNotificationsGroupBox->hide();
+
 	connect(_ui->soundComboBox, SIGNAL(activated(const QString &)), SLOT(soundComboBoxActivated(const QString &)));
 	connect(_ui->browseButton, SIGNAL(clicked()), SLOT(browseSounds()));
 	connect(_ui->playButton, SIGNAL(clicked()), SLOT(playSound()));
