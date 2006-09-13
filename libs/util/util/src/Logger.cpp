@@ -55,13 +55,13 @@ void Logger::error(const std::string & className, const std::string & message) {
 	log(Error, className, message);
 }
 
-void Logger::fatal(const std::string & className, const std::string & message) {
-	log(Fatal, className, message);
+void Logger::fatal(const std::string & className, const std::string & message, const std::string & filename, const std::string & line) {
+	log(Fatal, className, message, filename, line);
 	flush();
 	assert(NULL && "fatal error");
 }
 
-void Logger::log(Level level, const std::string & className, const std::string & message) {
+void Logger::log(Level level, const std::string & className, const std::string & message, const std::string & filename, const std::string & line) {
 	boost::mutex::scoped_lock scopedLock(_mutex);
 
 	static const char * CLASS_METHOD_SEPARATOR = "::";
@@ -88,24 +88,11 @@ void Logger::log(Level level, const std::string & className, const std::string &
 		LOG_FATAL("unknown log level=" + String::fromNumber(level));
 	}
 
-	time_t t = time(NULL);
-	struct tm * localTime = localtime(&t);
-
-	String classNameTmp = className;
-	/*classNameTmp.remove("class");
-	classNameTmp.remove("*");
-	classNameTmp.remove("static");
-	classNameTmp.remove(",");
-	classNameTmp.remove("(");
-	classNameTmp.remove(")");
-	classNameTmp.remove("int");
-	classNameTmp.remove("char");
-	classNameTmp.remove("std::string");
-	classNameTmp.remove("std::");
-	classNameTmp.remove("void");
-	classNameTmp.remove("bool");
-	classNameTmp.remove("const");*/
-	std::string tmp = "(" + levelString + ") " + Time().toString() + " " + classNameTmp +  ": " + message;
+	std::string tmp;
+	if ((!filename.empty()) && (!line.empty())) {
+		tmp = filename + ":" + line + " ";
+	}
+	tmp += "(" + levelString + ") " + Time().toString() + " " + className +  ": " + message;
 
 	if (!_fileCreated) {
 		String strippedClassName = className;

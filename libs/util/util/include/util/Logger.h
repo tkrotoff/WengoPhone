@@ -44,11 +44,11 @@ __PRETTY_FUNCTION__ : function name
 #endif
 
 /** Macros for the Logger class. */
-#define LOG_DEBUG(message) Logger::logger.debug(String(__FUNCTION__), message);
-#define LOG_INFO(message) Logger::logger.info(String(__FUNCTION__), message);
-#define LOG_WARN(message) Logger::logger.warn(String(__FUNCTION__), message);
-#define LOG_ERROR(message) Logger::logger.error(String(__FUNCTION__), message);
-#define LOG_FATAL(message) Logger::logger.fatal(String(__FUNCTION__), message);
+#define LOG_DEBUG(message) Logger::logger.debug(std::string(__FUNCTION__), message)
+#define LOG_INFO(message) Logger::logger.info(std::string(__FUNCTION__), message)
+#define LOG_WARN(message) Logger::logger.warn(std::string(__FUNCTION__), message)
+#define LOG_ERROR(message) Logger::logger.error(std::string(__FUNCTION__), message)
+#define LOG_FATAL(message) Logger::logger.fatal(std::string(__FUNCTION__), message, std::string(__FILE__), String::fromNumber(__LINE__))
 
 /**
  * Logger class.
@@ -111,7 +111,7 @@ public:
 
 	void error(const std::string & className, const std::string & message);
 
-	void fatal(const std::string & className, const std::string & message);
+	void fatal(const std::string & className, const std::string & message, const std::string & filename, const std::string & line);
 
 	/**
 	 * Flushes the logger.
@@ -130,7 +130,8 @@ private:
 		Fatal
 	};
 
-	void log(Level level, const std::string & className, const std::string & message);
+	void log(Level level, const std::string & className, const std::string & message,
+		const std::string & filename = "", const std::string & line = "");
 
 	/** Writes the log messages to a file named log.txt. */
 	std::ofstream _file;
