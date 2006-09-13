@@ -19,6 +19,7 @@
 
 #include "QtChatTabWidget.h"
 
+#include <cutil/global.h>
 #include <util/Logger.h>
 
 QtChatTabWidget::QtChatTabWidget(QWidget * parent) : QTabWidget (parent) {
@@ -27,6 +28,8 @@ QtChatTabWidget::QtChatTabWidget(QWidget * parent) : QTabWidget (parent) {
 	_alphaPixmap = QPixmap(QSize(16,16));
 	_alphaPixmap.fill(Qt::transparent);
 
+#if !defined(OS_MACOSX)
+	// On MacOS X, QtCloseChatTabWidget is used in QtChatWindow
 	QPushButton * closeTabButton = new QPushButton(this);
 	QIcon closeIcon(QPixmap(":/pics/close_normal.png"));
 	closeIcon.addPixmap(QPixmap(":/pics/close_on.png"),QIcon::Normal,QIcon::On);
@@ -39,6 +42,7 @@ QtChatTabWidget::QtChatTabWidget(QWidget * parent) : QTabWidget (parent) {
 
 	setCornerWidget(closeTabButton, Qt::TopRightCorner);
 	connect(closeTabButton, SIGNAL(clicked()), SIGNAL(closeButtonClicked()));
+#endif
 }
 
 void QtChatTabWidget::setBlinkingTab(int index) {

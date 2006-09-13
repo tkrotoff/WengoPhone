@@ -24,17 +24,6 @@ link_flags = []
 
 cc_flags = []
 
-if WengoOSMacOSX():
-	libs += [
-		'glib-2.0',
-		'gthread-2.0'
-	]
-	cc_flags += ['-x objective-c++']
-	link_flags += [
-		'-framework Cocoa',
-		'-framework Carbon',
-	]
-
 headers = [
 	'QtWengoPhone.h',
 	'QtConfigPanel.h',
@@ -342,6 +331,7 @@ forms = [
 	'config/WengoConfigDialog.ui',
 
 	'chat/ChatMainWindow.ui',
+	'chat/CloseChatTabWidget.ui',
 	'chat/ChatWidget.ui',
 	'chat/UserFrame.ui',
 	'chat/AvatarFrame.ui',
@@ -394,11 +384,29 @@ else:
 	libs += ['nullsipwrapper']
 
 if WengoOSMacOSX():
+	libs += [
+		'glib-2.0',
+		'gthread-2.0'
+	]
+
+	cc_flags += [
+		'-x objective-c++'
+	]
+
+	headers += [
+		'chat/QtCloseChatTabWidget.h',
+	]
+
+	sources += [
+		'chat/QtCloseChatTabWidget.cpp',
+	]
+
 	link_flags += [
 		'-framework CoreAudio',
 		'-framework AudioToolbox',
 		'-framework AudioUnit',
 		'-framework Cocoa',
+		'-framework Carbon',
 	]
 
 	env.WengoDeclareMacOSXAppTemplate('./macosx/template.app')

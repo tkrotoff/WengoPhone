@@ -56,6 +56,8 @@
 
 #if defined(OS_WINDOWS)
 	#include <windows.h>
+#elif defined (OS_MACOSX)
+	#include "QtCloseChatTabWidget.h"
 #endif
 
 QtChatWindow::QtChatWindow(QWidget * parent, CChatHandler & cChatHandler, IMChatSession & imChatSession, QtWengoPhone & qtWengoPhone)
@@ -72,9 +74,8 @@ QtChatWindow::QtChatWindow(QWidget * parent, CChatHandler & cChatHandler, IMChat
 	_imChatSession->messageReceivedEvent +=
 		boost::bind(&QtChatWindow::messageReceivedEventHandler, this, _1);
 	
-	//Event<void (IMChatSession & sender, IMChat::StatusMessage status, const std::string & message)> statusMessageReceivedEvent;
 	_imChatSession->statusMessageReceivedEvent +=
-			boost::bind(&QtChatWindow::statusMessageReceivedEventHandler, this, _1, _2, _3);
+		boost::bind(&QtChatWindow::statusMessageReceivedEventHandler, this, _1, _2, _3);
 
 	_imChatSession->imChatSessionWillDieEvent +=
 		boost::bind(&QtChatWindow::imChatSessionWillDieEventHandler, this, _1);
@@ -465,6 +466,14 @@ void QtChatWindow::setupToolBarActions() {
 	SAFE_CONNECT(_ui.actionCreateChatConf, SIGNAL(triggered()), SLOT(createChatConference()));
 	SAFE_CONNECT(_ui.actionContactInfo, SIGNAL(triggered()), SLOT(showActiveTabContactInfo()));
 	SAFE_CONNECT(_ui.actionBlockContact, SIGNAL(triggered()), SLOT(blockActiveTabContact()));
+
+#if defined(OS_MACOSX)
+	// Add the close tab widget
+	QtCloseChatTabWidget * closeTabWidget = new QtCloseChatTabWidget(_ui.toolBar);
+	_ui.toolBar->addWidget(closeTabWidget);
+	SAFE_CONNECT(closeTabWidget, SIGNAL(clicked()), SLOT(closeActiveTab()));
+	////
+#endif
 }
 
 void QtChatWindow::updateToolBarActions() {
