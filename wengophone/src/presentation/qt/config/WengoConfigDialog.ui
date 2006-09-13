@@ -82,14 +82,6 @@
      </item>
      <item>
       <property name="text" >
-       <string>Privacy</string>
-      </property>
-      <property name="icon" >
-       <iconset resource="..\wengophone.qrc" >:/pics/config/privacy.png</iconset>
-      </property>
-     </item>
-     <item>
-      <property name="text" >
        <string>Audio</string>
       </property>
       <property name="icon" >
