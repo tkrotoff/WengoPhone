@@ -1350,6 +1350,7 @@ void ph_encode_and_send_audio_frame(phastream_t *stream, void *recordbuf, int fr
     }
     else
     {
+      DBG_DYNA_AUDIO_TX("downsampling for FORCE_16KHZ mode (%d)->(%d)\n", framesize, framesize/2);
       ph_downsample(stream->resamplectx, recordbuf, framesize);
       enclen = codec->encode(stream->ms.encoder_ctx, recordbuf, framesize/2, data_out_enc, sizeof(data_out_enc));
       framesize /= 2;
