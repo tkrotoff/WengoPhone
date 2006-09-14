@@ -73,7 +73,7 @@
     </layout>
    </item>
    <item row="0" column="0" >
-    <widget class="QLabel" name="conferenceLabel" >
+    <widget class="QLabel" name="headerLabel" >
      <property name="palette" >
       <palette>
        <active>

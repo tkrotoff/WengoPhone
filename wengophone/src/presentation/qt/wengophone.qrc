@@ -208,6 +208,5 @@
 	</qresource>
 	<qresource prefix="/forms" >
 		<file>chat/chatroom/ChatRoomInviteWidget.ui</file>
-		<file>phonecall/ConferenceCallWidget.ui</file>
 	</qresource>
 </RCC>

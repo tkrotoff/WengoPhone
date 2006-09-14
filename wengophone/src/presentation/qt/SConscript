@@ -88,6 +88,8 @@ headers = [
 	'contactlist/QtRenameGroup.h',
 	'contactlist/QtConferenceAction.h',
 
+	'conference/QtConferenceCallWidget.h',
+
 	'chat/emoticons/QtEmoticonsWidget.h',
 	'chat/emoticons/QtEmoticon.h',
 	'chat/emoticons/QtEmoticonButton.h',
@@ -220,6 +222,8 @@ sources = [
 	'contactlist/QtRenameGroup.cpp',
 	'contactlist/QtConferenceAction.cpp',
 
+	'conference/QtConferenceCallWidget.cpp',
+
 	'chat/emoticons/QtEmoticonsWidget.cpp',
 	'chat/emoticons/QtEmoticon.cpp',
 	'chat/emoticons/QtEmoticonButton.cpp',
@@ -317,6 +321,8 @@ forms = [
 	'webservices/softupdate/SoftUpdateWindow.ui',
 	'webservices/softupdate/BrowserSoftUpdateWindow.ui',
 
+	'conference/ConferenceCallWidget.ui',
+
 	'config/AccountSettings.ui',
 	'config/AdvancedConfigWindow.ui',
 	'config/GeneralSettings.ui',
@@ -351,7 +357,6 @@ forms = [
 
 	'phonecall/PhoneCallWidget.ui',
 	'phonecall/VideoWindow.ui',
-#	'phonecall/ConferenceCallWidget.ui',
 
 	'filetransfer/AcceptDialog.ui',
 	'filetransfer/FileTransferWidget.ui',

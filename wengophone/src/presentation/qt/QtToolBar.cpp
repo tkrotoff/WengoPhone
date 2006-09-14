@@ -34,6 +34,7 @@
 #include "contactlist/QtContactList.h"
 #include "filetransfer/QtFileTransfer.h"
 #include "filetransfer/QtFileTransferWidget.h"
+#include "conference/QtConferenceCallWidget.h"
 
 #include <control/CWengoPhone.h>
 #include <control/profile/CUserProfile.h>
@@ -197,35 +198,16 @@ void QtToolBar::sendSms() {
 	}
 }
 
-//FIXME hack hack hack hack tired of it
 void QtToolBar::createConferenceCall() {
-	if (_cWengoPhone.getCUserProfileHandler().getCUserProfile()) {
-		QWidget * parent = qobject_cast<QWidget *>(sender()->parent());
 
-		QDialog * conferenceDialog = qobject_cast<QDialog *>(WidgetFactory::create(":/forms/phonecall/ConferenceCallWidget.ui", parent));
+	CUserProfile * cUserProfile = _cWengoPhone.getCUserProfileHandler().getCUserProfile();
+	if (cUserProfile) {
 
-		QLabel * conferenceLabel = Object::findChild<QLabel *>(conferenceDialog, "conferenceLabel");
-		WidgetBackgroundImage::setBackgroundImage(conferenceLabel, ":pics/headers/conference.png", true);
-
-		int ret = conferenceDialog->exec();
-
-		QLineEdit * phoneNumber1LineEdit = Object::findChild<QLineEdit *>(conferenceDialog, "phoneNumber1LineEdit");
-		QLineEdit * phoneNumber2LineEdit = Object::findChild<QLineEdit *>(conferenceDialog, "phoneNumber2LineEdit");
-
-		if (ret == QDialog::Accepted) {
-			IPhoneLine * phoneLine = _cWengoPhone.getCUserProfileHandler().getCUserProfile()->getUserProfile().getActivePhoneLine();
-
-			if (phoneLine != NULL) {
-				ConferenceCall * confCall = new ConferenceCall(*phoneLine);
-				confCall->addPhoneNumber(phoneNumber1LineEdit->text().toStdString());
-				confCall->addPhoneNumber(phoneNumber2LineEdit->text().toStdString());
-			} else {
-				LOG_DEBUG("phoneLine is NULL");
-			}
-		}
+		IPhoneLine * phoneLine = cUserProfile->getUserProfile().getActivePhoneLine();
+		QtConferenceCallWidget conferenceDialog(_qtWengoPhone.getWidget(), phoneLine);
+		conferenceDialog.exec();
 	}
 }
-//!FIXME
 
 void QtToolBar::showIMAccountSettings() {
 	if (_cWengoPhone.getCUserProfileHandler().getCUserProfile()) {
