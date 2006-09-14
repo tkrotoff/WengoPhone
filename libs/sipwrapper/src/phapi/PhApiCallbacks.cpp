@@ -252,7 +252,7 @@ void PhApiCallbacks::messageProgress(int messageId, const phMsgStateInfo_t * inf
 	PhApiWrapper * p = PhApiWrapper::PhApiWrapperHack;
 	IMChatSession * imChatSession;
 
-	if ((info->event == phMsgOk) || (info->event == phMsgError)) {
+	if (info->event == phMsgOk) {
 		//We drop status message
 		return;
 	}
@@ -326,6 +326,10 @@ void PhApiCallbacks::messageProgress(int messageId, const phMsgStateInfo_t * inf
 			p->messageReceivedEvent(*p, *imChatSession, from, content);
 		}
 
+		break;
+	case phMsgError:
+		LOG_DEBUG("message could not be sent");
+		p->statusMessageReceivedEvent(*p, *imChatSession, PhApiIMChat::StatusMessageError, content);
 		break;
 	}
 
