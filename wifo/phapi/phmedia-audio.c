@@ -264,7 +264,7 @@ cb_zfill(struct circbuf *cb, int len)
 static void 
 cb_init(struct circbuf *cb, int size)
 {
-  memset(cb, 0, sizeof(0));
+  memset(cb, 0, sizeof(*cb));
   cb->cb_buf = (char *) g_malloc(size);
   cb->cb_siz = size;
 }
