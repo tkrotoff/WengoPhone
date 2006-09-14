@@ -178,7 +178,7 @@ void QtToolBar::searchWengoContact() {
 	QtWsDirectory * qtWsDirectory = _qtWengoPhone.getQtWsDirectory();
 	if (qtWsDirectory) {
 		QWidget * parent = qobject_cast<QWidget *>(sender()->parent());
-		qtWsDirectory->getWidget()->setParent(parent);
+		qtWsDirectory->getWidget()->setParent(parent, Qt::Dialog);
 		qtWsDirectory->show();
 	}
 }
@@ -193,7 +193,7 @@ void QtToolBar::sendSms() {
 	QtSms * qtSms = _qtWengoPhone.getQtSms();
 	if (qtSms) {
 		QWidget * parent = qobject_cast<QWidget *>(sender()->parent());
-		qtSms->getWidget()->setParent(parent);
+		qtSms->getWidget()->setParent(parent, Qt::Dialog);
 		qtSms->getWidget()->show();
 	}
 }
@@ -290,7 +290,7 @@ void QtToolBar::logOff() {
 int QtToolBar::findFirstCallTab() {
 	QtContactCallListWidget * widget;
 	for (int i = 0; i < _ui->tabWidget->count(); i++) {
-		widget = (QtContactCallListWidget *) _ui->tabWidget->widget(i);
+		widget = dynamic_cast<QtContactCallListWidget *>(_ui->tabWidget->widget(i));
 		if (widget) {
 			return i;
 		}
