@@ -19,30 +19,18 @@
  * Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#include <osip2/osip_mt.h>
-#include <osip2/osip.h>
-#ifndef T_MSVC
-#include <sys/ioctl.h>
-#include <sys/time.h>
-#endif
+#include <time.h>
 #include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <ortp.h>
-#include <ortp-export.h>
-#include <telephonyevents.h>
+
+#include "phlog.h"
 #include "phapi.h"
-#include "phcall.h"
-#include "phmedia.h"
-#include "phcodec.h"
-#include "tonegen.h"
-#include "phmbuf.h"
 
 #include "phmstream.h"
 #include "phastream.h"
 #include "phrecorder.h"
 #include "phaudiodriver.h"
-#include "phlog.h"
 
 #define PH_UNREFERENCED_PARAMETER(P) (P)
 
@@ -53,6 +41,10 @@ struct phadfile_dev {
 	/* virtual SPK parameters */
 	char spk_filename[128];
 	recording_t spk_recorder;
+    /* engine datas */
+    int stream_started;
+    struct timeval last_time;
+    int elapsed_millisec;
 };
 
 // NOTE: phadfile stands for ph_audio_driver "file"
@@ -176,8 +168,30 @@ int phadfile_write(phastream_t *as, void *buf, int len) {
 int phadfile_read(phastream_t *as, void *buf, int len) {
   struct phadfile_dev *pd = as->drvinfo;
   int could_read = 0;
+  struct timeval now_time;
   DBG_DYNA_AUDIO_DRV("phad_file: Reading %d bytes of data and putting it into buffer %p\n", len, buf);
 
+  // in the phapi threading model, this callback needs to protect
+  // the fact that audio chunks are only given at at 20ms rate
+  // TODO: this engine is far from perfect to keep 20ms but does the
+  // trick. It will be removed when the phapi main thread will use the
+  // wtimer lib.
+  if (!pd->stream_started)
+  {
+      gettimeofday(&pd->last_time, 0);
+      pd->stream_started = 1;
+  }
+  gettimeofday(&now_time, 0);
+  ph_tvsub(&now_time, &pd->last_time);
+  pd->elapsed_millisec += now_time.tv_usec / 1000; // in millisec
+  gettimeofday(&pd->last_time, 0);
+  if (pd->elapsed_millisec < 20)
+  {
+      return 0;
+  }
+  pd->elapsed_millisec-=20;
+
+  
   // for a quick hack, we loop by dropping the last unaligned chunk
   could_read = fread(buf, 1, len, pd->mic_fd);
   DBG_DYNA_AUDIO_DRV("phad_file: just read %d bytes from file\n", could_read);
