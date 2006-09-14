@@ -716,17 +716,29 @@
      </property>
      <item>
       <widget class="QToolButton" name="avatarFrameButton" >
+       <property name="minimumSize" >
+        <size>
+         <width>14</width>
+         <height>31</height>
+        </size>
+       </property>
        <property name="maximumSize" >
         <size>
-         <width>22</width>
-         <height>22</height>
+         <width>14</width>
+         <height>32</height>
         </size>
        </property>
        <property name="text" >
         <string/>
        </property>
        <property name="icon" >
-        <iconset resource="../wengophone.qrc" >:/pics/group_close_reverse.png</iconset>
+        <iconset resource="../wengophone.qrc" >:/pics/chat/hide_avatar_frame.png</iconset>
+       </property>
+       <property name="iconSize" >
+        <size>
+         <width>14</width>
+         <height>31</height>
+        </size>
        </property>
        <property name="checkable" >
         <bool>false</bool>

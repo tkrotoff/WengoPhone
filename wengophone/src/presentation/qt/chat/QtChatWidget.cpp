@@ -284,7 +284,7 @@ void QtChatWidget::addAvatarFrame() {
 	glayout->insertWidget(1, _avatarFrame);
 
 	_isAvatarFrameOpened = true;
-	_ui.avatarFrameButton->setIcon(QIcon(":pics/group_close_reverse.png"));
+	_ui.avatarFrameButton->setIcon(QIcon(":pics/chat/hide_avatar_frame.png"));
 	update();
 }
 
@@ -295,7 +295,7 @@ void QtChatWidget::removeAvatarFrame() {
 	glayout->removeWidget(_avatarFrame);
 
 	_isAvatarFrameOpened = false;
-	_ui.avatarFrameButton->setIcon(QIcon(":pics/group_close.png"));
+	_ui.avatarFrameButton->setIcon(QIcon(":pics/chat/show_avatar_frame.png"));
 	update();
 }
 
