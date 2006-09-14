@@ -87,7 +87,7 @@ QtProfileBar::QtProfileBar(CWengoPhone & cWengoPhone, CUserProfile & cUserProfil
 					); //no fill
 
 	//Nickname label
-	_nicknameLabel = new WengoStyleLabel(this, WengoStyleLabel::Normal, Qt::AlignLeft);
+	_nicknameLabel = new WengoStyleLabel(this, WengoStyleLabel::Normal);
 	_nicknameLabel->setMinimumSize(QSize(0, 65));
 	_nicknameLabel->setMaximumSize(QSize(1000, 65));
 	_nicknameLabel->setPixmaps(
