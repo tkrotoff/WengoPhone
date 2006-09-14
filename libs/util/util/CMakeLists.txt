@@ -3,6 +3,10 @@ project(owutil)
 #Boost dependency
 find_package(Boost REQUIRED)
 
+if (UNIX AND NOT WIN32)
+  find_package(UUID REQUIRED)
+endif (UNIX AND NOT WIN32)
+
 #owcutil dependency
 #link_directories(${owcutil_BINARY_DIR})
 
@@ -22,8 +26,8 @@ set(OWUTIL_LIBRARIES
 include_directories(
   ${OWUTIL_INCLUDE_DIRS}
   ${OWCUTIL_INCLUDE_DIRS}
-  CACHE INTERNAL "owutil libraries"
 )
+
 
 #sources
 set(owutil_SRCS
@@ -47,21 +51,24 @@ if (WIN32)
   )
 endif (WIN32)
 
-if (APPLE)
-  set(owutil_SRCS ${owutil_SRCS}
-    src/mac/UuidMac.cpp
-  )
-endif (APPLE)
 
-if (UNIX)
-  set(owutil_SRCS ${owutil_SRCS}
-    src/unix/UuidUnix.cpp
-  )
-endif (UNIX)
+if (UNIX AND NOT WIN32)
+  if (APPLE)
+    set(owutil_SRCS ${owutil_SRCS}
+      src/mac/UuidMac.cpp
+    )
+  else (APPLE)
+    include_directories(${UUID_INCLUDE_DIRS})
+    set(owutil_SRCS ${owutil_SRCS}
+      src/unix/UuidUnix.cpp
+    )
+  endif (APPLE)
+endif (UNIX AND NOT WIN32)
 
-#owutil
 add_library(owutil STATIC ${owutil_SRCS})
 
-#owcutil dependency
-#target_link_libraries(owutil owcutil)
 target_link_libraries(${OWUTIL_LIBRARIES})
+
+if (UNIX AND NOT WIN32)
+  target_link_libraries(${UUID_LIBRARIES})
+endif (UNIX AND NOT WIN32)

@@ -25,4 +25,5 @@ endif (UNIX AND NOT WIN32)
 
 subdirs(
   libs
+  wifo
 )

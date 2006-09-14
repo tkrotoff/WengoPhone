@@ -132,3 +132,4 @@ extern "C" {
 #endif /* __cplusplus */
 
 #endif /* __LINKEDLIST_H__ */
+
