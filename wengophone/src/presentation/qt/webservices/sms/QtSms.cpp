@@ -27,12 +27,13 @@
 
 #include <util/Logger.h>
 #include <util/SafeDelete.h>
-
 #include <qtutil/SafeConnect.h>
 
 #include <QtGui/QtGui>
 
 static const QString SIGNATURE_SEPARATOR = " -- ";
+static const int SIGNATURE_LENGTH = 4;
+static const int MAX_LENGTH = 160;
 
 QtSms::QtSms(CSms & cSms)
 	: QObjectThreadSafe(NULL),
@@ -47,64 +48,122 @@ QtSms::QtSms(CSms & cSms)
 }
 
 QtSms::~QtSms() {
-	//TODO: unregister events, delete created objects
 	_qtWengoPhone->setQtSms(NULL);
-
 	OWSAFE_DELETE(_ui);
 }
 
 void QtSms::initThreadSafe() {
-	_smsWindow = new QDialog(_qtWengoPhone->getWidget());
 
+	_smsWindow = new QDialog(_qtWengoPhone->getWidget());
 	_ui = new Ui::SmsWindow();
 	_ui->setupUi(_smsWindow);
 
 	SAFE_CONNECT(_ui->sendButton, SIGNAL(clicked()), SLOT(sendButtonClicked()));
+	SAFE_CONNECT(_ui->smsText, SIGNAL(textChanged()), SLOT(updateCounter()));
+	SAFE_CONNECT(_ui->signatureLineEdit, SIGNAL(textChanged(const QString &)), SLOT(updateCounter()));
 
 	_qtWengoPhone->setQtSms(this);
 }
 
 QWidget * QtSms::getWidget() const {
+
 	return _smsWindow;
 }
 
-void QtSms::updatePresentation() {
+void QtSms::setPhoneNumber(const QString & phoneNumber) {
+
+	_ui->phoneComboBox->clear();
+	if (!phoneNumber.isEmpty()) {
+		_ui->phoneComboBox->addItem(phoneNumber);
+	}
 }
 
-void QtSms::updatePresentationThreadSafe() {
+void QtSms::setSignature(const QString & signature) {
+
+	_ui->signatureLineEdit->setText(signature);
+}
+
+void QtSms::setText(const QString & text) {
+
+	int pos = text.lastIndexOf(SIGNATURE_SEPARATOR);
+	QString mess = text;
+	if (pos != -1) {
+		//extract the signature
+		setSignature(text.right(text.length() - pos - SIGNATURE_LENGTH));
+		mess = text.left(pos);
+	}
+
+	_ui->smsText->clear();
+	_ui->smsText->setHtml("<html><head><meta name=\"qrichtext\" content=\"1\" /></head><body style=\" white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\"><p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">" + mess + "</p></body></html>");
+	updateCounter();
+}
+
+void QtSms::updateCounter() {
+
+	int textLength = _ui->smsText->toPlainText().length();
+	int signatureLength = _ui->signatureLineEdit->text().length();
+
+	QString counterText = QString::number(textLength + signatureLength) + "/";
+	if (signatureLength) {
+		counterText += QString::number(MAX_LENGTH - SIGNATURE_LENGTH);
+	} else {
+		counterText += QString::number(MAX_LENGTH);
+	}
+	_ui->counterLabel->setText(counterText);
+
+	// update counterLabel color
+	QPalette palette = _ui->counterLabel->palette();
+	if (!isSmsLengthOk()) {
+		palette.setColor(QPalette::WindowText, Qt::red);
+	} else {
+		palette.setColor(QPalette::WindowText, Qt::black);
+	}
+	_ui->counterLabel->setPalette(palette);
 }
 
 void QtSms::sendButtonClicked() {
 
-	//Validate SMS length before sending
-	if (!checkSmsLength()) {
+	//check phoneNumber.
+	if (_ui->phoneComboBox->currentText().isEmpty()) {
 
 		QMessageBox::warning(_smsWindow,
 			tr("Wengo SMS service"),
-			tr("Your message is too long.\n"
-				"The length can not exceed 156 characters.\n"
-				"Don't forget to add your signature length."
-			  ));
-
+			tr("Please fill in a phone number.")
+		);
 		return;
 	}
 
+	//Validate SMS length before sending
+	if (!isSmsLengthOk()) {
+
+		int neededMessages = getNeededMessages();
+
+		int ret = QMessageBox::question(_smsWindow,
+			tr("Wengo SMS service"),
+			tr("Your message is too long.\n"
+			"This will send ") + QString::number(neededMessages) + tr(" SMS.\n") + tr("Do you want to continue?"),
+			QMessageBox::Yes,
+			QMessageBox::No
+		);
+
+		if (ret == QMessageBox::No) {
+			return;
+		}
+	}
+
 	_ui->sendButton->setEnabled(false);
-
-	//Converts to UTF-8
-	std::string phoneNumber(_ui->phoneComboBox->currentText().toUtf8().constData());
-	std::string sms(getCompleteMessage().toUtf8().constData());
-
-	_cSms.sendSMS(phoneNumber, sms);
+	sendSms();
 }
 
 void QtSms::smsStatusEventHandler(WsSms & sender, int smsId, EnumSmsState::SmsState state) {
+
 	typedef PostEvent0<void ()> MyPostEvent;
 	MyPostEvent * event = new MyPostEvent(boost::bind(&QtSms::smsStatusEventHandlerThreadSafe, this, state));
 	postEvent(event);
 }
 
 void QtSms::smsStatusEventHandlerThreadSafe(EnumSmsState::SmsState state) {
+
 	QString smsStatus = String::null;
 	switch (state) {
 	case EnumSmsState::SmsStateError:
@@ -121,33 +180,13 @@ void QtSms::smsStatusEventHandlerThreadSafe(EnumSmsState::SmsState state) {
 	QMessageBox::information(_smsWindow, tr("Wengo SMS service"), smsStatus);
 }
 
-void QtSms::setPhoneNumber(const QString & phoneNumber) {
-	_ui->phoneComboBox->clear();
-	if (!phoneNumber.isEmpty()) {
-		_ui->phoneComboBox->addItem(phoneNumber);
-	}
-}
+bool QtSms::isSmsLengthOk() const {
 
-void QtSms::setText(const QString & text) {
-	int pos = text.lastIndexOf(SIGNATURE_SEPARATOR);
-	QString mess = text;
-	if (pos != -1) {
-		//extract the signature
-		setSignature(text.right(text.length() - pos - 4));
-		mess = text.left(pos);
-	}
-
-	_ui->smsText->clear();
-	_ui->smsText->setHtml("<html><head><meta name=\"qrichtext\" content=\"1\" /></head><body style=\" white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\"><p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">" + mess + "</p></body></html>");
-}
-
-bool QtSms::checkSmsLength() const {
-	QString mess = getCompleteMessage();
-
-	return (mess.length() < 160);
+	return (getCompleteMessage().length() < MAX_LENGTH);
 }
 
 QString QtSms::getCompleteMessage() const {
+
 	QString completeMessage = _ui->smsText->toPlainText();
 	QString signature = _ui->signatureLineEdit->text();
 	if (!signature.isEmpty()) {
@@ -158,6 +197,40 @@ QString QtSms::getCompleteMessage() const {
 	return completeMessage;
 }
 
-void QtSms::setSignature(const QString & signature) {
-	_ui->signatureLineEdit->setText(signature);
+int QtSms::getMessageLength() const {
+
+	return getCompleteMessage().length();
+}
+
+
+void QtSms::sendSms() {
+
+	//Converts to UTF-8
+	std::string phoneNumber(_ui->phoneComboBox->currentText().toUtf8().constData());
+
+	QStringList messages = splitMessage();
+	for (int i = 0; i < messages.size(); i++) {
+				
+		std::string sms(messages[i].toUtf8().constData());
+		_cSms.sendSMS(phoneNumber, sms);
+	}
+}
+
+QStringList QtSms::splitMessage() const {
+
+	QStringList toReturn;
+	QString message = getCompleteMessage();
+	int i;
+
+	for (i = 0; i < getNeededMessages(); i++) {
+		QString temp = message.mid(i * MAX_LENGTH, MAX_LENGTH);
+		toReturn += temp;
+	}
+
+	return toReturn;
+}
+
+int QtSms::getNeededMessages() const {
+
+	return ((getMessageLength() / MAX_LENGTH) + 1);
 }

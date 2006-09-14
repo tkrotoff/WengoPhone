@@ -48,37 +48,124 @@ class QtSms : public QObjectThreadSafe, public PSms, public Trackable {
 	Q_OBJECT
 public:
 
+	/**
+	 * Constructor.
+	 */
 	QtSms(CSms & cSms);
 
+	/**
+	 * Destructor.
+	 */
 	virtual ~QtSms();
 
+	/**
+	 * Return a pointer to the widget.
+	 * 
+	 * @return the sms widget.
+	 */
 	QWidget * getWidget() const;
 
-	void updatePresentation();
+	/**
+	 * @see Presentation::updatePresentation.
+	 */
+	void updatePresentation() {}
 
+	/**
+	 * Set the phone number.
+	 * 
+	 * @param phoneNumber the phone number.
+	 */
 	void setPhoneNumber(const QString & phoneNumber);
 
+	/**
+	 * Set the message text.
+	 * 
+	 * @param text the text.
+	 */
 	void setText(const QString & text);
 
+	/**
+	 * Set the signature.
+	 * 
+	 * @param signature the signature.
+	 */
 	void setSignature(const QString & signature);
 
 private Q_SLOTS:
 
+	/**
+	 * Update the counter label.
+	 */
+	void updateCounter();
+
+	/**
+	 * The user has clicked the send button.
+	 */
 	void sendButtonClicked();
 
 private:
 
-	void initThreadSafe();
+	/**
+	 * Send sms(s) via control layer.
+	 */
+	void sendSms();
 
-	void updatePresentationThreadSafe();
+	/**
+	 * Split the sms into several sms if needed.
+	 * TODO: put this in the model layer
+	 * 
+	 * @return the sms list.
+	 */
+	QStringList splitMessage() const;
 
-	void smsStatusEventHandler(WsSms & sender, int smsId, EnumSmsState::SmsState state);
+	/**
+	 * Return the number of sms(s) needed to send the message.
+	 * TODO: put this in the model layer
+	 * 
+	 * @return the number of sms(s) needed.
+	 */
+	int getNeededMessages() const;
 
-	void smsStatusEventHandlerThreadSafe(EnumSmsState::SmsState state);
+	/**
+	 * Return the length of the sms.
+	 *
+	 * @return the length of the sms.
+	 */
+	int getMessageLength() const;
 
+	/**
+	 * Gets the complete sms: text + signature.
+	 *
+	 * @return the complete message.
+	 */
 	QString getCompleteMessage() const;
 
-	bool checkSmsLength() const;
+	/**
+	 * Check if the message could be send via one sms.
+	 *
+	 * @return the complete message.
+	 */
+	bool isSmsLengthOk() const;
+
+	/**
+	 * Init thread safe.
+	 */
+	void initThreadSafe();
+
+	/**
+	 * UpdatePresentation thread safe.
+	 */
+	void updatePresentationThreadSafe() {}
+
+	/**
+	 * Sms status event handler.
+	 */
+	void smsStatusEventHandler(WsSms & sender, int smsId, EnumSmsState::SmsState state);
+
+	/**
+	 * Sms status event handler thread safe.
+	 */
+	void smsStatusEventHandlerThreadSafe(EnumSmsState::SmsState state);
 
 	CSms & _cSms;
 
