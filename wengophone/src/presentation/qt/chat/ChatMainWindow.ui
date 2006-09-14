@@ -133,6 +133,12 @@
    <property name="orientation" >
     <enum>Qt::Horizontal</enum>
    </property>
+   <property name="iconSize" >
+    <size>
+     <width>32</width>
+     <height>32</height>
+    </size>
+   </property>
    <attribute name="toolBarArea" >
     <number>4</number>
    </attribute>
