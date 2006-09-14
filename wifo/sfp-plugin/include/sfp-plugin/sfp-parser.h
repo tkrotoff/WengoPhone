@@ -39,6 +39,8 @@
 #define SFP_CRYPTED_KEY_LINE_FORMAT			"k=%s %s\n" /* (key_info) (crypted_key) */
 #define SFP_FILE_INFO_LINE					'f'
 #define SFP_FILE_INFO_LINE_FORMAT			"f=%s \"%s\" %s\n" /* (filename) (file_type) (file_size) */
+#define SFP_CONNECTION_ID_LINE				's'
+#define SFP_CONNECTION_ID_LINE_FORMAT		"s=%s\n" /* (connection_id) */
 
 // ----- PREDEFINED VALUES -----
 #define SFP_PROTOCOL_VERSION				"0.1.1"
@@ -77,6 +79,9 @@ typedef struct sfp_info{
 	char filename[64]; // TODO rename to short_filename
 	char file_type[32];
 	char file_size[13]; /* bytes */
+
+	/* JULIEN */
+	char connection_id[16];
 } sfp_info_t;
 
 #ifdef __cplusplus

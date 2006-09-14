@@ -658,6 +658,7 @@ static sfp_session_info_t * sfp_make_session(int vlid){
 */
 static sfp_session_info_t * sfp_make_session_for_invite(int vlid, char * filename, char * short_filename, char * file_type, char * file_size, char * bandwidth){
 	char file_sending_id[12];
+	char connection_id[16];
 	sfp_session_info_t * session = NULL;
 
 	// args check
@@ -674,6 +675,11 @@ static sfp_session_info_t * sfp_make_session_for_invite(int vlid, char * filenam
 		m_log_error("Could not create sfp_session_info_t", "sfp_make_session");
 		return NULL;
 	}
+
+	/* JULIEN */
+	sfp_generate_tranfer_id(connection_id, sizeof(connection_id));
+	sfp_add_property(&(session->connection_id), connection_id);
+	/* ****** */
 
 	sfp_add_property(&(session->session_id), file_sending_id);
 	if(strfilled(bandwidth)){
@@ -876,9 +882,10 @@ static sfp_info_t * sfp_make_body_info_from_session_info(sfp_session_info_t * se
 		strfilled(session->local_username) &&
 		strfilled(session->local_ip_address_type) &&
 		strfilled(session->local_ip) &&		
-		strfilled(session->local_port))
+		strfilled(session->local_port) &&
+		strfilled(session->connection_id))
 		// TODO network type fixed for the moment
-		sfp_add_origin_info(body_info, session->session_id, session->local_username, SFP_NETWORK_TYPE_INTERNET, session->local_ip_address_type, session->local_ip, session->local_port);
+		sfp_add_origin_info(body_info, session->session_id, session->local_username, SFP_NETWORK_TYPE_INTERNET, session->local_ip_address_type, session->local_ip, session->local_port, session->connection_id);
 
 	if(strfilled(session->local_mode))
 		sfp_add_mode_info(body_info, session->local_mode);

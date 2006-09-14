@@ -169,6 +169,7 @@ char * sfp_make_message_body_from_sfp_info(sfp_info_t * info){
 	char * uri_line = NULL;
 	char * key_line = NULL;
 	char * file_line = NULL;
+	char * connection_id_line = NULL;
 	unsigned int length = 0;
 
 	// VERSION LINE
@@ -273,6 +274,19 @@ char * sfp_make_message_body_from_sfp_info(sfp_info_t * info){
 		body_length += length;
 	}
 
+	/* JULIEN */
+	// CONNECTION ID LINE
+	if(strfilled(info->connection_id)){
+
+		length = 0;
+		length += (int) strlen(info->connection_id);
+		length += format_length_without_tokens(SFP_CONNECTION_ID_LINE_FORMAT);
+		connection_id_line = (char *)malloc((length+1) * sizeof(char));
+		sprintf(connection_id_line, SFP_CONNECTION_ID_LINE_FORMAT, info->connection_id);
+
+		body_length += length;
+	}
+
 	if(body_length > 0){
 		body_length = (body_length+1) * sizeof(char);
 		body = (char *)malloc(body_length);
@@ -297,6 +311,10 @@ char * sfp_make_message_body_from_sfp_info(sfp_info_t * info){
 		}
 		if(strfilled(file_line)){
 			strcat(body, file_line);
+		}
+		/* JULIEN */
+		if(strfilled(connection_id_line)){
+			strcat(body, connection_id_line);
 		}
 	}
 
@@ -331,14 +349,19 @@ void sfp_add_version_info(sfp_info_t * info, char * protocol_version){
 * @param	[in]	ip_address_type : the ip address type can be SFP_ADDRESS_TYPE_IPV4 or SFP_ADDRESS_TYPE_IPV6
 * @param	[in]	ip_address : the ip address
 * @param	[in]	address_port : the port number
+* @param	[in]	connection_id : the connection id
 */
-void sfp_add_origin_info(sfp_info_t * info, char * file_sending_id, char * username, char * network_type, char * ip_address_type, char * ip_address, char * address_port){
+void sfp_add_origin_info(sfp_info_t * info, char * file_sending_id, char * username, char * network_type, char * ip_address_type, char * ip_address, char * address_port, char * connection_id){
 	strncpy(info->file_sending_id, file_sending_id, sizeof(info->file_sending_id));
 	strncpy(info->username, username, sizeof(info->username));
 	strncpy(info->network_type, network_type, sizeof(info->network_type));
 	strncpy(info->ip_address_type, ip_address_type, sizeof(info->ip_address_type));
 	strncpy(info->ip_address, ip_address, sizeof(info->ip_address));
 	strncpy(info->address_port, address_port, sizeof(info->address_port));
+
+	/* JULIEN */
+	strncpy(info->connection_id, connection_id, sizeof(info->connection_id));
+	/* ****** */
 }
 
 /**

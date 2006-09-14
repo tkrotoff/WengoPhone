@@ -335,6 +335,34 @@ static sfp_returncode_t sfp_transfer_receive_switch(FILE * stream, unsigned int 
 	return success; // TODO
 }
 
+/* JULIEN */
+
+#ifndef MSG_NOSIGNAL
+#define MSG_NOSIGNAL 0
+#endif
+
+int sfp_transfer_send_connect_id(SOCKET sckt, char * connect_id, int size)
+{
+	char buff[24];
+	int bsize;
+	int retry = 3;
+	int ret = 0;
+
+	memset(buff, 0, sizeof(buff));
+	snprintf(buff, sizeof(buff), "%s\n", connect_id);
+	for (ret = 0, bsize = size; bsize && retry; retry--){
+		ret = send(sckt, buff, bsize, MSG_NOSIGNAL);
+		if (ret <= 0){
+			return -1;
+		}
+
+		bsize -= ret;
+	}
+
+	return (retry == 0 ? -1 : 0);
+}
+/* ****** */
+
 /**
 * Sends the file read from a stream, in TCP and in active mode (means that it does a "connect").
 *
@@ -369,6 +397,13 @@ static sfp_returncode_t sfp_transfer_send_active(FILE * stream, SOCKET sckt, str
 		m_log_error("Could not connect to peer", "sfp_transfer_send_active");
 		return CANT_CONNECT; // fail
 	}
+
+	/* JULIEN */
+	if (sfp_transfer_send_connect_id(sckt, session->connection_id, strlen(session->connection_id)) < 0){
+		m_log_error("Could not send connection ID", "sfp_transfer_send_active");
+		return TRANSFER_CORRUPTION;
+	}
+	/* ****** */
 
 	memset(buffer, 0, sizeof(buffer));
 	while((read = fread(buffer, sizeof(char), READ_WRITE_BUFFER_SIZE, stream)) > 0){
@@ -432,31 +467,67 @@ static sfp_returncode_t sfp_transfer_send_passive(FILE * stream, SOCKET sckt, st
 	unsigned long total_to_send = (unsigned long)atol(session->file_size);
 	unsigned int increase = SFP_PROGRESSION_PERCENTAGE_INCREASE;
 
+	/* JULIEN */
+	int ret = 0;
+	int cread = 0;
+	int total = 0;
+	char cid_buff[32];
+	/* ****** */
+
 	addrlen = (socklen_t)sizeof(address);
 
 	if(listen(sckt, 5) < 0){
 		return CANT_LISTEN_ON_SOCKET; // fail
 	}
+	
+	// use select to do a timeout in order not to stay blocked if peer cannot send file
+	memset(cid_buff, 0, sizeof(cid_buff));
+	while (1){
+		
+		FD_ZERO(&sckts);
+		FD_SET(sckt, &sckts);
+		if (tmp)
+			FD_SET(sckt, &sckts);
 
-	// use select to do a timeout in order not to stay blocked if peer cannot receive file
-	FD_ZERO(&sckts);
-	FD_SET(sckt, &sckts);
-	max_sckt = (int)sckt + 1;
-	if(select(max_sckt, NULL, &sckts, NULL, &timeout) <= 0){
-		// no connection received
-		FD_CLR(sckt, &sckts);
-		return CONNECTION_TIMED_OUT; // fail
-	}
-	if(FD_ISSET(sckt, &sckts) == 0){
-		FD_CLR(sckt, &sckts);
-		return CONNECTION_TIMED_OUT; // fail
-	}
-	FD_CLR(sckt, &sckts);
+		max_sckt = ((int)(sckt > tmp ? sckt : tmp)) + 1;
+		
+		ret = select(max_sckt, &sckts, NULL, NULL, &timeout);
+		if (ret <= 0){
+			// no connection received
+			FD_CLR(sckt, &sckts);
+			return CONNECTION_TIMED_OUT; // fail
+		}
+		if(FD_ISSET(sckt, &sckts)){
+			tmp = accept(sckt, (struct sockaddr *)&address, &addrlen); // should block until someone connects
+			if(tmp < 0){
+				return CANT_ACCEPT_CONNECTION; // fail
+			}
+		}
+		else if (FD_ISSET(tmp, &sckts)){
+			if (total < (sizeof(cid_buff) -1)){
+				if ((cread = recv(tmp, &cid_buff[total], 1, 0)) > 0)
+					total += cread;
+				else
+					return CANT_ACCEPT_CONNECTION; // fail
 
-	tmp = accept(sckt, (struct sockaddr *)&address, &addrlen);
-	if(tmp < 0){
+				if (cid_buff[total] == '\n') {
+					cid_buff[total] = '\0';
+					break;
+				}
+			} 
+			else {
+				return CANT_ACCEPT_CONNECTION; // fail
+			}
+		}
+		else
+			return CANT_ACCEPT_CONNECTION; // fail
+	}
+	// CHECK CONNECTION ID
+	if (strcmp(cid_buff, session->connection_id) != 0)
 		return CANT_ACCEPT_CONNECTION; // fail
-	}
+	/* ****** */
+
+	FD_CLR(sckt, &sckts);
 
 	memset(buffer, 0, sizeof(buffer));
 	while((read = fread(buffer, sizeof(char), READ_WRITE_BUFFER_SIZE, stream)) > 0){
@@ -536,6 +607,13 @@ static sfp_returncode_t sfp_transfer_receive_active(FILE * stream, SOCKET sckt, 
 		return CANT_CONNECT; // fail
 	}
 
+	/* JULIEN */
+	if (sfp_transfer_send_connect_id(sckt, session->connection_id, strlen(session->connection_id)) < 0){
+		m_log_error("Could not send connection ID", "sfp_transfer_send_active");
+		return TRANSFER_CORRUPTION;
+	}
+	/* ****** */
+
 	memset(buffer, 0, sizeof(buffer));
 	while((received = recv(sckt, buffer, READ_WRITE_BUFFER_SIZE, 0)) > 0){
 		total_received += (unsigned long)received;
@@ -589,7 +667,7 @@ static sfp_returncode_t sfp_transfer_receive_passive(FILE * stream, SOCKET sckt,
 	char buffer[READ_WRITE_BUFFER_SIZE];
 	socklen_t addrlen;
 	unsigned int received = 0;
-	SOCKET tmp;
+	SOCKET tmp = -1;
 	fd_set sckts;
 	struct timeval timeout = {SFP_TIMEOUT_SEC, 0};
 	int max_sckt;
@@ -597,31 +675,68 @@ static sfp_returncode_t sfp_transfer_receive_passive(FILE * stream, SOCKET sckt,
 	unsigned long total_to_receive = (unsigned long)atol(session->file_size);
 	unsigned int increase = SFP_PROGRESSION_PERCENTAGE_INCREASE;
 
+	/* JULIEN */
+	int ret = 0;
+	int cread = 0;
+	int total = 0;
+	char cid_buff[32];
+	/* ****** */
+	
 	addrlen = (socklen_t)sizeof(address);
 
 	if(listen(sckt, 5) < 0){
 		return CANT_LISTEN_ON_SOCKET; // fail
 	}
 
+	/* JULIEN */
 	// use select to do a timeout in order not to stay blocked if peer cannot send file
-	FD_ZERO(&sckts);
-	FD_SET(sckt, &sckts);
-	max_sckt = (int)sckt + 1;
-	if(select(max_sckt, &sckts, NULL, NULL, &timeout) <= 0){
-		// no connection received
-		FD_CLR(sckt, &sckts);
-		return CONNECTION_TIMED_OUT; // fail
-	}
-	if(FD_ISSET(sckt, &sckts) == 0){
-		FD_CLR(sckt, &sckts);
-		return CONNECTION_TIMED_OUT; // fail
-	}
-	FD_CLR(sckt, &sckts);
+	memset(cid_buff, 0, sizeof(cid_buff));
+	while (1){
+		
+		FD_ZERO(&sckts);
+		FD_SET(sckt, &sckts);
+		if (tmp)
+			FD_SET(sckt, &sckts);
 
-	tmp = accept(sckt, (struct sockaddr *)&address, &addrlen); // should block until someone connects
-	if(tmp < 0){
-		return CANT_ACCEPT_CONNECTION; // fail
+		max_sckt = ((int)(sckt > tmp ? sckt : tmp)) + 1;
+		
+		ret = select(max_sckt, &sckts, NULL, NULL, &timeout);
+		if (ret <= 0){
+			// no connection received
+			FD_CLR(sckt, &sckts);
+			return CONNECTION_TIMED_OUT; // fail
+		}
+		if(FD_ISSET(sckt, &sckts)){
+			tmp = accept(sckt, (struct sockaddr *)&address, &addrlen); // should block until someone connects
+			if(tmp < 0){
+				return CANT_ACCEPT_CONNECTION; // fail
+			}
+		}
+		else if (FD_ISSET(tmp, &sckts)){
+			if (total < (sizeof(cid_buff) -1)){
+				if ((cread = recv(tmp, &cid_buff[total], 1, 0)) > 0)
+					total += cread;
+				else
+					return CANT_ACCEPT_CONNECTION; // fail
+
+				if (cid_buff[total] == '\n') {
+					cid_buff[total] = '\0';
+					break;
+				}
+			} 
+			else {
+				return CANT_ACCEPT_CONNECTION; // fail
+			}
+		}
+		else
+			return CANT_ACCEPT_CONNECTION; // fail
 	}
+	// CHECK CONNECTION ID
+	if (strcmp(cid_buff, session->connection_id) != 0)
+		return CANT_ACCEPT_CONNECTION; // fail
+	/* ****** */
+
+	FD_CLR(sckt, &sckts);
 
 	memset(buffer, 0, sizeof(buffer));
 	while((received = recv(tmp, buffer, READ_WRITE_BUFFER_SIZE, 0)) > 0){

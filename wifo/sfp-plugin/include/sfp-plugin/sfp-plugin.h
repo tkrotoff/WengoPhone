@@ -95,6 +95,9 @@ extern "C" {
 		int call_id;
 		void (*terminaisonCallback)(sfp_session_info_t * session, sfp_returncode_t code);
 		void (*progressionCallback)(sfp_session_info_t * session, int percentage);
+
+		/* JULIEN */
+		char * connection_id;
 	};
 
 	/**
