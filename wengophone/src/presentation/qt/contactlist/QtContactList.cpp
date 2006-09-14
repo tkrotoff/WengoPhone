@@ -56,7 +56,7 @@ const QString QtContactList::STATUS_GROUP_OPEN_PIXMAP = ":/pics/group_open.png";
 const QString QtContactList::STATUS_GROUP_CLOSE_PIXMAP = ":/pics/group_close.png";
 
 static inline QPixmap scalePixmap(const QString name) {
-	return QPixmap(name).scaled(QSize(16, 16), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+	return QPixmap(name).scaled(QSize(11, 11), Qt::KeepAspectRatio, Qt::SmoothTransformation);
 }
 
 QtContactList::QtContactList(CContactList & cContactList, CWengoPhone & cWengoPhone)
