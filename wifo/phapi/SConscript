@@ -139,6 +139,7 @@ sources = [
 	'wav.c',
 	'tonegen.c',
 	'phmedia-audio-null.c',
+	'phmedia-audio-file.c',
 	'phapi.c',
 	'phaudiodriver.c',
 	'phmedia.c',

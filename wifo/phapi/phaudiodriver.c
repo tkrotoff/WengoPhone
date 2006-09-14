@@ -1,6 +1,7 @@
 /*
   The phaudiodriver module implements abstract audio device interface for phapi
   Copyright (C) 2004  Vadim Lebedev  <vadim@mbdsys.com>
+  Copyright (C) 2006  Wengo SAS
 
   this module is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by

@@ -47,14 +47,14 @@
 /**
  * Declare the driver to phmedia-audio and initialize it.
  */
-void ph_null_driver_init();
+void ph_phadnull_driver_init();
 
 /**
  * Start the stream.
  *
  * @return
  */
-void null_start(phastream_t *as);
+void phadnull_start(phastream_t *as);
 
 /**
  * Open a device.
@@ -65,7 +65,7 @@ void null_start(phastream_t *as);
  * @param cbk
  * @return
  */
-int null_open(phastream_t *as, const char *name, int rate, int framesize, ph_audio_cbk cbk);
+int phadnull_open(phastream_t *as, const char *name, int rate, int framesize, ph_audio_cbk cbk);
 
 /**
  * Write sound data onto the device.
@@ -73,7 +73,7 @@ int null_open(phastream_t *as, const char *name, int rate, int framesize, ph_aud
  * @param buf data buffer
  * @param len length of data buffer
  */
-int null_write(phastream_t *as, void *buf, int len);
+int phadnull_write(phastream_t *as, void *buf, int len);
 
 /**
  * Read sound data from the device.
@@ -81,81 +81,81 @@ int null_write(phastream_t *as, void *buf, int len);
  * @param buf data buffer
  * @param len length of data buffer
  */
-int null_read(phastream_t *as, void *buf, int len);
+int phadnull_read(phastream_t *as, void *buf, int len);
 
 /**
  * Get out data size.
  *
  * @param used
  */
-int null_get_out_space(phastream_t *as, int *used);
+int phadnull_get_out_space(phastream_t *as, int *used);
 
 /**
  * Get available data.
  */
-int null_get_avail_data(phastream_t *as);
+int phadnull_get_avail_data(phastream_t *as);
 
 /**
  * Close the stream.
  */
-void null_close(phastream_t *as);
+void phadnull_close(phastream_t *as);
 
-struct ph_audio_driver ph_null_audio_driver = {
+struct ph_audio_driver ph_phadnull_audio_driver = {
   "null",
   0,
   0,
-  null_start,
-  null_open,
-  null_write,
-  null_read,
-  null_get_out_space,
-  null_get_avail_data,
-  null_close
+  phadnull_start,
+  phadnull_open,
+  phadnull_write,
+  phadnull_read,
+  phadnull_get_out_space,
+  phadnull_get_avail_data,
+  phadnull_close
 };
 
-void ph_null_driver_init() {
-  DBG_DYNA_AUDIO_DRV("phad_null: Register and initialize null audio driver\n");
-  ph_register_audio_driver(&ph_null_audio_driver);
+void ph_phadnull_driver_init() {
+  ph_register_audio_driver(&ph_phadnull_audio_driver);
 }
 
-void null_start(phastream_t *as) {
+void phadnull_start(phastream_t *as) {
   PH_UNREFERENCED_PARAMETER(as);
   DBG_DYNA_AUDIO_DRV("phad_null: Starting audio stream\n");
 }
 
-int null_open(phastream_t *as, const char *name, int rate, int framesize, ph_audio_cbk cbk) {
+int phadnull_open(phastream_t *as, const char *name, int rate, int framesize, ph_audio_cbk cbk) {
   PH_UNREFERENCED_PARAMETER(as);
   DBG_DYNA_AUDIO_DRV("phad_null: Opening device %s with rate: %d, framesize: %d, and callback: %p\n",
     name, rate, framesize, cbk);
+  as->actual_rate = rate; // important
   return 0;
 }
 
-int null_write(phastream_t *as, void *buf, int len) {
+int phadnull_write(phastream_t *as, void *buf, int len) {
   PH_UNREFERENCED_PARAMETER(as);
   DBG_DYNA_AUDIO_DRV("phad_null: Writing %d bytes of data from buffer %p\n", len, buf);
   return 0;
 }
 
-int null_read(phastream_t *as, void *buf, int len) {
+int phadnull_read(phastream_t *as, void *buf, int len) {
   PH_UNREFERENCED_PARAMETER(as);
   DBG_DYNA_AUDIO_DRV("phad_null: Reading %d bytes of data and putting it into buffer %p\n", len, buf);
   return 0;
 }
 
-int null_get_out_space(phastream_t *as, int *used) {
+int phadnull_get_out_space(phastream_t *as, int *used) {
   *used = 0;
   PH_UNREFERENCED_PARAMETER(as);
   DBG_DYNA_AUDIO_DRV("phad_null: Out space used: 0\n", *used);
   return 0;
 }
 
-int null_get_avail_data(phastream_t *as) {
+int phadnull_get_avail_data(phastream_t *as) {
   PH_UNREFERENCED_PARAMETER(as);
   DBG_DYNA_AUDIO_DRV("phad_null: Available data: 0\n");
   return 0;
 }
 
-void null_close(phastream_t *as) {
+void phadnull_close(phastream_t *as) {
   PH_UNREFERENCED_PARAMETER(as);
   DBG_DYNA_AUDIO_DRV("phad_null: Closing audio stream\n");
 }

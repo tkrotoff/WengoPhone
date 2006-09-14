@@ -828,6 +828,8 @@ ph_handle_network_data(phastream_t *stream)
   char data_in_dec[1024];
   int len;
   phcodec_t *codec = stream->ms.codec;
+  int internal_framesize = codec->decoded_framesize;
+  int internal_clockrate = stream->clock_rate;
   int played = 0;  
   int freespace;
   int usedspace;
@@ -836,6 +838,14 @@ ph_handle_network_data(phastream_t *stream)
   DBG_DYNA_AUDIO_RX("ph_handle_network_data :: start\n");
 #ifdef DO_ECHO_CAN
   DBG_DYNA_AUDIO_ECHO("echo cirbuf size %d\n", stream->sent_cnt - stream->read_cnt);
+#endif
+
+#ifdef PH_FORCE_16KHZ
+  if (internal_clockrate == 8000)
+  {
+    internal_framesize *= 2;
+    internal_clockrate = 16000;
+  }
 #endif
   
 #if 0
@@ -854,8 +864,8 @@ ph_handle_network_data(phastream_t *stream)
     gettimeofday(&now, 0);
 
     // try to read read to be played samples from the RX path
-    len = ph_audio_play_cbk(stream, data_in_dec, codec->decoded_framesize);
-    DBG_DYNA_AUDIO_RX("ph_handle_network_data:%u.%u :: read %d full size packets\n", now.tv_sec, now.tv_usec, len/codec->decoded_framesize);
+    len = ph_audio_play_cbk(stream, data_in_dec, internal_framesize);
+    DBG_DYNA_AUDIO_RX("ph_handle_network_data:%u.%u :: read %d full size packets\n", now.tv_sec, now.tv_usec, len/internal_framesize);
 
     if (!len)
     {
@@ -882,7 +892,7 @@ ph_handle_network_data(phastream_t *stream)
 #endif
 
     // exit loop if we've played 4 full size packets
-    if (played >= codec->decoded_framesize * 4)
+    if (played >= internal_framesize * 4)
     {
       break;
     }
@@ -1580,11 +1590,20 @@ ph_handle_audio_data(phastream_t *stream)
 {
   char data_out[1000];
   phcodec_t *codec = stream->ms.codec;
-  const int framesize = codec->decoded_framesize;
+  int internal_framesize = codec->decoded_framesize;
+  int internal_clockrate = stream->clock_rate;
   int i;
 
-  DBG_DYNA_AUDIO_TX("Reading Got %d bytes from mic\n", framesize);
-  i=audio_stream_read(stream, data_out, framesize);
+#ifdef PH_FORCE_16KHZ
+  if (internal_clockrate == 8000)
+  {
+    internal_framesize *= 2;
+    internal_clockrate = 16000;
+  }
+#endif
+
+  DBG_DYNA_AUDIO_TX("Reading Got %d bytes from mic\n", internal_framesize);
+  i=audio_stream_read(stream, data_out, internal_framesize);
   DBG_DYNA_AUDIO_TX("Got %d bytes from mic\n", i);
   if (i>0)
   {
@@ -2069,7 +2088,7 @@ select_audio_device(const char *deviceId)
      if we have 	PH_FORCE_AUDIO_DEVICE env var it overrides everything else
      otherwise we try to use the device specified by the UI....
      if UI didn't specify anything we try to use content of PH_AUDIO_DEVICE env var (if it is nonempty)
-     and in the last resort we use PoartAudio default device
+     and in the last resort we use PortAudio default device
   */
   forcedDeviceId = getenv("PH_FORCE_AUDIO_DEVICE");
 
@@ -3064,6 +3083,10 @@ ph_media_audio_init()
 {
   static int first_time = 1;
 
+  void ph_pa_driver_init();
+  void ph_phadnull_driver_init();
+  void ph_phadfile_driver_init();
+
 #if defined(OS_LINUX)
   void ph_oss_driver_init();
   void ph_alsa_driver_init();
@@ -3079,8 +3102,6 @@ ph_media_audio_init()
 #elif defined(OS_WINDOWS)
   void ph_winmm_driver_init();
 #endif
-  void ph_pa_driver_init();
-  void ph_null_driver_init();
 
 #ifdef ENABLE_OPENAL
   void ph_openal_driver_init();
@@ -3129,7 +3150,8 @@ ph_media_audio_init()
   ph_openal_driver_init();
 #endif
 
-  ph_null_driver_init();
+  ph_phadnull_driver_init();
+  ph_phadfile_driver_init();
 
   tg_init_sine_table();
   ph_gen_noise();
