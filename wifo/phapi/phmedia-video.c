@@ -252,7 +252,8 @@ int ph_media_video_send_frame(phvstream_t *video_stream, phm_videoframe_t *phmvf
 	{
 		// more work needed. Webcam capture a frame that we need to resize
 		// before sending it to the decoder
-		pix_convert(PIX_NO_FLAG, video_stream->image_ready_for_network, image_captured);
+        // PIX_FLIP_HORIZONTALLY, PIX_NO_FLAG
+		pix_convert((phcfg.video_config.video_camera_flip_frame)?PIX_FLIP_HORIZONTALLY:PIX_NO_FLAG, video_stream->image_ready_for_network, image_captured);
 		pix_fill_avpicture((AVPicture *)video_encoder->encoder_ctx.resized_pic,
 		video_stream->image_ready_for_network);
 		avf_prepared_for_encoding = video_encoder->encoder_ctx.resized_pic;
@@ -736,7 +737,7 @@ int ph_media_video_flush_queue(phvstream_t *stream, unsigned long seqnumber_star
       }
 
 			pix_convert_avpicture(PIX_NO_FLAG, stream->frame_event.frame_remote, picIn, PIX_OSI_YUV420P);
-			pix_convert(PIX_NO_FLAG, stream->frame_event.frame_local, stream->local_frame_cache);
+			pix_convert((phcfg.video_config.video_camera_flip_frame)?PIX_FLIP_HORIZONTALLY:PIX_NO_FLAG, stream->frame_event.frame_local, stream->local_frame_cache);
 
 			stream->frameDisplayCallback(stream->ms.mses->cbkInfo, &stream->frame_event);
 
