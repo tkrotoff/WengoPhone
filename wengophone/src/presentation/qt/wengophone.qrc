@@ -32,6 +32,8 @@
 		<file>pics/chat/font_police.png</file>
 		<file>pics/chat/font_color.png</file>
 		<file>pics/chat/font_color_on.png</file>
+		<file>pics/chat/hide_avatar_frame.png</file>
+		<file>pics/chat/show_avatar_frame.png</file>
 
 		<file>pics/config/accounts.png</file>
 		<file>pics/config/advanced.png</file>
