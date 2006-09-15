@@ -35,6 +35,7 @@
  * Handle common data between a Contact a UserProfile.
  *
  * @author Philippe Bernery
+ * @author Mathieu Stute
  */
 class Profile : Interface {
 	friend class ProfileXMLSerializer;
@@ -73,16 +74,16 @@ public:
 	void setCompany(const std::string & company) { _company = company; profileChangedEvent(*this); }
 	std::string getCompany() const { return _company; }
 
-	void setMobilePhone(const std::string & mobilePhone) { _mobilePhone = mobilePhone; profileChangedEvent(*this); }
+	virtual void setMobilePhone(const std::string & mobilePhone) { _mobilePhone = mobilePhone; profileChangedEvent(*this); }
 	std::string getMobilePhone() const { return _mobilePhone; }
 
-	void setHomePhone(const std::string & homePhone) { _homePhone = homePhone; profileChangedEvent(*this); }
+	virtual void setHomePhone(const std::string & homePhone) { _homePhone = homePhone; profileChangedEvent(*this); }
 	std::string getHomePhone() const { return _homePhone; }
 
-	void setWorkPhone(const std::string & workPhone) { _workPhone = workPhone; profileChangedEvent(*this); }
+	virtual void setWorkPhone(const std::string & workPhone) { _workPhone = workPhone; profileChangedEvent(*this); }
 	std::string getWorkPhone() const { return _workPhone; }
 
-	void setOtherPhone(const std::string & otherPhone) { _otherPhone = otherPhone; profileChangedEvent(*this); }
+	virtual void setOtherPhone(const std::string & otherPhone) { _otherPhone = otherPhone; profileChangedEvent(*this); }
 	std::string getOtherPhone() const { return _otherPhone; }
 
 	void setWengoPhoneNumber(const std::string & wengoPhoneNumber) { _wengoPhoneNumber = wengoPhoneNumber; profileChangedEvent(*this); }
@@ -108,6 +109,10 @@ public:
 
 	void setSmsSignature(const std::string & signature) { _smsSignature = signature; profileChangedEvent(*this); }
 	std::string getSmsSignature() const { return _smsSignature; }
+
+	bool hasPhoneNumber() const {
+		return (!_workPhone.empty() || !_homePhone.empty() || !_mobilePhone.empty() || !_otherPhone.empty());
+	}
 
 	virtual void setAlias(const std::string & alias) { _alias = alias; profileChangedEvent(*this); }
 	virtual std::string getAlias() const { return _alias; }

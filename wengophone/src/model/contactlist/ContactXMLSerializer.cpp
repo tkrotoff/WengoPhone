@@ -104,5 +104,7 @@ bool ContactXMLSerializer::unserialize(const string & data) {
 	}
 	////
 
+	_contact.updatePresenceState();
+
 	return true;
 }

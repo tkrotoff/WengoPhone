@@ -24,6 +24,7 @@
 #include "ContactPresenceStateOffline.h"
 #include "ContactPresenceStateAway.h"
 #include "ContactPresenceStateDoNotDisturb.h"
+#include "ContactPresenceStateUnavailable.h"
 
 #include <imwrapper/IMAccount.h>
 #include <imwrapper/IMContact.h>
@@ -45,6 +46,7 @@ static ContactPresenceStateOnline contactPresenceStateOnline;
 static ContactPresenceStateOffline contactPresenceStateOffline;
 static ContactPresenceStateAway contactPresenceStateAway;
 static ContactPresenceStateDoNotDisturb contactPresenceStateDoNotDisturb;
+static ContactPresenceStateUnavailable contactPresenceStateUnavailable;
 
 ContactProfile::ContactProfile() {
 	_sex = EnumSex::SexUnknown;
@@ -61,6 +63,7 @@ ContactProfile::ContactProfile() {
 	_presenceStateMap[contactPresenceStateOffline.getCode()] = &contactPresenceStateOffline;
 	_presenceStateMap[contactPresenceStateAway.getCode()] = &contactPresenceStateAway;
 	_presenceStateMap[contactPresenceStateDoNotDisturb.getCode()] = &contactPresenceStateDoNotDisturb;
+	_presenceStateMap[contactPresenceStateUnavailable.getCode()] = &contactPresenceStateUnavailable;
 }
 
 ContactProfile::ContactProfile(const ContactProfile & contactProfile) {
@@ -94,6 +97,7 @@ bool ContactProfile::operator == (const ContactProfile & contactProfile) const {
 
 void ContactProfile::addIMContact(const IMContact & imContact) {
 	pair<IMContactSet::const_iterator, bool> result = _imContactSet.insert(imContact);
+	updatePresenceState();
 }
 
 void ContactProfile::removeIMContact(const IMContact & imContact) {
@@ -102,6 +106,7 @@ void ContactProfile::removeIMContact(const IMContact & imContact) {
 	if (it != _imContactSet.end()) {
 		_imContactSet.erase(it);
 	}
+	updatePresenceState();
 }
 
 bool ContactProfile::hasIMContact(const IMContact & imContact) const {
@@ -209,12 +214,14 @@ EnumPresenceState::PresenceState ContactProfile::computePresenceState() const {
 
 	if (onlineIMContact > 0) {
 		return EnumPresenceState::PresenceStateOnline;
-	} else if (offlineIMContact == _imContactSet.size()) {
+	} else if ((_imContactSet.size() != 0) && (offlineIMContact == _imContactSet.size())) {
 		return EnumPresenceState::PresenceStateOffline;
-	} else if (dndIMContact == _imContactSet.size()) {
+	} else if ((_imContactSet.size() != 0) && (dndIMContact == _imContactSet.size())) {
 		return EnumPresenceState::PresenceStateDoNotDisturb;
 	} else if (awayIMContact > 0) {
 		return EnumPresenceState::PresenceStateAway;
+	} else if (hasPhoneNumber() && !hasAvailableWengoId()) {
+		return EnumPresenceState::PresenceStateUnavailable;
 	} else {
 		return EnumPresenceState::PresenceStateUnknown;
 	}

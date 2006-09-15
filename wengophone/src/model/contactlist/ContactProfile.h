@@ -42,6 +42,7 @@ class ContactPresenceState;
  *
  * @ingroup model
  * @author Philippe Bernery
+ * @author Mathieu Stute
  */
 class ContactProfile : public Profile {
 	friend class Contact;
@@ -219,6 +220,14 @@ public:
 	std::string getGroupId() const {
 		return _groupId;
 	}
+
+	virtual void setMobilePhone(const std::string & mobilePhone) { Profile::setMobilePhone(mobilePhone); updatePresenceState(); }
+
+	virtual void setHomePhone(const std::string & homePhone) { Profile::setHomePhone(homePhone); updatePresenceState(); }
+
+	virtual void setWorkPhone(const std::string & workPhone) { Profile::setWorkPhone(workPhone); updatePresenceState(); }
+
+	virtual void setOtherPhone(const std::string & otherPhone) { Profile::setOtherPhone(otherPhone); updatePresenceState(); }
 
 protected:
 
