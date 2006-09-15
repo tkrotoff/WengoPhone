@@ -46,6 +46,7 @@ class UserProfile;
  *
  * @ingroup model
  * @author Tanguy Krotoff
+ * @author Mathieu Stute
  */
 class IPhoneLine : Interface {
 public:
@@ -221,6 +222,11 @@ public:
 	 * @return the list of PhoneCall
 	 */
 	virtual PhoneCallList getPhoneCallList() const = 0;
+
+	/**
+	 * Set flip video parameter.
+	 */
+	virtual void flipVideoImage(bool flip) = 0;
 };
 
 #endif	//OWIPHONELINE_H

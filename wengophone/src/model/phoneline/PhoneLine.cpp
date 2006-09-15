@@ -509,3 +509,7 @@ void PhoneLine::configureSipWrapper() {
 bool PhoneLine::isConnected() const {
 	return (_state->getCode() == EnumPhoneLineState::PhoneLineStateOk);
 }
+
+void PhoneLine::flipVideoImage(bool flip) {
+	_sipWrapper->flipVideoImage(flip);
+}

@@ -105,6 +105,8 @@ public:
 
 	bool isConnected() const;
 
+	void flipVideoImage(bool flip);
+
 private:
 
 	/**
