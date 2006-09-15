@@ -460,7 +460,7 @@ static sfp_returncode_t sfp_transfer_send_passive(FILE * stream, SOCKET sckt, st
 	char buffer[READ_WRITE_BUFFER_SIZE];
 	socklen_t addrlen;
 	size_t read = 0;
-	SOCKET tmp;
+	SOCKET tmp = -1;
 	fd_set sckts;
 	struct timeval timeout = {SFP_TIMEOUT_SEC, 0};
 	int max_sckt;
@@ -488,7 +488,7 @@ static sfp_returncode_t sfp_transfer_send_passive(FILE * stream, SOCKET sckt, st
 		
 		FD_ZERO(&sckts);
 		FD_SET(sckt, &sckts);
-		if (tmp)
+		if (((int)tmp) > 0)
 			FD_SET(tmp, &sckts);
 
 		max_sckt = ((int)(sckt > ((int)tmp) ? sckt : tmp)) + 1;
@@ -699,7 +699,7 @@ static sfp_returncode_t sfp_transfer_receive_passive(FILE * stream, SOCKET sckt,
 		
 		FD_ZERO(&sckts);
 		FD_SET(sckt, &sckts);
-		if (tmp)
+		if (((int)tmp) > 0)
 			FD_SET(tmp, &sckts);
 
 		max_sckt = ((int)(sckt > ((int)tmp) ? sckt : tmp)) + 1;
