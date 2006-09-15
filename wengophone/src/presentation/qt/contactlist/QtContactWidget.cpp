@@ -34,7 +34,7 @@
 
 #include <model/contactlist/ContactProfile.h>
 
-#include <util/Picture.h>
+#include <util/OWPicture.h>
 #include <util/Logger.h>
 
 #include <qtutil/PixmapMerging.h>

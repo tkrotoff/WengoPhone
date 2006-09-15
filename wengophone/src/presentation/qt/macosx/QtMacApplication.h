@@ -22,6 +22,30 @@
 
 #include <QtGui/QApplication>
 
+#include <Cocoa/Cocoa.h>
+
+class QtMacApplication;
+
+/**
+ * QtMacApplicationObjC interface.
+ * 
+ * This class will receive events from Cocoa and resend them to our C++
+ * equivalent (QtMacApplication).
+ *
+ * @author Philippe Bernery
+ */
+@interface QtMacApplicationObjC : NSObject
+{
+	/** QtMacApplication instance. */
+	QtMacApplication * _qtMacApplication;
+}
+
+- (id) initWithQtMacApplicationInstance:(QtMacApplication *)qtMacApplication;
+- (void) appReopen:(NSAppleEventDescriptor *)event withReplyEvent:(NSAppleEventDescriptor *)replyEvent;
+- (void) getUrl:(NSAppleEventDescriptor *)event withReplyEvent:(NSAppleEventDescriptor *)replyEvent;
+
+@end
+
 /**
  * QApplication subclass for MacOS X.
  *
@@ -35,19 +59,36 @@ public:
 
 	virtual ~QtMacApplication();
 
-Q_SIGNALS:
+	/**
+	 * @name Event called by QtMacApplicationObjC.
+	 * These must not be called from outside.
+	 * @{
+	 */
 
-	/** kHICommandQuit received. */
-	void applicationMustQuit();
+	/** A reopen event has been emitted. */
+	void applicationReopenEvent();
+
+	/** A getURL event has been emitted. */
+	void openURLRequestEvent(const std::string & url);
+
+	/**
+	 * @}
+	 */
+
+Q_SIGNALS:
 
 	/** kHICommandShowAll received. */
 	void applicationMustShow();
 
-protected:
+	/** Emitted when user tried to access wengo:// */
+	void openURLRequest(QString url);
 
-	bool macEventFilter(EventHandlerCallRef caller, EventRef event);
+private:
 
 	bool _quitCalled;
+
+	/** QtMacApplicationObjC instance. */
+	QtMacApplicationObjC * _qtMacApplicationObjC;
 
 };
 

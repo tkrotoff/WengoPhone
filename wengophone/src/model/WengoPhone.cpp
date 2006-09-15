@@ -83,12 +83,10 @@ WengoPhone::WengoPhone() {
 		boost::bind(&WengoPhone::userProfileInitializedEventHandler, this, _1, _2);
 	////
 
-#ifdef OS_WINDOWS
-	RegisterProtocol registerProtocol("wengo");
+/*	RegisterProtocol registerProtocol("wengo");
 	std::string executableFullName = Path::getApplicationDirPath() + config.getExecutableName();
 	registerProtocol.bind(executableFullName + " -c %1", executableFullName + ",0", "http://www.wengo.com");
-#endif
-
+*/
 	//Creating instance of CommandServer
 	CommandServer::getInstance(*this);
 	////

@@ -283,7 +283,7 @@ void QtProfileDetails::setProfileAvatarFileName(UserProfile & userProfile, const
 		QByteArray byteArray = buffer.data();
 		std::string data(byteArray.data(), byteArray.size());
 
-		Picture picture = Picture::pictureFromData(data);
+		OWPicture picture = OWPicture::pictureFromData(data);
 		picture.setFilename(fileName.toStdString());
 
 		userProfile.setIcon(picture, NULL);

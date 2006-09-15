@@ -24,7 +24,7 @@
 #include <imwrapper/EnumIMProtocol.h>
 
 #include <util/Event.h>
-#include <util/Picture.h>
+#include <util/OWPicture.h>
 #include <util/Trackable.h>
 #include <util/NonCopyable.h>
 
@@ -117,12 +117,12 @@ public:
 		imContactChangedEvent(*this);
 	}
 
-	void setIcon(const Picture & icon) {
+	void setIcon(const OWPicture & icon) {
 		_icon = icon;
 		imContactChangedEvent(*this);
 	}
 
-	const Picture & getIcon() const {
+	const OWPicture & getIcon() const {
 		return _icon;
 	}
 
@@ -161,7 +161,7 @@ private:
 
 	std::string _alias;
 
-	Picture _icon;
+	OWPicture _icon;
 
 	/** True if this IMContact is blocked. */
 	bool _blocked;

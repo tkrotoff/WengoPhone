@@ -48,6 +48,9 @@ private Q_SLOTS:
 
 	void callButtonClicked();
 
+	/** @see QtMacApplication::openURLRequestEvent */
+	void openURLRequest(QString url);
+
 private:
 
 	void initThreadSafe();

@@ -300,7 +300,7 @@ bool ProfileXMLSerializer::unserializeContent(TiXmlHandle & rootElt) {
 
 		TiXmlNode * photoNode = photo->FirstChild();
 		if (photoNode) {
-			Picture picture = Picture::pictureFromData(Base64::decode(photoNode->Value()));
+			OWPicture picture = OWPicture::pictureFromData(Base64::decode(photoNode->Value()));
 			picture.setFilename(filename);
 			_profile._icon = picture;
 		}

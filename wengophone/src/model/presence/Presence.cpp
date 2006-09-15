@@ -62,7 +62,7 @@ void Presence::changeMyAlias(const std::string & alias) {
 	_imPresence->changeMyAlias(alias);
 }
 
-void Presence::changeMyIcon(const Picture & picture) {
+void Presence::changeMyIcon(const OWPicture & picture) {
 	_imPresence->changeMyIcon(picture);
 }
 

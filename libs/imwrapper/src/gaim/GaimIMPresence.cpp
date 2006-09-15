@@ -28,7 +28,7 @@ extern "C" {
 
 #include <util/File.h>
 #include <util/Logger.h>
-#include <util/Picture.h>
+#include <util/OWPicture.h>
 
 GaimIMPresence::GaimIMPresence(IMAccount & account)
 	: IMPresence(account)
@@ -74,7 +74,7 @@ void GaimIMPresence::changeMyAlias(const std::string & nickname)
 		gaim_account_set_alias(gAccount, nickname.c_str(), TRUE);
 }
 
-void GaimIMPresence::changeMyIcon(const Picture & picture)
+void GaimIMPresence::changeMyIcon(const OWPicture & picture)
 {
 	GaimAccount *gAccount = gaim_accounts_find(_imAccount.getLogin().c_str(),
 											GaimIMPrcl::GetPrclId(_imAccount.getProtocol()));

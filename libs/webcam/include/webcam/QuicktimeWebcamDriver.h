@@ -104,7 +104,7 @@ private:
 	/** The sequence grabber channel component. */
 	SGChannel _SGChanVideo;
 
-	/** Picture size. */
+	/** OWPicture size. */
 	Rect _boundsRect;
 
 	/** GWorld used for decompression. */

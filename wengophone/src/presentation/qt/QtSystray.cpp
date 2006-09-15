@@ -23,6 +23,7 @@
 #include "QtUserProfilePresenceMenu.h"
 #include "profilebar/QtProfileBar.h"
 #include "contactlist/QtContactListManager.h"
+#include "macosx/QtMacApplication.h"
 #include "webservices/sms/QtSms.h"
 
 #include <control/CWengoPhone.h>
@@ -77,7 +78,15 @@ void QtSystray::setTrayMenu() {
 	_trayMenu->clear();
 
 	//openAction
+#if defined(OS_MACOSX)
+	// On Mac OS X, clicking the Dock icon should show the application thus the
+	// 'Open WengoPhone' entry is not necessary. We get the Dock Icon click event
+	// from our QtMacApplication class.
+	QtMacApplication * qMacApp = dynamic_cast<QtMacApplication *>(QApplication::instance());
+	SAFE_CONNECT_RECEIVER(qMacApp, SIGNAL(applicationMustShow()), _qtWengoPhone->getWidget(), SLOT(show()));
+#else
 	QAction * openAction = _trayMenu->addAction(QIcon(":/pics/open.png"), tr("Open WengoPhone"));
+#endif
 
 	//Start a call session
 	_callMenu = new QMenu(tr("Call"));
@@ -91,8 +100,12 @@ void QtSystray::setTrayMenu() {
 	}
 
 	//quitAction
+#if !defined(OS_MACOSX)
+	// There is already a Quit on Mac OS X
 	QAction * quitAction = _trayMenu->addAction(QIcon(":/pics/exit.png"), tr("Quit WengoPhone"));
+#endif
 
+#ifdef OS_LINUX
 	//GDMSESSION
 	char * env = getenv("GDMSESSION");
 	std::string gdmSession;
@@ -105,7 +118,6 @@ void QtSystray::setTrayMenu() {
 		LOG_DEBUG("no GDMSESSION environment variable");
 	}
 
-#ifdef OS_LINUX
 	if (gdmSession == "gnome") {
 		LOG_DEBUG("GDMSESSION running");
 		SAFE_CONNECT_RECEIVER(openAction, SIGNAL(triggered()), _qtWengoPhone->getWidget(), SLOT(show()));
@@ -114,7 +126,7 @@ void QtSystray::setTrayMenu() {
 		SAFE_CONNECT_RECEIVER(openAction, SIGNAL(triggered()), _qtWengoPhone->getWidget(), SLOT(show()));
 		SAFE_CONNECT_RECEIVER(quitAction, SIGNAL(triggered()), _qtWengoPhone, SLOT(exitApplication()));
 	}
-#else
+#elif !defined(OS_MACOSX)
 	SAFE_CONNECT_RECEIVER(openAction, SIGNAL(triggered()), _qtWengoPhone->getWidget(), SLOT(show()));
 	SAFE_CONNECT_RECEIVER(quitAction, SIGNAL(triggered()), _qtWengoPhone, SLOT(exitApplication()));
 #endif
@@ -347,15 +359,15 @@ void QtSystray::phoneLineStateChanged(EnumPhoneLineState::PhoneLineState state) 
 }
 
 void QtSystray::connectionIsDownEventHandler() {
-	typedef PostEvent1<void (bool), bool> MyPostEvent;
-	MyPostEvent * event = new MyPostEvent(boost::bind(&QtSystray::connectionStateEventHandlerThreadSafe, this, _1), false);
+	//typedef PostEvent1<void (bool), bool> MyPostEvent;
+	//MyPostEvent * event = new MyPostEvent(boost::bind(&QtSystray::connectionStateEventHandlerThreadSafe, this, _1), false);
 	//FIXME Replaced by phoneLineStateChanged()
 	//postEvent(event);
 }
 
 void QtSystray::connectionIsUpEventHandler() {
-	typedef PostEvent1<void (bool), bool> MyPostEvent;
-	MyPostEvent * event = new MyPostEvent(boost::bind(&QtSystray::connectionStateEventHandlerThreadSafe, this, _1), true);
+	//typedef PostEvent1<void (bool), bool> MyPostEvent;
+	//MyPostEvent * event = new MyPostEvent(boost::bind(&QtSystray::connectionStateEventHandlerThreadSafe, this, _1), true);
 	//FIXME Replaced by phoneLineStateChanged()
 	//postEvent(event);
 }
@@ -429,3 +441,4 @@ void QtSystray::sendSms(QAction * action) {
 		LOG_FATAL("QAction cannot be NULL");
 	}
 }
+	

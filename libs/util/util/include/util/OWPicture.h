@@ -31,36 +31,36 @@
  *
  * @author Philippe Bernery
  */
-class Picture {
+class OWPicture {
 public:
 
 	/**
-	 * Constructs an empty Picture.
+	 * Constructs an empty OWPicture.
 	 */
-	Picture();
+	OWPicture();
 
-	Picture(const Picture & picture);
+	OWPicture(const OWPicture & picture);
 
-	Picture & operator = (const Picture & picture);
+	OWPicture & operator = (const OWPicture & picture);
 
 	/**
-	 * Constructs a Picture from data in memory.
+	 * Constructs a OWPicture from data in memory.
 	 * These data must include the header available in the file from where
 	 * it has been extracted. The construtor will then guess the picture format
 	 * from this header.
 	 *
-	 * @param data Picture data
+	 * @param data OWPicture data
 	 */
-	static Picture pictureFromData(const std::string & data);
+	static OWPicture pictureFromData(const std::string & data);
 
 	/**
-	 * Constructs a Picture from a file.
+	 * Constructs a OWPicture from a file.
 	 *
 	 * The data are loaded and copied in memory.
 	 *
-	 * @param data Picture data
+	 * @param data OWPicture data
 	 */
-	static Picture pictureFromFile(const std::string & filename);
+	static OWPicture pictureFromFile(const std::string & filename);
 
 	/**
 	 * Gets the data with format header.
@@ -70,21 +70,21 @@ public:
 	std::string getData() const;
 
 	/**
-	 * Gets the name of the file from which the Picture has been created.
+	 * Gets the name of the file from which the OWPicture has been created.
 	 * This does not return the complete path of the file.
 	 * @return the filename
 	 */
 	std::string getFilename() const;
 
 	/**
-	 * Set the filename of the Picture.
+	 * Set the filename of the OWPicture.
 	 * Only the last part of the past is saved.
 	 */
 	void setFilename(const std::string & filename);
 
 private:
 
-	void copy(const Picture & picture);
+	void copy(const OWPicture & picture);
 
 	std::string _pictureData;
 

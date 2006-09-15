@@ -29,7 +29,7 @@ extern "C" {
 }
 
 #include <util/Logger.h>
-#include <util/Picture.h>
+#include <util/OWPicture.h>
 
 /* ************ BUDDY ICON MANAGEMENT ************** */
 
@@ -306,11 +306,11 @@ void GaimContactListMngr::UpdateBuddyIcon(GaimBuddy *buddy)
 	}
 	
 	size_t size;
-	Picture picture;
+	OWPicture picture;
 	const char *data = (const char *)gaim_buddy_icon_get_data(buddy->icon, &size);
 		
 	if (data && size > 0)
-		picture = Picture::pictureFromData(std::string(data, size));
+		picture = OWPicture::pictureFromData(std::string(data, size));
 
 	mIMPresence->contactIconChangedEvent(*mIMPresence, gaim_buddy_get_name(buddy), picture);
 }

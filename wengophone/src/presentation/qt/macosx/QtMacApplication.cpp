@@ -19,104 +19,99 @@
 
 #include "QtMacApplication.h"
 
-#include <Carbon/Carbon.h>
-#include <Cocoa/Cocoa.h>
+#include <model/config/Config.h>
+#include <model/config/ConfigManager.h>
 
-#include <iostream>
+#include <util/Logger.h>
+#include <util/String.h>
 
-// Type to convert an integer to 4 chars
-typedef struct kIntToChar {
-	char a;
-	char b;
-	char c;
-	char d;
-} kIntToChar;
-////
+@implementation QtMacApplicationObjC
+
+- (id) initWithQtMacApplicationInstance:(QtMacApplication *)qtMacApplication
+{
+	NSAutoreleasePool *pool = [NSAutoreleasePool new];
+
+	[super init];
+
+	// Member intialization
+	_qtMacApplication = qtMacApplication;
+	////
+
+	// Register event handlers
+
+	// Event handler for wengo:// handling
+	[[NSAppleEventManager sharedAppleEventManager] setEventHandler:self
+		andSelector:@selector(getUrl:withReplyEvent:)
+		forEventClass:kInternetEventClass
+		andEventID:kAEGetURL];
+
+	// Event handle for reopen event. Emitted when the Dock icon is clicked
+	// Or when the application icon has been double-clicked.
+	[[NSAppleEventManager sharedAppleEventManager] setEventHandler:self
+		andSelector:@selector(appReopen:withReplyEvent:)
+		forEventClass:kCoreEventClass
+		andEventID:kAEReopenApplication];
+
+	////
+
+	[pool release];
+
+	return self;
+}
+
+- (void) dealloc
+{
+	NSAutoreleasePool *pool = [NSAutoreleasePool new];
+
+	// Unregister event handlers
+	[[NSAppleEventManager sharedAppleEventManager] removeEventHandlerForEventClass:kInternetEventClass
+		andEventID:kAEGetURL];
+
+	[[NSAppleEventManager sharedAppleEventManager] removeEventHandlerForEventClass:kCoreEventClass
+		andEventID:kAEReopenApplication];
+	////
+
+	[pool release];
+
+	[super dealloc];
+}
+
+- (void) getUrl:(NSAppleEventDescriptor *)event withReplyEvent:(NSAppleEventDescriptor *)replyEvent
+{
+	NSString * url = [[event descriptorAtIndex:1] stringValue];
+	std::string strUrl = [url cStringUsingEncoding:NSUTF8StringEncoding];
+	_qtMacApplication->openURLRequestEvent(strUrl);
+}
+
+- (void) appReopen:(NSAppleEventDescriptor *)event withReplyEvent:(NSAppleEventDescriptor *)replyEvent
+{
+	_qtMacApplication->applicationReopenEvent();
+}
+
+@end
 
 QtMacApplication::QtMacApplication(int & argc, char ** argv) 
 	: QApplication(argc, argv) {
 
 	_quitCalled = false;
 
+	_qtMacApplicationObjC = [[QtMacApplicationObjC alloc] initWithQtMacApplicationInstance:this];
 }
 
 QtMacApplication::~QtMacApplication() {
+	[_qtMacApplicationObjC release];
 }
 
-bool QtMacApplication::macEventFilter(EventHandlerCallRef caller, EventRef event) {
-	UInt32 eventClass = GetEventClass(event);
-	switch (eventClass) {
-	/*
-	case kEventClassMouse:
-		break;
-	case kEventClassKeyboard:
-		break;
-	case kEventClassTextInput:
-		break;
-	case kEventClassApplication:
-		std::cout << std::endl << "ClassApplication: " << GetEventKind(event) << std::endl;
-		break;
-	case kEventClassAppleEvent:
-		break;
-	case kEventClassMenu:
-		break;
-	*/
-	case kEventClassWindow:
-		std::cout << std::endl << "ClassWindow: " << GetEventKind(event) << std::endl;
-		break;
-	/*case kEventClassControl:
-		break;
-	*/
-	case kEventClassCommand:
-		if (GetEventKind(event) == kEventCommandProcess) {
-			HICommand command;
-			GetEventParameter(event, kEventParamDirectObject, typeHICommand,
-				NULL, sizeof(command), NULL, &command);
-			switch (command.commandID) {
-			case kHICommandQuit:
-				if (!_quitCalled) {
-					_quitCalled = true;
-					applicationMustQuit();
-				}
-				return true;
-				break;
-			default:
-				kIntToChar * toChar = (kIntToChar *) &command.commandID;
-				std::cout << std::endl << "command: "
-					<< toChar->a << toChar->b
-					<< toChar->c << toChar->d
-					<< std::endl;
-			};
-		}
-		break;
-	/*
-	case kEventClassTablet:
-		break;
-	case kEventClassVolume:
-		break;
-	case kEventClassAppearance:
-		break;
-	case kEventClassService:
-		break;
-	case kEventClassToolbar:
-		break;
-	case kEventClassToolbarItem:
-		break;
-	case kEventClassToolbarItemView:
-		break;
-	case kEventClassAccessibility:
-		break;
-	case kEventClassSystem:
-		break;
-	case kEventClassInk:
-		break;
-	case kEventClassTSMDocumentAccess:
-		break;
-	*/
-	default:
-		kIntToChar * chars = (kIntToChar *)&eventClass;
-		std::cout << "Unknown class: " << chars->a << chars->b << chars->c << chars->d << ": " << GetEventKind(event) << std::endl;
-	};
+void QtMacApplication::applicationReopenEvent() {
+	applicationMustShow();
+}
 
-	return false;
+void QtMacApplication::openURLRequestEvent(const std::string & url) {
+	// Put the received url in Config in case of no object is currently
+	// registered to the Signal.
+	String myUrl = String(url);
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	config.set(Config::CMDLINE_PLACECALL_KEY, myUrl.split("/")[1]);
+
+	openURLRequest(QString::fromUtf8(url.c_str()));
 }

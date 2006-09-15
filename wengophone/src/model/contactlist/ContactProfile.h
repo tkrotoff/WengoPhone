@@ -205,7 +205,7 @@ public:
 	bool isBlocked() { return _blocked; }
 
 	// Inherited from Profile
-	Picture getIcon() const;
+	OWPicture getIcon() const;
 	////
 
 	/**

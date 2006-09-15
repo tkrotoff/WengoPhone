@@ -63,7 +63,7 @@ public:
 	/**
 	 * @see IMPresence::contactIconChangedEvent
 	 */
-	Event< void (IMPresence & sender, const std::string & contactId, Picture icon) > contactIconChangedEvent;
+	Event< void (IMPresence & sender, const std::string & contactId, OWPicture icon) > contactIconChangedEvent;
 
 
 	Presence(IMAccount & imAccount);
@@ -83,7 +83,7 @@ public:
 	/**
 	 * @see IMPresence::changeMyIcon
 	 */
-	void changeMyIcon(const Picture & picture);
+	void changeMyIcon(const OWPicture & picture);
 
 	/**
 	 * @see IMPresence::subscribeToPresenceOf

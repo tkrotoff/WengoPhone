@@ -30,7 +30,7 @@
 #include <imwrapper/IMChat.h>
 
 #include <util/Logger.h>
-#include <util/Picture.h>
+#include <util/OWPicture.h>
 #include <util/StringList.h>
 #include <util/Uuid.h>
 
@@ -220,7 +220,7 @@ void Contact::profileChangedEventHandler(Profile & profile) {
 	contactChangedEvent(*this);
 }
 
-void Contact::setIcon(const Picture & icon) {
+void Contact::setIcon(const OWPicture & icon) {
 }
 
 void Contact::merge(const Contact & contact) {

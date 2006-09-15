@@ -79,7 +79,7 @@ public:
 	 * @see IMPresence::contactIconChangedEvent
 	 */
 	Event< void (PresenceHandler & sender, const IMContact & imContact,
-		Picture icon) > contactIconChangedEvent;
+		OWPicture icon) > contactIconChangedEvent;
 
 
 	PresenceHandler(UserProfile & userProfile);
@@ -113,17 +113,17 @@ public:
 	 * @param imAccount the IMAccount that we want the icon changed. If NULL
 	 * icon of all accounts is changed.
 	 */
-	void changeMyIcon(const Picture & picture, IMAccount * imAccount = NULL);
+	void changeMyIcon(const OWPicture & picture, IMAccount * imAccount = NULL);
 
 	/**
 	 * Gets the icon of the given IMContact.
 	 *
-	 * If no icon has been set, an empty Picture is returned.
+	 * If no icon has been set, an empty OWPicture is returned.
 	 *
 	 * @param imContact the IMContact to get the icon of
 	 * @return the icon
 	 */
-	Picture getContactIcon(const IMContact & imContact);
+	OWPicture getContactIcon(const IMContact & imContact);
 
 	/**
 	 * Subscribes to the presence of an IMContact.
@@ -219,7 +219,7 @@ private:
 	/**
 	 * @see IMPresence::contactIconChangedEvent
 	 */
-	void contactIconChangedEventHandler(IMPresence & sender, const std::string & contactId, Picture icon);
+	void contactIconChangedEventHandler(IMPresence & sender, const std::string & contactId, OWPicture icon);
 
 	/**
 	 * Finds the Presence related to the given protocol.

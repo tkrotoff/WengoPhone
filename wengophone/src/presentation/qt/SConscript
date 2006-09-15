@@ -400,10 +400,12 @@ if WengoOSMacOSX():
 
 	headers += [
 		'chat/QtCloseChatTabWidget.h',
+		'macosx/QtMacApplication.h',
 	]
 
 	sources += [
 		'chat/QtCloseChatTabWidget.cpp',
+		'macosx/QtMacApplication.cpp',
 	]
 
 	link_flags += [

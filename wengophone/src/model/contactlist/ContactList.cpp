@@ -385,7 +385,7 @@ ContactGroup * ContactList::getContactGroup(const std::string & groupId) const {
 	return result;
 }
 
-void ContactList::contactIconChangedEventHandler(PresenceHandler & sender, const IMContact & imContact, Picture icon) {
+void ContactList::contactIconChangedEventHandler(PresenceHandler & sender, const IMContact & imContact, OWPicture icon) {
 	RecursiveMutex::ScopedLock lock(_mutex);
 
 	Contact * contact = findContactThatOwns(imContact);

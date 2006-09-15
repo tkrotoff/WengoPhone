@@ -76,6 +76,10 @@
 
 #include <QtGui/QtGui>
 
+#if defined(OS_MACOSX)
+	#include <Carbon/Carbon.h>
+#endif
+
 using namespace std;
 
 QtWengoPhone::QtWengoPhone(CWengoPhone & cWengoPhone)
@@ -701,9 +705,16 @@ void QtWengoPhone::proxyNeedsAuthenticationEventHandlerThreadSafe(NetworkProxy n
 }
 
 void QtWengoPhone::closeWindow() {
-#if !defined(OS_MACOSX)
-	// Bad behavior on MacOS X
+#if defined(OS_MACOSX)
+	// This different code make WengoPhone reacts as a true MacOS X application:
+	// When trying to close the main window, WengoPhone is actually hidden. Then
+	// clicking on the WengoPhone icon in the Dock will show WengoPhone.
+//	HICommand command;
+//	memset(&command, 0, sizeof(HICommand));
+//	command.commandID = kHICommandHide;
+//	OSStatus status = ProcessHICommand(&command);
+#else
 	_wengoPhoneWindow->showMinimized();
-#endif
 	_wengoPhoneWindow->hide();
+#endif
 }

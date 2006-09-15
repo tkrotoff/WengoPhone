@@ -20,7 +20,7 @@ sources = [
 	'src/File.cpp',
 	'src/Logger.cpp',
 	'src/Path.cpp',
-	'src/Picture.cpp',
+	'src/OWPicture.cpp',
 	'src/String.cpp',
 	'src/StringList.cpp',
 	'src/Time.cpp',

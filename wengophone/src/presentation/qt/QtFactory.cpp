@@ -45,14 +45,23 @@
 
 #include <QtGui/QApplication>
 
-#ifdef OS_MACOSX
-	#include <CoreFoundation/CoreFoundation.h>
+#if defined(OS_MACOSX)
+	#include "macosx/QtMacApplication.h"
 #endif
 
 PFactory * PFactory::_factory = NULL;
 
 QtFactory::QtFactory(int argc, char * argv[]) {
+#if defined(OS_MACOSX) 
+	_app = new QtMacApplication(argc, argv);
+
+	std::string qtPlugins = Path::getApplicationPrivateFrameworksDirPath() +
+		File::convertPathSeparators("qt-plugins/");
+	QCoreApplication::addLibraryPath(QString::fromStdString(qtPlugins));
+#else
 	_app = new QApplication(argc, argv);
+	QCoreApplication::addLibraryPath(".");
+#endif
 
 	//QtWengoStyle
 	QtWengoStyle * qtWengoStyle = new QtWengoStyle();
@@ -61,15 +70,6 @@ QtFactory::QtFactory(int argc, char * argv[]) {
 	//Filter for post event (=thread event)
 	ThreadEventFilter * threadEventFilter = new ThreadEventFilter();
 	_app->installEventFilter(threadEventFilter);
-
-	QCoreApplication::addLibraryPath(".");
-
-#ifdef OS_MACOSX
-	std::string qtPlugins = Path::getApplicationPrivateFrameworksDirPath() +
-		File::convertPathSeparators("qt-plugins/");
-
-	QCoreApplication::addLibraryPath(QString::fromStdString(qtPlugins));
-#endif
 
 	reset();
 	_qtWengoPhone = NULL;

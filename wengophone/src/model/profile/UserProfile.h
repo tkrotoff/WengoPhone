@@ -368,7 +368,7 @@ public:
 	 * @param imAccount the IMAccount to apply the icon to
 	 *        pass NULL to set the icon to all IMAccount
 	 */
-	void setIcon(const Picture & icon, IMAccount * account);
+	void setIcon(const OWPicture & icon, IMAccount * account);
 
 	/**
 	 * Gets the PresenceState of this UserProfile.
@@ -440,7 +440,7 @@ private:
 	/* Inherited from Profile */
 	void setAlias(const std::string & alias) { _alias = alias; };
 
-	void setIcon(const Picture & icon) { setIcon(icon, NULL); };
+	void setIcon(const OWPicture & icon) { setIcon(icon, NULL); };
 	/**/
 
 	/**

@@ -22,7 +22,7 @@
 #include "PhApiWrapper.h"
 
 #include <util/Logger.h>
-#include <util/Picture.h>
+#include <util/OWPicture.h>
 #include <util/Path.h>
 #include <util/File.h>
 #include <cutil/global.h>
@@ -61,7 +61,7 @@ void PhApiIMPresence::changeMyAlias(const std::string & nickname) {
 	_phApiWrapper.changeMyPresence(EnumPresenceState::PresenceStateUserDefined, nickname);
 }
 
-void PhApiIMPresence::changeMyIcon(const Picture & picture) {
+void PhApiIMPresence::changeMyIcon(const OWPicture & picture) {
 	_iconFilename = picture.getFilename();
 	_phApiWrapper._iconFilename = _iconFilename;
 	//FIXME commented due to imcompatibility with Wengophone Classic
@@ -126,6 +126,6 @@ const std::string PhApiIMPresence::getRessourcePath() {
 }
 
 void PhApiIMPresence::contactIconChangedEventHandler(PhApiWrapper & sender, const std::string & contactId, const std::string & filename) {
-	Picture picture = Picture::pictureFromFile(getRessourcePath() + "pics/avatars/" + filename);
+	OWPicture picture = OWPicture::pictureFromFile(getRessourcePath() + "pics/avatars/" + filename);
 	contactIconChangedEvent(*this, contactId, picture);
 }

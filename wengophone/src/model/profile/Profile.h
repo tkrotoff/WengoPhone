@@ -28,7 +28,7 @@
 #include <util/Date.h>
 #include <util/Event.h>
 #include <util/Interface.h>
-#include <util/Picture.h>
+#include <util/OWPicture.h>
 #include <util/List.h>
 
 /**
@@ -120,8 +120,8 @@ public:
 	virtual void setWengoPhoneId(const std::string & wengoPhoneId) { _wengoPhoneId = wengoPhoneId; profileChangedEvent(*this); } 
 	virtual std::string getWengoPhoneId() const { return _wengoPhoneId; } 
 
-	virtual void setIcon(const Picture & icon) { _icon = icon; profileChangedEvent(*this); }
-	virtual Picture getIcon() const { return _icon; }
+	virtual void setIcon(const OWPicture & icon) { _icon = icon; profileChangedEvent(*this); }
+	virtual OWPicture getIcon() const { return _icon; }
 
 	/**
 	 * Gets the PresenceState of this Profile.
@@ -177,9 +177,10 @@ protected:
 
 	std::string _wengoPhoneId;
 
+	OWPicture _icon;
+
 	std::string _smsSignature;
 
-	Picture _icon;
 };
 
 #endif	//PROFILE_H

@@ -675,7 +675,7 @@ void QtChatWindow::showToaster(IMChatSession * imChatSession) {
 			std::string contact =  _cChatHandler.getCUserProfile().getCContactList().findContactThatOwns((*it));
 			if (!contact.empty()) {
 				ContactProfile contactProfile = _cChatHandler.getCUserProfile().getCContactList().getContactProfile(contact);
-				Picture picture = contactProfile.getIcon();
+				OWPicture picture = contactProfile.getIcon();
 				std::string data = picture.getData();
 				if (!data.empty()) {
 					result.loadFromData((uchar *) data.c_str(), data.size());

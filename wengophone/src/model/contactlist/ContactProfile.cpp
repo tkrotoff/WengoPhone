@@ -32,7 +32,7 @@
 #include <imwrapper/IMChat.h>
 
 #include <util/Logger.h>
-#include <util/Picture.h>
+#include <util/OWPicture.h>
 #include <util/Uuid.h>
 
 #include <iostream>
@@ -249,8 +249,8 @@ void ContactProfile::updatePresenceState() {
 	}
 }
 
-Picture ContactProfile::getIcon() const {
-	Picture result;
+OWPicture ContactProfile::getIcon() const {
+	OWPicture result;
 
 	for (IMContactSet::const_iterator it = _imContactSet.begin() ;
 		it != _imContactSet.end() ;

@@ -19,21 +19,30 @@
 
 #include "QtPhoneLine.h"
 
-#include <presentation/qt/phonecall/QtPhoneCall.h>
-#include <presentation/qt/QtWengoPhone.h>
-#include <presentation/qt/statusbar/QtStatusBar.h>
+#include <QtGui/QtGui>
+
 #include <presentation/qt/QtSystray.h>
+#include <presentation/qt/QtWengoPhone.h>
 #include <presentation/qt/callbar/QtCallBar.h>
+#include <presentation/qt/macosx/QtMacApplication.h>
+#include <presentation/qt/phonecall/QtPhoneCall.h>
+#include <presentation/qt/statusbar/QtStatusBar.h>
 
-#include <control/phoneline/CPhoneLine.h>
-#include <control/phonecall/CPhoneCall.h>
 #include <control/CWengoPhone.h>
+#include <control/phonecall/CPhoneCall.h>
+#include <control/phoneline/CPhoneLine.h>
 
+#include <model/config/Config.h>
+#include <model/config/ConfigManager.h>
+
+#include <cutil/global.h>
+#include <qtutil/SafeConnect.h>
 #include <util/Logger.h>
 
-#include <qtutil/SafeConnect.h>
 
-#include <QtGui/QtGui>
+#if defined(OS_MACOSX)
+	#include <presentation/qt/macosx/QtMacApplication.h>
+#endif
 
 QtPhoneLine::QtPhoneLine(CPhoneLine & cPhoneLine)
 	: QObjectThreadSafe(NULL),
@@ -57,6 +66,10 @@ QtPhoneLine::~QtPhoneLine() {
 void QtPhoneLine::initThreadSafe() {
 	//callButton
 	SAFE_CONNECT(&_qtWengoPhone->getQtCallBar(), SIGNAL(callButtonClicked()), SLOT(callButtonClicked()));
+
+	// openURLRequest
+	QtMacApplication * macApp = dynamic_cast<QtMacApplication *>(QApplication::instance());
+	SAFE_CONNECT_TYPE(macApp, SIGNAL(openURLRequest(QString)), SLOT(openURLRequest(QString)), Qt::QueuedConnection);
 }
 
 void QtPhoneLine::updatePresentation() {
@@ -106,4 +119,13 @@ void QtPhoneLine::callButtonClicked() {
 		_activeCPhoneCall->accept();
 		_qtWengoPhone->getQtCallBar().setEnabledCallButton(false);
 	}
+}
+
+void QtPhoneLine::openURLRequest(QString url) {
+	// Resetting in case of synchronization problem
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	config.resetToDefaultValue(Config::CMDLINE_PLACECALL_KEY);
+	////
+
+	_cPhoneLine.makeCall((url.split("//")[1]).toStdString());
 }

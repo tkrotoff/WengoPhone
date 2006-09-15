@@ -29,7 +29,7 @@
 
 #include <thread/ThreadEvent.h>
 #include <util/Logger.h>
-#include <util/Picture.h>
+#include <util/OWPicture.h>
 
 using namespace std;
 
@@ -169,7 +169,7 @@ void PresenceHandler::changeMyAlias(const string & alias, IMAccount * imAccount)
 	}
 }
 
-void PresenceHandler::changeMyIcon(const Picture & picture, IMAccount * imAccount) {
+void PresenceHandler::changeMyIcon(const OWPicture & picture, IMAccount * imAccount) {
 	LOG_DEBUG("changing icon for "
 		+ ((!imAccount) ? "all" : imAccount->getLogin() + ", of protocol=" + String::fromNumber(imAccount->getProtocol())));
 
@@ -303,7 +303,7 @@ void PresenceHandler::imAccountDeadEventHandler(IMAccount & sender) {
 	}
 }
 
-Picture PresenceHandler::getContactIcon(const IMContact & imContact) {
+OWPicture PresenceHandler::getContactIcon(const IMContact & imContact) {
 	//LOG_DEBUG("getting icon of=" + imContact.getContactId());
 
 	//PresenceMap::iterator it = findPresence(_presenceMap, (IMAccount *)imContact.getIMAccount());
@@ -312,9 +312,9 @@ Picture PresenceHandler::getContactIcon(const IMContact & imContact) {
 	//	return (*it).second->getContactIcon(imContact.getContactId());
 	//} else {
 	//	LOG_FATAL("Unknown IMAccount");
-	//	return Picture();
+	//	return OWPicture();
 	//}
-	return Picture();
+	return OWPicture();
 }
 
 void PresenceHandler::authorizeContact(const IMContact & imContact, bool authorized, const std::string & message) {
@@ -328,7 +328,7 @@ void PresenceHandler::authorizeContact(const IMContact & imContact, bool authori
 }
 
 void PresenceHandler::contactIconChangedEventHandler(IMPresence & sender,
-	const std::string & contactId, Picture icon) {
+	const std::string & contactId, OWPicture icon) {
 
 	contactIconChangedEvent(*this, IMContact(sender.getIMAccount(), contactId), icon);
 }

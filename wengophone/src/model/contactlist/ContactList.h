@@ -27,7 +27,7 @@
 #include <thread/RecursiveMutex.h>
 
 #include <util/Event.h>
-#include <util/Picture.h>
+#include <util/OWPicture.h>
 #include <util/Trackable.h>
 
 #include <set>
@@ -312,7 +312,7 @@ private:
 	 * @see PresenceHandler::contactIconChangedEvent
 	 */
 	void contactIconChangedEventHandler(PresenceHandler & sender,
-		const IMContact & imContact, Picture icon);
+		const IMContact & imContact, OWPicture icon);
 
 	/**
 	 * @see Contact::contactChangedEvent

@@ -172,7 +172,7 @@ private:
 	void _removeIMContact(const IMContact & imContact);
 
 	/** Can't be used on a Contact.*/
-	void setIcon(const Picture & icon);
+	void setIcon(const OWPicture & icon);
 
 	/**
 	 * Merges this Contact with another.

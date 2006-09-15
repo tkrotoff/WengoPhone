@@ -25,10 +25,9 @@
 
 #include <util/Event.h>
 #include <util/Interface.h>
+#include <util/OWPicture.h>
 #include <util/Trackable.h>
 #include <util/String.h>
-
-class Picture;
 
 /**
  * Wrapper for Instant Messaging presence.
@@ -114,7 +113,7 @@ public:
 	 * @param icon the new icon
 	 */
 	Event< void (IMPresence & sender, const std::string & contactId,
-		Picture icon) > contactIconChangedEvent;
+		OWPicture icon) > contactIconChangedEvent;
 
 	virtual ~IMPresence() { }
 
@@ -142,7 +141,7 @@ public:
 	 *
 	 * @param picture the desired icon
 	 */
-	virtual void changeMyIcon(const Picture & picture) = 0;
+	virtual void changeMyIcon(const OWPicture & picture) = 0;
 
 	/**
 	 * Subscribes to the presence of a contact.

@@ -41,7 +41,7 @@ public:
 
 	void changeMyAlias(const std::string & nickname);
 
-	void changeMyIcon(const Picture & picture);
+	void changeMyIcon(const OWPicture & picture);
 
 	void subscribeToPresenceOf(const std::string & contactId);
 

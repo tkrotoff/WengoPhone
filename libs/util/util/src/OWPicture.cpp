@@ -17,39 +17,39 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <util/Picture.h>
+#include <util/OWPicture.h>
 
 #include <util/File.h>
 
 using namespace std;
 
-Picture::Picture() {
+OWPicture::OWPicture() {
 }
 
-Picture::Picture(const Picture & picture) {
+OWPicture::OWPicture(const OWPicture & picture) {
 	copy(picture);
 }
 
-Picture & Picture::operator = (const Picture & picture) {
+OWPicture & OWPicture::operator = (const OWPicture & picture) {
 	copy(picture);
 
 	return *this;
 }
 
-void Picture::copy(const Picture & picture) {
+void OWPicture::copy(const OWPicture & picture) {
 	_pictureData = picture._pictureData;
 	_filename = picture._filename;
 }
 
-Picture Picture::pictureFromData(const std::string & data) {
-	Picture result;
+OWPicture OWPicture::pictureFromData(const std::string & data) {
+	OWPicture result;
 
 	result._pictureData = data;
 
 	return result;
 }
 
-Picture Picture::pictureFromFile(const std::string & filename) {
+OWPicture OWPicture::pictureFromFile(const std::string & filename) {
 	string data;
 	FileReader file(filename);
 	if (file.open()) {
@@ -57,21 +57,21 @@ Picture Picture::pictureFromFile(const std::string & filename) {
 		file.close();
 	}
 
-	Picture result = pictureFromData(data);
+	OWPicture result = pictureFromData(data);
 	result.setFilename(filename);
 
 	return result;
 }
 
-string Picture::getData() const {
+string OWPicture::getData() const {
 	return _pictureData;
 }
 
-string Picture::getFilename() const {
+string OWPicture::getFilename() const {
 	return _filename;
 }
 
-void Picture::setFilename(const string & filename) {
+void OWPicture::setFilename(const string & filename) {
 	string path = filename;
 	path = File::convertPathSeparators(path);
 	string::size_type pos = path.rfind(File::getPathSeparator());

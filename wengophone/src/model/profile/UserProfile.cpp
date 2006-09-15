@@ -464,7 +464,7 @@ void UserProfile::historyChangedEventHandler(History & sender, int id) {
 	saveHistory();
 }
 
-void UserProfile::setIcon(const Picture & icon, IMAccount * imAccount) {
+void UserProfile::setIcon(const OWPicture & icon, IMAccount * imAccount) {
 	Profile::setIcon(icon);
 	_presenceHandler.changeMyIcon(icon, imAccount);
 }
