@@ -52,7 +52,10 @@ public:
 		PresenceStateUserDefined,
 
 		/** Not used for the moment. */
-		PresenceStateUnknown
+		PresenceStateUnknown,
+
+		/** Presence state cannot be determined. */
+		PresenceStateUnavailable
 	};
 
 	enum MyPresenceStatus {

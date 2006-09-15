@@ -48,6 +48,9 @@ string EnumPresenceState::toString(PresenceState presenceState) {
 	case PresenceStateUserDefined:
 		result = "userdefined";
 		break;
+	case PresenceStateUnavailable:
+		result = "unavailable";
+		break;
 	default:
 		LOG_FATAL("unknown state=" + String::fromNumber(presenceState));
 	}
@@ -72,6 +75,8 @@ EnumPresenceState::PresenceState EnumPresenceState::fromString(const string & pr
 		result = PresenceStateUserDefined;
 	} else if (presenceState == "unknown") {
 		result = PresenceStateUnknown;
+	} else if (presenceState == "unavailable") {
+		result = PresenceStateUnavailable;
 	} else {
 		LOG_FATAL("unknown state=" + presenceState);
 	}
