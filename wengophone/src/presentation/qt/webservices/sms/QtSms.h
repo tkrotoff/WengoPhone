@@ -167,6 +167,16 @@ private:
 	 */
 	void smsStatusEventHandlerThreadSafe(EnumSmsState::SmsState state);
 
+	/**
+	 * Memorize in the current UserProfile.
+	 */
+	void memorizeSignature();
+
+	/**
+	 * Load the signature from the current UserProfile.
+	 */
+	void loadSignature();
+
 	CSms & _cSms;
 
 	QtWengoPhone * _qtWengoPhone;

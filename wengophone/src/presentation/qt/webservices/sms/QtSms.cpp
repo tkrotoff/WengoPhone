@@ -24,6 +24,9 @@
 #include <presentation/qt/QtWengoPhone.h>
 
 #include <control/CWengoPhone.h>
+#include <control/profile/CUserProfile.h>
+#include <control/profile/CUserProfileHandler.h>
+#include <model/profile/UserProfile.h>
 
 #include <util/Logger.h>
 #include <util/SafeDelete.h>
@@ -62,6 +65,7 @@ void QtSms::initThreadSafe() {
 	SAFE_CONNECT(_ui->smsText, SIGNAL(textChanged()), SLOT(updateCounter()));
 	SAFE_CONNECT(_ui->signatureLineEdit, SIGNAL(textChanged(const QString &)), SLOT(updateCounter()));
 
+	loadSignature();
 	_qtWengoPhone->setQtSms(this);
 }
 
@@ -152,6 +156,7 @@ void QtSms::sendButtonClicked() {
 	}
 
 	_ui->sendButton->setEnabled(false);
+	memorizeSignature();
 	sendSms();
 }
 
@@ -233,4 +238,34 @@ QStringList QtSms::splitMessage() const {
 int QtSms::getNeededMessages() const {
 
 	return ((getMessageLength() / MAX_LENGTH) + 1);
+}
+
+void QtSms::memorizeSignature() {
+
+	CUserProfile * cUserProfile = _qtWengoPhone->getCWengoPhone().getCUserProfileHandler().getCUserProfile();
+	QString signature = _ui->signatureLineEdit->text();
+
+	if (cUserProfile && (!signature.isEmpty())) {
+
+		UserProfile & userProfile = cUserProfile->getUserProfile();
+		userProfile.setSmsSignature(signature.toStdString());
+		
+	}
+}
+
+void QtSms::loadSignature() {
+
+	CUserProfile * cUserProfile = _qtWengoPhone->getCWengoPhone().getCUserProfileHandler().getCUserProfile();
+	QString signature = _ui->signatureLineEdit->text();
+
+	if (cUserProfile) {
+
+		UserProfile & userProfile = cUserProfile->getUserProfile();
+		std::string signature = userProfile.getSmsSignature();
+
+		if (!signature.empty()) {
+
+			_ui->signatureLineEdit->setText(QString::fromStdString(signature));
+		}
+	}
 }
