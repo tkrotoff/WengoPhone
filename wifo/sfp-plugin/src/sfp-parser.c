@@ -138,6 +138,10 @@ sfp_info_t * sfp_parse_message(char * text){
 					//msscanf(&text, SFP_FILE_INFO_LINE_FORMAT, &(info->filename), &(info->file_type), &(info->file_size));
 					sscanf3(&text, SFP_FILE_INFO_LINE_FORMAT, info->filename, sizeof(info->filename), info->file_type, sizeof(info->file_type), info->file_size, sizeof(info->file_size));
 					break;
+				case SFP_CONNECTION_ID_LINE :
+					//msscanf(&text, SFP_CONNECTION_ID_LINE_FORMAT, &(info->connection_id));
+					sscanf3(&text, SFP_CONNECTION_ID_LINE_FORMAT, info->connection_id, sizeof(info->connection_id));
+					break;
 				default :
 					// go to the next readable line
 					while(*text != '\n'){
