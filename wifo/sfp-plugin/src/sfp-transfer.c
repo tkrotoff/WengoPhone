@@ -399,6 +399,8 @@ static sfp_returncode_t sfp_transfer_send_active(FILE * stream, SOCKET sckt, str
 	}
 
 	/* JULIEN */
+	if (!session->connection_id || session->connection_id[0] == 0)
+		return TRANSFER_CORRUPTION;
 	if (sfp_transfer_send_connect_id(sckt, session->connection_id, strlen(session->connection_id)) < 0){
 		m_log_error("Could not send connection ID", "sfp_transfer_send_active");
 		return TRANSFER_CORRUPTION;
@@ -608,6 +610,8 @@ static sfp_returncode_t sfp_transfer_receive_active(FILE * stream, SOCKET sckt, 
 	}
 
 	/* JULIEN */
+	if (!session->connection_id || session->connection_id[0] == 0)
+		return TRANSFER_CORRUPTION;
 	if (sfp_transfer_send_connect_id(sckt, session->connection_id, strlen(session->connection_id)) < 0){
 		m_log_error("Could not send connection ID", "sfp_transfer_send_active");
 		return TRANSFER_CORRUPTION;
