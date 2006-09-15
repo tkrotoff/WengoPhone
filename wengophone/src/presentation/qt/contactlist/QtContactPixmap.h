@@ -33,6 +33,7 @@ public:
 
 	enum ContactPixmap {
 		ContactUnknown,
+		ContactNoStatus,
 		ContactOnline,
 		ContactOffline,
 		ContactDND,

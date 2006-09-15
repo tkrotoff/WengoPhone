@@ -43,6 +43,7 @@
 #include <QtGui/QtGui>
 
 const QString QtContactList::DEFAULT_GROUP_NAME = "WENGO2006CLISTHIDE";
+const QString QtContactList::STATUS_NOSTATUS_PIXMAP = ":/pics/status/wengo-id.png";
 const QString QtContactList::STATUS_UNKNOW_PIXMAP = ":/pics/status/unknown.png";
 const QString QtContactList::STATUS_ONLINE_PIXMAP = ":/pics/status/online.png";
 const QString QtContactList::STATUS_OFFLINE_PIXMAP = ":/pics/status/offline.png";
@@ -89,6 +90,7 @@ QtContactList::QtContactList(CContactList & cContactList, CWengoPhone & cWengoPh
 	//icons
 	QtContactPixmap * spx = QtContactPixmap::getInstance();
 	spx->setPixmap(QtContactPixmap::ContactUnknown, scalePixmap(STATUS_UNKNOW_PIXMAP));
+	spx->setPixmap(QtContactPixmap::ContactNoStatus, scalePixmap(STATUS_NOSTATUS_PIXMAP));
 	spx->setPixmap(QtContactPixmap::ContactOnline, scalePixmap(STATUS_ONLINE_PIXMAP));
 	spx->setPixmap(QtContactPixmap::ContactOffline, scalePixmap(STATUS_OFFLINE_PIXMAP ));
 	spx->setPixmap(QtContactPixmap::ContactDND, scalePixmap(STATUS_DND_PIXMAP));

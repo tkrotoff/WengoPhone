@@ -107,7 +107,7 @@ QtContactPixmap::ContactPixmap QtContact::getStatus() const {
 
 	switch (_contactProfile.getPresenceState()) {
 	case EnumPresenceState::PresenceStateUnknown:
-		status = QtContactPixmap::ContactUnknown;
+			status = QtContactPixmap::ContactUnknown;
 		break;
 	case EnumPresenceState::PresenceStateOnline:
 		status = QtContactPixmap::ContactOnline;
@@ -123,6 +123,9 @@ QtContactPixmap::ContactPixmap QtContact::getStatus() const {
 		break;
 	case EnumPresenceState::PresenceStateInvisible:
 		status = QtContactPixmap::ContactInvisible;
+		break;
+	case EnumPresenceState::PresenceStateUnavailable:
+		status = QtContactPixmap::ContactNoStatus;
 		break;
 	default:
 		LOG_FATAL("unknown state=" + String::fromNumber(_contactProfile.getPresenceState()));

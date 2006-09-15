@@ -46,6 +46,7 @@ public:
 
 	static const QString DEFAULT_GROUP_NAME;
 	static const QString STATUS_UNKNOW_PIXMAP;
+	static const QString STATUS_NOSTATUS_PIXMAP;
 	static const QString STATUS_ONLINE_PIXMAP;
 	static const QString STATUS_OFFLINE_PIXMAP;
 	static const QString STATUS_DND_PIXMAP;
