@@ -109,15 +109,15 @@ void QtSimpleIMContactManager::changeIMProtocolPixmaps(EnumIMProtocol::IMProtoco
 void QtSimpleIMContactManager::loadIMContacts() {
 	//Update presentation depending if IM accounts exist
 	changeIMProtocolPixmaps(EnumIMProtocol::IMProtocolWengo,
-				_ui->wengoLabel, ":pics/protocols/wengo.png", _ui->wengoLineEdit);
+		_ui->wengoLabel, ":pics/protocols/wengo.png", _ui->wengoLineEdit);
 	changeIMProtocolPixmaps(EnumIMProtocol::IMProtocolMSN,
-				_ui->msnLabel, ":pics/protocols/msn.png", _ui->msnLineEdit);
+		_ui->msnLabel, ":pics/protocols/msn.png", _ui->msnLineEdit);
 	changeIMProtocolPixmaps(EnumIMProtocol::IMProtocolAIMICQ,
-				_ui->aimLabel, ":pics/protocols/aim.png", _ui->aimLineEdit);
+		_ui->aimLabel, ":pics/protocols/aim.png", _ui->aimLineEdit);
 	changeIMProtocolPixmaps(EnumIMProtocol::IMProtocolYahoo,
-				_ui->yahooLabel, ":pics/protocols/yahoo.png", _ui->yahooLineEdit);
+		_ui->yahooLabel, ":pics/protocols/yahoo.png", _ui->yahooLineEdit);
 	changeIMProtocolPixmaps(EnumIMProtocol::IMProtocolJabber,
-				_ui->jabberLabel, ":pics/protocols/jabber.png", _ui->jabberLineEdit);
+		_ui->jabberLabel, ":pics/protocols/jabber.png", _ui->jabberLineEdit);
 
 	//Loads all the IM contacts
 	if (_ui->wengoLineEdit->isEnabled()) {
@@ -179,11 +179,21 @@ void QtSimpleIMContactManager::addIMContactsOfProtocol(EnumIMProtocol::IMProtoco
 }
 
 void QtSimpleIMContactManager::saveIMContacts() {
-	addIMContactsOfProtocol(EnumIMProtocol::IMProtocolWengo, _ui->wengoLineEdit->text());
-	addIMContactsOfProtocol(EnumIMProtocol::IMProtocolMSN, _ui->msnLineEdit->text());
-	addIMContactsOfProtocol(EnumIMProtocol::IMProtocolAIMICQ, _ui->aimLineEdit->text());
-	addIMContactsOfProtocol(EnumIMProtocol::IMProtocolYahoo, _ui->yahooLineEdit->text());
-	addIMContactsOfProtocol(EnumIMProtocol::IMProtocolJabber, _ui->jabberLineEdit->text());
+	if (_ui->wengoLineEdit->isEnabled()) {
+		addIMContactsOfProtocol(EnumIMProtocol::IMProtocolWengo, _ui->wengoLineEdit->text());
+	}
+	if (_ui->msnLineEdit->isEnabled()) {
+		addIMContactsOfProtocol(EnumIMProtocol::IMProtocolMSN, _ui->msnLineEdit->text());
+	}
+	if (_ui->aimLineEdit->isEnabled()) {
+		addIMContactsOfProtocol(EnumIMProtocol::IMProtocolAIMICQ, _ui->aimLineEdit->text());
+	}
+	if (_ui->yahooLineEdit->isEnabled()) {
+		addIMContactsOfProtocol(EnumIMProtocol::IMProtocolYahoo, _ui->yahooLineEdit->text());
+	}
+	if (_ui->jabberLineEdit->isEnabled()) {
+		addIMContactsOfProtocol(EnumIMProtocol::IMProtocolJabber, _ui->jabberLineEdit->text());
+	}
 }
 
 void QtSimpleIMContactManager::searchWengoContactButtonClicked() {
