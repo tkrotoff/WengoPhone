@@ -379,9 +379,9 @@ static sfp_returncode_t sfp_transfer_send_active(FILE * stream, SOCKET sckt, str
 	int retries = SFP_MAX_RETRIES;
 	int wait_time = SFP_WAIT_TIME_BASE;
 	int res_connect = -1;
-	unsigned int sent = 0;
-	unsigned long total_sent = 0;
-	unsigned long total_to_send = (unsigned long)atol(session->file_size);
+	int sent = 0;
+	long total_sent = 0;
+	long total_to_send = (unsigned long)atol(session->file_size);
 	unsigned int increase = SFP_PROGRESSION_PERCENTAGE_INCREASE;
 
 	while((res_connect = connect(sckt, (struct sockaddr *)&address, sizeof(address))) < 0 && retries-- > 0){
@@ -419,7 +419,7 @@ static sfp_returncode_t sfp_transfer_send_active(FILE * stream, SOCKET sckt, str
 		}else if(session->state == SFP_SESSION_CANCELLED){
 			return SUCCESS;
 		}
-		if((sent = send(sckt, buffer, (int)read, 0)) < (int)read){
+		if((sent = send(sckt, buffer, (int)read, 0)) <= 0){
 			m_log_error("Sent less char that what's been read", "sfp_transfer_send_active");
 			return TRANSFER_CORRUPTION; // fail
 		}else{
@@ -465,8 +465,8 @@ static sfp_returncode_t sfp_transfer_send_passive(FILE * stream, SOCKET sckt, st
 	struct timeval timeout = {SFP_TIMEOUT_SEC, 0};
 	int max_sckt;
 	int sent;
-	unsigned long total_sent = 0;
-	unsigned long total_to_send = (unsigned long)atol(session->file_size);
+	long total_sent = 0;
+	long total_to_send = (unsigned long)atol(session->file_size);
 	unsigned int increase = SFP_PROGRESSION_PERCENTAGE_INCREASE;
 
 	/* JULIEN */
@@ -489,9 +489,9 @@ static sfp_returncode_t sfp_transfer_send_passive(FILE * stream, SOCKET sckt, st
 		FD_ZERO(&sckts);
 		FD_SET(sckt, &sckts);
 		if (tmp)
-			FD_SET(sckt, &sckts);
+			FD_SET(tmp, &sckts);
 
-		max_sckt = ((int)(sckt > tmp ? sckt : tmp)) + 1;
+		max_sckt = ((int)(sckt > ((int)tmp) ? sckt : tmp)) + 1;
 		
 		ret = select(max_sckt, &sckts, NULL, NULL, &timeout);
 		if (ret <= 0){
@@ -545,7 +545,7 @@ static sfp_returncode_t sfp_transfer_send_passive(FILE * stream, SOCKET sckt, st
 			finalize_connection(tmp);
 			return SUCCESS;
 		}
-		if((sent = send(tmp, buffer, (int)read, 0)) < (int)read){
+		if((sent = send(tmp, buffer, (int)read, 0)) <= 0){
 			m_log_error("Sent less bytes that what's been read", "sfp_transfer_send_passive");
 			return TRANSFER_CORRUPTION; // fail
 		}else{
@@ -591,8 +591,8 @@ static sfp_returncode_t sfp_transfer_receive_active(FILE * stream, SOCKET sckt, 
 	int retries = SFP_MAX_RETRIES;
 	int wait_time = SFP_WAIT_TIME_BASE;
 	int res_connect = -1;
-	unsigned long total_received = 0;
-	unsigned long total_to_receive = (unsigned long)atol(session->file_size);
+	long total_received = 0;
+	long total_to_receive = (unsigned long)atol(session->file_size);
 	unsigned int increase = SFP_PROGRESSION_PERCENTAGE_INCREASE;
 
 	while((res_connect = connect(sckt, (struct sockaddr *)&address, sizeof(address))) < 0 && retries-- > 0){
@@ -675,8 +675,8 @@ static sfp_returncode_t sfp_transfer_receive_passive(FILE * stream, SOCKET sckt,
 	fd_set sckts;
 	struct timeval timeout = {SFP_TIMEOUT_SEC, 0};
 	int max_sckt;
-	unsigned long total_received = 0;
-	unsigned long total_to_receive = (unsigned long)atol(session->file_size);
+	long total_received = 0;
+	long total_to_receive = (unsigned long)atol(session->file_size);
 	unsigned int increase = SFP_PROGRESSION_PERCENTAGE_INCREASE;
 
 	/* JULIEN */
@@ -700,9 +700,9 @@ static sfp_returncode_t sfp_transfer_receive_passive(FILE * stream, SOCKET sckt,
 		FD_ZERO(&sckts);
 		FD_SET(sckt, &sckts);
 		if (tmp)
-			FD_SET(sckt, &sckts);
+			FD_SET(tmp, &sckts);
 
-		max_sckt = ((int)(sckt > tmp ? sckt : tmp)) + 1;
+		max_sckt = ((int)(sckt > ((int)tmp) ? sckt : tmp)) + 1;
 		
 		ret = select(max_sckt, &sckts, NULL, NULL, &timeout);
 		if (ret <= 0){
