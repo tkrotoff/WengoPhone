@@ -2907,7 +2907,7 @@ phInit(phCallbacks_t *cbk, char * server, int asyncmode)
   }
 
   {
-    const char * ua  = "phapi/eXosip/" PHAPI_VERSION;
+    const char * ua  = WENGOPHONE_UA;
     eXosip_set_user_agent(ua);
   }
 

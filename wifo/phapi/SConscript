@@ -132,6 +132,12 @@ defines = {
 # To activate FORCED 16 KHZ SAMPLING
 defines['PH_FORCE_16KHZ'] = 1
 
+# To grab the svn revision number
+defines['SUBVERSION_REVISION'] = WengoGetSubversionRevision()
+
+# To set the wengophone user agent. it should be latter changed to "Wengophone NG"
+defines['WENGOPHONE_UA'] = '\\"phpapi/eXosip/0.2.0\\"'
+
 headers = []
 sources = [
 	'phcodec.c',
