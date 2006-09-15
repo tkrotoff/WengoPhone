@@ -106,6 +106,9 @@ public:
 	void setNotes(const std::string & notes) { _notes = notes; profileChangedEvent(*this); }
 	std::string getNotes() const { return _notes; }
 
+	void setSmsSignature(const std::string & signature) { _smsSignature = signature; profileChangedEvent(*this); }
+	std::string getSmsSignature() const { return _smsSignature; }
+
 	virtual void setAlias(const std::string & alias) { _alias = alias; profileChangedEvent(*this); }
 	virtual std::string getAlias() const { return _alias; }
 
@@ -168,6 +171,8 @@ protected:
 	std::string _alias;
 
 	std::string _wengoPhoneId;
+
+	std::string _smsSignature;
 
 	Picture _icon;
 };

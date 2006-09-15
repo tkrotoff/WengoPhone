@@ -128,6 +128,12 @@ string ProfileXMLSerializer::serialize() {
 	}
 	////
 
+	// Serializing SMS signature
+	if (!_profile._smsSignature.empty()) {
+		result += ("<smssignature type=\"other\">" + _profile._smsSignature + "</smssignature>\n");
+	}
+	////
+
 	// Serializing photo
 	if (!_profile._icon.getData().empty()) {
 		result += ("<photo filename=\"" + _profile._icon.getFilename()
@@ -167,6 +173,13 @@ bool ProfileXMLSerializer::unserializeContent(TiXmlHandle & rootElt) {
 	TiXmlNode * alias = rootElt.FirstChild("alias").FirstChild().Node();
 	if (alias) {
 		_profile._alias = alias->Value();
+	}
+	////
+
+	// Retrieving SMS Signature
+	TiXmlNode * smsSignature = rootElt.FirstChild("smssignature").FirstChild().Node();
+	if (smsSignature) {
+		_profile._smsSignature = smsSignature->Value();
 	}
 	////
 

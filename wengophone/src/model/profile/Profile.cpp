@@ -39,6 +39,7 @@ Profile::Profile() {
 	_notes = String::null;
 	_alias = String::null;
 	_wengoPhoneId = String::null;
+	_smsSignature = String::null;
 }
 
 Profile::Profile(const Profile & profile) {
@@ -62,8 +63,9 @@ void Profile::copy(const Profile & profile) {
 	_otherEmail = profile._otherEmail;
 	_notes = profile._notes;
 	_alias = profile._alias;
-	_wengoPhoneId = profile._wengoPhoneId; 
+	_wengoPhoneId = profile._wengoPhoneId;
 	_icon = profile._icon;
+	_smsSignature = profile._smsSignature;
 }
 
 bool Profile::operator==(const Profile & profile) const {
@@ -83,5 +85,6 @@ bool Profile::operator==(const Profile & profile) const {
 		&& (_otherEmail == profile._otherEmail)
 		&& (_streetAddress == profile._streetAddress)
 		&& (_notes == profile._notes)
-		&& (_wengoPhoneId == profile._wengoPhoneId));
+		&& (_wengoPhoneId == profile._wengoPhoneId)
+		&& (_smsSignature == profile._smsSignature));
 }
