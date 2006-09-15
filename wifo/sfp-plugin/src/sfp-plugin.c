@@ -807,6 +807,11 @@ static sfp_session_info_t * sfp_make_session_info_from_body_info(int call_id, sf
 			}
 		}
 
+		// CONNECTION_ID
+		if(strfilled(info->connection_id))
+			sfp_add_property(&(session->connection_id), info->connection_id);
+		
+
 		// TODO key and uri
 	}
 	else if(session != NULL && in_or_out == SFP_OUTGOING_INFO){ // we are the sender of the SFP message
@@ -854,6 +859,10 @@ static sfp_session_info_t * sfp_make_session_info_from_body_info(int call_id, sf
 
 		if(strfilled(info->file_size) && !strfilled(session->file_size))
 			sfp_add_property(&(session->file_size), info->file_size);
+
+		// CONNECTION_ID
+		if(strfilled(info->connection_id))
+			sfp_add_property(&(session->connection_id), info->connection_id);		
 
 		// TODO key and uri
 	}
