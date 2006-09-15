@@ -350,7 +350,7 @@ int sfp_transfer_send_connect_id(SOCKET sckt, char * connect_id, int size)
 
 	memset(buff, 0, sizeof(buff));
 	snprintf(buff, sizeof(buff), "%s\n", connect_id);
-	for (ret = 0, bsize = size; bsize && retry; retry--){
+	for (ret = 0, bsize = (size + 1); bsize && retry; retry--){
 		ret = send(sckt, buff, bsize, MSG_NOSIGNAL);
 		if (ret <= 0){
 			return -1;
