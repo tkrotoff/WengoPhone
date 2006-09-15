@@ -21,3 +21,4 @@ typedef enum sfp_returncode {
 } sfp_returncode_t;
 
 #endif /* __SFP_ERROR_H__ */
+
