@@ -151,8 +151,9 @@ extern "C" {
 	* @param	[in]	ip_address_type : the ip address type can be SFP_ADDRESS_TYPE_IPV4 or SFP_ADDRESS_TYPE_IPV6
 	* @param	[in]	ip_address : the ip address
 	* @param	[in]	address_port : the port number
+	* @param	[in]	connection_id : the connection id
 	*/
-	void sfp_add_origin_info(sfp_info_t * info, char * file_sending_id, char * username, char * network_type, char * ip_address_type, char * ip_address, char * address_port);
+	void sfp_add_origin_info(sfp_info_t * info, char * file_sending_id, char * username, char * network_type, char * ip_address_type, char * ip_address, char * address_port, char * connection_id);
 
 	/**
 	* Adds the info concerning the transfer mode to be used to an sfp info
