@@ -127,6 +127,7 @@ sources = [
 	'model/contactlist/ContactPresenceStateOffline.cpp',
 	'model/contactlist/ContactPresenceStateDoNotDisturb.cpp',
 	'model/contactlist/ContactPresenceStateUnknown.cpp',
+	'model/contactlist/ContactPresenceStateUnavailable.cpp',
 	'model/contactlist/ContactXMLSerializer.cpp',
 	'model/contactlist/ContactList.cpp',
 	'model/contactlist/ContactListXMLSerializer.cpp',
