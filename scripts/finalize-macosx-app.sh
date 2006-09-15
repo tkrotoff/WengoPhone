@@ -129,6 +129,16 @@ mv $WENGO_APP_PATH/Contents/MacOS/qtwengophone $WENGO_EXE
 echo " done"
 
 ##
+# Creates the Info.plist file
+##
+echo -n "Generating Info.plist... "
+
+#TODO: should get the version number from somewhere
+`dirname $0`/generate_info_plist_file.py $WENGO_APP_PATH/Contents "2.0" > /dev/null
+
+echo " done"
+
+##
 # Check the MacOS X version
 ##
 OSVERSION=$(uname -r)
