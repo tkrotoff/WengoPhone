@@ -113,6 +113,7 @@ const std::string Config::VIDEO_ENABLE_KEY = "video.enable";
 const std::string Config::VIDEO_WEBCAM_DEVICE_KEY = "video.webcam.device";
 const std::string Config::VIDEO_QUALITY_KEY = "video.quality";
 const std::string Config::VIDEO_ENABLE_XVIDEO = "video.xvideo.enable";
+const std::string Config::VIDEO_ENABLE_FLIP = "video.flip.enable";
 
 const std::string Config::WENGO_SERVER_HOSTNAME_KEY = "wengo.server.hostname";
 const std::string Config::WENGO_SMS_PATH_KEY = "wengo.sms.path";
@@ -136,6 +137,8 @@ const std::string Config::CMDLINE_PLACECALL_KEY = "cmdline.placecall";
 const std::string Config::CMDSERVER_AUTHORIZED_KEY = "cmdserver.authorized";
 
 const std::string Config::FILETRANSFER_DOWNLOAD_FOLDER = "filetransfer.downloadfolder";
+
+const std::string Config::LINUX_PREFERED_BROWSER = "linux.prefered.browser";
 
 Config::Config(const std::string & name)
 	: AutomaticSettings() {
@@ -248,6 +251,7 @@ Config::Config(const std::string & name)
 	_keyDefaultValueMap[VIDEO_WEBCAM_DEVICE_KEY] = WebcamDriver::getInstance()->getDefaultDevice();
 	_keyDefaultValueMap[VIDEO_QUALITY_KEY] = (int) EnumVideoQuality::VideoQualityNormal;
 	_keyDefaultValueMap[VIDEO_ENABLE_XVIDEO] = true;
+	_keyDefaultValueMap[VIDEO_ENABLE_FLIP] = false;
 
 	_keyDefaultValueMap[WENGO_SERVER_HOSTNAME_KEY] = std::string("ws.wengo.fr");
 	_keyDefaultValueMap[WENGO_SMS_PATH_KEY] = std::string("/sms/sendsms.php");
@@ -269,6 +273,8 @@ Config::Config(const std::string & name)
 	_keyDefaultValueMap[LAST_CHAT_HISTORY_SAVE_DIR_KEY] = Path::getHomeDirPath();
 
 	_keyDefaultValueMap[FILETRANSFER_DOWNLOAD_FOLDER] = empty;
+
+	_keyDefaultValueMap[LINUX_PREFERED_BROWSER] = empty;
 }
 
 Config::~Config() {
@@ -641,6 +647,10 @@ bool Config::getXVideoEnable() const {
 	return getBooleanKeyValue(VIDEO_ENABLE_XVIDEO);
 }
 
+bool Config::getVideoFlipEnable() const {
+	return getBooleanKeyValue(VIDEO_ENABLE_FLIP);
+}
+
 bool Config::getWenboxEnable() const {
 	return getBooleanKeyValue(WENBOX_ENABLE_KEY);
 }
@@ -665,3 +675,6 @@ std::string Config::getFileTransferDownloadFolder() const {
 	return getStringKeyValue(FILETRANSFER_DOWNLOAD_FOLDER);
 }
 
+std::string Config::getLinuxPreferedBrowser() const {
+	return getStringKeyValue(LINUX_PREFERED_BROWSER);
+}

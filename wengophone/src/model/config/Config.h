@@ -412,6 +412,9 @@ public:
 	static const std::string VIDEO_ENABLE_XVIDEO;
 	bool getXVideoEnable() const;
 
+	static const std::string VIDEO_ENABLE_FLIP;
+	bool getVideoFlipEnable() const;
+
 	/** @} */
 
 	/**
@@ -489,6 +492,17 @@ public:
 	/** download folder. */
 	static const std::string FILETRANSFER_DOWNLOAD_FOLDER;
 	std::string getFileTransferDownloadFolder() const;
+
+	/** @} */
+
+	/**
+	 * @name Linux Options
+	 * @{
+	 */
+
+	/** Prefered browser. */
+	static const std::string LINUX_PREFERED_BROWSER;
+	std::string getLinuxPreferedBrowser() const;
 
 	/** @} */
 
