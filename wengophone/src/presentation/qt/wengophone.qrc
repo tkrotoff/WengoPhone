@@ -131,6 +131,7 @@
 		<file>pics/status/offline.png</file>
 		<file>pics/status/online.png</file>
 		<file>pics/status/unknown.png</file>
+		<file>pics/status/wengo-id.png</file>
 
 		<file>pics/statusbar/audio_status_error.png</file>
 		<file>pics/statusbar/audio_status_ok.png</file>
