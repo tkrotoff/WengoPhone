@@ -723,8 +723,8 @@ static sfp_returncode_t sfp_transfer_receive_passive(FILE * stream, SOCKET sckt,
 				else
 					return CANT_ACCEPT_CONNECTION; // fail
 
-				if (cid_buff[total] == '\n') {
-					cid_buff[total] = '\0';
+				if (cid_buff[total - 1] == '\n') {
+					cid_buff[total - 1] = '\0';
 					break;
 				}
 			} 
