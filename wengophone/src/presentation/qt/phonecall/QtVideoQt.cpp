@@ -43,13 +43,7 @@ QtVideoQt::QtVideoQt(QWidget * parent)
 	PaintEventFilter * paintFilter = new PaintEventFilter(this, SLOT(paintEvent()));
 	_ui->frame->installEventFilter(paintFilter);
 
-	//flipButton
 	connect(_ui->flipButton, SIGNAL(clicked()), SLOT(flipWebcamButtonClicked()));
-#ifdef OS_WINDOWS
-	_ui->flipButton->hide();
-#endif
-
-	//fullScreenButton
 	connect(_ui->fullScreenButton, SIGNAL(clicked()), SLOT(fullScreenButtonClicked()));
 
 	_fullScreen = false;
@@ -152,15 +146,6 @@ void QtVideoQt::paintEvent() {
 	}
 }
 
-void QtVideoQt::flipWebcamButtonClicked() {
-	static bool flip = true;
-
-	IWebcamDriver * driver = WebcamDriver::getInstance();
-	driver->flipHorizontally(flip);
-
-	flip = !flip;
-}
-
 void QtVideoQt::fullScreenButtonClicked() {
 	_ui->frame->setFocus();
 
@@ -169,6 +154,10 @@ void QtVideoQt::fullScreenButtonClicked() {
 	} else {
 		this->unFullScreen();
 	}
+}
+
+void QtVideoQt::flipWebcamButtonClicked() {
+	toggleFlipVideoImageSignal();
 }
 
 void QtVideoQt::fullScreen() {

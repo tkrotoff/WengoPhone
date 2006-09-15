@@ -80,6 +80,12 @@ QtPhoneCall::QtPhoneCall(CPhoneCall & cPhoneCall)
 		userInfo = QString::fromStdString(_cPhoneCall.getPhoneCall().getPeerSipAddress().getUserName());
 	}
 
+	//init flip
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	PhoneLine & phoneLine = dynamic_cast < PhoneLine & > (_cPhoneCall.getPhoneCall().getPhoneLine());
+	phoneLine.flipVideoImage(config.getVideoFlipEnable());
+	////
+
 	userInfo = getDisplayName(userInfo);
 
 	QString tmp = QString("<html><head><meta name='qrichtext' content='1'/></head><body "
@@ -340,9 +346,11 @@ void QtPhoneCall::videoFrameReceivedEvent(piximage * remoteVideoFrame, piximage 
 			if (!_videoWindow->isInitialized()) {
 				OWSAFE_DELETE(_videoWindow);
 				_videoWindow = new QtVideoQt(_phoneCallWidget);
+				SAFE_CONNECT(_videoWindow, SIGNAL(toggleFlipVideoImageSignal()), SLOT(toggleFlipVideoImage()));
 			}
 		} else {
 			_videoWindow = new QtVideoQt(_phoneCallWidget);
+			SAFE_CONNECT(_videoWindow, SIGNAL(toggleFlipVideoImageSignal()), SLOT(toggleFlipVideoImage()));
 		}
 	}
 #else
@@ -547,10 +555,19 @@ void QtPhoneCall::close() {
 			_videoWindow->unFullScreen();
 		}
 	}
+	//TODO: disconnect from flipWebcamButtonClicked
 	delete _videoWindow;
 	_videoWindow = NULL;
 	delete _phoneCallWidget;
 	_phoneCallWidget = NULL;
 	deleteMe(this);
 	callRejected();*/
+}
+
+void QtPhoneCall::toggleFlipVideoImage() {
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	PhoneLine & phoneLine = dynamic_cast < PhoneLine & > (_cPhoneCall.getPhoneCall().getPhoneLine());
+	bool flip = !config.getVideoFlipEnable();
+	phoneLine.flipVideoImage(flip);
+	config.set(Config::VIDEO_ENABLE_FLIP, flip);
 }

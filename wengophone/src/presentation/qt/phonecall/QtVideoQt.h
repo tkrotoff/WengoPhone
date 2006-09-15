@@ -50,13 +50,17 @@ public:
 
 	void unFullScreen();
 
+Q_SIGNALS:
+
+	void toggleFlipVideoImageSignal();
+
 private Q_SLOTS:
 
 	void paintEvent();
 
-	void flipWebcamButtonClicked();
-
 	void fullScreenButtonClicked();
+
+	void flipWebcamButtonClicked();
 
 private:
 

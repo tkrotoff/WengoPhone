@@ -101,6 +101,8 @@ public Q_SLOTS:
 
 	void rejectCall();
 
+	void toggleFlipVideoImage();
+
 private Q_SLOTS:
 
 	void updateCallDuration();
