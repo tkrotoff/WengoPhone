@@ -1043,3 +1043,7 @@ std::string PhApiWrapper::phapiCallStateToString(enum phCallStateEvent event) {
 void PhApiWrapper::setVideoDevice(const std::string & deviceName) {
 	strncpy(phcfg.video_config.video_device, deviceName.c_str(), sizeof(phcfg.video_config.video_device));
 }
+
+void PhApiWrapper::flipVideoImage(bool flip) {
+	phVideoControlSetCameraFlip((int)flip);
+}

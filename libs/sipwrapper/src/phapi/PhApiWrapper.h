@@ -263,6 +263,8 @@ public:
 
 	int getActiveVline() const { return _wengoVline; };
 
+	void flipVideoImage(bool flip);
+
 private:
 
 	/**

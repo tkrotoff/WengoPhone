@@ -65,6 +65,7 @@ class WebcamVideoFrame;
  * SipWrapper handles telephony and video only.
  *
  * @author Tanguy Krotoff
+ * @author Mathieu Stute
  */
 class SipWrapper : Interface {
 public:
@@ -423,6 +424,21 @@ public:
 	 * @param codecList new codec list
 	 */
 	//virtual void setCodecList(const List<AudioCodec> & codecList) = 0;
+
+	/** @} */
+
+	/**
+	 * @name Video Methods
+	 * @{
+	 */
+
+	/**
+	 * Set video image flip.
+	 * This parameter is dynamic so it can be set during a call.
+	 *
+	 * @param flip if true flip the image
+	 */
+	virtual void flipVideoImage(bool flip) = 0;
 
 	/** @} */
 

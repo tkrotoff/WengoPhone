@@ -267,8 +267,15 @@ void PhApiCallbacks::messageProgress(int messageId, const phMsgStateInfo_t * inf
 	//Getting maps from PhApiWrapper
 	std::map<const std::string, IMChatSession *> & contactChatMap = p->getContactChatMap();
 
+	string from;
+	//<sip:robobob1535@voip.wengo.fr>;tag=b6e249633711def8c2dbe3c2d4f39996-e1d6
+	if (info->event != phMsgError) {
+		from = String(info->from).split(" ")[0];
+	} else {
+		int atPos = String(info->to).find("@");
+		from = String(info->to).substr(5, atPos - 5);
+	}
 	//Finding associated session
-	string from = String(info->from).split(" ")[0];
 	std::map<const std::string, IMChatSession *>::const_iterator sessionIt = contactChatMap.find(from);
 
 	string ctype;
