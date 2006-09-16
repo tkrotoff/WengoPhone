@@ -48,9 +48,7 @@ add_library(ilbc STATIC ${ilbc_SRCS})
 
 target_link_libraries(${ILBC_LIBRARIES})
 
-set_source_files_properties(
-  PROPERTIES
-    COMPILE_FLAGS
-      ${PHAPI_OPTIMIZATION_FLAGS}
+macro_add_compile_flags(ilbc
+  ${PHAPI_OPTIMIZATION_FLAGS}
 )
 

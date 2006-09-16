@@ -14,10 +14,6 @@ set(AMRNB_LIBRARIES
   CACHE INTERNAL "amrnb libraries"
 )
 
-include_directories(
-  ${AMRNB_INCLUDE_DIRS}
-)
-
 set(amrnb_SRCS
   interf_dec.c
   interf_enc.c
@@ -25,13 +21,15 @@ set(amrnb_SRCS
   sp_enc.c
 )
 
+include_directories(
+  ${AMRNB_INCLUDE_DIRS}
+)
+
 add_library(amrnb STATIC ${amrnb_SRCS})
 
 target_link_libraries(${AMRNB_LIBRARIES})
 
-set_source_files_properties(
-  PROPERTIES
-    COMPILE_FLAGS
-      ${PHAPI_OPTIMIZATION_FLAGS}
+macro_add_compile_flags(amrnb
+  ${PHAPI_OPTIMIZATION_FLAGS}
 )
 

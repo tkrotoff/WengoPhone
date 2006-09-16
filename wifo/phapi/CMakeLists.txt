@@ -35,8 +35,6 @@ endif (MSVC)
 # saves the variable in internal cache for later use
 set(PHAPI_INCLUDE_DIRS
   ${CMAKE_CURRENT_SOURCE_DIR}
-  ${CMAKE_CURRENT_SOURCE_DIR}/include
-  ${OSIP2_INCLUDE_DIRS}
   ${EXOSIP_INCLUDE_DIRS}
   ${ORTP_INCLUDE_DIRS}
   ${ILBC_INCLUDE_DIRS}
@@ -49,11 +47,15 @@ set(PHAPI_INCLUDE_DIRS
   CACHE INTERNAL "phapi include directories"
 )
 
+set(PHAPI_LIBRARY
+  phapi
+  CACHE INTERNAL "phapi library"
+)
+
 # phapi lib and dependencies
 # saves the variable in internal cache for later use
 set(PHAPI_LIBRARIES
   phapi
-  ${OSIP2_LIBRARIES}
   ${EXOSIP_LIBRARIES}
   ${ORTP_LIBRARIES}
   ${ILBC_LIBRARIES}
@@ -291,10 +293,10 @@ if (UNIX AND NOT WIN32)
     )
 
     macro_add_link_flags(phapi
-      "-framework AudioUnit
-      -framework CoreAudio
-      -framework AudioToolbox
-      -framework CoreServices"
+      "-framework AudioUnit"
+      "-framework CoreAudio"
+      "-framework AudioToolbox"
+      "-framework CoreServices"
     )
   else (APPLE)
     set(PHAPI_INCLUDE_DIRS
@@ -433,14 +435,17 @@ install(
     ${LIB_INSTALL_DIR}
 )
 
-# phapi plugins
-macro_add_plugin(phamrplugin "${phapi_amr_plugin_SRCS}")
-macro_add_compile_flags(phamrplugin "${PHAPI_OPTIMIZATION_FLAGS}")
+### phapi plugins
+
+# amr
+macro_add_plugin(phamrplugin ${phapi_amr_plugin_SRCS})
+macro_add_compile_flags(phamrplugin ${PHAPI_OPTIMIZATION_FLAGS})
 target_link_libraries(phamrplugin amrwb amrnb)
 
+# speex
 find_package(Speex REQUIRED)
 include_directories(${SPEEX_INCLUDE_DIRS})
-macro_add_plugin(phspeexplugin "${phapi_speex_plugin_SRCS}")
-macro_add_compile_flags(phspeexplugin "${PHAPI_OPTIMIZATION_FLAGS}")
+macro_add_plugin(phspeexplugin ${phapi_speex_plugin_SRCS})
+macro_add_compile_flags(phspeexplugin ${PHAPI_OPTIMIZATION_FLAGS})
 target_link_libraries(phspeexplugin ${SPEEX_LIBRARIES})
 

@@ -41,10 +41,8 @@ add_library(owhttp STATIC ${owhttp_SRCS})
 target_link_libraries(${OWTHREAD_LIBRARIES})
 
 if (APPLE)
-  set_target_properties(owhttp
-    PROPERTIES
-      LINK_FLAGS
-        "-framework CoreFoundation"
+  macro_add_link_flags(owhttp
+    "-framework CoreFoundation"
   )
 endif (APPLE)
 

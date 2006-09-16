@@ -1,19 +1,21 @@
-# - MACRO_ADD_COMPILE_FLAGS(<_target> "flags...")
+# - MACRO_ADD_COMPILE_FLAGS(target_name flag1 ... flagN)
 
 # Copyright (c) 2006, Oswald Buddenhagen, <ossi@kde.org>
+# Copyright (c) 2006, Andreas Schneider, <mail@cynapses.org>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
 
 
-MACRO (MACRO_ADD_COMPILE_FLAGS _target _flg)
+macro (MACRO_ADD_COMPILE_FLAGS _target)
 
-   GET_TARGET_PROPERTY(_flags ${_target} COMPILE_FLAGS)
-   if (_flags)
-      set(_flags "${_flags} ${_flg}")
-   else (_flags)
-      set(_flags "${_flg}")
-   endif (_flags)
-   SET_TARGET_PROPERTIES(${_target} PROPERTIES COMPILE_FLAGS "${_flags}")
+  get_target_property(_flags ${_target} COMPILE_FLAGS)
+  if (_flags)
+    set(_flags ${_flags} ${ARGN})
+  else (_flags)
+    set(_flags ${ARGN})
+  endif (_flags)
 
-ENDMACRO (MACRO_ADD_COMPILE_FLAGS)
+  set_target_properties(${_target} PROPERTIES COMPILE_FLAGS ${_flags})
+
+endmacro (MACRO_ADD_COMPILE_FLAGS)

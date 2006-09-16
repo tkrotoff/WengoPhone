@@ -95,16 +95,13 @@ endif (WITH_PORTAUDIO AND WIN32)
 add_library(owsound STATIC ${owsound_SRCS})
 
 if (APPLE)
-  set_target_properties(owsound
-    PROPERTIES
-      LINK_FLAGS
-        "-framework CoreAudio -framework Cocoa"
+  macro_add_link_flags(owsound
+    -framework CoreAudio
+    -framework Cocoa
   )
 
-  set_source_files_properties(${owsound_SRCS}
-    PROPERTIES
-      COMPILE_FLAGS
-        "-x objective-c++"
+  macro_add_compile_flags(${owsound_SRCS}
+    "-x objective-c++"
   )
 endif (APPLE)
 

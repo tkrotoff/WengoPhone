@@ -41,10 +41,8 @@ if (UNIX)
       src/mac/Startup.cpp
     )
 
-    set_source_files_properties(${owsystem_SRCS}
-      PROPERTIES
-        COMPILE_FLAGS
-          "-x objective-c++"
+    macro_add_compile_flags(owsystem_SRCS
+      "-x objective-c++"
     )
   else (APPLE)
     set(owsystem_SRCS ${owsystem_SRCS}

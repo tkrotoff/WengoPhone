@@ -14,10 +14,6 @@ set(AMRWB_LIBRARIES
   CACHE INTERNAL "amrwb libraries"
 )
 
-include_directories(
-  ${AMRWB_INCLUDE_DIRS}
-)
-
 set(amrwb_SRCS
   dec_acelp.c
   dec_dtx.c
@@ -38,13 +34,15 @@ set(amrwb_SRCS
   if_rom.c
 )
 
+include_directories(
+  ${AMRWB_INCLUDE_DIRS}
+)
+
 add_library(amrwb STATIC ${amrwb_SRCS})
 
 target_link_libraries(${AMRWB_LIBRARIES})
 
-set_source_files_properties(
-  PROPERTIES
-    COMPILE_FLAGS
-      ${PHAPI_OPTIMIZATION_FLAGS}
+macro_add_compile_flags(amrwb
+  ${PHAPI_OPTIMIZATION_FLAGS}
 )
 

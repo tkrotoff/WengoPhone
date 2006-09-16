@@ -6,6 +6,7 @@ set(SFP-PLUGIN_INCLUDE_DIRS
   ${CMAKE_CURRENT_SOURCE_DIR}/include
   ${PHAPI_INCLUDE_DIRS}
   ${PHAPI-UTIL_INCLUDE_DIRS}
+  ${EXOSIP_INCLUDE_DIRS}
   CACHE INTERNAL "sfp-plugin include directories"
 )
 
@@ -13,8 +14,9 @@ set(SFP-PLUGIN_INCLUDE_DIRS
 # saves the variable in internal cache for later use
 set(SFP-PLUGIN_LIBRARIES
   sfp-plugin
-  ${PHAPI_LIBRARIES}
+  ${PHAPI_LIBRARY}
   ${PHAPI-UTIL_LIBRARIES}
+  ${EXOSIP_LIBRARIES}
   CACHE INTERNAL "sfp-plugin libraries"
 )
 
