@@ -76,6 +76,10 @@ if not definitions.empty?
 	file.printf(")\n")
 end
 
+file.printf("set(#{project}_SRCS\n")
+file.printf("  files.c\n")
+file.printf(")\n")
+
 file.printf("\n")
 
 file.printf("include_directories(\n")
@@ -91,10 +95,6 @@ if not definitions.empty?
 
 	file.printf("\n")
 end
-
-file.printf("set(#{project}_SRCS\n")
-file.printf("  files.c\n")
-file.printf(")\n")
 
 file.printf("\n")
 

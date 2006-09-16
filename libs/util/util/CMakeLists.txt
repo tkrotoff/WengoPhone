@@ -36,8 +36,8 @@ set(owutil_SRCS
   src/Date.cpp
   src/File.cpp
   src/Logger.cpp
+  src/OWPicture.cpp
   src/Path.cpp
-  src/Picture.cpp
   src/String.cpp
   src/StringList.cpp
   src/Time.cpp

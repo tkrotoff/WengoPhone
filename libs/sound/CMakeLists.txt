@@ -1,9 +1,5 @@
 project(owsound)
 
-if (NOT APPLE)
-  find_package(Portaudio REQUIRED)
-endif (NOT APPLE)
-
 # needed include directories to build owsound
 # saves the variable in internal cache for later use
 set(OWSOUND_INCLUDE_DIRS

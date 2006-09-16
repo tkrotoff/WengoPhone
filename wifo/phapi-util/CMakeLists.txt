@@ -4,9 +4,16 @@ project(phapi-util)
 # saves the variable in internal cache for later use
 set(PHAPI-UTIL_INCLUDE_DIRS
   ${CMAKE_CURRENT_SOURCE_DIR}/include
-  ${CMAKE_CURRENT_SOURCE_DIR}/include/phapi-util/msvc
   CACHE INTERNAL "phapi-util include directories"
 )
+
+if (WIN32)
+  set(PHAPI-UTIL_INCLUDE_DIRS
+    ${PHAPI-UTIL_INCLUDE_DIRS}
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/phapi-util/msvc
+    CACHE INTERNAL "phapi-util include directories"
+  )
+endif (WIN32)
 
 # phapi-util lib and dependencies
 # saves the variable in internal cache for later use

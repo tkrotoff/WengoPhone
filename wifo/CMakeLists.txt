@@ -5,8 +5,8 @@ subdirs(
   #miniua
   netlib
   ortp
-  #phapi
+  phapi
   phapi-util
-  #sfp-plugin
+  sfp-plugin
 )
 

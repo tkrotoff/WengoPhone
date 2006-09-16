@@ -1,16 +1,9 @@
 project(owcurl)
 
-if (WIN32)
-  find_package(OpenSSLInternal REQUIRED)
-else (WIN32)
-  find_package(OpenSSL REQUIRED)
-endif (WIN32)
-
 # needed include directories to build owcurl
 # saves the variable in internal cache for later use
 set(OWCURL_INCLUDE_DIRS
   ${CMAKE_CURRENT_SOURCE_DIR}/include
-  ${CMAKE_CURRENT_SOURCE_DIR}/lib
   ${OPENSSL_INCLUDE_DIRS}
   CACHE INTERNAL "owcurl include directories"
 )
@@ -58,6 +51,7 @@ endif (APPLE)
 
 include_directories(
   ${OWCURL_INCLUDE_DIRS}
+  ${CMAKE_CURRENT_SOURCE_DIR}/lib
 )
 
 add_definitions(
