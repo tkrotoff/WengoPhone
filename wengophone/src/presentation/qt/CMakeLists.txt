@@ -293,16 +293,22 @@ if (UNIX AND NOT WIN32)
 
     option(WITH_HW_ACCEL "Build with Xv hardware acceleration support" ON)
     if (WITH_HW_ACCEL)
-      set(QTWENGOPHONE_DEFINITIONS
-        ${QTWENGOPHONE_DEFINITIONS}
-        -DXV_HWACCEL
-      )
+      if (X11_XV_FOUND)
+        set(QTWENGOPHONE_LIBRARIES
+          ${QTWENGOPHONE_LIBRARIES}
+          ${X11_Xv_LIB}
+        }
+        set(QTWENGOPHONE_DEFINITIONS
+          ${QTWENGOPHONE_DEFINITIONS}
+          -DXV_HWACCEL
+        )
 
-      set(qtwengophone_SRCS
-        ${qtwengophone_SRCS}
-        phonecall/XVWindow.cpp
-        phonecall/QtVideoXV.cpp
-      )
+        set(qtwengophone_SRCS
+          ${qtwengophone_SRCS}
+          phonecall/XVWindow.cpp
+          phonecall/QtVideoXV.cpp
+        )
+      endif (X11_XV_FOUND)
     endif (WITH_HW_ACCEL)
   endif (APPLE)
 endif (UNIX AND NOT WIN32)
