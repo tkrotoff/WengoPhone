@@ -28,6 +28,7 @@ class QTreeWidget;
 /**
  * History item widget.
  *
+ * @author Mathieu Stute
  * @author Tanguy Krotoff
  */
 class QtHistoryItem : public QTreeWidgetItem {

@@ -214,6 +214,10 @@ void QtHistory::replayItem(QtHistoryItem * item) {
 
 	case QtHistoryItem::IncomingCall:
 		//can't replay
+		if (mb.exec() == QMessageBox::Yes) {
+			_cHistory.replay(item->getId());
+		}
+		break;
 		break;
 
 	case QtHistoryItem::MissedCall:
