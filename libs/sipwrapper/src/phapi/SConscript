@@ -3,9 +3,9 @@ env = WengoGetEnvironment()
 libs = [
 	'owthread',
 	'owutil',
+	'ortp',
 	'phapi',
 	'sfp-plugin',
-	'ortp',
 	'stun',
 	'httptunnel',
 	'tinyxml',
