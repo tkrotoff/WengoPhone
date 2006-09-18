@@ -24,7 +24,6 @@
 #include <presentation/qt/QtSystray.h>
 #include <presentation/qt/QtWengoPhone.h>
 #include <presentation/qt/callbar/QtCallBar.h>
-#include <presentation/qt/macosx/QtMacApplication.h>
 #include <presentation/qt/phonecall/QtPhoneCall.h>
 #include <presentation/qt/statusbar/QtStatusBar.h>
 
@@ -67,9 +66,11 @@ void QtPhoneLine::initThreadSafe() {
 	//callButton
 	SAFE_CONNECT(&_qtWengoPhone->getQtCallBar(), SIGNAL(callButtonClicked()), SLOT(callButtonClicked()));
 
+#ifdef OS_MACOSX
 	// openURLRequest
 	QtMacApplication * macApp = dynamic_cast<QtMacApplication *>(QApplication::instance());
 	SAFE_CONNECT_TYPE(macApp, SIGNAL(openURLRequest(QString)), SLOT(openURLRequest(QString)), Qt::QueuedConnection);
+#endif
 }
 
 void QtPhoneLine::updatePresentation() {
@@ -129,3 +130,4 @@ void QtPhoneLine::openURLRequest(QString url) {
 
 	_cPhoneLine.makeCall((url.split("//")[1]).toStdString());
 }
+
