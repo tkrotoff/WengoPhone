@@ -30,15 +30,15 @@ QtChatTabWidget::QtChatTabWidget(QWidget * parent) : QTabWidget (parent) {
 
 #if !defined(OS_MACOSX)
 	// On MacOS X, QtCloseChatTabWidget is used in QtChatWindow
-	QPushButton * closeTabButton = new QPushButton(this);
+	QToolButton * closeTabButton = new QToolButton(this);
 	QIcon closeIcon(QPixmap(":/pics/close_normal.png"));
-	closeIcon.addPixmap(QPixmap(":/pics/close_on.png"),QIcon::Normal,QIcon::On);
+	closeIcon.addPixmap(QPixmap(":/pics/close_on.png"), QIcon::Normal, QIcon::On);
 	closeTabButton->setIcon(closeIcon);
-	closeTabButton->setMaximumSize(QSize(16,16));
-	closeTabButton->setMinimumSize(QSize(16,16));
-	closeTabButton->resize(QSize(16,16));
+	closeTabButton->setMaximumSize(QSize(16, 16));
+	closeTabButton->setMinimumSize(QSize(16, 16));
+	closeTabButton->resize(QSize(16, 16));
 	closeTabButton->setToolTip(tr("Close chat"));
-	closeTabButton->setFlat(true);
+	closeTabButton->setAutoRaise(true);
 
 	setCornerWidget(closeTabButton, Qt::TopRightCorner);
 	connect(closeTabButton, SIGNAL(clicked()), SIGNAL(closeButtonClicked()));
