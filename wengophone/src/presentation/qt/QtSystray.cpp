@@ -23,8 +23,11 @@
 #include "QtUserProfilePresenceMenu.h"
 #include "profilebar/QtProfileBar.h"
 #include "contactlist/QtContactListManager.h"
-#include "macosx/QtMacApplication.h"
 #include "webservices/sms/QtSms.h"
+
+#ifdef OS_MACOSX
+#include "macosx/QtMacApplication.h"
+#endif
 
 #include <control/CWengoPhone.h>
 #include <control/profile/CUserProfile.h>
