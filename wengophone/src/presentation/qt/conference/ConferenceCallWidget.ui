@@ -9,7 +9,7 @@
     <x>0</x>
     <y>0</y>
     <width>387</width>
-    <height>231</height>
+    <height>257</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -355,13 +355,6 @@
      <property name="spacing" >
       <number>6</number>
      </property>
-     <item row="1" column="0" >
-      <widget class="QLabel" name="label_2" >
-       <property name="text" >
-        <string>Phone number 2:</string>
-       </property>
-      </widget>
-     </item>
      <item row="0" column="1" >
       <widget class="QLineEdit" name="phoneNumber1LineEdit" >
        <property name="minimumSize" >
@@ -394,10 +387,67 @@
        </property>
       </widget>
      </item>
+     <item row="1" column="0" >
+      <widget class="QLabel" name="label_2" >
+       <property name="text" >
+        <string>Phone number 2:</string>
+       </property>
+      </widget>
+     </item>
      <item row="0" column="0" >
       <widget class="QLabel" name="label" >
        <property name="text" >
         <string>Phone number 1:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2" >
+      <widget class="QToolButton" name="peer1ToolButton" >
+       <property name="minimumSize" >
+        <size>
+         <width>28</width>
+         <height>28</height>
+        </size>
+       </property>
+       <property name="text" >
+        <string/>
+       </property>
+       <property name="icon" >
+        <iconset resource="../wengophone.qrc" >:/pics/iconbar/add_contact.png</iconset>
+       </property>
+       <property name="iconSize" >
+        <size>
+         <width>22</width>
+         <height>22</height>
+        </size>
+       </property>
+       <property name="autoRaise" >
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2" >
+      <widget class="QToolButton" name="peer2ToolButton" >
+       <property name="minimumSize" >
+        <size>
+         <width>28</width>
+         <height>28</height>
+        </size>
+       </property>
+       <property name="text" >
+        <string>...</string>
+       </property>
+       <property name="icon" >
+        <iconset resource="../wengophone.qrc" >:/pics/iconbar/add_contact.png</iconset>
+       </property>
+       <property name="iconSize" >
+        <size>
+         <width>22</width>
+         <height>22</height>
+        </size>
+       </property>
+       <property name="autoRaise" >
+        <bool>true</bool>
        </property>
       </widget>
      </item>

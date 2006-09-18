@@ -23,6 +23,9 @@
 #include <QtGui/QDialog>
 
 class IPhoneLine;
+class CWengoPhone;
+class QMenu;
+class QPoint;
 
 namespace Ui { class ConferenceCallWidget; }
 
@@ -38,7 +41,7 @@ public:
 	/**
 	 * Constructor.
 	 */
-	QtConferenceCallWidget(QWidget * parent, IPhoneLine * phoneLine);
+	QtConferenceCallWidget(QWidget * parent, CWengoPhone & cWengoPhone, IPhoneLine * phoneLine);
 
 	/**
 	 * Destructor.
@@ -52,9 +55,31 @@ private Q_SLOTS:
 	 */
 	void startClicked();
 
+	void peer1ToolButtonClicked();
+
+	void peer2ToolButtonClicked();
+
+	void updateLineEdit(QAction * action);
+
 private:
 
+	void populateMenus();
+
+	void showMenu(QPoint point);
+
 	IPhoneLine * _phoneLine;
+
+	QMenu * _menu;
+
+	QMenu * _sipMenu;
+
+	QMenu * _landLineMenu;
+
+	QMenu * _mobileMenu;
+
+	CWengoPhone & _cWengoPhone;
+
+	int _currentPeer;
 
 	Ui::ConferenceCallWidget * _ui;
 };

@@ -21,25 +21,47 @@
 
 #include "ui_ConferenceCallWidget.h"
 
+#include <presentation/qt/contactlist/QtContactMenu.h>
+
 #include <model/phoneline/IPhoneLine.h>
 #include <model/phonecall/ConferenceCall.h>
 
 #include <util/SafeDelete.h>
+#include <util/Logger.h>
 #include <qtutil/WidgetBackgroundImage.h>
 #include <qtutil/SafeConnect.h>
 
 #include <QtGui/QtGui>
 
-QtConferenceCallWidget::QtConferenceCallWidget(QWidget * parent, IPhoneLine * phoneLine)
-	: QDialog(parent), _phoneLine(phoneLine) {
+QtConferenceCallWidget::QtConferenceCallWidget(QWidget * parent, CWengoPhone & cWengoPhone, IPhoneLine * phoneLine)
+	: QDialog(parent), _cWengoPhone(cWengoPhone), _phoneLine(phoneLine) {
+
+	_currentPeer = 1;
 
 	_ui = new Ui::ConferenceCallWidget();
 	_ui->setupUi(this);
+
+	_menu = new QMenu(this);
+	_sipMenu = new QMenu(_menu);
+	_sipMenu->setTitle(tr("Call SIP"));
+	_landLineMenu = new QMenu(_menu);
+	_landLineMenu->setTitle(tr("Call land line"));
+	_mobileMenu = new QMenu(_menu);
+	_mobileMenu->setTitle(tr("Call Mobile"));
+	_menu->addMenu(_sipMenu);
+	_menu->addMenu(_landLineMenu);
+	_menu->addMenu(_mobileMenu);
 
 	WidgetBackgroundImage::setBackgroundImage(_ui->headerLabel, ":pics/headers/conference.png", true);
 
 	SAFE_CONNECT(_ui->startButton, SIGNAL(clicked()), SLOT(startClicked()));
 	SAFE_CONNECT(_ui->cancelButton, SIGNAL(clicked()), SLOT(reject()));
+	SAFE_CONNECT( _ui->peer1ToolButton, SIGNAL(clicked()), SLOT(peer1ToolButtonClicked()));
+	SAFE_CONNECT( _ui->peer2ToolButton, SIGNAL(clicked()), SLOT(peer2ToolButtonClicked()));
+
+	SAFE_CONNECT(_sipMenu, SIGNAL(triggered(QAction *)), SLOT(updateLineEdit(QAction *)));
+	SAFE_CONNECT(_landLineMenu, SIGNAL(triggered(QAction *)), SLOT(updateLineEdit(QAction *)));
+	SAFE_CONNECT(_mobileMenu, SIGNAL(triggered(QAction *)), SLOT(updateLineEdit(QAction *)));
 }
 
 QtConferenceCallWidget::~QtConferenceCallWidget() {
@@ -51,4 +73,47 @@ void QtConferenceCallWidget::startClicked() {
 	confCall->addPhoneNumber(_ui->phoneNumber1LineEdit->text().toStdString());
 	confCall->addPhoneNumber(_ui->phoneNumber2LineEdit->text().toStdString());
 	accept();
+}
+
+void QtConferenceCallWidget::peer1ToolButtonClicked() {
+	_currentPeer = 1;
+	showMenu(_ui->peer1ToolButton->pos());
+}
+
+void QtConferenceCallWidget::peer2ToolButtonClicked() {
+	_currentPeer = 2;
+	showMenu(_ui->peer2ToolButton->pos());
+}
+
+void QtConferenceCallWidget::showMenu(QPoint point) {
+	point.setX(point.x() + _ui->peer2ToolButton->rect().width());
+	populateMenus();
+	_menu->popup(mapToGlobal(point));
+}
+
+void QtConferenceCallWidget::populateMenus() {
+	_sipMenu->clear();
+	_landLineMenu->clear();
+	_mobileMenu->clear();
+
+	QtContactMenu::populateMobilePhoneMenu(_mobileMenu, _cWengoPhone);
+	QtContactMenu::populateFreeCallMenu(_sipMenu, _cWengoPhone);
+	QtContactMenu::populateHomePhoneMenu(_landLineMenu, _cWengoPhone);
+}
+
+void QtConferenceCallWidget::updateLineEdit(QAction * action) {
+
+	if (action) {
+		QString data = action->data().toString();
+		switch (_currentPeer) {
+			case 1:
+				_ui->phoneNumber1LineEdit->setText(data);
+				break;
+			case 2:
+				_ui->phoneNumber2LineEdit->setText(data);
+				break;
+			default:
+				LOG_FATAL("Unknown _currentPeer");
+		}
+	}
 }

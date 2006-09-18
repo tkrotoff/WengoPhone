@@ -87,6 +87,7 @@ headers = [
 	'contactlist/QtContactTreeKeyFilter.h',
 	'contactlist/QtRenameGroup.h',
 	'contactlist/QtConferenceAction.h',
+	'contactlist/QtContactMenu.h',
 
 	'conference/QtConferenceCallWidget.h',
 
@@ -221,6 +222,7 @@ sources = [
 	'contactlist/QtContactTreeKeyFilter.cpp',
 	'contactlist/QtRenameGroup.cpp',
 	'contactlist/QtConferenceAction.cpp',
+	'contactlist/QtContactMenu.cpp',
 
 	'conference/QtConferenceCallWidget.cpp',
 

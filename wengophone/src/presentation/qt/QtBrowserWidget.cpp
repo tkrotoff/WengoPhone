@@ -53,9 +53,9 @@ QtBrowserWidget::QtBrowserWidget(QtWengoPhone & qtWengoPhone)
 	: _qtWengoPhone(qtWengoPhone) {
 	_qtBrowser = NULL;
 
-	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
 #if (defined OS_WINDOWS) && (defined QT_COMMERCIAL)
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	if (config.getIEActiveXEnable()) {
 		//Embedded Browser
 		_qtBrowser = new QtBrowser(NULL);
