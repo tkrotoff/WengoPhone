@@ -140,3 +140,4 @@ std::string HistoryMemento::stateToString(State state) {
 		LOG_FATAL("unknown state=" + String::fromNumber(state));
 	}
 }
+

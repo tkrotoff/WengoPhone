@@ -206,3 +206,4 @@ unsigned History::addChatMemento(HistoryMemento * memento, int chatSessionID) {
 	chatMementoAddedEvent(*this, id);
 	return id;
 }
+

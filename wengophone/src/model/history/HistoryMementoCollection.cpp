@@ -158,3 +158,4 @@ unsigned int HistoryMementoCollection::getMementoId(HistoryMemento * memento) {
 	}
 	return 0;
 }
+

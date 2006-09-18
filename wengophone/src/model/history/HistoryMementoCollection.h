@@ -183,3 +183,4 @@ private:
 BOOST_CLASS_VERSION(HistoryMementoCollection, HistoryMementoCollection::SERIALIZATION_VERSION)
 
 #endif //OW_HISTORYMEMENTOLIST_H
+

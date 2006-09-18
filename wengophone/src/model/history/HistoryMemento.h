@@ -56,6 +56,11 @@ public:
 		OutgoingSmsOk,
 		OutgoingSmsNok,
 		ChatSession,
+		FileTransferUploaded,
+		FileTransferDownloaded,
+		FileTransferInProgress,
+		FileTransferCancelled,
+		FileTransferPaused,
 		None,
 		Any,
 	};
@@ -197,7 +202,11 @@ private:
 	/** Time associated to the memento. */
 	Time _time;
 
-	/** data: meaningfull only for SMS. */
+	/**
+	 * meaning:
+	 * - text for SMS
+	 * - filename for file transfer
+	 */
 	std::string _data;
 
 	/** data: meaningfull only for calls. */
@@ -250,3 +259,4 @@ private:
 BOOST_CLASS_VERSION(HistoryMemento, HistoryMemento::SERIALIZATION_VERSION)
 
 #endif	//OWHISTORYMEMENTO_H
+
