@@ -45,9 +45,13 @@ void QtContactMenu::populateMobilePhoneMenu(QMenu * menu, CWengoPhone & cWengoPh
 
 			if (!tmpContactProfile.getMobilePhone().empty()) {
 				QString mobilePhone = QString::fromStdString(tmpContactProfile.getMobilePhone());
-
 				//Call mobile action
-				QAction * tmpAction = menu->addAction(displayName + ": " + mobilePhone);
+				QAction * tmpAction;
+				if (displayName.isEmpty()) {
+					tmpAction = menu->addAction(mobilePhone);
+				} else {
+					tmpAction = menu->addAction(displayName + ": " + mobilePhone);
+				}
 				tmpAction->setData(QVariant(mobilePhone));
 			}
 		}
@@ -69,7 +73,12 @@ void QtContactMenu::populateFreeCallMenu(QMenu * menu, CWengoPhone & cWengoPhone
 
 			if (tmpContactProfile.hasFreeCall()) {
 				QString freePhoneNumber = QString::fromStdString(tmpContactProfile.getFirstFreePhoneNumber());
-				QAction * tmpAction = menu->addAction(freePhoneNumber);
+				QAction * tmpAction;
+				if (displayName.isEmpty()) {
+					tmpAction = menu->addAction(freePhoneNumber);
+				} else {
+					tmpAction = menu->addAction(displayName + ": " + freePhoneNumber);
+				}
 				tmpAction->setData(QVariant(freePhoneNumber));
 				EnumPresenceState::PresenceState presenceState = tmpContactProfile.getPresenceState();
 				setPresenceIcon(tmpAction, presenceState);
@@ -93,8 +102,12 @@ void QtContactMenu::populateHomePhoneMenu(QMenu * menu, CWengoPhone & cWengoPhon
 
 			if (!tmpContactProfile.getHomePhone().empty()) {
 				QString homePhone = QString::fromStdString(tmpContactProfile.getHomePhone());
-
-				QAction * tmpAction = menu->addAction(displayName + ": " + homePhone);
+				QAction * tmpAction;
+				if (displayName.isEmpty()) {
+					tmpAction = menu->addAction(homePhone);
+				} else {
+					tmpAction = menu->addAction(displayName + ": " + homePhone);
+				}
 				tmpAction->setData(QVariant(homePhone));
 			}
 		}
