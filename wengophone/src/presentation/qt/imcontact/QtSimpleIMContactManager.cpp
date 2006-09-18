@@ -147,7 +147,7 @@ void QtSimpleIMContactManager::addIMContactsOfProtocol(EnumIMProtocol::IMProtoco
 	for (int i = 0; i < contactIdListBefore.size(); i++) {
 		QString contactId = contactIdListBefore[i];
 
-		if (imContactsAfter.contains(contactId)) {
+		if (contactIdListAfter.contains(contactId)) {
 			//Do nothing
 		} else {
 			//Remove the imContact from the contactProfile
@@ -160,7 +160,7 @@ void QtSimpleIMContactManager::addIMContactsOfProtocol(EnumIMProtocol::IMProtoco
 	for (int i = 0; i < contactIdListAfter.size(); i++) {
 		QString contactId = contactIdListAfter[i];
 
-		if (imContactsBefore.contains(contactId)) {
+		if (contactIdListBefore.contains(contactId)) {
 			//Do nothing
 		} else {
 			//Add the imContact to the contactProfile
