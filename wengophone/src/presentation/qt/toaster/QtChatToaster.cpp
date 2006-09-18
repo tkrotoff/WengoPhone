@@ -23,6 +23,10 @@
 
 #include "QtToaster.h"
 
+#include <util/SafeDelete.h>
+
+#include <qtutil/SafeConnect.h>
+
 #include <QtGui/QtGui>
 
 QtChatToaster::QtChatToaster()
@@ -33,15 +37,15 @@ QtChatToaster::QtChatToaster()
 	_ui = new Ui::ChatToaster();
 	_ui->setupUi(_chatToasterWidget);
 
-	connect(_ui->chatButton, SIGNAL(clicked()), SLOT(chatButtonSlot()));
+	SAFE_CONNECT(_ui->chatButton, SIGNAL(clicked()), SLOT(chatButtonSlot()));
 
-	connect(_ui->closeButton, SIGNAL(clicked()), SLOT(close()));
+	SAFE_CONNECT(_ui->closeButton, SIGNAL(clicked()), SLOT(close()));
 
 	_toaster = new QtToaster(_chatToasterWidget, _ui->windowFrame);
 }
 
 QtChatToaster::~QtChatToaster() {
-	delete _ui;
+	OWSAFE_DELETE(_ui);
 }
 
 void QtChatToaster::setMessage(const QString & message) {

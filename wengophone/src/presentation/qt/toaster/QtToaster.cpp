@@ -19,6 +19,11 @@
 
 #include "QtToaster.h"
 
+#include <util/Logger.h>
+#include <util/SafeDelete.h>
+
+#include <qtutil/SafeConnect.h>
+
 #include <QtGui/QtGui>
 
 QtToaster::QtToaster(QWidget * toaster, QFrame * toasterWindowFrame)
@@ -56,16 +61,18 @@ void QtToaster::close() {
 }
 
 void QtToaster::show() {
+	//10 pixels of margin
+	static const int MARGIN_X = 10;
+
 	QDesktopWidget * desktop = QApplication::desktop();
 	QRect screenGeometry = desktop->screenGeometry(desktop->primaryScreen());
 
-	_toaster->move(screenGeometry.bottom(), screenGeometry.right() - _toaster->size().width());
-	//_toaster->move(1280 + 50, 1024 + 50);
+	_toaster->move(screenGeometry.right() - _toaster->size().width() - MARGIN_X, screenGeometry.bottom());
 
 	_toaster->show();
 
 	_timer = new QTimer(this);
-	connect(_timer, SIGNAL(timeout()), this, SLOT(changeToasterPosition()));
+	SAFE_CONNECT(_timer, SIGNAL(timeout()), SLOT(changeToasterPosition()));
 	_timer->start(20);
 }
 

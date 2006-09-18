@@ -570,7 +570,7 @@
       <property name="spacing" >
        <number>0</number>
       </property>
-      <item row="1" column="0" >
+      <item row="2" column="0" >
        <layout class="QGridLayout" >
         <property name="margin" >
          <number>0</number>
@@ -578,90 +578,33 @@
         <property name="spacing" >
          <number>6</number>
         </property>
-        <item row="1" column="1" >
-         <layout class="QGridLayout" >
-          <property name="margin" >
-           <number>0</number>
+        <item row="0" column="2" >
+         <widget class="QToolButton" name="chatButton" >
+          <property name="icon" >
+           <iconset resource="../wengophone.qrc" >:/pics/toaster/chat.png</iconset>
           </property>
-          <property name="spacing" >
-           <number>6</number>
+          <property name="iconSize" >
+           <size>
+            <width>56</width>
+            <height>56</height>
+           </size>
           </property>
-          <item row="0" column="1" >
-           <spacer>
-            <property name="orientation" >
-             <enum>Qt::Horizontal</enum>
-            </property>
-           </spacer>
-          </item>
-          <item row="0" column="0" >
-           <widget class="QPushButton" name="chatButton" >
-            <property name="icon" >
-             <iconset resource="../wengophone.qrc" >:/pics/toaster/chat.png</iconset>
-            </property>
-            <property name="iconSize" >
-             <size>
-              <width>56</width>
-              <height>56</height>
-             </size>
-            </property>
-            <property name="flat" >
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item row="0" column="0" colspan="2" >
-         <widget class="QLabel" name="messageLabel" >
-          <property name="text" >
-           <string>Message</string>
-          </property>
-          <property name="alignment" >
-           <set>Qt::AlignCenter</set>
+          <property name="autoRaise" >
+           <bool>true</bool>
           </property>
          </widget>
         </item>
-        <item row="1" column="0" >
+        <item row="0" column="1" >
          <widget class="QLabel" name="pixmapLabel" >
           <property name="pixmap" >
-           <pixmap resource="../wengophone.qrc" >:/pics/fond_avatar.png</pixmap>
+           <pixmap/>
           </property>
           <property name="alignment" >
            <set>Qt::AlignCenter</set>
           </property>
          </widget>
         </item>
-       </layout>
-      </item>
-      <item row="2" column="0" >
-       <spacer>
-        <property name="orientation" >
-         <enum>Qt::Vertical</enum>
-        </property>
-        <property name="sizeHint" >
-         <size>
-          <width>20</width>
-          <height>40</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="0" column="0" >
-       <layout class="QHBoxLayout" >
-        <property name="margin" >
-         <number>2</number>
-        </property>
-        <property name="spacing" >
-         <number>0</number>
-        </property>
-        <item>
-         <widget class="QLabel" name="titleLabel" >
-          <property name="text" >
-           <string>WengoPhone - Incoming Chat</string>
-          </property>
-         </widget>
-        </item>
-        <item>
+        <item row="0" column="3" >
          <spacer>
           <property name="orientation" >
            <enum>Qt::Horizontal</enum>
@@ -674,8 +617,77 @@
           </property>
          </spacer>
         </item>
-        <item>
-         <widget class="QPushButton" name="closeButton" >
+        <item row="0" column="0" >
+         <spacer>
+          <property name="orientation" >
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" >
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </item>
+      <item row="1" column="0" >
+       <layout class="QGridLayout" >
+        <property name="margin" >
+         <number>0</number>
+        </property>
+        <property name="spacing" >
+         <number>0</number>
+        </property>
+        <item row="0" column="1" >
+         <widget class="QLabel" name="messageLabel" >
+          <property name="text" >
+           <string>Message</string>
+          </property>
+          <property name="alignment" >
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0" >
+         <spacer>
+          <property name="orientation" >
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" >
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="0" column="2" >
+         <spacer>
+          <property name="orientation" >
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" >
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </item>
+      <item row="0" column="0" >
+       <layout class="QGridLayout" >
+        <property name="margin" >
+         <number>0</number>
+        </property>
+        <property name="spacing" >
+         <number>0</number>
+        </property>
+        <item row="0" column="2" >
+         <widget class="QToolButton" name="closeButton" >
           <property name="sizePolicy" >
            <sizepolicy>
             <hsizetype>0</hsizetype>
@@ -699,8 +711,28 @@
           <property name="icon" >
            <iconset resource="../wengophone.qrc" >:/pics/close_normal.png</iconset>
           </property>
-          <property name="flat" >
+          <property name="autoRaise" >
            <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1" >
+         <spacer>
+          <property name="orientation" >
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" >
+           <size>
+            <width>225</width>
+            <height>22</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="0" column="0" >
+         <widget class="QLabel" name="titleLabel" >
+          <property name="text" >
+           <string>WengoPhone - Incoming Chat</string>
           </property>
          </widget>
         </item>

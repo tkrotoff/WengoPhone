@@ -23,6 +23,10 @@
 
 #include "ui_QtCallToaster.h"
 
+#include <util/SafeDelete.h>
+
+#include <qtutil/SafeConnect.h>
+
 #include <QtGui/QtGui>
 
 QtCallToaster::QtCallToaster()
@@ -49,19 +53,19 @@ QtCallToaster::QtCallToaster()
 
 	_ui->pickUpButton->setMinimumSize(QSize(48, 56));
 	_ui->pickUpButton->setMaximumSize(QSize(48, 56));
-	connect(_ui->pickUpButton, SIGNAL(clicked()), SLOT(pickUpButtonSlot()));
+	SAFE_CONNECT(_ui->pickUpButton, SIGNAL(clicked()), SLOT(pickUpButtonSlot()));
 
 	_ui->hangUpButton->setMinimumSize(QSize(28, 56));
 	_ui->hangUpButton->setMaximumSize(QSize(28, 56));
-	connect(_ui->hangUpButton, SIGNAL(clicked()), SLOT(hangUpButtonSlot()));
+	SAFE_CONNECT(_ui->hangUpButton, SIGNAL(clicked()), SLOT(hangUpButtonSlot()));
 
-	connect(_ui->closeButton, SIGNAL(clicked()), SLOT(close()));
+	SAFE_CONNECT(_ui->closeButton, SIGNAL(clicked()), SLOT(close()));
 
 	_toaster = new QtToaster(_callToasterWidget, _ui->windowFrame);
 }
 
 QtCallToaster::~QtCallToaster() {
-	delete _ui;
+	OWSAFE_DELETE(_ui);
 }
 
 void QtCallToaster::setMessage(const QString & message) {

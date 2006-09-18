@@ -535,7 +535,6 @@ void QtPhoneCall::showToaster(const QString & userName) {
 	toaster->setMessage(userName);
 	SAFE_CONNECT(toaster, SIGNAL(pickUpButtonClicked()), SLOT(acceptCall()));
 	SAFE_CONNECT(toaster, SIGNAL(hangUpButtonClicked()), SLOT(rejectCall()));
-	toaster->setPixmap(QPixmap(":/pics/default-avatar.png"));
 	toaster->show();
 }
 
