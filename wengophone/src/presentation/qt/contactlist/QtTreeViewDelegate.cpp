@@ -102,6 +102,7 @@ bool QtTreeViewDelegate::checkForUtf8(const std::string & text, int size) const 
 		return true;
 	}
 
+//FIXME: comparison is always true due to limited range of data type
 	if ((text[0] <= 0x7F) && size == 1) {
 		return true;
 	}
@@ -109,6 +110,7 @@ bool QtTreeViewDelegate::checkForUtf8(const std::string & text, int size) const 
 		if (text[i] == 0) {
 			return false;
 		}
+//FIXME: comparison is always true due to limited range of data type
 		if (text[i] > 0x7F) {
 			if ((text[i] & 0xC0) == 0xC0) {
 				if (i+1 > size) {
