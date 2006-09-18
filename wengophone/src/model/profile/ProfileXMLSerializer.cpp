@@ -141,6 +141,12 @@ string ProfileXMLSerializer::serialize() {
 	}
 	////
 
+	// Serializing notes
+	if (!_profile._notes.empty()) {
+		result += ("<notes><![CDATA[" + _profile._notes + "]]></notes>"); 
+	}
+	////
+
 	return result;
 }
 
@@ -304,6 +310,13 @@ bool ProfileXMLSerializer::unserializeContent(TiXmlHandle & rootElt) {
 			picture.setFilename(filename);
 			_profile._icon = picture;
 		}
+	}
+	////
+
+	// Retrieving notes
+	TiXmlNode * notes = rootElt.FirstChild("notes").FirstChild().Node();
+	if (notes) {
+		_profile._notes = notes->Value();
 	}
 	////
 

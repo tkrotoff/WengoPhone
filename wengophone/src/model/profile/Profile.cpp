@@ -47,9 +47,10 @@ Profile::Profile(const Profile & profile) {
 }
 
 void Profile::copy(const Profile & profile) {
-	_sex = profile._sex;
 	_firstName = profile._firstName;
 	_lastName = profile._lastName;
+	_sex = profile._sex;
+	_birthdate = profile._birthdate;
 	_website = profile._website;
 	_company = profile._company;
 	_mobilePhone = profile._mobilePhone;
@@ -61,9 +62,10 @@ void Profile::copy(const Profile & profile) {
 	_personalEmail = profile._personalEmail;
 	_workEmail = profile._workEmail;
 	_otherEmail = profile._otherEmail;
+	_streetAddress = profile._streetAddress;
 	_notes = profile._notes;
-	_alias = profile._alias;
 	_wengoPhoneId = profile._wengoPhoneId;
+	_alias = profile._alias;
 	_icon = profile._icon;
 	_smsSignature = profile._smsSignature;
 }
@@ -78,6 +80,7 @@ bool Profile::operator==(const Profile & profile) const {
 		&& (_mobilePhone == profile._mobilePhone)
 		&& (_homePhone == profile._homePhone)
 		&& (_workPhone == profile._workPhone)
+		&& (_wengoPhoneNumber == profile._wengoPhoneNumber)
 		&& (_otherPhone == profile._otherPhone)
 		&& (_fax == profile._fax)
 		&& (_personalEmail == profile._personalEmail)

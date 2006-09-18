@@ -8,8 +8,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>382</height>
+    <width>427</width>
+    <height>434</height>
    </rect>
   </property>
   <layout class="QGridLayout" >
@@ -391,7 +391,7 @@
        <item row="4" column="0" >
         <widget class="QLabel" name="label_11" >
          <property name="text" >
-          <string>Country/Region:</string>
+          <string>Country:</string>
          </property>
         </widget>
        </item>
@@ -423,7 +423,7 @@
         <number>6</number>
        </property>
        <item row="0" column="0" >
-        <widget class="QTextEdit" name="textEdit" />
+        <widget class="QTextEdit" name="notesEdit" />
        </item>
       </layout>
      </widget>

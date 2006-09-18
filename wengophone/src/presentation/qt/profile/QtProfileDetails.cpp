@@ -34,9 +34,10 @@
 #include <model/contactlist/ContactProfile.h>
 #include <model/profile/UserProfile.h>
 
-#include <qtutil/StringListConvert.h>
 #include <qtutil/PixmapMerging.h>
+#include <qtutil/StringListConvert.h>
 
+#include <util/CountryList.h>
 #include <util/Logger.h>
 #include <util/SafeDelete.h>
 #include <cutil/global.h>
@@ -107,7 +108,7 @@ QtProfileDetails::QtProfileDetails(CUserProfile & cUserProfile, UserProfile & us
 
 	//QtIMAccountManager
 	QtIMAccountManager * qtIMAccountManager =
-				new QtIMAccountManager((UserProfile &) _profile, false, _profileDetailsWindow);
+		new QtIMAccountManager((UserProfile &) _profile, false, _profileDetailsWindow);
 	int index = _ui->imStackedWidget->addWidget(qtIMAccountManager->getWidget());
 	_ui->imStackedWidget->setCurrentIndex(index);
 	_ui->advancedButton->hide();
@@ -126,6 +127,8 @@ void QtProfileDetails::init(QWidget * parent) {
 	_ui = new Ui::ProfileDetails();
 	_ui->setupUi(_profileDetailsWindow);
 
+	fullCountryList();
+
 	SAFE_CONNECT(_ui->cancelButton, SIGNAL(clicked()), SLOT(cancelButtonClicked()));
 	SAFE_CONNECT(_ui->advancedButton, SIGNAL(clicked()), SLOT(advancedButtonClicked()));
 
@@ -133,6 +136,10 @@ void QtProfileDetails::init(QWidget * parent) {
 	_qtIMAccountManager = NULL;
 
 	readProfile();
+}
+
+void QtProfileDetails::fullCountryList() {
+	_ui->countryComboBox->addItems(StringListConvert::toQStringList(CountryList::getCountryList()));
 }
 
 int QtProfileDetails::show() {
@@ -148,16 +155,17 @@ void QtProfileDetails::readProfile() {
 	_ui->birthDate->setDate(QDate(date.getYear(), date.getMonth(), date.getDay()));
 
 	StreetAddress address = _profile.getStreetAddress();
+	_ui->countryComboBox->setCurrentIndex(_ui->countryComboBox->findText(QString::fromUtf8(address.getCountry().c_str())));
 	_ui->cityLineEdit->setText(QString::fromUtf8(address.getCity().c_str()));
 	_ui->stateLineEdit->setText(QString::fromUtf8(address.getStateProvince().c_str()));
 
 	_ui->mobilePhoneLineEdit->setText(QString::fromStdString(_profile.getMobilePhone()));
 	_ui->homePhoneLineEdit->setText(QString::fromStdString(_profile.getHomePhone()));
-	//_ui->wengoPhoneLineEdit->setText(QString::fromStdString(_profile.getWengoPhoneNumber()));
-	//_ui->workPhoneLineEdit->setText(QString::fromStdString(_profile.getWorkPhone()));
 
 	_ui->emailLineEdit->setText(QString::fromStdString(_profile.getPersonalEmail()));
 	_ui->webLineEdit->setText(QString::fromStdString(_profile.getWebsite()));
+
+	_ui->notesEdit->setPlainText(QString::fromUtf8(_profile.getNotes().c_str()));
 
 	readProfileAvatar();
 }
@@ -180,20 +188,19 @@ void QtProfileDetails::saveProfile() {
 	_profile.setSex((EnumSex::Sex) _ui->genderComboBox->currentIndex());
 
 	StreetAddress address;
-	//address.setCountry(_ui->countryComboBox->currentText().toStdString());
+	address.setCountry(_ui->countryComboBox->currentText().toUtf8().data());
 	address.setStateProvince(_ui->stateLineEdit->text().toUtf8().data());
-
 	address.setCity(_ui->cityLineEdit->text().toUtf8().data());
 
 	_profile.setStreetAddress(address);
 
 	_profile.setMobilePhone(_ui->mobilePhoneLineEdit->text().toStdString());
 	_profile.setHomePhone(_ui->homePhoneLineEdit->text().toStdString());
-	//_profile.setWengoPhoneNumber(_ui->wengoPhoneLineEdit->text().toStdString());
-	//_profile.setWorkPhone(_ui->workPhoneLineEdit->text().toStdString());
 
 	_profile.setPersonalEmail(_ui->emailLineEdit->text().toStdString());
 	_profile.setWebsite(_ui->webLineEdit->text().toStdString());
+
+	_profile.setNotes(_ui->notesEdit->toPlainText().toUtf8().constData());
 }
 
 void QtProfileDetails::saveContact() {
@@ -235,8 +242,6 @@ void QtProfileDetails::saveContact() {
 
 void QtProfileDetails::saveUserProfile() {
 	saveProfile();
-
-	UserProfile & userProfile = (UserProfile &) _profile;
 
 	_profileDetailsWindow->accept();
 }

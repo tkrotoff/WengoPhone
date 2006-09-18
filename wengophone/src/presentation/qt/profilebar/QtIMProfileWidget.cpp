@@ -293,7 +293,7 @@ void QtIMProfileWidget::editProfileClicked() {
 
 void QtIMProfileWidget::init() {
 	if (!_cUserProfile.getUserProfile().getAlias().empty()) {
-		_ui->aliasLineEdit->setText(QString::fromStdString(_cUserProfile.getUserProfile().getAlias()));
+		_ui->aliasLineEdit->setText(QString::fromUtf8(_cUserProfile.getUserProfile().getAlias().c_str()));
 	}
 
 	//aliasTextChanged();

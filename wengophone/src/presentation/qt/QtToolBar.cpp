@@ -227,7 +227,7 @@ void QtToolBar::showHideOfflineContacts() {
 	QtContactList * qtContactList = _qtWengoPhone.getQtContactList();
 	if (qtContactList) {
 		Config & config = ConfigManager::getInstance().getCurrentConfig();
-		config.set(Config::GENERAL_SHOW_OFFLINE_CONTACTS_KEY, config.getShowOfflineContacts());
+		config.set(Config::GENERAL_SHOW_OFFLINE_CONTACTS_KEY, !config.getShowOfflineContacts());
 		qtContactList->hideOffLineContacts();
 	}
 }
@@ -236,7 +236,7 @@ void QtToolBar::showHideContactGroups() {
 	QtContactList * qtContactList = _qtWengoPhone.getQtContactList();
 	if (qtContactList) {
 		Config & config = ConfigManager::getInstance().getCurrentConfig();
-		config.set(Config::GENERAL_SHOW_GROUPS_KEY, config.getShowGroups());
+		config.set(Config::GENERAL_SHOW_GROUPS_KEY, !config.getShowGroups());
 		qtContactList->showHideGroups();
 	}
 }

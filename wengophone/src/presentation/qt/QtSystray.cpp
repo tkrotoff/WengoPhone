@@ -23,13 +23,9 @@
 #include "QtUserProfilePresenceMenu.h"
 #include "profilebar/QtProfileBar.h"
 #include "contactlist/QtContactListManager.h"
+#include "contactlist/QtContactMenu.h"
 #include "webservices/sms/QtSms.h"
 
-#include "contactlist/QtContactMenu.h"
-
-#ifdef OS_MACOSX
-#include "macosx/QtMacApplication.h"
-#endif
 
 #include <control/CWengoPhone.h>
 #include <control/profile/CUserProfile.h>
@@ -38,6 +34,7 @@
 #include <model/network/NetworkObserver.h>
 #include <model/profile/UserProfile.h>
 
+#include <cutil/global.h>
 #include <util/Logger.h>
 
 #include <qtutil/SafeConnect.h>
@@ -45,6 +42,10 @@
 #include <QtGui/QtGui>
 
 #include <trayicon.h>
+
+#if defined(OS_MACOSX)
+#include "macosx/QtMacApplication.h"
+#endif
 
 QtSystray::QtSystray(QObject * parent)
 	: QObjectThreadSafe(NULL) {

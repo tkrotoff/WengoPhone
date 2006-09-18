@@ -86,6 +86,9 @@ private:
 
 	void init(QWidget * parent);
 
+	/** Full the country list widget. */
+	void fullCountryList();
+
 	void readProfile();
 
 	void readProfileAvatar();

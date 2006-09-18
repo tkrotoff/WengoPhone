@@ -267,9 +267,6 @@
    </item>
    <item row="1" column="0" >
     <widget class="QPushButton" name="makeTestVideoCallButton" >
-     <property name="enabled" >
-      <bool>false</bool>
-     </property>
      <property name="text" >
       <string>Make a test video call</string>
      </property>
