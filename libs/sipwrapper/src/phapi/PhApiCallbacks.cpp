@@ -310,7 +310,7 @@ void PhApiCallbacks::messageProgress(int messageId, const phMsgStateInfo_t * inf
 		p->addContact(*imChatSession, from);
 		p->newIMChatSessionCreatedEvent(*p, *imChatSession);
 		p->sendMyIcon(from, p->_iconFilename);
-		p->contactAddedEvent(*p, *imChatSession, from);
+		//p->contactAddedEvent(*p, *imChatSession, from);
 	}
 
 	switch(info->event) {
