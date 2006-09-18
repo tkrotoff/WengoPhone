@@ -31,6 +31,7 @@
 class IMContact;
 class ContactProfile;
 class CUserProfile;
+class MousePressEventFilter;
 
 class QLineEdit;
 class QLabel;
@@ -61,6 +62,14 @@ private Q_SLOTS:
 
 	void searchWengoContactButtonClicked();
 
+	void msnLineEditClicked();
+
+	void aimLineEditClicked();
+
+	void yahooLineEditClicked();
+
+	void jabberLineEditClicked();
+
 private:
 
 	void loadIMContacts();
@@ -84,15 +93,23 @@ private:
 	 * Code factorization.
 	 */
 	void changeIMProtocolPixmaps(EnumIMProtocol::IMProtocol imProtocol,
-			QLabel * imProtocolLabel, const char * connectedPixmap, QLineEdit * imProtocolLineEdit);
+		QLabel * imProtocolLabel, const char * connectedPixmap, QLineEdit * imProtocolLineEdit);
 
 	Ui::SimpleIMContactManager * _ui;
 
 	QWidget * _imContactManagerWidget;
 
-	CUserProfile & _cUserProfile;
+	MousePressEventFilter * _msnLineEditMouseEventFilter;
+
+	MousePressEventFilter * _aimLineEditMouseEventFilter;
+
+	MousePressEventFilter * _yahooLineEditMouseEventFilter;
+
+	MousePressEventFilter * _jabberLineEditMouseEventFilter;
 
 	ContactProfile & _contactProfile;
+
+	CUserProfile & _cUserProfile;
 };
 
 #endif	//OWQTSIMPLEIMCONTACTMANAGER_H

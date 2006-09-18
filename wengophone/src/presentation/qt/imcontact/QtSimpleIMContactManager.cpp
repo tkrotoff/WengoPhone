@@ -23,6 +23,7 @@
 
 #include "QtIMContactManager.h"
 
+#include <presentation/qt/imaccount/QtIMAccountSettings.h>
 #include <presentation/qt/QtWengoPhone.h>
 
 #include <control/contactlist/CContactList.h>
@@ -36,6 +37,7 @@
 #include <util/Logger.h>
 #include <util/SafeDelete.h>
 
+#include <qtutil/MouseEventFilter.h>
 #include <qtutil/SafeConnect.h>
 
 #include <QtGui/QtGui>
@@ -53,12 +55,26 @@ QtSimpleIMContactManager::QtSimpleIMContactManager(ContactProfile & contactProfi
 	_ui = new Ui::SimpleIMContactManager();
 	_ui->setupUi(_imContactManagerWidget);
 
+	_msnLineEditMouseEventFilter = new MousePressEventFilter(this, SLOT(msnLineEditClicked()));
+	_ui->msnLineEdit->installEventFilter(_msnLineEditMouseEventFilter);
+	_aimLineEditMouseEventFilter = new MousePressEventFilter(this, SLOT(aimLineEditClicked()));
+	_ui->aimLineEdit->installEventFilter(_aimLineEditMouseEventFilter);
+	_yahooLineEditMouseEventFilter = new MousePressEventFilter(this, SLOT(yahooLineEditClicked()));
+	_ui->yahooLineEdit->installEventFilter(_yahooLineEditMouseEventFilter);
+	_jabberLineEditMouseEventFilter = new MousePressEventFilter(this, SLOT(jabberLineEditClicked()));
+	_ui->jabberLineEdit->installEventFilter(_jabberLineEditMouseEventFilter);
+
+
 	SAFE_CONNECT(_ui->searchWengoContactButton, SIGNAL(clicked()), SLOT(searchWengoContactButtonClicked()));
 
 	loadIMContacts();
 }
 
 QtSimpleIMContactManager::~QtSimpleIMContactManager() {
+	OWSAFE_DELETE(_msnLineEditMouseEventFilter);
+	OWSAFE_DELETE(_aimLineEditMouseEventFilter);
+	OWSAFE_DELETE(_yahooLineEditMouseEventFilter);
+	OWSAFE_DELETE(_jabberLineEditMouseEventFilter);
 	OWSAFE_DELETE(_ui);
 }
 
@@ -97,7 +113,7 @@ QString QtSimpleIMContactManager::getIMContactsOfProtocol(EnumIMProtocol::IMProt
 }
 
 void QtSimpleIMContactManager::changeIMProtocolPixmaps(EnumIMProtocol::IMProtocol imProtocol,
-			QLabel * imProtocolLabel, const char * connectedPixmap, QLineEdit * imProtocolLineEdit) {
+	QLabel * imProtocolLabel, const char * connectedPixmap, QLineEdit * imProtocolLineEdit) {
 
 	std::set<IMAccount *> imAccounts = _cUserProfile.getIMAccountsOfProtocol(imProtocol);
 	if (!imAccounts.empty()) {
@@ -200,4 +216,32 @@ void QtSimpleIMContactManager::searchWengoContactButtonClicked() {
 	//_imContactManagerWidget->parentWidget()->close();
 	QtWengoPhone * qtWengoPhone = (QtWengoPhone *) _cUserProfile.getCWengoPhone().getPresentation();
 	//qtWengoPhone->searchWengoContact();
+}
+
+void QtSimpleIMContactManager::msnLineEditClicked() {
+	if (!_ui->msnLineEdit->isEnabled()) {
+		QtIMAccountSettings(_cUserProfile.getUserProfile(), QtEnumIMProtocol::IMProtocolMSN, _imContactManagerWidget);
+		loadIMContacts();
+	}
+}
+
+void QtSimpleIMContactManager::aimLineEditClicked() {
+	if (!_ui->aimLineEdit->isEnabled()) {
+		QtIMAccountSettings(_cUserProfile.getUserProfile(), QtEnumIMProtocol::IMProtocolAIMICQ, _imContactManagerWidget);
+		loadIMContacts();
+	}
+}
+
+void QtSimpleIMContactManager::yahooLineEditClicked() {
+	if (!_ui->yahooLineEdit->isEnabled()) {
+		QtIMAccountSettings(_cUserProfile.getUserProfile(), QtEnumIMProtocol::IMProtocolYahoo, _imContactManagerWidget);
+		loadIMContacts();
+	}
+}
+
+void QtSimpleIMContactManager::jabberLineEditClicked() {
+	if (!_ui->jabberLineEdit->isEnabled()) {
+		QtIMAccountSettings(_cUserProfile.getUserProfile(), QtEnumIMProtocol::IMProtocolJabber, _imContactManagerWidget);
+		loadIMContacts();
+	}
 }

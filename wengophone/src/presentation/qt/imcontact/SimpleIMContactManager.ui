@@ -25,7 +25,7 @@
       <bool>false</bool>
      </property>
      <property name="text" >
-      <string>No Jabber/GoogleTalk Account</string>
+      <string>Click to add account</string>
      </property>
     </widget>
    </item>
@@ -150,7 +150,7 @@
       <bool>false</bool>
      </property>
      <property name="text" >
-      <string>No AIM/ICQ Account</string>
+      <string>Click to add account</string>
      </property>
     </widget>
    </item>
@@ -160,7 +160,7 @@
       <bool>false</bool>
      </property>
      <property name="text" >
-      <string>No MSN Account</string>
+      <string>Click to add account</string>
      </property>
     </widget>
    </item>
@@ -170,7 +170,7 @@
       <bool>false</bool>
      </property>
      <property name="text" >
-      <string>No Wengo Account</string>
+      <string>Click to add account</string>
      </property>
     </widget>
    </item>
@@ -180,7 +180,7 @@
       <bool>false</bool>
      </property>
      <property name="text" >
-      <string>No Yahoo Account</string>
+      <string>Click to add account</string>
      </property>
     </widget>
    </item>
