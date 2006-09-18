@@ -79,7 +79,7 @@ void HistoryMemento::updateState(State state) {
 }
 
 bool HistoryMemento::canReplay() const {
-	return ((_state == OutgoingCall) || (_state == OutgoingSmsOk));
+	return ((_state == OutgoingCall) || (_state == OutgoingSmsOk) || (_state == IncomingCall));
 }
 
 bool HistoryMemento::isCallMemento() const {
