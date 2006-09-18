@@ -20,6 +20,9 @@
 #include "QtPhoneComboBox.h"
 
 #include <util/SafeDelete.h>
+#include <util/Logger.h>
+
+#include <qtutil/SafeConnect.h>
 
 #include <QtGui/QtGui>
 
@@ -33,6 +36,8 @@ QtPhoneComboBox::QtPhoneComboBox(QWidget * parent)
 	_greyPalette.setColor(QPalette::Text, Qt::gray);
 
 	setLineEdit(new QtPhoneComboBoxLineEdit(this));
+
+	SAFE_CONNECT(this, SIGNAL(activated(const QString &)), SLOT(comboBoxActivated()));
 }
 
 QtPhoneComboBox::~QtPhoneComboBox() {
@@ -61,7 +66,7 @@ QString QtPhoneComboBox::currentText() const {
 
 void QtPhoneComboBox::setToolTipText() {
 	//Text color is grey
-	setPalette(_greyPalette);
+	lineEdit()->setPalette(_greyPalette);
 
 	QComboBox::setEditText(_toolTip);
 	_cleared = false;
@@ -69,16 +74,14 @@ void QtPhoneComboBox::setToolTipText() {
 
 void QtPhoneComboBox::clearLineEdit() {
 	//Text color back to original color
-	setPalette(_originalPalette);
+	lineEdit()->setPalette(_originalPalette);
 
 	clearEditText();
 	_cleared = true;
 }
 
 void QtPhoneComboBox::mousePressEvent(QMouseEvent * event) {
-	if (!_cleared) {
-		clearLineEdit();
-	}
+	clearLineEdit();
 	QComboBox::mousePressEvent(event);
 }
 
@@ -94,6 +97,11 @@ void QtPhoneComboBox::leaveEvent(QEvent * event) {
 		setToolTipText();
 	}
 	QComboBox::leaveEvent(event);
+}
+
+void QtPhoneComboBox::comboBoxActivated() {
+	//Text color back to original color
+	lineEdit()->setPalette(_originalPalette);
 }
 
 
@@ -113,11 +121,4 @@ void QtPhoneComboBoxLineEdit::keyPressEvent(QKeyEvent * event) {
 		_qtPhoneComboBox->clearLineEdit();
 	}
 	QLineEdit::keyPressEvent(event);
-}
-
-void QtPhoneComboBoxLineEdit::leaveEvent(QEvent * event) {
-	if (!_qtPhoneComboBox->_cleared) {
-		_qtPhoneComboBox->clearLineEdit();
-	}
-	QLineEdit::leaveEvent(event);
 }

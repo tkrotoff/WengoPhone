@@ -56,6 +56,10 @@ public Q_SLOTS:
 
 	void setEditText(const QString & text);
 
+private Q_SLOTS:
+
+	void comboBoxActivated();
+
 private:
 
 	void setToolTipText();
@@ -90,8 +94,6 @@ private:
 	void mousePressEvent(QMouseEvent * event);
 
 	void keyPressEvent(QKeyEvent * event);
-
-	void leaveEvent(QEvent * event);
 
 	QtPhoneComboBox * _qtPhoneComboBox;
 };

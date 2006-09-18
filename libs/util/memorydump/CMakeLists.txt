@@ -18,7 +18,7 @@ set(OWMEMORYDUMP_LIBRARIES
 
 if (MSVC)
   set(OWMEMORYDUMP_LIBRARIES
-    ${set(OWMEMORYDUMP_LIBRARIES}
+    ${OWMEMORYDUMP_LIBRARIES}
     shlwapi
     CACHE INTERNAL "owmemorydump libraries"
   )

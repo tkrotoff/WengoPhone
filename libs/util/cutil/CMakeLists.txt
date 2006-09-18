@@ -7,6 +7,7 @@ set(OWCUTIL_INCLUDE_DIRS
 
 if (MSVC)
   set(OWCUTIL_INCLUDE_DIRS
+    ${OWCUTIL_INCLUDE_DIRS}
     ${owcutil_SOURCE_DIR}/include/cutil/msvc
     CACHE INTERNAL "owcutil include directory"
   )

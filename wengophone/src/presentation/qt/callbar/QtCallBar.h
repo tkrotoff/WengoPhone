@@ -60,7 +60,7 @@ public:
 
 	void setPhoneComboBoxEditText(const std::string & text);
 
-	void addPhoneComboBoxItem(const QIcon & icon, const std::string & text);
+	void addPhoneComboBoxItem(const std::string & text);
 
 Q_SIGNALS:
 

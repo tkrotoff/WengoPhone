@@ -570,7 +570,7 @@ void QtWengoPhone::exitApplication() {
 
 void QtWengoPhone::phoneComboBoxClicked() {
 	//if _qtHistoryWidget is set it means that History has been created
-	/*if (_qtHistoryWidget) {
+	if (_qtHistoryWidget) {
 		HistoryMementoCollection * mementos =
 			_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCHistory()->getMementos(HistoryMemento::OutgoingCall, 10);
 		_qtCallBar->clearPhoneComboBox();
@@ -582,24 +582,15 @@ void QtWengoPhone::phoneComboBoxClicked() {
 			HistoryMemento::State state = memento->getState();
 			switch (state) {
 			case HistoryMemento::IncomingCall:
-				_qtCallBar->addPhoneComboBoxItem(QIcon(QPixmap(":/pics/history/call_incoming.png")),
-					sipAddress.getUserName());
 				break;
 			case HistoryMemento::OutgoingCall:
-				_qtCallBar->addPhoneComboBoxItem(QIcon(QPixmap(":/pics/history/call_outgoing.png")),
-					sipAddress.getUserName());
+				_qtCallBar->addPhoneComboBoxItem(sipAddress.getUserName());
 				break;
 			case HistoryMemento::MissedCall:
-				_qtCallBar->addPhoneComboBoxItem(QIcon(QPixmap(":/pics/history/call_missed.png")),
-					sipAddress.getUserName());
 				break;
 			case HistoryMemento::RejectedCall:
-				_qtCallBar->addPhoneComboBoxItem(QIcon(QPixmap(":/pics/history/call_missed.png")),
-					sipAddress.getUserName());
 				break;
 			case HistoryMemento::OutgoingSmsOk:
-				_qtCallBar->addPhoneComboBoxItem(QIcon(QPixmap(":/pics/history/sms_sent.png")),
-					sipAddress.getUserName());
 				break;
 			case HistoryMemento::OutgoingSmsNok:
 				break;
@@ -613,7 +604,7 @@ void QtWengoPhone::phoneComboBoxClicked() {
 				LOG_FATAL("unknown HistoryMemento state=" + String::fromNumber(state));
 			}
 		}
-	}*/
+	}
 }
 
 void QtWengoPhone::exitEvent() {

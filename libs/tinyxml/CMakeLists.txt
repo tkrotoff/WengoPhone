@@ -27,4 +27,3 @@ set(tinyxml_SRCS
 )
 
 add_library(tinyxml STATIC ${tinyxml_SRCS})
-
