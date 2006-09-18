@@ -209,7 +209,6 @@ if (WITH_HTTPTUNNEL)
   add_definitions(-DUSE_HTTP_TUNNEL)
 endif (WITH_HTTPTUNNEL)
 
-option(WITH_VIDEO "Build phapi with video support" ON)
 if (WITH_VIDEO)
   set(PHAPI_INCLUDE_DIRS
     ${PHAPI_INCLUDE_DIRS}
@@ -420,6 +419,7 @@ endif (WITH_SHARED_PHAPI)
 target_link_libraries(${PHAPI_LIBRARIES})
 
 set_target_properties(
+  phapi
   PROPERTIES
     VERSION
       0.2.0

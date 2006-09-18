@@ -62,18 +62,21 @@ file.printf("\n")
 file.printf("set(#{cmakeLibName}\n")
 file.printf("  #{project}\n")
 file.printf("  CACHE INTERNAL \"#{project} library\"\n")
+file.printf(")\n")
 
 file.printf("\n")
 
 file.printf("# #{project} lib and dependencies\n")
 file.printf("# saves the variable in internal cache for later use\n")
 file.printf("set(#{cmakeLibNames}\n")
-file.printf("  #{project}\n")
+file.printf("  #{cmakeLibName}\n")
 otherprojects.split(" ").each do |otherproject|
 	file.printf("  ${#{otherproject.upcase}_LIBRARIES}\n")
 end
 file.printf("  CACHE INTERNAL \"#{project} libraries\"\n")
 file.printf(")\n")
+
+file.printf("\n")
 
 if not definitions.empty?
 	file.printf("\n")
@@ -81,6 +84,8 @@ if not definitions.empty?
 	file.printf("set(#{cmakeDefsName}\n")
 	file.printf("  #{definitions}\n")
 	file.printf(")\n")
+
+	file.printf("\n")
 end
 
 file.printf("set(#{project}_SRCS\n")

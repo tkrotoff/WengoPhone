@@ -15,6 +15,7 @@ subdirs(
   sound
   timer
   imwrapper
+  sipwrapper
 )
 
 if (WIN32)
