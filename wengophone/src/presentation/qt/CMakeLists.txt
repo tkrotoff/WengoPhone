@@ -297,7 +297,7 @@ if (UNIX AND NOT WIN32)
         set(QTWENGOPHONE_LIBRARIES
           ${QTWENGOPHONE_LIBRARIES}
           ${X11_Xv_LIB}
-        }
+        )
         set(QTWENGOPHONE_DEFINITIONS
           ${QTWENGOPHONE_DEFINITIONS}
           -DXV_HWACCEL
