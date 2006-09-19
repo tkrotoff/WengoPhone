@@ -22,7 +22,7 @@
    <item row="0" column="0" >
     <widget class="QTabWidget" name="tabWidget" >
      <property name="currentIndex" >
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="tabGeneral" >
       <attribute name="title" >
@@ -479,16 +479,22 @@
   <tabstop>groupComboBox</tabstop>
   <tabstop>firstNameLineEdit</tabstop>
   <tabstop>lastNameLineEdit</tabstop>
-  <tabstop>birthDate</tabstop>
-  <tabstop>genderComboBox</tabstop>
+  <tabstop>mobilePhoneLineEdit</tabstop>
+  <tabstop>homePhoneLineEdit</tabstop>
+  <tabstop>advancedButton</tabstop>
+  <tabstop>saveButton</tabstop>
+  <tabstop>cancelButton</tabstop>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>avatarPixmapButton</tabstop>
+  <tabstop>emailLineEdit</tabstop>
+  <tabstop>webLineEdit</tabstop>
+  <tabstop>lineEdit</tabstop>
   <tabstop>countryComboBox</tabstop>
   <tabstop>stateLineEdit</tabstop>
   <tabstop>cityLineEdit</tabstop>
-  <tabstop>mobilePhoneLineEdit</tabstop>
-  <tabstop>homePhoneLineEdit</tabstop>
-  <tabstop>avatarPixmapButton</tabstop>
-  <tabstop>saveButton</tabstop>
-  <tabstop>cancelButton</tabstop>
+  <tabstop>genderComboBox</tabstop>
+  <tabstop>birthDate</tabstop>
+  <tabstop>notesEdit</tabstop>
  </tabstops>
  <resources>
   <include location="../wengophone.qrc" />
