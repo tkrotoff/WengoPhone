@@ -22,7 +22,7 @@
    <item row="0" column="0" >
     <widget class="QTabWidget" name="tabWidget" >
      <property name="currentIndex" >
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tabGeneral" >
       <attribute name="title" >
@@ -476,7 +476,9 @@
  </widget>
  <pixmapfunction></pixmapfunction>
  <tabstops>
+  <tabstop>tabWidget</tabstop>
   <tabstop>groupComboBox</tabstop>
+  <tabstop>avatarPixmapButton</tabstop>
   <tabstop>firstNameLineEdit</tabstop>
   <tabstop>lastNameLineEdit</tabstop>
   <tabstop>mobilePhoneLineEdit</tabstop>
@@ -484,8 +486,6 @@
   <tabstop>advancedButton</tabstop>
   <tabstop>saveButton</tabstop>
   <tabstop>cancelButton</tabstop>
-  <tabstop>tabWidget</tabstop>
-  <tabstop>avatarPixmapButton</tabstop>
   <tabstop>emailLineEdit</tabstop>
   <tabstop>webLineEdit</tabstop>
   <tabstop>lineEdit</tabstop>
