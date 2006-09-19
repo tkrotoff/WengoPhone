@@ -32,6 +32,7 @@
 
 #include <util/Logger.h>
 
+#include <qtutil/SafeConnect.h>
 #include <qtutil/Widget.h>
 
 #include <QtGui/QtGui>
@@ -64,11 +65,9 @@ void QtIMAccountSettings::createIMProtocolWidget(QWidget * parent, QtEnumIMProto
 	_ui = new Ui::IMAccountTemplate();
 	_ui->setupUi(imAccountTemplateWindow);
 
-	//saveButton
-	connect(_ui->saveButton, SIGNAL(clicked()), imAccountTemplateWindow, SLOT(accept()));
-
 	//cancelButton
-	connect(_ui->cancelButton, SIGNAL(clicked()), imAccountTemplateWindow, SLOT(reject()));
+	SAFE_CONNECT_RECEIVER(_ui->cancelButton, SIGNAL(clicked()),
+		imAccountTemplateWindow, SLOT(reject()));
 
 	switch (imProtocol) {
 	case QtEnumIMProtocol::IMProtocolMSN: {
@@ -104,7 +103,10 @@ void QtIMAccountSettings::createIMProtocolWidget(QWidget * parent, QtEnumIMProto
 	Widget::createLayout(_ui->settingsGroupBox)->addWidget(imProtocolWidget);
 	_ui->settingsGroupBox->setTitle(imProtocolWidget->windowTitle());
 
-	connect(imAccountTemplateWindow, SIGNAL(accepted()), _imAccountPlugin, SLOT(save()));
+	//saveButton
+	SAFE_CONNECT_RECEIVER(_ui->saveButton, SIGNAL(clicked()),
+		_imAccountPlugin, SLOT(save()));
+
 	imAccountTemplateWindow->setWindowTitle(imProtocolWidget->windowTitle());
 	imAccountTemplateWindow->exec();
 }

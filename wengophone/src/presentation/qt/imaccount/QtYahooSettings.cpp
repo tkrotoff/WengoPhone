@@ -69,6 +69,10 @@ void QtYahooSettings::init() {
 }
 
 void QtYahooSettings::save() {
+	if (_ui->loginLineEdit->text().isEmpty()) {
+		return;
+	}
+
 	String login = _ui->loginLineEdit->text().toStdString();
 	std::string password = _ui->passwordLineEdit->text().toStdString();
 

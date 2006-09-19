@@ -70,7 +70,7 @@ void QtMSNSettings::init() {
 }
 
 void QtMSNSettings::save(UserProfile & userProfile, IMAccount * imAccount,
-		const std::string & login, const std::string & password) {
+	const std::string & login, const std::string & password) {
 
 	static const String AT = "@";
 
@@ -103,6 +103,10 @@ void QtMSNSettings::save(UserProfile & userProfile, IMAccount * imAccount,
 }
 
 void QtMSNSettings::save() {
+	if (_ui->loginLineEdit->text().isEmpty()) {
+		return;
+	}
+
 	save(_userProfile, _imAccount, _ui->loginLineEdit->text().toStdString(), _ui->passwordLineEdit->text().toStdString());
 }
 

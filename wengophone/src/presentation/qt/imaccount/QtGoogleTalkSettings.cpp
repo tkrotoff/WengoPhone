@@ -105,6 +105,10 @@ void QtGoogleTalkSettings::save(UserProfile & userProfile, IMAccount * imAccount
 }
 
 void QtGoogleTalkSettings::save() {
+	if (_ui->loginLineEdit->text().isEmpty()) {
+		return;
+	}
+
 	save(_userProfile, _imAccount, _ui->loginLineEdit->text().toStdString(), _ui->passwordLineEdit->text().toStdString());
 }
 

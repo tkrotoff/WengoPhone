@@ -63,6 +63,10 @@ void QtJabberSettings::init() {
 }
 
 void QtJabberSettings::save() {
+	if (_ui->loginLineEdit->text().isEmpty()) {
+		return;
+	}
+
 	std::string login = _ui->loginLineEdit->text().toStdString();
 	std::string password = _ui->passwordLineEdit->text().toStdString();
 

@@ -26,7 +26,7 @@
 
 class IMAccount;
 class UserProfile;
-class QWidget;
+class QDialog;
 
 /**
  * Interface for IM accounts (MSN, AIM, Yahoo, Jabber...).
