@@ -36,6 +36,8 @@ class QWidget;
 class QPushButton;
 class QTextEdit;
 class QDialog;
+class QMenu;
+class QAction;
 namespace Ui { class SmsWindow; }
 
 /**
@@ -102,6 +104,16 @@ private Q_SLOTS:
 	 * The user has clicked the send button.
 	 */
 	void sendButtonClicked();
+
+	/**
+	 * The user has clicked the add contact button.
+	 */
+	void addContactToolButtonClicked();
+
+	/**
+	 * The user has clicked on a menu entry.
+	 */
+	void updatePhoneNumberLineEdit(QAction * action);
 
 private:
 
@@ -180,6 +192,8 @@ private:
 	CSms & _cSms;
 
 	QtWengoPhone * _qtWengoPhone;
+
+	QMenu * _mobilePhoneMenu;
 
 	Ui::SmsWindow * _ui;
 

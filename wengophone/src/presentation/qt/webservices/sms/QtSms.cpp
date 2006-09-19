@@ -22,6 +22,7 @@
 #include "ui_SmsWindow.h"
 
 #include <presentation/qt/QtWengoPhone.h>
+#include <presentation/qt/contactlist/QtContactMenu.h>
 
 #include <control/CWengoPhone.h>
 #include <control/profile/CUserProfile.h>
@@ -61,9 +62,14 @@ void QtSms::initThreadSafe() {
 	_ui = new Ui::SmsWindow();
 	_ui->setupUi(_smsWindow);
 
+	_mobilePhoneMenu = new QMenu(_smsWindow);
+
 	SAFE_CONNECT(_ui->sendButton, SIGNAL(clicked()), SLOT(sendButtonClicked()));
 	SAFE_CONNECT(_ui->smsText, SIGNAL(textChanged()), SLOT(updateCounter()));
 	SAFE_CONNECT(_ui->signatureLineEdit, SIGNAL(textChanged(const QString &)), SLOT(updateCounter()));
+
+	SAFE_CONNECT( _ui->addContactToolButton, SIGNAL(clicked()), SLOT(addContactToolButtonClicked()));	
+	SAFE_CONNECT(_mobilePhoneMenu, SIGNAL(triggered(QAction *)), SLOT(updatePhoneNumberLineEdit(QAction *)));
 
 	loadSignature();
 	_qtWengoPhone->setQtSms(this);
@@ -267,5 +273,21 @@ void QtSms::loadSignature() {
 
 			_ui->signatureLineEdit->setText(QString::fromStdString(signature));
 		}
+	}
+}
+
+void QtSms::addContactToolButtonClicked() {
+	_mobilePhoneMenu->clear();
+	QtContactMenu::populateMobilePhoneMenu(_mobilePhoneMenu, _qtWengoPhone->getCWengoPhone());
+	QPoint point = _ui->addContactToolButton->pos();
+	point.setX(point.x() + _ui->addContactToolButton->rect().width());
+	_mobilePhoneMenu->popup(_smsWindow->mapToGlobal(point));
+}
+
+void QtSms::updatePhoneNumberLineEdit(QAction * action) {
+
+	if (action) {
+		QString data = action->data().toString();
+		setPhoneNumber(data);
 	}
 }

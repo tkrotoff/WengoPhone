@@ -8,7 +8,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>359</width>
+    <width>351</width>
     <height>324</height>
    </rect>
   </property>
@@ -23,6 +23,34 @@
     <number>6</number>
    </property>
    <item row="0" column="3" >
+    <widget class="QToolButton" name="addContactToolButton" >
+     <property name="minimumSize" >
+      <size>
+       <width>28</width>
+       <height>28</height>
+      </size>
+     </property>
+     <property name="toolTip" >
+      <string>Click here to add a phone number</string>
+     </property>
+     <property name="text" >
+      <string/>
+     </property>
+     <property name="icon" >
+      <iconset resource="../../wengophone.qrc" >:/pics/iconbar/add_contact.png</iconset>
+     </property>
+     <property name="iconSize" >
+      <size>
+       <width>22</width>
+       <height>22</height>
+      </size>
+     </property>
+     <property name="autoRaise" >
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="4" >
     <widget class="QLabel" name="counterLabel" >
      <property name="autoFillBackground" >
       <bool>false</bool>
@@ -35,39 +63,13 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="2" >
-    <widget class="QComboBox" name="phoneComboBox" >
-     <property name="sizePolicy" >
-      <sizepolicy>
-       <hsizetype>7</hsizetype>
-       <vsizetype>0</vsizetype>
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="editable" >
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="0" colspan="2" >
-    <widget class="QLabel" name="phoneNumberLabel" >
+   <item row="2" column="3" colspan="2" >
+    <widget class="QPushButton" name="sendButton" >
      <property name="text" >
-      <string>Phone number:</string>
+      <string>Send</string>
      </property>
-    </widget>
-   </item>
-   <item row="1" column="0" colspan="4" >
-    <widget class="QTextEdit" name="smsText" >
-     <property name="acceptRichText" >
-      <bool>false</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="0" >
-    <widget class="QLabel" name="label" >
-     <property name="text" >
-      <string>Signature:</string>
+     <property name="icon" >
+      <iconset resource="../../wengophone.qrc" >:/pics/contact/sms.png</iconset>
      </property>
     </widget>
    </item>
@@ -81,18 +83,58 @@
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
+     <property name="toolTip" >
+      <string>Enter your signature here</string>
+     </property>
      <property name="maxLength" >
       <number>16</number>
      </property>
     </widget>
    </item>
-   <item row="2" column="3" >
-    <widget class="QPushButton" name="sendButton" >
+   <item row="2" column="0" >
+    <widget class="QLabel" name="label" >
      <property name="text" >
-      <string>Send</string>
+      <string>Signature:</string>
      </property>
-     <property name="icon" >
-      <iconset resource="../../wengophone.qrc" >:/pics/contact/sms.png</iconset>
+    </widget>
+   </item>
+   <item row="1" column="0" colspan="5" >
+    <widget class="QTextEdit" name="smsText" >
+     <property name="acceptRichText" >
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0" colspan="2" >
+    <widget class="QLabel" name="phoneNumberLabel" >
+     <property name="sizePolicy" >
+      <sizepolicy>
+       <hsizetype>1</hsizetype>
+       <vsizetype>5</vsizetype>
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text" >
+      <string>Phone number:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="2" >
+    <widget class="QComboBox" name="phoneComboBox" >
+     <property name="sizePolicy" >
+      <sizepolicy>
+       <hsizetype>7</hsizetype>
+       <vsizetype>0</vsizetype>
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="toolTip" >
+      <string>Enter the phone number here</string>
+     </property>
+     <property name="editable" >
+      <bool>true</bool>
      </property>
     </widget>
    </item>
