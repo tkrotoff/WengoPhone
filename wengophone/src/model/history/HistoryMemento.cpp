@@ -79,7 +79,9 @@ void HistoryMemento::updateState(State state) {
 }
 
 bool HistoryMemento::canReplay() const {
-	return ((_state == OutgoingCall) || (_state == OutgoingSmsOk) || (_state == IncomingCall));
+	return ((_state == OutgoingCall) || (_state == OutgoingSmsOk) || 
+			(_state == IncomingCall) || (_state == MissedCall) ||
+			(_state == RejectedCall));
 }
 
 bool HistoryMemento::isCallMemento() const {
@@ -138,6 +140,7 @@ std::string HistoryMemento::stateToString(State state) {
 
 	default:
 		LOG_FATAL("unknown state=" + String::fromNumber(state));
+		return "";
 	}
 }
 

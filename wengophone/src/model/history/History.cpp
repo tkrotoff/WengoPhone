@@ -168,7 +168,9 @@ bool History::save(const std::string & url) {
 void History::replay(unsigned id) {
 
 	//replay only outgoing call
-	if ((getMemento(id)->getState() == HistoryMemento::OutgoingCall) || (getMemento(id)->getState() == HistoryMemento::IncomingCall)){
+	if ((getMemento(id)->getState() == HistoryMemento::OutgoingCall) ||
+		(getMemento(id)->getState() == HistoryMemento::IncomingCall) ||
+		(getMemento(id)->getState() == HistoryMemento::MissedCall)) {
 		std::string phoneNumber = getMemento(id)->getPeer();
 		_userProfile.getActivePhoneLine()->makeCall(phoneNumber);
 	}
