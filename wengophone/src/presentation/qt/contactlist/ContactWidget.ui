@@ -273,6 +273,14 @@
   </layout>
  </widget>
  <pixmapfunction></pixmapfunction>
+ <tabstops>
+  <tabstop>callButton</tabstop>
+  <tabstop>chatButton</tabstop>
+  <tabstop>smsButton</tabstop>
+  <tabstop>avatarButton</tabstop>
+  <tabstop>mobileButton</tabstop>
+  <tabstop>landlineButton</tabstop>
+ </tabstops>
  <resources>
   <include location="../wengophone.qrc" />
  </resources>
