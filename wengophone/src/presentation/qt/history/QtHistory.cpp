@@ -181,7 +181,7 @@ void QtHistory::clearRejectedCallEntries() {
 void QtHistory::replayItem(QtHistoryItem * item) {
 	QtWengoPhone * qtWengoPhone = (QtWengoPhone *) _cHistory.getCWengoPhone().getPresentation();
 
-	QMessageBox mb(tr("WengoPhone - Replay Call"),
+	QMessageBox mb(tr("WengoPhone - Call History"),
 		tr("Do you want to call %1?").arg(item->text(QtHistoryItem::COLUMN_PEERS)),
 		QMessageBox::Question,
 		QMessageBox::Yes | QMessageBox::Default,
@@ -207,21 +207,12 @@ void QtHistory::replayItem(QtHistoryItem * item) {
 	}
 
 	case QtHistoryItem::OutGoingCall:
-		if (mb.exec() == QMessageBox::Yes) {
-			_cHistory.replay(item->getId());
-		}
-		break;
-
 	case QtHistoryItem::IncomingCall:
-		//can't replay
+	case QtHistoryItem::MissedCall:
+	case QtHistoryItem::RejectedCall:
 		if (mb.exec() == QMessageBox::Yes) {
 			_cHistory.replay(item->getId());
 		}
-		break;
-		break;
-
-	case QtHistoryItem::MissedCall:
-		//can't replay
 		break;
 
 	case QtHistoryItem::Chat:

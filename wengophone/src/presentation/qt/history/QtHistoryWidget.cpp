@@ -98,12 +98,6 @@ QtHistoryWidget::QtHistoryWidget(QWidget * parent)
 
 
 	_popupMenu = new QMenu();
-
-	action = _popupMenu->addAction(tr("Erase entry"));
-	connect(action, SIGNAL(triggered(bool)), SLOT(eraseEntry()));
-
-	action = _popupMenu->addAction(tr("Replay entry"));
-	connect(action, SIGNAL(triggered(bool)), SLOT(replayEntry()));
 }
 
 QtHistoryWidget::~QtHistoryWidget() {
@@ -230,6 +224,29 @@ void QtHistoryWidget::showPopupMenu(const QPoint & pos) {
 	QtHistoryItem * hItem = (QtHistoryItem *) item;
 	if (hItem) {
 		_currentItem = hItem;
+
+		QString replayText;
+		switch (_currentItem->getItemType()) {
+			case QtHistoryItem::Sms:
+				replayText = tr("Open in SMS window");
+				break;
+			case QtHistoryItem::OutGoingCall:
+			case QtHistoryItem::IncomingCall:
+			case QtHistoryItem::MissedCall:
+			case QtHistoryItem::RejectedCall:
+				replayText = tr("Call this peer");
+				break;
+			case QtHistoryItem::Chat:
+			default:
+				break;
+		}
+
+		_popupMenu->clear();
+		QAction * action = _popupMenu->addAction(tr("Erase this entry"));
+		connect(action, SIGNAL(triggered(bool)), SLOT(eraseEntry()));
+		action = _popupMenu->addAction(replayText);
+		connect(action, SIGNAL(triggered(bool)), SLOT(replayEntry()));
+
 		QCursor cursor;
 		_popupMenu->popup(cursor.pos());
 	}
