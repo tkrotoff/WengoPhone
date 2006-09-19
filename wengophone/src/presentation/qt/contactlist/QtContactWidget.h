@@ -79,6 +79,8 @@ private:
 	 */
 	void showContactProfile();
 
+	void updateToolTips();
+
 	void paintEvent(QPaintEvent *);
 
 	void paintContact(QPainter * painter, const QRect & rect);

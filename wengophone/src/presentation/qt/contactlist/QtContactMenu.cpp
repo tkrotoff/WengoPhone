@@ -47,7 +47,7 @@ void QtContactMenu::populateMobilePhoneMenu(QMenu * menu, CWengoPhone & cWengoPh
 				QString mobilePhone = QString::fromStdString(tmpContactProfile.getMobilePhone());
 				//Call mobile action
 				QAction * tmpAction;
-				if (displayName.isEmpty()) {
+				if (displayName == " ") {
 					tmpAction = menu->addAction(mobilePhone);
 				} else {
 					tmpAction = menu->addAction(displayName + ": " + mobilePhone);
@@ -99,7 +99,7 @@ void QtContactMenu::populateHomePhoneMenu(QMenu * menu, CWengoPhone & cWengoPhon
 			if (!tmpContactProfile.getHomePhone().empty()) {
 				QString homePhone = QString::fromStdString(tmpContactProfile.getHomePhone());
 				QAction * tmpAction;
-				if (displayName.isEmpty()) {
+				if (displayName == " ") {
 					tmpAction = menu->addAction(homePhone);
 				} else {
 					tmpAction = menu->addAction(displayName + ": " + homePhone);

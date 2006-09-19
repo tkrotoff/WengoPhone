@@ -104,6 +104,43 @@ void QtContactWidget::contactProfileUpdated() {
 	_contactProfile = _cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCContactList().getContactProfile(_contactId);
 }
 
+void QtContactWidget::updateToolTips() {
+
+	QtContactListManager * ul = QtContactListManager::getInstance();
+
+	if (!ul->getMobilePhone(QString::fromStdString(_contactId)).isEmpty()) {
+		_ui->mobileButton->setToolTip(tr("Click here to call"));
+	} else {
+		_ui->mobileButton->setToolTip(tr("Click here to set a phone number"));
+	}
+
+	if (!ul->getHomePhone(QString::fromStdString(_contactId)).isEmpty()) {
+		_ui->landlineButton->setToolTip(tr("Click here to call"));
+	} else {
+		_ui->landlineButton->setToolTip(tr("Click here to set a phone number"));
+	}
+
+	_ui->avatarButton->setToolTip(tr("Click here to edit the contact"));
+
+	if (_ui->smsButton->isEnabled()) {
+		_ui->smsButton->setToolTip(tr("Click here to send a SMS"));
+	} else {
+		_ui->smsButton->setToolTip("");
+	}
+
+	if (_ui->chatButton->isEnabled()) {
+		_ui->chatButton->setToolTip(tr("Click here to start a chat"));
+	} else {
+		_ui->chatButton->setToolTip("");
+	}
+
+	if (_ui->callButton->isEnabled()) {
+		_ui->callButton->setToolTip(tr("Click here to start a free call"));
+	} else {
+		_ui->callButton->setToolTip("");
+	}
+}
+
 void QtContactWidget::mobileButtonClicked() {
 	QtContactListManager * ul = QtContactListManager::getInstance();
 	if (!ul->getMobilePhone(QString::fromStdString(_contactId)).isEmpty()) {
@@ -192,4 +229,6 @@ void QtContactWidget::paintContact(QPainter * painter, const QRect & rect) {
 	painter->drawText(textRect, Qt::AlignLeft, qtContact->getUserName(), 0);
 	font.setBold(false);
 	painter->setFont(font);
+
+	updateToolTips();
 }
