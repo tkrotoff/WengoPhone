@@ -3,7 +3,7 @@
 
 #ifndef WIN32
 
-#define SOCKET	unsigned int // TODO is SOCKET an unsigned int ?
+#define SOCKET	int
 #define HANDLE	int
 #define __stdcall
 #define _T(string) string

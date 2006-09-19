@@ -380,9 +380,13 @@ static sfp_returncode_t sfp_transfer_send_active(FILE * stream, SOCKET sckt, str
 	int wait_time = SFP_WAIT_TIME_BASE;
 	int res_connect = -1;
 	int sent = 0;
+	int tmp_sent = 0;
 	long total_sent = 0;
 	long total_to_send = (unsigned long)atol(session->file_size);
 	unsigned int increase = SFP_PROGRESSION_PERCENTAGE_INCREASE;
+	fd_set sckts;
+	struct timeval timeout = {SFP_TIMEOUT_SEC, 0};
+	int max_sckt;
 
 	while((res_connect = connect(sckt, (struct sockaddr *)&address, sizeof(address))) < 0 && retries-- > 0){
 		sprintf(message, "Waiting for %d ms", wait_time);
@@ -419,20 +423,35 @@ static sfp_returncode_t sfp_transfer_send_active(FILE * stream, SOCKET sckt, str
 		}else if(session->state == SFP_SESSION_CANCELLED){
 			return SUCCESS;
 		}
-		if((sent = send(sckt, buffer, (int)read, 0)) <= 0){
-			m_log_error("Sent less char that what's been read", "sfp_transfer_send_active");
-			return TRANSFER_CORRUPTION; // fail
-		}else{
-			total_sent += sent;
-
-			if(total_sent > total_to_send){
-				m_log_error("Sent more bytes than declared", "sfp_transfer_send_active");
-				return TRANSFER_CORRUPTION; // TODO errorcode
+		sent = 0;
+		while(sent < (int)read){
+			FD_ZERO(&sckts);
+			FD_SET(sckt, &sckts);
+			max_sckt = sckt+1;
+			if(select(max_sckt, NULL, &sckts, NULL, &timeout) > 0){
+				if((tmp_sent = send(sckt, buffer, (int)read, 0)) >= 0){
+					sent += tmp_sent;
+				}else{
+					m_log_error("Send failed", "sfp_transfer_send_active");
+					return TRANSFER_CORRUPTION; // fail
+				}
+			}else{
+				FD_CLR(sckt, &sckts);
+				m_log_error("Connection timed out", "sfp_transfer_send_active");
+				return CONNECTION_TIMED_OUT; // fail
 			}
-
-			// notify the progession of the transfer
-			notify_progress(session, total_sent, total_to_send, &increase);
 		}
+
+		total_sent += sent;
+
+		if(total_sent > total_to_send){
+			m_log_error("Sent more bytes than declared", "sfp_transfer_send_active");
+			return TRANSFER_CORRUPTION; // fail
+		}
+
+		// notify the progession of the transfer
+		notify_progress(session, total_sent, total_to_send, &increase);
+
 		memset(buffer, 0, sizeof(buffer));
 	}
 
@@ -464,7 +483,8 @@ static sfp_returncode_t sfp_transfer_send_passive(FILE * stream, SOCKET sckt, st
 	fd_set sckts;
 	struct timeval timeout = {SFP_TIMEOUT_SEC, 0};
 	int max_sckt;
-	int sent;
+	int sent = 0;
+	int tmp_sent = 0;
 	long total_sent = 0;
 	long total_to_send = (unsigned long)atol(session->file_size);
 	unsigned int increase = SFP_PROGRESSION_PERCENTAGE_INCREASE;
@@ -488,10 +508,10 @@ static sfp_returncode_t sfp_transfer_send_passive(FILE * stream, SOCKET sckt, st
 		
 		FD_ZERO(&sckts);
 		FD_SET(sckt, &sckts);
-		if (((int)tmp) > 0)
+		if (tmp > 0)
 			FD_SET(tmp, &sckts);
 
-		max_sckt = ((int)(sckt > ((int)tmp) ? sckt : tmp)) + 1;
+		max_sckt = (sckt > tmp ? sckt : tmp) + 1;
 		
 		ret = select(max_sckt, &sckts, NULL, NULL, &timeout);
 		if (ret <= 0){
@@ -545,20 +565,35 @@ static sfp_returncode_t sfp_transfer_send_passive(FILE * stream, SOCKET sckt, st
 			finalize_connection(tmp);
 			return SUCCESS;
 		}
-		if((sent = send(tmp, buffer, (int)read, 0)) <= 0){
-			m_log_error("Sent less bytes that what's been read", "sfp_transfer_send_passive");
-			return TRANSFER_CORRUPTION; // fail
-		}else{
-			total_sent += sent;
-
-			if(total_sent > total_to_send){
-				m_log_error("Sent more bytes than declared", "sfp_transfer_send_passive");
-				return TRANSFER_CORRUPTION; // TODO errorcode
+		sent = 0;
+		while(sent < (int)read){
+			FD_ZERO(&sckts);
+			FD_SET(tmp, &sckts);
+			max_sckt = tmp+1;
+			if(select(max_sckt, NULL, &sckts, NULL, &timeout) > 0){
+				if((tmp_sent = send(tmp, buffer, (int)read, 0)) >= 0){
+					sent += tmp_sent;
+				}else{
+					m_log_error("Send failed", "sfp_transfer_send_active");
+					return TRANSFER_CORRUPTION; // fail
+				}
+			}else{
+				FD_CLR(tmp, &sckts);
+				m_log_error("Connection timed out", "sfp_transfer_send_active");
+				return CONNECTION_TIMED_OUT; // fail
 			}
-
-			// notify the progession of the transfer
-			notify_progress(session, total_sent, total_to_send, &increase);
 		}
+		
+		total_sent += sent;
+
+		if(total_sent > total_to_send){
+			m_log_error("Sent more bytes than declared", "sfp_transfer_send_passive");
+			return TRANSFER_CORRUPTION; // TODO errorcode
+		}
+
+		// notify the progession of the transfer
+		notify_progress(session, total_sent, total_to_send, &increase);
+		
 		memset(buffer, 0, sizeof(buffer));
 	}
 
@@ -699,10 +734,10 @@ static sfp_returncode_t sfp_transfer_receive_passive(FILE * stream, SOCKET sckt,
 		
 		FD_ZERO(&sckts);
 		FD_SET(sckt, &sckts);
-		if (((int)tmp) > 0)
+		if (tmp > 0)
 			FD_SET(tmp, &sckts);
 
-		max_sckt = ((int)(sckt > ((int)tmp) ? sckt : tmp)) + 1;
+		max_sckt = (sckt > tmp ? sckt : tmp) + 1;
 		
 		ret = select(max_sckt, &sckts, NULL, NULL, &timeout);
 		if (ret <= 0){
@@ -896,15 +931,22 @@ static void finalize_connection(SOCKET sckt){
 * @param	[in]	session : a session info providing the callback to call in order to notify of the transfer progress
 * @param	[in]	actual : the actual size, in bytes
 * @param	[in]	final : the size to reach, in bytes
-* @param	[in][out]	increase : the progress step
+* @param	[in][out]	increase : the progress step / next step to reach
 */
 static void notify_progress(sfp_session_info_t * session, unsigned long actual, unsigned long final, unsigned int * increase){
 	double percentage = 0;
 
-	percentage = ((double)actual / (double)final) * 100;
-	if(percentage >= (double)(*increase)){
-		if(session->progressionCallback != NULL) session->progressionCallback(session, *increase);
-		*increase += SFP_PROGRESSION_PERCENTAGE_INCREASE;
+	if(actual == final) {
+		if(session->progressionCallback != NULL) session->progressionCallback(session, 100);
+		*increase = 100;
+	} else {
+		percentage = ((double)actual / (double)final) * 100;
+		if(percentage >= (double)(*increase)){
+			if(session->progressionCallback != NULL) session->progressionCallback(session, *increase);
+			while(percentage >= (double)(*increase)){
+				*increase += SFP_PROGRESSION_PERCENTAGE_INCREASE;
+			}
+		}
 	}
 }
 

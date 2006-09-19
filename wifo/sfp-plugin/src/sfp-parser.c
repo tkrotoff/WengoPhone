@@ -329,6 +329,7 @@ char * sfp_make_message_body_from_sfp_info(sfp_info_t * info){
 	free(uri_line);
 	free(key_line);
 	free(file_line);
+	free(connection_id_line);
 
 	return body;
 }

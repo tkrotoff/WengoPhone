@@ -183,20 +183,19 @@ void PhApiSendFileSession::transferToPeerFinishedEventHandler(PhApiSFPWrapper & 
 		(*_currentContact).getContactId().compare(contactID) == 0 &&
 		(*_currentFile).getFileName().compare(fileName) == 0 &&
 		(*_currentFile).getSize() == fileSize){
+		fileTransferEvent(*this, IFileSession::IFileSessionEventFileTransferFinished, *_currentContact, *_currentFile);
 		// send one file to each contact, then go to the next file
 		_currentCallID = -1;
+		_currentContact++;
 		if(_currentContact == _imContactSet.end()){
 			_currentContact = _imContactSet.begin();
 			if(_currentFile != _fileVector.end()){
 				_currentFile++;
 			}
-		}else{
-			_currentContact++;
 		}
 		if(_currentFile != _fileVector.end()){
 			start();
 		}
-		fileTransferEvent(*this, IFileSession::IFileSessionEventFileTransferFinished, *_currentContact, *_currentFile);
 	}
 }
 
