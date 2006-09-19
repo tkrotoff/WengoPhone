@@ -68,10 +68,15 @@ void GaimIMPresence::changeMyPresence(EnumPresenceState::PresenceState state,
 void GaimIMPresence::changeMyAlias(const std::string & nickname)
 {
 	GaimAccount *gAccount = gaim_accounts_find(_imAccount.getLogin().c_str(),
-											GaimIMPrcl::GetPrclId(_imAccount.getProtocol()));
+		GaimIMPrcl::GetPrclId(_imAccount.getProtocol()));
 
-	if (gAccount && gaim_account_is_connected(gAccount) && !nickname.empty())
-		gaim_account_set_alias(gAccount, nickname.c_str(), TRUE);
+	if (gAccount && gaim_account_is_connected(gAccount)) {
+		if (nickname.empty()) {
+			gaim_account_set_alias(gAccount, "", TRUE);	
+		} else {
+			gaim_account_set_alias(gAccount, nickname.c_str(), TRUE);
+		}
+	}
 }
 
 void GaimIMPresence::changeMyIcon(const OWPicture & picture)

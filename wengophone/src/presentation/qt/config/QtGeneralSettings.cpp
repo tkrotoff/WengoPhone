@@ -40,8 +40,6 @@ QtGeneralSettings::QtGeneralSettings(CWengoPhone & cWengoPhone, QWidget * parent
 
 	QtWengoPhone * qtWengoPhone =
 		dynamic_cast<QtWengoPhone *>(cWengoPhone.getPresentation());
-	connect(_ui->editProfileButton, SIGNAL(clicked()), 
-		qtWengoPhone, SLOT(editMyProfile()));
 
 	readConfig();
 }
@@ -85,9 +83,4 @@ void QtGeneralSettings::saveConfig() {
 	} else {
 		config.set(Config::GENERAL_AWAY_TIMER_KEY, Config::NO_AWAY_TIMER);
 	}
-}
-
-void QtGeneralSettings::editProfile() {
-	/*QtProfileDetails qtProfileDetails(_cWengoPhone, _cWengoPhone.getCurrentUserProfile(), _generalSettingsWidget);
-	LOG_DEBUG("edit user profile");*/
 }
