@@ -41,6 +41,7 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <math.h>
 
 
 #define READ_WRITE_BUFFER_SIZE					1024
@@ -935,6 +936,8 @@ static void finalize_connection(SOCKET sckt){
 */
 static void notify_progress(sfp_session_info_t * session, unsigned long actual, unsigned long final, unsigned int * increase){
 	double percentage = 0;
+	double pg = 49000000/((double)final+1000000)+1;
+	int progression = (int)ceil(pg);
 
 	if(actual == final) {
 		if(session->progressionCallback != NULL) session->progressionCallback(session, 100);
@@ -944,7 +947,8 @@ static void notify_progress(sfp_session_info_t * session, unsigned long actual, 
 		if(percentage >= (double)(*increase)){
 			if(session->progressionCallback != NULL) session->progressionCallback(session, *increase);
 			while(percentage >= (double)(*increase)){
-				*increase += SFP_PROGRESSION_PERCENTAGE_INCREASE;
+				//*increase += SFP_PROGRESSION_PERCENTAGE_INCREASE;
+				*increase += progression;
 			}
 		}
 	}
