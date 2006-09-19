@@ -360,6 +360,7 @@ void QtPhoneCall::videoFrameReceivedEvent(piximage * remoteVideoFrame, piximage 
 
 		_showVideo = true;
 		_videoWindow = new QtVideoQt(_phoneCallWidget);
+		SAFE_CONNECT(_videoWindow, SIGNAL(toggleFlipVideoImageSignal()), SLOT(toggleFlipVideoImage()));
 	}
 #endif
 	showVideoWidget();
