@@ -60,6 +60,11 @@ public:
 
 	void setPhoneComboBoxEditText(const std::string & text);
 
+	/**
+	 * Prepends an item to the combo box.
+	 *
+	 * @param text item to prepend
+	 */
 	void addPhoneComboBoxItem(const std::string & text);
 
 Q_SIGNALS:

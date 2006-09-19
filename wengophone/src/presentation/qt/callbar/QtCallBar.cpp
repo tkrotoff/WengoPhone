@@ -123,7 +123,7 @@ void QtCallBar::setPhoneComboBoxEditText(const std::string & text) {
 }
 
 void QtCallBar::addPhoneComboBoxItem(const std::string & text) {
-	_phoneComboBox->addItem(QString::fromStdString(text));
+	_phoneComboBox->insertItem(0, QString::fromStdString(text));
 }
 
 void QtCallBar::callButtonClickedSlot() {
