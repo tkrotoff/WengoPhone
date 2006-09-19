@@ -40,10 +40,6 @@ if (UNIX)
       src/null/Processes.cpp
       src/mac/Startup.cpp
     )
-
-    macro_add_compile_flags(owsystem_SRCS
-      "-x objective-c++"
-    )
   else (APPLE)
     set(owsystem_SRCS ${owsystem_SRCS}
       src/unix/Processes.cpp
@@ -53,5 +49,11 @@ if (UNIX)
 endif (UNIX)
 
 add_library(owsystem STATIC ${owsystem_SRCS})
+
+if (APPLE)
+    macro_add_compile_flags(owsystem
+      "-x objective-c++"
+    )
+endif (APPLE)
 
 target_link_libraries(${OWSYSTEM_LIBRARIES})

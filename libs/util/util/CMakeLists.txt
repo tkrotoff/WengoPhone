@@ -3,9 +3,9 @@ project(owutil)
 #Boost dependency
 find_package(Boost REQUIRED)
 
-if (UNIX AND NOT WIN32)
+if (UNIX AND NOT WIN32 AND NOT APPLE)
   find_package(UUID REQUIRED)
-endif (UNIX AND NOT WIN32)
+endif (UNIX AND NOT WIN32 AND NOT APPLE)
 
 #owcutil dependency
 #link_directories(${owcutil_BINARY_DIR})
@@ -69,6 +69,12 @@ add_library(owutil STATIC ${owutil_SRCS})
 
 target_link_libraries(${OWUTIL_LIBRARIES})
 
-if (UNIX AND NOT WIN32)
+if (APPLE)
+    macro_add_link_flags(owutil
+      -framework CoreFoundation
+    )
+endif (APPLE)
+
+if (UNIX AND NOT WIN32 AND NOT APPLE)
   target_link_libraries(${UUID_LIBRARIES})
-endif (UNIX AND NOT WIN32)
+endif (UNIX AND NOT WIN32 AND NOT APPLE)

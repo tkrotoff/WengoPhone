@@ -290,13 +290,6 @@ if (UNIX AND NOT WIN32)
       ${phapi_SRCS}
       phmedia-coreaudio.c
     )
-
-    macro_add_link_flags(phapi
-      "-framework AudioUnit"
-      "-framework CoreAudio"
-      "-framework AudioToolbox"
-      "-framework CoreServices"
-    )
   else (APPLE)
     set(PHAPI_INCLUDE_DIRS
       ${PHAPI_INCLUDE_DIRS}
@@ -412,9 +405,30 @@ add_definitions(
 if (WITH_SHARED_PHAPI)
   add_definitions(-DBUILD_PHAPI_DLL)
   add_library(phapi SHARED ${phapi_SRCS})
+  install(
+    TARGETS
+      phapi
+    LIBRARY DESTINATION
+      ${LIB_INSTALL_DIR}
+  )
 else (WITH_SHARED_PHAPI)
   add_library(phapi STATIC ${phapi_SRCS})
+  install(
+    TARGETS
+      phapi
+    ARCHIVE DESTINATION
+      ${LIB_INSTALL_DIR}
+  )
 endif (WITH_SHARED_PHAPI)
+
+if (APPLE)
+    macro_add_link_flags(phapi
+      "-framework AudioUnit"
+      "-framework CoreAudio"
+      "-framework AudioToolbox"
+      "-framework CoreServices"
+    )
+endif (APPLE)
 
 target_link_libraries(${PHAPI_LIBRARIES})
 
@@ -425,14 +439,6 @@ set_target_properties(
       0.2.0
     SOVERSION
       0
-)
-
-install(
-  TARGETS
-    phapi
-  LIBRARY
-  DESTINATION
-    ${LIB_INSTALL_DIR}
 )
 
 ### phapi plugins

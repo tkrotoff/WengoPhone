@@ -43,17 +43,22 @@ add_definitions(
 
 if (APPLE)
   add_library(sfp-plugin STATIC ${sfp-plugin_SRCS})
+  install(
+    TARGETS
+      sfp-plugin
+    ARCHIVE DESTINATION
+      ${LIB_INSTALL_DIR}
+  )
 else (APPLE)
   add_library(sfp-plugin SHARED ${sfp-plugin_SRCS})
+  install(
+    TARGETS
+      sfp-plugin
+    LIBRARY DESTINATION
+      ${LIB_INSTALL_DIR}
+  )
 endif (APPLE)
 
 target_link_libraries(${SFP-PLUGIN_LIBRARIES})
 
-install(
-  TARGETS
-    sfp-plugin
-  LIBRARY
-  DESTINATION
-    ${LIB_INSTALL_DIR}
-)
 

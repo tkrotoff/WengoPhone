@@ -100,7 +100,7 @@ if (APPLE)
     -framework Cocoa
   )
 
-  macro_add_compile_flags(${owsound_SRCS}
+  macro_add_compile_flags(owsound
     "-x objective-c++"
   )
 endif (APPLE)
