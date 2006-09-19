@@ -411,8 +411,5 @@
   </layout>
  </widget>
  <pixmapfunction></pixmapfunction>
- <resources>
-  <include location="wengoconfigdata.qrc" />
- </resources>
  <connections/>
 </ui>

@@ -132,11 +132,11 @@ public Q_SLOTS:
 
 	void userProfileInitializedEventHandlerSlot();
 
+	void hangUpButtonClicked();
+
 private Q_SLOTS:
 
 	void callButtonClicked();
-
-	void hangUpButtonClicked();
 
 	void enableCallButton();
 

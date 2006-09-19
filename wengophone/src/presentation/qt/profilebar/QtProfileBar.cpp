@@ -53,7 +53,7 @@ QtProfileBar::QtProfileBar(CWengoPhone & cWengoPhone, CUserProfile & cUserProfil
 	UserProfile & userProfile = _cUserProfile.getUserProfile();
 	std::string data = userProfile.getIcon().getData();
 	if (data.empty()) {
-		QtProfileDetails::setProfileAvatarFileName(userProfile, ":/pics/default-avatar.png");
+		QtProfileDetails::setProfileAvatarFileName(userProfile, ":/pics/avatar_default.png");
 	}
 	///
 

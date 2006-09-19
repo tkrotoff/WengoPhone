@@ -270,8 +270,8 @@ void QtPhoneCall::stateChangedEvent(EnumPhoneCallState::PhoneCallState state) {
 		_ui->statusLabel->setText(tr("Talking"));
 
 		//FIXME Hack to put a modal window
-        //this lets the user explain to the participants that
-        //they are going to be put in a 3-way conf
+		//this lets the user explain to the participants that
+		//they are going to be put in a 3-way conf
 		ConferenceCall * conferenceCall = _cPhoneCall.getPhoneCall().getConferenceCall();
 		if (conferenceCall) {
 
@@ -540,6 +540,7 @@ void QtPhoneCall::showToaster(const QString & userName) {
 }
 
 void QtPhoneCall::close() {
+	_qtWengoPhone->hangUpButtonClicked();
 	/*_qtWengoPhone->getStatusBar().showMessage(QString::null);
 	_ui->durationLabel = NULL;
 	_callTimer->disconnect();
