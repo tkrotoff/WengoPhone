@@ -129,7 +129,8 @@ void QtContactWidget::avatarButtonClicked() {
 void QtContactWidget::showContactProfile() {
 	ContactProfile contactProfile =
 		_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCContactList().getContactProfile(_text.toStdString());
-	QtProfileDetails qtProfileDetails(*_cWengoPhone.getCUserProfileHandler().getCUserProfile(), contactProfile, this);
+	QtProfileDetails qtProfileDetails(*_cWengoPhone.getCUserProfileHandler().getCUserProfile(),
+		contactProfile, this, tr("Edit Contact"));
 	if (qtProfileDetails.show()) {
 		_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCContactList().updateContact(contactProfile);
 	}

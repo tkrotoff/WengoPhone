@@ -154,7 +154,11 @@ void QtWsDirectory::callContact(const QString & sipAddress) {
 
 void QtWsDirectory::addContact(ContactProfile * contact) {
 	ContactProfile contactProfile = *contact;
-	QtProfileDetails qtProfileDetails(*_cWsDirectory.getCWengoPhone().getCUserProfileHandler().getCUserProfile(), contactProfile, _directoryWindow);
+	QtProfileDetails qtProfileDetails(
+		*_cWsDirectory.getCWengoPhone().getCUserProfileHandler().getCUserProfile(),
+		contactProfile,
+		_directoryWindow,
+		tr("Add a Contact"));
 
 	if (qtProfileDetails.show()) {
 		_cWsDirectory.getCWengoPhone().getCUserProfileHandler().getCUserProfile()->getCContactList().addContact(contactProfile);

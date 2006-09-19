@@ -99,7 +99,7 @@ void QtFileTransferWidget::addSendItem(SendFileSession * fileSession) {
 		std::string filename = (*it).getFileName();
 
 		StringList contactList = fileSession->getContactList();
-		for(unsigned int i = 0; i < contactList.size(); i++) {
+		for (unsigned int i = 0; i < contactList.size(); i++) {
 			QtFileTransferUploadItem * fileTransferItem = new QtFileTransferUploadItem(
 				this,
 				fileSession,

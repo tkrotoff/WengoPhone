@@ -139,7 +139,8 @@ void QtToolBar::editMyProfile() {
 
 		//FIXME this method should not be called if no UserProfile has been set
 		QtProfileDetails qtProfileDetails(*_cWengoPhone.getCUserProfileHandler().getCUserProfile(),
-			_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getUserProfile(), parent);
+			_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getUserProfile(),
+			parent, tr("Edit My Profile"));
 
 		//TODO UserProfile must be updated if QtProfileDetails was accepted
 		qtProfileDetails.show();
@@ -153,7 +154,7 @@ void QtToolBar::addContact() {
 		//FIXME this method should not be called if no UserProfile has been set
 		ContactProfile contactProfile;
 		QtProfileDetails qtProfileDetails(*_cWengoPhone.getCUserProfileHandler().getCUserProfile(),
-				contactProfile, parent);
+			contactProfile, parent, tr("Add a Contact"));
 		if (qtProfileDetails.show()) {
 			_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCContactList().addContact(contactProfile);
 		}

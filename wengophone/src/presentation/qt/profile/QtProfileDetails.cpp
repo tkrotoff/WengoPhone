@@ -52,14 +52,15 @@
 
 static const char * PNG_FORMAT = "PNG";
 
-QtProfileDetails::QtProfileDetails(CUserProfile & cUserProfile, ContactProfile & contactProfile, QWidget * parent)
+QtProfileDetails::QtProfileDetails(CUserProfile & cUserProfile, 
+	ContactProfile & contactProfile, QWidget * parent, const QString & windowTitle)
 	: QObject(parent),
 	_cUserProfile(cUserProfile),
 	_profile(contactProfile) {
 
 	init(parent);
 	_showContact = true;
-	_profileDetailsWindow->setWindowTitle(tr("WengoPhone - Contact Details"));
+	_profileDetailsWindow->setWindowTitle(tr("WengoPhone") + " - " + windowTitle);
 
 	//FIXME we should keep in memory the UUID of the group
 	std::vector< std::pair<std::string, std::string> > tmp = _cUserProfile.getCContactList().getContactGroups();
@@ -87,14 +88,15 @@ QtProfileDetails::QtProfileDetails(CUserProfile & cUserProfile, ContactProfile &
 	_ui->avatarPixmapButton->setEnabled(false);
 }
 
-QtProfileDetails::QtProfileDetails(CUserProfile & cUserProfile, UserProfile & userProfile, QWidget * parent)
+QtProfileDetails::QtProfileDetails(CUserProfile & cUserProfile,
+	UserProfile & userProfile, QWidget * parent, const QString & windowTitle)
 	: QObject(parent),
 	_cUserProfile(cUserProfile),
 	_profile(userProfile) {
 
 	init(parent);
 	_showContact = false;
-	_profileDetailsWindow->setWindowTitle(tr("WengoPhone - My Profile Details"));
+	_profileDetailsWindow->setWindowTitle(tr("WengoPhone") + " - " + windowTitle);
 
 	//Not needed for UserProfile
 	_ui->groupLabel->hide();

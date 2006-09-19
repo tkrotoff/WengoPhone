@@ -259,7 +259,8 @@ void QtChatWindow::showActiveTabContactInfo() {
 		QtProfileDetails qtProfileDetails(
 			*_qtWengoPhone.getCWengoPhone().getCUserProfileHandler().getCUserProfile(),
 			contactProfile,
-			this
+			this,
+			tr("Edit Contact")
 		);
 		if (qtProfileDetails.show()) {
 			_qtWengoPhone.getCWengoPhone().getCUserProfileHandler().getCUserProfile()->getCContactList().updateContact(contactProfile);

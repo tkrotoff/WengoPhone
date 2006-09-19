@@ -116,7 +116,7 @@ void QtContactManager::editContact(bool) {
 		return;
 	}
 	ContactProfile contactProfile = _cUserProfile.getCContactList().getContactProfile(item->text(0).toStdString());
-	QtProfileDetails qtProfileDetails(_cUserProfile, contactProfile, _tree);
+	QtProfileDetails qtProfileDetails(_cUserProfile, contactProfile, _tree, tr("Edit Contact"));
 	if (qtProfileDetails.show()) {
 		_cUserProfile.getCContactList().updateContact(contactProfile);
 	}

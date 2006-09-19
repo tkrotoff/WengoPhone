@@ -278,14 +278,14 @@ void QtIMProfileWidget::jabberClicked() {
 }
 
 void QtIMProfileWidget::changeAvatarClicked() {
-	QtProfileDetails qtProfileDetails(_cUserProfile, _cUserProfile.getUserProfile(), _imProfileWidget);
+	QtProfileDetails qtProfileDetails(_cUserProfile, _cUserProfile.getUserProfile(), _imProfileWidget, tr("Edit My Profile"));
 	//TODO UserProfile must be updated if QtProfileDetails was accepted
 	qtProfileDetails.changeUserProfileAvatar();
 	updateAvatar();
 }
 
 void QtIMProfileWidget::editProfileClicked() {
-	QtProfileDetails qtProfileDetails(_cUserProfile, _cUserProfile.getUserProfile(), _imProfileWidget);
+	QtProfileDetails qtProfileDetails(_cUserProfile, _cUserProfile.getUserProfile(), _imProfileWidget, tr("Edit My Profile"));
 	//TODO UserProfile must be updated if QtProfileDetails was accepted
 	qtProfileDetails.show();
 	updateAvatar();

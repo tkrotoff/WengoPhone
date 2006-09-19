@@ -144,7 +144,7 @@ void QtUserProfile::authorizationRequestEventHandlerSlot(PresenceHandler * sende
 			//If the contact is not in our ContactList
 			ContactProfile contactProfile;
 			contactProfile.addIMContact(imContact);
-			QtProfileDetails qtProfileDetails(_cUserProfile, contactProfile, _qtWengoPhone.getWidget());
+			QtProfileDetails qtProfileDetails(_cUserProfile, contactProfile, _qtWengoPhone.getWidget(), tr("Edit Contact"));
 			if (qtProfileDetails.show()) {
 				_cUserProfile.getCContactList().addContact(contactProfile);
 			}

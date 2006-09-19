@@ -47,9 +47,9 @@ class QtProfileDetails : public QObject, NonCopyable {
 	Q_OBJECT
 public:
 
-	QtProfileDetails(CUserProfile & cUserProfile, ContactProfile & contactProfile, QWidget * parent);
+	QtProfileDetails(CUserProfile & cUserProfile, ContactProfile & contactProfile, QWidget * parent, const QString & windowTitle);
 
-	QtProfileDetails(CUserProfile & cUserProfile, UserProfile & userProfile, QWidget * parent);
+	QtProfileDetails(CUserProfile & cUserProfile, UserProfile & userProfile, QWidget * parent, const QString & windowTitle);
 
 	int show();
 
