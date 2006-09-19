@@ -33,7 +33,7 @@ set(QT_MIN_VERSION 4.1.2)
 find_package(Qt4 REQUIRED)
 
 if (UNIX AND NOT WIN32)
-  find_package(GTK2 REQUIRED)
+  find_package(GLIB2 REQUIRED)
 endif (UNIX AND NOT WIN32)
 
 if (WIN32)

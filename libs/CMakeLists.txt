@@ -10,7 +10,6 @@ subdirs(
   softupdater
   pixertool
   webcam
-  samplerate
   skinstyle
   sound
   timer
@@ -27,3 +26,11 @@ else (WIN32)
     gaim
   )
 endif (WIN32)
+
+if (UNIX)
+  if (NOT APPLE)
+    subdirs(
+      samplerate
+    )
+  endif (NOT APPLE)
+endif (UNIX)
