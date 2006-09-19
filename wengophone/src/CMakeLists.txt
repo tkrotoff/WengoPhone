@@ -1,10 +1,10 @@
 project(owphone)
 
-# TODO: test
+# TODO: test, xpcom, gtk?
 subdirs(
   #presentation/gtk
   presentation/qt
-  presentation/xpcom
+  #presentation/xpcom
 )
 
 # needed include directories to build owphone
@@ -59,6 +59,11 @@ set(OWPHONE_LIBRARIES
   CACHE INTERNAL "owphone libraries"
 )
 
+# owbuildid
+set(OWBUILDID_LIBRARY
+  owbuildid
+  CACHE INTERNAL "owbuildid library"
+)
 if (WITH_BUILDID)
   set(OWPHONE_DEFINITIONS
     -DDD_BUILDID="0LL"
@@ -215,6 +220,16 @@ if (WIN32)
   )
 endif (WIN32)
 
+if (UNIX AND NOT WIN32)
+  option(WITH_RESOURCEDIR "Use ${DATA_INSTALL_DIR} as hardcoded resouce path" ON)
+  if (WITH_RESOURCEDIR)
+    set(OWPHONE_DEFINITIONS
+      ${OWPHONE_DEFINITIONS}
+      -DOW_RESOURCEDIR="${DATA_INSTALL_DIR}"
+    )
+  endif (WITH_RESOURCEDIR)
+endif (UNIX AND NOT WIN32)
+
 include_directories(
   ${OWPHONE_INCLUDE_DIRS}
 )
@@ -225,7 +240,7 @@ add_definitions(
 
 
 add_library(owphone STATIC ${owphone_SRCS})
-add_library(buildid STATIC WengoPhoneBuildId.cpp)
+add_library(owbuildid STATIC WengoPhoneBuildId.cpp)
 
 target_link_libraries(${OWPHONE_LIBRARIES})
 

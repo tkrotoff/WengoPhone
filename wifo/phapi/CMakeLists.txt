@@ -455,3 +455,12 @@ macro_add_plugin(phspeexplugin ${phapi_speex_plugin_SRCS})
 macro_add_compile_flags(phspeexplugin ${PHAPI_OPTIMIZATION_FLAGS})
 target_link_libraries(phspeexplugin ${SPEEX_LIBRARIES})
 
+install(
+  TARGETS
+    phapi
+    phamrplugin
+    phspeexplugin
+  DESTINATION
+    ${LIB_INSTALL_DIR}
+)
+

@@ -169,6 +169,10 @@ Config::Config(const std::string & name)
 	resourcesPath = Path::getApplicationDirPath();
 #elif defined(OS_MACOSX)
 	resourcesPath = Path::getApplicationResourcesDirPath();
+#elif defined(OS_LINUX)
+ #if defined(OW_RESOURCEDIR)
+	resourcePath = OW_RESOURCEDIR;
+ #endif
 #endif
 	_keyDefaultValueMap[RESOURCES_DIR_KEY] = resourcesPath;
 	_keyDefaultValueMap[EXECUTABLE_NAME_KEY] = empty;

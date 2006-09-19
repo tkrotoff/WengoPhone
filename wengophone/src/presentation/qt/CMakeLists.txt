@@ -2,18 +2,25 @@ project(qtwengophone)
 
 include(${QT_USE_FILE})
 
+subdirs(
+  pics/emoticons
+)
+
 # needed include directories to build qtwengophone
 # saves the variable in internal cache for later use
 set(QTWENGOPHONE_INCLUDE_DIRS
+  ${CMAKE_CURRENT_BINARY_DIR}
   ${CMAKE_CURRENT_SOURCE_DIR}
   ${CMAKE_CURRENT_SOURCE_DIR}/include
+  ${CMAKE_CURRENT_SOURCE_DIR}/toaster
+  ${CMAKE_CURRENT_SOURCE_DIR}/profilebar
   ${OWPHONE_INCLUDE_DIRS}
-  ${BUILDID_INCLUDE_DIRS}
+  ${OWBUILDID_INCLUDE_DIRS}
   ${QTUTIL_INCLUDE_DIRS}
   ${WEBCAM_INCLUDE_DIRS}
   ${OWBROWSER_INCLUDE_DIRS}
   ${TRAYICON_INCLUDE_DIRS}
-  ${SOFTUPDATER_INCLUDE_DIRS}
+  ${OWSOFTUPDATER_INCLUDE_DIRS}
   ${OWIDLE_INCLUDE_DIRS}
   ${OWPHAPIWRAPPER_INCLUDE_DIRS}
   ${OWMULTIIMWRAPPER_INCLUDE_DIRS}
@@ -22,22 +29,16 @@ set(QTWENGOPHONE_INCLUDE_DIRS
   CACHE INTERNAL "qtwengophone include directories"
 )
 
-set(QTWENGOPHONE_LIBRARY
-  qtwengophone
-  CACHE INTERNAL "qtwengophone library"
-)
-
-# qtwengophone lib and dependencies
-# saves the variable in internal cache for later use
+# qtwengophone dependencies
 set(QTWENGOPHONE_LIBRARIES
-  ${QTWENGOPHONE_LIBRARY}
+  qtwengophone
   ${OWPHONE_LIBRARIES}
-  ${BUILDID_LIBRARIES}
+  ${OWBUILDID_LIBRARY}
   ${QTUTIL_LIBRARIES}
   ${WEBCAM_LIBRARIES}
   ${OWBROWSER_LIBRARIES}
   ${TRAYICON_LIBRARIES}
-  ${SOFTUPDATER_LIBRARIES}
+  ${OWSOFTUPDATER_LIBRARIES}
   ${OWIDLE_LIBRARIES}
   ${OWPHAPIWRAPPER_LIBRARIES}
   ${OWMULTIIMWRAPPER_LIBRARIES}
@@ -321,8 +322,14 @@ add_definitions(
   ${QTWENGOPHONE_DEFINITIONS}
 )
 
-
 add_executable(qtwengophone ${qtwengophone_SRCS})
 
 target_link_libraries(${QTWENGOPHONE_LIBRARIES})
+
+install(
+  TARGETS
+    qtwengophone
+  DESTINATION
+    ${BIN_INSTALL_DIR}
+)
 

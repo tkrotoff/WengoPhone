@@ -118,7 +118,7 @@ set(owcurl_SRCS
   lib/version.c
 )
 
-add_library(owcurl STATIC ${owcurl_SRCS})
+add_library(owcurl SHARED ${owcurl_SRCS})
 
 target_link_libraries(${OWCURL_LIBRARIES})
 

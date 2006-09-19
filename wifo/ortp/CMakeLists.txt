@@ -4,6 +4,7 @@ project(ortp)
 # saves the variable in internal cache for later use
 set(ORTP_INCLUDE_DIRS
   ${CMAKE_CURRENT_SOURCE_DIR}/src
+  ${GLIB2_INCLUDE_DIRS}
   CACHE INTERNAL "ortp include directories"
 )
 
@@ -11,6 +12,7 @@ set(ORTP_INCLUDE_DIRS
 # saves the variable in internal cache for later use
 set(ORTP_LIBRARIES
   ortp
+  ${GLIB2_LIBRARIES}
   CACHE INTERNAL "ortp libraries"
 )
 

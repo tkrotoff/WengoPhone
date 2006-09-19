@@ -31,6 +31,7 @@ add_definitions(-DQT_NO_KEYWORDS)
 # Global requirements
 set(QT_MIN_VERSION 4.1.2)
 find_package(Qt4 REQUIRED)
+find_package(Boost REQUIRED)
 
 if (UNIX AND NOT WIN32)
   find_package(GLIB2 REQUIRED)
