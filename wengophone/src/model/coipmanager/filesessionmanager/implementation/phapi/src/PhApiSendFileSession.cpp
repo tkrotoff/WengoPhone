@@ -131,7 +131,7 @@ void PhApiSendFileSession::stop() {
 void PhApiSendFileSession::inviteToTransferEventHandler(PhApiSFPWrapper & sender, int callID, std::string uri, std::string fileName, std::string fileType, int fileSize){
 	if(callID == _currentCallID &&
 		(*_currentContact).getContactId().compare(extractContactIDFromURI(uri)) == 0 &&
-		(*_currentFile).getPath().compare(fileName) == 0 &&
+		(*_currentFile).getFileName().compare(fileName) == 0 &&
 		(*_currentFile).getSize() == fileSize){
 		fileTransferEvent(*this, IFileSession::IFileSessionEventInviteToTransfer, *_currentContact, *_currentFile);
 	}
@@ -145,7 +145,7 @@ void PhApiSendFileSession::waitingForAnswerEventHandler(PhApiSFPWrapper & sender
 
 void PhApiSendFileSession::transferCancelledEventHandler(PhApiSFPWrapper & sender, int callID, std::string fileName, std::string fileType, int fileSize){
 	if(callID == _currentCallID &&
-		(*_currentFile).getPath().compare(fileName) == 0 &&
+		(*_currentFile).getFileName().compare(fileName) == 0 &&
 		(*_currentFile).getSize() == fileSize){
 		fileTransferEvent(*this, IFileSession::IFileSessionEventFileTransferCancelled, *_currentContact, *_currentFile);
 	}
@@ -154,7 +154,7 @@ void PhApiSendFileSession::transferCancelledEventHandler(PhApiSFPWrapper & sende
 void PhApiSendFileSession::transferCancelledByPeerEventHandler(PhApiSFPWrapper & sender, int callID, std::string contactID, std::string fileName, std::string fileType, int fileSize){
 	if(callID == _currentCallID &&
 		(*_currentContact).getContactId().compare(contactID) == 0 &&
-		(*_currentFile).getPath().compare(fileName) == 0 &&
+		(*_currentFile).getFileName().compare(fileName) == 0 &&
 		(*_currentFile).getSize() == fileSize){
 		fileTransferEvent(*this, IFileSession::IFileSessionEventFileTransferCancelledByPeer, *_currentContact, *_currentFile);
 	}
@@ -163,7 +163,7 @@ void PhApiSendFileSession::transferCancelledByPeerEventHandler(PhApiSFPWrapper &
 void PhApiSendFileSession::sendingFileBeginEventHandler(PhApiSFPWrapper & sender, int callID, std::string contactID, std::string fileName, std::string fileType, int fileSize){
 	if(callID == _currentCallID &&
 		(*_currentContact).getContactId().compare(contactID) == 0 &&
-		(*_currentFile).getPath().compare(fileName) == 0 &&
+		(*_currentFile).getFileName().compare(fileName) == 0 &&
 		(*_currentFile).getSize() == fileSize){
 		fileTransferEvent(*this, IFileSession::IFileSessionEventFileTransferBegan, *_currentContact, *_currentFile);
 	}
@@ -172,7 +172,7 @@ void PhApiSendFileSession::sendingFileBeginEventHandler(PhApiSFPWrapper & sender
 void PhApiSendFileSession::transferFromPeerFinishedEventHandler(PhApiSFPWrapper & sender, int callID, std::string contactID, std::string fileName, std::string fileType, int fileSize){
 	if(callID == _currentCallID &&
 		(*_currentContact).getContactId().compare(contactID) == 0 &&
-		(*_currentFile).getPath().compare(fileName) == 0 &&
+		(*_currentFile).getFileName().compare(fileName) == 0 &&
 		(*_currentFile).getSize() == fileSize){
 		fileTransferEvent(*this, IFileSession::IFileSessionEventFileTransferFinished, *_currentContact, *_currentFile);
 	}
@@ -181,7 +181,7 @@ void PhApiSendFileSession::transferFromPeerFinishedEventHandler(PhApiSFPWrapper 
 void PhApiSendFileSession::transferToPeerFinishedEventHandler(PhApiSFPWrapper & sender, int callID, std::string contactID, std::string fileName, std::string fileType, int fileSize){
 	if(callID == _currentCallID &&
 		(*_currentContact).getContactId().compare(contactID) == 0 &&
-		(*_currentFile).getPath().compare(fileName) == 0 &&
+		(*_currentFile).getFileName().compare(fileName) == 0 &&
 		(*_currentFile).getSize() == fileSize){
 		// send one file to each contact, then go to the next file
 		_currentCallID = -1;
@@ -203,7 +203,7 @@ void PhApiSendFileSession::transferToPeerFinishedEventHandler(PhApiSFPWrapper & 
 void PhApiSendFileSession::transferFromPeerFailedEventHandler(PhApiSFPWrapper & sender, int callID, std::string contactID, std::string fileName, std::string fileType, int fileSize){
 	if(callID == _currentCallID &&
 		(*_currentContact).getContactId().compare(contactID) == 0 &&
-		(*_currentFile).getPath().compare(fileName) == 0 &&
+		(*_currentFile).getFileName().compare(fileName) == 0 &&
 		(*_currentFile).getSize() == fileSize){
 		fileTransferEvent(*this, IFileSession::IFileSessionEventFileTransferFailed, *_currentContact, *_currentFile);
 	}
@@ -212,7 +212,7 @@ void PhApiSendFileSession::transferFromPeerFailedEventHandler(PhApiSFPWrapper & 
 void PhApiSendFileSession::transferToPeerFailedEventHandler(PhApiSFPWrapper & sender, int callID, std::string contactID, std::string fileName, std::string fileType, int fileSize){
 	if(callID == _currentCallID &&
 		(*_currentContact).getContactId().compare(contactID) == 0 &&
-		(*_currentFile).getPath().compare(fileName) == 0 &&
+		(*_currentFile).getFileName().compare(fileName) == 0 &&
 		(*_currentFile).getSize() == fileSize){
 		fileTransferEvent(*this, IFileSession::IFileSessionEventFileTransferFailed, *_currentContact, *_currentFile);
 	}
@@ -227,7 +227,7 @@ void PhApiSendFileSession::transferProgressionEventHandler(PhApiSFPWrapper & sen
 void PhApiSendFileSession::transferPausedByPeerEventHandler(PhApiSFPWrapper & sender, int callID, std::string contactID, std::string fileName, std::string fileType, int fileSize){
 	if(callID == _currentCallID &&
 		(*_currentContact).getContactId().compare(contactID) == 0 &&
-		(*_currentFile).getPath().compare(fileName) == 0 &&
+		(*_currentFile).getFileName().compare(fileName) == 0 &&
 		(*_currentFile).getSize() == fileSize){
 		fileTransferEvent(*this, IFileSession::IFileSessionEventFileTransferPausedByPeer, *_currentContact, *_currentFile);
 	}
@@ -236,7 +236,7 @@ void PhApiSendFileSession::transferPausedByPeerEventHandler(PhApiSFPWrapper & se
 void PhApiSendFileSession::transferPausedEventHandler(PhApiSFPWrapper & sender, int callID, std::string contactID, std::string fileName, std::string fileType, int fileSize){
 	if(callID == _currentCallID &&
 		(*_currentContact).getContactId().compare(contactID) == 0 &&
-		(*_currentFile).getPath().compare(fileName) == 0 &&
+		(*_currentFile).getFileName().compare(fileName) == 0 &&
 		(*_currentFile).getSize() == fileSize){
 		fileTransferEvent(*this, IFileSession::IFileSessionEventFileTransferPaused, *_currentContact, *_currentFile);
 	}
@@ -245,7 +245,7 @@ void PhApiSendFileSession::transferPausedEventHandler(PhApiSFPWrapper & sender, 
 void PhApiSendFileSession::transferResumedByPeerEventHandler(PhApiSFPWrapper & sender, int callID, std::string contactID, std::string fileName, std::string fileType, int fileSize){
 	if(callID == _currentCallID &&
 		(*_currentContact).getContactId().compare(contactID) == 0 &&
-		(*_currentFile).getPath().compare(fileName) == 0 &&
+		(*_currentFile).getFileName().compare(fileName) == 0 &&
 		(*_currentFile).getSize() == fileSize){
 		fileTransferEvent(*this, IFileSession::IFileSessionEventFileTransferResumedByPeer, *_currentContact, *_currentFile);
 	}
@@ -254,7 +254,7 @@ void PhApiSendFileSession::transferResumedByPeerEventHandler(PhApiSFPWrapper & s
 void PhApiSendFileSession::transferResumedEventHandler(PhApiSFPWrapper & sender, int callID, std::string contactID, std::string fileName, std::string fileType, int fileSize){
 	if(callID == _currentCallID &&
 		(*_currentContact).getContactId().compare(contactID) == 0 &&
-		(*_currentFile).getPath().compare(fileName) == 0 &&
+		(*_currentFile).getFileName().compare(fileName) == 0 &&
 		(*_currentFile).getSize() == fileSize){
 		fileTransferEvent(*this, IFileSession::IFileSessionEventFileTransferResumed, *_currentContact, *_currentFile);
 	}
