@@ -96,6 +96,11 @@
   </layout>
  </widget>
  <pixmapfunction></pixmapfunction>
+ <tabstops>
+  <tabstop>landlineNumberButton</tabstop>
+  <tabstop>callForwardButton</tabstop>
+  <tabstop>buyCreditsButton</tabstop>
+ </tabstops>
  <resources>
   <include location="../wengophone.qrc" />
  </resources>
