@@ -21,12 +21,18 @@
 
 #include "ui_GeneralSettings.h"
 
+#include <presentation/qt/QtToolBar.h>
 #include <presentation/qt/QtWengoPhone.h>
+#include <presentation/qt/profile/QtProfileDetails.h>
 
 #include <control/CWengoPhone.h>
+#include <control/profile/CUserProfile.h>
+#include <control/profile/CUserProfileHandler.h>
 
-#include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
+#include <model/config/ConfigManager.h>
+
+#include <qtutil/SafeConnect.h>
 
 #include <QtGui/QtGui>
 
@@ -38,8 +44,14 @@ QtGeneralSettings::QtGeneralSettings(CWengoPhone & cWengoPhone, QWidget * parent
 	_ui = new Ui::GeneralSettings();
 	_ui->setupUi(_generalSettingsWidget);
 
-	QtWengoPhone * qtWengoPhone =
-		dynamic_cast<QtWengoPhone *>(cWengoPhone.getPresentation());
+	if (cWengoPhone.getCUserProfileHandler().getCUserProfile()) {
+		QtWengoPhone *qtWengoPhone = dynamic_cast<QtWengoPhone *>(cWengoPhone.getPresentation());
+		QtToolBar *toolbar = &qtWengoPhone->getQtToolBar();
+		SAFE_CONNECT_RECEIVER(_ui->editProfileButton, SIGNAL(clicked()), 
+			toolbar, SLOT(editMyProfile()));
+	} else {
+		_ui->editProfileButton->setDisabled(true);
+	}
 
 	readConfig();
 }
