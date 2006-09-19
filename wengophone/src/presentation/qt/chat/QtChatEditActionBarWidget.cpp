@@ -36,13 +36,13 @@ QtChatEditActionBarWidget::QtChatEditActionBarWidget(QWidget * parent) :
 	_emoticonsLabel->setPixmaps(
 		QPixmap(":/pics/chat/chat_emoticon_button.png"),
 		QPixmap(),
-		QPixmap(":/pics/profilebar/bar_fill.png"),
+		QPixmap(),
 		QPixmap(":/pics/chat/chat_emoticon_button_on.png"),
 		QPixmap(),
-		QPixmap(":/pics/profilebar/bar_fill.png")
+		QPixmap()
 	);
-	_emoticonsLabel->setMaximumSize(QSize(48,65));
-	_emoticonsLabel->setMinimumSize(QSize(48,65));
+	_emoticonsLabel->setMaximumSize(QSize(46,65));
+	_emoticonsLabel->setMinimumSize(QSize(46,65));
 	connect(_emoticonsLabel, SIGNAL(clicked()), SIGNAL(emoticonsLabelClicked()));
 	////
 
