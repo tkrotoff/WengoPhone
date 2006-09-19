@@ -129,7 +129,9 @@ void *GaimIMConnect::CreateAccount()
 
 	if (gAccount)
 	{
-		gaim_account_set_password(gAccount, _imAccount.getPassword().c_str());
+		if (!_imAccount.getPassword().empty()) {
+			gaim_account_set_password(gAccount, _imAccount.getPassword().c_str());
+		}
 		gaim_accounts_add(gAccount);
 	}
 
@@ -195,9 +197,13 @@ void GaimIMConnect::connect()
 
 	AddAccountParams(gAccount);
 
-	gaim_account_set_password(gAccount, _imAccount.getPassword().c_str());
-	if (!gaim_account_get_enabled(gAccount, gaim_core_get_ui()))
+	if (!_imAccount.getPassword().empty()) {
+		gaim_account_set_password(gAccount, _imAccount.getPassword().c_str());
+	}
+
+	if (!gaim_account_get_enabled(gAccount, gaim_core_get_ui())) {
 		gaim_account_set_enabled(gAccount, gaim_core_get_ui(), TRUE);
+	}
 
 	gaim_account_connect(gAccount);
 }
