@@ -290,6 +290,7 @@
  <pixmapfunction></pixmapfunction>
  <tabstops>
   <tabstop>webcamDeviceComboBox</tabstop>
+  <tabstop>webcamPreviewButton</tabstop>
   <tabstop>videoQualityTreeWidget</tabstop>
   <tabstop>makeTestVideoCallButton</tabstop>
  </tabstops>

@@ -94,6 +94,11 @@
   </layout>
  </widget>
  <pixmapfunction></pixmapfunction>
+ <tabstops>
+  <tabstop>tableWidget</tabstop>
+  <tabstop>saveButton</tabstop>
+  <tabstop>closeButton</tabstop>
+ </tabstops>
  <resources>
   <include location="../wengophone.qrc" />
  </resources>

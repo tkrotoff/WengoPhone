@@ -182,6 +182,9 @@
  </widget>
  <pixmapfunction></pixmapfunction>
  <tabstops>
+  <tabstop>disableRadioButton</tabstop>
+  <tabstop>forwardToVoiceMailRadioButton</tabstop>
+  <tabstop>forwardToNumberRadioButton</tabstop>
   <tabstop>phoneNumber1Edit</tabstop>
   <tabstop>phoneNumber2Edit</tabstop>
   <tabstop>phoneNumber3Edit</tabstop>

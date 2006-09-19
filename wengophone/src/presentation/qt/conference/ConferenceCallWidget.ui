@@ -459,6 +459,8 @@
  <tabstops>
   <tabstop>phoneNumber1LineEdit</tabstop>
   <tabstop>phoneNumber2LineEdit</tabstop>
+  <tabstop>peer1ToolButton</tabstop>
+  <tabstop>peer2ToolButton</tabstop>
   <tabstop>startButton</tabstop>
   <tabstop>cancelButton</tabstop>
  </tabstops>

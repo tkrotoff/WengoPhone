@@ -304,11 +304,17 @@
  <pixmapfunction></pixmapfunction>
  <tabstops>
   <tabstop>showToasterOnIncomingCallCheckBox</tabstop>
+  <tabstop>showToasterOnIncomingChatCheckBox</tabstop>
   <tabstop>showToasterOnContactOnlineCheckBox</tabstop>
   <tabstop>doNotDisturbNoWindowCheckBox</tabstop>
   <tabstop>doNotDisturbNoAudioCheckBox</tabstop>
   <tabstop>awayNoWindowCheckBox</tabstop>
   <tabstop>awayNoAudioCheckBox</tabstop>
+  <tabstop>soundComboBox</tabstop>
+  <tabstop>soundLineEdit</tabstop>
+  <tabstop>clearSoundButton</tabstop>
+  <tabstop>browseButton</tabstop>
+  <tabstop>playButton</tabstop>
  </tabstops>
  <resources>
   <include location="../wengophone.qrc" />
