@@ -62,6 +62,8 @@ public:
 	void setLastName(const std::string & lastName) { _lastName = lastName; profileChangedEvent(*this); }
 	std::string getLastName() const { return _lastName; }
 
+	std::string getCompleteName() const { return _firstName + " " + _lastName; }
+
 	void setSex(EnumSex::Sex sex) { _sex = sex; profileChangedEvent(*this); }
 	EnumSex::Sex getSex() const { return _sex; }
 
