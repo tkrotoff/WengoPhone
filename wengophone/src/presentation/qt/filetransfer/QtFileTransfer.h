@@ -32,6 +32,8 @@
 class CoIpManager;
 class FileSessionManager;
 class QtFileTransferWidget;
+class IMContactSet;
+class CContactList;
 
 /**
  * Qt file transfer object.
@@ -50,9 +52,7 @@ public:
 
 	~QtFileTransfer();
 
-	void sendFileToPeer(const std::string contactId, const std::string filename);
-
-	void sendFileToPeers(List<std::string> contactIdList, const std::string filename);
+	void createSendFileSession(IMContactSet imContactSet, const std::string & filename, CContactList & cContactList);
 
 	void addSendFileSession(SendFileSession * fileSession);
 

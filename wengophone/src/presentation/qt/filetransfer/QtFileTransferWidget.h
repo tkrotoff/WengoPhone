@@ -45,7 +45,7 @@ public:
 
 	void addReceiveItem(ReceiveFileSession * fileSession);
 
-	void addSendItem(SendFileSession * fileSession);
+	void addSendItem(SendFileSession * fileSession, const std::string & filename, const std::string & contactId);
 
 private Q_SLOTS:
 
@@ -60,6 +60,10 @@ private Q_SLOTS:
 	void pathButtonClicked();
 
 private:
+
+	void showUploadTab();
+
+	void showDownloadTab();
 
 	Ui::FileTransferWidget _ui;
 };

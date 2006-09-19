@@ -234,7 +234,7 @@ void QtChatWindow::sendFileToActiveTabContact() {
 	if (!filename.isEmpty()) {
 		QtChatWidget * widget = getActiveTabWidget();
 		if (widget) {
-			widget->fileDraggedSlot(filename);
+			widget->sendFileToSession(filename);
 		}
 	}
 }

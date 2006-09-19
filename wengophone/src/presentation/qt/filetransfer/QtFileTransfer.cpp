@@ -24,7 +24,11 @@
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
 
+#include <control/contactlist/CContactList.h>
+
 #include <coipmanager/CoIpManager.h>
+
+#include <imwrapper/IMContactSet.h>
 
 #include <util/SafeDelete.h>
 #include <util/Logger.h>
@@ -35,7 +39,6 @@ QtFileTransfer::QtFileTransfer(QObject * parent, CoIpManager * coIpManager)
 	: QObject(parent), _coIpManager(coIpManager) {
 
 	_qtFileTransferWidget = new QtFileTransferWidget();
-
 	connect(this, SIGNAL(newReceiveFileSessionCreatedEventHandlerSignal(ReceiveFileSession *)),
 		SLOT(newReceiveFileSessionCreatedEventHandlerSlot(ReceiveFileSession *)));
 	_coIpManager->getFileSessionManager().newReceiveFileSessionCreatedEvent +=
@@ -68,8 +71,10 @@ void QtFileTransfer::newReceiveFileSessionCreatedEventHandlerSlot(ReceiveFileSes
 	// the user accept the file transfer
 	if (qtFileTransferAcceptDialog.exec() == QDialog::Accepted) {
 	
+		QDir dir(QString::fromStdString(config.getFileTransferDownloadFolder()));
 		// if no download folder set then choose one
-		if (config.getFileTransferDownloadFolder().empty()) {
+		// or if the choosen folder does not exists anymore.
+		if ((config.getFileTransferDownloadFolder().empty()) || (!dir.exists())) {
 	
 			downloadFolder = QFileDialog::getExistingDirectory(
 				0,
@@ -87,7 +92,6 @@ void QtFileTransfer::newReceiveFileSessionCreatedEventHandlerSlot(ReceiveFileSes
 				return;
 			}
 		} else {
-			//TODO: check if the folder exists
 			downloadFolder = QString::fromStdString(config.getFileTransferDownloadFolder());
 		}
 
@@ -106,25 +110,30 @@ void QtFileTransfer::newReceiveFileSessionCreatedEventHandlerSlot(ReceiveFileSes
 
 void QtFileTransfer::addSendFileSession(SendFileSession * fileSession) {
 
-	_qtFileTransferWidget->addSendItem(fileSession);
-}
+	std::vector<File> fileList =  fileSession->getFileList();
+	std::vector<File>::iterator it;
 
-void QtFileTransfer::sendFileToPeer(const std::string contactId, const std::string filename) {
+	for (it = fileList.begin(); it != fileList.end(); it++) {
+		std::string filename = (*it).getFileName();
 
-	SendFileSession * fileSession = _coIpManager->getFileSessionManager().createSendFileSession();
-	fileSession->addContact(contactId);
-	fileSession->addFile(filename);
-	_qtFileTransferWidget->addSendItem(fileSession);
-	fileSession->start();
-}
-
-void QtFileTransfer::sendFileToPeers(List<std::string> contactIdList, const std::string filename) {
-
-	SendFileSession * fileSession = _coIpManager->getFileSessionManager().createSendFileSession();
-	for (unsigned int i = 0; i < contactIdList.size(); i++) {
-		fileSession->addContact(contactIdList[i]);
+		StringList contactList = fileSession->getContactList();
+		for (unsigned int i = 0; i < contactList.size(); i++) {
+			_qtFileTransferWidget->addSendItem(fileSession, filename, contactList[i]);
+		}
 	}
-	fileSession->addFile(filename);
-	_qtFileTransferWidget->addSendItem(fileSession);
+}
+
+void QtFileTransfer::createSendFileSession(IMContactSet imContactSet, const std::string & filename, CContactList & cContactList) {
+
+	SendFileSession * fileSession = _coIpManager->getFileSessionManager().createSendFileSession();
+	fileSession->addFile(File(filename));
+
+	for (IMContactSet::const_iterator it = imContactSet.begin(); it != imContactSet.end(); ++it) {
+		std::string contactId = cContactList.findContactThatOwns(*it);
+		fileSession->addContact(contactId);
+
+		_qtFileTransferWidget->addSendItem(fileSession, filename, contactId);
+	}
+
 	fileSession->start();
 }

@@ -58,6 +58,7 @@ void QtFileTransferItem::setFileSize(int size) {
 
 void QtFileTransferItem::setProgress(int progress) {
 	_ui.progressBar->setValue(progress);
+	stateChangeEvent(tr("Downloading..."));
 }
 
 

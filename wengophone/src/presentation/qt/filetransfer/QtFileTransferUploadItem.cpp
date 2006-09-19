@@ -55,9 +55,10 @@ void QtFileTransferUploadItem::fileTransferProgressionEventHandler(
 
 	LOG_DEBUG("fileTransferProgressionEventHandler: " + String::fromNumber(percentage));
 
-	if ((sentFile.getFileName() == _filename) && (imContact.getContactId() == _contactId)) {
-		progressChangeEvent(percentage);
-	}
+	//FIXME: this code is working because for now there is just one contact & one file in a send file session
+	//if ((sentFile.getFileName() == _filename) && (imContact.getContactId() == _contactId)) {
+	progressChangeEvent(percentage);
+	//}
 }
 
 void QtFileTransferUploadItem::fileTransferEventHandler(
@@ -65,7 +66,8 @@ void QtFileTransferUploadItem::fileTransferEventHandler(
 
 	LOG_DEBUG("fileTransferProgressionEventHandler: " + String::fromNumber((int)event));
 
-	if ((sentFile.getFileName() == _filename) && (imContact.getContactId() == _contactId)) {
-		updateStateEvent((int)event);
-	}
+	//FIXME: this code is working because for now there is just one contact & one file in a send file session
+	//if ((sentFile.getFileName() == _filename) && (imContact.getContactId() == _contactId)) {
+	updateStateEvent((int)event);
+	//}
 }

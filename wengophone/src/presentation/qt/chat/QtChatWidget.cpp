@@ -37,7 +37,6 @@
 #include <control/CWengoPhone.h>
 #include <control/contactlist/CContactList.h>
 #include <control/profile/CUserProfile.h>
-
 #include <presentation/qt/QtWengoPhone.h>
 #include <presentation/qt/contactlist/QtContactList.h>
 #include <presentation/qt/contactlist/QtContactListManager.h>
@@ -122,7 +121,7 @@ QtChatWidget::QtChatWidget(CChatHandler & cChatHandler,
 	connect(_emoticonsWidget, SIGNAL(emoticonClicked(QtEmoticon)), SLOT(emoticonSelected(QtEmoticon)));
 	connect(_emoticonsWidget, SIGNAL(closed()), _chatEdit, SLOT(setFocus()));
 	connect(_chatEdit, SIGNAL(textChanged()), SLOT(chatEditTextChanged()));
-	connect(_chatEdit, SIGNAL(fileDragged(const QString &)), SLOT(fileDraggedSlot(const QString &)));
+	connect(_chatEdit, SIGNAL(fileDragged(const QString &)), SLOT(sendFileToSession(const QString &)));
 	connect (this, SIGNAL(contactAddedEventSignal(const IMContact &)),
 		SLOT(contactAddedEventSlot(const IMContact &)));
 	connect (this, SIGNAL(contactRemovedEventSignal(const IMContact &)),
@@ -475,29 +474,19 @@ void QtChatWidget::updateAvatarFrame() {
 }
 
 void QtChatWidget::updateUserAvatar() {
+
 	QPixmap pixmap;
 	std::string myData = _cChatHandler.getCUserProfile().getUserProfile().getIcon().getData();
 	pixmap.loadFromData((uchar *)myData.c_str(), myData.size());
 	_avatarFrame->setUserPixmap(pixmap);
 }
 
-void QtChatWidget::fileDraggedSlot(const QString & filename) {
+void QtChatWidget::sendFileToSession(const QString & filename) {
+
 	QtContactList * qtContactList = _qtWengoPhone->getQtContactList();
 	CContactList & cContactList = qtContactList->getCContactList();
-	SendFileSession * fileSession =
-		_cChatHandler.getCWengoPhone().getWengoPhone().getCoIpManager()->getFileSessionManager().createSendFileSession();
-	IMContactSet imContactSet = _imChatSession->getIMContactSet();
-	for (IMContactSet::const_iterator it = imContactSet.begin();
-		it != imContactSet.end();
-		++it) {
-		std::string contactId = cContactList.findContactThatOwns(*it);
-		fileSession->addContact(contactId);
-	}
-
-	fileSession->addFile(File(filename.toStdString()));
 	QtFileTransfer * qtFileTransfer = _qtWengoPhone->getFileTransfer();
 	if (qtFileTransfer) {
-		qtFileTransfer->addSendFileSession(fileSession);
+		qtFileTransfer->createSendFileSession(_imChatSession->getIMContactSet(), filename.toStdString(), cContactList);
 	}
-	fileSession->start();
 }

@@ -85,35 +85,20 @@ void QtFileTransferWidget::addReceiveItem(ReceiveFileSession * fileSession) {
 	QListWidgetItem * item = new QListWidgetItem(_ui.downloadTransferListWidget);
 	item->setSizeHint(fileTransferItem->minimumSizeHint());
 	_ui.downloadTransferListWidget->setItemWidget(item, fileTransferItem);
+	showDownloadTab();
 	show();
 }
 
-void QtFileTransferWidget::addSendItem(SendFileSession * fileSession) {
+void QtFileTransferWidget::addSendItem(SendFileSession * fileSession,
+	const std::string & filename, const std::string & contactId) {
 
-	//TODO: put this code in QtFileTransfer
-
-	std::vector<File> fileList =  fileSession->getFileList();
-	
-	std::vector<File>::iterator it;
-	for (it = fileList.begin(); it != fileList.end(); it++) {
-		std::string filename = (*it).getFileName();
-
-		StringList contactList = fileSession->getContactList();
-		for (unsigned int i = 0; i < contactList.size(); i++) {
-			QtFileTransferUploadItem * fileTransferItem = new QtFileTransferUploadItem(
-				this,
-				fileSession,
-				filename,
-				contactList[i]
-			);
-
-			QListWidgetItem * item = new QListWidgetItem(_ui.uploadTransferListWidget);
-			item->setSizeHint(fileTransferItem->minimumSizeHint());
-			_ui.uploadTransferListWidget->setItemWidget(item, fileTransferItem);
-			show();
-
-		}
-	}
+	QtFileTransferUploadItem * fileTransferItem = new QtFileTransferUploadItem(this, fileSession,
+		filename, contactId);
+	QListWidgetItem * item = new QListWidgetItem(_ui.uploadTransferListWidget);
+	item->setSizeHint(fileTransferItem->minimumSizeHint());
+	_ui.uploadTransferListWidget->setItemWidget(item, fileTransferItem);
+	showUploadTab();
+	show();
 }
 
 void QtFileTransferWidget::setDownloadFolder(const QString & folder) {
@@ -121,4 +106,14 @@ void QtFileTransferWidget::setDownloadFolder(const QString & folder) {
 	config.set(Config::FILETRANSFER_DOWNLOAD_FOLDER, folder.toStdString());
 	QDir dir(folder);
 	_ui.pathButton->setText(dir.dirName());
+}
+
+void QtFileTransferWidget::showDownloadTab() {
+	_ui.tabWidget->setCurrentIndex(0);
+	_ui.downloadTransferListWidget->scrollToBottom();
+}
+
+void QtFileTransferWidget::showUploadTab() {
+	_ui.tabWidget->setCurrentIndex(1);
+	_ui.uploadTransferListWidget->scrollToBottom();
 }

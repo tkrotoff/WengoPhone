@@ -112,7 +112,7 @@ public Q_SLOTS:
 
 	virtual void setVisible(bool visible);
 
-	void fileDraggedSlot(const QString & filename);
+	void sendFileToSession(const QString & filename);
 
 Q_SIGNALS:
 

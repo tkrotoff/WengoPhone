@@ -117,7 +117,6 @@ protected:
 
 	void disconnectButtons();
 
-	
 	void updateButtonsFinished();
 
 	void updateButtonsPaused();
