@@ -368,7 +368,10 @@
        <item row="0" column="0" >
         <widget class="QListWidget" name="uploadTransferListWidget" >
          <property name="editTriggers" >
-          <set>QAbstractItemView::AllEditTriggers</set>
+          <set>QAbstractItemView::NoEditTriggers</set>
+         </property>
+         <property name="alternatingRowColors" >
+          <bool>true</bool>
          </property>
          <property name="selectionMode" >
           <enum>QAbstractItemView::NoSelection</enum>

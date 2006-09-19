@@ -301,6 +301,9 @@ void QtSystray::systrayDoubleClicked(const QPoint &) {
 	else {
 		_qtWengoPhone->getWidget()->showMinimized();
 		_qtWengoPhone->getWidget()->showNormal();
+#ifdef OS_WINDOWS
+		BringWindowToTop(_qtWengoPhone->getWidget()->winId());
+#endif
 	}
 }
 

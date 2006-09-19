@@ -67,8 +67,9 @@ void QtFileTransferItem::updateButtonsFinished() {
 	SAFE_CONNECT(_ui.removePauseResumeButton, SIGNAL(clicked()), SLOT(remove()));
 	_ui.cancelOpenButton->setText(tr("Open"));
 	_ui.removePauseResumeButton->setText(tr("Remove"));
-
-	//TODO: remove the status bar from its layout
+	_ui.removePauseResumeButton->setEnabled(true);
+	_ui.cancelOpenButton->setEnabled(true);
+	//FIXME: remove the status bar from its layout
 	//_ui.progressBar->hide();
 }
 
@@ -78,6 +79,18 @@ void QtFileTransferItem::updateButtonsPaused() {
 	SAFE_CONNECT(_ui.removePauseResumeButton, SIGNAL(clicked()), SLOT(resume()));
 	_ui.cancelOpenButton->setText(tr("Cancel"));
 	_ui.removePauseResumeButton->setText(tr("Resume"));
+	_ui.removePauseResumeButton->setEnabled(true);
+	_ui.cancelOpenButton->setEnabled(false);
+}
+
+void QtFileTransferItem::updateButtonsPausedByPeer() {
+	disconnectButtons();
+	SAFE_CONNECT(_ui.cancelOpenButton, SIGNAL(clicked()), SLOT(stop()));
+	SAFE_CONNECT(_ui.removePauseResumeButton, SIGNAL(clicked()), SLOT(pause()));
+	_ui.cancelOpenButton->setText(tr("Cancel"));
+	_ui.removePauseResumeButton->setText(tr("Pause"));
+	_ui.removePauseResumeButton->setEnabled(false);
+	_ui.cancelOpenButton->setEnabled(true);
 }
 
 void QtFileTransferItem::updateButtonsDownloading() {
@@ -86,6 +99,8 @@ void QtFileTransferItem::updateButtonsDownloading() {
 	SAFE_CONNECT(_ui.removePauseResumeButton, SIGNAL(clicked()), SLOT(pause()));
 	_ui.cancelOpenButton->setText(tr("Cancel"));
 	_ui.removePauseResumeButton->setText(tr("Pause"));
+	_ui.removePauseResumeButton->setEnabled(true);
+	_ui.cancelOpenButton->setEnabled(true);
 }
 
 void QtFileTransferItem::disconnectButtons() {
@@ -129,7 +144,7 @@ void QtFileTransferItem::updateState(int e) {
 			break;
 		case IFileSession::IFileSessionEventFileTransferPausedByPeer:
 			stateChangeEvent(tr("Paused by peer"));
-			updateButtonsPaused();
+			updateButtonsPausedByPeer();
 			break;
 		case IFileSession::IFileSessionEventFileTransferResumed:
 			stateChangeEvent(tr("Downloading..."));

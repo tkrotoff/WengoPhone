@@ -41,7 +41,7 @@ void QtContactMenu::populateMobilePhoneMenu(QMenu * menu, CWengoPhone & cWengoPh
 		for (StringList::const_iterator it = currentContactsIds.begin(); it != currentContactsIds.end(); ++it) {
 
 			ContactProfile tmpContactProfile = currentCContactList.getContactProfile(*it);
-			QString displayName = QString::fromUtf8(tmpContactProfile.getDisplayName().c_str());
+			QString displayName = QString::fromUtf8(tmpContactProfile.getCompleteName().c_str());
 
 			if (!tmpContactProfile.getMobilePhone().empty()) {
 				QString mobilePhone = QString::fromStdString(tmpContactProfile.getMobilePhone());
@@ -74,11 +74,7 @@ void QtContactMenu::populateFreeCallMenu(QMenu * menu, CWengoPhone & cWengoPhone
 			if (tmpContactProfile.hasFreeCall()) {
 				QString freePhoneNumber = QString::fromStdString(tmpContactProfile.getFirstFreePhoneNumber());
 				QAction * tmpAction;
-				if (displayName.isEmpty()) {
-					tmpAction = menu->addAction(freePhoneNumber);
-				} else {
-					tmpAction = menu->addAction(displayName + ": " + freePhoneNumber);
-				}
+				tmpAction = menu->addAction(displayName);
 				tmpAction->setData(QVariant(freePhoneNumber));
 				EnumPresenceState::PresenceState presenceState = tmpContactProfile.getPresenceState();
 				setPresenceIcon(tmpAction, presenceState);
@@ -98,7 +94,7 @@ void QtContactMenu::populateHomePhoneMenu(QMenu * menu, CWengoPhone & cWengoPhon
 		for (StringList::const_iterator it = currentContactsIds.begin(); it != currentContactsIds.end(); ++it) {
 
 			ContactProfile tmpContactProfile = currentCContactList.getContactProfile(*it);
-			QString displayName = QString::fromUtf8(tmpContactProfile.getDisplayName().c_str());
+			QString displayName = QString::fromUtf8(tmpContactProfile.getCompleteName().c_str());
 
 			if (!tmpContactProfile.getHomePhone().empty()) {
 				QString homePhone = QString::fromStdString(tmpContactProfile.getHomePhone());

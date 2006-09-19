@@ -122,6 +122,8 @@ protected:
 
 	void updateButtonsPaused();
 
+	void updateButtonsPausedByPeer();
+
 	void updateButtonsDownloading();
 	
 

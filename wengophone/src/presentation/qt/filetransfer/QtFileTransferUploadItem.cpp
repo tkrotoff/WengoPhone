@@ -22,9 +22,7 @@
 #include <filesessionmanager/SendFileSession.h>
 
 #include <util/Logger.h>
-
 #include <qtutil/SafeConnect.h>
-
 #include <QtGui/QtGui>
 
 QtFileTransferUploadItem::QtFileTransferUploadItem(QWidget * parent, SendFileSession * fileSession, std::string filename, std::string contactId)
@@ -55,15 +53,19 @@ void QtFileTransferUploadItem::stop() {
 void QtFileTransferUploadItem::fileTransferProgressionEventHandler(
 	SendFileSession & sender, IMContact imContact, File sentFile, int percentage) {
 
-	if ((sentFile.getFileName() == _filename) && (imContact.getContactId() == _contactId)) {
-		progressChangeEvent(percentage);
-	}
+	//LOG_DEBUG("\n\n\n\n\n\n fileTransferProgressionEventHandler: " + String::fromNumber(percentage) + "\n\n\n\n\n\n");
+
+	//if ((sentFile.getFileName() == _filename) && (imContact.getContactId() == _contactId)) {
+	progressChangeEvent(percentage);
+	//}
 }
 
 void QtFileTransferUploadItem::fileTransferEventHandler(
 	SendFileSession & sender, IFileSession::IFileSessionEvent event, IMContact imContact, File sentFile) {
-	
-	if ((sentFile.getFileName() == _filename) && (imContact.getContactId() == _contactId)) {
-		updateStateEvent((int)event);
-	}
+
+	LOG_DEBUG("\n\n\n\n\n\n fileTransferProgressionEventHandler: " + String::fromNumber((int)event) + "\n\n\n\n\n\n");
+
+	//if ((sentFile.getFileName() == _filename) && (imContact.getContactId() == _contactId)) {
+	updateStateEvent((int)event);
+	//}
 }

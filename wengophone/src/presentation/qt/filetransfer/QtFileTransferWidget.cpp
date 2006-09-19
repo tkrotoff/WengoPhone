@@ -54,13 +54,18 @@ QtFileTransferWidget::QtFileTransferWidget(QWidget * parent) : QWidget(parent) {
 
 void QtFileTransferWidget::cleanButtonClicked() {
 
-	_ui.downloadTransferListWidget->clear();
-	//delete items and widgetItem over rows
-	for (int i = 0; i < _ui.downloadTransferListWidget->count(); i++) {
-		QListWidgetItem * item = _ui.downloadTransferListWidget->item(i);
-		QtFileTransferDownloadItem * widgetItem = (QtFileTransferDownloadItem*)_ui.downloadTransferListWidget->itemWidget(item);
-		_ui.downloadTransferListWidget->takeItem(i);
-		delete widgetItem;
+	if (_ui.tabWidget->currentIndex() == 0) {
+		_ui.downloadTransferListWidget->clear();
+		//delete items and widgetItem over rows
+		for (int i = 0; i < _ui.downloadTransferListWidget->count(); i++) {
+			QListWidgetItem * item = _ui.downloadTransferListWidget->item(i);
+			QtFileTransferDownloadItem * widgetItem = (QtFileTransferDownloadItem*)_ui.downloadTransferListWidget->itemWidget(item);
+			_ui.downloadTransferListWidget->takeItem(i);
+			delete widgetItem;
+		}
+
+	} else {
+		_ui.uploadTransferListWidget->clear();
 	}
 }
 
@@ -94,7 +99,7 @@ void QtFileTransferWidget::addSendItem(SendFileSession * fileSession) {
 		std::string filename = (*it).getFileName();
 
 		StringList contactList = fileSession->getContactList();
-		for(int i = 0; i < contactList.size(); i++) {
+		for(unsigned int i = 0; i < contactList.size(); i++) {
 			QtFileTransferUploadItem * fileTransferItem = new QtFileTransferUploadItem(
 				this,
 				fileSession,

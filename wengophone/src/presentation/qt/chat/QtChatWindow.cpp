@@ -343,7 +343,10 @@ void QtChatWindow::statusChangedSlot(QString contactId) {
 					_tabWidget->setTabIcon(i, QIcon(QPixmap(":/pics/status/online.png")));
 					break;
 				case EnumPresenceState::PresenceStateOffline:
+
+					//TODO: call widget->disableEditWidget()
 					_tabWidget->setTabIcon(i, QIcon(QPixmap(":/pics/status/offline.png")));
+
 					break;
 				case EnumPresenceState::PresenceStateDoNotDisturb:
 					_tabWidget->setTabIcon(i, QIcon(QPixmap(":/pics/status/donotdisturb.png")));
