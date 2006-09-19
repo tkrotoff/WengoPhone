@@ -429,6 +429,7 @@ static sfp_returncode_t sfp_transfer_send_active(FILE * stream, SOCKET sckt, str
 			FD_ZERO(&sckts);
 			FD_SET(sckt, &sckts);
 			max_sckt = sckt+1;
+			timeout = {SFP_TIMEOUT_SEC, 0};
 			if(select(max_sckt, NULL, &sckts, NULL, &timeout) > 0){
 				if((tmp_sent = send(sckt, buffer, (int)read, 0)) >= 0){
 					sent += tmp_sent;
@@ -571,6 +572,7 @@ static sfp_returncode_t sfp_transfer_send_passive(FILE * stream, SOCKET sckt, st
 			FD_ZERO(&sckts);
 			FD_SET(tmp, &sckts);
 			max_sckt = tmp+1;
+			timeout = {SFP_TIMEOUT_SEC, 0};
 			if(select(max_sckt, NULL, &sckts, NULL, &timeout) > 0){
 				if((tmp_sent = send(tmp, buffer, (int)read, 0)) >= 0){
 					sent += tmp_sent;
