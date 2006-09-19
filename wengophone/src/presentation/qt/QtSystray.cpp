@@ -44,7 +44,11 @@
 #include <trayicon.h>
 
 #if defined(OS_MACOSX)
-#include "macosx/QtMacApplication.h"
+	#include "macosx/QtMacApplication.h"
+#endif
+
+#ifdef OS_WINDOWS
+	#include <windows.h>
 #endif
 
 QtSystray::QtSystray(QObject * parent)
