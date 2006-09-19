@@ -143,6 +143,7 @@
  <pixmapfunction></pixmapfunction>
  <tabstops>
   <tabstop>phoneComboBox</tabstop>
+  <tabstop>addContactToolButton</tabstop>
   <tabstop>smsText</tabstop>
   <tabstop>signatureLineEdit</tabstop>
   <tabstop>sendButton</tabstop>

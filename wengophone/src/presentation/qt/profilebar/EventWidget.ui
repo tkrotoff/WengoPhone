@@ -8,8 +8,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>261</width>
-    <height>24</height>
+    <width>291</width>
+    <height>27</height>
    </rect>
   </property>
   <layout class="QGridLayout" >
@@ -107,6 +107,10 @@
   </layout>
  </widget>
  <pixmapfunction></pixmapfunction>
+ <tabstops>
+  <tabstop>missedCallButton</tabstop>
+  <tabstop>voiceMailButton</tabstop>
+ </tabstops>
  <resources>
   <include location="../wengophone.qrc" />
  </resources>

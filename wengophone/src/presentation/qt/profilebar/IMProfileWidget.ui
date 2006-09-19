@@ -194,6 +194,16 @@
    <pixmap></pixmap>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>avatarButton</tabstop>
+  <tabstop>aliasLineEdit</tabstop>
+  <tabstop>wengoButton</tabstop>
+  <tabstop>msnButton</tabstop>
+  <tabstop>aimButton</tabstop>
+  <tabstop>yahooButton</tabstop>
+  <tabstop>jabberButton</tabstop>
+  <tabstop>editProfileButton</tabstop>
+ </tabstops>
  <resources>
   <include location="../wengophone.qrc" />
  </resources>
