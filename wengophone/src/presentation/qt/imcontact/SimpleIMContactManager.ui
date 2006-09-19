@@ -187,6 +187,14 @@
   </layout>
  </widget>
  <pixmapfunction></pixmapfunction>
+ <tabstops>
+  <tabstop>wengoLineEdit</tabstop>
+  <tabstop>searchWengoContactButton</tabstop>
+  <tabstop>msnLineEdit</tabstop>
+  <tabstop>aimLineEdit</tabstop>
+  <tabstop>yahooLineEdit</tabstop>
+  <tabstop>jabberLineEdit</tabstop>
+ </tabstops>
  <resources>
   <include location="../wengophone.qrc" />
  </resources>

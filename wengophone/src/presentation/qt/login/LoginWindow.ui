@@ -574,10 +574,13 @@
  </widget>
  <pixmapfunction></pixmapfunction>
  <tabstops>
+  <tabstop>createWengoAccountButton</tabstop>
   <tabstop>loginComboBox</tabstop>
   <tabstop>passwordLineEdit</tabstop>
   <tabstop>loginButton</tabstop>
   <tabstop>cancelButton</tabstop>
+  <tabstop>helpButton</tabstop>
+  <tabstop>forgotPasswordButton</tabstop>
  </tabstops>
  <resources>
   <include location="../wengophone.qrc" />

@@ -149,6 +149,10 @@
   </layout>
  </widget>
  <pixmapfunction></pixmapfunction>
+ <tabstops>
+  <tabstop>okButton</tabstop>
+  <tabstop>cancelButton</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>

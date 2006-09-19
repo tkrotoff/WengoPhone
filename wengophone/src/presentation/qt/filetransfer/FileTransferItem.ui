@@ -158,6 +158,10 @@
   </layout>
  </widget>
  <pixmapfunction></pixmapfunction>
+ <tabstops>
+  <tabstop>cancelOpenButton</tabstop>
+  <tabstop>removePauseResumeButton</tabstop>
+ </tabstops>
  <resources>
   <include location="../wengophone.qrc" />
  </resources>

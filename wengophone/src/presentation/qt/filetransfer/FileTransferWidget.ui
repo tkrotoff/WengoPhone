@@ -395,6 +395,13 @@
   </layout>
  </widget>
  <pixmapfunction></pixmapfunction>
+ <tabstops>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>downloadTransferListWidget</tabstop>
+  <tabstop>pathButton</tabstop>
+  <tabstop>cleanButton</tabstop>
+  <tabstop>uploadTransferListWidget</tabstop>
+ </tabstops>
  <resources>
   <include location="../wengophone.qrc" />
  </resources>
