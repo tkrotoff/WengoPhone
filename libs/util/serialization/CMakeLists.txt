@@ -8,23 +8,27 @@ set(OWSERIALIZATION_INCLUDE_DIRS
   CACHE INTERNAL "owserialization include directories"
 )
 
-# OWSERIALIZATION lib and dependencies
-# saves the variable in internal cache for later use
-set(OWSERIALIZATION_LIBRARIES
+set(OWSERIALIZATION_LIBRARY
   owserialization
-  ${OWUTIL_LIBRARIES}
-  CACHE INTERNAL "owserialization libraries"
+  CACHE INTERNAL "owserialization library"
 )
 
-include_directories(
-  ${OWSERIALIZATION_INCLUDE_DIRS}
+# OWSERIALIZATION lib and dependencies
+# saves the variable in internal cache for later use
+set(OWSERIALIZATION_LINK_LIBRARIES
+  ${OWSERIALIZATION_LIBRARY}
+  ${OWUTIL_LIBRARY}
 )
 
 set(owserialization_SRCS
   src/fake.cpp
 )
 
-add_library(owserialization STATIC ${owserialization_SRCS})
+include_directories(
+  ${OWSERIALIZATION_INCLUDE_DIRS}
+)
 
-target_link_libraries(${OWSERIALIZATION_LIBRARIES})
+add_library(${OWSERIALIZATION_LIBRARY} STATIC ${owserialization_SRCS})
+
+target_link_libraries(${OWSERIALIZATION_LINK_LIBRARIES})
 

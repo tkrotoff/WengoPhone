@@ -1,54 +1,56 @@
-project(webcam)
+project(owwebcam)
 
-# needed include directories to build webcam
+# needed include directories to build owwebcam
 # saves the variable in internal cache for later use
-set(WEBCAM_INCLUDE_DIRS
+set(OWWEBCAM_INCLUDE_DIRS
   ${CMAKE_CURRENT_SOURCE_DIR}/include
   ${OWUTIL_INCLUDE_DIRS}
   ${PIXERTOOL_INCLUDE_DIRS}
-  CACHE INTERNAL "webcam include directories"
+  CACHE INTERNAL "owwebcam include directories"
 )
 
 if (UNIX AND NOT WIN32 OR APPLE)
-  set(WEBCAM_INCLUDE_DIRS
-    ${WEBCAM_INCLUDE_DIRS}
+  set(OWWEBCAM_INCLUDE_DIRS
+    ${OWWEBCAM_INCLUDE_DIRS}
     ${OWTHREAD_INCLUDE_DIRS}
-    CACHE INTERNAL "webcam include directories"
+    CACHE INTERNAL "owwebcam include directories"
   )
 endif (UNIX AND NOT WIN32 OR APPLE)
 
-# webcam lib and dependencies
-# saves the variable in internal cache for later use
-set(WEBCAM_LIBRARIES
-  webcam
-  ${OWUTIL_LIBRARIES}
-  ${PIXERTOOL_LIBRARIES}
-  CACHE INTERNAL "webcam libraries"
+set(OWWEBCAM_LIBRARY
+  owwebcam
+  CACHE INTERNAL "owwebcam library"
+)
+
+# owwebcam lib and dependencies
+set(OWWEBCAM_LINK_LIBRARIES
+  ${OWWEBCAM_LIBRARY}
+  ${OWUTIL_LIBRARY}
+  ${PIXERTOOL_LIBRARY}
 )
 
 if(UNIX AND NOT WIN32 OR APPLE)
-  set(WEBCAM_LIBRARIES
-    ${WEBCAM_LIBRARIES}
-    ${OWTHREAD_LIBRARIES}
-    CACHE INTERNAL "webcam libraries"
+  set(OWWEBCAM_LINK_LIBRARIES
+    ${OWWEBCAM_LINK_LIBRARIES}
+    ${OWTHREAD_LIBRARY}
   )
 endif(UNIX AND NOT WIN32 OR APPLE)
 
-set(webcam_SRCS
+set(owwebcam_SRCS
   src/WebcamDriver.cpp
   src/webcam.cpp
 )
 
 if (MSVC)
-  set(WEBCAM_LIBRARIES
-    ${WEBCAM_LIBRARIES}
+  set(OWWEBCAM_LINK_LIBRARIES
+    ${OWWEBCAM_LINK_LIBRARIES}
     winmm
     strmiids
     comsupp
   )
 
-  set(webcam_SRCS
-    ${webcam_SRCS}
+  set(owwebcam_SRCS
+    ${owwebcam_SRCS}
     src/directx/DirectXWebcamDriver.cpp
     src/directx/DirectXWebcamUtils.cpp
   )
@@ -56,28 +58,29 @@ endif (MSVC)
 
 if (UNIX AND NOT WIN32)
   if (APPLE)
-    set(WEBCAM_INCLUDE_DIRS
-      ${WEBCAM_INCLUDE_DIRS}
-      CACHE INTERNAL "webcam include directories"
+    set(OWWEBCAM_INCLUDE_DIRS
+      ${OWWEBCAM_INCLUDE_DIRS}
+      /System/Library/Frameworks/Quicktime.framework/Headers
+      CACHE INTERNAL "owwebcam include directories"
     )
 
-    set(webcam_SRCS
-      ${webcam_SRCS}
+    set(owwebcam_SRCS
+      ${owwebcam_SRCS}
       src/quicktime/QuicktimeWebcamDriver.cpp
     )
   else (APPLE)
-    set(webcam_SRCS
-      ${webcam_SRCS}
+    set(owwebcam_SRCS
+      ${owwebcam_SRCS}
       src/v4l/V4LWebcamDriver.cpp
     )
   endif (APPLE)
 endif (UNIX AND NOT WIN32)
 
 include_directories(
-  ${WEBCAM_INCLUDE_DIRS}
+  ${OWWEBCAM_INCLUDE_DIRS}
 )
 
-add_library(webcam STATIC ${webcam_SRCS})
+add_library(${OWWEBCAM_LIBRARY} STATIC ${owwebcam_SRCS})
 
-target_link_libraries(${WEBCAM_LIBRARIES})
+target_link_libraries(${OWWEBCAM_LINK_LIBRARIES})
 

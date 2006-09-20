@@ -7,15 +7,14 @@ set(SAMPLERATE_INCLUDE_DIRS
   CACHE INTERNAL "samplerate include directories"
 )
 
-# samplerate lib and dependencies
-# saves the variable in internal cache for later use
-set(SAMPLERATE_LIBRARIES
+set(SAMPLERATE_LIBRARY
   samplerate
-  CACHE INTERNAL "samplerate libraries"
+  CACHE INTERNAL "samplerate library"
 )
 
-include_directories(
-  ${SAMPLERATE_INCLUDE_DIRS}
+# samplerate lib and dependencies
+set(SAMPLERATE_LINK_LIBRARIES
+  ${SAMPLERATE_LIBRARY}
 )
 
 set(samplerate_SRCS
@@ -25,7 +24,11 @@ set(samplerate_SRCS
   src/src_zoh.c
 )
 
-add_library(samplerate STATIC ${samplerate_SRCS})
+include_directories(
+  ${SAMPLERATE_INCLUDE_DIRS}
+)
 
-target_link_libraries(${SAMPLERATE_LIBRARIES})
+add_library(${SAMPLERATE_LIBRARY} STATIC ${samplerate_SRCS})
+
+target_link_libraries(${SAMPLERATE_LINK_LIBRARIES})
 

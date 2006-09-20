@@ -1,35 +1,27 @@
 project(owutil)
 
-#Boost dependency
-find_package(Boost REQUIRED)
-
 if (UNIX AND NOT WIN32 AND NOT APPLE)
   find_package(UUID REQUIRED)
 endif (UNIX AND NOT WIN32 AND NOT APPLE)
 
-#owcutil dependency
-#link_directories(${owcutil_BINARY_DIR})
-
-#includes
 set(OWUTIL_INCLUDE_DIRS
   ${CMAKE_CURRENT_SOURCE_DIR}/include
   ${OWCUTIL_INCLUDE_DIRS}
-  ${Boost_INCLUDE_DIRS}
+  ${BOOST_INCLUDE_DIRS}
   CACHE INTERNAL "owutil include directories"
 )
 
-set(OWUTIL_LIBRARIES
+set(OWUTIL_LIBRARY
   owutil
-  owcuitl
+  CACHE INTERNAL "owutil library"
 )
 
-include_directories(
-  ${OWUTIL_INCLUDE_DIRS}
-  ${OWCUTIL_INCLUDE_DIRS}
+set(OWUTIL_LINK_LIBRARIES
+  ${OWUTIL_LIBRARY}
+  ${OWCUTIL_LIBRARY}
+  ${BOOST_SIGNALS_LIBRARY}
 )
 
-
-#sources
 set(owutil_SRCS
   src/exception/Exception.cpp
   src/Base64.cpp
@@ -62,19 +54,25 @@ if (UNIX AND NOT WIN32)
     set(owutil_SRCS ${owutil_SRCS}
       src/unix/UuidUnix.cpp
     )
+
+    set(OWUTIL_LINK_LIBRARIES
+      ${OWUTIL_LINK_LIBRARIES}
+      ${UUID_LIBRARIES}
+    )
   endif (APPLE)
 endif (UNIX AND NOT WIN32)
 
-add_library(owutil STATIC ${owutil_SRCS})
+include_directories(
+  ${OWUTIL_INCLUDE_DIRS}
+)
 
-target_link_libraries(${OWUTIL_LIBRARIES})
+add_library(${OWUTIL_LIBRARY} STATIC ${owutil_SRCS})
+
+target_link_libraries(${OWUTIL_LINK_LIBRARIES})
 
 if (APPLE)
     macro_add_link_flags(owutil
-      -framework CoreFoundation
+      "-framework CoreFoundation"
     )
 endif (APPLE)
 
-if (UNIX AND NOT WIN32 AND NOT APPLE)
-  target_link_libraries(${UUID_LIBRARIES})
-endif (UNIX AND NOT WIN32 AND NOT APPLE)

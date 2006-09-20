@@ -18,11 +18,9 @@ set(OWSIPWRAPPER_LIBRARY
 )
 
 # owsipwrapper lib and dependencies
-# saves the variable in internal cache for later use
-set(OWSIPWRAPPER_LIBRARIES
-  owsipwrapper
-  ${OWUTIL_LIBRARIES}
-  CACHE INTERNAL "owsipwrapper libraries"
+set(OWSIPWRAPPER_LINK_LIBRARIES
+  ${OWSIPWRAPPER_LIBRARY}
+  ${OWUTIL_LIBRARY}
 )
 
 set(owsipwrapper_SRCS
@@ -39,7 +37,7 @@ include_directories(
 )
 
 
-add_library(owsipwrapper STATIC ${owsipwrapper_SRCS})
+add_library(${OWSIPWRAPPER_LIBRARY} STATIC ${owsipwrapper_SRCS})
 
-target_link_libraries(${OWSIPWRAPPER_LIBRARIES})
+target_link_libraries(${OWSIPWRAPPER_LINK_LIBRARIES})
 

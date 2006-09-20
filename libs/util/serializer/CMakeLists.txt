@@ -9,27 +9,29 @@ set(OWSERIALIZER_INCLUDE_DIRS
   CACHE INTERNAL "owserializer include directories"
 )
 
-# owserializer lib and dependencies
-# saves the variable in internal cache for later use
-set(OWSERIALIZER_LIBRARIES
+set(OWSERIALIZER_LIBRARY
   owserializer
-  ${OWSERIALIZATION_LIBRARIES}
+  CACHE INTERNAL "owserializer library"
+)
+
+# owserializer lib and dependencies
+set(OWSERIALIZER_LINK_LIBRARIES
+  ${OWSERIALIZER_LIBRARY}
+  ${OWSERIALIZATION_LIBRARY}
   ${TINYXML_LIBRARIES}
-  CACHE INTERNAL "owserializer libraries"
 )
 
-include_directories(
-  ${OWSERIALIZER_INCLUDE_DIRS}
-)
-
-#sources
 set(owserializer_SRCS
   src/DateXMLSerializer.cpp
   src/TimeXMLSerializer.cpp
 )
 
-#owserializer
-add_library(owserializer STATIC ${owserializer_SRCS})
 
-target_link_libraries(${OWSERIALIZER_LIBRARIES})
+include_directories(
+  ${OWSERIALIZER_INCLUDE_DIRS}
+)
+
+add_library(${OWSERIALIZER_LIBRARY} STATIC ${owserializer_SRCS})
+
+target_link_libraries(${OWSERIALIZER_LINK_LIBRARIES})
 

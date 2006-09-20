@@ -10,18 +10,21 @@ set(NETLIB_INCLUDE_DIRS
   CACHE INTERNAL "netlib include directories"
 )
 
-# netlib lib and dependencies
-# saves the variable in internal cache for later use
-set(NETLIB_LIBRARIES
+set(NETLIB_LIBRARY
   netlib
-  ${OWCUTIL_LIBRARIES}
-  ${HTTPTUNNEL_LIBRARIES}
-  CACHE INTERNAL "netlib libraries"
+  CACHE INTERNAL "netlib library"
+)
+
+# netlib lib and dependencies
+set(NETLIB_LINK_LIBRARIES
+  ${NETLIB_LIBRARY}
+  ${OWCUTIL_LIBRARY}
+  ${HTTPTUNNEL_LIBRARY}
 )
 
 if (MSVC)
-  set(NETLIB_LIBRARIES
-    ${NETLIB_LIBRARIES}
+  set(NETLIB_LINK_LIBRARIES
+    ${NETLIB_LINK_LIBRARIES}
     user32
     shell32
     ws2_32
@@ -32,10 +35,6 @@ if (MSVC)
   )
 endif (MSVC)
 
-include_directories(
-  ${NETLIB_INCLUDE_DIRS}
-)
-
 set(netlib_SRCS
   src/netlib.cpp
   src/netlib_util.cpp
@@ -44,7 +43,11 @@ set(netlib_SRCS
   src/bugfix.cpp
 )
 
-add_library(netlib STATIC ${netlib_SRCS})
+include_directories(
+  ${NETLIB_INCLUDE_DIRS}
+)
 
-target_link_libraries(${NETLIB_LIBRARIES})
+add_library(${NETLIB_LIBRARY} STATIC ${netlib_SRCS})
+
+target_link_libraries(${NETLIB_LINK_LIBRARIES})
 

@@ -8,6 +8,7 @@ set(OWPHAPIWRAPPER_INCLUDE_DIRS
   ${OWUTIL_INCLUDE_DIRS}
   ${OWSOUND_INCLUDE_DIRS}
   ${TINYXML_INCLUDE_DIRS}
+  ${PIXERTOOL_INCLUDE_DIRS}
   ${OWIMWRAPPER_INCLUDE_DIRS}
   ${OWSIPWRAPPER_INCLUDE_DIRS}
   ${PHAPI_INCLUDE_DIRS}
@@ -21,21 +22,20 @@ set(OWPHAPIWRAPPER_LIBRARY
 )
 
 # owphapiwrapper lib and dependencies
-# saves the variable in internal cache for later use
-set(OWPHAPIWRAPPER_LIBRARIES
-  owphapiwrapper
-  ${OWTHREAD_LIBRARIES}
-  ${OWUTIL_LIBRARIES}
-  ${OWSOUND_LIBRARIES}
-  ${TINYXML_LIBRARIES}
-  ${OWIMWRAPPER_LIBRARIES}
-  ${OWSIPWRAPPER_LIBRARIES}
+set(OWPHAPIWRAPPER_LINK_LIBRARIES
+  ${OWPHAPIWRAPPER_LIBRARY}
+  ${OWUTIL_LIBRARY}
+  ${OWTHREAD_LIBRARY}
+  ${OWSOUND_LIBRARY}
+  ${TINYXML_LIBRARY}
+  ${PIXERTOOL_LIBRARY}
+  ${OWIMWRAPPER_LIBRARY}
+  ${OWSIPWRAPPER_LIBRARY}
   ${PHAPI_LIBRARY}
-  ${ORTP_LIBRARIES}
-  ${STUN_LIBRARIES}
-  ${HTTPTUNNEL_LIBRARIES}
-  ${SFP-PLUGIN_LIBRARIES}
-  CACHE INTERNAL "owphapiwrapper libraries"
+  ${ORTP_LIBRARY}
+  ${STUN_LIBRARY}
+  ${HTTPTUNNEL_LIBRARY}
+  ${SFP-PLUGIN_LIBRARY}
 )
 
 set(owphapiwrapper_SRCS
@@ -52,10 +52,9 @@ set(owphapiwrapper_SRCS
 )
 
 if (WITH_VIDEO)
-  set(OWPHAPIWRAPPER_LIBRARIES
-    ${OWPHAPIWRAPPER_LIBRARIES}
-    ${PIXERTOOL_LIBRARIES}
-    CACHE INTERNAL "owphapiwrapper libraries"
+  set(OWPHAPIWRAPPER_LINK_LIBRARIES
+    ${OWPHAPIWRAPPER_LINK_LIBRARIES}
+    ${PIXERTOOL_LIBRARY}
   )
 
   add_definitions(-DENABLE_VIDEO)
@@ -66,13 +65,13 @@ include_directories(
 )
 
 
-add_library(owphapiwrapper STATIC ${owphapiwrapper_SRCS})
+add_library(${OWPHAPIWRAPPER_LIBRARY} STATIC ${owphapiwrapper_SRCS})
 
 if (APPLE)
-  macro_add_link_flags(owphapiwrapper
+  macro_add_link_flags(${OWPHAPIWRAPPER_LIBRARY}
     "-framework CoreFoundation"
   )
 endif (APPLE)
 
-target_link_libraries(${OWPHAPIWRAPPER_LIBRARIES})
+target_link_libraries(${OWPHAPIWRAPPER_LINK_LIBRARIES})
 

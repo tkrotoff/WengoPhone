@@ -15,12 +15,10 @@ set(OWMULTIIMWRAPPER_LIBRARY
 )
 
 # owmultiimwrapper lib and dependencies
-# saves the variable in internal cache for later use
-set(OWMULTIIMWRAPPER_LIBRARIES
-  owmultiimwrapper
-  ${OWPHAPIWRAPPER_LIBRARIES}
-  ${OWGAIMWRAPPER_LIBRARIES}
-  CACHE INTERNAL "owmultiimwrapper libraries"
+set(OWMULTIIMWRAPPER_LINK_LIBRARIES
+  ${OWMULTIIMWRAPPER_LIBRARY}
+  ${OWPHAPIWRAPPER_LIBRARY}
+  ${OWGAIMWRAPPER_LIBRARY}
 )
 
 set(owmultiimwrapper_SRCS
@@ -31,8 +29,7 @@ include_directories(
   ${OWMULTIIMWRAPPER_INCLUDE_DIRS}
 )
 
+add_library(${OWMULTIIMWRAPPER_LIBRARY} STATIC ${owmultiimwrapper_SRCS})
 
-add_library(owmultiimwrapper STATIC ${owmultiimwrapper_SRCS})
-
-target_link_libraries(${OWMULTIIMWRAPPER_LIBRARIES})
+target_link_libraries(${OWMULTIIMWRAPPER_LINK_LIBRARIES})
 

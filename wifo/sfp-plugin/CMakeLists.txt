@@ -10,14 +10,17 @@ set(SFP-PLUGIN_INCLUDE_DIRS
   CACHE INTERNAL "sfp-plugin include directories"
 )
 
-# sfp-plugin lib and dependencies
-# saves the variable in internal cache for later use
-set(SFP-PLUGIN_LIBRARIES
+set(SFP-PLUGIN_LIBRARY
   sfp-plugin
+  CACHE INTERNAL "sfp-plugin library"
+)
+
+# sfp-plugin lib and dependencies
+set(SFP-PLUGIN_LINK_LIBRARIES
+  ${SFP-PLUGIN_LIBRARY}
+  ${PHAPI-UTIL_LIBRARY}
   ${PHAPI_LIBRARY}
-  ${PHAPI-UTIL_LIBRARIES}
-  ${EXOSIP_LIBRARIES}
-  CACHE INTERNAL "sfp-plugin libraries"
+  ${EXOSIP_LIBRARY}
 )
 
 if (MSVC)
@@ -42,23 +45,22 @@ add_definitions(
 )
 
 if (APPLE)
-  add_library(sfp-plugin STATIC ${sfp-plugin_SRCS})
+  add_library(${SFP-PLUGIN_LIBRARY} STATIC ${sfp-plugin_SRCS})
   install(
     TARGETS
-      sfp-plugin
+      ${SFP-PLUGIN_LIBRARY}
     ARCHIVE DESTINATION
       ${LIB_INSTALL_DIR}
   )
 else (APPLE)
-  add_library(sfp-plugin SHARED ${sfp-plugin_SRCS})
+  add_library(${SFP-PLUGIN_LIBRARY} SHARED ${sfp-plugin_SRCS})
   install(
     TARGETS
-      sfp-plugin
+      ${SFP-PLUGIN_LIBRARY}
     LIBRARY DESTINATION
       ${LIB_INSTALL_DIR}
   )
 endif (APPLE)
 
-target_link_libraries(${SFP-PLUGIN_LIBRARIES})
-
+target_link_libraries(${SFP-PLUGIN_LINK_LIBRARIES})
 

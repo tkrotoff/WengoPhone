@@ -10,16 +10,16 @@ set(OWIDLE_INCLUDE_DIRS
   CACHE INTERNAL "owidle include directories"
 )
 
-# owidle lib and dependencies
-# saves the variable in internal cache for later use
-set(OWIDLE_LIBRARIES
+set(OWIDLE_LIBRARY
   owidle
-  ${OWQTUTIL_LIBRARIES}
-  CACHE INTERNAL "owidle libraries"
+  CACHE INTERNAL "owidle library"
 )
 
-include_directories(
-  ${OWIDLE_INCLUDE_DIRS}
+# owidle lib and dependencies
+set(OWIDLE_LINK_LIBRARIES
+  ${OWIDLE_LIBRARY}
+  ${OWQTUTIL_LIBRARIES}
+  ${QT_CORE_LIBRARY}
 )
 
 set(owidle_SRCS
@@ -28,7 +28,11 @@ set(owidle_SRCS
 
 qt4_automoc(${owidle_SRCS})
 
-add_library(owidle STATIC ${owidle_SRCS})
+include_directories(
+  ${OWIDLE_INCLUDE_DIRS}
+)
 
-target_link_libraries(${OWIDLE_LIBRARIES})
+add_library(${OWIDLE_LIBRARY} STATIC ${owidle_SRCS})
+
+target_link_libraries(${OWIDLE_LINK_LIBRARIES})
 

@@ -7,11 +7,18 @@ set(FIDLIB_INCLUDE_DIRS
   CACHE INTERNAL "fidlib include directories"
 )
 
-# fidlib lib and dependencies
-# saves the variable in internal cache for later use
-set(FIDLIB_LIBRARIES
+set(FIDLIB_LIBRARY
   fidlib
-  CACHE INTERNAL "fidlib libraries"
+  CACHE INTERNAL "fidlib library"
+)
+
+# fidlib lib and dependencies
+set(FIDLIB_LINK_LIBRARIES
+  ${FIDLIB_LIBRARY}
+)
+
+set(fidlib_SRCS
+  src/fidlib.c
 )
 
 if (WIN32)
@@ -24,11 +31,7 @@ include_directories(
   ${FIDLIB_INCLUDE_DIRS}
 )
 
-set(fidlib_SRCS
-  src/fidlib.c
-)
+add_library(${FIDLIB_LIBRARY} STATIC ${fidlib_SRCS})
 
-add_library(fidlib STATIC ${fidlib_SRCS})
-
-target_link_libraries(${FIDLIB_LIBRARIES})
+target_link_libraries(${FIDLIB_LINK_LIBRARIES})
 

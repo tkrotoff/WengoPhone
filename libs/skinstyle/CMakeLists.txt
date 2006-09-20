@@ -1,29 +1,32 @@
-project(skinstyle)
+project(owskinstyle)
 
 include(${QT_USE_FILE})
 
-# needed include directories to build skinstyle
+# needed include directories to build owskinstyle
 # saves the variable in internal cache for later use
-set(SKINSTYLE_INCLUDE_DIRS
+set(OWSKINSTYLE_INCLUDE_DIRS
   ${CMAKE_CURRENT_SOURCE_DIR}
+  ${OWCUTIL_INCLUDE_DIRS}
   ${OWQTUTIL_INCLUDE_DIRS}
   ${QT_INCLUDE_DIR}
-  CACHE INTERNAL "skinstyle include directories"
+  CACHE INTERNAL "owskinstyle include directories"
 )
 
-# skinstyle lib and dependencies
-# saves the variable in internal cache for later use
-set(SKINSTYLE_LIBRARIES
-  skinstyle
-  ${OWQTUTIL_LIBRARIES}
-  CACHE INTERNAL "skinstyle libraries"
+set(OWSKINSTYLE_LIBRARY
+  owskinstyle
+  CACHE INTERNAL "owskinstyle library"
 )
 
-include_directories(
-  ${SKINSTYLE_INCLUDE_DIRS}
+# owskinstyle lib and dependencies
+set(OWSKINSTYLE_LINK_LIBRARIES
+  ${OWSKINSTYLE_LIBRARY}
+  ${OWCUTIL_LIBRARY}
+  ${OWQTUTIL_LIBRARY}
+  ${QT_QTCORE_LIBRARY}
+  ${QT_QTGUI_LIBRARY}
 )
 
-set(skinstyle_SRCS
+set(owskinstyle_SRCS
   src/SkinStyle.cpp
   src/SkinInfoReader.cpp
   src/SkinWidget.cpp
@@ -31,9 +34,12 @@ set(skinstyle_SRCS
   src/SkinButton.cpp
 )
 
-qt4_automoc(${skinstyle_SRCS})
+qt4_automoc(${owskinstyle_SRCS})
 
-add_library(skinstyle STATIC ${skinstyle_SRCS})
+include_directories(
+  ${OWSKINSTYLE_INCLUDE_DIRS}
+)
+add_library(${OWSKINSTYLE_LIBRARY} STATIC ${owskinstyle_SRCS})
 
-target_link_libraries(${SKINSTYLE_LIBRARIES})
+target_link_libraries(${OWSKINSTYLE_LINK_LIBRARIES})
 

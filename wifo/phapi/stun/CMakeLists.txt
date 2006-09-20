@@ -7,11 +7,14 @@ set(STUN_INCLUDE_DIRS
   CACHE INTERNAL "stun include directories"
 )
 
-# stun lib and dependencies
-# saves the variable in internal cache for later use
-set(STUN_LIBRARIES
+set(STUN_LIBRARY
   stun
-  CACHE INTERNAL "stun libraries"
+  CACHE INTERNAL "stun library"
+)
+
+# stun lib and dependencies
+set(STUN_LINK_LIBRARIES
+  ${STUN_LIBRARY}
 )
 
 if (WIN32)
@@ -20,16 +23,16 @@ if (WIN32)
   )
 endif (WIN32)
 
-include_directories(
-  ${STUN_INCLUDE_DIRS}
-)
-
 set(stun_SRCS
   udp.c
   stun.c
 )
 
-add_library(stun STATIC ${stun_SRCS})
+include_directories(
+  ${STUN_INCLUDE_DIRS}
+)
 
-target_link_libraries(${STUN_LIBRARIES})
+add_library(${STUN_LIBRARY} STATIC ${stun_SRCS})
+
+target_link_libraries(${STUN_LINK_LIBRARIES})
 

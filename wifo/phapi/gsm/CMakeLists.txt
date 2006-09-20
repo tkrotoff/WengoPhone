@@ -7,15 +7,14 @@ set(GSM_INCLUDE_DIRS
   CACHE INTERNAL "gsm include directories"
 )
 
-# gsm lib and dependencies
-# saves the variable in internal cache for later use
-set(GSM_LIBRARIES
+set(GSM_LIBRARY
   gsm
-  CACHE INTERNAL "gsm libraries"
+  CACHE INTERNAL "gsm library"
 )
 
-include_directories(
-  ${GSM_INCLUDE_DIRS}
+# gsm lib and dependencies
+set(GSM_LINK_LIBRARIES
+  ${GSM_LIBRARY}
 )
 
 set(gsm_SRCS
@@ -39,7 +38,11 @@ set(gsm_SRCS
   table.c
 )
 
-add_library(gsm STATIC ${gsm_SRCS})
+include_directories(
+  ${GSM_INCLUDE_DIRS}
+)
 
-target_link_libraries(${GSM_LIBRARIES})
+add_library(${GSM_LIBRARY} STATIC ${gsm_SRCS})
+
+target_link_libraries(${GSM_LINK_LIBRARIES})
 

@@ -4,20 +4,22 @@ project(owbrowser)
 # saves the variable in internal cache for later use
 set(OWBROWSER_INCLUDE_DIRS
   ${CMAKE_CURRENT_SOURCE_DIR}
+  ${OWCUTIL_INCLUDE_DIRS}
+  ${OWUTIL_INCLUDE_DIRS}
   ${OWQTUTIL_INCLUDE_DIRS}
   CACHE INTERNAL "owbrowser include directories"
 )
 
-# owbrowser lib and dependencies
-# saves the variable in internal cache for later use
-set(OWBROWSER_LIBRARIES
+set(OWBROWSER_LIBRARY
   owbrowser
-  ${OWQTUTIL_LIBRARIES}
   CACHE INTERNAL "owbrowser libraries"
 )
-
-include_directories(
-  ${OWBROWSER_INCLUDE_DIRS}
+# owbrowser lib and dependencies
+set(OWBROWSER_LINK_LIBRARIES
+  ${OWBROWSER_LIBRARY}
+  ${OWCUTIL_LIBRARY}
+  ${OWUTIL_LIBRARY}
+  ${OWQTUTIL_LIBRARY}
 )
 
 set(owbrowser_SRCS
@@ -26,6 +28,10 @@ set(owbrowser_SRCS
 
 qt4_automoc(${owbrowser_SRCS})
 
-add_library(owbrowser STATIC ${owbrowser_SRCS})
+include_directories(
+  ${OWBROWSER_INCLUDE_DIRS}
+)
 
-target_link_libraries(${OWBROWSER_LIBRARIES})
+add_library(${OWBROWSER_LIBRARY} STATIC ${owbrowser_SRCS})
+
+target_link_libraries(${OWBROWSER_LINK_LIBRARIES})

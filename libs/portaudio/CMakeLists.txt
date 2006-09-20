@@ -7,25 +7,20 @@ set(PORTAUDIO_INCLUDE_DIRS
   CACHE INTERNAL "portaudio include directories"
 )
 
-# portaudio lib and dependencies
-# saves the variable in internal cache for later use
-set(PORTAUDIO_LIBRARIES
+set(PORTAUDIO_LIBRARY
   portaudio
-  CACHE INTERNAL "portaudio libraries"
+  CACHE INTERNAL "portaudio library"
+)
+
+# portaudio lib and dependencies
+set(PORTAUDIO_LINK_LIBRARIES
+  ${PORTAUDIO_LIBRARY}
 )
 
 set(PORTAUDIO_DEFINITIONS
   -DPA_LITTLE_ENDIAN
   -DPA_NO_ASIO
   -DPA_NO_WDMKS
-)
-
-include_directories(
-  ${PORTAUDIO_INCLUDE_DIRS}
-)
-
-add_definitions(
-  ${PORTAUDIO_DEFINITIONS}
 )
 
 set(portaudio_SRCS
@@ -56,7 +51,15 @@ else (WITH_PORTAUDIO_DSOUND)
   )
 endif (WITH_PORTAUDIO_DSOUND)
 
-add_library(portaudio STATIC ${portaudio_SRCS})
+include_directories(
+  ${PORTAUDIO_INCLUDE_DIRS}
+)
 
-target_link_libraries(${PORTAUDIO_LIBRARIES})
+add_definitions(
+  ${PORTAUDIO_DEFINITIONS}
+)
+
+add_library(${PORTAUDIO_LIBRARY} STATIC ${portaudio_SRCS})
+
+target_link_libraries(${PORTAUDIO_LINK_LIBRARIES})
 

@@ -5,20 +5,14 @@ set(OWCUTIL_INCLUDE_DIRS
   CACHE INTERNAL "owcutil include directory"
 )
 
-if (MSVC)
-  set(OWCUTIL_INCLUDE_DIRS
-    ${OWCUTIL_INCLUDE_DIRS}
-    ${owcutil_SOURCE_DIR}/include/cutil/msvc
-    CACHE INTERNAL "owcutil include directory"
-  )
-endif (MSVC)
-
-set(OWCUTIL_LIBRARIES
+set(OWCUTIL_LIBRARY
   owcutil
-  CACHE INTERNAL "owcutil libraries"
+  CACHE INTERNAL "owcutil library"
 )
 
-include_directories(${OWCUTIL_INCLUDE_DIRS})
+set(OWCUTIL_LINK_LIBRARIES
+  ${OWCUTIL_LIBRARY}
+)
 
 set(owcutil_SRCS
   src/fake.c
@@ -27,11 +21,21 @@ set(owcutil_SRCS
 )
 
 if (MSVC)
+  set(OWCUTIL_INCLUDE_DIRS
+    ${OWCUTIL_INCLUDE_DIRS}
+    ${owcutil_SOURCE_DIR}/include/cutil/msvc
+    CACHE INTERNAL "owcutil include directory"
+  )
+endif (MSVC)
+
+include_directories(${OWCUTIL_INCLUDE_DIRS})
+
+if (MSVC)
   set(owcutil_SRCS
     ${owcutil_SRCS}
     src/msvc/dirent.c
   )
 endif (MSVC)
 
-add_library(owcutil STATIC ${owcutil_SRCS})
+add_library(${OWCUTIL_LIBRARY} STATIC ${owcutil_SRCS})
 

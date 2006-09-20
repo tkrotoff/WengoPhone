@@ -7,11 +7,14 @@ set(AMRWB_INCLUDE_DIRS
   CACHE INTERNAL "amrwb include directories"
 )
 
-# amrwb lib and dependencies
-# saves the variable in internal cache for later use
-set(AMRWB_LIBRARIES
+set(AMRWB_LIBRARY
   amrwb
-  CACHE INTERNAL "amrwb libraries"
+  CACHE INTERNAL "amrwb library"
+)
+
+# amrwb lib and dependencies
+set(AMRWB_LINK_LIBRARIES
+  ${AMRWB_LIBRARY}
 )
 
 set(amrwb_SRCS
@@ -38,11 +41,11 @@ include_directories(
   ${AMRWB_INCLUDE_DIRS}
 )
 
-add_library(amrwb STATIC ${amrwb_SRCS})
+add_library(${AMRWB_LIBRARY} STATIC ${amrwb_SRCS})
 
-target_link_libraries(${AMRWB_LIBRARIES})
+target_link_libraries(${AMRWB_LINK_LIBRARIES})
 
-macro_add_compile_flags(amrwb
+macro_add_compile_flags(${AMRWB_LIBRARY}
   ${PHAPI_OPTIMIZATION_FLAGS}
 )
 

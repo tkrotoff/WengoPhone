@@ -5,40 +5,33 @@ project(owthread)
 set(OWTHREAD_INCLUDE_DIRS
   ${CMAKE_CURRENT_SOURCE_DIR}/include
   ${OWUTIL_INCLUDE_DIRS}
+  ${BOOST_INCLUDE_DIRS}
   CACHE INTERNAL "owthread include directories"
 )
 
-# owthread lib and dependencies
-# saves the variable in internal cache for later use
-set(OWTHREAD_LIBRARIES
+set(OWTHREAD_LIBRARY
   owthread
-  ${OWUTIL_LIBRARIES}
+  CACHE INTERNAL "owthread library"
+)
+
+# owthread lib and dependencies
+set(OWTHREAD_LINK_LIBRARIES
+  ${OWTHREAD_LIBRARY}
+  ${OWUTIL_LIBRARY}
+  ${BOOST_THREAD_LIBRARY}
   CACHE INTERNAL "owthread libraries"
 )
 
-include_directories(
-  ${OWTHREAD_INCLUDE_DIRS}
-)
-#owutil dependency
-link_directories(${owutil_BINARY_DIR})
-
-#includes
-set(owthread_INCLUDE_DIR
-  ${owthread_SOURCE_DIR}/include
-  ${owutil_INCLUDE_DIR}
-  CACHE INTERNAL ""
-)
-
-include_directories(${owthread_INCLUDE_DIR})
-
-#sources
 set(owthread_SRCS
   src/Timer.cpp
   src/Thread.cpp
 )
 
-#owthread
-add_library(owthread STATIC ${owthread_SRCS})
+include_directories(
+  ${OWTHREAD_INCLUDE_DIRS}
+)
 
-target_link_libraries(${OWTHREAD_LIBRARIES})
+add_library(${OWTHREAD_LIBRARY} STATIC ${owthread_SRCS})
+
+target_link_libraries(${OWTHREAD_LINK_LIBRARIES})
 

@@ -1,5 +1,7 @@
 project(wtimer)
 
+# TODO: test
+
 # needed include directories to build wtimer
 # saves the variable in internal cache for later use
 set(WTIMER_INCLUDE_DIRS
@@ -7,15 +9,14 @@ set(WTIMER_INCLUDE_DIRS
   CACHE INTERNAL "wtimer include directories"
 )
 
-# wtimer lib and dependencies
-# saves the variable in internal cache for later use
-set(WTIMER_LIBRARIES
+set(WTIMER_LIBRARY
   wtimer
-  CACHE INTERNAL "wtimer libraries"
+  CACHE INTERNAL "wtimer library"
 )
 
-include_directories(
-  ${WTIMER_INCLUDE_DIRS}
+# wtimer lib and dependencies
+set(WTIMER_LINK_LIBRARIES
+  ${WTIMER_LIBRARY}
 )
 
 if (WIN32)
@@ -25,13 +26,13 @@ if (WIN32)
 
   add_definitions(-DTIMER_ENABLE_WINMM_IMPL)
 else (WIN32)
-  if (UNIX AND NOT WIN32)
-    set(WTIMER_LIBRARIES
-      ${WTIMER_LIBRARIES}
+  if (UNIX)
+    set(WTIMER_LINK_LIBRARIES
+      ${WTIMER_LINK_LIBRARIES}
       pthread
       rt
     )
-  endif (UNIX AND NOT WIN32)
+  endif (UNIX)
 
   set(wtimer_SRCS
     src/clock_gettime/impl_timer.c
@@ -40,7 +41,11 @@ else (WIN32)
   add_definitions(-DTIMER_ENABLE_CLOCK_GETTIME_IMPL)
 endif (WIN32)
 
-add_library(wtimer STATIC ${wtimer_SRCS})
+include_directories(
+  ${WTIMER_INCLUDE_DIRS}
+)
 
-target_link_libraries(${WTIMER_LIBRARIES})
+add_library(${WTIMER_LIBRARY} STATIC ${wtimer_SRCS})
+
+target_link_libraries(${WTIMER_LINK_LIBRARIES})
 

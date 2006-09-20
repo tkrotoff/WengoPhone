@@ -12,34 +12,28 @@ set(EXOSIP_INCLUDE_DIRS
   CACHE INTERNAL "eXosip include directories"
 )
 
-# eXosip lib and dependencies
-# saves the variable in internal cache for later use
-set(EXOSIP_LIBRARIES
+set(EXOSIP_LIBRARY
   eXosip
-  ${OSIP2_LIBRARIES}
-  CACHE INTERNAL "eXosip libraries"
+  CACHE INTERNAL "eXosip library"
+)
+
+# eXosip lib and dependencies
+set(EXOSIP_LINK_LIBRARIES
+  ${EXOSIP_LIBRARY}
+  ${OSIP2_LIBRARY}
 )
 
 if (WIN32)
-  set(EXOSIP_LIBRARIES
-    ${EXOSIP_LIBRARIES}
+  set(EXOSIP_LINK_LIBRARIES
+    ${EXOSIP_LINK_LIBRARIES}
     ws2_32
     winmm
     iphlpapi
-    CACHE INTERNAL "eXosip libraries"
   )
 endif (WIN32)
 
 set(EXOSIP_DEFINITIONS
   ${OSIP2_DEFINITIONS}
-)
-
-include_directories(
-  ${EXOSIP_INCLUDE_DIRS}
-)
-
-add_definitions(
-  ${EXOSIP_DEFINITIONS}
 )
 
 set(eXosip_SRCS
@@ -65,7 +59,15 @@ set(eXosip_SRCS
   src/udp.c
 )
 
-add_library(eXosip STATIC ${eXosip_SRCS})
+include_directories(
+  ${EXOSIP_INCLUDE_DIRS}
+)
 
-target_link_libraries(${EXOSIP_LIBRARIES})
+add_definitions(
+  ${EXOSIP_DEFINITIONS}
+)
+
+add_library(${EXOSIP_LIBRARY} STATIC ${eXosip_SRCS})
+
+target_link_libraries(${EXOSIP_LINK_LIBRARIES})
 

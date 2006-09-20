@@ -35,12 +35,14 @@ endif (MSVC)
 # saves the variable in internal cache for later use
 set(PHAPI_INCLUDE_DIRS
   ${CMAKE_CURRENT_SOURCE_DIR}
+  ${OSIP2_INCLUDE_DIRS}
   ${EXOSIP_INCLUDE_DIRS}
   ${ORTP_INCLUDE_DIRS}
   ${ILBC_INCLUDE_DIRS}
   ${STUN_INCLUDE_DIRS}
   ${GSM_INCLUDE_DIRS}
   ${OWUTIL_INCLUDE_DIRS}
+  ${OWWEBCAM_INCLUDE_DIRS}
   ${PHAPI-UTIL_INCLUDE_DIRS}
   ${FIDLIB_INCLUDE_DIRS}
   ${SPEEXEC_INCLUDE_DIRS}
@@ -53,19 +55,19 @@ set(PHAPI_LIBRARY
 )
 
 # phapi lib and dependencies
-# saves the variable in internal cache for later use
-set(PHAPI_LIBRARIES
-  phapi
-  ${EXOSIP_LIBRARIES}
-  ${ORTP_LIBRARIES}
-  ${ILBC_LIBRARIES}
-  ${STUN_LIBRARIES}
-  ${GSM_LIBRARIES}
-  ${OWUTIL_LIBRARIES}
-  ${PHAPI-UTIL_LIBRARIES}
-  ${FIDLIB_LIBRARIES}
-  ${SPEEXEC_LIBRARIES}
-  CACHE INTERNAL "phapi libraries"
+set(PHAPI_LINK_LIBRARIES
+  ${PHAPI_LIBRARY}
+  ${OWUTIL_LIBRARY}
+  ${OWWEBCAM_LIBRARY}
+  ${OSIP2_LIBRARY}
+  ${EXOSIP_LIBRARY}
+  ${ORTP_LIBRARY}
+  ${ILBC_LIBRARY}
+  ${STUN_LIBRARY}
+  ${GSM_LIBRARY}
+  ${PHAPI-UTIL_LIBRARY}
+  ${FIDLIB_LIBRARY}
+  ${SPEEXEC_LIBRARY}
 )
 
 set(PHAPI_DEFINITIONS
@@ -200,8 +202,8 @@ if (WITH_HTTPTUNNEL)
     CACHE INTERNAL "phapi include directories"
   )
 
-  set(PHAPI_LIBRARIES
-    ${PHAPI_LIBRARIES}
+  set(PHAPI_LINK_LIBRARIES
+    ${PHAPI_LINK_LIBRARIES}
     ${OPENSSL_LIBRARIES}
     httptunnel
   )
@@ -217,12 +219,11 @@ if (WITH_VIDEO)
     CACHE INTERNAL "phapi include directories"
   )
 
-  set(PHAPI_LIBRARIES
-    ${PHAPI_LIBRARIES}
+  set(PHAPI_LINK_LIBRARIES
+    ${PHAPI_LINK_LIBRARIES}
     ${AVUTIL_LIBRARY}
     ${AVCODEC_LIBRARY}
     ${WEBCAM_LIBRARIES}
-    CACHE INTERNAL "phapi libraries"
   )
 
   add_definitions(-DPHAPI_VIDEO_SUPPORT)
@@ -242,8 +243,8 @@ endif (WITH_VIDEO)
 # system specific phapi options
 
 if (WIN32)
-  set(PHAPI_LIBRARIES
-    ${PHAPI_LIBRARIES}
+  set(PHAPI_LINK_LIBRARIES
+    ${PHAPI_LINK_LIBRARIES}
       msdirent
       winmm
       ws2_32
@@ -254,7 +255,6 @@ if (WIN32)
       iphlpapi
       strmiids
       ole32
-      CACHE INTERNAL "phapi libraries"
   )
 
   set(phapi_SRCS
@@ -268,16 +268,14 @@ if (WIN32)
       -DT_MSVC
     )
 
-    set(PHAPI_LIBRARIES
-      ${PHAPI_LIBRARIES}
+    set(PHAPI_LINK_LIBRARIES
+      ${PHAPI_LINK_LIBRARIES}
       comsupp
-      CACHE INTERNAL "phapi libraries"
     )
   else (MSVC)
-    set(PHAPI_LIBRARIES
-      ${PHAPI_LIBRARIES}
+    set(PHAPI_LINK_LIBRARIES
+      ${PHAPI_LINK_LIBRARIES}
       gdi32
-      CACHE INTERNAL "phapi libraries"
     )
   endif (MSVC)
 endif (WIN32)
@@ -293,22 +291,21 @@ if (UNIX AND NOT WIN32)
   else (APPLE)
     set(PHAPI_INCLUDE_DIRS
       ${PHAPI_INCLUDE_DIRS}
-      ${GTK2_INCLUDE_DIRS}
+      ${GLIB2_INCLUDE_DIRS}
       CACHE INTERNAL "phapi include directories"
     )
 
-    set(PHAPI_LIBRARIES
-      ${PHAPI_LIBRARIES}
-      ${GTK2_GTHREAD_LIBRARY}
+    set(PHAPI_LINK_LIBRARIES
+      ${PHAPI_LINK_LIBRARIES}
+      ${GTHREAD2_LIBRARY}
       pthread
       rt
-      CACHE INTERNAL "phapi libraries"
     )
 
     option(WITH_SAMPLERATE "Build phapi with samplerate support" OFF)
     if (WITH_SAMPLERATE)
-      set(PHAPI_LIBRARIES
-        ${PHAPI_LIBRARIES}
+      set(PHAPI_LINK_LIBRARIES
+        ${PHAPI_LINK_LIBRARIES}
         ${SAMPLERATE_LIBRARIES}
         CACHE INTERNAL "phapi libraries"
       )
@@ -320,8 +317,8 @@ if (UNIX AND NOT WIN32)
     if (WITH_PHAPI_AUDIO_ALSA)
       find_package(Alsa REQUIRED)
 
-      set(PHAPI_LIBRARIES
-        ${PHAPI_LIBRARIES}
+      set(PHAPI_LINK_LIBRARIES
+        ${PHAPI_LINK_LIBRARIES}
         ${ASOUND_LIBRARY}
         CACHE INTERNAL "phapi libraries"
       )
@@ -342,10 +339,9 @@ if (UNIX AND NOT WIN32)
         ${ARTS_INCLUDE_DIRS}
       )
 
-      set(PHAPI_LIBRARIES
-        ${PHAPI_LIBRARIES}
+      set(PHAPI_LINK_LIBRARIES
+        ${PHAPI_LINK_LIBRARIES}
         ${ARTS_LIBRARY}
-        CACHE INTERNAL "phapi libraries"
       )
 
       add_definitions(-DENABLE_ARTS)
@@ -363,10 +359,9 @@ if (UNIX AND NOT WIN32)
         ${ESD_INCLUDE_DIRS}
       )
 
-      set(PHAPI_LIBRARIES
-        ${PHAPI_LIBRARIES}
+      set(PHAPI_LINK_LIBRARIES
+        ${PHAPI_LINK_LIBRARIES}
         ${ESD_LIBRARY}
-        CACHE INTERNAL "phapi libraries"
       )
       add_definitions(-DENABLE_ESD)
 
@@ -379,10 +374,9 @@ if (UNIX AND NOT WIN32)
 endif (UNIX AND NOT WIN32)
 
 if (NOT APPLE)
-  set(PHAPI_LIBRARIES
-    ${PHAPI_LIBRARIES}
+  set(PHAPI_LINK_LIBRARIES
+    ${PHAPI_LINK_LIBRARIES}
     ${PORTAUDIO_LIBRARIES}
-    CACHE INTERNAL "phapi libraries"
   )
 
   add_definitions(-DENABLE_PORTAUDIO)
@@ -404,21 +398,15 @@ add_definitions(
 # phapi
 if (WITH_SHARED_PHAPI)
   add_definitions(-DBUILD_PHAPI_DLL)
-  add_library(phapi SHARED ${phapi_SRCS})
+  add_library(${PHAPI_LIBRARY} SHARED ${phapi_SRCS})
   install(
     TARGETS
-      phapi
+      ${PHAPI_LIBRARY}
     LIBRARY DESTINATION
       ${LIB_INSTALL_DIR}
   )
 else (WITH_SHARED_PHAPI)
-  add_library(phapi STATIC ${phapi_SRCS})
-  install(
-    TARGETS
-      phapi
-    ARCHIVE DESTINATION
-      ${LIB_INSTALL_DIR}
-  )
+  add_library(${PHAPI_LIBRARY} STATIC ${phapi_SRCS})
 endif (WITH_SHARED_PHAPI)
 
 if (APPLE)
@@ -430,10 +418,10 @@ if (APPLE)
     )
 endif (APPLE)
 
-target_link_libraries(${PHAPI_LIBRARIES})
+target_link_libraries(${PHAPI_LINK_LIBRARIES})
 
 set_target_properties(
-  phapi
+  ${PHAPI_LIBRARY}
   PROPERTIES
     VERSION
       0.2.0
@@ -457,7 +445,7 @@ target_link_libraries(phspeexplugin ${SPEEX_LIBRARIES})
 
 install(
   TARGETS
-    phapi
+    ${PHAPI_LIBRARY}
     phamrplugin
     phspeexplugin
   DESTINATION

@@ -11,14 +11,19 @@ set(GAIM_INCLUDE_DIRS
   CACHE INTERNAL "gaim include directories"
 )
 
-# gaim lib and dependencies
-# saves the variable in internal cache for later use
-set(GAIM_LIBRARIES
+set(GAIM_LIBRARY
   gaim
+  CACHE INTERNAL "gaim library"
+)
+
+# gaim lib and dependencies
+set(GAIM_LINK_LIBRARIES
+  ${GAIM_LIBRARY}
+  ${GLIB2_LIBRARY}
+  ${GMODULE2_LIBRARY}
+  ${GTHREAD2_LIBRARY}
   resolv
-  ${GLIB2_GMODULE_LIBRARY}
-  ${GLIB2_GLIB_LIBRARY}
-  ${GLIB2_GTHREAD_LIBRARY}
+  gnutls
   CACHE INTERNAL "gaim libraries"
 )
 
@@ -27,14 +32,7 @@ set(GAIM_DEFINITIONS
   -DHAVE_GLIB
   -DGAIM_STATIC_PRPL
   -DHAVE_SSL
-)
-
-include_directories(
-  ${GAIM_INCLUDE_DIRS}
-)
-
-add_definitions(
-  ${GAIM_DEFINITIONS}
+  -DHAVE_GNUTLS
 )
 
 set(gaim_SRCS
@@ -199,7 +197,15 @@ set(gaim_SRCS
     src/plugins/ssl/ssl-gnutls.c
 )
 
-add_library(gaim STATIC ${gaim_SRCS})
+include_directories(
+  ${GAIM_INCLUDE_DIRS}
+)
 
-target_link_libraries(${GAIM_LIBRARIES})
+add_definitions(
+  ${GAIM_DEFINITIONS}
+)
+
+add_library(${GAIM_LIBRARY} STATIC ${gaim_SRCS})
+
+target_link_libraries(${GAIM_LINK_LIBRARIES})
 

@@ -7,15 +7,14 @@ set(ILBC_INCLUDE_DIRS
   CACHE INTERNAL "ilbc include directories"
 )
 
-# ilbc lib and dependencies
-# saves the variable in internal cache for later use
-set(ILBC_LIBRARIES
+set(ILBC_LIBRARY
   ilbc
-  CACHE INTERNAL "ilbc libraries"
+  CACHE INTERNAL "ilbc library"
 )
 
-include_directories(
-  ${ILBC_INCLUDE_DIRS}
+# ilbc lib and dependencies
+set(ILBC_LINK_LIBRARIES
+  ${ILBC_LIBRARY}
 )
 
 set(ilbc_SRCS
@@ -44,11 +43,15 @@ set(ilbc_SRCS
   syntFilter.c
 )
 
-add_library(ilbc STATIC ${ilbc_SRCS})
+include_directories(
+  ${ILBC_INCLUDE_DIRS}
+)
 
-target_link_libraries(${ILBC_LIBRARIES})
+add_library(${ILBC_LIBRARY} STATIC ${ilbc_SRCS})
 
-macro_add_compile_flags(ilbc
+target_link_libraries(${ILBC_LINK_LIBRARIES})
+
+macro_add_compile_flags(${ILBC_LIBRARY}
   ${PHAPI_OPTIMIZATION_FLAGS}
 )
 

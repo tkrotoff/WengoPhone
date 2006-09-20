@@ -8,15 +8,16 @@ set(OWTRAYICON_INCLUDE_DIRS
   CACHE INTERNAL "owtrayicon include directories"
 )
 
-# owtrayicon lib and dependencies
-# saves the variable in internal cache for later use
-set(OWTRAYICON_LIBRARIES
+set(OWTRAYICON_LIBRARY
   owtrayicon
-  CACHE INTERNAL "owtrayicon libraries"
+  CACHE INTERNAL "owtrayicon library"
 )
 
-include_directories(
-  ${OWTRAYICON_INCLUDE_DIRS}
+# owtrayicon lib and dependencies
+set(OWTRAYICON_LINK_LIBRARIES
+  ${OWTRAYICON_LIBRARY}
+  ${QT_QTCORE_LIBRARY}
+  ${QT_QTGUI_LIBRARY}
 )
 
 set(owtrayicon_SRCS
@@ -29,8 +30,7 @@ if (WIN32)
   )
 endif (WIN32)
 
-# TODO: cygwin reports as UNIX too.
-if (UNIX)
+if (UNIX AND NOT WIN32)
   if (APPLE)
     set(owtrayicon_SRCS ${owtrayicon_SRCS}
       trayicon_mac.cpp
@@ -40,9 +40,15 @@ if (UNIX)
       trayicon_x11.cpp
     )
   endif (APPLE)
-endif (UNIX)
+endif (UNIX AND NOT WIN32)
 
 qt4_automoc(${owtrayicon_SRCS})
 
-add_library(owtrayicon STATIC ${owtrayicon_SRCS})
+include_directories(
+  ${OWTRAYICON_INCLUDE_DIRS}
+)
+
+add_library(${OWTRAYICON_LIBRARY} STATIC ${owtrayicon_SRCS})
+
+target_link_libraries(${OWTRAYICON_LINK_LIBRARIES})
 

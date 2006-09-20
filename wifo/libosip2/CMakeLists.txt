@@ -10,11 +10,14 @@ set(OSIP2_INCLUDE_DIRS
   CACHE INTERNAL "osip include directories"
 )
 
-# osip lib and dependencies
-# saves the variable in internal cache for later use
-set(OSIP2_LIBRARIES
+set(OSIP2_LIBRARY
   osip2
-  CACHE INTERNAL "osip libraries"
+  CACHE INTERNAL "osip library"
+)
+
+# osip lib and dependencies
+set(OSIP2_LINK_LIBRARIES
+  ${OSIP2_LIBRARY}
 )
 
 set(OSIP2_DEFINITIONS
@@ -24,8 +27,8 @@ set(OSIP2_DEFINITIONS
 )
 
 if (WIN32)
-  set(OSIP2_LIBRARIES
-    ${OSIP_LIBRARIES}
+  set(OSIP2_LINK_LIBRARIES
+    ${OSIP2_LINK_LIBRARIES}
     advapi32
   )
 
@@ -50,14 +53,6 @@ if (UNIX AND NOT WIN32)
     )
   endif (APPLE)
 endif (UNIX AND NOT WIN32)
-
-include_directories(
-  ${OSIP2_INCLUDE_DIRS}
-)
-
-add_definitions(
-  ${OSIP2_DEFINITIONS}
-)
 
 set(osip2_SRCS
   src/osipparser2/osip_accept.c
@@ -120,8 +115,15 @@ set(osip2_SRCS
   src/osip2/port_thread.c
 )
 
+include_directories(
+  ${OSIP2_INCLUDE_DIRS}
+)
 
-add_library(osip2 STATIC ${osip2_SRCS})
+add_definitions(
+  ${OSIP2_DEFINITIONS}
+)
 
-target_link_libraries(${OSIP2_LIBRARIES})
+add_library(${OSIP2_LIBRARY} STATIC ${osip2_SRCS})
+
+target_link_libraries(${OSIP2_LINK_LIBRARIES})
 

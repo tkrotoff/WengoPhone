@@ -2,7 +2,7 @@ subdirs(
   eXosip
   httptunnel
   libosip2
-  #miniua
+  #TODO: miniua
   netlib
   ortp
   phapi

@@ -8,18 +8,17 @@ set(OWSHLIBLOADER_INCLUDE_DIRS
   CACHE INTERNAL "owshlibloader include directories"
 )
 
-# owshlibloader lib and dependencies
-# saves the variable in internal cache for later use
-set(OWSHLIBLOADER_LIBRARIES
+set(OWSHLIBLOADER_LIBRARY
   owshlibloader
-  ${OWUTIL_LIBRARIES}
-  CACHE INTERNAL "owshlibloader libraries"
+  CACHE INTERNAL "owshlibloader library"
 )
 
-include_directories(
-  ${OWSHLIBLOADER_INCLUDE_DIRS}
+# owshlibloader lib and dependencies
+set(OWSHLIBLOADER_LINK_LIBRARIES
+  ${OWSHLIBLOADER_LIBRARY}
+  ${OWUTIL_LIBRARY}
 )
-#sources
+
 set(owshlibloader_SRCS
   src/SharedLibLoader.cpp
 )
@@ -36,7 +35,11 @@ if (UNIX)
   )
 endif (UNIX)
 
-#owshlibloader
-add_library(owshlibloader STATIC ${owshlibloader_SRCS})
+include_directories(
+  ${OWSHLIBLOADER_INCLUDE_DIRS}
+)
 
-target_link_libraries(${OWSHLIBLOADER_LIBRARIES})
+add_library(${OWSHLIBLOADER_LIBRARY} STATIC ${owshlibloader_SRCS})
+
+target_link_libraries(${OWSHLIBLOADER_LINK_LIBRARIES})
+

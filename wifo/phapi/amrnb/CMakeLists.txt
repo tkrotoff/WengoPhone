@@ -7,11 +7,14 @@ set(AMRNB_INCLUDE_DIRS
   CACHE INTERNAL "amrnb include directories"
 )
 
-# amrnb lib and dependencies
-# saves the variable in internal cache for later use
-set(AMRNB_LIBRARIES
+set(AMRNB_LIBRARY
   amrnb
-  CACHE INTERNAL "amrnb libraries"
+  CACHE INTERNAL "amrnb library"
+)
+
+# amrnb lib and dependencies
+set(AMRNB_LINK_LIBRARIES
+  ${AMRNB_LIBRARY}
 )
 
 set(amrnb_SRCS
@@ -25,11 +28,11 @@ include_directories(
   ${AMRNB_INCLUDE_DIRS}
 )
 
-add_library(amrnb STATIC ${amrnb_SRCS})
+add_library(${AMRNB_LIBRARY} STATIC ${amrnb_SRCS})
 
-target_link_libraries(${AMRNB_LIBRARIES})
+target_link_libraries(${AMRNB_LINK_LIBRARIES})
 
-macro_add_compile_flags(amrnb
+macro_add_compile_flags(${AMRNB_LIBRARY}
   ${PHAPI_OPTIMIZATION_FLAGS}
 )
 

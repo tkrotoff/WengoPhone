@@ -7,7 +7,7 @@ set(OWGAIMWRAPPER_INCLUDE_DIRS
   ${OWCUTIL_INCLUDE_DIRS}
   ${OWIMWRAPPER_INCLUDE_DIRS}
   ${GAIM_INCLUDE_DIRS}
-  ${GTK2_INCLUDE_DIRS}
+  ${GLIB2_INCLUDE_DIRS}
   CACHE INTERNAL "owgaimwrapper include directories"
 )
 
@@ -17,21 +17,17 @@ set(OWGAIMWRAPPER_LIBRARY
 )
 
 # owgaimwrapper lib and dependencies
-# saves the variable in internal cache for later use
-set(OWGAIMWRAPPER_LIBRARIES
-  owgaimwrapper
-  ${OWCUTIL_LIBRARIES}
-  ${OWIMWRAPPER_LIBRARIES}
-  ${GAIM_LIBRARIES}
-  ${GTK2_GLIB_LIBRARY}
-  ${GTK2_GTHREAD_LIBRARY}
-  CACHE INTERNAL "owgaimwrapper libraries"
+set(OWGAIMWRAPPER_LINK_LIBRARIES
+  ${OWGAIMWRAPPER_LIBRARY}
+  ${OWCUTIL_LIBRARY}
+  ${OWIMWRAPPER_LIBRARY}
+  ${GAIM_LIBRARY}
 )
 
 if (UNIX)
-  set(OWGAIMWRAPPER_LIBRARIES
-    ${OWGAIMWRAPPER_LIBRARIES}
-    ${GTK2_GTHREAD_LIBRARIES}
+  set(OWGAIMWRAPPER_LINK_LIBRARIES
+    ${OWGAIMWRAPPER_LINK_LIBRARIES}
+    ${GTHREAD2_LIBRARIES}
   )
 
   add_definitions(-DENABLE_NLS)
@@ -57,7 +53,7 @@ include_directories(
 )
 
 
-add_library(owgaimwrapper STATIC ${owgaimwrapper_SRCS})
+add_library(${OWGAIMWRAPPER_LIBRARY} STATIC ${owgaimwrapper_SRCS})
 
-target_link_libraries(${OWGAIMWRAPPER_LIBRARIES})
+target_link_libraries(${OWGAIMWRAPPER_LINK_LIBRARIES})
 

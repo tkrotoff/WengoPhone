@@ -4,16 +4,17 @@ project(ortp)
 # saves the variable in internal cache for later use
 set(ORTP_INCLUDE_DIRS
   ${CMAKE_CURRENT_SOURCE_DIR}/src
-  ${GLIB2_INCLUDE_DIRS}
   CACHE INTERNAL "ortp include directories"
 )
 
-# ortp lib and dependencies
-# saves the variable in internal cache for later use
-set(ORTP_LIBRARIES
+set(ORTP_LIBRARY
   ortp
-  ${GLIB2_LIBRARIES}
-  CACHE INTERNAL "ortp libraries"
+  CACHE INTERNAL "ortp library"
+)
+
+# ortp lib and dependencies
+set(ORTP_LINK_LIBRARIES
+  ${ORTP_LIBRARY}
 )
 
 set(ORTP_DEFINITIONS
@@ -26,25 +27,23 @@ if (WIN32)
     -DWIN32
   )
 
-  set(ORTP_LIBRARIES
-    ${ORTP_LIBRARIES}
+  set(ORTP_LINK_LIBRARIES
+    ${ORTP_LINK_LIBRARIES}
     ws2_32
     winmm
-    CACHE INTERNAL "ortp libraries"
   )
 endif (WIN32)
 
 if (UNIX AND NOT WIN32)
   set(ORTP_INCLUDE_DIRS
     ${ORTP_INCLUDE_DIRS}
-    ${GTK2_INCLUDE_DIRS}
+    ${GLIB2_INCLUDE_DIRS}
     CACHE INTERNAL "ortp include directories"
   )
 
-  set(ORTP_LIBRARIES
-    ${ORTP_LIBRARIES}
-    ${GTK2_GTHREAD_LIBRARY}
-    CACHE INTERNAL "ortp libraries"
+  set(ORTP_LINK_LIBRARIES
+    ${ORTP_LINK_LIBRARIES}
+    ${GLIB2_GTHREAD_LIBRARY}
   )
 endif (UNIX AND NOT WIN32)
 
@@ -76,7 +75,7 @@ set(ortp_SRCS
   src/rtcp.c
 )
 
-add_library(ortp STATIC ${ortp_SRCS})
+add_library(${ORTP_LIBRARY} STATIC ${ortp_SRCS})
 
-target_link_libraries(${ORTP_LIBRARIES})
+target_link_libraries(${ORTP_LINK_LIBRARIES})
 

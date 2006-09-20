@@ -8,12 +8,15 @@ set(OWCURL_INCLUDE_DIRS
   CACHE INTERNAL "owcurl include directories"
 )
 
-# owcurl lib and dependencies
-# saves the variable in internal cache for later use
-set(OWCURL_LIBRARIES
+set(OWCURL_LIBRARY
   owcurl
+  CACHE INTERNAL "owcurl library"
+)
+
+# owcurl lib and dependencies
+set(OWCURL_LINK_LIBRARIES
+  ${OWCURL_LIBRARY}
   ${OPENSSL_LIBRARIES}
-  CACHE INTERNAL "owcurl libraries"
 )
 
 set(OWCURL_DEFINITIONS
@@ -48,15 +51,6 @@ if (APPLE)
     -DCURL_STATICLIB
   )
 endif (APPLE)
-
-include_directories(
-  ${OWCURL_INCLUDE_DIRS}
-  ${CMAKE_CURRENT_SOURCE_DIR}/lib
-)
-
-add_definitions(
-  ${OWCURL_DEFINITIONS}
-)
 
 set(owcurl_SRCS
   lib/base64.c
@@ -118,7 +112,17 @@ set(owcurl_SRCS
   lib/version.c
 )
 
-add_library(owcurl SHARED ${owcurl_SRCS})
 
-target_link_libraries(${OWCURL_LIBRARIES})
+include_directories(
+  ${OWCURL_INCLUDE_DIRS}
+  ${CMAKE_CURRENT_SOURCE_DIR}/lib
+)
+
+add_definitions(
+  ${OWCURL_DEFINITIONS}
+)
+
+add_library(${OWCURL_LIBRARY} SHARED ${owcurl_SRCS})
+
+target_link_libraries(${OWCURL_LINK_LIBRARIES})
 

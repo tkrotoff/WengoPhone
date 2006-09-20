@@ -8,19 +8,17 @@ set(OWSYSTEM_INCLUDE_DIRS
   CACHE INTERNAL "owsystem include directories"
 )
 
-# owsystem lib and dependencies
-# saves the variable in internal cache for later use
-set(OWSYSTEM_LIBRARIES
+set(OWSYSTEM_LIBRARY
   owsystem
-  ${OWUTIL_LIBRARIES}
   CACHE INTERNAL "owsystem libraries"
 )
 
-include_directories(
-  ${OWSYSTEM_INCLUDE_DIRS}
+# owsystem lib and dependencies
+set(OWSYSTEM_LINK_LIBRARIES
+  ${OWSYSTEM_LIBRARY}
+  ${OWUTIL_LIBRARY}
 )
 
-#sources
 set(owsystem_SRCS
   src/RegisterProtocol.cpp
 )
@@ -48,12 +46,17 @@ if (UNIX)
   endif (APPLE)
 endif (UNIX)
 
-add_library(owsystem STATIC ${owsystem_SRCS})
+include_directories(
+  ${OWSYSTEM_INCLUDE_DIRS}
+)
+
+add_library(${OWSYSTEM_LIBRARY} STATIC ${owsystem_SRCS})
 
 if (APPLE)
-    macro_add_compile_flags(owsystem
+    macro_add_compile_flags(${OWSYSTEM_LIBRARY}
       "-x objective-c++"
     )
 endif (APPLE)
 
-target_link_libraries(${OWSYSTEM_LIBRARIES})
+target_link_libraries(${OWSYSTEM_LINK_LIBRARIES})
+

@@ -7,15 +7,14 @@ set(SPEEXEC_INCLUDE_DIRS
   CACHE INTERNAL "speexec include directories"
 )
 
-# speexec lib and dependencies
-# saves the variable in internal cache for later use
-set(SPEEXEC_LIBRARIES
+set(SPEEXEC_LIBRARY
   speexec
-  CACHE INTERNAL "speexec libraries"
+  CACHE INTERNAL "speexec library"
 )
 
-include_directories(
-  ${SPEEXEC_INCLUDE_DIRS}
+# speexec lib and dependencies
+set(SPEEXEC_LINK_LIBRARIES
+  ${SPEEXEC_LIBRARY}
 )
 
 set(speexec_SRCS
@@ -24,7 +23,11 @@ set(speexec_SRCS
   src/spxecfftwrap.c
 )
 
-add_library(speexec STATIC ${speexec_SRCS})
+include_directories(
+  ${SPEEXEC_INCLUDE_DIRS}
+)
 
-target_link_libraries(${SPEEXEC_LIBRARIES})
+add_library(${SPEEXEC_LIBRARY} STATIC ${speexec_SRCS})
+
+target_link_libraries(${SPEEXEC_LINK_LIBRARIES})
 

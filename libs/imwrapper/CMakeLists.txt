@@ -17,22 +17,22 @@ set(OWIMWRAPPER_INCLUDE_DIRS
   ${CMAKE_CURRENT_SOURCE_DIR}/include
   ${OWSETTINGS_INCLUDE_DIRS}
   ${TINYXML_INCLUDE_DIRS}
-  ${GTK2_GLIB_INCLUDE_DIR}
+  ${GLIB2_INCLUDE_DIR}
   CACHE INTERNAL "owimwrapper include directories"
 )
 
-# owimwrapper lib and dependencies
-# saves the variable in internal cache for later use
-set(OWIMWRAPPER_LIBRARIES
+set(OWIMWRAPPER_LIBRARY
   owimwrapper
-  ${OWSETTINGS_LIBRARIES}
-  ${TINYXML_LIBRARIES}
-  ${GTK2_GLIB_LIBRARIES}
-  CACHE INTERNAL "owimwrapper libraries"
+  CACHE INTERNAL "owimwrapper library"
 )
 
-include_directories(
-  ${OWIMWRAPPER_INCLUDE_DIRS}
+# owimwrapper lib and dependencies
+set(OWIMWRAPPER_LINK_LIBRARIES
+  ${OWIMWRAPPER_LIBRARY}
+  ${OWSETTINGS_LIBRARY}
+  ${TINYXML_LIBRARY}
+  ${GLIB2_LIBRARY}
+  CACHE INTERNAL "owimwrapper libraries"
 )
 
 set(owimwrapper_SRCS
@@ -53,7 +53,11 @@ set(owimwrapper_SRCS
   src/IMWrapperFactory.cpp
 )
 
-add_library(owimwrapper STATIC ${owimwrapper_SRCS})
+include_directories(
+  ${OWIMWRAPPER_INCLUDE_DIRS}
+)
 
-target_link_libraries(${OWIMWRAPPER_LIBRARIES})
+add_library(${OWIMWRAPPER_LIBRARY} STATIC ${owimwrapper_SRCS})
+
+target_link_libraries(${OWIMWRAPPER_LINK_LIBRARIES})
 

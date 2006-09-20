@@ -8,31 +8,33 @@ set(OWMEMORYDUMP_INCLUDE_DIRS
   CACHE INTERNAL "owmemorydump include directories"
 )
 
-# owmemorydump lib and dependencies
-# saves the variable in internal cache for later use
-set(OWMEMORYDUMP_LIBRARIES
+set(OWMEMORYDUMP_LIBRARY
   owmemorydump
-  ${OWUTIL_LIBRARIES}
-  CACHE INTERNAL "owmemorydump libraries"
+  CACHE INTERNAL "owmemorydump library"
+)
+
+# owmemorydump lib and dependencies
+set(OWMEMORYDUMP_LINK_LIBRARIES
+  ${OWMEMORYDUMP_LIBRARY}
+  ${OWUTIL_LIBRARY}
 )
 
 if (MSVC)
-  set(OWMEMORYDUMP_LIBRARIES
-    ${OWMEMORYDUMP_LIBRARIES}
+  set(OWMEMORYDUMP_LINK_LIBRARIES
+    ${OWMEMORYDUMP_LINK_LIBRARIES}
     shlwapi
-    CACHE INTERNAL "owmemorydump libraries"
   )
 endif (MSVC)
-
-include_directories(
-  ${OWMEMORYDUMP_INCLUDE_DIRS}
-)
 
 set(owmemorydump_SRCS
   src/win32/MemoryDump.cpp
 )
 
-add_library(owmemorydump STATIC ${owmemorydump_SRCS})
+include_directories(
+  ${OWMEMORYDUMP_INCLUDE_DIRS}
+)
 
-target_link_libraries(${OWMEMORYDUMP_LIBRARIES})
+add_library(${OWMEMORYDUMP_LIBRARY} STATIC ${owmemorydump_SRCS})
+
+target_link_libraries(${OWMEMORYDUMP_LINK_LIBRARIES})
 

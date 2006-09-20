@@ -130,14 +130,29 @@ end
 
 file.printf("\n")
 
+libs.split(" ").each do |lib|
+	file.printf("  if (#{lib.upcase}_LIBRARY)\n")
+	file.printf("    set(#{lib.upcase}_FOUND TRUE)\n")
+	file.printf("  endif (#{lib.upcase}_LIBRARY)\n")
+end
+
+file.printf("\n")
+
 file.printf("  set(#{cmakeIncDirNames}\n")
 file.printf("    ${#{cmakeIncDirName}}\n")
 file.printf("  )\n")
-file.printf("  set(#{cmakeLibNames}\n")
+
+file.printf("\n")
+
+
 libs.split(" ").each do |lib|
-	file.printf("    ${#{lib.upcase}_LIBRARY}\n")
+	file.printf("  if (#{lib.upcase}_FOUND)\n")
+	file.printf("    set(#{cmakeLibNames}\n")
+	file.printf("      ${#{cmakeLibNames}}\n")
+	file.printf("      ${#{lib.upcase}_LIBRARY}\n")
+	file.printf("    )\n")
+	file.printf("  endif (#{lib.upcase}_FOUND)\n")
 end
-file.printf(")\n")
 
 file.printf("\n")
 

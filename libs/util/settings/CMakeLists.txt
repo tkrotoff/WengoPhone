@@ -7,21 +7,21 @@ set(OWSETTINGS_INCLUDE_DIRS
   ${OWSERIALIZATION_INCLUDE_DIRS}
   ${OWTHREAD_INCLUDE_DIRS}
   ${TINYXML_INCLUDE_DIRS}
+  ${Boost_INCLUDE_DIRS}
   CACHE INTERNAL "owsettings include directories"
 )
 
-# owsettings lib and dependencies
-# saves the variable in internal cache for later use
-set(OWSETTINGS_LIBRARIES
+set(OWSETTINGS_LIBRARY
   owsettings
-  ${OWSERIALIZATION_LIBRARIES}
-  ${OWTHREAD_LIBRARIES}
-  ${TINYXML_LIBRARIES}
-  CACHE INTERNAL "owsettings libraries"
+  CACHE INTERNAL "owsettings library"
 )
 
-include_directories(
-  ${OWSETTINGS_INCLUDE_DIRS}
+# owsettings lib and dependencies
+set(OWSETTINGS_LINK_LIBRARIES
+  ${OWSETTINGS_LIBRARY}
+  ${OWSERIALIZATION_LIBRARY}
+  ${OWTHREAD_LIBRARY}
+  ${TINYXML_LIBRARY}
 )
 
 set(owsettings_SRCS
@@ -31,8 +31,11 @@ set(owsettings_SRCS
   src/SettingsXMLSerializer.cpp
 )
 
-#owsettings
-add_library(owsettings STATIC ${owsettings_SRCS})
+include_directories(
+  ${OWSETTINGS_INCLUDE_DIRS}
+)
 
-#owutil dependency
-target_link_libraries(${OWSETTINGS_LIBRARIES})
+add_library(${OWSETTINGS_LIBRARY} STATIC ${owsettings_SRCS})
+
+target_link_libraries(${OWSETTINGS_LINK_LIBRARIES})
+

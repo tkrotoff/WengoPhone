@@ -15,15 +15,14 @@ if (WIN32)
   )
 endif (WIN32)
 
-# phapi-util lib and dependencies
-# saves the variable in internal cache for later use
-set(PHAPI-UTIL_LIBRARIES
+set(PHAPI-UTIL_LIBRARY
   phapi-util
-  CACHE INTERNAL "phapi-util libraries"
+  CACHE INTERNAL "phapi-util library"
 )
 
-include_directories(
-  ${PHAPI-UTIL_INCLUDE_DIRS}
+# phapi-util lib and dependencies
+set(PHAPI-UTIL_LINK_LIBRARIES
+  ${PHAPI-UTIL_LIBRARY}
 )
 
 set(phapi-util_SRCS
@@ -44,7 +43,11 @@ if (WIN32)
   )
 endif (WIN32)
 
-add_library(phapi-util STATIC ${phapi-util_SRCS})
+include_directories(
+  ${PHAPI-UTIL_INCLUDE_DIRS}
+)
 
-target_link_libraries(${PHAPI-UTIL_LIBRARIES})
+add_library(${PHAPI-UTIL_LIBRARY} STATIC ${phapi-util_SRCS})
+
+target_link_libraries(${PHAPI-UTIL_LINK_LIBRARIES})
 

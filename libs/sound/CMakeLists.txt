@@ -4,20 +4,21 @@ project(owsound)
 # saves the variable in internal cache for later use
 set(OWSOUND_INCLUDE_DIRS
   ${CMAKE_CURRENT_SOURCE_DIR}/include
+  ${OWUTIL_INCLUDE_DIRS}
   ${OWTHREAD_INCLUDE_DIRS}
   CACHE INTERNAL "owsound include directories"
 )
 
-# owsound lib and dependencies
-# saves the variable in internal cache for later use
-set(OWSOUND_LIBRARIES
+set(OWSOUND_LIBRARY
   owsound
-  ${OWTHREAD_LIBRARIES}
-  CACHE INTERNAL "owsound libraries"
+  CACHE INTERNAL "owsound library"
 )
 
-include_directories(
-  ${OWSOUND_INCLUDE_DIRS}
+# owsound lib and dependencies
+set(OWSOUND_LINK_LIBRARIES
+  ${OWSOUND_LIBRARY}
+  ${OWUTIL_LIBRARY}
+  ${OWTHREAD_LIBRARY}
 )
 
 set(owsound_SRCS
@@ -27,8 +28,8 @@ set(owsound_SRCS
 )
 
 if (MSVC)
-  set(OWSOUND_LIBRARIES
-    ${OWSOUND_LIBRARIES}
+  set(OWSOUND_LINK_LIBRARIES
+    ${OWSOUND_LINK_LIBRARIES}
     winmm
     advapi32
   )
@@ -57,8 +58,8 @@ if (UNIX AND NOT WIN32)
       src/mac/Sound.cpp
     )
   else (APPLE)
-    set(OWSOUND_LIBRARIES
-      ${OWSOUND_LIBRARIES}
+    set(OWSOUND_LINK_LIBRARIES
+      ${OWSOUND_LINK_LIBRARIES}
       ${PORTAUDIO_LIBRARIES}
     )
 
@@ -80,8 +81,8 @@ if (WITH_PORTAUDIO AND WIN32)
   )
 else (WITH_PORTAUDIO AND WIN32)
   if (WIN32)
-    set(OWSOUND_LIBRARIES
-      ${OWSOUND_LIBRARIES}
+    set(OWSOUND_LINK_LIBRARIES
+      ${OWSOUND_LINK_LIBRARIES}
       ${PORTAUDIO_LIBRARIES}
     )
 
@@ -92,18 +93,22 @@ else (WITH_PORTAUDIO AND WIN32)
   endif (WIN32)
 endif (WITH_PORTAUDIO AND WIN32)
 
+include_directories(
+  ${OWSOUND_INCLUDE_DIRS}
+)
+
 add_library(owsound STATIC ${owsound_SRCS})
 
 if (APPLE)
-  macro_add_link_flags(owsound
+  macro_add_link_flags(${OWSOUND_LIBRARY}
     -framework CoreAudio
     -framework Cocoa
   )
 
-  macro_add_compile_flags(owsound
+  macro_add_compile_flags(${OWSOUND_LIBRARY}
     "-x objective-c++"
   )
 endif (APPLE)
 
-target_link_libraries(${OWSOUND_LIBRARIES})
+target_link_libraries(${OWSOUND_LINK_LIBRARIES})
 

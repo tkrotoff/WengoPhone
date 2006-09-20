@@ -9,16 +9,14 @@ set(TINYXML_INCLUDE_DIRS
 
 # tinyxml lib and dependencies
 # saves the variable in internal cache for later use
-set(TINYXML_LIBRARIES
+set(TINYXML_LIBRARY
   tinyxml
-  CACHE INTERNAL "tinyxml libraries"
+  CACHE INTERNAL "tinyxml library"
 )
 
-include_directories(
-  ${TINYXML_INCLUDE_DIRS}
+set(TINYXML_LINK_LIBRARIES
+  ${TINYXML_LIBRARY}
 )
-
-include_directories(${TINYXML_INCLUDE_DIRS})
 
 set(tinyxml_SRCS
   tinyxml.cpp
@@ -26,4 +24,12 @@ set(tinyxml_SRCS
   tinyxmlparser.cpp
 )
 
-add_library(tinyxml STATIC ${tinyxml_SRCS})
+
+include_directories(
+  ${TINYXML_INCLUDE_DIRS}
+)
+
+include_directories(${TINYXML_INCLUDE_DIRS})
+
+add_library(${TINYXML_LIBRARY} STATIC ${tinyxml_SRCS})
+

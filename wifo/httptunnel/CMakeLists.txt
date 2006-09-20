@@ -5,15 +5,20 @@ project(httptunnel)
 set(HTTPTUNNEL_INCLUDE_DIRS
   ${CMAKE_CURRENT_SOURCE_DIR}
   ${OWCURL_INCLUDE_DIRS}
+  ${OPENSSL_INCLUDE_DIRS}
   CACHE INTERNAL "httptunnel include directories"
 )
 
-# httptunnel lib and dependencies
-# saves the variable in internal cache for later use
-set(HTTPTUNNEL_LIBRARIES
+set(HTTPTUNNEL_LIBRARY
   httptunnel
-  ${OWCURL_LIBRARIES}
-  CACHE INTERNAL "httptunnel libraries"
+  CACHE INTERNAL "httptunnel library"
+)
+
+# httptunnel lib and dependencies
+set(HTTPTUNNEL_LINK_LIBRARIES
+  ${HTTPTUNNEL_LIBRARY}
+  ${OWCURL_LIBRARY}
+  ${OPENSSL_LIBRARIES}
 )
 
 set(HTTPTUNNEL_DEFINITIONS
@@ -39,7 +44,7 @@ set(httptunnel_SRCS
   httptunnel.c
 )
 
-add_library(httptunnel STATIC ${httptunnel_SRCS})
+add_library(${HTTPTUNNEL_LIBRARY} STATIC ${httptunnel_SRCS})
 
-target_link_libraries(${HTTPTUNNEL_LIBRARIES})
+target_link_libraries(${HTTPTUNNEL_LINK_LIBRARIES})
 

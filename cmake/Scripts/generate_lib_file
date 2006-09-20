@@ -39,7 +39,7 @@ definitions=gets.chomp
 
 cmakeIncDirName = project.upcase+"_INCLUDE_DIRS"
 cmakeLibName = project.upcase+"_LIBRARY"
-cmakeLibNames = project.upcase+"_LIBRARIES"
+cmakeLibNames = project.upcase+"_LINK_LIBRARIES"
 cmakeDefsName = project.upcase+"_DEFINITIONS"
 
 file=File.new("CMakeLists.txt", "w+")
@@ -67,7 +67,6 @@ file.printf(")\n")
 file.printf("\n")
 
 file.printf("# #{project} lib and dependencies\n")
-file.printf("# saves the variable in internal cache for later use\n")
 file.printf("set(#{cmakeLibNames}\n")
 file.printf("  #{cmakeLibName}\n")
 otherprojects.split(" ").each do |otherproject|
@@ -110,7 +109,7 @@ end
 
 file.printf("\n")
 
-file.printf("add_library(#{project} STATIC ${#{project}_SRCS})\n")
+file.printf("add_library(${#{cmakeLibName}} STATIC ${#{project}_SRCS})\n")
 
 file.printf("\n")
 

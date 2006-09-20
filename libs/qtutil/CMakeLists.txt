@@ -6,26 +6,24 @@ include(${QT_USE_FILE})
 # saves the variable in internal cache for later use
 set(OWQTUTIL_INCLUDE_DIRS
   ${CMAKE_CURRENT_SOURCE_DIR}/include
+  ${OWUTIL_INCLUDE_DIRS}
   ${OWTHREAD_INCLUDE_DIRS}
   ${QT_INCLUDE_DIR}
   CACHE INTERNAL "owqtutil include directories"
 )
 
-# TODO: Qt debug and release under windows
-
-# owqtutil lib and dependencies
-# saves the variable in internal cache for later use
-set(OWQTUTIL_LIBRARIES
+set(OWQTUTIL_LIBRARY
   owqtutil
-  ${OWTHREAD_LIBRARIES}
-  ${QT_QTCORE_LIBRARY}
-  ${QT_QTGUI_LIBRARY}
-  CACHE INTERNAL "owqtutil libraries"
+  CACHE INTERNAL "owqtutil library"
 )
 
-
-include_directories(
-  ${OWQTUTIL_INCLUDE_DIRS}
+# owqtutil lib and dependencies
+set(OWQTUTIL_LINK_LIBRARIES
+  ${OWQTUTIL_LIBRARY}
+  ${OWUTIL_LIBRARY}
+  ${OWTHREAD_LIBRARY}
+  ${QT_QTCORE_LIBRARY}
+  ${QT_QTGUI_LIBRARY}
 )
 
 set(owqtutil_SRCS
@@ -54,6 +52,12 @@ set(owqtutil_SRCS
 qt4_automoc(${owqtutil_SRCS})
 qt4_wrap_ui(owqtutil_SRCS src/Wizard.ui)
 
-add_library(owqtutil STATIC ${owqtutil_SRCS})
 
-target_link_libraries(${OWQTUTIL_LIBRARIES})
+include_directories(
+  ${OWQTUTIL_INCLUDE_DIRS}
+)
+
+add_library(${OWQTUTIL_LIBRARY} STATIC ${owqtutil_SRCS})
+
+target_link_libraries(${OWQTUTIL_LINK_LIBRARIES})
+
