@@ -339,6 +339,9 @@ SFP_PLUGIN_EXPORTS int sfp_receive_file(int cid, const char * filename){
 		phCancel(cid);
 		// TODO notify GUI
 		return FALSE;
+	}else{
+		// notify GUI of the begining of the send
+		if(sfp_cbks != NULL && sfp_cbks->receivingFileBegin) sfp_cbks->receivingFileBegin(cid, session->remote_username, session->short_filename, session->file_type, session->file_size);	
 	}
 
 	// send the accept answer

@@ -31,6 +31,8 @@ Event<void (PhApiSFPWrapper & sender, int callID, std::string contactID, std::st
 
 Event<void (PhApiSFPWrapper & sender, int callID, std::string contactID, std::string fileName, std::string fileType, int fileSize)> PhApiSFPEvent::sendingFileBeginEvent;
 
+Event<void (PhApiSFPWrapper & sender, int callID, std::string contactID, std::string fileName, std::string fileType, int fileSize)> PhApiSFPEvent::receivingFileBeginEvent;
+
 Event<void (PhApiSFPWrapper & sender, int callID, std::string contactID, std::string fileName, std::string fileType, int fileSize)> PhApiSFPEvent::transferFromPeerFinishedEvent;
 
 Event<void (PhApiSFPWrapper & sender, int callID, std::string contactID, std::string fileName, std::string fileType, int fileSize)> PhApiSFPEvent::transferToPeerFinishedEvent;

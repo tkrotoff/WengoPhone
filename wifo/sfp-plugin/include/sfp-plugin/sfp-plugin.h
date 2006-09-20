@@ -116,6 +116,8 @@ extern "C" {
 		void (*transferCancelledByPeer)(int cid, char * username, char * short_filename, char * file_type, char * file_size);
 		/** The transfer is starting */
 		void (*sendingFileBegin)(int cid, char * username, char * short_filename, char * file_type, char * file_size);
+		/** The transfer is starting */
+		void (*receivingFileBegin)(int cid, char * username, char * short_filename, char * file_type, char * file_size);
 		/** The peer closed the SIP call */
 		void (*transferClosedByPeer)(int cid, char * username, char * short_filename, char * file_type, char * file_size);
 		/** The user closed the SIP call */

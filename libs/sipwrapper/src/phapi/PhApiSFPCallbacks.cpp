@@ -48,6 +48,10 @@ extern "C" {
 	static void sendingFileBegin(int cid, char * username, char * short_filename, char * file_type, char * file_size){
 		PhApiSFPCallbacks::sendingFileBegin(cid, std::string((const char *) username), std::string((const char *) short_filename), std::string((const char *) file_type), String(file_size).toInteger());
 	}
+	
+	static void receivingFileBegin(int cid, char * username, char * short_filename, char * file_type, char * file_size){
+		PhApiSFPCallbacks::receivingFileBegin(cid, std::string((const char *) username), std::string((const char *) short_filename), std::string((const char *) file_type), String(file_size).toInteger());
+	}
 
 	static void transferClosed(int cid, char * username, char * short_filename, char * file_type, char * file_size){
 	}
@@ -106,6 +110,7 @@ extern "C" {
 		transferCancelled,
 		transferCancelledByPeer,
 		sendingFileBegin,
+		receivingFileBegin,
 		transferClosedByPeer,
 		transferClosed,
 		transferFromPeerFinished,
@@ -146,6 +151,10 @@ void PhApiSFPCallbacks::transferCancelledByPeer(int callID, std::string contactI
 
 void PhApiSFPCallbacks::sendingFileBegin(int callID, std::string contactID, std::string fileName, std::string fileType, int fileSize){
 	PhApiSFPEvent::sendingFileBeginEvent(*(PhApiSFPWrapper::getInstance()), callID, contactID, fileName, fileType, fileSize);
+}
+
+void PhApiSFPCallbacks::receivingFileBegin(int callID, std::string contactID, std::string fileName, std::string fileType, int fileSize){
+	PhApiSFPEvent::receivingFileBeginEvent(*(PhApiSFPWrapper::getInstance()), callID, contactID, fileName, fileType, fileSize);
 }
 
 void PhApiSFPCallbacks::transferFromPeerFinished(int callID, std::string contactID, std::string fileName, std::string fileType, int fileSize){

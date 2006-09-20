@@ -63,8 +63,6 @@
 #define SFP_TRANSFER_TCP						SOCK_STREAM
 #define SFP_TRANSFER_UDP						SOCK_DGRAM
 
-#define SFP_PROGRESSION_PERCENTAGE_INCREASE		10
-
 #define WAIT_PAUSE_DELAY						25000 // microseconds
 
 
@@ -384,7 +382,7 @@ static sfp_returncode_t sfp_transfer_send_active(FILE * stream, SOCKET sckt, str
 	int tmp_sent = 0;
 	long total_sent = 0;
 	long total_to_send = (unsigned long)atol(session->file_size);
-	unsigned int increase = SFP_PROGRESSION_PERCENTAGE_INCREASE;
+	unsigned int increase = 0;
 	fd_set sckts;
 	struct timeval timeout = {SFP_TIMEOUT_SEC, 0};
 	int max_sckt;
@@ -490,7 +488,7 @@ static sfp_returncode_t sfp_transfer_send_passive(FILE * stream, SOCKET sckt, st
 	int tmp_sent = 0;
 	long total_sent = 0;
 	long total_to_send = (unsigned long)atol(session->file_size);
-	unsigned int increase = SFP_PROGRESSION_PERCENTAGE_INCREASE;
+	unsigned int increase = 0;
 
 	/* JULIEN */
 	int ret = 0;
@@ -633,7 +631,7 @@ static sfp_returncode_t sfp_transfer_receive_active(FILE * stream, SOCKET sckt, 
 	int res_connect = -1;
 	long total_received = 0;
 	long total_to_receive = (unsigned long)atol(session->file_size);
-	unsigned int increase = SFP_PROGRESSION_PERCENTAGE_INCREASE;
+	unsigned int increase = 0;
 
 	while((res_connect = connect(sckt, (struct sockaddr *)&address, sizeof(address))) < 0 && retries-- > 0){
 		sprintf(message, "Waiting for %d ms", wait_time);
@@ -717,7 +715,7 @@ static sfp_returncode_t sfp_transfer_receive_passive(FILE * stream, SOCKET sckt,
 	int max_sckt;
 	long total_received = 0;
 	long total_to_receive = (unsigned long)atol(session->file_size);
-	unsigned int increase = SFP_PROGRESSION_PERCENTAGE_INCREASE;
+	unsigned int increase = 0;
 
 	/* JULIEN */
 	int ret = 0;
@@ -948,10 +946,12 @@ static void notify_progress(sfp_session_info_t * session, unsigned long actual, 
 		*increase = 100;
 	} else {
 		percentage = ((double)actual / (double)final) * 100;
+		if(*increase == 0){
+			*increase = progression;
+		}
 		if(percentage >= (double)(*increase)){
 			if(session->progressionCallback != NULL) session->progressionCallback(session, *increase);
 			while(percentage >= (double)(*increase)){
-				//*increase += SFP_PROGRESSION_PERCENTAGE_INCREASE;
 				*increase += progression;
 			}
 		}

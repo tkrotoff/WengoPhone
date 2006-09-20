@@ -45,6 +45,8 @@ public :
 	static Event<void (PhApiSFPWrapper & sender, int callID, std::string contactID, std::string fileName, std::string fileType, int fileSize)> transferCancelledByPeerEvent;
 	
 	static Event<void (PhApiSFPWrapper & sender, int callID, std::string contactID, std::string fileName, std::string fileType, int fileSize)> sendingFileBeginEvent;
+
+	static Event<void (PhApiSFPWrapper & sender, int callID, std::string contactID, std::string fileName, std::string fileType, int fileSize)> receivingFileBeginEvent;
 	
 	static Event<void (PhApiSFPWrapper & sender, int callID, std::string contactID, std::string fileName, std::string fileType, int fileSize)> transferFromPeerFinishedEvent;
 	

@@ -45,6 +45,8 @@ public:
 
 	static void sendingFileBegin(int cid, std::string contactID, std::string short_filename, std::string file_type, int file_size);
 
+	static void receivingFileBegin(int cid, std::string contactID, std::string short_filename, std::string file_type, int file_size);
+
 	static void transferFromPeerFinished(int cid, std::string contactID, std::string short_filename, std::string file_type, int file_size);
 
 	static void transferToPeerFinished(int cid, std::string contactID, std::string short_filename, std::string file_type, int file_size);
