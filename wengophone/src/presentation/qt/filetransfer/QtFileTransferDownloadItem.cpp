@@ -28,7 +28,7 @@
 #include <QtGui/QtGui>
 
 QtFileTransferDownloadItem::QtFileTransferDownloadItem(QWidget * parent, ReceiveFileSession * fileSession)
-	: QtFileTransferItem(parent), _receiveFileSession(fileSession) {
+	: QtFileTransferItem(parent, QtFileTransferItem::Download), _receiveFileSession(fileSession) {
 
 	setFilename(QString::fromStdString(fileSession->getFileName()));
 

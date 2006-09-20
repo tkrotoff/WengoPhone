@@ -25,14 +25,14 @@
 
 #include <QtGui/QtGui>
 
-QtFileTransferItem::QtFileTransferItem(QWidget * parent) : QWidget(parent) {
+QtFileTransferItem::QtFileTransferItem(QWidget * parent, Type type) : QWidget(parent), _type(type) {
 
 	//init main widget
 	_ui.setupUi(this);
 	_ui.progressBar->setMaximum(100);
 	setProgress(0);
 	setState(tr("Starting"));
-	updateButtonsDownloading();
+	updateButtonsInProgress();
 	////
 
 	// SIGNAL/SLOT for thread safe
@@ -58,9 +58,8 @@ void QtFileTransferItem::setFileSize(int size) {
 
 void QtFileTransferItem::setProgress(int progress) {
 	_ui.progressBar->setValue(progress);
-	stateChangeEvent(tr("Downloading..."));
+	stateChangeEventDownUp();
 }
-
 
 void QtFileTransferItem::updateButtonsFinished() {
 	disconnectButtons();
@@ -94,7 +93,7 @@ void QtFileTransferItem::updateButtonsPausedByPeer() {
 	_ui.cancelOpenButton->setEnabled(true);
 }
 
-void QtFileTransferItem::updateButtonsDownloading() {
+void QtFileTransferItem::updateButtonsInProgress() {
 	disconnectButtons();
 	SAFE_CONNECT(_ui.cancelOpenButton, SIGNAL(clicked()), SLOT(stop()));
 	SAFE_CONNECT(_ui.removePauseResumeButton, SIGNAL(clicked()), SLOT(pause()));
@@ -125,11 +124,11 @@ void QtFileTransferItem::updateState(int e) {
 
 		case IFileSession::IFileSessionEventInviteToTransfer:
 			stateChangeEvent(tr("Starting"));
-			updateButtonsDownloading();
+			updateButtonsInProgress();
 			break;
 		case IFileSession::IFileSessionEventWaitingForAnswer:
 			stateChangeEvent(tr("Waiting for anwser..."));
-			updateButtonsDownloading();
+			updateButtonsInProgress();
 			break;
 		case IFileSession::IFileSessionEventFileTransferFinished:
 			stateChangeEvent(tr("Done"));
@@ -148,15 +147,15 @@ void QtFileTransferItem::updateState(int e) {
 			updateButtonsPausedByPeer();
 			break;
 		case IFileSession::IFileSessionEventFileTransferResumed:
-			stateChangeEvent(tr("Downloading..."));
-			updateButtonsDownloading();
+			stateChangeEventDownUp();
+			updateButtonsInProgress();
 			break;
 		case IFileSession::IFileSessionEventFileTransferResumedByPeer:
-			stateChangeEvent(tr("Downloading..."));
-			updateButtonsDownloading();
+			stateChangeEventDownUp();
+			updateButtonsInProgress();
 			break;
 		case IFileSession::IFileSessionEventFileTransferCancelled:
-			stateChangeEvent(tr("Cancelled"));
+			stateChangeEventDownUp();
 			updateButtonsFinished();
 			break;
 		case IFileSession::IFileSessionEventFileTransferCancelledByPeer:
@@ -164,10 +163,18 @@ void QtFileTransferItem::updateState(int e) {
 			updateButtonsFinished();
 			break;
 		case IFileSession::IFileSessionEventFileTransferBegan:
-			stateChangeEvent(tr("Downloading..."));
-			updateButtonsDownloading();
+			stateChangeEventDownUp();
+			updateButtonsInProgress();
 			break;
 		default:
 			LOG_FATAL("unknonw IFileSessionEvent: " + String::fromNumber(event));
+	}
+}
+
+void QtFileTransferItem::stateChangeEventDownUp() {
+	if (_type == Download) {
+		stateChangeEvent(tr("Downloading..."));
+	} else {
+		stateChangeEvent(tr("Uploading..."));
 	}
 }

@@ -32,8 +32,6 @@
  * Qt file transfer item widget.
  * Represents graphically one file transfer.
  * Auto adapt its appearance to its state.
- * For example if the transfer is finished the progress bar
- * is removed...
  *
  * TODO: delete file Session objects
  *
@@ -43,10 +41,18 @@ class QtFileTransferItem : public QWidget, public Trackable {
 	Q_OBJECT
 public:
 
+	enum Type {
+		/** Download type */
+		Download,
+
+		/** Upload type */
+		Upload
+	};
+
 	/**
 	 * Default constructor.
 	 */
-	QtFileTransferItem(QWidget * parent);
+	QtFileTransferItem(QWidget * parent, Type type);
 
 Q_SIGNALS:
 
@@ -115,16 +121,40 @@ protected:
 	 */
 	void setFileSize(int size);
 
+	/**
+	 * Disconnect buttons.
+	 */
 	void disconnectButtons();
 
+	/**
+	 * Update gui to state finished.
+	 */
 	void updateButtonsFinished();
 
+	/**
+	 * Update gui to state paused.
+	 */
 	void updateButtonsPaused();
 
+	/**
+	 * Update gui to state paused by peer.
+	 */
 	void updateButtonsPausedByPeer();
 
-	void updateButtonsDownloading();
-	
+	/**
+	 * Update gui to state downloading/uploading.
+	 */
+	void updateButtonsInProgress();
+
+	/**
+	 * Emits stateChangeEvent for uploading and downloading.
+	 */
+	void stateChangeEventDownUp();
+
+	/**
+	 * Type (Upload or Download).
+	 */
+	Type _type;
 
 	Ui::FileTransferItem _ui;
 };
