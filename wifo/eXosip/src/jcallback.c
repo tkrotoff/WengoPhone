@@ -1,17 +1,17 @@
 /*
   eXosip - This is the eXtended osip library.
   Copyright (C) 2002, 2003  Aymeric MOIZARD  - jack@atosc.org
-  
+
   eXosip is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation; either version 2 of the License, or
   (at your option) any later version.
-  
+
   eXosip is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
-  
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
@@ -25,11 +25,11 @@
 
 #include <stdlib.h>
 
-#if defined(_WIN32_WCE) || defined(WI32)
+#if defined(_WIN32_WCE) || defined(WIN32)
 #include <windowsx.h>
 #include <winsock2.h>
 #include <Ws2tcpip.h>
-#else 
+#else
 #include <sys/wait.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -108,11 +108,11 @@ static void cb_rcvreq_retransmission(int type, osip_transaction_t *tr, osip_mess
 static void cb_transport_error(int type, osip_transaction_t *tr, int error);
 static void report_event_with_status(eXosip_event_t *je, osip_message_t *sip);
 
-/* _send_udp:  
- * This function really send the packet over the network. It chooses the right way to send the packet: 
+/* _send_udp:
+ * This function really send the packet over the network. It chooses the right way to send the packet:
  * Over UDP or over HTTP tunnel
  */
-int 
+int
 _send_udp(const void *buf, int len, int flags, const struct sockaddr *to, int tolen)
 {
 	int res;
@@ -143,7 +143,7 @@ int cb_udp_snd_message(osip_transaction_t *tr, osip_message_t *sip, char *host,
   int i;
   osip_route_t *o_proxy = 0;
 
-  if (eXosip.j_socket==0 && !eXosip.use_tunnel) 
+  if (eXosip.j_socket==0 && !eXosip.use_tunnel)
 	  return -1;
 
   if (eXosip.forced_proxy[0])
@@ -154,7 +154,7 @@ int cb_udp_snd_message(osip_transaction_t *tr, osip_message_t *sip, char *host,
 	  osip_route_init2(&o_proxy);
 #endif
 	  osip_route_parse(o_proxy, eXosip.forced_proxy);
-      
+
 	  host = o_proxy->url->host;
 	  port =  (o_proxy->url->port) ? atoi(o_proxy->url->port) : 5060;
     }
@@ -177,10 +177,10 @@ int cb_udp_snd_message(osip_transaction_t *tr, osip_message_t *sip, char *host,
   len = addrinfo->ai_addrlen;
 
   freeaddrinfo (addrinfo);
-  
+
   if (o_proxy)
     osip_route_free(o_proxy);
- 
+
 
   i = osip_message_to_str(sip, &message, &length);
 
@@ -193,9 +193,9 @@ int cb_udp_snd_message(osip_transaction_t *tr, osip_message_t *sip, char *host,
 			message, len, sizeof(addr), sizeof(struct sockaddr_in6)));
 
   // Really send the packet over network
-  i = _send_udp((const void*) message, length, 0, (struct sockaddr *) &addr, len); 
+  i = _send_udp((const void*) message, length, 0, (struct sockaddr *) &addr, len);
 
-  if (i < 0) 
+  if (i < 0)
     {
 #if defined(_WIN32_WCE) || defined(WIN32)
       if (WSAECONNREFUSED==WSAGetLastError())
@@ -227,7 +227,7 @@ int cb_udp_snd_message(osip_transaction_t *tr, osip_message_t *sip, char *host,
     }
 
   osip_free(message);
-  //<MINHPQ>  
+  //<MINHPQ>
   /*
   if (tr->ctx_type == NIST && MSG_IS_RESPONSE(sip)) {
 	__osip_transaction_set_state(tr,NIST_COMPLETED);
@@ -235,7 +235,7 @@ int cb_udp_snd_message(osip_transaction_t *tr, osip_message_t *sip, char *host,
   */
   //</MINHPQ>
   return 0;
-  
+
 }
 
 static void cb_ict_kill_transaction(int type, osip_transaction_t *tr)
@@ -311,7 +311,7 @@ static void cb_nict_kill_transaction(int type, osip_transaction_t *tr)
       && tr->last_response==NULL)
     {
       eXosip_event_t *je;
-     
+
       je = eXosip_event_init_for_call(EXOSIP_CALL_REFER_FAILURE, jc, jd);
       je->status_code = 408;
       osip_strncpy(je->reason_phrase,"Request Timeout", sizeof(je->reason_phrase));
@@ -360,7 +360,7 @@ static void cb_nict_kill_transaction(int type, osip_transaction_t *tr)
 	}
     }
 
- #if 0  /* WE want to retransmit subscribtion requests evene if the server does not answer */    
+ #if 0  /* WE want to retransmit subscribtion requests evene if the server does not answer */
   /* no answer to a SUBSCRIBE request! */
   if (MSG_IS_SUBSCRIBE(tr->orig_request)
       && type==OSIP_NICT_KILL_TRANSACTION
@@ -404,7 +404,7 @@ static void cb_nist_kill_transaction(int type, osip_transaction_t *tr)
     }
 
 }
-  
+
 static void cb_rcvinvite  (int type, osip_transaction_t *tr,osip_message_t *sip)
 {
   OSIP_TRACE(osip_trace(__FILE__,__LINE__,OSIP_INFO1,NULL,"cb_rcvinvite (id=%i)\n", tr->transactionid));
@@ -419,7 +419,7 @@ static void cb_rcvack2    (int type, osip_transaction_t *tr,osip_message_t *sip)
 {
   OSIP_TRACE(osip_trace(__FILE__,__LINE__,OSIP_INFO1,NULL,"cb_rcvack2 (id=%i)\r\n", tr->transactionid));
 }
-  
+
 static void cb_rcvregister(int type, osip_transaction_t *tr,osip_message_t *sip)
 {
   OSIP_TRACE(osip_trace(__FILE__,__LINE__,OSIP_INFO1,NULL,"cb_rcvregister (id=%i)\r\n", tr->transactionid));
@@ -448,7 +448,7 @@ static void cb_rcvinfo    (int type, osip_transaction_t *tr,osip_message_t *sip)
   eXosip_event_t     *je;
   jinfo_t *jinfo =  (jinfo_t *)osip_transaction_get_your_instance(tr);
   OSIP_TRACE(osip_trace(__FILE__,__LINE__,OSIP_INFO1,NULL,"cb_rcvinfo (id=%i)\r\n", tr->transactionid));
-  
+
   if (jinfo==NULL)
     return;
   if (jinfo->jc==NULL)
@@ -464,7 +464,7 @@ static void cb_rcvinfo    (int type, osip_transaction_t *tr,osip_message_t *sip)
  	  snprintf(je->req_uri, 255, "%s", tmp);
  	  osip_free(tmp);
  	}
-      
+
       if (sip!=NULL)
 	{
 	  int pos;
@@ -506,7 +506,7 @@ static void cb_rcvoptions (int type, osip_transaction_t *tr,osip_message_t *sip)
   js = jinfo->js;
   if (jinfo->jc==NULL)
     return;
-  
+
   je = eXosip_event_init_for_call(EXOSIP_OPTIONS_NEW, jc, jd);
   if (je!=NULL)
     {
@@ -542,7 +542,7 @@ static void cb_rcvsubscribe (int type, osip_transaction_t *tr,osip_message_t *si
   jn = jinfo->jn;
   if (jinfo->jn==NULL)
     return;
-  
+
   je = eXosip_event_init_for_notify(EXOSIP_IN_SUBSCRIPTION_NEW, jn, jd);
   if (je!=NULL)
     {
@@ -572,7 +572,7 @@ static void cb_rcvunkrequest(int type, osip_transaction_t *tr,osip_message_t *si
   if (jinfo->jc==NULL)
     return;
 
-  
+
   if (!MSG_IS_REFER(sip))
     return;
 
@@ -594,7 +594,7 @@ static void cb_sndack     (int type, osip_transaction_t *tr,osip_message_t *sip)
 {
   OSIP_TRACE(osip_trace(__FILE__,__LINE__,OSIP_INFO1,NULL,"cb_sndack (id=%i)\r\n", tr->transactionid));
 }
-  
+
 static void cb_sndregister(int type, osip_transaction_t *tr,osip_message_t *sip)
 {
   OSIP_TRACE(osip_trace(__FILE__,__LINE__,OSIP_INFO1,NULL,"cb_sndregister (id=%i)\r\n", tr->transactionid));
@@ -668,11 +668,11 @@ jinfo_t *__eXosip_new_jinfo(eXosip_call_t *jc, eXosip_dialog_t *jd,
 }
 
 
-int 
+int
 eXosip_sdp_negotiate(osip_negotiation_ctx_t *ctx, sdp_message_t *remote_sdp)
 {
   int i ;
-  sdp_message_t *tmp  = osip_negotiation_ctx_get_remote_sdp(ctx);  
+  sdp_message_t *tmp  = osip_negotiation_ctx_get_remote_sdp(ctx);
 
   if (tmp!=NULL)
     sdp_message_free(tmp);
@@ -690,7 +690,7 @@ eXosip_sdp_negotiate(osip_negotiation_ctx_t *ctx, sdp_message_t *remote_sdp)
 }
 
 
-static void 
+static void
 check_for_answer_with_sdp(eXosip_call_t *jc, osip_message_t *sip)
 {
   sdp_message_t *remote_sdp = eXosip_get_sdp_body(sip);
@@ -788,7 +788,7 @@ static void cb_rcv1xx(int type, osip_transaction_t *tr,osip_message_t *sip)
 	      return;
 
 	}
-       
+
     }
 
   if ( jd!=NULL)
@@ -887,7 +887,7 @@ sdp_message_t *eXosip_get_local_sdp(osip_transaction_t *transaction)
 }
 
 
-void 
+void
 eXosip_report_call_event_with_status(int evt, eXosip_call_t *jc, eXosip_dialog_t *jd, osip_message_t *sip)
 {
 	eXosip_event_t *je;
@@ -908,7 +908,7 @@ eXosip_report_call_event_with_status(int evt, eXosip_call_t *jc, eXosip_dialog_t
 			je->msg_body = osip_strdup(body->body);
 			if (!je->msg_body){
 				eXosip_event_free(je);
-				return;				
+				return;
 			}
 		}
 	}
@@ -972,7 +972,7 @@ void eXosip_update_audio_session(osip_transaction_t *transaction)
   char *media_type;
   int pos;
   /* look for the SDP informations */
-  
+
   remote_sdp = eXosip_get_remote_sdp(transaction);
   if (remote_sdp==NULL)
     return ;
@@ -1095,7 +1095,7 @@ static void cb_rcv2xx_4invite(osip_transaction_t *tr,osip_message_t *sip)
 	 We have used the first informationnal answer to create a
 	 dialog, but we now want to be sure the 200ok received is
 	 for the dialog this dialog.
-	 
+
 	 We have to check the To tag and if it does not match, we
 	 just have to modify the existing dialog and replace it. */
       osip_generic_param_t *tag;
@@ -1104,11 +1104,11 @@ static void cb_rcv2xx_4invite(osip_transaction_t *tr,osip_message_t *sip)
       i=1; /* default is the same dialog */
 
 	  if (jd->d_dialog == NULL)
-	  { 
+	  {
 		  osip_dialog_init_as_uac(&(jd->d_dialog), sip);
 	  }
 
-	  
+
 #if 1
       if (jd->d_dialog==NULL)
 	{
@@ -1129,7 +1129,7 @@ static void cb_rcv2xx_4invite(osip_transaction_t *tr,osip_message_t *sip)
       else if (jd->d_dialog->remote_tag!=NULL && tag!=NULL && tag->gvalue!=NULL
 	       && 0!=strcmp(jd->d_dialog->remote_tag, tag->gvalue))
 	{ i=0; } /* different dialog! */
-      
+
       if (i==1) /* just update the dialog */
 	{
 	  osip_dialog_update_route_set_as_uac(jd->d_dialog, sip);
@@ -1173,7 +1173,7 @@ static void cb_rcv2xx_4invite(osip_transaction_t *tr,osip_message_t *sip)
       {
 	char *body;
 	char *size;
-	
+
 	body = generating_sdp_answer(tr->last_response, jc->c_ctx);
 	if (body==NULL)
 	  {
@@ -1185,14 +1185,14 @@ static void cb_rcv2xx_4invite(osip_transaction_t *tr,osip_message_t *sip)
 	  {
 	    return;
 	  }
-	
+
 	size = (char *) osip_malloc(6*sizeof(char));
 #ifdef __APPLE_CC__
 	sprintf(size,"%li",strlen(body));
 #else
 	sprintf(size,"%i",strlen(body));
 #endif
-	osip_free(body);  
+	osip_free(body);
 	i = osip_message_set_content_length(ack, size);
 	osip_free(size);
 	if (i!=0)
@@ -1267,7 +1267,7 @@ static void cb_rcv2xx_4subscribe(osip_transaction_t *tr,osip_message_t *sip)
 	}
 
 	if (jd && jd->d_dialog && (jd->d_dialog->remote_contact_uri == NULL)) {
-		osip_contact_t *contact;		
+		osip_contact_t *contact;
 		i = osip_contact_init (&contact);
 		if (i != 0)
 			return;
@@ -1296,7 +1296,7 @@ static void cb_rcv2xx_4subscribe(osip_transaction_t *tr,osip_message_t *sip)
 
   {
     eXosip_event_t *je;
-    je = eXosip_event_init_for_subscribe(EXOSIP_SUBSCRIPTION_ANSWERED, js, jd);	
+    je = eXosip_event_init_for_subscribe(EXOSIP_SUBSCRIPTION_ANSWERED, js, jd);
     if (je!=NULL)
     {
 		//<MINHPQ>
@@ -1461,7 +1461,7 @@ find_reg_for_transaction(osip_transaction_t *tr)
   return 0;
 }
 
-  
+
 static void
 rcvregister_failure(int type, osip_transaction_t *tr, osip_message_t *sip)
 {
@@ -1516,13 +1516,13 @@ static void cb_rcv3xx(int type, osip_transaction_t *tr,osip_message_t *sip)
       eXosip_report_call_event_with_status(EXOSIP_CALL_REDIRECTED, jc, jd, sip);
     }
   else if (MSG_IS_RESPONSE_FOR(sip, "MESSAGE"))
-    {      
+    {
       eXosip_event_t *je;
       je = eXosip_event_init_for_message(EXOSIP_MESSAGE_FAILURE, tr, sip);
       if (je)
 	report_event_with_status(je, sip);
       return;
-    }    
+    }
   else if (MSG_IS_RESPONSE_FOR(sip, "SUBSCRIBE"))
     {
       eXosip_event_t *je;
@@ -1530,7 +1530,7 @@ static void cb_rcv3xx(int type, osip_transaction_t *tr,osip_message_t *sip)
       if (je)
 	report_event_with_status(je, sip);
     }
-  
+
   if (jd==NULL) return;
   if (MSG_IS_RESPONSE_FOR(sip, "INVITE")
       || MSG_IS_RESPONSE_FOR(sip, "SUBSCRIBE"))
@@ -1555,7 +1555,7 @@ static void cb_rcv4xx(int type, osip_transaction_t *tr,osip_message_t *sip)
     {
       rcvregister_failure(type, tr, sip);
       return;
-    }	
+    }
 
   if (jinfo==NULL)
     return;
@@ -1576,13 +1576,13 @@ static void cb_rcv4xx(int type, osip_transaction_t *tr,osip_message_t *sip)
 	  /* options is within a call */
 	}
 
-      eXosip_report_call_event_with_status(EXOSIP_OPTIONS_REQUESTFAILURE, jc, jd, sip);      
+      eXosip_report_call_event_with_status(EXOSIP_OPTIONS_REQUESTFAILURE, jc, jd, sip);
       return;
     }
 
-  if (sip->status_code == 401 || sip->status_code == 407 )  
+  if (sip->status_code == 401 || sip->status_code == 407 )
     {
-	if (eXosip_retry_with_auth_info(tr,sip) == 0) 
+	if (eXosip_retry_with_auth_info(tr,sip) == 0)
 	  {
 	  if (jd != 0)
 	    {
@@ -1592,8 +1592,8 @@ static void cb_rcv4xx(int type, osip_transaction_t *tr,osip_message_t *sip)
 	  }
     }
 
-  /* 
-     in the case when the status code is not auth related or 
+  /*
+     in the case when the status code is not auth related or
      the call to eXosip_retry_with_auth_info failed for some reason
      (for example because we've already tried sending a request with our credentials)
      we deliver the error event to application
@@ -1601,11 +1601,11 @@ static void cb_rcv4xx(int type, osip_transaction_t *tr,osip_message_t *sip)
 
   if (MSG_IS_RESPONSE_FOR(sip, "INVITE"))
   {
-    eXosip_report_call_event_with_status(EXOSIP_CALL_REQUESTFAILURE, jc, jd, sip);      
+    eXosip_report_call_event_with_status(EXOSIP_CALL_REQUESTFAILURE, jc, jd, sip);
   }
   else if (MSG_IS_RESPONSE_FOR(sip, "REFER"))
   {
-    eXosip_report_call_event_with_status(EXOSIP_CALL_REFER_FAILURE, jc, jd, sip);      
+    eXosip_report_call_event_with_status(EXOSIP_CALL_REFER_FAILURE, jc, jd, sip);
   }
   else if (MSG_IS_RESPONSE_FOR(sip, "MESSAGE"))
   {
@@ -1686,18 +1686,18 @@ static void cb_rcv5xx(int type, osip_transaction_t *tr,osip_message_t *sip)
 	{
 	  /* options is within a call */
 	}
-    
-      eXosip_report_call_event_with_status(EXOSIP_OPTIONS_SERVERFAILURE, jc, jd, sip);      
+
+      eXosip_report_call_event_with_status(EXOSIP_OPTIONS_SERVERFAILURE, jc, jd, sip);
       return;
     }
 
   if (MSG_IS_RESPONSE_FOR(sip, "INVITE"))
   {
-    eXosip_report_call_event_with_status(EXOSIP_CALL_SERVERFAILURE, jc, jd, sip);      
+    eXosip_report_call_event_with_status(EXOSIP_CALL_SERVERFAILURE, jc, jd, sip);
   }
   else if (MSG_IS_RESPONSE_FOR(sip, "REFER"))
   {
-    eXosip_report_call_event_with_status(EXOSIP_CALL_REFER_FAILURE, jc, jd, sip);      
+    eXosip_report_call_event_with_status(EXOSIP_CALL_REFER_FAILURE, jc, jd, sip);
   }
   else if (MSG_IS_RESPONSE_FOR(sip, "MESSAGE"))
   {
@@ -1706,7 +1706,7 @@ static void cb_rcv5xx(int type, osip_transaction_t *tr,osip_message_t *sip)
       if (je!=NULL)
 	report_event_with_status(je, sip);
       return;
-  }    
+  }
   else if (MSG_IS_RESPONSE_FOR(sip, "SUBSCRIBE"))
   {
     eXosip_event_t *je;
@@ -1767,7 +1767,7 @@ static void cb_rcv6xx(int type, osip_transaction_t *tr,osip_message_t *sip)
   }
   else if (MSG_IS_RESPONSE_FOR(sip, "REFER"))
   {
-    eXosip_report_call_event_with_status(EXOSIP_CALL_REFER_FAILURE, jc, jd, sip);      
+    eXosip_report_call_event_with_status(EXOSIP_CALL_REFER_FAILURE, jc, jd, sip);
   }
   else if (MSG_IS_RESPONSE_FOR(sip, "MESSAGE"))
   {
@@ -1776,7 +1776,7 @@ static void cb_rcv6xx(int type, osip_transaction_t *tr,osip_message_t *sip)
       if (je!=NULL)
 	report_event_with_status(je, sip);
       return;
-  }    
+  }
   else if (MSG_IS_RESPONSE_FOR(sip, "SUBSCRIBE"))
   {
     eXosip_event_t *je;
@@ -2005,7 +2005,7 @@ eXosip_set_callbacks(osip_t *osip)
   /* register all callbacks */
 
   osip_set_cb_send_message(osip, &cb_udp_snd_message);
-  
+
   osip_set_kill_transaction_callback(osip ,OSIP_ICT_KILL_TRANSACTION,
 				 &cb_ict_kill_transaction);
   osip_set_kill_transaction_callback(osip ,OSIP_NIST_KILL_TRANSACTION,
@@ -2014,7 +2014,7 @@ eXosip_set_callbacks(osip_t *osip)
 				 &cb_nict_kill_transaction);
   osip_set_kill_transaction_callback(osip ,OSIP_NIST_KILL_TRANSACTION,
 				 &cb_nist_kill_transaction);
-          
+
   osip_set_message_callback(osip ,OSIP_ICT_STATUS_2XX_RECEIVED_AGAIN,
 			&cb_rcvresp_retransmission);
   osip_set_message_callback(osip ,OSIP_ICT_STATUS_3456XX_RECEIVED_AGAIN,
@@ -2039,7 +2039,7 @@ eXosip_set_callbacks(osip_t *osip)
 			&cb_sndresp_retransmission);
   osip_set_message_callback(osip ,OSIP_NIST_REQUEST_RECEIVED_AGAIN,
 			&cb_rcvreq_retransmission);
-          
+
   osip_set_transport_error_callback(osip ,OSIP_ICT_TRANSPORT_ERROR,
 				    &cb_transport_error);
   osip_set_transport_error_callback(osip ,OSIP_IST_TRANSPORT_ERROR,
@@ -2048,7 +2048,7 @@ eXosip_set_callbacks(osip_t *osip)
 				    &cb_transport_error);
   osip_set_transport_error_callback(osip ,OSIP_NIST_TRANSPORT_ERROR,
 				    &cb_transport_error);
-  
+
   osip_set_message_callback(osip ,OSIP_ICT_INVITE_SENT,     &cb_sndinvite);
   osip_set_message_callback(osip ,OSIP_ICT_ACK_SENT,        &cb_sndack);
   osip_set_message_callback(osip ,OSIP_NICT_REGISTER_SENT,  &cb_sndregister);
@@ -2067,28 +2067,28 @@ eXosip_set_callbacks(osip_t *osip)
   osip_set_message_callback(osip ,OSIP_ICT_STATUS_4XX_RECEIVED, &cb_rcv4xx);
   osip_set_message_callback(osip ,OSIP_ICT_STATUS_5XX_RECEIVED, &cb_rcv5xx);
   osip_set_message_callback(osip ,OSIP_ICT_STATUS_6XX_RECEIVED, &cb_rcv6xx);
-  
+
   osip_set_message_callback(osip ,OSIP_IST_STATUS_1XX_SENT, &cb_snd1xx);
   osip_set_message_callback(osip ,OSIP_IST_STATUS_2XX_SENT, &cb_snd2xx);
   osip_set_message_callback(osip ,OSIP_IST_STATUS_3XX_SENT, &cb_snd3xx);
   osip_set_message_callback(osip ,OSIP_IST_STATUS_4XX_SENT, &cb_snd4xx);
   osip_set_message_callback(osip ,OSIP_IST_STATUS_5XX_SENT, &cb_snd5xx);
   osip_set_message_callback(osip ,OSIP_IST_STATUS_6XX_SENT, &cb_snd6xx);
-  
+
   osip_set_message_callback(osip ,OSIP_NICT_STATUS_1XX_RECEIVED, &cb_rcv1xx);
   osip_set_message_callback(osip ,OSIP_NICT_STATUS_2XX_RECEIVED, &cb_rcv2xx);
   osip_set_message_callback(osip ,OSIP_NICT_STATUS_3XX_RECEIVED, &cb_rcv3xx);
   osip_set_message_callback(osip ,OSIP_NICT_STATUS_4XX_RECEIVED, &cb_rcv4xx);
   osip_set_message_callback(osip ,OSIP_NICT_STATUS_5XX_RECEIVED, &cb_rcv5xx);
   osip_set_message_callback(osip ,OSIP_NICT_STATUS_6XX_RECEIVED, &cb_rcv6xx);
-      
+
   osip_set_message_callback(osip ,OSIP_NIST_STATUS_1XX_SENT, &cb_snd1xx);
   osip_set_message_callback(osip ,OSIP_NIST_STATUS_2XX_SENT, &cb_snd2xx);
   osip_set_message_callback(osip ,OSIP_NIST_STATUS_3XX_SENT, &cb_snd3xx);
   osip_set_message_callback(osip ,OSIP_NIST_STATUS_4XX_SENT, &cb_snd4xx);
   osip_set_message_callback(osip ,OSIP_NIST_STATUS_5XX_SENT, &cb_snd5xx);
   osip_set_message_callback(osip ,OSIP_NIST_STATUS_6XX_SENT, &cb_snd6xx);
-  
+
   osip_set_message_callback(osip ,OSIP_IST_INVITE_RECEIVED,     &cb_rcvinvite);
   osip_set_message_callback(osip ,OSIP_IST_ACK_RECEIVED,        &cb_rcvack);
   osip_set_message_callback(osip ,OSIP_IST_ACK_RECEIVED_AGAIN,  &cb_rcvack2);
