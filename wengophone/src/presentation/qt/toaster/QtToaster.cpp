@@ -62,7 +62,11 @@ void QtToaster::close() {
 
 void QtToaster::show() {
 	//10 pixels of margin
+#if !defined(OS_WINDOWS)
+	static const int MARGIN_X = 30;
+#else
 	static const int MARGIN_X = 10;
+#endif
 
 	QDesktopWidget * desktop = QApplication::desktop();
 	QRect screenGeometry = desktop->screenGeometry(desktop->primaryScreen());
