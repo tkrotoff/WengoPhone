@@ -223,13 +223,21 @@ void QtChatWindow::sendSmsToActiveTabContact() {
 }
 
 void QtChatWindow::sendFileToActiveTabContact() {
-//TODO: add an option: last opened file for upload
+
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	QString startDir = QString::fromStdString(config.getLastUploadedFileFolder());
+
 	QString filename = QFileDialog::getOpenFileName(
 		this,
 		"Choose a file",
-		"",
+		startDir,
 		"All files (*.*)"
 	);
+
+	if (!filename.isEmpty()) {
+		QFileInfo fileInfo(filename);
+		config.set(Config::FILETRANSFER_LASTUPLOADEDFILE_FOLDER, fileInfo.dir().absolutePath().toStdString());
+	}
 
 	if (!filename.isEmpty()) {
 		QtChatWidget * widget = getActiveTabWidget();
