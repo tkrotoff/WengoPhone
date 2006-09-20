@@ -228,9 +228,6 @@ clean_transaction_list(osip_list_t *tlist)
 
 void eXosip_dialog_free(eXosip_dialog_t *jd)
 {
-
-  printf("eXosip_dialog_free: id = %d jd=%08x\n", jd->d_id, (unsigned int)jd); 
-
   clean_transaction_list(jd->d_inc_trs);
   clean_transaction_list(jd->d_out_trs);
 

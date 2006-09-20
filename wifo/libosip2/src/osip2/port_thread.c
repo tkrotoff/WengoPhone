@@ -29,7 +29,7 @@
 #include <winbase.h>
 #define _beginthreadex	CreateThread
 #define	_endthreadex	ExitThread
-#elif defined WIN32
+#elif defined(_WIN32_WCE) || defined(WIN32)
 #include <process.h>
 #endif
 
@@ -87,7 +87,7 @@ osip_thread_exit ()
 #endif
 #endif
 
-#ifdef WIN32
+#if defined(_WIN32_WCE) || defined(WIN32)
 struct osip_thread *
 osip_thread_create (int stacksize, void *(*func) (void *), void *arg)
 {

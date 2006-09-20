@@ -38,7 +38,7 @@
 #include <selectLib.h>
 #elif (!defined(WIN32) && !defined(_WIN32_WCE))
 #include <sys/time.h>
-#elif defined(WIN32)
+#elif defined(_WIN32_WCE) || defined(WIN32)
 #include <windows.h>
 #ifdef WIN32_USE_CRYPTO
 #include <Wincrypt.h>
@@ -81,7 +81,7 @@ osip_fallback_random_number ()
 {
   if (!random_seed_set)
     {
-#ifndef WIN32
+#if ! (defined(WIN32) || defined(_WIN32_WCE))
       struct timeval tv;
 
       gettimeofday (&tv, NULL);
@@ -145,7 +145,6 @@ char *
 osip_strncpy (char *dest, const char *src, size_t length)
 {
   strncpy (dest, src, length);
-
   dest[length] = '\0';
   return dest;
 }
@@ -174,7 +173,7 @@ __osip_sdp_append_string (char *string, size_t size, char *cur,
 void
 osip_usleep (int useconds)
 {
-#ifdef WIN32
+#if defined(_WIN32_WCE) || defined(WIN32)
   Sleep (useconds / 1000);
 #else
   struct timeval delay;
@@ -721,7 +720,7 @@ osip_trace (char *fi, int li, osip_trace_level_t level, FILE * f, char *chfr,
   return 0;
 }
 
-#ifdef WIN32
+#if defined(_WIN32_WCE) || defined(WIN32)
 
 void *osip_malloc(size_t size)
 {

@@ -24,7 +24,7 @@
 /* Include necessary headers for osip */
 
 #include <stdio.h>
-#ifdef WIN32
+#if defined(_WIN32_WCE) || defined(WIN32)
 
 #define STDC_HEADERS 1
 #define HAVE_CTYPE_H 1
@@ -81,7 +81,8 @@
 #    include <stdlib.h>
 #endif /* !STDC_HEADERS */
 
-#if defined(HAVE_STDARG_H) || defined(WIN32)
+
+#if defined(HAVE_STDARG_H) || defined(_WIN32_WCE) || defined(WIN32)
 #  include <stdarg.h>
 #  define VA_START(a, f)  va_start(a, f)
 #else
@@ -108,7 +109,7 @@
 #define VA_START(a, f)  va_start(a, f)
 #endif
 
-#ifdef WIN32
+#if defined(_WIN32_WCE) || defined(WIN32)
 #define VA_START(a, f)  va_start(a, f)
 #endif
 
@@ -145,7 +146,7 @@ extern "C"
 /* MALLOC redirections    */
 /**************************/
 
-#ifndef WIN32
+#if ! (defined(_WIN32_WCE) || defined(WIN32))
 
 #ifndef osip_malloc
 #define osip_malloc(S) malloc(S)
@@ -163,7 +164,7 @@ void *osip_realloc(void *, size_t size);
 void osip_free(void *);
 #endif
 
-#ifdef WIN32
+#if defined(_WIN32_WCE) || defined(WIN32)
 #define alloca _alloca
 #endif
 

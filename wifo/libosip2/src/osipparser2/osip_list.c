@@ -94,9 +94,9 @@ int osip_list_get_first_index (osip_list_t * li, void *el)
 	__node_t *ntmp;
 	int i = 0;
 
-	if (!li)
+	if (!li) {
 		return -1;
-	
+	}
 	ntmp = li->node;
 	while ((i < li->nb_elt) && ntmp) {
 		if (ntmp->element == el) {
@@ -234,6 +234,10 @@ osip_list_remove (osip_list_t * li, int pos)
 
   __node_t *ntmp;
   int i = 0;
+
+  if (!li) {
+	return -1;
+  }
 
   if (pos < 0 || pos >= li->nb_elt)
     /* element does not exist */

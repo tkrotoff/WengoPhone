@@ -103,7 +103,10 @@ osip_from_free (osip_from_t * from)
     {
       osip_uri_free (from->url);
     }
+
+  if (from->displayname) {
   osip_free (from->displayname);
+  }
 
   osip_generic_param_freelist (from->gen_params);
 

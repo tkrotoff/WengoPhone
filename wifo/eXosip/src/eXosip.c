@@ -29,7 +29,7 @@
 #include <osip2/osip_mt.h>
 #include <osip2/osip_condv.h>
 
-#ifndef  WIN32
+#if !defined(_WIN32_WCE) && !defined(WIN32)
 #include <memory.h>
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -589,7 +589,7 @@ int eXosip_init(FILE *input, FILE *output, int port, eXosip_tunnel_t *tunnel)
   
   eXosip.j_osip = osip;
 
-#ifdef WIN32
+#if defined(_WIN32_WCE) || defined(WIN32)
    /* Initializing windows socket library */
    {
      WORD wVersionRequested;

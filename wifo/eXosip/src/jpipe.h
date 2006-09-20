@@ -23,13 +23,13 @@
 
 #include <eXosip/eXosip.h>
 
-#ifndef WIN32
+#if ! (defined(_WIN32_WCE) || defined(WIN32))
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
 #endif
 
-#ifdef WIN32
+#if defined(_WIN32_WCE) || defined(WIN32)
 #include <windows.h>
 #endif
 
@@ -49,7 +49,7 @@ extern "C"
 {
 #endif
 
-#ifndef WIN32
+#if !(defined(_WIN32_WCE) || defined(WIN32))
 
 /**
  * Structure for storing a pipe descriptor

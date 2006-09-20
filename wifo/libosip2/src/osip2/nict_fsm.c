@@ -170,11 +170,23 @@ nict_snd_request (osip_transaction_t * nict, osip_event_t * evt)
   int i;
   osip_t *osip = (osip_t *) nict->config;
 
+// Minh Phan :
+// Add various null pointer check to avoid crashing
+
+  if (!evt || !nict) {
+	return;
+  }
+
   /* Here we have ict->orig_request == NULL */
   nict->orig_request = evt->sip;
 
+  if (evt->sip && nict->nict_context) {
   i = osip->cb_send_message (nict, evt->sip, nict->nict_context->destination,
 			     nict->nict_context->port, nict->out_socket);
+  }
+  else {
+	return;
+  }
 
   if (i == 0)
     {

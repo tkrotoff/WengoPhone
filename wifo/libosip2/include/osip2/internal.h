@@ -206,7 +206,8 @@ typedef struct osip_cond
 
 #endif
 
-#ifdef WIN32
+
+#if defined(_WIN32_WCE) || defined(WIN32)
 typedef struct osip_cond
 {
   struct osip_mutex *mut;

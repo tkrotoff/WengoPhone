@@ -29,7 +29,7 @@
 
 void add_gettimeofday (struct timeval *atv, int ms);
 void min_timercmp (struct timeval *tv1, struct timeval *tv2);
-#ifdef WIN32
+#if defined(_WIN32_WCE) || defined(WIN32)
 int gettimeofday(struct timeval *tp, void *tz);
 #endif
 

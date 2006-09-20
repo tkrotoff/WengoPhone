@@ -62,22 +62,24 @@ __eXosip_call_remove_dialog_reference_in_call(eXosip_call_t *jc, eXosip_dialog_t
   if (jd==NULL) return;
 
 
-  for (_jd = jc->c_dialogs; _jd!=NULL; _jd=jc->c_dialogs)
+	for (_jd = jc->c_dialogs; _jd!=NULL; _jd=_jd->next)
     {
       if (jd==_jd)
 	break;
     }
-  if (_jd==NULL)
+	if (_jd!=NULL) /* dialog found*/
     {
-      /* dialog not found??? */
+		REMOVE_ELEMENT(jc->c_dialogs, _jd);
     }
 
   ji = osip_transaction_get_your_instance(jc->c_inc_tr);
-  if (ji!=NULL && ji->jd==jd)
+	if (ji!=NULL && ji->jd==jd) {
     ji->jd=NULL;
+	}
   ji = osip_transaction_get_your_instance(jc->c_out_tr);
-  if (ji!=NULL && ji->jd==jd)
+	if (ji!=NULL && ji->jd==jd) {
     ji->jd=NULL;
+	}
 }
 
 void

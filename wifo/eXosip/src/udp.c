@@ -29,7 +29,7 @@
 #include <eXosip/eXosip.h>
 #include <eXosip/eXosip_cfg.h>
 
-#ifndef WIN32
+#if ! (defined(_WIN32_WCE) || defined(WIN32))
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -42,7 +42,7 @@
 #endif
 
 extern eXosip_t eXosip;
-#ifdef WIN32
+#if defined(WIN32) || defined(_WIN32_WCE)
 #define strcasecmp stricmp
 #endif
 

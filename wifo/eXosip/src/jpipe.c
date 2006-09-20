@@ -152,9 +152,20 @@ jpipe_t * jpipe ()
       osip_free (my_pipe);
     }
 
+#if !(defined(_WIN32_WCE) || defined(WIN32))
+
   j = setsockopt (my_pipe->pipes[1],
 		  SOL_SOCKET,
 		  SO_RCVTIMEO, (const char*) &timeout, sizeof (timeout));
+#else
+  
+  {
+	unsigned long JTr=0;
+    j = ioctlsocket(my_pipe->pipes[1],FIONBIO,&JTr); 
+  }
+
+#endif
+
   if (j != NO_ERROR)
     {
       /* failed for some reason... */

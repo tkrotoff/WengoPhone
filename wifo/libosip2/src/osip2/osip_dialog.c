@@ -329,7 +329,7 @@ osip_dialog_match_with_replaces (osip_dialog_t * dialog, const osip_replaces_t *
 
 }
 
-#if defined(WIN32)
+#if defined(WIN32) || defined(_WIN32_WCE)
 #define snprintf _snprintf
 #endif
 
@@ -667,8 +667,14 @@ osip_dialog_free (osip_dialog_t * dialog)
   osip_to_free (dialog->remote_uri);
   osip_list_special_free (dialog->route_set,
 			  (void *(*)(void *)) &osip_record_route_free);
+  if (dialog->remote_tag) {
   osip_free (dialog->remote_tag);
+  }
+  if (dialog->local_tag) {
   osip_free (dialog->local_tag);
+  }
+  if (dialog->call_id) {
   osip_free (dialog->call_id);
+  }
   osip_free (dialog);
 }

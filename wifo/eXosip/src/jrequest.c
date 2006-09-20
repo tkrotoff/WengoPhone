@@ -23,7 +23,7 @@
 
 #include "eXosip2.h"
 
-#ifndef WIN32
+#if !( defined(_WIN32_WCE) || defined(_WIN32_WCE))
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>

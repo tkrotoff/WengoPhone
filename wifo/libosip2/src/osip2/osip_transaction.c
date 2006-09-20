@@ -473,7 +473,7 @@ __osip_transaction_set_state (osip_transaction_t * transaction, state_t state)
   return 0;
 }
 
-extern int 
+int 
 osip_transaction_set_state  (osip_transaction_t * transaction, state_t state)
 {
 

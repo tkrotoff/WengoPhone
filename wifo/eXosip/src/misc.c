@@ -56,7 +56,7 @@ eXosip_remove_transaction_from_call(osip_transaction_t *tr, eXosip_call_t *jc)
 {
   eXosip_dialog_t *jd;
 
-  if (!tr)
+  if ((!tr) || (!jc))
     return 0;
 
   if (jc->c_inc_tr==tr)
@@ -71,16 +71,18 @@ eXosip_remove_transaction_from_call(osip_transaction_t *tr, eXosip_call_t *jc)
       return 0;
     }
 
+	if (jd)
+	{
+		if (!eXosip_list_remove_element(jd->d_inc_trs, tr))
+			return 0;
 
-  if (!eXosip_list_remove_element(jd->d_inc_trs, tr))
-    return 0;
-
- if (!eXosip_list_remove_element(jd->d_out_trs, tr))
-    return 0;
+		if (!eXosip_list_remove_element(jd->d_out_trs, tr))
+			return 0;
 
 
-  OSIP_TRACE(osip_trace(__FILE__,__LINE__,OSIP_INFO1,NULL,
-			"eXosip: No information.\n"));
+		OSIP_TRACE(osip_trace(__FILE__,__LINE__,OSIP_INFO1,NULL,
+				"eXosip: No information.\n"));
+	}
   return -1;
 }
 

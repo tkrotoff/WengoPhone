@@ -791,7 +791,7 @@ osip_message_parse (osip_message_t * sip, const char *buf, size_t length)
   const char *next_header_index;
   char *tmp;
   char *beg;
-#ifdef WIN32
+#if defined(_WIN32_WCE) || defined(WIN32)
   tmp = _alloca (length + 2);
 #else
   tmp = alloca (length + 2);

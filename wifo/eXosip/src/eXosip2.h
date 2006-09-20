@@ -28,7 +28,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#ifdef WIN32
+#if defined (_WIN32_WCE) || defined (WIN32)
 #include <winsock2.h>
 #include <ws2tcpip.h>
 #define snprintf _snprintf

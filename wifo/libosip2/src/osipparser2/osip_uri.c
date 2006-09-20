@@ -828,8 +828,9 @@ osip_uri_param_freelist (osip_list_t * params)
 {
   osip_uri_param_t *u_param;
 
-  if(params == NULL)
+  if (!params) {
 	  return;
+	}
 
   while (!osip_list_eol (params, 0))
     {

@@ -25,7 +25,7 @@
 
 #include <stdlib.h>
 
-#ifdef WIN32
+#if defined(_WIN32_WCE) || defined(WI32)
 #include <windowsx.h>
 #include <winsock2.h>
 #include <Ws2tcpip.h>
@@ -197,7 +197,7 @@ int cb_udp_snd_message(osip_transaction_t *tr, osip_message_t *sip, char *host,
 
   if (i < 0) 
     {
-#ifdef WIN32
+#if defined(_WIN32_WCE) || defined(WIN32)
       if (WSAECONNREFUSED==WSAGetLastError())
 #else
 	if (ECONNREFUSED==errno)
@@ -768,7 +768,7 @@ static void cb_rcv1xx(int type, osip_transaction_t *tr,osip_message_t *sip)
 	    }
 	  else
 	    {
-#ifndef WIN32
+#if !(defined(_WIN32_WCE) || defined(WIN32))
 	      assert(0==0);
 #else
 		  exit(0);

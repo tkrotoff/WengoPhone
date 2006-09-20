@@ -447,7 +447,8 @@ char *strdup_printf(const char *fmt, ...)
 	{
 		/* Try to print in the allocated space. */
 		va_start (ap, fmt);
-#ifdef WIN32
+
+#if defined(_WIN32_WCE) || defined(WIN32)
 		n = _vsnprintf (p, size, fmt, ap);
 #else
 		n = vsnprintf (p, size, fmt, ap);
@@ -469,7 +470,7 @@ char *strdup_printf(const char *fmt, ...)
 int
 eXosip_get_addrinfo (struct addrinfo **addrinfo, char *hostname, int service)
 {
-#ifndef WIN32
+#if !(defined(_WIN32_WCE) || defined(WIN32))
   struct in_addr addr;
   struct in6_addr addrv6;
 #else
@@ -490,7 +491,8 @@ eXosip_get_addrinfo (struct addrinfo **addrinfo, char *hostname, int service)
   }
 
   memset (&hints, 0, sizeof (hints));
-#ifndef WIN32
+
+#if !(defined(_WIN32_WCE) || defined(WIN32))
  if (inet_pton(AF_INET, hostname, &addr)>0)
  {
    /* ipv4 address detected */

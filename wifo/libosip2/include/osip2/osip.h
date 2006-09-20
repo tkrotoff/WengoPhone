@@ -23,7 +23,7 @@
 
 #include <osipparser2/osip_const.h>
 
-#ifdef WIN32
+#if defined(_WIN32_WCE) || defined(WIN32)
 #include <time.h>
 #include <windows.h>
 #else
