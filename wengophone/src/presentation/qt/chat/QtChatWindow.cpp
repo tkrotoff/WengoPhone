@@ -73,7 +73,7 @@ QtChatWindow::QtChatWindow(QWidget * parent, CChatHandler & cChatHandler, IMChat
 
 	_imChatSession->messageReceivedEvent +=
 		boost::bind(&QtChatWindow::messageReceivedEventHandler, this, _1);
-	
+
 	_imChatSession->statusMessageReceivedEvent +=
 		boost::bind(&QtChatWindow::statusMessageReceivedEventHandler, this, _1, _2, _3);
 
@@ -386,22 +386,10 @@ void QtChatWindow::setupMenuBarActions() {
 	SAFE_CONNECT_RECEIVER(_ui.actionShowWengoAccount, SIGNAL(triggered()), qtToolBar, SLOT(showWengoAccount()));
 	copyQAction(toolBar, _ui.actionEditMyProfile);
 	SAFE_CONNECT_RECEIVER(_ui.actionEditMyProfile, SIGNAL(triggered()), qtToolBar, SLOT(editMyProfile()));
-	copyQAction(toolBar, _ui.actionLogOff);
-	SAFE_CONNECT_RECEIVER(_ui.actionLogOff, SIGNAL(triggered()), qtToolBar, SLOT(logOff()));
 	copyQAction(toolBar, _ui.actionWengoServices);
 	SAFE_CONNECT_RECEIVER(_ui.actionWengoServices, SIGNAL(triggered()), qtToolBar, SLOT(showWengoServices()));
-
-	// TODO: what do we want for this action?
 	copyQAction(toolBar, _ui.actionClose);
-	SAFE_CONNECT_RECEIVER(_ui.actionClose, SIGNAL(triggered()), &_qtWengoPhone, SLOT(closeWindow()));
-	////
-
-	// TODO: put this in a slot of QtWengoPhone
-	QtUserProfileHandler * qtUserProfileHandler =
-		(QtUserProfileHandler *) _qtWengoPhone.getCWengoPhone().getCUserProfileHandler().getPresentation();
-	copyQAction(toolBar, _ui.actionChangeProfile);
-	SAFE_CONNECT_RECEIVER(_ui.actionChangeProfile, SIGNAL(triggered()), qtUserProfileHandler, SLOT(showLoginWindow()));
-	////
+	SAFE_CONNECT(_ui.actionClose, SIGNAL(triggered()), SLOT(closeWindow()));
 	////
 
 	// setup "contact" menubar
@@ -409,10 +397,6 @@ void QtChatWindow::setupMenuBarActions() {
 	SAFE_CONNECT_RECEIVER(_ui.actionAddContact, SIGNAL(triggered()), qtToolBar, SLOT(addContact()));
 	copyQAction(toolBar, _ui.actionSearchWengoContact);
 	SAFE_CONNECT_RECEIVER(_ui.actionSearchWengoContact, SIGNAL(triggered()), qtToolBar, SLOT(searchWengoContact()));
-	copyQAction(toolBar, _ui.actionShowHideOfflineContacts);
-	SAFE_CONNECT_RECEIVER(_ui.actionShowHideOfflineContacts, SIGNAL(triggered()), qtToolBar, SLOT(showHideOfflineContacts()));
-	copyQAction(toolBar, _ui.actionShowHideContactGroups);
-	SAFE_CONNECT_RECEIVER(_ui.actionShowHideContactGroups, SIGNAL(triggered()), qtToolBar, SLOT(showHideContactGroups()));
 	////
 
 	// setup "actions" menu
@@ -420,35 +404,11 @@ void QtChatWindow::setupMenuBarActions() {
 	SAFE_CONNECT_RECEIVER(_ui.actionCreateConferenceCall, SIGNAL(triggered()), qtToolBar, SLOT(createConferenceCall()));
 	copyQAction(toolBar, _ui.actionSendSms);
 	SAFE_CONNECT_RECEIVER(_ui.actionSendSms, SIGNAL(triggered()), qtToolBar, SLOT(sendSms()));
-	copyQAction(toolBar, _ui.actionAcceptCall);
-	SAFE_CONNECT_RECEIVER(_ui.actionAcceptCall, SIGNAL(triggered()), qtToolBar, SLOT(acceptCall()));
-	copyQAction(toolBar, _ui.actionHangUpCall);
-	SAFE_CONNECT_RECEIVER(_ui.actionHangUpCall, SIGNAL(triggered()), qtToolBar, SLOT(hangUpCall()));
-	copyQAction(toolBar, _ui.actionHoldResumeCall);
-	SAFE_CONNECT_RECEIVER(_ui.actionHoldResumeCall, SIGNAL(triggered()), qtToolBar, SLOT(holdResumeCall()));
 	////
 
 	// setup "tools" menu
-	copyQAction(toolBar, _ui.actionShowConfig);
-	SAFE_CONNECT_RECEIVER(_ui.actionShowConfig, SIGNAL(triggered()), qtToolBar, SLOT(showConfig()));
-	copyQAction(toolBar, _ui.actionShowVolumePanel);
-	SAFE_CONNECT_RECEIVER(_ui.actionShowVolumePanel, SIGNAL(triggered()), qtToolBar, SLOT(expandVolumePanel()));
 	copyQAction(toolBar, _ui.actionShowFileTransfer);
 	SAFE_CONNECT_RECEIVER(_ui.actionShowFileTransfer, SIGNAL(triggered()), qtToolBar, SLOT(showFileTransferWindow()));
-	// menu clear history
-	copyQAction(toolBar, _ui.actionClearOutgoingCalls);
-	SAFE_CONNECT_RECEIVER(_ui.actionClearOutgoingCalls, SIGNAL(triggered()), qtToolBar, SLOT(clearHistoryOutgoingCalls()));
-	copyQAction(toolBar, _ui.actionClearIncomingCalls);
-	SAFE_CONNECT_RECEIVER(_ui.actionClearIncomingCalls, SIGNAL(triggered()), qtToolBar, SLOT(clearHistoryIncomingCalls()));
-	copyQAction(toolBar, _ui.actionClearMissedCalls);
-	SAFE_CONNECT_RECEIVER(_ui.actionClearMissedCalls, SIGNAL(triggered()), qtToolBar, SLOT(clearHistoryMissedCalls()));
-	copyQAction(toolBar, _ui.actionClearChatSessions);
-	SAFE_CONNECT_RECEIVER(_ui.actionClearChatSessions, SIGNAL(triggered()), qtToolBar, SLOT(clearHistoryChatSessions()));
-	copyQAction(toolBar, _ui.actionClearSMS);
-	SAFE_CONNECT_RECEIVER(_ui.actionClearSMS, SIGNAL(triggered()), qtToolBar, SLOT(clearHistorySms()));
-	copyQAction(toolBar, _ui.actionClearAll);
-	SAFE_CONNECT_RECEIVER(_ui.actionClearAll, SIGNAL(triggered()), qtToolBar, SLOT(clearHistoryAll()));
-	////
 	////
 
 	// setup "help" menu
@@ -456,8 +416,6 @@ void QtChatWindow::setupMenuBarActions() {
 	SAFE_CONNECT_RECEIVER(_ui.actionShowWengoForum, SIGNAL(triggered()), qtToolBar, SLOT(showWengoForum()));
 	copyQAction(toolBar, _ui.actionWengoFAQ);
 	SAFE_CONNECT_RECEIVER(_ui.actionWengoFAQ, SIGNAL(triggered()), qtToolBar, SLOT(showWengoFAQ()));
-	copyQAction(toolBar, _ui.actionShowAbout);
-	SAFE_CONNECT_RECEIVER(_ui.actionShowAbout, SIGNAL(triggered()), qtToolBar, SLOT(showAbout()));
 	////
 }
 
@@ -733,4 +691,9 @@ void QtChatWindow::statusMessageReceivedSLot(IMChatSession * sender, int status,
 			return;
 		}
 	}
+}
+
+void QtChatWindow::closeWindow() {
+	showMinimized();
+	hide();
 }

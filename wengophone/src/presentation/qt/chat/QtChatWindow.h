@@ -107,6 +107,8 @@ private Q_SLOTS:
 
 	void statusMessageReceivedSLot(IMChatSession * sender, int status, const QString & message);
 
+	void closeWindow();
+
 private:
 
 	QtChatWidget * getActiveTabWidget();

@@ -26,7 +26,6 @@
 #include "contactlist/QtContactMenu.h"
 #include "webservices/sms/QtSms.h"
 
-
 #include <control/CWengoPhone.h>
 #include <control/profile/CUserProfile.h>
 #include <control/profile/CUserProfileHandler.h>
@@ -76,7 +75,7 @@ QtSystray::QtSystray(QObject * parent)
 
 	//trayIcon
 	_trayIcon = new TrayIcon(QPixmap(":pics/status/online.png"), QString("WengoPhone"), _trayMenu, _qtWengoPhone->getWidget());
-	SAFE_CONNECT(_trayIcon, SIGNAL(doubleClicked(const QPoint &)), SLOT(systrayDoubleClicked(const QPoint &)));
+	SAFE_CONNECT(_trayIcon, SIGNAL(doubleClicked(const QPoint &)), SLOT(showMainWindow()));
 	phoneLineStateChanged(EnumPhoneLineState::PhoneLineStateProgress);
 	_trayIcon->show();
 
@@ -115,7 +114,7 @@ void QtSystray::setTrayMenu() {
 #endif
 
 #if !defined(OS_MACOSX)
-	SAFE_CONNECT_RECEIVER(openAction, SIGNAL(triggered()), _qtWengoPhone->getWidget(), SLOT(show()));
+	SAFE_CONNECT(openAction, SIGNAL(triggered()), SLOT(showMainWindow()));
 	SAFE_CONNECT_RECEIVER(quitAction, SIGNAL(triggered()), _qtWengoPhone, SLOT(exitApplication()));
 #endif
 
@@ -298,17 +297,10 @@ void QtSystray::connectionStateEventHandlerThreadSafe(bool connected) {
 	}
 }
 
-void QtSystray::systrayDoubleClicked(const QPoint &) {
-	if (_qtWengoPhone->getWidget()->isVisible()) {
-		_qtWengoPhone->getWidget()->setVisible(false);
-	}
-	else {
-		_qtWengoPhone->getWidget()->showMinimized();
-		_qtWengoPhone->getWidget()->showNormal();
-#ifdef OS_WINDOWS
-		BringWindowToTop(_qtWengoPhone->getWidget()->winId());
-#endif
-	}
+void QtSystray::showMainWindow() {
+	_qtWengoPhone->getWidget()->showMinimized();
+	_qtWengoPhone->getWidget()->showNormal();
+	_qtWengoPhone->getWidget()->activateWindow();
 }
 
 void QtSystray::hide() {
@@ -361,4 +353,3 @@ void QtSystray::sendSms(QAction * action) {
 		LOG_FATAL("QAction cannot be NULL");
 	}
 }
-	

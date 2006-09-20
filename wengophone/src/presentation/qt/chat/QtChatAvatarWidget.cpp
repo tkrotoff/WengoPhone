@@ -42,7 +42,7 @@ QtChatAvatarWidget::QtChatAvatarWidget(QWidget * parent, const QString & id,
 void QtChatAvatarWidget::setupPixmap(QPixmap pixmap) {
 
 	//TODO:: resize fond_avatar.png
-	QPixmap background = QPixmap(":/pics/avatar_background.png");
+	/*QPixmap background = QPixmap(":/pics/avatar_background.png");
 	QPainter painter(&background);
 
 	if (!pixmap.isNull()) {
@@ -82,7 +82,7 @@ void QtChatAvatarWidget::setupPixmap(QPixmap pixmap) {
 	}
 
 	painter.end();
-	_ui.pictureLabel->setPixmap(background);
+	_ui.pictureLabel->setPixmap(background);*/
 }
 
 void QtChatAvatarWidget::setupNickname(const QString & nickname) {

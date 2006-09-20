@@ -58,7 +58,7 @@ public Q_SLOTS:
 
 private Q_SLOTS:
 
-	void systrayDoubleClicked(const QPoint &);
+	void showMainWindow();
 
 	void makeCall(QAction * action);
 
