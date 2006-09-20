@@ -493,6 +493,10 @@ public:
 	static const std::string FILETRANSFER_DOWNLOAD_FOLDER;
 	std::string getFileTransferDownloadFolder() const;
 
+	/** Path to the last uploaded file. */
+	static const std::string FILETRANSFER_LASTUPLOADEDFILE_FOLDER;
+	std::string getLastUploadedFileFolder() const;
+
 	/** @} */
 
 	/**

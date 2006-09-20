@@ -137,6 +137,7 @@ const std::string Config::CMDLINE_PLACECALL_KEY = "cmdline.placecall";
 const std::string Config::CMDSERVER_AUTHORIZED_KEY = "cmdserver.authorized";
 
 const std::string Config::FILETRANSFER_DOWNLOAD_FOLDER = "filetransfer.downloadfolder";
+const std::string Config::FILETRANSFER_LASTUPLOADEDFILE_FOLDER = "filetransfer.lastuploadedfilefolder";
 
 const std::string Config::LINUX_PREFERED_BROWSER = "linux.prefered.browser";
 
@@ -277,6 +278,7 @@ Config::Config(const std::string & name)
 	_keyDefaultValueMap[LAST_CHAT_HISTORY_SAVE_DIR_KEY] = Path::getHomeDirPath();
 
 	_keyDefaultValueMap[FILETRANSFER_DOWNLOAD_FOLDER] = empty;
+	_keyDefaultValueMap[FILETRANSFER_LASTUPLOADEDFILE_FOLDER] = empty;
 
 	_keyDefaultValueMap[LINUX_PREFERED_BROWSER] = empty;
 }
@@ -682,3 +684,9 @@ std::string Config::getFileTransferDownloadFolder() const {
 std::string Config::getLinuxPreferedBrowser() const {
 	return getStringKeyValue(LINUX_PREFERED_BROWSER);
 }
+
+
+std::string Config::getLastUploadedFileFolder() const {
+		return getStringKeyValue(FILETRANSFER_LASTUPLOADEDFILE_FOLDER);
+}
+
