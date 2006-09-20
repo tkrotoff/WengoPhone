@@ -621,7 +621,6 @@ void QtWengoPhone::currentUserProfileWillDieEventHandlerSlot() {
 	OWSAFE_DELETE(_qtIdle);
 
 	if (_qtProfileBar) {
-		_ui->profileBar->layout()->removeWidget(_qtProfileBar);
 		OWSAFE_DELETE(_qtProfileBar);
 	}
 
@@ -655,7 +654,6 @@ void QtWengoPhone::userProfileInitializedEventHandlerSlot() {
 	//Add the profile bar
 	int profileBarIndex = _ui->profileBar->addWidget(_qtProfileBar);
 	_ui->profileBar->setCurrentIndex(profileBarIndex);
-	_ui->profileBar->widget(profileBarIndex)->setLayout(new QGridLayout());
 
 	_qtSystray->setTrayMenu();
 	_qtSystray->setSystrayIcon(EnumPresenceState::MyPresenceStatusOk);
