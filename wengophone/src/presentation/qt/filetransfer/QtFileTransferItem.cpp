@@ -53,6 +53,14 @@ void QtFileTransferItem::setState(const QString & state) {
 	_ui.statusLabel->setText(state);
 }
 
+void QtFileTransferItem::setContact(const QString & contact) {
+	if (_type == Download) {
+		_ui.contactLabel->setText("  " + tr("From : ") + contact);
+	} else {
+		_ui.contactLabel->setText("  " + tr("To : ") + contact);
+	}
+}
+
 void QtFileTransferItem::setFileSize(int size) {
 }
 
@@ -155,7 +163,7 @@ void QtFileTransferItem::updateState(int e) {
 			updateButtonsInProgress();
 			break;
 		case IFileSession::IFileSessionEventFileTransferCancelled:
-			stateChangeEventDownUp();
+			stateChangeEvent(tr("Cancelled"));
 			updateButtonsFinished();
 			break;
 		case IFileSession::IFileSessionEventFileTransferCancelledByPeer:

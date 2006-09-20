@@ -25,12 +25,13 @@
 #include <qtutil/SafeConnect.h>
 #include <QtGui/QtGui>
 
-QtFileTransferUploadItem::QtFileTransferUploadItem(QWidget * parent,
-	SendFileSession * fileSession, std::string filename, std::string contactId)
-	:  QtFileTransferItem(parent, QtFileTransferItem::Upload),
+QtFileTransferUploadItem::QtFileTransferUploadItem(QWidget * parent, SendFileSession * fileSession,
+	const std::string & filename, const std::string & contactId, const std::string & contact)
+	: QtFileTransferItem(parent, QtFileTransferItem::Upload),
 	_sendFileSession(fileSession), _filename(filename), _contactId(contactId) {
 
 	setFilename(QString::fromStdString(fileSession->getFileList()[0].getFileName()));
+	setContact(QString::fromStdString(contact));
 
 	// bind to fileSession events
 	_sendFileSession->fileTransferProgressionEvent +=

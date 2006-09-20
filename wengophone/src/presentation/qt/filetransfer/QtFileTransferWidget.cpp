@@ -87,18 +87,20 @@ void QtFileTransferWidget::addReceiveItem(ReceiveFileSession * fileSession) {
 	_ui.downloadTransferListWidget->setItemWidget(item, fileTransferItem);
 	showDownloadTab();
 	show();
+	raise();
 }
 
 void QtFileTransferWidget::addSendItem(SendFileSession * fileSession,
-	const std::string & filename, const std::string & contactId) {
+	const std::string & filename, const std::string & contactId, const std::string & contact) {
 
 	QtFileTransferUploadItem * fileTransferItem = new QtFileTransferUploadItem(this, fileSession,
-		filename, contactId);
+		filename, contactId, contact);
 	QListWidgetItem * item = new QListWidgetItem(_ui.uploadTransferListWidget);
 	item->setSizeHint(fileTransferItem->minimumSizeHint());
 	_ui.uploadTransferListWidget->setItemWidget(item, fileTransferItem);
 	showUploadTab();
 	show();
+	raise();
 }
 
 void QtFileTransferWidget::setDownloadFolder(const QString & folder) {

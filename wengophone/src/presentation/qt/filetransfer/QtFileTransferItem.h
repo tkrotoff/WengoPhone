@@ -122,6 +122,12 @@ protected:
 	void setFileSize(int size);
 
 	/**
+	 * Set contact name.
+	 * @param contact contact name.
+	 */
+	void setContact(const QString & contact);
+
+	/**
 	 * Disconnect buttons.
 	 */
 	void disconnectButtons();

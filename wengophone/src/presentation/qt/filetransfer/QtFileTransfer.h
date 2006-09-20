@@ -46,26 +46,41 @@ class QtFileTransfer : public QObject, public Trackable {
 public:
 
 	/**
-	 * Default constructor.
+	 * Constructor.
 	 */
 	QtFileTransfer(QObject * parent, CoIpManager * coIpManager);
 
+	/**
+	 * Destructor.
+	 */
 	~QtFileTransfer();
 
+	/**
+	 * Creates a SendFileSession.
+	 * @param imContactSet the set of contacts.
+	 * @param filename the file to upload.
+	 * @param cContactList a reference to the CContactList.
+	 */
 	void createSendFileSession(IMContactSet imContactSet, const std::string & filename, CContactList & cContactList);
 
-	void addSendFileSession(SendFileSession * fileSession);
-
-	QtFileTransferWidget * getFileTransferWidget() {
-		return _qtFileTransferWidget;
-	}
+	/**
+	 * Return a pointer to the File Transfer Widget.
+	 * @return a pointer to the QtFileTransferWidget.
+	 */
+	QtFileTransferWidget * getFileTransferWidget() { return _qtFileTransferWidget; }
 
 Q_SIGNALS:
 
+	/**
+	 * @brief Thread safe code
+	 */
 	void newReceiveFileSessionCreatedEventHandlerSignal(ReceiveFileSession * fileSession);
 
 private Q_SLOTS:
 
+	/**
+	 * @brief Thread safe code
+	 */
 	void newReceiveFileSessionCreatedEventHandlerSlot(ReceiveFileSession * fileSession);
 
 private:
@@ -74,6 +89,16 @@ private:
 	 * @see FileSessionManager::newReceiveFileSessionCreatedEvent
 	 */
 	void newReceiveFileSessionCreatedEventHandler(FileSessionManager & sender, ReceiveFileSession fileSession);
+
+	/**
+	 * Test if a file is in a dir.
+	 * TODO: put this somewhere else.
+	 *
+	 * @param dir the dir
+	 * @param file the file
+	 * @return true if file is in dir otherwise false.
+	 */
+	bool isFileInDir(const QString & dir, const QString & filename);
 
 	QtFileTransferWidget * _qtFileTransferWidget;
 

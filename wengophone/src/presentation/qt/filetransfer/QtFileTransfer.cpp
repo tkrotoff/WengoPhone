@@ -61,12 +61,14 @@ void QtFileTransfer::newReceiveFileSessionCreatedEventHandlerSlot(ReceiveFileSes
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	QString downloadFolder;
+	QString filename =  QString::fromStdString(fileSession->getFileName());
+	QString contact = QString::fromStdString(fileSession->getIMContact().getContactId());
 
 	LOG_DEBUG("incoming file: " + fileSession->getFileName() + "from: " + fileSession->getIMContact().getContactId());
 
-	QtFileTransferAcceptDialog qtFileTransferAcceptDialog(0);
-	qtFileTransferAcceptDialog.setFileName(fileSession->getFileName());
-	qtFileTransferAcceptDialog.setContactName(fileSession->getIMContact().getContactId());
+	QtFileTransferAcceptDialog qtFileTransferAcceptDialog(_qtFileTransferWidget);
+	qtFileTransferAcceptDialog.setFileName(filename);
+	qtFileTransferAcceptDialog.setContactName(contact);
 
 	// the user accept the file transfer
 	if (qtFileTransferAcceptDialog.exec() == QDialog::Accepted) {
@@ -95,7 +97,13 @@ void QtFileTransfer::newReceiveFileSessionCreatedEventHandlerSlot(ReceiveFileSes
 			downloadFolder = QString::fromStdString(config.getFileTransferDownloadFolder());
 		}
 
-		// here we're sure to have a download folder.
+		// here we're sure to have a download folder,
+		// but we must check if the file already exists.
+		if (isFileInDir(downloadFolder, QString::fromStdString(fileSession->getFileName()))) {
+			fileSession->stop();
+			OWSAFE_DELETE(fileSession);
+		}
+
 		_qtFileTransferWidget->setDownloadFolder(downloadFolder);
 		_qtFileTransferWidget->addReceiveItem(fileSession);
 		fileSession->setFilePath(downloadFolder.toStdString());
@@ -108,21 +116,6 @@ void QtFileTransfer::newReceiveFileSessionCreatedEventHandlerSlot(ReceiveFileSes
 	}
 }
 
-void QtFileTransfer::addSendFileSession(SendFileSession * fileSession) {
-
-	std::vector<File> fileList =  fileSession->getFileList();
-	std::vector<File>::iterator it;
-
-	for (it = fileList.begin(); it != fileList.end(); it++) {
-		std::string filename = (*it).getFileName();
-
-		StringList contactList = fileSession->getContactList();
-		for (unsigned int i = 0; i < contactList.size(); i++) {
-			_qtFileTransferWidget->addSendItem(fileSession, filename, contactList[i]);
-		}
-	}
-}
-
 void QtFileTransfer::createSendFileSession(IMContactSet imContactSet, const std::string & filename, CContactList & cContactList) {
 
 	SendFileSession * fileSession = _coIpManager->getFileSessionManager().createSendFileSession();
@@ -132,8 +125,23 @@ void QtFileTransfer::createSendFileSession(IMContactSet imContactSet, const std:
 		std::string contactId = cContactList.findContactThatOwns(*it);
 		fileSession->addContact(contactId);
 
-		_qtFileTransferWidget->addSendItem(fileSession, filename, contactId);
+		_qtFileTransferWidget->addSendItem(fileSession, filename, contactId, (*it).getContactId());
 	}
 
 	fileSession->start();
+}
+
+bool QtFileTransfer::isFileInDir(const QString & dirname, const QString & filename) {
+
+	QDir dir(dirname);
+	if (dir.exists()) {
+
+		QStringList dirList = dir.entryList(QStringList(), QDir::Files);
+		for (int i = 0; i < dirList.size(); i++) {
+			if (dirList[i] == filename) {
+				return true;
+			}
+		}
+	}
+	return false;
 }

@@ -20,10 +20,9 @@
 #include "QtFileTransferDownloadItem.h"
 
 #include <filesessionmanager/ReceiveFileSession.h>
-
-#include <util/Logger.h>
-
+#include <imwrapper/IMContact.h>
 #include <qtutil/SafeConnect.h>
+#include <util/Logger.h>
 
 #include <QtGui/QtGui>
 
@@ -31,6 +30,8 @@ QtFileTransferDownloadItem::QtFileTransferDownloadItem(QWidget * parent, Receive
 	: QtFileTransferItem(parent, QtFileTransferItem::Download), _receiveFileSession(fileSession) {
 
 	setFilename(QString::fromStdString(fileSession->getFileName()));
+	//TODO: setContact from fileSession.getContact that returns a IMContact
+	setContact(QString::fromStdString(_receiveFileSession->getIMContact().getContactId()));
 
 	// bind to fileSession events
 	_receiveFileSession->fileTransferProgressionEvent +=

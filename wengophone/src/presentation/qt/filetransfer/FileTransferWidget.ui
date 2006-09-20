@@ -8,12 +8,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>478</width>
-    <height>368</height>
+    <width>378</width>
+    <height>279</height>
    </rect>
   </property>
   <property name="windowTitle" >
-   <string>File Transfer</string>
+   <string>File Transfer Manager</string>
   </property>
   <layout class="QGridLayout" >
    <property name="margin" >

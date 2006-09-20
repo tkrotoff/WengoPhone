@@ -39,7 +39,8 @@ public:
 	/**
 	 * Default constructor.
 	 */
-	QtFileTransferUploadItem(QWidget * parent, SendFileSession * fileSession, std::string filename, std::string contactId);
+	QtFileTransferUploadItem(QWidget * parent, SendFileSession * fileSession, 
+		const std::string & filename, const std::string & contactId, const std::string & contact);
 
 private Q_SLOTS:
 

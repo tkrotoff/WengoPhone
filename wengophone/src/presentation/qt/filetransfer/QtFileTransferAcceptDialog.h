@@ -43,12 +43,12 @@ public:
 	/**
  	 * Sets the file name label.
 	 */
-	void setFileName(const std::string & fileName);
+	void setFileName(const QString & fileName);
 
 	/**
 	 * Sets the Contact name label.
 	 */
-	void setContactName(const std::string & contactName);
+	void setContactName(const QString & contactName);
 	
 private:
 

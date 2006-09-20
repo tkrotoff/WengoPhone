@@ -45,7 +45,8 @@ public:
 
 	void addReceiveItem(ReceiveFileSession * fileSession);
 
-	void addSendItem(SendFileSession * fileSession, const std::string & filename, const std::string & contactId);
+	void addSendItem(SendFileSession * fileSession, const std::string & filename,
+		const std::string & contactId, const std::string & contact);
 
 private Q_SLOTS:
 

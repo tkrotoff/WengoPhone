@@ -22,20 +22,26 @@
 #include "ui_AcceptDialog.h"
 
 #include <util/SafeDelete.h>
+#include <qtutil/WidgetBackgroundImage.h>
+
 
 QtFileTransferAcceptDialog::QtFileTransferAcceptDialog(QWidget * parent) : QDialog(parent) {
 	_ui = new Ui::AcceptDialog();
 	_ui->setupUi(this);
+
+	//install header image
+	WidgetBackgroundImage::setBackgroundImage(_ui->headerLabel, ":pics/headers/file-tranfer.png", true);
+	////
 }
 
 QtFileTransferAcceptDialog::~QtFileTransferAcceptDialog() {
 	OWSAFE_DELETE(_ui);
 }
 
-void QtFileTransferAcceptDialog::setFileName(const std::string & fileName) {
-	_ui->filenameLabel->setText(QString::fromStdString(fileName));
+void QtFileTransferAcceptDialog::setFileName(const QString & fileName) {
+	_ui->filenameLabel->setText(fileName);
 }
 
-void QtFileTransferAcceptDialog::setContactName(const std::string & contactName) {
-	_ui->contactLabel->setText(QString::fromStdString(contactName));
+void QtFileTransferAcceptDialog::setContactName(const QString & contactName) {
+	_ui->contactLabel->setText(contactName);
 }
