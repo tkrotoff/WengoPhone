@@ -1034,8 +1034,16 @@ static void sfp_receive_terminaison(sfp_session_info_t * session, sfp_returncode
 
 			// close the call
 			phBye(call_id);
+		}else if(session->state == SFP_SESSION_CANCELLED){
+			// notify GUI
+			if(sfp_cbks != NULL && sfp_cbks->transferCancelled) sfp_cbks->transferCancelled(call_id, session->short_filename, session->file_type, session->file_size);
+
+			// send a BYE
+			phBye(call_id);
+		}else if(session->state == SFP_SESSION_CANCELLED_BY_PEER){			
+			// notify GUI
+			if(sfp_cbks != NULL && sfp_cbks->transferCancelledByPeer) sfp_cbks->transferCancelledByPeer(call_id, session->remote_username, session->short_filename, session->file_type, session->file_size);
 		}
-		// TODO else what?
 	}
 
 	// free the session
@@ -1092,8 +1100,16 @@ static void sfp_send_terminaison(sfp_session_info_t * session, sfp_returncode_t 
 			if(sfp_cbks != NULL && sfp_cbks->transferToPeerFinished) sfp_cbks->transferToPeerFinished(call_id, session->remote_username, session->short_filename, session->file_type, session->file_size);
 
 			session->state = SFP_SESSION_FINISHED;
+		}else if(session->state == SFP_SESSION_CANCELLED){			
+			// notify GUI
+			if(sfp_cbks != NULL && sfp_cbks->transferCancelled) sfp_cbks->transferCancelled(call_id, session->short_filename, session->file_type, session->file_size);
+
+			// send a BYE
+			phBye(call_id);
+		}else if(session->state == SFP_SESSION_CANCELLED_BY_PEER){			
+			// notify GUI
+			if(sfp_cbks != NULL && sfp_cbks->transferCancelledByPeer) sfp_cbks->transferCancelledByPeer(call_id, session->remote_username, session->short_filename, session->file_type, session->file_size);
 		}
-		// TODO else what?
 	}
 
 	// do not free the session here, but at the receive of a BYE from the receiver
@@ -1386,12 +1402,10 @@ static void sfp_on_EXOSIP_CALL_CLOSED(eXosip_event_t * event){ // BYE received
 	}
 
 	if(session->state != SFP_SESSION_FINISHED){
+		session->state = SFP_SESSION_CANCELLED_BY_PEER;
+	}else{
 		session->state = SFP_SESSION_CLOSED_BY_PEER;
-	}
-
-	if(sfp_cbks != NULL && sfp_cbks->transferClosedByPeer) sfp_cbks->transferClosedByPeer(event->cid, session->remote_username, session->short_filename, session->file_type, session->file_size);
-
-	if(session->state == SFP_SESSION_FINISHED){
+		if(sfp_cbks != NULL && sfp_cbks->transferClosedByPeer) sfp_cbks->transferClosedByPeer(event->cid, session->remote_username, session->short_filename, session->file_type, session->file_size);
 		// suppress the session
 		sfp_remove_session_info(event->cid);
 	}

@@ -390,7 +390,7 @@ static sfp_returncode_t sfp_transfer_send_active(FILE * stream, SOCKET sckt, str
 	while((res_connect = connect(sckt, (struct sockaddr *)&address, sizeof(address))) < 0 && retries-- > 0){
 		sprintf(message, "Waiting for %d ms", wait_time);
 		m_log(message, "sfp_transfer_send_active");
-		if(session->state == SFP_SESSION_CLOSED_BY_PEER || session->state == SFP_SESSION_CANCELLED){
+		if(session->state == SFP_SESSION_CLOSED_BY_PEER || session->state == SFP_SESSION_CANCELLED || session->state == SFP_SESSION_CANCELLED_BY_PEER){
 			break;
 		}
 		sleep(wait_time);
@@ -417,9 +417,7 @@ static sfp_returncode_t sfp_transfer_send_active(FILE * stream, SOCKET sckt, str
 			usleep(WAIT_PAUSE_DELAY);
 		}
 		// if the transfer has been cancelled stop sending
-		if(session->state == SFP_SESSION_CLOSED_BY_PEER){
-			return SUCCESS;
-		}else if(session->state == SFP_SESSION_CANCELLED){
+		if(session->state == SFP_SESSION_CLOSED_BY_PEER || session->state == SFP_SESSION_CANCELLED_BY_PEER || session->state == SFP_SESSION_CANCELLED){
 			return SUCCESS;
 		}
 		sent = 0;
@@ -559,10 +557,7 @@ static sfp_returncode_t sfp_transfer_send_passive(FILE * stream, SOCKET sckt, st
 			usleep(WAIT_PAUSE_DELAY);
 		}
 		// if the transfer has been cancelled stop sending
-		if(session->state == SFP_SESSION_CLOSED_BY_PEER){
-			finalize_connection(tmp);
-			return SUCCESS;
-		}else if(session->state == SFP_SESSION_CANCELLED){
+		if(session->state == SFP_SESSION_CLOSED_BY_PEER || session->state == SFP_SESSION_CANCELLED_BY_PEER || session->state == SFP_SESSION_CANCELLED){
 			finalize_connection(tmp);
 			return SUCCESS;
 		}
@@ -636,7 +631,7 @@ static sfp_returncode_t sfp_transfer_receive_active(FILE * stream, SOCKET sckt, 
 	while((res_connect = connect(sckt, (struct sockaddr *)&address, sizeof(address))) < 0 && retries-- > 0){
 		sprintf(message, "Waiting for %d ms", wait_time);
 		m_log(message, "sfp_transfer_receive_active");
-		if(session->state == SFP_SESSION_CLOSED_BY_PEER || session->state == SFP_SESSION_CANCELLED){
+		if(session->state == SFP_SESSION_CLOSED_BY_PEER || session->state == SFP_SESSION_CANCELLED || session->state == SFP_SESSION_CANCELLED_BY_PEER){
 			break;
 		}
 		sleep(wait_time);
@@ -671,9 +666,7 @@ static sfp_returncode_t sfp_transfer_receive_active(FILE * stream, SOCKET sckt, 
 		//sprintf(message, "Received %d char", received);
 		m_log(message,"sfp_transfer_receive_active");
 		// if the transfer has been cancelled stop sending
-		if(session->state == SFP_SESSION_CLOSED_BY_PEER){
-			return SUCCESS;
-		}else if(session->state == SFP_SESSION_CANCELLED){
+		if(session->state == SFP_SESSION_CLOSED_BY_PEER || session->state == SFP_SESSION_CANCELLED_BY_PEER || session->state == SFP_SESSION_CANCELLED){
 			return SUCCESS;
 		}
 		if((int)fwrite(buffer, sizeof(char), received, stream) < received){
@@ -793,10 +786,7 @@ static sfp_returncode_t sfp_transfer_receive_passive(FILE * stream, SOCKET sckt,
 		notify_progress(session, total_received, total_to_receive, &increase);
 
 		// if the transfer has been cancelled stop sending
-		if(session->state == SFP_SESSION_CLOSED_BY_PEER){
-			finalize_connection(tmp);
-			return SUCCESS;
-		}else if(session->state == SFP_SESSION_CANCELLED){
+		if(session->state == SFP_SESSION_CLOSED_BY_PEER || session->state == SFP_SESSION_CANCELLED_BY_PEER || session->state == SFP_SESSION_CANCELLED){
 			finalize_connection(tmp);
 			return SUCCESS;
 		}
@@ -941,7 +931,7 @@ static void notify_progress(sfp_session_info_t * session, unsigned long actual, 
 	double pg = 49000000/((double)final+1000000)+1;
 	int progression = (int)ceil(pg);
 
-	if(actual == final) {
+	if(actual == final || final == 0) {
 		if(session->progressionCallback != NULL) session->progressionCallback(session, 100);
 		*increase = 100;
 	} else {
