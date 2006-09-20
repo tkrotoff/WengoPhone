@@ -23,10 +23,20 @@
 
 #include <QtGui/QtGui>
 
-QtIMAccountPlugin::QtIMAccountPlugin(UserProfile & userProfile, IMAccount * imAccount, QWidget * parent)
+QtIMAccountPlugin::QtIMAccountPlugin(UserProfile & userProfile, IMAccount * imAccount, QDialog * parent)
 	: QObject(parent),
 	_userProfile(userProfile) {
 
-	_parentWidget = parent;
+	_parentDialog = parent;
 	_imAccount = imAccount;
+}
+
+void QtIMAccountPlugin::checkAndSave() {
+	if (isValid()) {
+		save();
+		_parentDialog->accept();
+	} else {
+		QMessageBox::critical(_parentDialog, "WengoPhone",
+			tr("Please enter a login"), QMessageBox::Ok, QMessageBox::NoButton);
+	}
 }

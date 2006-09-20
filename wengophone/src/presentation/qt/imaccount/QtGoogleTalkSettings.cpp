@@ -41,7 +41,7 @@ static const std::string GOOGLETALK_CREATE_NEW_ACCOUNT_LINK_EN = "http://www.goo
 static const std::string GOOGLETALK_CREATE_NEW_ACCOUNT_LINK_FR = "http://www.google.com/talk/intl/fr/";
 static const int GOOGLETALK_PORT = 80;
 
-QtGoogleTalkSettings::QtGoogleTalkSettings(UserProfile & userProfile, IMAccount * imAccount, QWidget * parent)
+QtGoogleTalkSettings::QtGoogleTalkSettings(UserProfile & userProfile, IMAccount * imAccount, QDialog * parent)
 	: QtIMAccountPlugin(userProfile, imAccount, parent) {
 
 	init();
@@ -52,7 +52,7 @@ QtGoogleTalkSettings::~QtGoogleTalkSettings() {
 }
 
 void QtGoogleTalkSettings::init() {
-	_IMSettingsWidget = new QWidget(_parentWidget);
+	_IMSettingsWidget = new QWidget(_parentDialog);
 
 	_ui = new Ui::GoogleTalkSettings();
 	_ui->setupUi(_IMSettingsWidget);
@@ -104,11 +104,11 @@ void QtGoogleTalkSettings::save(UserProfile & userProfile, IMAccount * imAccount
 	userProfile.getConnectHandler().connect(*imAccount);
 }
 
-void QtGoogleTalkSettings::save() {
-	if (_ui->loginLineEdit->text().isEmpty()) {
-		return;
-	}
+bool QtGoogleTalkSettings::isValid() const {
+	return !_ui->loginLineEdit->text().isEmpty();
+}
 
+void QtGoogleTalkSettings::save() {
 	save(_userProfile, _imAccount, _ui->loginLineEdit->text().toStdString(), _ui->passwordLineEdit->text().toStdString());
 }
 

@@ -65,37 +65,29 @@ void QtIMAccountSettings::createIMProtocolWidget(QWidget * parent, QtEnumIMProto
 	_ui = new Ui::IMAccountTemplate();
 	_ui->setupUi(imAccountTemplateWindow);
 
-	//saveButton
-	SAFE_CONNECT_RECEIVER(_ui->saveButton, SIGNAL(clicked()),
-		imAccountTemplateWindow, SLOT(accept()));
-
-	//cancelButton
-	SAFE_CONNECT_RECEIVER(_ui->cancelButton, SIGNAL(clicked()),
-		imAccountTemplateWindow, SLOT(reject()));
-
 	switch (imProtocol) {
 	case QtEnumIMProtocol::IMProtocolMSN: {
-		_imAccountPlugin = new QtMSNSettings(_userProfile, _imAccount, _ui->settingsGroupBox);
+		_imAccountPlugin = new QtMSNSettings(_userProfile, _imAccount, imAccountTemplateWindow);
 		break;
 	}
 
 	case QtEnumIMProtocol::IMProtocolYahoo: {
-		_imAccountPlugin = new QtYahooSettings(_userProfile, _imAccount, _ui->settingsGroupBox);
+		_imAccountPlugin = new QtYahooSettings(_userProfile, _imAccount, imAccountTemplateWindow);
 		break;
 	}
 
 	case QtEnumIMProtocol::IMProtocolAIMICQ: {
-		_imAccountPlugin = new QtAIMSettings(_userProfile, _imAccount, _ui->settingsGroupBox);
+		_imAccountPlugin = new QtAIMSettings(_userProfile, _imAccount, imAccountTemplateWindow);
 		break;
 	}
 
 	case QtEnumIMProtocol::IMProtocolJabber: {
-		_imAccountPlugin = new QtJabberSettings(_userProfile, _imAccount, _ui->settingsGroupBox);
+		_imAccountPlugin = new QtJabberSettings(_userProfile, _imAccount, imAccountTemplateWindow);
 		break;
 	}
 
 	case QtEnumIMProtocol::IMProtocolGoogleTalk: {
-		_imAccountPlugin = new QtGoogleTalkSettings(_userProfile, _imAccount, _ui->settingsGroupBox);
+		_imAccountPlugin = new QtGoogleTalkSettings(_userProfile, _imAccount, imAccountTemplateWindow);
 		break;
 	}
 
@@ -103,12 +95,17 @@ void QtIMAccountSettings::createIMProtocolWidget(QWidget * parent, QtEnumIMProto
 		LOG_FATAL("unknown IM protocol=" + String::fromNumber(imProtocol));
 	}
 
+	//saveButton
+	SAFE_CONNECT_RECEIVER(_ui->saveButton, SIGNAL(clicked()),
+		_imAccountPlugin, SLOT(checkAndSave()));
+
+	//cancelButton
+	SAFE_CONNECT_RECEIVER(_ui->cancelButton, SIGNAL(clicked()),
+		imAccountTemplateWindow, SLOT(reject()));
+
 	QWidget * imProtocolWidget = _imAccountPlugin->getWidget();
 	Widget::createLayout(_ui->settingsGroupBox)->addWidget(imProtocolWidget);
 	_ui->settingsGroupBox->setTitle(imProtocolWidget->windowTitle());
-
-	SAFE_CONNECT_RECEIVER(imAccountTemplateWindow, SIGNAL(accepted()),
-		_imAccountPlugin, SLOT(save()));
 
 	imAccountTemplateWindow->setWindowTitle(imProtocolWidget->windowTitle());
 	imAccountTemplateWindow->exec();

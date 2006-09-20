@@ -39,7 +39,7 @@ class QtAIMSettings : public QtIMAccountPlugin {
 	Q_OBJECT
 public:
 
-	QtAIMSettings(UserProfile & userProfile, IMAccount * imAccount, QWidget * parent);
+	QtAIMSettings(UserProfile & userProfile, IMAccount * imAccount, QDialog * parent);
 
 	~QtAIMSettings();
 
@@ -59,9 +59,11 @@ public:
 	static void save(UserProfile & userProfile, IMAccount * imAccount,
 		const std::string & login, const std::string & password);
 
-public Q_SLOTS:
+	virtual bool isValid() const;
 
-	void save();
+	virtual void save();
+
+public Q_SLOTS:
 
 	void forgotPasswordButtonClicked();
 

@@ -30,7 +30,7 @@
 
 #include <QtGui/QtGui>
 
-QtJabberSettings::QtJabberSettings(UserProfile & userProfile, IMAccount * imAccount, QWidget * parent)
+QtJabberSettings::QtJabberSettings(UserProfile & userProfile, IMAccount * imAccount, QDialog * parent)
 	: QtIMAccountPlugin(userProfile, imAccount, parent) {
 
 	init();
@@ -41,7 +41,7 @@ QtJabberSettings::~QtJabberSettings() {
 }
 
 void QtJabberSettings::init() {
-	_IMSettingsWidget = new QWidget(_parentWidget);
+	_IMSettingsWidget = new QWidget(_parentDialog);
 
 	_ui = new Ui::JabberSettings();
 	_ui->setupUi(_IMSettingsWidget);
@@ -62,11 +62,11 @@ void QtJabberSettings::init() {
 	_ui->portLineEdit->setText(QString("%1").arg(params.getJabberServerPort()));
 }
 
-void QtJabberSettings::save() {
-	if (_ui->loginLineEdit->text().isEmpty()) {
-		return;
-	}
+bool QtJabberSettings::isValid() const {
+	return !_ui->loginLineEdit->text().isEmpty();
+}
 
+void QtJabberSettings::save() {
 	std::string login = _ui->loginLineEdit->text().toStdString();
 	std::string password = _ui->passwordLineEdit->text().toStdString();
 

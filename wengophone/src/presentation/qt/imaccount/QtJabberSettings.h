@@ -39,7 +39,7 @@ class QtJabberSettings : public QtIMAccountPlugin {
 	Q_OBJECT
 public:
 
-	QtJabberSettings(UserProfile & userProfile, IMAccount * imAccount, QWidget * parent);
+	QtJabberSettings(UserProfile & userProfile, IMAccount * imAccount, QDialog * parent);
 
 	~QtJabberSettings();
 
@@ -47,9 +47,9 @@ public:
 		return _IMSettingsWidget;
 	}
 
-public Q_SLOTS:
+	virtual bool isValid() const;
 
-	void save();
+	virtual void save();
 
 private:
 

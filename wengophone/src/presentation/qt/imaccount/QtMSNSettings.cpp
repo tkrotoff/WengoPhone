@@ -39,7 +39,7 @@ static const std::string MSN_FORGOT_PASSWORD_LINK_FR = "https://accountservices.
 static const std::string MSN_CREATE_NEW_ACCOUNT_LINK_EN = "https://accountservices.passport.net/reg.srf?bk=1148037006&cru=https://accountservices.passport.net/uiresetpw.srf%3flc%3d1033&lc=1033&sl=1";
 static const std::string MSN_CREATE_NEW_ACCOUNT_LINK_FR = "https://accountservices.passport.net/reg.srf?id=9&cbid=956&sl=1&lc=1036";
 
-QtMSNSettings::QtMSNSettings(UserProfile & userProfile, IMAccount * imAccount, QWidget * parent)
+QtMSNSettings::QtMSNSettings(UserProfile & userProfile, IMAccount * imAccount, QDialog * parent)
 	: QtIMAccountPlugin(userProfile, imAccount, parent) {
 
 	init();
@@ -50,7 +50,7 @@ QtMSNSettings::~QtMSNSettings() {
 }
 
 void QtMSNSettings::init() {
-	_IMSettingsWidget = new QWidget(_parentWidget);
+	_IMSettingsWidget = new QWidget(_parentDialog);
 
 	_ui = new Ui::MSNSettings();
 	_ui->setupUi(_IMSettingsWidget);
@@ -102,11 +102,11 @@ void QtMSNSettings::save(UserProfile & userProfile, IMAccount * imAccount,
 	userProfile.getConnectHandler().connect(*imAccount);
 }
 
-void QtMSNSettings::save() {
-	if (_ui->loginLineEdit->text().isEmpty()) {
-		return;
-	}
+bool QtMSNSettings::isValid() const {
+	return !_ui->loginLineEdit->text().isEmpty();
+}
 
+void QtMSNSettings::save() {
 	save(_userProfile, _imAccount, _ui->loginLineEdit->text().toStdString(), _ui->passwordLineEdit->text().toStdString());
 }
 

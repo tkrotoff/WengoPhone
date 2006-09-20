@@ -38,7 +38,7 @@ static const std::string AIM_FORGOT_PASSWORD_LINK_FR = "http://www.aim.aol.fr/ou
 static const std::string AIM_CREATE_NEW_ACCOUNT_LINK_EN = "https://my.screenname.aol.com/_cqr/login/login.psp?mcState=initialized&seamless=n&createSn=1&sitedomain=www.aim.com&siteState=http%3A//www.aim.com/get_aim/congratsd2.adp&triedAimAuth=y&promo=380464";
 static const std::string AIM_CREATE_NEW_ACCOUNT_LINK_FR = "https://reg.my.screenname.aol.com/_cqr/registration/initRegistration.psp?mcState=initialized&seamless=n&createSn=1&siteId=aimregPROD-fr&siteState=http%3A%2F%2Faim%2Eaol%2Efr%2Fupgrade%2Ejsp&mcAuth=%2FBcAG0RtoewAAPdvAHyUj0RtoigIxtPj0NfjWwgAAA%3D%3D";
 
-QtAIMSettings::QtAIMSettings(UserProfile & userProfile, IMAccount * imAccount, QWidget * parent)
+QtAIMSettings::QtAIMSettings(UserProfile & userProfile, IMAccount * imAccount, QDialog * parent)
 	: QtIMAccountPlugin(userProfile, imAccount, parent) {
 
 	init();
@@ -49,7 +49,7 @@ QtAIMSettings::~QtAIMSettings() {
 }
 
 void QtAIMSettings::init() {
-	_IMSettingsWidget = new QWidget(_parentWidget);
+	_IMSettingsWidget = new QWidget(_parentDialog);
 
 	_ui = new Ui::AIMSettings();
 	_ui->setupUi(_IMSettingsWidget);
@@ -92,11 +92,11 @@ void QtAIMSettings::save(UserProfile & userProfile, IMAccount * imAccount,
 	userProfile.getConnectHandler().connect(*imAccount);
 }
 
-void QtAIMSettings::save() {
-	if (_ui->loginLineEdit->text().isEmpty()) {
-		return;
-	}
+bool QtAIMSettings::isValid() const {
+	return !_ui->loginLineEdit->text().isEmpty();
+}
 
+void QtAIMSettings::save() {
 	save(_userProfile, _imAccount, _ui->loginLineEdit->text().toStdString(), _ui->passwordLineEdit->text().toStdString());
 }
 

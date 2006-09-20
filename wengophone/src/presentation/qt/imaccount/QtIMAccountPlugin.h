@@ -37,13 +37,23 @@ class QtIMAccountPlugin : public QObject, Interface {
 	Q_OBJECT
 public:
 
-	QtIMAccountPlugin(UserProfile & userProfile, IMAccount * imAccount, QWidget * parent);
+	QtIMAccountPlugin(UserProfile & userProfile, IMAccount * imAccount, QDialog * parent);
 
 	virtual QWidget * getWidget() const = 0;
 
+	/**
+	 * @return true if entered value are valid.
+	 */
+	virtual bool isValid() const = 0;
+
+	/**
+	 * Saves the entered data.
+	 */
+	virtual void save() = 0;
+
 public Q_SLOTS:
 
-	virtual void save() = 0;
+	void checkAndSave();
 
 protected:
 
@@ -53,7 +63,7 @@ protected:
 
 	UserProfile & _userProfile;
 
-	QWidget * _parentWidget;
+	QDialog * _parentDialog;
 };
 
 #endif	//QTIMACCOUNTPLUGIN_H

@@ -38,7 +38,7 @@ static const std::string YAHOO_FORGOT_PASSWORD_LINK_FR = "http://edit.yahoo.com/
 static const std::string YAHOO_CREATE_NEW_ACCOUNT_LINK_EN = "http://login.yahoo.com/config/login?.done=http://messenger.yahoo.com&.src=pg";
 static const std::string YAHOO_CREATE_NEW_ACCOUNT_LINK_FR = "https://edit.yahoo.com/config/eval_register?.intl=fr&.done=http://fr.messenger.yahoo.com&.src=pg";
 
-QtYahooSettings::QtYahooSettings(UserProfile & userProfile, IMAccount * imAccount, QWidget * parent)
+QtYahooSettings::QtYahooSettings(UserProfile & userProfile, IMAccount * imAccount, QDialog * parent)
 	: QtIMAccountPlugin(userProfile, imAccount, parent) {
 
 	init();
@@ -49,7 +49,7 @@ QtYahooSettings::~QtYahooSettings() {
 }
 
 void QtYahooSettings::init() {
-	_IMSettingsWidget = new QWidget(_parentWidget);
+	_IMSettingsWidget = new QWidget(_parentDialog);
 
 	_ui = new Ui::YahooSettings();
 	_ui->setupUi(_IMSettingsWidget);
@@ -68,11 +68,11 @@ void QtYahooSettings::init() {
 	_ui->passwordLineEdit->setText(QString::fromStdString(_imAccount->getPassword()));
 }
 
-void QtYahooSettings::save() {
-	if (_ui->loginLineEdit->text().isEmpty()) {
-		return;
-	}
+bool QtYahooSettings::isValid() const {
+	return !_ui->loginLineEdit->text().isEmpty();
+}
 
+void QtYahooSettings::save() {
 	String login = _ui->loginLineEdit->text().toStdString();
 	std::string password = _ui->passwordLineEdit->text().toStdString();
 

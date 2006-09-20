@@ -39,7 +39,7 @@ class QtYahooSettings : public QtIMAccountPlugin {
 	Q_OBJECT
 public:
 
-	QtYahooSettings(UserProfile & userProfile, IMAccount * imAccount, QWidget * parent);
+	QtYahooSettings(UserProfile & userProfile, IMAccount * imAccount, QDialog * parent);
 
 	~QtYahooSettings();
 
@@ -47,9 +47,11 @@ public:
 		return _IMSettingsWidget;
 	}
 
-public Q_SLOTS:
+	virtual bool isValid() const;
 
-	void save();
+	virtual void save();
+
+public Q_SLOTS:
 
 	void forgotPasswordButtonClicked();
 
