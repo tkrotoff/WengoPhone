@@ -70,21 +70,19 @@ eXosip_remove_transaction_from_call(osip_transaction_t *tr, eXosip_call_t *jc)
       jc->c_out_tr = NULL; /* can be NULL */
       return 0;
     }
-    
-    jd = jc->c_dialogs;
 
-	if (jd)
-	{
-		if (!eXosip_list_remove_element(jd->d_inc_trs, tr))
-			return 0;
+  for (jd = jc->c_dialogs; jd; jd->next)
+    {
+      if (!eXosip_list_remove_element(jd->d_inc_trs, tr))
+	return 0;
 
-		if (!eXosip_list_remove_element(jd->d_out_trs, tr))
-			return 0;
+      if (!eXosip_list_remove_element(jd->d_out_trs, tr))
+	return 0;
+    }
 
-
-		OSIP_TRACE(osip_trace(__FILE__,__LINE__,OSIP_INFO1,NULL,
+  OSIP_TRACE(osip_trace(__FILE__,__LINE__,OSIP_INFO1,NULL,
 				"eXosip: No information.\n"));
-	}
+
   return -1;
 }
 
