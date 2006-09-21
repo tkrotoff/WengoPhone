@@ -22,6 +22,9 @@
 
 #include <presentation/PContactList.h>
 
+#include <thread/Condition.h>
+#include <thread/Mutex.h>
+
 #include <QtCore/QObject>
 #include <QtCore/QString>
 
@@ -87,6 +90,16 @@ public:
 
 	void contactChangedEvent(const std::string & contactId);
 
+	/**
+	 * Avoids the ContactList to be updated.
+	 */
+	void lock();
+
+	/**
+	 * Reactivates the ContactList display.
+	 */
+	void unlock();
+
 	CContactList & getCContactList() const;
 
 Q_SIGNALS:
@@ -97,11 +110,7 @@ public Q_SLOTS:
 
 	void cleanup();
 
-	void redrawContacts();
-
 	void hideOffLineContacts();
-
-	void sortContacts();
 
 	void showHideGroups();
 
@@ -134,6 +143,11 @@ private:
 
 	/** True when model is doing some things on contacts. */
 	bool _waitingForModel;
+
+	/** Used to lock the contact list display. */
+	bool _locked;
+	Mutex _mutex;
+	Condition _condition;
 
 	CWengoPhone & _cWengoPhone;
 };

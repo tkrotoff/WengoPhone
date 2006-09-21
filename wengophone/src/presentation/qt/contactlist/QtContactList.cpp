@@ -66,6 +66,7 @@ QtContactList::QtContactList(CContactList & cContactList, CWengoPhone & cWengoPh
 	_cWengoPhone(cWengoPhone) {
 
 	_waitingForModel = false;
+	_locked = false;
 
 	_contactListWidget = new QWidget(NULL);
 
@@ -164,7 +165,12 @@ void QtContactList::initContent() {
 }
 
 void QtContactList::updatePresentation() {
-	_contactManager->closeUserInfo();
+	Mutex::ScopedLock lock(_mutex);
+
+	if (_locked) {
+		_condition.wait(lock);	
+	}
+
 	_contactManager->userStateChanged();
 	_ui->treeWidget->viewport()->update();
 }
@@ -259,16 +265,8 @@ QTreeWidgetItem * QtContactList::addGroup(QString contactGroupId) {
 	return group;
 }
 
-void QtContactList::redrawContacts() {
-	_contactManager->redrawContacts();
-}
-
 void QtContactList::hideOffLineContacts() {
 	_contactManager->hideOffLineContacts();
-}
-
-void QtContactList::sortContacts() {
-	_contactManager->sortContacts();
 }
 
 CContactList & QtContactList::getCContactList() const {
@@ -301,4 +299,13 @@ void QtContactList::mergeContactsSlot(QString dstContact, QString srcContact) {
 			_waitingForModel = false;
 		}
 	}
+}
+
+void QtContactList::lock() {
+	_locked = true;
+}
+
+void QtContactList::unlock() {
+	_locked = false;
+	_condition.notify_all();
 }

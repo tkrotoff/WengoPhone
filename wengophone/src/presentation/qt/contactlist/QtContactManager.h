@@ -65,23 +65,29 @@ public:
 
 public Q_SLOTS:
 
-	void treeViewSelectionChanged();
+	void hideGroups();
+
+	void hideOffLineContacts();
+
+	void setMouseButton(Qt::MouseButton button);
+
+	void userStateChanged();
+
+private Q_SLOTS:
+
+	void closeUserInfo();
+
+	void defaultAction(QTreeWidgetItem * item);
+
+	void deleteContact();
+
+	void editContact(bool checked);
+
+	void inviteToConference();
 
 	void itemClicked(QTreeWidgetItem * item, int column);
 
 	void openUserInfo(QTreeWidgetItem * item);
-
-	void closeUserInfo();
-
-	void editContact(bool checked);
-
-	void deleteContact();
-
-	void userStateChanged();
-
-	void hideOffLineContacts();
-
-	void hideGroups();
 
 	void redrawContacts();
 
@@ -89,21 +95,17 @@ public Q_SLOTS:
 
 	void startChat(bool checked);
 
-	void startSMS(bool checked);
+	void startHomeCall(bool checked);
 
 	void startMobileCall(bool checked);
 
-	void startHomeCall(bool checked);
-
-	void startWorkCall(bool checked);
+	void startSMS(bool checked);
 
 	void startWengoCall(bool checked);
 
-	void setMouseButton(Qt::MouseButton button);
+	void startWorkCall(bool checked);
 
-	void inviteToConference();
-
-	void defaultAction(QTreeWidgetItem * item);
+	void treeViewSelectionChanged();
 
 Q_SIGNALS:
 
@@ -112,6 +114,8 @@ Q_SIGNALS:
 	void inviteToConferenceClicked(QString phone, PhoneCall * target);
 
 private:
+
+	void safeSortContacts(bool bypassTimer);
 
 	void safeUserStateChanged();
 
