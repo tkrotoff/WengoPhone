@@ -125,6 +125,8 @@ void ReceiveFileSession::moduleFinishedEventHandler(CoIpModule & sender) {
 void ReceiveFileSession::fileTransferEventHandler(IFileSession & sender,
 	IFileSession::IFileSessionEvent event, IMContact imContact, File sentFile) {
 
+	_lastEvent = event;
+
 	fileTransferEvent(*this, event, imContact, sentFile);
 }
 

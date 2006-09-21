@@ -113,6 +113,11 @@ public:
 	 */
 	unsigned getFileSize() const;
 
+	/**
+	 * Gets the last event.
+	 */
+	IFileSession::IFileSessionEvent getLastEvent() const { return _lastEvent; };
+
 private:
 
 	/**
@@ -137,6 +142,9 @@ private:
 	 * @see Module::moduleFinishedEvent
 	 */
 	void moduleFinishedEventHandler(CoIpModule & sender);
+
+	/** Last occured event. */
+	IFileSession::IFileSessionEvent _lastEvent;
 
 	/** Pointer to running IFileSession. */
 	IReceiveFileSession * _currentFileSessionImp;
