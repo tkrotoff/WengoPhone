@@ -132,11 +132,13 @@ QMenu * QtSystray::createStatusMenu() {
 	QtUserProfilePresenceMenu * menu = new QtUserProfilePresenceMenu(presenceState, connected, tr("Status"), NULL);
 
 	QtProfileBar * qtProfileBar = _qtWengoPhone->getQtProfileBar();
-	SAFE_CONNECT_RECEIVER(menu, SIGNAL(onlineClicked()), qtProfileBar, SLOT(onlineClicked()));
-	SAFE_CONNECT_RECEIVER(menu, SIGNAL(doNotDisturbClicked()), qtProfileBar, SLOT(doNotDisturbClicked()));
-	SAFE_CONNECT_RECEIVER(menu, SIGNAL(invisibleClicked()), qtProfileBar, SLOT(invisibleClicked()));
-	SAFE_CONNECT_RECEIVER(menu, SIGNAL(awayClicked()), qtProfileBar, SLOT(awayClicked()));
-	SAFE_CONNECT_RECEIVER(menu, SIGNAL(disconnectClicked()), qtProfileBar, SLOT(disconnectClicked()));
+	if (qtProfileBar) {
+		SAFE_CONNECT_RECEIVER(menu, SIGNAL(onlineClicked()), qtProfileBar, SLOT(onlineClicked()));
+		SAFE_CONNECT_RECEIVER(menu, SIGNAL(doNotDisturbClicked()), qtProfileBar, SLOT(doNotDisturbClicked()));
+		SAFE_CONNECT_RECEIVER(menu, SIGNAL(invisibleClicked()), qtProfileBar, SLOT(invisibleClicked()));
+		SAFE_CONNECT_RECEIVER(menu, SIGNAL(awayClicked()), qtProfileBar, SLOT(awayClicked()));
+		SAFE_CONNECT_RECEIVER(menu, SIGNAL(disconnectClicked()), qtProfileBar, SLOT(disconnectClicked()));
+	}
 
 	return menu;
 }
