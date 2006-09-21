@@ -193,7 +193,7 @@ void QtSms::smsStatusEventHandlerThreadSafe(EnumSmsState::SmsState state) {
 
 bool QtSms::isSmsLengthOk() const {
 
-	return (getCompleteMessage().length() < MAX_LENGTH);
+	return (getCompleteMessage().length() <= MAX_LENGTH);
 }
 
 QString QtSms::getCompleteMessage() const {
