@@ -86,7 +86,9 @@ int QtLogin::show() {
 
 	setInfoMessage(tr("Please enter your email address<br/>and your password"));
 
-	return _loginWindow->exec();
+	_loginWindow->show();
+
+	return 0;
 }
 
 int QtLogin::showWithInvalidWengoAccount(WengoAccount wengoAccount) {
@@ -94,7 +96,9 @@ int QtLogin::showWithInvalidWengoAccount(WengoAccount wengoAccount) {
 
 	setErrorMessage(tr("Wrong email/password entered"));
 
-	return _loginWindow->exec();
+	_loginWindow->show();
+
+	return 0;
 }
 
 int QtLogin::showWithWengoAccount(WengoAccount wengoAccount) {
@@ -113,7 +117,9 @@ int QtLogin::showWithWengoAccount(WengoAccount wengoAccount) {
 
 	setInfoMessage(tr("Click on Login to connect to Wengo"));
 
-	return _loginWindow->exec();
+	_loginWindow->show();
+
+	return 0;
 }
 
 void QtLogin::createWengoAccountButtonClicked() {
