@@ -372,6 +372,11 @@ endif (WIN32)
 
 if (UNIX AND NOT WIN32)
   if (APPLE)
+    qt4_wrap_cpp(
+      chat/QtCloseChatTabWidget.h
+      macosx/QtMacApplication.h
+    )
+
     set(qtwengophone_SRCS
       ${qtwengophone_SRCS}
       chat/QtCloseChatTabWidget.cpp
@@ -508,6 +513,20 @@ add_definitions(
 add_executable(${QTWENGOPHONE_EXECUTABLE} ${qtwengophone_SRCS})
 
 target_link_libraries(${QTWENGOPHONE_LINK_LIBRARIES})
+
+if (APPLE)
+  macro_add_compile_flags(${QTWENGOPHONE_EXECUTABLE}
+    "-x objective-c++"
+  )
+
+  macro_add_link_flags(${QTWENGOPHONE_EXECUTABLE}
+    "-framework CoreAudio"
+    "-framework AudioToolbox"
+    "-framework AudioUnit"
+    "-framework Cocoa"
+    "-framework Carbon"
+  )
+endif (APPLE)
 
 install(
   TARGETS
