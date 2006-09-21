@@ -19,6 +19,7 @@
 
 #include "QtUserProfileHandler.h"
 
+#include <presentation/PFactory.h>
 #include <presentation/qt/QtLanguage.h>
 #include <presentation/qt/QtWengoPhone.h>
 #include <presentation/qt/login/QtLogin.h>
@@ -38,9 +39,7 @@ QtUserProfileHandler::QtUserProfileHandler(CUserProfileHandler & cUserProfileHan
 	typedef PostEvent0<void ()> MyPostEvent;
 	MyPostEvent * event = new MyPostEvent(boost::bind(&QtUserProfileHandler::initThreadSafe, this));
 	postEvent(event);
-}
 
-void QtUserProfileHandler::initThreadSafe() {
 	//Connection for UserProfile change
 	SAFE_CONNECT_TYPE(this, SIGNAL(noCurrentUserProfileSetEventHandlerSignal()),
 		SLOT(noCurrentUserProfileSetEventHandlerSlot()), Qt::QueuedConnection);
@@ -53,7 +52,9 @@ void QtUserProfileHandler::initThreadSafe() {
 		SLOT(wengoAccountNotValidEventHandlerSlot(WengoAccount)), Qt::QueuedConnection);
 	SAFE_CONNECT_TYPE(this, SIGNAL(defaultUserProfileExistsEventHandlerSignal(QString)),
 		SLOT(defaultUserProfileExistsEventHandlerSlot(QString)), Qt::QueuedConnection);
+}
 
+void QtUserProfileHandler::initThreadSafe() {
 	//Login Window
 	_qtLogin = new QtLogin(_qtWengoPhone.getWidget(), _cUserProfileHandler);
 }
