@@ -24,7 +24,8 @@ set(OWQTUTIL_LINK_LIBRARIES
   ${OWTHREAD_LIBRARY}
   ${QT_QTCORE_LIBRARY}
   ${QT_QTGUI_LIBRARY}
-  ${QT_QTUITOOLS_LIBRARY}
+  #${QT_QTUITOOLS_LIBRARY}
+  QtUiTools
 )
 
 qt4_wrap_cpp(owqtutil_SRCS
@@ -56,7 +57,6 @@ qt4_wrap_cpp(owqtutil_SRCS
 
 set(owqtutil_SRCS
   ${owqtutil_SRCS}
-  src/CloseEventFilter.cpp
   src/EventFilter.cpp
   src/KeyEventFilter.cpp
   src/MouseEventFilter.cpp
@@ -75,7 +75,10 @@ set(owqtutil_SRCS
   src/WidgetBackgroundImage.cpp
   src/Wizard.cpp
   src/ThreadEventFilter.cpp
+  src/PixmapMerging.cpp
   src/SafeConnect.cpp
+  src/LanguageChangeEventFilter.cpp
+  src/CloseEventFilter.cpp
 )
 
 qt4_wrap_ui(owqtutil_SRCS src/Wizard.ui)

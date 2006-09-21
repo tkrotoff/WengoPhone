@@ -43,8 +43,6 @@ set(owskinstyle_SRCS
   src/SkinButton.cpp
 )
 
-qt4_automoc(${owskinstyle_SRCS})
-
 include_directories(
   ${OWSKINSTYLE_INCLUDE_DIRS}
 )

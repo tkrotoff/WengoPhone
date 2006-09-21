@@ -41,30 +41,30 @@ if (MSVC)
     comsupp
   )
 
-  set(pixertool_SRC
-    ${pixertool_SRC}
+  set(pixertool_SRCS
+    ${pixertool_SRCS}
     src/directx/directx-pixertool.cpp
   )
 endif (MSVC)
 
-if (NOT WIN32)
+if (UNIX AND NOT WIN32)
   if (APPLE)
-    set(pixertool_SRC
-      ${pixertool_SRC}
+    set(pixertool_SRCS
+      ${pixertool_SRCS}
       src/quicktime/quicktime-pixertool.c
     )
   else (APPLE)
-    set(pixertool_SRC
-      ${pixertool_SRC}
+    set(pixertool_SRCS
+      ${pixertool_SRCS}
       src/v4l/v4l-pixertool.c
     )
   endif(APPLE)
-else (NOT WIN32)
-  set(pixertool_SRC
-    ${pixertool_SRC}
+else (UNIX AND NOT WIN32)
+  set(pixertool_SRCS
+    ${pixertool_SRCS}
     src/null-pixertool.cpp
   )
-endif (NOT WIN32)
+endif (UNIX AND NOT WIN32)
 
 include_directories(
   ${PIXERTOOL_INCLUDE_DIRS}

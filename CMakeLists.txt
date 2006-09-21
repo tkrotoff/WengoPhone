@@ -53,5 +53,6 @@ subdirs(
   libs
   wifo
   wengophone
+  crashreport
 )
 

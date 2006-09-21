@@ -47,8 +47,6 @@ if (UNIX AND NOT WIN32)
   endif (APPLE)
 endif (UNIX AND NOT WIN32)
 
-qt4_automoc(${owtrayicon_SRCS})
-
 include_directories(
   ${OWTRAYICON_INCLUDE_DIRS}
 )

@@ -25,6 +25,7 @@ set(OWUTIL_LINK_LIBRARIES
 set(owutil_SRCS
   src/exception/Exception.cpp
   src/Base64.cpp
+  src/CountryList.cpp
   src/Date.cpp
   src/File.cpp
   src/Logger.cpp

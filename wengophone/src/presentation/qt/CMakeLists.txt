@@ -23,6 +23,8 @@ set(QTWENGOPHONE_INCLUDE_DIRS
   ${OWTHREAD_INCLUDE_DIRS}
   ${OWQTUTIL_INCLUDE_DIRS}
 
+  ${GAIM_INCLUDE_DIRS}
+  ${PIXERTOOL_INCLUDE_DIRS}
   ${OWCURL_INCLUDE_DIRS}
   ${OWWEBCAM_INCLUDE_DIRS}
   ${OWBROWSER_INCLUDE_DIRS}
@@ -31,8 +33,6 @@ set(QTWENGOPHONE_INCLUDE_DIRS
   ${OWIDLE_INCLUDE_DIRS}
   ${OWPHAPIWRAPPER_INCLUDE_DIRS}
   ${OWMULTIIMWRAPPER_INCLUDE_DIRS}
-  ${GAIM_INCLUDE_DIRS}
-  ${PIXERTOOL_INCLUDE_DIRS}
 
   ${OSIP2_INCLUDE_DIRS}
 
@@ -79,7 +79,8 @@ set(QTWENGOPHONE_LINK_LIBRARIES
   ${QT_QTCORE_LIBRARY}
   ${QT_QTGUI_LIBRARY}
   ${QT_QTXML_LIBRARY}
-  ${QT_QTUITOOLS_LIBRARY}
+  #${QT_QTUITOOLS_LIBRARY}
+  QtUiTools
 
   gnutls
 )
@@ -106,6 +107,7 @@ qt4_wrap_cpp(qtwengophone_SRCS
   QtUserProfilePresenceMenu.h
   QtWengoStyle.h
   QtBrowserWidget.h
+  QtWebcamButton.h
 
   phoneline/QtPhoneLine.h
 
@@ -143,6 +145,7 @@ qt4_wrap_cpp(qtwengophone_SRCS
   imaccount/QtGoogleTalkSettings.h
 
   contactlist/QtContactList.h
+  contactlist/ContactGroupPopupMenu.h
   contactlist/QtContactWidget.h
   contactlist/QtContactTreeMouseFilter.h
   contactlist/QtContactManager.h
@@ -180,6 +183,7 @@ qt4_wrap_cpp(qtwengophone_SRCS
 
   webservices/sms/QtSms.h
   webservices/softupdate/QtSoftUpdate.h
+  webservices/softupdate/QtBrowserSoftUpdate.h
   webservices/subscribe/QtSubscribe.h
   webservices/subscribe/QtSubscribe2.h
   webservices/directory/QtWsDirectory.h
@@ -359,7 +363,9 @@ set(qtwengophone_SRCS
 
 if (WIN32)
   if (MSVC)
-    # TODO win32/wengophone.rc
+    qt4_add_resources(qtwengophone_SRCS
+      win32/wengophone.rc
+    )
   else (MSVC)
   endif (MSVC)
 endif (WIN32)
@@ -395,8 +401,8 @@ if (UNIX AND NOT WIN32)
         )
 
         qt4_wrap_cpp(qtwengophone_SRCS
-          phonecall/XVWindow.cpp
-          phonecall/QtVideoXV.cpp
+          phonecall/XVWindow.h
+          phonecall/QtVideoXV.h
         )
 
       set(qtwengophone_SRCS

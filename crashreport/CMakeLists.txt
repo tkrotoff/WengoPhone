@@ -1,48 +1,66 @@
 project(owcrashreport)
 
-#Qt4 dependency
-find_package(Qt4 REQUIRED)
-include_directories(
-	${QT_INCLUDE_DIR}
+# needed include directories to build owcrashreport
+# saves the variable in internal cache for later use
+set(OWCRASHREPORT_INCLUDE_DIRS
+  ${CMAKE_CURRENT_SOURCE_DIR}
+  ${CMAKE_CURRENT_SOURCE_DIR}/include
+  ${OWCUTIL_INCLUDE_DIRS}
+  ${OWUTIL_INCLUDE_DIRS}
+  ${OWTHREAD_INCLUDE_DIRS}
+  ${OWCURL_INCLUDE_DIRS}
+  ${OWQTUTIL_INCLUDE_DIRS}
+  ${QT_INCLUDE_DIRS}
+  ${BOOST_INCLUDE_DIRS}
+  CACHE INTERNAL "owcrashreport include directories"
 )
-include(${QT_USE_FILE})
 
-#Boost dependency
-find_package(Boost REQUIRED)
-link_directories(${Boost_LIBRARY_DIRS})
+set(OWCRASHREPORT_EXECUTABLE
+  owcrashreport
+  CACHE INTERNAL "owcrashreport library"
+)
 
-#owthread dependency
-include_directories(${owthread_INCLUDE_DIR})
+# owcrashreport lib and dependencies
+set(OWCRASHREPORT_LINK_LIBRARIES
+  ${OWCRASHREPORT_EXECUTABLE}
+  ${OWCUTIL_LIBRARY}
+  ${OWUTIL_LIBRARY}
+  ${OWTHREAD_LIBRARY}
+  ${OWCURL_LIBRARY}
+  ${OWQTUTIL_LIBRARY}
+  ${QT_QTCORE_LIBRARY}
+  ${QT_QTGUI_LIBRARY}
+  ${BOOST_PROGRAM_OPTIONS_LIBRARY}
+)
 
-#owsystem dependency
-include_directories(${owsystem_INCLUDE_DIR})
+qt4_wrap_cpp(owcrashreport_SRCS
+  FtpUpload.h
+  QtCrashReport.h
+)
 
-#owqtutil dependency
-include_directories(${owqtutil_INCLUDE_DIR})
-
-#owcurl dependency
-include_directories(${owcurl_INCLUDE_DIR})
-
-#includes
-include_directories(${owcrashreport_SOURCE_DIR})
-
-#sources
 set(owcrashreport_SRCS
-	main.cpp
-	FtpUpload.cpp
-	QtCrashReport.cpp
+  ${owcrashreport_SRCS}
+  main.cpp
+  FtpUpload.cpp
+  QtCrashReport.cpp
 )
 
-qt4_automoc(${owcrashreport_SRCS})
+qt4_wrap_ui(owcrashreport_SRCS
+  CrashReport.ui
+)
 
-include_directories(${owcrashreport_BINARY_DIR})
-qt4_wrap_ui(owcrashreport_SRCS CrashReport.ui)
+include_directories(
+  ${OWCRASHREPORT_INCLUDE_DIRS}
+)
 
-#owcrashreport
-add_executable(owcrashreport ${owcrashreport_SRCS})
+add_executable(${OWCRASHREPORT_EXECUTABLE} ${owcrashreport_SRCS})
 
-#owthread dependency
-target_link_libraries(owcrashreport owthread)
+target_link_libraries(${OWCRASHREPORT_LINK_LIBRARIES})
 
-#Qt4 dependency
-target_link_libraries(owcrashreport ${QT_LIBRARIES})
+install(
+  TARGETS
+    ${OWCRASHREPORT_EXECUTABLE}
+  DESTINATION
+    ${BIN_INSTALL_DIR}
+)
+
