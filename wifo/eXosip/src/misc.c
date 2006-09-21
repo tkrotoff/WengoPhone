@@ -70,6 +70,8 @@ eXosip_remove_transaction_from_call(osip_transaction_t *tr, eXosip_call_t *jc)
       jc->c_out_tr = NULL; /* can be NULL */
       return 0;
     }
+    
+    jd = jc->c_dialogs;
 
 	if (jd)
 	{
