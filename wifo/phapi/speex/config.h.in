@@ -4,7 +4,7 @@
 #undef ARM4_ASM
 
 /* Make use of ARM5E assembly optimizations */
-#undef ARM5_ASM
+#undef ARM5E_ASM
 
 /* Make use of Blackfin assembly optimizations */
 #undef BFIN_ASM
@@ -93,9 +93,6 @@
 /* The size of a `long', as computed by sizeof. */
 #undef SIZEOF_LONG
 
-/* The size of a `long long', as computed by sizeof. */
-#undef SIZEOF_LONG_LONG
-
 /* The size of a `short', as computed by sizeof. */
 #undef SIZEOF_SHORT
 
@@ -125,6 +122,9 @@
 
 /* Use C99 variable-size arrays */
 #undef VAR_ARRAYS
+
+/* Enable Vorbis-style psychoacoustics (EXPERIMENTAL) */
+#undef VORBIS_PSYCHO
 
 /* Define to 1 if your processor stores words with the most significant byte
    first (like Motorola and SPARC, unlike Intel and VAX). */

@@ -1,11 +1,14 @@
+Better saturation handling in mdf?
+get rid of crap that shouldn't be exposed in speex.h
+
+Would be nice:
+
 Allocator override (speex_lib_ctl)
 Better error handling
 Fixed-point:
   - Wideband
   - Initialization
   - Jitter buffer
-Echo cancellation:
-  - Int array for denoiser hooks
 Denoiser:
   - Smooth gain (remove musical noise)
   - Better noise adaptation

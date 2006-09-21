@@ -37,6 +37,7 @@ sources = [
 	'vbr.c',
 	'vorbis_psy.c',
 	'vq.c',
+	'window.c'
 ]
 
 if WengoOSWindows():

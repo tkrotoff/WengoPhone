@@ -27,9 +27,9 @@ int main(int argc, char **argv)
    void *st;
    void *dec;
    SpeexBits bits;
-   int tmp;
+   spx_int32_t tmp;
    int bitCount=0;
-   int skip_group_delay;
+   spx_int32_t skip_group_delay;
    SpeexCallback callback;
 
    sigpow = 0;
@@ -38,6 +38,7 @@ int main(int argc, char **argv)
    st = speex_encoder_init(&speex_nb_mode);
    dec = speex_decoder_init(&speex_nb_mode);
 
+   /* BEGIN: You probably don't need the following in a real application */
    callback.callback_id = SPEEX_INBAND_CHAR;
    callback.func = speex_std_char_handler;
    callback.data = stderr;
@@ -47,8 +48,9 @@ int main(int argc, char **argv)
    callback.func = speex_std_mode_request_handler;
    callback.data = st;
    speex_decoder_ctl(dec, SPEEX_SET_HANDLER, &callback);
+   /* END of unnecessary stuff */
 
-   tmp=0;
+   tmp=1;
    speex_decoder_ctl(dec, SPEEX_SET_ENH, &tmp);
    tmp=0;
    speex_encoder_ctl(st, SPEEX_SET_VBR, &tmp);
@@ -57,9 +59,14 @@ int main(int argc, char **argv)
    tmp=1;
    speex_encoder_ctl(st, SPEEX_SET_COMPLEXITY, &tmp);
 
-   speex_mode_query(&speex_nb_mode, SPEEX_MODE_FRAME_SIZE, &tmp);
-   fprintf (stderr, "frame size: %d\n", tmp);
-   skip_group_delay = tmp / 2;
+   /* Turn this off if you want to measure SNR (on by default) */
+   tmp=1;
+   speex_encoder_ctl(st, SPEEX_SET_HIGHPASS, &tmp);
+   speex_decoder_ctl(dec, SPEEX_SET_HIGHPASS, &tmp);
+
+   speex_encoder_ctl(st, SPEEX_GET_LOOKAHEAD, &skip_group_delay);
+   speex_decoder_ctl(dec, SPEEX_GET_LOOKAHEAD, &tmp);
+   skip_group_delay += tmp;
 
    if (argc != 4 && argc != 3)
    {
@@ -102,6 +109,7 @@ int main(int argc, char **argv)
    speex_decoder_destroy(dec);
    speex_bits_destroy(&bits);
 
+   /* This code just computes SNR, so you don't need it either */
    rewind(fin);
    rewind(fout);
 

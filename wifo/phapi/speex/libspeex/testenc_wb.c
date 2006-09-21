@@ -28,9 +28,9 @@ int main(int argc, char **argv)
    void *st;
    void *dec;
    SpeexBits bits;
-   int tmp;
+   spx_int32_t tmp;
    int bitCount=0;
-   int skip_group_delay;
+   spx_int32_t skip_group_delay;
    SpeexCallback callback;
 
    sigpow = 0;
@@ -49,23 +49,24 @@ int main(int argc, char **argv)
    callback.data = st;
    speex_decoder_ctl(dec, SPEEX_SET_HANDLER, &callback);
 
-   tmp=0;
+   tmp=1;
    speex_decoder_ctl(dec, SPEEX_SET_ENH, &tmp);
    tmp=0;
    speex_encoder_ctl(st, SPEEX_SET_VBR, &tmp);
    tmp=8;
    speex_encoder_ctl(st, SPEEX_SET_QUALITY, &tmp);
-   tmp=2;
-   speex_encoder_ctl(st, SPEEX_SET_COMPLEXITY, &tmp);
    tmp=3;
+   speex_encoder_ctl(st, SPEEX_SET_COMPLEXITY, &tmp);
+   /*tmp=3;
    speex_encoder_ctl(st, SPEEX_SET_HIGH_MODE, &tmp);
    tmp=6;
    speex_encoder_ctl(st, SPEEX_SET_LOW_MODE, &tmp);
+*/
 
+   speex_encoder_ctl(st, SPEEX_GET_LOOKAHEAD, &skip_group_delay);
+   speex_decoder_ctl(dec, SPEEX_GET_LOOKAHEAD, &tmp);
+   skip_group_delay += tmp;
 
-   speex_mode_query(&speex_wb_mode, SPEEX_MODE_FRAME_SIZE, &tmp);
-   fprintf (stderr, "frame size: %d\n", tmp);
-   skip_group_delay = 223;
 
    if (argc != 4 && argc != 3)
    {
@@ -108,6 +109,7 @@ int main(int argc, char **argv)
    fprintf (stderr, "Total encoded size: %d bits\n", bitCount);
    speex_encoder_destroy(st);
    speex_decoder_destroy(dec);
+   speex_bits_destroy(&bits);
 
    rewind(fin);
    rewind(fout);

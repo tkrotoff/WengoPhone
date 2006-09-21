@@ -34,45 +34,25 @@
 #ifndef SPEEX_ECHO_H
 #define SPEEX_ECHO_H
 
+#include "speex/speex_types.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-struct drft_lookup;
+/** Obtain frame size used by the AEC */
+#define SPEEX_ECHO_GET_FRAME_SIZE 3
 
-/** Speex echo cancellation state. */
-typedef struct SpeexEchoState {
-   int frame_size;           /**< Number of samples processed each time */
-   int window_size;
-   int M;
-   int cancel_count;
-   int adapted;
-   float sum_adapt;
-   
-   float *x;
-   float *X;
-   float *d;
-   float *y;
-   float *last_y;
-   float *Yps;
-   float *Y;
-   float *E;
-   float *PHI;
-   float *W;
-   float *power;
-   float *power_1;
-   float *Rf;
-   float *Yf;
-   float *Xf;
-   float *Eh;
-   float *Yh;
-   float Pey;
-   float Pyy;
-   struct drft_lookup *fft_lookup;
+/** Set sampling rate */
+#define SPEEX_ECHO_SET_SAMPLING_RATE 24
+/** Get sampling rate */
+#define SPEEX_ECHO_GET_SAMPLING_RATE 25
 
 
-} SpeexEchoState;
+/*struct drft_lookup;*/
+struct SpeexEchoState_;
 
+typedef struct SpeexEchoState_ SpeexEchoState;
 
 /** Creates a new echo canceller state */
 SpeexEchoState *speex_echo_state_init(int frame_size, int filter_length);
@@ -81,10 +61,25 @@ SpeexEchoState *speex_echo_state_init(int frame_size, int filter_length);
 void speex_echo_state_destroy(SpeexEchoState *st);
 
 /** Performs echo cancellation a frame */
-void speex_echo_cancel(SpeexEchoState *st, short *ref, short *echo, short *out, float *Y);
+void speex_echo_cancel(SpeexEchoState *st, const spx_int16_t *rec, const spx_int16_t *play, spx_int16_t *out, spx_int32_t *Yout);
+
+/** Perform echo cancellation using internal playback buffer */
+void speex_echo_capture(SpeexEchoState *st, const spx_int16_t *rec, spx_int16_t *out, spx_int32_t *Yout);
+
+/** Let the echo canceller know that a frame was just played */
+void speex_echo_playback(SpeexEchoState *st, const spx_int16_t *play);
 
 /** Reset the echo canceller state */
 void speex_echo_state_reset(SpeexEchoState *st);
+
+/** Used like the ioctl function to control the echo canceller parameters
+ *
+ * @param state Encoder state
+ * @param request ioctl-type request (one of the SPEEX_ECHO_* macros)
+ * @param ptr Data exchanged to-from function
+ * @return 0 if no error, -1 if request in unknown
+ */
+int speex_echo_ctl(SpeexEchoState *st, int request, void *ptr);
 
 #ifdef __cplusplus
 }

@@ -36,7 +36,11 @@
 #define STACK_ALLOC_H
 
 #ifdef USE_ALLOCA
+#ifdef WIN32
+#include <malloc.h>
+#else
 #include <alloca.h>
+#endif
 #endif
 
 /**
@@ -110,7 +114,7 @@
 #define ALLOC(var, size, type) type var[size]
 #elif defined(USE_ALLOCA)
 #define VARDECL(var) var
-#define ALLOC(var, size, type) var = alloca(sizeof(type)*size)
+#define ALLOC(var, size, type) var = alloca(sizeof(type)*(size))
 #else
 #define VARDECL(var) var
 #define ALLOC(var, size, type) var = PUSH(stack, size, type)

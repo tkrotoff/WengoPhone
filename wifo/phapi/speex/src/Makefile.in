@@ -63,15 +63,17 @@ speexdec_OBJECTS = $(am_speexdec_OBJECTS)
 am__DEPENDENCIES_1 =
 speexdec_DEPENDENCIES = $(top_builddir)/libspeex/libspeex.la \
 	$(am__DEPENDENCIES_1)
-am_speexenc_OBJECTS = speexenc.$(OBJEXT) wav_io.$(OBJEXT)
+am_speexenc_OBJECTS = speexenc.$(OBJEXT) wav_io.$(OBJEXT) \
+	skeleton.$(OBJEXT)
 speexenc_OBJECTS = $(am_speexenc_OBJECTS)
 speexenc_DEPENDENCIES = $(top_builddir)/libspeex/libspeex.la \
 	$(am__DEPENDENCIES_1)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
-@AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/speexdec.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/speexenc.Po ./$(DEPDIR)/wav_io.Po
+@AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/skeleton.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/speexdec.Po ./$(DEPDIR)/speexenc.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/wav_io.Po
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) \
@@ -198,10 +200,10 @@ sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 INCLUDES = -I$(top_srcdir)/include -I$(top_builddir)/include -I$(top_builddir) @OGG_CFLAGS@
 man_MANS = speexenc.1 speexdec.1
-EXTRA_DIST = $(man_MANS) getopt_win.h getopt.c getopt1.c wave_out.c wave_out.h
+EXTRA_DIST = $(man_MANS) getopt_win.h getopt.c getopt1.c wave_out.c wave_out.h skeleton.h
 include_HEADERS = 
 noinst_HEADERS = wav_io.h
-speexenc_SOURCES = speexenc.c wav_io.c
+speexenc_SOURCES = speexenc.c wav_io.c skeleton.c
 speexenc_LDADD = $(top_builddir)/libspeex/libspeex.la \
 	$(OGG_LIBS)
 
@@ -283,6 +285,7 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/skeleton.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/speexdec.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/speexenc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/wav_io.Po@am__quote@

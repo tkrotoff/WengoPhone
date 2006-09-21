@@ -49,7 +49,7 @@ typedef struct split_cb_params {
 
 
 void split_cb_search_shape_sign(
-spx_sig_t target[],             /* target vector */
+spx_word16_t target[],             /* target vector */
 spx_coef_t ak[],                /* LPCs for this subframe */
 spx_coef_t awk1[],              /* Weighted LPCs for this subframe */
 spx_coef_t awk2[],              /* Weighted LPCs for this subframe */
@@ -69,12 +69,13 @@ spx_sig_t *exc,
 const void *par,                /* non-overlapping codebook */
 int   nsf,                      /* number of samples in subframe */
 SpeexBits *bits,
-char *stack
+char *stack,
+spx_int32_t *seed
 );
 
 
 void noise_codebook_quant(
-spx_sig_t target[],             /* target vector */
+spx_word16_t target[],             /* target vector */
 spx_coef_t ak[],                /* LPCs for this subframe */
 spx_coef_t awk1[],              /* Weighted LPCs for this subframe */
 spx_coef_t awk2[],              /* Weighted LPCs for this subframe */
@@ -95,7 +96,8 @@ spx_sig_t *exc,
 const void *par,                /* non-overlapping codebook */
 int   nsf,                      /* number of samples in subframe */
 SpeexBits *bits,
-char *stack
+char *stack,
+spx_int32_t *seed
 );
 
 #endif

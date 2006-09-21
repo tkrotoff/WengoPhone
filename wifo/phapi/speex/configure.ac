@@ -6,14 +6,15 @@ AM_CONFIG_HEADER([config.h])
 
 SPEEX_MAJOR_VERSION=1
 SPEEX_MINOR_VERSION=1
-SPEEX_MICRO_VERSION=11
-SPEEX_EXTRA_VERSION=.1
+SPEEX_MICRO_VERSION=13
+SPEEX_EXTRA_VERSION=
 #SPEEX_VERSION=
 SPEEX_VERSION=$SPEEX_MAJOR_VERSION.$SPEEX_MINOR_VERSION.$SPEEX_MICRO_VERSION$SPEEX_EXTRA_VERSION
+SPEEX_VERSION="1.2beta1"
 
-SPEEX_LT_CURRENT=3
+SPEEX_LT_CURRENT=5
 SPEEX_LT_REVISION=0
-SPEEX_LT_AGE=2
+SPEEX_LT_AGE=4
 
 AC_SUBST(SPEEX_LT_CURRENT)
 AC_SUBST(SPEEX_LT_REVISION)
@@ -93,6 +94,11 @@ AC_ARG_ENABLE(wideband, [  --disable-wideband      Disable wideband codec],
   AC_DEFINE([DISABLE_WIDEBAND], , [Disable wideband codec])
 fi])
 
+AC_ARG_ENABLE(vorbis-psy, [  --enable-vorbis-psy       Enable Vorbis-style psychoacoustics (EXPERIMENTAL)],
+[if test "$enableval" = yes; then
+  AC_DEFINE([VORBIS_PSYCHO], , [Enable Vorbis-style psychoacoustics (EXPERIMENTAL)])
+fi])
+
 AC_ARG_ENABLE(valgrind, [  --enable-valgrind       Enable valgrind extra checks],
 [if test "$enableval" = yes; then
   AC_DEFINE([ENABLE_VALGRIND], , [Enable valgrind extra checks])
@@ -116,12 +122,13 @@ fi])
 
 AC_ARG_ENABLE(arm5e-asm, [  --enable-arm5e-asm      Make use of ARM5E assembly optimizations],
 [if test "$enableval" = yes; then
-  AC_DEFINE([ARM5_ASM], , [Make use of ARM5E assembly optimizations])
+  AC_DEFINE([ARM5E_ASM], , [Make use of ARM5E assembly optimizations])
 fi])
 
 AC_ARG_ENABLE(blackfin-asm, [  --enable-blackfin-asm      Make use of Blackfin assembly optimizations],
 [if test "$enableval" = yes; then
   AC_DEFINE([BFIN_ASM], , [Make use of Blackfin assembly optimizations])
+  LDFLAGS="-Wl,-elf2flt=-s100000"
 fi])
 
 AC_ARG_ENABLE(fixed-point-debug, [  --enable-fixed-point-debug  Debug fixed-point implementation],
@@ -148,7 +155,6 @@ fi])
 AC_CHECK_SIZEOF(short)
 AC_CHECK_SIZEOF(int)
 AC_CHECK_SIZEOF(long)
-AC_CHECK_SIZEOF(long long)
 
 if test x$has_char16 = "xyes" ; then
         case 1 in
@@ -183,6 +189,13 @@ AC_OUTPUT([Makefile libspeex/Makefile src/Makefile doc/Makefile Speex.spec
            include/Makefile include/speex/Makefile speex.pc
            win32/Makefile win32/libspeex/Makefile win32/speexenc/Makefile
            win32/speexdec/Makefile symbian/Makefile 
+           win32/VS2003/Makefile win32/VS2005/Makefile
+           win32/VS2003/libspeex/Makefile
+           win32/VS2003/speexdec/Makefile
+           win32/VS2003/speexenc/Makefile
+           win32/VS2005/libspeex/Makefile
+           win32/VS2005/speexdec/Makefile
+           win32/VS2005/speexenc/Makefile
            include/speex/speex_config_types.h ti/Makefile 
 	   ti/speex_C54_test/Makefile ti/speex_C55_test/Makefile
 	   ti/speex_C64_test/Makefile ])
@@ -190,7 +203,7 @@ AC_OUTPUT([Makefile libspeex/Makefile src/Makefile doc/Makefile Speex.spec
 if test "x$src" = "x"; then 
 echo "**IMPORTANT**"
 echo "You don't seem to have the development package for libogg (libogg-devel) installed. Only the Speex library (libspeex) will be built (no encoder/decoder executable)"
-echo "You can download libogg from http://www.vorbis.com/download.psp"
+echo "You can download libogg from http://downloads.xiph.org/releases/ogg/"
 fi
 
 echo "Type \"make; make install\" to compile and install Speex";

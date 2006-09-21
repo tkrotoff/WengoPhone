@@ -1,4 +1,4 @@
-/* Copyright (C) 2002 Jean-Marc Valin 
+/* Copyright (C) 2002-2006 Jean-Marc Valin 
    File: cb_search.c
 
    Redistribution and use in source and binary forms, with or without
@@ -70,7 +70,7 @@ static void compute_weighted_codebook(const signed char *shape_cb, const spx_wor
          for (k=0;k<=j;k++)
             resj = MAC16_16(resj,shape[k],r[j-k]);
 #ifdef FIXED_POINT
-         res16 = EXTRACT16(SHR32(resj, 11));
+         res16 = EXTRACT16(SHR32(resj, 13));
 #else
          res16 = 0.03125f*resj;
 #endif
@@ -88,16 +88,15 @@ static void compute_weighted_codebook(const signed char *shape_cb, const spx_wor
 static inline void target_update(spx_word16_t *t, spx_word16_t g, spx_word16_t *r, int len)
 {
    int n;
-   int q=0;
-   for (n=0;n<len;n++,q++)
-      t[n] = SUB32(t[n],MULT16_16_Q11_32(g,r[q]));
+   for (n=0;n<len;n++)
+      t[n] = SUB16(t[n],PSHR32(MULT16_16(g,r[n]),13));
 }
 #endif
 
 
 
 static void split_cb_search_shape_sign_N1(
-spx_sig_t target[],			/* target vector */
+spx_word16_t target[],			/* target vector */
 spx_coef_t ak[],			/* LPCs for this subframe */
 spx_coef_t awk1[],			/* Weighted LPCs for this subframe */
 spx_coef_t awk2[],			/* Weighted LPCs for this subframe */
@@ -108,14 +107,10 @@ spx_sig_t *exc,
 spx_word16_t *r,
 SpeexBits *bits,
 char *stack,
-int   complexity,
 int   update_target
 )
 {
    int i,j,m,q;
-#ifndef FIXED_POINT
-   int n;
-#endif
    VARDECL(spx_word16_t *resp);
 #ifdef _USE_SSE
    VARDECL(__m128 *resp2);
@@ -129,15 +124,9 @@ int   update_target
    const signed char *shape_cb;
    int shape_cb_size, subvect_size, nb_subvect;
    const split_cb_params *params;
-   int N=2;
    int best_index;
    spx_word32_t best_dist;
    int have_sign;
-   N=complexity;
-   if (N>10)
-      N=10;
-   if (N<1)
-      N=1;
    
    params = (const split_cb_params *) par;
    subvect_size = params->subvect_size;
@@ -156,9 +145,9 @@ int   update_target
    ALLOC(t, nsf, spx_word16_t);
    ALLOC(e, nsf, spx_sig_t);
    
-   /* FIXME: make that adaptive? */
+   /* FIXME: Do we still need to copy the target? */
    for (i=0;i<nsf;i++)
-      t[i]=EXTRACT16(PSHR32(target[i],6));
+      t[i]=target[i];
 
    compute_weighted_codebook(shape_cb, r, resp, resp2, E, shape_cb_size, subvect_size, stack);
 
@@ -222,13 +211,10 @@ int   update_target
          q=subvect_size-m;
 #ifdef FIXED_POINT
          g=sign*shape_cb[rind*subvect_size+m];
-         target_update(t+subvect_size*(i+1), g, r+q, nsf-subvect_size*(i+1));
 #else
          g=sign*0.03125*shape_cb[rind*subvect_size+m];
-         /*FIXME: I think that one too can be replaced by target_update */
-         for (n=subvect_size*(i+1);n<nsf;n++,q++)
-            t[n] = SUB32(t[n],g*r[q]);
 #endif
+         target_update(t+subvect_size*(i+1), g, r+q, nsf-subvect_size*(i+1));
       }
    }
 
@@ -244,14 +230,14 @@ int   update_target
       ALLOC(r2, nsf, spx_sig_t);
       syn_percep_zero(e, ak, awk1, awk2, r2, nsf,p, stack);
       for (j=0;j<nsf;j++)
-         target[j]=SUB32(target[j],r2[j]);
+         target[j]=SUB16(target[j],EXTRACT16(PSHR32(r2[j],8)));
    }
 }
 
 
 
 void split_cb_search_shape_sign(
-spx_sig_t target[],			/* target vector */
+spx_word16_t target[],			/* target vector */
 spx_coef_t ak[],			/* LPCs for this subframe */
 spx_coef_t awk1[],			/* Weighted LPCs for this subframe */
 spx_coef_t awk2[],			/* Weighted LPCs for this subframe */
@@ -300,12 +286,13 @@ int   update_target
    N=complexity;
    if (N>10)
       N=10;
+   /* Complexity isn't as important for the codebooks as it is for the pitch */
+   N=(2*N)/3;
    if (N<1)
       N=1;
-   
    if (N==1)
    {
-      split_cb_search_shape_sign_N1(target,ak,awk1,awk2,par,p,nsf,exc,r,bits,stack,complexity,update_target);
+      split_cb_search_shape_sign_N1(target,ak,awk1,awk2,par,p,nsf,exc,r,bits,stack,update_target);
       return;
    }
    ALLOC(ot2, N, spx_word16_t*);
@@ -354,9 +341,8 @@ int   update_target
       oind[i]=itmp+(2*i+1)*nb_subvect;
    }
    
-   /* FIXME: make that adaptive? */
    for (i=0;i<nsf;i++)
-      t[i]=EXTRACT16(PSHR32(target[i],6));
+      t[i]=target[i];
 
    for (j=0;j<N;j++)
       speex_move(&ot[j][0], t, nsf*sizeof(spx_word16_t));
@@ -444,13 +430,10 @@ int   update_target
             q=subvect_size-m;
 #ifdef FIXED_POINT
             g=sign*shape_cb[rind*subvect_size+m];
-            target_update(nt[j]+subvect_size*(i+1), g, r+q, nsf-subvect_size*(i+1));
 #else
             g=sign*0.03125*shape_cb[rind*subvect_size+m];
-            /*FIXME: I think that one too can be replaced by target_update */
-            for (n=subvect_size*(i+1);n<nsf;n++,q++)
-               nt[j][n] = SUB32(nt[j][n],g*r[q]);
 #endif
+            target_update(nt[j]+subvect_size*(i+1), g, r+q, nsf-subvect_size*(i+1));
          }
 
          for (q=0;q<nb_subvect;q++)
@@ -514,7 +497,7 @@ int   update_target
    {
       syn_percep_zero(e, ak, awk1, awk2, r2, nsf,p, stack);
       for (j=0;j<nsf;j++)
-         target[j]=SUB32(target[j],r2[j]);
+         target[j]=SUB16(target[j],EXTRACT16(PSHR32(r2[j],8)));
    }
 }
 
@@ -524,7 +507,8 @@ spx_sig_t *exc,
 const void *par,                      /* non-overlapping codebook */
 int   nsf,                      /* number of samples in subframe */
 SpeexBits *bits,
-char *stack
+char *stack,
+spx_int32_t *seed
 )
 {
    int i,j;
@@ -577,7 +561,7 @@ char *stack
 }
 
 void noise_codebook_quant(
-spx_sig_t target[],			/* target vector */
+spx_word16_t target[],			/* target vector */
 spx_coef_t ak[],			/* LPCs for this subframe */
 spx_coef_t awk1[],			/* Weighted LPCs for this subframe */
 spx_coef_t awk2[],			/* Weighted LPCs for this subframe */
@@ -595,13 +579,14 @@ int   update_target
    int i;
    VARDECL(spx_sig_t *tmp);
    ALLOC(tmp, nsf, spx_sig_t);
-   residue_percep_zero(target, ak, awk1, awk2, tmp, nsf, p, stack);
+   for (i=0;i<nsf;i++)
+      tmp[i]=PSHR32(EXTEND32(target[i]),SIG_SHIFT);
+   residue_percep_zero(tmp, ak, awk1, awk2, tmp, nsf, p, stack);
 
    for (i=0;i<nsf;i++)
       exc[i]+=tmp[i];
    for (i=0;i<nsf;i++)
       target[i]=0;
-
 }
 
 
@@ -610,8 +595,12 @@ spx_sig_t *exc,
 const void *par,                      /* non-overlapping codebook */
 int   nsf,                      /* number of samples in subframe */
 SpeexBits *bits,
-char *stack
+char *stack,
+spx_int32_t *seed
 )
 {
-   speex_rand_vec(1, exc, nsf);
+   int i;
+   /* FIXME: This is bad, but I don't think the function ever gets called anyway */
+   for (i=0;i<nsf;i++)
+      exc[i]=SHL32(EXTEND32(speex_rand(1, seed)),SIG_SHIFT);
 }

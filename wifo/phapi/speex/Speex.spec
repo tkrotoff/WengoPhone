@@ -1,12 +1,12 @@
 %define name     speex
-%define ver      1.1.11.1
+%define ver      1.2beta1
 %define rel      1
 
 Summary: An open-source, patent-free speech codec
 Name: %name
 Version: %ver
 Release: %rel
-Copyright: BSD
+License: BSD
 Group: Application/Devel
 Source: http://www.speex.org/download/%{name}-%{ver}.tar.gz
 URL: http://www.speex.org/
