@@ -694,9 +694,9 @@ void QtWengoPhone::proxyNeedsAuthenticationEventHandlerThreadSafe(NetworkProxy n
 }
 
 void QtWengoPhone::closeWindow() {
-#if defined(OS_MACOSX)
-#else
+#if !defined(OS_MACOSX)
 	_wengoPhoneWindow->showMinimized();
+#else
 	_wengoPhoneWindow->hide();
 #endif
 }
