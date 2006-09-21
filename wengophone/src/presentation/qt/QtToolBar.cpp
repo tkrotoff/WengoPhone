@@ -205,8 +205,10 @@ void QtToolBar::createConferenceCall() {
 	if (cUserProfile) {
 
 		IPhoneLine * phoneLine = cUserProfile->getUserProfile().getActivePhoneLine();
-		QtConferenceCallWidget conferenceDialog(_qtWengoPhone.getWidget(), _cWengoPhone, phoneLine);
-		conferenceDialog.exec();
+		if (phoneLine) {
+			QtConferenceCallWidget conferenceDialog(_qtWengoPhone.getWidget(), _cWengoPhone, phoneLine);
+			conferenceDialog.exec();
+		}
 	}
 }
 

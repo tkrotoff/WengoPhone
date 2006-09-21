@@ -56,8 +56,8 @@ QtConferenceCallWidget::QtConferenceCallWidget(QWidget * parent, CWengoPhone & c
 
 	SAFE_CONNECT(_ui->startButton, SIGNAL(clicked()), SLOT(startClicked()));
 	SAFE_CONNECT(_ui->cancelButton, SIGNAL(clicked()), SLOT(reject()));
-	SAFE_CONNECT( _ui->peer1ToolButton, SIGNAL(clicked()), SLOT(peer1ToolButtonClicked()));
-	SAFE_CONNECT( _ui->peer2ToolButton, SIGNAL(clicked()), SLOT(peer2ToolButtonClicked()));
+	SAFE_CONNECT(_ui->peer1ToolButton, SIGNAL(clicked()), SLOT(peer1ToolButtonClicked()));
+	SAFE_CONNECT(_ui->peer2ToolButton, SIGNAL(clicked()), SLOT(peer2ToolButtonClicked()));
 
 	SAFE_CONNECT(_sipMenu, SIGNAL(triggered(QAction *)), SLOT(updateLineEdit(QAction *)));
 	SAFE_CONNECT(_landLineMenu, SIGNAL(triggered(QAction *)), SLOT(updateLineEdit(QAction *)));
@@ -102,18 +102,17 @@ void QtConferenceCallWidget::populateMenus() {
 }
 
 void QtConferenceCallWidget::updateLineEdit(QAction * action) {
-
 	if (action) {
 		QString data = action->data().toString();
 		switch (_currentPeer) {
-			case 1:
-				_ui->phoneNumber1LineEdit->setText(data);
-				break;
-			case 2:
-				_ui->phoneNumber2LineEdit->setText(data);
-				break;
-			default:
-				LOG_FATAL("Unknown _currentPeer");
+		case 1:
+			_ui->phoneNumber1LineEdit->setText(data);
+			break;
+		case 2:
+			_ui->phoneNumber2LineEdit->setText(data);
+			break;
+		default:
+			LOG_FATAL("Unknown _currentPeer");
 		}
 	}
 }
