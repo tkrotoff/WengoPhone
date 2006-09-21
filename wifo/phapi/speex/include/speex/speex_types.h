@@ -56,7 +56,7 @@
    typedef SInt32 spx_int32_t;
    typedef UInt32 spx_uint32_t;
 
-#elif defined(__MACOSX__) /* MacOS X Framework build */
+#elif defined(__MACOSX__) || defined(__APPLE__) /* MacOS X Framework build */
 
 #  include <sys/types.h>
    typedef int16_t spx_int16_t;
