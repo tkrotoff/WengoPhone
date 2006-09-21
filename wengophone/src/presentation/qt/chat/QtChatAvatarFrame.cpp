@@ -51,6 +51,8 @@ void QtChatAvatarFrame::setUserPixmap(QPixmap pixmap) {
 void QtChatAvatarFrame::addRemoteContact(const QString & id, const QString & displayName, const QString & contactId, QPixmap avatar) {
 	QtChatAvatarWidget * avatarWidget = new QtChatAvatarWidget(
 		_ui.remoteAvatarFrame, id, avatar, displayName, contactId, QtChatAvatarWidget::BIG);
+	avatarWidget->setupPixmap(avatar);
+	
 	_widgetList.append(avatarWidget);
 	QGridLayout * glayout = dynamic_cast<QGridLayout *>(_ui.remoteAvatarFrame->layout());
 	glayout->addWidget(avatarWidget, glayout->count(), 0);

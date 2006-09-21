@@ -56,9 +56,9 @@ public:
 		return _contactId;
 	}
 
-private:
-
 	void setupPixmap(QPixmap pixmap);
+
+private:
 
 	void setupNickname(const QString & nickname);
 
