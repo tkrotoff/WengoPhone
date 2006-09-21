@@ -282,7 +282,7 @@
   </property>
   <layout class="QGridLayout" >
    <property name="margin" >
-    <number>0</number>
+    <number>2</number>
    </property>
    <property name="spacing" >
     <number>0</number>
