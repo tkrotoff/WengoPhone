@@ -48,8 +48,10 @@
 
 #include <qtutil/Object.h>
 #include <qtutil/SafeConnect.h>
+#include <qtutil/CloseEventFilter.h>
 
 #include <util/Logger.h>
+#include <util/SafeDelete.h>
 #include <cutil/global.h>
 
 #include <QtGui/QtGui>
@@ -112,12 +114,16 @@ QtChatWindow::QtChatWindow(QWidget * parent, CChatHandler & cChatHandler, IMChat
 	SAFE_CONNECT_TYPE(this, SIGNAL(messageReceivedSignal(IMChatSession *)),
 		SLOT(messageReceivedSlot(IMChatSession *)), Qt::QueuedConnection);
 
+	//Install the close event filter
+	CloseEventFilter * closeEventFilter = new CloseEventFilter(this, SLOT(closeWindow()));
+	installEventFilter(closeEventFilter);
+
 	updateToolBarActions();
 }
 
 QtChatWindow::~QtChatWindow() {
 	QtEmoticonsManager * qtEmoticonsManager = QtEmoticonsManager::getInstance();
-	delete qtEmoticonsManager;
+	OWSAFE_DELETE(qtEmoticonsManager);
 }
 
 QtChatWidget * QtChatWindow::getActiveTabWidget() {
@@ -145,9 +151,9 @@ ContactProfile QtChatWindow::getContactProfileFromContactId(const QString & cont
 
 void QtChatWindow::closeActiveTab() {
 	QtChatWidget * widget = getActiveTabWidget();
-	delete widget;
+	OWSAFE_DELETE(widget);
 	if (_tabWidget->count() == 0) {
-		hide();
+		closeWindow();
 		_qtWengoPhone.setChatWindow(NULL);
 	}
 }
@@ -196,7 +202,7 @@ void QtChatWindow::showChatWindow() {
 
 void QtChatWindow::show() {
 	if (isMinimized()) {
-		hide();
+		closeWindow();
 	}
 	showNormal();
 	activateWindow();

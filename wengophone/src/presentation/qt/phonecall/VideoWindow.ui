@@ -8,8 +8,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>338</width>
-    <height>277</height>
+    <width>400</width>
+    <height>300</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -45,7 +45,7 @@
        </spacer>
       </item>
       <item row="1" column="1" >
-       <widget class="QPushButton" name="fullScreenButton" >
+       <widget class="QToolButton" name="fullScreenButton" >
         <property name="icon" >
          <iconset resource="../wengophone.qrc" >:/pics/video_fullscreen.png</iconset>
         </property>
@@ -55,16 +55,13 @@
           <height>24</height>
          </size>
         </property>
-        <property name="autoDefault" >
-         <bool>false</bool>
-        </property>
-        <property name="flat" >
+        <property name="autoRaise" >
          <bool>true</bool>
         </property>
        </widget>
       </item>
       <item row="1" column="0" >
-       <widget class="QPushButton" name="flipButton" >
+       <widget class="QToolButton" name="flipButton" >
         <property name="icon" >
          <iconset resource="../wengophone.qrc" >:/pics/video_flip.png</iconset>
         </property>
@@ -74,10 +71,7 @@
           <height>24</height>
          </size>
         </property>
-        <property name="autoDefault" >
-         <bool>false</bool>
-        </property>
-        <property name="flat" >
+        <property name="autoRaise" >
          <bool>true</bool>
         </property>
        </widget>
