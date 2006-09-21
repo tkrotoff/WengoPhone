@@ -30,8 +30,8 @@
 
 #include <imwrapper/IMContactSet.h>
 
-#include <util/SafeDelete.h>
 #include <util/Logger.h>
+#include <util/SafeDelete.h>
 
 #include <QtGui/QtGui>
 

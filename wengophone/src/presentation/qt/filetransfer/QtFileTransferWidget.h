@@ -66,6 +66,8 @@ private:
 
 	void showDownloadTab();
 
+	QString _downloadFolder;
+
 	Ui::FileTransferWidget _ui;
 };
 

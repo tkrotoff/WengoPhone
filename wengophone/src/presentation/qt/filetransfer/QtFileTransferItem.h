@@ -162,6 +162,9 @@ protected:
 	 */
 	Type _type;
 
+	/** complete filename */
+	QString _filename;
+
 	Ui::FileTransferItem _ui;
 };
 

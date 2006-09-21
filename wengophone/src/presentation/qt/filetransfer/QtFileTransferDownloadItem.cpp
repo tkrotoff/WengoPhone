@@ -27,8 +27,10 @@
 
 #include <QtGui/QtGui>
 
-QtFileTransferDownloadItem::QtFileTransferDownloadItem(QWidget * parent, ReceiveFileSession * fileSession)
+QtFileTransferDownloadItem::QtFileTransferDownloadItem(QWidget * parent, ReceiveFileSession * fileSession, const QString & path)
 	: QtFileTransferItem(parent, QtFileTransferItem::Download), _receiveFileSession(fileSession) {
+
+	_filename = path + QString::fromStdString(fileSession->getFileName());
 
 	setFilename(QString::fromStdString(fileSession->getFileName()));
 	setContact(QString::fromStdString(_receiveFileSession->getIMContact().getContactId()));

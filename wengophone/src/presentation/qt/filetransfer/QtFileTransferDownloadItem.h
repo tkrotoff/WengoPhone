@@ -41,7 +41,7 @@ public:
 	/**
 	 * Default constructor.
 	 */
-	QtFileTransferDownloadItem(QWidget * parent, ReceiveFileSession * fileSession);
+	QtFileTransferDownloadItem(QWidget * parent, ReceiveFileSession * fileSession, const QString & path);
 
 private Q_SLOTS:
 

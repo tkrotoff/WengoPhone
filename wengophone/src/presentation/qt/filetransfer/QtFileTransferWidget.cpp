@@ -84,7 +84,7 @@ void QtFileTransferWidget::pathButtonClicked() {
 
 void QtFileTransferWidget::addReceiveItem(ReceiveFileSession * fileSession) {
 
-	QtFileTransferDownloadItem * fileTransferItem = new QtFileTransferDownloadItem(this, fileSession);
+	QtFileTransferDownloadItem * fileTransferItem = new QtFileTransferDownloadItem(this, fileSession, _downloadFolder);
 	QListWidgetItem * item = new QListWidgetItem(_ui.downloadTransferListWidget);
 	item->setSizeHint(fileTransferItem->minimumSizeHint());
 	_ui.downloadTransferListWidget->setItemWidget(item, fileTransferItem);
@@ -97,7 +97,7 @@ void QtFileTransferWidget::addSendItem(SendFileSession * fileSession,
 	const std::string & filename, const std::string & contactId, const std::string & contact) {
 
 	QtFileTransferUploadItem * fileTransferItem = new QtFileTransferUploadItem(this, fileSession,
-		filename, contactId, contact);
+			QString::fromStdString(filename), contactId, contact);
 	QListWidgetItem * item = new QListWidgetItem(_ui.uploadTransferListWidget);
 	item->setSizeHint(fileTransferItem->minimumSizeHint());
 	_ui.uploadTransferListWidget->setItemWidget(item, fileTransferItem);
@@ -111,6 +111,7 @@ void QtFileTransferWidget::setDownloadFolder(const QString & folder) {
 	config.set(Config::FILETRANSFER_DOWNLOAD_FOLDER, folder.toStdString());
 	QDir dir(folder);
 	_ui.pathButton->setText(dir.dirName());
+	_downloadFolder = folder;
 }
 
 void QtFileTransferWidget::showDownloadTab() {

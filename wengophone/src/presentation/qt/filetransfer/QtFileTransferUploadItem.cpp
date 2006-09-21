@@ -28,9 +28,10 @@
 #include <QtGui/QtGui>
 
 QtFileTransferUploadItem::QtFileTransferUploadItem(QWidget * parent, SendFileSession * fileSession,
-	const std::string & filename, const std::string & contactId, const std::string & contact)
-	: QtFileTransferItem(parent, QtFileTransferItem::Upload),
-	_sendFileSession(fileSession), _filename(filename), _contactId(contactId) {
+	const QString & filename, const std::string & contactId, const std::string & contact)
+	: QtFileTransferItem(parent, QtFileTransferItem::Upload), _sendFileSession(fileSession), _contactId(contactId) {
+
+	_filename = filename;
 
 	setFilename(QString::fromStdString(fileSession->getFileList()[0].getFileName()));
 	setContact(QString::fromStdString(contact));
@@ -40,10 +41,8 @@ QtFileTransferUploadItem::QtFileTransferUploadItem(QWidget * parent, SendFileSes
 		boost::bind(&QtFileTransferUploadItem::fileTransferProgressionEventHandler, this, _1, _2, _3, _4);
 	_sendFileSession->fileTransferEvent +=
 		boost::bind(&QtFileTransferUploadItem::fileTransferEventHandler, this, _1, _2, _3, _4);
-
 	_sendFileSession->moduleFinishedEvent +=
 		boost::bind(&QtFileTransferUploadItem::moduleFinishedEventHandler, this, _1);
-
 	////
 }
 
@@ -63,22 +62,14 @@ void QtFileTransferUploadItem::fileTransferProgressionEventHandler(
 	SendFileSession & sender, IMContact imContact, File sentFile, int percentage) {
 
 	LOG_DEBUG("fileTransferProgressionEventHandler: " + String::fromNumber(percentage));
-
-	//FIXME: this code is working because for now there is just one contact & one file in a send file session
-	//if ((sentFile.getFileName() == _filename) && (imContact.getContactId() == _contactId)) {
 	progressChangeEvent(percentage);
-	//}
 }
 
 void QtFileTransferUploadItem::fileTransferEventHandler(
 	SendFileSession & sender, IFileSession::IFileSessionEvent event, IMContact imContact, File sentFile) {
 
 	LOG_DEBUG("fileTransferProgressionEventHandler: " + String::fromNumber((int)event));
-
-	//FIXME: this code is working because for now there is just one contact & one file in a send file session
-	//if ((sentFile.getFileName() == _filename) && (imContact.getContactId() == _contactId)) {
 	updateStateEvent((int)event);
-	//}
 }
 
 void QtFileTransferUploadItem::moduleFinishedEventHandler(CoIpModule & sender) {

@@ -19,9 +19,8 @@
 
 #include "QtFileTransferItem.h"
 
-#include <util/Logger.h>
-
 #include <qtutil/SafeConnect.h>
+#include <util/Logger.h>
 
 #include <QtGui/QtGui>
 
@@ -122,6 +121,7 @@ void QtFileTransferItem::remove() {
 
 void QtFileTransferItem::open() {
 	//TODO:
+	LOG_DEBUG("open from file transfer manager: " + _filename.toStdString());
 }
 
 void QtFileTransferItem::updateState(int e) {
