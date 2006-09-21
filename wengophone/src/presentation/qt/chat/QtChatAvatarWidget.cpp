@@ -76,7 +76,9 @@ void QtChatAvatarWidget::setupPixmap(QPixmap pixmap) {
 				LOG_WARN("unknown picture mode: " + String::fromNumber(_pictureMode));
 		}
 	} else {
-		painter.drawPixmap(5, 5, QPixmap(":/pics/avatar_default.png").scaled(60, 60, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+		QPixmap defaultAvatar(":/pics/avatar_default.png");
+		defaultAvatar = defaultAvatar.scaled(60, 60, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+		painter.drawPixmap(5, 5, defaultAvatar);
 		_ui.pictureLabel->resize(70, 70);
 		setMinimumSize(70, 70);
 	}
