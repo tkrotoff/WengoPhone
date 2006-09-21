@@ -19,6 +19,8 @@
 
 #include "SipAddress.h"
 
+#include <util/Logger.h>
+
 using namespace std;
 
 SipAddress::SipAddress(const std::string & rawSipAddress) {

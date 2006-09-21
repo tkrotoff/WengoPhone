@@ -348,8 +348,12 @@ void PhoneLine::setPhoneCallState(int callId, EnumPhoneCallState::PhoneCallState
 		phoneCallCreatedEvent(*this, *phoneCall);
 
 		//History: create a HistoryMemento for this incoming call
+		std::string displayName = sipAddress.getDisplayName();
+		if (displayName.empty()) {
+			displayName = sipAddress.getUserName();
+		}
 		HistoryMemento * memento = new HistoryMemento(
-				HistoryMemento::IncomingCall, sipAddress.getDisplayName(), callId);
+				HistoryMemento::IncomingCall, displayName, callId);
 		_userProfile.getHistory().addMemento(memento);
 
 		break;
