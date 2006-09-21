@@ -77,22 +77,13 @@ File "${BUILD_DIR}\owcrashreport.exe"
 
 /** Gaim plugins. */
 SetOutPath "$INSTDIR\plugins\"
-File "${BUILD_DIR}\plugins\gaimrc.dll"
-File "${BUILD_DIR}\plugins\history.dll"
-File "${BUILD_DIR}\plugins\libgg.dll"
-File "${BUILD_DIR}\plugins\libirc.dll"
 File "${BUILD_DIR}\plugins\libjabber.dll"
 File "${BUILD_DIR}\plugins\libmsn.dll"
-File "${BUILD_DIR}\plugins\libnapster.dll"
-File "${BUILD_DIR}\plugins\libnovell.dll"
 File "${BUILD_DIR}\plugins\liboscar.dll"
-File "${BUILD_DIR}\plugins\libsimple.dll"
 File "${BUILD_DIR}\plugins\libyahoo.dll"
-File "${BUILD_DIR}\plugins\perl.dll"
 File "${BUILD_DIR}\plugins\ssl.dll"
 File "${BUILD_DIR}\plugins\ssl-nss.dll"
-File "${BUILD_DIR}\plugins\statenotify.dll"
-File "${BUILD_DIR}\plugins\tcl.dll"
+
 
 /** Sounds. */
 SetOutPath "$INSTDIR\sounds\"
