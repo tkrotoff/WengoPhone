@@ -32,6 +32,7 @@
 #include <model/phonecall/SipAddress.h>
 
 #include <util/Logger.h>
+#include <qtutil/SafeConnect.h>
 
 #include <QtGui/QtGui>
 
@@ -39,11 +40,13 @@ QtHistory::QtHistory(CHistory & cHistory)
 	: QObject(NULL),
 	_cHistory(cHistory) {
 
+	_stateFilter = HistoryMemento::Any;
 	_historyWidget = new QtHistoryWidget(NULL);
 
-	connect(_historyWidget, SIGNAL(replayItem(QtHistoryItem *)), SLOT(replayItem(QtHistoryItem *)));
-	connect(_historyWidget, SIGNAL(removeItem(unsigned)), SLOT(removeItem(unsigned)));
-	connect(_historyWidget, SIGNAL(missedCallsSeen()), SLOT(resetUnseenMissedCalls()));
+	SAFE_CONNECT(_historyWidget, SIGNAL(replayItem(QtHistoryItem *)), SLOT(replayItem(QtHistoryItem *)));
+	SAFE_CONNECT(_historyWidget, SIGNAL(removeItem(unsigned)), SLOT(removeItem(unsigned)));
+	SAFE_CONNECT(_historyWidget, SIGNAL(missedCallsSeen()), SLOT(resetUnseenMissedCalls()));
+	SAFE_CONNECT(_historyWidget, SIGNAL(showOnlyItemOfType(int)), SLOT(showOnlyItemOfTypeSlot(int)));
 
 	QtWengoPhone * qtWengoPhone = (QtWengoPhone *) _cHistory.getCWengoPhone().getPresentation();
 	qtWengoPhone->setQtHistoryWidget(_historyWidget);
@@ -60,6 +63,11 @@ void QtHistory::historyLoadedEvent() {
 	updatePresentation();
 }
 
+void QtHistory::showOnlyItemOfTypeSlot(int state) {
+	_stateFilter = (HistoryMemento::State)state;
+	updatePresentation();
+}
+
 void QtHistory::updatePresentation() {
 	_historyWidget->clearHistory();
 
@@ -67,14 +75,16 @@ void QtHistory::updatePresentation() {
 	for (HistoryMap::iterator it = collection->begin(); it != collection->end(); it++) {
 		HistoryMemento * memento = (*it).second;
 
-		addHistoryMemento(
-			memento->getState(),
-			memento->getDate().toString(),
-			memento->getTime().toString(),
-			memento->getDuration(),
-			memento->getPeer(),
-			(*it).first
-		);
+		if ((memento->getState() == _stateFilter) || (_stateFilter == HistoryMemento::Any)) {
+			addHistoryMemento(
+				memento->getState(),
+				memento->getDate().toString(),
+				memento->getTime().toString(),
+				memento->getDuration(),
+				memento->getPeer(),
+				(*it).first
+			);
+		}
 	}
 }
 

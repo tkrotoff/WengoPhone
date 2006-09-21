@@ -105,6 +105,9 @@ Q_SIGNALS:
 
 	void missedCallsSeen();
 
+	// the int is a HistoryMemento::State
+	void showOnlyItemOfType(int state);
+
 private Q_SLOTS:
 
 	void itemClicked();

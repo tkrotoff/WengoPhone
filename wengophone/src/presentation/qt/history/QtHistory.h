@@ -86,9 +86,13 @@ private Q_SLOTS:
 
 	void resetUnseenMissedCalls();
 
+	void showOnlyItemOfTypeSlot(int state);
+
 private:
 
 	QtHistoryWidget * _historyWidget;
+
+	HistoryMemento::State _stateFilter;
 
 	CHistory & _cHistory;
 };

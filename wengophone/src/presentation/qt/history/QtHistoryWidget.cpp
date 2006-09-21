@@ -18,11 +18,11 @@
  */
 
 #include "QtHistoryWidget.h"
+#include "QtHistoryItem.h"
 
 #include "ui_HistoryWidget.h"
 
-#include "QtHistoryItem.h"
-
+#include <model/history/HistoryMemento.h>
 #include <control/history/CHistory.h>
 
 #include <util/Logger.h>
@@ -90,8 +90,11 @@ QtHistoryWidget::QtHistoryWidget(QWidget * parent)
 	action = _menu->addAction(tr("Incoming call"));
 	connect(action, SIGNAL(triggered(bool)), SLOT(showIncoming(bool)));
 
+	// TODO: uncomment when chat will be historized
+	/*
 	action = _menu->addAction(tr("Chat"));
 	connect(action, SIGNAL(triggered(bool)), SLOT(showChat(bool)));
+	*/
 
 	action = _menu->addAction(tr("All"));
 	connect(action, SIGNAL(triggered(bool)), SLOT(showAll(bool)));
@@ -193,26 +196,32 @@ void QtHistoryWidget::showItem(const QString & text) {
 
 void QtHistoryWidget::showSMSCall(bool) {
 	showItem(tr("SMS"));
+	showOnlyItemOfType((int)HistoryMemento::OutgoingSmsOk);
 }
 
 void QtHistoryWidget::showOutGoingCall(bool) {
 	showItem(tr("Outgoing call"));
+	showOnlyItemOfType((int)HistoryMemento::OutgoingCall);
 }
 
 void QtHistoryWidget::showIncoming(bool) {
 	showItem(tr("Incoming call"));
+	showOnlyItemOfType((int)HistoryMemento::IncomingCall);
 }
 
 void QtHistoryWidget::showChat(bool) {
 	showItem(tr("Chat"));
-}
-
-void QtHistoryWidget::showAll(bool) {
-	showItem(tr("All"));
+	showOnlyItemOfType((int)HistoryMemento::ChatSession);
 }
 
 void QtHistoryWidget::showMissedCall(bool) {
 	showItem(tr("Missed call"));
+	showOnlyItemOfType((int)HistoryMemento::MissedCall);
+}
+
+void QtHistoryWidget::showAll(bool) {
+	showItem(tr("All"));
+	showOnlyItemOfType((int)HistoryMemento::Any);
 }
 
 void QtHistoryWidget::clearHistory() {
