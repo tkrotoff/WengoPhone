@@ -21,6 +21,7 @@
 
 #include <qtutil/SafeConnect.h>
 #include <util/Logger.h>
+#include <util/WebBrowser.h>
 
 #include <QtGui/QtGui>
 
@@ -120,8 +121,10 @@ void QtFileTransferItem::remove() {
 }
 
 void QtFileTransferItem::open() {
-	//TODO:
 	LOG_DEBUG("open from file transfer manager: " + _filename.toStdString());
+#ifdef OS_WINDOWS
+	WebBrowser::openUrl(_filename.toStdString());
+#endif
 }
 
 void QtFileTransferItem::updateState(int e) {
