@@ -377,7 +377,10 @@ SFP_PLUGIN_EXPORTS int sfp_cancel_transfer(int call_id){
 	if(session->state == SFP_SESSION_RUNNING){ // the receive / send thread is active yet; INVITE has been answered by a 200OK
 		// set the session in a cancelled transfer state
 		session->state = SFP_SESSION_CANCELLED;
+		phBye(call_id);
 	}else if(session->state == SFP_SESSION_INITIATED){ // the receive / send thread is not active yet; still in INVITE phase
+		// set the session in a cancelled transfer state
+		session->state = SFP_SESSION_CANCELLED;
 		// send a BYE
 		phBye(call_id);
 
@@ -399,6 +402,7 @@ SFP_PLUGIN_EXPORTS int sfp_cancel_transfer(int call_id){
 * @return	TRUE if succeeded; FALSE else
 */
 SFP_PLUGIN_EXPORTS int sfp_pause_transfer(int call_id){
+	int holdOn = FALSE;
 	sfp_session_info_t * session = NULL;
 
 	if((session = sfp_get_session_info(call_id)) == NULL){
@@ -406,7 +410,7 @@ SFP_PLUGIN_EXPORTS int sfp_pause_transfer(int call_id){
 		return FALSE;
 	}
 
-	if(phHoldOn(call_id, "application/sfp") == TRUE){
+	if((holdOn = phHoldOn(call_id, "application/sfp")) == TRUE){
 		session->state = SFP_SESSION_PAUSED;
 		if(sfp_cbks != NULL && sfp_cbks->transferPaused) sfp_cbks->transferPaused(call_id, session->remote_username, session->short_filename, session->file_type, session->file_size);
 		return TRUE;
@@ -423,6 +427,7 @@ SFP_PLUGIN_EXPORTS int sfp_pause_transfer(int call_id){
 * @return	TRUE if succeeded; FALSE else
 */
 SFP_PLUGIN_EXPORTS int sfp_resume_transfer(int call_id){
+	int holdOff = FALSE;
 	sfp_session_info_t * session = NULL;
 
 	if((session = sfp_get_session_info(call_id)) == NULL){
@@ -430,7 +435,7 @@ SFP_PLUGIN_EXPORTS int sfp_resume_transfer(int call_id){
 		return FALSE;
 	}
 
-	if(phHoldOff(call_id, "application/sfp") == TRUE){
+	if((holdOff = phHoldOff(call_id, "application/sfp")) == TRUE){
 		session->state = SFP_SESSION_RESUMED;		
 		return TRUE;
 	}
@@ -1005,7 +1010,7 @@ static void sfp_receive_terminaison(sfp_session_info_t * session, sfp_returncode
 			if(sfp_cbks != NULL && sfp_cbks->transferCancelled) sfp_cbks->transferCancelled(call_id, session->short_filename, session->file_type, session->file_size);
 
 			// send a BYE
-			phBye(call_id);
+			//phBye(call_id);
 		}else if(session->state == SFP_SESSION_CLOSED_BY_PEER){			
 			// notify GUI
 			if(sfp_cbks != NULL && sfp_cbks->transferClosedByPeer) sfp_cbks->transferClosedByPeer(call_id, session->remote_username, session->short_filename, session->file_type, session->file_size);
@@ -1039,7 +1044,7 @@ static void sfp_receive_terminaison(sfp_session_info_t * session, sfp_returncode
 			if(sfp_cbks != NULL && sfp_cbks->transferCancelled) sfp_cbks->transferCancelled(call_id, session->short_filename, session->file_type, session->file_size);
 
 			// send a BYE
-			phBye(call_id);
+			//phBye(call_id);
 		}else if(session->state == SFP_SESSION_CANCELLED_BY_PEER){			
 			// notify GUI
 			if(sfp_cbks != NULL && sfp_cbks->transferCancelledByPeer) sfp_cbks->transferCancelledByPeer(call_id, session->remote_username, session->short_filename, session->file_type, session->file_size);
@@ -1074,7 +1079,7 @@ static void sfp_send_terminaison(sfp_session_info_t * session, sfp_returncode_t 
 			if(sfp_cbks != NULL && sfp_cbks->transferCancelled) sfp_cbks->transferCancelled(call_id, session->short_filename, session->file_type, session->file_size);
 
 			// send a BYE
-			phBye(call_id);
+			//phBye(call_id);
 		}else if(session->state == SFP_SESSION_CLOSED_BY_PEER){ // received a BYE while still sending
 			// notify GUI
 			if(sfp_cbks != NULL && sfp_cbks->transferClosedByPeer) sfp_cbks->transferClosedByPeer(call_id, session->remote_username, session->short_filename, session->file_type, session->file_size);
@@ -1105,7 +1110,7 @@ static void sfp_send_terminaison(sfp_session_info_t * session, sfp_returncode_t 
 			if(sfp_cbks != NULL && sfp_cbks->transferCancelled) sfp_cbks->transferCancelled(call_id, session->short_filename, session->file_type, session->file_size);
 
 			// send a BYE
-			phBye(call_id);
+			//phBye(call_id);
 		}else if(session->state == SFP_SESSION_CANCELLED_BY_PEER){			
 			// notify GUI
 			if(sfp_cbks != NULL && sfp_cbks->transferCancelledByPeer) sfp_cbks->transferCancelledByPeer(call_id, session->remote_username, session->short_filename, session->file_type, session->file_size);

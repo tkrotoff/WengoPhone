@@ -64,6 +64,7 @@
 #define SFP_TRANSFER_UDP						SOCK_DGRAM
 
 #define WAIT_PAUSE_DELAY						25000 // microseconds
+#define WAIT_FOR_BYE_DELAY						5000 // microseconds
 
 
 // ----- PRIVATE FUNCTION DECLARATION -----
@@ -431,8 +432,14 @@ static sfp_returncode_t sfp_transfer_send_active(FILE * stream, SOCKET sckt, str
 				if((tmp_sent = send(sckt, buffer, (int)read, 0)) >= 0){
 					sent += tmp_sent;
 				}else{
-					m_log_error("Send failed", "sfp_transfer_send_active");
-					return TRANSFER_CORRUPTION; // fail
+					// wait little time to see if it is not because a BYE (CANCELLED_BY_PEER) has been received
+					//usleep(WAIT_FOR_BYE_DELAY);
+					//if(session->state == SFP_SESSION_CANCELLED_BY_PEER){
+					//	return SUCCESS;
+					//}else{
+						m_log_error("Send failed", "sfp_transfer_send_active");
+						return TRANSFER_CORRUPTION; // fail
+					//}
 				}
 			}else{
 				FD_CLR(sckt, &sckts);
@@ -572,8 +579,14 @@ static sfp_returncode_t sfp_transfer_send_passive(FILE * stream, SOCKET sckt, st
 				if((tmp_sent = send(tmp, buffer, (int)read, 0)) >= 0){
 					sent += tmp_sent;
 				}else{
-					m_log_error("Send failed", "sfp_transfer_send_active");
-					return TRANSFER_CORRUPTION; // fail
+					// wait little time to see if it is not because a BYE (CANCELLED_BY_PEER) has been received
+					//usleep(WAIT_FOR_BYE_DELAY);
+					//if(session->state == SFP_SESSION_CANCELLED_BY_PEER){
+					//	return SUCCESS;
+					//}else{
+						m_log_error("Send failed", "sfp_transfer_send_active");
+						return TRANSFER_CORRUPTION; // fail
+					//}
 				}
 			}else{
 				FD_CLR(tmp, &sckts);
@@ -666,7 +679,7 @@ static sfp_returncode_t sfp_transfer_receive_active(FILE * stream, SOCKET sckt, 
 		//sprintf(message, "Received %d char", received);
 		m_log(message,"sfp_transfer_receive_active");
 		// if the transfer has been cancelled stop sending
-		if(session->state == SFP_SESSION_CLOSED_BY_PEER || session->state == SFP_SESSION_CANCELLED_BY_PEER || session->state == SFP_SESSION_CANCELLED){
+		if(session->state == SFP_SESSION_CLOSED_BY_PEER || session->state == SFP_SESSION_CANCELLED_BY_PEER){
 			return SUCCESS;
 		}
 		if((int)fwrite(buffer, sizeof(char), received, stream) < received){
@@ -676,6 +689,17 @@ static sfp_returncode_t sfp_transfer_receive_active(FILE * stream, SOCKET sckt, 
 			// success
 		}
 		memset(buffer, 0, sizeof(buffer));
+	}
+	
+	// if recv failed or finishes and we are in a cancel state, it could because we cancelled
+	// (sent a BYE) the transfer and peer therefore closed the socket
+	if(session->state == SFP_SESSION_CANCELLED){
+		return SUCCESS;
+	}
+	// wait little time to see if it is not because a BYE (CANCELLED_BY_PEER) has been received
+	usleep(WAIT_FOR_BYE_DELAY);
+	if(session->state == SFP_SESSION_CANCELLED_BY_PEER){
+		return SUCCESS;
 	}
 
 	// check that we have received it all
@@ -786,7 +810,7 @@ static sfp_returncode_t sfp_transfer_receive_passive(FILE * stream, SOCKET sckt,
 		notify_progress(session, total_received, total_to_receive, &increase);
 
 		// if the transfer has been cancelled stop sending
-		if(session->state == SFP_SESSION_CLOSED_BY_PEER || session->state == SFP_SESSION_CANCELLED_BY_PEER || session->state == SFP_SESSION_CANCELLED){
+		if(session->state == SFP_SESSION_CLOSED_BY_PEER || session->state == SFP_SESSION_CANCELLED_BY_PEER){
 			finalize_connection(tmp);
 			return SUCCESS;
 		}
@@ -796,8 +820,20 @@ static sfp_returncode_t sfp_transfer_receive_passive(FILE * stream, SOCKET sckt,
 		}
 		memset(buffer, 0, sizeof(buffer));
 	}
-
+	
 	finalize_connection(tmp);
+
+	// if recv failed or finishes and we are in a cancel state, it could because we cancelled
+	// (sent a BYE) the transfer and peer therefore closed the socket
+	if(session->state == SFP_SESSION_CANCELLED){
+		return SUCCESS;
+	}
+	// wait little time to see if it is not because a BYE (CANCELLED_BY_PEER) has been received
+	usleep(WAIT_FOR_BYE_DELAY);
+	if(session->state == SFP_SESSION_CANCELLED_BY_PEER){
+		return SUCCESS;
+	}
+	
 
 	// check that we have received it all
 	if(total_received < total_to_receive){ // TODO verify
