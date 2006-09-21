@@ -21,7 +21,6 @@
 #define OWQTCONTACTMANAGER_H
 
 #include <QtCore/QObject>
-#include <QtCore/QMutex>
 #include <QtCore/QList>
 
 class CUserProfile;
@@ -44,6 +43,7 @@ class QAction;
  * Qt Presentation manager for the ContactList
  *
  * @author Mr K.
+ * @author Philippe Bernery
  */
 class QtContactManager : public QObject {
 	Q_OBJECT
@@ -72,6 +72,8 @@ public Q_SLOTS:
 	void setMouseButton(Qt::MouseButton button);
 
 	void userStateChanged();
+
+	void editContact(QString contactId);
 
 private Q_SLOTS:
 
@@ -156,8 +158,6 @@ private:
 	QMenu * _menu;
 
 	QAction * _callAction;
-
-	QMutex _mutex;
 
 	QtContactList & _qtContactList;
 

@@ -29,6 +29,7 @@ class CContact;
 class CWengoPhone;
 class QLabel;
 class QPushButton;
+class QtContactManager;
 namespace Ui { class ContactWidget; }
 
 /**
@@ -37,12 +38,14 @@ namespace Ui { class ContactWidget; }
  *
  * @author Mr K
  * @author Mathieu Stute
+ * @author Philippe Bernery
  */
 class QtContactWidget : public QWidget {
 	Q_OBJECT
 public:
 
-	QtContactWidget(const std::string & contactId, CWengoPhone & cWengoPhone, QWidget * parent);
+	QtContactWidget(const std::string & contactId, CWengoPhone & cWengoPhone,
+		QtContactManager * qtContactManager, QWidget * parent);
 
 	~QtContactWidget();
 
@@ -53,6 +56,14 @@ public:
 	QString text() const {
 		return _text;
 	}
+
+Q_SIGNALS:
+
+	/**
+	 * Emitted when a the contact icon has been clicked and so the
+	 * user wants to edit the contact.
+	 */
+	void editContact(QString contact);
 
 public Q_SLOTS:
 
@@ -73,11 +84,6 @@ private Q_SLOTS:
 	void avatarButtonClicked();
 
 private:
-
-	/**
-	 * Code factorization.
-	 */
-	void showContactProfile();
 
 	void updateToolTips();
 

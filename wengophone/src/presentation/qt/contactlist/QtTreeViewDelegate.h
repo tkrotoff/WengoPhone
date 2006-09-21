@@ -25,12 +25,13 @@
 #include <QtGui/QPixmap>
 
 class CWengoPhone;
-class QModelIndex;
-class QWidget;
-class QStyleOptionViewItem;
 class QAbstractItemModel;
-class QRect;
+class QModelIndex;
 class QPainter;
+class QRect;
+class QStyleOptionViewItem;
+class QWidget;
+class QtContactManager;
 class QtUserWidget;
 
 /**
@@ -42,7 +43,8 @@ class QtTreeViewDelegate : public QItemDelegate {
 	Q_OBJECT
 public:
 
-	QtTreeViewDelegate(CWengoPhone & cWengoPhone, QObject * parent = 0);
+	QtTreeViewDelegate(CWengoPhone & cWengoPhone,
+		QtContactManager * qtContactManager, QObject * parent = 0);
 
 	QWidget * createEditor(QWidget * parent, const QStyleOptionViewItem & option, const QModelIndex & index) const;
 
@@ -69,6 +71,8 @@ private:
 	QPixmap _menuIcon;
 
 	mutable QPixmap _groupBackground;
+
+	QtContactManager * _qtContactManager;
 
 	CWengoPhone & _cWengoPhone;
 };

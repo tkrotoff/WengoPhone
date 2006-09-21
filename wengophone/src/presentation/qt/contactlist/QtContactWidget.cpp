@@ -21,8 +21,9 @@
 
 #include "ui_ContactWidget.h"
 
-#include "QtContactListManager.h"
 #include "QtContact.h"
+#include "QtContactListManager.h"
+#include "QtContactManager.h"
 
 #include <presentation/qt/contactlist/QtContactListManager.h>
 #include <presentation/qt/profile/QtProfileDetails.h>
@@ -38,13 +39,14 @@
 #include <util/Logger.h>
 
 #include <qtutil/PixmapMerging.h>
+#include <qtutil/SafeConnect.h>
 
 #include <QtGui/QtGui>
 
 static const std::string AVATAR_BACKGROUND = ":/pics/avatar_background.png";
 
-QtContactWidget::QtContactWidget(const std::string & contactId,
-	CWengoPhone & cWengoPhone, QWidget * parent)
+QtContactWidget::QtContactWidget(const std::string & contactId, CWengoPhone & cWengoPhone,
+	QtContactManager * qtContactManager, QWidget * parent)
 	: QWidget(parent),
 	_cWengoPhone(cWengoPhone) {
 
@@ -60,6 +62,7 @@ QtContactWidget::QtContactWidget(const std::string & contactId,
 	if (!str.isEmpty()) {
 		_ui->landlineButton->setText(str);
 	}
+
 	str = QString::fromUtf8(_contactProfile.getMobilePhone().c_str());
 	if (!str.isEmpty()) {
 		_ui->mobileButton->setText(str);
@@ -67,18 +70,23 @@ QtContactWidget::QtContactWidget(const std::string & contactId,
 	else {
 		_ui->smsButton->setEnabled(false);
 	}
+
 	if (!_contactProfile.hasFreeCall()) {
 		_ui->callButton->setEnabled(false);
 	}
+
 	if (!_contactProfile.hasIM()) {
 		_ui->chatButton->setEnabled(false);
 	}
-	connect(_ui->callButton, SIGNAL(clicked()), SLOT(callButtonClicked()));
-	connect(_ui->chatButton, SIGNAL(clicked()), SLOT(chatButtonClicked()));
-	connect(_ui->smsButton, SIGNAL(clicked()), SLOT(smsButtonClicked()));
-	connect(_ui->landlineButton, SIGNAL(clicked()), SLOT(landlineButtonClicked()));
-	connect(_ui->mobileButton, SIGNAL(clicked()), SLOT(mobileButtonClicked()));
-	connect(_ui->avatarButton, SIGNAL(clicked()), SLOT(avatarButtonClicked()));
+
+	SAFE_CONNECT(_ui->callButton, SIGNAL(clicked()), SLOT(callButtonClicked()));
+	SAFE_CONNECT(_ui->chatButton, SIGNAL(clicked()), SLOT(chatButtonClicked()));
+	SAFE_CONNECT(_ui->smsButton, SIGNAL(clicked()), SLOT(smsButtonClicked()));
+	SAFE_CONNECT(_ui->landlineButton, SIGNAL(clicked()), SLOT(landlineButtonClicked()));
+	SAFE_CONNECT(_ui->mobileButton, SIGNAL(clicked()), SLOT(mobileButtonClicked()));
+	SAFE_CONNECT(_ui->avatarButton, SIGNAL(clicked()), SLOT(avatarButtonClicked()));
+	SAFE_CONNECT_RECEIVER_TYPE(this, SIGNAL(editContact(QString)),
+		qtContactManager, SLOT(editContact(QString)), Qt::QueuedConnection);
 }
 
 QtContactWidget::~QtContactWidget() {
@@ -146,7 +154,7 @@ void QtContactWidget::mobileButtonClicked() {
 	if (!ul->getMobilePhone(QString::fromStdString(_contactId)).isEmpty()) {
 		ul->startCall(QString::fromStdString(_contactId), _ui->mobileButton->text());
 	} else {
-		showContactProfile();
+		editContact(_text);
 	}
 }
 
@@ -155,22 +163,12 @@ void QtContactWidget::landlineButtonClicked() {
 	if (!ul->getHomePhone(QString::fromStdString(_contactId)).isEmpty()) {
 		ul->startCall(QString::fromStdString(_contactId), _ui->landlineButton->text());
 	} else {
-		showContactProfile();
+		editContact(_text);
 	}
 }
 
 void QtContactWidget::avatarButtonClicked() {
-	showContactProfile();
-}
-
-void QtContactWidget::showContactProfile() {
-	ContactProfile contactProfile =
-		_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCContactList().getContactProfile(_text.toStdString());
-	QtProfileDetails qtProfileDetails(*_cWengoPhone.getCUserProfileHandler().getCUserProfile(),
-		contactProfile, this, tr("Edit Contact"));
-	if (qtProfileDetails.show()) {
-		_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCContactList().updateContact(contactProfile);
-	}
+	editContact(_text);
 }
 
 void QtContactWidget::createAvatar() {

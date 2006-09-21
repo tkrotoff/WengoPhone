@@ -66,7 +66,6 @@ QtContactList::QtContactList(CContactList & cContactList, CWengoPhone & cWengoPh
 	_cWengoPhone(cWengoPhone) {
 
 	_waitingForModel = false;
-	_locked = false;
 
 	_contactListWidget = new QWidget(NULL);
 
@@ -117,7 +116,8 @@ QtContactList::QtContactList(CContactList & cContactList, CWengoPhone & cWengoPh
 	connect(qtContactTreeMouseFilter, SIGNAL(mergeContacts(QString, QString)),
 		SLOT(mergeContactsSlot(QString, QString)));
 
-	QtTreeViewDelegate * delegate = new QtTreeViewDelegate(_cWengoPhone, _ui->treeWidget);
+	QtTreeViewDelegate * delegate = new QtTreeViewDelegate(_cWengoPhone,
+		_contactManager, _ui->treeWidget);
 	delegate->setParent(_ui->treeWidget->viewport());
 
 	_ui->treeWidget->setItemDelegate(delegate);
@@ -165,12 +165,6 @@ void QtContactList::initContent() {
 }
 
 void QtContactList::updatePresentation() {
-	Mutex::ScopedLock lock(_mutex);
-
-	if (_locked) {
-		_condition.wait(lock);	
-	}
-
 	_contactManager->userStateChanged();
 	_ui->treeWidget->viewport()->update();
 }
@@ -299,13 +293,4 @@ void QtContactList::mergeContactsSlot(QString dstContact, QString srcContact) {
 			_waitingForModel = false;
 		}
 	}
-}
-
-void QtContactList::lock() {
-	_locked = true;
-}
-
-void QtContactList::unlock() {
-	_locked = false;
-	_condition.notify_all();
 }

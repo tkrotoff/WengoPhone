@@ -35,8 +35,10 @@
 
 static int GROUP_WIDGET_FRAME_HEIGHT = 22;
 
-QtTreeViewDelegate::QtTreeViewDelegate(CWengoPhone & cWengoPhone, QObject * parent)
+QtTreeViewDelegate::QtTreeViewDelegate(CWengoPhone & cWengoPhone,
+	QtContactManager * qtContactManager, QObject * parent)
 	: QItemDelegate(parent),
+	_qtContactManager(qtContactManager),
 	_cWengoPhone(cWengoPhone) {
 }
 
@@ -49,7 +51,9 @@ QWidget * QtTreeViewDelegate::createEditor(QWidget * parent,
 
 	QtContactListManager * ul = QtContactListManager::getInstance();
 	QtContact * qtContact = ul->getContact(index.data().toString());
-	QtContactWidget * widget = new QtContactWidget(qtContact->getId().toStdString(), _cWengoPhone, parent);
+	QtContactWidget * widget =
+		new QtContactWidget(qtContact->getId().toStdString(), _cWengoPhone,
+			_qtContactManager, parent);
 	return (QWidget *) widget;
 }
 
