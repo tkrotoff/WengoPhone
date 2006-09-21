@@ -443,7 +443,7 @@ void QtWengoPhone::addToConference(PhoneCall * sourceCall, PhoneCall * targetCal
 				if (qtContactCallListWidget->hasPhoneCall(sourceCall)) {
 					_ui->tabWidget->setTabText(i, tr("Conference"));
 					IPhoneLine * phoneLine = _cWengoPhone.getCUserProfileHandler().getCUserProfile()->getUserProfile().getActivePhoneLine();
-					if (phoneLine != NULL) {
+					if (phoneLine) {
 						ConferenceCall * confCall = new ConferenceCall(*phoneLine);
 						confCall->addPhoneCall(*targetCall);
 						confCall->addPhoneCall(*sourceCall);
@@ -695,13 +695,6 @@ void QtWengoPhone::proxyNeedsAuthenticationEventHandlerThreadSafe(NetworkProxy n
 
 void QtWengoPhone::closeWindow() {
 #if defined(OS_MACOSX)
-	// This different code make WengoPhone reacts as a true MacOS X application:
-	// When trying to close the main window, WengoPhone is actually hidden. Then
-	// clicking on the WengoPhone icon in the Dock will show WengoPhone.
-//	HICommand command;
-//	memset(&command, 0, sizeof(HICommand));
-//	command.commandID = kHICommandHide;
-//	OSStatus status = ProcessHICommand(&command);
 #else
 	_wengoPhoneWindow->showMinimized();
 	_wengoPhoneWindow->hide();

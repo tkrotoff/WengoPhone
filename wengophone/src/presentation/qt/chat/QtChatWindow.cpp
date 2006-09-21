@@ -708,6 +708,9 @@ void QtChatWindow::statusMessageReceivedSLot(IMChatSession * sender, int status,
 }
 
 void QtChatWindow::closeWindow() {
+#if defined(OS_MACOSX)
+#else
 	showMinimized();
 	hide();
+#endif
 }
