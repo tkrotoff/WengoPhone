@@ -71,7 +71,7 @@ eXosip_remove_transaction_from_call(osip_transaction_t *tr, eXosip_call_t *jc)
       return 0;
     }
 
-  for (jd = jc->c_dialogs; jd; jd->next)
+  for (jd = jc->c_dialogs; jd; jd = jd->next)
     {
       if (!eXosip_list_remove_element(jd->d_inc_trs, tr))
 	return 0;
