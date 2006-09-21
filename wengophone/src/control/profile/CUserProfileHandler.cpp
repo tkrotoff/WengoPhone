@@ -29,6 +29,7 @@
 #include <model/profile/UserProfileHandler.h>
 #include <model/WengoPhone.h>
 
+#include <util/SafeDelete.h>
 #include <thread/ThreadEvent.h>
 
 CUserProfileHandler::CUserProfileHandler(UserProfileHandler & userProfileHandler, CWengoPhone & cWengoPhone)
@@ -142,10 +143,7 @@ void CUserProfileHandler::currentUserProfileReleased() {
 }
 
 void CUserProfileHandler::currentUserProfileReleasedThreadSafe() {
-	if (_cUserProfile) {
-		delete _cUserProfile;
-		_cUserProfile = NULL;
-	}
+	OWSAFE_DELETE(_cUserProfile);
 
 	PFactory::getFactory().reset();
 
