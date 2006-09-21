@@ -21,8 +21,10 @@
 
 #include <filesessionmanager/SendFileSession.h>
 
-#include <util/Logger.h>
 #include <qtutil/SafeConnect.h>
+#include <util/Logger.h>
+#include <util/SafeDelete.h>
+
 #include <QtGui/QtGui>
 
 QtFileTransferUploadItem::QtFileTransferUploadItem(QWidget * parent, SendFileSession * fileSession,
@@ -38,6 +40,10 @@ QtFileTransferUploadItem::QtFileTransferUploadItem(QWidget * parent, SendFileSes
 		boost::bind(&QtFileTransferUploadItem::fileTransferProgressionEventHandler, this, _1, _2, _3, _4);
 	_sendFileSession->fileTransferEvent +=
 		boost::bind(&QtFileTransferUploadItem::fileTransferEventHandler, this, _1, _2, _3, _4);
+
+	_sendFileSession->moduleFinishedEvent +=
+		boost::bind(&QtFileTransferUploadItem::moduleFinishedEventHandler, this, _1);
+
 	////
 }
 
@@ -73,4 +79,9 @@ void QtFileTransferUploadItem::fileTransferEventHandler(
 	//if ((sentFile.getFileName() == _filename) && (imContact.getContactId() == _contactId)) {
 	updateStateEvent((int)event);
 	//}
+}
+
+void QtFileTransferUploadItem::moduleFinishedEventHandler(CoIpModule & sender) {
+	LOG_DEBUG("module sendFileSession has finished, delete it");
+	OWSAFE_DELETE(_sendFileSession);
 }

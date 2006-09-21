@@ -23,6 +23,7 @@
 #include <imwrapper/IMContact.h>
 #include <qtutil/SafeConnect.h>
 #include <util/Logger.h>
+#include <util/SafeDelete.h>
 
 #include <QtGui/QtGui>
 
@@ -30,7 +31,6 @@ QtFileTransferDownloadItem::QtFileTransferDownloadItem(QWidget * parent, Receive
 	: QtFileTransferItem(parent, QtFileTransferItem::Download), _receiveFileSession(fileSession) {
 
 	setFilename(QString::fromStdString(fileSession->getFileName()));
-	//TODO: setContact from fileSession.getContact that returns a IMContact
 	setContact(QString::fromStdString(_receiveFileSession->getIMContact().getContactId()));
 
 	// bind to fileSession events
@@ -38,7 +38,15 @@ QtFileTransferDownloadItem::QtFileTransferDownloadItem(QWidget * parent, Receive
 		boost::bind(&QtFileTransferDownloadItem::fileTransferProgressionEventHandler, this, _1, _2, _3, _4);
 	_receiveFileSession->fileTransferEvent +=
 		boost::bind(&QtFileTransferDownloadItem::fileTransferEventHandler, this, _1, _2, _3, _4);
+
+	_receiveFileSession->moduleFinishedEvent +=
+		boost::bind(&QtFileTransferDownloadItem::moduleFinishedEventHandler, this, _1);
 	////
+
+	//TODO: check if the fileSession has been cancelled, if yes call updateState
+	if (_receiveFileSession->getLastEvent() == IFileSession::IFileSessionEventFileTransferCancelledByPeer) {
+		updateStateEvent((int)IFileSession::IFileSessionEventFileTransferCancelledByPeer);
+	}
 }
 
 void QtFileTransferDownloadItem::pause() {
@@ -66,4 +74,9 @@ void QtFileTransferDownloadItem::fileTransferEventHandler(ReceiveFileSession & s
 	LOG_DEBUG("filetransfer event: " + String::fromNumber(event));
 
 	updateStateEvent((int)event);
+}
+
+void QtFileTransferDownloadItem::moduleFinishedEventHandler(CoIpModule & sender) {
+	LOG_DEBUG("module receiveFileSession has finished, delete it");
+	OWSAFE_DELETE(_receiveFileSession);
 }

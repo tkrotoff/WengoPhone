@@ -27,6 +27,7 @@
 class SendFileSession;
 class File;
 class IMContact;
+class CoIpModule;
 
 /**
  *
@@ -66,6 +67,8 @@ private:
 
 	void fileTransferEventHandler(SendFileSession & sender, IFileSession::IFileSessionEvent event,
 		IMContact imContact, File sentFile);
+
+	void moduleFinishedEventHandler(CoIpModule & sender);
 
 	SendFileSession * _sendFileSession;
 

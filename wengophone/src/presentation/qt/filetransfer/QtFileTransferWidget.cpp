@@ -31,6 +31,9 @@
 
 #include <QtGui/QtGui>
 
+static int DOWNLOAD_TAB_INDEX = 0;
+static int UPLOAD_TAB_INDEX = 1;
+
 QtFileTransferWidget::QtFileTransferWidget(QWidget * parent) : QWidget(parent) {
 
 	//init main widget
@@ -54,7 +57,7 @@ QtFileTransferWidget::QtFileTransferWidget(QWidget * parent) : QWidget(parent) {
 
 void QtFileTransferWidget::cleanButtonClicked() {
 
-	if (_ui.tabWidget->currentIndex() == 0) {
+	if (_ui.tabWidget->currentIndex() == DOWNLOAD_TAB_INDEX) {
 		_ui.downloadTransferListWidget->clear();
 		//delete items and widgetItem over rows
 		for (int i = 0; i < _ui.downloadTransferListWidget->count(); i++) {
@@ -111,11 +114,11 @@ void QtFileTransferWidget::setDownloadFolder(const QString & folder) {
 }
 
 void QtFileTransferWidget::showDownloadTab() {
-	_ui.tabWidget->setCurrentIndex(0);
+	_ui.tabWidget->setCurrentIndex(DOWNLOAD_TAB_INDEX);
 	_ui.downloadTransferListWidget->scrollToBottom();
 }
 
 void QtFileTransferWidget::showUploadTab() {
-	_ui.tabWidget->setCurrentIndex(1);
+	_ui.tabWidget->setCurrentIndex(UPLOAD_TAB_INDEX);
 	_ui.uploadTransferListWidget->scrollToBottom();
 }
