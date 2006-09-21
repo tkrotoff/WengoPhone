@@ -122,6 +122,18 @@ StringList mySplit(const std::string & str, char sep) {
 	return wordList;
 }
 
+static void initVcard(vcard_t *mVcard)
+{
+	if (mVcard)
+	{
+		mVcard->gender = UNKNOWN;
+		mVcard->blocked = false;
+		mVcard->birthday.day = 1;
+		mVcard->birthday.month = 1;
+		mVcard->birthday.year = 1900;
+	}
+}
+
 static const unsigned CONFIG_UNKNOWN = 0;
 static const unsigned  CONFIG_VERSION1 = 1;
 static const unsigned  CONFIG_VERSION2 = 2;
@@ -244,77 +256,80 @@ bool ConfigImporter::classicVcardParser(const string & vcardFile, void * structV
 		key = lastLine.substr(0, pos);
 		value = lastLine.substr(pos + 1, lastLine.length() - (pos + 1));
 
-		if (!key.compare("N")) {
-			StringList mList = mySplit(value, ';');
-			mVcard->lname = mList[0];
-			mVcard->fname = mList[1];
+		if (!value.empty())
+		{
+			if (!key.compare("N")) {
+				StringList mList = mySplit(value, ';');
+				mVcard->lname = mList[0];
+				mVcard->fname = mList[1];
 
-			if (!mList[4].compare("Mme.")) {
-				mVcard->gender = FEMALE;
+				if (!mList[4].compare("Mme.")) {
+					mVcard->gender = FEMALE;
+				}
+				else if (!mList[4].compare("Mr.")) {
+					mVcard->gender = MALE;
+				}
+				else {
+					mVcard->gender = UNKNOWN;
+				}
 			}
-			else if (!mList[4].compare("Mr.")) {
-				mVcard->gender = MALE;
+			else if (!key.compare("TEL;TYPE=home")) {
+				mVcard->numbers.push_back(createNewNodeNumber(HOME_NUMBER_KEY, value));
+			}
+
+			else if (!key.compare("TEL;TYPE=work")) {
+				mVcard->numbers.push_back	(createNewNodeNumber(WORK_NUMBER_KEY, value));
+			}
+
+			else if (!key.compare("TEL;TYPE=cell")) {
+				mVcard->numbers.push_back(createNewNodeNumber(CELL_NUMBER_KEY, value));
+			}
+
+			else if (!key.compare("TEL;TYPE=pref")) {
+				mVcard->id = value;
+			}
+
+			else if (!key.compare("TEL;TYPE=fax")) {
+				mVcard->numbers.push_back(createNewNodeNumber(FAX_NUMBER_KEY, value));
+			}
+
+			else if (!key.compare("TEL;TYPE=other")) {
+				mVcard->numbers.push_back(createNewNodeNumber(OTHER_NUMBER_KEY, value));
+			}
+
+			else if (!key.compare("EMAIL")) {
+				mVcard->emails += value;
+			}
+
+			else if (!key.compare("ORG")) {
+				mVcard->company = value;
+			}
+
+			else if (!key.compare("URL")) {
+				mVcard->website = value;
+			}
+
+			else if (!key.compare("BDAY")) {
+				StringList mList = mySplit(value, '-');
+				mVcard->birthday.year = atoi(mList[0].c_str());
+				mVcard->birthday.month = atoi(mList[1].c_str());
+				mVcard->birthday.day = atoi(mList[2].c_str());
+			}
+			else if (!key.compare("NOTE")) {
+				mVcard->note = value;
+			}
+
+			else if (!key.compare("ADR;TYPE=home;TYPE=pref")) {
+				StringList mList = mySplit(value, ';');
+				mVcard->address.street = mList[2];
+				mVcard->address.city = mList[3];
+				mVcard->address.state = mList[4];
+				mVcard->address.post_code = mList[5];
+				mVcard->address.country = mList[6];
 			}
 			else {
-				mVcard->gender = UNKNOWN;
+				LOG_DEBUG("KEY " + key + " not supported");
 			}
-		}
-		else if (!key.compare("TEL;TYPE=home")) {
-			mVcard->numbers.push_back(createNewNodeNumber(HOME_NUMBER_KEY, value));
-		}
-
-		else if (!key.compare("TEL;TYPE=work")) {
-			mVcard->numbers.push_back(createNewNodeNumber(WORK_NUMBER_KEY, value));
-		}
-
-		else if (!key.compare("TEL;TYPE=cell")) {
-			mVcard->numbers.push_back(createNewNodeNumber(CELL_NUMBER_KEY, value));
-		}
-
-		else if (!key.compare("TEL;TYPE=pref")) {
-			mVcard->id = value;
-		}
-
-		else if (!key.compare("TEL;TYPE=fax")) {
-			mVcard->numbers.push_back(createNewNodeNumber(FAX_NUMBER_KEY, value));
-		}
-
-		else if (!key.compare("TEL;TYPE=other")) {
-			mVcard->numbers.push_back(createNewNodeNumber(OTHER_NUMBER_KEY, value));
-		}
-
-		else if (!key.compare("EMAIL")) {
-			mVcard->emails += value;
-		}
-
-		else if (!key.compare("ORG")) {
-			mVcard->company = value;
-		}
-
-		else if (!key.compare("URL")) {
-			mVcard->website = value;
-		}
-
-		else if (!key.compare("BDAY")) {
-			StringList mList = mySplit(value, '-');
-			mVcard->birthday.year = atoi(mList[0].c_str());
-			mVcard->birthday.month = atoi(mList[1].c_str());
-			mVcard->birthday.day = atoi(mList[2].c_str());
-		}
-		else if (!key.compare("NOTE")) {
-			mVcard->note = value;
-		}
-
-		else if (!key.compare("ADR;TYPE=home;TYPE=pref")) {
-			StringList mList = mySplit(value, ';');
-			mVcard->address.street = mList[2];
-			mVcard->address.city = mList[3];
-			mVcard->address.state = mList[4];
-			mVcard->address.post_code = mList[5];
-			mVcard->address.country = mList[6];
-		}
-		else {
-			LOG_DEBUG("KEY " + key + " not supported");
 		}
 
 		lastLine = tmp.trim();
@@ -543,6 +558,7 @@ bool ConfigImporter::importContactsFromV1toV3(const string & fromDir, UserProfil
 		string Id = fileList[i].substr(0, fileList[i].find("_", 0));
 		vcard_t mVcard;
 
+		initVcard(&mVcard);
 		if (!mFile.getExtension().compare("vcf")) {
 			if (classicVcardParser(fromDir + fileList[i], &mVcard) == false) {
 				continue;
