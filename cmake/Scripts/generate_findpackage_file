@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-# Ssimple script to generate simple cmake modules for finding
+# Simple script to generate simple cmake modules for finding
 # libraries (packages)
 #
 # usage: generate_findpackage_file

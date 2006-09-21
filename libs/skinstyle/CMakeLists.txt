@@ -26,7 +26,16 @@ set(OWSKINSTYLE_LINK_LIBRARIES
   ${QT_QTGUI_LIBRARY}
 )
 
+qt4_wrap_cpp(owskinstyle_SRCS
+  src/SkinStyle.h
+  src/SkinInfoReader.h
+  src/SkinWidget.h
+  src/SkinWindow.h
+  src/SkinButton.h
+)
+
 set(owskinstyle_SRCS
+  ${owskinstyle_SRCS}
   src/SkinStyle.cpp
   src/SkinInfoReader.cpp
   src/SkinWidget.cpp

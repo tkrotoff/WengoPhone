@@ -59,16 +59,16 @@ set(QTWENGOPHONE_LINK_LIBRARIES
   ${OWTHREAD_LIBRARY}
   ${OWQTUTIL_LIBRARY}
 
+  ${GAIM_LIBRARY}
+  ${PIXERTOOL_LIBRARY}
   ${OWCURL_LIBRARY}
+  ${OWIDLE_LIBRARY}
   ${OWWEBCAM_LIBRARY}
   ${OWBROWSER_LIBRARY}
   ${OWTRAYICON_LIBRARY}
   ${OWSOFTUPDATER_LIBRARY}
-  ${OWIDLE_LIBRARY}
   ${OWPHAPIWRAPPER_LIBRARY}
   ${OWMULTIIMWRAPPER_LIBRARY}
-  ${GAIM_LIBRARY}
-  ${PIXERTOOL_LIBRARY}
 
   ${OSIP2_LIBRARY}
 
@@ -78,6 +78,8 @@ set(QTWENGOPHONE_LINK_LIBRARIES
   ${AVCODEC_LIBRARY}
   ${QT_QTCORE_LIBRARY}
   ${QT_QTGUI_LIBRARY}
+  ${QT_QTXML_LIBRARY}
+  ${QT_QTUITOOLS_LIBRARY}
 
   gnutls
 )
@@ -88,7 +90,139 @@ set(QTWENGOPHONE_DEFINITIONS
   -DMULTIIMWRAPPER
 )
 
+#set(qtwengophone_SRCS
+qt4_wrap_cpp(qtwengophone_SRCS
+  QtWengoPhone.h
+  QtConfigPanel.h
+  QtDialpad.h
+  QtAbout.h
+  QtHttpProxyLogin.h
+  QtIdle.h
+  QtEnumIMProtocol.h
+  QtLanguage.h
+  QtToolBar.h
+  QtSystray.h
+  QtFactory.h
+  QtUserProfilePresenceMenu.h
+  QtWengoStyle.h
+  QtBrowserWidget.h
+
+  phoneline/QtPhoneLine.h
+
+  phonecall/QtPhoneCall.h
+  phonecall/QtVideo.h
+  phonecall/QtVideoQt.h
+  phonecall/QtContactCallList.h
+  phonecall/QtContactCallListWidget.h
+  phonecall/QtPhoneCallEventFilter.h
+
+  toaster/QtChatToaster.h
+  toaster/QtCallToaster.h
+  toaster/QtToaster.h
+
+  login/QtLogin.h
+
+  profile/QtProfileDetails.h
+  profile/QtUserProfile.h
+  profile/QtUserProfileHandler.h
+
+  imcontact/QtIMContactManager.h
+  imcontact/QtAddIMContact.h
+  imcontact/QtIMContactItem.h
+  imcontact/QtSimpleIMContactManager.h
+
+  imaccount/QtIMAccountItem.h
+  imaccount/QtIMAccountManager.h
+  imaccount/QtSimpleIMAccountManager.h
+  imaccount/QtIMAccountSettings.h
+  imaccount/QtIMAccountPlugin.h
+  imaccount/QtMSNSettings.h
+  imaccount/QtYahooSettings.h
+  imaccount/QtAIMSettings.h
+  imaccount/QtJabberSettings.h
+  imaccount/QtGoogleTalkSettings.h
+
+  contactlist/QtContactList.h
+  contactlist/QtContactWidget.h
+  contactlist/QtContactTreeMouseFilter.h
+  contactlist/QtContactManager.h
+  contactlist/QtContactListManager.h
+  contactlist/QtContact.h
+  contactlist/QtTreeViewDelegate.h
+  contactlist/QtContactPixmap.h
+  contactlist/QtContactInfo.h
+  contactlist/QtContactTreeKeyFilter.h
+  contactlist/QtRenameGroup.h
+  contactlist/QtConferenceAction.h
+  contactlist/QtContactMenu.h
+
+  conference/QtConferenceCallWidget.h
+
+  chat/emoticons/QtEmoticonsWidget.h
+  chat/emoticons/QtEmoticon.h
+  chat/emoticons/QtEmoticonButton.h
+  chat/emoticons/QtEmoticonsManager.h
+  chat/chatroom/QtChatRoomInviteDlg.h
+  chat/chatroom/QtChatRoomTreeWidgetItem.h
+  chat/chatroom/QtChatRoomListWidgetItem.h
+  chat/QtChatEditEventManager.h
+  chat/QtChatTabWidget.h
+  chat/QtChatAvatarFrame.h
+  chat/QtChatAvatarWidget.h
+  chat/QtChatHandler.h
+  chat/QtChatWidget.h
+  chat/QtChatWindow.h
+  chat/QtChatEditWidget.h
+  chat/QtChatHistoryWidget.h
+  chat/QtChatEditActionBarWidget.h
+  chat/QtWengoStyleBar.h
+  chat/QtChatUtils.h
+
+  webservices/sms/QtSms.h
+  webservices/softupdate/QtSoftUpdate.h
+  webservices/subscribe/QtSubscribe.h
+  webservices/subscribe/QtSubscribe2.h
+  webservices/directory/QtWsDirectory.h
+  webservices/directory/QtWsDirectoryContact.h
+
+  callbar/QtCallBar.h
+  callbar/QtPhoneComboBox.h
+
+  statusbar/QtStatusBar.h
+
+  config/QtISettings.h
+  config/QtAdvancedConfig.h
+  config/QtAccountSettings.h
+  config/QtAdvancedSettings.h
+  config/QtAudioSettings.h
+  config/QtCallForwardSettings.h
+  config/QtGeneralSettings.h
+  config/QtNotificationSettings.h
+  config/QtPrivacySettings.h
+  config/QtVideoSettings.h
+  config/QtLanguagesSettings.h
+  config/QtWengoConfigDialog.h
+
+  profilebar/QtEventWidget.h
+  profilebar/QtIMProfileWidget.h
+  profilebar/QtProfileBar.h
+  profilebar/QtCreditWidget.h
+  profilebar/QtIMAccountPresenceMenu.h
+
+  history/QtHistoryWidget.h
+  history/QtHistoryItem.h
+  history/QtHistory.h
+
+  filetransfer/QtFileTransfer.h
+  filetransfer/QtFileTransferAcceptDialog.h
+  filetransfer/QtFileTransferWidget.h
+  filetransfer/QtFileTransferItem.h
+  filetransfer/QtFileTransferDownloadItem.h
+  filetransfer/QtFileTransferUploadItem.h
+)
+
 set(qtwengophone_SRCS
+  ${qtwengophone_SRCS}
   ../main.cpp
   QtWengoPhone.cpp
   QtConfigPanel.cpp
@@ -223,7 +357,57 @@ set(qtwengophone_SRCS
   filetransfer/QtFileTransferUploadItem.cpp
 )
 
-qt4_automoc(${qtwengophone_SRCS})
+if (WIN32)
+  if (MSVC)
+    # TODO win32/wengophone.rc
+  else (MSVC)
+  endif (MSVC)
+endif (WIN32)
+
+if (UNIX AND NOT WIN32)
+  if (APPLE)
+    set(qtwengophone_SRCS
+      ${qtwengophone_SRCS}
+      chat/QtCloseChatTabWidget.cpp
+      macosx/QtMacApplication.cpp
+    )
+  else (APPLE)
+    set(QTWENGOPHONE_INCLUDE_DIRS
+      ${QTWENGOPHONE_INCLUDE_DIRS}
+      ${X11_INCLUDE_DIR}
+    )
+
+    set(QTWENGOPHONE_LINK_LIBRARIES
+      ${QTWENGOPHONE_LINK_LIBRARIES}
+      ${X11_LIBRARIES}
+    )
+
+    option(WITH_HW_ACCEL "Build with Xv hardware acceleration support" ON)
+    if (WITH_HW_ACCEL)
+      if (X11_XV_FOUND)
+        set(QTWENGOPHONE_LINK_LIBRARIES
+          ${QTWENGOPHONE_LINK_LIBRARIES}
+          ${X11_Xv_LIB}
+        )
+        set(QTWENGOPHONE_DEFINITIONS
+          ${QTWENGOPHONE_DEFINITIONS}
+          -DXV_HWACCEL
+        )
+
+        qt4_wrap_cpp(qtwengophone_SRCS
+          phonecall/XVWindow.cpp
+          phonecall/QtVideoXV.cpp
+        )
+
+      set(qtwengophone_SRCS
+        ${qtwengophone_SRCS}
+        phonecall/XVWindow.cpp
+        phonecall/QtVideoXV.cpp
+      )
+    endif (X11_XV_FOUND)
+  endif (WITH_HW_ACCEL)
+endif (APPLE)
+endif (UNIX AND NOT WIN32)
 
 qt4_wrap_ui(qtwengophone_SRCS
   WengoPhoneWindow.ui
@@ -303,52 +487,9 @@ qt4_wrap_ui(qtwengophone_SRCS
   statusbar/StatusBarWidget.ui
 )
 
-if (WIN32)
-  if (MSVC)
-    # TODO win32/wengophone.rc
-  else (MSVC)
-  endif (MSVC)
-endif (WIN32)
-
-if (UNIX AND NOT WIN32)
-  if (APPLE)
-    set(qtwengophone_SRCS
-      ${qtwengophone_SRCS}
-      chat/QtCloseChatTabWidget.cpp
-      macosx/QtMacApplication.cpp
-    )
-  else (APPLE)
-    set(QTWENGOPHONE_INCLUDE_DIRS
-      ${QTWENGOPHONE_INCLUDE_DIRS}
-      ${X11_INCLUDE_DIR}
-    )
-
-    set(QTWENGOPHONE_LINK_LIBRARIES
-      ${QTWENGOPHONE_LINK_LIBRARIES}
-      ${X11_LIBRARIES}
-    )
-
-    option(WITH_HW_ACCEL "Build with Xv hardware acceleration support" ON)
-    if (WITH_HW_ACCEL)
-      if (X11_XV_FOUND)
-        set(QTWENGOPHONE_LINK_LIBRARIES
-          ${QTWENGOPHONE_LINK_LIBRARIES}
-          ${X11_Xv_LIB}
-        )
-        set(QTWENGOPHONE_DEFINITIONS
-          ${QTWENGOPHONE_DEFINITIONS}
-          -DXV_HWACCEL
-        )
-
-        set(qtwengophone_SRCS
-          ${qtwengophone_SRCS}
-          phonecall/XVWindow.cpp
-          phonecall/QtVideoXV.cpp
-        )
-      endif (X11_XV_FOUND)
-    endif (WITH_HW_ACCEL)
-  endif (APPLE)
-endif (UNIX AND NOT WIN32)
+qt4_add_resources(qtwengophone_SRCS
+  wengophone.qrc
+)
 
 include_directories(
   ${QTWENGOPHONE_INCLUDE_DIRS}

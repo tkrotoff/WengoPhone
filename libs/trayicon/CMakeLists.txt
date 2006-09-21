@@ -20,7 +20,12 @@ set(OWTRAYICON_LINK_LIBRARIES
   ${QT_QTGUI_LIBRARY}
 )
 
+qt4_wrap_cpp(owtrayicon_SRCS
+  trayicon.h
+)
+
 set(owtrayicon_SRCS
+  ${owtrayicon_SRCS}
   trayicon.cpp
 )
 
