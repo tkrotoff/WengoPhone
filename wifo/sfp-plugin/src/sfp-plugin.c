@@ -1401,7 +1401,10 @@ static void sfp_on_EXOSIP_CALL_CLOSED(eXosip_event_t * event){ // BYE received
 		return; // TODO notify GUI
 	}
 
-	if(session->state != SFP_SESSION_FINISHED){
+	if(session->state == SFP_SESSION_INITIATED){
+		if(sfp_cbks != NULL && sfp_cbks->transferCancelledByPeer) sfp_cbks->transferCancelledByPeer(event->cid, session->remote_username, session->short_filename, session->file_type, session->file_size);
+		sfp_remove_session_info(event->cid);
+	}else if(session->state != SFP_SESSION_FINISHED){
 		session->state = SFP_SESSION_CANCELLED_BY_PEER;
 	}else{
 		session->state = SFP_SESSION_CLOSED_BY_PEER;
