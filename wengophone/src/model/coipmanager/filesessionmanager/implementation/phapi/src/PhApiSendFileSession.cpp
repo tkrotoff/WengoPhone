@@ -195,6 +195,8 @@ void PhApiSendFileSession::transferToPeerFinishedEventHandler(PhApiSFPWrapper & 
 		}
 		if(_currentFile != _fileVector.end()){
 			start();
+		}else{
+			moduleFinishedEvent(*this);
 		}
 	}
 }
