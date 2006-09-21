@@ -43,6 +43,7 @@ void QtChatAvatarWidget::setupPixmap(QPixmap pixmap) {
 
 	//TODO:: resize fond_avatar.png
 	QPixmap background = QPixmap(":/pics/avatar_background.png");
+	QPixmap defaultAvatar(":/pics/avatar_default.png");
 	QPainter painter(&background);
 
 	if (!pixmap.isNull()) {
@@ -76,9 +77,7 @@ void QtChatAvatarWidget::setupPixmap(QPixmap pixmap) {
 				LOG_WARN("unknown picture mode: " + String::fromNumber(_pictureMode));
 		}
 	} else {
-		QPixmap defaultAvatar(":/pics/avatar_default.png");
-		defaultAvatar = defaultAvatar.scaled(60, 60, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-		painter.drawPixmap(5, 5, defaultAvatar);
+		painter.drawPixmap(5, 5, defaultAvatar.scaled(60, 60, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
 		_ui.pictureLabel->resize(70, 70);
 		setMinimumSize(70, 70);
 	}
