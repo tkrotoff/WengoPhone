@@ -43,6 +43,7 @@
 #include <sipwrapper/EnumPhoneCallState.h>
 
 #include <util/Logger.h>
+#include <util/SafeDelete.h>
 
 #include <QtGui/QtGui>
 
@@ -286,10 +287,7 @@ void QtContactManager::defaultAction(QTreeWidgetItem * item) {
 }
 
 void QtContactManager::safeUserStateChanged() {
-	if (_menu) {
-		delete _menu;
-		_menu = NULL;
-	}
+	OWSAFE_DELETE(_menu);
 	redrawContacts();
 }
 
@@ -401,7 +399,6 @@ void QtContactManager::sortContacts(bool bypassTimer) {
 			}
 		}
 	}
-	QCoreApplication::processEvents();
 }
 
 bool QtContactManager::canShowUser(const ContactProfile * cprofile) {
@@ -428,10 +425,8 @@ void QtContactManager::redrawContacts() {
 		_wantShow = true;
 		return;
 	}
-	//Clear the events buffer
-	QCoreApplication::processEvents();
 
-	ContactProfile cprofile;
+ 	ContactProfile cprofile;
 	QtContactListManager * ul = QtContactListManager::getInstance();
 	QTreeWidgetItem * group;
 	std::vector<std::string> contactIds = _qtContactList.getCContactList().getContactIds();
