@@ -84,9 +84,12 @@ public:
 	 */
 	unsigned getFreeLocalPort();
 
-private:
-
+	/**
+	 * Sets the detected Nat Type.
+	 */
 	void setNatConfig(EnumNatType::NatType natType);
+
+private:
 
 	static const unsigned PING_TIMEOUT = 3;
 

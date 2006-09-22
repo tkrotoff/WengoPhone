@@ -38,7 +38,8 @@
 using namespace std;
 
 WengoAccount WengoAccount::empty;
-short WengoAccount::testSIPRetry = 3;
+unsigned short WengoAccount::_testSIPRetry = 3;
+unsigned short WengoAccount::_testStunRetry = 2;
 
 WengoAccount::WengoAccount()
 	: SipAccount(),
@@ -50,6 +51,7 @@ WengoAccount::WengoAccount()
 	_ssoWithSSL = false;
 	_isValid = false;
 	_discoveringNetwork = false;
+	_needsHttpTunnel = false;
 	_stunServer = "stun.wengo.fr";
 	_lastNetworkDiscoveryState = NetworkDiscoveryStateError;
 
@@ -71,6 +73,7 @@ WengoAccount::WengoAccount(const std::string & login, const std::string & passwo
 	_ssoRequestOk = false;
 	_wengoLoginOk = false;
 	_ssoWithSSL = false;
+	_needsHttpTunnel = false;
 	_stunServer = "stun.wengo.fr";
 	_discoveringNetwork = false;
 	_lastNetworkDiscoveryState = NetworkDiscoveryStateError;
@@ -227,6 +230,10 @@ EnumSipLoginState::SipLoginState WengoAccount::discoverNetwork() {
 }
 
 bool WengoAccount::discoverForSSO() {
+	//
+	// Please contact network@openwengo.com before any modifications.
+	//
+
 	LOG_DEBUG("discovering network parameters for SSO connection");
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
@@ -250,27 +257,45 @@ bool WengoAccount::discoverForSSO() {
 }
 
 bool WengoAccount::discoverForSIP() {
+	//
+	// Please contact network@openwengo.com before any modifications.
+	//
+
 	LOG_DEBUG("discovering network parameters for SIP connection");
 
 	_localSIPPort = _networkDiscovery.getFreeLocalPort();
 	LOG_DEBUG("SIP will use " + String::fromNumber(_localSIPPort) + " as local SIP port");
 
-	for (int i = 0; i < testSIPRetry; i++) {
-
-		LOG_DEBUG("testUDP / testSIP test number: " + String::fromNumber(i+1));
-
-		if ((_networkDiscovery.testUDP(_stunServer)) &&
-			(_networkDiscovery.testSIP(_sipProxyServerHostname, _sipProxyServerPort, _localSIPPort))) {
-
-			_needsHttpTunnel = false;
-
-			LOG_DEBUG("SIP can connect via UDP");
-			return true;
+	// Stun test
+	unsigned short iTestStun;
+	for (iTestStun = 0; iTestStun < _testStunRetry; iTestStun++) {
+		LOG_DEBUG("testUDP (Stun): " + String::fromNumber(iTestStun + 1));
+		if (_networkDiscovery.testUDP(_stunServer)) {
+			break;
 		}
 	}
 
+	if (iTestStun == _testStunRetry) {
+		// Stun test failed
+		_networkDiscovery.setNatConfig(EnumNatType::NatTypeFullCone);
+	}
+	////
+
+	// SIP test with UDP
+	for (unsigned short i = 0; i < _testSIPRetry; i++) {
+		LOG_DEBUG("testSIP test number: " + String::fromNumber(i + 1));
+
+		if (_networkDiscovery.testSIP(_sipProxyServerHostname, _sipProxyServerPort, _localSIPPort)) {
+			LOG_DEBUG("SIP can connect via UDP");
+			_needsHttpTunnel = false;
+			return true;
+		}
+	}
+	////
+
 	LOG_DEBUG("cannot connect via UDP");
 
+	// SIP test with Http
 	if (_networkDiscovery.testSIPHTTPTunnel(_httpTunnelServerHostname, 80, false,
 		_sipProxyServerHostname, _sipProxyServerPort)) {
 
@@ -303,6 +328,7 @@ bool WengoAccount::discoverForSIP() {
 		LOG_DEBUG("SIP can connect via a tunnel on port 443 with SSL");
 		return true;
 	}
+	////
 
 	LOG_DEBUG("SIP cannot connect");
 	return false;

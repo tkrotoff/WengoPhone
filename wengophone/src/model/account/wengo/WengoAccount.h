@@ -86,8 +86,18 @@ private:
 
 	EnumSipLoginState::SipLoginState discoverNetwork();
 
+	/**
+	 * Discovers network for SSO request.
+	 *
+	 * Please contact network@openwengo.com before any modifications.
+	 */
 	bool discoverForSSO();
 
+	/**
+	 * Discovers network for SIP.
+	 *
+	 * Please contact network@openwengo.com before any modifications.
+	 */
 	bool discoverForSIP();
 
 	void wengoLoginEventHandler();
@@ -133,7 +143,10 @@ private:
 	bool _isValid;
 
 	/** Number of testSIP retry. */
-	static short testSIPRetry;
+	static unsigned short _testSIPRetry;
+
+	/** Number of testStun retry. */
+	static unsigned short _testStunRetry;
 };
 
 #endif	//OWWENGOACCOUNT_H
