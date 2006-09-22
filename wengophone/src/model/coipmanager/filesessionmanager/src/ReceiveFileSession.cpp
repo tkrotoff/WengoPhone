@@ -52,6 +52,8 @@ ReceiveFileSession::ReceiveFileSession(const ReceiveFileSession & receiveFileSes
 }
 
 ReceiveFileSession::~ReceiveFileSession() {
+	RecursiveMutex::ScopedLock scopedLock(_mutex);
+
 	OWSAFE_DELETE(_currentFileSessionImp);
 }
 

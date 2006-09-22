@@ -58,6 +58,8 @@ SendFileSession::SendFileSession(const SendFileSession & sendFileSession)
 }
 
 SendFileSession::~SendFileSession() {
+	RecursiveMutex::ScopedLock scopedLock(_mutex);
+
 	OWSAFE_DELETE(_currentFileSessionImp);
 }
 
