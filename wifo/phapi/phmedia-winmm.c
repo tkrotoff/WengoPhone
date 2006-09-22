@@ -164,7 +164,8 @@ winmm_audio_read_cbk(HWAVEIN hWaveIn, UINT uMsg, DWORD dwInstance, DWORD dwParam
           mmtime_in.u.sample, mmtime_out.u.sample, mmtime_in.u.sample-mmtime_out.u.sample);
       }
 #endif
-      dev->cbk(stream, rawData, frameSize, NULL, NULL);
+	  DBG_DYNA_AUDIO_DRV("phad_winmm: winmm_audio_read_cbk : windows just gave us %d bytes\n", recLen);
+      dev->cbk(stream, rawData, recLen, NULL, NULL);
       rawData += frameSize;
       recLen -= frameSize;
     }
@@ -245,15 +246,17 @@ winmm_audio_dev_open(phastream_t *as, const char * deviceID, int framesize, int 
 
   winmm_init_deviceID(deviceID,  &waveoutDeviceID, &waveinDeviceID);
 #ifndef USE_WAVEOUT_CBK
-  mr = waveOutOpen(&hWaveOut, waveoutDeviceID, &wfx, (DWORD)0/* SpeakerCallback */, 0/* arg */, CALLBACK_NULL /* CALLBACK_FUNCTION */);
+	DBG_DYNA_AUDIO_DRV("phad_winmm: waveOut threading model - phapi will do the callbacks\n");
+	mr = waveOutOpen(&hWaveOut, waveoutDeviceID, &wfx, (DWORD)0/* SpeakerCallback */, 0/* arg */, CALLBACK_NULL /* CALLBACK_FUNCTION */);
 #else
-  mr = waveOutOpen(&hWaveOut, waveoutDeviceID, &wfx, (DWORD)winmm_audio_write_cbk, (DWORD) as/* arg */, CALLBACK_FUNCTION);
+	DBG_DYNA_AUDIO_DRV("phad_winmm: waveOut threading model - windows will do the callbacks\n");
+	mr = waveOutOpen(&hWaveOut, waveoutDeviceID, &wfx, (DWORD)winmm_audio_write_cbk, (DWORD) as/* arg */, CALLBACK_FUNCTION);
 #endif
   dev->hWaveOut = hWaveOut;
 
   if (mr != NOERROR)
   {
-    DBG_DYNA_AUDIO_DRV("Error opening output audio dev %x\n", mr);
+    DBG_DYNA_AUDIO_DRV("phad_winmm: Error opening output audio dev %x\n", mr);
     return -1;
   }
 
@@ -269,7 +272,7 @@ winmm_audio_dev_open(phastream_t *as, const char * deviceID, int framesize, int 
     mr = waveOutPrepareHeader(hWaveOut, whp, sizeof(*whp));
     if (mr != MMSYSERR_NOERROR)
     {
-      DBG_DYNA_AUDIO_DRV("waveOutPrepareHeader: %x\n", mr);
+      DBG_DYNA_AUDIO_DRV("phad_winmm: waveOutPrepareHeader: %x\n", mr);
       exit(-1);
     }
 
@@ -278,16 +281,18 @@ winmm_audio_dev_open(phastream_t *as, const char * deviceID, int framesize, int 
 
   dev->event = CreateEvent(NULL,FALSE,FALSE,NULL);
 #ifndef USE_WAVEIN_CBK
-  mr = waveInOpen(&hWaveIn, waveinDeviceID, &wfx, (DWORD) dev->event/*WaveInCallback*/, (DWORD) dev, CALLBACK_EVENT/*CALLBACK_FUNCTION*/);
+	DBG_DYNA_AUDIO_DRV("phad_winmm: waveIn threading model - phapi will do the callbacks\n");
+	mr = waveInOpen(&hWaveIn, waveinDeviceID, &wfx, (DWORD) dev->event/*WaveInCallback*/, (DWORD) dev, CALLBACK_EVENT/*CALLBACK_FUNCTION*/);
 #else
-  mr = waveInOpen(&hWaveIn, waveinDeviceID, &wfx, (DWORD) winmm_audio_read_cbk, (DWORD) as, CALLBACK_FUNCTION);
+	DBG_DYNA_AUDIO_DRV("phad_winmm: waveIn threading model - windows will do the callbacks\n");
+	mr = waveInOpen(&hWaveIn, waveinDeviceID, &wfx, (DWORD) winmm_audio_read_cbk, (DWORD) as, CALLBACK_FUNCTION);
 #endif
 
   dev->hWaveIn = hWaveIn;
 
   if (mr != MMSYSERR_NOERROR)
   {
-    DBG_DYNA_AUDIO_DRV("Error opening input audio dev %x\n", mr);
+    DBG_DYNA_AUDIO_DRV("phad_winmm: Error opening input audio dev %x\n", mr);
     waveInClose(hWaveIn);
     return -1;
   }
@@ -303,13 +308,14 @@ winmm_audio_dev_open(phastream_t *as, const char * deviceID, int framesize, int 
     mr = waveInPrepareHeader(hWaveIn, whp, sizeof(*whp));
     if (mr != MMSYSERR_NOERROR)
     {
-      DBG_DYNA_AUDIO_DRV("waveiNPrepareHeader: %x\n", mr);
+      DBG_DYNA_AUDIO_DRV("phad_winmm: waveiNPrepareHeader: %x\n", mr);
       exit(-1);
     }
     mr = waveInAddBuffer(hWaveIn, whp, sizeof (WAVEHDR));
   }
 
   as->drvinfo = dev;
+  DBG_DYNA_AUDIO_DRV("phad_winmm: winmm_audio_dev_open: last line of function\n");
   return 0;
 }
 
@@ -317,18 +323,24 @@ int winmm_stream_open(phastream_t *as, char *name, int rate, int framesize, ph_a
 {
   int ret;
 
-  DBG_DYNA_AUDIO_DRV("winmm_stream_open\n");
+  DBG_DYNA_AUDIO_DRV("phad_winmm: phad_winmm - winmm_stream_open: asking for (name: \"%s\", rate: %d, framesize: %d)\n", name, rate, framesize, 0);
+
   if (!strnicmp(name, "winmm:", 6))
   {
     name += 6;
   }
 
-  ret = winmm_audio_dev_open(as, name, framesize, rate, cbk);
-  if (!ret)
+  ret = winmm_audio_dev_open(as, name, framesize/2, rate, cbk);
+  if (ret)
   {
-    return ret;
+	as->actual_rate = 0;
+	DBG_DYNA_AUDIO_DRV("phad_winmm - winmm_stream_open: Error - could not open the device driver\n");
+	return ret;
   }
-
+    
+  DBG_DYNA_AUDIO_DRV("winmm: required internal rate: %d\n", rate);
+  as->actual_rate = rate; // important for codec negociation
+  
   PH_SNDDRVR_USE();
 
   return 0;

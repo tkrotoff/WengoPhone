@@ -29,6 +29,7 @@
 #endif
 #include <fcntl.h>
 #include <stdlib.h>
+#include <wtimer.h>
 #include <ortp.h>
 #include <ortp-export.h>
 #include <telephonyevents.h>
@@ -1426,7 +1427,7 @@ int ph_audio_rec_cbk(phastream_t *stream, void *buf_dataleft, int size_dataleft)
   unsigned char buf_resampled[1000];
   long size_resampled = 0;
 #endif
-
+  
   // FLOWGRAPH STEP
   // SPIKE_AUDIO_FLOWGRAPH: record MIC source in a file
   // BEGIN GRAPH NODE
@@ -1624,61 +1625,26 @@ ph_handle_audio_data(phastream_t *stream)
 void *
 ph_audio_io_thread(void *p)
 {
-  phastream_t *stream = (phastream_t*)p;
-  struct timeval sleeptime, start_time, end_time;
-  struct timespec sleepns;
-  unsigned long rxts_inc = 0;
-  int needsleep;
+    phastream_t *stream = (phastream_t*)p;
 
-  if (stream->ms.media_io_thread)
-  {
-    osip_thread_set_priority(stream->ms.media_io_thread, -19);
-  }
-
-  DBG_DYNA_AUDIO("new media io thread started\n");
-
-  while (stream->ms.running)
-  {
-    needsleep = 1;
-
-    gettimeofday(&start_time, 0);
+    DBG_DYNA_AUDIO("audio io timer called\n");
 
     // if subsystem threading model does not take care of feeding SPK,
     // do it : receive packets from the RX path and play them on SPK
     if (!audio_driver_has_play_callback())
     {
-      ph_handle_network_data(stream);
+        ph_handle_network_data(stream);
     }
 
     // if subsystem threading model does not take care of reading MIC,
     // do it : read samples from MIC and send them on the TX path
     if (!audio_driver_has_rec_callback())
     {
-      ph_handle_audio_data(stream);
+        ph_handle_audio_data(stream);
     }
 
-    // evaluate how much time was spent in the above handlings
-    // and sleep for a while before looping
-    gettimeofday(&end_time, 0);
-    ph_tvsub(&end_time, &start_time);
-    if (end_time.tv_usec < SLEEP_TIME_US)
-    {
-      sleeptime.tv_usec = SLEEP_TIME_US; sleeptime.tv_sec = 0;
-      ph_tvsub(&sleeptime, &end_time);
-      TIMEVAL_TO_TIMESPEC(&sleeptime, &sleepns);
-      if (stream->ms.running)
-      {
-#ifdef OS_WINDOWS
-        Sleep(sleeptime.tv_usec / 1000);
-#else
-        nanosleep(&sleepns, 0);
-#endif
-      }
-    }
-  }
-
-  DBG_DYNA_AUDIO("media io thread stopping\n");
-  return NULL;
+    DBG_DYNA_AUDIO("audio io timer stopping\n");
+    return NULL;
 }
 
 
@@ -2194,11 +2160,19 @@ start_audio_device(struct ph_msession_s *s, phastream_t *stream)
     audio_stream_start(stream);
   }
 
-  if ((!stream->ms.media_io_thread && (s->confflags != PH_MSESSION_CONF_MEMBER))
+  if ((!stream->ms.media_io_timer && (s->confflags != PH_MSESSION_CONF_MEMBER))
     && (!audio_driver_has_rec_callback() || !audio_driver_has_play_callback()))
   {
-    DBG_MEDIA_ENGINE("start phapi thread threading model part\n");
-    stream->ms.media_io_thread = osip_thread_create(20000, ph_audio_io_thread, stream);
+    DBG_MEDIA_ENGINE("start phapi threading model part\n");
+    timer_init();
+    stream->ms.media_io_timer_impl = timer_impl_getfirst();
+    stream->ms.media_io_timer = stream->ms.media_io_timer_impl->timer_create();
+    stream->ms.media_io_timer_impl->timer_set_delay(stream->ms.media_io_timer, 20);
+    stream->ms.media_io_timer_impl->timer_set_callback(stream->ms.media_io_timer,
+					   ph_audio_io_thread);
+    stream->ms.media_io_timer_impl->timer_set_userdata(stream->ms.media_io_timer,
+					   stream);
+    stream->ms.media_io_timer_impl->timer_start(stream->ms.media_io_timer);
   }
 }
 
@@ -2322,11 +2296,10 @@ void ph_msession_audio_stream_stop(struct ph_msession_s *s, const char *deviceId
   s->activestreams &= ~(1 << PH_MSTREAM_AUDIO1);
 
   // if a thread was needed in the threading model, wait and destroy it
-  if (stream->ms.media_io_thread)
+  if (stream->ms.media_io_timer)
   {
-    osip_thread_join(stream->ms.media_io_thread);
-    osip_free(stream->ms.media_io_thread);
-    stream->ms.media_io_thread = 0;
+    stream->ms.media_io_timer_impl->timer_stop(stream->ms.media_io_timer);
+    stream->ms.media_io_timer_impl->timer_destroy(stream->ms.media_io_timer);
   }
 
   if (stopdevice)

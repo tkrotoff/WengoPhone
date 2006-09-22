@@ -1,6 +1,7 @@
 #ifndef __PHMSTREAM_H__
 #define __PHMSTREAM_H__
 
+#include <wtimer.h>
 #include "phcodec.h"
 
 #ifdef __cplusplus
@@ -52,7 +53,12 @@ struct phmstream
   unsigned long txtstamp;
   unsigned long rxts_inc;
 
+  /** used only for video. TODO: replace with io_timer */
   struct osip_thread *media_io_thread;
+
+  /** used only for audio. TODO: share with video */
+  struct timer_impl * media_io_timer_impl;
+  struct timer *media_io_timer;
 
   void      (*endCallback)(void *ca, int arg);
 
