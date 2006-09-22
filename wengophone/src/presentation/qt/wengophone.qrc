@@ -180,6 +180,34 @@
 		<file>pics/dialpad/9.png</file>
 		<file>pics/dialpad/9_on.png</file>
 
+		<file>pics/actions/change-profile.png</file>
+		<file>pics/actions/delete-contact.png</file>
+		<file>pics/actions/delete-group.png</file>
+		<file>pics/actions/edit-account.png</file>
+		<file>pics/actions/edit-contact.png</file>
+		<file>pics/actions/faq-b.png</file>
+		<file>pics/actions/forum.png</file>
+		<file>pics/actions/hangup-phone.png</file>
+		<file>pics/actions/history-clear.png</file>
+		<file>pics/actions/hold-phone.png</file>
+		<file>pics/actions/log-off.png</file>
+		<file>pics/actions/mywengo-account.png</file>
+		<file>pics/actions/rename-groups.png</file>
+		<file>pics/actions/resume_pause-phone.png</file>
+		<file>pics/actions/resume-phone.png</file>
+		<file>pics/actions/save_as.png</file>
+		<file>pics/actions/show-available-contacts.png</file>
+		<file>pics/actions/show-groups.png</file>
+		<file>pics/actions/start-video.png</file>
+		<file>pics/actions/stop-video.png</file>
+		<file>pics/actions/wengo-services.png</file>
+		<file>pics/actions/config.png</file>
+		<file>pics/actions/accept-phone.png</file>
+		<file>pics/actions/chat.png</file>
+		<file>pics/actions/send-sms-16.png</file>
+		<file>pics/actions/delete.png</file>
+		<file>pics/actions/add-contact.png</file>
+
 		<file>pics/cancel.png</file>
 		<file>pics/browse.png</file>
 		<file>pics/close_normal.png</file>
