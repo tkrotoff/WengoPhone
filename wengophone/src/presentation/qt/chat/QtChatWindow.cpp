@@ -419,6 +419,7 @@ void QtChatWindow::setupMenuBarActions() {
 	SAFE_CONNECT_RECEIVER(_ui.actionCreateConferenceCall, SIGNAL(triggered()), qtToolBar, SLOT(createConferenceCall()));
 	copyQAction(toolBar, _ui.actionSendSms);
 	SAFE_CONNECT_RECEIVER(_ui.actionSendSms, SIGNAL(triggered()), qtToolBar, SLOT(sendSms()));
+	SAFE_CONNECT(_ui.actionSaveHistoryAs, SIGNAL(triggered()), SLOT(saveActiveTabChatHistory()));
 	////
 
 	// setup "tools" menu
@@ -714,4 +715,11 @@ void QtChatWindow::closeWindow() {
 #else
 	hide();
 #endif
+}
+
+void QtChatWindow::saveActiveTabChatHistory() {
+	QtChatWidget * chatWidget = getActiveTabWidget();
+	if (chatWidget) {
+		chatWidget->saveHistoryAsHtml();
+	}
 }

@@ -34,7 +34,7 @@
      <x>0</x>
      <y>0</y>
      <width>351</width>
-     <height>19</height>
+     <height>29</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuHelp" >
@@ -43,19 +43,6 @@
     </property>
     <addaction name="actionShowWengoForum" />
     <addaction name="actionWengoFAQ" />
-   </widget>
-   <widget class="QMenu" name="menuTools" >
-    <property name="title" >
-     <string>&amp;Tools</string>
-    </property>
-    <addaction name="actionShowFileTransfer" />
-   </widget>
-   <widget class="QMenu" name="menuActions" >
-    <property name="title" >
-     <string>&amp;Actions</string>
-    </property>
-    <addaction name="actionCreateConferenceCall" />
-    <addaction name="actionSendSms" />
    </widget>
    <widget class="QMenu" name="menuContact" >
     <property name="title" >
@@ -74,6 +61,21 @@
     <addaction name="separator" />
     <addaction name="actionClose" />
    </widget>
+   <widget class="QMenu" name="menuTools" >
+    <property name="title" >
+     <string>&amp;Tools</string>
+    </property>
+    <addaction name="actionShowFileTransfer" />
+   </widget>
+   <widget class="QMenu" name="menuActions" >
+    <property name="title" >
+     <string>&amp;Actions</string>
+    </property>
+    <addaction name="actionCreateConferenceCall" />
+    <addaction name="actionSendSms" />
+    <addaction name="separator" />
+    <addaction name="actionSaveHistoryAs" />
+   </widget>
    <addaction name="menuWengo" />
    <addaction name="menuContact" />
    <addaction name="menuActions" />
@@ -81,6 +83,14 @@
    <addaction name="menuHelp" />
   </widget>
   <widget class="QStatusBar" name="statusbar" >
+   <property name="geometry" >
+    <rect>
+     <x>0</x>
+     <y>520</y>
+     <width>351</width>
+     <height>22</height>
+    </rect>
+   </property>
    <property name="autoFillBackground" >
     <bool>false</bool>
    </property>
@@ -115,8 +125,7 @@
   <action name="actionClose" />
   <action name="actionAddContact" />
   <action name="actionSearchWengoContact" />
-  <action name="actionSendSms" >
-  </action>
+  <action name="actionSendSms" />
   <action name="actionCreateConferenceCall" />
   <action name="actionShowWengoForum" />
   <action name="actionWengoFAQ" />
@@ -163,6 +172,14 @@
   <action name="actionShowFileTransfer" >
    <property name="text" >
     <string/>
+   </property>
+  </action>
+  <action name="actionSaveHistoryAs" >
+   <property name="icon" >
+    <iconset resource="../wengophone.qrc" >:/pics/actions/save_as.png</iconset>
+   </property>
+   <property name="text" >
+    <string>&amp;Save History As ...</string>
    </property>
   </action>
  </widget>

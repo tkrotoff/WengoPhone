@@ -85,6 +85,8 @@ public:
 
 	void addToHistory(const QString & senderName, const QString & str);
 
+	void saveHistoryAsHtml();
+
 public Q_SLOTS:
 
 	/**

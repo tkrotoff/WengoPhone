@@ -103,6 +103,8 @@ public Q_SLOTS:
 
 	void statusChangedSlot(QString contactId);
 
+	void saveActiveTabChatHistory();
+
 private Q_SLOTS:
 
 	void statusMessageReceivedSLot(IMChatSession * sender, int status, const QString & message);

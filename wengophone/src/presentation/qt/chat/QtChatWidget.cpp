@@ -490,3 +490,7 @@ void QtChatWidget::sendFileToSession(const QString & filename) {
 		qtFileTransfer->createSendFileSession(_imChatSession->getIMContactSet(), filename.toStdString(), cContactList);
 	}
 }
+
+void QtChatWidget::saveHistoryAsHtml() {
+	_chatHistory->saveHistoryAsHtmlSlot();
+}
