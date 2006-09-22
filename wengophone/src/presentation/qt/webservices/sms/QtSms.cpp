@@ -27,8 +27,10 @@
 #include <control/CWengoPhone.h>
 #include <control/profile/CUserProfile.h>
 #include <control/profile/CUserProfileHandler.h>
+
 #include <model/profile/UserProfile.h>
 
+#include <cutil/global.h>
 #include <util/Logger.h>
 #include <util/SafeDelete.h>
 #include <qtutil/SafeConnect.h>
@@ -106,7 +108,17 @@ void QtSms::setText(const QString & text) {
 	}
 
 	_ui->smsText->clear();
-	_ui->smsText->setHtml("<html><head><meta name=\"qrichtext\" content=\"1\" /></head><body style=\" white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;\"><p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">" + mess + "</p></body></html>");
+
+	QString fontSize = "9";
+#if defined(OS_MACOSX)
+	fontSize = "13";
+#endif
+
+	_ui->smsText->setHtml("<html><head><meta name=\"qrichtext\" content=\"1\" /></head><body style=\" white-space: pre-wrap; font-family:Sans Serif; font-size:"
+		+ fontSize
+		+ "pt; font-weight:400; font-style:normal; text-decoration:none;\"><p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">"
+		+ mess
+		+ "</p></body></html>");
 	updateCounter();
 }
 
