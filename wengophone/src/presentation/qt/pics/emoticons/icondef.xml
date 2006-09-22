@@ -31,7 +31,6 @@
 		<icon>
 			<text>:-(</text>
 			<text>:(</text>
-			<text>:&lt;</text>
 			<object>sad.png</object>
 		</icon>
 		<icon>
@@ -405,7 +404,6 @@
 		<icon>
 			<text>:-(</text>
 			<text>:(</text>
-			<text>:&lt;</text>
 			<object>sad.png</object>
 		</icon>
 		<icon>
@@ -670,7 +668,6 @@
 		<icon>
 			<text>:-(</text>
 			<text>:(</text>
-			<text>:&lt;</text>
 			<object>sad.png</object>
 		</icon>
 	</protocol>
