@@ -141,18 +141,6 @@
     <addaction name="separator" />
     <addaction name="actionShowAbout" />
    </widget>
-   <widget class="QMenu" name="menuActions" >
-    <property name="title" >
-     <string>&amp;Actions</string>
-    </property>
-    <addaction name="actionCreateConferenceCall" />
-    <addaction name="separator" />
-    <addaction name="actionSendSms" />
-    <addaction name="separator" />
-    <addaction name="actionAcceptCall" />
-    <addaction name="actionHangUpCall" />
-    <addaction name="actionHoldResumeCall" />
-   </widget>
    <widget class="QMenu" name="menuTools" >
     <property name="title" >
      <string>&amp;Tools</string>
@@ -160,6 +148,9 @@
     <widget class="QMenu" name="menuClearHistory" >
      <property name="title" >
       <string>Clear &amp;History</string>
+     </property>
+     <property name="icon" >
+      <iconset resource="wengophone.qrc" >:/pics/actions/history-clear.png</iconset>
      </property>
      <addaction name="actionClearOutgoingCalls" />
      <addaction name="actionClearIncomingCalls" />
@@ -175,6 +166,28 @@
     <addaction name="separator" />
     <addaction name="menuClearHistory" />
    </widget>
+   <widget class="QMenu" name="menuContacts" >
+    <property name="title" >
+     <string>&amp;Contacts</string>
+    </property>
+    <addaction name="actionAddContact" />
+    <addaction name="actionSearchWengoContact" />
+    <addaction name="separator" />
+    <addaction name="actionShowHideOfflineContacts" />
+    <addaction name="actionShowHideContactGroups" />
+   </widget>
+   <widget class="QMenu" name="menuActions" >
+    <property name="title" >
+     <string>&amp;Actions</string>
+    </property>
+    <addaction name="actionCreateConferenceCall" />
+    <addaction name="separator" />
+    <addaction name="actionSendSms" />
+    <addaction name="separator" />
+    <addaction name="actionAcceptCall" />
+    <addaction name="actionHangUpCall" />
+    <addaction name="actionHoldResumeCall" />
+   </widget>
    <widget class="QMenu" name="menuWengo" >
     <property name="title" >
      <string>&amp;Wengo</string>
@@ -188,16 +201,6 @@
     <addaction name="actionWengoServices" />
     <addaction name="separator" />
     <addaction name="actionClose" />
-   </widget>
-   <widget class="QMenu" name="menuContacts" >
-    <property name="title" >
-     <string>&amp;Contacts</string>
-    </property>
-    <addaction name="actionAddContact" />
-    <addaction name="actionSearchWengoContact" />
-    <addaction name="separator" />
-    <addaction name="actionShowHideOfflineContacts" />
-    <addaction name="actionShowHideContactGroups" />
    </widget>
    <addaction name="menuWengo" />
    <addaction name="menuContacts" />
@@ -243,21 +246,33 @@
    <addaction name="actionEnableVideo" />
   </widget>
   <action name="actionShowWengoAccount" >
+   <property name="icon" >
+    <iconset resource="wengophone.qrc" >:/pics/actions/mywengo-account.png</iconset>
+   </property>
    <property name="text" >
     <string>View My &amp;Wengo Account</string>
    </property>
   </action>
   <action name="actionClose" >
+   <property name="icon" >
+    <iconset resource="wengophone.qrc" >:/pics/exit.png</iconset>
+   </property>
    <property name="text" >
     <string>&amp;Close</string>
    </property>
   </action>
   <action name="actionShowWengoForum" >
+   <property name="icon" >
+    <iconset resource="wengophone.qrc" >:/pics/actions/forum.png</iconset>
+   </property>
    <property name="text" >
     <string>Wengo &amp;Forum</string>
    </property>
   </action>
   <action name="actionShowAbout" >
+   <property name="icon" >
+    <iconset resource="wengophone.qrc" >:/pics/help.png</iconset>
+   </property>
    <property name="text" >
     <string>&amp;About</string>
    </property>
@@ -271,6 +286,9 @@
    </property>
   </action>
   <action name="actionShowConfig" >
+   <property name="icon" >
+    <iconset resource="wengophone.qrc" >:/pics/actions/config.png</iconset>
+   </property>
    <property name="text" >
     <string>&amp;Configuration</string>
    </property>
@@ -300,16 +318,25 @@
    </property>
   </action>
   <action name="actionWengoFAQ" >
+   <property name="icon" >
+    <iconset resource="wengophone.qrc" >:/pics/actions/faq-b.png</iconset>
+   </property>
    <property name="text" >
     <string>Wengo &amp;Wiki/FAQ</string>
    </property>
   </action>
   <action name="actionWengoServices" >
+   <property name="icon" >
+    <iconset resource="wengophone.qrc" >:/pics/actions/wengo-services.png</iconset>
+   </property>
    <property name="text" >
     <string>Learn more about &amp;Wengo Services</string>
    </property>
   </action>
   <action name="actionShowHideOfflineContacts" >
+   <property name="icon" >
+    <iconset resource="wengophone.qrc" >:/pics/actions/show-available-contacts.png</iconset>
+   </property>
    <property name="text" >
     <string>Show/Hide Unavailable &amp;Contacts</string>
    </property>
@@ -347,31 +374,49 @@
    </property>
   </action>
   <action name="actionAcceptCall" >
+   <property name="icon" >
+    <iconset resource="wengophone.qrc" >:/pics/actions/accept-phone.png</iconset>
+   </property>
    <property name="text" >
     <string>&amp;Accept</string>
    </property>
   </action>
   <action name="actionHangUpCall" >
+   <property name="icon" >
+    <iconset resource="wengophone.qrc" >:/pics/actions/hangup-phone.png</iconset>
+   </property>
    <property name="text" >
     <string>&amp;HangUp</string>
    </property>
   </action>
   <action name="actionHoldResumeCall" >
+   <property name="icon" >
+    <iconset resource="wengophone.qrc" >:/pics/actions/resume-phone.png</iconset>
+   </property>
    <property name="text" >
     <string>&amp;Hold/Resume</string>
    </property>
   </action>
   <action name="actionShowHideContactGroups" >
+   <property name="icon" >
+    <iconset resource="wengophone.qrc" >:/pics/actions/show-groups.png</iconset>
+   </property>
    <property name="text" >
     <string>Show/Hide &amp;Groups</string>
    </property>
   </action>
   <action name="actionChangeProfile" >
+   <property name="icon" >
+    <iconset resource="wengophone.qrc" >:/pics/actions/change-profile.png</iconset>
+   </property>
    <property name="text" >
     <string>Change &amp;Profile...</string>
    </property>
   </action>
   <action name="actionLogOff" >
+   <property name="icon" >
+    <iconset resource="wengophone.qrc" >:/pics/actions/log-off.png</iconset>
+   </property>
    <property name="text" >
     <string>Log &amp;Off</string>
    </property>
