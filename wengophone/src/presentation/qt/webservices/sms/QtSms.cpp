@@ -32,12 +32,9 @@
 #include <util/Logger.h>
 #include <util/SafeDelete.h>
 #include <qtutil/SafeConnect.h>
+#include <qtutil/CloseEventFilter.h>
 
 #include <QtGui/QtGui>
-
-static const QString SIGNATURE_SEPARATOR = " -- ";
-static const int SIGNATURE_LENGTH = 4;
-static const int MAX_LENGTH = 160;
 
 QtSms::QtSms(CSms & cSms)
 	: QObjectThreadSafe(NULL),
@@ -71,13 +68,18 @@ void QtSms::initThreadSafe() {
 	SAFE_CONNECT( _ui->addContactToolButton, SIGNAL(clicked()), SLOT(addContactToolButtonClicked()));	
 	SAFE_CONNECT(_mobilePhoneMenu, SIGNAL(triggered(QAction *)), SLOT(updatePhoneNumberLineEdit(QAction *)));
 
+	CloseEventFilter * closeEventFilter = new CloseEventFilter(this, SLOT(CloseEventFilterSlot()));
+	_smsWindow->installEventFilter(closeEventFilter);
+
 	loadSignature();
 	_qtWengoPhone->setQtSms(this);
 }
 
-QWidget * QtSms::getWidget() const {
+void QtSms::clear() {
 
-	return _smsWindow;
+	setPhoneNumber(QString());
+	setSignature(QString());
+	setText(QString());
 }
 
 void QtSms::setPhoneNumber(const QString & phoneNumber) {
@@ -191,11 +193,6 @@ void QtSms::smsStatusEventHandlerThreadSafe(EnumSmsState::SmsState state) {
 	QMessageBox::information(_smsWindow, tr("Wengo SMS service"), smsStatus);
 }
 
-bool QtSms::isSmsLengthOk() const {
-
-	return (getCompleteMessage().length() <= MAX_LENGTH);
-}
-
 QString QtSms::getCompleteMessage() const {
 
 	QString completeMessage = _ui->smsText->toPlainText();
@@ -255,7 +252,6 @@ void QtSms::memorizeSignature() {
 
 		UserProfile & userProfile = cUserProfile->getUserProfile();
 		userProfile.setSmsSignature(signature.toStdString());
-		
 	}
 }
 

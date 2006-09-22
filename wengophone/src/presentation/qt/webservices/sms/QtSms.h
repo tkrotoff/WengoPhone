@@ -40,6 +40,10 @@ class QMenu;
 class QAction;
 namespace Ui { class SmsWindow; }
 
+static const QString SIGNATURE_SEPARATOR = " -- ";
+static const int SIGNATURE_LENGTH = 4;
+static const int MAX_LENGTH = 160;
+
 /**
  * Qt Presentation component for SMS.
  *
@@ -65,7 +69,7 @@ public:
 	 * 
 	 * @return the sms widget.
 	 */
-	QWidget * getWidget() const;
+	QWidget * getWidget() const { return (QWidget*)_smsWindow; }
 
 	/**
 	 * @see Presentation::updatePresentation.
@@ -93,6 +97,11 @@ public:
 	 */
 	void setSignature(const QString & signature);
 
+	/**
+	 * Clear signature, phone box and textedit.
+	 */
+	void clear();
+
 private Q_SLOTS:
 
 	/**
@@ -114,6 +123,11 @@ private Q_SLOTS:
 	 * The user has clicked on a menu entry.
 	 */
 	void updatePhoneNumberLineEdit(QAction * action);
+
+	/**
+	 * Call when the dialog is closed.
+	 */
+	void CloseEventFilterSlot() { clear(); }
 
 private:
 
@@ -157,7 +171,7 @@ private:
 	 *
 	 * @return the complete message.
 	 */
-	bool isSmsLengthOk() const;
+	bool isSmsLengthOk() const { return (getCompleteMessage().length() <= MAX_LENGTH); }
 
 	/**
 	 * Init thread safe.
