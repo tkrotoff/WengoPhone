@@ -79,8 +79,6 @@ void QtSms::initThreadSafe() {
 
 void QtSms::clear() {
 
-	setPhoneNumber(QString());
-	setSignature(QString());
 	setText(QString());
 }
 
