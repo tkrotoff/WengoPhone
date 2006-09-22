@@ -28,11 +28,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <assert.h>
 #include <windows.h>
 
 struct winmm_metadata {
     timer_delay_t delay;
     unsigned int timerId;
+    unsigned int usage_counter;
 };
 
 w_timer_t *winmm_timer_create () {
@@ -41,7 +43,6 @@ w_timer_t *winmm_timer_create () {
     ti = (w_timer_t *) malloc (sizeof(w_timer_t));
     memset(ti, 0, sizeof(w_timer_t));
     ti->impl_data = malloc (sizeof(struct winmm_metadata));
-
     return ti;
 }
 
@@ -62,12 +63,17 @@ void CALLBACK winmm_internal_callback(UINT uID,
 				      DWORD dw2) {
 
 	w_timer_t *ti = (w_timer_t *) dwUser;
+    struct winmm_metadata *ptm = (struct clock_gettime_medata *)
+                                       ti->impl_data;
+    ptm->usage_counter++;
 	ti->callback(ti->userdata);
+    ptm->usage_counter--;
 }
 
 int winmm_timer_start(w_timer_t *ti) {
     struct winmm_metadata *ptm = (struct clock_gettime_medata *)
                                        ti->impl_data;
+    ptm->usage_counter = 0;
     ptm->timerId = timeSetEvent(ptm->delay, 10,
             (LPTIMECALLBACK)winmm_internal_callback, (DWORD) ti,
             TIME_CALLBACK_FUNCTION | TIME_PERIODIC);
@@ -77,6 +83,10 @@ int winmm_timer_stop(w_timer_t *ti) {
     struct winmm_metadata *ptm = (struct clock_gettime_medata *)
                                        ti->impl_data;
     timeKillEvent(ptm->timerId);
+    
+    // make sure all executing callbacks are finished
+    Sleep(2*ptm->delay);
+    assert(!ptm->usage_counter);
 }
 
 void winmm_timer_set_userdata(w_timer_t *ti, void *userdata) {

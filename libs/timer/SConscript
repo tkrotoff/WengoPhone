@@ -11,6 +11,7 @@ defines = {}
 if WengoOSWindows():
 	sources += ['src/win32_mm/impl_timer.c']
 	defines['TIMER_ENABLE_WINMM_IMPL'] = 1
+	libs += ['winmm',]
 
 else:
 	sources += ['src/clock_gettime/impl_timer.c']
@@ -24,3 +25,5 @@ env.WengoAddIncludePath(include_path)
 env.WengoUseLibraries(libs)
 
 env.WengoStaticLibrary('wtimer', sources, headers)
+
+#env.SConscript('test/SConscript')

@@ -131,6 +131,7 @@ int cgt_timer_stop(w_timer_t *ti) {
     struct clock_gettime_metadata *ptm = (struct clock_gettime_metadata *)
                                        ti->impl_data;
     ptm->running = 0;
+    pthread_join(&ptm->w_timer_thread, NULL);
 	return 0;
 }
 
