@@ -230,31 +230,32 @@ void QtHistoryWidget::clearHistory() {
 }
 
 void QtHistoryWidget::showPopupMenu(const QPoint & pos) {
+
 	QTreeWidgetItem * item = _ui->treeWidget->itemAt(pos);
 	QtHistoryItem * hItem = (QtHistoryItem *) item;
+
 	if (hItem) {
 		_currentItem = hItem;
+		_popupMenu->clear();
 
-		QString replayText;
+		QAction * action = _popupMenu->addAction(QIcon(":/pics/actions/delete.png"), tr("Erase this entry"));
+		connect(action, SIGNAL(triggered(bool)), SLOT(eraseEntry()));
+
 		switch (_currentItem->getItemType()) {
 			case QtHistoryItem::Sms:
-				replayText = tr("Open in SMS window");
+				action = _popupMenu->addAction(QIcon(":/pics/actions/send-sms-16.png"), tr("Open in SMS window"));
 				break;
 			case QtHistoryItem::OutGoingCall:
 			case QtHistoryItem::IncomingCall:
 			case QtHistoryItem::MissedCall:
 			case QtHistoryItem::RejectedCall:
-				replayText = tr("Call this peer");
+				action = _popupMenu->addAction(QIcon(":/pics/actions/accept-phone.png"), tr("Call this peer"));
 				break;
 			case QtHistoryItem::Chat:
 			default:
 				break;
 		}
 
-		_popupMenu->clear();
-		QAction * action = _popupMenu->addAction(tr("Erase this entry"));
-		connect(action, SIGNAL(triggered(bool)), SLOT(eraseEntry()));
-		action = _popupMenu->addAction(replayText);
 		connect(action, SIGNAL(triggered(bool)), SLOT(replayEntry()));
 
 		QCursor cursor;
