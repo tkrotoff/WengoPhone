@@ -153,6 +153,7 @@ void QtChatWindow::closeActiveTab() {
 	QtChatWidget * widget = getActiveTabWidget();
 	OWSAFE_DELETE(widget);
 	if (_tabWidget->count() == 0) {
+		hide();
 		closeWindow();
 		_qtWengoPhone.setChatWindow(NULL);
 	}

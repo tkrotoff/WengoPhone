@@ -175,7 +175,7 @@ QString QtEmoticonsManager::text2Emoticon(const QString & text, const QString pr
 	for (it = emoticonList.begin(); it != emoticonList.end(); it++) {
 		stringList = (*it).getText();
 		for (si = stringList.begin(); si != stringList.end(); si++) {
-			ret.replace((*si),(*it).getHtml(),Qt::CaseInsensitive);
+			ret.replace((*si),(*it).getHtml(), Qt::CaseInsensitive);
 		}
 	}
 	return ret;
