@@ -99,6 +99,7 @@ QtHistoryWidget::QtHistoryWidget(QWidget * parent)
 	action = _menu->addAction(tr("All"));
 	connect(action, SIGNAL(triggered(bool)), SLOT(showAll(bool)));
 
+	showAll(true);
 
 	_popupMenu = new QMenu();
 }
