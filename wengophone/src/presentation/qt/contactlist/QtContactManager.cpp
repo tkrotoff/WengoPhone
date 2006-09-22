@@ -535,9 +535,9 @@ QMenu * QtContactManager::createMenu() {
 	menu = new QMenu(dynamic_cast <QWidget *> (parent()));
 	//Call menu
 	if (ul->hasPhoneNumber(contactId)) {
-		QMenu * callMenu = menu->addMenu(_trStringCall);
+		QMenu * callMenu = menu->addMenu(QIcon(":/pics/actions/accept-phone.png"), _trStringCall);
 		if (! ul->getMobilePhone(contactId).isEmpty()) {
-			action = callMenu->addAction(_trStringMobilePhone);
+			action = callMenu->addAction( _trStringMobilePhone);
 			connect(action, SIGNAL(triggered(bool)), SLOT(startMobileCall(bool)));
 		}
 
@@ -556,18 +556,18 @@ QMenu * QtContactManager::createMenu() {
 			connect(action, SIGNAL(triggered(bool)), SLOT(startWengoCall(bool)));
 		}
 	}
-	action = menu->addAction(_trStringStartChat);
+	action = menu->addAction(QIcon(":/pics/actions/chat.png"), _trStringStartChat);
 	connect(action, SIGNAL(triggered(bool)), SLOT(startChat(bool)));
-	action = menu->addAction(_trStringSendSMS);
+	action = menu->addAction(QIcon(":/pics/actions/send-sms-16.png"), _trStringSendSMS);
 	connect(action, SIGNAL(triggered(bool)), SLOT(startSMS(bool)));
 
 	//FIXME Desactivated for the moment due to a crash
 	//menu->addMenu(createConferenceMenu());
 
 	menu->addSeparator();
-	action = menu->addAction(_trStringEditContact);
+	action = menu->addAction(QIcon(":/pics/actions/edit-contact.png"), _trStringEditContact);
 	connect(action, SIGNAL(triggered(bool)), this, SLOT(editContact(bool)));
-	action = menu->addAction(_trStringDeleteContact);
+	action = menu->addAction(QIcon(":/pics/actions/delete-contact.png"), _trStringDeleteContact);
 	connect(action, SIGNAL(triggered(bool)), this, SLOT(deleteContact()));
 	//menu->addSeparator();
 	//menu->addAction(_trStringBlockContact);
