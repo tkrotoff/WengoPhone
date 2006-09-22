@@ -126,3 +126,10 @@ add_library(${OWCURL_LIBRARY} SHARED ${owcurl_SRCS})
 
 target_link_libraries(${OWCURL_LINK_LIBRARIES})
 
+install(
+  TARGETS
+    ${OWCURL_LIBRARY}
+  DESTINATION
+    ${LIB_INSTALL_DIR}
+)
+

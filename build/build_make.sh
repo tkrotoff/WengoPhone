@@ -19,17 +19,28 @@ cd ${BUILDDIR}
 
 case $1 in
 	configure)
+		if [ "$(uname -m)" == "x86_64" ]; then
+			cmake -DCMAKE_INSTALL_PREFIX=/usr -DLIB_SUFFIX=64 --graphviz=${BUILDDIR}/wengophone.dot "$@" ..
+		else
+			cmake -DCMAKE_INSTALL_PREFIX=/usr --graphviz=${BUILDDIR}/wengophone.dot "$@" ..
+		fi
 		DOT=$(which dot)
 		if [ -n "${DOT}" ]; then
-			cmake -DCMAKE_INSTALL_PREFIX=/usr --graphviz=${BUILDDIR}/wengophone.dot "$@" ..
 			${DOT} -Tpng -o${BUILDDIR}/wengophone.png ${BUILDDIR}/wengophone.dot
 			${DOT} -Tsvg -o${BUILDDIR}/wengophone.svg ${BUILDDIR}/wengophone.dot
-		else
-			cmake -DCMAKE_INSTALL_PREFIX=/usr "$@" ..
 		fi
 	;;
 	make)
-		cmake -DCMAKE_INSTALL_PREFIX=/usr "$@" ..
+		if [ "$(uname -m)" == "x86_64" ]; then
+			cmake -DCMAKE_INSTALL_PREFIX=/usr -DLIB_SUFFIX=64 --graphviz=${BUILDDIR}/wengophone.dot "$@" ..
+		else
+			cmake -DCMAKE_INSTALL_PREFIX=/usr --graphviz=${BUILDDIR}/wengophone.dot "$@" ..
+		fi
+		DOT=$(which dot)
+		if [ -n "${DOT}" ]; then
+			${DOT} -Tpng -o${BUILDDIR}/wengophone.png ${BUILDDIR}/wengophone.dot
+			${DOT} -Tsvg -o${BUILDDIR}/wengophone.svg ${BUILDDIR}/wengophone.dot
+		fi
 		make
 	;;
 	*)

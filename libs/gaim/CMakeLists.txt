@@ -24,7 +24,6 @@ set(GAIM_LINK_LIBRARIES
   ${GTHREAD2_LIBRARY}
   resolv
   gnutls
-  CACHE INTERNAL "gaim libraries"
 )
 
 set(GAIM_DEFINITIONS

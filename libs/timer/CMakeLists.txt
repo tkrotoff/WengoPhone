@@ -25,6 +25,11 @@ if (WIN32)
   )
 
   add_definitions(-DTIMER_ENABLE_WINMM_IMPL)
+
+  set(WTIMER_LINK_LIBRARIES
+    ${WTIMER_LINK_LIBRARIES}
+    winmm
+  )
 else (WIN32)
   if (UNIX)
     set(WTIMER_LINK_LIBRARIES
