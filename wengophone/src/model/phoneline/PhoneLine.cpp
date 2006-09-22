@@ -108,7 +108,7 @@ std::string PhoneLine::getMySipAddress() const {
 	return "sip:" + _sipAccount.getIdentity() + "@" + _sipAccount.getRealm();
 }
 
-int PhoneLine::makeCall(const std::string & phoneNumber) {
+int PhoneLine::makeCall(const std::string & phoneNumber, ConferenceCall * conferenceCall) {
 	if (!_sipAccount.isConnected()) {
 		LOG_ERROR("SipAccount not connected");
 		return SipWrapper::CallIdError;
@@ -148,6 +148,7 @@ int PhoneLine::makeCall(const std::string & phoneNumber) {
 	}
 
 	PhoneCall * phoneCall = new PhoneCall(*this, sipAddress);
+	phoneCall->setConferenceCall(conferenceCall);
 	_activePhoneCall = phoneCall;
 	int callId = _sipWrapper->makeCall(_lineId, sipAddress.getRawSipAddress(), enableVideo);
 	if (callId < 0) {
@@ -186,8 +187,8 @@ void PhoneLine::connect() {
 
 	_sipAccount.setVLineID(_lineId);
 
-	LOG_DEBUG("connect username=" + _sipAccount.getUsername() 
-		+ " server=" + _sipAccount.getRegisterServerHostname() 
+	LOG_DEBUG("connect username=" + _sipAccount.getUsername()
+		+ " server=" + _sipAccount.getRegisterServerHostname()
 		+ " lineId=" + String::fromNumber(_lineId));
 }
 

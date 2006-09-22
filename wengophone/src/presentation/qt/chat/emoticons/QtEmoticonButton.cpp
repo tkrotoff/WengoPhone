@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,24 +16,18 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+
 #include "QtEmoticonButton.h"
 
-QtEmoticonButton::QtEmoticonButton ( QWidget * parent ) : QPushButton(parent) {
-	init();
-}
+#include <QtGui/QtGui>
 
-QtEmoticonButton::QtEmoticonButton ( const QString & text, QWidget * parent ) : QPushButton(text,parent) {
-	init();
-}
+#include <qtutil/SafeConnect.h>
 
-QtEmoticonButton::QtEmoticonButton ( const QIcon & icon, const QString & text, QWidget * parent ) :
-QPushButton(icon,text,parent) {
-	init();
-}
+QtEmoticonButton::QtEmoticonButton(QWidget * parent)
+	: QToolButton(parent) {
 
-void QtEmoticonButton::init() {
-	setFlat(true);
-	connect (this,SIGNAL(clicked()),this,SLOT(buttonClickedSlot()));
+	setAutoRaise(true);
+	SAFE_CONNECT(this, SIGNAL(clicked()), SLOT(buttonClickedSlot()));
 }
 
 void QtEmoticonButton::buttonClickedSlot() {

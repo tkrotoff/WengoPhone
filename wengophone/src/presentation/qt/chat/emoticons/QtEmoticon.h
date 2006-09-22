@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,18 +16,20 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+
 #ifndef OWQTEMOTICON_H
 #define OWQTEMOTICON_H
 
-#include <QtGui/QtGui>
+#include <QtCore/QStringList>
+#include <QtCore/QString>
+#include <QtGui/QPixmap>
 
 /**
  *
  * @ingroup presentation
  * @author Mr K.
  */
-class QtEmoticon
-{
+class QtEmoticon {
 public:
 
 	QtEmoticon();
@@ -36,27 +38,27 @@ public:
 
 	~QtEmoticon();
 
-	void setText(const QStringList & text) { _text = text;};
+	void setText(const QStringList & text) { _text = text; }
 
-	void setPath(const QString & path) { _path = path;};
+	void setPath(const QString & path) { _path = path; }
 
-	void setPixmap(const QPixmap & pixmap) { _pixmap = pixmap;};
+	void setPixmap(const QPixmap & pixmap) { _pixmap = pixmap; }
 
-	void setButtonPixmap(const QPixmap & pixmap) { _buttonPixmap = pixmap;};
+	void setButtonPixmap(const QPixmap & pixmap) { _buttonPixmap = pixmap; }
 
 	void setRegExp(const QString & regExp);
 
-	QString getRegExp() const {return _regExp;};
+	QString getRegExp() const { return _regExp; }
 
-	QStringList getText() const { return _text;};
+	QStringList getText() const { return _text;}
 
-	QString getDefaultText() const { return _text[0];};
+	QString getDefaultText() const { return _text[0]; }
 
-	QPixmap getPixmap() const { return _pixmap;};
+	QPixmap getPixmap() const { return _pixmap; }
 
-	QPixmap getButtonPixmap() const { return _buttonPixmap;};
+	QPixmap getButtonPixmap() const { return _buttonPixmap; }
 
-	QString getPath() const { return _path;};
+	QString getPath() const { return _path; }
 
 	QString getHtmlRegExp() const;
 
@@ -79,4 +81,4 @@ private:
 	QPixmap _buttonPixmap;
 };
 
-#endif //OWQTEMOTICON_H
+#endif	//OWQTEMOTICON_H

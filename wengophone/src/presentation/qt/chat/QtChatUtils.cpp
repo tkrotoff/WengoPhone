@@ -21,9 +21,8 @@
 
 #include "emoticons/QtEmoticonsManager.h"
 
-#include <QtCore/QString>
-#include <QtCore/QStringList>
-#include <QtGui/QFont>
+#include <QtGui/QtGui>
+#include <QtXml/QtXml>
 
 //TODO: remove this from here
 static const QString CHAT_USER_FORGROUND_COLOR = "#000000";

@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,43 +16,42 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+
 #ifndef OWQTEMOTICONBUTTON_H
 #define OWQTEMOTICONBUTTON_H
 
-#include <QtGui/QtGui>
 #include "QtEmoticon.h"
+
+#include <QtGui/QToolButton>
+
+class QWidget;
+class QString;
+class QIcon;
 
 /**
  *
  * @ingroup presentation
  * @author Mr K.
  */
-class QtEmoticonButton : public QPushButton
-{
+class QtEmoticonButton : public QToolButton {
 	Q_OBJECT
-
 public:
-	QtEmoticonButton ( QWidget * parent = 0 );
 
-	QtEmoticonButton ( const QString & text, QWidget * parent = 0 );
-
-	QtEmoticonButton ( const QIcon & icon, const QString & text, QWidget * parent = 0 );
+	QtEmoticonButton(QWidget * parent);
 
 	void setEmoticon(QtEmoticon emoticon);
-
-public Q_SLOTS:
-
-	void buttonClickedSlot();
 
 Q_SIGNALS:
 
 	void buttonClicked(QtEmoticon emoticon);
 
-protected:
+private Q_SLOTS:
 
-	void init();
+	void buttonClickedSlot();
+
+private:
 
 	QtEmoticon _emoticon;
 };
 
-#endif //OWQTEMOTICONBUTTON_H
+#endif	//OWQTEMOTICONBUTTON_H

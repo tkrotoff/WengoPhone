@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,65 +18,70 @@
  */
 
 #include "QtEmoticonsWidget.h"
+
+#include "QtEmoticon.h"
 #include "QtEmoticonButton.h"
 #include "QtEmoticonsManager.h"
 
 #include <util/Logger.h>
+#include <util/SafeDelete.h>
 #include <cutil/global.h>
 
+#include <qtutil/SafeConnect.h>
+
+#include <QtGui/QtGui>
 #include <QtXml/QtXml>
 
-EmoticonsWidget::EmoticonsWidget(QWidget * parent, Qt::WFlags flags)
-	: QWidget(parent, flags) {
+EmoticonsWidget::EmoticonsWidget(QWidget * parent)
+	: QWidget(parent, Qt::Popup) {
 
 	_layout = NULL;
-	_stat = Popup;
+	_state = Popup;
 	_buttonX = 0;
 	_buttonY = 0;
 }
 
-void EmoticonsWidget::buttonClicked(QtEmoticon emoticon) {
-	if (_stat == Popup) {
+void EmoticonsWidget::buttonClicked(const QtEmoticon & emoticon) {
+	if (_state == Popup) {
 		close();
 	}
 	emoticonClicked(emoticon);
 }
 
-void EmoticonsWidget::changeStat() {
-	if (_stat == Popup) {
+void EmoticonsWidget::changeState() {
+	if (_state == Popup) {
 		close();
 		setWindowFlags(Qt::Window);
-		_stat = Window;
+		_state = Window;
 		show();
 	} else {
 		close();
 		setWindowFlags(Qt::Popup);
-		_stat = Popup;
+		_state = Popup;
 	}
 }
 
 void EmoticonsWidget::initButtons(const QString & protocol) {
-	if (_layout) {
-		delete _layout;
-	}
+	OWSAFE_DELETE(_layout);
+
 	_layout = new QGridLayout(this);
 	_layout->setMargin(0);
 	_buttonX = 0;
 	_buttonY = 0;
 	QtEmoticonsManager * qtEmoticonsManager = QtEmoticonsManager::getInstance();
-	QtEmoticonsManager::QtEmoticonsList emoticonsList = qtEmoticonsManager->getQtEmoticonsList(protocol);
-	QtEmoticonsManager::QtEmoticonsList::iterator it;
-	for (it = emoticonsList.begin(); it != emoticonsList.end(); it++) {
+	QtEmoticonsManager::QtEmoticonList emoticonList = qtEmoticonsManager->getQtEmoticonList(protocol);
+	QtEmoticonsManager::QtEmoticonList::iterator it;
+	for (it = emoticonList.begin(); it != emoticonList.end(); it++) {
 		addButton((*it));
 	}
 }
 
-void EmoticonsWidget::addButton(QtEmoticon emoticon) {
+void EmoticonsWidget::addButton(const QtEmoticon & emoticon) {
 	if (_buttonX == 10) {
 		_buttonX = 0;
 		_buttonY += 1;
 	}
-	QtEmoticonButton * button = new QtEmoticonButton();
+	QtEmoticonButton * button = new QtEmoticonButton(this);
 	button->setEmoticon(emoticon);
 	QSize buttonSize = emoticon.getButtonPixmap().size();
 #if defined(OS_MACOSX)
@@ -86,7 +91,7 @@ void EmoticonsWidget::addButton(QtEmoticon emoticon) {
 	button->setMaximumSize(buttonSize);
 	button->setMinimumSize(buttonSize);
 	_layout->addWidget(button, _buttonY, _buttonX);
-	connect(button, SIGNAL(buttonClicked(QtEmoticon)), SLOT(buttonClicked(QtEmoticon)));
+	SAFE_CONNECT(button, SIGNAL(buttonClicked(QtEmoticon)), SLOT(buttonClicked(QtEmoticon)));
 	_buttonX++;
 }
 

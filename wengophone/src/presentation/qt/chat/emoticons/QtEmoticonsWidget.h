@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,10 +20,12 @@
 #ifndef OWQTEMOTICONSWIDGET_H
 #define OWQTEMOTICONSWIDGET_H
 
-#include <QtGui/QtGui>
+#include <QtGui/QWidget>
 
-#include "QtEmoticon.h"
-#include "QtEmoticonButton.h"
+class QtEmoticon;
+class QString;
+class QStringList;
+class QGridLayout;
 
 /**
  *
@@ -34,38 +36,38 @@ class EmoticonsWidget : public QWidget {
 	Q_OBJECT
 public:
 
-	enum EmoticonsWidgetStat {
-		Window,
-		Popup
-	};
-
-	EmoticonsWidget(QWidget * parent, Qt::WFlags flags);
+	EmoticonsWidget(QWidget * parent);
 
 	void initButtons(const QString & protocol);
 
 public Q_SLOTS:
 
-	void changeStat();
+	void changeState();
 
-	void buttonClicked(QtEmoticon emoticon);
+	void buttonClicked(const QtEmoticon & emoticon);
 
 Q_SIGNALS:
 
-	void emoticonClicked(QtEmoticon emoticon);
+	void emoticonClicked(const QtEmoticon & emoticon);
 
 	void closed();
 
 private:
 
-	virtual void closeEvent(QCloseEvent * event);
+	void closeEvent(QCloseEvent * event);
 
-	void addButton(QtEmoticon emoticon);
+	void addButton(const QtEmoticon & emoticon);
+
+	enum EmoticonsWidgetState {
+		Window,
+		Popup
+	};
 
 	QWidget * _widget;
 
 	QStringList _iconName;
 
-	EmoticonsWidgetStat _stat;
+	EmoticonsWidgetState _state;
 
 	int _buttonX;
 

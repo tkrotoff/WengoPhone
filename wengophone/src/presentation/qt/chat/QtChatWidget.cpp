@@ -87,7 +87,7 @@ QtChatWidget::QtChatWidget(CChatHandler & cChatHandler,
 	////
 
 	//creates sub widgets
-	_emoticonsWidget = new EmoticonsWidget(this, Qt::Popup);
+	_emoticonsWidget = new EmoticonsWidget(this);
 	_editActionBar = new QtChatEditActionBarWidget(this);
 	_chatEdit = new QtChatEditWidget(this);
 	_chatHistory = new QtChatHistoryWidget(this);

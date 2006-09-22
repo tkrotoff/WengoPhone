@@ -222,7 +222,7 @@ public:
 	/**
 	 * Sets the conference associated with this call.
 	 *
-	 * Internal method, used only by ConferenceCall.
+	 * Internal method, used only by ConferenceCall and PhoneLine.
 	 *
 	 * @param conferenceCall conference
 	 */

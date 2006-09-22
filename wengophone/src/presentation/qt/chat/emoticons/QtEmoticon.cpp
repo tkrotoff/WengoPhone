@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,14 +21,15 @@
 
 #include <util/Logger.h>
 
-QtEmoticon::QtEmoticon() {
+#include <QtGui/QtGui>
 
+QtEmoticon::QtEmoticon() {
 }
 
 QtEmoticon::QtEmoticon(const QtEmoticon & source) {
-	_path=source._path;
-	_text=QStringList(source._text);
-	_pixmap=source._pixmap;
+	_path = source._path;
+	_text = QStringList(source._text);
+	_pixmap = source._pixmap;
 	_regExp = source._regExp;
 	_buttonPixmap = source._buttonPixmap;
 }
@@ -45,10 +46,7 @@ QString QtEmoticon::getHtmlRegExp() const {
 }
 
 bool QtEmoticon::isNull() const {
-	if (_text.isEmpty()) {
-		return true;
-	}
-	return false;
+	return _text.isEmpty();
 }
 
 void QtEmoticon::setRegExp(const QString & regExp) {

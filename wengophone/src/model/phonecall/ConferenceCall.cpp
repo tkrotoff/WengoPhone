@@ -40,7 +40,6 @@ ConferenceCall::~ConferenceCall() {
 }
 
 void ConferenceCall::addPhoneCall(PhoneCall & phoneCall) {
-	phoneCall.setConferenceCall(this);
 	if (_confId == -1) {
 		_confId = _phoneLine.getSipWrapper().createConference();
 	}
@@ -71,7 +70,7 @@ void ConferenceCall::addPhoneNumber(const std::string & phoneNumber) {
 	if (!phoneCall) {
 		phoneCall = _phoneCallMap[phoneNumber];
 		if (!phoneCall) {
-			int callId = _phoneLine.makeCall(phoneNumber);
+			int callId = _phoneLine.makeCall(phoneNumber, this);
 			if (callId == SipWrapper::CallIdError) {
 				//NULL means put the phone number in the queue
 				phoneCall = NULL;

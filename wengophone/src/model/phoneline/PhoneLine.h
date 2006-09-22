@@ -30,6 +30,7 @@
 
 class PhoneLineState;
 class PhoneCall;
+class ConferenceCall;
 class WengoPhone;
 class SipAddress;
 class SipCallbacks;
@@ -45,7 +46,7 @@ public:
 
 	std::string getMySipAddress() const;
 
-	int makeCall(const std::string & phoneNumber);
+	int makeCall(const std::string & phoneNumber, ConferenceCall * conferenceCall = NULL);
 
 	void acceptCall(int callId);
 

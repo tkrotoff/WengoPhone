@@ -32,6 +32,7 @@
 #include <string>
 
 class PhoneCall;
+class ConferenceCall;
 class PhoneLineState;
 class SipAccount;
 class SipWrapper;
@@ -80,7 +81,7 @@ public:
 	/**
 	 * @see SipWrapper::makeCall()
 	 */
-	virtual int makeCall(const std::string & phoneNumber) = 0;
+	virtual int makeCall(const std::string & phoneNumber, ConferenceCall * conferenceCall = NULL) = 0;
 
 	/**
 	 * @see SipWrapper::acceptCall()

@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,26 +16,27 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+
 #ifndef OWQTEMOTICONSMANAGER_H
 #define OWQTEMOTICONSMANAGER_H
 
 #include "QtEmoticon.h"
 
-#include <QtGui/QtGui>
-#include <QtXml/QtXml>
+#include <QtCore/QHash>
+
+class QDomNode;
+class QList;
+class QString;
 
 /**
  *
  * @ingroup presentation
- * @author Mr K.
  * @author Mathieu Stute
  */
 class QtEmoticonsManager {
 public:
 
-	typedef QList<QtEmoticon> QtEmoticonsList;
-
-	typedef QHash<QString, QtEmoticonsList> ProtocolsList;
+	typedef QList<QtEmoticon> QtEmoticonList;
 
 	static QtEmoticonsManager * getInstance();
 
@@ -43,31 +44,31 @@ public:
 
 	QtEmoticon getEmoticon(const QString & text, const QString & protocol);
 
-	void loadFromFile(QString filename);
+	void loadFromFile(const QString & filename);
 
-	QString text2Emoticon(const QString & text, const QString protocol);
+	QString text2Emoticon(const QString & text, const QString & protocol);
 
-	QString emoticons2Text(const QString & text, const QString protocol);
+	QString emoticons2Text(const QString & text, const QString & protocol);
 
-	QtEmoticonsList getQtEmoticonsList(const QString & protocol);
+	QtEmoticonList getQtEmoticonList(const QString & protocol);
 
 	int getProtocolCount();
 
-	int getEmoticonsCount(QString protocol);
+	int getEmoticonCount(const QString & protocol);
 
 private:
 
-	void readProtocol(QDomNode node);
+	void readProtocol(const QDomNode & node);
 
-	void readIcon(QDomNode node, QString protocol);
+	void readIcon(const QDomNode & node, const QString & protocol);
 
-	QString encode(const QString & text);
+	QString encode(const QString & text) const;
 
-	ProtocolsList _protocolsList;
+	typedef QHash<QString, QtEmoticonList> ProtocolList;
 
-	QtEmoticonsList _qtEmoticonsList;
+	ProtocolList _protocolList;
 
 	static QtEmoticonsManager * _instance;
 };
 
-#endif //OWQTEMOTICONSMANAGER_H
+#endif	//OWQTEMOTICONSMANAGER_H
