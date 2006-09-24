@@ -23,7 +23,13 @@ include(MacroAddPlugin)
 include(MacroGetSubversionRevision)
 macro_get_subversion_revision(SVN_REVISION)
 
-set(CMAKE_BUILD_TYPE RelWithDebInfo)
+if (NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE RelWithDebInfo
+    CACHE STRING
+      "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel."
+    FORCE
+  )
+endif (NOT CMAKE_BUILD_TYPE)
 
 # Compatibility between Qt4 and Boost
 add_definitions(-DQT_NO_KEYWORDS)
