@@ -19,12 +19,17 @@ set(WTIMER_LINK_LIBRARIES
   ${WTIMER_LIBRARY}
 )
 
+set(wtimer_SRCS
+  src/timer_impl.c
+)
+
 if (WIN32)
   set(wtimer_SRCS
+    ${wtimer_SRCS}
     src/win32_mm/impl_timer.c
   )
 
-  add_definitions(-DTIMER_ENABLE_WINMM_IMPL)
+  add_definitions(-DTIMER_ENABLE_WINMM_IMPL=1)
 
   set(WTIMER_LINK_LIBRARIES
     ${WTIMER_LINK_LIBRARIES}
@@ -39,11 +44,13 @@ else (WIN32)
     )
   endif (UNIX)
 
+  add_definitions(-DTIMER_ENABLE_CLOCK_GETTIME_IMPL=1)
+
   set(wtimer_SRCS
+    ${wtimer_SRCS}
     src/clock_gettime/impl_timer.c
   )
 
-  add_definitions(-DTIMER_ENABLE_CLOCK_GETTIME_IMPL)
 endif (WIN32)
 
 include_directories(
