@@ -15,7 +15,7 @@ include(DefineInstallationPaths)
 
 # add macros
 include(MacroGetSubversionRevision)
-include(MacroGenerateQt4QmFiles)
+include(MacroGenerateQtQmFiles)
 include(MacroAddCompileFlags)
 include(MacroAddLinkFlags)
 include(MacroAddPlugin)
