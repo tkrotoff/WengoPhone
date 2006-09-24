@@ -25,7 +25,6 @@
 #include <QtCore/QHash>
 
 class QDomNode;
-class QList;
 class QString;
 
 /**
