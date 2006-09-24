@@ -49,6 +49,7 @@ set(PHAPI_INCLUDE_DIRS
   ${WTIMER_INCLUDE_DIRS}
   CACHE INTERNAL "phapi include directories"
 )
+message("timer: ${WTIMER_LIBRARY}")
 
 set(PHAPI_LIBRARY
   phapi

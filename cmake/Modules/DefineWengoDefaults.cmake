@@ -21,3 +21,12 @@ set(CMAKE_COLOR_MAKEFILE ON)
 set(GENERIC_LIB_VERSION "2.0.0")
 set(GENERIC_LIB_SOVERSION "2")
 
+# set the default build type to release with debug info
+if (NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE RelWithDebInfo
+    CACHE STRING
+      "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel."
+    FORCE
+  )
+endif (NOT CMAKE_BUILD_TYPE)
+
