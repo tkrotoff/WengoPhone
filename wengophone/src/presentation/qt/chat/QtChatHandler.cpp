@@ -65,5 +65,6 @@ void QtChatHandler::deletePresentation() {
 	/* delete(this); */
 	if (_qtChatWindow) {
 		_qtChatWindow->hide();
+		_qtWengoPhone.setChatWindow(NULL);
 	}
 }
