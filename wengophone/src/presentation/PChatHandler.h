@@ -37,6 +37,8 @@ public:
 	 * @see ChatHandler::newIMChatSessionCreatedEvent
 	 */
 	virtual void newIMChatSessionCreatedEvent(IMChatSession & imChatSession) = 0;
+
+	virtual void deletePresentation() = 0;
 };
 
 #endif	//OWPCHATHANDLER_H

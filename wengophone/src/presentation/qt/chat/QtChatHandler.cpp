@@ -20,6 +20,7 @@
 #include "QtChatHandler.h"
 
 #include "QtChatWindow.h"
+#include "emoticons/QtEmoticonsManager.h"
 
 #include <control/chat/CChatHandler.h>
 
@@ -56,4 +57,11 @@ void QtChatHandler::createSession(IMAccount & imAccount, IMContactSet & imContac
 }
 
 void QtChatHandler::updatePresentation() {
+}
+
+void QtChatHandler::deletePresentation() {
+	// we should delete the QtChatWindow
+	// but it crashes in QtEmoticonsManager::getQtEmoticonList
+	/* delete(this); */
+	_qtChatWindow->hide();
 }

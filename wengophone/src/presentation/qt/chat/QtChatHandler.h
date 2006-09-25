@@ -50,6 +50,8 @@ public:
 
 	void updatePresentation();
 
+	void deletePresentation();
+
 private:
 
 	CChatHandler & _cChatHandler;
