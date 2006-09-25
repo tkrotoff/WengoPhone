@@ -100,6 +100,7 @@ QtProfileBar::QtProfileBar(CWengoPhone & cWengoPhone, CUserProfile & cUserProfil
 					);
 
 	//The events label
+	/*
 	_eventsLabel = new WengoStyleLabel(this);
 	_eventsLabel->setMinimumSize(QSize(46, 65));
 	_eventsLabel->setMaximumSize(QSize(1000, 65));
@@ -110,6 +111,7 @@ QtProfileBar::QtProfileBar(CWengoPhone & cWengoPhone, CUserProfile & cUserProfil
 					QPixmap(":/pics/profilebar/bar_on_separator_left.png"),  //end
 					QPixmap(":/pics/profilebar/bar_on_fill.png")
 					);
+	*/
 
 	//The credit label
 	_creditLabel = new WengoStyleLabel(this);
@@ -126,15 +128,15 @@ QtProfileBar::QtProfileBar(CWengoPhone & cWengoPhone, CUserProfile & cUserProfil
 	//Add the labels to the gridlayout
 	_gridlayout->addWidget(_statusLabel, 0, 0);
 	_gridlayout->addWidget(_nicknameLabel, 0, 1);
-	_gridlayout->addWidget(_eventsLabel, 0, 2);
+	//_gridlayout->addWidget(_eventsLabel, 0, 2);
 	_gridlayout->addWidget(_creditLabel, 0, 3);
 
 	//_statusLabel->setText("S");
 	_nicknameLabel->setText("  " + tr("NickName"));
 	_nicknameLabel->setTextColor(Qt::white);
 
-	_eventsLabel->setText(tr("events"));
-	_eventsLabel->setTextColor(Qt::white);
+//	_eventsLabel->setText(tr("events"));
+//	_eventsLabel->setTextColor(Qt::white);
 
 	_creditLabel->setText(QString() + QChar(0x20ac) + QString(" 0.00"));
 	_creditLabel->setTextColor(Qt::white);
@@ -142,7 +144,7 @@ QtProfileBar::QtProfileBar(CWengoPhone & cWengoPhone, CUserProfile & cUserProfil
 	//Objects connection
 	connect(_statusLabel, SIGNAL(clicked()), SLOT(statusClicked()));
 	connect(_nicknameLabel, SIGNAL(clicked()), SLOT(nicknameClicked()));
-	connect(_eventsLabel, SIGNAL(clicked()), SLOT(eventsClicked()));
+//	connect(_eventsLabel, SIGNAL(clicked()), SLOT(eventsClicked()));
 	connect(_creditLabel, SIGNAL(clicked()), SLOT(creditClicked()));
 
 	//resize
@@ -288,7 +290,7 @@ void QtProfileBar::nicknameClicked() {
 	}
 	else {
 		_nicknameLabel->setSelected(true);
-		_eventsLabel->setSelected(false);
+//		_eventsLabel->setSelected(false);
 		_creditLabel->setSelected(false);
 		showNickNameWidget();
 	}
@@ -327,7 +329,7 @@ void QtProfileBar::eventsClicked() {
 		removeEventsWidget();
 	} else {
 		_nicknameLabel->setSelected(false);
-		_eventsLabel->setSelected(true);
+//		_eventsLabel->setSelected(true);
 		_creditLabel->setSelected(false);
 		showEventsWidget();
 	}
@@ -355,7 +357,7 @@ void QtProfileBar::removeEventsWidget() {
 		setMinimumSize(QSize(0, 0));
 		resize(QSize(0, 0));
 		_eventsWidgetVisible = false;
-		_eventsLabel->setSelected(false);
+//		_eventsLabel->setSelected(false);
 		setOpen(false);
 	}
 }
@@ -365,7 +367,7 @@ void QtProfileBar::creditClicked() {
 		removeCreditWidget();
 	} else {
 		_nicknameLabel->setSelected(false);
-		_eventsLabel->setSelected(false);
+		//_eventsLabel->setSelected(false);
 		_creditLabel->setSelected(true);
 		showCreditWidget();
 	}

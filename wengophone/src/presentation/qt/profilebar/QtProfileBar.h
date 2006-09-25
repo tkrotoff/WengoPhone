@@ -181,7 +181,7 @@ private:
 
 	WengoStyleLabel * _nicknameLabel;
 
-	WengoStyleLabel * _eventsLabel;
+//	WengoStyleLabel * _eventsLabel;
 
 	WengoStyleLabel * _creditLabel;
 
