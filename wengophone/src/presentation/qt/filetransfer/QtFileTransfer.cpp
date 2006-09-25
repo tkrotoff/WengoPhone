@@ -101,7 +101,6 @@ void QtFileTransfer::newReceiveFileSessionCreatedEventHandlerSlot(ReceiveFileSes
 		// but we must check if the file already exists.
 		if (isFileInDir(downloadFolder, filename)) {
 			
-			//TODO: add a question to the user
 			if (QMessageBox::question(_qtFileTransferWidget, tr("Overwrite File?"),
 					tr("A file called %1 already exists."
 					"Do you want to overwrite it?").arg(filename),
@@ -122,6 +121,7 @@ void QtFileTransfer::newReceiveFileSessionCreatedEventHandlerSlot(ReceiveFileSes
 	} else {
 		fileSession->stop();
 		OWSAFE_DELETE(fileSession);
+		return;
 	}
 }
 

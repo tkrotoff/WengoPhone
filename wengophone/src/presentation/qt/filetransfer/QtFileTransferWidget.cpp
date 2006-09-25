@@ -70,7 +70,7 @@ void QtFileTransferWidget::clean(bool cleanButton) {
 					delete widgetItem;
 				}
 			} else {
-				if (widgetItem->removeHasBeenClicked()) {
+				if ((widgetItem->removeHasBeenClicked()) && (!widgetItem->isRunning())) {
 					_ui.downloadTransferListWidget->takeItem(i);
 					delete widgetItem;
 				}
@@ -89,7 +89,7 @@ void QtFileTransferWidget::clean(bool cleanButton) {
 					delete widgetItem;
 				}
 			} else {
-				if (widgetItem->removeHasBeenClicked()) {
+				if ((widgetItem->removeHasBeenClicked()) && (!widgetItem->isRunning())) {
 					_ui.uploadTransferListWidget->takeItem(i);
 					delete widgetItem;
 				}
