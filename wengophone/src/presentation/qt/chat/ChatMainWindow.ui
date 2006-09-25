@@ -2,8 +2,8 @@
  <author></author>
  <comment></comment>
  <exportmacro></exportmacro>
- <class>chatMainWindow</class>
- <widget class="QMainWindow" name="chatMainWindow" >
+ <class>ChatMainWindow</class>
+ <widget class="QMainWindow" name="ChatMainWindow" >
   <property name="geometry" >
    <rect>
     <x>0</x>

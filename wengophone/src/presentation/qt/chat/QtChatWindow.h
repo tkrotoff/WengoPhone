@@ -20,8 +20,6 @@
 #ifndef OWQTCHATWINDOW_H
 #define OWQTCHATWINDOW_H
 
-#include "ui_ChatMainWindow.h"
-
 #include <QtGui/QMainWindow>
 
 #include <control/chat/CChatHandler.h>
@@ -41,6 +39,7 @@ class IMChatSession;
 class ContactProfile;
 
 class QAction;
+namespace Ui { class ChatMainWindow; }
 
 /**
  *
@@ -160,10 +159,10 @@ private:
 
 	QtWengoPhone & _qtWengoPhone;
 
-	Ui::chatMainWindow _ui;
+	Ui::ChatMainWindow * _ui;
 
 	/** Index of the last message printed on screen for ecah sessionID **/
 	std::map<int, int> _lastReceivedMessageIndex;
 };
 
-#endif //OWQTCHATWINDOW_H
+#endif	//OWQTCHATWINDOW_H

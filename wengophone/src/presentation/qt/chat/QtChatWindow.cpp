@@ -19,6 +19,8 @@
 
 #include "QtChatWindow.h"
 
+#include "ui_ChatMainWindow.h"
+
 #include "QtChatWidget.h"
 #include "QtChatTabWidget.h"
 #include "emoticons/QtEmoticonsManager.h"
@@ -69,7 +71,8 @@ QtChatWindow::QtChatWindow(QWidget * parent, CChatHandler & cChatHandler, IMChat
 
 	_imChatSession = &imChatSession;
 
-	_ui.setupUi(this);
+	_ui = new Ui::ChatMainWindow();
+	_ui->setupUi(this);
 	setupMenuBarActions();
 	setupToolBarActions();
 
@@ -124,6 +127,7 @@ QtChatWindow::QtChatWindow(QWidget * parent, CChatHandler & cChatHandler, IMChat
 QtChatWindow::~QtChatWindow() {
 	QtEmoticonsManager * qtEmoticonsManager = QtEmoticonsManager::getInstance();
 	OWSAFE_DELETE(qtEmoticonsManager);
+	OWSAFE_DELETE(_ui);
 }
 
 QtChatWidget * QtChatWindow::getActiveTabWidget() {
@@ -397,56 +401,56 @@ void QtChatWindow::setupMenuBarActions() {
 	QWidget * toolBar = qtToolBar->getWidget();
 
 	// setup "Wengo" menu
-	copyQAction(toolBar, _ui.actionShowWengoAccount);
-	SAFE_CONNECT_RECEIVER(_ui.actionShowWengoAccount, SIGNAL(triggered()), qtToolBar, SLOT(showWengoAccount()));
-	copyQAction(toolBar, _ui.actionEditMyProfile);
-	SAFE_CONNECT_RECEIVER(_ui.actionEditMyProfile, SIGNAL(triggered()), qtToolBar, SLOT(editMyProfile()));
-	copyQAction(toolBar, _ui.actionWengoServices);
-	SAFE_CONNECT_RECEIVER(_ui.actionWengoServices, SIGNAL(triggered()), qtToolBar, SLOT(showWengoServices()));
-	copyQAction(toolBar, _ui.actionClose);
-	SAFE_CONNECT(_ui.actionClose, SIGNAL(triggered()), SLOT(closeWindow()));
+	copyQAction(toolBar, _ui->actionShowWengoAccount);
+	SAFE_CONNECT_RECEIVER(_ui->actionShowWengoAccount, SIGNAL(triggered()), qtToolBar, SLOT(showWengoAccount()));
+	copyQAction(toolBar, _ui->actionEditMyProfile);
+	SAFE_CONNECT_RECEIVER(_ui->actionEditMyProfile, SIGNAL(triggered()), qtToolBar, SLOT(editMyProfile()));
+	copyQAction(toolBar, _ui->actionWengoServices);
+	SAFE_CONNECT_RECEIVER(_ui->actionWengoServices, SIGNAL(triggered()), qtToolBar, SLOT(showWengoServices()));
+	copyQAction(toolBar, _ui->actionClose);
+	SAFE_CONNECT(_ui->actionClose, SIGNAL(triggered()), SLOT(closeWindow()));
 	////
 
 	// setup "contact" menubar
-	copyQAction(toolBar, _ui.actionAddContact);
-	SAFE_CONNECT_RECEIVER(_ui.actionAddContact, SIGNAL(triggered()), qtToolBar, SLOT(addContact()));
-	copyQAction(toolBar, _ui.actionSearchWengoContact);
-	SAFE_CONNECT_RECEIVER(_ui.actionSearchWengoContact, SIGNAL(triggered()), qtToolBar, SLOT(searchWengoContact()));
+	copyQAction(toolBar, _ui->actionAddContact);
+	SAFE_CONNECT_RECEIVER(_ui->actionAddContact, SIGNAL(triggered()), qtToolBar, SLOT(addContact()));
+	copyQAction(toolBar, _ui->actionSearchWengoContact);
+	SAFE_CONNECT_RECEIVER(_ui->actionSearchWengoContact, SIGNAL(triggered()), qtToolBar, SLOT(searchWengoContact()));
 	////
 
 	// setup "actions" menu
-	copyQAction(toolBar, _ui.actionCreateConferenceCall);
-	SAFE_CONNECT_RECEIVER(_ui.actionCreateConferenceCall, SIGNAL(triggered()), qtToolBar, SLOT(createConferenceCall()));
-	copyQAction(toolBar, _ui.actionSendSms);
-	SAFE_CONNECT_RECEIVER(_ui.actionSendSms, SIGNAL(triggered()), qtToolBar, SLOT(sendSms()));
-	SAFE_CONNECT(_ui.actionSaveHistoryAs, SIGNAL(triggered()), SLOT(saveActiveTabChatHistory()));
+	copyQAction(toolBar, _ui->actionCreateConferenceCall);
+	SAFE_CONNECT_RECEIVER(_ui->actionCreateConferenceCall, SIGNAL(triggered()), qtToolBar, SLOT(createConferenceCall()));
+	copyQAction(toolBar, _ui->actionSendSms);
+	SAFE_CONNECT_RECEIVER(_ui->actionSendSms, SIGNAL(triggered()), qtToolBar, SLOT(sendSms()));
+	SAFE_CONNECT(_ui->actionSaveHistoryAs, SIGNAL(triggered()), SLOT(saveActiveTabChatHistory()));
 	////
 
 	// setup "tools" menu
-	copyQAction(toolBar, _ui.actionShowFileTransfer);
-	SAFE_CONNECT_RECEIVER(_ui.actionShowFileTransfer, SIGNAL(triggered()), qtToolBar, SLOT(showFileTransferWindow()));
+	copyQAction(toolBar, _ui->actionShowFileTransfer);
+	SAFE_CONNECT_RECEIVER(_ui->actionShowFileTransfer, SIGNAL(triggered()), qtToolBar, SLOT(showFileTransferWindow()));
 	////
 
 	// setup "help" menu
-	copyQAction(toolBar, _ui.actionShowWengoForum);
-	SAFE_CONNECT_RECEIVER(_ui.actionShowWengoForum, SIGNAL(triggered()), qtToolBar, SLOT(showWengoForum()));
-	copyQAction(toolBar, _ui.actionWengoFAQ);
-	SAFE_CONNECT_RECEIVER(_ui.actionWengoFAQ, SIGNAL(triggered()), qtToolBar, SLOT(showWengoFAQ()));
+	copyQAction(toolBar, _ui->actionShowWengoForum);
+	SAFE_CONNECT_RECEIVER(_ui->actionShowWengoForum, SIGNAL(triggered()), qtToolBar, SLOT(showWengoForum()));
+	copyQAction(toolBar, _ui->actionWengoFAQ);
+	SAFE_CONNECT_RECEIVER(_ui->actionWengoFAQ, SIGNAL(triggered()), qtToolBar, SLOT(showWengoFAQ()));
 	////
 }
 
 void QtChatWindow::setupToolBarActions() {
-	SAFE_CONNECT(_ui.actionCallContact, SIGNAL(triggered()), SLOT(callActiveTabContact()));
-	SAFE_CONNECT(_ui.actionSendSms, SIGNAL(triggered()), SLOT(sendSmsToActiveTabContact()));
-	SAFE_CONNECT(_ui.actionSendFile, SIGNAL(triggered()), SLOT(sendFileToActiveTabContact()));
-	SAFE_CONNECT(_ui.actionCreateChatConf, SIGNAL(triggered()), SLOT(createChatConference()));
-	SAFE_CONNECT(_ui.actionContactInfo, SIGNAL(triggered()), SLOT(showActiveTabContactInfo()));
-	SAFE_CONNECT(_ui.actionBlockContact, SIGNAL(triggered()), SLOT(blockActiveTabContact()));
+	SAFE_CONNECT(_ui->actionCallContact, SIGNAL(triggered()), SLOT(callActiveTabContact()));
+	SAFE_CONNECT(_ui->actionSendSms, SIGNAL(triggered()), SLOT(sendSmsToActiveTabContact()));
+	SAFE_CONNECT(_ui->actionSendFile, SIGNAL(triggered()), SLOT(sendFileToActiveTabContact()));
+	SAFE_CONNECT(_ui->actionCreateChatConf, SIGNAL(triggered()), SLOT(createChatConference()));
+	SAFE_CONNECT(_ui->actionContactInfo, SIGNAL(triggered()), SLOT(showActiveTabContactInfo()));
+	SAFE_CONNECT(_ui->actionBlockContact, SIGNAL(triggered()), SLOT(blockActiveTabContact()));
 
 #if defined(OS_MACOSX)
 	// Add the close tab widget
-	QtCloseChatTabWidget * closeTabWidget = new QtCloseChatTabWidget(_ui.toolBar);
-	_ui.toolBar->addWidget(closeTabWidget);
+	QtCloseChatTabWidget * closeTabWidget = new QtCloseChatTabWidget(_ui->toolBar);
+	_ui->toolBar->addWidget(closeTabWidget);
 	SAFE_CONNECT(closeTabWidget, SIGNAL(clicked()), SLOT(closeActiveTab()));
 	////
 #endif
@@ -462,14 +466,14 @@ void QtChatWindow::updateToolBarActions() {
 		qtContactList = _qtWengoPhone.getQtContactList();
 		contactProfile = qtContactList->getCContactList().getContactProfile(contactId.toStdString());
 
-		_ui.actionCallContact->setEnabled(contactProfile.hasCall());
-		_ui.actionSendSms->setEnabled(!contactProfile.getMobilePhone().empty());
-		_ui.actionSendFile->setEnabled(!contactProfile.getFirstWengoId().empty());
-		_ui.actionCreateChatConf->setEnabled(widget->canDoMultiChat());
-		_ui.actionContactInfo->setEnabled(true);
+		_ui->actionCallContact->setEnabled(contactProfile.hasCall());
+		_ui->actionSendSms->setEnabled(!contactProfile.getMobilePhone().empty());
+		_ui->actionSendFile->setEnabled(!contactProfile.getFirstWengoId().empty());
+		_ui->actionCreateChatConf->setEnabled(widget->canDoMultiChat());
+		_ui->actionContactInfo->setEnabled(true);
 		//TODO: uncomment when block a contact will be implemented
-		//_ui.actionBlockContact->setEnabled(!contactProfile.isBlocked());
-		_ui.actionBlockContact->setEnabled(false);
+		//_ui->actionBlockContact->setEnabled(!contactProfile.isBlocked());
+		_ui->actionBlockContact->setEnabled(false);
 		////
 	}
 }
