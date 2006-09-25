@@ -8,7 +8,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>315</width>
+    <width>374</width>
     <height>396</height>
    </rect>
   </property>
@@ -41,7 +41,7 @@
       <item row="0" column="0" >
        <widget class="QLabel" name="label" >
         <property name="text" >
-         <string>Call forwarding is active if you're not connected to Wengo, when your line is busy or 20 seconds after you did not answer a call. You can configure up to three call forwards to landlines, mobile phones or vocal box.</string>
+         <string>Call forwarding is active if you're not connected to Wengo, when your line is busy or 20 seconds after you did not answer a call. You can configure up to three call forwards to landlines, mobile phones or voice mail (if applicable)</string>
         </property>
         <property name="wordWrap" >
          <bool>true</bool>
