@@ -108,6 +108,7 @@ void PhApiReceiveFileSession::transferCancelledEventHandler(PhApiSFPWrapper & se
 		getFileName().compare(fileName) == 0 &&
 		getFileSize() == (unsigned int)fileSize){
 		fileTransferEvent(*this, IFileSession::IFileSessionEventFileTransferCancelled, _imContact, File(getFilePath()+getFileName()));
+		moduleFinishedEvent(*this);
 	}
 }
 
@@ -117,6 +118,7 @@ void PhApiReceiveFileSession::transferCancelledByPeerEventHandler(PhApiSFPWrappe
 		getFileName().compare(fileName) == 0 &&
 		getFileSize() == (unsigned int)fileSize){
 		fileTransferEvent(*this, IFileSession::IFileSessionEventFileTransferCancelledByPeer, _imContact, File(getFilePath()+getFileName()));
+		moduleFinishedEvent(*this);
 	}
 }
 
@@ -145,6 +147,7 @@ void PhApiReceiveFileSession::transferToPeerFinishedEventHandler(PhApiSFPWrapper
 		getFileName().compare(fileName) == 0 &&
 		getFileSize() == (unsigned int)fileSize){
 		fileTransferEvent(*this, IFileSession::IFileSessionEventFileTransferFinished, _imContact, File(getFilePath()+getFileName()));
+		moduleFinishedEvent(*this);
 	}
 }
 
@@ -154,6 +157,7 @@ void PhApiReceiveFileSession::transferFromPeerFailedEventHandler(PhApiSFPWrapper
 		getFileName().compare(fileName) == 0 &&
 		getFileSize() == (unsigned int)fileSize){
 		fileTransferEvent(*this, IFileSession::IFileSessionEventFileTransferFailed, _imContact, File(getFilePath()+getFileName()));
+		moduleFinishedEvent(*this);
 	}
 }
 
@@ -163,6 +167,7 @@ void PhApiReceiveFileSession::transferToPeerFailedEventHandler(PhApiSFPWrapper &
 		getFileName().compare(fileName) == 0 &&
 		getFileSize() == (unsigned int)fileSize){
 		fileTransferEvent(*this, IFileSession::IFileSessionEventFileTransferFailed, _imContact, File(getFilePath()+getFileName()));
+		moduleFinishedEvent(*this);
 	}
 }
 

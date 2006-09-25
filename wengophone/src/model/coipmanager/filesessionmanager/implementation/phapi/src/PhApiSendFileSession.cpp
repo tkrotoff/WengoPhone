@@ -92,7 +92,7 @@ void PhApiSendFileSession::start() {
 		PhApiSFPWrapper * wrapper = PhApiSFPWrapper::getInstance();
 		int vlid = wAccount->getVLineID();
 		std::string fullIdentity = wAccount->getDisplayName()+std::string(" <")+wAccount->getFullIdentity()+std::string(">");
-		std::string contactUri = std::string("sip:")+(*_currentContact).getContactId()+std::string("@voip.wengo.fr");
+		std::string contactUri = std::string("sip:")+(*_currentContact).getContactId()+std::string("@voip.wengo.fr"); // FIXME get the real domain
 		_currentCallID = wrapper->sendFile(vlid,
 			fullIdentity,
 			contactUri,
@@ -148,6 +148,7 @@ void PhApiSendFileSession::transferCancelledEventHandler(PhApiSFPWrapper & sende
 		(*_currentFile).getFileName().compare(fileName) == 0 &&
 		(*_currentFile).getSize() == fileSize){
 		fileTransferEvent(*this, IFileSession::IFileSessionEventFileTransferCancelled, *_currentContact, *_currentFile);
+		moduleFinishedEvent(*this);
 	}
 }
 
@@ -157,6 +158,7 @@ void PhApiSendFileSession::transferCancelledByPeerEventHandler(PhApiSFPWrapper &
 		(*_currentFile).getFileName().compare(fileName) == 0 &&
 		(*_currentFile).getSize() == fileSize){
 		fileTransferEvent(*this, IFileSession::IFileSessionEventFileTransferCancelledByPeer, *_currentContact, *_currentFile);
+		moduleFinishedEvent(*this);
 	}
 }
 
@@ -175,6 +177,7 @@ void PhApiSendFileSession::transferFromPeerFinishedEventHandler(PhApiSFPWrapper 
 		(*_currentFile).getFileName().compare(fileName) == 0 &&
 		(*_currentFile).getSize() == fileSize){
 		fileTransferEvent(*this, IFileSession::IFileSessionEventFileTransferFinished, *_currentContact, *_currentFile);
+		moduleFinishedEvent(*this);
 	}
 }
 
@@ -207,6 +210,7 @@ void PhApiSendFileSession::transferFromPeerFailedEventHandler(PhApiSFPWrapper & 
 		(*_currentFile).getFileName().compare(fileName) == 0 &&
 		(*_currentFile).getSize() == fileSize){
 		fileTransferEvent(*this, IFileSession::IFileSessionEventFileTransferFailed, *_currentContact, *_currentFile);
+		moduleFinishedEvent(*this);
 	}
 }
 
@@ -216,6 +220,7 @@ void PhApiSendFileSession::transferToPeerFailedEventHandler(PhApiSFPWrapper & se
 		(*_currentFile).getFileName().compare(fileName) == 0 &&
 		(*_currentFile).getSize() == fileSize){
 		fileTransferEvent(*this, IFileSession::IFileSessionEventFileTransferFailed, *_currentContact, *_currentFile);
+		moduleFinishedEvent(*this);
 	}
 }
 
