@@ -155,6 +155,8 @@ ContactProfile QtChatWindow::getContactProfileFromContactId(const QString & cont
 
 void QtChatWindow::closeActiveTab() {
 	QtChatWidget * widget = getActiveTabWidget();
+	int widgetPos = _tabWidget->indexOf(widget);
+	_tabWidget->removeTab(widgetPos);
 	OWSAFE_DELETE(widget);
 	if (_tabWidget->count() == 0) {
 		hide();
