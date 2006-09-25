@@ -39,6 +39,7 @@
 
 #include <sound/AudioDevice.h>
 #include <util/Logger.h>
+#include <util/SafeDelete.h>
 
 #include <string>
 using namespace std;
@@ -91,17 +92,11 @@ PhoneLine::~PhoneLine() {
 	//since states are static inside the constructor
 	_state = NULL;
 
-	if (_sipCallbacks) {
-		delete _sipCallbacks;
-		_sipCallbacks = NULL;
-	}
+	OWSAFE_DELETE(_sipCallbacks);
 
 	_sipWrapper = NULL;
 
-	if (_activePhoneCall) {
-		delete _activePhoneCall;
-		_activePhoneCall = NULL;
-	}
+	OWSAFE_DELETE(_activePhoneCall);
 }
 
 std::string PhoneLine::getMySipAddress() const {
@@ -207,7 +202,9 @@ void PhoneLine::checkCallId(int callId) {
 }
 
 void PhoneLine::acceptCall(int callId) {
-	checkCallId(callId);
+	//FIXME crash in some cases
+	//checkCallId(callId);
+
 	holdCallsExcept(callId);
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
@@ -223,7 +220,9 @@ void PhoneLine::acceptCall(int callId) {
 }
 
 void PhoneLine::rejectCall(int callId) {
-	checkCallId(callId);
+	//FIXME crash in some cases
+	//checkCallId(callId);
+
 	_sipWrapper->rejectCall(callId);
 	//History: retrieve the memento and change its state to rejected
 	_userProfile.getHistory().updateCallState(callId, HistoryMemento::RejectedCall);
