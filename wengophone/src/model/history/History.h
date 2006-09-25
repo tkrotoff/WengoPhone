@@ -139,7 +139,7 @@ public:
 	 * Clear entries of the history
 	 * @param state type of entries to remove
 	 */
-	void clear(HistoryMemento::State state = HistoryMemento::Any);
+	void clear(HistoryMemento::State state = HistoryMemento::Any, bool notify = true);
 
 	/**
 	 * return the number of HistoryMemento's.

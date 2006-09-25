@@ -110,9 +110,11 @@ bool History::unserialize(const std::string & data) {
 	return true;
 }
 
-void History::clear(HistoryMemento::State state) {
+void History::clear(HistoryMemento::State state, bool notify) {
 	_collection->clear(state);
-	mementoRemovedEvent(*this, 0);
+	if (notify) {
+		mementoRemovedEvent(*this, 0);
+	}
 }
 
 std::string History::toString() const {
@@ -144,7 +146,7 @@ bool History::load(const std::string & url) {
 		file.close();
 
 		//clear & unserialize the history
-		clear();
+		clear(HistoryMemento::Any, false);
 		unserialize(data);
 		historyLoadedEvent(*this);
 
