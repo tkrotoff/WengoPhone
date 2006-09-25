@@ -28,6 +28,7 @@
 #include <model/chat/ChatHandler.h>
 
 #include <util/Logger.h>
+#include <util/SafeDelete.h>
 #include <thread/ThreadEvent.h>
 
 CChatHandler::CChatHandler(ChatHandler & chatHandler, CUserProfile & cUserProfile)
@@ -41,12 +42,15 @@ CChatHandler::CChatHandler(ChatHandler & chatHandler, CUserProfile & cUserProfil
 }
 
 CChatHandler::~CChatHandler() {
-	//delete _pChatHandler;
+
+	typedef ThreadEvent0<void ()> MyThreadEvent;
+	MyThreadEvent * event = new MyThreadEvent(boost::bind(&PChatHandler::deletePresentation, _pChatHandler));
+	PFactory::postEvent(event);
 }
 
 void CChatHandler::initPresentationThreadSafe() {
-	_pChatHandler = PFactory::getFactory().createPresentationChatHandler(*this);
 
+	_pChatHandler = PFactory::getFactory().createPresentationChatHandler(*this);
 	_chatHandler.newIMChatSessionCreatedEvent += boost::bind(&CChatHandler::newIMChatSessionCreatedEventHandler, this, _1, _2);
 }
 
@@ -78,3 +82,5 @@ void CChatHandler::newIMChatSessionCreatedEventHandlerThreadSafe(IMChatSession &
 void CChatHandler::createSession(IMAccount & imAccount, IMContactSet & imContactSet) {
 	_chatHandler.createSession(imAccount, imContactSet);
 }
+
+
