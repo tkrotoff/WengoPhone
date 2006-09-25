@@ -135,6 +135,7 @@ void PhApiReceiveFileSession::transferFromPeerFinishedEventHandler(PhApiSFPWrapp
 		getFileName().compare(fileName) == 0 &&
 		getFileSize() == (unsigned int)fileSize){
 		fileTransferEvent(*this, IFileSession::IFileSessionEventFileTransferFinished, _imContact, File(getFilePath()+getFileName()));
+		moduleFinishedEvent(*this);
 	}
 }
 
