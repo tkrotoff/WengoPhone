@@ -150,6 +150,8 @@ private Q_SLOTS:
 
 	void closeWindow();
 
+	void languageChanged();
+
 private:
 
 	void initThreadSafe();

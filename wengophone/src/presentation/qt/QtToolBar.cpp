@@ -52,7 +52,6 @@
 
 #include <util/Logger.h>
 
-#include <qtutil/LanguageChangeEventFilter.h>
 #include <qtutil/WidgetBackgroundImage.h>
 #include <qtutil/SafeConnect.h>
 #include <qtutil/Object.h>
@@ -66,9 +65,6 @@ QtToolBar::QtToolBar(QtWengoPhone & qtWengoPhone, Ui::WengoPhoneWindow * qtWengo
 	_cWengoPhone(_qtWengoPhone.getCWengoPhone()) {
 
 	_ui = qtWengoPhoneUi;
-
-
-	LANGUAGE_CHANGE();
 
 	//menuWengo
 	SAFE_CONNECT(_ui->actionShowWengoAccount, SIGNAL(triggered()), SLOT(showWengoAccount()));
@@ -378,13 +374,4 @@ void QtToolBar::showFileTransferWindow() {
 		}
 	}
 	show = !show;
-}
-
-void QtToolBar::languageChanged() {
-#if defined(OS_MACOSX)
-	// Avoids translation of these menus on Mac OS X. Thus Qt
-	// will put these under the Application menu
-	_ui->actionShowConfig->setText("Preferences");
-	_ui->actionShowAbout->setText("About");
-#endif
 }

@@ -28,6 +28,9 @@
 #include <model/webservices/url/WsUrl.h>
 
 #include <qtutil/LanguageChangeEventFilter.h>
+#include <qtutil/SafeConnect.h>
+
+#include <util/SafeDelete.h>
 
 #include <QtGui/QtGui>
 
@@ -41,7 +44,7 @@ QtCreditWidget::QtCreditWidget(CWengoPhone & cWengoPhone, QWidget * parent)
 }
 
 QtCreditWidget::~QtCreditWidget() {
-	delete _ui;
+	OWSAFE_DELETE(_ui);
 }
 
 void QtCreditWidget::initThreadSafe() {
@@ -51,15 +54,15 @@ void QtCreditWidget::initThreadSafe() {
 	_ui->setupUi(_creditWidget);
 
 	//landlineNumberButton
-	connect(_ui->landlineNumberButton, SIGNAL(clicked()), SLOT(landlineNumberClicked()));
+	SAFE_CONNECT(_ui->landlineNumberButton, SIGNAL(clicked()), SLOT(landlineNumberClicked()));
 
 	//callForwardButton
-	connect(_ui->callForwardButton, SIGNAL(clicked()), SLOT(callforwardModeClicked()));
+	SAFE_CONNECT(_ui->callForwardButton, SIGNAL(clicked()), SLOT(callforwardModeClicked()));
 
 	//buyCreditsButton
-	connect(_ui->buyCreditsButton, SIGNAL(clicked()), SLOT(buyCreditsClicked()));
+	SAFE_CONNECT(_ui->buyCreditsButton, SIGNAL(clicked()), SLOT(buyCreditsClicked()));
 
-	LANGUAGE_CHANGE();
+	LANGUAGE_CHANGE(_creditWidget);
 }
 
 QWidget * QtCreditWidget::getWidget() const {

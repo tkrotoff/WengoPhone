@@ -104,10 +104,6 @@ public Q_SLOTS:
 
 	void showFileTransferWindow();
 
-private Q_SLOTS:
-
-	void languageChanged();
-
 private:
 
 	/**

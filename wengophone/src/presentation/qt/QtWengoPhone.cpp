@@ -68,6 +68,7 @@
 #include <qtutil/CloseEventFilter.h>
 #include <qtutil/Widget.h>
 #include <qtutil/SafeConnect.h>
+#include <qtutil/LanguageChangeEventFilter.h>
 
 #include <cutil/global.h>
 #include <thread/Thread.h>
@@ -121,6 +122,8 @@ void QtWengoPhone::initThreadSafe() {
 	qRegisterMetaType<QVariant>("QVariant");
 
 	_wengoPhoneWindow = new QMainWindow(NULL);
+
+	LANGUAGE_CHANGE(_wengoPhoneWindow);
 
 	_ui = new Ui::WengoPhoneWindow();
 	_ui->setupUi(_wengoPhoneWindow);
@@ -698,5 +701,16 @@ void QtWengoPhone::closeWindow() {
 	_wengoPhoneWindow->showMinimized();
 #else
 	_wengoPhoneWindow->hide();
+#endif
+}
+
+void QtWengoPhone::languageChanged() {
+	LOG_DEBUG("retranslate main window ui");
+	_ui->retranslateUi(_wengoPhoneWindow);
+#if defined(OS_MACOSX)
+	// Avoids translation of these menus on Mac OS X. Thus Qt
+	// will put these under the Application menu
+	_ui->actionShowConfig->setText("Preferences");
+	_ui->actionShowAbout->setText("About");
 #endif
 }

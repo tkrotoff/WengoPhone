@@ -30,6 +30,9 @@
 #include <model/phoneline/IPhoneLine.h>
 
 #include <qtutil/LanguageChangeEventFilter.h>
+#include <qtutil/SafeConnect.h>
+
+#include <util/SafeDelete.h>
 
 #include <QtGui/QtGui>
 
@@ -49,7 +52,7 @@ QtEventWidget::QtEventWidget(CWengoPhone & cWengoPhone, CUserProfile & cUserProf
 }
 
 QtEventWidget::~QtEventWidget() {
-	delete _ui;
+	OWSAFE_DELETE(_ui);
 }
 
 void QtEventWidget::initThreadSafe() {
@@ -59,12 +62,12 @@ void QtEventWidget::initThreadSafe() {
 	_ui->setupUi(_eventWidget);
 
 	//missedCallButton
-	connect(_ui->missedCallButton, SIGNAL(clicked()), SLOT(missedCallClicked()));
+	SAFE_CONNECT(_ui->missedCallButton, SIGNAL(clicked()), SLOT(missedCallClicked()));
 
 	//voiceMailButton
-	connect(_ui->voiceMailButton, SIGNAL(clicked()), SLOT(voiceMailClicked()));
+	SAFE_CONNECT(_ui->voiceMailButton, SIGNAL(clicked()), SLOT(voiceMailClicked()));
 
-	LANGUAGE_CHANGE();
+	LANGUAGE_CHANGE(_eventWidget);
 
 	updatePresentation();
 }
