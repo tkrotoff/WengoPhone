@@ -54,13 +54,20 @@ private Q_SLOTS:
 	 * Clean button has been clicked.
 	 */
 	void cleanButtonClicked();
-	
+
 	/**
 	 * Path button has been clicked.
 	 */
 	void pathButtonClicked();
 
+	/**
+	 * A remove button has been clicked.
+	 */
+	void itemRemoveClicked();
+
 private:
+
+	void clean(bool cleanButton);
 
 	void showUploadTab();
 

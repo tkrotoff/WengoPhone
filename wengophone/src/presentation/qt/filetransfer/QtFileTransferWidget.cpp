@@ -27,7 +27,8 @@
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
 
-#include <qtutil/WidgetBackgroundImage.h>
+#include <qtutil/SafeConnect.h>
+#include <util/Logger.h>
 
 #include <QtGui/QtGui>
 
@@ -46,42 +47,56 @@ QtFileTransferWidget::QtFileTransferWidget(QWidget * parent) : QWidget(parent) {
 	}
 
 	//connect signals to slots
-	connect(_ui.cleanButton, SIGNAL(pressed()), this, SLOT(cleanButtonClicked()));
-	connect(_ui.pathButton, SIGNAL(pressed()), this, SLOT(pathButtonClicked()));
-	////
-
-	//install header image
-	//WidgetBackgroundImage::setBackgroundImage(_ui.headerLabel, ":pics/headers/file-tranfer.png", true);
+	SAFE_CONNECT(_ui.cleanButton, SIGNAL(pressed()), SLOT(cleanButtonClicked()));
+	SAFE_CONNECT(_ui.pathButton, SIGNAL(pressed()), SLOT(pathButtonClicked()));
 	////
 }
 
 void QtFileTransferWidget::cleanButtonClicked() {
+	clean(true);
+}
+
+void QtFileTransferWidget::clean(bool cleanButton) {
 
 	if (_ui.tabWidget->currentIndex() == DOWNLOAD_TAB_INDEX) {
-		//_ui.downloadTransferListWidget->clear();
-		//delete items and widgetItem over rows
+
 		for (int i = 0; i < _ui.downloadTransferListWidget->count(); i++) {
 			QListWidgetItem * item = _ui.downloadTransferListWidget->item(i);
 			QtFileTransferDownloadItem * widgetItem = (QtFileTransferDownloadItem*)_ui.downloadTransferListWidget->itemWidget(item);
 			
-			if (!widgetItem->isRunning()) {
-				_ui.downloadTransferListWidget->takeItem(i);
-				delete widgetItem;
+			if (cleanButton) {
+				if (!widgetItem->isRunning()) {
+					_ui.downloadTransferListWidget->takeItem(i);
+					delete widgetItem;
+				}
+			} else {
+				if (widgetItem->removeHasBeenClicked()) {
+					_ui.downloadTransferListWidget->takeItem(i);
+					delete widgetItem;
+				}
 			}
 		}
 
 	} else {
-		//_ui.uploadTransferListWidget->clear();
+
 		for (int i = 0; i < _ui.uploadTransferListWidget->count(); i++) {
 			QListWidgetItem * item = _ui.uploadTransferListWidget->item(i);
 			QtFileTransferUploadItem * widgetItem = (QtFileTransferUploadItem*)_ui.uploadTransferListWidget->itemWidget(item);
 			
-			if (!widgetItem->isRunning()) {
-				_ui.uploadTransferListWidget->takeItem(i);
-				delete widgetItem;
+			if (cleanButton) {
+				if (!widgetItem->isRunning()) {
+					_ui.uploadTransferListWidget->takeItem(i);
+					delete widgetItem;
+				}
+			} else {
+				if (widgetItem->removeHasBeenClicked()) {
+					_ui.uploadTransferListWidget->takeItem(i);
+					delete widgetItem;
+				}
 			}
 		}
 	}
+
 }
 
 void QtFileTransferWidget::pathButtonClicked() {
@@ -97,6 +112,7 @@ void QtFileTransferWidget::pathButtonClicked() {
 void QtFileTransferWidget::addReceiveItem(ReceiveFileSession * fileSession) {
 
 	QtFileTransferDownloadItem * fileTransferItem = new QtFileTransferDownloadItem(this, fileSession, _downloadFolder);
+	SAFE_CONNECT(fileTransferItem, SIGNAL(removeClicked()), SLOT(itemRemoveClicked()));
 	QListWidgetItem * item = new QListWidgetItem(_ui.downloadTransferListWidget);
 	item->setSizeHint(fileTransferItem->minimumSizeHint());
 	_ui.downloadTransferListWidget->setItemWidget(item, fileTransferItem);
@@ -110,6 +126,7 @@ void QtFileTransferWidget::addSendItem(SendFileSession * fileSession,
 
 	QtFileTransferUploadItem * fileTransferItem = new QtFileTransferUploadItem(this, fileSession,
 			QString::fromStdString(filename), contactId, contact);
+	SAFE_CONNECT(fileTransferItem, SIGNAL(removeClicked()), SLOT(itemRemoveClicked()));
 	QListWidgetItem * item = new QListWidgetItem(_ui.uploadTransferListWidget);
 	item->setSizeHint(fileTransferItem->minimumSizeHint());
 	_ui.uploadTransferListWidget->setItemWidget(item, fileTransferItem);
@@ -134,4 +151,8 @@ void QtFileTransferWidget::showDownloadTab() {
 void QtFileTransferWidget::showUploadTab() {
 	_ui.tabWidget->setCurrentIndex(UPLOAD_TAB_INDEX);
 	_ui.uploadTransferListWidget->scrollToBottom();
+}
+
+void QtFileTransferWidget::itemRemoveClicked() {
+	clean(false);
 }

@@ -60,6 +60,10 @@ public:
 	 */
 	virtual bool isRunning() const = 0;
 
+	bool removeHasBeenClicked() {
+		return _removeClicked;
+	}
+
 Q_SIGNALS:
 
 	void stateChangeEvent(const QString & state);
@@ -68,6 +72,8 @@ Q_SIGNALS:
 
 	// the int is a IFileSession::IFileSessionEvent
 	void updateStateEvent(int event);
+
+	void removeClicked();
 
 private Q_SLOTS:
 
@@ -83,7 +89,10 @@ private Q_SLOTS:
 	 */
 	void setState(const QString & state);
 
-	// the int is a IFileSession::IFileSessionEvent
+	/**
+	 * Update state.
+	 * @param event a IFileSession::IFileSessionEvent
+	 */
 	void updateState(int event);
 
 protected Q_SLOTS:
@@ -170,6 +179,8 @@ protected:
 
 	/** complete filename */
 	QString _filename;
+
+	bool _removeClicked;
 
 	Ui::FileTransferItem _ui;
 };

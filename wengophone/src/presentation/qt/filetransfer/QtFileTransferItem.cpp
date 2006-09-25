@@ -35,6 +35,8 @@ QtFileTransferItem::QtFileTransferItem(QWidget * parent, Type type) : QWidget(pa
 	updateButtonsInProgress();
 	////
 
+	_removeClicked = false;
+
 	// SIGNAL/SLOT for thread safe
 	SAFE_CONNECT(this, SIGNAL(progressChangeEvent(int)),
 		SLOT(setProgress(int)));
@@ -118,6 +120,8 @@ void QtFileTransferItem::disconnectButtons() {
 
 void QtFileTransferItem::remove() {
 	//TODO:
+	_removeClicked = true;
+	removeClicked();
 }
 
 void QtFileTransferItem::open() {
