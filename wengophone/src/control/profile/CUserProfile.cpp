@@ -50,6 +50,7 @@
 
 #include <thread/ThreadEvent.h>
 #include <util/Logger.h>
+#include <util/SafeDelete.h>
 
 CUserProfile::CUserProfile(UserProfile & userProfile, CWengoPhone & cWengoPhone)
 	: _userProfile(userProfile),
