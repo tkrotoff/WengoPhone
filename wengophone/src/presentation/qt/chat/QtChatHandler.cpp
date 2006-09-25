@@ -63,5 +63,7 @@ void QtChatHandler::deletePresentation() {
 	// we should delete the QtChatWindow
 	// but it crashes in QtEmoticonsManager::getQtEmoticonList
 	/* delete(this); */
-	_qtChatWindow->hide();
+	if (_qtChatWindow) {
+		_qtChatWindow->hide();
+	}
 }
