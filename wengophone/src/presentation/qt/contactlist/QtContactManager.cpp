@@ -154,7 +154,7 @@ void QtContactManager::closeUserInfo() {
 			//It's a group
 			return;
 		}
-		_tree->closePersistentEditor(_previous, 0);
+		_tree->closePersistentEditor(_previous);
 		ul->setOpenStatus(_previous->text(0), false);
 		_previous->setSizeHint(0, QSize(-1, ul->getHeight(_previous->text(0))));
 		_previous = NULL;

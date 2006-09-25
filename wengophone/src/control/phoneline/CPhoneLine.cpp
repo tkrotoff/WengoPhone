@@ -30,6 +30,7 @@
 #include <model/config/Config.h>
 
 #include <util/Logger.h>
+#include <util/SafeDelete.h>
 
 CPhoneLine::CPhoneLine(IPhoneLine & phoneLine, CWengoPhone & cWengoPhone)
 	: _phoneLine(phoneLine),
@@ -43,7 +44,7 @@ CPhoneLine::CPhoneLine(IPhoneLine & phoneLine, CWengoPhone & cWengoPhone)
 }
 
 CPhoneLine::~CPhoneLine() {
-	delete _pPhoneLine;
+	OWSAFE_DELETE(_pPhoneLine);
 }
 
 int CPhoneLine::makeCall(const std::string & phoneNumber) {

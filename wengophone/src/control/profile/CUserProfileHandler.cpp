@@ -31,6 +31,7 @@
 
 #include <util/SafeDelete.h>
 #include <thread/ThreadEvent.h>
+#include <util/SafeDelete.h>
 
 CUserProfileHandler::CUserProfileHandler(UserProfileHandler & userProfileHandler, CWengoPhone & cWengoPhone)
 	: _userProfileHandler(userProfileHandler),
@@ -53,13 +54,8 @@ CUserProfileHandler::CUserProfileHandler(UserProfileHandler & userProfileHandler
 }
 
 CUserProfileHandler::~CUserProfileHandler() {
-	if (_pUserProfileHandler) {
-		delete _pUserProfileHandler;
-	}
-
-	if (_cUserProfile) {
-		delete _cUserProfile;
-	}
+	OWSAFE_DELETE(_pUserProfileHandler);
+	OWSAFE_DELETE(_cUserProfile);
 }
 
 std::vector<std::string> CUserProfileHandler::getUserProfileNames() {
@@ -127,9 +123,7 @@ WengoAccount CUserProfileHandler::getWengoAccountOfUserProfile(const std::string
 		result = *userProfile->getWengoAccount();
 	}
 
-	if (userProfile) {
-		delete userProfile;
-	}
+	OWSAFE_DELETE(userProfile);
 
 	return result;
 }

@@ -114,35 +114,34 @@ CUserProfile::CUserProfile(UserProfile & userProfile, CWengoPhone & cWengoPhone)
 }
 
 CUserProfile::~CUserProfile() {
-	if (_pUserProfile) {
-		delete _pUserProfile;
-		_pUserProfile = NULL;
-	}
+	// Trackable seems to not work on some system
+	// (crashes appears on an Ubuntu Dapper. See Ticket #964)
+	// Events unregistering must be done by end.
+	_userProfile.wsDirectoryCreatedEvent -=
+		boost::bind(&CUserProfile::wsDirectoryCreatedEventHandler, this, _1, _2);
+	_userProfile.phoneLineCreatedEvent -=
+		boost::bind(&CUserProfile::phoneLineCreatedEventHandler, this, _1, _2);
+	_userProfile.wsSmsCreatedEvent -=
+		boost::bind(&CUserProfile::wsSmsCreatedEventHandler, this, _1, _2);
+	_userProfile.wsSoftUpdateCreatedEvent -=
+		boost::bind(&CUserProfile::wsSoftUpdateCreatedEventHandler, this, _1, _2);
+	_userProfile.wsCallForwardCreatedEvent -=
+	  boost::bind(&CUserProfile::wsCallForwardCreatedEventHandler, this, _1, _2);
+	_userProfile.loginStateChangedEvent -=
+		boost::bind(&CUserProfile::loginStateChangedEventHandler, this, _1, _2);
+	_userProfile.networkDiscoveryStateChangedEvent -=
+		boost::bind(&CUserProfile::networkDiscoveryStateChangedEventHandler, this, _1, _2);
+	_userProfile.getHistory().historyLoadedEvent -=
+		boost::bind(&CUserProfile::historyLoadedEventHandler, this, _1);
+	_userProfile.getPresenceHandler().authorizationRequestEvent -=
+		boost::bind(&CUserProfile::authorizationRequestEventHandler, this, _1, _2, _3);
 
-	if (_cWsDirectory) {
-		delete _cWsDirectory;
-		_cWsDirectory = NULL;
-	}
-
-	if (_cHistory) {
-		delete _cHistory;
-		_cHistory = NULL;
-	}
-
-	if (_cSms) {
-		delete _cSms;
-		_cSms = NULL;
-	}
-
-	if (_cSoftUpdate) {
-		delete _cSoftUpdate;
-		_cSoftUpdate = NULL;
-	}
-
-	if (_cPhoneLine) {
-		delete _cPhoneLine;
-		_cPhoneLine = NULL;
-	}
+	OWSAFE_DELETE(_pUserProfile);
+	OWSAFE_DELETE(_cWsDirectory);
+	OWSAFE_DELETE(_cHistory);
+	OWSAFE_DELETE(_cSms);
+	OWSAFE_DELETE(_cSoftUpdate);
+	OWSAFE_DELETE(_cPhoneLine);
 }
 
 void CUserProfile::loginStateChangedEventHandler(SipAccount & sender,
