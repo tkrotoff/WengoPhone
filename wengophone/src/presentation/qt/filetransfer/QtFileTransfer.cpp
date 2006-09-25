@@ -46,8 +46,8 @@ QtFileTransfer::QtFileTransfer(QObject * parent, CoIpManager * coIpManager)
 }
 
 QtFileTransfer::~QtFileTransfer() {
-		_qtFileTransferWidget->hide();
-		delete _qtFileTransferWidget;
+	_qtFileTransferWidget->hide();
+	delete _qtFileTransferWidget;
 }
 
 void QtFileTransfer::newReceiveFileSessionCreatedEventHandler(
@@ -99,9 +99,18 @@ void QtFileTransfer::newReceiveFileSessionCreatedEventHandlerSlot(ReceiveFileSes
 
 		// here we're sure to have a download folder,
 		// but we must check if the file already exists.
-		if (isFileInDir(downloadFolder, QString::fromStdString(fileSession->getFileName()))) {
-			fileSession->stop();
-			OWSAFE_DELETE(fileSession);
+		if (isFileInDir(downloadFolder, filename)) {
+			
+			//TODO: add a question to the user
+			if (QMessageBox::question(_qtFileTransferWidget, tr("Overwrite File?"),
+					tr("A file called %1 already exists."
+					"Do you want to overwrite it?").arg(filename),
+					tr("&Yes"), tr("&No"), QString(), 0, 1)) {
+
+				fileSession->stop();
+				OWSAFE_DELETE(fileSession);
+				return;
+			}
 		}
 
 		_qtFileTransferWidget->setDownloadFolder(downloadFolder);
@@ -136,8 +145,9 @@ bool QtFileTransfer::isFileInDir(const QString & dirname, const QString & filena
 	QDir dir(dirname);
 	if (dir.exists()) {
 
-		QStringList dirList = dir.entryList(QStringList(), QDir::Files);
+		QStringList dirList = dir.entryList(QDir::Files);
 		for (int i = 0; i < dirList.size(); i++) {
+			LOG_DEBUG("filename: " + dirList[i].toStdString());
 			if (dirList[i] == filename) {
 				return true;
 			}
