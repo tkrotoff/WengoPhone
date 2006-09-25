@@ -58,17 +58,29 @@ QtFileTransferWidget::QtFileTransferWidget(QWidget * parent) : QWidget(parent) {
 void QtFileTransferWidget::cleanButtonClicked() {
 
 	if (_ui.tabWidget->currentIndex() == DOWNLOAD_TAB_INDEX) {
-		_ui.downloadTransferListWidget->clear();
+		//_ui.downloadTransferListWidget->clear();
 		//delete items and widgetItem over rows
 		for (int i = 0; i < _ui.downloadTransferListWidget->count(); i++) {
 			QListWidgetItem * item = _ui.downloadTransferListWidget->item(i);
 			QtFileTransferDownloadItem * widgetItem = (QtFileTransferDownloadItem*)_ui.downloadTransferListWidget->itemWidget(item);
-			_ui.downloadTransferListWidget->takeItem(i);
-			delete widgetItem;
+			
+			if (!widgetItem->isRunning()) {
+				_ui.downloadTransferListWidget->takeItem(i);
+				delete widgetItem;
+			}
 		}
 
 	} else {
-		_ui.uploadTransferListWidget->clear();
+		//_ui.uploadTransferListWidget->clear();
+		for (int i = 0; i < _ui.uploadTransferListWidget->count(); i++) {
+			QListWidgetItem * item = _ui.uploadTransferListWidget->item(i);
+			QtFileTransferUploadItem * widgetItem = (QtFileTransferUploadItem*)_ui.uploadTransferListWidget->itemWidget(item);
+			
+			if (!widgetItem->isRunning()) {
+				_ui.uploadTransferListWidget->takeItem(i);
+				delete widgetItem;
+			}
+		}
 	}
 }
 

@@ -43,6 +43,13 @@ public:
 	QtFileTransferUploadItem(QWidget * parent, SendFileSession * fileSession, 
 		const QString & filename, const std::string & contactId, const std::string & contact);
 
+	/**
+	 * @see QtFileTransferItem::isRunning().
+	 */
+	bool isRunning() const {
+		return (_sendFileSession != NULL);
+	}
+
 private Q_SLOTS:
 
 	/**

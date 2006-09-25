@@ -43,6 +43,13 @@ public:
 	 */
 	QtFileTransferDownloadItem(QWidget * parent, ReceiveFileSession * fileSession, const QString & path);
 
+	/**
+	 * @see QtFileTransferItem::isRunning().
+	 */
+	bool isRunning() const {
+		return (_receiveFileSession != NULL);
+	}
+
 private Q_SLOTS:
 
 	/**

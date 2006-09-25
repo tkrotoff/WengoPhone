@@ -54,6 +54,12 @@ public:
 	 */
 	QtFileTransferItem(QWidget * parent, Type type);
 
+	/**
+	 * Returns true if the transfer is not finished.
+	 * @return true if finished otherwise false.
+	 */
+	virtual bool isRunning() const = 0;
+
 Q_SIGNALS:
 
 	void stateChangeEvent(const QString & state);
@@ -88,7 +94,7 @@ protected Q_SLOTS:
 	void remove();
 
 	/**
-	 * TODO:
+	 * Open the file with the associated application.
 	 */
 	void open();
 
