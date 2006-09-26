@@ -84,6 +84,8 @@ public Q_SLOTS:
 
 	void clearHistoryMissedCalls();
 
+	void clearHistoryRejectedCalls();
+
 	void clearHistoryChatSessions();
 
 	void clearHistorySms();

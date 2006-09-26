@@ -25,6 +25,7 @@
 #include "QtHistoryItem.h"
 
 class HistoryTreeEventManager;
+class QtToolBar;
 
 namespace Ui { class HistoryWidget; }
 
@@ -75,17 +76,23 @@ public:
 
 	void resizeColumns();
 
+	void setQtToolBar(QtToolBar * qtToolBar) {
+		_qtToolBar = qtToolBar;
+	}
+
 public Q_SLOTS:
 
 	void showSMSCall(bool checked);
 
 	void showOutGoingCall(bool checked);
 
-	void showIncoming(bool checked);
+	void showIncomingCall(bool checked);
 
 	void showChat(bool checked);
 
 	void showMissedCall(bool checked);
+
+	void showRejectedCall(bool checked);
 
 	void showAll(bool checked);
 
@@ -134,6 +141,8 @@ private:
 	QMenu * _popupMenu;
 
 	QtHistoryItem * _currentItem;
+
+	QtToolBar * _qtToolBar;
 
 	HistoryTreeEventManager * _historyTreeEventManager;
 };

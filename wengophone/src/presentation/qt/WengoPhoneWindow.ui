@@ -129,7 +129,7 @@
      <x>0</x>
      <y>0</y>
      <width>310</width>
-     <height>19</height>
+     <height>29</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuHelp" >
@@ -191,10 +191,16 @@
      <addaction name="actionClearOutgoingCalls" />
      <addaction name="actionClearIncomingCalls" />
      <addaction name="actionClearMissedCalls" />
+     <addaction name="actionClearRejectedCalls" />
      <addaction name="actionClearChatSessions" />
      <addaction name="actionClearSMS" />
      <addaction name="separator" />
      <addaction name="actionClearAll" />
+    </widget>
+    <widget class="QMenu" name="menuType_Here" >
+     <property name="title" >
+      <string>Type Here</string>
+     </property>
     </widget>
     <addaction name="actionShowVolumePanel" />
     <addaction name="actionShowFileTransfer" />
@@ -208,7 +214,16 @@
    <addaction name="menuTools" />
    <addaction name="menuHelp" />
   </widget>
-  <widget class="QStatusBar" name="statusBar" />
+  <widget class="QStatusBar" name="statusBar" >
+   <property name="geometry" >
+    <rect>
+     <x>0</x>
+     <y>495</y>
+     <width>310</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
   <widget class="QToolBar" name="toolBar" >
    <property name="windowTitle" >
     <string>ToolBar</string>
@@ -471,6 +486,11 @@
    </property>
    <property name="shortcut" >
     <string/>
+   </property>
+  </action>
+  <action name="actionClearRejectedCalls" >
+   <property name="text" >
+    <string>Rejected Calls</string>
    </property>
   </action>
  </widget>

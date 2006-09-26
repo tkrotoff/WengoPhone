@@ -106,6 +106,7 @@ QtToolBar::QtToolBar(QtWengoPhone & qtWengoPhone, Ui::WengoPhoneWindow * qtWengo
 	SAFE_CONNECT(_ui->actionClearOutgoingCalls, SIGNAL(triggered()), SLOT(clearHistoryOutgoingCalls()));
 	SAFE_CONNECT(_ui->actionClearIncomingCalls, SIGNAL(triggered()), SLOT(clearHistoryIncomingCalls()));
 	SAFE_CONNECT(_ui->actionClearMissedCalls, SIGNAL(triggered()), SLOT(clearHistoryMissedCalls()));
+	SAFE_CONNECT(_ui->actionClearRejectedCalls, SIGNAL(triggered()), SLOT(clearHistoryRejectedCalls()));
 	SAFE_CONNECT(_ui->actionClearChatSessions, SIGNAL(triggered()), SLOT(clearHistoryChatSessions()));
 	SAFE_CONNECT(_ui->actionClearSMS, SIGNAL(triggered()), SLOT(clearHistorySms()));
 	SAFE_CONNECT(_ui->actionClearAll, SIGNAL(triggered()), SLOT(clearHistoryAll()));
@@ -258,6 +259,13 @@ void QtToolBar::clearHistoryMissedCalls() {
 	if (_cWengoPhone.getCUserProfileHandler().getCUserProfile() &&
 		_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCHistory()) {
 		_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCHistory()->clear(HistoryMemento::MissedCall);
+	}
+}
+
+void QtToolBar::clearHistoryRejectedCalls() {
+	if (_cWengoPhone.getCUserProfileHandler().getCUserProfile() &&
+		_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCHistory()) {
+		_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCHistory()->clear(HistoryMemento::RejectedCall);
 	}
 }
 

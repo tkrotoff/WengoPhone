@@ -24,7 +24,9 @@
 
 #include <model/history/HistoryMemento.h>
 #include <control/history/CHistory.h>
+#include <presentation/qt/QtToolBar.h>
 
+#include <qtutil/SafeConnect.h>
 #include <util/Logger.h>
 #include <util/SafeDelete.h>
 
@@ -63,15 +65,15 @@ QtHistoryWidget::QtHistoryWidget(QWidget * parent)
 #endif
 
 	//treeWidget
-	connect(_ui->treeWidget, SIGNAL(itemDoubleClicked(QTreeWidgetItem *, int)), SLOT(itemDoubleClicked(QTreeWidgetItem *, int)));
-	connect(_ui->treeWidget, SIGNAL(itemClicked(QTreeWidgetItem *,int)), SLOT(itemClicked()));
+	SAFE_CONNECT(_ui->treeWidget, SIGNAL(itemDoubleClicked(QTreeWidgetItem *, int)), SLOT(itemDoubleClicked(QTreeWidgetItem *, int)));
+	SAFE_CONNECT(_ui->treeWidget, SIGNAL(itemClicked(QTreeWidgetItem *,int)), SLOT(itemClicked()));
 
 	//header
 	_ui->treeWidget->header()->setClickable(true);
 	_ui->treeWidget->setSortingEnabled(false);
 	_ui->treeWidget->header()->resizeSection(0, 150);
 	_ui->treeWidget->header()->setStretchLastSection(true);
-	connect(_ui->treeWidget->header(), SIGNAL(sectionClicked(int)), SLOT(headerClicked(int)));
+	SAFE_CONNECT(_ui->treeWidget->header(), SIGNAL(sectionClicked(int)), SLOT(headerClicked(int)));
 
 	_historyTreeEventManager = new HistoryTreeEventManager(_ui->treeWidget, this);
 
@@ -79,25 +81,28 @@ QtHistoryWidget::QtHistoryWidget(QWidget * parent)
 	_menu = new QMenu();
 
 	QAction * action = _menu->addAction(tr("Outgoing SMS"));
-	connect(action, SIGNAL(triggered(bool)), SLOT(showSMSCall(bool)));
+	SAFE_CONNECT(action, SIGNAL(triggered(bool)), SLOT(showSMSCall(bool)));
 
 	action = _menu->addAction(tr("Outgoing call"));
-	connect(action, SIGNAL(triggered(bool)), SLOT(showOutGoingCall(bool)));
+	SAFE_CONNECT(action, SIGNAL(triggered(bool)), SLOT(showOutGoingCall(bool)));
 
 	action = _menu->addAction(tr("Missed call"));
-	connect(action, SIGNAL(triggered(bool)), SLOT(showMissedCall(bool)));
+	SAFE_CONNECT(action, SIGNAL(triggered(bool)), SLOT(showMissedCall(bool)));
 
 	action = _menu->addAction(tr("Incoming call"));
-	connect(action, SIGNAL(triggered(bool)), SLOT(showIncoming(bool)));
+	SAFE_CONNECT(action, SIGNAL(triggered(bool)), SLOT(showIncomingCall(bool)));
+
+	action = _menu->addAction(tr("Rejected call"));
+	SAFE_CONNECT(action, SIGNAL(triggered(bool)), SLOT(showRejectedCall(bool)));
 
 	// TODO: uncomment when chat will be historized
 	/*
 	action = _menu->addAction(tr("Chat"));
-	connect(action, SIGNAL(triggered(bool)), SLOT(showChat(bool)));
+	SAFE_CONNECT(action, SIGNAL(triggered(bool)), SLOT(showChat(bool)));
 	*/
 
 	action = _menu->addAction(tr("All"));
-	connect(action, SIGNAL(triggered(bool)), SLOT(showAll(bool)));
+	SAFE_CONNECT(action, SIGNAL(triggered(bool)), SLOT(showAll(bool)));
 
 	showAll(true);
 
@@ -205,7 +210,7 @@ void QtHistoryWidget::showOutGoingCall(bool) {
 	showOnlyItemOfType((int)HistoryMemento::OutgoingCall);
 }
 
-void QtHistoryWidget::showIncoming(bool) {
+void QtHistoryWidget::showIncomingCall(bool) {
 	showItem(tr("Incoming call"));
 	showOnlyItemOfType((int)HistoryMemento::IncomingCall);
 }
@@ -218,6 +223,11 @@ void QtHistoryWidget::showChat(bool) {
 void QtHistoryWidget::showMissedCall(bool) {
 	showItem(tr("Missed call"));
 	showOnlyItemOfType((int)HistoryMemento::MissedCall);
+}
+
+void QtHistoryWidget::showRejectedCall(bool checked) {
+	showItem(tr("Rejected call"));
+	showOnlyItemOfType((int)HistoryMemento::RejectedCall);
 }
 
 void QtHistoryWidget::showAll(bool) {
@@ -234,12 +244,12 @@ void QtHistoryWidget::showPopupMenu(const QPoint & pos) {
 	QTreeWidgetItem * item = _ui->treeWidget->itemAt(pos);
 	QtHistoryItem * hItem = (QtHistoryItem *) item;
 
+	_popupMenu->clear();
 	if (hItem) {
 		_currentItem = hItem;
-		_popupMenu->clear();
 
 		QAction * action = _popupMenu->addAction(QIcon(":/pics/actions/delete.png"), tr("Erase this entry"));
-		connect(action, SIGNAL(triggered(bool)), SLOT(eraseEntry()));
+		SAFE_CONNECT(action, SIGNAL(triggered(bool)), SLOT(eraseEntry()));
 
 		switch (_currentItem->getItemType()) {
 			case QtHistoryItem::Sms:
@@ -256,7 +266,27 @@ void QtHistoryWidget::showPopupMenu(const QPoint & pos) {
 				break;
 		}
 
-		connect(action, SIGNAL(triggered(bool)), SLOT(replayEntry()));
+		SAFE_CONNECT(action, SIGNAL(triggered(bool)), SLOT(replayEntry()));
+
+		QCursor cursor;
+		_popupMenu->popup(cursor.pos());
+
+	} else if (_qtToolBar) {
+
+		QAction * action = _popupMenu->addAction(tr("Clear Outgoing Calls"));
+		SAFE_CONNECT_RECEIVER(action, SIGNAL(triggered()), _qtToolBar, SLOT(clearHistoryOutgoingCalls()));
+		action = _popupMenu->addAction(tr("Clear Incoming Calls"));
+		SAFE_CONNECT_RECEIVER(action, SIGNAL(triggered()), _qtToolBar, SLOT(clearHistoryIncomingCalls()));
+		action = _popupMenu->addAction(tr("Clear Missed Calls"));
+		SAFE_CONNECT_RECEIVER(action, SIGNAL(triggered()), _qtToolBar, SLOT(clearHistoryMissedCalls()));
+		action = _popupMenu->addAction(tr("Clear Rejected Calls"));
+		SAFE_CONNECT_RECEIVER(action, SIGNAL(triggered()), _qtToolBar, SLOT(clearHistoryRejectedCalls()));
+		//action = _popupMenu->addAction(tr("Clear Chat Session"));
+		//SAFE_CONNECT_RECEIVER(action, SIGNAL(triggered()), _qtToolBar, SLOT(clearHistoryChatSessions()));
+		action = _popupMenu->addAction(tr("Clear SMS"));
+		SAFE_CONNECT_RECEIVER(action, SIGNAL(triggered()), _qtToolBar, SLOT(clearHistorySms()));
+		action = _popupMenu->addAction(tr("Clear All"));
+		SAFE_CONNECT_RECEIVER(action, SIGNAL(triggered()), _qtToolBar, SLOT(clearHistoryAll()));
 
 		QCursor cursor;
 		_popupMenu->popup(cursor.pos());
