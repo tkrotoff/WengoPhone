@@ -375,14 +375,15 @@ void QtChatWidget::setIMChatSession(IMChatSession * imChatSession) {
 	_imChatSession = imChatSession;
 	_emoticonsWidget->initButtons(QtChatUtils::getProtocol(_imChatSession->getIMChat().getIMAccount().getProtocol()));
 
+	updateAvatarFrame();
+	updateUserAvatar();
+
 	_imChatSession->contactAddedEvent +=
 		boost::bind(&QtChatWidget::contactAddedEventHandler, this, _1, _2);
 	_imChatSession->contactRemovedEvent +=
 		boost::bind(&QtChatWidget::contactRemovedEventHandler, this, _1, _2);
 	_imChatSession->changeTypingState(IMChat::TypingStateNotTyping);
 
-	updateAvatarFrame();
-	updateUserAvatar();
 }
 
 void QtChatWidget::chatEditTextChanged() {
