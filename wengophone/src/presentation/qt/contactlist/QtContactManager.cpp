@@ -45,6 +45,9 @@
 #include <util/Logger.h>
 #include <util/SafeDelete.h>
 
+#include <qtutil/SafeConnect.h>
+#include <qtutil/LanguageChangeEventFilter.h>
+
 #include <QtGui/QtGui>
 
 QtContactManager::QtContactManager(CUserProfile & cUserProfile, CWengoPhone & cWengoPhone,
@@ -54,7 +57,8 @@ QtContactManager::QtContactManager(CUserProfile & cUserProfile, CWengoPhone & cW
 	_cWengoPhone(cWengoPhone),
 	_qtContactList(qtContactList) {
 
-	retranslateUi();
+	LANGUAGE_CHANGE(this);
+	languageChanged();
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	_tree = target;
@@ -77,20 +81,18 @@ QtContactManager::QtContactManager(CUserProfile & cUserProfile, CWengoPhone & cW
 	target->setMouseTracking(true);
 	QtContactTreeKeyFilter * keyFilter = new QtContactTreeKeyFilter(this, target);
 
-	connect(target, SIGNAL(itemSelectionChanged()), this, SLOT(treeViewSelectionChanged()));
-	connect(target, SIGNAL(itemClicked(QTreeWidgetItem *, int)), this, SLOT(itemClicked(QTreeWidgetItem *, int)));
+	SAFE_CONNECT(target, SIGNAL(itemSelectionChanged()), SLOT(treeViewSelectionChanged()));
+	SAFE_CONNECT(target, SIGNAL(itemClicked(QTreeWidgetItem *, int)), SLOT(itemClicked(QTreeWidgetItem *, int)));
 
-	connect(keyFilter, SIGNAL(openItem(QTreeWidgetItem *)), SLOT(openUserInfo(QTreeWidgetItem *)));
-	connect(keyFilter, SIGNAL(closeItem(QTreeWidgetItem *)), SLOT(closeUserInfo()));
-	connect(keyFilter, SIGNAL(deleteItem(QTreeWidgetItem *)), SLOT(deleteContact()));
-	connect(keyFilter, SIGNAL(enterPressed(QTreeWidgetItem *)),SLOT(defaultAction(QTreeWidgetItem *)));
+	SAFE_CONNECT(keyFilter, SIGNAL(openItem(QTreeWidgetItem *)), SLOT(openUserInfo(QTreeWidgetItem *)));
+	SAFE_CONNECT(keyFilter, SIGNAL(closeItem(QTreeWidgetItem *)), SLOT(closeUserInfo()));
+	SAFE_CONNECT(keyFilter, SIGNAL(deleteItem(QTreeWidgetItem *)), SLOT(deleteContact()));
+	SAFE_CONNECT(keyFilter, SIGNAL(enterPressed(QTreeWidgetItem *)),SLOT(defaultAction(QTreeWidgetItem *)));
 
 	QtWengoPhone * qtWengoPhone = (QtWengoPhone *) _cWengoPhone.getPresentation();
 
-	if (!connect(this, SIGNAL(inviteToConferenceClicked(QString, PhoneCall *)),
-		qtWengoPhone, SLOT(addToConference(QString, PhoneCall *)))) {
-		LOG_FATAL("unable to connect signal");
-	}
+	SAFE_CONNECT_RECEIVER(this, SIGNAL(inviteToConferenceClicked(QString, PhoneCall *)),
+		qtWengoPhone, SLOT(addToConference(QString, PhoneCall *)));
 }
 
 void QtContactManager::startSMS(bool) {
@@ -460,7 +462,7 @@ void QtContactManager::redrawContacts() {
 				group = new QTreeWidgetItem(_tree);
 				if (groupsAreHidden()) {
 					group->setText(0, QtContactList::DEFAULT_GROUP_NAME);
-				}else{
+				} else {
 					group->setText(0, QString::fromStdString(contactGroupId));
 				}
 				_tree->setItemExpanded(group, true);
@@ -494,7 +496,7 @@ QMenu * QtContactManager::createConferenceMenu() {
 				QtConferenceAction *action=new
 					QtConferenceAction(QString::fromStdString((* it)->getPeerSipAddress().getUserName()), menu);
 				action->setPhoneCall((* it));
-				connect(action, SIGNAL(triggered(bool)), SLOT(inviteToConference()));
+				SAFE_CONNECT(action, SIGNAL(triggered(bool)), SLOT(inviteToConference()));
 				menu->addAction(action);
 			}
 		}
@@ -531,41 +533,40 @@ QMenu * QtContactManager::createMenu() {
 		QMenu * callMenu = menu->addMenu(QIcon(":/pics/actions/accept-phone.png"), _trStringCall);
 		if (! ul->getMobilePhone(contactId).isEmpty()) {
 			action = callMenu->addAction( _trStringMobilePhone);
-			connect(action, SIGNAL(triggered(bool)), SLOT(startMobileCall(bool)));
+			SAFE_CONNECT(action, SIGNAL(triggered(bool)), SLOT(startMobileCall(bool)));
 		}
 
 		if (!ul->getHomePhone(contactId).isEmpty()) {
 			action = callMenu->addAction(_trStringHomePhone);
-			connect(action, SIGNAL(triggered(bool)), SLOT(startHomeCall(bool)));
+			SAFE_CONNECT(action, SIGNAL(triggered(bool)), SLOT(startHomeCall(bool)));
 		}
 
 		if (!ul->getWorkPhone(contactId).isEmpty()) {
 			action = callMenu->addAction(_trStringWorkPhone);
-			connect(action, SIGNAL(triggered(bool)), SLOT(startWorkCall(bool)));
+			SAFE_CONNECT(action, SIGNAL(triggered(bool)), SLOT(startWorkCall(bool)));
 		}
 
 		if (!ul->getWengoPhoneNumber(contactId).isEmpty()) {
 			action = callMenu->addAction(_trStringWengoPhone);
-			connect(action, SIGNAL(triggered(bool)), SLOT(startWengoCall(bool)));
+			SAFE_CONNECT(action, SIGNAL(triggered(bool)), SLOT(startWengoCall(bool)));
 		}
 	}
 	action = menu->addAction(QIcon(":/pics/actions/chat.png"), _trStringStartChat);
-	connect(action, SIGNAL(triggered(bool)), SLOT(startChat(bool)));
+	SAFE_CONNECT(action, SIGNAL(triggered(bool)), SLOT(startChat(bool)));
 	action = menu->addAction(QIcon(":/pics/actions/send-sms-16.png"), _trStringSendSMS);
-	connect(action, SIGNAL(triggered(bool)), SLOT(startSMS(bool)));
+	SAFE_CONNECT(action, SIGNAL(triggered(bool)), SLOT(startSMS(bool)));
 
 	//FIXME Desactivated for the moment due to a crash
 	//menu->addMenu(createConferenceMenu());
 
 	menu->addSeparator();
-	action = menu->addAction(QIcon(":/pics/actions/edit-contact.png"), _trStringEditContact);
-	connect(action, SIGNAL(triggered(bool)), this, SLOT(editContact(bool)));
-	action = menu->addAction(QIcon(":/pics/actions/delete-contact.png"), _trStringDeleteContact);
-	connect(action, SIGNAL(triggered(bool)), this, SLOT(deleteContact()));
+	action = menu->addAction(_trStringEditContact);
+	SAFE_CONNECT(action, SIGNAL(triggered(bool)), SLOT(editContact(bool)));
+	action = menu->addAction(_trStringDeleteContact);
+	SAFE_CONNECT(action, SIGNAL(triggered(bool)), SLOT(deleteContact()));
 	//menu->addSeparator();
 	//menu->addAction(_trStringBlockContact);
 	//menu->addAction(_trStringForwardToCellPhone);
-	menu->setWindowOpacity(0.97);
 
 	return menu;
 }
@@ -574,7 +575,7 @@ void QtContactManager::startMobileCall(bool) {
 	QtContactListManager * ul = QtContactListManager::getInstance();
 	QTreeWidgetItem * item = _tree->currentItem();
 	if (ul && item) {
-		QtContact *qtContact = ul->getContact(item->text(0));
+		QtContact * qtContact = ul->getContact(item->text(0));
 		qtContact->startCall(qtContact->getMobilePhone());
 	}
 }
@@ -583,7 +584,7 @@ void QtContactManager::startHomeCall(bool) {
 	QtContactListManager * ul = QtContactListManager::getInstance();
 	QTreeWidgetItem * item = _tree->currentItem();
 	if (ul && item) {
-		QtContact *qtContact = ul->getContact(item->text(0));
+		QtContact * qtContact = ul->getContact(item->text(0));
 		qtContact->startCall(qtContact->getHomePhone());
 	}
 }
@@ -592,7 +593,7 @@ void QtContactManager::startWorkCall(bool) {
 	QtContactListManager * ul = QtContactListManager::getInstance();
 	QTreeWidgetItem * item = _tree->currentItem();
 	if (ul && item) {
-		QtContact *qtContact = ul->getContact(item->text(0));
+		QtContact * qtContact = ul->getContact(item->text(0));
 		qtContact->startCall(qtContact->getWorkPhone());
 	}
 }
@@ -601,7 +602,7 @@ void QtContactManager::startWengoCall(bool) {
 	QtContactListManager * ul = QtContactListManager::getInstance();
 	QTreeWidgetItem * item = _tree->currentItem();
 	if (ul && item) {
-		QtContact *qtContact = ul->getContact(item->text(0));
+		QtContact * qtContact = ul->getContact(item->text(0));
 		qtContact->startCall(qtContact->getWengoPhoneNumber());
 	}
 }
@@ -704,7 +705,7 @@ QtContact * QtContactManager::findContactInGroup(const QTreeWidgetItem * group, 
 
 	int count = group->childCount();
 	for (int i = 0; i < count; i++) {
-		QtContact *qtContact = ul->getContact(group->child(i)->text(0));
+		QtContact * qtContact = ul->getContact(group->child(i)->text(0));
 		if (qtContact->getId() == contactId) {
 			return qtContact;
 		}
@@ -749,15 +750,7 @@ bool QtContactManager::groupsAreHidden() const {
 	return _hideGroups;
 }
 
-bool QtContactManager::event(QEvent * event) {
-	if (event->type() == QEvent::LanguageChange) {
-		retranslateUi();
-	}
-
-	return QObject::event(event);
-}
-
-void QtContactManager::retranslateUi() {
+void QtContactManager::languageChanged() {
 	_trStringCall = tr("Call");
 	_trStringMobilePhone = tr("Mobile phone");
 	_trStringHomePhone = tr("Home phone");

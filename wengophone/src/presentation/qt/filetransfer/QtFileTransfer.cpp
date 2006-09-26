@@ -18,6 +18,7 @@
  */
 
 #include "QtFileTransfer.h"
+
 #include "QtFileTransferAcceptDialog.h"
 #include "QtFileTransferWidget.h"
 
@@ -33,13 +34,16 @@
 #include <util/Logger.h>
 #include <util/SafeDelete.h>
 
+#include <qtutil/SafeConnect.h>
+
 #include <QtGui/QtGui>
 
 QtFileTransfer::QtFileTransfer(QObject * parent, CoIpManager * coIpManager)
-	: QObject(parent), _coIpManager(coIpManager) {
+	: QObject(parent),
+	_coIpManager(coIpManager) {
 
-	_qtFileTransferWidget = new QtFileTransferWidget();
-	connect(this, SIGNAL(newReceiveFileSessionCreatedEventHandlerSignal(ReceiveFileSession *)),
+	_qtFileTransferWidget = new QtFileTransferWidget(NULL);
+	SAFE_CONNECT(this, SIGNAL(newReceiveFileSessionCreatedEventHandlerSignal(ReceiveFileSession *)),
 		SLOT(newReceiveFileSessionCreatedEventHandlerSlot(ReceiveFileSession *)));
 	_coIpManager->getFileSessionManager().newReceiveFileSessionCreatedEvent +=
 		boost::bind(&QtFileTransfer::newReceiveFileSessionCreatedEventHandler, this, _1, _2);
@@ -47,7 +51,7 @@ QtFileTransfer::QtFileTransfer(QObject * parent, CoIpManager * coIpManager)
 
 QtFileTransfer::~QtFileTransfer() {
 	_qtFileTransferWidget->hide();
-	delete _qtFileTransferWidget;
+	OWSAFE_DELETE(_qtFileTransferWidget);
 }
 
 void QtFileTransfer::newReceiveFileSessionCreatedEventHandler(
@@ -72,14 +76,14 @@ void QtFileTransfer::newReceiveFileSessionCreatedEventHandlerSlot(ReceiveFileSes
 
 	// the user accept the file transfer
 	if (qtFileTransferAcceptDialog.exec() == QDialog::Accepted) {
-	
+
 		QDir dir(QString::fromStdString(config.getFileTransferDownloadFolder()));
 		// if no download folder set then choose one
 		// or if the choosen folder does not exists anymore.
 		if ((config.getFileTransferDownloadFolder().empty()) || (!dir.exists())) {
-	
+
 			downloadFolder = QFileDialog::getExistingDirectory(
-				0,
+				_qtFileTransferWidget,
 				tr("Choose a directory"),
 				"",
 				QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks
@@ -100,7 +104,7 @@ void QtFileTransfer::newReceiveFileSessionCreatedEventHandlerSlot(ReceiveFileSes
 		// here we're sure to have a download folder,
 		// but we must check if the file already exists.
 		if (isFileInDir(downloadFolder, filename)) {
-			
+
 			if (QMessageBox::question(_qtFileTransferWidget, tr("Overwrite File?"),
 					tr("A file called %1 already exists."
 					"Do you want to overwrite it?").arg(filename),

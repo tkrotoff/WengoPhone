@@ -34,16 +34,9 @@
      <x>0</x>
      <y>0</y>
      <width>351</width>
-     <height>29</height>
+     <height>19</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuHelp" >
-    <property name="title" >
-     <string>&amp;Help</string>
-    </property>
-    <addaction name="actionShowWengoForum" />
-    <addaction name="actionWengoFAQ" />
-   </widget>
    <widget class="QMenu" name="menuContact" >
     <property name="title" >
      <string>&amp;Contact</string>
@@ -67,6 +60,13 @@
     </property>
     <addaction name="actionShowFileTransfer" />
    </widget>
+   <widget class="QMenu" name="menuHelp" >
+    <property name="title" >
+     <string>&amp;Help</string>
+    </property>
+    <addaction name="actionShowWengoForum" />
+    <addaction name="actionWengoFAQ" />
+   </widget>
    <widget class="QMenu" name="menuActions" >
     <property name="title" >
      <string>&amp;Actions</string>
@@ -83,14 +83,6 @@
    <addaction name="menuHelp" />
   </widget>
   <widget class="QStatusBar" name="statusbar" >
-   <property name="geometry" >
-    <rect>
-     <x>0</x>
-     <y>520</y>
-     <width>351</width>
-     <height>22</height>
-    </rect>
-   </property>
    <property name="autoFillBackground" >
     <bool>false</bool>
    </property>
@@ -176,10 +168,10 @@
   </action>
   <action name="actionSaveHistoryAs" >
    <property name="icon" >
-    <iconset resource="../wengophone.qrc" >:/pics/actions/save_as.png</iconset>
+    <iconset/>
    </property>
    <property name="text" >
-    <string>&amp;Save History As ...</string>
+    <string>&amp;Save History As...</string>
    </property>
   </action>
  </widget>

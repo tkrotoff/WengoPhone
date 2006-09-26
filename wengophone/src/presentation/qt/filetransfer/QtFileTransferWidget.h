@@ -21,11 +21,14 @@
 #define OWQTFILETRANSFERWIDGET_H
 
 #include <QtGui/QWidget>
+#include <QtCore/QString>
 
-#include "ui_FileTransferWidget.h"
+#include <string>
 
 class ReceiveFileSession;
 class SendFileSession;
+
+namespace Ui { class FileTransferWidget; }
 
 /**
  * Qt file transfer widget.
@@ -39,7 +42,9 @@ public:
 	/**
 	 * Default constructor.
 	 */
-	QtFileTransferWidget(QWidget * parent = 0);
+	QtFileTransferWidget(QWidget * parent);
+
+	~QtFileTransferWidget();
 
 	void setDownloadFolder(const QString & folder);
 
@@ -75,7 +80,7 @@ private:
 
 	QString _downloadFolder;
 
-	Ui::FileTransferWidget _ui;
+	Ui::FileTransferWidget * _ui;
 };
 
 #endif	//OWQTFILETRANSFERWIDGET_H

@@ -37,8 +37,8 @@ ContactGroupPopupMenu::ContactGroupPopupMenu(CContactList & cContactList, QWidge
 	: QMenu(parent),
 	_cContactList(cContactList) {
 
-	addAction(QIcon(":/pics/actions/delete-group.png"), tr("Remove Contact Group"), this, SLOT(removeContactGroup()));
-	addAction(QIcon(":pics/actions/rename-groups.png"), tr("Rename Contact Group"), this, SLOT(renameContactGroup()));
+	addAction(tr("Remove Contact Group"), this, SLOT(removeContactGroup()));
+	addAction(tr("Rename Contact Group"), this, SLOT(renameContactGroup()));
 	//addAction(tr("Send SMS to group"), this, SLOT(sendSms()));
 }
 
@@ -61,8 +61,8 @@ void ContactGroupPopupMenu::removeContactGroup() const {
 void ContactGroupPopupMenu::renameContactGroup() const {
 	std::string tmp = _cContactList.getContactGroupName(_groupId.toStdString());
 	QString groupName = QString::fromUtf8(tmp.c_str());
-	QtRenameGroup dialog(groupName,qobject_cast<QWidget *>(parent()));
-	if (dialog.exec()){
+	QtRenameGroup dialog(groupName, qobject_cast<QWidget *>(parent()));
+	if (dialog.exec()) {
 		_cContactList.renameContactGroup(_groupId.toStdString(), dialog.getGroupName().toUtf8().data());
 	}
 }

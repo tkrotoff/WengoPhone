@@ -22,10 +22,12 @@
 #include "ui_AcceptDialog.h"
 
 #include <util/SafeDelete.h>
+
 #include <qtutil/WidgetBackgroundImage.h>
 
+QtFileTransferAcceptDialog::QtFileTransferAcceptDialog(QWidget * parent)
+	: QDialog(parent) {
 
-QtFileTransferAcceptDialog::QtFileTransferAcceptDialog(QWidget * parent) : QDialog(parent) {
 	_ui = new Ui::AcceptDialog();
 	_ui->setupUi(this);
 

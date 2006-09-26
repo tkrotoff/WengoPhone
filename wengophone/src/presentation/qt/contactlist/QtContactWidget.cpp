@@ -133,19 +133,19 @@ void QtContactWidget::updateToolTips() {
 	if (_ui->smsButton->isEnabled()) {
 		_ui->smsButton->setToolTip(tr("Click here to send a SMS"));
 	} else {
-		_ui->smsButton->setToolTip("");
+		_ui->smsButton->setToolTip(QString::null);
 	}
 
 	if (_ui->chatButton->isEnabled()) {
 		_ui->chatButton->setToolTip(tr("Click here to start a chat"));
 	} else {
-		_ui->chatButton->setToolTip("");
+		_ui->chatButton->setToolTip(QString::null);
 	}
 
 	if (_ui->callButton->isEnabled()) {
 		_ui->callButton->setToolTip(tr("Click here to start a free call"));
 	} else {
-		_ui->callButton->setToolTip("");
+		_ui->callButton->setToolTip(QString::null);
 	}
 }
 

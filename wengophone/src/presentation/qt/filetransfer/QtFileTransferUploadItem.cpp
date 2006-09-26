@@ -21,15 +21,18 @@
 
 #include <filesessionmanager/SendFileSession.h>
 
-#include <qtutil/SafeConnect.h>
 #include <util/Logger.h>
 #include <util/SafeDelete.h>
+
+#include <qtutil/SafeConnect.h>
 
 #include <QtGui/QtGui>
 
 QtFileTransferUploadItem::QtFileTransferUploadItem(QWidget * parent, SendFileSession * fileSession,
 	const QString & filename, const std::string & contactId, const std::string & contact)
-	: QtFileTransferItem(parent, QtFileTransferItem::Upload), _sendFileSession(fileSession), _contactId(contactId) {
+	: QtFileTransferItem(parent, QtFileTransferItem::Upload),
+	_sendFileSession(fileSession),
+	_contactId(contactId) {
 
 	_filename = filename;
 

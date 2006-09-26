@@ -13,7 +13,7 @@
    </rect>
   </property>
   <property name="windowTitle" >
-   <string>File Transfer Manager</string>
+   <string>WengoPhone - File Transfer Manager</string>
   </property>
   <layout class="QGridLayout" >
    <property name="margin" >
@@ -72,12 +72,15 @@
      <property name="tabShape" >
       <enum>QTabWidget::Rounded</enum>
      </property>
+     <property name="currentIndex" >
+      <number>0</number>
+     </property>
      <widget class="QWidget" name="DownloadTab" >
       <attribute name="title" >
        <string>Download</string>
       </attribute>
       <attribute name="icon" >
-       <iconset resource="../wengophone.qrc" >:/pics/filetransfer/receive-file.png</iconset>
+       <iconset resource="..\wengophone.qrc" >:/pics/filetransfer/receive-file.png</iconset>
       </attribute>
       <layout class="QGridLayout" >
        <property name="margin" >
@@ -106,7 +109,7 @@
        <string>Upload</string>
       </attribute>
       <attribute name="icon" >
-       <iconset resource="../wengophone.qrc" >:/pics/filetransfer/send-file.png</iconset>
+       <iconset resource="..\wengophone.qrc" >:/pics/filetransfer/send-file.png</iconset>
       </attribute>
       <layout class="QGridLayout" >
        <property name="margin" >

@@ -62,7 +62,7 @@
         </font>
        </property>
        <property name="text" >
-        <string>From :</string>
+        <string>From:</string>
        </property>
       </widget>
      </item>

@@ -34,7 +34,7 @@ void QtContactMenu::populateMobilePhoneMenu(QMenu * menu, CWengoPhone & cWengoPh
 
 	CUserProfile * currentCUserProfile = cWengoPhone.getCUserProfileHandler().getCUserProfile();
 	if (currentCUserProfile) {
-		
+
 		CContactList & currentCContactList = currentCUserProfile->getCContactList();
 		StringList currentContactsIds = currentCContactList.getContactIds();
 
@@ -87,7 +87,7 @@ void QtContactMenu::populateHomePhoneMenu(QMenu * menu, CWengoPhone & cWengoPhon
 
 	CUserProfile * currentCUserProfile = cWengoPhone.getCUserProfileHandler().getCUserProfile();
 	if (currentCUserProfile) {
-		
+
 		CContactList & currentCContactList = currentCUserProfile->getCContactList();
 		StringList currentContactsIds = currentCContactList.getContactIds();
 
@@ -138,25 +138,25 @@ void QtContactMenu::populateChatMenu(QMenu * menu, CWengoPhone & cWengoPhone) {
 void QtContactMenu::setPresenceIcon(QAction * action, EnumPresenceState::PresenceState presenceState) {
 
 	switch (presenceState) {
-		case EnumPresenceState::PresenceStateOnline:
-			action->setIcon(QIcon(":/pics/status/online.png"));
-			break;
-		case EnumPresenceState::PresenceStateOffline:
-			action->setIcon(QIcon(":/pics/status/offline.png"));
-			break;
-		case EnumPresenceState::PresenceStateInvisible:
-			action->setIcon(QIcon(":/pics/status/invisible.png"));
-			break;
-		case EnumPresenceState::PresenceStateAway:
-			action->setIcon(QIcon(":/pics/status/away.png"));
-			break;
-		case EnumPresenceState::PresenceStateDoNotDisturb:
-			action->setIcon(QIcon(":/pics/status/donotdisturb.png"));
-			break;
-		case EnumPresenceState::PresenceStateUnknown:
-			break;
-		default:
-			LOG_FATAL("unknown presenceState=" + String::fromNumber(presenceState));
-			break;
+	case EnumPresenceState::PresenceStateOnline:
+		action->setIcon(QIcon(":/pics/status/online.png"));
+		break;
+	case EnumPresenceState::PresenceStateOffline:
+		action->setIcon(QIcon(":/pics/status/offline.png"));
+		break;
+	case EnumPresenceState::PresenceStateInvisible:
+		action->setIcon(QIcon(":/pics/status/invisible.png"));
+		break;
+	case EnumPresenceState::PresenceStateAway:
+		action->setIcon(QIcon(":/pics/status/away.png"));
+		break;
+	case EnumPresenceState::PresenceStateDoNotDisturb:
+		action->setIcon(QIcon(":/pics/status/donotdisturb.png"));
+		break;
+	case EnumPresenceState::PresenceStateUnknown:
+		break;
+	default:
+		LOG_FATAL("unknown presenceState=" + String::fromNumber(presenceState));
+		break;
 	}
 }

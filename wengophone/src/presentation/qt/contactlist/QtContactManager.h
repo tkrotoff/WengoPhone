@@ -74,11 +74,6 @@ public:
 	 */
 	bool groupsAreHidden() const;
 
-	/**
-	 * Used for translation event.
-	 */
-	bool event(QEvent * event);
-
 public Q_SLOTS:
 
 	void hideGroups();
@@ -125,6 +120,8 @@ private Q_SLOTS:
 
 	void treeViewSelectionChanged();
 
+	void languageChanged();
+
 Q_SIGNALS:
 
 	void groupRightClicked(const QString & groupName);
@@ -138,8 +135,6 @@ private:
 	void safeSortContacts(bool bypassTimer);
 
 	void safeUserStateChanged();
-
-	void retranslateUi();
 
 	void clearTreeSelection();
 

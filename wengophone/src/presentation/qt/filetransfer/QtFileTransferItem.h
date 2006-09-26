@@ -21,12 +21,13 @@
 #define OWQTFILETRANSFERITEM_H
 
 #include <QtGui/QWidget>
+#include <QtCore/QString>
 
 #include <util/Trackable.h>
 
-#include "ui_FileTransferItem.h"
-
 #include <filesessionmanager/IFileSession.h>
+
+namespace Ui { class FileTransferItem; }
 
 /**
  * Qt file transfer item widget.
@@ -53,6 +54,8 @@ public:
 	 * Default constructor.
 	 */
 	QtFileTransferItem(QWidget * parent, Type type);
+
+	~QtFileTransferItem();
 
 	/**
 	 * Returns true if the transfer is not finished.
@@ -182,7 +185,7 @@ protected:
 
 	bool _removeClicked;
 
-	Ui::FileTransferItem _ui;
+	Ui::FileTransferItem * _ui;
 };
 
 #endif	//OWQTFILETRANSFERITEM_H

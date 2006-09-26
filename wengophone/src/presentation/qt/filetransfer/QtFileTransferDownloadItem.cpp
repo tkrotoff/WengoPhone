@@ -21,9 +21,11 @@
 
 #include <filesessionmanager/ReceiveFileSession.h>
 #include <imwrapper/IMContact.h>
-#include <qtutil/SafeConnect.h>
+
 #include <util/Logger.h>
 #include <util/SafeDelete.h>
+
+#include <qtutil/SafeConnect.h>
 
 #include <QtGui/QtGui>
 

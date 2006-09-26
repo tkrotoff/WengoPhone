@@ -18,6 +18,9 @@
  */
 
 #include "QtFileTransferWidget.h"
+
+#include "ui_FileTransferWidget.h"
+
 #include "QtFileTransferDownloadItem.h"
 #include "QtFileTransferUploadItem.h"
 
@@ -27,18 +30,22 @@
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
 
-#include <qtutil/SafeConnect.h>
 #include <util/Logger.h>
+#include <util/SafeDelete.h>
+
+#include <qtutil/SafeConnect.h>
 
 #include <QtGui/QtGui>
 
 static int DOWNLOAD_TAB_INDEX = 0;
 static int UPLOAD_TAB_INDEX = 1;
 
-QtFileTransferWidget::QtFileTransferWidget(QWidget * parent) : QWidget(parent) {
+QtFileTransferWidget::QtFileTransferWidget(QWidget * parent)
+	: QWidget(parent) {
 
 	//init main widget
-	_ui.setupUi(this);
+	_ui = new Ui::FileTransferWidget();
+	_ui->setupUi(this);
 	////
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
@@ -47,9 +54,13 @@ QtFileTransferWidget::QtFileTransferWidget(QWidget * parent) : QWidget(parent) {
 	}
 
 	//connect signals to slots
-	SAFE_CONNECT(_ui.cleanButton, SIGNAL(pressed()), SLOT(cleanButtonClicked()));
-	SAFE_CONNECT(_ui.pathButton, SIGNAL(pressed()), SLOT(pathButtonClicked()));
+	SAFE_CONNECT(_ui->cleanButton, SIGNAL(pressed()), SLOT(cleanButtonClicked()));
+	SAFE_CONNECT(_ui->pathButton, SIGNAL(pressed()), SLOT(pathButtonClicked()));
 	////
+}
+
+QtFileTransferWidget::~QtFileTransferWidget() {
+	OWSAFE_DELETE(_ui);
 }
 
 void QtFileTransferWidget::cleanButtonClicked() {
@@ -58,40 +69,40 @@ void QtFileTransferWidget::cleanButtonClicked() {
 
 void QtFileTransferWidget::clean(bool cleanButton) {
 
-	if (_ui.tabWidget->currentIndex() == DOWNLOAD_TAB_INDEX) {
+	if (_ui->tabWidget->currentIndex() == DOWNLOAD_TAB_INDEX) {
 
-		for (int i = 0; i < _ui.downloadTransferListWidget->count(); i++) {
-			QListWidgetItem * item = _ui.downloadTransferListWidget->item(i);
-			QtFileTransferDownloadItem * widgetItem = (QtFileTransferDownloadItem*)_ui.downloadTransferListWidget->itemWidget(item);
-			
+		for (int i = 0; i < _ui->downloadTransferListWidget->count(); i++) {
+			QListWidgetItem * item = _ui->downloadTransferListWidget->item(i);
+			QtFileTransferDownloadItem * widgetItem = (QtFileTransferDownloadItem*)_ui->downloadTransferListWidget->itemWidget(item);
+
 			if (cleanButton) {
 				if (!widgetItem->isRunning()) {
-					_ui.downloadTransferListWidget->takeItem(i);
-					delete widgetItem;
+					_ui->downloadTransferListWidget->takeItem(i);
+					OWSAFE_DELETE(widgetItem);
 				}
 			} else {
 				if ((widgetItem->removeHasBeenClicked()) && (!widgetItem->isRunning())) {
-					_ui.downloadTransferListWidget->takeItem(i);
-					delete widgetItem;
+					_ui->downloadTransferListWidget->takeItem(i);
+					OWSAFE_DELETE(widgetItem);
 				}
 			}
 		}
 
 	} else {
 
-		for (int i = 0; i < _ui.uploadTransferListWidget->count(); i++) {
-			QListWidgetItem * item = _ui.uploadTransferListWidget->item(i);
-			QtFileTransferUploadItem * widgetItem = (QtFileTransferUploadItem*)_ui.uploadTransferListWidget->itemWidget(item);
-			
+		for (int i = 0; i < _ui->uploadTransferListWidget->count(); i++) {
+			QListWidgetItem * item = _ui->uploadTransferListWidget->item(i);
+			QtFileTransferUploadItem * widgetItem = (QtFileTransferUploadItem*)_ui->uploadTransferListWidget->itemWidget(item);
+
 			if (cleanButton) {
 				if (!widgetItem->isRunning()) {
-					_ui.uploadTransferListWidget->takeItem(i);
-					delete widgetItem;
+					_ui->uploadTransferListWidget->takeItem(i);
+					OWSAFE_DELETE(widgetItem);
 				}
 			} else {
 				if ((widgetItem->removeHasBeenClicked()) && (!widgetItem->isRunning())) {
-					_ui.uploadTransferListWidget->takeItem(i);
-					delete widgetItem;
+					_ui->uploadTransferListWidget->takeItem(i);
+					OWSAFE_DELETE(widgetItem);
 				}
 			}
 		}
@@ -113,9 +124,9 @@ void QtFileTransferWidget::addReceiveItem(ReceiveFileSession * fileSession) {
 
 	QtFileTransferDownloadItem * fileTransferItem = new QtFileTransferDownloadItem(this, fileSession, _downloadFolder);
 	SAFE_CONNECT(fileTransferItem, SIGNAL(removeClicked()), SLOT(itemRemoveClicked()));
-	QListWidgetItem * item = new QListWidgetItem(_ui.downloadTransferListWidget);
+	QListWidgetItem * item = new QListWidgetItem(_ui->downloadTransferListWidget);
 	item->setSizeHint(fileTransferItem->minimumSizeHint());
-	_ui.downloadTransferListWidget->setItemWidget(item, fileTransferItem);
+	_ui->downloadTransferListWidget->setItemWidget(item, fileTransferItem);
 	showDownloadTab();
 	show();
 	raise();
@@ -127,9 +138,9 @@ void QtFileTransferWidget::addSendItem(SendFileSession * fileSession,
 	QtFileTransferUploadItem * fileTransferItem = new QtFileTransferUploadItem(this, fileSession,
 			QString::fromStdString(filename), contactId, contact);
 	SAFE_CONNECT(fileTransferItem, SIGNAL(removeClicked()), SLOT(itemRemoveClicked()));
-	QListWidgetItem * item = new QListWidgetItem(_ui.uploadTransferListWidget);
+	QListWidgetItem * item = new QListWidgetItem(_ui->uploadTransferListWidget);
 	item->setSizeHint(fileTransferItem->minimumSizeHint());
-	_ui.uploadTransferListWidget->setItemWidget(item, fileTransferItem);
+	_ui->uploadTransferListWidget->setItemWidget(item, fileTransferItem);
 	showUploadTab();
 	show();
 	raise();
@@ -139,18 +150,18 @@ void QtFileTransferWidget::setDownloadFolder(const QString & folder) {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	config.set(Config::FILETRANSFER_DOWNLOAD_FOLDER, folder.toStdString());
 	QDir dir(folder);
-	_ui.pathButton->setText(dir.dirName());
+	_ui->pathButton->setText(dir.dirName());
 	_downloadFolder = folder;
 }
 
 void QtFileTransferWidget::showDownloadTab() {
-	_ui.tabWidget->setCurrentIndex(DOWNLOAD_TAB_INDEX);
-	_ui.downloadTransferListWidget->scrollToBottom();
+	_ui->tabWidget->setCurrentIndex(DOWNLOAD_TAB_INDEX);
+	_ui->downloadTransferListWidget->scrollToBottom();
 }
 
 void QtFileTransferWidget::showUploadTab() {
-	_ui.tabWidget->setCurrentIndex(UPLOAD_TAB_INDEX);
-	_ui.uploadTransferListWidget->scrollToBottom();
+	_ui->tabWidget->setCurrentIndex(UPLOAD_TAB_INDEX);
+	_ui->uploadTransferListWidget->scrollToBottom();
 }
 
 void QtFileTransferWidget::itemRemoveClicked() {

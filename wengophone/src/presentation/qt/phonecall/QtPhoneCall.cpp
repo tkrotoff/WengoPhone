@@ -112,11 +112,11 @@ QtPhoneCall::QtPhoneCall(CPhoneCall & cPhoneCall)
 	SAFE_CONNECT_TYPE(_actionHangupCall, SIGNAL(triggered(bool)), SLOT(rejectActionTriggered(bool)), Qt::QueuedConnection);
 
 	//Hold
-	_actionHold = new QAction(QIcon(":/pics/actions/hold-phone.png"), tr("Hold"), _phoneCallWidget);
+	_actionHold = new QAction(tr("Hold"), _phoneCallWidget);
 	SAFE_CONNECT(_actionHold, SIGNAL(triggered(bool)), SLOT(holdResumeActionTriggered(bool)));
 
 	//Resume
-	_actionResume = new QAction(QIcon(":/pics/actions/resume-phone.png"), tr("Resume"), _phoneCallWidget);
+	_actionResume = new QAction(tr("Resume"), _phoneCallWidget);
 	SAFE_CONNECT(_actionResume, SIGNAL(triggered(bool)), SLOT(holdResumeActionTriggered(bool)));
 	_actionResume->setEnabled(false);
 
@@ -127,7 +127,6 @@ QtPhoneCall::QtPhoneCall(CPhoneCall & cPhoneCall)
 
 	//Start/stop video
 	_actionSwitchVideo = new QAction(tr("Stop video"), _phoneCallWidget);
-	_actionSwitchVideo->setIcon(QIcon(":/pics/actions/stop-video.png"));
 	SAFE_CONNECT(_actionSwitchVideo, SIGNAL(triggered(bool)), SLOT(switchVideo(bool)));
 
 	//Add contact
@@ -489,11 +488,9 @@ void QtPhoneCall::switchVideo(bool) {
 		showAvatar();
 		_showVideo = false;
 		_actionSwitchVideo->setText(tr("Start video"));
-		_actionSwitchVideo->setIcon(QIcon(":/pics/actions/start-video.png"));
 	} else {
 		_showVideo = true;
 		_actionSwitchVideo->setText(tr("Stop video"));
-		_actionSwitchVideo->setIcon(QIcon(":/pics/actions/stop-video.png"));
 		showVideoWidget();
 	}
 }

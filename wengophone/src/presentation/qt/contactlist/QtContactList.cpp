@@ -41,6 +41,8 @@
 #include <util/SafeDelete.h>
 #include <util/StringList.h>
 
+#include <qtutil/SafeConnect.h>
+
 #include <QtGui/QtGui>
 
 const QString QtContactList::DEFAULT_GROUP_NAME = "WENGO2006CLISTHIDE";
@@ -112,9 +114,9 @@ QtContactList::QtContactList(CContactList & cContactList, CWengoPhone & cWengoPh
 
 	QtContactTreeMouseFilter * qtContactTreeMouseFilter =
 		new QtContactTreeMouseFilter(_cContactList, _ui->treeWidget, _ui->treeWidget);
-	connect(qtContactTreeMouseFilter, SIGNAL(mouseClicked(Qt::MouseButton)),
+	SAFE_CONNECT_RECEIVER(qtContactTreeMouseFilter, SIGNAL(mouseClicked(Qt::MouseButton)),
 		_contactManager, SLOT(setMouseButton(Qt::MouseButton)));
-	connect(qtContactTreeMouseFilter, SIGNAL(mergeContacts(QString, QString)),
+	SAFE_CONNECT(qtContactTreeMouseFilter, SIGNAL(mergeContacts(QString, QString)),
 		SLOT(mergeContactsSlot(QString, QString)));
 
 	QtTreeViewDelegate * delegate = new QtTreeViewDelegate(_cWengoPhone,
@@ -127,7 +129,7 @@ QtContactList::QtContactList(CContactList & cContactList, CWengoPhone & cWengoPh
 
 	//Popup Menus
 	_contactGroupPopupMenu = new ContactGroupPopupMenu(_cContactList, _ui->treeWidget);
-	connect(_contactManager, SIGNAL(groupRightClicked(const QString &)),
+	SAFE_CONNECT(_contactManager, SIGNAL(groupRightClicked(const QString &)),
 		SLOT(groupRightClickedSlot(const QString &)));
 
 	QtWengoPhone * qtWengoPhone = (QtWengoPhone *) _cWengoPhone.getPresentation();
