@@ -343,7 +343,7 @@ size_t curlHTTPWrite(void * ptr, size_t size, size_t nmemb, void * curlHttpReque
 	if (curlHttpRequestInstance && ptr) {
 		CurlHttpRequest * instance = (CurlHttpRequest *) curlHttpRequestInstance;
 
-		int requestId;
+		long requestId;
 		curl_easy_getinfo(instance->_curl, CURLINFO_PRIVATE, &requestId);
 
 		//Appends the data received to the entire response content
