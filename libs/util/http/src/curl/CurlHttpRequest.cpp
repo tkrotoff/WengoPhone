@@ -405,7 +405,7 @@ int curlHTTPProgress(void * curlHttpRequestInstance, double dltotal, double dlno
 		CurlHttpRequest * instance = (CurlHttpRequest *) curlHttpRequestInstance;
 		instance->downloadDone = dlnow;
 		instance->downloadTotal = dltotal;
-		int requestId;
+		long requestId;
 		curl_easy_getinfo(instance->_curl, CURLINFO_PRIVATE, &requestId);
 		instance->dataReadProgressEvent(requestId, dlnow, dltotal);
 		instance->dataSendProgressEvent(requestId, ulnow, ultotal);
