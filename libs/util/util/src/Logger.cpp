@@ -88,11 +88,11 @@ void Logger::log(Level level, const std::string & className, const std::string &
 		LOG_FATAL("unknown log level=" + String::fromNumber(level));
 	}
 
-	std::string tmp;
+	std::string tmp = "(" + levelString + ") " + Time().toString();
 	if ((!filename.empty()) && (!line.empty())) {
 		tmp = filename + ":" + line + " ";
 	}
-	tmp += "(" + levelString + ") " + Time().toString() + " " + className +  ": " + message;
+	tmp += " " + className +  ": " + message;
 
 	if (!_fileCreated) {
 		String strippedClassName = className;
