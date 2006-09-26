@@ -96,8 +96,6 @@ Q_SIGNALS:
 
 public Q_SLOTS:
 
-	void cleanup();
-
 	void hideOffLineContacts();
 
 	void showHideGroups();

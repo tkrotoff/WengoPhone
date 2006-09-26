@@ -37,8 +37,9 @@
 #include <model/contactlist/Contact.h>
 #include <model/contactlist/ContactGroup.h>
 
-#include <util/StringList.h>
 #include <util/Logger.h>
+#include <util/SafeDelete.h>
+#include <util/StringList.h>
 
 #include <QtGui/QtGui>
 
@@ -137,22 +138,9 @@ QtContactList::QtContactList(CContactList & cContactList, CWengoPhone & cWengoPh
 }
 
 QtContactList::~QtContactList() {
-	//FIXME cannot do that here since it is not thread-safe
-	//delete _ui;
-}
-
-void QtContactList::cleanup() {
 	QtContactListManager::getInstance()->clear();
-
-	if (_contactListWidget) {
-		delete _contactListWidget;
-		_contactListWidget = NULL;
-	}
-
-	if (_ui) {
-		delete _ui;
-		_ui = NULL;
-	}
+	OWSAFE_DELETE(_contactListWidget);
+	OWSAFE_DELETE(_ui);
 }
 
 void QtContactList::initContent() {
