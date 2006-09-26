@@ -505,7 +505,7 @@ qt4_add_resources(qtwengophone_SRCS
 macro_generate_qt_qm_files(
   ${CMAKE_CURRENT_SOURCE_DIR}/lang
   qtwengophone_SRCS
-  ${DATA_INSTALL_DIR}/lang}
+  ${DATA_INSTALL_DIR}/lang
 )
 
 include_directories(
