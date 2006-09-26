@@ -86,6 +86,7 @@ QtProfileDetails::QtProfileDetails(CUserProfile & cUserProfile,
 	//avatarPixmapButton
 	_ui->avatarPixmapButton->setToolTip("");
 	_ui->avatarPixmapButton->setEnabled(false);
+	_ui->myProfileLabel->hide();
 }
 
 QtProfileDetails::QtProfileDetails(CUserProfile & cUserProfile,

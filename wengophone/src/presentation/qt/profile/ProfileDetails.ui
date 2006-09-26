@@ -8,13 +8,13 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>382</height>
+    <width>359</width>
+    <height>480</height>
    </rect>
   </property>
   <layout class="QGridLayout" >
    <property name="margin" >
-    <number>9</number>
+    <number>6</number>
    </property>
    <property name="spacing" >
     <number>6</number>
@@ -55,12 +55,15 @@
          </property>
          <layout class="QGridLayout" >
           <property name="margin" >
-           <number>9</number>
+           <number>6</number>
           </property>
           <property name="spacing" >
            <number>6</number>
           </property>
           <item row="1" column="0" >
+           <widget class="QStackedWidget" name="imStackedWidget" />
+          </item>
+          <item row="2" column="0" >
            <widget class="QToolButton" name="advancedButton" >
             <property name="text" >
              <string>Advanced >></string>
@@ -77,7 +80,288 @@
            </widget>
           </item>
           <item row="0" column="0" >
-           <widget class="QStackedWidget" name="imStackedWidget" />
+           <widget class="QLabel" name="myProfileLabel" >
+            <property name="palette" >
+             <palette>
+              <active>
+               <color>
+                <red>255</red>
+                <green>0</green>
+                <blue>0</blue>
+               </color>
+               <color>
+                <red>221</red>
+                <green>223</green>
+                <blue>228</blue>
+               </color>
+               <color>
+                <red>255</red>
+                <green>255</green>
+                <blue>255</blue>
+               </color>
+               <color>
+                <red>255</red>
+                <green>255</green>
+                <blue>255</blue>
+               </color>
+               <color>
+                <red>85</red>
+                <green>85</green>
+                <blue>85</blue>
+               </color>
+               <color>
+                <red>199</red>
+                <green>199</green>
+                <blue>199</blue>
+               </color>
+               <color>
+                <red>0</red>
+                <green>0</green>
+                <blue>0</blue>
+               </color>
+               <color>
+                <red>255</red>
+                <green>255</green>
+                <blue>255</blue>
+               </color>
+               <color>
+                <red>0</red>
+                <green>0</green>
+                <blue>0</blue>
+               </color>
+               <color>
+                <red>255</red>
+                <green>255</green>
+                <blue>255</blue>
+               </color>
+               <color>
+                <red>239</red>
+                <green>239</green>
+                <blue>239</blue>
+               </color>
+               <color>
+                <red>0</red>
+                <green>0</green>
+                <blue>0</blue>
+               </color>
+               <color>
+                <red>103</red>
+                <green>141</green>
+                <blue>178</blue>
+               </color>
+               <color>
+                <red>255</red>
+                <green>255</green>
+                <blue>255</blue>
+               </color>
+               <color>
+                <red>0</red>
+                <green>0</green>
+                <blue>238</blue>
+               </color>
+               <color>
+                <red>82</red>
+                <green>24</green>
+                <blue>139</blue>
+               </color>
+               <color>
+                <red>232</red>
+                <green>232</green>
+                <blue>232</blue>
+               </color>
+              </active>
+              <inactive>
+               <color>
+                <red>255</red>
+                <green>0</green>
+                <blue>0</blue>
+               </color>
+               <color>
+                <red>221</red>
+                <green>223</green>
+                <blue>228</blue>
+               </color>
+               <color>
+                <red>255</red>
+                <green>255</green>
+                <blue>255</blue>
+               </color>
+               <color>
+                <red>255</red>
+                <green>255</green>
+                <blue>255</blue>
+               </color>
+               <color>
+                <red>85</red>
+                <green>85</green>
+                <blue>85</blue>
+               </color>
+               <color>
+                <red>199</red>
+                <green>199</green>
+                <blue>199</blue>
+               </color>
+               <color>
+                <red>0</red>
+                <green>0</green>
+                <blue>0</blue>
+               </color>
+               <color>
+                <red>255</red>
+                <green>255</green>
+                <blue>255</blue>
+               </color>
+               <color>
+                <red>0</red>
+                <green>0</green>
+                <blue>0</blue>
+               </color>
+               <color>
+                <red>255</red>
+                <green>255</green>
+                <blue>255</blue>
+               </color>
+               <color>
+                <red>239</red>
+                <green>239</green>
+                <blue>239</blue>
+               </color>
+               <color>
+                <red>0</red>
+                <green>0</green>
+                <blue>0</blue>
+               </color>
+               <color>
+                <red>103</red>
+                <green>141</green>
+                <blue>178</blue>
+               </color>
+               <color>
+                <red>255</red>
+                <green>255</green>
+                <blue>255</blue>
+               </color>
+               <color>
+                <red>0</red>
+                <green>0</green>
+                <blue>238</blue>
+               </color>
+               <color>
+                <red>82</red>
+                <green>24</green>
+                <blue>139</blue>
+               </color>
+               <color>
+                <red>232</red>
+                <green>232</green>
+                <blue>232</blue>
+               </color>
+              </inactive>
+              <disabled>
+               <color>
+                <red>128</red>
+                <green>128</green>
+                <blue>128</blue>
+               </color>
+               <color>
+                <red>221</red>
+                <green>223</green>
+                <blue>228</blue>
+               </color>
+               <color>
+                <red>255</red>
+                <green>255</green>
+                <blue>255</blue>
+               </color>
+               <color>
+                <red>255</red>
+                <green>255</green>
+                <blue>255</blue>
+               </color>
+               <color>
+                <red>85</red>
+                <green>85</green>
+                <blue>85</blue>
+               </color>
+               <color>
+                <red>199</red>
+                <green>199</green>
+                <blue>199</blue>
+               </color>
+               <color>
+                <red>199</red>
+                <green>199</green>
+                <blue>199</blue>
+               </color>
+               <color>
+                <red>255</red>
+                <green>255</green>
+                <blue>255</blue>
+               </color>
+               <color>
+                <red>128</red>
+                <green>128</green>
+                <blue>128</blue>
+               </color>
+               <color>
+                <red>239</red>
+                <green>239</green>
+                <blue>239</blue>
+               </color>
+               <color>
+                <red>239</red>
+                <green>239</green>
+                <blue>239</blue>
+               </color>
+               <color>
+                <red>0</red>
+                <green>0</green>
+                <blue>0</blue>
+               </color>
+               <color>
+                <red>86</red>
+                <green>117</green>
+                <blue>148</blue>
+               </color>
+               <color>
+                <red>255</red>
+                <green>255</green>
+                <blue>255</blue>
+               </color>
+               <color>
+                <red>0</red>
+                <green>0</green>
+                <blue>238</blue>
+               </color>
+               <color>
+                <red>82</red>
+                <green>24</green>
+                <blue>139</blue>
+               </color>
+               <color>
+                <red>232</red>
+                <green>232</green>
+                <blue>232</blue>
+               </color>
+              </disabled>
+             </palette>
+            </property>
+            <property name="autoFillBackground" >
+             <bool>false</bool>
+            </property>
+            <property name="text" >
+             <string>Fill in all your network Id to stay connected with your contacts</string>
+            </property>
+            <property name="scaledContents" >
+             <bool>false</bool>
+            </property>
+            <property name="alignment" >
+             <set>Qt::AlignJustify|Qt::AlignVCenter</set>
+            </property>
+            <property name="wordWrap" >
+             <bool>true</bool>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>
@@ -89,7 +373,7 @@
          </property>
          <layout class="QGridLayout" >
           <property name="margin" >
-           <number>9</number>
+           <number>6</number>
           </property>
           <property name="spacing" >
            <number>6</number>
@@ -149,7 +433,7 @@
          </property>
          <layout class="QGridLayout" >
           <property name="margin" >
-           <number>9</number>
+           <number>6</number>
           </property>
           <property name="spacing" >
            <number>6</number>
@@ -478,7 +762,6 @@
   <tabstop>cancelButton</tabstop>
   <tabstop>emailLineEdit</tabstop>
   <tabstop>webLineEdit</tabstop>
-  <tabstop>lineEdit</tabstop>
   <tabstop>countryComboBox</tabstop>
   <tabstop>stateLineEdit</tabstop>
   <tabstop>cityLineEdit</tabstop>
