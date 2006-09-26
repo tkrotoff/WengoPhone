@@ -20,15 +20,16 @@
 #ifndef OWQTCONTACTMANAGER_H
 #define OWQTCONTACTMANAGER_H
 
-#include <QtCore/QObject>
 #include <QtCore/QList>
+#include <QtCore/QMutex>
+#include <QtCore/QObject>
 
+class ContactProfile;
 class CUserProfile;
 class CWengoPhone;
+class PhoneCall;
 class QtContactList;
 class QtContactInfo;
-class PhoneCall;
-class ContactProfile;
 class QtContact;
 
 class QString;
@@ -49,18 +50,34 @@ class QtContactManager : public QObject {
 	Q_OBJECT
 public:
 
-	typedef QList <QtContactInfo> QtContactInfoList;
-
 	QtContactManager(CUserProfile & cUserProfile, CWengoPhone & cWengoPhone,
 		QtContactList & qtContactList, QObject * parent, QTreeWidget * target);
 
+	/**
+	 * Removes a Contact from the QtContactManager.
+	 *
+	 * @param contactId the Id of the Contact to remove
+	 */
 	void removeContact(const QString & contactId);
 
+	/**
+	 * Moves a Contact from one group to another.
+	 *
+	 * @param dstGroupId the Id of the destination group
+	 * @param srcGroupId the Id of the source group
+	 * @param contactId the Id of the Contact to move
+	 */
 	void moveContact(const std::string & dstGroupId,
 		const std::string & srcGroupId, const std::string & contactId);
 
-	bool groupsAreHidden();
+	/**
+	 * @return true if groups are hidden (not displayed)
+	 */
+	bool groupsAreHidden() const;
 
+	/**
+	 * Used for translation event.
+	 */
 	bool event(QEvent * event);
 
 public Q_SLOTS:
@@ -116,6 +133,8 @@ Q_SIGNALS:
 	void inviteToConferenceClicked(QString phone, PhoneCall * target);
 
 private:
+
+	typedef QList <QtContactInfo> QtContactInfoList;
 
 	void safeSortContacts(bool bypassTimer);
 
@@ -182,6 +201,8 @@ private:
 	bool _canShow;
 
 	bool _wantShow;
+
+	QMutex _mutex;
 
 	/**
 	 * Translated strings
