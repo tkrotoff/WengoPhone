@@ -50,7 +50,6 @@
 
 #include <qtutil/Object.h>
 #include <qtutil/SafeConnect.h>
-#include <qtutil/CloseEventFilter.h>
 
 #include <util/Logger.h>
 #include <util/SafeDelete.h>
@@ -116,10 +115,6 @@ QtChatWindow::QtChatWindow(QWidget * parent, CChatHandler & cChatHandler, IMChat
 		SLOT(typingStateChangedThreadSafe(const IMChatSession *, const IMContact *, const IMChat::TypingState *)), Qt::QueuedConnection);
 	SAFE_CONNECT_TYPE(this, SIGNAL(messageReceivedSignal(IMChatSession *)),
 		SLOT(messageReceivedSlot(IMChatSession *)), Qt::QueuedConnection);
-
-	//Install the close event filter
-	CloseEventFilter * closeEventFilter = new CloseEventFilter(this, SLOT(closeWindow()));
-	installEventFilter(closeEventFilter);
 
 	updateToolBarActions();
 }
@@ -715,11 +710,6 @@ void QtChatWindow::statusMessageReceivedSLot(IMChatSession * sender, int status,
 }
 
 void QtChatWindow::closeWindow() {
-#if !defined(OS_MACOSX)
-	showMinimized();
-#else
-	hide();
-#endif
 	close();
 }
 
