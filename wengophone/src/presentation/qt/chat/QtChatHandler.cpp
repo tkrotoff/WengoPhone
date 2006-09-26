@@ -64,7 +64,7 @@ void QtChatHandler::deletePresentation() {
 	// but it crashes in QtEmoticonsManager::getQtEmoticonList
 	/* delete(this); */
 	if (_qtChatWindow) {
-		_qtChatWindow->hide();
+		_qtChatWindow->closeWindow();
 		_qtWengoPhone.setChatWindow(NULL);
 	}
 }

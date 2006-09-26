@@ -104,11 +104,11 @@ public Q_SLOTS:
 
 	void saveActiveTabChatHistory();
 
+	void closeWindow();
+
 private Q_SLOTS:
 
 	void statusMessageReceivedSLot(IMChatSession * sender, int status, const QString & message);
-
-	void closeWindow();
 
 private:
 
