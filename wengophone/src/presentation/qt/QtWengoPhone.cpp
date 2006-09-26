@@ -620,17 +620,11 @@ void QtWengoPhone::showHistory() {
 
 void QtWengoPhone::currentUserProfileWillDieEventHandlerSlot() {
 	OWSAFE_DELETE(_qtFileTransfer);
-
 	OWSAFE_DELETE(_qtIdle);
-
-	if (_qtProfileBar) {
-		OWSAFE_DELETE(_qtProfileBar);
-	}
+	OWSAFE_DELETE(_qtProfileBar);
 
 	if (_qtContactList) {
 		_ui->tabContactList->layout()->removeWidget(_qtContactList->getWidget());
-		_qtContactList->cleanup();
-		//_contactList is deleted in CContactList
 		OWSAFE_DELETE(_qtContactList);
 	}
 
