@@ -1,0 +1,18 @@
+env = WengoGetEnvironment()
+
+include_path = ['.']
+defines = { }
+
+sources = [
+	'udp.c',
+	'stun.c'
+]
+
+
+if WengoOSWindows():
+	defines['WIN32'] = 1
+
+env.WengoAddIncludePath(include_path)
+env.WengoAddDefines(defines)
+
+env.WengoStaticLibrary('stun', sources)

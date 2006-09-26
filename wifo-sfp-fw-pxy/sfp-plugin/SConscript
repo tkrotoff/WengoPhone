@@ -1,0 +1,32 @@
+env = WengoGetEnvironment()
+
+libs = [
+    'phapi',
+    'phapi-util',
+]
+lib_path = []
+include_path = [
+    'include',
+]
+headers = []
+sources = [
+    'src/sfp-parser.c',
+    'src/sfp-plugin.c',
+    'src/sfp-transfer.c',
+]
+
+if WengoCCMSVC():
+    defines = {
+        'BUILD_SFP_PLUGIN_DLL' : 1,
+        'WIN32' : 1
+    }
+    env.WengoAddDefines(defines)
+
+env.WengoAddLibPath(lib_path)
+env.WengoUseLibraries(libs)
+env.WengoAddIncludePath(include_path)
+
+if WengoOSMacOSX():
+	env.WengoStaticLibrary('sfp-plugin', sources)
+else:
+	env.WengoSharedLibrary('sfp-plugin', sources)
