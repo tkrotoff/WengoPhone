@@ -24,6 +24,8 @@
 #include <imwrapper/IMContactSet.h>
 
 #include <util/Trackable.h>
+#include <thread/Mutex.h>
+
 
 #include <string>
 #include <set>
@@ -262,6 +264,8 @@ private:
 	IMChat & _imChat;
 
 	IMChatMessageList _receivedIMChatMessageList;
+
+	mutable Mutex _mutex;
 
 	bool _userCreated;
 };

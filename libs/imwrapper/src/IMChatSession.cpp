@@ -66,6 +66,8 @@ void IMChatSession::close() {
 }
 
 void IMChatSession::addIMContact(const IMContact & imContact) {
+	Mutex::ScopedLock scopedLock(_mutex);
+
 	//The IMContact must be of the same protocol of the IMAccount
 	if (_imChat.getIMAccount() == *imContact.getIMAccount()) {
 		LOG_DEBUG("adding a new IMContact=" + imContact.getContactId());
@@ -74,11 +76,15 @@ void IMChatSession::addIMContact(const IMContact & imContact) {
 }
 
 void IMChatSession::removeIMContact(const IMContact & imContact) {
+	Mutex::ScopedLock scopedLock(_mutex);
+
 	LOG_DEBUG("removing an IMContact=" + imContact.getContactId());
 	_imChat.removeContact(*this, imContact.getContactId());
 }
 
 void IMChatSession::removeAllIMContact() {
+	Mutex::ScopedLock scopedLock(_mutex);
+
 	for (IMContactSet::const_iterator it = _imContactSet.begin(); it != _imContactSet.end(); ++it) {
 		_imChat.removeContact(*this, (*it).getContactId());
 	}
@@ -157,12 +163,16 @@ int IMChatSession::getId() const {
 }
 
 void IMChatSession::contactAddedEventHandler(IMChat & sender, IMChatSession & imChatSession, const IMContact & imContact) {
+	Mutex::ScopedLock scopedLock(_mutex);
+
 	if (imChatSession == *this) {
 		contactAddedEvent(*this, *_imContactSet.find(imContact));
 	}
 }
 
 void IMChatSession::contactRemovedEventHandler(IMChat & sender, IMChatSession & imChatSession, const std::string & contactId) {
+	Mutex::ScopedLock scopedLock(_mutex);
+
 	if (imChatSession == *this) {
 		IMContact imContact(_imChat.getIMAccount(), contactId);
 		if (_imContactSet.find(imContact) == _imContactSet.end()) {
