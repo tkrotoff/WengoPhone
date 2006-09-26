@@ -454,6 +454,9 @@ void QtPhoneCall::showVideoWidget() {
 	}
 
 	QGridLayout * layout = qobject_cast < QGridLayout * > (_phoneCallWidget->layout());
+	if (!layout) {
+		return;
+	}
 
 	//Removes the avatar from the widget
 	layout->removeWidget(_ui->avatarLabel);
