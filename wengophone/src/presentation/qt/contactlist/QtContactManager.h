@@ -21,7 +21,6 @@
 #define OWQTCONTACTMANAGER_H
 
 #include <QtCore/QList>
-#include <QtCore/QMutex>
 #include <QtCore/QObject>
 
 class ContactProfile;
@@ -201,8 +200,6 @@ private:
 	bool _canShow;
 
 	bool _wantShow;
-
-	QMutex _mutex;
 
 	/**
 	 * Translated strings

@@ -52,8 +52,7 @@ QtContactManager::QtContactManager(CUserProfile & cUserProfile, CWengoPhone & cW
 	: QObject(parent),
 	_cUserProfile(cUserProfile),
 	_cWengoPhone(cWengoPhone),
-	_qtContactList(qtContactList),
-	_mutex(QMutex::Recursive) {
+	_qtContactList(qtContactList) {
 
 	retranslateUi();
 
@@ -95,8 +94,6 @@ QtContactManager::QtContactManager(CUserProfile & cUserProfile, CWengoPhone & cW
 }
 
 void QtContactManager::startSMS(bool) {
-	QMutexLocker locker(&_mutex);
-
 	QtContactListManager * ul = QtContactListManager::getInstance();
 	QTreeWidgetItem * item = _tree->currentItem();
 	if (ul && item) {
@@ -105,8 +102,6 @@ void QtContactManager::startSMS(bool) {
 }
 
 void QtContactManager::startChat(bool) {
-	QMutexLocker locker(&_mutex);
-
 	QtContactListManager * ul = QtContactListManager::getInstance();
 	QTreeWidgetItem * item = _tree->currentItem();
 	if (ul && item) {
@@ -115,8 +110,6 @@ void QtContactManager::startChat(bool) {
 }
 
 void QtContactManager::editContact(bool) {
-	QMutexLocker locker(&_mutex);
-
 	QTreeWidgetItem * item = _tree->currentItem();
 	if (item) {
 		editContact(item->text(0));
@@ -132,8 +125,6 @@ void QtContactManager::editContact(QString contactId) {
 }
 
 void QtContactManager::deleteContact() {
-	QMutexLocker locker(&_mutex);
-
 	QTreeWidgetItem * item = _tree->currentItem();
 	if (!item) {
 		return;
@@ -158,8 +149,6 @@ void QtContactManager::treeViewSelectionChanged() {
 }
 
 void QtContactManager::closeUserInfo() {
-	QMutexLocker locker(&_mutex);
-
 	if (_previous) {
 		if (!_previous->parent()) {
 			//It's a group
@@ -178,8 +167,6 @@ void QtContactManager::closeUserInfo() {
 }
 
 void QtContactManager::openUserInfo(QTreeWidgetItem * item) {
-	QMutexLocker locker(&_mutex);
-
 	if (_previous) {
 		closeUserInfo();
 	}
@@ -308,8 +295,6 @@ void QtContactManager::safeUserStateChanged() {
 }
 
 void QtContactManager::userStateChanged() {
-	QMutexLocker locker(&_mutex);
-
 	safeUserStateChanged();
 }
 
@@ -326,8 +311,6 @@ void QtContactManager::hideGroups() {
 }
 
 void QtContactManager::sortContacts(bool bypassTimer) {
-	QMutexLocker locker(&_mutex);
-
 	safeSortContacts(bypassTimer);
 }
 
@@ -440,8 +423,6 @@ bool QtContactManager::canShowUser(const ContactProfile * cprofile) {
 }
 
 void QtContactManager::redrawContacts() {
-	QMutexLocker locker(&_mutex);
-
 	if (_canShow) {
 		_canShow = false;
 		if (_showTimerId != -1) {
@@ -590,8 +571,6 @@ QMenu * QtContactManager::createMenu() {
 }
 
 void QtContactManager::startMobileCall(bool) {
-	QMutexLocker locker(&_mutex);
-
 	QtContactListManager * ul = QtContactListManager::getInstance();
 	QTreeWidgetItem * item = _tree->currentItem();
 	if (ul && item) {
@@ -601,8 +580,6 @@ void QtContactManager::startMobileCall(bool) {
 }
 
 void QtContactManager::startHomeCall(bool) {
-	QMutexLocker locker(&_mutex);
-
 	QtContactListManager * ul = QtContactListManager::getInstance();
 	QTreeWidgetItem * item = _tree->currentItem();
 	if (ul && item) {
@@ -612,8 +589,6 @@ void QtContactManager::startHomeCall(bool) {
 }
 
 void QtContactManager::startWorkCall(bool) {
-	QMutexLocker locker(&_mutex);
-
 	QtContactListManager * ul = QtContactListManager::getInstance();
 	QTreeWidgetItem * item = _tree->currentItem();
 	if (ul && item) {
@@ -623,8 +598,6 @@ void QtContactManager::startWorkCall(bool) {
 }
 
 void QtContactManager::startWengoCall(bool) {
-	QMutexLocker locker(&_mutex);
-
 	QtContactListManager * ul = QtContactListManager::getInstance();
 	QTreeWidgetItem * item = _tree->currentItem();
 	if (ul && item) {
@@ -634,8 +607,6 @@ void QtContactManager::startWengoCall(bool) {
 }
 
 void QtContactManager::removeContact(const QString & contactId) {
-	QMutexLocker locker(&_mutex);
-
 	QtContactListManager * ul = QtContactListManager::getInstance();
 	QtContact * qtContact = NULL;
 	bool found = false;
@@ -650,6 +621,7 @@ void QtContactManager::removeContact(const QString & contactId) {
 				item = group->child(i);
 				qtContact = ul->getContact(item->text(0));
 				if (qtContact->getId() == contactId) {
+					closeUserInfo();
 					item = group->takeChild(i);
 					ul->removeContact(qtContact);
 					delete item;
@@ -666,8 +638,6 @@ void QtContactManager::setMouseButton(Qt::MouseButton button) {
 
 void QtContactManager::moveContact(const std::string & dstGroupId,
 	const std::string & srcGroupId, const std::string & contactId) {
-
-	QMutexLocker locker(&_mutex);
 
 	LOG_DEBUG("moving contact=" + contactId +
 		" from=" + srcGroupId +
