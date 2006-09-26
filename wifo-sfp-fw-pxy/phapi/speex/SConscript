@@ -1,3 +1,0 @@
-env = WengoGetEnvironment()
-
-env.SConscript('libspeex/SConscript')
