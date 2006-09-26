@@ -97,19 +97,29 @@ unsigned int sfp_transfer_send_file(sfp_session_info_t * session){
 	unsigned short port;
 	sfp_returncode_t res = SUCCESS;
 
+	if(session == NULL){
+		m_log_error("session is NULL!!", "sfp_transfer_send_file");
+		return FAILURE;
+	}
+
 	// mark the session as running
 	session->state = SFP_SESSION_RUNNING;
 
-	// TODO add checks
-	if(strequals(session->local_mode, SFP_MODE_ACTIVE)){
+	if(session->local_mode != NULL && strequals(session->local_mode, SFP_MODE_ACTIVE)){
 		mode = SFP_TRANSFER_ACTIVE;
-	}else if(strequals(session->local_mode, SFP_MODE_PASSIVE)){
+	}else if(session->local_mode != NULL && strequals(session->local_mode, SFP_MODE_PASSIVE)){
 		mode = SFP_TRANSFER_PASSIVE;
+	}else{
+		m_log_error("session->local_mode is NULL!!", "sfp_transfer_send_file");
+		return FAILURE;
 	}
-	if(strequals(session->ip_protocol, SFP_IP_PROTOCOL_TCP)){
+	if(session->ip_protocol != NULL && strequals(session->ip_protocol, SFP_IP_PROTOCOL_TCP)){
 		protocol = SFP_TRANSFER_TCP;
-	}else if(strequals(session->local_mode, SFP_IP_PROTOCOL_UDP)){
+	}else if(session->ip_protocol != NULL && strequals(session->local_mode, SFP_IP_PROTOCOL_UDP)){
 		protocol = SFP_TRANSFER_UDP;
+	}else{
+		m_log_error("session->ip_protocol is NULL!!", "sfp_transfer_send_file");
+		return FAILURE;
 	}
 
 	// check the mode first
@@ -144,19 +154,29 @@ unsigned int sfp_transfer_receive_file(sfp_session_info_t * session){
 	unsigned short port;
 	sfp_returncode_t res = SUCCESS;
 
+	if(session == NULL){
+		m_log_error("session is NULL!!", "sfp_transfer_receive_file");
+		return FAILURE;
+	}
+
 	// mark the session as running
 	session->state = SFP_SESSION_RUNNING;
 
-	// TODO add checks
-	if(strequals(session->local_mode, SFP_MODE_ACTIVE)){
+	if(session->local_mode != NULL && strequals(session->local_mode, SFP_MODE_ACTIVE)){
 		mode = SFP_TRANSFER_ACTIVE;
-	}else if(strequals(session->local_mode, SFP_MODE_PASSIVE)){
+	}else if(session->local_mode != NULL && strequals(session->local_mode, SFP_MODE_PASSIVE)){
 		mode = SFP_TRANSFER_PASSIVE;
+	}else{
+		m_log_error("session->local_mode is NULL!!", "sfp_transfer_receive_file");
+		return FAILURE;
 	}
-	if(strequals(session->ip_protocol, SFP_IP_PROTOCOL_TCP)){
+	if(session->ip_protocol != NULL && strequals(session->ip_protocol, SFP_IP_PROTOCOL_TCP)){
 		protocol = SFP_TRANSFER_TCP;
-	}else if(strequals(session->local_mode, SFP_IP_PROTOCOL_UDP)){
+	}else if(session->ip_protocol != NULL && strequals(session->local_mode, SFP_IP_PROTOCOL_UDP)){
 		protocol = SFP_TRANSFER_UDP;
+	}else{
+		m_log_error("session->ip_protocol is NULL!!", "sfp_transfer_receive_file");
+		return FAILURE;
 	}
 
 	// check the mode first

@@ -17,7 +17,8 @@ typedef enum sfp_returncode {
 	CANT_WRITE_FILE,
 	CANT_CLOSE_FILE,
 	FILE_SEND_FAILED,
-	FILE_RECEIVE_FAILED
+	FILE_RECEIVE_FAILED,
+	FAILURE
 } sfp_returncode_t;
 
 #endif /* __SFP_ERROR_H__ */
