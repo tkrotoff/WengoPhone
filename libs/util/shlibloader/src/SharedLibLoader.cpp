@@ -41,11 +41,11 @@ SharedLibLoader::SharedLibLoader(const std::string & fileName) {
 	}
 
 #if defined(OS_WINDOWS)
-	_loaderPrivate = new Win32SharedLibLoader(fileName);
+	_loaderPrivate = new Win32SharedLibLoader(tmp);
 #elif defined(OS_POSIX)
-	_loaderPrivate = new PosixSharedLibLoader(fileName);
+	_loaderPrivate = new PosixSharedLibLoader(tmp);
 #else
-	_loaderPrivate = new NullSharedLibLoader(fileName);
+	_loaderPrivate = new NullSharedLibLoader(tmp);
 #endif
 }
 
@@ -67,8 +67,9 @@ void * SharedLibLoader::resolve(const std::string & symbol) {
 
 void * SharedLibLoader::resolve(const std::string & fileName, const std::string & symbol) {
 	SharedLibLoader loader(fileName);
-	loader.load();
-	return loader.resolve(symbol);
+	if (loader.load())
+	  return loader.resolve(symbol);
+	return NULL;
 }
 
 std::string SharedLibLoader::getSharedLibExtension() {
