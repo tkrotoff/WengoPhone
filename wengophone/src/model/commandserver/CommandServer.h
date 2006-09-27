@@ -21,6 +21,7 @@
 #define OWCOMMANDSERVER_H
 
 #include <socket/ServerSocket.h>
+#include <util/Event.h>
 
 class WengoPhone;
 
@@ -33,6 +34,12 @@ class WengoPhone;
  */
 class CommandServer {
 public:
+
+	/**
+	 * @param sender this class
+	 * @param wsWengoSubscribe WsWengoSubscribe created
+	 */
+	Event<void (CommandServer & sender, const std::string & wengoName)> showAddContactEvent;
 
 	CommandServer(WengoPhone & wengoPhone);
 
@@ -75,6 +82,10 @@ private:
 	static const std::string _queryCall;
 
 	static const std::string _querySms;
+
+	static const std::string _queryChat;
+
+	static const std::string _queryAddContact;
 
 	WengoPhone & _wengoPhone;
 };

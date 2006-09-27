@@ -245,3 +245,8 @@ void QtSimpleIMContactManager::jabberLineEditClicked() {
 		loadIMContacts();
 	}
 }
+
+void QtSimpleIMContactManager::setWengoName(const QString & wengoName) {
+	_ui->wengoLineEdit->setText(wengoName);
+	_ui->wengoLineEdit->setEnabled(true);
+}

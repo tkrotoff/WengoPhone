@@ -22,15 +22,20 @@
 
 #include "Presentation.h"
 
+#include <string>
+
 /**
  *
  * @ingroup presentation
  * @author Tanguy Krotoff
+ * @author Mathieu Stute
  */
 class PWengoPhone : public Presentation {
 public:
 
 	virtual void showHistory() = 0;
+
+	virtual void showAddContact(const std::string nickname) = 0;
 
 	/**
 	 * @see WengoPhone::exitEvent

@@ -25,6 +25,7 @@
 #include <control/profile/CUserProfileHandler.h>
 #include <control/webservices/subscribe/CSubscribe.h>
 
+#include <model/commandserver/CommandServer.h>
 #include <model/WengoPhone.h>
 #include <model/webservices/subscribe/WsSubscribe.h>
 
@@ -54,6 +55,9 @@ void CWengoPhone::initPresentationThreadSafe() {
 	_wengoPhone.initFinishedEvent += boost::bind(&CWengoPhone::initFinishedEventHandler, this, _1);
 	_wengoPhone.exitEvent += boost::bind(&CWengoPhone::exitEventHandler, this);
 	_wengoPhone.wsSubscribeCreatedEvent += boost::bind(&CWengoPhone::wsSubscribeCreatedEventHandler, this, _1, _2);
+
+	CommandServer & commandServer = CommandServer::getInstance(_wengoPhone);
+	commandServer.showAddContactEvent += boost::bind(&CWengoPhone::showAddContactEventHandler, this, _1, _2);
 }
 
 Presentation * CWengoPhone::getPresentation() const {
@@ -100,4 +104,8 @@ void CWengoPhone::exitEventHandlerThreadSafe() {
 	if (_pWengoPhone) {
 		_pWengoPhone->exitEvent();
 	}
+}
+
+void CWengoPhone::showAddContactEventHandler(CommandServer & sender, const std::string & wengoName) {
+	_pWengoPhone->showAddContact(wengoName);
 }

@@ -58,6 +58,8 @@ public:
 
 	void saveIMContacts();
 
+	void setWengoName(const QString & wengoName);
+
 private Q_SLOTS:
 
 	void searchWengoContactButtonClicked();

@@ -126,6 +126,8 @@ public:
 
 	void showHistory();
 
+	void showAddContact(const std::string nickname);
+
 public Q_SLOTS:
 
 	void currentUserProfileWillDieEventHandlerSlot();

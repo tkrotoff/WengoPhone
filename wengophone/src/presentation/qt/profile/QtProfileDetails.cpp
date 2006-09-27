@@ -361,3 +361,7 @@ void QtProfileDetails::advancedButtonClicked() {
 		_ui->advancedButton->setText(tr("Advanced >>"));
 	}
 }
+
+void QtProfileDetails::setWengoName(const QString & wengoName) {
+	_qtIMContactManager->setWengoName(wengoName);
+}

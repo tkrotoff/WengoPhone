@@ -59,6 +59,8 @@ public:
 
 	static void setProfileAvatarFileName(UserProfile & userProfile, const QString & fileName);
 
+	void setWengoName(const QString & wengoName);
+
 public Q_SLOTS:
 
 	void changeUserProfileAvatar();

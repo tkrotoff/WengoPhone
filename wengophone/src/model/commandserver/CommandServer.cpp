@@ -19,12 +19,18 @@
 
 #include "CommandServer.h"
 
-#include <model/WengoPhone.h>
-#include <model/phoneline/IPhoneLine.h>
-#include <model/profile/UserProfileHandler.h>
-#include <model/profile/UserProfile.h>
+#include <model/chat/ChatHandler.h>
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
+#include <model/phoneline/IPhoneLine.h>
+#include <model/profile/UserProfile.h>
+#include <model/profile/UserProfileHandler.h>
+#include <model/WengoPhone.h>
+
+#include <imwrapper/EnumIMProtocol.h>
+#include <imwrapper/IMAccountHandler.h>
+#include <imwrapper/IMContact.h>
+#include <imwrapper/IMContactSet.h>
 
 #include <util/Logger.h>
 
@@ -32,6 +38,8 @@ CommandServer * CommandServer::_commandServerInstance = NULL;
 const std::string CommandServer::_queryStatus = "1|s";
 const std::string CommandServer::_queryCall = "1|o|call/";
 const std::string CommandServer::_querySms = "1|o|sms/";
+const std::string CommandServer::_queryChat = "1|o|chat/";
+const std::string CommandServer::_queryAddContact = "1|o|addc/";
 
 CommandServer::CommandServer(WengoPhone & wengoPhone)
 	: _wengoPhone(wengoPhone) {
@@ -96,13 +104,80 @@ void CommandServer::incomingRequestEventHandler(ServerSocket & sender, const std
 				if (phoneLine && phoneLine->isConnected()) {
 					phoneLine->makeCall(l[1]);
 					_serverSocket->writeToClient(connectionId, data + "|1");
+					return;
 				}
 			}
 		}
 		_serverSocket->writeToClient(connectionId, data + "|0");
 
 	} else if (query.contains(_querySms)) {
+
 		LOG_WARN("not yet implemented");
+
+	} else if (query.contains(_queryChat)) {
+
+		UserProfile * userProfile = _wengoPhone.getUserProfileHandler().getCurrentUserProfile();
+		if (userProfile) {
+			IPhoneLine * phoneLine = userProfile->getActivePhoneLine();
+			if (phoneLine && phoneLine->isConnected()) {
+
+				// extract the nickname from 1|o|chat/pseudo=value&sip=value
+				StringList l = query.split("/");
+				std::string nickname;
+				if (l.size() == 2) {
+					int sepPos = l[1].find("&");
+					nickname = l[1].substr(7, sepPos - 7);
+				}
+				////
+
+				// get THE Wengo account
+				IMAccountHandler imAccountHandler(userProfile->getIMAccountHandler());
+				std::set<IMAccount *> imAccountSet = imAccountHandler.getIMAccountsOfProtocol(EnumIMProtocol::IMProtocolWengo);
+				////
+
+				// create the IMContactSet
+				IMAccount * imAccount = *imAccountSet.begin();
+				IMContact imContact(*imAccount, nickname);
+				IMContactSet imContactSet;
+				imContactSet.insert(imContact);
+				////
+
+				// create the chat session
+				ChatHandler & chatHandler = userProfile->getChatHandler();
+				chatHandler.createSession(*imAccount, imContactSet);
+				////
+			}
+		}
+		// failed
+		_serverSocket->writeToClient(connectionId, _queryChat + "|0");
+
+	} else if (query.contains(_queryAddContact)) {
+
+		UserProfile * userProfile = _wengoPhone.getUserProfileHandler().getCurrentUserProfile();
+		if (userProfile) {
+
+			// extract the information
+			StringList l = query.split("/");
+			std::string nickname;
+			if (l.size() == 2) {
+				String infos = String(l[1]);
+				StringList contactInfo = infos.split("&");
+
+				for(unsigned int i = 0; i < contactInfo.size(); i++) {
+	
+					String info = contactInfo[i];
+	
+					if (info.beginsWith("pseudo=")) {
+						nickname = info.substr(7, info.size() - 7);
+					}
+	
+				}
+			}
+			////
+
+			showAddContactEvent(*this, nickname);
+		}
+
 	} else {
 
 		Config & config = ConfigManager::getInstance().getCurrentConfig();

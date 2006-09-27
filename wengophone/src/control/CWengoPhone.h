@@ -27,6 +27,7 @@ class WengoPhone;
 class Presentation;
 class CUserProfileHandler;
 class WsSubscribe;
+class CommandServer;
 
 /**
  * @ingroup control
@@ -76,6 +77,8 @@ private:
 	void initFinishedEventHandler(WengoPhone & sender);
 
 	void wsSubscribeCreatedEventHandler(WengoPhone & sender, WsSubscribe & wsSubscribe);
+
+	void showAddContactEventHandler(CommandServer & sender, const std::string & wengoName);
 
 	void exitEventHandler();
 

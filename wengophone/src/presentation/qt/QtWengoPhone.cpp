@@ -40,6 +40,7 @@
 #include "phonecall/QtContactCallListWidget.h"
 #include "phonecall/QtPhoneCall.h"
 #include "phoneline/QtPhoneLine.h"
+#include "profile/QtProfileDetails.h"
 #include "profilebar/QtProfileBar.h"
 #include "statusbar/QtStatusBar.h"
 #include "webservices/directory/QtWsDirectory.h"
@@ -708,4 +709,21 @@ void QtWengoPhone::languageChanged() {
 	_ui->actionShowConfig->setText("Preferences");
 	_ui->actionShowAbout->setText("About");
 #endif
+}
+
+void QtWengoPhone::showAddContact(const std::string nickname) {
+
+	if (_cWengoPhone.getCUserProfileHandler().getCUserProfile()) {
+
+		//FIXME this method should not be called if no UserProfile has been set
+		ContactProfile contactProfile;
+		QtProfileDetails qtProfileDetails(*_cWengoPhone.getCUserProfileHandler().getCUserProfile(),
+			contactProfile, _wengoPhoneWindow, tr("Add a Contact"));
+		
+		qtProfileDetails.setWengoName(QString::fromStdString(nickname));
+		if (qtProfileDetails.show()) {
+			_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCContactList().addContact(contactProfile);
+		}
+	}
+
 }
