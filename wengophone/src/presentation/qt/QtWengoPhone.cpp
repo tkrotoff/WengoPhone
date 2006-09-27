@@ -23,6 +23,8 @@
 
 #include <presentation/PFactory.h>
 
+#include <cutil/global.h>
+
 #include "QtSystray.h"
 #include "QtHttpProxyLogin.h"
 #include "QtConfigPanel.h"
@@ -45,6 +47,9 @@
 #include "statusbar/QtStatusBar.h"
 #include "webservices/directory/QtWsDirectory.h"
 #include "webservices/sms/QtSms.h"
+#ifdef OS_WINDOWS
+#include "webdirectory/QtWebDirectory.h"
+#endif
 
 #include <control/CWengoPhone.h>
 #include <control/profile/CUserProfile.h>
@@ -169,6 +174,10 @@ void QtWengoPhone::initThreadSafe() {
 	//QtStatusBar
 	_qtStatusBar = new QtStatusBar(_cWengoPhone, _ui->statusBar);
 
+#ifdef OS_WINDOWS
+	_qtWebDirectory = new QtWebDirectory(_wengoPhoneWindow);
+#endif
+
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
 	//QtBrowserWidget
@@ -224,6 +233,12 @@ void QtWengoPhone::setQtSms(QtSms * qtSms) {
 QtSms * QtWengoPhone::getQtSms() const {
 	return _qtSms;
 }
+
+#ifdef OS_WINDOWS
+QtWebDirectory * QtWengoPhone::getQtWebDirectory() const {
+	return _qtWebDirectory;
+}
+#endif
 
 void QtWengoPhone::setQtWsDirectory(QtWsDirectory * qtWsDirectory) {
 	_qtWsDirectory = qtWsDirectory;
@@ -711,7 +726,14 @@ void QtWengoPhone::languageChanged() {
 #endif
 }
 
-void QtWengoPhone::showAddContact(const std::string nickname) {
+void QtWengoPhone::showAddContact(const std::string & nickname) {
+	typedef PostEvent1<void (const QString & nickname), const QString &> MyPostEvent;
+	MyPostEvent * event =
+		new MyPostEvent(boost::bind(&QtWengoPhone::showAddContactThreadSafe, this, _1), QString::fromStdString(nickname));
+	postEvent(event);
+}
+
+void QtWengoPhone::showAddContactThreadSafe(const QString & nickname) {
 
 	if (_cWengoPhone.getCUserProfileHandler().getCUserProfile()) {
 
@@ -719,11 +741,10 @@ void QtWengoPhone::showAddContact(const std::string nickname) {
 		ContactProfile contactProfile;
 		QtProfileDetails qtProfileDetails(*_cWengoPhone.getCUserProfileHandler().getCUserProfile(),
 			contactProfile, _wengoPhoneWindow, tr("Add a Contact"));
-		
-		qtProfileDetails.setWengoName(QString::fromStdString(nickname));
+
+		qtProfileDetails.setWengoName(nickname);
 		if (qtProfileDetails.show()) {
 			_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCContactList().addContact(contactProfile);
 		}
 	}
-
 }

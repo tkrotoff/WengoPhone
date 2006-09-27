@@ -21,6 +21,8 @@
 
 #include "ui_WengoPhoneWindow.h"
 
+#include <cutil/global.h>
+
 #include "QtWengoPhone.h"
 #include "QtAbout.h"
 #include "profile/QtProfileDetails.h"
@@ -35,6 +37,9 @@
 #include "filetransfer/QtFileTransfer.h"
 #include "filetransfer/QtFileTransferWidget.h"
 #include "conference/QtConferenceCallWidget.h"
+#ifdef OS_WINDOWS
+#include "webdirectory/QtWebDirectory.h"
+#endif
 
 #include <control/CWengoPhone.h>
 #include <control/profile/CUserProfile.h>
@@ -173,12 +178,22 @@ void QtToolBar::showWengoServices() {
 }
 
 void QtToolBar::searchWengoContact() {
+	/*
 	QtWsDirectory * qtWsDirectory = _qtWengoPhone.getQtWsDirectory();
 	if (qtWsDirectory) {
 		QWidget * parent = qobject_cast<QWidget *>(sender()->parent());
 		qtWsDirectory->getWidget()->setParent(parent, Qt::Dialog);
 		qtWsDirectory->show();
 	}
+	*/
+#ifdef OS_WINDOWS
+	QtWebDirectory * qtWebDirectory = _qtWengoPhone.getQtWebDirectory();
+	if (qtWebDirectory) {
+		qtWebDirectory->show();
+	}
+#else
+	WsUrl::showWengoSmartDirectory();
+#endif
 }
 
 void QtToolBar::showAbout() {

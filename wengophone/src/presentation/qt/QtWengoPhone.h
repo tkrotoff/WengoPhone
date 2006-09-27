@@ -59,6 +59,9 @@ class QtToaster;
 class QtWsDirectory;
 class QtBrowserWidget;
 class UserProfile;
+#ifdef OS_WINDOWS
+class QtWebDirectory;
+#endif
 
 class QWidget;
 class QMenu;
@@ -121,12 +124,16 @@ public:
 
 	CWengoPhone & getCWengoPhone() const;
 
+#ifdef OS_WINDOWS
+	QtWebDirectory * getQtWebDirectory() const;
+#endif
+
 	void setChatWindow(QWidget * chatWindow);
 	QWidget * getChatWindow() const;
 
 	void showHistory();
 
-	void showAddContact(const std::string nickname);
+	void showAddContact(const std::string & nickname);
 
 public Q_SLOTS:
 
@@ -174,6 +181,8 @@ private:
 
 	void wrongProxyAuthenticationEventHandler(NetworkProxyDiscovery & sender, NetworkProxy networkProxy);
 
+	void showAddContactThreadSafe(const QString & nickname);
+
 	void makeCallErrorEventHandler();
 
 	void makeCallErrorEventHandlerThreadSafe();
@@ -220,6 +229,10 @@ private:
 	QWidget * _chatWindow;
 
 	QWidget * _activeTabBeforeCall;
+
+#ifdef OS_WINDOWS
+	QtWebDirectory * _qtWebDirectory;
+#endif
 };
 
 #endif	//OWQTWENGOPHONE_H
