@@ -125,10 +125,6 @@ QtPhoneCall::QtPhoneCall(CPhoneCall & cPhoneCall)
 	SAFE_CONNECT(_actionInvite, SIGNAL(triggered(bool)), SLOT(inviteToConference(bool)));
 	//_actionInvite->setEnabled(false);
 
-	//Start/stop video
-	_actionSwitchVideo = new QAction(tr("Stop video"), _phoneCallWidget);
-	SAFE_CONNECT(_actionSwitchVideo, SIGNAL(triggered(bool)), SLOT(switchVideo(bool)));
-
 	//Add contact
 	_actionAddContact = new QAction(QIcon(":/pics/actions/add-contact.png"), tr("Add contact"), _phoneCallWidget);
 	SAFE_CONNECT(_actionAddContact, SIGNAL(triggered(bool)), SLOT(addContactActionTriggered(bool)));
@@ -194,10 +190,6 @@ QMenu * QtPhoneCall::createMenu() const {
 	//FIXME Invite to conferente desactivated for the moment due to a crash
 	//menu->addSeparator();
 	//menu->addAction(_actionInvite);
-
-	menu->addSeparator();
-
-	menu->addAction(_actionSwitchVideo);
 
 	menu->addSeparator();
 
@@ -481,18 +473,6 @@ void QtPhoneCall::showAvatar() {
 	//Inserts the avatar label
 	layout->addWidget(_ui->avatarLabel, 0, 0);
 	_ui->avatarLabel->show();
-}
-
-void QtPhoneCall::switchVideo(bool) {
-	if (_showVideo) {
-		showAvatar();
-		_showVideo = false;
-		_actionSwitchVideo->setText(tr("Start video"));
-	} else {
-		_showVideo = true;
-		_actionSwitchVideo->setText(tr("Stop video"));
-		showVideoWidget();
-	}
 }
 
 void QtPhoneCall::inviteToConference(bool) {

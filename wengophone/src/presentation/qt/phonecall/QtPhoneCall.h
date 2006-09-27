@@ -93,8 +93,6 @@ public Q_SLOTS:
 
 	void inviteToConference(bool checked);
 
-	void switchVideo(bool checked);
-
 	void openPopup(int x, int y);
 
 	void acceptCall();
@@ -142,8 +140,6 @@ private:
 	QAction * _actionResume;
 
 	QAction * _actionInvite;
-
-	QAction * _actionSwitchVideo;
 
 	QAction * _actionAddContact;
 
