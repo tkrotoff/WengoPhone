@@ -141,20 +141,6 @@
     <addaction name="separator" />
     <addaction name="actionShowAbout" />
    </widget>
-   <widget class="QMenu" name="menuWengo" >
-    <property name="title" >
-     <string>&amp;Wengo</string>
-    </property>
-    <addaction name="actionShowWengoAccount" />
-    <addaction name="actionEditMyProfile" />
-    <addaction name="actionLogOff" />
-    <addaction name="separator" />
-    <addaction name="actionChangeProfile" />
-    <addaction name="separator" />
-    <addaction name="actionWengoServices" />
-    <addaction name="separator" />
-    <addaction name="actionClose" />
-   </widget>
    <widget class="QMenu" name="menuContacts" >
     <property name="title" >
      <string>&amp;Contacts</string>
@@ -207,6 +193,20 @@
     <addaction name="actionShowConfig" />
     <addaction name="separator" />
     <addaction name="menuClearHistory" />
+   </widget>
+   <widget class="QMenu" name="menuWengo" >
+    <property name="title" >
+     <string>&amp;Wengo</string>
+    </property>
+    <addaction name="actionShowWengoAccount" />
+    <addaction name="actionEditMyProfile" />
+    <addaction name="actionLogOff" />
+    <addaction name="separator" />
+    <addaction name="actionChangeProfile" />
+    <addaction name="separator" />
+    <addaction name="actionWengoServices" />
+    <addaction name="separator" />
+    <addaction name="actionClose" />
    </widget>
    <addaction name="menuWengo" />
    <addaction name="menuContacts" />
@@ -424,7 +424,7 @@
     <iconset/>
    </property>
    <property name="text" >
-    <string>Log &amp;Off</string>
+    <string>Log &amp;Off / Log In</string>
    </property>
   </action>
   <action name="actionOpenChatWindow" >
