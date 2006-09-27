@@ -172,7 +172,7 @@ Config::Config(const std::string & name)
 	resourcesPath = Path::getApplicationResourcesDirPath();
 #elif defined(OS_LINUX)
  #if defined(OW_RESOURCEDIR)
-	resourcesPath = OW_RESOURCEDIR;
+	resourcesPath = OW_RESOURCEDIR + File::getPathSeparator();
  #endif
 #endif
 	_keyDefaultValueMap[RESOURCES_DIR_KEY] = resourcesPath;

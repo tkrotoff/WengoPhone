@@ -2,6 +2,8 @@ project(owwenbox)
 
 if (WIN32)
   subdirs(src/yealink)
+  #else (WIN32)
+  #subdirs(src/null)
 endif (WIN32)
 
 # needed include directories to build owwenbox
@@ -25,7 +27,6 @@ set(OWWENBOX_LINK_LIBRARIES
   ${OWCUTIL_LIBRARY}
   ${OWUTIL_LIBRARY}
   ${OWSHLIBLOADER_LIBRARY}
-  CACHE INTERNAL "owwenbox libraries"
 )
 
 set(owwenbox_SRCS

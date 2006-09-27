@@ -1,32 +1,48 @@
-project(ownullwenbox)
+project(nullwenbox)
 
-find_package(Boost REQUIRED)
-
-# needed include directories to build ownullwenbox
-# saves the variable in internal cache for later use
-set(OWNULLWENBOX_INCLUDE_DIRS
+# needed include directories to build nullwenbox
+set(NULLWENBOX_INCLUDE_DIRS
   ${CMAKE_CURRENT_SOURCE_DIR}
-  ${Boost_INCLUDE_DIRS}
-  CACHE INTERNAL "ownullwenbox include directories"
+  ${OWUTIL_INCLUDE_DIRS}
+  ${WENBOX_INCLUDE_DIRS}
 )
 
-# ownullwenbox lib and dependencies
-# saves the variable in internal cache for later use
-set(OWNULLWENBOX_LIBRARIES
-  ownullwenbox
-  ${OWWENBOX_LIBRARIES}
-  CACHE INTERNAL "ownullwenbox libraries"
+set(NULLWENBOX_LIBRARY
+  wenboxplugin
 )
 
-include_directories(
-  ${OWNULLWENBOX_INCLUDE_DIRS}
+# nullwenbox lib and dependencies
+set(NULLWENBOX_LINK_LIBRARIES
+  ${NULLWENBOX_LIBRARY}
+  ${OWUTIL_LIBRARY}
+  ${WENBOX_LIBRARY}
 )
 
-set(ownullwenbox_SRCS
+set(NULLWENBOX_DEFINITIONS
+  -DWENBOX_DLL=1
+  -DBUILDING_DLL=1
+)
+
+set(nullwenbox_SRCS
   NullWenbox.cpp
 )
 
-add_library(ownullwenbox STATIC ${ownullwenbox_SRCS})
+include_directories(
+  ${NULLWENBOX_INCLUDE_DIRS}
+)
 
-target_link_libraries(ownullwenbox owwenbox)
+add_definitions(
+  ${NULLWENBOX_DEFINITIONS}
+)
+
+macro_add_plugin(${NULLWENBOX_LIBRARY} ${nullwenbox_SRCS})
+
+target_link_libraries(${NULLWENBOX_LINK_LIBRARIES})
+
+install(
+  TARGETS
+    ${NULLWENBOX_LIBRARY}
+  DESTINATION
+    ${PLUGIN_INSTALL_DIR}
+)
 

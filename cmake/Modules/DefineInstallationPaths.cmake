@@ -3,10 +3,12 @@ if (UNIX)
     MESSAGE(STATUS "${PROJECT_NAME} is used as APPLICATION_NAME")
     SET(APPLICATION_NAME ${PROJECT_NAME})
   ENDIF (NOT APPLICATION_NAME)
+
   # Suffix for Linux
   SET(LIB_SUFFIX
     CACHE STRING "Define suffix of directory name (32/64)"
   )
+
   SET(EXEC_INSTALL_PREFIX
     "${CMAKE_INSTALL_PREFIX}"
     CACHE PATH  "Base directory for executables and libraries"
@@ -112,10 +114,11 @@ if (WIN32)
   # Same same
   SET(BIN_INSTALL_DIR .)
   SET(SBIN_INSTALL_DIR .)
-  SET(LIB_INSTALL_DIR lib)
+  SET(LIB_INSTALL_DIR .)
   SET(PLUGIN_INSTALL_DIR plugins)
   SET(HTML_INSTALL_DIR doc/HTML)
-  SET(ICON_INSTALL_DIR icons)
-  SET(SOUND_INSTALL_DIR sounds)
+  SET(ICON_INSTALL_DIR .)
+  SET(SOUND_INSTALL_DIR .)
   SET(LOCALE_INSTALL_DIR lang)
 endif (WIN32)
+

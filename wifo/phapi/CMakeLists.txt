@@ -95,10 +95,9 @@ set(PHAPI_DEFINITIONS
   -DWENGOPHONE_UA="\\"phapi/eXosip/0.2.0\\""
 )
 
-if (SVN_REVISION)
+if (WITH_BUILDID)
   add_definitions(-DSUBVERSION_REVISION="${SVN_REVISION}")
-endif (SVN_REVISION)
-
+endif (WITH_BUILDID)
 
 # PH_FORCE_16KHZ : activate FORCED 16 KHZ SAMPLING
 # SUBVERSION_REVISION : grab the svn revision number

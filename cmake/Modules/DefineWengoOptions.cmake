@@ -3,4 +3,5 @@ if (WIN32)
 endif (WIN32)
 
 option(WITH_VIDEO "Build phapi with video support" ON)
-option(WITH_BUILDID "Build wengophone with buildid (builds faster without)" ON)
+option(WITH_BUILDID "Build wengophone with buildid (builds faster without)" OFF)
+
