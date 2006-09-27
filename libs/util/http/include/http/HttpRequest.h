@@ -79,7 +79,7 @@ public:
 
 	/**
 	 * Sets the local proxy settings.
-         * The proxy can be a SOCKS5 proxy,
+	 * The proxy can be a SOCKS5 proxy,
 	 *
 	 * Static method so that it keeps the proxy informations once it is set.
 	 *
@@ -155,9 +155,14 @@ public:
 
 	void abort();
 
-	void run();
 
 private:
+
+	// Inherited from Thread
+	void start();
+
+	void run();
+	////
 
 	void answerReceivedEventHandler(IHttpRequest * sender, int requestId, const std::string & answer, Error error);
 

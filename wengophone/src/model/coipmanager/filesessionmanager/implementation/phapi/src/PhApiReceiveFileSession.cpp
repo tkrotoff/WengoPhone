@@ -75,14 +75,14 @@ PhApiReceiveFileSession::~PhApiReceiveFileSession(){}
 
 void PhApiReceiveFileSession::start() {
 	LOG_DEBUG("starting file transfer");
-	PhApiSFPWrapper::getInstance()->receiveFile(_currentCallID, _filePath+_fileName);
+	PhApiSFPWrapper::getInstance().receiveFile(_currentCallID, _filePath+_fileName);
 	LOG_DEBUG("end of transfer start");
 }
 
 void PhApiReceiveFileSession::pause(){
 	LOG_DEBUG("pausing file transfer");
 	if(_currentCallID > 0){
-		PhApiSFPWrapper::getInstance()->pauseTransfer(_currentCallID);
+		PhApiSFPWrapper::getInstance().pauseTransfer(_currentCallID);
 	}
 	LOG_DEBUG("end of transfer pause");
 }
@@ -90,7 +90,7 @@ void PhApiReceiveFileSession::pause(){
 void PhApiReceiveFileSession::resume(){
 	LOG_DEBUG("resuming file transfer");
 	if(_currentCallID > 0){
-		PhApiSFPWrapper::getInstance()->resumeTransfer(_currentCallID);
+		PhApiSFPWrapper::getInstance().resumeTransfer(_currentCallID);
 	}
 	LOG_DEBUG("end of transfer resume");
 }
@@ -98,7 +98,7 @@ void PhApiReceiveFileSession::resume(){
 void PhApiReceiveFileSession::stop(){
 	LOG_DEBUG("stopping file transfer");
 	if(_currentCallID > 0){
-		PhApiSFPWrapper::getInstance()->cancelTransfer(_currentCallID);
+		PhApiSFPWrapper::getInstance().cancelTransfer(_currentCallID);
 	}
 	LOG_DEBUG("end of transfer stop");
 }

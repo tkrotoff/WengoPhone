@@ -87,7 +87,9 @@ int CurlHttpRequest::sendRequest(bool sslProtocol, const std::string & hostname,
 void CurlHttpRequest::run() {
 	CURLcode res;
 	long response;
+
 	_curl = curl_easy_init();
+
 	if (_curl) {
 		setCurlParam();
 		setProxyParam();
@@ -142,11 +144,11 @@ void CurlHttpRequest::run() {
 				LOG_DEBUG("CURLINFO_SIZE_DOWNLOAD: " + String::fromNumber(tmp));
 			}
 		}
-	}
-	else {
+	} else {
 		LOG_WARN("cURL initialization failed");
 		return;
 	}
+
 	curl_easy_cleanup(_curl);
 }
 

@@ -89,11 +89,11 @@ void PhApiSendFileSession::start() {
 	if(_account != NULL && _imContactSet.size()>0 && _fileVector.size()>0){
 		//WengoAccount * wAccount = dynamic_cast<WengoAccount *>(_account);
 		WengoAccount * wAccount = _userProfile.getWengoAccount();
-		PhApiSFPWrapper * wrapper = PhApiSFPWrapper::getInstance();
+		PhApiSFPWrapper & wrapper = PhApiSFPWrapper::getInstance();
 		int vlid = wAccount->getVLineID();
 		std::string fullIdentity = wAccount->getDisplayName()+std::string(" <")+wAccount->getFullIdentity()+std::string(">");
 		std::string contactUri = std::string("sip:")+(*_currentContact).getContactId()+std::string("@voip.wengo.fr"); // FIXME get the real domain
-		_currentCallID = wrapper->sendFile(vlid,
+		_currentCallID = wrapper.sendFile(vlid,
 			fullIdentity,
 			contactUri,
 			(*_currentFile).getFullPath(),
@@ -107,7 +107,7 @@ void PhApiSendFileSession::start() {
 void PhApiSendFileSession::pause() {
 	LOG_DEBUG("pausing file transfer");
 	if(_currentCallID > 0){
-		PhApiSFPWrapper::getInstance()->pauseTransfer(_currentCallID);
+		PhApiSFPWrapper::getInstance().pauseTransfer(_currentCallID);
 	}
 	LOG_DEBUG("end of transfer pause");
 }
@@ -115,7 +115,7 @@ void PhApiSendFileSession::pause() {
 void PhApiSendFileSession::resume() {
 	LOG_DEBUG("resuming file transfer");
 	if(_currentCallID > 0){
-		PhApiSFPWrapper::getInstance()->resumeTransfer(_currentCallID);
+		PhApiSFPWrapper::getInstance().resumeTransfer(_currentCallID);
 	}
 	LOG_DEBUG("end of transfer resume");
 }
@@ -123,7 +123,7 @@ void PhApiSendFileSession::resume() {
 void PhApiSendFileSession::stop() {
 	LOG_DEBUG("stopping file transfer");
 	if(_currentCallID > 0){
-		PhApiSFPWrapper::getInstance()->cancelTransfer(_currentCallID);
+		PhApiSFPWrapper::getInstance().cancelTransfer(_currentCallID);
 	}
 	LOG_DEBUG("end of transfer stop");
 }

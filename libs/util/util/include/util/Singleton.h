@@ -36,11 +36,11 @@ protected:
 
 public:
 
-	static T * getInstance() {
+	static T & getInstance() {
 		if (!_singleton) {
 			_singleton = new T;
 		}
-		return (static_cast<T*>(_singleton));
+		return *_singleton;
 	}
 
 	static void deleteInstance() {

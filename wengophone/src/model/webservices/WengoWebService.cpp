@@ -19,11 +19,13 @@
 
 #include "WengoWebService.h"
 
+#include <model/WengoPhone.h>
 #include <model/account/wengo/WengoAccount.h>
 #include <model/config/Config.h>
 #include <model/config/ConfigManager.h>
 #include <WengoPhoneBuildId.h>
 
+#include <thread/ThreadEvent.h>
 #include <util/Logger.h>
 
 WengoWebService::WengoWebService(WengoAccount * wengoAccount)
@@ -36,7 +38,6 @@ WengoWebService::WengoWebService(WengoAccount * wengoAccount)
 }
 
 WengoWebService::~WengoWebService() {
-
 }
 
 void WengoWebService::setHttps(bool https) {
@@ -103,6 +104,12 @@ int WengoWebService::call(WengoWebService * caller) {
 }
 
 void WengoWebService::answerReceivedEventHandler(IHttpRequest * sender, int requestId, const std::string & answer, HttpRequest::Error error) {
+	typedef ThreadEvent4<void (IHttpRequest *, int, std::string, HttpRequest::Error), IHttpRequest *, int, std::string, HttpRequest::Error> MyThreadEvent;
+	MyThreadEvent *event = new MyThreadEvent(boost::bind(&WengoWebService::answerReceivedEventHandlerThreadSafe, this, _1, _2, _3, _4), sender, requestId, answer, error);
+	WengoPhone::getInstance().postEvent(event);
+}
+
+void WengoWebService::answerReceivedEventHandlerThreadSafe(IHttpRequest * sender, int requestId, std::string answer, HttpRequest::Error error) {
 	if (_caller) {
 		if (error == HttpRequest::NoError) {
 			_caller->answerReceived(answer, requestId);

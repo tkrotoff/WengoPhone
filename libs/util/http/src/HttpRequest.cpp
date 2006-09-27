@@ -154,7 +154,6 @@ void HttpRequest::abort() {
 }
 
 void HttpRequest::run() {
-	_httpRequestPrivate->run();
 }
 
 void HttpRequest::answerReceivedEventHandler(IHttpRequest * sender, int requestId, const std::string & answer, Error error) {

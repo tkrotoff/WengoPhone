@@ -360,7 +360,7 @@ private:
 
 	bool _registered;
 
-	PhApiSFPWrapper * phApiSFPWrapper;
+	PhApiSFPWrapper & _phApiSFPWrapper;
 };
 
 #endif	//OWPHAPIWRAPPER_H

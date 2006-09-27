@@ -130,67 +130,67 @@ extern "C" {
 
 
 void PhApiSFPCallbacks::inviteToTransfer(int callID, std::string uri, std::string fileName, std::string fileType, int fileSize){
-	PhApiSFPEvent::inviteToTransferEvent(*(PhApiSFPWrapper::getInstance()), callID, uri, fileName, fileType, fileSize);
+	PhApiSFPEvent::inviteToTransferEvent(PhApiSFPWrapper::getInstance(), callID, uri, fileName, fileType, fileSize);
 }
 
 void PhApiSFPCallbacks::newIncomingFile(int callID, std::string contactID, std::string fileName, std::string fileType, int fileSize){
-	PhApiSFPEvent::newIncomingFileEvent(*(PhApiSFPWrapper::getInstance()), callID, contactID, fileName, fileType, fileSize);
+	PhApiSFPEvent::newIncomingFileEvent(PhApiSFPWrapper::getInstance(), callID, contactID, fileName, fileType, fileSize);
 }
 
 void PhApiSFPCallbacks::waitingForAnswer(int callID, std::string uri){
-	PhApiSFPEvent::waitingForAnswerEvent(*(PhApiSFPWrapper::getInstance()), callID, uri);
+	PhApiSFPEvent::waitingForAnswerEvent(PhApiSFPWrapper::getInstance(), callID, uri);
 }
 
 void PhApiSFPCallbacks::transferCancelled(int callID, std::string fileName, std::string fileType, int fileSize){
-	PhApiSFPEvent::transferCancelledEvent(*(PhApiSFPWrapper::getInstance()), callID, fileName, fileType, fileSize);
+	PhApiSFPEvent::transferCancelledEvent(PhApiSFPWrapper::getInstance(), callID, fileName, fileType, fileSize);
 }
 
 void PhApiSFPCallbacks::transferCancelledByPeer(int callID, std::string contactID, std::string fileName, std::string fileType, int fileSize){
-	PhApiSFPEvent::transferCancelledByPeerEvent(*(PhApiSFPWrapper::getInstance()), callID, contactID, fileName, fileType, fileSize);
+	PhApiSFPEvent::transferCancelledByPeerEvent(PhApiSFPWrapper::getInstance(), callID, contactID, fileName, fileType, fileSize);
 }
 
 void PhApiSFPCallbacks::sendingFileBegin(int callID, std::string contactID, std::string fileName, std::string fileType, int fileSize){
-	PhApiSFPEvent::sendingFileBeginEvent(*(PhApiSFPWrapper::getInstance()), callID, contactID, fileName, fileType, fileSize);
+	PhApiSFPEvent::sendingFileBeginEvent(PhApiSFPWrapper::getInstance(), callID, contactID, fileName, fileType, fileSize);
 }
 
 void PhApiSFPCallbacks::receivingFileBegin(int callID, std::string contactID, std::string fileName, std::string fileType, int fileSize){
-	PhApiSFPEvent::receivingFileBeginEvent(*(PhApiSFPWrapper::getInstance()), callID, contactID, fileName, fileType, fileSize);
+	PhApiSFPEvent::receivingFileBeginEvent(PhApiSFPWrapper::getInstance(), callID, contactID, fileName, fileType, fileSize);
 }
 
 void PhApiSFPCallbacks::transferFromPeerFinished(int callID, std::string contactID, std::string fileName, std::string fileType, int fileSize){
-	PhApiSFPEvent::transferFromPeerFinishedEvent(*(PhApiSFPWrapper::getInstance()), callID, contactID, fileName, fileType, fileSize);
+	PhApiSFPEvent::transferFromPeerFinishedEvent(PhApiSFPWrapper::getInstance(), callID, contactID, fileName, fileType, fileSize);
 }
 
 void PhApiSFPCallbacks::transferToPeerFinished(int callID, std::string contactID, std::string fileName, std::string fileType, int fileSize){
-	PhApiSFPEvent::transferToPeerFinishedEvent(*(PhApiSFPWrapper::getInstance()), callID, contactID, fileName, fileType, fileSize);
+	PhApiSFPEvent::transferToPeerFinishedEvent(PhApiSFPWrapper::getInstance(), callID, contactID, fileName, fileType, fileSize);
 }
 
 void PhApiSFPCallbacks::transferFromPeerFailed(int callID, std::string contactID, std::string fileName, std::string fileType, int fileSize){
-	PhApiSFPEvent::transferFromPeerFailedEvent(*(PhApiSFPWrapper::getInstance()), callID, contactID, fileName, fileType, fileSize);
+	PhApiSFPEvent::transferFromPeerFailedEvent(PhApiSFPWrapper::getInstance(), callID, contactID, fileName, fileType, fileSize);
 }
 
 void PhApiSFPCallbacks::transferToPeerFailed(int callID, std::string contactID, std::string fileName, std::string fileType, int fileSize){
-	PhApiSFPEvent::transferToPeerFailedEvent(*(PhApiSFPWrapper::getInstance()), callID, contactID, fileName, fileType, fileSize);
+	PhApiSFPEvent::transferToPeerFailedEvent(PhApiSFPWrapper::getInstance(), callID, contactID, fileName, fileType, fileSize);
 }
 
 void PhApiSFPCallbacks::transferProgression(int callID, int percentage){
-	PhApiSFPEvent::transferProgressionEvent(*(PhApiSFPWrapper::getInstance()), callID, percentage);
+	PhApiSFPEvent::transferProgressionEvent(PhApiSFPWrapper::getInstance(), callID, percentage);
 }
 
 void PhApiSFPCallbacks::transferPausedByPeer(int callID, std::string contactID, std::string fileName, std::string fileType, int fileSize){
-	PhApiSFPEvent::transferPausedByPeerEvent(*(PhApiSFPWrapper::getInstance()), callID, contactID, fileName, fileType, fileSize);
+	PhApiSFPEvent::transferPausedByPeerEvent(PhApiSFPWrapper::getInstance(), callID, contactID, fileName, fileType, fileSize);
 }
 
 void PhApiSFPCallbacks::transferPaused(int callID, std::string contactID, std::string fileName, std::string fileType, int fileSize){
-	PhApiSFPEvent::transferPausedEvent(*(PhApiSFPWrapper::getInstance()), callID, contactID, fileName, fileType, fileSize);
+	PhApiSFPEvent::transferPausedEvent(PhApiSFPWrapper::getInstance(), callID, contactID, fileName, fileType, fileSize);
 }
 
 void PhApiSFPCallbacks::transferResumedByPeer(int callID, std::string contactID, std::string fileName, std::string fileType, int fileSize){
-	PhApiSFPEvent::transferResumedByPeerEvent(*(PhApiSFPWrapper::getInstance()), callID, contactID, fileName, fileType, fileSize);
+	PhApiSFPEvent::transferResumedByPeerEvent(PhApiSFPWrapper::getInstance(), callID, contactID, fileName, fileType, fileSize);
 }
 
 void PhApiSFPCallbacks::transferResumed(int callID, std::string contactID, std::string fileName, std::string fileType, int fileSize){
-	PhApiSFPEvent::transferResumedEvent(*(PhApiSFPWrapper::getInstance()), callID, contactID, fileName, fileType, fileSize);
+	PhApiSFPEvent::transferResumedEvent(PhApiSFPWrapper::getInstance(), callID, contactID, fileName, fileType, fileSize);
 }
 
 const sfp_callbacks_t * PhApiSFPCallbacks::getCallbacks(){

@@ -102,7 +102,8 @@ phCallbacks_t phApiCallbacks = {
 }	//"C"
 
 
-PhApiWrapper::PhApiWrapper(PhApiCallbacks & callbacks) {
+PhApiWrapper::PhApiWrapper(PhApiCallbacks & callbacks)
+	: _phApiSFPWrapper(PhApiSFPWrapper::getInstance()) {
 	_callbacks = &callbacks;
 	_wengoVline = -1;
 	_isInitialized = false;
@@ -120,8 +121,6 @@ PhApiWrapper::PhApiWrapper(PhApiCallbacks & callbacks) {
 	//FIXME ugly hack for conference
 	phoneCallStateChangedEvent +=
 		boost::bind(&PhApiWrapper::phoneCallStateChangedEventHandler, this, _1, _2, _3, _4);
-
-	phApiSFPWrapper = PhApiSFPWrapper::getInstance();
 }
 
 PhApiWrapper::~PhApiWrapper() {

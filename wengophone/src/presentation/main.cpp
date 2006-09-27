@@ -132,7 +132,7 @@ int main(int argc, char * argv[]) {
 	//CWengoPhone creates PWengoPhone (QtWengoPhone, GtkWengoPhone...)
 	//thus creating CWengoPhone at the very beginning makes the gui
 	//to be shown before everything is fully loaded
-	WengoPhone wengoPhone;
+	WengoPhone &wengoPhone = WengoPhone::getInstance();
 	CWengoPhone cWengoPhone(wengoPhone);
 	pFactory->processEvents();
 
