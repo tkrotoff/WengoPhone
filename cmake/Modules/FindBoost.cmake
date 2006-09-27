@@ -55,15 +55,15 @@ else (BOOST_LIBRARIES AND BOOST_INCLUDE_DIRS)
     )
 
     if (MSVC)
-      set(BOOST_LIB_SUFFIX vc71-mt)
+      set(BOOST_LIB_SUFFIX -vc71-mt)
     endif (MSVC)
 
     if (MINGW)
-      set(BOOST_LIB_SUFFIX mgw-mt)
+      set(BOOST_LIB_SUFFIX -mgw-mt)
     endif (MINGW)
 
     if (CYGWIN)
-      set(BOOST_LIB_SUFFIX gcc-mt)
+      set(BOOST_LIB_SUFFIX -gcc-mt)
     endif (CYGWIN)
   endif (WIN32)
 
