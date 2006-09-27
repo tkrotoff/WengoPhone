@@ -2701,7 +2701,7 @@ ph_nat_init()
     {
       eXosip_set_nattype(ntstr);
       if (!phcfg.nat_refresh_time)
-	phcfg.nat_refresh_time = 15;
+	phcfg.nat_refresh_time = 25;
 
       strncpy(ph_nat_type_str, ntstr, sizeof(ph_nat_type_str));
       if (ph_nat_router_addr[0] && strcmp(ntstr, "sym"))
@@ -4479,7 +4479,7 @@ ph_event_get()
 #endif /* USE_PLUGINS */
 
 // </ncouturier>
-#define MAX_SRV_IDLE_TIME	45 /* The maximum idle time since we receive the last message from server */
+#define MAX_SRV_IDLE_TIME	75 /* The maximum idle time since we receive the last message from server */
 
 // <ncouturier>
 #ifdef USE_PLUGINS
