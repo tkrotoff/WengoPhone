@@ -475,25 +475,24 @@ void QtChatWindow::updateToolBarActions() {
 }
 
 void QtChatWindow::messageReceivedSlot(IMChatSession * sender) {
-	showToaster(sender);
 	// TODO NCOUTURIER new way to get messages
 	IMChatSession::IMChatMessageList imChatMessageList = sender->getReceivedMessage(_lastReceivedMessageIndex[sender->getId()] + 1);
 	if (imChatMessageList.size() > 0) {
 		_lastReceivedMessageIndex[sender->getId()] += imChatMessageList.size();
 		IMChatSession::IMChatMessageList::iterator imChatMessageListIterator = imChatMessageList.begin();
-		while(imChatMessageListIterator < imChatMessageList.end()){
+		while (imChatMessageListIterator < imChatMessageList.end()) {
 			IMChatSession::IMChatMessage * imChatMessage = * imChatMessageListIterator;
 			const IMContact & from = imChatMessage->getIMContact();
 			std::string message = imChatMessage->getMessage();
 			QString senderName = QString::fromStdString(from.getContactId());
 
-		QtContactList * qtContactList = _qtWengoPhone.getQtContactList();
-			CContactList & cContactList = qtContactList->getCContactList();
-			QString contactId = QString::fromStdString(cContactList.findContactThatOwns(from));
-			QString senderDisplayName = getShortDisplayName(contactId, QString::fromStdString(from.getContactId()));
-			QString msg = QString::fromUtf8(message.c_str());
+			QtContactList * qtContactList = _qtWengoPhone.getQtContactList();
+				CContactList & cContactList = qtContactList->getCContactList();
+				QString contactId = QString::fromStdString(cContactList.findContactThatOwns(from));
+				QString senderDisplayName = getShortDisplayName(contactId, QString::fromStdString(from.getContactId()));
+				QString msg = QString::fromUtf8(message.c_str());
 
-		if (!isVisible()) {
+			if (!isVisible()) {
 				showChatWindow();
 				flashWindow();
 			} else {
@@ -507,12 +506,13 @@ void QtChatWindow::messageReceivedSlot(IMChatSession * sender) {
 					_chatWidget = qobject_cast<QtChatWidget *>(_tabWidget->widget(i));
 					_chatWidget->addToHistory(senderDisplayName, msg);
 					if (_tabWidget->currentWidget() != _chatWidget) {
-					if (isMinimized())
+						if (isMinimized()) {
 							_tabWidget->setCurrentIndex(i);
-						else
+						} else {
 							_tabWidget->setBlinkingTab(i);
+						}
 					}
-				if (isMinimized()) {
+					if (isMinimized()) {
 						flashWindow();
 					}
 					return;
@@ -524,6 +524,10 @@ void QtChatWindow::messageReceivedSlot(IMChatSession * sender) {
 }
 
 void QtChatWindow::addChatSession(IMChatSession * imChatSession) {
+	if (!chatIsVisible()) {
+		showToaster(imChatSession);
+	}
+
 	// If this chat session already exists, display the tab
 	int tabs = _tabWidget->count();
 	for (int i = 0; i < tabs; i++) {
@@ -605,7 +609,7 @@ void QtChatWindow::addChat(IMChatSession * session, const IMContact & from) {
 	// Adding probably missed message
 	_lastReceivedMessageIndex[session->getId()] = -1;
 	IMChatSession::IMChatMessageList imChatMessageList = session->getReceivedMessage(_lastReceivedMessageIndex[session->getId()]+1);
-	if(imChatMessageList.size() > 0) {
+	if (imChatMessageList.size() > 0) {
 		_lastReceivedMessageIndex[session->getId()] += imChatMessageList.size();
 		IMChatSession::IMChatMessageList::iterator imChatMessageListIterator = imChatMessageList.begin();
 		while(imChatMessageListIterator != imChatMessageList.end()){
@@ -625,9 +629,6 @@ void QtChatWindow::addChat(IMChatSession * session, const IMContact & from) {
 
 void QtChatWindow::showToaster(IMChatSession * imChatSession) {
 
-	if (chatIsVisible()) {
-		return;
-	}
 	if (imChatSession->isUserCreated()) {
 		return;
 	}
@@ -696,10 +697,11 @@ void QtChatWindow::statusMessageReceivedSLot(IMChatSession * sender, int status,
 			_chatWidget = qobject_cast<QtChatWidget *>(_tabWidget->widget(i));
 			_chatWidget->addToHistory("", message + tr(" has not been transmitted!"));
 			if (_tabWidget->currentWidget() != _chatWidget) {
-				if (isMinimized())
+				if (isMinimized()) {
 					_tabWidget->setCurrentIndex(i);
-				else
+				} else {
 					_tabWidget->setBlinkingTab(i);
+				}
 			}
 			if (isMinimized()) {
 				flashWindow();
