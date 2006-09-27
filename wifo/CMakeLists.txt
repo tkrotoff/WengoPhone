@@ -1,12 +1,12 @@
 subdirs(
+  libosip2
   eXosip
   httptunnel
-  libosip2
-  #TODO: miniua
   netlib
   ortp
-  phapi
   phapi-util
+  phapi
   sfp-plugin
+  #TODO: miniua
 )
 
