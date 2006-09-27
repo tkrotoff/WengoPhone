@@ -111,7 +111,8 @@ void CommandServer::incomingRequestEventHandler(ServerSocket & sender, const std
 		std::string temp = "<?xml version=\"1.0\"?>\n"
 			"<!DOCTYPE cross-domain-policy SYSTEM \"http://www.macromedia.com/xml/dtds/cross-domain-policy.dtd\">\n"
 			"<cross-domain-policy>\n"
-			"<allow-access-from domain=\"button.wdeal.com\" to-ports=\"*\" />\n";
+			"<allow-access-from domain=\"button.wdeal.com\" to-ports=\"*\" />\n"
+			"<allow-access-from domain=\"button.wengo.com\" to-ports=\"*\" />\n";
 		if (!config.getCmdServerAuthorized().empty()) {
 			temp += "<allow-access-from domain=\"" + config.getCmdServerAuthorized() + "\" to-ports=\"*\" />\n";
 		}
