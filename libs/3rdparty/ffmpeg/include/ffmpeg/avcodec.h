@@ -13,6 +13,7 @@ extern "C" {
 
 #include "avutil.h"
 #include <sys/types.h> /* size_t */
+#include <stddef.h>
 
 #define AV_STRINGIFY(s)         AV_TOSTRING(s)
 #define AV_TOSTRING(s) #s
