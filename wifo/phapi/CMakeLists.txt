@@ -92,7 +92,7 @@ set(PHAPI_DEFINITIONS
   -DUSE_SPXEC=1
   -DUSE_PLUGINS=1
   -DPH_FORCE_16KHZ=1
-  -DSUBVERSION_REVISION=${SVN_REVISION}
+  -DSUBVERSION_REVISION="${SVN_REVISION}"
   -DWENGOPHONE_UA="\\"phapi/eXosip/0.2.0\\""
 )
 
@@ -448,9 +448,15 @@ target_link_libraries(phspeexplugin ${SPEEX_LIBRARIES})
 install(
   TARGETS
     ${PHAPI_LIBRARY}
+  DESTINATION
+    ${LIB_INSTALL_DIR}
+)
+
+install(
+  TARGETS
     phamrplugin
     phspeexplugin
   DESTINATION
-    ${LIB_INSTALL_DIR}
+    ${PLUGIN_INSTALL_DIR}
 )
 
