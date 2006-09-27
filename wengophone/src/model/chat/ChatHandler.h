@@ -20,6 +20,8 @@
 #ifndef OWCHATHANDLER_H
 #define OWCHATHANDLER_H
 
+#include <imwrapper/IMAccount.h>
+
 #include <util/Event.h>
 #include <util/NonCopyable.h>
 #include <util/Trackable.h>
@@ -28,7 +30,6 @@
 #include <set>
 
 class ConnectHandler;
-class IMAccount;
 class IMChat;
 class IMChatSession;
 class IMContactSet;
@@ -97,7 +98,7 @@ private:
 	 */
 	void imChatSessionWillDieEventHandler(IMChatSession & sender);
 
-	typedef std::map<IMAccount *, IMChat *> IMChatMap;
+	typedef std::map<IMAccount, IMChat *> IMChatMap;
 
 	IMChatMap _imChatMap;
 

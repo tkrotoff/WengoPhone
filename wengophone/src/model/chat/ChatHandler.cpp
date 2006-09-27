@@ -45,7 +45,8 @@ ChatHandler::~ChatHandler() {
 
 void ChatHandler::createSession(IMAccount & imAccount, IMContactSet & imContactSet) {
 	LOG_DEBUG("creating new IMChatSession for: " + imAccount.getLogin());
-	_imChatMap[&imAccount]->createSession(imContactSet);
+	IMChat * imChat = _imChatMap[imAccount];
+	imChat->createSession(imContactSet);
 }
 
 void ChatHandler::connectedEventHandler(ConnectHandler & sender, IMAccount & account) {
@@ -74,7 +75,7 @@ void ChatHandler::imChatSessionWillDieEventHandler(IMChatSession & sender) {
 }
 
 void ChatHandler::newIMAccountAddedEventHandler(UserProfile & sender, IMAccount & imAccount) {
-	IMChatMap::const_iterator it = _imChatMap.find(&imAccount);
+	IMChatMap::const_iterator it = _imChatMap.find(imAccount);
 
 	LOG_DEBUG("new account added: login: " + imAccount.getLogin()
 		+ " protocol: " + String::fromNumber(imAccount.getProtocol()));
@@ -84,7 +85,7 @@ void ChatHandler::newIMAccountAddedEventHandler(UserProfile & sender, IMAccount 
 		imChat->newIMChatSessionCreatedEvent +=
 			boost::bind(&ChatHandler::newIMChatSessionCreatedEventHandler, this, _1, _2);
 
-		_imChatMap[&imAccount] = imChat;
+		_imChatMap[imAccount] = imChat;
 
 		imAccount.imAccountDeadEvent +=
 			boost::bind(&ChatHandler::imAccountDeadEventHandler, this, _1);
@@ -95,7 +96,7 @@ void ChatHandler::newIMAccountAddedEventHandler(UserProfile & sender, IMAccount 
 }
 
 void ChatHandler::imAccountDeadEventHandler(IMAccount & sender) {
-	IMChatMap::iterator it = _imChatMap.find(&sender);
+	IMChatMap::iterator it = _imChatMap.find(sender);
 
 	if (it != _imChatMap.end()) {
 		//TODO close all IMChatSession opened with this IMAccount
