@@ -288,6 +288,7 @@ QtContactList * QtWengoPhone::getQtContactList() const {
 
 void QtWengoPhone::setQtHistoryWidget(QtHistoryWidget * qtHistoryWidget) {
 	_qtHistoryWidget = qtHistoryWidget;
+	_qtHistoryWidget->setQtToolBar(_qtToolBar);
 
 	if (!_ui->tabHistory->layout()) {
 		Widget::createLayout(_ui->tabHistory);
