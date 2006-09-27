@@ -67,8 +67,9 @@ void * SharedLibLoader::resolve(const std::string & symbol) {
 
 void * SharedLibLoader::resolve(const std::string & fileName, const std::string & symbol) {
 	SharedLibLoader loader(fileName);
-	if (loader.load())
-	  return loader.resolve(symbol);
+	if (loader.load()) {
+		return loader.resolve(symbol);
+	}
 	return NULL;
 }
 
