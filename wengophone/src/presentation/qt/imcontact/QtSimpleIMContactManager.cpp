@@ -64,7 +64,7 @@ QtSimpleIMContactManager::QtSimpleIMContactManager(ContactProfile & contactProfi
 	_jabberLineEditMouseEventFilter = new MousePressEventFilter(this, SLOT(jabberLineEditClicked()));
 	_ui->jabberLineEdit->installEventFilter(_jabberLineEditMouseEventFilter);
 
-
+	_ui->searchWengoContactButton->hide();
 	SAFE_CONNECT(_ui->searchWengoContactButton, SIGNAL(clicked()), SLOT(searchWengoContactButtonClicked()));
 
 	loadIMContacts();
