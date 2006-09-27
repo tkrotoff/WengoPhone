@@ -28,6 +28,7 @@
 
 #include <qtutil/QObjectThreadSafe.h>
 
+#include <cutil/global.h>
 #include <util/Trackable.h>
 
 #include <QtGui/QMainWindow>
