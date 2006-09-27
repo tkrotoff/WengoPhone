@@ -31,7 +31,5 @@ subdirs(
   skinstyle
   sound
   timer
-  imwrapper
-  sipwrapper
 )
 

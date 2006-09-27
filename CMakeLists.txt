@@ -51,6 +51,8 @@ endif (NOT APPLE AND NOT WIN32)
 subdirs(
   libs
   wifo
+  libs/sipwrapper
+  libs/imwrapper
   wengophone
   crashreport
 )
