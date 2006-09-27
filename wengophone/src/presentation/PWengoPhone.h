@@ -35,7 +35,7 @@ public:
 
 	virtual void showHistory() = 0;
 
-	virtual void showAddContact(const std::string nickname) = 0;
+	virtual void showAddContact(const std::string & nickname) = 0;
 
 	/**
 	 * @see WengoPhone::exitEvent
