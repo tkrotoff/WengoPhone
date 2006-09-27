@@ -175,7 +175,7 @@ void QtWengoPhone::initThreadSafe() {
 	_qtStatusBar = new QtStatusBar(_cWengoPhone, _ui->statusBar);
 
 #ifdef OS_WINDOWS
-	_qtWebDirectory = new QtWebDirectory(_wengoPhoneWindow);
+	_qtWebDirectory = new QtWebDirectory(0);
 #endif
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
