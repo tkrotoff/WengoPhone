@@ -528,12 +528,11 @@ void QtPhoneCall::showToaster(const QString & userName) {
 }
 
 void QtPhoneCall::close() {
-	_qtWengoPhone->hangUpButtonClicked();
-	/*_qtWengoPhone->getStatusBar().showMessage(QString::null);
+	_qtWengoPhone->getQtStatusBar().showMessage(QString::null);
 	_ui->durationLabel = NULL;
 	_callTimer->disconnect();
 	_callTimer->stop();
-	delete _callTimer;
+	OWSAFE_DELETE(_callTimer);
 
 	_actionAcceptCall->setEnabled(false);
 	_actionHangupCall->setEnabled(false);
@@ -545,12 +544,10 @@ void QtPhoneCall::close() {
 		}
 	}
 	//TODO: disconnect from flipWebcamButtonClicked
-	delete _videoWindow;
-	_videoWindow = NULL;
-	delete _phoneCallWidget;
-	_phoneCallWidget = NULL;
+	OWSAFE_DELETE(_videoWindow);
+	OWSAFE_DELETE(_phoneCallWidget);
 	deleteMe(this);
-	callRejected();*/
+	callRejected();
 }
 
 void QtPhoneCall::toggleFlipVideoImage() {

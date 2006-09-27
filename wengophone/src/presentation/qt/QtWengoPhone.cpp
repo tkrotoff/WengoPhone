@@ -376,7 +376,7 @@ void QtWengoPhone::addPhoneCall(QtPhoneCall * qtPhoneCall) {
 	_activeTabBeforeCall = _ui->tabWidget->currentWidget();
 
 	QtContactCallListWidget * qtContactCallListWidget = new QtContactCallListWidget(_cWengoPhone,_wengoPhoneWindow);
-	_ui->tabWidget->addTab(qtContactCallListWidget,tr("Call"));
+	_ui->tabWidget->addTab(qtContactCallListWidget, tr("Call"));
 	_ui->tabWidget->setCurrentWidget(qtContactCallListWidget);
 	qtContactCallListWidget->addPhoneCall(qtPhoneCall);
 

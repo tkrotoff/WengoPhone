@@ -38,9 +38,6 @@
       <property name="text" >
        <string>Audio Smileys</string>
       </property>
-      <property name="icon" >
-       <iconset resource="wengophone.qrc" >:/pics/chat/emoticons/face-devil-grin16.png</iconset>
-      </property>
      </item>
     </widget>
    </item>
@@ -66,15 +63,12 @@
       <number>6</number>
      </property>
      <item row="0" column="1" >
-      <widget class="QPushButton" name="twoButton" >
+      <widget class="QToolButton" name="twoButton" >
        <property name="maximumSize" >
         <size>
          <width>46</width>
          <height>46</height>
         </size>
-       </property>
-       <property name="text" >
-        <string/>
        </property>
        <property name="icon" >
         <iconset resource="wengophone.qrc" >:/pics/dialpad/2_on.png</iconset>
@@ -85,21 +79,18 @@
          <height>46</height>
         </size>
        </property>
-       <property name="flat" >
+       <property name="autoRaise" >
         <bool>true</bool>
        </property>
       </widget>
      </item>
      <item row="3" column="1" >
-      <widget class="QPushButton" name="zeroButton" >
+      <widget class="QToolButton" name="zeroButton" >
        <property name="maximumSize" >
         <size>
          <width>46</width>
          <height>46</height>
         </size>
-       </property>
-       <property name="text" >
-        <string/>
        </property>
        <property name="icon" >
         <iconset resource="wengophone.qrc" >:/pics/dialpad/11_on.png</iconset>
@@ -110,13 +101,13 @@
          <height>46</height>
         </size>
        </property>
-       <property name="flat" >
+       <property name="autoRaise" >
         <bool>true</bool>
        </property>
       </widget>
      </item>
      <item row="3" column="2" >
-      <widget class="QPushButton" name="poundButton" >
+      <widget class="QToolButton" name="poundButton" >
        <property name="sizePolicy" >
         <sizepolicy>
          <hsizetype>0</hsizetype>
@@ -131,9 +122,6 @@
          <height>46</height>
         </size>
        </property>
-       <property name="text" >
-        <string/>
-       </property>
        <property name="icon" >
         <iconset resource="wengophone.qrc" >:/pics/dialpad/12_on.png</iconset>
        </property>
@@ -143,27 +131,18 @@
          <height>46</height>
         </size>
        </property>
-       <property name="checkable" >
-        <bool>false</bool>
-       </property>
-       <property name="autoRepeat" >
-        <bool>false</bool>
-       </property>
-       <property name="flat" >
+       <property name="autoRaise" >
         <bool>true</bool>
        </property>
       </widget>
      </item>
      <item row="1" column="1" >
-      <widget class="QPushButton" name="fiveButton" >
+      <widget class="QToolButton" name="fiveButton" >
        <property name="maximumSize" >
         <size>
          <width>46</width>
          <height>46</height>
         </size>
-       </property>
-       <property name="text" >
-        <string/>
        </property>
        <property name="icon" >
         <iconset resource="wengophone.qrc" >:/pics/dialpad/5_on.png</iconset>
@@ -174,21 +153,18 @@
          <height>46</height>
         </size>
        </property>
-       <property name="flat" >
+       <property name="autoRaise" >
         <bool>true</bool>
        </property>
       </widget>
      </item>
      <item row="0" column="0" >
-      <widget class="QPushButton" name="oneButton" >
+      <widget class="QToolButton" name="oneButton" >
        <property name="maximumSize" >
         <size>
          <width>46</width>
          <height>46</height>
         </size>
-       </property>
-       <property name="text" >
-        <string/>
        </property>
        <property name="icon" >
         <iconset resource="wengophone.qrc" >:/pics/dialpad/1_on.png</iconset>
@@ -199,21 +175,18 @@
          <height>46</height>
         </size>
        </property>
-       <property name="flat" >
+       <property name="autoRaise" >
         <bool>true</bool>
        </property>
       </widget>
      </item>
      <item row="0" column="2" >
-      <widget class="QPushButton" name="threeButton" >
+      <widget class="QToolButton" name="threeButton" >
        <property name="maximumSize" >
         <size>
          <width>46</width>
          <height>46</height>
         </size>
-       </property>
-       <property name="text" >
-        <string/>
        </property>
        <property name="icon" >
         <iconset resource="wengophone.qrc" >:/pics/dialpad/3_on.png</iconset>
@@ -224,21 +197,18 @@
          <height>46</height>
         </size>
        </property>
-       <property name="flat" >
+       <property name="autoRaise" >
         <bool>true</bool>
        </property>
       </widget>
      </item>
      <item row="3" column="0" >
-      <widget class="QPushButton" name="starButton" >
+      <widget class="QToolButton" name="starButton" >
        <property name="maximumSize" >
         <size>
          <width>46</width>
          <height>46</height>
         </size>
-       </property>
-       <property name="text" >
-        <string/>
        </property>
        <property name="icon" >
         <iconset resource="wengophone.qrc" >:/pics/dialpad/10_on.png</iconset>
@@ -249,21 +219,18 @@
          <height>46</height>
         </size>
        </property>
-       <property name="flat" >
+       <property name="autoRaise" >
         <bool>true</bool>
        </property>
       </widget>
      </item>
      <item row="2" column="0" >
-      <widget class="QPushButton" name="sevenButton" >
+      <widget class="QToolButton" name="sevenButton" >
        <property name="maximumSize" >
         <size>
          <width>46</width>
          <height>46</height>
         </size>
-       </property>
-       <property name="text" >
-        <string/>
        </property>
        <property name="icon" >
         <iconset resource="wengophone.qrc" >:/pics/dialpad/7_on.png</iconset>
@@ -274,21 +241,18 @@
          <height>46</height>
         </size>
        </property>
-       <property name="flat" >
+       <property name="autoRaise" >
         <bool>true</bool>
        </property>
       </widget>
      </item>
      <item row="2" column="2" >
-      <widget class="QPushButton" name="nineButton" >
+      <widget class="QToolButton" name="nineButton" >
        <property name="maximumSize" >
         <size>
          <width>46</width>
          <height>46</height>
         </size>
-       </property>
-       <property name="text" >
-        <string/>
        </property>
        <property name="icon" >
         <iconset resource="wengophone.qrc" >:/pics/dialpad/9_on.png</iconset>
@@ -299,21 +263,18 @@
          <height>46</height>
         </size>
        </property>
-       <property name="flat" >
+       <property name="autoRaise" >
         <bool>true</bool>
        </property>
       </widget>
      </item>
      <item row="1" column="2" >
-      <widget class="QPushButton" name="sixButton" >
+      <widget class="QToolButton" name="sixButton" >
        <property name="maximumSize" >
         <size>
          <width>46</width>
          <height>46</height>
         </size>
-       </property>
-       <property name="text" >
-        <string/>
        </property>
        <property name="icon" >
         <iconset resource="wengophone.qrc" >:/pics/dialpad/6_on.png</iconset>
@@ -324,21 +285,18 @@
          <height>46</height>
         </size>
        </property>
-       <property name="flat" >
+       <property name="autoRaise" >
         <bool>true</bool>
        </property>
       </widget>
      </item>
      <item row="1" column="0" >
-      <widget class="QPushButton" name="fourButton" >
+      <widget class="QToolButton" name="fourButton" >
        <property name="maximumSize" >
         <size>
          <width>46</width>
          <height>46</height>
         </size>
-       </property>
-       <property name="text" >
-        <string/>
        </property>
        <property name="icon" >
         <iconset resource="wengophone.qrc" >:/pics/dialpad/4_on.png</iconset>
@@ -349,21 +307,18 @@
          <height>46</height>
         </size>
        </property>
-       <property name="flat" >
+       <property name="autoRaise" >
         <bool>true</bool>
        </property>
       </widget>
      </item>
      <item row="2" column="1" >
-      <widget class="QPushButton" name="eightButton" >
+      <widget class="QToolButton" name="eightButton" >
        <property name="maximumSize" >
         <size>
          <width>46</width>
          <height>46</height>
         </size>
-       </property>
-       <property name="text" >
-        <string/>
        </property>
        <property name="icon" >
         <iconset resource="wengophone.qrc" >:/pics/dialpad/8_on.png</iconset>
@@ -374,7 +329,7 @@
          <height>46</height>
         </size>
        </property>
-       <property name="flat" >
+       <property name="autoRaise" >
         <bool>true</bool>
        </property>
       </widget>

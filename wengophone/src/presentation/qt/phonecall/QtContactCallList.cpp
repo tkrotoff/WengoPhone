@@ -79,7 +79,7 @@ bool QtContactCallList::hasPhoneCall(PhoneCall * phoneCall) {
 void QtContactCallList::clearCalls() {
 	QMutexLocker locker(& _mutex);
 	_phoneCallList.clear();
-	lastQtPhoneCallClosed();
+	//lastQtPhoneCallClosed();
 }
 
 int QtContactCallList::count() {
