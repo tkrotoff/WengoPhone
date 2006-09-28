@@ -139,7 +139,7 @@ void PhApiWrapper::terminate() {
 
 void PhApiWrapper::setNetworkParameter() {
 	std::string natType = "auto";
-	int natRefreshTime = 15;
+	int natRefreshTime = 25;
 
 	if (_tunnelNeeded) {
 		//TODO: activate SSL for HTTP tunnel

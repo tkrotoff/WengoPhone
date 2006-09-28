@@ -2701,7 +2701,7 @@ ph_nat_init()
     {
       eXosip_set_nattype(ntstr);
       if (!phcfg.nat_refresh_time)
-	phcfg.nat_refresh_time = 25;
+	phcfg.nat_refresh_time = 15;
 
       strncpy(ph_nat_type_str, ntstr, sizeof(ph_nat_type_str));
       if (ph_nat_router_addr[0] && strcmp(ntstr, "sym"))
