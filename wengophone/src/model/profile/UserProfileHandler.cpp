@@ -116,8 +116,6 @@ UserProfileHandler::UserProfileHandlerError UserProfileHandler::createUserProfil
 }
 
 void UserProfileHandler::createAndSetUserProfile(const WengoAccount & wengoAccount) {
-	createUserProfile(wengoAccount);
-
 	if (createUserProfile(wengoAccount) != UserProfileHandlerErrorWengoAccountNotValid) {
 		std::string profileName = wengoAccount.getWengoLogin();
 		if (profileName.empty()) {

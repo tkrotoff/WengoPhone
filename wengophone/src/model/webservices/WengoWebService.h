@@ -125,7 +125,6 @@ protected:
 	 * @see IHttpRequest::answerReceivedEvent
 	 */
 	void answerReceivedEventHandler(IHttpRequest * sender, int requestId, const std::string & answer, HttpRequest::Error error);
-	void answerReceivedEventHandlerThreadSafe(IHttpRequest * sender, int requestId, std::string answer, HttpRequest::Error error);
 
 private:
 
