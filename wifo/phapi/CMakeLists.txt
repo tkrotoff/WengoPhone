@@ -61,7 +61,7 @@ set(PHAPI_DEFINITIONS
   -DUSE_SPXEC=1
   -DUSE_PLUGINS=1
   -DPH_FORCE_16KHZ=1
-  -DWENGOPHONE_UA="\\"phapi/eXosip/0.2.0\\""
+  -DWENGOPHONE_UA="\\"wengo/v1/wengophoneng/wengo/rev${SVN_REVISION}/trunk/\\""
 )
 
 if (WITH_BUILDID)
