@@ -51,8 +51,8 @@ endif (NOT APPLE AND NOT WIN32)
 subdirs(
   libs
   wifo
-  libs/sipwrapper/src/phapi
   libs/sipwrapper
+  libs/sipwrapper/src/phapi
   libs/imwrapper/src/gaim
   libs/imwrapper/src/multiim
   libs/imwrapper
