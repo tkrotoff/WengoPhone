@@ -168,7 +168,7 @@ void CommandServer::incomingRequestEventHandler(ServerSocket & sender, const std
 					String info = contactInfo[i];
 	
 					if (info.beginsWith("name=")) {
-						nickname = info.substr(7, info.size() - 7);
+						nickname = info.substr(5, info.size() - 5);
 					}
 	
 				}
