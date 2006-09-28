@@ -53,9 +53,9 @@ subdirs(
   wifo
   libs/imwrapper
   libs/imwrapper/src/gaim
-  libs/imwrapper/src/multiim
   libs/sipwrapper
   libs/sipwrapper/src/phapi
+  libs/imwrapper/src/multiim
   wengophone
   crashreport
 )
