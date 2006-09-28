@@ -51,11 +51,11 @@ endif (NOT APPLE AND NOT WIN32)
 subdirs(
   libs
   wifo
-  libs/sipwrapper
-  libs/sipwrapper/src/phapi
   libs/imwrapper/src/gaim
   libs/imwrapper/src/multiim
   libs/imwrapper
+  libs/sipwrapper
+  libs/sipwrapper/src/phapi
   wengophone
   crashreport
 )
