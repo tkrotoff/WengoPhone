@@ -728,13 +728,14 @@ void QtWengoPhone::languageChanged() {
 }
 
 void QtWengoPhone::showAddContact(const std::string & nickname) {
-	typedef PostEvent1<void (const QString & nickname), const QString &> MyPostEvent;
+	QString name = QString::fromStdString(nickname);
+	typedef PostEvent1<void (QString nickname), QString> MyPostEvent;
 	MyPostEvent * event =
-		new MyPostEvent(boost::bind(&QtWengoPhone::showAddContactThreadSafe, this, _1), QString::fromStdString(nickname));
+		new MyPostEvent(boost::bind(&QtWengoPhone::showAddContactThreadSafe, this, _1), name);
 	postEvent(event);
 }
 
-void QtWengoPhone::showAddContactThreadSafe(const QString & nickname) {
+void QtWengoPhone::showAddContactThreadSafe(QString nickname) {
 
 	if (_cWengoPhone.getCUserProfileHandler().getCUserProfile()) {
 

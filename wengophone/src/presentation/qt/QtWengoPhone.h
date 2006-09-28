@@ -182,7 +182,7 @@ private:
 
 	void wrongProxyAuthenticationEventHandler(NetworkProxyDiscovery & sender, NetworkProxy networkProxy);
 
-	void showAddContactThreadSafe(const QString & nickname);
+	void showAddContactThreadSafe(QString nickname);
 
 	void makeCallErrorEventHandler();
 
