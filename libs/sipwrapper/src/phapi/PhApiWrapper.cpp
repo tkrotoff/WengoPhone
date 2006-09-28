@@ -933,7 +933,9 @@ void PhApiWrapper::init() {
 	strncpy(phcfg.audio_codecs, audioCodecList.c_str(), sizeof(phcfg.audio_codecs));
 	strncpy(phcfg.video_codecs, videoCodecList.c_str(), sizeof(phcfg.video_codecs));
 
-	strncpy(phcfg.proxy, _sipServer.c_str(), sizeof(phcfg.proxy));
+	std::string tmp = _sipServer;
+	tmp += ":" + String::fromNumber(_sipServerPort);
+	strncpy(phcfg.proxy, tmp.c_str(), sizeof(phcfg.proxy));
 
 	String localPort = String::fromNumber(_sipLocalPort);
 	strncpy(phcfg.sipport, localPort.c_str(), sizeof(phcfg.sipport));
