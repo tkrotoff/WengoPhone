@@ -1,11 +1,11 @@
 project(owimwrapper)
 
 # TODO: test
-subdirs(
-  src/gaim
-  src/multiim
-  #src/tests
-)
+#subdirs(
+#  src/gaim
+#  src/multiim
+#  #src/tests
+#)
 
 if (WIN32)
   find_package(GAIMInternal REQUIRED)

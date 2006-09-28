@@ -1,8 +1,8 @@
 project(owsipwrapper)
 
-subdirs(
-  src/phapi
-)
+#subdirs(
+#  src/phapi
+#)
 
 # needed include directories to build owsipwrapper
 # saves the variable in internal cache for later use

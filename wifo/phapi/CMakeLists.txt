@@ -1,36 +1,5 @@
 project(phapi)
 
-subdirs(
-  amrnb
-  amrwb
-  fidlib
-  gsm
-  ilbc
-  speexec
-  stun
-)
-
-if (MSVC)
-  set(PHAPI_OPTIMIZATION_FLAGS
-    /Ox
-    /Ob2
-    /Oi
-    /Ot
-    /Oy
-    /G7
-    /GX-
-    /GR-
-    /arch:SSE
-  )
-else (MSVC)
-  # TODO: we need a flag on other platforms
-  # maybe unroll-loops is nice to have ;)
-  set(PHAPI_OPTIMIZATION_FLAGS
-    -funroll-loops
-  )
-endif (MSVC)
-
-
 # needed include directories to build phapi
 # saves the variable in internal cache for later use
 set(PHAPI_INCLUDE_DIRS
