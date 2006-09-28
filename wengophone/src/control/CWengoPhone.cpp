@@ -81,7 +81,7 @@ void CWengoPhone::start() {
 }
 
 void CWengoPhone::terminate() {
-	_wengoPhone.terminate();
+	_wengoPhone.prepareToTerminate();
 }
 
 void CWengoPhone::initFinishedEventHandler(WengoPhone & sender) {
@@ -97,10 +97,11 @@ void CWengoPhone::wsSubscribeCreatedEventHandler(WengoPhone & sender, WsSubscrib
 void CWengoPhone::exitEventHandler() {
 	typedef ThreadEvent0<void ()> MyThreadEvent;
 	MyThreadEvent * event = new MyThreadEvent(boost::bind(&CWengoPhone::exitEventHandlerThreadSafe, this));
-	WengoPhone::getInstance().postEvent(event);
+	PFactory::postEvent(event);
 }
 
 void CWengoPhone::exitEventHandlerThreadSafe() {
+	WengoPhone::getInstance().terminate();
 	if (_pWengoPhone) {
 		_pWengoPhone->exitEvent();
 	}

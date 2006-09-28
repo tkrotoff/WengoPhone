@@ -152,7 +152,9 @@ void WengoPhone::run() {
 
 void WengoPhone::terminate() {
 	Thread::terminate();
+}
 
+void WengoPhone::prepareToTerminate() {
 	/**
 	 * Set up a timeout triggered if SIP registering is too long
 	 * so that closing WengoPhone is not too long.

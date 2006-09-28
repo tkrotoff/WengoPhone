@@ -105,6 +105,15 @@ public:
 	}
 
 	/**
+	 * Prepares the model to terminate.
+	 *
+	 * Starts a 3 seconds timer that will launch exitEvent.
+	 *
+	 * @see terminate()
+	 */
+	void prepareToTerminate();
+
+	/**
 	 * Terminates the model component thread i.e this thread.
 	 *
 	 * This method should be called when you exit definitly WengoPhone.
