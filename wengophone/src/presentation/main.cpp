@@ -166,8 +166,6 @@ int main(int argc, char * argv[]) {
 
 	pFactory->exec();
 
-	cWengoPhone.terminate();
-
 	LOG_DEBUG("WengoPhone ended");
 
 	return EXIT_SUCCESS;
