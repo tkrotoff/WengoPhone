@@ -37,7 +37,7 @@
 #include "filetransfer/QtFileTransfer.h"
 #include "filetransfer/QtFileTransferWidget.h"
 #include "conference/QtConferenceCallWidget.h"
-#ifdef OS_WINDOWS
+#if (defined OS_WINDOWS) && (defined QT_COMMERCIAL)
 #include "webdirectory/QtWebDirectory.h"
 #endif
 
@@ -186,7 +186,7 @@ void QtToolBar::searchWengoContact() {
 		qtWsDirectory->show();
 	}
 	*/
-#ifdef OS_WINDOWS
+#if (defined OS_WINDOWS) && (defined QT_COMMERCIAL)
 	QtWebDirectory * qtWebDirectory = _qtWengoPhone.getQtWebDirectory();
 	if (qtWebDirectory) {
 		qtWebDirectory->show();

@@ -47,7 +47,7 @@
 #include "statusbar/QtStatusBar.h"
 #include "webservices/directory/QtWsDirectory.h"
 #include "webservices/sms/QtSms.h"
-#ifdef OS_WINDOWS
+#if (defined OS_WINDOWS) && (defined QT_COMMERCIAL)
 #include "webdirectory/QtWebDirectory.h"
 #endif
 
@@ -172,9 +172,9 @@ void QtWengoPhone::initThreadSafe() {
 	_qtSystray = new QtSystray(this);
 
 	//QtStatusBar
-	_qtStatusBar = new QtStatusBar(_cWengoPhone, _ui->statusBar);
+	_qtStatusBar = new QtStatusBar(_cWengoPhone, _ui->statusBar, _qtToolBar);
 
-#ifdef OS_WINDOWS
+#if (defined OS_WINDOWS) && (defined QT_COMMERCIAL)
 	_qtWebDirectory = new QtWebDirectory(0);
 #endif
 
@@ -234,7 +234,7 @@ QtSms * QtWengoPhone::getQtSms() const {
 	return _qtSms;
 }
 
-#ifdef OS_WINDOWS
+#if (defined OS_WINDOWS) && (defined QT_COMMERCIAL)
 QtWebDirectory * QtWengoPhone::getQtWebDirectory() const {
 	return _qtWebDirectory;
 }

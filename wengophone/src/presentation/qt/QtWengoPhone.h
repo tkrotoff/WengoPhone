@@ -60,7 +60,7 @@ class QtToaster;
 class QtWsDirectory;
 class QtBrowserWidget;
 class UserProfile;
-#ifdef OS_WINDOWS
+#if (defined OS_WINDOWS) && (defined QT_COMMERCIAL)
 class QtWebDirectory;
 #endif
 
@@ -125,7 +125,7 @@ public:
 
 	CWengoPhone & getCWengoPhone() const;
 
-#ifdef OS_WINDOWS
+#if (defined OS_WINDOWS) && (defined QT_COMMERCIAL)
 	QtWebDirectory * getQtWebDirectory() const;
 #endif
 
@@ -231,7 +231,7 @@ private:
 
 	QWidget * _activeTabBeforeCall;
 
-#ifdef OS_WINDOWS
+#if (defined OS_WINDOWS) && (defined QT_COMMERCIAL)
 	QtWebDirectory * _qtWebDirectory;
 #endif
 };

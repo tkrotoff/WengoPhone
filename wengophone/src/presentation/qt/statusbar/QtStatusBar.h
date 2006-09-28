@@ -28,6 +28,7 @@
 
 class CWengoPhone;
 class Settings;
+class QtToolBar;
 
 class QStatusBar;
 class QMovie;
@@ -45,7 +46,7 @@ class QtStatusBar : public QObjectThreadSafe, public Trackable {
 	Q_OBJECT
 public:
 
-	QtStatusBar(CWengoPhone & cWengoPhone, QStatusBar * statusBar);
+	QtStatusBar(CWengoPhone & cWengoPhone, QStatusBar * statusBar, QtToolBar * qtToolBar);
 
 	~QtStatusBar();
 
@@ -82,6 +83,8 @@ private:
 	CWengoPhone & _cWengoPhone;
 
 	QStatusBar * _statusBar;
+
+	QtToolBar * _qtToolBar;
 
 	Ui::StatusBarWidget * _ui;
 

@@ -21,7 +21,6 @@
 
 #include "ui_StatusBarWidget.h"
 
-#include <presentation/qt/QtWengoPhone.h>
 #include <presentation/qt/QtToolBar.h>
 
 #include <control/CWengoPhone.h>
@@ -47,9 +46,9 @@
 
 static const char * MNG_FORMAT = "MNG";
 
-QtStatusBar::QtStatusBar(CWengoPhone & cWengoPhone, QStatusBar * statusBar)
+QtStatusBar::QtStatusBar(CWengoPhone & cWengoPhone, QStatusBar * statusBar, QtToolBar * qtToolBar)
 	: QObjectThreadSafe(statusBar),
-	_cWengoPhone(cWengoPhone) {
+	_cWengoPhone(cWengoPhone), _qtToolBar(qtToolBar) {
 
 	_statusBar = statusBar;
 
@@ -79,8 +78,7 @@ QtStatusBar::QtStatusBar(CWengoPhone & cWengoPhone, QStatusBar * statusBar)
 	_sipConnectionMovie->start();
 
 	//soundButton
-	QtWengoPhone * qtWengoPhone = (QtWengoPhone *) cWengoPhone.getPresentation();
-	SAFE_CONNECT_RECEIVER(_ui->soundButton, SIGNAL(clicked()), &qtWengoPhone->getQtToolBar(), SLOT(expandVolumePanel()));
+	SAFE_CONNECT_RECEIVER(_ui->soundButton, SIGNAL(clicked()), _qtToolBar, SLOT(expandVolumePanel()));
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	config.valueChangedEvent += boost::bind(&QtStatusBar::checkSoundConfig, this, _1, _2);
