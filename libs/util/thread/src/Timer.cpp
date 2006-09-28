@@ -113,8 +113,7 @@ void PrivateThread::run() {
 }
 
 void PrivateThread::msleepAndCheck(unsigned time) {
-	static const unsigned nbSleep = 10;
-	unsigned sleepTime = time / nbSleep;
+	unsigned sleepTime = time;
 
 	if (sleepTime > 500) {
 		sleepTime = 500;
