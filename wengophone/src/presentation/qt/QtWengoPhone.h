@@ -144,13 +144,13 @@ public Q_SLOTS:
 
 	void hangUpButtonClicked();
 
+	void prepareToExitApplication();
+
 private Q_SLOTS:
 
 	void callButtonClicked();
 
 	void enableCallButton();
-
-	void exitApplication();
 
 	void phoneComboBoxClicked();
 

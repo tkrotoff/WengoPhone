@@ -115,7 +115,7 @@ void QtSystray::setTrayMenu() {
 
 #if !defined(OS_MACOSX)
 	SAFE_CONNECT(openAction, SIGNAL(triggered()), SLOT(showMainWindow()));
-	SAFE_CONNECT_RECEIVER(quitAction, SIGNAL(triggered()), _qtWengoPhone, SLOT(exitApplication()));
+	SAFE_CONNECT_RECEIVER(quitAction, SIGNAL(triggered()), _qtWengoPhone, SLOT(prepareToExitApplication()));
 #endif
 
 	_trayIcon->setPopup(_trayMenu);

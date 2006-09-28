@@ -567,7 +567,7 @@ void QtWengoPhone::dialpad(const std::string & tone, const std::string & soundFi
 	}
 }
 
-void QtWengoPhone::exitApplication() {
+void QtWengoPhone::prepareToExitApplication() {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
 	_qtSystray->hide();
@@ -585,7 +585,8 @@ void QtWengoPhone::exitApplication() {
 
 	QApplication::closeAllWindows();
 	QCoreApplication::processEvents();
-	QCoreApplication::exit(EXIT_SUCCESS);
+
+	_cWengoPhone.terminate();
 }
 
 void QtWengoPhone::phoneComboBoxClicked() {
