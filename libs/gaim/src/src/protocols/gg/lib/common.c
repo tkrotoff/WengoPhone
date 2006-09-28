@@ -1,4 +1,4 @@
-/* $Id: common.c 13801 2005-09-14 19:10:39Z datallah $ */
+/* $Id: common.c,v 1.2 2005/09/14 19:10:39 datallah Exp $ */
 
 /*
  *  (C) Copyright 2001-2002 Wojtek Kaniewski <wojtekka@irc.pl>

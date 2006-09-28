@@ -16,7 +16,7 @@ static void
 echo_hi(GaimConnection *gc)
 {
 	/* this doesn't do much, just lets you know who we are :) */
-	gaim_gtkdialogs_about();
+	gaim_gtkdialogs_about(NULL, NULL);
 }
 
 static gboolean
@@ -106,9 +106,7 @@ static GaimPluginInfo info =
 	NULL,                                             /**< destroy        */
 
 	NULL,                                             /**< ui_info        */
-	NULL,                                             /**< extra_info     */
-	NULL,                                             /**< prefs_info     */
-	NULL                                              /**< actions        */
+	NULL                                              /**< extra_info     */
 };
 
 static void

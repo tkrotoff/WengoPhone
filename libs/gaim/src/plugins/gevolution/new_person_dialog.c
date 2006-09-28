@@ -112,9 +112,9 @@ add_cb(GtkWidget *w, GevoNewPersonDialog *dialog)
 
 			dialog->contact = e_contact_new();
 
-			if (*lastname && *firstname)
+			if (lastname != NULL && firstname != NULL)
 				file_as = g_strdup_printf("%s, %s", lastname, firstname);
-			else if (*lastname)
+			else if (lastname != NULL)
 				file_as = g_strdup(lastname);
 			else
 				file_as = g_strdup(firstname);

@@ -119,14 +119,12 @@ int serv_send_im(GaimConnection *gc, const char *name, const char *message,
 	GaimConversation *conv;
 	GaimAccount *account;
 	GaimPresence *presence;
-	GaimPluginProtocolInfo *prpl_info;
+	GaimPluginProtocolInfo *prpl_info = NULL;
 	int val = -EINVAL;
 	const gchar *auto_reply_pref;
 
-	g_return_val_if_fail(gc != NULL, val);
-	g_return_val_if_fail(gc->prpl != NULL, val);
-
-	prpl_info = GAIM_PLUGIN_PROTOCOL_INFO(gc->prpl);
+	if (gc != NULL && gc->prpl != NULL)
+		prpl_info = GAIM_PLUGIN_PROTOCOL_INFO(gc->prpl);
 
 	account  = gaim_connection_get_account(gc);
 	presence = gaim_account_get_presence(account);
@@ -247,14 +245,10 @@ void serv_move_buddy(GaimBuddy *b, GaimGroup *og, GaimGroup *ng)
 {
 	GaimPluginProtocolInfo *prpl_info = NULL;
 
-	g_return_if_fail(b != NULL);
-	g_return_if_fail(og != NULL);
-	g_return_if_fail(ng != NULL);
-
 	if (b->account->gc != NULL && b->account->gc->prpl != NULL)
 		prpl_info = GAIM_PLUGIN_PROTOCOL_INFO(b->account->gc->prpl);
 
-	if (b->account->gc && og && ng) {
+	if (b && b->account->gc && og && ng) {
 		if (prpl_info && prpl_info->group_buddy) {
 			prpl_info->group_buddy(b->account->gc, b->name, og->name, ng->name);
 		}
@@ -842,4 +836,15 @@ void serv_send_file(GaimConnection *gc, const char *who, const char *file)
 			prpl_info->send_file(gc, who, file);
 		}
 	}
+}
+
+void serv_voice_chat(GaimConnection *gc, const char *who)
+{
+	GaimPluginProtocolInfo *prpl_info = NULL;
+
+	if (gc != NULL && gc->prpl != NULL)
+		prpl_info = GAIM_PLUGIN_PROTOCOL_INFO(gc->prpl);
+	
+	if (prpl_info && prpl_info->media_prpl_ops && prpl_info->media_prpl_ops->call) 
+		prpl_info->media_prpl_ops->call(gc, who);
 }

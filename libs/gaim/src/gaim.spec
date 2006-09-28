@@ -6,12 +6,12 @@
 # When not doing betas comment this out
 # NOTE: %defines in spec files are evaluated in comments so the correct
 #       way to comment it out is to replace the % with #
-%define beta 3.1
+%define beta 2
 
-%if "0%{?beta}" != "0"
-%define gaimver %(echo "2.0.0beta3.1"|sed -e 's/cvs//; s/beta.*//')
+%if 0%{?beta}
+%define gaimver %(echo "2.0.0beta2"|sed -e 's/cvs//; s/beta.*//')
 %else
-%define gaimver 2.0.0beta3.1
+%define gaimver 2.0.0beta2
 %endif
 
 Summary:    A Gtk+ based multiprotocol instant messaging client
@@ -23,7 +23,7 @@ License:    GPL
 Group:      Applications/Internet
 URL:        http://gaim.sourceforge.net/
 Packager:   %{packager}
-Source:     %{name}-2.0.0beta3.1.tar.gz
+Source:     %{name}-2.0.0beta2.tar.gz
 BuildRoot:  %{_tmppath}/%{name}-%{version}-root
 
 # Generic build requirements
@@ -142,7 +142,7 @@ documentation, and libraries required for development of gaim scripts
 and plugins.
 
 %prep
-%setup -q -n %{name}-2.0.0beta3.1
+%setup -q -n %{name}-2.0.0beta2
 
 %build
 CFLAGS="$RPM_OPT_FLAGS" ./configure --prefix=%{_prefix} \

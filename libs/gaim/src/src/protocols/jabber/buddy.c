@@ -256,9 +256,9 @@ struct vcard_template {
 	{N_("Locality"),           NULL, TRUE, TRUE, "LOCALITY",  "ADR", NULL},
 	{N_("Region"),             NULL, TRUE, TRUE, "REGION",    "ADR", NULL},
 	{N_("Postal Code"),        NULL, TRUE, TRUE, "PCODE",     "ADR", NULL},
-	{N_("Country"),            NULL, TRUE, TRUE, "CTRY",      "ADR", NULL},
+	{N_("Country"),            NULL, TRUE, TRUE, "COUNTRY",   "ADR", NULL},
 	{N_("Telephone"),          NULL, TRUE, TRUE, "NUMBER",    "TEL",  NULL},
-	{N_("E-Mail"),             NULL, TRUE, TRUE, "USERID",    "EMAIL",  "<A HREF=\"mailto:%s\">%s</A>"},
+	{N_("Email"),              NULL, TRUE, TRUE, "USERID",    "EMAIL",  "<A HREF=\"mailto:%s\">%s</A>"},
 	{N_("Organization Name"),  NULL, TRUE, TRUE, "ORGNAME",   "ORG", NULL},
 	{N_("Organization Unit"),  NULL, TRUE, TRUE, "ORGUNIT",   "ORG", NULL},
 	{N_("Title"),              NULL, TRUE, TRUE, "TITLE",     NULL,  NULL},
@@ -776,7 +776,7 @@ static void jabber_vcard_parse(JabberStream *js, xmlnode *packet, gpointer data)
 					if(userid) {
 						g_string_append_printf(info_text,
 								"<b>%s:</b> <a href='mailto:%s'>%s</a><br/>",
-								_("E-Mail"), userid, userid);
+								_("Email"), userid, userid);
 						g_free(userid);
 					}
 				} else if((userid = xmlnode_get_data(child))) {
@@ -784,7 +784,7 @@ static void jabber_vcard_parse(JabberStream *js, xmlnode *packet, gpointer data)
 					 * out of spec */
 						g_string_append_printf(info_text,
 								"<b>%s:</b> <a href='mailto:%s'>%s</a><br/>",
-								_("E-Mail"), userid, userid);
+								_("Email"), userid, userid);
 					g_free(userid);
 				}
 			} else if(!strcmp(child->name, "ORG")) {
@@ -1235,7 +1235,7 @@ static void user_search_result_cb(JabberStream *js, xmlnode *packet, gpointer da
 			GList *row = NULL;
 			field = xmlnode_get_child(item, "field");
 			while(field) {
-				xmlnode *valuenode = xmlnode_get_child(field, "value");
+				xmlnode *valuenode = xmlnode_get_child(item, "value");
 				if(valuenode) {
 					char *value = xmlnode_get_data(valuenode);
 					row = g_list_append(row, value);
@@ -1250,15 +1250,15 @@ static void user_search_result_cb(JabberStream *js, xmlnode *packet, gpointer da
 		/* old skool */
 		gaim_debug_info("jabber", "old-skool\n");
 
-		column = gaim_notify_searchresults_column_new(_("JID"));
+		column = gaim_notify_searchresults_column_new("JID");
 		gaim_notify_searchresults_column_add(results, column);
-		column = gaim_notify_searchresults_column_new(_("First Name"));
+		column = gaim_notify_searchresults_column_new("First");
 		gaim_notify_searchresults_column_add(results, column);
-		column = gaim_notify_searchresults_column_new(_("Last Name"));
+		column = gaim_notify_searchresults_column_new("Last");
 		gaim_notify_searchresults_column_add(results, column);
-		column = gaim_notify_searchresults_column_new(_("Nickname"));
+		column = gaim_notify_searchresults_column_new("Nickname");
 		gaim_notify_searchresults_column_add(results, column);
-		column = gaim_notify_searchresults_column_new(_("E-Mail"));
+		column = gaim_notify_searchresults_column_new("E-Mail");
 		gaim_notify_searchresults_column_add(results, column);
 
 		for(item = xmlnode_get_child(query, "item"); item; item = xmlnode_get_next_twin(item)) {
@@ -1293,7 +1293,6 @@ static void user_search_x_data_cb(JabberStream *js, xmlnode *result, gpointer da
 {
 	xmlnode *query;
 	JabberIq *iq;
-	char *dir_server = data;
 
 	iq = jabber_iq_new_query(js, JABBER_IQ_SET, "jabber:iq:search");
 	query = xmlnode_get_child(iq->node, "query");
@@ -1301,9 +1300,7 @@ static void user_search_x_data_cb(JabberStream *js, xmlnode *result, gpointer da
 	xmlnode_insert_child(query, result);
 
 	jabber_iq_set_callback(iq, user_search_result_cb, NULL);
-	xmlnode_set_attrib(iq->node, "to", dir_server);
 	jabber_iq_send(iq);
-	g_free(dir_server);
 }
 
 struct user_search_info {
@@ -1352,22 +1349,18 @@ static void user_search_cb(struct user_search_info *usi, GaimRequestFields *fiel
 static void user_search_fields_result_cb(JabberStream *js, xmlnode *packet, gpointer data)
 {
 	xmlnode *query, *x;
-	const char *from, *type;
+	const char *from;
 
+	/* i forget, do i have to check for error? XXX */
 	if(!(from = xmlnode_get_attrib(packet, "from")))
 		return;
-
-	/* XXX: make a pretty error box after the string freeze */
-	if(!(type = xmlnode_get_attrib(packet, "type")) || !strcmp(type, "error")) {
-		return;
-	}
 
 
 	if(!(query = xmlnode_get_child(packet, "query")))
 		return;
 
-	if((x = xmlnode_get_child_with_namespace(query, "x", "jabber:x:data"))) {
-		jabber_x_data_request(js, x, user_search_x_data_cb, g_strdup(from));
+	if((x = xmlnode_get_child_with_namespace(packet, "x", "jabber:x:data"))) {
+		jabber_x_data_request(js, x, user_search_x_data_cb, NULL);
 		return;
 	} else {
 		struct user_search_info *usi;
@@ -1383,11 +1376,7 @@ static void user_search_fields_result_cb(JabberStream *js, xmlnode *packet, gpoi
 		gaim_request_fields_add_group(fields, group);
 
 		if((instnode = xmlnode_get_child(query, "instructions")))
-		{
-			char *tmp = xmlnode_get_data(instnode);
-			instructions = g_strdup_printf(_("Server Instructions: %s"), tmp);
-			g_free(tmp);
-		}
+			instructions = xmlnode_get_data(instnode);
 		else
 			instructions = g_strdup(_("Fill in one or more fields to search "
 						"for any matching Jabber users."));

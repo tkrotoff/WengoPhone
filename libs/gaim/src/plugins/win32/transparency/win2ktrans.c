@@ -640,8 +640,7 @@ static GtkWidget *get_config_frame(GaimPlugin *plugin) {
 
 static GaimGtkPluginUiInfo ui_info =
 {
-	get_config_frame,
-	0 /* page_num (Reserved) */
+	get_config_frame
 };
 
 static GaimPluginInfo info =

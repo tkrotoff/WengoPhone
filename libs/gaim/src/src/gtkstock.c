@@ -130,7 +130,8 @@ static struct StockIcon
 	{ GAIM_STOCK_STATUS_CONNECT1, "gaim",    "status-connect1.png"      },
 	{ GAIM_STOCK_STATUS_CONNECT2, "gaim",    "status-connect2.png"      },
 	{ GAIM_STOCK_STATUS_CONNECT3, "gaim",    "status-connect3.png"      },
-	{ GAIM_STOCK_UPLOAD,          NULL,      GTK_STOCK_GO_UP            }
+	{ GAIM_STOCK_UPLOAD,          NULL,      GTK_STOCK_GO_UP            },
+	{ GAIM_STOCK_WARN,            NULL,      GTK_STOCK_DIALOG_WARNING   }
 };
 
 static const GtkStockItem stock_items[] =
@@ -144,6 +145,7 @@ static const GtkStockItem stock_items[] =
 	{ GAIM_STOCK_MODIFY,     N_("_Modify"),     0, 0, NULL },
 	{ GAIM_STOCK_OPEN_MAIL,  N_("_Open Mail"),  0, 0, NULL },
 	{ GAIM_STOCK_PAUSE,      N_("_Pause"),      0, 0, NULL },
+	{ GAIM_STOCK_WARN,       N_("_Warn"),       0, 0, NULL },
 };
 
 static gchar *

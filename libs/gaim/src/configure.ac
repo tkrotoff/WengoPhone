@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT([gaim], [2.0.0beta3.1], [gaim-devel@lists.sourceforge.net])
+AC_INIT([gaim], [2.0.0beta2], [gaim-devel@lists.sourceforge.net])
 AC_CANONICAL_SYSTEM
 AM_CONFIG_HEADER(config.h)
 AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
@@ -17,22 +17,11 @@ AC_DISABLE_STATIC
 AM_PROG_LIBTOOL
 LIBTOOL="$LIBTOOL --silent"
 AC_PROG_INSTALL
-AC_PROG_INTLTOOL
-GETTEXT_PACKAGE=gaim
-AC_SUBST(GETTEXT_PACKAGE)
 
 # before gettexting, in case iconv matters
 case "$host_os" in
 darwin*)
 	AC_CHECK_LIB(resolv, res_query)
-
-	AC_CHECK_HEADER(CoreFoundation/CoreFoundation.h, [
-		AC_CHECK_HEADER(IOKit/IOKitLib.h, [
-			AC_DEFINE(HAVE_IOKIT, 1, [Define if we have IOKit])
-			LIBS="$LIBS -framework IOKit -framework CoreFoundation"
-		], [])
-	], [])
-
 	AC_MSG_CHECKING([for fink])
 	if test -d /sw; then
 		AC_MSG_RESULT([found, adding /sw to search paths])
@@ -46,8 +35,9 @@ darwin*)
 	;;
 esac
 
-ALL_LINGUAS="am az bg bn bs ca ca_ES@valencian cs da de el en_AU en_CA en_GB es et fa fi fr gl gu he hi hu it ja ka ko ku lt mk my_MM nb nl nn pa pl pt_BR pt ro ru sk sl sq sr sr@Latn sv ta te tr uk vi xh zh_CN zh_TW"
-AM_GLIB_GNU_GETTEXT
+ALL_LINGUAS="am az bg bn bs ca cs da de el en_AU en_CA en_GB es et fi fr gl gu he hi hu it ja ka ko ku lt mk my_MM nb nl nn pa pl pt_BR pt ro ru sk sl sq sr sr@Latn sv ta te tr uk vi xh zh_CN zh_TW"
+AM_GNU_GETTEXT_VERSION(0.10.40)
+AM_GNU_GETTEXT
 
 dnl we don't use autobreak on cygwin!!
 dnl AC_CYGWIN
@@ -66,7 +56,7 @@ AC_C_BIGENDIAN
 dnl Checks for library functions.
 AC_TYPE_SIGNAL
 AC_FUNC_STRFTIME
-AC_CHECK_FUNCS(strdup strstr atexit setlocale)
+AC_CHECK_FUNCS(strdup strstr atexit)
 dnl Checks for getopt in standard library
 AC_CHECK_FUNCS(getopt_long,,
 [
@@ -118,58 +108,15 @@ AC_SYS_LARGEFILE
 dnl FreeBSD doesn't have libdl, dlopen is provided by libc
 AC_CHECK_FUNC(dlopen, LIBDL="", [AC_CHECK_LIB(dl, dlopen, LIBDL="-ldl")])
 
-AC_MSG_CHECKING(for the %z format string in strftime())
-AC_TRY_RUN([
-#ifdef HAVE_SYS_TIME_H
-#include <sys/time.h>
-#endif
-#include <time.h>
-#include <stdio.h>
-
-int main()
-{
-	char buf[6];
-	time_t t = time(NULL);
-	
-	if (strftime(buf, sizeof(buf), "%z", localtime(&t)) != 5)
-		return 1;
-	
-	fprintf(stderr, "strftime(\"%%z\") yields: \"%s\"\n", buf);
-	
-	return !((buf[0] == '-' || buf[0] == '+') &&
-	         (buf[1] >= '0' && buf[1] <= '9') &&
-	         (buf[2] >= '0' && buf[2] <= '9') &&
-	         (buf[3] >= '0' && buf[3] <= '9') &&
-	         (buf[4] >= '0' && buf[4] <= '9')
-	        );
-}
-],
-[
-	AC_MSG_RESULT(yes)
-	AC_DEFINE([HAVE_STRFTIME_Z_FORMAT], [1],
-                                      [Define to 1 if you have a strftime() that supports the %z format string.])
-],
-[
-	AC_MSG_RESULT(no)
-],
-[
-	# Fallback for Cross Compiling...
-	# This will enable the compatibility code.
-	AC_MSG_RESULT(no)
-]
-)
 
 
 dnl #######################################################################
 dnl # Check for Meanwhile headers (for Sametime)
 dnl #######################################################################
 PKG_CHECK_MODULES(MEANWHILE,
-	[meanwhile >= 1.0.0 meanwhile < 2.0.0], [
-		have_meanwhile="yes"
-	], [
-		AC_MSG_RESULT(no)
-		have_meanwhile="no"
-	])
+	[meanwhile >= 1.0.0 meanwhile < 2.0.0],
+	[have_meanwhile="yes"],
+	[have_meanwhile="no"])
 AC_SUBST(MEANWHILE_CFLAGS)
 AC_SUBST(MEANWHILE_LIBS)
 
@@ -184,14 +131,9 @@ HOWL_CFLAGS=""
 HOWL_LIBS=""
 
 dnl Attempt to autodetect Howl
-PKG_CHECK_MODULES(HOWL, howl, [
-		howlincludes="yes"
-		howllibs="yes"
-	], [
-		AC_MSG_RESULT(no)
-		howlincludes="no"
-		howllibs="no"
-	])
+PKG_CHECK_MODULES(HOWL, howl,
+	[howlincludes="yes" howllibs="yes"],
+	[howlincludes="no" howllibs="no"])
 
 dnl Override HOWL_CFLAGS if the user specified an include dir
 if test "$ac_howl_includes" != "no"; then
@@ -230,20 +172,14 @@ if test "x$silc_manual_check" = "xno"; then
 		have_silc="yes"
 		silcincludes="yes"
 		silcclient="yes"
-	], [
-		AC_MSG_RESULT(no)
-		have_silc="no"
-	])
+	], have_silc="no")
 	dnl If silcclient.pc wasn't found, check for just silc.pc
 	if test "x$have_silc" = "xno"; then
 		PKG_CHECK_MODULES(SILC, silc, [
 			have_silc="yes"
 			silcincludes="yes"
 			silcclient="yes"
-		], [
-			AC_MSG_RESULT(no)
-			have_silc="no"
-		])
+		], have_silc="no")
 	fi
 else
 	if test "$ac_silc_includes" != "no"; then
@@ -272,80 +208,12 @@ if test "x$silcclient" = "xyes"; then
 #include <silcmime.h>
 		], [], [
 		AC_MSG_RESULT(yes)
-		AC_DEFINE(HAVE_SILCMIME_H, 1, [Define if we have silcmime.h])
+		AC_DEFINE(HAVE_SILCMIME_H, 1, [define if we have silcmime.h])
 		], [
 		AC_MSG_RESULT(no)
 		])
 	CPPFLAGS="$CPPFLAGS_save"
 fi
-
-
-dnl #######################################################################
-dnl # Check for gadugadu client includes and libraries
-dnl #######################################################################
-AC_ARG_WITH(gadu-includes, [AC_HELP_STRING([--with-gadu-includes=DIR], [Compile the gadugadu plugin against includes in DIR])], [ac_gadu_includes="$withval"], [ac_gadu_includes="no"])
-AC_ARG_WITH(gadu-libs, [AC_HELP_STRING([--with-gadu-libs=DIR], [Compile the gadugadu plugin against the libs in DIR])], [ac_gadu_libs="$withval"], [ac_gadu_libs="no"])
-GADU_CFLAGS=""
-GADU_LIBS=""
-if test -n "$with_gadu_includes" || test -n "$with_gadu_libs"; then
-	gadu_manual_check="yes"
-else
-	gadu_manual_check="no"
-fi
-if test "x$gadu_manual_check" = "xno"; then
-	PKG_CHECK_MODULES(GADU, libgadu, [
-		gadu_includes="yes"
-		gadu_libs="yes"
-	], [
-		AC_MSG_RESULT(no)
-	])
-else
-	if test "$ac_gadu_includes" != "no"; then
-		GADU_CFLAGS="-I$ac_gadu_includes"
-	fi
-	CPPFLAGS_save="$CPPFLAGS"
-	CPPFLAGS="$CPPFLAGS $GADU_CFLAGS"
-	AC_CHECK_HEADER(libgadu.h, [gadu_includes=yes])
-	CPPFLAGS="$CPPFLAGS_save"
-
-	if test "$ac_gadu_libs" != "no"; then
-		GADU_LIBS="-L$ac_gadu_libs"
-	fi
-	GADU_LIBS="$GADU_LIBS -lgadu"
-	AC_CHECK_LIB(gadu, gg_libgadu_version, [gadu_libs=yes], , $GADU_LIBS)
-fi
-
-if test "x$gadu_libs" = "xyes"; then
-	AC_MSG_CHECKING(for libgadu GPL compatibility)
-	CPPFLAGS_save="$CPPFLAGS"
-	CPPFLAGS="$CPPFLAGS $GADU_CFLAGS"
-	AC_TRY_COMPILE([#include <libgadu.h>], [
-#ifdef __GG_LIBGADU_HAVE_OPENSSL
-#error "libgadu is not compatible with the GPL when compiled with OpenSSL support."
-#endif
-	], [
-		AC_MSG_RESULT(yes)
-		AC_DEFINE([HAVE_LIBGADU], [1],
-		          [Define to 1 if you have libgadu.])
-	], [
-		AC_MSG_RESULT(no)
-		echo
-		echo
-		echo "libgadu is not compatible with the GPL when compiled with OpenSSL support."
-		echo "Please recompile libgadu using:"
-		echo "./autogen.sh --disable-libgadu-openssl --disable-static --enable-shared"
-		echo "Then rerun this ./configure"
-		echo
-		echo
-		GADU_LIBS=""
-		GADU_CFLAGS=""
-		gadu_libs=no
-	])
-	CPPFLAGS="$CPPFLAGS_save"
-fi
-
-AC_SUBST(GADU_LIBS)
-AC_SUBST(GADU_CFLAGS)
 
 
 AC_ARG_ENABLE(distrib,,,enable_distrib=no)
@@ -369,9 +237,6 @@ fi
 if test "x$silcincludes" != "xyes" -o "x$silcclient" != "xyes"; then
 	STATIC_PRPLS=`echo $STATIC_PRPLS | $sedpath 's/silc//'`
 fi
-if test "x$gadu_libs" != "xyes"; then
-	STATIC_PRPLS=`echo $STATIC_PRPLS | $sedpath 's/gg//'`
-fi
 AC_SUBST(STATIC_PRPLS)
 STATIC_LINK_LIBS=
 extern_init=
@@ -387,7 +252,7 @@ for i in $STATIC_PRPLS ; do
 	load_proto="$load_proto gaim_init_${i}_plugin();"
 	case $i in
 		bonjour)	static_bonjour=yes ;;
-		gg)		static_gg=yes ;;
+		gg)			static_gg=yes ;;
 		irc)		static_irc=yes ;;
 		jabber)		static_jabber=yes ;;
 		msn)		static_msn=yes ;;
@@ -431,9 +296,6 @@ if test "x$howlincludes" != "xyes" -o "x$howllibs" != "xyes"; then
 fi
 if test "x$silcincludes" != "xyes" -o "x$silcclient" != "xyes"; then
 	DYNAMIC_PRPLS=`echo $DYNAMIC_PRPLS | $sedpath 's/silc//'`
-fi
-if test "x$gadu_libs" != "xyes"; then
-	DYNAMIC_PRPLS=`echo $DYNAMIC_PRPLS | $sedpath 's/gg//'`
 fi
 AC_SUBST(DYNAMIC_PRPLS)
 for i in $DYNAMIC_PRPLS ; do
@@ -630,7 +492,6 @@ if test "x$enable_dbus" = "xyes" ; then
 		enable_dbus=yes
 	],
 	[
-		AC_MSG_RESULT(no)
 		enable_dbus=no
 	])
 fi
@@ -671,55 +532,38 @@ if test "x$enable_dbus" = "xyes" ; then
 	fi
 fi
 
-dnl ###########################################################################
-dnl # Find the D-Bus services dir.
-dnl #
-dnl # This is a 3 step process that
-dnl #
-dnl # 1. checks if --with-dbus-services was set, if so use that.
-dnl # 2. checks if --prefix was given, if so use that.
-dnl # 3. fallbacks to installing into what should be the correct system
-dnl #    directories.
-dnl #
-dnl # This is still prone to error if one of the legacy directories exist
-dnl # although a newer dbus is installed.  But I have tried to order the
-dnl # directory searching to keep this situation at a minimum.
-dnl ###########################################################################
-AC_ARG_WITH(dbus-services, [  --with-dbus-services=<dir>   Where the D-Bus services directory is located.])
+dnl  Here we locate the directory containing DBus .service files for
+dnl  the session bus.  Adapted from the guifications project.
 
-AC_MSG_CHECKING([location of the D-Bus services directory])
-if ! test -z "$with_dbus_services" ; then
-	if ! test -d "$with_dbus_services" ; then
-		AC_MSG_ERROR([$with_dbus_services does not exist, if this is the correct location please make sure that it exists.])
-	fi
+AC_ARG_WITH(dbus-session-dir, [  --with-dbus-session-dir=<dir>   Location of the D-BUS session directory.])
 
-	DBUS_SERVICES_DIR="$with_dbus_services"
-else
-	if test x"$prefix" = x"NONE" ; then
-		dnl # no prefix given, so we look for the correct dbus system paths.
-		dnl # if a prefix is given, we use it.
-
-		serviceprefixes="$datadir $libdir /usr/share /usr/local/share"
-		DBUS_SERVICES_DIR=""
-
-		for d in $serviceprefixes ; do
-			dir="$d/dbus-1/services"
-			if test -d $dir ; then
-				DBUS_SERVICES_DIR="$dir"
-				break
-			fi
-		done
-
-		if test -z $DBUS_SERVICES_DIR ; then
-			AC_MSG_ERROR([D-Bus services directory was not found!  Please use --with-dbus-services and specify it's location.])
+if test "x$enable_dbus" = "xyes" ; then
+    AC_MSG_CHECKING([location of the D-BUS session directory])
+    if ! test -z "$with_dbus_session_dir"; then
+		if ! test -d "$with_dbus_session_dir"; then
+			AC_MSG_WARN([$with_dbus_session_dir does not exist, if this is the correct location please make sure that it exists.])
+			enable_dbus=no
 		fi
-	else
-		DBUS_SERVICES_DIR="$datadir/dbus-1/services"
-	fi
-fi
-AC_MSG_RESULT([$DBUS_SERVICES_DIR])
-AC_SUBST(DBUS_SERVICES_DIR)
+		DBUS_SESSION_DIR="$with_dbus_session_dir"
+    else
+	dnl # add more to this as needed
+	servicesprefixes="$DATADIR $LIBDIR /usr/share /usr/local/share"
+	DBUS_SESSION_DIR=""
 
+	for p in $servicesprefixes; do
+	    dir="$p/dbus-1/services"
+	    if test -d $dir; then
+		DBUS_SESSION_DIR="$dir"
+		break
+	    fi
+	done
+
+	if test -z $DBUS_SESSION_DIR; then
+	    AC_MSG_WARN([D-BUS session directory was not found!  Please use --with-dbus-session-dir and specify its location.])
+	    enable_dbus=no
+	fi
+    fi
+fi
 
 if test "x$enable_dbus" = "xyes" ; then
     AC_MSG_RESULT([$DBUS_SESSION_DIR])
@@ -732,6 +576,11 @@ fi
 
 AM_CONDITIONAL(ENABLE_DBUS, test "x$enable_dbus" = "xyes")
 
+
+
+
+
+
 dnl #######################################################################
 dnl # Check for startup notification
 dnl #######################################################################
@@ -741,10 +590,11 @@ if test "x$enable_startup_notification" = "xyes"; then
 	PKG_CHECK_MODULES(STARTUP_NOTIFICATION, libstartup-notification-1.0 >= 0.5,
 	[
 		AC_DEFINE(HAVE_STARTUP_NOTIFICATION, 1, [Define if we're using libstartup-notification.])
+		echo "Building with libstartup-notification"
 		enable_startup_notification=yes
 	],
 	[
-		AC_MSG_RESULT(no)
+		echo "Building without libstartup-notification"
 		enable_startup_notification=no
 	])
 
@@ -764,19 +614,13 @@ if test "x$enable_gevolution" = "xyes"; then
 	PKG_CHECK_MODULES(EVOLUTION_ADDRESSBOOK, $evo_deps, [
 		AC_DEFINE(HAVE_EVOLUTION_ADDRESSBOOK, 1, [Define if we're using evolution addressbook.])
 		build_gevo=yes
-	], [
-		AC_MSG_RESULT(yes)
-		build_gevo=no
-	])
+	], build_gevo=no)
 	if test "x$build_gevo" = "xno"; then
 		evo_deps="libebook-1.0 libedata-book-1.0"
 		PKG_CHECK_MODULES(EVOLUTION_ADDRESSBOOK, $evo_deps, [
 			AC_DEFINE(HAVE_EVOLUTION_ADDRESSBOOK, 1, [Define if we're using evolution addressbook.])
 			build_gevo=yes
-		], [
-			AC_MSG_RESULT(yes)
-			build_gevo=no
-		])
+		], build_gevo=no)
 	fi
 
 	AC_SUBST(EVOLUTION_ADDRESSBOOK_CFLAGS)
@@ -1165,21 +1009,12 @@ if test "x$enable_nss" != "xno"; then
 
 	if test "x$nss_manual_check" = "xno"; then
 		if `$PKG_CONFIG --exists mozilla-nss`; then
-			PKG_CHECK_MODULES(NSS, mozilla-nss, [
-				have_nss="yes"
-			], [
-				AC_MSG_RESULT(no)
-				have_nss="no"
-			])
+			PKG_CHECK_MODULES(NSS, mozilla-nss, have_nss="yes", have_nss="no")
 			mozilla_nspr="mozilla-nspr"
 			mozilla_nss="mozilla-nss"
 		else
 			if `$PKG_CONFIG --exists nss`; then
-				PKG_CHECK_MODULES(NSS, nss, [
-					have_nss="yes"
-				], [
-					AC_MSG_RESULT(no)
-				])
+				PKG_CHECK_MODULES(NSS, nss, have_nss="yes")
 				mozilla_nspr="nspr"
 				mozilla_nss="nss"
 			fi
@@ -1415,7 +1250,6 @@ if test "$enable_tcl" = yes; then
 	AC_MSG_CHECKING([for tclConfig.sh])
         TCLCONFIG=no
 	TCLCONFIGDIRS="/usr/lib \
-		       /usr/lib64 \
 		       /usr/lib/tcl8.4 \
 		       /usr/lib/tcl8.3 \
 		       /usr/lib/tcl8.2 \
@@ -1473,8 +1307,7 @@ if test "$enable_tcl" = yes -a "$enable_tk" = yes; then
 	AC_MSG_CHECKING([for tkConfig.sh])
 	TKCONFIG=no
 	TKCONFIGDIRS="/usr/lib \
-		      /usr/lib64 \
-		      /usr/lib/tk8.4 \
+	              /usr/lib/tk8.4 \
 		      /usr/lib/tk8.3 \
 		      /usr/lib/tk8.2 \
 		      /usr/local/lib"
@@ -1517,10 +1350,7 @@ fi
 
 dnl Thanks, Evan.
 if test "$enable_gtkspell" = yes ; then
-	PKG_CHECK_MODULES(GTKSPELL, gtkspell-2.0 >= 2.0.2, [], [
-		AC_MSG_RESULT(no)
-		enable_gtkspell=no
-	])
+	PKG_CHECK_MODULES(GTKSPELL, gtkspell-2.0 >= 2.0.2, , enable_gtkspell=no)
 	if test "$enable_gtkspell" = "yes" ; then
 		AC_SUBST(GTKSPELL_CFLAGS)
 		AC_SUBST(GTKSPELL_LIBS)
@@ -1695,6 +1525,78 @@ fi
 AC_SUBST(enable_doxygen)
 AC_SUBST(enable_dot)
 
+dnl ##############################################################################
+dnl ## Mediastreamer stuff #######################################################
+dnl ##############################################################################
+AC_ARG_ENABLE(vv,     [  --enable-vv         enable Voice and Video support],,enable_vv=no)
+if test "x$enable_vv" = xyes; then
+	AC_DEFINE(HAVE_GLIB, 1, [Gaim always has GLib, but Linphone can be built without it])
+
+	dnl enable truespeech codec support
+	AC_ARG_ENABLE(truespeech, [  --enable-truespeech       Turn on TrueSpeech support (x86 only)],,enable_truespeech=no)
+	TRUESPEECH_CFLAGS=
+	if test x$enable_truespeech = xyes ; then
+	TRUESPEECH_CFLAGS=-DTRUESPEECH
+	fi
+	VV_CFLAGS="$VV_CFLAGS $TRUESPEECH_CFLAGS"
+
+	found_sound=no
+	AC_CHECK_HEADERS(soundcard.h sys/soundcard.h machine/soundcard.h sys/audio.h)
+		if test "${ac_cv_header_sys_soundcard_h}" = "yes" || \
+		test "${ac_cv_header_soundcard_h}" = "yes" || \
+			  test "${ac_cv_header_sys_audio_h}" = "yes" || \
+		test "${ac_cv_header_machine_soundcard_h}" = "yes"; then
+		found_sound=yes
+		fi
+	if test "$found_sound" = "no"; then
+		   AC_MSG_ERROR([Could not find a support sound driver])
+	fi
+	if test "$alsa" = "true"; then
+		AC_CHECK_HEADERS(alsa/asoundlib.h,
+				[ AC_CHECK_LIB(asound,snd_pcm_open,
+			[ALSA_LIBS="-lasound" ; AC_DEFINE(__ALSA_ENABLED__,1,[Defined when alsa support is enabled]) ])
+			]
+		  )
+	fi
+	dnl Check for samplerate libraries
+	dnl Check for jack libraries (sound output plugin)
+	PKG_CHECK_MODULES(JACK,jack >= 0.15.0,
+	[
+		 dnl we've found jack devel files
+		 PKG_CHECK_MODULES(SAMPLERATE, samplerate >= 0.0.13, [AC_DEFINE(__JACK_ENABLED__,1,[Jack support])] ,
+				  [echo "libsamplerate not found, jack support disabled."])
+		 VV_CFLAGS="$VV_CFLAGS $SAMPLERATE_CFLAGS"
+	 VV_LIBS="$VV_LIBS   $SAMPLERATE_LIBS"
+	],
+	[echo "No jack support."] )
+	VV_CFLAGS="$VV_CFLAGS $JACK_CFLAGS"
+	VV_LIBS="$VV_LIBS $JACK_LIBS"
+
+	dnl check for installed version of speex
+	LP_CHECK_SPEEX
+	VV_CFLAGS="$VV_CFLAGS $SPEEX_CFLAGS"
+	VV_LIBS="$VV_LIBS   $SPEEX_LIBS"
+
+	PKG_CHECK_MODULES(ORTP, ortp >= 0.7.1, enable_ortp=yes, enable_ortp=no)
+	VV_CFLAGS="$VV_CFLAGS $ORTP_CFLAGS"
+	VV_LIBS="$VV_LIBS   $ORTP_LIBS"
+	if test x$enable_ortp = xno; then
+	AC_MSG_ERROR([Could not find a suitable version of oRTP. Please install oRTP >= 0.7.1])
+	fi
+else
+	enable_vv=no
+fi
+
+if test x$enable_vv = xyes; then
+	AM_CONDITIONAL(HAVE_VV, true)
+	AC_DEFINE(HAVE_VV, [1], [Compile with Voice/Video support])
+else
+	AM_CONDITIONAL(HAVE_VV, false)
+fi
+
+AC_SUBST(VV_CFLAGS)
+AC_SUBST(VV_LIBS)
+
 AC_CONFIG_COMMANDS_PRE([
 	if test -e VERSION; then
 		cp -p VERSION VERSION.ac-save
@@ -1709,9 +1611,9 @@ AC_CONFIG_COMMANDS_POST([
 AC_OUTPUT([Makefile
 		   Doxyfile
 		   gaim.apspec
-		   gaim.service
 		   doc/Makefile
 		   doc/gaim.1
+		   intl/Makefile
 		   m4macros/Makefile
 		   pixmaps/Makefile
 		   pixmaps/smileys/Makefile
@@ -1735,6 +1637,7 @@ AC_OUTPUT([Makefile
 		   po/Makefile.in
 		   sounds/Makefile
 		   src/Makefile
+		   src/mediastreamer/Makefile
 		   src/protocols/Makefile
 		   src/protocols/bonjour/Makefile
 		   src/protocols/gg/Makefile
@@ -1772,9 +1675,10 @@ echo Build with Tcl support........ : $enable_tcl
 echo Build with Tk support......... : $enable_tk
 echo Build with Audio support...... : $enable_audio
 echo Build with GtkSpell support... : $enable_gtkspell
+echo Build with Voice/Video support : $enable_vv
 echo Build with DBUS support....... : $enable_dbus
 if test x$enable_dbus = xyes ; then
-eval echo DBUS servies directory........ : $DBUS_SERVICES_DIR
+echo DBUS session directory........ : $DBUS_SESSION_DIR
 fi
 echo Build with Cyrus SASL support. : $enable_cyrus_sasl
 echo Has you....................... : yes

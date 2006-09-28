@@ -45,8 +45,6 @@ typedef struct _GaimMenuAction
 	GList *children;
 } GaimMenuAction;
 
-typedef char *(*GaimInfoFieldFormatCallback)(const char *field, size_t len);
-
 /**
  * A key-value pair.
  *
@@ -62,7 +60,6 @@ typedef struct _GaimKeyValuePair
 
 /**
  * Creates a new GaimMenuAction.
- *
  * @param label    The text label to display for this action.
  * @param callback The function to be called when the action is used on
  *                 the selected item.
@@ -71,15 +68,8 @@ typedef struct _GaimKeyValuePair
  *                 of the action.
  * @return The GaimMenuAction.
  */
-GaimMenuAction *gaim_menu_action_new(const char *label, GaimCallback callback,
+GaimMenuAction *gaim_menu_action_new(char *label, GaimCallback callback,
                                      gpointer data, GList *children);
-
-/**
- * Frees a GaimMenuAction
- *
- * @param act The GaimMenuAction to free.
- */
-void gaim_menu_action_free(GaimMenuAction *act);
 
 /**************************************************************************/
 /** @name Base16 Functions                                                */
@@ -211,81 +201,28 @@ char *gaim_mime_decode_field(const char *str);
 /*@{*/
 
 /**
- * Formats a time into the specified format.
- *
- * This is essentially strftime(), but it has a static buffer
- * and handles the UTF-8 conversion for the caller.
- *
- * This function also provides the GNU %z formatter if the underlying C
- * library doesn't.  However, the format string parser is very naive, which
- * means that conversions specifiers to %z cannot be guaranteed.  The GNU
- * strftime(3) man page describes %z as: 'The time-zone as hour offset from
- * GMT.  Required to emit RFC822-conformant dates
- * (using "%a, %d %b %Y %H:%M:%S %z"). (GNU)'
- *
- * On Windows, this function also converts the results for %Z from a timezone
- * name (as returned by the system strftime() %Z format string) to a timezone
- * abbreviation (as is the case on Unix).  As with %z, conversion specifiers
- * should not be used.
- *
- * @param format The format string, in UTF-8
- * @param tm     The time to format, or @c NULL to use the current local time
- *
- * @return The formatted time, in UTF-8.
- *
- * @note @a format is required to be in UTF-8.  This differs from strftime(),
- *       where the format is provided in the locale charset.
- */
-const char *gaim_utf8_strftime(const char *format, const struct tm *tm);
-
-/**
- * Formats a time into the user's preferred short date format.
+ * Returns the current local time in hour:minute:second form.
  *
  * The returned string is stored in a static buffer, so the result
- * should be g_strdup()'d if it's going to be kept.
+ * should be g_strdup()'d if it's intended to be used for long.
  *
- * @param time The time to format, or @c NULL to use the current local time
+ * @return The current local time.
  *
- * @return The date, formatted as per the user's settings.
+ * @see gaim_date_full()
  */
-const char *gaim_date_format_short(const struct tm *tm);
+const char *gaim_date(void);
 
 /**
- * Formats a time into the user's preferred short date plus time format.
+ * Returns the date and time in human-readable form.
  *
  * The returned string is stored in a static buffer, so the result
- * should be g_strdup()'d if it's going to be kept.
+ * should be g_strdup()'d if it's intended to be used for long.
  *
- * @param time The time to format, or @c NULL to use the current local time
+ * @return The date and time in human-readable form.
  *
- * @return The timestamp, formatted as per the user's settings.
+ * @see gaim_date()
  */
-const char *gaim_date_format_long(const struct tm *tm);
-
-/**
- * Formats a time into the user's preferred full date and time format.
- *
- * The returned string is stored in a static buffer, so the result
- * should be g_strdup()'d if it's going to be kept.
- *
- * @param time The time to format, or @c NULL to use the current local time
- *
- * @return The date and time, formatted as per the user's settings.
- */
-const char *gaim_date_format_full(const struct tm *tm);
-
-/**
- * Formats a time into the user's preferred time format.
- *
- * The returned string is stored in a static buffer, so the result
- * should be g_strdup()'d if it's going to be kept.
- *
- * @param time The time value to format.
- * @param time The time to format, or @c NULL to use the current local time
- *
- * @return The time, formatted as per the user's settings.
- */
-const char *gaim_time_format(const struct tm *tm);
+const char *gaim_date_full(void);
 
 /**
  * Builds a time_t from the supplied information.
@@ -302,32 +239,26 @@ const char *gaim_time_format(const struct tm *tm);
 time_t gaim_time_build(int year, int month, int day, int hour,
 					   int min, int sec);
 
-/** Used by gaim_str_to_time to indicate no timezone offset was
-  * specified in the timestamp string. */
-#define GAIM_NO_TZ_OFF -500000
-
 /**
- * Parses a timestamp in jabber, ISO8601, or MM/DD/YYYY format and returns
- * a time_t.
+ * Parses a timestamp in jabber or ISO8601 format and returns a time_t.
  *
  * @param timestamp The timestamp
- * @param utc       Assume UTC if no timezone specified
- * @param tm        If not @c NULL, the caller can get a copy of the
- *                  struct tm used to calculate the time_t return value.
- * @param tz_off    If not @c NULL, the caller can get a copy of the
- *                  timezone offset (from UTC) used to calculate the time_t
- *                  return value. Note: Zero is a valid offset. As such,
- *                  the value of the macro @c GAIM_NO_TZ_OFF indicates no
- *                  offset was specified (which means that the local
- *                  timezone was used in the calculation).
- * @param rest      If not @c NULL, the caller can get a pointer to the
- *                  part of @a timestamp left over after parsing is
- *                  completed, if it's not the end of @a timestamp.
+ * @param utc Assume UTC if no timezone specified
  *
  * @return A time_t.
  */
-time_t gaim_str_to_time(const char *timestamp, gboolean utc,
-                        struct tm *tm, long *tz_off, const char **rest);
+time_t gaim_str_to_time(const char *timestamp, gboolean utc);
+
+/**
+ * Creates a string according to a time and format string
+ *
+ * This function just calls strftime. The only advantage to using it
+ * is that gcc won't give a warning if you use %c
+ *
+ * TODO: The warning is gone in gcc4, and this function can
+ *       eventually be removed.
+ */
+size_t gaim_strftime(char *s, size_t max, const char *format, const struct tm *tm);
 
 /*@}*/
 
@@ -374,7 +305,6 @@ gboolean gaim_markup_find_tag(const char *needle, const char *haystack,
  * @param display_name   The short descriptive name to display for this token.
  * @param is_link        TRUE if this should be a link, or FALSE otherwise.
  * @param link_prefix    The prefix for the link.
- * @param format_cb      A callback to format the value before adding it.
  *
  * @return TRUE if successful, or FALSE otherwise.
  */
@@ -383,8 +313,7 @@ gboolean gaim_markup_extract_info_field(const char *str, int len, GString *dest,
                                         const char *end_token, char check_value,
                                         const char *no_value_token,
                                         const char *display_name, gboolean is_link,
-                                        const char *link_prefix,
-					GaimInfoFieldFormatCallback format_cb);
+                                        const char *link_prefix);
 
 /**
  * Converts HTML markup to XHTML.
@@ -652,6 +581,18 @@ gboolean gaim_str_has_prefix(const char *s, const char *p);
  * @return   TRUE if x is a a suffix of s, otherwise FALSE.
  */
 gboolean gaim_str_has_suffix(const char *s, const char *x);
+
+/**
+ * Looks for %n, %d, or %t in a string, and replaces them with the
+ * specified name, date, and time, respectively.
+ *
+ * @param str  The string that may contain the special variables.
+ * @param name The sender name.
+ *
+ * @return A newly allocated string where the special variables are
+ *         expanded.  This should be g_free'd by the caller.
+ */
+gchar *gaim_str_sub_away_formatters(const char *str, const char *name);
 
 /**
  * Duplicates a string and replaces all newline characters from the
@@ -968,16 +909,6 @@ int gaim_utf8_strcasecmp(const char *a, const char *b);
  * @return TRUE if haystack has the word, otherwise FALSE
  */
 gboolean gaim_utf8_has_word(const char *haystack, const char *needle);
-
-/**
- * Prints a UTF-8 message to the given file stream. The function
- * tries to convert the UTF-8 message to user's locale. If this
- * is not possible, the original UTF-8 text will be printed.
- *
- * @param filestream The file stream (e.g. STDOUT or STDERR)
- * @param message    The message to print.
- */
-void gaim_print_utf8_to_console(FILE *filestream, char *message);
 
 /**
  * Checks for messages starting with "/me "

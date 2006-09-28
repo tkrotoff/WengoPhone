@@ -62,17 +62,14 @@ static struct developer developers[] = {
 	{"Daniel 'datallah' Atallah",	N_("developer"),	NULL},
 	{"Ethan 'Paco-Paco' Blanton",	N_("developer"), NULL},
 	{"Herman Bloggs",				N_("win32 port"), "herman@bluedigits.com"},
-	{"Thomas Butter",		N_("developer"), NULL},
 	{"Mark 'KingAnt' Doliner",		N_("developer"), NULL},
 	{"Christian 'ChipX86' Hammond",	N_("developer & webmaster"), NULL},
 	{"Gary 'grim' Kramlich",		N_("developer"), NULL},
 	{"Richard 'rlaager' Laager",	N_("developer"), NULL},
 	{"Christopher 'siege' O'Brien", N_("developer"), "taliesein@users.sf.net"},
-	{"Bartosz Oler",		N_("developer"), NULL},
 	{"Etan 'deryni' Reisner",       N_("developer"), NULL},
 	{"Tim 'marv' Ringenbach",		N_("developer"), NULL},
 	{"Luke 'LSchiere' Schierer",	N_("support"), "lschiere@users.sf.net"},
-	{"Evan Schoenberg",		N_("developer"), NULL},
 	{"Stu 'nosnilmot' Tomlinson",	N_("developer"), NULL},
 	{"Nathan 'faceprint' Walp",		N_("developer"), NULL},
 	{NULL, NULL, NULL}
@@ -112,22 +109,17 @@ static struct translator current_translators[] = {
 	{N_("Bengali"),             "bn", "Samia Nimatullah", "mailsamia2001@yahoo.com"},
 	{N_("Bosnian"),             "bs", "Lejla Hadzialic", "lejlah@gmail.com"},
 	{N_("Catalan"),             "ca", "Josep Puigdemont", "tradgnome@softcatala.org"},
-	{N_("Valencian"),           "ca_ES@valencian", "Software Valencià", "info@softwarevalencia.com"},
 	{N_("Czech"),               "cs", "Miloslav Trmac", "mitr@volny.cz"},
 	{N_("Danish"),              "da", "Morten Brix Pedersen", "morten@wtf.dk"},
 	{N_("German"),              "de", "Björn Voigt", "bjoern@cs.tu-berlin.de"},
-	{N_("German"),              "de", "Jochen Kemnade", "kemnade@gmail.com"},
 	{N_("Greek"),               "el", "Katsaloulis Panayotis", "panayotis@panayotis.com"},
 	{N_("Greek"),               "el", "Bouklis Panos", "panos@echidna-band.com"},
 	{N_("Australian English"),  "en_AU", "Peter Lawler", "trans@six-by-nine.com.au"},
 	{N_("Canadian English"),    "en_CA", "Adam Weinberger", "adamw@gnome.org"},
 	{N_("British English"),     "en_GB", "Luke Ross", "lukeross@sys3175.co.uk"},
 	{N_("Spanish"),             "es", "Javier Fernández-Sanguino Peña", "jfs@debian.org"},
-	{N_("Persian"),             "fa", "Elnaz Sarbar", "elnaz@farsiweb.info"},
-	{N_("Persian"),             "fa", "Meelad Zakaria", "meelad@farsiweb.info"},
 	{N_("Finnish"),             "fi", "Timo Jyrinki", "timo.jyrinki@iki.fi"},
 	{N_("French"),              "fr", "Éric Boumaour", "zongo_fr@users.sourceforge.net"},
-	{N_("Galician"),            "gl", "Ignacio Casal Quinteiro", "nacho.resa@gmail.com"},
 	{N_("Hebrew"),              "he", "Pavel Bibergal", "cyberkm203@hotmail.com"},
 	{N_("Hindi"),               "hi", "Ravishankar Shrivastava", "raviratlami@yahoo.com"},
 	{N_("Hungarian"),           "hu", "Zoltan Sutto", "sutto.zoltan@rutinsoft.hu"},
@@ -135,9 +127,8 @@ static struct translator current_translators[] = {
 	{N_("Japanese"),            "ja", "Takashi Aihana", "aihana@gnome.gr.jp"},
 	{N_("Georgian"),            "ka", "Ubuntu Georgian Translators", "alexander.didebulidze@stusta.mhn.de"},
 	{N_("Korean"),              "ko", "Kyung-uk Son", "vvs740@chol.com"},
-	{N_("Kurdish"),             "ku", "Erdal Ronahi", "erdal.ronahi@gmail.com"},
-	{N_("Kurdish"),             "ku", "Amed Ç. Jiyan", "amedcj@hotmail.com"},
-	{N_("Lithuanian"),          "lt", "Laurynas Biveinis", "laurynas.biveinis@gmail.com"},
+	{N_("Kurdish"),             "ku", "Erdal Ronahi, Amed Ç. Jiyan", "erdal.ronahi@gmail.com,amedcj@hotmail.com"},
+	{N_("Lithuanian"),          "lt", "Andrius Štikonas", "a.stikonas@gmail.com"},
 	{N_("Macedonian"),          "mk", "Tomislav Markovski", "herrera@users.sf.net"},
 	{N_("Dutch, Flemish"),      "nl", "Vincent van Adrighem", "V.vanAdrighem@dirck.mine.nu"},
 	{N_("Norwegian"),           "no", "Petter Johan Olsen", "petter.olsen@cc.uit.no"},
@@ -145,7 +136,7 @@ static struct translator current_translators[] = {
 	{N_("Polish"),              "pl", "Krzysztof Foltman", "krzysztof@foltman.com"},
 	{N_("Portuguese"),          "pt", "Duarte Henriques", "duarte_henriques@myrealbox.com"},
 	{N_("Portuguese-Brazil"),   "pt_BR", "Maurício de Lemos Rodrigues Collares Neto", "mauricioc@gmail.com"},
-	{N_("Romanian"),            "ro", "Mişu Moldovan", "dumol@gnome.ro"},
+	{N_("Romanian"),            "ro", "Mişu Moldovan", "dumol@go.ro"},
 	{N_("Russian"),             "ru", "Dmitry Beloglazov", "dmaa@users.sf.net"},
 	{N_("Serbian"),             "sr", "Danilo Šegan", "dsegan@gmx.net"},
 	{N_("Serbian"),             "sr", "Aleksandar Urosevic", "urke@users.sourceforge.net"},
@@ -153,7 +144,6 @@ static struct translator current_translators[] = {
 	{N_("Swedish"),             "sv", "Tore Lundqvist", "tlt@mima.x.se"},
 	{N_("Tamil"),               "ta", "Viveka Nathan K", "vivekanathan@users.sourceforge.net"},
 	{N_("Telugu"),              "te", "Mr. Subbaramaih", "info.gist@cdac.in"},
-	{N_("Turkish"),             "tr", "Ahmet Alp BALKAN", "prf_q@users.sf.net"},
 	{N_("Vietnamese"),          "vi", N_("T.M.Thanh and the Gnome-Vi Team"), "gnomevi-list@lists.sf.net"},
 	{N_("Simplified Chinese"),  "zh_CN", "Funda Wang", "fundawang@linux.net.cn"},
 	{N_("Traditional Chinese"), "zh_TW", "Ambrose C. Li", "acli@ada.dhs.org"},
@@ -185,7 +175,6 @@ static struct translator past_translators[] = {
 	{N_("Japanese"),            "ja", "Junichi Uekawa", NULL},
 	{N_("Georgian"),            "ka", "Temuri Doghonadze", NULL},
 	{N_("Korean"),              "ko", "Sang-hyun S, A Ho-seok Lee", NULL},
-	{N_("Lithuanian"),          "lt", "Andrius Štikonas", NULL},
 	{N_("Lithuanian"),          "lt", "Gediminas Čičinskas", NULL},
 	{N_("Polish"),              "pl", "Przemysław Sułek", NULL},
 	{N_("Russian"),             "ru", "Alexandre Prokoudine", NULL},
@@ -251,7 +240,7 @@ void gaim_gtkdialogs_about()
 	atk_object_set_description(obj, "Gaim " VERSION);
 	gtk_box_pack_start(GTK_BOX(vbox), logo, FALSE, FALSE, 0);
 
-	frame = gaim_gtk_create_imhtml(FALSE, &text, NULL, NULL);
+	frame = gaim_gtk_create_imhtml(FALSE, &text, NULL);
 	gtk_imhtml_set_format_functions(GTK_IMHTML(text), GTK_IMHTML_ALL ^ GTK_IMHTML_SMILEY);
 	gtk_box_pack_start(GTK_BOX(vbox), frame, TRUE, TRUE, 0);
 
@@ -261,7 +250,7 @@ void gaim_gtkdialogs_about()
 		_("Gaim is a modular messaging client capable of using "
 		  "AIM, MSN, Yahoo!, Jabber, ICQ, IRC, SILC, "
 		  "Novell GroupWise, Lotus Sametime, Napster, Zephyr, and Gadu-Gadu "
-		  "all at once.  It is written using GTK+.<BR><BR>"
+		  "all at once.  It is written using GTK+.  "
 		  "You may modify and redistribute the program under "
 		  "the terms of the GPL (version 2 or later).  A copy of the GPL is "
 		  "contained in the 'COPYING' file distributed with Gaim.  "
@@ -420,16 +409,6 @@ g_string_append(str, "<br/>  <b>Library Support</b><br/>");
 #else
 	g_string_append_printf(str, "    <b>Evolution Addressbook:</b> Disabled<br/>");
 #endif
-#endif
-
-#ifdef HAVE_LIBGADU
-#ifdef _WIN32
-	g_string_append(str, "    <b>Gadu-Gadu library (libgadu):</b> Internal<br/>");
-#else
-	g_string_append(str, "    <b>Gadu-Gadu library (libgadu):</b> Enabled<br/>");
-#endif
-#else
-	g_string_append(str, "    <b>Gadu-Gadu library (libgadu):</b> Disabled<br/>");
 #endif
 
 #ifdef USE_GTKSPELL
@@ -744,12 +723,16 @@ gaim_gtkdialogs_log_cb(gpointer data, GaimRequestFields *fields)
 	if (username != NULL && *username != '\0' && account != NULL)
 	{
 		GaimGtkBuddyList *gtkblist = gaim_gtk_blist_get_default_gtk_blist();
+		GdkCursor *cursor = gdk_cursor_new(GDK_WATCH);
 
-		gaim_gtk_set_cursor(gtkblist->window, GDK_WATCH);
+		gdk_window_set_cursor(gtkblist->window->window, cursor);
+		gdk_cursor_unref(cursor);
+		while (gtk_events_pending())
+			gtk_main_iteration();
 
 		gaim_gtk_log_show(GAIM_LOG_IM, username, account);
 
-		gaim_gtk_clear_cursor(gtkblist->window);
+		gdk_window_set_cursor(gtkblist->window->window, NULL);
 	}
 
 	g_free(username);

@@ -108,9 +108,7 @@ get_plugin_pref_frame(GaimPlugin *plugin) {
 }
 
 static GaimPluginUiInfo prefs_info = {
-	get_plugin_pref_frame,
-	0,   /* page_num (Reserved) */
-	NULL /* frame (Reserved) */
+	get_plugin_pref_frame
 };
 
 static GaimPluginInfo info =

@@ -95,7 +95,7 @@ static void resolve(int in, int out) {
 	guchar *end;
 	guchar *cp;
 	gchar name[256];
-	guint16 type, dlen, pref, weight, port;
+	int type, dlen, pref, weight, port;
 	gchar query[256];
 
 	if(read(in, query, 256) <= 0) {
@@ -124,19 +124,17 @@ static void resolve(int in, int out) {
 
 		cp += size;
 
-		GETSHORT(type,cp);
+		NS_GET16(type,cp);
+		cp += 6; /* skip ttl and class since we already know it */
 
-		/* skip ttl and class since we already know it */
-		cp += 6;
-
-		GETSHORT(dlen,cp);
+		NS_GET16(dlen,cp);
 
 		if (type == T_SRV) {
-			GETSHORT(pref,cp);
+			NS_GET16(pref,cp);
 
-			GETSHORT(weight,cp);
+			NS_GET16(weight, cp);
 
-			GETSHORT(port,cp);
+			NS_GET16(port, cp);
 
 			size = dn_expand( (unsigned char*)&answer, end, cp, name, 256);
 			if(size < 0 )

@@ -26,7 +26,6 @@
 #include "connection.h"
 #include "roomlist.h"
 #include "sslconn.h"
-#include "gaim_buffer.h"
 
 #include "jutil.h"
 #include "xmlnode.h"
@@ -34,8 +33,6 @@
 #ifdef HAVE_CYRUS_SASL
 #include <sasl/sasl.h>
 #endif
-
-#define CAPS0115_NODE "http://gaim.sf.net/caps"
 
 typedef enum {
 	JABBER_CAP_NONE           = 0,
@@ -110,9 +107,6 @@ typedef struct _JabberStream
 
 	char *avatar_hash;
 	GSList *pending_avatar_requests;
-
-	GaimCircBuffer *write_buffer;
-	guint writeh;
 
 	/* OK, this stays at the end of the struct, so plugins can depend
 	 * on the rest of the stuff being in the right place

@@ -24,7 +24,6 @@
 typedef struct _NMEvent NMEvent;
 
 #include "nmuser.h"
-#include <sys/types.h>
 
 /**
  * Defines for the event types
@@ -171,8 +170,10 @@ int nm_event_get_type(NMEvent * event);
  *
  * @param event	The event.
  *
- * @return		The timestamp for the event.
+ * @return		The timestamp for the event. This is the number of
+ *			    seconds since 1/1/1970 (as returned by the time()
+ *				system call).
  */
-time_t nm_event_get_gmt(NMEvent * event);
+guint32 nm_event_get_gmt(NMEvent * event);
 
 #endif

@@ -254,38 +254,23 @@ static void free_triple(zephyr_triple * zt)
 static gboolean triple_subset(zephyr_triple * zt1, zephyr_triple * zt2)
 {
 
-	if (!zt2) {
+	if (!zt2) 
 		gaim_debug_error("zephyr","zt2 doesn't exist\n"); 
-		return FALSE;
-	}
-	if (!zt1) {
+	if (!zt1) 
 		gaim_debug_error("zephyr","zt1 doesn't exist\n");
-		return FALSE;
-	}
-	if (!(zt1->class)) {
+	if (!(zt1->class))
 		gaim_debug_error("zephyr","zt1c doesn't exist\n");
-		return FALSE;
-	}
-	if (!(zt1->instance)) {
+	if (!(zt1->instance)) 
 		gaim_debug_error("zephyr","zt1i doesn't exist\n");
-		return FALSE;
-	}
-	if (!(zt1->recipient)) {
+	if (!(zt1->recipient)) 
 		gaim_debug_error("zephyr","zt1r doesn't exist\n");
-		return FALSE;
-	}
-	if (!(zt2->class)) {
+	if (!(zt2->class)) 
 		gaim_debug_error("zephyr","zt2c doesn't exist\n");
-		return FALSE;
-	}
-	if (!(zt2->recipient)) {
+	if (!(zt2->recipient)) 
 		gaim_debug_error("zephyr","zt2r doesn't exist\n");
-		return FALSE;
-	}
-	if (!(zt2->instance)) {
+	if (!(zt2->instance)) 
 		gaim_debug_error("zephyr","zt2i doesn't exist\n");
-		return FALSE;
-	}
+	
 
 	if (g_ascii_strcasecmp(zt2->class, zt1->class)) {
 		return FALSE;
@@ -642,7 +627,7 @@ static char *zephyr_to_html(char *message)
 			zframe *popped;
 			gboolean last_had_closer;
 
-			if (frames && frames->enclosing) {
+			if (frames->enclosing) {
 				do {
 					popped = frames;
 					frames = frames->enclosing;
@@ -747,9 +732,9 @@ static void handle_message(GaimConnection *gc,ZNotice_t notice)
 				g_string_free(str, TRUE);
 			} else {
 				if (nlocs>0) 
-					gaim_prpl_got_user_status(gc->account, b ? b->name : user, "available", NULL);
+					gaim_prpl_got_user_status(gc->account,b->name,"available",NULL);
 				else 
-					gaim_prpl_got_user_status(gc->account, b ? b->name : user, "offline", NULL);
+					gaim_prpl_got_user_status(gc->account,b->name,"offline",NULL);
 			}
 
 			g_free(user);
@@ -932,12 +917,10 @@ static parse_tree *tree_child(parse_tree* tree,int index) {
 
 static parse_tree *find_node(parse_tree* ptree,gchar* key)
 {
-	gchar* tc;
+	gchar* tc = tree_child(ptree,0)->contents;
 
 	if (!ptree || ! key) 
 		return &null_parse_tree;
-
-	tc = tree_child(ptree,0)->contents;
 
 	if (ptree->num_children > 0  &&	tc && !strcasecmp(tc, key)) {
 		return ptree;
@@ -1165,9 +1148,9 @@ static gint check_notify_tzc(gpointer data)
 					g_string_free(str, TRUE);
 				} else {
 					if (nlocs>0) 
-						gaim_prpl_got_user_status(gc->account, b ? b->name : user, "available", NULL);
+						gaim_prpl_got_user_status(gc->account,b->name,"available",NULL);
 					else 
-						gaim_prpl_got_user_status(gc->account, b ? b->name : user, "offline", NULL);
+						gaim_prpl_got_user_status(gc->account,b->name,"offline",NULL);
 				}
 			}
 			else if (!g_ascii_strncasecmp(spewtype,"subscribed",10)) {
@@ -1476,7 +1459,6 @@ static void process_zsubs(zephyr_account *zephyr)
 				g_strfreev(triple);
 			}
 		}
-		fclose(f);
 	}
 }
 
@@ -1686,7 +1668,6 @@ static void zephyr_login(GaimAccount * account)
 			}
 			if (ptr >=bufcur) {
 				gaim_connection_error(gc,"invalid output by tzc (or bad parsing code)");
-				free(buf);
 				return;
 			}
 
@@ -1777,9 +1758,8 @@ static void zephyr_login(GaimAccount * account)
 				}
 				if (parenlevel==0)
 					break;
-			} /* while (ptr < bufcur) */
+			} /* while (ptr < bufcur) { */
 			gaim_debug_info("zephyr", "tzc startup done\n");
-		free(buf);
 		}
 	}
 	else if ( use_zeph02(zephyr)) {
@@ -2856,6 +2836,7 @@ static GaimPluginProtocolInfo prpl_info = {
 	NULL,					/* new_xfer */
 	NULL,					/* offline_message */
 	NULL,					/* whiteboard_prpl_ops */
+	NULL,					/* media_prpl_ops */
 };
 
 static GaimPluginInfo info = {
@@ -2893,10 +2874,10 @@ static void init_plugin(GaimPlugin * plugin)
 	GaimAccountOption *option;
 	char *tmp = get_exposure_level();
 
-	option = gaim_account_option_bool_new(_("Use tzc"), "use_tzc", FALSE);
+	option = gaim_account_option_bool_new("Use tzc", "use_tzc", FALSE);
 	prpl_info.protocol_options = g_list_append(prpl_info.protocol_options, option);
 
-	option = gaim_account_option_string_new(_("tzc command"), "tzc_command", "/usr/bin/tzc -e %s");
+	option = gaim_account_option_string_new("tzc command", "tzc_command", "/usr/bin/tzc -e %s");
 	prpl_info.protocol_options = g_list_append(prpl_info.protocol_options, option);
 
 	option = gaim_account_option_bool_new(_("Export to .anyone"), "write_anyone", FALSE);

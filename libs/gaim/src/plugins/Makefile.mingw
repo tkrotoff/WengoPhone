@@ -120,7 +120,6 @@ plugins: \
 	 	iconaway.dll \
 		idle.dll \
 		notify.dll \
-		psychic.dll \
 		relnot.dll \
 		spellchk.dll \
 		statenotify.dll \

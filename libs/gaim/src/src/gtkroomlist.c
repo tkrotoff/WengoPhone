@@ -649,8 +649,7 @@ static gboolean gaim_gtk_progress_bar_pulse(gpointer data)
 	GaimGtkRoomlist *rl = list->ui_data;
 
 	if (!rl || !rl->dialog || !rl->dialog->pg_needs_pulse) {
-		if (rl && rl->dialog)
-			rl->dialog->pg_to_active = FALSE;
+		rl->dialog->pg_to_active = FALSE;
 		gaim_roomlist_unref(list);
 		return FALSE;
 	}

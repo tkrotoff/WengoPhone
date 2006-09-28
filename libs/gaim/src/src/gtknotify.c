@@ -79,7 +79,6 @@ struct _GaimMailDialog
 	GtkWidget *treeview;
 	GtkTreeStore *treemodel;
 	GtkLabel *label;
-	GtkWidget *open_button;
 };
 
 static GaimMailDialog *mail_dialog = NULL;
@@ -269,26 +268,6 @@ gaim_gtk_notify_message(GaimNotifyMsgType type, const char *title,
 	return dialog;
 }
 
-static void
-selection_changed_cb(GtkTreeSelection *sel, GaimMailDialog *dialog)
-{
-	GtkTreeIter iter;
-	GtkTreeModel *model;
-	GaimNotifyMailData *data;
-	gboolean active = TRUE;
-
-	if (gtk_tree_selection_get_selected(sel, &model, &iter) == FALSE)
-		active = FALSE;
-	else
-	{
-		gtk_tree_model_get(model, &iter, GAIM_MAIL_DATA, &data, -1);
-		if (data->url == NULL)
-			active = FALSE;
-	}
-
-	gtk_widget_set_sensitive(dialog->open_button, active);
-}
-
 static void *
 gaim_gtk_notify_email(GaimConnection *gc, const char *subject, const char *from,
 					  const char *to, const char *url)
@@ -322,7 +301,6 @@ gaim_gtk_notify_emails(GaimConnection *gc, size_t count, gboolean detailed,
 	{
 		GtkCellRenderer *rend;
 		GtkTreeViewColumn *column;
-		GtkWidget *button = NULL;
 
 		dialog = gtk_dialog_new_with_buttons(_("New Mail"), NULL, 0,
 											 GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE,
@@ -342,8 +320,8 @@ gaim_gtk_notify_emails(GaimConnection *gc, size_t count, gboolean detailed,
 			gtk_dialog_add_button(GTK_DIALOG(dialog),
 					 _("Open All Messages"), GTK_RESPONSE_ACCEPT);
 
-			button = gtk_dialog_add_button(GTK_DIALOG(dialog),
-						 GAIM_STOCK_OPEN_MAIL, GTK_RESPONSE_YES);
+			gtk_dialog_add_button(GTK_DIALOG(dialog),
+					 GAIM_STOCK_OPEN_MAIL, GTK_RESPONSE_YES);
 		}
 
 		/* Setup the dialog */
@@ -380,7 +358,6 @@ gaim_gtk_notify_emails(GaimConnection *gc, size_t count, gboolean detailed,
 
 			mail_dialog = g_new0(GaimMailDialog, 1);
 			mail_dialog->dialog = dialog;
-			mail_dialog->open_button = button;
 
 			mail_dialog->treemodel = gtk_tree_store_new(COLUMNS_GAIM_MAIL,
 							GDK_TYPE_PIXBUF, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_POINTER);
@@ -388,10 +365,7 @@ gaim_gtk_notify_emails(GaimConnection *gc, size_t count, gboolean detailed,
 
 			g_signal_connect(G_OBJECT(dialog), "response",
 							 G_CALLBACK(email_response_cb), mail_dialog);
-			g_signal_connect(G_OBJECT(gtk_tree_view_get_selection(GTK_TREE_VIEW(mail_dialog->treeview))),
-							 "changed", G_CALLBACK(selection_changed_cb), mail_dialog);
 
-			/* Account column */
 			column = gtk_tree_view_column_new();
 			gtk_tree_view_column_set_resizable(column, TRUE);
 			gtk_tree_view_column_set_title(column, _("Account"));
@@ -403,7 +377,6 @@ gaim_gtk_notify_emails(GaimConnection *gc, size_t count, gboolean detailed,
 			gtk_tree_view_column_set_attributes(column, rend, "markup", GAIM_MAIL_TO, NULL);
 			gtk_tree_view_append_column(GTK_TREE_VIEW(mail_dialog->treeview), column);
 
-			/* From column */
 			column = gtk_tree_view_column_new();
 			gtk_tree_view_column_set_resizable(column, TRUE);
 			gtk_tree_view_column_set_title(column, _("From"));
@@ -412,7 +385,6 @@ gaim_gtk_notify_emails(GaimConnection *gc, size_t count, gboolean detailed,
 			gtk_tree_view_column_set_attributes(column, rend, "markup", GAIM_MAIL_FROM, NULL);
 			gtk_tree_view_append_column(GTK_TREE_VIEW(mail_dialog->treeview), column);
 
-			/* Subject column */
 			column = gtk_tree_view_column_new();
 			gtk_tree_view_column_set_resizable(column, TRUE);
 			gtk_tree_view_column_set_title(column, _("Subject"));
@@ -420,7 +392,7 @@ gaim_gtk_notify_emails(GaimConnection *gc, size_t count, gboolean detailed,
 			gtk_tree_view_column_pack_start(column, rend, TRUE);
 			gtk_tree_view_column_set_attributes(column, rend, "markup", GAIM_MAIL_SUBJECT, NULL);
 			gtk_tree_view_append_column(GTK_TREE_VIEW(mail_dialog->treeview), column);
-
+			
 			gtk_container_add(GTK_CONTAINER(sw), mail_dialog->treeview);
 
 			label = gtk_label_new(NULL);
@@ -437,55 +409,45 @@ gaim_gtk_notify_emails(GaimConnection *gc, size_t count, gboolean detailed,
 		dialog = mail_dialog->dialog;
 		while (count--)
 		{
-			char *to_text = NULL;
-			char *from_text = NULL;
-			char *subject_text = NULL;
-			GdkPixbuf *pixbuf;
+			char *from_text = NULL, *subject_text = NULL;
+			GdkPixbuf *pixbuf, *scale = NULL;
 
-			if (tos != NULL)
-				to_text = g_markup_escape_text(*tos, -1);
 			if (froms != NULL)
 				from_text = g_markup_escape_text(*froms, -1);
+
 			if (subjects != NULL)
 				subject_text = g_markup_escape_text(*subjects, -1);
 
 			data = g_new0(GaimNotifyMailData, 1);
-			if (urls != NULL)
-				data->url = g_strdup(*urls);
+			data->url = g_strdup(*urls);
 
-			pixbuf = gaim_gtk_create_prpl_icon(account, 0.5);
+			pixbuf = gaim_gtk_create_prpl_icon(account);
+			if (pixbuf != NULL)
+			{
+				scale = gdk_pixbuf_scale_simple(pixbuf, 16, 16,
+												GDK_INTERP_BILINEAR);
+				g_object_unref(pixbuf);
+			}
 
 			gtk_tree_store_append(mail_dialog->treemodel, &iter, NULL);
 			gtk_tree_store_set(mail_dialog->treemodel, &iter,
-									GAIM_MAIL_ICON, pixbuf,
-									GAIM_MAIL_TO, to_text,
+									GAIM_MAIL_ICON, scale,
+									GAIM_MAIL_TO, *tos,
 									GAIM_MAIL_FROM, from_text,
 									GAIM_MAIL_SUBJECT, subject_text,
 									GAIM_MAIL_DATA, data,
 									-1);
-			if (pixbuf != NULL)
-				g_object_unref(pixbuf);
-			g_free(to_text);
-			g_free(from_text);
-			g_free(subject_text);
 			data->iter = iter;
-
-			if (urls != NULL)
-				urls++;
-			if (froms != NULL)
-				froms++;
-			if (subjects != NULL)
-				subjects++;
-			if (tos != NULL)
-				tos++;
+			urls++;
+			froms++;
+			subjects++;
+			tos++;
 		}
 	}
 	else
 	{
 		data = g_new0(GaimNotifyMailData, 1);
-
-		if (urls != NULL)
-			data->url = g_strdup(*urls);
+		data->url = g_strdup(*urls);
 
 		g_signal_connect(G_OBJECT(dialog), "response",
 						 G_CALLBACK(email_nondetailed_cb), data);
@@ -574,7 +536,7 @@ gaim_gtk_notify_formatted(const char *title, const char *primary,
 	gtk_widget_show(label);
 
 	/* Add the imhtml */
-	frame = gaim_gtk_create_imhtml(FALSE, &imhtml, NULL, NULL);
+	frame = gaim_gtk_create_imhtml(FALSE, &imhtml, NULL);
 	gtk_widget_set_name(imhtml, "gaim_gtknotify_imhtml");
 	gtk_imhtml_set_format_functions(GTK_IMHTML(imhtml),
 			gtk_imhtml_get_format_functions(GTK_IMHTML(imhtml)) | GTK_IMHTML_IMAGE);
@@ -619,14 +581,15 @@ gaim_gtk_notify_searchresults_new_rows(GaimConnection *gc, GaimNotifySearchResul
 	GaimNotifySearchResultsData *data = data_;
 	GtkListStore *model = data->model;
 	GtkTreeIter iter;
-	GdkPixbuf *pixbuf;
+	GdkPixbuf *icon, *scaled;
 	guint col_num;
 	guint i;
 	guint j;
-
+	
 	gtk_list_store_clear(data->model);
 
-	pixbuf = gaim_gtk_create_prpl_icon(gaim_connection_get_account(gc), 0.5);
+	icon = gaim_gtk_create_prpl_icon(gaim_connection_get_account(gc));
+	scaled = gdk_pixbuf_scale_simple(icon, 16, 16, GDK_INTERP_BILINEAR);
 
 	/* +1 is for the automagically created Status column. */
 	col_num = gaim_notify_searchresults_get_columns_count(results) + 1;
@@ -635,7 +598,7 @@ gaim_gtk_notify_searchresults_new_rows(GaimConnection *gc, GaimNotifySearchResul
 		GList *row = gaim_notify_searchresults_row_get(results, i);
 
 		gtk_list_store_append(model, &iter);
-		gtk_list_store_set(model, &iter, 0, pixbuf, -1);
+		gtk_list_store_set(model, &iter, 0, scaled, -1);
 
 		for (j = 1; j < col_num; j++) {
 			GValue v;
@@ -648,9 +611,6 @@ gaim_gtk_notify_searchresults_new_rows(GaimConnection *gc, GaimNotifySearchResul
 			g_free(escaped);
 		}
 	}
-
-	if (pixbuf != NULL)
-		g_object_unref(pixbuf);
 }
 
 static void *
@@ -870,16 +830,17 @@ gaim_gtk_close_notify(GaimNotifyType type, void *ui_handle)
 static gint
 uri_command(const char *command, gboolean sync)
 {
-	gchar *tmp;
+	gchar *escaped, *tmp;
 	GError *error = NULL;
 	gint ret = 0;
 
-	gaim_debug_misc("gtknotify", "Executing %s\n", command);
+	escaped = g_markup_escape_text(command, -1);
+	gaim_debug_misc("gtknotify", "Executing %s\n", escaped);
 
 	if (!gaim_program_is_valid(command))
 	{
-		tmp = g_strdup_printf(_("The browser command \"%s\" is invalid."),
-							  command ? command : "(none)");
+		tmp = g_strdup_printf(_("The browser command <b>%s</b> is invalid."),
+							  escaped ? escaped : "(none)");
 		gaim_notify_error(NULL, NULL, _("Unable to open URL"), tmp);
 		g_free(tmp);
 
@@ -890,8 +851,8 @@ uri_command(const char *command, gboolean sync)
 
 		if (!g_spawn_command_line_sync(command, NULL, NULL, &status, &error))
 		{
-			tmp = g_strdup_printf(_("Error launching \"%s\": %s"),
-										command, error->message);
+			tmp = g_strdup_printf(_("Error launching <b>%s</b>: %s"),
+										escaped, error->message);
 			gaim_notify_error(NULL, NULL, _("Unable to open URL"), tmp);
 			g_free(tmp);
 			g_error_free(error);
@@ -903,13 +864,15 @@ uri_command(const char *command, gboolean sync)
 	{
 		if (!g_spawn_command_line_async(command, &error))
 		{
-			tmp = g_strdup_printf(_("Error launching \"%s\": %s"),
-										command, error->message);
+			tmp = g_strdup_printf(_("Error launching <b>%s</b>: %s"),
+										escaped, error->message);
 			gaim_notify_error(NULL, NULL, _("Unable to open URL"), tmp);
 			g_free(tmp);
 			g_error_free(error);
 		}
 	}
+
+	g_free(escaped);
 
 	return ret;
 }

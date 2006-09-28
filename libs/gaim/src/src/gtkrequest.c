@@ -36,7 +36,9 @@
 
 #include <gdk/gdkkeysyms.h>
 
-static GtkWidget * create_account_field(GaimRequestField *field);
+#if GTK_CHECK_VERSION(2,3,0)
+# define NEW_STYLE_COMPLETION
+#endif
 
 typedef struct
 {
@@ -78,13 +80,29 @@ typedef struct
 
 } GaimGtkRequestData;
 
+#ifndef NEW_STYLE_COMPLETION
+typedef struct
+{
+	GCompletion *completion;
+
+	gboolean completion_started;
+
+} GaimGtkCompletionData;
+#endif
+
 static void
 generic_response_start(GaimGtkRequestData *data)
 {
-	g_return_if_fail(data != NULL);
+	GdkWindow *window = GTK_WIDGET(data->dialog)->window;
+	GdkCursor *cursor;
 
 	/* Tell the user we're doing something. */
-	gaim_gtk_set_cursor(GTK_WIDGET(data->dialog), GDK_WATCH);
+	cursor = gdk_cursor_new(GDK_WATCH);
+	gdk_window_set_cursor(window, cursor);
+	gdk_cursor_unref(cursor);
+	while (gtk_events_pending())
+		gtk_main_iteration();
+
 }
 
 static void
@@ -370,7 +388,7 @@ gaim_gtk_request_input(const char *title, const char *primary,
 		GtkWidget *frame;
 
 		/* imhtml */
-		frame = gaim_gtk_create_imhtml(TRUE, &entry, &toolbar, NULL);
+		frame = gaim_gtk_create_imhtml(TRUE, &entry, &toolbar);
 		gtk_widget_set_size_request(entry, 320, 130);
 		gtk_widget_set_name(entry, "gaim_gtkrequest_imhtml");
 		if (default_value != NULL)
@@ -659,6 +677,396 @@ req_entry_field_changed_cb(GtkWidget *entry, GaimRequestField *field)
 		gaim_request_fields_all_required_filled(field->group->fields_list));
 }
 
+#ifndef NEW_STYLE_COMPLETION
+static gboolean
+completion_entry_event(GtkEditable *entry, GdkEventKey *event,
+					   GaimGtkCompletionData *data)
+{
+	int pos, end_pos;
+
+	if (event->type == GDK_KEY_PRESS && event->keyval == GDK_Tab)
+	{
+		gtk_editable_get_selection_bounds(entry, &pos, &end_pos);
+
+		if (data->completion_started &&
+			pos != end_pos && pos > 1 &&
+			end_pos == strlen(gtk_entry_get_text(GTK_ENTRY(entry))))
+		{
+			gtk_editable_select_region(entry, 0, 0);
+			gtk_editable_set_position(entry, -1);
+
+			return TRUE;
+		}
+	}
+	else if (event->type == GDK_KEY_PRESS && event->length > 0)
+	{
+		char *prefix, *nprefix;
+
+		gtk_editable_get_selection_bounds(entry, &pos, &end_pos);
+
+		if (data->completion_started &&
+			pos != end_pos && pos > 1 &&
+			end_pos == strlen(gtk_entry_get_text(GTK_ENTRY(entry))))
+		{
+			char *temp;
+
+			temp = gtk_editable_get_chars(entry, 0, pos);
+			prefix = g_strconcat(temp, event->string, NULL);
+			g_free(temp);
+		}
+		else if (pos == end_pos && pos > 1 &&
+				 end_pos == strlen(gtk_entry_get_text(GTK_ENTRY(entry))))
+		{
+			prefix = g_strconcat(gtk_entry_get_text(GTK_ENTRY(entry)),
+								 event->string, NULL);
+		}
+		else
+			return FALSE;
+
+		pos = strlen(prefix);
+		nprefix = NULL;
+
+		g_completion_complete(data->completion, prefix, &nprefix);
+
+		if (nprefix != NULL)
+		{
+			gtk_entry_set_text(GTK_ENTRY(entry), nprefix);
+			gtk_editable_set_position(entry, pos);
+			gtk_editable_select_region(entry, pos, -1);
+
+			data->completion_started = TRUE;
+
+			g_free(nprefix);
+			g_free(prefix);
+
+			return TRUE;
+		}
+
+		g_free(prefix);
+	}
+
+	return FALSE;
+}
+
+static void
+destroy_completion_data(GtkWidget *w, GaimGtkCompletionData *data)
+{
+	g_list_foreach(data->completion->items, (GFunc)g_free, NULL);
+	g_completion_free(data->completion);
+
+	g_free(data);
+}
+#endif /* !NEW_STYLE_COMPLETION */
+
+#ifdef NEW_STYLE_COMPLETION
+static gboolean screenname_completion_match_func(GtkEntryCompletion *completion,
+		const gchar *key, GtkTreeIter *iter, gpointer user_data)
+{
+	GtkTreeModel *model;
+	GValue val1;
+	GValue val2;
+	const char *tmp;
+
+	model = gtk_entry_completion_get_model (completion);
+
+	val1.g_type = 0;
+	gtk_tree_model_get_value(model, iter, 2, &val1);
+	tmp = g_value_get_string(&val1);
+	if (tmp != NULL && gaim_str_has_prefix(tmp, key))
+	{
+		g_value_unset(&val1);
+		return TRUE;
+	}
+	g_value_unset(&val1);
+
+	val2.g_type = 0;
+	gtk_tree_model_get_value(model, iter, 3, &val2);
+	tmp = g_value_get_string(&val2);
+	if (tmp != NULL && gaim_str_has_prefix(tmp, key))
+	{
+		g_value_unset(&val2);
+		return TRUE;
+	}
+	g_value_unset(&val2);
+
+	return FALSE;
+}
+
+static gboolean screenname_completion_match_selected_cb(GtkEntryCompletion *completion,
+		GtkTreeModel *model, GtkTreeIter *iter, gpointer *user_data)
+{
+	GValue val;
+	GaimRequestField *screen_field = user_data[1];
+	GList *fields = screen_field->group->fields;
+	GaimAccount *account;
+
+	val.g_type = 0;
+	gtk_tree_model_get_value(model, iter, 1, &val);
+	gtk_entry_set_text(GTK_ENTRY(user_data[0]), g_value_get_string(&val));
+	g_value_unset(&val);
+
+	gtk_tree_model_get_value(model, iter, 4, &val);
+	account = g_value_get_pointer(&val);
+	g_value_unset(&val);
+
+	if (account == NULL)
+		return TRUE;
+
+	do {
+		GaimRequestField *field = fields->data;
+
+		if (gaim_request_field_get_type(field) == GAIM_REQUEST_FIELD_ACCOUNT) {
+			const char *type_hint = gaim_request_field_get_type_hint(field);
+
+			if (type_hint != NULL && !strcmp(type_hint, "account")) {
+				/* We found the corresponding account field. */
+				GtkOptionMenu *optmenu = GTK_OPTION_MENU(field->ui_data);
+
+				/* Set the account in the request API. */
+				gaim_request_field_account_set_value(field, account);
+
+				if (optmenu != NULL) {
+					GList *items = GTK_MENU_SHELL(gtk_option_menu_get_menu(optmenu))->children;
+					guint index = 0;
+
+					do {
+						if (account == g_object_get_data(G_OBJECT(items->data), "account")) {
+							/* Set the account in the GUI. */
+							gtk_option_menu_set_history(GTK_OPTION_MENU(field->ui_data), index);
+							return TRUE;
+						}
+						index++;
+					} while ((items = items->next) != NULL);
+				}
+
+				return TRUE;
+			}
+		}
+
+	} while ((fields = fields->next) != NULL);
+
+	return TRUE;
+}
+
+static void
+add_screenname_autocomplete_entry(GtkListStore *store, const char *buddy_alias, const char *contact_alias,
+								  const GaimAccount *account, const char *screenname)
+{
+	GtkTreeIter iter;
+	gboolean completion_added = FALSE;
+	gchar *normalized_screenname;
+	gchar *tmp;
+
+	tmp = g_utf8_normalize(screenname, -1, G_NORMALIZE_DEFAULT);
+	normalized_screenname = g_utf8_casefold(tmp, -1);
+	g_free(tmp);
+
+	/* There's no sense listing things like: 'xxx "xxx"'
+	   when the screenname and buddy alias match. */
+	if (buddy_alias && strcmp(buddy_alias, screenname)) {
+		char *completion_entry = g_strdup_printf("%s \"%s\"", screenname, buddy_alias);
+		char *tmp2 = g_utf8_normalize(buddy_alias, -1, G_NORMALIZE_DEFAULT);
+
+		tmp = g_utf8_casefold(tmp2, -1);
+		g_free(tmp2);
+
+		gtk_list_store_append(store, &iter);
+		gtk_list_store_set(store, &iter,
+				0, completion_entry,
+				1, screenname,
+				2, normalized_screenname,
+				3, tmp,
+				4, account,
+				-1);
+		g_free(completion_entry);
+		g_free(tmp);
+		completion_added = TRUE;
+	}
+
+	/* There's no sense listing things like: 'xxx "xxx"'
+	   when the screenname and contact alias match. */
+	if (contact_alias && strcmp(contact_alias, screenname)) {
+		/* We don't want duplicates when the contact and buddy alias match. */
+		if (!buddy_alias || strcmp(contact_alias, buddy_alias)) {
+			char *completion_entry = g_strdup_printf("%s \"%s\"",
+							screenname, contact_alias);
+			char *tmp2 = g_utf8_normalize(contact_alias, -1, G_NORMALIZE_DEFAULT);
+
+			tmp = g_utf8_casefold(tmp2, -1);
+			g_free(tmp2);
+
+			gtk_list_store_append(store, &iter);
+			gtk_list_store_set(store, &iter,
+					0, completion_entry,
+					1, screenname,
+					2, normalized_screenname,
+					3, tmp,
+					4, account,
+					-1);
+			g_free(completion_entry);
+			g_free(tmp);
+			completion_added = TRUE;
+		}
+	}
+
+	if (completion_added == FALSE) {
+		/* Add the buddy's screenname. */
+		gtk_list_store_append(store, &iter);
+		gtk_list_store_set(store, &iter,
+				0, screenname,
+				1, screenname,
+				2, normalized_screenname,
+				3, NULL,
+				4, account,
+				-1);
+	}
+
+	g_free(normalized_screenname);
+}
+#endif /* NEW_STYLE_COMPLETION */
+
+static void get_log_set_name(GaimLogSet *set, gpointer value, gpointer **set_hash_data)
+{
+	/* 1. Don't show buddies because we will have gotten them already.
+	 * 2. Only show those with non-NULL accounts that are currently connected.
+	 * 3. The boxes that use this autocomplete code handle only IMs. */
+	if (!set->buddy &&
+	    (GPOINTER_TO_INT(set_hash_data[1]) ||
+	     (set->account != NULL && gaim_account_is_connected(set->account))) &&
+		set->type == GAIM_LOG_IM) {
+#ifdef NEW_STYLE_COMPLETION
+			add_screenname_autocomplete_entry((GtkListStore *)set_hash_data[0],
+											  NULL, NULL, set->account, set->name);
+#else
+			GList **items = ((GList **)set_hash_data[0]);
+			/* Steal the name for the GCompletion. */
+			*items = g_list_append(*items, set->name);
+			set->name = set->normalized_name = NULL;
+#endif /* NEW_STYLE_COMPLETION */
+	}
+}
+
+static void
+setup_screenname_autocomplete(GtkWidget *entry, GaimRequestField *field, gboolean all)
+{
+#ifdef NEW_STYLE_COMPLETION
+	/* Store the displayed completion value, the screenname, the UTF-8 normalized & casefolded screenname,
+	 * the UTF-8 normalized & casefolded value for comparison, and the account. */
+	GtkListStore *store = gtk_list_store_new(5, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_POINTER);
+
+	GaimBlistNode *gnode, *cnode, *bnode;
+	GHashTable *sets;
+	gpointer set_hash_data[] = {store, GINT_TO_POINTER(all)};
+	GtkEntryCompletion *completion;
+	gpointer *data;
+
+	for (gnode = gaim_get_blist()->root; gnode != NULL; gnode = gnode->next)
+	{
+		if (!GAIM_BLIST_NODE_IS_GROUP(gnode))
+			continue;
+
+		for (cnode = gnode->child; cnode != NULL; cnode = cnode->next)
+		{
+			if (!GAIM_BLIST_NODE_IS_CONTACT(cnode))
+				continue;
+
+			for (bnode = cnode->child; bnode != NULL; bnode = bnode->next)
+			{
+				GaimBuddy *buddy = (GaimBuddy *)bnode;
+
+				if (!all && !gaim_account_is_connected(buddy->account))
+					continue;
+
+				add_screenname_autocomplete_entry(store,
+												  ((GaimContact *)cnode)->alias,
+												  gaim_buddy_get_contact_alias(buddy),
+												  buddy->account,
+												  buddy->name
+												 );
+			}
+		}
+	}
+
+	sets = gaim_log_get_log_sets();
+	g_hash_table_foreach(sets, (GHFunc)get_log_set_name, &set_hash_data);
+	g_hash_table_destroy(sets);
+
+
+	/* Sort the completion list by screenname. */
+	gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(store),
+	                                     1, GTK_SORT_ASCENDING);
+
+	completion = gtk_entry_completion_new();
+	gtk_entry_completion_set_match_func(completion, screenname_completion_match_func, NULL, NULL);
+
+	data = g_new0(gpointer, 2);
+	data[0] = entry;
+	data[1] = field;
+	g_signal_connect(G_OBJECT(completion), "match-selected",
+		G_CALLBACK(screenname_completion_match_selected_cb), data);
+
+	gtk_entry_set_completion(GTK_ENTRY(entry), completion);
+	g_object_unref(completion);
+
+	gtk_entry_completion_set_model(completion, GTK_TREE_MODEL(store));
+	g_object_unref(store);
+
+	gtk_entry_completion_set_text_column(completion, 0);
+
+#else /* !NEW_STYLE_COMPLETION */
+	GaimGtkCompletionData *data;
+	GaimBlistNode *gnode, *cnode, *bnode;
+	GList *item = g_list_append(NULL, NULL);
+	GHashTable *sets;
+	gpointer set_hash_data[2];
+
+	data = g_new0(GaimGtkCompletionData, 1);
+
+	data->completion = g_completion_new(NULL);
+
+	g_completion_set_compare(data->completion, g_ascii_strncasecmp);
+
+	for (gnode = gaim_get_blist()->root; gnode != NULL; gnode = gnode->next)
+	{
+		if (!GAIM_BLIST_NODE_IS_GROUP(gnode))
+			continue;
+
+		for (cnode = gnode->child; cnode != NULL; cnode = cnode->next)
+		{
+			if (!GAIM_BLIST_NODE_IS_CONTACT(cnode))
+				continue;
+
+			for (bnode = cnode->child; bnode != NULL; bnode = bnode->next)
+			{
+				GaimBuddy *buddy = (GaimBuddy *)bnode;
+
+				if (!all && !gaim_account_is_connected(buddy->account))
+					continue;
+
+				item->data = g_strdup(buddy->name);
+				g_completion_add_items(data->completion, item);
+			}
+		}
+	}
+	g_list_free(item);
+
+	sets = gaim_log_get_log_sets();
+	item = NULL;
+	set_hash_data[0] = &item;
+	set_hash_data[1] = GINT_TO_POINTER(all);
+	g_hash_table_foreach(sets, (GHFunc)get_log_set_name, &set_hash_data);
+	g_hash_table_destroy(sets);
+	g_completion_add_items(data->completion, item);
+	g_list_free(item);
+
+	g_signal_connect(G_OBJECT(entry), "event",
+					 G_CALLBACK(completion_entry_event), data);
+	g_signal_connect(G_OBJECT(entry), "destroy",
+					 G_CALLBACK(destroy_completion_data), data);
+
+#endif /* !NEW_STYLE_COMPLETION */
+}
+
 static void
 setup_entry_field(GtkWidget *entry, GaimRequestField *field)
 {
@@ -674,28 +1082,9 @@ setup_entry_field(GtkWidget *entry, GaimRequestField *field)
 
 	if ((type_hint = gaim_request_field_get_type_hint(field)) != NULL)
 	{
-		if (gaim_str_has_prefix(type_hint, "screenname"))
+		if (!strncmp(type_hint, "screenname", sizeof("screenname") - 1))
 		{
-			GtkWidget *optmenu = NULL;
-			GList *fields = field->group->fields;
-			while (fields)
-			{
-				GaimRequestField *fld = fields->data;
-				fields = fields->next;
-
-				if (gaim_request_field_get_type(fld) == GAIM_REQUEST_FIELD_ACCOUNT)
-				{
-					const char *type_hint = gaim_request_field_get_type_hint(fld);
-					if (type_hint != NULL && strcmp(type_hint, "account") == 0)
-					{
-						if (fld->ui_data == NULL)
-							fld->ui_data = create_account_field(fld);
-						optmenu = GTK_WIDGET(fld->ui_data);
-						break;
-					}
-				}
-			}
-			gaim_gtk_setup_screenname_autocomplete(entry, optmenu, !strcmp(type_hint, "screenname-all"));
+			setup_screenname_autocomplete(entry, field, !strcmp(type_hint, "screenname-all"));
 		}
 	}
 }
@@ -936,12 +1325,11 @@ select_field_list_item(GtkTreeModel *model, GtkTreePath *path,
 					   GtkTreeIter *iter, gpointer data)
 {
 	GaimRequestField *field = (GaimRequestField *)data;
-	char *text;
+	const char *text;
 
 	gtk_tree_model_get(model, iter, 1, &text, -1);
 
 	gaim_request_field_list_add_selected(field, text);
-	g_free(text);
 }
 
 static void
@@ -1272,9 +1660,7 @@ gaim_gtk_request_fields(const char *title, const char *primary,
 					gtk_widget_show(label);
 				}
 
-				if (field->ui_data != NULL)
-					widget = GTK_WIDGET(field->ui_data);
-				else if (type == GAIM_REQUEST_FIELD_STRING)
+				if (type == GAIM_REQUEST_FIELD_STRING)
 					widget = create_string_field(field);
 				else if (type == GAIM_REQUEST_FIELD_INTEGER)
 					widget = create_int_field(field);
@@ -1388,9 +1774,7 @@ file_yes_no_cb(GaimGtkRequestData *data, gint id)
 	if (id == 1) {
 		if (data->cbs[1] != NULL)
 			((GaimRequestFileCb)data->cbs[1])(data->user_data, data->u.file.name);
-		gaim_request_close(data->type, data);
-	} else {
-		gaim_gtk_clear_cursor(GTK_WIDGET(data->dialog));
+		gaim_request_close(GAIM_REQUEST_FILE, data);
 	}
 }
 
@@ -1405,7 +1789,7 @@ file_ok_check_if_exists_cb(GtkWidget *widget, gint response, GaimGtkRequestData 
 	if (response != GTK_RESPONSE_ACCEPT) {
 		if (data->cbs[0] != NULL)
 			((GaimRequestFileCb)data->cbs[0])(data->user_data, NULL);
-		gaim_request_close(data->type, data);
+		gaim_request_close(GAIM_REQUEST_FILE, data);
 		return;
 	}
 
@@ -1433,24 +1817,10 @@ file_ok_check_if_exists_cb(GtkWidget *button, GaimGtkRequestData *data)
 	name = gtk_file_selection_get_filename(GTK_FILE_SELECTION(data->dialog));
 
 	/* If name is a directory then change directories */
-	if (data->type == GAIM_REQUEST_FILE) {
-		if (gaim_gtk_check_if_dir(name, GTK_FILE_SELECTION(data->dialog)))
-			return;
-	}
+	if (gaim_gtk_check_if_dir(name, GTK_FILE_SELECTION(data->dialog)))
+		return;
 
 	current_folder = g_path_get_dirname(name);
-
-	g_free(data->u.file.name);
-	if (data->type == GAIM_REQUEST_FILE)
-		data->u.file.name = g_strdup(name);
-	else
-	{
-		if (g_file_test(name, G_FILE_TEST_IS_DIR))
-			data->u.file.name = g_strdup(name);
-		else
-			data->u.file.name = g_strdup(current_folder);
-	}
-
 	if (current_folder != NULL) {
 		if (data->u.file.savedialog) {
 			gaim_prefs_set_string("/gaim/gtk/filelocations/last_save_folder", current_folder);
@@ -1460,14 +1830,16 @@ file_ok_check_if_exists_cb(GtkWidget *button, GaimGtkRequestData *data)
 		g_free(current_folder);
 	}
 
+	data->u.file.name = g_strdup(name);
+
 #endif /* FILECHOOSER */
 
 	if ((data->u.file.savedialog == TRUE) &&
 		(g_file_test(data->u.file.name, G_FILE_TEST_EXISTS))) {
-		gaim_request_action(data, NULL, _("That file already exists"),
-							_("Would you like to overwrite it?"), 0, data, 2,
-							_("Overwrite"), G_CALLBACK(file_yes_no_cb),
-							_("Choose New Name"), G_CALLBACK(file_yes_no_cb));
+		gaim_request_yes_no(data, NULL, _("That file already exists"),
+							_("Would you like to overwrite it?"), 0, data,
+							G_CALLBACK(file_yes_no_cb),
+							G_CALLBACK(file_yes_no_cb));
 	} else
 		file_yes_no_cb(data, 1);
 }
@@ -1481,7 +1853,7 @@ file_cancel_cb(GaimGtkRequestData *data)
 	if (data->cbs[0] != NULL)
 		((GaimRequestFileCb)data->cbs[0])(data->user_data, NULL);
 
-	gaim_request_close(data->type, data);
+	gaim_request_close(GAIM_REQUEST_FILE, data);
 }
 #endif /* FILECHOOSER */
 
@@ -1579,55 +1951,6 @@ gaim_gtk_request_file(const char *title, const char *filename,
 	return (void *)data;
 }
 
-static void *
-gaim_gtk_request_folder(const char *title, const char *dirname,
-					  GCallback ok_cb, GCallback cancel_cb,
-					  void *user_data)
-{
-	GaimGtkRequestData *data;
-	GtkWidget *dirsel;
-	
-	data = g_new0(GaimGtkRequestData, 1);
-	data->type = GAIM_REQUEST_FOLDER;
-	data->user_data = user_data;
-	data->cb_count = 2;
-	data->cbs = g_new0(GCallback, 2);
-	data->cbs[0] = cancel_cb;
-	data->cbs[1] = ok_cb;
-	data->u.file.savedialog = FALSE;
-	
-#if GTK_CHECK_VERSION(2,4,0) /* FILECHOOSER */
-	dirsel = gtk_file_chooser_dialog_new(
-						title ? title : _("Select Folder..."),
-						NULL,
-						GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER,
-						GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-						GTK_STOCK_OK, GTK_RESPONSE_ACCEPT,
-						NULL);
-	gtk_dialog_set_default_response(GTK_DIALOG(dirsel), GTK_RESPONSE_ACCEPT);
-
-	if ((dirname != NULL) && (*dirname != '\0'))
-		gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dirsel), dirname);
-
-	g_signal_connect(G_OBJECT(GTK_FILE_CHOOSER(dirsel)), "response",
-						G_CALLBACK(file_ok_check_if_exists_cb), data);
-#else
-	dirsel = gtk_file_selection_new(title ? title : _("Select Folder..."));
-
-	g_signal_connect_swapped(G_OBJECT(dirsel), "delete_event",
-							 G_CALLBACK(file_cancel_cb), data);
-	g_signal_connect_swapped(G_OBJECT(GTK_FILE_SELECTION(dirsel)->cancel_button),
-					 "clicked", G_CALLBACK(file_cancel_cb), data);
-	g_signal_connect(G_OBJECT(GTK_FILE_SELECTION(dirsel)->ok_button), "clicked",
-					 G_CALLBACK(file_ok_check_if_exists_cb), data);
-#endif
-
-	data->dialog = dirsel;
-	gtk_widget_show(dirsel);
-
-	return (void *)data;
-}
-
 static void
 gaim_gtk_close_request(GaimRequestType type, void *ui_handle)
 {
@@ -1653,8 +1976,7 @@ static GaimRequestUiOps ops =
 	gaim_gtk_request_action,
 	gaim_gtk_request_fields,
 	gaim_gtk_request_file,
-	gaim_gtk_close_request,
-	gaim_gtk_request_folder
+	gaim_gtk_close_request
 };
 
 GaimRequestUiOps *

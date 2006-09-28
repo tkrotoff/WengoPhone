@@ -23,32 +23,23 @@
 #include "internal.h"
 #include "gtkidle.h"
 
-#ifdef HAVE_IOKIT
-# include <CoreFoundation/CoreFoundation.h>
-# include <IOKit/IOKitLib.h>
-#else
-# ifdef USE_SCREENSAVER
-#  ifdef _WIN32
-#   include "idletrack.h"
-#  else
-    /* We're on X11 and not MacOS X with IOKit. */
-#   include <X11/Xlib.h>
-#   include <X11/Xutil.h>
-#   include <X11/extensions/scrnsaver.h>
-#   include <gdk/gdkx.h>
-#  endif /* !_WIN32 */
-# endif /* USE_SCREENSAVER */
-#endif /* !HAVE_IOKIT */
+#ifdef USE_SCREENSAVER
+# ifndef _WIN32
+#  include <X11/Xlib.h>
+#  include <X11/Xutil.h>
+#  include <X11/extensions/scrnsaver.h>
+#  include <gdk/gdkx.h>
+# else
+#  include "idletrack.h"
+# endif
+#endif /* USE_SCREENSAVER */
 
 #include "idle.h"
 
 /**
  * Get the number of seconds the user has been idle.  In Unix-world
- * this is based on the X Windows usage.  In MS Windows this is
- * based on keyboard/mouse usage information obtained from the OS.
- * In MacOS X, this is based on keyboard/mouse usage information
- * obtained from the OS, if configure detected IOKit.  Otherwise,
- * MacOS X is handled as a case of X Windows.
+ * this is based on the X Windows usage.  In MS Windows this is based
+ * on keyboard/mouse usage.
  *
  * In Debian bug #271639, jwz says:
  *
@@ -67,40 +58,11 @@
  *
  * @return The number of seconds the user has been idle.
  */
-#if defined(USE_SCREENSAVER) || defined(HAVE_IOKIT)
+#ifdef USE_SCREENSAVER
 static time_t
 gaim_gtk_get_time_idle()
 {
-# ifdef HAVE_IOKIT
-	/* Query the IOKit API */
-
-	static io_service_t macIOsrvc = NULL;
-	CFTypeRef property;
-	uint64_t idle_time = 0; /* nanoseconds */
-
-	if (macIOsrvc == NULL)
-	{
-		mach_port_t master;
-		IOMasterPort(MACH_PORT_NULL, &master);
-		macIOsrvc = IOServiceGetMatchingService(master,
-		                                        IOServiceMatching("IOHIDSystem"));
-	}
-
-	property = IORegistryEntryCreateCFProperty(macIOsrvc, CFSTR("HIDIdleTime"),
-	                                           kCFAllocatorDefault, 0);
-	CFNumberGetValue((CFNumberRef)property,
-	                 kCFNumberSInt64Type, &idle_time);
-	CFRelease(property);
-
-	/* convert nanoseconds to seconds */
-	return idle_time / 1000000000;
-# else
-#  ifdef _WIN32
-	/* Query Windows */
-	return (GetTickCount() - wgaim_get_lastactive()) / 1000;
-#  else
-	/* We're on X11 and not MacOS X with IOKit. */
-
+# ifndef _WIN32
 	/* Query xscreensaver */
 	static XScreenSaverInfo *mit_info = NULL;
 	int event_base, error_base;
@@ -112,18 +74,20 @@ gaim_gtk_get_time_idle()
 		return (mit_info->idle) / 1000;
 	} else
 		return 0;
-#  endif /* !_WIN32 */
-# endif /* !HAVE_IOKIT */
+# else
+	/* Query windows */
+	return (GetTickCount() - wgaim_get_lastactive()) / 1000;
+# endif /* _WIN32 */
 }
-#endif /* USE_SCREENSAVER || HAVE_IOKIT */
+#endif /* USE_SCREENSAVER */
 
 static GaimIdleUiOps ui_ops =
 {
-#if defined(USE_SCREENSAVER) || defined(HAVE_IOKIT)
+#ifdef USE_SCREENSAVER
 	gaim_gtk_get_time_idle
 #else
 	NULL
-#endif /* USE_SCREENSAVER || HAVE_IOKIT */
+#endif /* USE_SCREENSAVER */
 };
 
 GaimIdleUiOps *

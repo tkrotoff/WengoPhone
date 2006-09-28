@@ -59,26 +59,26 @@ def buddysignedon(buddyid):
     if code == 101:                     # so what?
         pass
 
-    if code == 102:                     # talk
+    if code == 102:                     # let's talk
         name = gaim.GaimBuddyGetName(buddyid)
         account = gaim.GaimBuddyGetAccount(buddyid)
         gaim.GaimConversationNew(1, account, name)
     
 
 bus = dbus.SessionBus()
-obj = bus.get_object("net.sf.gaim.GaimService", "/net/sf/gaim/GaimObject")
-gaim = dbus.Interface(obj, "net.sf.gaim.GaimInterface")
+obj = bus.get_object("org.gaim.GaimService", "/org/gaim/GaimObject")
+gaim = dbus.Interface(obj, "org.gaim.GaimInterface")
 
 bus.add_signal_receiver(receivedimmsg,
-                        dbus_interface = "net.sf.gaim.GaimInterface",
+                        dbus_interface = "org.gaim.GaimInterface",
                         signal_name = "ReceivedImMsg")
 
 bus.add_signal_receiver(buddysignedon,
-                        dbus_interface = "net.sf.gaim.GaimInterface",
+                        dbus_interface = "org.gaim.GaimInterface",
                         signal_name = "BuddySignedOn")
 
-print "This is a simple gaim notification server."
-print "It shows notifications when your buddy signs on or you get an IM message."
+print """This is a simple gaim notification server.
+It shows notifications when your buddy signs on or you get an IM message."""
 
 loop = gobject.MainLoop()
 loop.run()

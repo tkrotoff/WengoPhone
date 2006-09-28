@@ -185,7 +185,7 @@ add_pounce_to_treeview(GtkListStore *model, GaimPounce *pounce)
 	gboolean recurring;
 	const char *pouncer;
 	const char *pouncee;
-	GdkPixbuf *pixbuf;
+	GdkPixbuf *pixbuf, *scale = NULL;
 
 	account = gaim_pounce_get_pouncer(pounce);
 
@@ -194,7 +194,11 @@ add_pounce_to_treeview(GtkListStore *model, GaimPounce *pounce)
 
 	events = gaim_pounce_get_events(pounce);
 
-	pixbuf = gaim_gtk_create_prpl_icon(account, 0.5);
+	pixbuf = gaim_gtk_create_prpl_icon(account);
+
+	if (pixbuf != NULL)
+		scale = gdk_pixbuf_scale_simple(pixbuf, 16, 16,
+										GDK_INTERP_BILINEAR);
 
 	pouncer = gaim_account_get_username(account);
 	pouncee = gaim_pounce_get_pouncee(pounce);
@@ -203,14 +207,11 @@ add_pounce_to_treeview(GtkListStore *model, GaimPounce *pounce)
 	gtk_list_store_append(model, &iter);
 	gtk_list_store_set(model, &iter,
 					   POUNCES_MANAGER_COLUMN_POUNCE, pounce,
-					   POUNCES_MANAGER_COLUMN_ICON, pixbuf,
+					   POUNCES_MANAGER_COLUMN_ICON, scale,
 					   POUNCES_MANAGER_COLUMN_TARGET, pouncee,
 					   POUNCES_MANAGER_COLUMN_ACCOUNT, pouncer,
 					   POUNCES_MANAGER_COLUMN_RECURRING, recurring,
 					   -1);
-
-	if (pixbuf != NULL)
-		g_object_unref(pixbuf);
 }
 
 static void
@@ -551,8 +552,6 @@ gaim_gtk_pounce_editor_show(GaimAccount *account, const char *name,
 	gtk_size_group_add_widget(sg, label);
 
 	dialog->buddy_entry = gtk_entry_new();
-
-	gaim_gtk_setup_screenname_autocomplete(dialog->buddy_entry, dialog->account_menu, FALSE);
 
 	gtk_box_pack_start(GTK_BOX(hbox), dialog->buddy_entry, TRUE, TRUE, 0);
 	gtk_widget_show(dialog->buddy_entry);
@@ -1068,10 +1067,9 @@ pounces_manager_delete_confirm_cb(GaimPounce *pounce)
 {
 	GtkTreeIter iter;
 
-	if (pounces_manager && pounces_manager_find_pounce(&iter, pounce))
+	if (pounces_manager_find_pounce(&iter, pounce))
 		gtk_list_store_remove(pounces_manager->model, &iter);
 
-	gaim_request_close_with_handle(pounce);
 	gaim_pounce_destroy(pounce);
 }
 
@@ -1090,9 +1088,9 @@ pounces_manager_delete_foreach(GtkTreeModel *model, GtkTreePath *path,
 	pouncee = gaim_pounce_get_pouncee(pounce);
 
 	buf = g_strdup_printf(_("Are you sure you want to delete the pounce on %s for %s?"), pouncee, pouncer);
-	gaim_request_action(pounce, NULL, buf, NULL, 0, pounce, 2,
+	gaim_request_action(NULL, NULL, buf, NULL, 0, pounce, 2,
 						_("Delete"), pounces_manager_delete_confirm_cb,
-						_("Cancel"), NULL);
+						_("Cancel"), g_free);
 	g_free(buf);
 }
 
@@ -1475,12 +1473,10 @@ pounce_cb(GaimPounce *pounce, GaimPounceEvent events, void *data)
 			name_shown = gaim_account_get_username(account);
 
 		if (reason == NULL)
-		{
-			gaim_notify_info(NULL, name_shown, tmp, gaim_date_format_full(NULL));
-		}
+			gaim_notify_info(NULL, name_shown, tmp, gaim_date_full());
 		else
 		{
-			char *tmp2 = g_strdup_printf("%s\n\n%s", reason, gaim_date_format_full(NULL));
+			char *tmp2 = g_strdup_printf("%s\n\n%s", reason, gaim_date_full());
 			gaim_notify_info(NULL, name_shown, tmp, tmp2);
 			g_free(tmp2);
 		}

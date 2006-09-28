@@ -86,8 +86,6 @@ run_commands()
 			free(arg1);
 			free(arg2);
 
-/* gaim_find_conversation() is gone in 2.0.0. */
-#if 0
 		} else if (!strncasecmp(command, "send", 4)) {
 			GaimConversation *conv;
 
@@ -105,7 +103,6 @@ run_commands()
 
 			free(arg1);
 			free(arg2);
-#endif
 
 		} else if (!strncasecmp(command, "away", 4)) {
 			arg1 = getarg(buffer, 1, 1);

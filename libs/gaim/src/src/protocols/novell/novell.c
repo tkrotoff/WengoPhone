@@ -107,7 +107,7 @@ _login_resp_cb(NMUser * user, NMERR_T ret_code,
 			alias = nm_user_record_get_full_name(user->user_record);
 
 			if (alias)
-				gaim_account_set_alias(user->client_data, alias);
+				gaim_account_set_alias(user->client_data, alias, FALSE);
 		}
 
 		/* Tell Gaim that we are connected */
@@ -124,13 +124,13 @@ _login_resp_cb(NMUser * user, NMERR_T ret_code,
 		char *err = g_strdup_printf(_("Login failed (%s)."),
 					    nm_error_to_string (ret_code));
 
-		/* Don't attempt to auto-reconnect if our password
-		 * was invalid.
+		/* Clear the password if it was invalid ... don't want to retry
+		 * and get ourselves locked out.
 		 */
 		if (ret_code == NMERR_AUTHENTICATION_FAILED ||
 			ret_code == NMERR_CREDENTIALS_MISSING ||
 			ret_code == NMERR_PASSWORD_INVALID) {
-			gc->wants_to_die = TRUE;
+			gaim_account_set_password((GaimAccount*)user->client_data, NULL);
 		}
 		gaim_connection_error(gc, err);
 		g_free(err);
@@ -339,7 +339,7 @@ _create_contact_resp_cb(NMUser * user, NMERR_T ret_code,
 			folder_name = nm_folder_get_name(folder);
 		}
 
-		if (folder_name == NULL || *folder_name == '\0')
+		if (*folder_name == '\0')
 			folder_name = NM_ROOT_FOLDER_NAME;
 
 		/* Re-add the buddy now that we got the okay from the server */
@@ -1487,7 +1487,7 @@ _map_property_tag(const char *tag)
 	else if (strcmp(tag, "mailstop") == 0)
 		return _("Mailstop");
 	else if (strcmp(tag, "Internet EMail Address") == 0)
-		return _("E-Mail Address");
+		return _("Email Address");
 	else
 		return tag;
 }
@@ -1903,7 +1903,7 @@ _evt_conference_invite(NMUser * user, NMEvent * event)
 	gmt = nm_event_get_gmt(event);
 	title = _("Invitation to Conversation");
 	primary = g_strdup_printf(_("Invitation from: %s\n\nSent: %s"),
-							  name, gaim_date_format_full(localtime(&gmt)));
+							  name, asctime(localtime(&gmt)));
 	secondary = _("Would you like to join the conversation?");
 
 	/* Set up parms list for the callbacks
@@ -3525,6 +3525,7 @@ static GaimPluginProtocolInfo prpl_info = {
 	NULL,						/* new_xfer */
 	NULL,						/* offline_message */
 	NULL,						/* whiteboard_prpl_ops */
+	NULL,						/* media_prpl_ops */
 };
 
 static GaimPluginInfo info = {

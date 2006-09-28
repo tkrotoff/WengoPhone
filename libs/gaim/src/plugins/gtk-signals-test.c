@@ -61,8 +61,8 @@ conversation_dragging_cb(GaimGtkWindow *source, GaimGtkWindow *destination) {
 }
 
 static gboolean
-displaying_im_msg_cb(GaimAccount *account, const char *who, char **buffer,
-				GaimConversation *conv, GaimMessageFlags flags, void *data)
+displaying_im_msg_cb(GaimAccount *account, GaimConversation *conv,
+		     char **buffer, int flags, void *data)
 {
 	gaim_debug_misc("gtk-signals test", "displaying-im-msg (%s, %s)\n",
 					gaim_conversation_get_name(conv), *buffer);
@@ -71,16 +71,15 @@ displaying_im_msg_cb(GaimAccount *account, const char *who, char **buffer,
 }
 
 static void
-displayed_im_msg_cb(GaimAccount *account, const char *who, const char *buffer,
-				GaimConversation *conv, GaimMessageFlags flags, void *data)
+displayed_im_msg_cb(GaimAccount *account, GaimConversation *conv, const char *buffer, int flags, void *data)
 {
 	gaim_debug_misc("gtk-signals test", "displayed-im-msg (%s, %s)\n",
 					gaim_conversation_get_name(conv), buffer);
 }
 
 static gboolean
-displaying_chat_msg_cb(GaimAccount *account, const char *who, char **buffer,
-				GaimConversation *conv, GaimMessageFlags flags, void *data)
+displaying_chat_msg_cb(GaimAccount *account, GaimConversation *conv,
+		       char **buffer, int flags, void *data)
 {
 	gaim_debug_misc("gtk-signals test", "displaying-chat-msg (%s, %s)\n",
 					gaim_conversation_get_name(conv), *buffer);
@@ -89,8 +88,7 @@ displaying_chat_msg_cb(GaimAccount *account, const char *who, char **buffer,
 }
 
 static void
-displayed_chat_msg_cb(GaimAccount *account, const char *who, const char *buffer,
-				GaimConversation *conv, GaimMessageFlags flags, void *data)
+displayed_chat_msg_cb(GaimAccount *account, GaimConversation *conv, const char *buffer, int flags, void *data)
 {
 	gaim_debug_misc("gtk-signals test", "displayed-chat-msg (%s, %s)\n",
 					gaim_conversation_get_name(conv), buffer);

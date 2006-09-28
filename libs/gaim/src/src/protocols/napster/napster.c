@@ -508,11 +508,6 @@ static void nap_login_connect(gpointer data, gint source, GaimInputCondition con
 		return;
 	}
 
-	/* Clear the nonblocking flag
-	   This protocol should be updated to support nonblocking I/O if
-	   anyone is going to actually use it */
-	fcntl(source, F_SETFL, 0);
-
 	ndata->fd = source;
 
 	/* Update the login progress status display */
@@ -603,7 +598,7 @@ static GList *nap_chat_info(GaimConnection *gc)
 	return m;
 }
 
-static GHashTable *nap_chat_info_defaults(GaimConnection *gc, const char *chat_name)
+GHashTable *nap_chat_info_defaults(GaimConnection *gc, const char *chat_name)
 {
 	GHashTable *defaults;
 
@@ -679,6 +674,7 @@ static GaimPluginProtocolInfo prpl_info =
 	NULL,					/* new_xfer */
 	NULL,					/* offline_message */
 	NULL,					/* whiteboard_prpl_ops */
+	NULL,					/* media_prpl_ops */
 };
 
 static GaimPluginInfo info =

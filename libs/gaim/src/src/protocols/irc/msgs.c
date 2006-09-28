@@ -36,10 +36,6 @@ static char *irc_mask_userhost(const char *mask);
 static void irc_chat_remove_buddy(GaimConversation *convo, char *data[2]);
 static void irc_buddy_status(char *name, struct irc_buddy *ib, struct irc_conn *irc);
 
-static void irc_msg_handle_privmsg(struct irc_conn *irc, const char *name,
-                                   const char *from, const char *to,
-                                   const char *rawmsg, gboolean notice);
-
 static char *irc_mask_nick(const char *mask)
 {
 	char *end, *buf;
@@ -227,7 +223,7 @@ void irc_msg_endwhois(struct irc_conn *irc, const char *name, const char *from, 
 		tmp = g_markup_escape_text(irc->whois.name, strlen(irc->whois.name));
 		g_free(irc->whois.name);
 		g_string_append_printf(info, _("<b>%s:</b> %s<br>"), _("Username"), irc->whois.userhost);
-		g_string_append_printf(info, _("<b>%s:</b> %s<br>"), _("Real name"), tmp);
+		g_string_append_printf(info, _("<b>%s:</b> %s<br>"), _("Realname"), tmp);
 		g_free(irc->whois.userhost);
 		g_free(tmp);
 	}
@@ -245,8 +241,7 @@ void irc_msg_endwhois(struct irc_conn *irc, const char *name, const char *from, 
 		gchar *timex = gaim_str_seconds_to_string(irc->whois.idle);
 		g_string_append_printf(info, _("<b>Idle for:</b> %s<br>"), timex);
 		g_free(timex);
-		g_string_append_printf(info, _("<b>%s:</b> %s"), _("Online since"),
-		                       gaim_date_format_full(localtime(&irc->whois.signon)));
+		g_string_append_printf(info, _("<b>%s:</b> %s"), _("Online since"), ctime(&irc->whois.signon));
 	}
 	if (!strcmp(irc->whois.nick, "Paco-Paco")) {
 		g_string_append_printf(info, _("<br><b>Defining adjective:</b> Glorious<br>"));
@@ -315,26 +310,14 @@ void irc_msg_topic(struct irc_conn *irc, const char *name, const char *from, cha
 	tmp2 = gaim_markup_linkify(tmp);
 	g_free(tmp);
 	if (!strcmp(name, "topic")) {
-		const char *current_topic = gaim_conv_chat_get_topic(GAIM_CONV_CHAT(convo));
-		if (!(current_topic != NULL && strcmp(tmp2, current_topic) == 0))
-		{
-			char *nick_esc;
-			nick = irc_mask_nick(from);
-			nick_esc = g_markup_escape_text(nick, -1);
-			gaim_conv_chat_set_topic(GAIM_CONV_CHAT(convo), nick, topic);
-			if (*tmp2)
-				msg = g_strdup_printf(_("%s has changed the topic to: %s"), nick_esc, tmp2);
-			else
-				msg = g_strdup_printf(_("%s has cleared the topic."), nick_esc);
-			g_free(nick_esc);
-			g_free(nick);
-			gaim_conv_chat_write(GAIM_CONV_CHAT(convo), from, msg, GAIM_MESSAGE_SYSTEM, time(NULL));
-			g_free(msg);
-		}
+		nick = irc_mask_nick(from);
+		gaim_conv_chat_set_topic(GAIM_CONV_CHAT(convo), nick, topic);
+		msg = g_strdup_printf(_("%s has changed the topic to: %s"), nick, tmp2);
+		g_free(nick);
+		gaim_conv_chat_write(GAIM_CONV_CHAT(convo), from, msg, GAIM_MESSAGE_SYSTEM, time(NULL));
+		g_free(msg);
 	} else {
-		char *chan_esc = g_markup_escape_text(chan, -1);
-		msg = g_strdup_printf(_("The topic for %s is: %s"), chan_esc, tmp2);
-		g_free(chan_esc);
+		msg = g_strdup_printf(_("The topic for %s is: %s"), chan, tmp2);
 		gaim_conv_chat_set_topic(GAIM_CONV_CHAT(convo), NULL, topic);
 		gaim_conv_chat_write(GAIM_CONV_CHAT(convo), "", msg, GAIM_MESSAGE_SYSTEM, time(NULL));
 		g_free(msg);
@@ -823,16 +806,8 @@ void irc_msg_nick(struct irc_conn *irc, const char *name, const char *from, char
 
 void irc_msg_badnick(struct irc_conn *irc, const char *name, const char *from, char **args)
 {
-	GaimConnection *gc = gaim_account_get_connection(irc->account);
-	if (gaim_connection_get_state(gc) == GAIM_CONNECTED) {
-		gaim_notify_error(gc, _("Invalid nickname"),
-				  _("Invalid nickname"),
-				  _("Your selected nickname was rejected by the server.  It probably contains invalid characters."));
-
-	} else {
-		gaim_connection_error(gaim_account_get_connection(irc->account),
-				      _("Your selected account name was rejected by the server.  It probably contains invalid characters."));
-	}
+	gaim_connection_error(gaim_account_get_connection(irc->account),
+			      _("Your selected account name was rejected by the server.  It probably contains invalid characters."));
 }
 
 void irc_msg_nickused(struct irc_conn *irc, const char *name, const char *from, char **args)
@@ -857,10 +832,11 @@ void irc_msg_nickused(struct irc_conn *irc, const char *name, const char *from, 
 
 void irc_msg_notice(struct irc_conn *irc, const char *name, const char *from, char **args)
 {
-	if (!args || !args[0] || !args[1])
-		return;
+	char *newargs[2];
 
-	irc_msg_handle_privmsg(irc, name, from, args[0], args[1], TRUE);
+	newargs[0] = " notice ";	/* The spaces are magic, leave 'em in! */
+	newargs[1] = args[1];
+	irc_msg_privmsg(irc, name, from, newargs);
 }
 
 void irc_msg_nochangenick(struct irc_conn *irc, const char *name, const char *from, char **args)
@@ -958,25 +934,18 @@ void irc_msg_pong(struct irc_conn *irc, const char *name, const char *from, char
 
 void irc_msg_privmsg(struct irc_conn *irc, const char *name, const char *from, char **args)
 {
-	if (!args || !args[0] || !args[1])
-		return;
-
-	irc_msg_handle_privmsg(irc, name, from, args[0], args[1], FALSE);
-}
-
-static void irc_msg_handle_privmsg(struct irc_conn *irc, const char *name, const char *from, const char *to, const char *rawmsg, gboolean notice)
-{
 	GaimConnection *gc = gaim_account_get_connection(irc->account);
 	GaimConversation *convo;
-	char *tmp;
-	char *msg;
-	char *nick;
+	char *nick = irc_mask_nick(from), *tmp, *msg;
+	int notice = 0;
 
-	if (!gc)
+	if (!args || !args[0] || !args[1] || !gc) {
+		g_free(nick);
 		return;
+	}
 
-	nick = irc_mask_nick(from);
-	tmp = irc_parse_ctcp(irc, nick, to, rawmsg, notice);
+	notice = !strcmp(args[0], " notice ");
+	tmp = irc_parse_ctcp(irc, nick, args[0], args[1], notice);
 	if (!tmp) {
 		g_free(nick);
 		return;
@@ -994,15 +963,16 @@ static void irc_msg_handle_privmsg(struct irc_conn *irc, const char *name, const
 		msg = tmp;
 	}
 
-	if (!gaim_utf8_strcasecmp(to, gaim_connection_get_display_name(gc))) {
+	if (!gaim_utf8_strcasecmp(args[0], gaim_connection_get_display_name(gc))) {
+		serv_got_im(gc, nick, msg, 0, time(NULL));
+	} else if (notice) {
 		serv_got_im(gc, nick, msg, 0, time(NULL));
 	} else {
-		convo = gaim_find_conversation_with_account(GAIM_CONV_TYPE_CHAT, to, irc->account);
+		convo = gaim_find_conversation_with_account(GAIM_CONV_TYPE_CHAT, args[0], irc->account);
 		if (convo)
 			serv_got_chat_in(gc, gaim_conv_chat_get_id(GAIM_CONV_CHAT(convo)), nick, 0, msg, time(NULL));
 		else
-			gaim_debug_error("irc", "Got a %s on %s, which does not exist\n",
-			                 notice ? "NOTICE" : "PRIVMSG", to);
+			gaim_debug(GAIM_DEBUG_ERROR, "irc", "Got a PRIVMSG on %s, which does not exist\n", args[0]);
 	}
 	g_free(msg);
 	g_free(nick);

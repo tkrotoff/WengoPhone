@@ -72,8 +72,6 @@ GaimWhiteboard *gaim_whiteboard_create(GaimAccount *account, const char *who, in
 
 void gaim_whiteboard_destroy(GaimWhiteboard *wb)
 {
-	g_return_if_fail(wb != NULL);
-
 	if(wb->ui_data)
 	{
 		/* Destroy frontend */
@@ -85,9 +83,15 @@ void gaim_whiteboard_destroy(GaimWhiteboard *wb)
 	if(wb->prpl_ops && wb->prpl_ops->end)
 		wb->prpl_ops->end(wb);
 
-	g_free(wb->who);
-	wbList = g_list_remove(wbList, wb);
-	g_free(wb);
+	if(wb)
+	{
+		if(wb->who)
+			g_free(wb->who);
+
+		wbList = g_list_remove(wbList, wb);
+
+		g_free(wb);
+	}
 }
 
 void gaim_whiteboard_start(GaimWhiteboard *wb)

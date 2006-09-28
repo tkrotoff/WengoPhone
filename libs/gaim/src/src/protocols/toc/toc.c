@@ -521,7 +521,7 @@ static char *show_error_message()
 			g_snprintf(buf, sizeof(buf), _("Dir service temporarily unavailable."));
 			break;
 		case 974:
-			g_snprintf(buf, sizeof(buf), _("E-mail lookup restricted."));
+			g_snprintf(buf, sizeof(buf), _("Email lookup restricted."));
 			break;
 		case 975:
 			g_snprintf(buf, sizeof(buf), _("Keyword ignored."));
@@ -2299,6 +2299,7 @@ static GaimPluginProtocolInfo prpl_info =
 	NULL,					/* new_xfer */
 	NULL,					/* offline_message */
 	NULL,					/* whiteboard_prpl_ops */
+	NULL,					/* media_prpl_ops */
 };
 
 static GaimPluginInfo info =

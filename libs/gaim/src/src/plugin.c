@@ -22,7 +22,6 @@
 #include "internal.h"
 
 #include "accountopt.h"
-#include "dbus-maybe.h"
 #include "debug.h"
 #include "notify.h"
 #include "prefs.h"
@@ -191,8 +190,6 @@ gaim_plugin_new(gboolean native, const char *path)
 
 	plugin->native_plugin = native;
 	plugin->path = (path == NULL ? NULL : g_strdup(path));
-
-	GAIM_DBUS_REGISTER_POINTER(plugin, GaimPlugin);
 
 	return plugin;
 }
@@ -448,26 +445,17 @@ gaim_plugin_probe(const char *filename)
 		return plugin;
 	}
 
-	if (plugin->info->type == GAIM_PLUGIN_PROTOCOL)
+	/* If plugin is a PRPL, make sure it implements the required functions */
+	if ((plugin->info->type == GAIM_PLUGIN_PROTOCOL) && (
+		(GAIM_PLUGIN_PROTOCOL_INFO(plugin)->list_icon == NULL) ||
+		(GAIM_PLUGIN_PROTOCOL_INFO(plugin)->login == NULL) ||
+		(GAIM_PLUGIN_PROTOCOL_INFO(plugin)->close == NULL)))
 	{
-		/* If plugin is a PRPL, make sure it implements the required functions */
-		if ((GAIM_PLUGIN_PROTOCOL_INFO(plugin)->list_icon == NULL) ||
-		    (GAIM_PLUGIN_PROTOCOL_INFO(plugin)->login == NULL) ||
-		    (GAIM_PLUGIN_PROTOCOL_INFO(plugin)->close == NULL))
-		{
-			plugin->error = g_strdup(_("Plugin does not implement all required functions"));
-			gaim_debug_error("plugins", "%s is unloadable: Plugin does not implement all required functions\n",
-					 plugin->path);
-			plugin->unloadable = TRUE;
-			return plugin;
-		}
-
-		/* For debugging, let's warn about prpl prefs. */
-		if (plugin->info->prefs_info != NULL)
-		{
-			gaim_debug_error("plugins", "%s has a prefs_info, but is a prpl. This is no longer supported.\n",
-			                 plugin->path);
-		}
+		plugin->error = g_strdup(_("Plugin does not implement all required functions"));
+		gaim_debug_error("plugins", "%s is unloadable: Plugin does not implement all required functions\n",
+				 plugin->path);
+		plugin->unloadable = TRUE;
+		return plugin;
 	}
 
 	return plugin;
@@ -476,7 +464,6 @@ gaim_plugin_probe(const char *filename)
 #endif /* !GAIM_PLUGINS */
 }
 
-#ifdef GAIM_PLUGINS
 static gint
 compare_plugins(gconstpointer a, gconstpointer b)
 {
@@ -485,7 +472,6 @@ compare_plugins(gconstpointer a, gconstpointer b)
 
 	return strcmp(plugina->info->name, pluginb->info->name);
 }
-#endif /* GAIM_PLUGINS */
 
 gboolean
 gaim_plugin_load(GaimPlugin *plugin)
@@ -775,9 +761,6 @@ gaim_plugin_destroy(GaimPlugin *plugin)
 			plugin->info->major_version != GAIM_MAJOR_VERSION) {
 		if(plugin->handle)
 			g_module_close(plugin->handle);
-
-		GAIM_DBUS_UNREGISTER_POINTER(plugin);
-	
 		g_free(plugin);
 		return;
 	}
@@ -845,8 +828,6 @@ gaim_plugin_destroy(GaimPlugin *plugin)
 
 	if (plugin->path  != NULL) g_free(plugin->path);
 	if (plugin->error != NULL) g_free(plugin->error);
-
-	GAIM_DBUS_UNREGISTER_POINTER(plugin);
 
 	g_free(plugin);
 #endif /* !GAIM_PLUGINS */
@@ -1208,7 +1189,6 @@ gaim_plugins_load_saved(const char *key)
 			continue;
 
 		filename = f->data;
-
 		/*
 		 * We don't know if the filename uses Windows or Unix path
 		 * separators (because people might be sharing a prefs.xml
@@ -1220,10 +1200,6 @@ gaim_plugins_load_saved(const char *key)
 			basename = strrchr(filename, '\\');
 		if (basename != NULL)
 			basename++;
-
-		/* Strip the extension */
-		if (basename)
-			basename = gaim_plugin_get_basename(basename);
 
 		if ((plugin = gaim_plugins_find_with_filename(filename)) != NULL)
 		{
@@ -1242,8 +1218,6 @@ gaim_plugins_load_saved(const char *key)
 			gaim_debug_error("plugins", "Unable to find saved plugin %s\n",
 							 filename);
 		}
-
-		g_free(basename);
 
 		g_free(f->data);
 	}
@@ -1503,9 +1477,12 @@ gaim_plugins_find_with_basename(const char *basename)
 #ifdef GAIM_PLUGINS
 	GaimPlugin *plugin;
 	GList *l;
+	char *basename_no_ext;
 	char *tmp;
 
 	g_return_val_if_fail(basename != NULL, NULL);
+
+	basename_no_ext = gaim_plugin_get_basename(basename);
 
 	for (l = plugins; l != NULL; l = l->next)
 	{
@@ -1513,15 +1490,17 @@ gaim_plugins_find_with_basename(const char *basename)
 
 		if (plugin->path != NULL) {
 			tmp = gaim_plugin_get_basename(plugin->path);
-			if (!strcmp(tmp, basename))
+			if (!strcmp(tmp, basename_no_ext))
 			{
 				g_free(tmp);
+				g_free(basename_no_ext);
 				return plugin;
 			}
 			g_free(tmp);
 		}
 	}
 
+	g_free(basename_no_ext);
 #endif /* GAIM_PLUGINS */
 
 	return NULL;
@@ -1566,21 +1545,12 @@ gaim_plugins_get_all(void)
 
 
 GaimPluginAction *
-gaim_plugin_action_new(const char* label, void (*callback)(GaimPluginAction *))
+gaim_plugin_action_new(char* label, void (*callback)(GaimPluginAction *))
 {
 	GaimPluginAction *act = g_new0(GaimPluginAction, 1);
 
-	act->label = g_strdup(label);
+	act->label = label;
 	act->callback = callback;
 
 	return act;
-}
-
-void
-gaim_plugin_action_free(GaimPluginAction *action)
-{
-	g_return_if_fail(action != NULL);
-
-	g_free(action->label);
-	g_free(action);
 }

@@ -83,33 +83,11 @@ static gboolean log_viewer_equal(gconstpointer y, gconstpointer z)
 	return ret;
 }
 
-static void select_first_log(GaimGtkLogViewer *lv)
-{
-	GtkTreeModel *model;
-	GtkTreeIter iter, it;
-	GtkTreePath *path;
-
-	model = GTK_TREE_MODEL(lv->treestore);
-
-	if (!gtk_tree_model_get_iter_first(model, &iter))
-		return;
-
-	path = gtk_tree_model_get_path(model, &iter);
-	if (gtk_tree_model_iter_children(model, &it, &iter))
-	{
-		gtk_tree_view_expand_row(GTK_TREE_VIEW(lv->treeview), path, TRUE);
-		path = gtk_tree_model_get_path(model, &it);
-	}
-
-	gtk_tree_selection_select_path(gtk_tree_view_get_selection(GTK_TREE_VIEW(lv->treeview)), path);
-
-	gtk_tree_path_free(path);
-}
-
 static void search_cb(GtkWidget *button, GaimGtkLogViewer *lv)
 {
 	const char *search_term = gtk_entry_get_text(GTK_ENTRY(lv->entry));
 	GList *logs;
+	GdkCursor *cursor;
 
 	if (lv->search != NULL)
 		g_free(lv->search);
@@ -120,31 +98,39 @@ static void search_cb(GtkWidget *button, GaimGtkLogViewer *lv)
 		populate_log_tree(lv);
 		lv->search = NULL;
 		gtk_imhtml_search_clear(GTK_IMHTML(lv->imhtml));
-		select_first_log(lv);
 		return;
 	}
 
 	lv->search = g_strdup(search_term);
-	gtk_imhtml_clear(GTK_IMHTML(lv->imhtml));
 
-	gaim_gtk_set_cursor(lv->window, GDK_WATCH);
+	cursor = gdk_cursor_new(GDK_WATCH);
+	gdk_window_set_cursor(lv->window->window, cursor);
+	gdk_cursor_unref(cursor);
+	while (gtk_events_pending())
+		gtk_main_iteration();
 
 	for (logs = lv->logs; logs != NULL; logs = logs->next) {
 		char *read = gaim_log_read((GaimLog*)logs->data, NULL);
 		if (read && *read && gaim_strcasestr(read, search_term)) {
 			GtkTreeIter iter;
 			GaimLog *log = logs->data;
+			char title[64];
+			char *title_utf8; /* temporary variable for utf8 conversion */
+
+			gaim_strftime(title, sizeof(title), "%c", localtime(&log->time));
+			title_utf8 = gaim_utf8_try_convert(title);
+			strncpy(title, title_utf8, sizeof(title));
+			g_free(title_utf8);
 
 			gtk_tree_store_append (lv->treestore, &iter, NULL);
 			gtk_tree_store_set(lv->treestore, &iter,
-					   0, gaim_date_format_full(localtime(&log->time)),
+					   0, title,
 					   1, log, -1);
 		}
 		g_free(read);
 	}
 
-	select_first_log(lv);
-	gaim_gtk_clear_cursor(lv->window);
+	gdk_window_set_cursor(lv->window->window, NULL);
 }
 
 static gboolean destroy_cb(GtkWidget *w, gint resp, struct log_viewer_hash_t *ht) {
@@ -161,8 +147,15 @@ static gboolean destroy_cb(GtkWidget *w, gint resp, struct log_viewer_hash_t *ht
 	} else
 		syslog_viewer = NULL;
 
-	g_list_foreach(lv->logs, (GFunc)gaim_log_free, NULL);
-	g_list_free(lv->logs);
+	while (lv->logs != NULL) {
+		GList *logs2;
+
+		gaim_log_free((GaimLog *)lv->logs->data);
+
+		logs2 = lv->logs->next;
+		g_list_free_1(lv->logs);
+		lv->logs = logs2;
+	}
 
 	if (lv->search != NULL)
 		g_free(lv->search);
@@ -185,8 +178,10 @@ static void log_select_cb(GtkTreeSelection *sel, GaimGtkLogViewer *viewer) {
 	GValue val;
 	GtkTreeModel *model = GTK_TREE_MODEL(viewer->treestore);
 	GaimLog *log = NULL;
+	GdkCursor *cursor;
 	GaimLogReadFlags flags;
 	char *read = NULL;
+	char time[64];
 
 	if (!gtk_tree_selection_get_selected(sel, &model, &iter))
 		return;
@@ -199,20 +194,32 @@ static void log_select_cb(GtkTreeSelection *sel, GaimGtkLogViewer *viewer) {
 	if (log == NULL)
 		return;
 
-	gaim_gtk_set_cursor(viewer->window, GDK_WATCH);
+	/* When we set the initial log, this gets called and the window is still NULL. */
+	if (viewer->window->window != NULL)
+	{
+		cursor = gdk_cursor_new(GDK_WATCH);
+		gdk_window_set_cursor(viewer->window->window, cursor);
+		gdk_cursor_unref(cursor);
+		while (gtk_events_pending())
+			gtk_main_iteration();
+	}
 
 	if (log->type != GAIM_LOG_SYSTEM) {
 		char *title;
+		char *title_utf8; /* temporary variable for utf8 conversion */
+
+		gaim_strftime(time, sizeof(time), "%c", localtime(&log->time));
+
 		if (log->type == GAIM_LOG_CHAT)
-			title = g_strdup_printf(_("<span size='larger' weight='bold'>Conversation in %s on %s</span>"),
-									log->name,
-									log->tm ? gaim_date_format_full(log->tm) :
-									          gaim_date_format_full(localtime(&log->time)));
+			title = g_strdup_printf(_("Conversation in %s on %s"), log->name, time);
 		else
-			title = g_strdup_printf(_("<span size='larger' weight='bold'>Conversation with %s on %s</span>"),
-									log->name,
-									log->tm ? gaim_date_format_full(log->tm) :
-									          gaim_date_format_full(localtime(&log->time)));
+			title = g_strdup_printf(_("Conversation with %s on %s"), log->name, time);
+
+		title_utf8 = gaim_utf8_try_convert(title);
+		g_free(title);
+
+		title = g_strdup_printf("<span size='larger' weight='bold'>%s</span>", title_utf8);
+		g_free(title_utf8);
 
 		gtk_label_set_markup(GTK_LABEL(viewer->label), title);
 		g_free(title);
@@ -237,7 +244,9 @@ static void log_select_cb(GtkTreeSelection *sel, GaimGtkLogViewer *viewer) {
 		gtk_imhtml_search_find(GTK_IMHTML(viewer->imhtml), viewer->search);
 	}
 
-	gaim_gtk_clear_cursor(viewer->window);
+	/* When we set the initial log, this gets called and the window is still NULL. */
+	if (viewer->window->window != NULL)
+		gdk_window_set_cursor(viewer->window->window, NULL);
 }
 
 /* I want to make this smarter, but haven't come up with a cool algorithm to do so, yet.
@@ -250,19 +259,28 @@ static void populate_log_tree(GaimGtkLogViewer *lv)
      /* Logs are made from trees in real life.
         This is a tree made from logs */
 {
-	const char *month;
+	char month[30];
+	char title[64];
 	char prev_top_month[30] = "";
+	char *utf8_tmp; /* temporary variable for utf8 conversion */
 	GtkTreeIter toplevel, child;
 	GList *logs = lv->logs;
 
 	while (logs != NULL) {
 		GaimLog *log = logs->data;
 
-		month = gaim_utf8_strftime(_("%B %Y"),
-		                           log->tm ? log->tm : localtime(&log->time));
+		gaim_strftime(month, sizeof(month), "%B %Y", localtime(&log->time));
+		gaim_strftime(title, sizeof(title), "%c", localtime(&log->time));
 
-		if (strcmp(month, prev_top_month) != 0)
-		{
+		/* do utf8 conversions */
+		utf8_tmp = gaim_utf8_try_convert(month);
+		strncpy(month, utf8_tmp, sizeof(month));
+		g_free(utf8_tmp);
+		utf8_tmp = gaim_utf8_try_convert(title);
+		strncpy(title, utf8_tmp, sizeof(title));
+		g_free(utf8_tmp);
+
+		if (strncmp(month, prev_top_month, sizeof(month)) != 0) {
 			/* top level */
 			gtk_tree_store_append(lv->treestore, &toplevel, NULL);
 			gtk_tree_store_set(lv->treestore, &toplevel, 0, month, 1, NULL, -1);
@@ -272,10 +290,7 @@ static void populate_log_tree(GaimGtkLogViewer *lv)
 
 		/* sub */
 		gtk_tree_store_append(lv->treestore, &child, &toplevel);
-		gtk_tree_store_set(lv->treestore, &child,
-						   0, log->tm ? gaim_date_format_full(log->tm) : gaim_date_format_full(localtime(&log->time)),
-						   1, log,
-						   -1);
+		gtk_tree_store_set(lv->treestore, &child, 0, title, 1, log, -1);
 
 		logs = logs->next;
 	}
@@ -292,11 +307,17 @@ static GaimGtkLogViewer *display_log_viewer(struct log_viewer_hash_t *ht, GList 
 	GtkCellRenderer *rend;
 	GtkTreeViewColumn *col;
 	GtkTreeSelection *sel;
+#if GTK_CHECK_VERSION(2,2,0)
+	GtkTreePath *path_to_first_log;
+#endif
 	GtkWidget *vbox;
 	GtkWidget *frame;
 	GtkWidget *hbox;
 	GtkWidget *button;
 	GtkWidget *size_label;
+
+	lv = g_new0(GaimGtkLogViewer, 1);
+	lv->logs = logs;
 
 	if (logs == NULL)
 	{
@@ -319,9 +340,6 @@ static GaimGtkLogViewer *display_log_viewer(struct log_viewer_hash_t *ht, GList 
 		gaim_notify_info(NULL, title, _("No logs were found"), log_preferences);
 		return NULL;
 	}
-
-	lv = g_new0(GaimGtkLogViewer, 1);
-	lv->logs = logs;
 
 	if (ht != NULL)
 		g_hash_table_insert(log_viewers, ht, lv);
@@ -410,7 +428,7 @@ static GaimGtkLogViewer *display_log_viewer(struct log_viewer_hash_t *ht, GList 
 	gtk_paned_add2(GTK_PANED(pane), vbox);
 
 	/* Viewer ************/
-	frame = gaim_gtk_create_imhtml(FALSE, &lv->imhtml, NULL, NULL);
+	frame = gaim_gtk_create_imhtml(FALSE, &lv->imhtml, NULL);
 	gtk_widget_set_name(lv->imhtml, "gaim_gtklog_imhtml");
 	gtk_widget_set_size_request(lv->imhtml, 320, 200);
 	gtk_box_pack_start(GTK_BOX(vbox), frame, TRUE, TRUE, 0);
@@ -424,9 +442,19 @@ static GaimGtkLogViewer *display_log_viewer(struct log_viewer_hash_t *ht, GList 
 	button = gtk_button_new_from_stock(GTK_STOCK_FIND);
 	gtk_box_pack_start(GTK_BOX(hbox), button, FALSE, FALSE, 0);
 	g_signal_connect(GTK_ENTRY(lv->entry), "activate", G_CALLBACK(search_cb), lv);
+	g_signal_connect(GTK_BUTTON(button), "activate", G_CALLBACK(search_cb), lv);
 	g_signal_connect(GTK_BUTTON(button), "clicked", G_CALLBACK(search_cb), lv);
 
-	select_first_log(lv);
+#if GTK_CHECK_VERSION(2,2,0)
+	/* Show most recent log **********/
+	path_to_first_log = gtk_tree_path_new_from_string("0:0");
+	if (path_to_first_log)
+	{
+		gtk_tree_view_expand_to_path(GTK_TREE_VIEW(lv->treeview), path_to_first_log);
+		gtk_tree_selection_select_path(sel, path_to_first_log);
+		gtk_tree_path_free(path_to_first_log);
+	}
+#endif
 
 	gtk_widget_show_all(lv->window);
 
@@ -473,7 +501,7 @@ void gaim_gtk_log_show(GaimLogType type, const char *screenname, GaimAccount *ac
 	}
 
 	display_log_viewer(ht, gaim_log_get_logs(type, screenname, account),
-			title, gaim_gtk_create_prpl_icon(account, 0.5), gaim_log_get_total_size(type, screenname, account));
+			title, gaim_gtk_create_prpl_icon(account), gaim_log_get_total_size(type, screenname, account));
 	g_free(title);
 }
 

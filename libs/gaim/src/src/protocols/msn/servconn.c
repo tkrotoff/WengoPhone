@@ -50,9 +50,6 @@ msn_servconn_new(MsnSession *session, MsnServConnType type)
 
 	servconn->num = session->servconns_count++;
 
-	servconn->tx_buf = gaim_circ_buffer_new(MSN_BUF_LEN);
-	servconn->tx_handler = -1;
-
 	return servconn;
 }
 
@@ -76,11 +73,8 @@ msn_servconn_destroy(MsnServConn *servconn)
 	if (servconn->httpconn != NULL)
 		msn_httpconn_destroy(servconn->httpconn);
 
-	g_free(servconn->host);
-
-	gaim_circ_buffer_destroy(servconn->tx_buf);
-	if (servconn->tx_handler > 0)
-		gaim_input_remove(servconn->tx_handler);
+	if (servconn->host != NULL)
+		g_free(servconn->host);
 
 	msn_cmdproc_destroy(servconn->cmdproc);
 	g_free(servconn);
@@ -187,7 +181,7 @@ connect_cb(gpointer data, gint source, GaimInputCondition cond)
 		/* Someone wants to know we connected. */
 		servconn->connect_cb(servconn);
 		servconn->inpa = gaim_input_add(servconn->fd, GAIM_INPUT_READ,
-			read_cb, data);
+										read_cb, data);
 	}
 	else
 	{
@@ -233,7 +227,7 @@ msn_servconn_connect(MsnServConn *servconn, const char *host, int port)
 	}
 
 	r = gaim_proxy_connect(session->account, host, port, connect_cb,
-		servconn);
+						   servconn);
 
 	if (r == 0)
 	{
@@ -285,72 +279,30 @@ msn_servconn_disconnect(MsnServConn *servconn)
 		servconn->disconnect_cb(servconn);
 }
 
-static void
-servconn_write_cb(gpointer data, gint source, GaimInputCondition cond)
-{
-	MsnServConn *servconn = data;
-	int ret, writelen;
-
-	writelen = gaim_circ_buffer_get_max_read(servconn->tx_buf);
-
-	if (writelen == 0) {
-		gaim_input_remove(servconn->tx_handler);
-		servconn->tx_handler = -1;
-		return;
-	}
-
-	ret = write(servconn->fd, servconn->tx_buf->outptr, writelen);
-
-	if (ret < 0 && errno == EAGAIN)
-		return;
-	else if (ret <= 0) {
-		msn_servconn_got_error(servconn, MSN_SERVCONN_ERROR_WRITE);
-		return;
-	}
-
-	gaim_circ_buffer_mark_read(servconn->tx_buf, ret);
-}
-
-ssize_t
+size_t
 msn_servconn_write(MsnServConn *servconn, const char *buf, size_t len)
 {
-	ssize_t ret = 0;
+	size_t ret = FALSE;
 
 	g_return_val_if_fail(servconn != NULL, 0);
 
 	if (!servconn->session->http_method)
 	{
-		if (servconn->tx_handler == -1) {
-			switch (servconn->type)
-			{
-				case MSN_SERVCONN_NS:
-				case MSN_SERVCONN_SB:
-					ret = write(servconn->fd, buf, len);
-					break;
+		switch (servconn->type)
+		{
+			case MSN_SERVCONN_NS:
+			case MSN_SERVCONN_SB:
+				ret = send(servconn->fd, buf, len, MSG_NOSIGNAL);
+				break;
 #if 0
-				case MSN_SERVCONN_DC:
-					ret = write(servconn->fd, &buf, sizeof(len));
-					ret = write(servconn->fd, buf, len);
-					break;
+			case MSN_SERVCONN_DC:
+				ret = send(servconn->fd, &buf, sizeof(len), MSG_NOSIGNAL);
+				ret = send(servconn->fd, buf, len, MSG_NOSIGNAL);
+				break;
 #endif
-				default:
-					ret = write(servconn->fd, buf, len);
-					break;
-			}
-		} else {
-			ret = -1;
-			errno = EAGAIN;
-		}
-
-		if (ret < 0 && errno == EAGAIN)
-			ret = 0;
-		if (ret < len) {
-			if (servconn->tx_handler == -1)
-				servconn->tx_handler = gaim_input_add(
-					servconn->fd, GAIM_INPUT_WRITE,
-					servconn_write_cb, servconn);
-			gaim_circ_buffer_append(servconn->tx_buf, buf + ret,
-				len - ret);
+			default:
+				ret = send(servconn->fd, buf, len, MSG_NOSIGNAL);
+				break;
 		}
 	}
 	else
@@ -380,9 +332,7 @@ read_cb(gpointer data, gint source, GaimInputCondition cond)
 
 	len = read(servconn->fd, buf, sizeof(buf) - 1);
 
-	if (len < 0 && errno == EAGAIN)
-		return;
-	else if (len <= 0)
+	if (len <= 0)
 	{
 		gaim_debug_error("msn", "servconn read error, len: %d error: %s\n", len, strerror(errno));
 		msn_servconn_got_error(servconn, MSN_SERVCONN_ERROR_READ);

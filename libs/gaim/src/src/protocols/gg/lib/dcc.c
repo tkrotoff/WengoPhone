@@ -1,4 +1,4 @@
-/* $Id: dcc.c 14627 2005-12-04 18:19:56Z rlaager $ */
+/* $Id: dcc.c,v 1.4 2005/12/04 18:19:53 rlaager Exp $ */
 
 /*
  *  (C) Copyright 2001-2002 Wojtek Kaniewski <wojtekka@irc.pl>

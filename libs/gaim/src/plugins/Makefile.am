@@ -109,7 +109,6 @@ EXTRA_DIST = \
 	ChangeLog.API \
 	Makefile.mingw \
 	contact_priority.c \
-	dbus-buddyicons-example.py \
 	filectl.c \
 	fortuneprofile.pl \
 	gaim.pl \

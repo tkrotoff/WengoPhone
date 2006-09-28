@@ -184,7 +184,6 @@ struct _GaimPluginAction {
 		GaimPlugin *plugin = gaim_plugin_new(TRUE, NULL); \
 		plugin->info = &(plugininfo); \
 		initfunc((plugin)); \
-		gaim_plugin_load((plugin)); \
 		return gaim_plugin_register(plugin); \
 	}
 #else /* GAIM_PLUGINS  && !GAIM_STATIC_PRPL */
@@ -628,18 +627,8 @@ void gaim_plugins_uninit(void);
 
 /**
  * Allocates and returns a new GaimPluginAction.
- *
- * @param label    The description of the action to show to the user.
- * @param callback The callback to call when the user selects this action.
  */
-GaimPluginAction *gaim_plugin_action_new(const char* label, void (*callback)(GaimPluginAction *));
-
-/**
- * Frees a GaimPluginAction
- *
- * @param action The GaimPluginAction to free.
- */
-void gaim_plugin_action_free(GaimPluginAction *action);
+GaimPluginAction *gaim_plugin_action_new(char* label, void (*callback)(GaimPluginAction *));
 
 #ifdef __cplusplus
 }

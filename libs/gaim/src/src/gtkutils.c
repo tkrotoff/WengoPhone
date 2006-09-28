@@ -57,7 +57,6 @@
 #include "gtkdialogs.h"
 #include "gtkimhtml.h"
 #include "gtkimhtmltoolbar.h"
-#include "gtkstock.h"
 #include "gtkthemes.h"
 #include "gtkutils.h"
 
@@ -101,7 +100,7 @@ gaim_setup_imhtml(GtkWidget *imhtml)
 }
 
 GtkWidget *
-gaim_gtk_create_imhtml(gboolean editable, GtkWidget **imhtml_ret, GtkWidget **toolbar_ret, GtkWidget **sw_ret)
+gaim_gtk_create_imhtml(gboolean editable, GtkWidget **imhtml_ret, GtkWidget **toolbar_ret)
 {
 	GtkWidget *frame;
 	GtkWidget *imhtml;
@@ -127,9 +126,19 @@ gaim_gtk_create_imhtml(gboolean editable, GtkWidget **imhtml_ret, GtkWidget **to
 		gtk_widget_show(sep);
 	}
 
+	/*
+	 * We never show the horizontal scrollbar in editable imhtmls becuase
+	 * it was causing weird lockups when typing text just as you type the
+	 * character that would cause both scrollbars to appear.  Definitely
+	 * seems like a gtk bug to me.
+	 */
 	sw = gtk_scrolled_window_new(NULL, NULL);
-	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(sw),
-								   GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+	if (editable)
+		gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(sw),
+									   GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
+	else
+		gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(sw),
+									   GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 	gtk_box_pack_start(GTK_BOX(vbox), sw, TRUE, TRUE, 0);
 	gtk_widget_show(sw);
 
@@ -156,9 +165,6 @@ gaim_gtk_create_imhtml(gboolean editable, GtkWidget **imhtml_ret, GtkWidget **to
 
 	if (editable && (toolbar_ret != NULL))
 		*toolbar_ret = toolbar;
-
-	if (sw_ret != NULL)
-		*sw_ret = sw;
 
 	return frame;
 }
@@ -375,18 +381,17 @@ GtkWidget *
 gaim_gtk_make_frame(GtkWidget *parent, const char *title)
 {
 	GtkWidget *vbox, *label, *hbox;
-	char *labeltitle;
+	char labeltitle[256];
 
 	vbox = gtk_vbox_new(FALSE, GAIM_HIG_BOX_SPACE);
 	gtk_box_pack_start(GTK_BOX(parent), vbox, FALSE, FALSE, 0);
 	gtk_widget_show(vbox);
 
 	label = gtk_label_new(NULL);
+	g_snprintf(labeltitle, sizeof(labeltitle),
+			   "<span weight=\"bold\">%s</span>", title);
 
-	labeltitle = g_strdup_printf("<span weight=\"bold\">%s</span>", title);
 	gtk_label_set_markup(GTK_LABEL(label), labeltitle);
-	g_free(labeltitle);
-
 	gtk_misc_set_alignment(GTK_MISC(label), 0, 0);
 	gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, FALSE, 0);
 	gtk_widget_show(label);
@@ -1438,7 +1443,7 @@ gaim_dnd_file_manage(GtkSelectionData *sd, GaimAccount *account, const char *who
 						    _("You have dragged an image"),
 						    _("You can send this image as a file transfer, "
 						      "embed it into this message, or use it as the buddy icon for this user."),
-						    DND_FILE_TRANSFER, "OK", (GCallback)dnd_image_ok_callback,
+						    DND_BUDDY_ICON, "OK", (GCallback)dnd_image_ok_callback,
 						    "Cancel", (GCallback)dnd_image_cancel_callback, data,
 						    _("Set as buddy icon"), DND_BUDDY_ICON,
 						    _("Send image file"), DND_FILE_TRANSFER,
@@ -1453,7 +1458,7 @@ gaim_dnd_file_manage(GtkSelectionData *sd, GaimAccount *account, const char *who
 						    ft ? _("You can send this image as a file transfer or "
 							   "embed it into this message, or use it as the buddy icon for this user.") :
 						    _("You can insert this image into this message, or use it as the buddy icon for this user"),
-						    ft ? DND_FILE_TRANSFER : DND_IM_IMAGE, "OK", (GCallback)dnd_image_ok_callback,
+						    DND_BUDDY_ICON, "OK", (GCallback)dnd_image_ok_callback,
 						    "Cancel", (GCallback)dnd_image_cancel_callback, data,
 						    _("Set as buddy icon"), DND_BUDDY_ICON,
 						    ft ? _("Send image file") : _("Insert in message"), ft ? DND_FILE_TRANSFER : DND_IM_IMAGE, NULL);
@@ -1538,26 +1543,26 @@ void gaim_gtk_buddy_icon_get_scale_size(GdkPixbuf *buf, GaimBuddyIconSpec *spec,
 }
 
 GdkPixbuf *
-gaim_gtk_create_prpl_icon(GaimAccount *account, double scale_factor)
+gaim_gtk_create_prpl_icon(GaimAccount *account)
 {
 	GaimPlugin *prpl;
-	GaimPluginProtocolInfo *prpl_info;
+	GaimPluginProtocolInfo *prpl_info = NULL;
+	GdkPixbuf *status = NULL;
+	char *filename = NULL;
 	const char *protoname = NULL;
 	char buf[256]; /* TODO: We should use a define for max file length */
-	char *filename = NULL;
-	GdkPixbuf *pixbuf, *scaled;
 
 	g_return_val_if_fail(account != NULL, NULL);
 
 	prpl = gaim_find_prpl(gaim_account_get_protocol_id(account));
-	if (prpl == NULL)
-		return NULL;
 
-	prpl_info = GAIM_PLUGIN_PROTOCOL_INFO(prpl);
-	if (prpl_info->list_icon == NULL)
-		return NULL;
+	if (prpl != NULL) {
+		prpl_info = GAIM_PLUGIN_PROTOCOL_INFO(prpl);
 
-	protoname = prpl_info->list_icon(account, NULL);
+		if (prpl_info->list_icon != NULL)
+			protoname = prpl_info->list_icon(account, NULL);
+	}
+
 	if (protoname == NULL)
 		return NULL;
 
@@ -1569,102 +1574,53 @@ gaim_gtk_create_prpl_icon(GaimAccount *account, double scale_factor)
 
 	filename = g_build_filename(DATADIR, "pixmaps", "gaim", "status",
 								"default", buf, NULL);
-	pixbuf = gdk_pixbuf_new_from_file(filename, NULL);
+	status = gdk_pixbuf_new_from_file(filename, NULL);
 	g_free(filename);
 
-	scaled = gdk_pixbuf_scale_simple(pixbuf, 32*scale_factor,
-				32*scale_factor, GDK_INTERP_BILINEAR);
-	g_object_unref(pixbuf);
-
-	return scaled;
+	return status;
 }
 
-static GdkPixbuf *
-overlay_status_onto_icon(GdkPixbuf *pixbuf, GaimStatusPrimitive primitive)
+GdkPixbuf *
+gaim_gtk_create_prpl_icon_with_status(GaimAccount *account, GaimStatusType *status_type)
 {
-	const char *type_name;
-	char basename[256];
+	char basename2[BUFSIZ];
 	char *filename;
-	GdkPixbuf *emblem;
+	const char *type_name;
+	GdkPixbuf *pixbuf, *scale = NULL, *emblem;
 
-	type_name = gaim_primitive_get_id_from_type(primitive);
+	pixbuf = gaim_gtk_create_prpl_icon(account);
 
-	g_snprintf(basename, sizeof(basename), "%s.png", type_name);
-	filename = g_build_filename(DATADIR, "pixmaps", "gaim", "status",
-								"default", basename, NULL);
+	if (pixbuf != NULL) {
+		scale = gdk_pixbuf_scale_simple(pixbuf, 32, 32,
+		                                GDK_INTERP_BILINEAR);
+		g_object_unref(G_OBJECT(pixbuf));
+	} else {
+		return NULL;
+	}
+
+	/* TODO: let the prpl pick the emblem on a per status basis, and only
+	 * use the primitive as a fallback */
+	type_name = gaim_primitive_get_id_from_type(gaim_status_type_get_primitive(status_type));
+
+	g_snprintf(basename2, sizeof(basename2), "%s.png",
+	           type_name);
+	filename = g_build_filename(DATADIR, "pixmaps", "gaim", "status", "default",
+	                            basename2, NULL);
 	emblem = gdk_pixbuf_new_from_file(filename, NULL);
 	g_free(filename);
 
-	if (emblem != NULL) {
-		int width, height, emblem_width, emblem_height;
-		int new_emblem_width, new_emblem_height;
+	if (emblem) {
+		gdk_pixbuf_composite(emblem,
+		                     scale, 32-15, 32-15,
+		                     15, 15,
+		                     32-15, 32-15,
+		                     1, 1,
+		                     GDK_INTERP_BILINEAR,
+		                     255);
 
-		width = gdk_pixbuf_get_width(pixbuf);
-		height = gdk_pixbuf_get_height(pixbuf);
-		emblem_width = gdk_pixbuf_get_width(emblem);
-		emblem_height = gdk_pixbuf_get_height(emblem);
-
-		/*
-		 * Figure out how big to make the emblem.  Normally the emblem
-		 * will have half the width of the pixbuf.  But we don't make
-		 * an emblem any smaller than 10 pixels because it becomes
-		 * unrecognizable, unless the width of the pixbuf is less than
-		 * 10 pixels, in which case we make the emblem width the same
-		 * as the pixbuf width.
-		 */
-		new_emblem_width = MAX(width / 2, MIN(width, 10));
-		new_emblem_height = MAX(height / 2, MIN(height, 10));
-
-		/* Overlay emblem onto the bottom right corner of pixbuf */
-		gdk_pixbuf_composite(emblem, pixbuf,
-				width - new_emblem_width, height - new_emblem_height,
-				new_emblem_width, new_emblem_height,
-				width - new_emblem_width, height - new_emblem_height,
-				(double)new_emblem_width / (double)emblem_width,
-				(double)new_emblem_height / (double)emblem_height,
-				GDK_INTERP_BILINEAR,
-				255);
 		g_object_unref(emblem);
 	}
-
-	return pixbuf;
-}
-
-GdkPixbuf *
-gaim_gtk_create_prpl_icon_with_status(GaimAccount *account, GaimStatusType *status_type, double scale_factor)
-{
-	GdkPixbuf *pixbuf;
-
-	pixbuf = gaim_gtk_create_prpl_icon(account, scale_factor);
-	if (pixbuf == NULL)
-		return NULL;
-
-	/*
-	 * TODO: Let the prpl pick the emblem on a per status basis,
-	 *       and only use the primitive as a fallback?
-	 */
-
-	return overlay_status_onto_icon(pixbuf,
-				gaim_status_type_get_primitive(status_type));
-}
-
-GdkPixbuf *
-gaim_gtk_create_gaim_icon_with_status(GaimStatusPrimitive primitive, double scale_factor)
-{
-	gchar *filename;
-	GdkPixbuf *orig, *pixbuf;
-
-	filename = g_build_filename(DATADIR, "pixmaps", "gaim.png", NULL);
-	orig = gdk_pixbuf_new_from_file(filename, NULL);
-	g_free(filename);
-	if (orig == NULL)
-		return NULL;
-
-	pixbuf = gdk_pixbuf_scale_simple(orig, 32*scale_factor,
-					32*scale_factor, GDK_INTERP_BILINEAR);
-	g_object_unref(G_OBJECT(orig));
-
-	return overlay_status_onto_icon(pixbuf, primitive);
+	return scale;
 }
 
 static void
@@ -1731,480 +1687,6 @@ gaim_gtk_append_menu_action(GtkWidget *menu, GaimMenuAction *act,
 			g_list_free(act->children);
 			act->children = NULL;
 		}
-		gaim_menu_action_free(act);
+		g_free(act);
 	}
 }
-
-#if GTK_CHECK_VERSION(2,3,0)
-# define NEW_STYLE_COMPLETION
-#endif
-
-#ifndef NEW_STYLE_COMPLETION
-typedef struct
-{
-	GCompletion *completion;
-
-	gboolean completion_started;
-	gboolean all;
-
-} GaimGtkCompletionData;
-#endif
-
-#ifndef NEW_STYLE_COMPLETION
-static gboolean
-completion_entry_event(GtkEditable *entry, GdkEventKey *event,
-					   GaimGtkCompletionData *data)
-{
-	int pos, end_pos;
-
-	if (event->type == GDK_KEY_PRESS && event->keyval == GDK_Tab)
-	{
-		gtk_editable_get_selection_bounds(entry, &pos, &end_pos);
-
-		if (data->completion_started &&
-			pos != end_pos && pos > 1 &&
-			end_pos == strlen(gtk_entry_get_text(GTK_ENTRY(entry))))
-		{
-			gtk_editable_select_region(entry, 0, 0);
-			gtk_editable_set_position(entry, -1);
-
-			return TRUE;
-		}
-	}
-	else if (event->type == GDK_KEY_PRESS && event->length > 0)
-	{
-		char *prefix, *nprefix;
-
-		gtk_editable_get_selection_bounds(entry, &pos, &end_pos);
-
-		if (data->completion_started &&
-			pos != end_pos && pos > 1 &&
-			end_pos == strlen(gtk_entry_get_text(GTK_ENTRY(entry))))
-		{
-			char *temp;
-
-			temp = gtk_editable_get_chars(entry, 0, pos);
-			prefix = g_strconcat(temp, event->string, NULL);
-			g_free(temp);
-		}
-		else if (pos == end_pos && pos > 1 &&
-				 end_pos == strlen(gtk_entry_get_text(GTK_ENTRY(entry))))
-		{
-			prefix = g_strconcat(gtk_entry_get_text(GTK_ENTRY(entry)),
-								 event->string, NULL);
-		}
-		else
-			return FALSE;
-
-		pos = strlen(prefix);
-		nprefix = NULL;
-
-		g_completion_complete(data->completion, prefix, &nprefix);
-
-		if (nprefix != NULL)
-		{
-			gtk_entry_set_text(GTK_ENTRY(entry), nprefix);
-			gtk_editable_set_position(entry, pos);
-			gtk_editable_select_region(entry, pos, -1);
-
-			data->completion_started = TRUE;
-
-			g_free(nprefix);
-			g_free(prefix);
-
-			return TRUE;
-		}
-
-		g_free(prefix);
-	}
-
-	return FALSE;
-}
-
-static void
-destroy_completion_data(GtkWidget *w, GaimGtkCompletionData *data)
-{
-	g_list_foreach(data->completion->items, (GFunc)g_free, NULL);
-	g_completion_free(data->completion);
-
-	g_free(data);
-}
-#endif /* !NEW_STYLE_COMPLETION */
-
-#ifdef NEW_STYLE_COMPLETION
-static gboolean screenname_completion_match_func(GtkEntryCompletion *completion,
-		const gchar *key, GtkTreeIter *iter, gpointer user_data)
-{
-	GtkTreeModel *model;
-	GValue val1;
-	GValue val2;
-	const char *tmp;
-
-	model = gtk_entry_completion_get_model (completion);
-
-	val1.g_type = 0;
-	gtk_tree_model_get_value(model, iter, 2, &val1);
-	tmp = g_value_get_string(&val1);
-	if (tmp != NULL && gaim_str_has_prefix(tmp, key))
-	{
-		g_value_unset(&val1);
-		return TRUE;
-	}
-	g_value_unset(&val1);
-
-	val2.g_type = 0;
-	gtk_tree_model_get_value(model, iter, 3, &val2);
-	tmp = g_value_get_string(&val2);
-	if (tmp != NULL && gaim_str_has_prefix(tmp, key))
-	{
-		g_value_unset(&val2);
-		return TRUE;
-	}
-	g_value_unset(&val2);
-
-	return FALSE;
-}
-
-static gboolean screenname_completion_match_selected_cb(GtkEntryCompletion *completion,
-		GtkTreeModel *model, GtkTreeIter *iter, gpointer *user_data)
-{
-	GValue val;
-	GtkWidget *optmenu = user_data[1];
-	GaimAccount *account;
-
-	val.g_type = 0;
-	gtk_tree_model_get_value(model, iter, 1, &val);
-	gtk_entry_set_text(GTK_ENTRY(user_data[0]), g_value_get_string(&val));
-	g_value_unset(&val);
-
-	gtk_tree_model_get_value(model, iter, 4, &val);
-	account = g_value_get_pointer(&val);
-	g_value_unset(&val);
-
-	if (account == NULL)
-		return TRUE;
-
-	if (optmenu != NULL) {
-		GList *items;
-		guint index = 0;
-		gaim_gtk_account_option_menu_set_selected(optmenu, account);
-		items = GTK_MENU_SHELL(gtk_option_menu_get_menu(GTK_OPTION_MENU(optmenu)))->children;
-
-		do {
-			if (account == g_object_get_data(G_OBJECT(items->data), "account")) {
-				/* Set the account in the GUI. */
-				gtk_option_menu_set_history(GTK_OPTION_MENU(optmenu), index);
-				return TRUE;
-			}
-			index++;
-		} while ((items = items->next) != NULL);
-	}
-
-	return TRUE;
-}
-
-static void
-add_screenname_autocomplete_entry(GtkListStore *store, const char *buddy_alias, const char *contact_alias,
-								  const GaimAccount *account, const char *screenname)
-{
-	GtkTreeIter iter;
-	gboolean completion_added = FALSE;
-	gchar *normalized_screenname;
-	gchar *tmp;
-
-	tmp = g_utf8_normalize(screenname, -1, G_NORMALIZE_DEFAULT);
-	normalized_screenname = g_utf8_casefold(tmp, -1);
-	g_free(tmp);
-
-	/* There's no sense listing things like: 'xxx "xxx"'
-	   when the screenname and buddy alias match. */
-	if (buddy_alias && strcmp(buddy_alias, screenname)) {
-		char *completion_entry = g_strdup_printf("%s \"%s\"", screenname, buddy_alias);
-		char *tmp2 = g_utf8_normalize(buddy_alias, -1, G_NORMALIZE_DEFAULT);
-
-		tmp = g_utf8_casefold(tmp2, -1);
-		g_free(tmp2);
-
-		gtk_list_store_append(store, &iter);
-		gtk_list_store_set(store, &iter,
-				0, completion_entry,
-				1, screenname,
-				2, normalized_screenname,
-				3, tmp,
-				4, account,
-				-1);
-		g_free(completion_entry);
-		g_free(tmp);
-		completion_added = TRUE;
-	}
-
-	/* There's no sense listing things like: 'xxx "xxx"'
-	   when the screenname and contact alias match. */
-	if (contact_alias && strcmp(contact_alias, screenname)) {
-		/* We don't want duplicates when the contact and buddy alias match. */
-		if (!buddy_alias || strcmp(contact_alias, buddy_alias)) {
-			char *completion_entry = g_strdup_printf("%s \"%s\"",
-							screenname, contact_alias);
-			char *tmp2 = g_utf8_normalize(contact_alias, -1, G_NORMALIZE_DEFAULT);
-
-			tmp = g_utf8_casefold(tmp2, -1);
-			g_free(tmp2);
-
-			gtk_list_store_append(store, &iter);
-			gtk_list_store_set(store, &iter,
-					0, completion_entry,
-					1, screenname,
-					2, normalized_screenname,
-					3, tmp,
-					4, account,
-					-1);
-			g_free(completion_entry);
-			g_free(tmp);
-			completion_added = TRUE;
-		}
-	}
-
-	if (completion_added == FALSE) {
-		/* Add the buddy's screenname. */
-		gtk_list_store_append(store, &iter);
-		gtk_list_store_set(store, &iter,
-				0, screenname,
-				1, screenname,
-				2, normalized_screenname,
-				3, NULL,
-				4, account,
-				-1);
-	}
-
-	g_free(normalized_screenname);
-}
-#endif /* NEW_STYLE_COMPLETION */
-
-static void get_log_set_name(GaimLogSet *set, gpointer value, gpointer **set_hash_data)
-{
-	/* 1. Don't show buddies because we will have gotten them already.
-	 * 2. Only show those with non-NULL accounts that are currently connected.
-	 * 3. The boxes that use this autocomplete code handle only IMs. */
-	if (!set->buddy &&
-	    (GPOINTER_TO_INT(set_hash_data[1]) ||
-	     (set->account != NULL && gaim_account_is_connected(set->account))) &&
-		set->type == GAIM_LOG_IM) {
-#ifdef NEW_STYLE_COMPLETION
-			add_screenname_autocomplete_entry((GtkListStore *)set_hash_data[0],
-											  NULL, NULL, set->account, set->name);
-#else
-			GList **items = ((GList **)set_hash_data[0]);
-			/* Steal the name for the GCompletion. */
-			*items = g_list_append(*items, set->name);
-			set->name = set->normalized_name = NULL;
-#endif /* NEW_STYLE_COMPLETION */
-	}
-}
-
-#ifdef NEW_STYLE_COMPLETION
-static void
-add_completion_list(GtkListStore *store)
-{
-	GaimBlistNode *gnode, *cnode, *bnode;
-	gboolean all = GPOINTER_TO_INT(g_object_get_data(G_OBJECT(store), "screenname-all"));
-	GHashTable *sets;
-	gpointer set_hash_data[] = {store, GINT_TO_POINTER(all)};
-
-	gtk_list_store_clear(store);
-
-	for (gnode = gaim_get_blist()->root; gnode != NULL; gnode = gnode->next)
-	{
-		if (!GAIM_BLIST_NODE_IS_GROUP(gnode))
-			continue;
-
-		for (cnode = gnode->child; cnode != NULL; cnode = cnode->next)
-		{
-			if (!GAIM_BLIST_NODE_IS_CONTACT(cnode))
-				continue;
-
-			for (bnode = cnode->child; bnode != NULL; bnode = bnode->next)
-			{
-				GaimBuddy *buddy = (GaimBuddy *)bnode;
-
-				if (!all && !gaim_account_is_connected(buddy->account))
-					continue;
-
-				add_screenname_autocomplete_entry(store,
-												  ((GaimContact *)cnode)->alias,
-												  gaim_buddy_get_contact_alias(buddy),
-												  buddy->account,
-												  buddy->name
-												 );
-			}
-		}
-	}
-
-	sets = gaim_log_get_log_sets();
-	g_hash_table_foreach(sets, (GHFunc)get_log_set_name, &set_hash_data);
-	g_hash_table_destroy(sets);
-}
-#else
-static void
-add_completion_list(GaimGtkCompletionData *data)
-{
-	GaimBlistNode *gnode, *cnode, *bnode;
-	GCompletion *completion;
-	GList *item = g_list_append(NULL, NULL);
-	GHashTable *sets;
-	gpointer set_hash_data[2];
-
-	completion = data->completion;
-
-	g_list_foreach(completion->items, (GFunc)g_free, NULL);
-	g_completion_clear_items(completion);
-
-	for (gnode = gaim_get_blist()->root; gnode != NULL; gnode = gnode->next)
-	{
-		if (!GAIM_BLIST_NODE_IS_GROUP(gnode))
-			continue;
-
-		for (cnode = gnode->child; cnode != NULL; cnode = cnode->next)
-		{
-			if (!GAIM_BLIST_NODE_IS_CONTACT(cnode))
-				continue;
-
-			for (bnode = cnode->child; bnode != NULL; bnode = bnode->next)
-			{
-				GaimBuddy *buddy = (GaimBuddy *)bnode;
-
-				if (!data->all && !gaim_account_is_connected(buddy->account))
-					continue;
-
-				item->data = g_strdup(buddy->name);
-				g_completion_add_items(data->completion, item);
-			}
-		}
-	}
-	g_list_free(item);
-
-	sets = gaim_log_get_log_sets();
-	item = NULL;
-	set_hash_data[0] = &item;
-	set_hash_data[1] = GINT_TO_POINTER(data->all);
-	g_hash_table_foreach(sets, (GHFunc)get_log_set_name, &set_hash_data);
-	g_hash_table_destroy(sets);
-	g_completion_add_items(data->completion, item);
-	g_list_free(item);
-}
-#endif
-
-static void
-screenname_autocomplete_destroyed_cb(GtkWidget *widget, gpointer data)
-{
-	gaim_signals_disconnect_by_handle(widget);
-}
-
-static void
-repopulate_autocomplete(gpointer something, gpointer data)
-{
-	add_completion_list(data);
-}
-
-void
-gaim_gtk_setup_screenname_autocomplete(GtkWidget *entry, GtkWidget *accountopt, gboolean all)
-{
-	gpointer cb_data = NULL;
-
-#ifdef NEW_STYLE_COMPLETION
-	/* Store the displayed completion value, the screenname, the UTF-8 normalized & casefolded screenname,
-	 * the UTF-8 normalized & casefolded value for comparison, and the account. */
-	GtkListStore *store = gtk_list_store_new(5, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_POINTER);
-
-	GtkEntryCompletion *completion;
-	gpointer *data;
-
-	g_object_set_data(G_OBJECT(store), "screenname-all", GINT_TO_POINTER(all));
-	add_completion_list(store);
-
-	cb_data = store;
-
-	/* Sort the completion list by screenname. */
-	gtk_tree_sortable_set_sort_column_id(GTK_TREE_SORTABLE(store),
-	                                     1, GTK_SORT_ASCENDING);
-
-	completion = gtk_entry_completion_new();
-	gtk_entry_completion_set_match_func(completion, screenname_completion_match_func, NULL, NULL);
-
-	data = g_new0(gpointer, 2);
-	data[0] = entry;
-	data[1] = accountopt;
-	g_signal_connect(G_OBJECT(completion), "match-selected",
-		G_CALLBACK(screenname_completion_match_selected_cb), data);
-
-	gtk_entry_set_completion(GTK_ENTRY(entry), completion);
-	g_object_unref(completion);
-
-	gtk_entry_completion_set_model(completion, GTK_TREE_MODEL(store));
-	g_object_unref(store);
-
-	gtk_entry_completion_set_text_column(completion, 0);
-
-#else /* !NEW_STYLE_COMPLETION */
-	GaimGtkCompletionData *data;
-
-	data = g_new0(GaimGtkCompletionData, 1);
-
-	data->completion = g_completion_new(NULL);
-	data->all = all;
-
-	g_completion_set_compare(data->completion, g_ascii_strncasecmp);
-
-	add_completion_list(data);
-	cb_data = data;
-
-	g_signal_connect(G_OBJECT(entry), "event",
-					 G_CALLBACK(completion_entry_event), data);
-	g_signal_connect(G_OBJECT(entry), "destroy",
-					 G_CALLBACK(destroy_completion_data), data);
-
-#endif /* !NEW_STYLE_COMPLETION */
-
-	if (!all)
-	{
-		gaim_signal_connect(gaim_connections_get_handle(), "signed-on", entry,
-							GAIM_CALLBACK(repopulate_autocomplete), cb_data);
-		gaim_signal_connect(gaim_connections_get_handle(), "signed-off", entry,
-							GAIM_CALLBACK(repopulate_autocomplete), cb_data);
-	}
-
-	gaim_signal_connect(gaim_accounts_get_handle(), "account-added", entry,
-						GAIM_CALLBACK(repopulate_autocomplete), cb_data);
-	gaim_signal_connect(gaim_accounts_get_handle(), "account-removed", entry,
-						GAIM_CALLBACK(repopulate_autocomplete), cb_data);
-
-	g_signal_connect(G_OBJECT(entry), "destroy", G_CALLBACK(screenname_autocomplete_destroyed_cb), NULL);
-}
-
-void gaim_gtk_set_cursor(GtkWidget *widget, GdkCursorType cursor_type)
-{
-	GdkCursor *cursor;
-
-	g_return_if_fail(widget != NULL);
-	if (widget->window == NULL)
-		return;
-
-	cursor = gdk_cursor_new(GDK_WATCH);
-	gdk_window_set_cursor(widget->window, cursor);
-	gdk_cursor_unref(cursor);
-
-#if GTK_CHECK_VERSION(2,4,0)
-	gdk_display_flush(gdk_drawable_get_display(GDK_DRAWABLE(widget->window)));
-#else
-	gdk_flush();
-#endif
-}
-
-void gaim_gtk_clear_cursor(GtkWidget *widget)
-{
-	g_return_if_fail(widget != NULL);
-	if (widget->window == NULL)
-		return;
-
-	gdk_window_set_cursor(widget->window, NULL);
-}
-

@@ -25,7 +25,6 @@
 #include "debug.h"
 #include "internal.h"
 #include "prefs.h"
-#include "util.h"
 
 static GaimDebugUiOps *debug_ui_ops = NULL;
 
@@ -46,28 +45,22 @@ gaim_debug_vargs(GaimDebugLevel level, const char *category,
 				 const char *format, va_list args)
 {
 	GaimDebugUiOps *ops;
-	char *arg_s = NULL;
 
 	g_return_if_fail(level != GAIM_DEBUG_ALL);
 	g_return_if_fail(format != NULL);
 
-	ops = gaim_debug_get_ui_ops();
-
-	if (!debug_enabled && ((ops == NULL) || (ops->print == NULL)))
-		return;
-
-	arg_s = g_strdup_vprintf(format, args);
-
 	if (debug_enabled) {
-		gchar *ts_s;
+		gchar *arg_s, *ts_s;
+
+		arg_s = g_strdup_vprintf(format, args);
 
 		if ((category != NULL) &&
 			(gaim_prefs_exists("/core/debug/timestamps")) &&
 			(gaim_prefs_get_bool("/core/debug/timestamps"))) {
-			const char *mdate;
+			gchar mdate[64];
 
 			time_t mtime = time(NULL);
-			mdate = gaim_utf8_strftime("%H:%M:%S", localtime(&mtime));
+			strftime(mdate, sizeof(mdate), "%H:%M:%S", localtime(&mtime));
 			ts_s = g_strdup_printf("(%s) ", mdate);
 		} else {
 			ts_s = g_strdup("");
@@ -78,13 +71,14 @@ gaim_debug_vargs(GaimDebugLevel level, const char *category,
 		else
 			g_print("%s%s: %s", ts_s, category, arg_s);
 
+		g_free(arg_s);
 		g_free(ts_s);
 	}
 
-	if (ops != NULL && ops->print != NULL)
-		ops->print(level, category, arg_s);
+	ops = gaim_debug_get_ui_ops();
 
-	g_free(arg_s);
+	if (ops != NULL && ops->print != NULL)
+		ops->print(level, category, format, args);
 }
 
 void

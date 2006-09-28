@@ -26,5 +26,4 @@ AM_CPPFLAGS = \
 	-DVERSION=\"$(VERSION)\" \
 	-I$(top_srcdir)/src \
 	$(DEBUG_CFLAGS) \
-	$(X_CFLAGS) \
 	$(GTK_CFLAGS)

@@ -34,7 +34,7 @@
 typedef struct
 {
 	gnutls_session session;
-	guint handshake_handler;
+
 } GaimSslGnutlsData;
 
 #define GAIM_SSL_GNUTLS_DATA(gsc) ((GaimSslGnutlsData *)gsc->private_data)
@@ -48,7 +48,7 @@ ssl_gnutls_init_gnutls(void)
 
 	gnutls_certificate_allocate_credentials(&xcred);
 	gnutls_certificate_set_x509_trust_file(xcred, "ca.pem",
-		GNUTLS_X509_FMT_PEM);
+										   GNUTLS_X509_FMT_PEM);
 }
 
 static gboolean
@@ -65,48 +65,15 @@ ssl_gnutls_uninit(void)
 	gnutls_certificate_free_credentials(xcred);
 }
 
-
-static void ssl_gnutls_handshake_cb(gpointer data, gint source,
-		GaimInputCondition cond)
-{
-	GaimSslConnection *gsc = data;
-	GaimSslGnutlsData *gnutls_data = GAIM_SSL_GNUTLS_DATA(gsc);
-	ssize_t ret;
-
-	gaim_debug_info("gnutls", "Handshaking\n");
-	ret = gnutls_handshake(gnutls_data->session);
-
-	if(ret == GNUTLS_E_AGAIN || ret == GNUTLS_E_INTERRUPTED)
-		return;
-
-	gaim_input_remove(gnutls_data->handshake_handler);
-	gnutls_data->handshake_handler = 0;
-
-	if(ret != 0) {
-		gaim_debug_error("gnutls", "Handshake failed. Error %d\n", ret);
-
-		if(gsc->error_cb != NULL)
-			gsc->error_cb(gsc, GAIM_SSL_HANDSHAKE_FAILED,
-				gsc->connect_cb_data);
-
-		gaim_ssl_close(gsc);
-	} else {
-		gaim_debug_info("gnutls", "Handshake complete\n");
-
-		gsc->connect_cb(gsc->connect_cb_data, gsc, cond);
-	}
-
-}
-
-
 static void
 ssl_gnutls_connect_cb(gpointer data, gint source, GaimInputCondition cond)
 {
 	GaimSslConnection *gsc = (GaimSslConnection *)data;
 	GaimSslGnutlsData *gnutls_data;
 	static const int cert_type_priority[2] = { GNUTLS_CRT_X509, 0 };
+	int ret;
 
-	if(source < 0) {
+	if (source < 0) {
 		if(gsc->error_cb != NULL)
 			gsc->error_cb(gsc, GAIM_SSL_CONNECT_FAILED, gsc->connect_cb_data);
 
@@ -123,17 +90,37 @@ ssl_gnutls_connect_cb(gpointer data, gint source, GaimInputCondition cond)
 	gnutls_set_default_priority(gnutls_data->session);
 
 	gnutls_certificate_type_set_priority(gnutls_data->session,
-		cert_type_priority);
+										 cert_type_priority);
 
 	gnutls_credentials_set(gnutls_data->session, GNUTLS_CRD_CERTIFICATE,
-		xcred);
+						   xcred);
 
 	gnutls_transport_set_ptr(gnutls_data->session, GINT_TO_POINTER(source));
 
-	gnutls_data->handshake_handler = gaim_input_add(gsc->fd,
-		GAIM_INPUT_READ, ssl_gnutls_handshake_cb, gsc);
 
-	ssl_gnutls_handshake_cb(gsc, gsc->fd, GAIM_INPUT_READ);
+	do
+	{
+		gaim_debug_info("gnutls", "Handshaking\n");
+		ret = gnutls_handshake(gnutls_data->session);
+	}
+	while ((ret == GNUTLS_E_AGAIN) || (ret == GNUTLS_E_INTERRUPTED));
+
+	if (ret < 0)
+	{
+		gaim_debug_error("gnutls", "Handshake failed. Error %d\n", ret);
+
+		if (gsc->error_cb != NULL)
+			gsc->error_cb(gsc, GAIM_SSL_HANDSHAKE_FAILED,
+						  gsc->connect_cb_data);
+
+		gaim_ssl_close(gsc);
+	}
+	else
+	{
+		gaim_debug_info("gnutls", "Handshake complete\n");
+
+		gsc->connect_cb(gsc->connect_cb_data, gsc, cond);
+	}
 }
 
 static void
@@ -144,29 +131,27 @@ ssl_gnutls_close(GaimSslConnection *gsc)
 	if(!gnutls_data)
 		return;
 
-	if(gnutls_data->handshake_handler)
-		gaim_input_remove(gnutls_data->handshake_handler);
-
 	gnutls_bye(gnutls_data->session, GNUTLS_SHUT_RDWR);
 
 	gnutls_deinit(gnutls_data->session);
 
 	g_free(gnutls_data);
-	gsc->private_data = NULL;
 }
 
 static size_t
 ssl_gnutls_read(GaimSslConnection *gsc, void *data, size_t len)
 {
 	GaimSslGnutlsData *gnutls_data = GAIM_SSL_GNUTLS_DATA(gsc);
-	ssize_t s;
+	int s;
 
-	s = gnutls_record_recv(gnutls_data->session, data, len);
+	do
+	{
+		s = gnutls_record_recv(gnutls_data->session, data, len);
+	}
+	while ((s == GNUTLS_E_AGAIN) || (s == GNUTLS_E_INTERRUPTED));
 
-	if(s == GNUTLS_E_AGAIN || s == GNUTLS_E_INTERRUPTED) {
-		s = -1;
-		errno = EAGAIN;
-	} else if(s < 0) {
+	if (s < 0)
+	{
 		gaim_debug_error("gnutls", "receive failed: %d\n", s);
 		s = 0;
 	}
@@ -178,19 +163,10 @@ static size_t
 ssl_gnutls_write(GaimSslConnection *gsc, const void *data, size_t len)
 {
 	GaimSslGnutlsData *gnutls_data = GAIM_SSL_GNUTLS_DATA(gsc);
-	ssize_t s = 0;
+	size_t s = 0;
 
-	/* XXX: when will gnutls_data be NULL? */
 	if(gnutls_data)
 		s = gnutls_record_send(gnutls_data->session, data, len);
-
-	if(s == GNUTLS_E_AGAIN || s == GNUTLS_E_INTERRUPTED) {
-		s = -1;
-		errno = EAGAIN;
-	} else if(s < 0) {
-		gaim_debug_error("gnutls", "send failed: %d\n", s);
-		s = 0;
-	}
 
 	return s;
 }
@@ -211,7 +187,7 @@ static gboolean
 plugin_load(GaimPlugin *plugin)
 {
 #ifdef HAVE_GNUTLS
-	if(!gaim_ssl_get_ops()) {
+	if (!gaim_ssl_get_ops()) {
 		gaim_ssl_set_ops(&ssl_ops);
 	}
 
@@ -228,7 +204,7 @@ static gboolean
 plugin_unload(GaimPlugin *plugin)
 {
 #ifdef HAVE_GNUTLS
-	if(gaim_ssl_get_ops() == &ssl_ops) {
+	if (gaim_ssl_get_ops() == &ssl_ops) {
 		gaim_ssl_set_ops(NULL);
 	}
 #endif

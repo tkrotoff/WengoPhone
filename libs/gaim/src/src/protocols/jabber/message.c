@@ -34,14 +34,20 @@
 
 void jabber_message_free(JabberMessage *jm)
 {
-        g_free(jm->from);
-	g_free(jm->to);
-	g_free(jm->id);
-	g_free(jm->subject);
-	g_free(jm->body);
-	g_free(jm->xhtml);
-	g_free(jm->password);
-	g_list_free(jm->etc);
+	if(jm->from)
+		g_free(jm->from);
+	if(jm->to)
+		g_free(jm->to);
+	if(jm->subject)
+		g_free(jm->subject);
+	if(jm->body)
+		g_free(jm->body);
+	if(jm->xhtml)
+		g_free(jm->xhtml);
+	if(jm->password)
+		g_free(jm->password);
+	if(jm->etc)
+		g_list_free(jm->etc);
 
 	g_free(jm);
 }
@@ -67,10 +73,10 @@ static void handle_chat(JabberMessage *jm)
 			GaimConversation *conv;
 
 			from = g_strdup_printf("%s@%s", jid->node, jid->domain);
-			conv = gaim_find_conversation_with_account(GAIM_CONV_TYPE_IM, from, jm->js->gc->account);
+			conv = jabber_find_unnormalized_conv(from, jm->js->gc->account);
 			if(conv) {
 				gaim_conversation_set_name(conv, jm->from);
-				}
+			}
 			g_free(from);
 		}
 		from = g_strdup(jm->from);
@@ -265,7 +271,6 @@ void jabber_message_parse(JabberStream *js, xmlnode *packet)
 
 	jm->from = g_strdup(xmlnode_get_attrib(packet, "from"));
 	jm->to = g_strdup(xmlnode_get_attrib(packet, "to"));
-	jm->id = g_strdup(xmlnode_get_attrib(packet, "id"));
 
 	for(child = packet->child; child; child = child->next) {
 		if(child->type != XMLNODE_TYPE_TAG)
@@ -278,11 +283,8 @@ void jabber_message_parse(JabberStream *js, xmlnode *packet)
 			if(!jm->thread_id)
 				jm->thread_id = xmlnode_get_data(child);
 		} else if(!strcmp(child->name, "body")) {
-			if(!jm->body) {
-				char *msg = xmlnode_to_str(child, NULL);
-				jm->body = gaim_strdup_withhtml(msg);
-				g_free(msg);
-			}
+			if(!jm->body)
+				jm->body = xmlnode_to_str(child, NULL);
 		} else if(!strcmp(child->name, "html")) {
 			if(!jm->xhtml && xmlnode_get_child(child, "body"))
 				jm->xhtml = xmlnode_to_str(child, NULL);
@@ -309,7 +311,7 @@ void jabber_message_parse(JabberStream *js, xmlnode *packet)
 				const char *timestamp = xmlnode_get_attrib(child, "stamp");
 				jm->delayed = TRUE;
 				if(timestamp)
-					jm->sent = gaim_str_to_time(timestamp, TRUE, NULL, NULL, NULL);
+					jm->sent = gaim_str_to_time(timestamp, TRUE);
 			} else if(xmlns && !strcmp(xmlns, "jabber:x:conference") &&
 					jm->type != JABBER_MESSAGE_GROUPCHAT_INVITE &&
 					jm->type != JABBER_MESSAGE_ERROR) {
@@ -400,9 +402,6 @@ void jabber_message_send(JabberMessage *jm)
 
 	if(type)
 		xmlnode_set_attrib(message, "type", type);
- 
-	if (jm->id)
-		xmlnode_set_attrib(message, "id", jm->id);
 
 	xmlnode_set_attrib(message, "to", jm->to);
 
@@ -469,7 +468,6 @@ int jabber_message_send_im(GaimConnection *gc, const char *who, const char *msg,
 	jm->type = JABBER_MESSAGE_CHAT;
 	jm->events = JABBER_MESSAGE_EVENT_COMPOSING;
 	jm->to = g_strdup(who);
-	jm->id = jabber_get_next_id(jm->js);
 	if(jbr && jbr->thread_id)
 		jm->thread_id = jbr->thread_id;
 
@@ -508,7 +506,6 @@ int jabber_message_send_chat(GaimConnection *gc, int id, const char *msg, GaimMe
 	jm->js = gc->proto_data;
 	jm->type = JABBER_MESSAGE_GROUPCHAT;
 	jm->to = g_strdup_printf("%s@%s", chat->room, chat->server);
-	jm->id = jabber_get_next_id(jm->js);
 
 	buf = g_strdup_printf("<html xmlns='http://jabber.org/protocol/xhtml-im'><body xmlns='http://www.w3.org/1999/xhtml'>%s</body></html>", msg);
 	gaim_markup_html_to_xhtml(buf, &jm->xhtml, &jm->body);
@@ -544,7 +541,6 @@ int jabber_send_typing(GaimConnection *gc, const char *who, int typing)
 	jm->js = gc->proto_data;
 	jm->type = JABBER_MESSAGE_CHAT;
 	jm->to = g_strdup(who);
-	jm->id = jabber_get_next_id(jm->js);
 
 	if(typing == GAIM_TYPING)
 		jm->events = JABBER_MESSAGE_EVENT_COMPOSING;

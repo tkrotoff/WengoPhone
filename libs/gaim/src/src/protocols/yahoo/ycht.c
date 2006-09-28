@@ -265,39 +265,9 @@ static int ycht_packet_length(YchtPkt *pkt)
 	return ret;
 }
 
-static void ycht_packet_send_write_cb(gpointer data, gint source, GaimInputCondition cond)
-{
-	YchtConn *ycht = data;
-	int ret, writelen;
-
-	writelen = gaim_circ_buffer_get_max_read(ycht->txbuf);
-
-	if (writelen == 0) {
-		gaim_input_remove(ycht->tx_handler);
-		ycht->tx_handler = 0;
-		return;
-	}
-
-	ret = write(ycht->fd, ycht->txbuf->outptr, writelen);
-
-	if (ret < 0 && errno == EAGAIN)
-		return;
-	else if (ret <= 0) {
-		/* TODO: error handling */
-/*
-		gaim_connection_error(gaim_account_get_connection(irc->account),
-			      _("Server has disconnected"));
-*/
-		return;
-	}
-
-	gaim_circ_buffer_mark_read(ycht->txbuf, ret);
-
-}
-
 static void ycht_packet_send(YchtConn *ycht, YchtPkt *pkt)
 {
-	int len, pos, written;
+	int len, pos;
 	char *buf;
 	GList *l;
 
@@ -325,29 +295,7 @@ static void ycht_packet_send(YchtConn *ycht, YchtPkt *pkt)
 		}
 	}
 
-	if (!ycht->tx_handler)
-		written = write(ycht->fd, buf, len);
-	else {
-		written = -1;
-		errno = EAGAIN;
-	}
-
-	if (written < 0 && errno == EAGAIN)
-		written = 0;
-	else if (written <= 0) {
-		/* TODO: Error handling (was none before NBIO changes) */
-		written = 0;
-	}
-
-	if (written < len) {
-		if (!ycht->tx_handler)
-			ycht->tx_handler = gaim_input_add(ycht->fd,
-				GAIM_INPUT_WRITE, ycht_packet_send_write_cb,
-				ycht);
-		gaim_circ_buffer_append(ycht->txbuf, buf + written,
-			len - written);
-	}
-
+	write(ycht->fd, buf, len);
 	g_free(buf);
 }
 
@@ -440,12 +388,8 @@ void ycht_connection_close(YchtConn *ycht)
 	if (ycht->inpa)
 		gaim_input_remove(ycht->inpa);
 
-	if (ycht->tx_handler)
-		gaim_input_remove(ycht->tx_handler);
-
-	gaim_circ_buffer_destroy(ycht->txbuf);
-
-	g_free(ycht->rxqueue);
+	if (ycht->rxqueue)
+		g_free(ycht->rxqueue);
 
 	g_free(ycht);
 }
@@ -464,9 +408,6 @@ static void ycht_pending(gpointer data, gint source, GaimInputCondition cond)
 	int len;
 
 	len = read(ycht->fd, buf, sizeof(buf));
-
-	if (len < 0 && errno == EAGAIN)
-		return;
 
 	if (len <= 0) {
 		ycht_connection_error(ycht, _("Unable to read"));
@@ -588,7 +529,8 @@ void ycht_chat_join(YchtConn *ycht, const char *room)
 	char *tmp;
 
 	tmp = g_strdup(room);
-	g_free(ycht->room);
+	if (ycht->room)
+		g_free(ycht->room);
 	ycht->room = tmp;
 
 	if (!ycht->logged_in)

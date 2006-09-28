@@ -49,12 +49,12 @@ typedef struct
 	char *user_agent;
 	gboolean http11;
 	char *request;
-	gsize request_written;
 	gboolean include_headers;
 
 	int inpa;
 
-	gboolean got_headers;
+	gboolean sentreq;
+	gboolean startsaving;
 	gboolean has_explicit_data_len;
 	char *webdata;
 	unsigned long len;
@@ -66,24 +66,15 @@ static char custom_home_dir[MAXPATHLEN];
 static char home_dir[MAXPATHLEN];
 
 GaimMenuAction *
-gaim_menu_action_new(const char *label, GaimCallback callback, gpointer data,
+gaim_menu_action_new(char *label, GaimCallback callback, gpointer data,
                      GList *children)
 {
 	GaimMenuAction *act = g_new0(GaimMenuAction, 1);
-	act->label = g_strdup(label);
+	act->label = label;
 	act->callback = callback;
 	act->data = data;
 	act->children = children;
 	return act;
-}
-
-void
-gaim_menu_action_free(GaimMenuAction *act)
-{
-	g_return_if_fail(act != NULL);
-
-	g_free(act->label);
-	g_free(act);
 }
 
 /**************************************************************************
@@ -484,211 +475,29 @@ gaim_mime_decode_field(const char *str)
 /**************************************************************************
  * Date/Time Functions
  **************************************************************************/
-
-#ifdef _WIN32
-static long win32_get_tz_offset() {
-	TIME_ZONE_INFORMATION tzi;
-	DWORD ret;
-	long off = -1;
-
-	if ((ret = GetTimeZoneInformation(&tzi)) != TIME_ZONE_ID_INVALID)
-	{
-		off = -(tzi.Bias * 60);
-		if (ret == TIME_ZONE_ID_DAYLIGHT)
-			off -= tzi.DaylightBias * 60;
-	}
-
-	return off;
-}
-#endif
-
-#ifndef HAVE_STRFTIME_Z_FORMAT
-static const char *get_tmoff(const struct tm *tm)
-{
-	static char buf[6];
-	long off;
-	gint8 min;
-	gint8 hrs;
-	struct tm new_tm = *tm;
-
-	mktime(&new_tm);
-
-	if (new_tm.tm_isdst < 0)
-		g_return_val_if_reached("");
-
-#ifdef _WIN32
-	if ((off = win32_get_tz_offset()) == -1)
-		return "";
-#else
-# ifdef HAVE_TM_GMTOFF
-	off = new_tm.tm_gmtoff;
-# else
-#  ifdef HAVE_TIMEZONE
-	tzset();
-	off = -timezone;
-#  endif /* HAVE_TIMEZONE */
-# endif /* !HAVE_TM_GMTOFF */
-#endif /* _WIN32 */
-
-	min = (off / 60) % 60;
-	hrs = ((off / 60) - min) / 60;
-
-	if (g_snprintf(buf, sizeof(buf), "%+03d%02d", hrs, ABS(min)) > 5)
-		g_return_val_if_reached("");
-
-	return buf;
-}
-#endif
-
-/* Windows doesn't HAVE_STRFTIME_Z_FORMAT, but this seems clearer. -- rlaager */
-#if !defined(HAVE_STRFTIME_Z_FORMAT) || defined(_WIN32)
-static size_t gaim_internal_strftime(char *s, size_t max, const char *format, const struct tm *tm)
-{
-	const char *start;
-	const char *c;
-	char *fmt = NULL;
-
-	/* Yes, this is checked in gaim_utf8_strftime(),
-	 * but better safe than sorry. -- rlaager */
-	g_return_val_if_fail(format != NULL, 0);
-
-	/* This is fairly efficient, and it only gets
-	 * executed on Windows or if the underlying
-	 * system doesn't support the %z format string,
-	 * for strftime() so I think it's good enough.
-	 * -- rlaager */
-	for (c = start = format; *c ; c++)
-	{
-		if (*c != '%')
-			continue;
-
-		c++;
-
-#ifndef HAVE_STRFTIME_Z_FORMAT
-		if (*c == 'z')
-		{
-			char *tmp = g_strdup_printf("%s%.*s%s",
-			                            fmt ? fmt : "",
-			                            c - start - 1,
-			                            start,
-			                            get_tmoff(tm));
-			g_free(fmt);
-			fmt = tmp;
-			start = c + 1;
-		}
-#endif
-#ifdef _WIN32
-		if (*c == 'Z')
-		{
-			char *tmp = g_strdup_printf("%s%.*s%s",
-			                            fmt ? fmt : "",
-			                            c - start - 1,
-			                            start,
-			                            wgaim_get_timezone_abbreviation(tm));
-			g_free(fmt);
-			fmt = tmp;
-			start = c + 1;
-		}
-#endif
-	}
-
-	if (fmt != NULL)
-	{
-		size_t ret;
-
-		if (*start)
-		{
-			char *tmp = g_strconcat(fmt, start, NULL);
-			g_free(fmt);
-			fmt = tmp;
-		}
-
-		ret = strftime(s, max, fmt, tm);
-		g_free(fmt);
-
-		return ret;
-	}
-
-	return strftime(s, max, format, tm);
-}
-#else /* HAVE_STRFTIME_Z_FORMAT && !_WIN32 */
-#define gaim_internal_strftime strftime
-#endif
-
 const char *
-gaim_utf8_strftime(const char *format, const struct tm *tm)
+gaim_date(void)
 {
-	static char buf[128];
-	char *locale;
-	GError *err = NULL;
-	int len;
-	char *utf8;
+	static char date[80];
+	time_t tme;
 
-	g_return_val_if_fail(format != NULL, NULL);
+	time(&tme);
+	strftime(date, sizeof(date), "%H:%M:%S", localtime(&tme));
 
-	if (tm == NULL)
-	{
-		time_t now = time(NULL);
-		tm = localtime(&now);
-	}
-
-	locale = g_locale_from_utf8(format, -1, NULL, NULL, &err);
-	if (err != NULL)
-	{
-		gaim_debug_error("util", "Format conversion failed in gaim_utf8_strftime(): %s", err->message);
-		g_error_free(err);
-		locale = g_strdup(format);
-	}
-
-	/* A return value of 0 is either an error (in
-	 * which case, the contents of the buffer are
-	 * undefined) or the empty string (in which
-	 * case, no harm is done here). */
-	if ((len = gaim_internal_strftime(buf, sizeof(buf), locale, tm)) == 0)
-	{
-		g_free(locale);
-		return "";
-	}
-
-	g_free(locale);
-
-	utf8 = g_locale_to_utf8(buf, len, NULL, NULL, &err);
-	if (err != NULL)
-	{
-		gaim_debug_error("util", "Result conversion failed in gaim_utf8_strftime(): %s", err->message);
-		g_error_free(err);
-	}
-	else
-	{
-		gaim_strlcpy(buf, utf8);
-		g_free(utf8);
-	}
-
-	return buf;
+	return date;
 }
 
 const char *
-gaim_date_format_short(const struct tm *tm)
+gaim_date_full(void)
 {
-	return gaim_utf8_strftime("%x", tm);
-}
+	char *date;
+	time_t tme;
 
-const char *
-gaim_date_format_long(const struct tm *tm)
-{
-	return gaim_utf8_strftime(_("%x %X"), tm);
-}
+	time(&tme);
+	date = ctime(&tme);
+	date[strlen(date) - 1] = '\0';
 
-const char *
-gaim_date_format_full(const struct tm *tm)
-{
-	return gaim_utf8_strftime("%c", tm);
-}
-
-const char *
-gaim_time_format(const struct tm *tm)
-{
-	return gaim_utf8_strftime("%X", tm);
+	return date;
 }
 
 time_t
@@ -707,114 +516,69 @@ gaim_time_build(int year, int month, int day, int hour, int min, int sec)
 }
 
 time_t
-gaim_str_to_time(const char *timestamp, gboolean utc,
-                 struct tm *tm, long *tz_off, const char **rest)
+gaim_str_to_time(const char *timestamp, gboolean utc)
 {
 	time_t retval = 0;
 	struct tm *t;
-	const char *c = timestamp;
-	int year = 0;
-	long tzoff = GAIM_NO_TZ_OFF;
+	char buf[32];
+	char *c;
+	int tzoff = 0;
 
 	time(&retval);
 	t = localtime(&retval);
 
+	snprintf(buf, sizeof(buf), "%s", timestamp);
+	c = buf;
+
 	/* 4 digit year */
-	if (sscanf(c, "%04d", &year) && year > 1900)
-	{
-		c += 4;
-		if (*c == '-')
-			c++;
-		t->tm_year = year - 1900;
-	}
+	if (!sscanf(c, "%04d", &t->tm_year)) return 0;
+	c += 4;
+	if (*c == '-')
+		c++;
+
+	t->tm_year -= 1900;
 
 	/* 2 digit month */
-	if (!sscanf(c, "%02d", &t->tm_mon))
-	{
-		if (rest != NULL && *c != '\0')
-			*rest = c;
-		return 0;
-	}
+	if (!sscanf(c, "%02d", &t->tm_mon)) return 0;
 	c += 2;
-	if (*c == '-' || *c == '/')
+	if (*c == '-')
 		c++;
+
 	t->tm_mon -= 1;
 
 	/* 2 digit day */
-	if (!sscanf(c, "%02d", &t->tm_mday))
-	{
-		if (rest != NULL && *c != '\0')
-			*rest = c;
-		return 0;
-	}
+	if (!sscanf(c, "%02d", &t->tm_mday)) return 0;
 	c += 2;
-	if (*c == '/')
-	{
-		c++;
-
-		if (!sscanf(c, "%04d", &t->tm_year))
-		{
-			if (rest != NULL && *c != '\0')
-				*rest = c;
-			return 0;
-		}
-		t->tm_year -= 1900;
-	}
-	else if (*c == 'T' || *c == '.')
-	{
-		c++;
-		/* we have more than a date, keep going */
+	if (*c == 'T' || *c == '.') { /* we have more than a date, keep going */
+		c++; /* skip the "T" */
 
 		/* 2 digit hour */
-		if ((sscanf(c, "%02d:%02d:%02d", &t->tm_hour, &t->tm_min, &t->tm_sec) == 3 && (c = c + 8)) ||
-		    (sscanf(c, "%02d%02d%02d", &t->tm_hour, &t->tm_min, &t->tm_sec) == 3 && (c = c + 6)))
-		{
-			gboolean offset_positive = FALSE;
-			int tzhrs;
-			int tzmins;
+		if (sscanf(c, "%02d:%02d:%02d", &t->tm_hour, &t->tm_min, &t->tm_sec) == 3 ||
+			sscanf(c, "%02d%02d%02d", &t->tm_hour, &t->tm_min, &t->tm_sec) == 3) {
+			int tzhrs, tzmins;
+			c += 8;
+			if (*c == '.') /* dealing with precision we don't care about */
+				c += 4;
+			if ((*c == '+' || *c == '-') &&
+				sscanf(c+1, "%02d:%02d", &tzhrs, &tzmins)) {
+				tzoff = tzhrs*60*60 + tzmins*60;
+				if (*c == '+')
+					tzoff *= -1;
+			}
 
 			t->tm_isdst = -1;
 
-			if (*c == '.' && *(c+1) >= '0' && *(c+1) <= '9') /* dealing with precision we don't care about */
-				c += 4;
-			if (*c == '+')
-				offset_positive = TRUE;
-			if (((*c == '+' || *c == '-') && (c = c + 1)) &&
-			    ((sscanf(c, "%02d:%02d", &tzhrs, &tzmins) == 2 && (c = c + 5)) ||
-			     (sscanf(c, "%02d%02d", &tzhrs, &tzmins) == 2 && (c = c + 4))))
-			{
-				tzoff = tzhrs*60*60 + tzmins*60;
-				if (offset_positive)
-					tzoff *= -1;
-				/* We don't want the C library doing DST calculations
-				 * if we know the UTC offset already. */
-				t->tm_isdst = 0;
-			}
-
-			if (rest != NULL && *c != '\0')
-			{
-				if (*c == ' ')
-					c++;
-				if (*c != '\0')
-					*rest = c;
-			}
-
-			if (tzoff != GAIM_NO_TZ_OFF || utc)
-			{
-#if defined(_WIN32)
-				long sys_tzoff;
-#endif
-
-#if defined(_WIN32) || defined(HAVE_TM_GMTOFF) || defined (HAVE_TIMEZONE)
-				if (tzoff == GAIM_NO_TZ_OFF)
-					tzoff = 0;
-#endif
-
+			if (tzoff || utc) {
 #ifdef _WIN32
-				if ((sys_tzoff = win32_get_tz_offset()) == -1)
-					tzoff = GAIM_NO_TZ_OFF;
-				else
-					tzoff += sys_tzoff;
+				TIME_ZONE_INFORMATION tzi;
+				DWORD ret;
+				if ((ret = GetTimeZoneInformation(&tzi))
+						!= TIME_ZONE_ID_INVALID) {
+					tzoff -= tzi.Bias * 60;
+					if (ret == TIME_ZONE_ID_DAYLIGHT) {
+						tzoff -= tzi.DaylightBias * 60;
+					}
+				}
 #else
 #ifdef HAVE_TM_GMTOFF
 				tzoff += t->tm_gmtoff;
@@ -822,33 +586,23 @@ gaim_str_to_time(const char *timestamp, gboolean utc,
 #	ifdef HAVE_TIMEZONE
 				tzset();    /* making sure */
 				tzoff -= timezone;
+				t->tm_isdst = 0; /* I think this might fix it */
 #	endif
 #endif
 #endif /* _WIN32 */
 			}
 		}
-		else
-		{
-			if (rest != NULL && *c != '\0')
-				*rest = c;
-		}
-	}
-
-	if (tm != NULL)
-	{
-		*tm = *t;
-		tm->tm_isdst = -1;
-		mktime(tm);
 	}
 
 	retval = mktime(t);
-	if (tzoff != GAIM_NO_TZ_OFF)
-		retval += tzoff;
-
-	if (tz_off != NULL)
-		*tz_off = tzoff;
+	retval += tzoff;
 
 	return retval;
+}
+
+size_t gaim_strftime(char *s, size_t max, const char *format, const struct tm *tm)
+{
+	return strftime(s, max, format, tm);
 }
 
 /**************************************************************************
@@ -1014,8 +768,7 @@ gaim_markup_extract_info_field(const char *str, int len, GString *dest,
 							   const char *end_token, char check_value,
 							   const char *no_value_token,
 							   const char *display_name, gboolean is_link,
-							   const char *link_prefix,
-							   GaimInfoFieldFormatCallback format_cb)
+							   const char *link_prefix)
 {
 	const char *p, *q;
 
@@ -1067,14 +820,7 @@ gaim_markup_extract_info_field(const char *str, int len, GString *dest,
 			if (link_prefix)
 				g_string_append(dest, link_prefix);
 
-			if (format_cb != NULL)
-			{
-				char *reformatted = format_cb(p, q - p);
-				g_string_append(dest, reformatted);
-				g_free(reformatted);
-			}
-			else
-				g_string_append_len(dest, p, q - p);
+			g_string_append_len(dest, p, q - p);
 			g_string_append(dest, "\">");
 
 			if (link_prefix)
@@ -1085,14 +831,7 @@ gaim_markup_extract_info_field(const char *str, int len, GString *dest,
 		}
 		else
 		{
-			if (format_cb != NULL)
-			{
-				char *reformatted = format_cb(p, q - p);
-				g_string_append(dest, reformatted);
-				g_free(reformatted);
-			}
-			else
-				g_string_append_len(dest, p, q - p);
+			g_string_append_len(dest, p, q - p);
 		}
 
 		g_string_append(dest, "<br>\n");
@@ -1834,6 +1573,8 @@ gaim_markup_linkify(const char *text)
 					c = t;
 					break;
 				}
+				if (!t)
+					break;
 				t++;
 
 			}
@@ -1866,6 +1607,8 @@ gaim_markup_linkify(const char *text)
 						c = t;
 						break;
 					}
+					if (!t)
+						break;
 					t++;
 				}
 			}
@@ -2673,6 +2416,63 @@ gaim_normalize_nocase(const GaimAccount *account, const char *str)
 }
 
 gchar *
+gaim_str_sub_away_formatters(const char *str, const char *name)
+{
+	char *c;
+	GString *cpy;
+	time_t t;
+	struct tm *tme;
+	char tmp[20];
+
+	g_return_val_if_fail(str  != NULL, NULL);
+	g_return_val_if_fail(name != NULL, NULL);
+
+	/* Create an empty GString that is hopefully big enough for most messages */
+	cpy = g_string_sized_new(1024);
+
+	t = time(NULL);
+	tme = localtime(&t);
+
+	c = (char *)str;
+	while (*c) {
+		switch (*c) {
+		case '%':
+			if (*(c + 1)) {
+				switch (*(c + 1)) {
+				case 'n':
+					/* append name */
+					g_string_append(cpy, name);
+					c++;
+					break;
+				case 'd':
+					/* append date */
+					strftime(tmp, 20, "%m/%d/%Y", tme);
+					g_string_append(cpy, tmp);
+					c++;
+					break;
+				case 't':
+					/* append time */
+					strftime(tmp, 20, "%I:%M:%S %p", tme);
+					g_string_append(cpy, tmp);
+					c++;
+					break;
+				default:
+					g_string_append_c(cpy, *c);
+				}
+			} else {
+				g_string_append_c(cpy, *c);
+			}
+			break;
+		default:
+			g_string_append_c(cpy, *c);
+		}
+		c++;
+	}
+
+	return g_string_free(cpy, FALSE);
+}
+
+gchar *
 gaim_strdup_withhtml(const gchar *src)
 {
 	gulong destsize, i, j;
@@ -2708,10 +2508,10 @@ gaim_str_has_prefix(const char *s, const char *p)
 #if GLIB_CHECK_VERSION(2,2,0)
 	return g_str_has_prefix(s, p);
 #else
-	g_return_val_if_fail(s != NULL, FALSE);
-	g_return_val_if_fail(p != NULL, FALSE);
+	if (!strncmp(s, p, strlen(p)))
+		return TRUE;
 
-	return (!strncmp(s, p, strlen(p)));
+	return FALSE;
 #endif
 }
 
@@ -2721,13 +2521,12 @@ gaim_str_has_suffix(const char *s, const char *x)
 #if GLIB_CHECK_VERSION(2,2,0)
 	return g_str_has_suffix(s, x);
 #else
-	int off;
+	int off = strlen(s) - strlen(x);
 
-	g_return_val_if_fail(s != NULL, FALSE);
-	g_return_val_if_fail(x != NULL, FALSE);
+	if (off >= 0 && !strcmp(s + off, x))
+		return TRUE;
 
-	off = strlen(s) - strlen(x);
-	return (off >= 0 && !strcmp(s + off, x));
+	return FALSE;
 #endif
 }
 
@@ -2922,12 +2721,17 @@ gaim_str_size_to_units(size_t size)
 char *
 gaim_str_seconds_to_string(guint secs)
 {
-	char *ret = NULL;
+	GString *gstr;
+	const char *prefix = "";
 	guint days, hrs, mins;
+
+	gstr = g_string_new("");
 
 	if (secs < 60)
 	{
-		return g_strdup_printf(ngettext("%d second", "%d seconds", secs), secs);
+		g_string_append_printf(gstr, "%d %s", secs,
+							   ngettext("second", "seconds", secs));
+		return g_string_free(gstr, FALSE);
 	}
 
 	days = secs / (60 * 60 * 24);
@@ -2939,38 +2743,27 @@ gaim_str_seconds_to_string(guint secs)
 
 	if (days > 0)
 	{
-		ret = g_strdup_printf(ngettext("%d day", "%d days", days), days);
+		g_string_append_printf(gstr, "%d %s", days,
+							   ngettext("day", "days", days));
+
+		prefix = ", ";
 	}
 
 	if (hrs > 0)
 	{
-		if (ret != NULL)
-		{
-			char *tmp = g_strdup_printf(
-					ngettext("%s, %d hour", "%s, %d hours", hrs),
-							ret, hrs);
-			g_free(ret);
-			ret = tmp;
-		}
-		else
-			ret = g_strdup_printf(ngettext("%d hour", "%d hours", hrs), hrs);
+		g_string_append_printf(gstr, "%s%d %s", prefix, hrs,
+							   ngettext("hour", "hours", hrs));
+
+		prefix = ", ";
 	}
 
 	if (mins > 0)
 	{
-		if (ret != NULL)
-		{
-			char *tmp = g_strdup_printf(
-					ngettext("%s, %d minute", "%s, %d minutes", mins),
-							ret, mins);
-			g_free(ret);
-			ret = tmp;
-		}
-		else
-			ret = g_strdup_printf(ngettext("%d minute", "%d minutes", mins), mins);
+		g_string_append_printf(gstr, "%s%d %s", prefix, mins,
+							   ngettext("minute", "minutes", mins));
 	}
 
-	return ret;
+	return g_string_free(gstr, FALSE);
 }
 
 
@@ -3143,7 +2936,7 @@ parse_redirect(const char *data, size_t data_len, gint sock,
 
 		/* Try again, with this new location. */
 		gaim_url_fetch_request(new_url, full, gfud->user_agent,
-				gfud->http11, NULL, gfud->include_headers,
+				gfud->http11, gfud->request, gfud->include_headers,
 				gfud->callback, gfud->user_data);
 
 		/* Free up. */
@@ -3166,23 +2959,28 @@ parse_content_len(const char *data, size_t data_len)
 	 * [RFC 2616, section 4.2], though this ought to catch the normal case.
 	 * Note: data is _not_ nul-terminated.
 	 */
-	if(data_len > 16) {
-		p = (strncmp(data, "Content-Length: ", 16) == 0) ? data : NULL;
-		if(!p)
+	if (data_len > 16) {
+		p = strncmp(data, "Content-Length: ", 16) == 0 ? data : NULL;
+		if (!p) {
+			p = g_strstr_len(data, data_len, "\nContent-Length: ");
+			if (p)
+				p += 1;
+		}
+		if (!p)
 			p = (strncmp(data, "CONTENT-LENGTH: ", 16) == 0)
 				? data : NULL;
-		if(!p) {
+		if (!p) {
 			p = g_strstr_len(data, data_len, "\nContent-Length: ");
 			if (p)
 				p++;
 		}
-		if(!p) {
+		if (!p) {
 			p = g_strstr_len(data, data_len, "\nCONTENT-LENGTH: ");
 			if (p)
 				p++;
 		}
 
-		if(p)
+		if (p)
 			p += 16;
 	}
 
@@ -3198,7 +2996,6 @@ parse_content_len(const char *data, size_t data_len)
 	return content_len;
 }
 
-
 static void
 url_fetched_cb(gpointer url_data, gint sock, GaimInputCondition cond)
 {
@@ -3208,11 +3005,70 @@ url_fetched_cb(gpointer url_data, gint sock, GaimInputCondition cond)
 	char *data_cursor;
 	gboolean got_eof = FALSE;
 
-	while((len = read(sock, buf, sizeof(buf))) > 0) {
+	if (sock == -1)
+	{
+		gfud->callback(gfud->user_data, NULL, 0);
+
+		destroy_fetch_url_data(gfud);
+
+		return;
+	}
+
+	if (!gfud->sentreq)
+	{
+		char *send;
+		char buf[1024];
+
+		if (gfud->request) {
+			send = gfud->request;
+		} else {
+			if (gfud->user_agent) {
+				/* Host header is not forbidden in HTTP/1.0 requests, and HTTP/1.1
+				 * clients must know how to handle the "chunked" transfer encoding.
+				 * Gaim doesn't know how to handle "chunked", so should always send
+				 * the Host header regardless, to get around some observed problems
+				 */
+				g_snprintf(buf, sizeof(buf),
+					"GET %s%s HTTP/%s\r\n"
+					"Connection: close\r\n"
+					"User-Agent: %s\r\n"
+					"Host: %s\r\n\r\n",
+					(gfud->full ? "" : "/"),
+					(gfud->full ? gfud->url : gfud->website.page),
+					(gfud->http11 ? "1.1" : "1.0"),
+					gfud->user_agent, gfud->website.address);
+			} else {
+				g_snprintf(buf, sizeof(buf),
+					"GET %s%s HTTP/%s\r\n"
+					"Connection: close\r\n"
+					"Host: %s\r\n\r\n",
+					(gfud->full ? "" : "/"),
+					(gfud->full ? gfud->url : gfud->website.page),
+					(gfud->http11 ? "1.1" : "1.0"),
+					gfud->website.address);
+			}
+			send = buf;
+		}
+
+		gaim_debug_misc("gaim_url_fetch", "Request: %s\n", send);
+
+		write(sock, send, strlen(send));
+		fcntl(sock, F_SETFL, O_NONBLOCK);
+		gfud->sentreq = TRUE;
+		gfud->inpa = gaim_input_add(sock, GAIM_INPUT_READ,
+			url_fetched_cb, url_data);
+		gfud->data_len = 4096;
+		gfud->webdata = g_malloc(gfud->data_len);
+
+		return;
+	}
+
+	while ((len = read(sock, buf, sizeof(buf))) > 0)
+	{
 		/* If we've filled up our butfer, make it bigger */
-		if((gfud->len + len) >= gfud->data_len) {
-			while((gfud->len + len) >= gfud->data_len)
-				gfud->data_len += sizeof(buf);
+		if ((gfud->len + len) >= gfud->data_len)
+		{
+			gfud->data_len += MAX(((gfud->data_len) / 2), sizeof(buf));
 
 			gfud->webdata = g_realloc(gfud->webdata, gfud->data_len);
 		}
@@ -3225,49 +3081,51 @@ url_fetched_cb(gpointer url_data, gint sock, GaimInputCondition cond)
 
 		gfud->webdata[gfud->len] = '\0';
 
-		if(!gfud->got_headers) {
+		if (!gfud->startsaving)
+		{
 			char *tmp;
 
 			/** See if we've reached the end of the headers yet */
-			if((tmp = strstr(gfud->webdata, "\r\n\r\n"))) {
+			if ((tmp = strstr(gfud->webdata, "\r\n\r\n"))) {
 				char * new_data;
 				guint header_len = (tmp + 4 - gfud->webdata);
-				size_t content_len;
+				size_t content_len, body_len = 0;
 
 				gaim_debug_misc("gaim_url_fetch", "Response headers: '%.*s'\n",
 					header_len, gfud->webdata);
 
 				/* See if we can find a redirect. */
-				if(parse_redirect(gfud->webdata, header_len, sock, gfud))
+				if (parse_redirect(gfud->webdata, header_len, sock, gfud))
 					return;
 
-				gfud->got_headers = TRUE;
+				gfud->startsaving = TRUE;
 
 				/* No redirect. See if we can find a content length. */
 				content_len = parse_content_len(gfud->webdata, header_len);
 
-				if(content_len == 0) {
+				if (content_len == 0)
+				{
 					/* We'll stick with an initial 8192 */
 					content_len = 8192;
-				} else {
+				}
+				else
+				{
 					gfud->has_explicit_data_len = TRUE;
 				}
 
+				content_len = MAX(content_len, body_len);
 
 				/* If we're returning the headers too, we don't need to clean them out */
-				if(gfud->include_headers) {
+				if (gfud->include_headers) {
 					gfud->data_len = content_len + header_len;
-					gfud->webdata = g_realloc(gfud->webdata, gfud->data_len);
 				} else {
-					size_t body_len = 0;
 
-					if(gfud->len > (header_len + 1))
+					if (gfud->len > (header_len + 1))
 						body_len = (gfud->len - header_len);
 
-					content_len = MAX(content_len, body_len);
 
 					new_data = g_try_malloc(content_len);
-					if(new_data == NULL) {
+					if (new_data == NULL) {
 						gaim_debug_error("gaim_url_fetch", "Failed to allocate %u bytes: %s\n",
 							content_len, strerror(errno));
 						gaim_input_remove(gfud->inpa);
@@ -3279,13 +3137,14 @@ url_fetched_cb(gpointer url_data, gint sock, GaimInputCondition cond)
 					}
 
 					/* We may have read part of the body when reading the headers, don't lose it */
-					if(body_len > 0) {
+					if (body_len > 0) {
 						tmp += 4;
 						memcpy(new_data, tmp, body_len);
 					}
 
 					/* Out with the old... */
 					g_free(gfud->webdata);
+					gfud->webdata = NULL;
 
 					/* In with the new. */
 					gfud->len = body_len;
@@ -3295,16 +3154,18 @@ url_fetched_cb(gpointer url_data, gint sock, GaimInputCondition cond)
 			}
 		}
 
-		if(gfud->has_explicit_data_len && gfud->len >= gfud->data_len) {
+		if (gfud->has_explicit_data_len && gfud->len >= gfud->data_len)
+		{
 			got_eof = TRUE;
 			break;
 		}
 	}
 
-	if(len <= 0) {
-		if(errno == EAGAIN) {
+	if (len <= 0) {
+		if (errno == EWOULDBLOCK) {
+			errno = 0;
 			return;
-		} else if(errno != ETIMEDOUT) {
+		} else if (errno != ETIMEDOUT) {
 			got_eof = TRUE;
 		} else {
 			gaim_input_remove(gfud->inpa);
@@ -3317,7 +3178,7 @@ url_fetched_cb(gpointer url_data, gint sock, GaimInputCondition cond)
 		}
 	}
 
-	if(got_eof) {
+	if (got_eof) {
 		gfud->webdata = g_realloc(gfud->webdata, gfud->len + 1);
 		gfud->webdata[gfud->len] = '\0';
 
@@ -3329,76 +3190,6 @@ url_fetched_cb(gpointer url_data, gint sock, GaimInputCondition cond)
 
 		destroy_fetch_url_data(gfud);
 	}
-}
-
-static void
-url_fetch_connect_cb(gpointer url_data, gint sock, GaimInputCondition cond) {
-	GaimFetchUrlData *gfud = url_data;
-	int len, total_len;
-
-	if(sock == -1) {
-		gfud->callback(gfud->user_data, NULL, 0);
-		destroy_fetch_url_data(gfud);
-		return;
-	}
-
-	if (!gfud->request) {
-		if (gfud->user_agent) {
-			/* Host header is not forbidden in HTTP/1.0 requests, and HTTP/1.1
-			 * clients must know how to handle the "chunked" transfer encoding.
-			 * Gaim doesn't know how to handle "chunked", so should always send
-			 * the Host header regardless, to get around some observed problems
-			 */
-			gfud->request = g_strdup_printf(
-				"GET %s%s HTTP/%s\r\n"
-				"Connection: close\r\n"
-				"User-Agent: %s\r\n"
-				"Host: %s\r\n\r\n",
-				(gfud->full ? "" : "/"),
-				(gfud->full ? gfud->url : gfud->website.page),
-				(gfud->http11 ? "1.1" : "1.0"),
-				gfud->user_agent, gfud->website.address);
-		} else {
-			gfud->request = g_strdup_printf(
-				"GET %s%s HTTP/%s\r\n"
-				"Connection: close\r\n"
-				"Host: %s\r\n\r\n",
-				(gfud->full ? "" : "/"),
-				(gfud->full ? gfud->url : gfud->website.page),
-				(gfud->http11 ? "1.1" : "1.0"),
-				gfud->website.address);
-		}
-	}
-
-	gaim_debug_misc("gaim_url_fetch", "Request: '%s'\n", gfud->request);
-
-	if(!gfud->inpa)
-		gfud->inpa = gaim_input_add(sock, GAIM_INPUT_WRITE,
-			url_fetch_connect_cb, gfud);
-
-	total_len = strlen(gfud->request);
-
-	len = write(sock, gfud->request + gfud->request_written,
-			total_len - gfud->request_written);
-
-	if(len < 0 && errno == EAGAIN)
-		return;
-	else if(len < 0) {
-		gaim_input_remove(gfud->inpa);
-		close(sock);
-		gfud->callback(gfud->user_data, NULL, 0);
-		destroy_fetch_url_data(gfud);
-		return;
-	}
-	gfud->request_written += len;
-
-	if(gfud->request_written != total_len)
-		return;
-
-	gaim_input_remove(gfud->inpa);
-
-	gfud->inpa = gaim_input_add(sock, GAIM_INPUT_READ, url_fetched_cb,
-		gfud);
 }
 
 void
@@ -3431,7 +3222,9 @@ gaim_url_fetch_request(const char *url, gboolean full,
 				   &gfud->website.page, &gfud->website.user, &gfud->website.passwd);
 
 	if (gaim_proxy_connect(NULL, gfud->website.address,
-		gfud->website.port, url_fetch_connect_cb, gfud) != 0) {
+								   gfud->website.port, url_fetched_cb,
+								   gfud) != 0)
+	{
 		destroy_fetch_url_data(gfud);
 
 		cb(user_data, g_strdup(_("g003: Error opening connection.\n")), 0);
@@ -3716,7 +3509,7 @@ gaim_utf8_ncr_encode(const char *str)
 		gunichar wc = g_utf8_get_char(str);
 
 		/* super simple check. hopefully not too wrong. */
-		if(wc >= 0x80) {
+		if(wc >= 0x80) { 
 			g_string_append_printf(out, "&#%u;", (guint32) wc);
 		} else {
 			g_string_append_unichar(out, wc);
@@ -3742,17 +3535,15 @@ gaim_utf8_ncr_decode(const char *str)
 	while( (b = strstr(buf, "&#")) ) {
 		gunichar wc;
 		int base = 0;
-
+    
 		/* append everything leading up to the &# */
 		g_string_append_len(out, buf, b-buf);
 
 		b += 2; /* skip past the &# */
-
-		/* strtoul will treat 0x prefix as hex, but not just x */
-		if(*b == 'x' || *b == 'X') {
+    
+		/* strtoul will handle 0x prefix as hex, but not x */
+		if(*b == 'x' || *b == 'X')
 			base = 16;
-			b++;
-		}
 
 		/* advances buf to the end of the ncr segment */
 		wc = (gunichar) strtoul(b, &buf, base);
@@ -3802,7 +3593,7 @@ gaim_utf8_strcasecmp(const char *a, const char *b)
 }
 
 /* previously conversation::find_nick() */
-gboolean
+gboolean 
 gaim_utf8_has_word(const char *haystack, const char *needle)
 {
 	char *hay, *pin, *p;
@@ -3824,27 +3615,6 @@ gaim_utf8_has_word(const char *haystack, const char *needle)
 	g_free(hay);
 
 	return ret;
-}
-
-void
-gaim_print_utf8_to_console(FILE *filestream, char *message)
-{
-	gchar *message_conv;
-	GError *error = NULL;
-
-	/* Try to convert 'message' to user's locale */
-	message_conv = g_locale_from_utf8(message, -1, NULL, NULL, &error);
-	if (message_conv != NULL) {
-		fputs(message_conv, filestream);
-		g_free(message_conv);
-	}
-	else
-	{
-		/* use 'message' as a fallback */
-		g_warning("%s\n", error->message);
-		g_error_free(error);
-		fputs(message, filestream);
-	}
 }
 
 gboolean gaim_message_meify(char *message, size_t len)

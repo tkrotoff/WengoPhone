@@ -682,12 +682,6 @@ gaim_get_blist()
 	return gaimbuddylist;
 }
 
-GaimBlistNode *
-gaim_blist_get_root()
-{
-	return gaimbuddylist ? gaimbuddylist->root : NULL;
-}
-
 void gaim_blist_show()
 {
 	GaimBlistUiOps *ops = gaimbuddylist->ui_ops;
@@ -1000,7 +994,6 @@ void gaim_blist_rename_group(GaimGroup *source, const char *new_name)
 		/* Make a copy of the old group name and then delete the old group */
 		old_name = g_strdup(source->name);
 		gaim_blist_remove_group(source);
-		source = dest;
 	} else {
 		/* A simple rename */
 		GaimBlistNode *cnode, *bnode;
@@ -1014,6 +1007,7 @@ void gaim_blist_rename_group(GaimGroup *source, const char *new_name)
 
 		old_name = source->name;
 		source->name = g_strdup(new_name);
+
 	}
 
 	/* Save our changes */
@@ -1024,7 +1018,6 @@ void gaim_blist_rename_group(GaimGroup *source, const char *new_name)
 		ops->update(gaimbuddylist, (GaimBlistNode*)source);
 
 	/* Notify all PRPLs */
-	/* TODO: Is this condition needed?  Seems like it would always be TRUE */
 	if(old_name && source && strcmp(source->name, old_name)) {
 		for (accts = gaim_group_get_accounts(source); accts; accts = g_slist_remove(accts, accts->data)) {
 			GaimAccount *account = accts->data;
@@ -1204,12 +1197,10 @@ void gaim_blist_add_chat(GaimChat *chat, GaimGroup *group, GaimBlistNode *node)
 		if (cnode->parent->child == cnode)
 			cnode->parent->child = cnode->next;
 
-		if (ops && ops->remove)
-			ops->remove(gaimbuddylist, cnode);
+		ops->remove(gaimbuddylist, cnode);
 		/* ops->remove() cleaned up the cnode's ui_data, so we need to
 		 * reinitialize it */
-		if (ops && ops->new_node)
-			ops->new_node(cnode);
+		ops->new_node(cnode);
 
 		gaim_blist_schedule_save();
 	}
@@ -1310,8 +1301,7 @@ void gaim_blist_add_buddy(GaimBuddy *buddy, GaimContact *contact, GaimGroup *gro
 		if (bnode->parent->child == bnode)
 			bnode->parent->child = bnode->next;
 
-		if (ops && ops->remove)
-			ops->remove(gaimbuddylist, bnode);
+		ops->remove(gaimbuddylist, bnode);
 
 		gaim_blist_schedule_save();
 
@@ -1329,8 +1319,7 @@ void gaim_blist_add_buddy(GaimBuddy *buddy, GaimContact *contact, GaimGroup *gro
 			gaim_blist_remove_contact((GaimContact*)bnode->parent);
 		} else {
 			gaim_contact_invalidate_priority_buddy((GaimContact*)bnode->parent);
-			if (ops && ops->update)
-				ops->update(gaimbuddylist, bnode->parent);
+			ops->update(gaimbuddylist, bnode->parent);
 		}
 	}
 
@@ -1567,8 +1556,7 @@ void gaim_blist_add_contact(GaimContact *contact, GaimGroup *group, GaimBlistNod
 			((GaimGroup*)cnode->parent)->currentsize--;
 		((GaimGroup*)cnode->parent)->totalsize--;
 
-		if (ops && ops->remove)
-			ops->remove(gaimbuddylist, cnode);
+		ops->remove(gaimbuddylist, cnode);
 
 		gaim_blist_schedule_save();
 	}
@@ -1598,14 +1586,11 @@ void gaim_blist_add_contact(GaimContact *contact, GaimGroup *group, GaimBlistNod
 
 	gaim_blist_schedule_save();
 
-	if (ops && ops->update)
-	{
-		if (cnode->child)
-			ops->update(gaimbuddylist, cnode);
+	if (ops && cnode->child)
+		ops->update(gaimbuddylist, cnode);
 
-		for (bnode = cnode->child; bnode; bnode = bnode->next)
-			ops->update(gaimbuddylist, bnode);
-	}
+	for (bnode = cnode->child; bnode; bnode = bnode->next)
+		ops->update(gaimbuddylist, bnode);
 }
 
 void gaim_blist_merge_contact(GaimContact *source, GaimBlistNode *node)
@@ -1666,8 +1651,7 @@ void gaim_blist_add_group(GaimGroup *group, GaimBlistNode *node)
 	if (gaim_find_group(group->name)) {
 		/* This is just being moved */
 
-		if (ops && ops->remove)
-			ops->remove(gaimbuddylist, (GaimBlistNode *)group);
+		ops->remove(gaimbuddylist, (GaimBlistNode *)group);
 
 		if (gnode == gaimbuddylist->root)
 			gaimbuddylist->root = gnode->next;
@@ -1899,14 +1883,13 @@ void gaim_blist_remove_group(GaimGroup *group)
 			count++;
 
 		buf = g_strdup_printf(ngettext("%d buddy from group %s was not removed "
-									   "because it belongs to an account which is "
-									   "disabled or offline.  This buddy and the "
-									   "group were not removed.\n",
+									   "because its account was not logged in."
+									   "  This buddy and the group were not "
+									   "removed.\n",
 									   "%d buddies from group %s were not "
-									   "removed because they belong to accounts "
-									   "which are currently disabled or offline.  "
-									   "These buddies and the group were not "
-									   "removed.\n", count),
+									   "removed because their accounts were "
+									   "not logged in.  These buddies and "
+									   "the group were not removed.\n", count),
 							  count, group->name);
 		gaim_notify_error(NULL, NULL, _("Group not removed"), buf);
 		g_free(buf);

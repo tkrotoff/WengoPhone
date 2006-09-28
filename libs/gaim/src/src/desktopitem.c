@@ -723,7 +723,7 @@ insert_key (GaimDesktopItem *item,
 			char *p;
 			/* Whack C locale */
 			p = strchr (k, '[');
-			if(p) *p = '\0';
+			*p = '\0';
 			g_free (locale);
 		} else if (locale != NULL) {
 			char *p, *brace;
@@ -732,7 +732,7 @@ insert_key (GaimDesktopItem *item,
 			p = strchr (locale, '.');
 			if (p != NULL)
 				*p = '\0';
-
+				
 			if (g_list_find_custom (item->languages, locale,
 						(GCompareFunc)strcmp) == NULL) {
 				item->languages = g_list_prepend
@@ -741,14 +741,12 @@ insert_key (GaimDesktopItem *item,
 				g_free (locale);
 			}
 
-			/* Whack encoding from encoding in the key */
+			/* Whack encoding from encoding in the key */ 
 			brace = strchr (k, '[');
-			if(brace != NULL) {
-				p = strchr (brace, '.');
-				if (p != NULL) {
-					*p = ']';
-					*(p+1) = '\0';
-				}
+			p = strchr (brace, '.');
+			if (p != NULL) {
+				*p = ']';
+				*(p+1) = '\0';
 			}
 		}
 	}

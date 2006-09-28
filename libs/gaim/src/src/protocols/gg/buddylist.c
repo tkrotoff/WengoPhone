@@ -21,7 +21,7 @@
  */
 
 
-#include <libgadu.h>
+#include "lib/libgadu.h"
 
 #include "gg.h"
 #include "utils.h"

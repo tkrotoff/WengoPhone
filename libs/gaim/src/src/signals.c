@@ -540,10 +540,8 @@ gaim_signal_emit_vargs_return_1(void *instance, const char *signal,
 	}
 
 #ifdef HAVE_DBUS
-	G_VA_COPY(tmp, args);
 	gaim_dbus_signal_emit_gaim(signal, signal_data->num_values, 
-				   signal_data->values, tmp);
-	va_end(tmp);
+				   signal_data->values, args);
 #endif	/* HAVE_DBUS */
 
 	for (l = signal_data->handlers; l != NULL; l = l_next)

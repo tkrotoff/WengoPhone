@@ -28,11 +28,9 @@ typedef struct _MsnSession MsnSession;
 
 #include "sslconn.h"
 
-#include "user.h"
-#include "slpcall.h"
-
 #include "notification.h"
 #include "switchboard.h"
+#include "user.h"
 #include "group.h"
 
 #include "cmdproc.h"

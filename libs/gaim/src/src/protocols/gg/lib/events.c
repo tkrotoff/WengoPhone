@@ -1,4 +1,4 @@
-/* $Id: events.c 14520 2005-11-25 00:32:45Z rlaager $ */
+/* $Id: events.c,v 1.3 2005/11/25 00:32:45 rlaager Exp $ */
 
 /*
  *  (C) Copyright 2001-2003 Wojtek Kaniewski <wojtekka@irc.pl>

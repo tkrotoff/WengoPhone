@@ -136,10 +136,12 @@ void jabber_presence_send(GaimAccount *account, GaimStatus *status)
 
 xmlnode *jabber_presence_create(JabberBuddyState state, const char *msg, int priority)
 {
-	xmlnode *show, *status, *presence, *pri, *c;
+	xmlnode *show, *status, *presence, *pri;
 	const char *show_string = NULL;
 
+
 	presence = xmlnode_new("presence");
+
 
 	if(state == JABBER_BUDDY_STATE_UNAVAILABLE)
 		xmlnode_set_attrib(presence, "type", "unavailable");
@@ -165,18 +167,12 @@ xmlnode *jabber_presence_create(JabberBuddyState state, const char *msg, int pri
 		g_free(pstr);
 	}
 
-	/* JEP-0115 */
-	c = xmlnode_new_child(presence, "c");
-	xmlnode_set_attrib(c, "xmlns",  "http://jabber.org/protocol/caps");
-	xmlnode_set_attrib(c, "node", CAPS0115_NODE);
-	xmlnode_set_attrib(c, "ver", VERSION);
-
 	return presence;
 }
 
 struct _jabber_add_permit {
-	GaimConnection *gc;
 	JabberStream *js;
+	GaimConnection *gc;
 	char *who;
 };
 
@@ -378,20 +374,17 @@ void jabber_presence_parse(JabberStream *js, xmlnode *packet)
 				if((z = xmlnode_get_child(y, "status"))) {
 					const char *code = xmlnode_get_attrib(z, "code");
 					if(code && !strcmp(code, "201")) {
-						if((chat = jabber_chat_find(js, jid->node, jid->domain))) {
-							chat->config_dialog_type = GAIM_REQUEST_ACTION;
-							chat->config_dialog_handle =
-								gaim_request_action(js->gc,
-										_("Create New Room"),
-										_("Create New Room"),
-										_("You are creating a new room.  Would"
-											" you like to configure it, or"
-											" accept the default settings?"),
-										1, chat, 2, _("_Configure Room"),
-										G_CALLBACK(jabber_chat_request_room_configure),
-										_("_Accept Defaults"),
-										G_CALLBACK(jabber_chat_create_instant_room));
-						}
+						chat = jabber_chat_find(js, jid->node, jid->domain);
+						chat->config_dialog_type = GAIM_REQUEST_ACTION;
+						chat->config_dialog_handle =
+							gaim_request_action(js->gc, _("Create New Room"),
+								_("Create New Room"),
+								_("You are creating a new room.  Would you like to "
+									"configure it, or accept the default settings?"),
+								1, chat, 2, _("_Configure Room"),
+								G_CALLBACK(jabber_chat_request_room_configure),
+								_("_Accept Defaults"),
+								G_CALLBACK(jabber_chat_create_instant_room));
 					}
 				}
 				if((z = xmlnode_get_child(y, "item"))) {
@@ -616,27 +609,27 @@ void gaim_status_to_jabber(const GaimStatus *status, JabberBuddyState *state, co
 {
 	const char *status_id = NULL;
 
-	if(state) *state = JABBER_BUDDY_STATE_UNKNOWN;
-	if(msg) *msg = NULL;
-	if(priority) *priority = 0;
+	*state = JABBER_BUDDY_STATE_UNKNOWN;
+	*msg = NULL;
+	*priority = 0;
 
 	if(!status) {
-		if(state) *state = JABBER_BUDDY_STATE_UNAVAILABLE;
+		*state = JABBER_BUDDY_STATE_UNAVAILABLE;
 	} else {
 		if(state) {
 			status_id = gaim_status_get_id(status);
 			*state = jabber_buddy_status_id_get_state(status_id);
 		}
 
-		if(msg) {
+		if(msg)
 			*msg = gaim_status_get_attr_string(status, "message");
 
-			/* if the message is blank, then there really isn't a message */
-			if(*msg && !**msg)
-				*msg = NULL;
-		}
+		/* if the message is blank, then there really isn't a message */
+		if(*msg && !**msg)
+			*msg = NULL;
 
 		if(priority)
 			*priority = gaim_status_get_attr_int(status, "priority");
 	}
+
 }

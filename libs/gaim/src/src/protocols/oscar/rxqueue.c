@@ -1,30 +1,11 @@
 /*
- * Gaim's oscar protocol plugin
- * This file is the legal property of its developers.
- * Please see the AUTHORS file distributed alongside this file.
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
-
-/*
  * This file contains the management routines for the receive
  * (incoming packet) queue.  The actual packet handlers are in
  * rxhandlers.c.
  */
 
-#include "oscar.h"
+#define FAIM_INTERNAL
+#include <aim.h>
 
 #ifndef _WIN32
 #include <sys/socket.h>
@@ -57,7 +38,7 @@ faim_internal int aim_recv(int fd, void *buf, size_t count)
  * Read into a byte stream.  Will not read more than count, but may read
  * less if there is not enough room in the stream buffer.
  */
-faim_internal int aim_bstream_recv(ByteStream *bs, int fd, size_t count)
+faim_internal int aim_bstream_recv(aim_bstream_t *bs, int fd, size_t count)
 {
 	int red = 0;
 
@@ -81,12 +62,12 @@ faim_internal int aim_bstream_recv(ByteStream *bs, int fd, size_t count)
 }
 
 /**
- * Free an FlapFrame
+ * Free an aim_frame_t
  *
  * @param frame The frame to free.
  * @return -1 on error; 0 on success.
  */
-faim_internal void aim_frame_destroy(FlapFrame *frame)
+faim_internal void aim_frame_destroy(aim_frame_t *frame)
 {
 
 	free(frame->data.data); /* XXX aim_bstream_free */
@@ -96,15 +77,15 @@ faim_internal void aim_frame_destroy(FlapFrame *frame)
 }
 
 /*
- * Read a FLAP header from conn into fr, and return the number of
+ * Read a FLAP header from conn into fr, and return the number of 
  * bytes in the payload.
  *
  * @return -1 on error, otherwise return the length of the payload.
  */
-static int aim_get_command_flap(OscarSession *sess, OscarConnection *conn, FlapFrame *fr)
+static int aim_get_command_flap(aim_session_t *sess, aim_conn_t *conn, aim_frame_t *fr)
 {
-	guint8 hdr_raw[6];
-	ByteStream hdr;
+	fu8_t hdr_raw[6];
+	aim_bstream_t hdr;
 
 	fr->hdrtype = AIM_FRAMETYPE_FLAP;
 
@@ -121,7 +102,7 @@ static int aim_get_command_flap(OscarSession *sess, OscarConnection *conn, FlapF
 	 */
 	aim_bstream_init(&hdr, hdr_raw, sizeof(hdr_raw));
 	if (aim_bstream_recv(&hdr, conn->fd, 6) < 6) {
-		aim_conn_close(sess, conn);
+		aim_conn_close(conn);
 		return -1;
 	}
 
@@ -133,7 +114,7 @@ static int aim_get_command_flap(OscarSession *sess, OscarConnection *conn, FlapF
 	 */
 	if (aimbs_get8(&hdr) != 0x2a) {
 		gaim_debug_misc("oscar", "Invalid FLAP frame received on FLAP connection!");
-		aim_conn_close(sess, conn);
+		aim_conn_close(conn);
 		return -1;
 	}
 
@@ -144,15 +125,15 @@ static int aim_get_command_flap(OscarSession *sess, OscarConnection *conn, FlapF
 }
 
 /*
- * Read a rendezvous header from conn into fr, and return the number of
+ * Read a rendezvous header from conn into fr, and return the number of 
  * bytes in the payload.
  *
  * @return -1 on error, otherwise return the length of the payload.
  */
-static int aim_get_command_rendezvous(OscarSession *sess, OscarConnection *conn, FlapFrame *fr)
+static int aim_get_command_rendezvous(aim_session_t *sess, aim_conn_t *conn, aim_frame_t *fr)
 {
-	guint8 hdr_raw[8];
-	ByteStream hdr;
+	fu8_t hdr_raw[8];
+	aim_bstream_t hdr;
 
 	fr->hdrtype = AIM_FRAMETYPE_OFT;
 
@@ -161,7 +142,7 @@ static int aim_get_command_rendezvous(OscarSession *sess, OscarConnection *conn,
 	 */
 	aim_bstream_init(&hdr, hdr_raw, sizeof(hdr_raw));
 	if (aim_bstream_recv(&hdr, conn->fd, 8) < 8) {
-		aim_conn_close(sess, conn);
+		aim_conn_close(conn);
 		return -1;
 	}
 
@@ -175,16 +156,14 @@ static int aim_get_command_rendezvous(OscarSession *sess, OscarConnection *conn,
 }
 
 /*
- * Grab a single command sequence off the socket, and enqueue it in
- * the incoming event queue in a separate struct.
+ * Grab a single command sequence off the socket, and enqueue it in the incoming event queue 
+ * in a separate struct.
  *
  * @return 0 on success, otherwise return the error number.
- *         "Success" doesn't mean we have new data, it just means
- *         the connection isn't dead.
  */
-faim_export int aim_get_command(OscarSession *sess, OscarConnection *conn)
+faim_export int aim_get_command(aim_session_t *sess, aim_conn_t *conn)
 {
-	FlapFrame *fr;
+	aim_frame_t *fr;
 	int payloadlen;
 
 	if (!sess || !conn)
@@ -201,11 +180,11 @@ faim_export int aim_get_command(OscarSession *sess, OscarConnection *conn)
 	if (conn->status & AIM_CONN_STATUS_INPROGRESS)
 		return aim_conn_completeconnect(sess, conn);
 
-	if (!(fr = (FlapFrame *)calloc(sizeof(FlapFrame), 1)))
+	if (!(fr = (aim_frame_t *)calloc(sizeof(aim_frame_t), 1)))
 		return -ENOMEM;
 
 	/*
-	 * Rendezvous (client to client) connections do not speak FLAP, so this
+	 * Rendezvous (client to client) connections do not speak FLAP, so this 
 	 * function will break on them.
 	 */
 	if (conn->type == AIM_CONN_TYPE_RENDEZVOUS)
@@ -223,9 +202,9 @@ faim_export int aim_get_command(OscarSession *sess, OscarConnection *conn)
 	}
 
 	if (payloadlen > 0) {
-		guint8 *payload = NULL;
+		fu8_t *payload = NULL;
 
-		if (!(payload = (guint8 *) malloc(payloadlen))) {
+		if (!(payload = (fu8_t *) malloc(payloadlen))) {
 			aim_frame_destroy(fr);
 			return -1;
 		}
@@ -235,7 +214,7 @@ faim_export int aim_get_command(OscarSession *sess, OscarConnection *conn)
 		/* read the payload */
 		if (aim_bstream_recv(&fr->data, conn->fd, payloadlen) < payloadlen) {
 			aim_frame_destroy(fr); /* free's payload */
-			aim_conn_close(sess, conn);
+			aim_conn_close(conn);
 			return -1;
 		}
 	} else
@@ -250,7 +229,7 @@ faim_export int aim_get_command(OscarSession *sess, OscarConnection *conn)
 	if (sess->queue_incoming == NULL)
 		sess->queue_incoming = fr;
 	else {
-		FlapFrame *cur;
+		aim_frame_t *cur;
 		for (cur = sess->queue_incoming; cur->next; cur = cur->next);
 		cur->next = fr;
 	}
@@ -264,9 +243,9 @@ faim_export int aim_get_command(OscarSession *sess, OscarConnection *conn)
  * Purge receive queue of all handled commands (->handled==1).
  *
  */
-faim_export void aim_purge_rxqueue(OscarSession *sess)
+faim_export void aim_purge_rxqueue(aim_session_t *sess)
 {
-	FlapFrame *cur, **prev;
+	aim_frame_t *cur, **prev;
 
 	for (prev = &sess->queue_incoming; (cur = *prev); ) {
 		if (cur->handled) {
@@ -280,15 +259,15 @@ faim_export void aim_purge_rxqueue(OscarSession *sess)
 }
 
 /*
- * Since aim_get_command will oscar_connection_destroy dead connections, we need
+ * Since aim_get_command will aim_conn_kill dead connections, we need
  * to clean up the rxqueue of unprocessed connections on that socket.
  *
  * XXX: this is something that was handled better in the old connection
  * handling method, but eh.
  */
-faim_internal void aim_rxqueue_cleanbyconn(OscarSession *sess, OscarConnection *conn)
+faim_internal void aim_rxqueue_cleanbyconn(aim_session_t *sess, aim_conn_t *conn)
 {
-	FlapFrame *currx;
+	aim_frame_t *currx;
 
 	for (currx = sess->queue_incoming; currx; currx = currx->next) {
 		if ((!currx->handled) && (currx->conn == conn))
