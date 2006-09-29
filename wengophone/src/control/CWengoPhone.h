@@ -78,7 +78,11 @@ private:
 
 	void wsSubscribeCreatedEventHandler(WengoPhone & sender, WsSubscribe & wsSubscribe);
 
-	void showAddContactEventHandler(CommandServer & sender, const std::string & wengoName);
+	void showAddContactEventHandler(const std::string & wengoName,
+		const std::string & sip, const std::string & firstname,
+		const std::string & lastname, const std::string & country,
+		const std::string & city, const std::string & state,
+		const std::string & group);
 
 	void exitEventHandler();
 

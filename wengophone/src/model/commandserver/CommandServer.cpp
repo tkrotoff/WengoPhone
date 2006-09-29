@@ -41,6 +41,15 @@ const std::string CommandServer::_querySms = "1|o|sms/";
 const std::string CommandServer::_queryChat = "1|o|chat/";
 const std::string CommandServer::_queryAddContact = "1|o|addc/";
 
+const std::string NICKNAME_STR = "pseudo=";
+const std::string SIP_STR = "sip=";
+const std::string FIRSTNAME_STR = "firstname=";
+const std::string LASTNAME_STR = "lastname=";
+const std::string COUNTRY_STR = "country=";
+const std::string CITY_STR = "city=";
+const std::string STATE_STR = "state=";
+const std::string GROUP_STR = "group=";
+
 CommandServer::CommandServer(WengoPhone & wengoPhone)
 	: _wengoPhone(wengoPhone) {
 
@@ -159,6 +168,14 @@ void CommandServer::incomingRequestEventHandler(ServerSocket & sender, const std
 			// extract the information
 			StringList l = query.split("/");
 			std::string nickname;
+			std::string sip;
+			std::string firstname;
+			std::string lastname;
+			std::string country;
+			std::string city;
+			std::string state;
+			std::string group;
+
 			if (l.size() == 2) {
 				String infos = String(l[1]);
 				StringList contactInfo = infos.split("&");
@@ -166,16 +183,32 @@ void CommandServer::incomingRequestEventHandler(ServerSocket & sender, const std
 				for(unsigned int i = 0; i < contactInfo.size(); i++) {
 	
 					String info = contactInfo[i];
-	
+
+					// TODO: remove name= when the new protocol will be respected
 					if (info.beginsWith("name=")) {
 						nickname = info.substr(5, info.size() - 5);
+					} else if (info.beginsWith(NICKNAME_STR)) {
+						nickname = info.substr(NICKNAME_STR.size(), info.size() - NICKNAME_STR.size());
+					} else if (info.beginsWith(SIP_STR)) {
+						sip = info.substr(SIP_STR.size(), info.size() - SIP_STR.size());
+					} else if (info.beginsWith(FIRSTNAME_STR)) {
+						firstname = info.substr(FIRSTNAME_STR.size(), info.size() - FIRSTNAME_STR.size());
+					} else if (info.beginsWith(LASTNAME_STR)) {
+						lastname = info.substr(LASTNAME_STR.size(), info.size() - LASTNAME_STR.size());
+					} else if (info.beginsWith(COUNTRY_STR)) {
+						country = info.substr(COUNTRY_STR.size(), info.size() - COUNTRY_STR.size());
+					} else if (info.beginsWith(CITY_STR)) {
+						city = info.substr(CITY_STR.size(), info.size() - CITY_STR.size());
+					} else if (info.beginsWith(STATE_STR)) {
+						state = info.substr(STATE_STR.size(), info.size() - STATE_STR.size());
+					} else if (info.beginsWith(GROUP_STR)) {
+						group = info.substr(GROUP_STR.size(), info.size() - GROUP_STR.size());
 					}
-	
 				}
 			}
 			////
 
-			showAddContactEvent(*this, nickname);
+			showAddContactEvent(nickname, sip, firstname, lastname, country, city, state, group);
 		}
 
 	} else {

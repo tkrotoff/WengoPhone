@@ -22,7 +22,7 @@
 #include <QtGui/QtGui>
 
 QtWebDirectory::QtWebDirectory(QWidget * parent) : QtBrowser(parent) {
-	setUrl("http://annuaire.wengo.fr/index.php/contact");
+	setUrl("http://www.wengo.fr/public/public.php?page=smart_directory");
 	QWidget * widget = (QWidget*)getWidget();
 	widget->resize(715, 569);
 	widget->setWindowTitle(tr("Directory"));

@@ -134,7 +134,10 @@ public:
 
 	void showHistory();
 
-	void showAddContact(const std::string & nickname);
+	void showAddContact(const std::string & nickname, const std::string & sip,
+		const std::string & firstname, const std::string & lastname,
+		const std::string & country, const std::string & city,
+		const std::string & state, const std::string & group);
 
 public Q_SLOTS:
 
@@ -162,6 +165,14 @@ private Q_SLOTS:
 
 	void languageChanged();
 
+	void showAddContactThreadSafe(QString nickname, QString sip, QString firstname,
+		QString lastname, QString country, QString city, QString state,  QString group);
+
+Q_SIGNALS:
+
+	void showAddContactSignal(QString nickname, QString sip, QString firstname,
+		QString lastname, QString country, QString city, QString state, QString group);
+
 private:
 
 	void initThreadSafe();
@@ -181,8 +192,6 @@ private:
 	void proxyNeedsAuthenticationEventHandlerThreadSafe(NetworkProxy networkProxy);
 
 	void wrongProxyAuthenticationEventHandler(NetworkProxyDiscovery & sender, NetworkProxy networkProxy);
-
-	void showAddContactThreadSafe(QString nickname);
 
 	void makeCallErrorEventHandler();
 

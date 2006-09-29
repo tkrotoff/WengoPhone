@@ -55,7 +55,7 @@ void CWengoPhone::initPresentationThreadSafe() {
 	_wengoPhone.exitEvent += boost::bind(&CWengoPhone::exitEventHandler, this);
 
 	CommandServer & commandServer = CommandServer::getInstance(_wengoPhone);
-	commandServer.showAddContactEvent += boost::bind(&CWengoPhone::showAddContactEventHandler, this, _1, _2);
+	commandServer.showAddContactEvent += boost::bind(&CWengoPhone::showAddContactEventHandler, this, _1, _2, _3, _4, _5, _6, _7, _8);
 }
 
 Presentation * CWengoPhone::getPresentation() const {
@@ -99,6 +99,11 @@ void CWengoPhone::exitEventHandlerThreadSafe() {
 	}
 }
 
-void CWengoPhone::showAddContactEventHandler(CommandServer & sender, const std::string & wengoName) {
-	_pWengoPhone->showAddContact(wengoName);
+void CWengoPhone::showAddContactEventHandler(const std::string & wengoName,
+	const std::string & sip, const std::string & firstname,
+	const std::string & lastname, const std::string & country,
+	const std::string & city, const std::string & state,
+	const std::string & group) {
+
+	_pWengoPhone->showAddContact(wengoName, sip, firstname, lastname, country, city, state, group);
 }

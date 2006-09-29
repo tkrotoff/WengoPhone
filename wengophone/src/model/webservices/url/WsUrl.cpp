@@ -33,7 +33,7 @@ static const std::string URL_WENGO_FORUM = "http://www.wengo.fr/public/public.ph
 static const std::string URL_WENGO_CALLOUT = "http://www.wengo.fr/public/public.php?page=product_callout";
 static const std::string URL_WENGO_SMS = "http://www.wengo.fr/public/public.php?page=product_sms";
 static const std::string URL_WENGO_VOICEMAIL = "http://www.wengo.fr/public/public.php?page=product_voicemail";
-static const std::string URL_WENGO_SEARCH_EXT = "http://annuaire.wengo.fr";
+static const std::string URL_WENGO_SEARCH_EXT = "http://www.wengo.fr/public/public.php?page=main_smart_directory";
 static const std::string URL_WENGO_SEARCH_INT = "http://www.wengo.fr/public/public.php?page=smart_directory";
 static const std::string URL_WENGO_FAQ = "http://www.wengo.fr/public/public.php?page=wiki";
 static const std::string URL_WENGO_ACCOUNT = "https://www.wengo.fr/auth/auth.php?page=homepage";

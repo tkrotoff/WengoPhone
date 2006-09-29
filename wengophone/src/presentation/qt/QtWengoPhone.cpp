@@ -195,6 +195,10 @@ void QtWengoPhone::initThreadSafe() {
 	_ui->configPanel->setCurrentIndex(configPanelIndex);
 	_ui->configPanel->hide();
 
+	SAFE_CONNECT(this, SIGNAL(showAddContactSignal(QString, QString, QString,
+		QString, QString, QString, QString, QString)), SLOT(showAddContactThreadSafe(
+		QString, QString, QString, QString, QString, QString, QString, QString)));
+
 	updatePresentation();
 
 	//Main window size and position saved
@@ -727,15 +731,34 @@ void QtWengoPhone::languageChanged() {
 #endif
 }
 
-void QtWengoPhone::showAddContact(const std::string & nickname) {
-	QString name = QString::fromStdString(nickname);
-	typedef PostEvent1<void (QString nickname), QString> MyPostEvent;
+void QtWengoPhone::showAddContact(const std::string & nickname,
+	const std::string & sip, const std::string & firstname,
+	const std::string & lastname, const std::string & country,
+	const std::string & city, const std::string & state,
+	const std::string & group) {
+
+	QString qNick = QString::fromStdString(nickname);
+	QString qSip = QString::fromStdString(sip);
+	QString qFirstname = QString::fromStdString(firstname);
+	QString qLastname = QString::fromStdString(lastname);
+	QString qCountry = QString::fromStdString(country);
+	QString qCity = QString::fromStdString(city);
+	QString qState = QString::fromStdString(state);
+	QString qGroup = QString::fromStdString(group);
+
+	/*
+	typedef PostEvent8<void (QString nickname, QString sip, QString firstname,
+		QString lastname, QString country, QString city, QString state,
+		QString group), QString, QString, QString, QString, QString, QString, QString, QString> MyPostEvent;
 	MyPostEvent * event =
-		new MyPostEvent(boost::bind(&QtWengoPhone::showAddContactThreadSafe, this, _1), name);
+		new MyPostEvent(boost::bind(&QtWengoPhone::showAddContactThreadSafe, this,
+			_1, _2, _3, _4, _5, _6, _7, _8), qNick, qSip, qFirstname, qLastname, qCountry, qCity, qState, qGroup);
 	postEvent(event);
+	*/
 }
 
-void QtWengoPhone::showAddContactThreadSafe(QString nickname) {
+void QtWengoPhone::showAddContactThreadSafe(QString nickname, QString sip, QString firstname,
+	QString lastname, QString country, QString city, QString state,  QString group) {
 
 	if (_cWengoPhone.getCUserProfileHandler().getCUserProfile()) {
 

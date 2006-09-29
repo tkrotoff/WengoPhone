@@ -36,10 +36,14 @@ class CommandServer {
 public:
 
 	/**
-	 * @param sender this class
-	 * @param wsWengoSubscribe WsWengoSubscribe created
+	 * @param sender this class.
+	 * @param wengoName the wengoName of the contact.
 	 */
-	Event<void (CommandServer & sender, const std::string & wengoName)> showAddContactEvent;
+	Event<void (const std::string & wengoName,
+		const std::string & sip, const std::string & firstname,
+		const std::string & lastname, const std::string & country,
+		const std::string & city, const std::string & state,
+		const std::string & group)> showAddContactEvent;
 
 	CommandServer(WengoPhone & wengoPhone);
 
