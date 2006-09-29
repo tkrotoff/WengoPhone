@@ -228,9 +228,11 @@ void QtSms::sendSms() {
 
 	QStringList messages = splitMessage();
 	for (int i = 0; i < messages.size(); i++) {
-				
-		std::string sms(messages[i].toUtf8().constData());
-		_cSms.sendSMS(phoneNumber, sms);
+
+		if (!messages[i].isEmpty()) {
+			std::string sms(messages[i].toUtf8().constData());
+			_cSms.sendSMS(phoneNumber, sms);
+		}
 	}
 }
 
