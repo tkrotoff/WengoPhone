@@ -47,9 +47,9 @@ CWengoPhone::~CWengoPhone() {
 
 void CWengoPhone::initPresentationThreadSafe() {
 
-	_cUserProfileHandler = new CUserProfileHandler(_wengoPhone.getUserProfileHandler(), *this);
-
 	_pWengoPhone = PFactory::getFactory().createPresentationWengoPhone(*this);
+
+	_cUserProfileHandler = new CUserProfileHandler(_wengoPhone.getUserProfileHandler(), *this);
 
 	_wengoPhone.initFinishedEvent += boost::bind(&CWengoPhone::initFinishedEventHandler, this, _1);
 	_wengoPhone.exitEvent += boost::bind(&CWengoPhone::exitEventHandler, this);
@@ -93,7 +93,7 @@ void CWengoPhone::exitEventHandler() {
 }
 
 void CWengoPhone::exitEventHandlerThreadSafe() {
-	WengoPhone::getInstance().terminate();
+	_wengoPhone.terminate();
 	if (_pWengoPhone) {
 		_pWengoPhone->exitEvent();
 	}

@@ -20,11 +20,11 @@
 #ifndef OWTHREAD_H
 #define OWTHREAD_H
 
-#include <thread/Condition.h>
-#include <thread/Mutex.h>
 #include <util/Interface.h>
+#include <thread/Mutex.h>
+#include <thread/Condition.h>
 
-#include <queue>
+#include <vector>
 
 class IThreadEvent;
 namespace boost { class thread; }
@@ -53,17 +53,10 @@ namespace boost { class thread; }
  * @see java.lang.Runnable
  * @see java.lang.Object
  * @author Tanguy Krotoff
- * @author Philippe Bernery
  */
 class Thread : Interface {
 public:
 
-	Thread();
-
-	/**
-	 * Events contained in the Event Queue are executed
-	 * before deleting this Thread instance.
-	 */
 	virtual ~Thread();
 
 	/**
@@ -92,7 +85,7 @@ public:
 	 *
 	 * @param event to inject inside the thread main loop
 	 */
-	void postEvent(IThreadEvent * event);
+	static void postEvent(IThreadEvent * event);
 
 	/**
 	 * Causes the current thread to sleep.
@@ -172,20 +165,20 @@ protected:
 	void terminate();
 
 	/** Defines the vector of ThreadEvent. */
-	typedef std::queue < IThreadEvent * > Events;
+	typedef std::vector < IThreadEvent * > Events;
 
 	/** List of PostEvent. */
-	Events _eventQueue;
+	static Events _eventList;
 
 	/**
 	 * Mutex used for postEvent() and runEvents().
 	 */
-	Mutex _mutex;
+	static Mutex _mutex;
 
 	/**
 	 * Condition used for postEvent().
 	 */
-	Condition _condition;
+	static Condition _condition;
 
 	/**
 	 * If this thread should be terminate or not.
@@ -197,18 +190,9 @@ protected:
 
 private:
 
-	/**
-	 * Proxy function for runnning thread.
-	 */
-	void runThread();
-
-	/**
-	 * True if the thread is running.
-	 */
-	bool _threadRunning;
-
 	/** Boost thread. */
 	boost::thread * _thread;
 };
 
 #endif	//OWTHREAD_H
+

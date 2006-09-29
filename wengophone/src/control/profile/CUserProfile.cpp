@@ -198,7 +198,7 @@ void CUserProfile::historyLoadedEventHandler(History & history) {
 void CUserProfile::disconnect() {
 	typedef ThreadEvent0<void ()> MyThreadEvent;
 	MyThreadEvent * event = new MyThreadEvent(boost::bind(&CUserProfile::disconnectThreadSafe, this));
-	WengoPhone::getInstance().postEvent(event);
+	WengoPhone::postEvent(event);
 }
 
 void CUserProfile::disconnectThreadSafe() {
@@ -208,7 +208,7 @@ void CUserProfile::disconnectThreadSafe() {
 void CUserProfile::makeContactCall(const std::string & contactId) {
 	typedef ThreadEvent1<void (std::string contactId), std::string> MyThreadEvent;
 	MyThreadEvent * event = new MyThreadEvent(boost::bind(&CUserProfile::makeContactCallThreadSafe, this, _1), contactId);
-	WengoPhone::getInstance().postEvent(event);
+	WengoPhone::postEvent(event);
 }
 
 void CUserProfile::makeContactCallThreadSafe(std::string contactId) {
@@ -224,7 +224,7 @@ void CUserProfile::makeContactCallThreadSafe(std::string contactId) {
 void CUserProfile::makeCall(const std::string & phoneNumber) {
 	typedef ThreadEvent1<void (std::string phoneNumber), std::string> MyThreadEvent;
 	MyThreadEvent * event = new MyThreadEvent(boost::bind(&CUserProfile::makeCallThreadSafe, this, _1), phoneNumber);
-	WengoPhone::getInstance().postEvent(event);
+	WengoPhone::postEvent(event);
 }
 
 void CUserProfile::makeCallThreadSafe(std::string phoneNumber) {
@@ -237,7 +237,7 @@ void CUserProfile::makeCallThreadSafe(std::string phoneNumber) {
 void CUserProfile::startIM(const std::string & contactId) {
 	typedef ThreadEvent1<void (std::string contactId), std::string> MyThreadEvent;
 	MyThreadEvent * event = new MyThreadEvent(boost::bind(&CUserProfile::startIMThreadSafe, this, _1), contactId);
-	WengoPhone::getInstance().postEvent(event);
+	WengoPhone::postEvent(event);
 }
 
 void CUserProfile::startIMThreadSafe(std::string contactId) {
@@ -250,7 +250,7 @@ void CUserProfile::startIMThreadSafe(std::string contactId) {
 void CUserProfile::setWengoAccount(const WengoAccount & wengoAccount) {
 	typedef ThreadEvent1<void (WengoAccount wengoAccount), WengoAccount> MyThreadEvent;
 	MyThreadEvent * event = new MyThreadEvent(boost::bind(&CUserProfile::setWengoAccountThreadSafe, this, _1), wengoAccount);
-	WengoPhone::getInstance().postEvent(event);
+	WengoPhone::postEvent(event);
 }
 
 void CUserProfile::setWengoAccountThreadSafe(WengoAccount wengoAccount) {
@@ -282,3 +282,4 @@ PhoneCall * CUserProfile::getActivePhoneCall() const {
 
 	return result;
 }
+

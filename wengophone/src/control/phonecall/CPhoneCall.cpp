@@ -109,7 +109,7 @@ void CPhoneCall::videoFrameReceivedEventHandlerThreadSafe(piximage * remoteVideo
 void CPhoneCall::hangUp() {
 	typedef ThreadEvent0<void ()> MyThreadEvent;
 	MyThreadEvent * event = new MyThreadEvent(boost::bind(&CPhoneCall::hangUpThreadSafe, this));
-	WengoPhone::getInstance().postEvent(event);
+	WengoPhone::postEvent(event);
 }
 
 void CPhoneCall::hangUpThreadSafe() {
@@ -119,7 +119,7 @@ void CPhoneCall::hangUpThreadSafe() {
 void CPhoneCall::accept() {
 	typedef ThreadEvent0<void ()> MyThreadEvent;
 	MyThreadEvent * event = new MyThreadEvent(boost::bind(&CPhoneCall::acceptThreadSafe, this));
-	WengoPhone::getInstance().postEvent(event);
+	WengoPhone::postEvent(event);
 }
 
 void CPhoneCall::acceptThreadSafe() {
@@ -129,7 +129,7 @@ void CPhoneCall::acceptThreadSafe() {
 void CPhoneCall::hold() {
 	typedef ThreadEvent0<void ()> MyThreadEvent;
 	MyThreadEvent * event = new MyThreadEvent(boost::bind(&CPhoneCall::holdThreadSafe, this));
-	WengoPhone::getInstance().postEvent(event);
+	WengoPhone::postEvent(event);
 }
 
 void CPhoneCall::holdThreadSafe() {
@@ -139,7 +139,7 @@ void CPhoneCall::holdThreadSafe() {
 void CPhoneCall::resume() {
 	typedef ThreadEvent0<void ()> MyThreadEvent;
 	MyThreadEvent * event = new MyThreadEvent(boost::bind(&CPhoneCall::resumeThreadSafe, this));
-	WengoPhone::getInstance().postEvent(event);
+	WengoPhone::postEvent(event);
 }
 
 void CPhoneCall::resumeThreadSafe() {
@@ -149,7 +149,7 @@ void CPhoneCall::resumeThreadSafe() {
 void CPhoneCall::blindTransfer(const std::string & phoneNumber) {
 	typedef ThreadEvent1<void (std::string), std::string> MyThreadEvent;
 	MyThreadEvent * event = new MyThreadEvent(boost::bind(&CPhoneCall::blindTransferThreadSafe, this, _1), phoneNumber);
-	WengoPhone::getInstance().postEvent(event);
+	WengoPhone::postEvent(event);
 }
 
 void CPhoneCall::blindTransferThreadSafe(std::string phoneNumber) {
@@ -167,3 +167,5 @@ CodecList::VideoCodec CPhoneCall::getVideoCodecUsed() {
 EnumPhoneCallState::PhoneCallState CPhoneCall::getState() const {
 	return _phoneCall.getState();
 }
+
+

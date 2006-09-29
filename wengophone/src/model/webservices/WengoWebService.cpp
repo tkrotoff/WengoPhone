@@ -19,13 +19,11 @@
 
 #include "WengoWebService.h"
 
-#include <model/WengoPhone.h>
 #include <model/account/wengo/WengoAccount.h>
 #include <model/config/Config.h>
 #include <model/config/ConfigManager.h>
 #include <WengoPhoneBuildId.h>
 
-#include <thread/ThreadEvent.h>
 #include <util/Logger.h>
 
 WengoWebService::WengoWebService(WengoAccount * wengoAccount)
@@ -38,6 +36,7 @@ WengoWebService::WengoWebService(WengoAccount * wengoAccount)
 }
 
 WengoWebService::~WengoWebService() {
+
 }
 
 void WengoWebService::setHttps(bool https) {
@@ -114,3 +113,5 @@ void WengoWebService::answerReceivedEventHandler(IHttpRequest * sender, int requ
 
 	delete sender;
 }
+
+

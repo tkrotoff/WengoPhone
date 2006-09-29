@@ -40,6 +40,14 @@ public:
 	 * @return true if the web browser was found and the URL opened, false otherwise
 	 */
 	static bool openUrl(const std::string & url);
+
+	static void setBrowser(const std::string & browser) {
+		_browser = browser;
+	}
+
+private:
+
+	static std::string _browser;
 };
 
 #endif	//OWWEBBROWSER_H

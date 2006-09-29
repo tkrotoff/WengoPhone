@@ -21,59 +21,31 @@
 
 #include <thread/ThreadEvent.h>
 
-#include <util/SafeDelete.h>
-
 #include <boost/thread/thread.hpp>
 #include <boost/thread/xtime.hpp>
 
-Thread::Thread() {
-	_terminate = false;
-	_threadRunning = false;
-	_thread = NULL;
-}
+Thread::Events Thread::_eventList;
+Mutex Thread::_mutex;
+Condition Thread::_condition;
 
 Thread::~Thread() {
-	Mutex::ScopedLock scopedLock(_mutex);
-
-	if (_thread && _threadRunning) {
-		scopedLock.unlock();
-		terminate();
-		join();
-	}
-
-	OWSAFE_DELETE(_thread);
+	//FIXME Do not delete the boost::thread otherwise it crashes
+	//delete _thread;
 }
 
 void Thread::start() {
 	_terminate = false;
-	_thread = new boost::thread(boost::bind(&Thread::runThread, this));
-}
-
-void Thread::runThread() {
-	Mutex::ScopedLock scopedLock(_mutex);
-	_threadRunning = true;
-	scopedLock.unlock();
-
-	run();
-
-	scopedLock.lock();
-	_threadRunning = false;
-	scopedLock.unlock();
+	_thread = new boost::thread(boost::bind(&Thread::run, this));
 }
 
 void Thread::join() {
-	Mutex::ScopedLock scopedLock(_mutex);
-
-	if (_threadRunning) {
-		scopedLock.unlock();
-		_thread->join();
-	}
+	_thread->join();
 }
 
 void Thread::postEvent(IThreadEvent * event) {
-	Mutex::ScopedLock scopedLock(_mutex);
-	_eventQueue.push(event);
-	scopedLock.unlock();
+	Mutex::ScopedLock ScopedLock(_mutex);
+	_eventList.push_back(event);
+	ScopedLock.unlock();
 
 	_condition.notify_all();
 }
@@ -117,31 +89,27 @@ void Thread::msleep(unsigned long milliseconds) {
 }
 
 void Thread::runEvents() {
-	Mutex::ScopedLock scopedLock(_mutex);
-
+	Mutex::ScopedLock ScopedLock(_mutex);
 	while (true) {
-		while (!_eventQueue.empty()) {
-			IThreadEvent *event = _eventQueue.front();
-			_eventQueue.pop();
-
-			scopedLock.unlock();
-			event->callback();
-			OWSAFE_DELETE(event);
-			scopedLock.lock();
+		for (unsigned i = 0; i < _eventList.size(); i++) {
+			ScopedLock.unlock();
+			_eventList[i]->callback();
+			ScopedLock.lock();
+			delete _eventList[i];
 		}
-
+		_eventList.clear();
 		if (_terminate) {
 			return;
 		}
-
-		_condition.wait(scopedLock);
+		_condition.wait(ScopedLock);
 	}
 }
 
 void Thread::terminate() {
-	Mutex::ScopedLock scopedLock(_mutex);
+	Mutex::ScopedLock ScopedLock(_mutex);
 	_terminate = true;
-	scopedLock.unlock();
+	ScopedLock.unlock();
 
 	_condition.notify_all();
 }
+
