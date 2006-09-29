@@ -113,18 +113,19 @@ void HistoryMementoCollection::privateAdd(unsigned int id, HistoryMemento * meme
 }
 
 HistoryMementoCollection * HistoryMementoCollection::getMementos(HistoryMemento::State state, int count) {
+
 	int c = 0;
 	HistoryMementoCollection * toReturn = new HistoryMementoCollection();
 
-	HistoryMap::iterator it;
-	for(it = _privateCollection.begin(); it != _privateCollection.end(); it++) {
+	HistoryMap::reverse_iterator it;
+	for (it = _privateCollection.rbegin(); it != _privateCollection.rend(); it++) {
 
-		if( (state == HistoryMemento::Any) || ((*it).second->getState() == state) ) {
+		if ((state == HistoryMemento::Any) || ((*it).second->getState() == state)) {
 			toReturn->privateAdd((*it).first, (*it).second);
 			c++;
 		}
 
-		if( c > count ) {
+		if (c >= count) {
 			break;
 		}
 	}
