@@ -107,6 +107,10 @@ void CPhoneCall::videoFrameReceivedEventHandlerThreadSafe(piximage * remoteVideo
 }
 
 void CPhoneCall::hangUp() {
+	_phoneCall.videoFrameReceivedEvent -= boost::bind(&CPhoneCall::videoFrameReceivedEventHandler, this, _1, _2, _3);
+	_pPhoneCall->close();
+	_pPhoneCall = NULL;
+
 	typedef ThreadEvent0<void ()> MyThreadEvent;
 	MyThreadEvent * event = new MyThreadEvent(boost::bind(&CPhoneCall::hangUpThreadSafe, this));
 	WengoPhone::postEvent(event);

@@ -82,6 +82,9 @@ QtSystray::QtSystray(QObject * parent)
 	setTrayMenu();
 }
 
+QtSystray::~QtSystray() {
+}
+
 void QtSystray::setTrayMenu() {
 	_trayMenu->clear();
 

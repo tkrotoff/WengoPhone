@@ -575,7 +575,6 @@ void QtWengoPhone::prepareToExitApplication() {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
 	_qtSystray->hide();
-	OWSAFE_DELETE(_qtSystray);
 
 	//Save the window size
 	QSize winsize = _wengoPhoneWindow->size();

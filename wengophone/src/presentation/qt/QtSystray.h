@@ -46,6 +46,8 @@ public:
 
 	QtSystray(QObject * parent);
 
+	~QtSystray();
+
 	void phoneLineStateChanged(EnumPhoneLineState::PhoneLineState state);
 
 public Q_SLOTS:
