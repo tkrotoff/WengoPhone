@@ -166,7 +166,6 @@ set(owphone_SRCS
   model/webservices/WengoWebService.cpp
   model/webservices/sms/WsSms.cpp
   model/webservices/info/WsInfo.cpp
-  model/webservices/subscribe/WsSubscribe.cpp
   model/webservices/softupdate/WsSoftUpdate.cpp
   model/webservices/callforward/WsCallForward.cpp
   model/webservices/directory/WsDirectory.cpp
@@ -207,7 +206,6 @@ set(owphone_SRCS
   control/webservices/sms/CSms.cpp
   control/webservices/softupdate/CSoftUpdate.cpp
   control/webservices/info/CWsInfo.cpp
-  control/webservices/subscribe/CSubscribe.cpp
   control/webservices/directory/CWsDirectory.cpp
   control/webservices/callforward/CWsCallForward.cpp
   control/history/CHistory.cpp

@@ -184,8 +184,6 @@ qt4_wrap_cpp(qtwengophone_SRCS
   webservices/sms/QtSms.h
   webservices/softupdate/QtSoftUpdate.h
   webservices/softupdate/QtBrowserSoftUpdate.h
-  webservices/subscribe/QtSubscribe.h
-  webservices/subscribe/QtSubscribe2.h
   webservices/directory/QtWsDirectory.h
   webservices/directory/QtWsDirectoryContact.h
 
@@ -321,8 +319,6 @@ set(qtwengophone_SRCS
   webservices/sms/QtSms.cpp
   webservices/softupdate/QtSoftUpdate.cpp
   webservices/softupdate/QtBrowserSoftUpdate.cpp
-  webservices/subscribe/QtSubscribe.cpp
-  webservices/subscribe/QtSubscribe2.cpp
   webservices/directory/QtWsDirectory.cpp
   webservices/directory/QtWsDirectoryContact.cpp
 
@@ -446,8 +442,6 @@ qt4_wrap_ui(qtwengophone_SRCS
 
   webservices/directory/WsDirectory.ui
   webservices/directory/WsDirectoryContact.ui
-  webservices/subscribe/SubscribeWengo1.ui
-  webservices/subscribe/SubscribeWengo2.ui
   webservices/sms/SmsWindow.ui
   webservices/softupdate/SoftUpdateWindow.ui
   webservices/softupdate/BrowserSoftUpdateWindow.ui
@@ -473,7 +467,6 @@ qt4_wrap_ui(qtwengophone_SRCS
   chat/UserFrame.ui
   chat/AvatarFrame.ui
   chat/AvatarWidget.ui
-  #chat/chatroom/ChatRoomInviteWidget.ui
 
   contactlist/RenameGroupDialog.ui
   contactlist/ContactWidget.ui
