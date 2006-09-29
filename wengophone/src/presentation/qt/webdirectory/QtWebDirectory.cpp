@@ -25,6 +25,7 @@ QtWebDirectory::QtWebDirectory(QWidget * parent) : QtBrowser(parent) {
 	setUrl("http://annuaire.wengo.fr/index.php/contact");
 	QWidget * widget = (QWidget*)getWidget();
 	widget->resize(715, 569);
+	widget->setWindowTitle(tr("Directory"));
 }
 
 QtWebDirectory::~QtWebDirectory() {
