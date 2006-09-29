@@ -30,7 +30,6 @@
 #include "profile/QtUserProfileHandler.h"
 #include "webservices/sms/QtSms.h"
 #include "webservices/softupdate/QtSoftUpdate.h"
-#include "webservices/subscribe/QtSubscribe.h"
 #include "webservices/directory/QtWsDirectory.h"
 #include "wenbox/QtWenboxPlugin.h"
 
@@ -91,7 +90,6 @@ void QtFactory::reset() {
 	_qtChatHandler = NULL;
 	_qtWenboxPlugin = NULL;
 	_qtSms = NULL;
-	_qtSubscribe = NULL;
 	_qtWsDirectory = NULL;
 	_qtSoftUpdate = NULL;
 	_qtHistory = NULL;
@@ -165,13 +163,6 @@ PSms * QtFactory::createPresentationSms(CSms & cSms) {
 		_qtSms = new QtSms(cSms);
 	}
 	return _qtSms;
-}
-
-PSubscribe * QtFactory::createPresentationSubscribe(CSubscribe & cSubscribe) {
-	if (!_qtSubscribe) {
-		_qtSubscribe = new QtSubscribe(cSubscribe);
-	}
-	return _qtSubscribe;
 }
 
 PWsDirectory * QtFactory::createPresentationWsDirectory(CWsDirectory & cWsDirectory) {

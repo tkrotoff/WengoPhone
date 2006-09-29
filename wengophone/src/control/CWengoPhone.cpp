@@ -23,11 +23,9 @@
 #include <presentation/PWengoPhone.h>
 
 #include <control/profile/CUserProfileHandler.h>
-#include <control/webservices/subscribe/CSubscribe.h>
 
 #include <model/commandserver/CommandServer.h>
 #include <model/WengoPhone.h>
-#include <model/webservices/subscribe/WsSubscribe.h>
 
 #include <thread/ThreadEvent.h>
 #include <util/Logger.h>
@@ -48,13 +46,13 @@ CWengoPhone::~CWengoPhone() {
 }
 
 void CWengoPhone::initPresentationThreadSafe() {
-	_pWengoPhone = PFactory::getFactory().createPresentationWengoPhone(*this);
 
 	_cUserProfileHandler = new CUserProfileHandler(_wengoPhone.getUserProfileHandler(), *this);
 
+	_pWengoPhone = PFactory::getFactory().createPresentationWengoPhone(*this);
+
 	_wengoPhone.initFinishedEvent += boost::bind(&CWengoPhone::initFinishedEventHandler, this, _1);
 	_wengoPhone.exitEvent += boost::bind(&CWengoPhone::exitEventHandler, this);
-	_wengoPhone.wsSubscribeCreatedEvent += boost::bind(&CWengoPhone::wsSubscribeCreatedEventHandler, this, _1, _2);
 
 	CommandServer & commandServer = CommandServer::getInstance(_wengoPhone);
 	commandServer.showAddContactEvent += boost::bind(&CWengoPhone::showAddContactEventHandler, this, _1, _2);
@@ -86,12 +84,6 @@ void CWengoPhone::terminate() {
 
 void CWengoPhone::initFinishedEventHandler(WengoPhone & sender) {
 	LOG_DEBUG("WengoPhone::init() finished");
-}
-
-void CWengoPhone::wsSubscribeCreatedEventHandler(WengoPhone & sender, WsSubscribe & wsSubscribe) {
-	static CSubscribe cSubscribe(wsSubscribe, *this);
-
-	LOG_DEBUG("CSubscribe created");
 }
 
 void CWengoPhone::exitEventHandler() {

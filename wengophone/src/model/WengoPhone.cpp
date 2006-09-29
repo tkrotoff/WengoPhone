@@ -29,7 +29,6 @@
 #include "config/ConfigManagerFileStorage.h"
 #include "network/NetworkObserver.h"
 #include "network/NetworkProxyDiscovery.h"
-#include "webservices/subscribe/WsSubscribe.h"
 
 #include "WengoPhoneBuildId.h"
 
@@ -46,7 +45,6 @@
 
 WengoPhone::WengoPhone() {
 	_startupSettingListener = new StartupSettingListener();
-	_wsSubscribe = NULL;
 	_coIpManager = NULL;
 
 	//set HttpRequest User Agent
@@ -125,9 +123,6 @@ void WengoPhone::init() {
 	//Imports the Config from WengoPhone Classic.
 	ConfigImporter importer(*_userProfileHandler);
 	importer.importConfig(config.getConfigDir());
-
-	_wsSubscribe = new WsSubscribe();
-	wsSubscribeCreatedEvent(*this, *_wsSubscribe);
 
 	//LocalNetworkAccount always created and added by default
 	/*LocalNetworkAccount * localAccount = new LocalNetworkAccount();

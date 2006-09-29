@@ -93,4 +93,5 @@ private:
 	CUserProfileHandler * _cUserProfileHandler;
 };
 
+
 #endif	//OWCWENGOPHONE_H

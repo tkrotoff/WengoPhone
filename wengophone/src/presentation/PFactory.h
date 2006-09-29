@@ -46,8 +46,6 @@ class PHistory;
 class CHistory;
 class PSoftUpdate;
 class CSoftUpdate;
-class PSubscribe;
-class CSubscribe;
 class PWsDirectory;
 class CWsDirectory;
 class PUserProfile;
@@ -109,8 +107,6 @@ public:
 	virtual PSoftUpdate * createPresentationSoftUpdate(CSoftUpdate & cSoftUpdate) = 0;
 
 	virtual PHistory * createPresentationHistory(CHistory & cHistory) = 0;
-
-	virtual PSubscribe * createPresentationSubscribe(CSubscribe & cSubscribe) = 0;
 
 	virtual PWsDirectory * createPresentationWsDirectory(CWsDirectory & cWsDirectory) = 0;
 

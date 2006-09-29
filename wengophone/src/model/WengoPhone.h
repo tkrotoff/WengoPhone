@@ -34,7 +34,6 @@ class CoIpManager;
 class ConfigImporter;
 class UserProfile;
 class UserProfileHandler;
-class WsSubscribe;
 
 /**
  * @defgroup model Model Component
@@ -71,14 +70,6 @@ public:
 	 * @param sender this class
 	 */
 	Event<void (WengoPhone & sender)> initFinishedEvent;
-
-	/**
-	 * WsSubscribe has been created.
-	 *
-	 * @param sender this class
-	 * @param wsWengoSubscribe WsWengoSubscribe created
-	 */
-	Event<void (WengoPhone & sender, WsSubscribe & wsSubscribe)> wsSubscribeCreatedEvent;
 
 	/**
 	 * Application should be closed.
@@ -157,9 +148,6 @@ private:
 	 * @see Settings::valueChangedEvent
 	 */
 	void valueChangedEventHandler(Settings & sender, const std::string & key);
-
-	/** Wengo subscribe web service. */
-	WsSubscribe * _wsSubscribe;
 
 	/**
 	 * Emergency timeout handler called when SIP unregistering

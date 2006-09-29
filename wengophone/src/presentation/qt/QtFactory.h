@@ -42,7 +42,6 @@ class PChatHandler;
 class CChatHandler;
 class PSms;
 class CSms;
-class PSubscribe;
 class CSubscribe;
 class PWsDirectory;
 class CWsDirectory;
@@ -57,7 +56,6 @@ class QtContactList;
 class QtChatHandler;
 class QtWenboxPlugin;
 class QtSms;
-class QtSubscribe;
 class QtWsDirectory;
 class QtSoftUpdate;
 class QtHistory;
@@ -98,8 +96,6 @@ public:
 
 	PSms * createPresentationSms(CSms & cSms);
 
-	PSubscribe * createPresentationSubscribe(CSubscribe & cSubscribe);
-
 	PWsDirectory * createPresentationWsDirectory(CWsDirectory & cWsDirectory);
 
 	PSoftUpdate * createPresentationSoftUpdate(CSoftUpdate & cSoftUpdate);
@@ -121,8 +117,6 @@ private:
 	QtWenboxPlugin * _qtWenboxPlugin;
 
 	QtSms * _qtSms;
-
-	QtSubscribe * _qtSubscribe;
 
 	QtWsDirectory * _qtWsDirectory;
 
