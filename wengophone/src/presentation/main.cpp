@@ -133,7 +133,7 @@ int main(int argc, char * argv[]) {
 	//CWengoPhone creates PWengoPhone (QtWengoPhone, GtkWengoPhone...)
 	//thus creating CWengoPhone at the very beginning makes the gui
 	//to be shown before everything is fully loaded
-	WengoPhone &wengoPhone = WengoPhone::getInstance();
+	WengoPhone wengoPhone;
 	CWengoPhone cWengoPhone(wengoPhone);
 	pFactory->processEvents();
 
@@ -167,7 +167,6 @@ int main(int argc, char * argv[]) {
 
 	pFactory->exec();
 
-	WengoPhone::deleteInstance();
 	OWSAFE_DELETE(sipFactory);
 	OWSAFE_DELETE(imFactory);
 

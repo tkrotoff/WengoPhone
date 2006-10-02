@@ -25,7 +25,6 @@
 #include <thread/Thread.h>
 
 #include <util/Event.h>
-#include <util/Singleton.h>
 #include <util/Trackable.h>
 
 #include <string>
@@ -60,8 +59,7 @@ class UserProfileHandler;
  * @ingroup model
  * @author Tanguy Krotoff
  */
-class WengoPhone : public Singleton<WengoPhone>, public Thread, public Trackable {
-	friend class Singleton<WengoPhone>;
+class WengoPhone : public Thread, public Trackable {
 public:
 
 	/**
@@ -80,6 +78,10 @@ public:
 	 * @param sender this class
 	 */
 	Event<void (WengoPhone & sender)> exitEvent;
+
+	WengoPhone();
+
+	virtual ~WengoPhone();
 
 	/**
 	 * Gets the UserProfileHandler.
@@ -118,10 +120,6 @@ public:
 	virtual void run();
 
 private:
-
-	WengoPhone();
-
-	virtual ~WengoPhone();
 
 	/**
 	 * @see UserProfileHandler::currentUserProfileWillDieEvent
