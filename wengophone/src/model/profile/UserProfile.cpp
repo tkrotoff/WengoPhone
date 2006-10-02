@@ -44,6 +44,7 @@
 
 #include <util/File.h>
 #include <util/Logger.h>
+#include <util/SafeDelete.h>
 #include <thread/Thread.h>
 
 #include <exception>
