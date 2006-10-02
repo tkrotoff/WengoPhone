@@ -365,3 +365,27 @@ void QtProfileDetails::advancedButtonClicked() {
 void QtProfileDetails::setWengoName(const QString & wengoName) {
 	_qtIMContactManager->setWengoName(wengoName);
 }
+
+void QtProfileDetails::setGroup(const QString & group) {
+	_ui->groupComboBox->setEditText(group);
+}
+
+void QtProfileDetails::setFirstName(const QString & firstName) {
+	_ui->firstNameLineEdit->setText(firstName);
+}
+
+void QtProfileDetails::setLastName(const QString & lastName) {
+	_ui->lastNameLineEdit->setText(lastName);
+}
+
+void QtProfileDetails::setCountry(const QString & country) {
+	_ui->countryComboBox->setEditText(country);
+}
+
+void QtProfileDetails::setCity(const QString & city) {
+	_ui->cityLineEdit->setText(city);
+}
+
+void QtProfileDetails::setState(const QString & state) {
+	_ui->stateLineEdit->setText(state);
+}

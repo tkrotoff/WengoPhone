@@ -61,6 +61,18 @@ public:
 
 	void setWengoName(const QString & wengoName);
 
+	void setGroup(const QString & group);
+
+	void setFirstName(const QString & firstName);
+
+	void setLastName(const QString & lastName);
+
+	void setCountry(const QString & country);
+
+	void setCity(const QString & city);
+
+	void setState(const QString & state);
+
 public Q_SLOTS:
 
 	void changeUserProfileAvatar();

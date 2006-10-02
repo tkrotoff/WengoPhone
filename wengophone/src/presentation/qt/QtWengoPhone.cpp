@@ -745,15 +745,7 @@ void QtWengoPhone::showAddContact(const std::string & nickname,
 	QString qState = QString::fromStdString(state);
 	QString qGroup = QString::fromStdString(group);
 
-	/*
-	typedef PostEvent8<void (QString nickname, QString sip, QString firstname,
-		QString lastname, QString country, QString city, QString state,
-		QString group), QString, QString, QString, QString, QString, QString, QString, QString> MyPostEvent;
-	MyPostEvent * event =
-		new MyPostEvent(boost::bind(&QtWengoPhone::showAddContactThreadSafe, this,
-			_1, _2, _3, _4, _5, _6, _7, _8), qNick, qSip, qFirstname, qLastname, qCountry, qCity, qState, qGroup);
-	postEvent(event);
-	*/
+	showAddContactSignal(qNick, qSip, qFirstname, qLastname, qCountry, qCity, qState, qGroup);
 }
 
 void QtWengoPhone::showAddContactThreadSafe(QString nickname, QString sip, QString firstname,
@@ -767,6 +759,12 @@ void QtWengoPhone::showAddContactThreadSafe(QString nickname, QString sip, QStri
 			contactProfile, _wengoPhoneWindow, tr("Add a Contact"));
 
 		qtProfileDetails.setWengoName(nickname);
+		qtProfileDetails.setFirstName(firstname);
+		qtProfileDetails.setLastName(lastname);
+		qtProfileDetails.setCountry(country);
+		qtProfileDetails.setCity(city);
+		qtProfileDetails.setState(state);
+		qtProfileDetails.setGroup(group);
 		if (qtProfileDetails.show()) {
 			_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCContactList().addContact(contactProfile);
 		}
