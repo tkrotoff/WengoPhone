@@ -157,6 +157,9 @@ private:
 	//buffers to free in desctructor
 	piximage * _remoteVideoFrame;
 	piximage * _localVideoFrame;
+
+	//FIXME hack in order to prevent a crash
+	bool _closed;
 };
 
 #endif	//OWQTPHONECALL_H

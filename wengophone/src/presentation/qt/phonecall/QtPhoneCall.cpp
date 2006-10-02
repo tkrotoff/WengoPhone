@@ -58,6 +58,7 @@ QtPhoneCall::QtPhoneCall(CPhoneCall & cPhoneCall)
 
 	_qtWengoPhone = (QtWengoPhone *) _cPhoneCall.getCWengoPhone().getPresentation();
 	_videoWindow = NULL;
+	_closed = false;
 
 	_remoteVideoFrame = NULL;
 	_localVideoFrame = NULL;
@@ -415,10 +416,20 @@ void QtPhoneCall::addContactActionTriggered(bool) {
 }
 
 void QtPhoneCall::openPopup(int x, int y) {
+	//FIXME hack to prevent a crash
+	if (_closed) {
+		return;
+	}
+
 	QMenu * menu = createInviteMenu();
 	if (menu) {
 		_actionInvite->setMenu(menu);
 		_popupMenu->exec(QPoint(x, y));
+
+		//FIXME hack to prevent a crash
+		if (_closed) {
+			return;
+		}
 		_actionInvite->setMenu(NULL);
 		_actionInvite->setEnabled(true);
 		OWSAFE_DELETE(menu);
@@ -528,6 +539,9 @@ void QtPhoneCall::showToaster(const QString & userName) {
 }
 
 void QtPhoneCall::close() {
+	//FIXME hack to prevent a crash
+	_closed = true;
+
 	_qtWengoPhone->getQtStatusBar().showMessage(QString::null);
 	_ui->durationLabel = NULL;
 	_callTimer->disconnect();
