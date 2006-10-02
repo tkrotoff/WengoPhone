@@ -277,7 +277,6 @@ void WsInfo::answerReceived(const std::string & answer, int id) {
 		}
 
 		//write info to the Config
-		config.set(Config::CALL_FORWARD_TOMOBILE_KEY, false);
 		config.set(Config::CALL_FORWARD_PHONENUMBER1_KEY, dest1);
 		config.set(Config::CALL_FORWARD_PHONENUMBER2_KEY, dest2);
 		config.set(Config::CALL_FORWARD_PHONENUMBER3_KEY, dest3);

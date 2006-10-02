@@ -29,7 +29,6 @@
 class CWengoPhone;
 class CUserProfile;
 class IMAccount;
-class ToolTipLineEdit;
 
 class QMenu;
 class QWidget;

@@ -8,18 +8,18 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>374</width>
-    <height>396</height>
+    <width>400</width>
+    <height>300</height>
    </rect>
   </property>
-  <layout class="QVBoxLayout" >
+  <layout class="QGridLayout" >
    <property name="margin" >
     <number>0</number>
    </property>
    <property name="spacing" >
     <number>0</number>
    </property>
-   <item>
+   <item row="0" column="0" >
     <widget class="QGroupBox" name="groupBoxSettings" >
      <property name="title" >
       <string>Call Forward Settings</string>
@@ -31,34 +31,13 @@
       <property name="spacing" >
        <number>6</number>
       </property>
-      <item row="3" column="0" >
-       <widget class="QRadioButton" name="forwardToNumberRadioButton" >
+      <item row="5" column="0" >
+       <widget class="QLabel" name="label_5" >
         <property name="text" >
-         <string>Forward all unanswered calls to following phone numbers:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="0" >
-       <widget class="QLabel" name="label" >
-        <property name="text" >
-         <string>Call forwarding is active if you're not connected to Wengo, when your line is busy or 20 seconds after you did not answer a call. You can configure up to three call forwards to landlines, mobile phones or voice mail (if applicable)</string>
+         <string>For example +3314500XXXX (+33 is the country code and 14500XXXX is the phone number)</string>
         </property>
         <property name="wordWrap" >
          <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0" >
-       <widget class="QRadioButton" name="disableRadioButton" >
-        <property name="text" >
-         <string>Disable call forwarding</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="0" >
-       <widget class="QRadioButton" name="forwardToVoiceMailRadioButton" >
-        <property name="text" >
-         <string>Forward all unanswered calls to message box</string>
         </property>
        </widget>
       </item>
@@ -70,20 +49,6 @@
         <property name="spacing" >
          <number>6</number>
         </property>
-        <item row="2" column="1" >
-         <widget class="QLineEdit" name="phoneNumber3Edit" >
-          <property name="enabled" >
-           <bool>false</bool>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1" >
-         <widget class="QLineEdit" name="phoneNumber1Edit" >
-          <property name="enabled" >
-           <bool>false</bool>
-          </property>
-         </widget>
-        </item>
         <item row="2" column="0" >
          <widget class="QLabel" name="label_2" >
           <property name="text" >
@@ -95,13 +60,6 @@
          <widget class="QLabel" name="label_3" >
           <property name="text" >
            <string>1st:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1" >
-         <widget class="QLineEdit" name="phoneNumber2Edit" >
-          <property name="enabled" >
-           <bool>false</bool>
           </property>
          </widget>
         </item>
@@ -125,47 +83,73 @@
           </property>
          </spacer>
         </item>
+        <item row="0" column="1" >
+         <widget class="ToolTipLineEdit" name="phoneNumber1Edit" >
+          <property name="enabled" >
+           <bool>false</bool>
+          </property>
+          <property name="text" >
+           <string>(+ country code) phone number</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1" >
+         <widget class="ToolTipLineEdit" name="phoneNumber2Edit" >
+          <property name="enabled" >
+           <bool>false</bool>
+          </property>
+          <property name="text" >
+           <string>(+ country code) phone number</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1" >
+         <widget class="ToolTipLineEdit" name="phoneNumber3Edit" >
+          <property name="enabled" >
+           <bool>false</bool>
+          </property>
+          <property name="text" >
+           <string>(+ country code) phone number</string>
+          </property>
+         </widget>
+        </item>
        </layout>
       </item>
-     </layout>
-    </widget>
-   </item>
-   <item>
-    <widget class="QGroupBox" name="groupBoxCellPhone" >
-     <property name="title" >
-      <string>Forward to cellphone mode</string>
-     </property>
-     <layout class="QGridLayout" >
-      <property name="margin" >
-       <number>9</number>
-      </property>
-      <property name="spacing" >
-       <number>6</number>
-      </property>
-      <item row="1" column="0" >
-       <widget class="QLabel" name="label_5" >
+      <item row="2" column="0" >
+       <widget class="QRadioButton" name="forwardToVoiceMailRadioButton" >
         <property name="text" >
-         <string>Call forwards to my mobile are billed on standard rates and needs Wengo credits. You need to fill up a mobile phone number in your profile before using call forwarding.</string>
+         <string>Forward all unanswered calls to message box</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0" >
+       <widget class="QRadioButton" name="disableRadioButton" >
+        <property name="text" >
+         <string>Disable call forwarding</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0" >
+       <widget class="QLabel" name="label" >
+        <property name="text" >
+         <string>Call forwarding is active if you're not connected to Wengo, when your line is busy or 20 seconds after you did not answer a call. You can configure up to three call forwards to landlines, mobile phones or voice mail (if applicable)</string>
         </property>
         <property name="wordWrap" >
          <bool>true</bool>
         </property>
        </widget>
       </item>
-      <item row="0" column="0" >
-       <widget class="QCheckBox" name="forwardCallMobilCheckBox" >
-        <property name="enabled" >
-         <bool>false</bool>
-        </property>
+      <item row="3" column="0" >
+       <widget class="QRadioButton" name="forwardToNumberRadioButton" >
         <property name="text" >
-         <string>Forward calls to my mobile when I choose "mobile" status</string>
+         <string>Forward all unanswered calls to following phone numbers:</string>
         </property>
        </widget>
       </item>
      </layout>
     </widget>
    </item>
-   <item>
+   <item row="1" column="0" >
     <spacer>
      <property name="orientation" >
       <enum>Qt::Vertical</enum>
@@ -181,6 +165,15 @@
   </layout>
  </widget>
  <pixmapfunction></pixmapfunction>
+ <customwidgets>
+  <customwidget>
+   <class>ToolTipLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>ToolTipLineEditProxy.h</header>
+   <container>0</container>
+   <pixmap></pixmap>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>disableRadioButton</tabstop>
   <tabstop>forwardToVoiceMailRadioButton</tabstop>
@@ -188,7 +181,6 @@
   <tabstop>phoneNumber1Edit</tabstop>
   <tabstop>phoneNumber2Edit</tabstop>
   <tabstop>phoneNumber3Edit</tabstop>
-  <tabstop>forwardCallMobilCheckBox</tabstop>
  </tabstops>
  <resources/>
  <connections>

@@ -29,13 +29,13 @@ ToolTipLineEdit::ToolTipLineEdit(QWidget * parent)
 
 	//Grey color
 	_greyPalette.setColor(QPalette::Text, Qt::gray);
+
+	_toolTipTextDone = false;
 }
 
 void ToolTipLineEdit::setText(const QString & text) {
-	static bool already = true;
-
-	if (already) {
-		already = false;
+	if (!_toolTipTextDone) {
+		_toolTipTextDone = true;
 		_toolTip = text;
 		setToolTipText();
 	} else {

@@ -61,6 +61,9 @@ private:
 
 	bool _cleared;
 
+	/** Tool tip text already set? */
+	bool _toolTipTextDone;
+
 	QString _toolTip;
 
 	QPalette _originalPalette;

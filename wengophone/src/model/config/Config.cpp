@@ -80,7 +80,6 @@ const std::string Config::CALL_FORWARD_MODE_KEY = "call.forward.mode";
 const std::string Config::CALL_FORWARD_PHONENUMBER1_KEY = "call.forward.phonenumber1";
 const std::string Config::CALL_FORWARD_PHONENUMBER2_KEY = "call.forward.phonenumber2";
 const std::string Config::CALL_FORWARD_PHONENUMBER3_KEY = "call.forward.phonenumber3";
-const std::string Config::CALL_FORWARD_TOMOBILE_KEY = "call.forward.tomobile";
 
 const std::string Config::VOICE_MAIL_ACTIVE_KEY = "voicemail.active";
 
@@ -225,7 +224,6 @@ Config::Config(const std::string & name)
 	_keyDefaultValueMap[CALL_FORWARD_PHONENUMBER1_KEY] = empty;
 	_keyDefaultValueMap[CALL_FORWARD_PHONENUMBER2_KEY] = empty;
 	_keyDefaultValueMap[CALL_FORWARD_PHONENUMBER3_KEY] = empty;
-	_keyDefaultValueMap[CALL_FORWARD_TOMOBILE_KEY] = false;
 	_keyDefaultValueMap[VOICE_MAIL_ACTIVE_KEY] = false;
 
 	_keyDefaultValueMap[GENERAL_AUTOSTART_KEY] = true;
@@ -274,7 +272,7 @@ Config::Config(const std::string & name)
 	_keyDefaultValueMap[CMDLINE_PLACECALL_KEY] = empty;
 
 	_keyDefaultValueMap[CMDSERVER_AUTHORIZED_KEY] = empty;
-	
+
 	_keyDefaultValueMap[LAST_CHAT_HISTORY_SAVE_DIR_KEY] = Path::getHomeDirPath();
 
 	_keyDefaultValueMap[FILETRANSFER_DOWNLOAD_FOLDER] = empty;
@@ -524,10 +522,6 @@ std::string Config::getCallForwardPhoneNumber2() const {
 
 std::string Config::getCallForwardPhoneNumber3() const {
 	return getStringKeyValue(CALL_FORWARD_PHONENUMBER3_KEY);
-}
-
-bool Config::getCallForwardToMobile() const {
-	return getBooleanKeyValue(CALL_FORWARD_TOMOBILE_KEY);
 }
 
 bool Config::getVoiceMailActive() const {

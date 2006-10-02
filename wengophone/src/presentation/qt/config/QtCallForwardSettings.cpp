@@ -30,6 +30,7 @@
 #include <model/config/Config.h>
 
 #include <util/Logger.h>
+#include <util/SafeDelete.h>
 
 #include <QtGui/QtGui>
 
@@ -42,13 +43,11 @@ QtCallForwardSettings::QtCallForwardSettings(CWengoPhone & cWengoPhone, QWidget 
 	_ui = new Ui::CallForwardSettings();
 	_ui->setupUi(_callForwardSettingsWidget);
 
-	_ui->groupBoxCellPhone->hide();
-
 	readConfig();
 }
 
 QtCallForwardSettings::~QtCallForwardSettings() {
-	delete _ui;
+	OWSAFE_DELETE(_ui);
 }
 
 QString QtCallForwardSettings::getName() const {
@@ -103,9 +102,6 @@ void QtCallForwardSettings::saveConfig() {
 			}
 		}
 	}
-
-	//unused for now
-	config.set(Config::CALL_FORWARD_TOMOBILE_KEY, _ui->forwardCallMobilCheckBox->isChecked());
 }
 
 void QtCallForwardSettings::readConfig() {
@@ -123,12 +119,19 @@ void QtCallForwardSettings::readConfig() {
 
 	} else if (config.getCallForwardMode() == "unauthorized") {
 		_ui->groupBoxSettings->setEnabled(false);
-		_ui->groupBoxCellPhone->setEnabled(false);
 	}
 
 	_ui->forwardToVoiceMailRadioButton->setEnabled(config.getVoiceMailActive());
-	_ui->phoneNumber1Edit->setText(QString::fromStdString(config.getCallForwardPhoneNumber1()));
-	_ui->phoneNumber2Edit->setText(QString::fromStdString(config.getCallForwardPhoneNumber2()));
-	_ui->phoneNumber3Edit->setText(QString::fromStdString(config.getCallForwardPhoneNumber3()));
-	_ui->forwardCallMobilCheckBox->setChecked(config.getCallForwardToMobile());
+	QString tmp = QString::fromStdString(config.getCallForwardPhoneNumber1());
+	if (!tmp.isEmpty()) {
+		_ui->phoneNumber1Edit->setText(tmp);
+	}
+	tmp = QString::fromStdString(config.getCallForwardPhoneNumber2());
+	if (!tmp.isEmpty()) {
+		_ui->phoneNumber2Edit->setText(tmp);
+	}
+	tmp = QString::fromStdString(config.getCallForwardPhoneNumber3());
+	if (!tmp.isEmpty()) {
+		_ui->phoneNumber3Edit->setText(tmp);
+	}
 }

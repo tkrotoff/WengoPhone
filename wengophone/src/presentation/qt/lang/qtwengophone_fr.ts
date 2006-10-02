@@ -19,11 +19,19 @@
     </message>
     <message>
         <source>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Get a new AIM Account&lt;/span&gt;</source>
-        <translation>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Créer un compte AIM&lt;/span&gt;</translation>
+        <translation type="obsolete">&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Créer un compte AIM&lt;/span&gt;</translation>
     </message>
     <message>
         <source>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Forgot your AIM password?&lt;/span&gt;</source>
-        <translation>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Vous avez oublié votre mot de passe AIM?&lt;/span&gt;</translation>
+        <translation type="obsolete">&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Vous avez oublié votre mot de passe AIM?&lt;/span&gt;</translation>
+    </message>
+    <message>
+        <source>Forgot your AIM password?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Get a new AIM Account</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -61,6 +69,41 @@ of the License, or (at your option) any later version.</translation>
     <message>
         <source>Close</source>
         <translation>Fermer</translation>
+    </message>
+</context>
+<context>
+    <name>AcceptDialog</name>
+    <message>
+        <source>File Transfer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>toto@wengo.fr</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>test.bmp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Contact: &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Filename: &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;&lt;h1&gt;Incoming file&lt;/h1&gt;&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Accept</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Cancel</source>
+        <translation type="unfinished">&amp;Annuler</translation>
     </message>
 </context>
 <context>
@@ -186,6 +229,10 @@ of the License, or (at your option) any later version.</translation>
         <source>Advanced Configuration Window</source>
         <translation>Fenêtre de configuration avancée</translation>
     </message>
+    <message>
+        <source>Warning, this part is for advanced users.&lt;br&gt;Any mistake can badly damage the software.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>AudioSettings</name>
@@ -208,6 +255,20 @@ of the License, or (at your option) any later version.</translation>
     <message>
         <source>Output device:</source>
         <translation>Ecouteur:</translation>
+    </message>
+</context>
+<context>
+    <name>AvatarFrame</name>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>AvatarWidget</name>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -249,7 +310,7 @@ vers des postes fixes, des numéros mobiles ou sur votre messagerie.</translatio
     </message>
     <message>
         <source>Forward to cellphone mode</source>
-        <translation>Transfert vers téléphone mobile</translation>
+        <translation type="obsolete">Transfert vers téléphone mobile</translation>
     </message>
     <message encoding="UTF-8">
         <source>Les transferts d&apos;appel vers mon mobile sont facturés sur la base de la grille tarifaire standard et
@@ -297,12 +358,12 @@ vers des postes fixes, des numéros mobiles ou sur votre messagerie.</translatio
     </message>
     <message>
         <source>Call forwards to my mobile are billed on standard rates and needs Wengo credits. You need to fill up a mobile phone number in your profile before using call forwarding.</source>
-        <translation>Les transferts d&apos;appel vers mon mobile sont facturés sur la base de la grille tarifaire standard et
+        <translation type="obsolete">Les transferts d&apos;appel vers mon mobile sont facturés sur la base de la grille tarifaire standard et
 nécessitent un crédit de Wengo&apos;s. L&apos;activation du transfert nécessite de renseigner un numéro mobile dans votre profil.</translation>
     </message>
     <message>
         <source>Forward calls to my mobile when I choose &quot;mobile&quot; status</source>
-        <translation>Transférer les appels vers mon mobile lorsque je sélectionne le statut &quot;mobile&quot;</translation>
+        <translation type="obsolete">Transférer les appels vers mon mobile lorsque je sélectionne le statut &quot;mobile&quot;</translation>
     </message>
     <message>
         <source>Forward all unanswered calls to following phone numbers:</source>
@@ -310,7 +371,7 @@ nécessitent un crédit de Wengo&apos;s. L&apos;activation du transfert nécessi
     </message>
     <message>
         <source>Call forwarding is active if you&apos;re not connected to Wengo, when your line is busy or 20 seconds after you did not answer a call. You can configure up to three call forwards to landlines, mobile phones or vocal box.</source>
-        <translation>Le transfert d&apos;appel est actif si vous n&apos;êtes pas connécté à Wengo, quand votre ligne est occupé ou quand vous ne répondez pas dans les 20s. Vous pouvez configurer jusqu&apos;a 3 transferts vers des lignes fixes, mobiles ou votre messagerie.</translation>
+        <translation type="obsolete">Le transfert d&apos;appel est actif si vous n&apos;êtes pas connécté à Wengo, quand votre ligne est occupé ou quand vous ne répondez pas dans les 20s. Vous pouvez configurer jusqu&apos;a 3 transferts vers des lignes fixes, mobiles ou votre messagerie.</translation>
     </message>
     <message>
         <source>3rd:</source>
@@ -323,6 +384,18 @@ nécessitent un crédit de Wengo&apos;s. L&apos;activation du transfert nécessi
     <message>
         <source>2nd:</source>
         <translation>2ème:</translation>
+    </message>
+    <message>
+        <source>For example +3314500XXXX (+33 is the country code and 14500XXXX is the phone number)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>(+ country code) phone number</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Call forwarding is active if you&apos;re not connected to Wengo, when your line is busy or 20 seconds after you did not answer a call. You can configure up to three call forwards to landlines, mobile phones or voice mail (if applicable)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -349,14 +422,88 @@ nécessitent un crédit de Wengo&apos;s. L&apos;activation du transfert nécessi
     </message>
 </context>
 <context>
+    <name>ChatContactListItem</name>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ChatMainWindow</name>
+    <message>
+        <source>MainWindow</source>
+        <translation type="unfinished">Fenêtre Principale</translation>
+    </message>
+    <message>
+        <source>&amp;Contact</source>
+        <translation type="unfinished">&amp;Contact</translation>
+    </message>
+    <message>
+        <source>&amp;Wengo</source>
+        <translation type="unfinished">&amp;Wengo</translation>
+    </message>
+    <message>
+        <source>&amp;Tools</source>
+        <translation type="unfinished">&amp;Outils</translation>
+    </message>
+    <message>
+        <source>&amp;Help</source>
+        <translation type="unfinished">&amp;Aide</translation>
+    </message>
+    <message>
+        <source>&amp;Actions</source>
+        <translation type="unfinished">&amp;Actions</translation>
+    </message>
+    <message>
+        <source>Main Toolbar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>callContact</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>sendFile</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>createChatConf</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>contactInfo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>blockContact</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Save History As...</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>ChatRoomWidget</name>
     <message>
         <source>Wengophone ChatRoom</source>
-        <translation>WengoPhone Salon de Chat</translation>
+        <translation type="obsolete">WengoPhone Salon de Chat</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="obsolete">&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -415,6 +562,10 @@ nécessitent un crédit de Wengo&apos;s. L&apos;activation du transfert nécessi
     <message>
         <source>emoticons  </source>
         <translation type="obsolete">Emoticônes</translation>
+    </message>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -617,6 +768,17 @@ nécessitent un crédit de Wengo&apos;s. L&apos;activation du transfert nécessi
     </message>
 </context>
 <context>
+    <name>CloseChatTabWidget</name>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Close active tab</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>ConferenceCallWidget</name>
     <message>
         <source>Phone number 1</source>
@@ -662,6 +824,10 @@ nécessitent un crédit de Wengo&apos;s. L&apos;activation du transfert nécessi
         <source>&lt;span style=&quot; font-size:18pt;&quot;&gt;Conference&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;Please enter two phone numbers &lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;or Wengo contact ID in order&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;to create a 3-way conference.&lt;/p&gt;</source>
         <translation>&lt;span style=&quot; font-size:18pt;&quot;&gt;Conference&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;Veuillez saisir deux numéros de téléphone &lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;ou deux pseudos Wengo afin&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;de créer une conférence.&lt;/p&gt;</translation>
     </message>
+    <message>
+        <source>...</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>ConferenceInviteWidget</name>
@@ -684,6 +850,10 @@ nécessitent un crédit de Wengo&apos;s. L&apos;activation du transfert nécessi
     <message>
         <source>Available Contacts</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;span style=&quot; font-size:18pt;&quot;&gt;Conference&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;Please enter two phone numbers &lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;or Wengo contact ID in order&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;to create a 3-way conference.&lt;/p&gt;</source>
+        <translation type="unfinished">&lt;span style=&quot; font-size:18pt;&quot;&gt;Conference&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;Veuillez saisir deux numéros de téléphone &lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;ou deux pseudos Wengo afin&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;de créer une conférence.&lt;/p&gt;</translation>
     </message>
 </context>
 <context>
@@ -809,7 +979,7 @@ nécessitent un crédit de Wengo&apos;s. L&apos;activation du transfert nécessi
     </message>
     <message>
         <source>Send SMS to group</source>
-        <translation>Envoyer un SMS aux membres du groupe</translation>
+        <translation type="obsolete">Envoyer un SMS aux membres du groupe</translation>
     </message>
     <message>
         <source>Delete group</source>
@@ -876,6 +1046,17 @@ nécessitent un crédit de Wengo&apos;s. L&apos;activation du transfert nécessi
     <message>
         <source>Block Contact</source>
         <translation type="obsolete">Bloquer le contact</translation>
+    </message>
+</context>
+<context>
+    <name>ContactWidget</name>
+    <message>
+        <source>No mobile phone number set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No landline phone number set</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -954,15 +1135,15 @@ Décriverz les circonsances du problème:</translation>
     <name>CreditWidget</name>
     <message>
         <source>&lt;u&gt;Buy call-out credits&lt;/u&gt;</source>
-        <translation>&lt;u&gt;Créditer mon compte&lt;/u&gt;</translation>
+        <translation type="obsolete">&lt;u&gt;Créditer mon compte&lt;/u&gt;</translation>
     </message>
     <message>
         <source>&lt;b&gt;Your number:&lt;/b&gt;</source>
-        <translation>&lt;b&gt;Votre numéro:&lt;/b&gt;</translation>
+        <translation type="obsolete">&lt;b&gt;Votre numéro:&lt;/b&gt;</translation>
     </message>
     <message>
         <source>&lt;b&gt;Call forward mode:&lt;/b&gt;</source>
-        <translation>&lt;b&gt;Transfert d&apos;appel:&lt;/b&gt;</translation>
+        <translation type="obsolete">&lt;b&gt;Transfert d&apos;appel:&lt;/b&gt;</translation>
     </message>
     <message>
         <source>0102030405</source>
@@ -974,7 +1155,7 @@ Décriverz les circonsances du problème:</translation>
     </message>
     <message>
         <source>Not available</source>
-        <translation>Non disponible</translation>
+        <translation type="obsolete">Non disponible</translation>
     </message>
     <message>
         <source>Click here to buy Wengo&apos;s credits</source>
@@ -986,7 +1167,31 @@ Décriverz les circonsances du problème:</translation>
     </message>
     <message>
         <source>You need to buy wengo&apos;s credits in order to use the call forward</source>
-        <translation>Vous devez recharger votre compte pour utiliser le transfert d&apos;appel</translation>
+        <translation type="obsolete">Vous devez recharger votre compte pour utiliser le transfert d&apos;appel</translation>
+    </message>
+    <message>
+        <source>Not Available</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Your phone number:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Click here to change your call forward settings</source>
+        <translation type="unfinished">Cliquez ici pour modifier le transfer d&apos;appel</translation>
+    </message>
+    <message>
+        <source>Call forward mode:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Purchase call out credits</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Call Forward Method</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1007,7 +1212,7 @@ Décriverz les circonsances du problème:</translation>
     <name>EventWidget</name>
     <message>
         <source>&lt;b&gt;New voice mail:&lt;/b&gt;</source>
-        <translation>&lt;b&gt;Messages vocaux:&lt;/b&gt;</translation>
+        <translation type="obsolete">&lt;b&gt;Messages vocaux:&lt;/b&gt;</translation>
     </message>
     <message>
         <source>0</source>
@@ -1015,7 +1220,77 @@ Décriverz les circonsances du problème:</translation>
     </message>
     <message>
         <source>&lt;b&gt;Missed call:&lt;/b&gt;</source>
-        <translation>&lt;b&gt;Appels en absence:&lt;/b&gt;</translation>
+        <translation type="obsolete">&lt;b&gt;Appels en absence:&lt;/b&gt;</translation>
+    </message>
+    <message>
+        <source>Click here to call your voice mail</source>
+        <translation type="unfinished">Cliquez ici pour appeler votre messagerie</translation>
+    </message>
+    <message>
+        <source>New Voice Mail:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Click here to see missed call(s)</source>
+        <translation type="unfinished">Cliquez ici pour voir les appels en absence</translation>
+    </message>
+    <message>
+        <source>Missed Call(s):</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>FileTransferItem</name>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>From:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished">Annuler</translation>
+    </message>
+    <message>
+        <source>Pause</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>FileTransferWidget</name>
+    <message>
+        <source>WengoPhone - File Transfer Manager</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Click here to change your download folder&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Download folder:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Download</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Upload</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Clean all items in the list&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Clean</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1172,11 +1447,38 @@ Décriverz les circonsances du problème:</translation>
     </message>
     <message>
         <source>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Get a new GoogleTalk Account&lt;/span&gt;</source>
-        <translation>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Créer un compte GoogleTalk&lt;/span&gt;</translation>
+        <translation type="obsolete">&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Créer un compte GoogleTalk&lt;/span&gt;</translation>
     </message>
     <message>
         <source>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Forgot your GoogleTalk password?&lt;/span&gt;</source>
-        <translation>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Vous avez oublié votre mot de passe GoogleTalk ?&lt;/span&gt;</translation>
+        <translation type="obsolete">&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Vous avez oublié votre mot de passe GoogleTalk ?&lt;/span&gt;</translation>
+    </message>
+    <message>
+        <source>Forgot your GoogleTalk password?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Get a new GoogleTalk Account</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>HistoryWidget</name>
+    <message>
+        <source>Type</source>
+        <translation type="unfinished">Type</translation>
+    </message>
+    <message>
+        <source>Name/ID</source>
+        <translation type="unfinished">Nom/Numéro</translation>
+    </message>
+    <message>
+        <source>Date</source>
+        <translation type="unfinished">Date</translation>
+    </message>
+    <message>
+        <source>Duration</source>
+        <translation type="unfinished">Durée</translation>
     </message>
 </context>
 <context>
@@ -1225,7 +1527,7 @@ Veuiller saisisir votre identifiant et votre mot de passe afin d&apos;utiliser l
     <name>IMAccountManager</name>
     <message>
         <source>WengoPhone - IM Accounts</source>
-        <translation>WengoPhone - Comptes de messagerie instantanée</translation>
+        <translation type="obsolete">WengoPhone - Comptes de messagerie instantanée</translation>
     </message>
     <message>
         <source>Login</source>
@@ -1257,7 +1559,11 @@ Veuiller saisisir votre identifiant et votre mot de passe afin d&apos;utiliser l
     </message>
     <message>
         <source>Instant Messaging Accounts (MSN, Jabber...)</source>
-        <translation>Comptes IM (MSN, Jabber,...)</translation>
+        <translation type="obsolete">Comptes IM (MSN, Jabber,...)</translation>
+    </message>
+    <message>
+        <source>WengoPhone - My Instant Messaging Accounts (MSN, Jabber...)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1314,7 +1620,7 @@ Veuiller saisisir votre identifiant et votre mot de passe afin d&apos;utiliser l
     </message>
     <message>
         <source>Wengo ID or other network ID (MSN, Jabber...)</source>
-        <translation>Identifiant Wengo ou identifiant d&apos;autres réseaux (MSN, Jabber,...)</translation>
+        <translation type="obsolete">Identifiant Wengo ou identifiant d&apos;autres réseaux (MSN, Jabber,...)</translation>
     </message>
     <message>
         <source>Click on the add button below to add a new ID</source>
@@ -1323,6 +1629,37 @@ Veuiller saisisir votre identifiant et votre mot de passe afin d&apos;utiliser l
     <message>
         <source>Contact Type (protocol)</source>
         <translation>Type de contact (protocole)</translation>
+    </message>
+</context>
+<context>
+    <name>IMProfileWidget</name>
+    <message>
+        <source>Edit My Profile</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>AIM/ICQ</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Yahoo!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wengo</source>
+        <translation type="unfinished">Wengo</translation>
+    </message>
+    <message>
+        <source>Jabber/GoogleTalk</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>MSN</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enter your nickname here</source>
+        <translation type="unfinished">Entrez votre pseudo ici</translation>
     </message>
 </context>
 <context>
@@ -1474,15 +1811,23 @@ Veuiller saisisir votre identifiant et votre mot de passe afin d&apos;utiliser l
     </message>
     <message>
         <source>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Click here&lt;/span&gt;</source>
-        <translation>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Cliquez-ici&lt;/span&gt;</translation>
+        <translation type="obsolete">&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Cliquez-ici&lt;/span&gt;</translation>
     </message>
     <message>
         <source>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Forgot your password?&lt;/span&gt;</source>
-        <translation>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Vous avez oublié votre mot de passe ?&lt;/span&gt;</translation>
+        <translation type="obsolete">&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Vous avez oublié votre mot de passe ?&lt;/span&gt;</translation>
     </message>
     <message>
         <source>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Need help?&lt;/span&gt;</source>
-        <translation>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Besoin d&apos;aide ?&lt;/span&gt;</translation>
+        <translation type="obsolete">&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Besoin d&apos;aide ?&lt;/span&gt;</translation>
+    </message>
+    <message>
+        <source>Forgot your password?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Need help?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1505,11 +1850,19 @@ Veuiller saisisir votre identifiant et votre mot de passe afin d&apos;utiliser l
     </message>
     <message>
         <source>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Get a new MSN Account&lt;/span&gt;</source>
-        <translation>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Créer un compte MSN&lt;/span&gt;</translation>
+        <translation type="obsolete">&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Créer un compte MSN&lt;/span&gt;</translation>
     </message>
     <message>
         <source>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Forgot your MSN password?&lt;/span&gt;</source>
-        <translation>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Vous avez oublié votre mot de passe MSN ?&lt;/span&gt;</translation>
+        <translation type="obsolete">&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Vous avez oublié votre mot de passe MSN ?&lt;/span&gt;</translation>
+    </message>
+    <message>
+        <source>Forgot your MSN password?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Get a new MSN Account</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1723,7 +2076,7 @@ Veuiller saisisir votre identifiant et votre mot de passe afin d&apos;utiliser l
     </message>
     <message>
         <source>Web / blog:</source>
-        <translation>Web / Blog:</translation>
+        <translation type="obsolete">Web / Blog:</translation>
     </message>
     <message>
         <source>Phone Numbers</source>
@@ -1731,7 +2084,7 @@ Veuiller saisisir votre identifiant et votre mot de passe afin d&apos;utiliser l
     </message>
     <message>
         <source>Work phone</source>
-        <translation>Téléphone Bureau</translation>
+        <translation type="obsolete">Téléphone Bureau</translation>
     </message>
     <message>
         <source>Mobile phone</source>
@@ -1751,7 +2104,7 @@ Veuiller saisisir votre identifiant et votre mot de passe afin d&apos;utiliser l
     </message>
     <message>
         <source>General Details</source>
-        <translation>Identité</translation>
+        <translation type="obsolete">Identité</translation>
     </message>
     <message>
         <source>Birth Date:</source>
@@ -1779,7 +2132,7 @@ Veuiller saisisir votre identifiant et votre mot de passe afin d&apos;utiliser l
     </message>
     <message>
         <source>Country / Region:</source>
-        <translation>Pays:</translation>
+        <translation type="obsolete">Pays:</translation>
     </message>
     <message>
         <source>Unknown</source>
@@ -1795,7 +2148,7 @@ Veuiller saisisir votre identifiant et votre mot de passe afin d&apos;utiliser l
     </message>
     <message>
         <source>Wengo phone</source>
-        <translation>Téléphone Wengo</translation>
+        <translation type="obsolete">Téléphone Wengo</translation>
     </message>
     <message>
         <source>Home phone</source>
@@ -1808,6 +2161,42 @@ Veuiller saisisir votre identifiant et votre mot de passe afin d&apos;utiliser l
     <message>
         <source>Last Name:</source>
         <translation>Nom:</translation>
+    </message>
+    <message>
+        <source>General</source>
+        <translation type="unfinished">Général</translation>
+    </message>
+    <message>
+        <source>Network IDs (MSN, Jabber...)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Advanced &gt;&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fill in all your network Id to stay connected with your contacts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Contact</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Details</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Web/blog:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Country:</source>
+        <translation type="unfinished">Pays:</translation>
+    </message>
+    <message>
+        <source>Notes</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1852,6 +2241,10 @@ Veuiller saisisir votre identifiant et votre mot de passe afin d&apos;utiliser l
         <source>Enter a phone number, a Wengo nickname or a SIP address</source>
         <translation type="obsolete">Entrez un numéro ou un pseudo Wengo</translation>
     </message>
+    <message>
+        <source>+(country code) number or nickname</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QtCallForwardSettings</name>
@@ -1872,157 +2265,225 @@ Veuiller saisisir votre identifiant et votre mot de passe afin d&apos;utiliser l
     </message>
 </context>
 <context>
+    <name>QtChatHistoryWidget</name>
+    <message>
+        <source>&amp;Save As...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save conversation to html</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Save As</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QtChatTabWidget</name>
+    <message>
+        <source>Close chat</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>QtChatWidget</name>
     <message>
         <source>Chat with: </source>
-        <translation>Chat avec : </translation>
+        <translation type="obsolete">Chat avec : </translation>
     </message>
     <message>
         <source> is typing</source>
-        <translation> est en train d&apos;écrire un message</translation>
+        <translation type="obsolete"> est en train d&apos;écrire un message</translation>
     </message>
     <message>
         <source>emoticons  </source>
-        <translation>Emoticônes</translation>
+        <translation type="obsolete">Emoticônes</translation>
     </message>
     <message>
         <source>    fonts</source>
-        <translation>    Police</translation>
+        <translation type="obsolete">    Police</translation>
     </message>
     <message>
         <source>send</source>
         <translation>envoyer</translation>
+    </message>
+    <message>
+        <source> has joined the chat</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> has left the chat</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>QtChatWindow</name>
     <message>
         <source>close chat</source>
-        <translation>Clore le chat</translation>
+        <translation type="obsolete">Clore le chat</translation>
     </message>
     <message>
         <source>   invite</source>
-        <translation>   Inviter</translation>
+        <translation type="obsolete">   Inviter</translation>
     </message>
     <message>
         <source>View my &amp;Wengo Account</source>
-        <translation>Consulter mon &amp;espace perso</translation>
+        <translation type="obsolete">Consulter mon &amp;espace perso</translation>
     </message>
     <message>
         <source>Edit my &amp;Profile</source>
-        <translation>Editer mon &amp;Profil</translation>
+        <translation type="obsolete">Editer mon &amp;Profil</translation>
     </message>
     <message>
         <source>&amp;Learn more about Wengo Services</source>
-        <translation>&amp;Découvrez les services que vous offre Wengo</translation>
+        <translation type="obsolete">&amp;Découvrez les services que vous offre Wengo</translation>
     </message>
     <message>
         <source>&amp;Open Another Wengo Account</source>
-        <translation>&amp;Créer un nouveau compte Wengo</translation>
+        <translation type="obsolete">&amp;Créer un nouveau compte Wengo</translation>
     </message>
     <message>
         <source>&amp;Close</source>
-        <translation>&amp;Fermer</translation>
+        <translation type="obsolete">&amp;Fermer</translation>
     </message>
     <message>
         <source>&amp;Contacts</source>
-        <translation>&amp;Contacts</translation>
+        <translation type="obsolete">&amp;Contacts</translation>
     </message>
     <message>
         <source>Add contact</source>
-        <translation>Ajouter un contact</translation>
+        <translation type="obsolete">Ajouter un contact</translation>
     </message>
     <message>
         <source>Search for Wengo users</source>
-        <translation>Rechercher un contact Wengo</translation>
+        <translation type="obsolete">Rechercher un contact Wengo</translation>
     </message>
     <message>
         <source>Show contact groups</source>
-        <translation>Afficher les groupes des contacts</translation>
+        <translation type="obsolete">Afficher les groupes des contacts</translation>
     </message>
     <message>
         <source>Show / hide contacts offline</source>
-        <translation>Afficher / Cacher les contacts déconnectés</translation>
+        <translation type="obsolete">Afficher / Cacher les contacts déconnectés</translation>
     </message>
     <message>
         <source>&amp;Actions</source>
-        <translation>&amp;Actions</translation>
+        <translation type="obsolete">&amp;Actions</translation>
     </message>
     <message>
         <source>Send a short text message (SMS)</source>
-        <translation>Envoyer un SMS</translation>
+        <translation type="obsolete">Envoyer un SMS</translation>
     </message>
     <message>
         <source>Create a conference call</source>
-        <translation>Créer une conférence</translation>
+        <translation type="obsolete">Créer une conférence</translation>
     </message>
     <message>
         <source>Accept</source>
-        <translation>Décrocher</translation>
+        <translation type="obsolete">Décrocher</translation>
     </message>
     <message>
         <source>Hangup</source>
-        <translation>Raccrocher</translation>
+        <translation type="obsolete">Raccrocher</translation>
     </message>
     <message>
         <source>Hold / Resume</source>
-        <translation>Mettre en attente / Reprendre</translation>
+        <translation type="obsolete">Mettre en attente / Reprendre</translation>
     </message>
     <message>
         <source>&amp;Tools</source>
-        <translation>&amp;Outils</translation>
+        <translation type="obsolete">&amp;Outils</translation>
     </message>
     <message>
         <source>Instant Messaging Accounts</source>
-        <translation>Chatter avec les autres Messengers</translation>
+        <translation type="obsolete">Chatter avec les autres Messengers</translation>
     </message>
     <message>
         <source>Configuration</source>
-        <translation>Panneau de Configuration</translation>
+        <translation type="obsolete">Panneau de Configuration</translation>
     </message>
     <message>
         <source>Clear History</source>
-        <translation>Effacer l&apos;historique</translation>
+        <translation type="obsolete">Effacer l&apos;historique</translation>
     </message>
     <message>
         <source>Outgoing Calls</source>
-        <translation>Appels sortants</translation>
+        <translation type="obsolete">Appels sortants</translation>
     </message>
     <message>
         <source>Incoming Calls</source>
-        <translation>Appels entrants</translation>
+        <translation type="obsolete">Appels entrants</translation>
     </message>
     <message>
         <source>Missed Calls</source>
-        <translation>Appels en absence</translation>
+        <translation type="obsolete">Appels en absence</translation>
     </message>
     <message>
         <source>Chat sessions</source>
-        <translation>Session de chat</translation>
+        <translation type="obsolete">Session de chat</translation>
     </message>
     <message>
         <source>Short text message (SMS)</source>
-        <translation>Envoyer un SMS</translation>
+        <translation type="obsolete">Envoyer un SMS</translation>
     </message>
     <message>
         <source>All</source>
-        <translation>Tous</translation>
+        <translation type="obsolete">Tous</translation>
     </message>
     <message>
         <source>&amp;Forum</source>
-        <translation>Accédez à notre &amp;Forum</translation>
+        <translation type="obsolete">Accédez à notre &amp;Forum</translation>
     </message>
     <message>
         <source>&amp;Wiki / Faq</source>
-        <translation>Consultez notre &amp;Wiki / Faq</translation>
+        <translation type="obsolete">Consultez notre &amp;Wiki / Faq</translation>
     </message>
     <message>
         <source>&amp;About</source>
-        <translation>&amp;A propos de Wengo</translation>
+        <translation type="obsolete">&amp;A propos de Wengo</translation>
     </message>
     <message>
         <source>New chat session</source>
         <translation type="obsolete">Nouvelle session de chat</translation>
+    </message>
+    <message>
+        <source>Edit Contact</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> is typing</source>
+        <translation type="unfinished"> est en train d&apos;écrire un message</translation>
+    </message>
+    <message>
+        <source> has not been transmitted!</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QtConferenceCallWidget</name>
+    <message>
+        <source>Call SIP</source>
+        <translation type="unfinished">Appeler une adresse SIP</translation>
+    </message>
+    <message>
+        <source>Call land line</source>
+        <translation type="unfinished">Appeler une ligne fixe</translation>
+    </message>
+    <message>
+        <source>Call Mobile</source>
+        <translation type="unfinished">Appeler un Mobile</translation>
+    </message>
+</context>
+<context>
+    <name>QtConfigPanel</name>
+    <message>
+        <source>Input: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Output: </source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2110,6 +2571,10 @@ Veuiller saisisir votre identifiant et votre mot de passe afin d&apos;utiliser l
         <source>Do you really want to delete this contact?</source>
         <translation>Voulez vous vraiment supprimer ce contact?</translation>
     </message>
+    <message>
+        <source>Edit Contact</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QtContactTreeMouseFilter</name>
@@ -2128,6 +2593,33 @@ Veuiller saisisir votre identifiant et votre mot de passe afin d&apos;utiliser l
     <message>
         <source>&amp;No</source>
         <translation type="obsolete">&amp;Non</translation>
+    </message>
+</context>
+<context>
+    <name>QtContactWidget</name>
+    <message>
+        <source>Click here to call</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Click here to set a phone number</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Click here to edit the contact</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Click here to send a SMS</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Click here to start a chat</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Click here to start a free call</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2154,18 +2646,18 @@ Veuiller saisisir votre identifiant et votre mot de passe afin d&apos;utiliser l
     </message>
     <message>
         <source>Click here to change your call forward settings</source>
-        <translation>Cliquez ici pour modifier le transfer d&apos;appel</translation>
+        <translation type="obsolete">Cliquez ici pour modifier le transfer d&apos;appel</translation>
     </message>
 </context>
 <context>
     <name>QtEventWidget</name>
     <message>
         <source>Click here to call your voice mail</source>
-        <translation>Cliquez ici pour appeler votre messagerie</translation>
+        <translation type="obsolete">Cliquez ici pour appeler votre messagerie</translation>
     </message>
     <message>
         <source>Click here to see missed call(s)</source>
-        <translation>Cliquez ici pour voir les appels en absence</translation>
+        <translation type="obsolete">Cliquez ici pour voir les appels en absence</translation>
     </message>
     <message>
         <source>Replay call</source>
@@ -2185,6 +2677,100 @@ Veuiller saisisir votre identifiant et votre mot de passe afin d&apos;utiliser l
     </message>
 </context>
 <context>
+    <name>QtFileTransfer</name>
+    <message>
+        <source>Choose a directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Overwrite File?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>A file called %1 already exists.Do you want to overwrite it?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Yes</source>
+        <translation type="unfinished">&amp;Oui</translation>
+    </message>
+    <message>
+        <source>&amp;No</source>
+        <translation type="unfinished">&amp;Non</translation>
+    </message>
+</context>
+<context>
+    <name>QtFileTransferItem</name>
+    <message>
+        <source>Starting</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>From: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>To: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove</source>
+        <translation type="unfinished">Enlever</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished">Annuler</translation>
+    </message>
+    <message>
+        <source>Resume</source>
+        <translation type="unfinished">Reprendre</translation>
+    </message>
+    <message>
+        <source>Pause</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Waiting for anwser...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Done</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Paused</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Paused by peer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cancelled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cancelled by peer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Downloading...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Uploading...</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>QtGeneralSettings</name>
     <message>
         <source>General</source>
@@ -2195,7 +2781,7 @@ Veuiller saisisir votre identifiant et votre mot de passe afin d&apos;utiliser l
     <name>QtHistory</name>
     <message>
         <source>Replay call</source>
-        <translation>Rappeler</translation>
+        <translation type="obsolete">Rappeler</translation>
     </message>
     <message>
         <source>Do you want to call %1?</source>
@@ -2217,24 +2803,32 @@ Veuiller saisisir votre identifiant et votre mot de passe afin d&apos;utiliser l
         <source>Outgoing SMS</source>
         <translation>SMS</translation>
     </message>
+    <message>
+        <source>Missed call</source>
+        <translation type="unfinished">Appel en absence</translation>
+    </message>
+    <message>
+        <source>WengoPhone - Call History</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QtHistoryWidget</name>
     <message>
         <source>Type</source>
-        <translation>Type</translation>
+        <translation type="obsolete">Type</translation>
     </message>
     <message>
         <source>Name/ID</source>
-        <translation>Nom/Numéro</translation>
+        <translation type="obsolete">Nom/Numéro</translation>
     </message>
     <message>
         <source>Date</source>
-        <translation>Date</translation>
+        <translation type="obsolete">Date</translation>
     </message>
     <message>
         <source>Duration</source>
-        <translation>Durée</translation>
+        <translation type="obsolete">Durée</translation>
     </message>
     <message>
         <source>Outgoing SMS</source>
@@ -2262,15 +2856,55 @@ Veuiller saisisir votre identifiant et votre mot de passe afin d&apos;utiliser l
     </message>
     <message>
         <source>Erase entry</source>
-        <translation>Supprimer cet appel</translation>
+        <translation type="obsolete">Supprimer cet appel</translation>
     </message>
     <message>
         <source>Replay entry</source>
-        <translation>Rappeler</translation>
+        <translation type="obsolete">Rappeler</translation>
     </message>
     <message>
         <source>SMS</source>
         <translation>SMS</translation>
+    </message>
+    <message>
+        <source>Rejected call</source>
+        <translation type="unfinished">Appel en absence</translation>
+    </message>
+    <message>
+        <source>Erase this entry</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open in SMS window</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Call this peer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clear Outgoing Calls</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clear Incoming Calls</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clear Missed Calls</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clear Rejected Calls</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clear SMS</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clear All</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2288,6 +2922,13 @@ Veuiller saisisir votre identifiant et votre mot de passe afin d&apos;utiliser l
     <message>
         <source>Cancel</source>
         <translation>Annuler</translation>
+    </message>
+</context>
+<context>
+    <name>QtIMAccountPlugin</name>
+    <message>
+        <source>Please enter a login</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2310,31 +2951,38 @@ Veuiller saisisir votre identifiant et votre mot de passe afin d&apos;utiliser l
     <name>QtIMMenu</name>
     <message>
         <source>Online</source>
-        <translation>Connecté</translation>
+        <translation type="obsolete">Connecté</translation>
     </message>
     <message>
         <source>Do Not Disturb</source>
-        <translation>Ne pas déranger</translation>
+        <translation type="obsolete">Ne pas déranger</translation>
     </message>
     <message>
         <source>Invisible</source>
-        <translation>Invisible</translation>
+        <translation type="obsolete">Invisible</translation>
     </message>
     <message>
         <source>Away</source>
-        <translation>Absent</translation>
+        <translation type="obsolete">Absent</translation>
     </message>
     <message>
         <source>Forward</source>
-        <translation>Transfert</translation>
+        <translation type="obsolete">Transfert</translation>
     </message>
     <message>
         <source>Disconnect</source>
-        <translation>Déconnecter</translation>
+        <translation type="obsolete">Déconnecter</translation>
     </message>
     <message>
         <source>Connect</source>
-        <translation>Connecter</translation>
+        <translation type="obsolete">Connecter</translation>
+    </message>
+</context>
+<context>
+    <name>QtIMProfileWidget</name>
+    <message>
+        <source>Edit My Profile</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2363,7 +3011,7 @@ Veuiller saisisir votre identifiant et votre mot de passe afin d&apos;utiliser l
     <name>QtNickNameWidget</name>
     <message>
         <source>Enter your nickname here</source>
-        <translation>Entrez votre pseudo ici</translation>
+        <translation type="obsolete">Entrez votre pseudo ici</translation>
     </message>
 </context>
 <context>
@@ -2433,7 +3081,7 @@ Veuiller saisisir votre identifiant et votre mot de passe afin d&apos;utiliser l
     </message>
     <message>
         <source>Stop video</source>
-        <translation>Désactiver la vidéo</translation>
+        <translation type="obsolete">Désactiver la vidéo</translation>
     </message>
     <message>
         <source>Add contact</source>
@@ -2441,7 +3089,7 @@ Veuiller saisisir votre identifiant et votre mot de passe afin d&apos;utiliser l
     </message>
     <message>
         <source>Block contact</source>
-        <translation>Bloquer un contact</translation>
+        <translation type="obsolete">Bloquer un contact</translation>
     </message>
     <message>
         <source>Error</source>
@@ -2477,7 +3125,7 @@ Veuiller saisisir votre identifiant et votre mot de passe afin d&apos;utiliser l
     </message>
     <message>
         <source>Start video</source>
-        <translation>Activer la vidéo</translation>
+        <translation type="obsolete">Activer la vidéo</translation>
     </message>
     <message>
         <source>is calling you</source>
@@ -2525,19 +3173,19 @@ Veuillez patientez...</translation>
     <name>QtProfileBar</name>
     <message>
         <source>Online</source>
-        <translation>En ligne</translation>
+        <translation type="obsolete">En ligne</translation>
     </message>
     <message>
         <source>Invisible</source>
-        <translation>Invisible</translation>
+        <translation type="obsolete">Invisible</translation>
     </message>
     <message>
         <source>Away</source>
-        <translation>Absent</translation>
+        <translation type="obsolete">Absent</translation>
     </message>
     <message>
         <source>Do Not Disturb</source>
-        <translation>Ne pas déranger</translation>
+        <translation type="obsolete">Ne pas déranger</translation>
     </message>
     <message>
         <source>active</source>
@@ -2561,18 +3209,22 @@ Veuillez patientez...</translation>
     </message>
     <message>
         <source>events</source>
-        <translation>Evénements</translation>
+        <translation type="obsolete">Evénements</translation>
+    </message>
+    <message>
+        <source>Click here to change your status</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>QtProfileDetails</name>
     <message>
         <source>WengoPhone - Contact details</source>
-        <translation>WengoPhone - Identité</translation>
+        <translation type="obsolete">WengoPhone - Identité</translation>
     </message>
     <message>
         <source>WengoPhone - My profile details</source>
-        <translation>Wengophone - Détails de mon profil</translation>
+        <translation type="obsolete">Wengophone - Détails de mon profil</translation>
     </message>
     <message>
         <source>Choose an avatar</source>
@@ -2584,7 +3236,7 @@ Veuillez patientez...</translation>
     </message>
     <message>
         <source>WengoPhone -- No group selected</source>
-        <translation>Wengophone -- Aucun groupe sélectionné</translation>
+        <translation type="obsolete">Wengophone -- Aucun groupe sélectionné</translation>
     </message>
     <message>
         <source>A contact must have a group. Please set a group.</source>
@@ -2593,6 +3245,22 @@ Veuillez patientez...</translation>
     <message>
         <source>A contact must have a group, please set a group.</source>
         <translation>Un contact doit être placé dans un groupe, veuillez sélectionnez un groupe pour votre contact.</translation>
+    </message>
+    <message>
+        <source>WengoPhone</source>
+        <translation type="unfinished">WengoPhone</translation>
+    </message>
+    <message>
+        <source>WengoPhone - No Group Selected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;&lt; Simple</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Advanced &gt;&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2610,7 +3278,7 @@ Veuillez patientez...</translation>
     <name>QtSimpleAddIMContact</name>
     <message>
         <source>WengoPhone - Bad account</source>
-        <translation>WengoPhone - Mauvais login</translation>
+        <translation type="obsolete">WengoPhone - Mauvais login</translation>
     </message>
     <message>
         <source>Yout are not logged to this network
@@ -2620,16 +3288,16 @@ Utilisez le menu Outils -&gt; Comptes de messagerie pour vous connecter à ce r�
     </message>
     <message>
         <source>WengoPhone -- No group selected</source>
-        <translation>Wengophone -- Aucun groupe sélectionné</translation>
+        <translation type="obsolete">Wengophone -- Aucun groupe sélectionné</translation>
     </message>
     <message>
         <source>A contact must have a group, please set a group.</source>
-        <translation>Un contact doit être placé dans un groupe, veuillez sélectionnez un groupe pour votre contact.</translation>
+        <translation type="obsolete">Un contact doit être placé dans un groupe, veuillez sélectionnez un groupe pour votre contact.</translation>
     </message>
     <message>
         <source>You are not logged to this network
 Use &quot;the Tools / IM accounts&quot; menu to login to this network</source>
-        <translation>Vous n&apos;êtes pas connecté à ce réseau
+        <translation type="obsolete">Vous n&apos;êtes pas connecté à ce réseau
 Allez dans Outils -&gt; Comptes de messagerie pour saisir un compte utilisant ce réseau</translation>
     </message>
 </context>
@@ -2659,9 +3327,27 @@ N&apos;oubliez pas d&apos;ajouter votre signature.</translation>
         <source>Your message is too long.
 The length can not exceed 156 characters.
 Don&apos;t forget to add your signature length.</source>
-        <translation>Votre message est trop long.
+        <translation type="obsolete">Votre message est trop long.
 La longueur ne doit pas dépasser 156 cractères
 N&apos;oubliez pas de préciser votre signature.</translation>
+    </message>
+    <message>
+        <source>Please fill in a phone number.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Your message is too long.
+This will send </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> SMS.
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Do you want to continue?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2679,11 +3365,11 @@ N&apos;oubliez pas de préciser votre signature.</translation>
     <name>QtStatusBar</name>
     <message>
         <source>Not Connected</source>
-        <translation>Déconnecté</translation>
+        <translation type="obsolete">Déconnecté</translation>
     </message>
     <message>
         <source>Audio Configuration Error</source>
-        <translation>Erreur de configuration audio</translation>
+        <translation type="obsolete">Erreur de configuration audio</translation>
     </message>
     <message>
         <source>Audio Configuration OK</source>
@@ -2821,6 +3507,17 @@ N&apos;oubliez pas de préciser votre signature.</translation>
     </message>
 </context>
 <context>
+    <name>QtToolBar</name>
+    <message>
+        <source>Edit My Profile</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add a Contact</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>QtTreeViewDelegate</name>
     <message>
         <source>Contacts list</source>
@@ -2882,7 +3579,7 @@ N&apos;oubliez pas de préciser votre signature.</translation>
     <name>QtUserProfile</name>
     <message>
         <source>WengoPhone - Authorization request</source>
-        <translation>WengoPhone - Autorisation obligatoire</translation>
+        <translation type="obsolete">WengoPhone - Autorisation obligatoire</translation>
     </message>
     <message>
         <source>&amp;Authorize</source>
@@ -2891,6 +3588,14 @@ N&apos;oubliez pas de préciser votre signature.</translation>
     <message>
         <source>&amp;Block</source>
         <translation>&amp;Bloquer</translation>
+    </message>
+    <message>
+        <source>WengoPhone - Authorization Request</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Edit Contact</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2902,6 +3607,29 @@ N&apos;oubliez pas de préciser votre signature.</translation>
     <message>
         <source>WengoPhone - Importing contacts and IM accounts</source>
         <translation>WengoPhone - Importation des contacts et des comptes IM</translation>
+    </message>
+</context>
+<context>
+    <name>QtUserProfilePresenceMenu</name>
+    <message>
+        <source>Online</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Away</source>
+        <translation type="unfinished">Absent</translation>
+    </message>
+    <message>
+        <source>Do Not Disturb</source>
+        <translation type="unfinished">Ne pas déranger</translation>
+    </message>
+    <message>
+        <source>Invisible</source>
+        <translation type="unfinished">Invisible</translation>
+    </message>
+    <message>
+        <source>Offline (Disconnect)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2940,6 +3668,13 @@ N&apos;oubliez pas de préciser votre signature.</translation>
     <message>
         <source>Normale</source>
         <translation type="unfinished">Normale</translation>
+    </message>
+</context>
+<context>
+    <name>QtWebDirectory</name>
+    <message>
+        <source>Directory</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3021,19 +3756,19 @@ N&apos;oubliez pas de préciser votre signature.</translation>
     </message>
     <message>
         <source>Online</source>
-        <translation>En ligne</translation>
+        <translation type="obsolete">En ligne</translation>
     </message>
     <message>
         <source>DND</source>
-        <translation>Ne pas déranger</translation>
+        <translation type="obsolete">Ne pas déranger</translation>
     </message>
     <message>
         <source>Invisible</source>
-        <translation>Invisible</translation>
+        <translation type="obsolete">Invisible</translation>
     </message>
     <message>
         <source>Away</source>
-        <translation>Absent</translation>
+        <translation type="obsolete">Absent</translation>
     </message>
     <message>
         <source>Home</source>
@@ -3057,7 +3792,7 @@ N&apos;oubliez pas de préciser votre signature.</translation>
     </message>
     <message>
         <source>Status</source>
-        <translation>Statut</translation>
+        <translation type="obsolete">Statut</translation>
     </message>
     <message>
         <source>Send SMS</source>
@@ -3081,11 +3816,19 @@ N&apos;oubliez pas de préciser votre signature.</translation>
     </message>
     <message>
         <source>WengoPhone - Make call error</source>
-        <translation>WengoPhone - Erreur d&apos;appel</translation>
+        <translation type="obsolete">WengoPhone - Erreur d&apos;appel</translation>
     </message>
     <message>
         <source>Please hold all the phone calls before to place a new one</source>
         <translation>Veuillez mettre votre correspondant en attente avant de lancer un nouvel appel</translation>
+    </message>
+    <message>
+        <source>WengoPhone - Call Error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add a Contact</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3097,6 +3840,10 @@ N&apos;oubliez pas de préciser votre signature.</translation>
     <message>
         <source>No contact match your query</source>
         <translation>Aucun contact ne correspond à vos critères</translation>
+    </message>
+    <message>
+        <source>Add a Contact</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3126,7 +3873,7 @@ N&apos;oubliez pas de préciser votre signature.</translation>
     <name>RenameGroupDialog</name>
     <message>
         <source>Rename group</source>
-        <translation>Renommer le groupe</translation>
+        <translation type="obsolete">Renommer le groupe</translation>
     </message>
     <message>
         <source>OK</source>
@@ -3143,6 +3890,10 @@ N&apos;oubliez pas de préciser votre signature.</translation>
     <message>
         <source>Enter the new group name:</source>
         <translation>Saisissez le nouveau nom de groupe :</translation>
+    </message>
+    <message>
+        <source>WengoPhone - Rename Contact Group</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3169,7 +3920,7 @@ N&apos;oubliez pas de préciser votre signature.</translation>
     </message>
     <message>
         <source>Advanced</source>
-        <translation>Avancé</translation>
+        <translation type="obsolete">Avancé</translation>
     </message>
     <message>
         <source>OK</source>
@@ -3177,11 +3928,11 @@ N&apos;oubliez pas de préciser votre signature.</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Annuler</translation>
+        <translation type="obsolete">Annuler</translation>
     </message>
     <message>
         <source>Add</source>
-        <translation>Ajouter</translation>
+        <translation type="obsolete">Ajouter</translation>
     </message>
     <message>
         <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Add a contact&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;With Wengo you can chat with your contacts watever&lt;br&gt;their IM (&lt;b&gt;MSN&lt;/b&gt;, &lt;b&gt;Yahoo!&lt;/b&gt;, &lt;b&gt;AIM&lt;/b&gt;, &lt;b&gt;Google talk&lt;/b&gt; etc.).&lt;br&gt;Use the &quot;Tools / IM accounts&quot; menu to login to those&lt;br&gt;networks&lt;/span&gt;</source>
@@ -3189,7 +3940,7 @@ N&apos;oubliez pas de préciser votre signature.</translation>
     </message>
     <message>
         <source>Group:</source>
-        <translation>Groupe:</translation>
+        <translation type="obsolete">Groupe:</translation>
     </message>
     <message>
         <source>Contact type:</source>
@@ -3197,15 +3948,15 @@ N&apos;oubliez pas de préciser votre signature.</translation>
     </message>
     <message>
         <source>First Name (optional):</source>
-        <translation>Prénom (facultatif):</translation>
+        <translation type="obsolete">Prénom (facultatif):</translation>
     </message>
     <message>
         <source>Contact ID:</source>
-        <translation>Identifiant:</translation>
+        <translation type="obsolete">Identifiant:</translation>
     </message>
     <message>
         <source>Contact Type (protocol):</source>
-        <translation>Type de contact (IM):</translation>
+        <translation type="obsolete">Type de contact (IM):</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Lucida Grande; font-size:13pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:18pt;&quot;&gt;Add a contact&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;You can chat with your contacts&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;whatever their IM&lt;br /&gt;(&lt;span style=&quot; font-weight:600;&quot;&gt;MSN&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;Yahoo!&lt;/span&gt;, &lt;span style=&quot; font-weight:600;&quot;&gt;AIM&lt;/span&gt;,&lt;span style=&quot; font-weight:600;&quot;&gt;Google talk&lt;/span&gt; etc.).&lt;br /&gt;Use the &quot;Tools / IM accounts&quot; menu&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;to login to those networks.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
@@ -3213,11 +3964,77 @@ N&apos;oubliez pas de préciser votre signature.</translation>
     </message>
     <message>
         <source>WengoPhone - Add a Contact</source>
-        <translation>WengoPhone - Ajouter un contact</translation>
+        <translation type="obsolete">WengoPhone - Ajouter un contact</translation>
     </message>
     <message>
         <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Add a contact&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;You can chat with your contacts&lt;br&gt; whatever their IM (&lt;b&gt;MSN&lt;/b&gt;, &lt;b&gt;Yahoo!&lt;/b&gt;, etc.).&lt;br&gt;Use the &quot;Tools / IM accounts&quot; menu&lt;br&gt;to login to those networks&lt;/span&gt;</source>
-        <translation>&lt;span style=&quot;font-size:18pt;&quot;&gt;Ajouter un contact&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;Vous pouvez chatter avec vos contacts&lt;br&gt; quel que soit leur Messenger (&lt;b&gt;MSN&lt;/b&gt;, &lt;b&gt;Yahoo!&lt;/b&gt;, etc.).&lt;br&gt;Utilisez le menu &quot;Outils&quot; -&gt; &quot;Comptes de messagerie &lt;br&gt;instantanée&quot;pour vous connecter à ces réseaux &lt;/span&gt;</translation>
+        <translation type="obsolete">&lt;span style=&quot;font-size:18pt;&quot;&gt;Ajouter un contact&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;Vous pouvez chatter avec vos contacts&lt;br&gt; quel que soit leur Messenger (&lt;b&gt;MSN&lt;/b&gt;, &lt;b&gt;Yahoo!&lt;/b&gt;, etc.).&lt;br&gt;Utilisez le menu &quot;Outils&quot; -&gt; &quot;Comptes de messagerie &lt;br&gt;instantanée&quot;pour vous connecter à ces réseaux &lt;/span&gt;</translation>
+    </message>
+</context>
+<context>
+    <name>SimpleIMAccountManager</name>
+    <message>
+        <source>Password:</source>
+        <translation type="unfinished">Mot de passe:</translation>
+    </message>
+    <message>
+        <source>Login:</source>
+        <translation type="unfinished">Identifiant:</translation>
+    </message>
+    <message>
+        <source>Wengo</source>
+        <translation type="unfinished">Wengo</translation>
+    </message>
+    <message>
+        <source>MSN</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>AIM/ICQ</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Yahoo!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Jabber</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>GoogleTalk</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>SimpleIMContactManager</name>
+    <message>
+        <source>Update your profile</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Jabber/GoogleTalk ID:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Search</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wengo ID:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>MSN ID:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>AIM/ICQ ID:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Yahoo! ID:</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3240,7 +4057,23 @@ N&apos;oubliez pas de préciser votre signature.</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation type="obsolete">&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <source>Click here to add a phone number</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>0 /160</source>
+        <translation type="unfinished">0 /160</translation>
+    </message>
+    <message>
+        <source>Enter your signature here</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enter the phone number here</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3270,6 +4103,17 @@ Version:<byte value="x9"/>%1
 URL:<byte value="x9"/>%2
 Taille:<byte value="x9"/>%3 (MB)
 Vitesse:<byte value="x9"/>%4 (kB/s)</translation>
+    </message>
+</context>
+<context>
+    <name>StatusBarWidget</name>
+    <message>
+        <source>Audio Configuration Error</source>
+        <translation type="unfinished">Erreur de configuration audio</translation>
+    </message>
+    <message>
+        <source>Not Connected</source>
+        <translation type="unfinished">Déconnecté</translation>
     </message>
 </context>
 <context>
@@ -3358,6 +4202,13 @@ Vitesse:<byte value="x9"/>%4 (kB/s)</translation>
 </source>
         <translation>&lt;span style=&quot;font-size:18pt;&quot;&gt;Contratulations!&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;&lt;span&gt;Votre compte a été crée avec succès&lt;/span&gt;
 </translation>
+    </message>
+</context>
+<context>
+    <name>UserFrame</name>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3504,7 +4355,7 @@ Vitesse:<byte value="x9"/>%4 (kB/s)</translation>
     <name>WengoConfigDialog</name>
     <message>
         <source>WengoPhone Configuration</source>
-        <translation>Configuration du WengoPhone</translation>
+        <translation type="obsolete">Configuration du WengoPhone</translation>
     </message>
     <message>
         <source>General</source>
@@ -3520,7 +4371,7 @@ Vitesse:<byte value="x9"/>%4 (kB/s)</translation>
     </message>
     <message>
         <source>Privacy</source>
-        <translation>Confidentialité</translation>
+        <translation type="obsolete">Confidentialité</translation>
     </message>
     <message>
         <source>Audio</source>
@@ -3550,6 +4401,10 @@ Vitesse:<byte value="x9"/>%4 (kB/s)</translation>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
+    <message>
+        <source>WengoPhone - Configuration</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>WengoPhoneWindow</name>
@@ -3571,23 +4426,23 @@ Vitesse:<byte value="x9"/>%4 (kB/s)</translation>
     </message>
     <message>
         <source>Add a contact</source>
-        <translation>Ajouter un contact</translation>
+        <translation type="obsolete">Ajouter un contact</translation>
     </message>
     <message>
         <source>Search for a contact</source>
-        <translation>Rechercher un contact </translation>
+        <translation type="obsolete">Rechercher un contact </translation>
     </message>
     <message>
         <source>Create a conference call</source>
-        <translation>Créer une conférence</translation>
+        <translation type="obsolete">Créer une conférence</translation>
     </message>
     <message>
         <source>Sends a SMS</source>
-        <translation>Envoyer un SMS </translation>
+        <translation type="obsolete">Envoyer un SMS </translation>
     </message>
     <message>
         <source>Enable/disable video calls</source>
-        <translation>Activer/désactiver les appels vidéos</translation>
+        <translation type="obsolete">Activer/désactiver les appels vidéos</translation>
     </message>
     <message>
         <source>&amp;Help</source>
@@ -3611,7 +4466,7 @@ Vitesse:<byte value="x9"/>%4 (kB/s)</translation>
     </message>
     <message>
         <source>Type Here</source>
-        <translation type="obsolete">Tapez ici</translation>
+        <translation type="unfinished">Tapez ici</translation>
     </message>
     <message>
         <source>Clear &amp;History</source>
@@ -3643,7 +4498,7 @@ Vitesse:<byte value="x9"/>%4 (kB/s)</translation>
     </message>
     <message>
         <source>&amp;Forum</source>
-        <translation>Accéder à notre &amp;Forum</translation>
+        <translation type="obsolete">Accéder à notre &amp;Forum</translation>
     </message>
     <message>
         <source>Help</source>
@@ -3655,7 +4510,7 @@ Vitesse:<byte value="x9"/>%4 (kB/s)</translation>
     </message>
     <message>
         <source>&amp;Add Contact</source>
-        <translation>&amp;Ajouter un contact</translation>
+        <translation type="obsolete">&amp;Ajouter un contact</translation>
     </message>
     <message>
         <source>&amp;Configuration</source>
@@ -3663,7 +4518,7 @@ Vitesse:<byte value="x9"/>%4 (kB/s)</translation>
     </message>
     <message>
         <source>&amp;Send a short text message (SMS)</source>
-        <translation>&amp;Envoyer un SMS</translation>
+        <translation type="obsolete">&amp;Envoyer un SMS</translation>
     </message>
     <message>
         <source>Set login</source>
@@ -3679,11 +4534,11 @@ Vitesse:<byte value="x9"/>%4 (kB/s)</translation>
     </message>
     <message>
         <source>Create Conference C&amp;all</source>
-        <translation>Créer une &amp;conférence</translation>
+        <translation type="obsolete">Créer une &amp;conférence</translation>
     </message>
     <message>
         <source>&amp;Wiki / Faq</source>
-        <translation>Consulter notre &amp;Wiki / Faq</translation>
+        <translation type="obsolete">Consulter notre &amp;Wiki / Faq</translation>
     </message>
     <message>
         <source>Buy call-out credits</source>
@@ -3711,7 +4566,7 @@ Vitesse:<byte value="x9"/>%4 (kB/s)</translation>
     </message>
     <message>
         <source>Show / Hide &amp;Contacts Offline</source>
-        <translation>Afficher / Cacher &amp;les contacts déconnectés</translation>
+        <translation type="obsolete">Afficher / Cacher &amp;les contacts déconnectés</translation>
     </message>
     <message>
         <source>Show Contact &amp;Groups</source>
@@ -3735,7 +4590,7 @@ Vitesse:<byte value="x9"/>%4 (kB/s)</translation>
     </message>
     <message>
         <source>Short text messages (SMS)</source>
-        <translation>SMS</translation>
+        <translation type="obsolete">SMS</translation>
     </message>
     <message>
         <source>&amp;All</source>
@@ -3803,19 +4658,19 @@ Vitesse:<byte value="x9"/>%4 (kB/s)</translation>
     </message>
     <message>
         <source>Open the chat window</source>
-        <translation>Ouvrir la fenêtre de chat</translation>
+        <translation type="obsolete">Ouvrir la fenêtre de chat</translation>
     </message>
     <message>
         <source>&lt;u&gt;Click to change Audio and Video Settings&lt;/u&gt;</source>
-        <translation>&lt;u&gt;Cliquez ici pour ajuster vos paramètres Audio et Vidéo&lt;/u&gt;</translation>
+        <translation type="obsolete">&lt;u&gt;Cliquez ici pour ajuster vos paramètres Audio et Vidéo&lt;/u&gt;</translation>
     </message>
     <message>
         <source>&amp;Learn more about Wengo Services</source>
-        <translation>&amp;Découvrir nos autres services</translation>
+        <translation type="obsolete">&amp;Découvrir nos autres services</translation>
     </message>
     <message>
         <source>Instant Messaging Accounts</source>
-        <translation>Comptes de messagerie instantanée</translation>
+        <translation type="obsolete">Comptes de messagerie instantanée</translation>
     </message>
     <message>
         <source>&amp;Search for Wengo Users</source>
@@ -3827,27 +4682,115 @@ Vitesse:<byte value="x9"/>%4 (kB/s)</translation>
     </message>
     <message>
         <source>Accept</source>
-        <translation>Décrocher</translation>
+        <translation type="obsolete">Décrocher</translation>
     </message>
     <message>
         <source>Hangup</source>
-        <translation>Raccrocher</translation>
+        <translation type="obsolete">Raccrocher</translation>
     </message>
     <message>
         <source>Hold / Resume</source>
-        <translation>Mettre en attente / Reprendre</translation>
+        <translation type="obsolete">Mettre en attente / Reprendre</translation>
     </message>
     <message>
         <source>Show / Hide groups</source>
-        <translation>Afficher / Cacher les groupes</translation>
+        <translation type="obsolete">Afficher / Cacher les groupes</translation>
     </message>
     <message>
         <source>Change Profile...</source>
-        <translation>Se connecter avec un autre compte Wengo...</translation>
+        <translation type="obsolete">Se connecter avec un autre compte Wengo...</translation>
     </message>
     <message>
         <source>Log Off</source>
-        <translation>Se déconnecter</translation>
+        <translation type="obsolete">Se déconnecter</translation>
+    </message>
+    <message>
+        <source>ToolBar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wengo &amp;Forum</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add &amp;Contact</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Send a Short Text &amp;Message (SMS)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Create &amp;Conference Call</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wengo &amp;Wiki/FAQ</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Learn more about &amp;Wengo Services</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show/Hide Unavailable &amp;Contacts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Instant Messaging Accounts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Configure My Instant Messaging Accounts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Accept</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;HangUp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Hold/Resume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show/Hide &amp;Groups</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change &amp;Profile...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Log &amp;Off / Log In</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open &amp;Chat Window</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enable/Disable &amp;Video Calls</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show &amp;Volume Panel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Short Text &amp;Messages (SMS)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show File Transfer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Rejected Calls</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3862,7 +4805,7 @@ Vitesse:<byte value="x9"/>%4 (kB/s)</translation>
     </message>
     <message>
         <source>Loud speakers mode</source>
-        <translation>Mode Haut-parleurs</translation>
+        <translation type="obsolete">Mode Haut-parleurs</translation>
     </message>
     <message>
         <source>USB audio device</source>
@@ -3870,15 +4813,31 @@ Vitesse:<byte value="x9"/>%4 (kB/s)</translation>
     </message>
     <message>
         <source>&lt;u&gt;Video Settings&lt;/u&gt;</source>
-        <translation>&lt;u&gt;Paramètres Vidéo&lt;/u&gt;</translation>
+        <translation type="obsolete">&lt;u&gt;Paramètres Vidéo&lt;/u&gt;</translation>
     </message>
     <message>
         <source>&lt;u&gt;Audio Settings&lt;/u&gt;</source>
-        <translation>&lt;u&gt;Paramètres Audio&lt;/u&gt;</translation>
+        <translation type="obsolete">&lt;u&gt;Paramètres Audio&lt;/u&gt;</translation>
     </message>
     <message>
         <source>USB audio device (Wenbox)</source>
-        <translation>Périphérique audio USB (Wenbox)</translation>
+        <translation type="obsolete">Périphérique audio USB (Wenbox)</translation>
+    </message>
+    <message>
+        <source>Wenbox USB</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Loud Speakers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Audio Settings</source>
+        <translation type="unfinished">Paramètres Audio</translation>
+    </message>
+    <message>
+        <source>Video Settings</source>
+        <translation type="unfinished">Vidéo</translation>
     </message>
 </context>
 <context>
@@ -4030,11 +4989,19 @@ Vitesse:<byte value="x9"/>%4 (kB/s)</translation>
     </message>
     <message>
         <source>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Get a new Yahoo! Account&lt;/span&gt;</source>
-        <translation>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Créer un compte Yahoo!&lt;/span&gt;</translation>
+        <translation type="obsolete">&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Créer un compte Yahoo!&lt;/span&gt;</translation>
     </message>
     <message>
         <source>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Forgot your Yahoo! password?&lt;/span&gt;</source>
-        <translation>&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Vous avez oublié votre mot de passe Yahoo! ?&lt;/span&gt;</translation>
+        <translation type="obsolete">&lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;Vous avez oublié votre mot de passe Yahoo! ?&lt;/span&gt;</translation>
+    </message>
+    <message>
+        <source>Forgot your Yahoo! password?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Get a new Yahoo! Account</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
