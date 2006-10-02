@@ -124,8 +124,9 @@ void QtFileTransferWidget::addReceiveItem(ReceiveFileSession * fileSession) {
 
 	QtFileTransferDownloadItem * fileTransferItem = new QtFileTransferDownloadItem(this, fileSession, _downloadFolder);
 	SAFE_CONNECT(fileTransferItem, SIGNAL(removeClicked()), SLOT(itemRemoveClicked()));
-	QListWidgetItem * item = new QListWidgetItem(_ui->downloadTransferListWidget);
+	QListWidgetItem * item = new QListWidgetItem(/*_ui->downloadTransferListWidget*/);
 	item->setSizeHint(fileTransferItem->minimumSizeHint());
+	_ui->downloadTransferListWidget->insertItem(0, item);
 	_ui->downloadTransferListWidget->setItemWidget(item, fileTransferItem);
 	showDownloadTab();
 	show();
@@ -138,8 +139,9 @@ void QtFileTransferWidget::addSendItem(SendFileSession * fileSession,
 	QtFileTransferUploadItem * fileTransferItem = new QtFileTransferUploadItem(this, fileSession,
 			QString::fromStdString(filename), contactId, contact);
 	SAFE_CONNECT(fileTransferItem, SIGNAL(removeClicked()), SLOT(itemRemoveClicked()));
-	QListWidgetItem * item = new QListWidgetItem(_ui->uploadTransferListWidget);
+	QListWidgetItem * item = new QListWidgetItem(/*_ui->uploadTransferListWidget*/);
 	item->setSizeHint(fileTransferItem->minimumSizeHint());
+	_ui->uploadTransferListWidget->insertItem(0, item);
 	_ui->uploadTransferListWidget->setItemWidget(item, fileTransferItem);
 	showUploadTab();
 	show();
@@ -156,12 +158,12 @@ void QtFileTransferWidget::setDownloadFolder(const QString & folder) {
 
 void QtFileTransferWidget::showDownloadTab() {
 	_ui->tabWidget->setCurrentIndex(DOWNLOAD_TAB_INDEX);
-	_ui->downloadTransferListWidget->scrollToBottom();
+	_ui->downloadTransferListWidget->scrollToTop();
 }
 
 void QtFileTransferWidget::showUploadTab() {
 	_ui->tabWidget->setCurrentIndex(UPLOAD_TAB_INDEX);
-	_ui->uploadTransferListWidget->scrollToBottom();
+	_ui->uploadTransferListWidget->scrollToTop();
 }
 
 void QtFileTransferWidget::itemRemoveClicked() {
