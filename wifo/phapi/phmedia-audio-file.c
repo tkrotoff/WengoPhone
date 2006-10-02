@@ -131,8 +131,18 @@ int phadfile_open(phastream_t *as, const char *name, int rate, int framesize, ph
     return -PH_NORESOURCES;
   memset(pd, 0, sizeof(*pd));
 
-  mic_tmpfilename = "phadfile_mic.data";
-  spk_tmpfilename = "phadfile_spk.data";
+  mic_tmpfilename = getenv("PH_AD_FILE_MIC_FILE");
+  spk_tmpfilename = getenv("PH_AD_FILE_SPK_FILE");
+
+  if (!mic_tmpfilename)
+  {
+    mic_tmpfilename = "phadfile_mic.data";
+  }
+
+  if (!spk_tmpfilename)
+  {
+    spk_tmpfilename = "phadfile_spk.data";
+  }
 
   snprintf(pd->mic_filename, 128, mic_tmpfilename);
   snprintf(pd->spk_filename, 128, spk_tmpfilename);
