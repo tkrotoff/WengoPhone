@@ -238,7 +238,7 @@ void QtChatWindow::sendFileToActiveTabContact() {
 		this,
 		"Choose a file",
 		startDir,
-		"All files (*.*)"
+		"All files (*)"
 	);
 
 	if (!filename.isEmpty()) {
