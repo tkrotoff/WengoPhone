@@ -336,19 +336,7 @@ of the License, or (at your option) any later version.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>callContact</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>sendFile</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>createChatConf</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>contactInfo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -357,6 +345,18 @@ of the License, or (at your option) any later version.</source>
     </message>
     <message>
         <source>&amp;Save History As...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Call Contact</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Send a File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show Contact Info</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -989,10 +989,6 @@ of the License, or (at your option) any later version.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>You don&apos;t have a Wengo account?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Login&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;Please enter your email address and&lt;br&gt;password&lt;/span&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1002,6 +998,10 @@ of the License, or (at your option) any later version.</source>
     </message>
     <message>
         <source>Need help?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Click here if you don&apos;t have a Wengo account</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1564,9 +1564,6 @@ of the License, or (at your option) any later version.</source>
     </message>
 </context>
 <context>
-    <name>QtCreditWidget</name>
-</context>
-<context>
     <name>QtEventWidget</name>
     <message>
         <source>WengoPhone - Voice Mail</source>
@@ -1820,9 +1817,6 @@ of the License, or (at your option) any later version.</source>
     </message>
 </context>
 <context>
-    <name>QtIMMenu</name>
-</context>
-<context>
     <name>QtIMProfileWidget</name>
     <message>
         <source>Edit My Profile</source>
@@ -1850,9 +1844,6 @@ of the License, or (at your option) any later version.</source>
         <source>Click on Login to connect to Wengo</source>
         <translation type="unfinished"></translation>
     </message>
-</context>
-<context>
-    <name>QtNickNameWidget</name>
 </context>
 <context>
     <name>QtNotificationSettings</name>
@@ -2048,9 +2039,6 @@ Please wait for a few seconds...</source>
         <source>Group name cannot be empty</source>
         <translation type="unfinished"></translation>
     </message>
-</context>
-<context>
-    <name>QtSimpleAddIMContact</name>
 </context>
 <context>
     <name>QtSms</name>
@@ -2460,9 +2448,6 @@ This will send </source>
         <source>WengoPhone - Rename Contact Group</source>
         <translation type="unfinished"></translation>
     </message>
-</context>
-<context>
-    <name>SimpleAddIMAccount</name>
 </context>
 <context>
     <name>SimpleIMAccountManager</name>
@@ -3009,10 +2994,6 @@ Speed:<byte value="x9"/>%4 (kB/s)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Log &amp;Off / Log In</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Open &amp;Chat Window</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3034,6 +3015,10 @@ Speed:<byte value="x9"/>%4 (kB/s)</source>
     </message>
     <message>
         <source>Rejected Calls</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Log &amp;Off/Log In</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
