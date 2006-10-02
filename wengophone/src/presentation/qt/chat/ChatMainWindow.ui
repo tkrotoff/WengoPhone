@@ -34,7 +34,7 @@
      <x>0</x>
      <y>0</y>
      <width>351</width>
-     <height>19</height>
+     <height>29</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuContact" >
@@ -83,6 +83,14 @@
    <addaction name="menuHelp" />
   </widget>
   <widget class="QStatusBar" name="statusbar" >
+   <property name="geometry" >
+    <rect>
+     <x>0</x>
+     <y>520</y>
+     <width>351</width>
+     <height>22</height>
+    </rect>
+   </property>
    <property name="autoFillBackground" >
     <bool>false</bool>
    </property>
@@ -126,7 +134,13 @@
     <iconset resource="../wengophone.qrc" >:/pics/contact/call.png</iconset>
    </property>
    <property name="text" >
-    <string>callContact</string>
+    <string>Call Contact</string>
+   </property>
+   <property name="iconText" >
+    <string>Call Contact</string>
+   </property>
+   <property name="toolTip" >
+    <string>Call Contact</string>
    </property>
   </action>
   <action name="actionSendFile" >
@@ -134,7 +148,13 @@
     <iconset resource="../wengophone.qrc" >:/pics/filetransfer/send-file.png</iconset>
    </property>
    <property name="text" >
-    <string>sendFile</string>
+    <string>Send a File</string>
+   </property>
+   <property name="iconText" >
+    <string>Send a File</string>
+   </property>
+   <property name="toolTip" >
+    <string>Send a File</string>
    </property>
   </action>
   <action name="actionCreateChatConf" >
@@ -150,7 +170,13 @@
     <iconset resource="../wengophone.qrc" >:/pics/chat/contact-details.png</iconset>
    </property>
    <property name="text" >
-    <string>contactInfo</string>
+    <string>Show Contact Info</string>
+   </property>
+   <property name="iconText" >
+    <string>Show Contact Info</string>
+   </property>
+   <property name="toolTip" >
+    <string>Show Contact Info</string>
    </property>
   </action>
   <action name="actionBlockContact" >
