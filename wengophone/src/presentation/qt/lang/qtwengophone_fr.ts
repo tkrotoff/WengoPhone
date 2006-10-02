@@ -2,6803 +2,3655 @@
 <!DOCTYPE TS>
 <TS>
     <context>
-        <name>
-            AIMSettings
-        </name>
+        <name>AIMSettings</name>
         <message>
-            <source>
-                AIM/ICQ Settings
-            </source>
-            <translation>
-                Paramètres AIM/ICQ
-            </translation>
+            <source>AIM/ICQ Settings</source>
+            <translation>Paramètres AIM/ICQ</translation>
         </message>
         <message>
-            <source>
-                Password:
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Mot de passe :
-            </translation>
+            <source>Password:</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Mot de passe :</translation>
         </message>
         <message>
-            <source>
-                Login:
-            </source>
-            <translation>
-                Identifiant :
-            </translation>
+            <source>Login:</source>
+            <translation>Identifiant :</translation>
         </message>
         <message>
-            <source>
-                Forgot your AIM password?
-            </source>
-            <translation>
-                Mot de passe AIM oublié?
-            </translation>
+            <source>Forgot your AIM password?</source>
+            <translation>Mot de passe AIM oublié?</translation>
         </message>
         <message>
-            <source>
-                Get a new AIM Account
-            </source>
-            <translation>
-                Créez un nouveau compte AIM
-            </translation>
+            <source>Get a new AIM Account</source>
+            <translation>Créez un nouveau compte AIM</translation>
         </message>
     </context>
     <context>
-        <name>
-            GoogleTalkSettings
-        </name>
+        <name>GoogleTalkSettings</name>
         <message>
-            <source>
-                Password:
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Mot de passe :
-            </translation>
+            <source>Password:</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Mot de passe :</translation>
         </message>
         <message>
-            <source>
-                Login:
-            </source>
-            <translation>
-                Identifiant :
-            </translation>
+            <source>Login:</source>
+            <translation>Identifiant :</translation>
         </message>
         <message>
-            <source>
-                GoogleTalk Settings
-            </source>
-            <translation>
-                Paramètres GoogleTalk
-            </translation>
+            <source>GoogleTalk Settings</source>
+            <translation>Paramètres GoogleTalk</translation>
         </message>
         <message>
-            <source>
-                Forgot your GoogleTalk password?
-            </source>
-            <translation>
-                Mot de passe GoogleTalk oublié?
-            </translation>
+            <source>Forgot your GoogleTalk password?</source>
+            <translation>Mot de passe GoogleTalk oublié?</translation>
         </message>
         <message>
-            <source>
-                Get a new GoogleTalk Account
-            </source>
-            <translation>
-                Créez un nouveau compte GoogleTalk
-            </translation>
+            <source>Get a new GoogleTalk Account</source>
+            <translation>Créez un nouveau compte GoogleTalk</translation>
         </message>
     </context>
     <context>
-        <name>
-            JabberSettings
-        </name>
+        <name>JabberSettings</name>
         <message>
-            <source>
-                Password:
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Mot de passe :
-            </translation>
+            <source>Password:</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Mot de passe :</translation>
         </message>
         <message>
-            <source>
-                Login:
-            </source>
-            <translation>
-                Identifiant :
-            </translation>
+            <source>Login:</source>
+            <translation>Identifiant :</translation>
         </message>
         <message>
-            <source>
-                Jabber Settings
-            </source>
-            <translation>
-                Paramètres de Jabber
-            </translation>
+            <source>Jabber Settings</source>
+            <translation>Paramètres de Jabber</translation>
         </message>
         <message>
-            <source>
-                Connect Server:
-            </source>
-            <translation>
-                Se connecter au serveur:
-            </translation>
+            <source>Connect Server:</source>
+            <translation>Se connecter au serveur:</translation>
         </message>
         <message>
-            <source>
-                Require TLS
-            </source>
-            <translation>
-                Nécessite TLS
-            </translation>
+            <source>Require TLS</source>
+            <translation>Nécessite TLS</translation>
         </message>
         <message>
-            <source>
-                Port:
-            </source>
-            <translation>
-                Port:
-            </translation>
+            <source>Port:</source>
+            <translation>Port:</translation>
         </message>
         <message>
-            <source>
-                Use TLS if available
-            </source>
-            <translation>
-                Utiliser TLS, si possible
-            </translation>
+            <source>Use TLS if available</source>
+            <translation>Utiliser TLS, si possible</translation>
         </message>
         <message>
-            <source>
-                Allow plaintext authentication over unencrypted streams
-            </source>
-            <translation>
-                Autoriser l'identifcation en clair sur des connexions non cryptées
-            </translation>
+            <source>Allow plaintext authentication over unencrypted streams</source>
+            <translation>Autoriser l'identifcation en clair sur des connexions non cryptées</translation>
         </message>
         <message>
-            <source>
-                5222
-            </source>
-            <translation>
-                5222
-            </translation>
+            <source>5222</source>
+            <translation>5222</translation>
         </message>
         <message>
-            <source>
-                Force old (port 5223) SSL
-            </source>
-            <translation>
-                Forcer SSL (5223)
-            </translation>
+            <source>Force old (port 5223) SSL</source>
+            <translation>Forcer SSL (5223)</translation>
         </message>
         <message>
-            <source>
-                &lt;u&gt;Advanced Options&lt;/u&gt;
-            </source>
-            <translation>
-                &lt;u&gt;Options avancées&lt;/u&gt;
-            </translation>
+            <source>&lt;u&gt;Advanced Options&lt;/u&gt;</source>
+            <translation>&lt;u&gt;Options avancées&lt;/u&gt;</translation>
         </message>
     </context>
     <context>
-        <name>
-            LoginWindow
-        </name>
+        <name>LoginWindow</name>
         <message>
-            <source>
-                Password:
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Mot de passe :
-            </translation>
+            <source>Password:</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Mot de passe :</translation>
         </message>
         <message>
-            <source>
-                Login
-            </source>
-            <translation type="unfinished">
-                Se connecter
-            </translation>
+            <source>Login</source>
+            <translation type="unfinished">Se connecter</translation>
         </message>
         <message>
-            <source>
-                Cancel
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
+            <source>Cancel</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
 _ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Annuler
-            </translation>
+#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Annuler</translation>
         </message>
         <message>
-            <source>
-                WengoPhone - Login
-            </source>
-            <translation>
-                WengoPhone - Connexion
-            </translation>
+            <source>WengoPhone - Login</source>
+            <translation>WengoPhone - Connexion</translation>
         </message>
         <message>
-            <source>
-                Email Address:
-            </source>
-            <translation>
-                Adresse email:
-            </translation>
+            <source>Email Address:</source>
+            <translation>Adresse email:</translation>
         </message>
         <message>
-            <source>
-                You don't have a Wengo account?
-            </source>
-            <translation>
-                Vous n'avez pas encore d'identifiants de connexion ?
-            </translation>
+            <source>You don't have a Wengo account?</source>
+            <translation>Vous n'avez pas encore d'identifiants de connexion ?</translation>
         </message>
         <message>
-            <source>
-                &lt;span style=&quot;font-size:18pt;&quot;&gt;Login&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;Please enter your email address and&lt;br&gt;password&lt;/span&gt;
-            </source>
-            <translation>
-                &lt;span style=&quot;font-size:18pt;&quot;&gt;Connexion&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;Pour utiliser Wengo vous devez disposer de vos&lt;br&gt;identifiants de connexion (l’e-mail et le mot de&lt;/span&gt;&lt;span&gt;passe que vous avez déclarés lors de votre&lt;/span&gt;&lt;br&gt;inscription
-            </translation>
+            <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Login&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;Please enter your 
+email address and&lt;br&gt;password&lt;/span&gt;</source>
+            <translation>&lt;span style=&quot;font-size:18pt;&quot;&gt;Connexion&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;Pour utiliser 
+Wengo vous devez disposer de vos&lt;br&gt;identifiants de connexion (l’e-mail et 
+le mot de&lt;/span&gt;&lt;span&gt;passe que vous avez déclarés lors de 
+votre&lt;/span&gt;&lt;br&gt;inscription</translation>
         </message>
         <message>
-            <source>
-                Forgot your password?
-            </source>
-            <translation>
-                Mot de passe oublié?
-            </translation>
+            <source>Forgot your password?</source>
+            <translation>Mot de passe oublié?</translation>
         </message>
         <message>
-            <source>
-                Need help?
-            </source>
-            <translation>
-                Vous avez besoin d'aide?
-            </translation>
+            <source>Need help?</source>
+            <translation>Vous avez besoin d'aide?</translation>
         </message>
     </context>
     <context>
-        <name>
-            MSNSettings
-        </name>
+        <name>MSNSettings</name>
         <message>
-            <source>
-                Password:
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Mot de passe :
-            </translation>
+            <source>Password:</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Mot de passe :</translation>
         </message>
         <message>
-            <source>
-                Login:
-            </source>
-            <translation>
-                Identifiant :
-            </translation>
+            <source>Login:</source>
+            <translation>Identifiant :</translation>
         </message>
         <message>
-            <source>
-                MSN Settings
-            </source>
-            <translation>
-                Paramètres MSN
-            </translation>
+            <source>MSN Settings</source>
+            <translation>Paramètres MSN</translation>
         </message>
         <message>
-            <source>
-                Forgot your MSN password?
-            </source>
-            <translation>
-                Mot de passe MSN oublié?
-            </translation>
+            <source>Forgot your MSN password?</source>
+            <translation>Mot de passe MSN oublié?</translation>
         </message>
         <message>
-            <source>
-                Get a new MSN Account
-            </source>
-            <translation>
-                Créez un nouveau compte MSN
-            </translation>
+            <source>Get a new MSN Account</source>
+            <translation>Créez un nouveau compte MSN</translation>
         </message>
     </context>
     <context>
-        <name>
-            SimpleIMAccountManager
-        </name>
+        <name>SimpleIMAccountManager</name>
         <message>
-            <source>
-                Password:
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Mot de passe :
-            </translation>
+            <source>Password:</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Mot de passe :</translation>
         </message>
         <message>
-            <source>
-                Login:
-            </source>
-            <translation>
-                Identifiant :
-            </translation>
+            <source>Login:</source>
+            <translation>Identifiant :</translation>
         </message>
         <message>
-            <source>
-                AIM/ICQ
-            </source>
-            <translation>
-                AIM/ICQ
-            </translation>
+            <source>AIM/ICQ</source>
+            <translation>AIM/ICQ</translation>
         </message>
         <message>
-            <source>
-                Yahoo!
-            </source>
-            <translation>
-                Yahoo!
-            </translation>
+            <source>Yahoo!</source>
+            <translation>Yahoo!</translation>
         </message>
         <message>
-            <source>
-                Wengo
-            </source>
-            <translation>
-                Wengo
-            </translation>
+            <source>Wengo</source>
+            <translation>Wengo</translation>
         </message>
         <message>
-            <source>
-                MSN
-            </source>
-            <translation>
-                MSN
-            </translation>
+            <source>MSN</source>
+            <translation>MSN</translation>
         </message>
         <message>
-            <source>
-                Jabber
-            </source>
-            <translation>
-                Jabber
-            </translation>
+            <source>Jabber</source>
+            <translation>Jabber</translation>
         </message>
         <message>
-            <source>
-                GoogleTalk
-            </source>
-            <translation>
-                GoogleTalk
-            </translation>
+            <source>GoogleTalk</source>
+            <translation>GoogleTalk</translation>
         </message>
     </context>
     <context>
-        <name>
-            SubscribeWengo1
-        </name>
+        <name>SubscribeWengo1</name>
         <message>
-            <source>
-                Password:
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Mot de passe :
-            </translation>
+            <source>Password:</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Mot de passe :</translation>
         </message>
         <message>
-            <source>
-                Email:
-            </source>
-            <translation>
-                Email:
-            </translation>
+            <source>Email:</source>
+            <translation>Email:</translation>
         </message>
         <message>
-            <source>
-                WengoPhone - Wengo Account Creation (1/2)
-            </source>
-            <translation>
-                WengoPhone - Création de votre compte Wengo (1/2)
-            </translation>
+            <source>WengoPhone - Wengo Account Creation (1/2)</source>
+            <translation>WengoPhone - Création de votre compte Wengo (1/2)</translation>
         </message>
         <message>
-            <source>
-                * &lt;i&gt;Required fields&lt;/i&gt;
-            </source>
-            <translation>
-                * &lt;i&gt;Champs obligatoires&lt;/i&gt;
-            </translation>
+            <source>* &lt;i&gt;Required fields&lt;/i&gt;</source>
+            <translation>* &lt;i&gt;Champs obligatoires&lt;/i&gt;</translation>
         </message>
         <message>
-            <source>
-                Subscribe
-            </source>
-            <translation>
-                S'inscrire
-            </translation>
+            <source>Subscribe</source>
+            <translation>S'inscrire</translation>
         </message>
         <message>
-            <source>
-                Error message label
-            </source>
-            <translation>
-                Message d'erreur
-            </translation>
+            <source>Error message label</source>
+            <translation>Message d'erreur</translation>
         </message>
         <message>
-            <source>
-                Nickname:
-            </source>
-            <translation>
-                Pseudo:
-            </translation>
+            <source>Nickname:</source>
+            <translation>Pseudo:</translation>
         </message>
         <message>
-            <source>
-                *
-            </source>
-            <translation>
-                *
-            </translation>
+            <source>*</source>
+            <translation>*</translation>
         </message>
         <message>
-            <source>
-                Confirm password:
-            </source>
-            <translation>
-                Confirmez votre mot de passe:
-            </translation>
+            <source>Confirm password:</source>
+            <translation>Confirmez votre mot de passe:</translation>
         </message>
         <message>
-            <source>
-                &lt;i&gt;Please check your email and confirm the above details within 48 hours&lt;/i&gt;
-            </source>
-            <translation>
-                &lt;i&gt;Veuillez vérifier votre boîte aux lettres, et confirmer les informations ci-dessus sous 48 heures&lt;/i&gt;
-            </translation>
+            <source>&lt;i&gt;Please check your email and confirm the above details within 48 hours&lt;/i&gt;</source>
+            <translation>&lt;i&gt;Veuillez vérifier votre boîte aux lettres, et confirmer les informations 
+ci-dessus sous 48 heures&lt;/i&gt;</translation>
         </message>
         <message>
-            <source>
-                I read and accept the Terms of Service
-            </source>
-            <translation>
-                J'ai lu et j'accepte les conditions générales d'utilisation
-            </translation>
+            <source>I read and accept the Terms of Service</source>
+            <translation>J'ai lu et j'accepte les conditions générales d'utilisation</translation>
         </message>
         <message>
-            <source>
-                &lt;span style=&quot;font-size:18pt;&quot;&gt;Account Creation&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;&lt;span&gt;Please fill in the details below&lt;/span&gt;
-            </source>
-            <translation>
-                &lt;span style=&quot;font-size:18pt;&quot;&gt;Création du compte&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;&lt;span&gt;Veuillez remplir le formulaire suivant&lt;/span&gt;
-            </translation>
+            <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Account Creation&lt;/span&gt;&lt;br /&gt;&lt;br 
+/&gt;&lt;span&gt;Please fill in the details below&lt;/span&gt;</source>
+            <translation>&lt;span style=&quot;font-size:18pt;&quot;&gt;Création du compte&lt;/span&gt;&lt;br /&gt;&lt;br 
+/&gt;&lt;span&gt;Veuillez remplir le formulaire suivant&lt;/span&gt;</translation>
         </message>
     </context>
     <context>
-        <name>
-            SubscribeWengo2
-        </name>
+        <name>SubscribeWengo2</name>
         <message>
-            <source>
-                Password:
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Mot de passe :
-            </translation>
+            <source>Password:</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Mot de passe :</translation>
         </message>
         <message>
-            <source>
-                Email:
-            </source>
-            <translation>
-                Email:
-            </translation>
+            <source>Email:</source>
+            <translation>Email:</translation>
         </message>
         <message>
-            <source>
-                Nickname:
-            </source>
-            <translation>
-                Pseudo:
-            </translation>
+            <source>Nickname:</source>
+            <translation>Pseudo:</translation>
         </message>
         <message>
-            <source>
-                WengoPhone - Wengo Account Creation (2/2)
-            </source>
-            <translation>
-                WengoPhone - Création de votre compte Wengo (2/2)
-            </translation>
+            <source>WengoPhone - Wengo Account Creation (2/2)</source>
+            <translation>WengoPhone - Création de votre compte Wengo (2/2)</translation>
         </message>
         <message>
-            <source>
-                Please note your details needed to access your account:
-            </source>
-            <translation>
-                Mémoriser bien ces informations, elles sont nécessaire pour utiliser votre compte:
-            </translation>
+            <source>Please note your details needed to access your account:</source>
+            <translation>Mémoriser bien ces informations, elles sont nécessaire pour utiliser votre 
+compte:</translation>
         </message>
         <message>
-            <source>
-                Finish
-            </source>
-            <translation>
-                Terminer
-            </translation>
+            <source>Finish</source>
+            <translation>Terminer</translation>
         </message>
         <message>
-            <source>
-                Add your IM Accounts to your Profile
-            </source>
-            <translation>
-                Ajouter un compte IM à votre profil
-            </translation>
+            <source>Add your IM Accounts to your Profile</source>
+            <translation>Ajouter un compte IM à votre profil</translation>
         </message>
         <message>
-            <source>
-                &lt;span style=&quot;font-size:18pt;&quot;&gt;Contratulations!&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;&lt;span&gt;Your account has been successfully created&lt;/span&gt;
-            </source>
-            <translation>
-                &lt;span style=&quot;font-size:18pt;&quot;&gt;Contratulations!&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;&lt;span&gt;Votre compte a été crée avec succès&lt;/span&gt;
-            </translation>
+            <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Contratulations!&lt;/span&gt;&lt;br /&gt;&lt;br 
+/&gt;&lt;span&gt;Your account has been successfully created&lt;/span&gt;</source>
+            <translation>&lt;span style=&quot;font-size:18pt;&quot;&gt;Contratulations!&lt;/span&gt;&lt;br /&gt;&lt;br 
+/&gt;&lt;span&gt;Votre compte a été crée avec succès&lt;/span&gt;</translation>
         </message>
     </context>
     <context>
-        <name>
-            YahooSettings
-        </name>
+        <name>YahooSettings</name>
         <message>
-            <source>
-                Password:
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Mot de passe :
-            </translation>
+            <source>Password:</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Mot de passe :</translation>
         </message>
         <message>
-            <source>
-                Login:
-            </source>
-            <translation>
-                Identifiant :
-            </translation>
+            <source>Login:</source>
+            <translation>Identifiant :</translation>
         </message>
         <message>
-            <source>
-                &lt;u&gt;Advanced Options&lt;/u&gt;
-            </source>
-            <translation>
-                &lt;u&gt;Options avancées&lt;/u&gt;
-            </translation>
+            <source>&lt;u&gt;Advanced Options&lt;/u&gt;</source>
+            <translation>&lt;u&gt;Options avancées&lt;/u&gt;</translation>
         </message>
         <message>
-            <source>
-                Use Yahoo! Japan server
-            </source>
-            <translation>
-                Utiliser les serveurs de Yahoo! Japon
-            </translation>
+            <source>Use Yahoo! Japan server</source>
+            <translation>Utiliser les serveurs de Yahoo! Japon</translation>
         </message>
         <message>
-            <source>
-                Yahoo! Settings
-            </source>
-            <translation>
-                Yahoo! - Paramètres
-            </translation>
+            <source>Yahoo! Settings</source>
+            <translation>Yahoo! - Paramètres</translation>
         </message>
         <message>
-            <source>
-                Forgot your Yahoo! password?
-            </source>
-            <translation>
-                Mot de passe Yahoo! oublié?
-            </translation>
+            <source>Forgot your Yahoo! password?</source>
+            <translation>Mot de passe Yahoo! oublié?</translation>
         </message>
         <message>
-            <source>
-                Get a new Yahoo! Account
-            </source>
-            <translation>
-                Créer un nouveau compte Yahoo!
-            </translation>
+            <source>Get a new Yahoo! Account</source>
+            <translation>Créer un nouveau compte Yahoo!</translation>
         </message>
     </context>
     <context>
-        <name>
-            AboutWindow
-        </name>
+        <name>AboutWindow</name>
         <message>
-            <source>
-                WengoPhone - About
-            </source>
-            <translation>
-                WengoPhone - À propos
-            </translation>
+            <source>WengoPhone - About</source>
+            <translation>WengoPhone - À propos</translation>
         </message>
         <message>
-            <source>
-                About
-            </source>
-            <translation>
-                À propos
-            </translation>
+            <source>About</source>
+            <translation>À propos</translation>
         </message>
         <message>
-            <source>
-                This program is free software; you can redistribute it and/ormodify it under the terms of the GNU General Public Licenseas published by the Free Software Foundation; either version 2of the License, or (at your option) any later version.
-            </source>
-            <translation>
-                This program is free software; you can redistribute it and/ormodify it under the terms of the GNU General Public Licenseas published by the Free Software Foundation; either version 2of the License, or (at your option) any later version.
-            </translation>
+            <source>This program is free software; you can redistribute it and/ormodify it under 
+the terms of the GNU General Public Licenseas published by the Free Software 
+Foundation; either version 2of the License, or (at your option) any later 
+version.</source>
+            <translation>This program is free software; you can redistribute it and/ormodify it under 
+the terms of the GNU General Public Licenseas published by the Free Software 
+Foundation; either version 2of the License, or (at your option) any later 
+version.</translation>
         </message>
         <message>
-            <source>
-                Copyright (C) 2004-2006 Wengo  http://openwengo.com
-            </source>
-            <translation>
-                Copyright (C) 2004-2006 Wengo  http://openwengo.com
-            </translation>
+            <source>Copyright (C) 2004-2006 Wengo  http://openwengo.com</source>
+            <translation>Copyright (C) 2004-2006 Wengo  http://openwengo.com</translation>
         </message>
         <message>
-            <source>
-                WengoPhone, a voice over Internet phone
-            </source>
-            <translation>
-                WengoPhone, une application de téléphonie sur Internet
-            </translation>
+            <source>WengoPhone, a voice over Internet phone</source>
+            <translation>WengoPhone, une application de téléphonie sur Internet</translation>
         </message>
         <message>
-            <source>
-                Authors
-            </source>
-            <translation>
-                Auteurs
-            </translation>
+            <source>Authors</source>
+            <translation>Auteurs</translation>
         </message>
         <message>
-            <source>
-                Close
-            </source>
-            <translation>
-                Fermer
-            </translation>
+            <source>Close</source>
+            <translation>Fermer</translation>
         </message>
     </context>
     <context>
-        <name>
-            AdvancedConfigWindow
-        </name>
+        <name>AdvancedConfigWindow</name>
         <message>
-            <source>
-                Close
-            </source>
-            <translation>
-                Fermer
-            </translation>
+            <source>Close</source>
+            <translation>Fermer</translation>
         </message>
         <message>
-            <source>
-                WengoPhone - Advanced Configuration
-            </source>
-            <translation>
-                WengoPhone - Configuration avancée
-            </translation>
+            <source>WengoPhone - Advanced Configuration</source>
+            <translation>WengoPhone - Configuration avancée</translation>
         </message>
         <message>
-            <source>
-                Preference Name
-            </source>
-            <translation>
-                Nom de l'option
-            </translation>
+            <source>Preference Name</source>
+            <translation>Nom de l'option</translation>
         </message>
         <message>
-            <source>
-                Status
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Statut
-            </translation>
+            <source>Status</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Statut</translation>
         </message>
         <message>
-            <source>
-                Type
-            </source>
-            <translation>
-                Type
-            </translation>
+            <source>Type</source>
+            <translation>Type</translation>
         </message>
         <message>
-            <source>
-                Value
-            </source>
-            <translation>
-                Valeur
-            </translation>
+            <source>Value</source>
+            <translation>Valeur</translation>
         </message>
         <message>
-            <source>
-                Default Value
-            </source>
-            <translation>
-                Valeur par défaut
-            </translation>
+            <source>Default Value</source>
+            <translation>Valeur par défaut</translation>
         </message>
         <message>
-            <source>
-                Save
-            </source>
-            <translation>
-                Enregistrer
-            </translation>
+            <source>Save</source>
+            <translation>Enregistrer</translation>
         </message>
     </context>
     <context>
-        <name>
-            BrowserSoftUpdateWindow
-        </name>
+        <name>BrowserSoftUpdateWindow</name>
         <message>
-            <source>
-                Close
-            </source>
-            <translation>
-                Fermer
-            </translation>
+            <source>Close</source>
+            <translation>Fermer</translation>
         </message>
         <message>
-            <source>
-                WengoPhone - Update available
-            </source>
-            <translation>
-                WengoPhone - Mise à jour disponible
-            </translation>
+            <source>WengoPhone - Update available</source>
+            <translation>WengoPhone - Mise à jour disponible</translation>
         </message>
         <message>
-            <source>
-                &lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;An update is available, click &lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;here&lt;/span&gt; to download the new version&lt;br /&gt;&lt;br /&gt;Version:%1&lt;br /&gt;File Size:%2 (MB)&lt;br /&gt;&lt;/body&gt;&lt;/html&gt;
-            </source>
-            <translation>
-                &lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;Une mise à jour est disponible, cliquez &lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;ici&lt;/span&gt; pour télécharger la nouvelle version&lt;br /&gt;&lt;br /&gt;Version:%1&lt;br /&gt;Taille:%2 (MB)&lt;br /&gt;&lt;/body&gt;&lt;/html&gt;
-            </translation>
+            <source>&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;An update is available, click &lt;span style=&quot; text-
+decoration: underline; color:#0000ff;&quot;&gt;here&lt;/span&gt; to download the new 
+version&lt;br /&gt;&lt;br /&gt;Version:%1&lt;br /&gt;File Size:%2 (MB)&lt;br /&gt;&lt;/body&gt;&lt;/html&gt;</source>
+            <translation>&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;Une mise à jour est disponible, cliquez &lt;span 
+style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;ici&lt;/span&gt; pour 
+télécharger la nouvelle version&lt;br /&gt;&lt;br /&gt;Version:%1&lt;br /&gt;Taille:%2 (MB)&lt;br 
+/&gt;&lt;/body&gt;&lt;/html&gt;</translation>
         </message>
     </context>
     <context>
-        <name>
-            IMAccountManager
-        </name>
+        <name>IMAccountManager</name>
         <message>
-            <source>
-                Close
-            </source>
-            <translation>
-                Fermer
-            </translation>
+            <source>Close</source>
+            <translation>Fermer</translation>
         </message>
         <message>
-            <source>
-                Login
-            </source>
-            <translation type="unfinished">
-                Se connecter
-            </translation>
+            <source>Login</source>
+            <translation type="unfinished">Se connecter</translation>
         </message>
         <message>
-            <source>
-                Add
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Ajouter
-            </translation>
+            <source>Add</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Ajouter</translation>
         </message>
         <message>
-            <source>
-                Protocol
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Protocole
-            </translation>
+            <source>Protocol</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Protocole</translation>
         </message>
         <message>
-            <source>
-                Enabled
-            </source>
-            <translation>
-                Activé
-            </translation>
+            <source>Enabled</source>
+            <translation>Activé</translation>
         </message>
         <message>
-            <source>
-                Delete
-            </source>
-            <translation>
-                Supprimer
-            </translation>
+            <source>Delete</source>
+            <translation>Supprimer</translation>
         </message>
         <message>
-            <source>
-                Modify
-            </source>
-            <translation>
-                Modifier
-            </translation>
+            <source>Modify</source>
+            <translation>Modifier</translation>
         </message>
         <message>
-            <source>
-                WengoPhone - My Instant Messaging Accounts (MSN, Jabber...)
-            </source>
-            <translation>
-                WengoPhone - Mes comptes de Messagerie Instantannée (MSN, Jabber...)
-            </translation>
+            <source>WengoPhone - My Instant Messaging Accounts (MSN, Jabber...)</source>
+            <translation>WengoPhone - Mes comptes de Messagerie Instantannée (MSN, Jabber...)</translation>
         </message>
     </context>
     <context>
-        <name>
-            ManageBlockedUsersSettings
-        </name>
+        <name>ManageBlockedUsersSettings</name>
         <message>
-            <source>
-                Close
-            </source>
-            <translation>
-                Fermer
-            </translation>
+            <source>Close</source>
+            <translation>Fermer</translation>
         </message>
         <message>
-            <source>
-                WengoPhone - Manage blocked users
-            </source>
-            <translation>
-                Wengophone - Gérer les contacts bloqués
-            </translation>
+            <source>WengoPhone - Manage blocked users</source>
+            <translation>Wengophone - Gérer les contacts bloqués</translation>
         </message>
         <message>
-            <source>
-                Unblock User
-            </source>
-            <translation>
-                Débloquer le contact
-            </translation>
+            <source>Unblock User</source>
+            <translation>Débloquer le contact</translation>
         </message>
         <message>
-            <source>
-                Manage blocked users
-            </source>
-            <translation>
-                Gérer les contacts bloqués
-            </translation>
+            <source>Manage blocked users</source>
+            <translation>Gérer les contacts bloqués</translation>
         </message>
     </context>
     <context>
-        <name>
-            AcceptDialog
-        </name>
+        <name>AcceptDialog</name>
         <message>
-            <source>
-                File Transfer
-            </source>
-            <translation>
-                Transfert de fichier
-            </translation>
+            <source>File Transfer</source>
+            <translation>Transfert de fichier</translation>
         </message>
         <message>
-            <source>
-                toto@wengo.fr
-            </source>
-            <translation>
-                toto@wengo.fr
-            </translation>
+            <source>toto@wengo.fr</source>
+            <translation>toto@wengo.fr</translation>
         </message>
         <message>
-            <source>
-                test.bmp
-            </source>
-            <translation>
-                test.bmp
-            </translation>
+            <source>test.bmp</source>
+            <translation>test.bmp</translation>
         </message>
         <message>
-            <source>
-                &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Contact: &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
-            </source>
-            <translation>
-                &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Contact: &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
-            </translation>
+            <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
+white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-
+weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
+top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
+indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Contact: 
+&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+            <translation>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
+white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-
+weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
+top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
+indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Contact: 
+&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
         </message>
         <message>
-            <source>
-                &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Filename: &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
-            </source>
-            <translation>
-                &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Nom du fichier: &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
-            </translation>
+            <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
+white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-
+weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
+top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
+indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Filename: 
+&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+            <translation>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
+white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-
+weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
+top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
+indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Nom du 
+fichier: &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
         </message>
         <message>
-            <source>
-                &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;&lt;h1&gt;Incoming file&lt;/h1&gt;&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
-            </source>
-            <translation>
-                &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;&lt;h1&gt;Réception de fichier&lt;/h1&gt;&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
-            </translation>
+            <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
+white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-
+weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
+top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
+indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;&lt;h1&gt;Incoming 
+file&lt;/h1&gt;&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+            <translation>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
+white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-
+weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
+top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
+indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;&lt;h1&gt;Réception 
+de fichier&lt;/h1&gt;&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
         </message>
         <message>
-            <source>
-                &amp;Accept
-            </source>
-            <translation>
-                &amp;Accepter
-            </translation>
+            <source>&amp;Accept</source>
+            <translation>&amp;Accepter</translation>
         </message>
         <message>
-            <source>
-                &amp;Cancel
-            </source>
-            <translation>
-                &amp;Annuler
-            </translation>
+            <source>&amp;Cancel</source>
+            <translation>&amp;Annuler</translation>
         </message>
     </context>
     <context>
-        <name>
-            WengoPhoneWindow
-        </name>
+        <name>WengoPhoneWindow</name>
         <message>
-            <source>
-                &amp;Accept
-            </source>
-            <translation>
-                &amp;Accepter
-            </translation>
+            <source>&amp;Accept</source>
+            <translation>&amp;Accepter</translation>
         </message>
         <message>
-            <source>
-                &amp;Wengo
-            </source>
-            <translation>
-                &amp;Wengo
-            </translation>
+            <source>&amp;Wengo</source>
+            <translation>&amp;Wengo</translation>
         </message>
         <message>
-            <source>
-                &amp;Tools
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                &amp;Outils
-            </translation>
+            <source>&amp;Tools</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>&amp;Outils</translation>
         </message>
         <message>
-            <source>
-                &amp;Help
-            </source>
-            <translation>
-                &amp;Aide
-            </translation>
+            <source>&amp;Help</source>
+            <translation>&amp;Aide</translation>
         </message>
         <message>
-            <source>
-                &amp;Actions
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                &amp;Actions
-            </translation>
+            <source>&amp;Actions</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>&amp;Actions</translation>
         </message>
         <message>
-            <source>
-                WengoPhone
-            </source>
-            <translation>
-                WengoPhone
-            </translation>
+            <source>WengoPhone</source>
+            <translation>WengoPhone</translation>
         </message>
         <message>
-            <source>
-                Contacts
-            </source>
-            <translation>
-                Contacts
-            </translation>
+            <source>Contacts</source>
+            <translation>Contacts</translation>
         </message>
         <message>
-            <source>
-                History
-            </source>
-            <translation>
-                Historique
-            </translation>
+            <source>History</source>
+            <translation>Historique</translation>
         </message>
         <message>
-            <source>
-                Dialpad
-            </source>
-            <translation>
-                Composer
-            </translation>
+            <source>Dialpad</source>
+            <translation>Composer</translation>
         </message>
         <message>
-            <source>
-                &amp;Contacts
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                &amp;Contacts
-            </translation>
+            <source>&amp;Contacts</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>&amp;Contacts</translation>
         </message>
         <message>
-            <source>
-                Clear &amp;History
-            </source>
-            <translation>
-                Effacer l'&amp;Historique
-            </translation>
+            <source>Clear &amp;History</source>
+            <translation>Effacer l'&amp;Historique</translation>
         </message>
         <message>
-            <source>
-                View My &amp;Wengo Account
-            </source>
-            <translation>
-                Consulter mon &amp;espace perso
-            </translation>
+            <source>View My &amp;Wengo Account</source>
+            <translation>Consulter mon &amp;espace perso</translation>
         </message>
         <message>
-            <source>
-                &amp;Close
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                &amp;Fermer
-            </translation>
+            <source>&amp;Close</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>&amp;Fermer</translation>
         </message>
         <message>
-            <source>
-                &amp;About
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                &amp;À propos
-            </translation>
+            <source>&amp;About</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>&amp;À propos</translation>
         </message>
         <message>
-            <source>
-                &amp;Configuration
-            </source>
-            <translation>
-                &amp;Panneau de Configuration
-            </translation>
+            <source>&amp;Configuration</source>
+            <translation>&amp;Panneau de Configuration</translation>
         </message>
         <message>
-            <source>
-                Edit My &amp;Profile
-            </source>
-            <translation>
-                Editer mon &amp;Profil
-            </translation>
+            <source>Edit My &amp;Profile</source>
+            <translation>Editer mon &amp;Profil</translation>
         </message>
         <message>
-            <source>
-                &amp;Outgoing Calls
-            </source>
-            <translation>
-                &amp;Appels sortants
-            </translation>
+            <source>&amp;Outgoing Calls</source>
+            <translation>&amp;Appels sortants</translation>
         </message>
         <message>
-            <source>
-                &amp;Incoming Calls
-            </source>
-            <translation>
-                &amp;Appels sortants
-            </translation>
+            <source>&amp;Incoming Calls</source>
+            <translation>&amp;Appels sortants</translation>
         </message>
         <message>
-            <source>
-                &amp;Missed Calls
-            </source>
-            <translation>
-                &amp;Appels en absence
-            </translation>
+            <source>&amp;Missed Calls</source>
+            <translation>&amp;Appels en absence</translation>
         </message>
         <message>
-            <source>
-                &amp;Chat Sessions
-            </source>
-            <translation>
-                &amp;Conversation
-            </translation>
+            <source>&amp;Chat Sessions</source>
+            <translation>&amp;Conversation</translation>
         </message>
         <message>
-            <source>
-                &amp;All
-            </source>
-            <translation>
-                &amp;Tous
-            </translation>
+            <source>&amp;All</source>
+            <translation>&amp;Tous</translation>
         </message>
         <message>
-            <source>
-                &amp;Search for Wengo Users
-            </source>
-            <translation>
-                &amp;Rechercher un contact
-            </translation>
+            <source>&amp;Search for Wengo Users</source>
+            <translation>&amp;Rechercher un contact</translation>
         </message>
         <message>
-            <source>
-                Type Here
-            </source>
-            <translation>
-                Tapez ici
-            </translation>
+            <source>Type Here</source>
+            <translation>Tapez ici</translation>
         </message>
         <message>
-            <source>
-                ToolBar
-            </source>
-            <translation>
-                Barre d'outils
-            </translation>
+            <source>ToolBar</source>
+            <translation>Barre d'outils</translation>
         </message>
         <message>
-            <source>
-                Wengo &amp;Forum
-            </source>
-            <translation>
-                Wengo &amp;Forum
-            </translation>
+            <source>Wengo &amp;Forum</source>
+            <translation>Wengo &amp;Forum</translation>
         </message>
         <message>
-            <source>
-                Add &amp;Contact
-            </source>
-            <translation>
-                Ajouter un &amp;Contact
-            </translation>
+            <source>Add &amp;Contact</source>
+            <translation>Ajouter un &amp;Contact</translation>
         </message>
         <message>
-            <source>
-                Send a Short Text &amp;Message (SMS)
-            </source>
-            <translation>
-                Envoyer un SMS
-            </translation>
+            <source>Send a Short Text &amp;Message (SMS)</source>
+            <translation>Envoyer un SMS</translation>
         </message>
         <message>
-            <source>
-                Create &amp;Conference Call
-            </source>
-            <translation>
-                Créer une &amp;Conférence
-            </translation>
+            <source>Create &amp;Conference Call</source>
+            <translation>Créer une &amp;Conférence</translation>
         </message>
         <message>
-            <source>
-                Wengo &amp;Wiki/FAQ
-            </source>
-            <translation>
-                Wengo &amp;Wiki/FAQ
-            </translation>
+            <source>Wengo &amp;Wiki/FAQ</source>
+            <translation>Wengo &amp;Wiki/FAQ</translation>
         </message>
         <message>
-            <source>
-                Learn more about &amp;Wengo Services
-            </source>
-            <translation>
-                Pour en savoir plus sur les services &amp;Wengo
-            </translation>
+            <source>Learn more about &amp;Wengo Services</source>
+            <translation>Pour en savoir plus sur les services &amp;Wengo</translation>
         </message>
         <message>
-            <source>
-                Show/Hide Unavailable &amp;Contacts
-            </source>
-            <translation>
-                Montrer/Cacher les contacts indisponibles
-            </translation>
+            <source>Show/Hide Unavailable &amp;Contacts</source>
+            <translation>Montrer/Cacher les contacts indisponibles</translation>
         </message>
         <message>
-            <source>
-                &amp;Instant Messaging Accounts
-            </source>
-            <translation>
-                &amp;Comptes de Messagerie Instantanée
-            </translation>
+            <source>&amp;Instant Messaging Accounts</source>
+            <translation>&amp;Comptes de Messagerie Instantanée</translation>
         </message>
         <message>
-            <source>
-                Configure My Instant Messaging Accounts
-            </source>
-            <translation>
-                Configurer mes comptes de Messagerie Instantanée
-            </translation>
+            <source>Configure My Instant Messaging Accounts</source>
+            <translation>Configurer mes comptes de Messagerie Instantanée</translation>
         </message>
         <message>
-            <source>
-                &amp;HangUp
-            </source>
-            <translation>
-                &amp;Raccrocher
-            </translation>
+            <source>&amp;HangUp</source>
+            <translation>&amp;Raccrocher</translation>
         </message>
         <message>
-            <source>
-                &amp;Hold/Resume
-            </source>
-            <translation>
-                &amp;Pause/Reprise
-            </translation>
+            <source>&amp;Hold/Resume</source>
+            <translation>&amp;Pause/Reprise</translation>
         </message>
         <message>
-            <source>
-                Show/Hide &amp;Groups
-            </source>
-            <translation>
-                Afficher/Cacher &amp;Groupes
-            </translation>
+            <source>Show/Hide &amp;Groups</source>
+            <translation>Afficher/Cacher &amp;Groupes</translation>
         </message>
         <message>
-            <source>
-                Change &amp;Profile...
-            </source>
-            <translation>
-                Changer de &amp;Profil...
-            </translation>
+            <source>Change &amp;Profile...</source>
+            <translation>Changer de &amp;Profil...</translation>
         </message>
         <message>
-            <source>
-                Log &amp;Off
-            </source>
-            <translation>
-                &amp;Déconnexion
-            </translation>
+            <source>Log &amp;Off</source>
+            <translation>&amp;Déconnexion</translation>
         </message>
         <message>
-            <source>
-                Open &amp;Chat Window
-            </source>
-            <translation>
-                Ouvrir une fenêtre &amp;Chat
-            </translation>
+            <source>Open &amp;Chat Window</source>
+            <translation>Ouvrir une fenêtre &amp;Chat</translation>
         </message>
         <message>
-            <source>
-                Enable/Disable &amp;Video Calls
-            </source>
-            <translation>
-                Activer/Désactiver appels &amp;videos
-            </translation>
+            <source>Enable/Disable &amp;Video Calls</source>
+            <translation>Activer/Désactiver appels &amp;videos</translation>
         </message>
         <message>
-            <source>
-                Show &amp;Volume Panel
-            </source>
-            <translation>
-                Afficher &amp;Panneau du Volume
-            </translation>
+            <source>Show &amp;Volume Panel</source>
+            <translation>Afficher &amp;Panneau du Volume</translation>
         </message>
         <message>
-            <source>
-                Short Text &amp;Messages (SMS)
-            </source>
-            <translation>
-                SMS
-            </translation>
+            <source>Short Text &amp;Messages (SMS)</source>
+            <translation>SMS</translation>
         </message>
         <message>
-            <source>
-                Show File Transfer
-            </source>
-            <translation>
-                Afficher le transfert de fichier
-            </translation>
+            <source>Show File Transfer</source>
+            <translation>Afficher le transfert de fichier</translation>
         </message>
         <message>
-            <source>
-                Rejected Calls
-            </source>
-            <translation>
-                Appels refusés
-            </translation>
+            <source>Rejected Calls</source>
+            <translation>Appels refusés</translation>
         </message>
     </context>
     <context>
-        <name>
-            AddIMContact
-        </name>
+        <name>AddIMContact</name>
         <message>
-            <source>
-                Contact ID:
-            </source>
-            <translation>
-                Identifiant:
-            </translation>
+            <source>Contact ID:</source>
+            <translation>Identifiant:</translation>
         </message>
         <message>
-            <source>
-                Login
-            </source>
-            <translation type="unfinished">
-                Se connecter
-            </translation>
+            <source>Login</source>
+            <translation type="unfinished">Se connecter</translation>
         </message>
         <message>
-            <source>
-                Enable
-            </source>
-            <translation>
-                Activé
-            </translation>
+            <source>Enable</source>
+            <translation>Activé</translation>
         </message>
         <message>
-            <source>
-                Add
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Ajouter
-            </translation>
+            <source>Add</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Ajouter</translation>
         </message>
         <message>
-            <source>
-                Cancel
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
+            <source>Cancel</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
 _ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Annuler
-            </translation>
+#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Annuler</translation>
         </message>
         <message>
-            <source>
-                WengoPhone - Add a Contact Account
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                WengoPhone - Ajouter le compte IM d'un contact
-            </translation>
+            <source>WengoPhone - Add a Contact Account</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>WengoPhone - Ajouter le compte IM d'un contact</translation>
         </message>
         <message>
-            <source>
-                Account:
-            </source>
-            <translation>
-                Compte:
-            </translation>
+            <source>Account:</source>
+            <translation>Compte:</translation>
         </message>
         <message>
-            <source>
-                Contact Type (protocol):
-            </source>
-            <translation type="unfinished">
-                Type de contact (protocole):
-            </translation>
+            <source>Contact Type (protocol):</source>
+            <translation type="unfinished">Type de contact (protocole):</translation>
         </message>
     </context>
     <context>
-        <name>
-            AdvancedSettings
-        </name>
+        <name>AdvancedSettings</name>
         <message>
-            <source>
-                Add
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Ajouter
-            </translation>
+            <source>Add</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Ajouter</translation>
         </message>
         <message>
-            <source>
-                Advanced Settings
-            </source>
-            <translation>
-                Paramètres avancés
-            </translation>
+            <source>Advanced Settings</source>
+            <translation>Paramètres avancés</translation>
         </message>
         <message>
-            <source>
-                Automatically answer incoming calls from
-            </source>
-            <translation>
-                Toujours accepter les appels entrants de la part de
-            </translation>
+            <source>Automatically answer incoming calls from</source>
+            <translation>Toujours accepter les appels entrants de la part de</translation>
         </message>
         <message>
-            <source>
-                Remove
-            </source>
-            <translation>
-                Supprimer
-            </translation>
+            <source>Remove</source>
+            <translation>Supprimer</translation>
         </message>
         <message>
-            <source>
-                Advanced Configuration Window
-            </source>
-            <translation>
-                Fenêtre de configuration avancée
-            </translation>
+            <source>Advanced Configuration Window</source>
+            <translation>Fenêtre de configuration avancée</translation>
         </message>
         <message>
-            <source>
-                Warning, this part is for advanced users.&lt;br&gt;Any mistake can badly damage the software.
-            </source>
-            <translation>
-                Attention, cette section est dédiée aux utilisateurs avertis.&lt;br&gt; Toute mauvaise manipulation peut endommager le logiciel.
-            </translation>
+            <source>Warning, this part is for advanced users.&lt;br&gt;Any mistake can badly damage 
+the software.</source>
+            <translation>Attention, cette section est dédiée aux utilisateurs avertis.&lt;br&gt; Toute 
+mauvaise manipulation peut endommager le logiciel.</translation>
         </message>
     </context>
     <context>
-        <name>
-            IMContactManager
-        </name>
+        <name>IMContactManager</name>
         <message>
-            <source>
-                Add
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Ajouter
-            </translation>
+            <source>Add</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Ajouter</translation>
         </message>
         <message>
-            <source>
-                Delete
-            </source>
-            <translation>
-                Supprimer
-            </translation>
+            <source>Delete</source>
+            <translation>Supprimer</translation>
         </message>
         <message>
-            <source>
-                Contact ID
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
+            <source>Contact ID</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
 _ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation type="unfinished">
-                Identifiant du contact
-            </translation>
+#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation type="unfinished">Identifiant du contact</translation>
         </message>
         <message>
-            <source>
-                Click on the add button below to add a new ID
-            </source>
-            <translation>
-                Cliquer sur le bouton Ajouter ci dessous pour associer un identifiant de messagerie à ce contact
-            </translation>
+            <source>Click on the add button below to add a new ID</source>
+            <translation>Cliquer sur le bouton Ajouter ci dessous pour associer un identifiant de 
+messagerie à ce contact</translation>
         </message>
         <message>
-            <source>
-                Contact Type (protocol)
-            </source>
-            <translation>
-                Type de contact (protocole)
-            </translation>
+            <source>Contact Type (protocol)</source>
+            <translation>Type de contact (protocole)</translation>
         </message>
     </context>
     <context>
-        <name>
-            WsDirectoryContact
-        </name>
+        <name>WsDirectoryContact</name>
         <message>
-            <source>
-                Add
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Ajouter
-            </translation>
+            <source>Add</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Ajouter</translation>
         </message>
         <message>
-            <source>
-                Status
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Statut
-            </translation>
+            <source>Status</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Statut</translation>
         </message>
         <message>
-            <source>
-                Call
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
+            <source>Call</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
 _ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Appel
-            </translation>
+#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Appel</translation>
         </message>
         <message>
-            <source>
-                City:
-            </source>
-            <translation>
-                Ville:
-            </translation>
+            <source>City:</source>
+            <translation>Ville:</translation>
         </message>
         <message>
-            <source>
-                Country:
-            </source>
-            <translation>
-                Pays:
-            </translation>
+            <source>Country:</source>
+            <translation>Pays:</translation>
         </message>
         <message>
-            <source>
-                Nickname:
-            </source>
-            <translation>
-                Pseudo:
-            </translation>
+            <source>Nickname:</source>
+            <translation>Pseudo:</translation>
         </message>
         <message>
-            <source>
-                Wengo number:
-            </source>
-            <translation>
-                Numéro Wengo:
-            </translation>
+            <source>Wengo number:</source>
+            <translation>Numéro Wengo:</translation>
         </message>
         <message>
-            <source>
-                FirstName LastName
-            </source>
-            <translation>
-                Prénom Nom
-            </translation>
+            <source>FirstName LastName</source>
+            <translation>Prénom Nom</translation>
         </message>
         <message>
-            <source>
-                SIP address:
-            </source>
-            <translation>
-                Adresse SIP:
-            </translation>
+            <source>SIP address:</source>
+            <translation>Adresse SIP:</translation>
         </message>
     </context>
     <context>
-        <name>
-            ConferenceCallWidget
-        </name>
+        <name>ConferenceCallWidget</name>
         <message>
-            <source>
-                Cancel
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
+            <source>Cancel</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
 _ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Annuler
-            </translation>
+#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Annuler</translation>
         </message>
         <message>
-            <source>
-                WengoPhone - Create a Conference
-            </source>
-            <translation>
-                WengoPhone -Créer une conférence
-            </translation>
+            <source>WengoPhone - Create a Conference</source>
+            <translation>WengoPhone -Créer une conférence</translation>
         </message>
         <message>
-            <source>
-                Phone number 2:
-            </source>
-            <translation>
-                Numéro 2:
-            </translation>
+            <source>Phone number 2:</source>
+            <translation>Numéro 2:</translation>
         </message>
         <message>
-            <source>
-                Phone number 1:
-            </source>
-            <translation>
-                Numéro 1:
-            </translation>
+            <source>Phone number 1:</source>
+            <translation>Numéro 1:</translation>
         </message>
         <message>
-            <source>
-                Start
-            </source>
-            <translation>
-                Appeler
-            </translation>
+            <source>Start</source>
+            <translation>Appeler</translation>
         </message>
         <message>
-            <source>
-                &lt;span style=&quot; font-size:18pt;&quot;&gt;Conference&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;Please enter two phone numbers &lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;or Wengo contact ID in order&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;to create a 3-way conference.&lt;/p&gt;
-            </source>
-            <translation>
-                &lt;span style=&quot; font-size:18pt;&quot;&gt;Conference&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;Veuillez saisir deux numéros de téléphone &lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;ou deux pseudos Wengo afin&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;de créer une conférence.&lt;/p&gt;
-            </translation>
+            <source>&lt;span style=&quot; font-size:18pt;&quot;&gt;Conference&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;Please enter 
+two phone numbers &lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-
+left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;or Wengo 
+contact ID in order&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-
+left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;to create 
+a 3-way conference.&lt;/p&gt;</source>
+            <translation>&lt;span style=&quot; font-size:18pt;&quot;&gt;Conference&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;Veuillez 
+saisir deux numéros de téléphone &lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-
+bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-
+indent:0px;&quot;&gt;ou deux pseudos Wengo afin&lt;/p&gt;&lt;p style=&quot; margin-top:0px; 
+margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; 
+text-indent:0px;&quot;&gt;de créer une conférence.&lt;/p&gt;</translation>
         </message>
         <message>
-            <source>
-                ...
-            </source>
-            <translation>
-                ...
-            </translation>
+            <source>...</source>
+            <translation>...</translation>
         </message>
     </context>
     <context>
-        <name>
-            ConferenceInviteWidget
-        </name>
+        <name>ConferenceInviteWidget</name>
         <message>
-            <source>
-                Cancel
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
+            <source>Cancel</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
 _ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Annuler
-            </translation>
+#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Annuler</translation>
         </message>
         <message>
-            <source>
-                &lt;span style=&quot; font-size:18pt;&quot;&gt;Conference&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;Please enter two phone numbers &lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;or Wengo contact ID in order&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;to create a 3-way conference.&lt;/p&gt;
-            </source>
-            <translation>
-                &lt;span style=&quot; font-size:18pt;&quot;&gt;Conference&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;Veuillez saisir deux numéros de téléphone &lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;ou deux pseudos Wengo afin&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;de créer une conférence.&lt;/p&gt;
-            </translation>
+            <source>&lt;span style=&quot; font-size:18pt;&quot;&gt;Conference&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;Please enter 
+two phone numbers &lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-
+left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;or Wengo 
+contact ID in order&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-
+left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;to create 
+a 3-way conference.&lt;/p&gt;</source>
+            <translation>&lt;span style=&quot; font-size:18pt;&quot;&gt;Conference&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;Veuillez 
+saisir deux numéros de téléphone &lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-
+bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-
+indent:0px;&quot;&gt;ou deux pseudos Wengo afin&lt;/p&gt;&lt;p style=&quot; margin-top:0px; 
+margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; 
+text-indent:0px;&quot;&gt;de créer une conférence.&lt;/p&gt;</translation>
         </message>
         <message>
-            <source>
-                &amp;Start
-            </source>
-            <translation>
-                &amp;Commencer
-            </translation>
+            <source>&amp;Start</source>
+            <translation>&amp;Commencer</translation>
         </message>
         <message>
-            <source>
-                &amp;Add &gt;&gt;
-            </source>
-            <translation>
-                &amp;Ajouter &gt;&gt;
-            </translation>
+            <source>&amp;Add &gt;&gt;</source>
+            <translation>&amp;Ajouter &gt;&gt;</translation>
         </message>
         <message>
-            <source>
-                &lt;&lt; &amp;Remove
-            </source>
-            <translation>
-                &lt;&lt; &amp;Supprimer
-            </translation>
+            <source>&lt;&lt; &amp;Remove</source>
+            <translation>&lt;&lt; &amp;Supprimer</translation>
         </message>
         <message>
-            <source>
-                Available Contacts
-            </source>
-            <translation>
-                Contacts disponibles
-            </translation>
+            <source>Available Contacts</source>
+            <translation>Contacts disponibles</translation>
         </message>
     </context>
     <context>
-        <name>
-            CrashReport
-        </name>
+        <name>CrashReport</name>
         <message>
-            <source>
-                Cancel
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
+            <source>Cancel</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
 _ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Annuler
-            </translation>
+#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Annuler</translation>
         </message>
         <message>
-            <source>
-                Program Failure
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Echec du programme
-            </translation>
+            <source>Program Failure</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Echec du programme</translation>
         </message>
         <message>
-            <source>
-                The WengoPhone execution failed and has generated a diagnostic file.&lt;br&gt;This file contains usefull information to solve the problem you are encounting.&lt;br&gt;Thanks for your contribution.&lt;br&gt;&lt;br&gt;The WengoPhone Development Team.
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                L'execution du WengoPhone a échoué et un rapport d'erreur a été généré.Ce rapport contient des informations essentielles aux développeurs pour résoudre le problème rencontré.Merci de votre participation.L'équipe de développement du WengoPhone.
-            </translation>
+            <source>The WengoPhone execution failed and has generated a diagnostic file.&lt;br&gt;This 
+file contains usefull information to solve the problem you are 
+encounting.&lt;br&gt;Thanks for your contribution.&lt;br&gt;&lt;br&gt;The WengoPhone 
+Development Team.</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>L'execution du WengoPhone a échoué et un rapport d'erreur a été généré.Ce 
+rapport contient des informations essentielles aux développeurs pour 
+résoudre le problème rencontré.Merci de votre participation.L'équipe de 
+développement du WengoPhone.</translation>
         </message>
         <message>
-            <source>
-                Send
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Envoyer
-            </translation>
+            <source>Send</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Envoyer</translation>
         </message>
         <message>
-            <source>
-                Optional Information
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Informations facultatives
-            </translation>
+            <source>Optional Information</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Informations facultatives</translation>
         </message>
         <message>
-            <source>
-                In order to help the developers you can complete this report. This step is optional.&lt;br&gt;Use Case Description:
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Afin d'aider les développeurs vous pouvez compléter ce rapport. Cette étape est facultative.Décriverz les circonsances du problème:
-            </translation>
+            <source>In order to help the developers you can complete this report. This step is 
+optional.&lt;br&gt;Use Case Description:</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Afin d'aider les développeurs vous pouvez compléter ce rapport. Cette étape 
+est facultative.Décriverz les circonsances du problème:</translation>
         </message>
         <message>
-            <source>
-                Your Mail:
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Votre Email:
-            </translation>
+            <source>Your Mail:</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Votre Email:</translation>
         </message>
     </context>
     <context>
-        <name>
-            FileTransferItem
-        </name>
+        <name>FileTransferItem</name>
         <message>
-            <source>
-                Cancel
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
+            <source>Cancel</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
 _ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Annuler
-            </translation>
+#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Annuler</translation>
         </message>
         <message>
-            <source>
-                Form
-            </source>
-            <translation>
-                Formulaire
-            </translation>
+            <source>Form</source>
+            <translation>Formulaire</translation>
         </message>
         <message>
-            <source>
-                From:
-            </source>
-            <translation>
-                De:
-            </translation>
+            <source>From:</source>
+            <translation>De:</translation>
         </message>
         <message>
-            <source>
-                Pause
-            </source>
-            <translation>
-                Pause
-            </translation>
+            <source>Pause</source>
+            <translation>Pause</translation>
         </message>
     </context>
     <context>
-        <name>
-            HttpProxyLoginWindow
-        </name>
+        <name>HttpProxyLoginWindow</name>
         <message>
-            <source>
-                Cancel
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
+            <source>Cancel</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
 _ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Annuler
-            </translation>
+#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Annuler</translation>
         </message>
         <message>
-            <source>
-                WengoPhone - Local HTTP Proxy
-            </source>
-            <translation>
-                WengoPhone - Proxy HTTP local
-            </translation>
+            <source>WengoPhone - Local HTTP Proxy</source>
+            <translation>WengoPhone - Proxy HTTP local</translation>
         </message>
         <message>
-            <source>
-                HTTP Proxy Address:
-            </source>
-            <translation>
-                Adresse du Proxy HTTP:
-            </translation>
+            <source>HTTP Proxy Address:</source>
+            <translation>Adresse du Proxy HTTP:</translation>
         </message>
         <message>
-            <source>
-                HTTP Proxy Port Number:
-            </source>
-            <translation>
-                Port:
-            </translation>
+            <source>HTTP Proxy Port Number:</source>
+            <translation>Port:</translation>
         </message>
         <message>
-            <source>
-                HTTP Proxy Login:
-            </source>
-            <translation>
-                Nom d'utilisateur:
-            </translation>
+            <source>HTTP Proxy Login:</source>
+            <translation>Nom d'utilisateur:</translation>
         </message>
         <message>
-            <source>
-                HTTP Proxy Password:
-            </source>
-            <translation>
-                Mot de passe:
-            </translation>
+            <source>HTTP Proxy Password:</source>
+            <translation>Mot de passe:</translation>
         </message>
         <message>
-            <source>
-                OK
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
+            <source>OK</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
 _ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                OK
-            </translation>
+#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>OK</translation>
         </message>
         <message>
-            <source>
-                &lt;span style=&quot;font-size:18pt;&quot;&gt;HTTP Proxy Authentication&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;Your local HTTP proxy uses authentication&lt;br&gt;Please enter your login and password&lt;/span&gt;
-            </source>
-            <translation>
-                &lt;span style=&quot;font-size:18pt;&quot;&gt;HTTP Proxy Authentication&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;Votre proxy HTTP local requiert une authentification&lt;br&gt;Veuiller saisisir votre identifiant et votre mot de passe&lt;/span&gt;
-            </translation>
+            <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;HTTP Proxy 
+Authentication&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;Your local HTTP proxy uses 
+authentication&lt;br&gt;Please enter your login and password&lt;/span&gt;</source>
+            <translation>&lt;span style=&quot;font-size:18pt;&quot;&gt;HTTP Proxy 
+Authentication&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;Votre proxy HTTP local requiert une 
+authentification&lt;br&gt;Veuiller saisisir votre identifiant et votre mot de 
+passe&lt;/span&gt;</translation>
         </message>
     </context>
     <context>
-        <name>
-            IMAccountTemplate
-        </name>
+        <name>IMAccountTemplate</name>
         <message>
-            <source>
-                Cancel
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
+            <source>Cancel</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
 _ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Annuler
-            </translation>
+#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Annuler</translation>
         </message>
         <message>
-            <source>
-                Save
-            </source>
-            <translation>
-                Enregistrer
-            </translation>
+            <source>Save</source>
+            <translation>Enregistrer</translation>
         </message>
         <message>
-            <source>
-                IM Account Settings
-            </source>
-            <translation>
-                Paramètres des comptes IM
-            </translation>
+            <source>IM Account Settings</source>
+            <translation>Paramètres des comptes IM</translation>
         </message>
     </context>
     <context>
-        <name>
-            ProfileDetails
-        </name>
+        <name>ProfileDetails</name>
         <message>
-            <source>
-                Cancel
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
+            <source>Cancel</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
 _ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Annuler
-            </translation>
+#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Annuler</translation>
         </message>
         <message>
-            <source>
-                Save
-            </source>
-            <translation>
-                Enregistrer
-            </translation>
+            <source>Save</source>
+            <translation>Enregistrer</translation>
         </message>
         <message>
-            <source>
-                Email:
-            </source>
-            <translation>
-                Email:
-            </translation>
+            <source>Email:</source>
+            <translation>Email:</translation>
         </message>
         <message>
-            <source>
-                Phone Numbers
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Numéros de téléphone
-            </translation>
+            <source>Phone Numbers</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Numéros de téléphone</translation>
         </message>
         <message>
-            <source>
-                Mobile phone
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Téléphone Mobile
-            </translation>
+            <source>Mobile phone</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Téléphone Mobile</translation>
         </message>
         <message>
-            <source>
-                Click to change avatar
-            </source>
-            <translation>
-                Cliquer pour changer d'avatar
-            </translation>
+            <source>Click to change avatar</source>
+            <translation>Cliquer pour changer d'avatar</translation>
         </message>
         <message>
-            <source>
-                Birth Date:
-            </source>
-            <translation>
-                Date de naissance:
-            </translation>
+            <source>Birth Date:</source>
+            <translation>Date de naissance:</translation>
         </message>
         <message>
-            <source>
-                Group:
-            </source>
-            <translation>
-                Groupe:
-            </translation>
+            <source>Group:</source>
+            <translation>Groupe:</translation>
         </message>
         <message>
-            <source>
-                dd MMMM yyyy
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                dd MMMM yyyy
-            </translation>
+            <source>dd MMMM yyyy</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>dd MMMM yyyy</translation>
         </message>
         <message>
-            <source>
-                State:
-            </source>
-            <translation>
-                Région:
-            </translation>
+            <source>State:</source>
+            <translation>Région:</translation>
         </message>
         <message>
-            <source>
-                Gender:
-            </source>
-            <translation>
-                Genre:
-            </translation>
+            <source>Gender:</source>
+            <translation>Genre:</translation>
         </message>
         <message>
-            <source>
-                City:
-            </source>
-            <translation>
-                Ville:
-            </translation>
+            <source>City:</source>
+            <translation>Ville:</translation>
         </message>
         <message>
-            <source>
-                Unknown
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Inconnu
-            </translation>
+            <source>Unknown</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Inconnu</translation>
         </message>
         <message>
-            <source>
-                Male
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Homme
-            </translation>
+            <source>Male</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Homme</translation>
         </message>
         <message>
-            <source>
-                Female
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Femme
-            </translation>
+            <source>Female</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Femme</translation>
         </message>
         <message>
-            <source>
-                Home phone
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Numéro de téléphone personnel
-            </translation>
+            <source>Home phone</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Numéro de téléphone personnel</translation>
         </message>
         <message>
-            <source>
-                First Name:
-            </source>
-            <translation>
-                Prénom:
-            </translation>
+            <source>First Name:</source>
+            <translation>Prénom:</translation>
         </message>
         <message>
-            <source>
-                Last Name:
-            </source>
-            <translation>
-                Nom:
-            </translation>
+            <source>Last Name:</source>
+            <translation>Nom:</translation>
         </message>
         <message>
-            <source>
-                General
-            </source>
-            <translation>
-                Général
-            </translation>
+            <source>General</source>
+            <translation>Général</translation>
         </message>
         <message>
-            <source>
-                Network IDs (MSN, Jabber...)
-            </source>
-            <translation>
-                Identifiants (MSN, Jabber...)
-            </translation>
+            <source>Network IDs (MSN, Jabber...)</source>
+            <translation>Identifiants (MSN, Jabber...)</translation>
         </message>
         <message>
-            <source>
-                Advanced &gt;&gt;
-            </source>
-            <translation>
-                Avancé &gt;&gt;
-            </translation>
+            <source>Advanced &gt;&gt;</source>
+            <translation>Avancé &gt;&gt;</translation>
         </message>
         <message>
-            <source>
-                Fill in all your network Id to stay connected with your contacts
-            </source>
-            <translation>
-                Veuillez renseigner tous vos identifiants pour rester connecté avec vos contacts
-            </translation>
+            <source>Fill in all your network Id to stay connected with your contacts</source>
+            <translation>Veuillez renseigner tous vos identifiants pour rester connecté avec vos 
+contacts</translation>
         </message>
         <message>
-            <source>
-                Contact
-            </source>
-            <translation>
-                Contact
-            </translation>
+            <source>Contact</source>
+            <translation>Contact</translation>
         </message>
         <message>
-            <source>
-                Details
-            </source>
-            <translation>
-                Détails
-            </translation>
+            <source>Details</source>
+            <translation>Détails</translation>
         </message>
         <message>
-            <source>
-                Web/blog:
-            </source>
-            <translation>
-                Web/blog:
-            </translation>
+            <source>Web/blog:</source>
+            <translation>Web/blog:</translation>
         </message>
         <message>
-            <source>
-                Country:
-            </source>
-            <translation>
-                Pays:
-            </translation>
+            <source>Country:</source>
+            <translation>Pays:</translation>
         </message>
         <message>
-            <source>
-                Notes
-            </source>
-            <translation>
-                Notes
-            </translation>
+            <source>Notes</source>
+            <translation>Notes</translation>
         </message>
     </context>
     <context>
-        <name>
-            QtFileTransferItem
-        </name>
+        <name>QtFileTransferItem</name>
         <message>
-            <source>
-                Cancel
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
+            <source>Cancel</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
 _ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Annuler
-            </translation>
+#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Annuler</translation>
         </message>
         <message>
-            <source>
-                Remove
-            </source>
-            <translation>
-                Supprimer
-            </translation>
+            <source>Remove</source>
+            <translation>Supprimer</translation>
         </message>
         <message>
-            <source>
-                Pause
-            </source>
-            <translation>
-                Pause
-            </translation>
+            <source>Pause</source>
+            <translation>Pause</translation>
         </message>
         <message>
-            <source>
-                Starting
-            </source>
-            <translation>
-                Démarrage
-            </translation>
+            <source>Starting</source>
+            <translation>Démarrage</translation>
         </message>
         <message>
-            <source>
-                From: 
-            </source>
-            <translation>
-                De: 
-            </translation>
+            <source>From: </source>
+            <translation>De: </translation>
         </message>
         <message>
-            <source>
-                To: 
-            </source>
-            <translation>
-                Vers: 
-            </translation>
+            <source>To: </source>
+            <translation>Vers: </translation>
         </message>
         <message>
-            <source>
-                Open
-            </source>
-            <translation>
-                Ouvrir
-            </translation>
+            <source>Open</source>
+            <translation>Ouvrir</translation>
         </message>
         <message>
-            <source>
-                Resume
-            </source>
-            <translation>
-                Reprendre
-            </translation>
+            <source>Resume</source>
+            <translation>Reprendre</translation>
         </message>
         <message>
-            <source>
-                Waiting for anwser...
-            </source>
-            <translation>
-                Attente d'une réponse...
-            </translation>
+            <source>Waiting for anwser...</source>
+            <translation>Attente d'une réponse...</translation>
         </message>
         <message>
-            <source>
-                Done
-            </source>
-            <translation>
-                Terminé
-            </translation>
+            <source>Done</source>
+            <translation>Terminé</translation>
         </message>
         <message>
-            <source>
-                Failed
-            </source>
-            <translation>
-                Echoué
-            </translation>
+            <source>Failed</source>
+            <translation>Echoué</translation>
         </message>
         <message>
-            <source>
-                Paused
-            </source>
-            <translation>
-                Mis en pause
-            </translation>
+            <source>Paused</source>
+            <translation>Mis en pause</translation>
         </message>
         <message>
-            <source>
-                Paused by peer
-            </source>
-            <translation>
-                Mis en pause par le contact
-            </translation>
+            <source>Paused by peer</source>
+            <translation>Mis en pause par le contact</translation>
         </message>
         <message>
-            <source>
-                Cancelled
-            </source>
-            <translation>
-                Annulé
-            </translation>
+            <source>Cancelled</source>
+            <translation>Annulé</translation>
         </message>
         <message>
-            <source>
-                Cancelled by peer
-            </source>
-            <translation>
-                Annulé par le contact
-            </translation>
+            <source>Cancelled by peer</source>
+            <translation>Annulé par le contact</translation>
         </message>
         <message>
-            <source>
-                Downloading...
-            </source>
-            <translation>
-                Téléchargement...
-            </translation>
+            <source>Downloading...</source>
+            <translation>Téléchargement...</translation>
         </message>
         <message>
-            <source>
-                Uploading...
-            </source>
-            <translation>
-                Envoi...
-            </translation>
+            <source>Uploading...</source>
+            <translation>Envoi...</translation>
         </message>
     </context>
     <context>
-        <name>
-            QtIMAccountManager
-        </name>
+        <name>QtIMAccountManager</name>
         <message>
-            <source>
-                Cancel
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
+            <source>Cancel</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
 _ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Annuler
-            </translation>
+#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Annuler</translation>
         </message>
         <message>
-            <source>
-                Are sure you want to delete this account?
-            </source>
-            <translation>
-                Etes vous sur de vouloir supprimer ce compte ?
-            </translation>
+            <source>Are sure you want to delete this account?</source>
+            <translation>Etes vous sur de vouloir supprimer ce compte ?</translation>
         </message>
         <message>
-            <source>
-                &amp;Delete
-            </source>
-            <translation>
-                &amp;Supprimer
-            </translation>
+            <source>&amp;Delete</source>
+            <translation>&amp;Supprimer</translation>
         </message>
     </context>
     <context>
-        <name>
-            QtIMContactManager
-        </name>
+        <name>QtIMContactManager</name>
         <message>
-            <source>
-                Cancel
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
+            <source>Cancel</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
 _ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Annuler
-            </translation>
+#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Annuler</translation>
         </message>
         <message>
-            <source>
-                &amp;Delete
-            </source>
-            <translation>
-                &amp;Supprimer
-            </translation>
+            <source>&amp;Delete</source>
+            <translation>&amp;Supprimer</translation>
         </message>
         <message>
-            <source>
-                Are sure you want to delete this IM contact?
-            </source>
-            <translation>
-                Voulez vous vaiment supprimer ce contact ?
-            </translation>
+            <source>Are sure you want to delete this IM contact?</source>
+            <translation>Voulez vous vaiment supprimer ce contact ?</translation>
         </message>
     </context>
     <context>
-        <name>
-            RenameGroupDialog
-        </name>
+        <name>RenameGroupDialog</name>
         <message>
-            <source>
-                Cancel
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
+            <source>Cancel</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
 _ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Annuler
-            </translation>
+#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Annuler</translation>
         </message>
         <message>
-            <source>
-                OK
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
+            <source>OK</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
 _ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                OK
-            </translation>
+#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>OK</translation>
         </message>
         <message>
-            <source>
-                Enter the new group name:
-            </source>
-            <translation>
-                Saisissez le nouveau nom de groupe :
-            </translation>
+            <source>Enter the new group name:</source>
+            <translation>Saisissez le nouveau nom de groupe :</translation>
         </message>
         <message>
-            <source>
-                WengoPhone - Rename Contact Group
-            </source>
-            <translation>
-                WengoPhone - Renommer un groupe de contacts
-            </translation>
+            <source>WengoPhone - Rename Contact Group</source>
+            <translation>WengoPhone - Renommer un groupe de contacts</translation>
         </message>
     </context>
     <context>
-        <name>
-            SoftUpdateWindow
-        </name>
+        <name>SoftUpdateWindow</name>
         <message>
-            <source>
-                Cancel
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
+            <source>Cancel</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
 _ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Annuler
-            </translation>
+#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Annuler</translation>
         </message>
         <message>
-            <source>
-                WengoPhone - Downloading update
-            </source>
-            <translation>
-                WengoPhone - Mise à jour
-            </translation>
+            <source>WengoPhone - Downloading update</source>
+            <translation>WengoPhone - Mise à jour</translation>
         </message>
         <message>
-            <source>
-                Downloading WengoPhone update...Version:%1URL:%2File Size:%3 (MB)Speed:%4 (kB/s)
-            </source>
-            <translation>
-                Téléchargement en cours...Version:%1URL:%2Taille:%3 (MB)Vitesse:%4 (kB/s)
-            </translation>
+            <source>Downloading WengoPhone update...Version:%1URL:%2File Size:%3 (MB)Speed:%4 
+(kB/s)</source>
+            <translation>Téléchargement en cours...Version:%1URL:%2Taille:%3 (MB)Vitesse:%4 (kB/s)</translation>
         </message>
     </context>
     <context>
-        <name>
-            WengoConfigDialog
-        </name>
+        <name>WengoConfigDialog</name>
         <message>
-            <source>
-                Cancel
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
+            <source>Cancel</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
 _ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Annuler
-            </translation>
+#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Annuler</translation>
         </message>
         <message>
-            <source>
-                Save
-            </source>
-            <translation>
-                Enregistrer
-            </translation>
+            <source>Save</source>
+            <translation>Enregistrer</translation>
         </message>
         <message>
-            <source>
-                Language
-            </source>
-            <translation>
-                Langue
-            </translation>
+            <source>Language</source>
+            <translation>Langue</translation>
         </message>
         <message>
-            <source>
-                General
-            </source>
-            <translation>
-                Général
-            </translation>
+            <source>General</source>
+            <translation>Général</translation>
         </message>
         <message>
-            <source>
-                Accounts
-            </source>
-            <translation>
-                Comptes
-            </translation>
+            <source>Accounts</source>
+            <translation>Comptes</translation>
         </message>
         <message>
-            <source>
-                Advanced
-            </source>
-            <translation>
-                Avancé
-            </translation>
+            <source>Advanced</source>
+            <translation>Avancé</translation>
         </message>
         <message>
-            <source>
-                Audio
-            </source>
-            <translation>
-                Audio
-            </translation>
+            <source>Audio</source>
+            <translation>Audio</translation>
         </message>
         <message>
-            <source>
-                Call Forward
-            </source>
-            <translation>
-                Transfert d'appel
-            </translation>
+            <source>Call Forward</source>
+            <translation>Transfert d'appel</translation>
         </message>
         <message>
-            <source>
-                Notifications &amp; Sounds
-            </source>
-            <translation type="unfinished">
-                Alertes &amp; Sons
-            </translation>
+            <source>Notifications &amp; Sounds</source>
+            <translation type="unfinished">Alertes &amp; Sons</translation>
         </message>
         <message>
-            <source>
-                Video
-            </source>
-            <translation>
-                Vidéo
-            </translation>
+            <source>Video</source>
+            <translation>Vidéo</translation>
         </message>
         <message>
-            <source>
-                WengoPhone - Configuration
-            </source>
-            <translation>
-                WengoPhone - Configuration
-            </translation>
+            <source>WengoPhone - Configuration</source>
+            <translation>WengoPhone - Configuration</translation>
         </message>
     </context>
     <context>
-        <name>
-            Wizard
-        </name>
+        <name>Wizard</name>
         <message>
-            <source>
-                Cancel
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
+            <source>Cancel</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
 _ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Annuler
-            </translation>
+#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Annuler</translation>
         </message>
         <message>
-            <source>
-                Finish
-            </source>
-            <translation>
-                Terminer
-            </translation>
+            <source>Finish</source>
+            <translation>Terminer</translation>
         </message>
         <message>
-            <source>
-                Next &gt;
-            </source>
-            <translation>
-                Suivant &gt;
-            </translation>
+            <source>Next &gt;</source>
+            <translation>Suivant &gt;</translation>
         </message>
         <message>
-            <source>
-                &lt; Back
-            </source>
-            <translation>
-                &lt; Précédent
-            </translation>
+            <source>&lt; Back</source>
+            <translation>&lt; Précédent</translation>
         </message>
     </context>
     <context>
-        <name>
-            PhoneCallWidget
-        </name>
+        <name>PhoneCallWidget</name>
         <message>
-            <source>
-                Status
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Statut
-            </translation>
+            <source>Status</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Statut</translation>
         </message>
         <message>
-            <source>
-                Duration
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Durée
-            </translation>
+            <source>Duration</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Durée</translation>
         </message>
         <message>
-            <source>
-                &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-size:13pt; font-weight:600;&quot;&gt;NickName or number&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-size:13pt; font-weight:600;&quot;&gt;Pseudo ou numéro&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
-            </translation>
+            <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
+white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-
+weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
+top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
+indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-size:13pt; 
+font-weight:600;&quot;&gt;NickName or number&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
+white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-
+weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
+top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
+indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-size:13pt; 
+font-weight:600;&quot;&gt;Pseudo ou numéro&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
         </message>
     </context>
     <context>
-        <name>
-            QtPhoneCall
-        </name>
+        <name>QtPhoneCall</name>
         <message>
-            <source>
-                Status
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Statut
-            </translation>
+            <source>Status</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Statut</translation>
         </message>
         <message>
-            <source>
-                Invite to conference
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Inviter à la conférence
-            </translation>
+            <source>Invite to conference</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Inviter à la conférence</translation>
         </message>
         <message>
-            <source>
-                Resume
-            </source>
-            <translation>
-                Reprendre
-            </translation>
+            <source>Resume</source>
+            <translation>Reprendre</translation>
         </message>
         <message>
-            <source>
-                Accept
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
+            <source>Accept</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
 _ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Décrocher
-            </translation>
+#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Décrocher</translation>
         </message>
         <message>
-            <source>
-                Hang-up
-            </source>
-            <translation>
-                Raccrocher
-            </translation>
+            <source>Hang-up</source>
+            <translation>Raccrocher</translation>
         </message>
         <message>
-            <source>
-                Hold
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Mettre en attente
-            </translation>
+            <source>Hold</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Mettre en attente</translation>
         </message>
         <message>
-            <source>
-                Stop video
-            </source>
-            <translation>
-                Désactiver la vidéo
-            </translation>
+            <source>Stop video</source>
+            <translation>Désactiver la vidéo</translation>
         </message>
         <message>
-            <source>
-                Add contact
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Ajouter un contact
-            </translation>
+            <source>Add contact</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Ajouter un contact</translation>
         </message>
         <message>
-            <source>
-                Error
-            </source>
-            <translation>
-                Erreur
-            </translation>
+            <source>Error</source>
+            <translation>Erreur</translation>
         </message>
         <message>
-            <source>
-                Talking
-            </source>
-            <translation>
-                Communication en cours
-            </translation>
+            <source>Talking</source>
+            <translation>Communication en cours</translation>
         </message>
         <message>
-            <source>
-                Dialing
-            </source>
-            <translation>
-                Numérotation
-            </translation>
+            <source>Dialing</source>
+            <translation>Numérotation</translation>
         </message>
         <message>
-            <source>
-                Ringing
-            </source>
-            <translation>
-                En attente
-            </translation>
+            <source>Ringing</source>
+            <translation>En attente</translation>
         </message>
         <message>
-            <source>
-                Incoming Call
-            </source>
-            <translation>
-                Appel entrant
-            </translation>
+            <source>Incoming Call</source>
+            <translation>Appel entrant</translation>
         </message>
         <message>
-            <source>
-                Redirected
-            </source>
-            <translation>
-                Transféré
-            </translation>
+            <source>Redirected</source>
+            <translation>Transféré</translation>
         </message>
         <message>
-            <source>
-                Start video
-            </source>
-            <translation>
-                Activer la vidéo
-            </translation>
+            <source>Start video</source>
+            <translation>Activer la vidéo</translation>
         </message>
         <message>
-            <source>
-                Talking - conference
-            </source>
-            <translation>
-                En communication - Conférence
-            </translation>
+            <source>Talking - conference</source>
+            <translation>En communication - Conférence</translation>
         </message>
         <message>
-            <source>
-                WengoPhone - Proceed Conference
-            </source>
-            <translation>
-                WengoPhone - Commencer la conférence
-            </translation>
+            <source>WengoPhone - Proceed Conference</source>
+            <translation>WengoPhone - Commencer la conférence</translation>
         </message>
         <message>
-            <source>
-                When you are ready to start the conference, click on the button belowPlease wait for a few seconds...
-            </source>
-            <translation>
-                Quand vous êtres prêt à lancer la conférence, cliquez sur le bouton ci-dessousVeuillez patientez...
-            </translation>
+            <source>When you are ready to start the conference, click on the button belowPlease 
+wait for a few seconds...</source>
+            <translation>Quand vous êtres prêt à lancer la conférence, cliquez sur le bouton ci-
+dessousVeuillez patientez...</translation>
         </message>
         <message>
-            <source>
-                Call Duration
-            </source>
-            <translation>
-                Durée d'appel
-            </translation>
+            <source>Call Duration</source>
+            <translation>Durée d'appel</translation>
         </message>
         <message>
-            <source>
-                Initialization...
-            </source>
-            <translation>
-                Initialisation...
-            </translation>
+            <source>Initialization...</source>
+            <translation>Initialisation...</translation>
         </message>
     </context>
     <context>
-        <name>
-            QtSystray
-        </name>
+        <name>QtSystray</name>
         <message>
-            <source>
-                Status
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Statut
-            </translation>
+            <source>Status</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Statut</translation>
         </message>
         <message>
-            <source>
-                Call
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
+            <source>Call</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
 _ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Appel
-            </translation>
+#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Appel</translation>
         </message>
         <message>
-            <source>
-                Call SIP
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Appeler une adresse SIP
-            </translation>
+            <source>Call SIP</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Appeler une adresse SIP</translation>
         </message>
         <message>
-            <source>
-                Call land line
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Appeler une ligne fixe
-            </translation>
+            <source>Call land line</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Appeler une ligne fixe</translation>
         </message>
         <message>
-            <source>
-                Call Mobile
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Appeler un Mobile
-            </translation>
+            <source>Call Mobile</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Appeler un Mobile</translation>
         </message>
         <message>
-            <source>
-                Send SMS
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
+            <source>Send SMS</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
 _ OBSOLETE
 #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
 _ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Envoyer un SMS
-            </translation>
+#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Envoyer un SMS</translation>
         </message>
         <message>
-            <source>
-                Internet Connection Error
-            </source>
-            <translation>
-                Erreur de connexion Internet
-            </translation>
+            <source>Internet Connection Error</source>
+            <translation>Erreur de connexion Internet</translation>
         </message>
         <message>
-            <source>
-                Connecting...
-            </source>
-            <translation>
-                Connexion...
-            </translation>
+            <source>Connecting...</source>
+            <translation>Connexion...</translation>
         </message>
         <message>
-            <source>
-                Open WengoPhone
-            </source>
-            <translation>
-                Ouvrir WengoPhone
-            </translation>
+            <source>Open WengoPhone</source>
+            <translation>Ouvrir WengoPhone</translation>
         </message>
         <message>
-            <source>
-                Quit WengoPhone
-            </source>
-            <translation>
-                Quitter WengoPhone
-            </translation>
+            <source>Quit WengoPhone</source>
+            <translation>Quitter WengoPhone</translation>
         </message>
         <message>
-            <source>
-                Online
-            </source>
-            <translation>
-                En ligne
-            </translation>
+            <source>Online</source>
+            <translation>En ligne</translation>
         </message>
         <message>
-            <source>
-                Do Not Disturb
-            </source>
-            <translation>
-                Ne pas déranger
-            </translation>
+            <source>Do Not Disturb</source>
+            <translation>Ne pas déranger</translation>
         </message>
         <message>
-            <source>
-                Invisible
-            </source>
-            <translation>
-                Invisible
-            </translation>
+            <source>Invisible</source>
+            <translation>Invisible</translation>
         </message>
         <message>
-            <source>
-                Away
-            </source>
-            <translation>
-                Absent
-            </translation>
+            <source>Away</source>
+            <translation>Absent</translation>
         </message>
         <message>
-            <source>
-                Send a SMS
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Envoyer un SMS
-            </translation>
+            <source>Send a SMS</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Envoyer un SMS</translation>
         </message>
         <message>
-            <source>
-                Start a chat
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Commencer un chat
-            </translation>
+            <source>Start a chat</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Commencer un chat</translation>
         </message>
         <message>
-            <source>
-                Place Call
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Composer un appel
-            </translation>
+            <source>Place Call</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Composer un appel</translation>
         </message>
         <message>
-            <source>
-                Offline
-            </source>
-            <translation>
-                Déconnecté
-            </translation>
+            <source>Offline</source>
+            <translation>Déconnecté</translation>
         </message>
     </context>
     <context>
-        <name>
-            HistoryWidget
-        </name>
+        <name>HistoryWidget</name>
         <message>
-            <source>
-                Type
-            </source>
-            <translation>
-                Type
-            </translation>
+            <source>Type</source>
+            <translation>Type</translation>
         </message>
         <message>
-            <source>
-                Name/ID
-            </source>
-            <translation>
-                Nom/Numéro
-            </translation>
+            <source>Name/ID</source>
+            <translation>Nom/Numéro</translation>
         </message>
         <message>
-            <source>
-                Date
-            </source>
-            <translation>
-                Date
-            </translation>
+            <source>Date</source>
+            <translation>Date</translation>
         </message>
         <message>
-            <source>
-                Duration
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Durée
-            </translation>
+            <source>Duration</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Durée</translation>
         </message>
     </context>
     <context>
-        <name>
-            AudioSettings
-        </name>
+        <name>AudioSettings</name>
         <message>
-            <source>
-                Make a test call 
-            </source>
-            <translation>
-                Effectuer un appel de test 
-            </translation>
+            <source>Make a test call </source>
+            <translation>Effectuer un appel de test </translation>
         </message>
         <message>
-            <source>
-                Audio Settings
-            </source>
-            <translation>
-                Paramètres Audio
-            </translation>
+            <source>Audio Settings</source>
+            <translation>Paramètres Audio</translation>
         </message>
         <message>
-            <source>
-                Ringing device:
-            </source>
-            <translation>
-                Sonnerie:
-            </translation>
+            <source>Ringing device:</source>
+            <translation>Sonnerie:</translation>
         </message>
         <message>
-            <source>
-                Input device:
-            </source>
-            <translation>
-                Micro:
-            </translation>
+            <source>Input device:</source>
+            <translation>Micro:</translation>
         </message>
         <message>
-            <source>
-                Output device:
-            </source>
-            <translation>
-                Ecouteur:
-            </translation>
+            <source>Output device:</source>
+            <translation>Ecouteur:</translation>
         </message>
     </context>
     <context>
-        <name>
-            WengoPhoneWindowConfigPanel
-        </name>
+        <name>WengoPhoneWindowConfigPanel</name>
         <message>
-            <source>
-                Audio Settings
-            </source>
-            <translation>
-                Paramètres Audio
-            </translation>
+            <source>Audio Settings</source>
+            <translation>Paramètres Audio</translation>
         </message>
         <message>
-            <source>
-                Video Settings
-            </source>
-            <translation>
-                Vidéo
-            </translation>
+            <source>Video Settings</source>
+            <translation>Vidéo</translation>
         </message>
         <message>
-            <source>
-                Enable Wenbox usage
-            </source>
-            <translation>
-                Activer la Wenbo USB
-            </translation>
+            <source>Enable Wenbox usage</source>
+            <translation>Activer la Wenbo USB</translation>
         </message>
         <message>
-            <source>
-                Enable half-duplex mode
-            </source>
-            <translation>
-                Activer le mode half-duplex
-            </translation>
+            <source>Enable half-duplex mode</source>
+            <translation>Activer le mode half-duplex</translation>
         </message>
         <message>
-            <source>
-                Wenbox USB
-            </source>
-            <translation>
-                Wenbox USB
-            </translation>
+            <source>Wenbox USB</source>
+            <translation>Wenbox USB</translation>
         </message>
         <message>
-            <source>
-                Loud Speakers
-            </source>
-            <translation>
-                Mode haut-parleurs
-            </translation>
+            <source>Loud Speakers</source>
+            <translation>Mode haut-parleurs</translation>
         </message>
     </context>
     <context>
-        <name>
-            AvatarFrame
-        </name>
+        <name>AvatarFrame</name>
         <message>
-            <source>
-                Form
-            </source>
-            <translation>
-                Formulaire
-            </translation>
+            <source>Form</source>
+            <translation>Formulaire</translation>
         </message>
     </context>
     <context>
-        <name>
-            AvatarWidget
-        </name>
+        <name>AvatarWidget</name>
         <message>
-            <source>
-                Form
-            </source>
-            <translation>
-                Formulaire
-            </translation>
+            <source>Form</source>
+            <translation>Formulaire</translation>
         </message>
     </context>
     <context>
-        <name>
-            ChatWidget
-        </name>
+        <name>ChatWidget</name>
         <message>
-            <source>
-                Form
-            </source>
-            <translation>
-                Formulaire
-            </translation>
+            <source>Form</source>
+            <translation>Formulaire</translation>
         </message>
         <message>
-            <source>
-                SEND
-            </source>
-            <translation>
-                Envoyer
-            </translation>
+            <source>SEND</source>
+            <translation>Envoyer</translation>
         </message>
         <message>
-            <source>
-                &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
-            </source>
-            <translation>
-                &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
-            </translation>
+            <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
+white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-
+weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot;-qt-
+paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; 
+margin-right:0px; -qt-block-indent:0; text-indent:0px; font-
+size:8pt;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+            <translation>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
+white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-
+weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot;-qt-
+paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; 
+margin-right:0px; -qt-block-indent:0; text-indent:0px; font-
+size:8pt;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
         </message>
         <message>
-            <source>
-                emoticons
-            </source>
-            <translation>
-                emoticônes
-            </translation>
+            <source>emoticons</source>
+            <translation>emoticônes</translation>
         </message>
         <message>
-            <source>
-                fonts
-            </source>
-            <translation>
-                Polices
-            </translation>
+            <source>fonts</source>
+            <translation>Polices</translation>
         </message>
         <message>
-            <source>
-                Call
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
+            <source>Call</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
 _ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Appel
-            </translation>
+#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Appel</translation>
         </message>
         <message>
-            <source>
-                Invite
-            </source>
-            <translation>
-                Inviter
-            </translation>
+            <source>Invite</source>
+            <translation>Inviter</translation>
         </message>
     </context>
     <context>
-        <name>
-            ChatWindow
-        </name>
+        <name>ChatWindow</name>
         <message>
-            <source>
-                Form
-            </source>
-            <translation>
-                Formulaire
-            </translation>
+            <source>Form</source>
+            <translation>Formulaire</translation>
         </message>
         <message>
-            <source>
-                Tab 1
-            </source>
-            <translation>
-                Onglet 1
-            </translation>
+            <source>Tab 1</source>
+            <translation>Onglet 1</translation>
         </message>
     </context>
     <context>
-        <name>
-            CloseChatTabWidget
-        </name>
+        <name>CloseChatTabWidget</name>
         <message>
-            <source>
-                Form
-            </source>
-            <translation>
-                Formulaire
-            </translation>
+            <source>Form</source>
+            <translation>Formulaire</translation>
         </message>
         <message>
-            <source>
-                Close active tab
-            </source>
-            <translation>
-                Fermer l'onglet actuel
-            </translation>
+            <source>Close active tab</source>
+            <translation>Fermer l'onglet actuel</translation>
         </message>
     </context>
     <context>
-        <name>
-            EmoticonsWidget
-        </name>
+        <name>EmoticonsWidget</name>
         <message>
-            <source>
-                Form
-            </source>
-            <translation>
-                Formulaire
-            </translation>
+            <source>Form</source>
+            <translation>Formulaire</translation>
         </message>
     </context>
     <context>
-        <name>
-            UserFrame
-        </name>
+        <name>UserFrame</name>
         <message>
-            <source>
-                Form
-            </source>
-            <translation>
-                Formulaire
-            </translation>
+            <source>Form</source>
+            <translation>Formulaire</translation>
         </message>
     </context>
     <context>
-        <name>
-            mainWindow
-        </name>
+        <name>mainWindow</name>
         <message>
-            <source>
-                Form
-            </source>
-            <translation>
-                Formulaire
-            </translation>
+            <source>Form</source>
+            <translation>Formulaire</translation>
+        </message>
+        <message>
+            <source>Tab 1</source>
+            <translation>Onglet 1</translation>
+        </message>
+        <message>
+            <source>Pause</source>
+            <translation>Pause</translation>
+        </message>
+        <message>
+            <source>Search</source>
+            <translation>Rechercher</translation>
         </message>
         <message>
             <source>
-                Tab 1
-            </source>
+qwepowefklwenmlkwefweklfnwelfknwlfknweklfnwelfknwefwefopjiwelpkwmjvlkwneklwemf
+lkwemdfklwemflwekmfwkled;qweef</source>
             <translation>
-                Onglet 1
-            </translation>
+qwepowefklwenmlkwefweklfnwelfknwlfknweklfnwelfknwefwefopjiwelpkwmjvlkwneklwemf
+lkwemdfklwemflwekmfwkled;qweef</translation>
         </message>
         <message>
             <source>
-                Pause
-            </source>
+wefwefweklfl;m,we;lf,;welcv,wel;wekfm;kf;pwecmlwkewl;efmwklegfhweklnqwekldhjl;
+dmjqwlekdfjqweklf</source>
             <translation>
-                Pause
-            </translation>
+wefwefweklfl;m,we;lf,;welcv,wel;wekfm;kf;pwecmlwkewl;efmwklegfhweklnqwekldhjl;
+dmjqwlekdfjqweklf</translation>
+        </message>
+        <message>
+            <source>New Item</source>
+            <translation>Nouvel élément</translation>
         </message>
         <message>
             <source>
-                Search
-            </source>
+wef[pwoejfweopfjero'wepofjkwepfm,weopfkweopfmkdfokweopf,wepofweopfkweopfkweopf
+kweopfkwef</source>
             <translation>
-                Rechercher
-            </translation>
+wef[pwoejfweopfjero'wepofjkwepfm,weopfkweopfmkdfokweopf,wepofweopfkweopfkweopf
+kweopfkwef</translation>
         </message>
         <message>
-            <source>
-                qwepowefklwenmlkwefweklfnwelfknwlfknweklfnwelfknwefwefopjiwelpkwmjvlkwneklwemflkwemdfklwemflwekmfwkled;qweef
-            </source>
-            <translation>
-                qwepowefklwenmlkwefweklfnwelfknwlfknweklfnwelfknwefwefopjiwelpkwmjvlkwneklwemflkwemdfklwemflwekmfwkled;qweef
-            </translation>
+            <source>Tab 2</source>
+            <translation>Onglet 2</translation>
         </message>
         <message>
-            <source>
-                wefwefweklfl;m,we;lf,;welcv,wel;wekfm;kf;pwecmlwkewl;efmwklegfhweklnqwekldhjl;dmjqwlekdfjqweklf
-            </source>
-            <translation>
-                wefwefweklfl;m,we;lf,;welcv,wel;wekfm;kf;pwecmlwkewl;efmwklegfhweklnqwekldhjl;dmjqwlekdfjqweklf
-            </translation>
+            <source>Exit</source>
+            <translation>Quitter</translation>
         </message>
         <message>
-            <source>
-                New Item
-            </source>
-            <translation>
-                Nouvel élément
-            </translation>
+            <source>Update</source>
+            <translation>Mettre à jour</translation>
         </message>
         <message>
-            <source>
-                wef[pwoejfweopfjero'wepofjkwepfm,weopfkweopfmkdfokweopf,wepofweopfkweopfkweopfkweopfkwef
-            </source>
-            <translation>
-                wef[pwoejfweopfjero'wepofjkwepfm,weopfkweopfmkdfokweopf,wepofweopfkweopfkweopfkweopfkwef
-            </translation>
+            <source>Previous Track</source>
+            <translation>Piste précédente</translation>
         </message>
         <message>
-            <source>
-                Tab 2
-            </source>
-            <translation>
-                Onglet 2
-            </translation>
+            <source>Next Track</source>
+            <translation>Piste suivante</translation>
         </message>
         <message>
-            <source>
-                Exit
-            </source>
-            <translation>
-                Quitter
-            </translation>
+            <source>Stop</source>
+            <translation>Arrêter</translation>
         </message>
         <message>
-            <source>
-                Update
-            </source>
-            <translation>
-                Mettre à jour
-            </translation>
-        </message>
-        <message>
-            <source>
-                Previous Track
-            </source>
-            <translation>
-                Piste précédente
-            </translation>
-        </message>
-        <message>
-            <source>
-                Next Track
-            </source>
-            <translation>
-                Piste suivante
-            </translation>
-        </message>
-        <message>
-            <source>
-                Stop
-            </source>
-            <translation>
-                Arrêter
-            </translation>
-        </message>
-        <message>
-            <source>
-                Play
-            </source>
-            <translation>
-                Lire
-            </translation>
+            <source>Play</source>
+            <translation>Lire</translation>
         </message>
     </context>
     <context>
-        <name>
-            CallForwardSettings
-        </name>
+        <name>CallForwardSettings</name>
         <message>
-            <source>
-                Call Forward Settings
-            </source>
-            <translation>
-                Paramètres du transfert d'appel
-            </translation>
+            <source>Call Forward Settings</source>
+            <translation>Paramètres du transfert d'appel</translation>
         </message>
         <message>
-            <source>
-                Forward to cellphone mode
-            </source>
-            <translation>
-                Transfert vers un téléphone mobile
-            </translation>
+            <source>Forward to cellphone mode</source>
+            <translation>Transfert vers un téléphone mobile</translation>
         </message>
         <message>
-            <source>
-                Disable call forwarding
-            </source>
-            <translation>
-                Désactiver le transfert d'appel
-            </translation>
+            <source>Disable call forwarding</source>
+            <translation>Désactiver le transfert d'appel</translation>
         </message>
         <message>
-            <source>
-                Forward all unanswered calls to message box
-            </source>
-            <translation>
-                Transférer tous vos appels non aboutis vers la messagerie vocale
-            </translation>
+            <source>Forward all unanswered calls to message box</source>
+            <translation>Transférer tous vos appels non aboutis vers la messagerie vocale</translation>
         </message>
         <message>
-            <source>
-                Call forwards to my mobile are billed on standard rates and needs Wengo credits. You need to fill up a mobile phone number in your profile before using call forwarding.
-            </source>
-            <translation>
-                Les transferts d'appel vers mon mobile sont facturés sur la base de la grille tarifaire standard et nécessitent un crédit de Wengo's. L'activation du transfert nécessite de renseigner un numéro mobile dans votre profil.
-            </translation>
+            <source>Call forwards to my mobile are billed on standard rates and needs Wengo 
+credits. You need to fill up a mobile phone number in your profile before 
+using call forwarding.</source>
+            <translation>Les transferts d'appel vers mon mobile sont facturés sur la base de la 
+grille tarifaire standard et nécessitent un crédit de Wengo's. L'activation 
+du transfert nécessite de renseigner un numéro mobile dans votre profil.</translation>
         </message>
         <message>
-            <source>
-                Forward calls to my mobile when I choose &quot;mobile&quot; status
-            </source>
-            <translation>
-                Transférer les appels vers mon mobile lorsque je sélectionne le statut &quot;mobile&quot;
-            </translation>
+            <source>Forward calls to my mobile when I choose &quot;mobile&quot; status</source>
+            <translation>Transférer les appels vers mon mobile lorsque je sélectionne le statut 
+&quot;mobile&quot;</translation>
         </message>
         <message>
-            <source>
-                Forward all unanswered calls to following phone numbers:
-            </source>
-            <translation>
-                Transférer tout les appels en absence vers les numéros suivants:
-            </translation>
+            <source>Forward all unanswered calls to following phone numbers:</source>
+            <translation>Transférer tout les appels en absence vers les numéros suivants:</translation>
         </message>
         <message>
-            <source>
-                3rd:
-            </source>
-            <translation>
-                3ème:
-            </translation>
+            <source>3rd:</source>
+            <translation>3ème:</translation>
         </message>
         <message>
-            <source>
-                1st:
-            </source>
-            <translation>
-                1er:
-            </translation>
+            <source>1st:</source>
+            <translation>1er:</translation>
         </message>
         <message>
-            <source>
-                2nd:
-            </source>
-            <translation>
-                2ème:
-            </translation>
+            <source>2nd:</source>
+            <translation>2ème:</translation>
         </message>
         <message>
-            <source>
-                Call forwarding is active if you're not connected to Wengo, when your line is busy or 20 seconds after you did not answer a call. You can configure up to three call forwards to landlines, mobile phones or voice mail (if applicable)
-            </source>
-            <translation>
-                Le transfert d'appel est actif si vous n'êtes pas connecté à Wengo, si votre ligne est occupée ou si vous ne répondez pas 20 secondes après avoir reçu un appel. Vous pouvez configurer jusqu'à 3 transferts d'appel vers des téléphones fixes, téléphones portables ou la boite vocale (si disponible).
-            </translation>
+            <source>Call forwarding is active if you're not connected to Wengo, when your line 
+is busy or 20 seconds after you did not answer a call. You can configure up 
+to three call forwards to landlines, mobile phones or voice mail (if 
+applicable)</source>
+            <translation>Le transfert d'appel est actif si vous n'êtes pas connecté à Wengo, si votre 
+ligne est occupée ou si vous ne répondez pas 20 secondes après avoir reçu un 
+appel. Vous pouvez configurer jusqu'à 3 transferts d'appel vers des 
+téléphones fixes, téléphones portables ou la boite vocale (si disponible).</translation>
         </message>
     </context>
     <context>
-        <name>
-            CallToaster
-        </name>
+        <name>CallToaster</name>
         <message>
-            <source>
-                WengoPhone - Incoming Call
-            </source>
-            <translation>
-                WengoPhone - Réception d'un appel
-            </translation>
+            <source>WengoPhone - Incoming Call</source>
+            <translation>WengoPhone - Réception d'un appel</translation>
         </message>
         <message>
-            <source>
-                Message
-            </source>
-            <translation>
-                Message
-            </translation>
+            <source>Message</source>
+            <translation>Message</translation>
         </message>
     </context>
     <context>
-        <name>
-            ChatToaster
-        </name>
+        <name>ChatToaster</name>
         <message>
-            <source>
-                Message
-            </source>
-            <translation>
-                Message
-            </translation>
+            <source>Message</source>
+            <translation>Message</translation>
         </message>
         <message>
-            <source>
-                WengoPhone - Incoming Chat
-            </source>
-            <translation>
-                WengoPhone - Réception d'un chat
-            </translation>
+            <source>WengoPhone - Incoming Chat</source>
+            <translation>WengoPhone - Réception d'un chat</translation>
         </message>
     </context>
     <context>
-        <name>
-            ChatMainWindow
-        </name>
+        <name>ChatMainWindow</name>
         <message>
-            <source>
-                MainWindow
-            </source>
-            <translation>
-                Fenêtre Principale
-            </translation>
+            <source>MainWindow</source>
+            <translation>Fenêtre Principale</translation>
         </message>
         <message>
-            <source>
-                &amp;Contact
-            </source>
-            <translation>
-                &amp;Contact
-            </translation>
+            <source>&amp;Contact</source>
+            <translation>&amp;Contact</translation>
         </message>
         <message>
-            <source>
-                &amp;Wengo
-            </source>
-            <translation>
-                &amp;Wengo
-            </translation>
+            <source>&amp;Wengo</source>
+            <translation>&amp;Wengo</translation>
         </message>
         <message>
-            <source>
-                &amp;Tools
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                &amp;Outils
-            </translation>
+            <source>&amp;Tools</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>&amp;Outils</translation>
         </message>
         <message>
-            <source>
-                &amp;Help
-            </source>
-            <translation>
-                &amp;Aide
-            </translation>
+            <source>&amp;Help</source>
+            <translation>&amp;Aide</translation>
         </message>
         <message>
-            <source>
-                &amp;Actions
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                &amp;Actions
-            </translation>
+            <source>&amp;Actions</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>&amp;Actions</translation>
         </message>
         <message>
-            <source>
-                Main Toolbar
-            </source>
-            <translation>
-                Barre d'outils principale
-            </translation>
+            <source>Main Toolbar</source>
+            <translation>Barre d'outils principale</translation>
         </message>
         <message>
-            <source>
-                callContact
-            </source>
-            <translation>
-                Appeler le contact
-            </translation>
+            <source>callContact</source>
+            <translation>Appeler le contact</translation>
         </message>
         <message>
-            <source>
-                sendFile
-            </source>
-            <translation>
-                Envoyer un fichier
-            </translation>
+            <source>sendFile</source>
+            <translation>Envoyer un fichier</translation>
         </message>
         <message>
-            <source>
-                createChatConf
-            </source>
-            <translation>
-                Créer une conférence
-            </translation>
+            <source>createChatConf</source>
+            <translation>Créer une conférence</translation>
         </message>
         <message>
-            <source>
-                contactInfo
-            </source>
-            <translation>
-                Information sur le contact
-            </translation>
+            <source>contactInfo</source>
+            <translation>Information sur le contact</translation>
         </message>
         <message>
-            <source>
-                blockContact
-            </source>
-            <translation>
-                Bloquer le contact
-            </translation>
+            <source>blockContact</source>
+            <translation>Bloquer le contact</translation>
         </message>
         <message>
-            <source>
-                &amp;Save History As...
-            </source>
-            <translation>
-                &amp;Enregistrer l'historique sous...
-            </translation>
+            <source>&amp;Save History As...</source>
+            <translation>&amp;Enregistrer l'historique sous...</translation>
         </message>
     </context>
     <context>
-        <name>
-            MainWindow
-        </name>
+        <name>MainWindow</name>
         <message>
-            <source>
-                MainWindow
-            </source>
-            <translation>
-                Fenêtre Principale
-            </translation>
+            <source>MainWindow</source>
+            <translation>Fenêtre Principale</translation>
         </message>
         <message>
-            <source>
-                Send Chat Message
-            </source>
-            <translation>
-                Envoyer un chat
-            </translation>
+            <source>Send Chat Message</source>
+            <translation>Envoyer un chat</translation>
         </message>
         <message>
-            <source>
-                Hang Up
-            </source>
-            <translation>
-                Raccrocher
-            </translation>
+            <source>Hang Up</source>
+            <translation>Raccrocher</translation>
         </message>
         <message>
-            <source>
-                Make Call
-            </source>
-            <translation>
-                Effectuer un appel
-            </translation>
+            <source>Make Call</source>
+            <translation>Effectuer un appel</translation>
         </message>
         <message>
-            <source>
-                Accept Call
-            </source>
-            <translation>
-                Accepter l'appel
-            </translation>
+            <source>Accept Call</source>
+            <translation>Accepter l'appel</translation>
         </message>
         <message>
-            <source>
-                Command::terminate()
-            </source>
-            <translation>
-                Command::terminate()
-            </translation>
+            <source>Command::terminate()</source>
+            <translation>Command::terminate()</translation>
         </message>
         <message>
-            <source>
-                Command::start()
-            </source>
-            <translation>
-                Command::start()
-            </translation>
+            <source>Command::start()</source>
+            <translation>Command::start()</translation>
         </message>
     </context>
     <context>
-        <name>
-            QtContactManager
-        </name>
+        <name>QtContactManager</name>
         <message>
-            <source>
-                Call
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
+            <source>Call</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
 _ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Appel
-            </translation>
+#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Appel</translation>
         </message>
         <message>
-            <source>
-                &amp;Yes
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
+            <source>&amp;Yes</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
 _ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                &amp;Oui
-            </translation>
+#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>&amp;Oui</translation>
         </message>
         <message>
-            <source>
-                &amp;No
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
+            <source>&amp;No</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
 _ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                &amp;Non
-            </translation>
+#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>&amp;Non</translation>
         </message>
         <message>
-            <source>
-                Mobile phone
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Téléphone Mobile
-            </translation>
+            <source>Mobile phone</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Téléphone Mobile</translation>
         </message>
         <message>
-            <source>
-                Home phone
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Numéro de téléphone personnel
-            </translation>
+            <source>Home phone</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Numéro de téléphone personnel</translation>
         </message>
         <message>
-            <source>
-                WengoPhone
-            </source>
-            <translation>
-                WengoPhone
-            </translation>
+            <source>WengoPhone</source>
+            <translation>WengoPhone</translation>
         </message>
         <message>
-            <source>
-                Edit Contact
-            </source>
-            <translation>
-                Editer le contact
-            </translation>
+            <source>Edit Contact</source>
+            <translation>Editer le contact</translation>
         </message>
         <message>
-            <source>
-                Delete contact
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Supprimer le contact
-            </translation>
+            <source>Delete contact</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Supprimer le contact</translation>
         </message>
         <message>
-            <source>
-                Work phone
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Téléphone Bureau
-            </translation>
+            <source>Work phone</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Téléphone Bureau</translation>
         </message>
         <message>
-            <source>
-                Send SMS
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
+            <source>Send SMS</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
 _ OBSOLETE
 #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
 _ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Envoyer un SMS
-            </translation>
+#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Envoyer un SMS</translation>
         </message>
         <message>
-            <source>
-                Edit contact
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Editer le contact
-            </translation>
+            <source>Edit contact</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Editer le contact</translation>
         </message>
         <message>
-            <source>
-                Block contact
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation type="unfinished">
-                Bloquer le contact
-            </translation>
+            <source>Block contact</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation type="unfinished">Bloquer le contact</translation>
         </message>
         <message>
-            <source>
-                Forward to Cell phone
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Transférer vers mon mobile
-            </translation>
+            <source>Forward to Cell phone</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Transférer vers mon mobile</translation>
         </message>
         <message>
-            <source>
-                Start chat
-            </source>
-            <translation>
-                Commencer un chat
-            </translation>
+            <source>Start chat</source>
+            <translation>Commencer un chat</translation>
         </message>
         <message>
-            <source>
-                Invite to conference
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Inviter à la conférence
-            </translation>
+            <source>Invite to conference</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Inviter à la conférence</translation>
         </message>
         <message>
-            <source>
-                Do you really want to delete this contact?
-            </source>
-            <translation>
-                Voulez vous vraiment supprimer ce contact?
-            </translation>
+            <source>Do you really want to delete this contact?</source>
+            <translation>Voulez vous vraiment supprimer ce contact?</translation>
         </message>
     </context>
     <context>
-        <name>
-            QtWengoPhone
-        </name>
+        <name>QtWengoPhone</name>
         <message>
-            <source>
-                Call
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
+            <source>Call</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
 _ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Appel
-            </translation>
+#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Appel</translation>
         </message>
         <message>
-            <source>
-                Home
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Domicile
-            </translation>
+            <source>Home</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Domicile</translation>
         </message>
         <message>
-            <source>
-                Conference
-            </source>
-            <translation>
-                Conférence
-            </translation>
+            <source>Conference</source>
+            <translation>Conférence</translation>
         </message>
         <message>
-            <source>
-                Please hold all the phone calls before to place a new one
-            </source>
-            <translation>
-                Veuillez mettre votre correspondant en attente avant de lancer un nouvel appel
-            </translation>
+            <source>Please hold all the phone calls before to place a new one</source>
+            <translation>Veuillez mettre votre correspondant en attente avant de lancer un nouvel 
+appel</translation>
         </message>
         <message>
-            <source>
-                WengoPhone - Call Error
-            </source>
-            <translation>
-                WengoPhone - Erreur d'appel
-            </translation>
+            <source>WengoPhone - Call Error</source>
+            <translation>WengoPhone - Erreur d'appel</translation>
         </message>
     </context>
     <context>
-        <name>
-            FileTransferWidget
-        </name>
+        <name>FileTransferWidget</name>
         <message>
-            <source>
-                ...
-            </source>
-            <translation>
-                ...
-            </translation>
+            <source>...</source>
+            <translation>...</translation>
         </message>
         <message>
-            <source>
-                WengoPhone - File Transfer Manager
-            </source>
-            <translation>
-                WengoPhone - Gestionnaire du Transfert de Fichiers
-            </translation>
+            <source>WengoPhone - File Transfer Manager</source>
+            <translation>WengoPhone - Gestionnaire du Transfert de Fichiers</translation>
         </message>
         <message>
-            <source>
-                &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Click here to change your download folder&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
-            </source>
-            <translation>
-                &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Cliquer ici pour changer votre dossier de téléchargement&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
-            </translation>
+            <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
+white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-
+weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
+top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
+indent:0; text-indent:0px;&quot;&gt;Click here to change your download 
+folder&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+            <translation>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
+white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-
+weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
+top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
+indent:0; text-indent:0px;&quot;&gt;Cliquer ici pour changer votre dossier de 
+téléchargement&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
         </message>
         <message>
-            <source>
-                Download folder:
-            </source>
-            <translation>
-                Dossier de téléchargement:
-            </translation>
+            <source>Download folder:</source>
+            <translation>Dossier de téléchargement:</translation>
         </message>
         <message>
-            <source>
-                Download
-            </source>
-            <translation>
-                Téléchargement
-            </translation>
+            <source>Download</source>
+            <translation>Téléchargement</translation>
         </message>
         <message>
-            <source>
-                Upload
-            </source>
-            <translation>
-                Envoi
-            </translation>
+            <source>Upload</source>
+            <translation>Envoi</translation>
         </message>
         <message>
-            <source>
-                &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Clean all items in the list&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
-            </source>
-            <translation>
-                &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Nettoyer tous les éléments de la liste&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
-            </translation>
+            <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
+white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-
+weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
+top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
+indent:0; text-indent:0px;&quot;&gt;Clean all items in the list&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+            <translation>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
+white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-
+weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
+top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
+indent:0; text-indent:0px;&quot;&gt;Nettoyer tous les éléments de la 
+liste&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
         </message>
         <message>
-            <source>
-                &amp;Clean
-            </source>
-            <translation>
-                &amp;Nettoyer
-            </translation>
+            <source>&amp;Clean</source>
+            <translation>&amp;Nettoyer</translation>
         </message>
     </context>
     <context>
-        <name>
-            Form
-        </name>
+        <name>Form</name>
         <message>
-            <source>
-                &amp;Start
-            </source>
-            <translation>
-                &amp;Commencer
-            </translation>
+            <source>&amp;Start</source>
+            <translation>&amp;Commencer</translation>
         </message>
         <message>
-            <source>
-                Chat room
-            </source>
-            <translation>
-                Salon de discussion
-            </translation>
+            <source>Chat room</source>
+            <translation>Salon de discussion</translation>
         </message>
         <message>
-            <source>
-                &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;&gt;Chat room&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
-            </source>
-            <translation>
-                &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;&gt;Salon de discussion&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
-            </translation>
+            <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
+white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-
+weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
+top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
+indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt; font-
+weight:600;&quot;&gt;Chat room&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+            <translation>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
+white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-
+weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
+top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
+indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt; font-
+weight:600;&quot;&gt;Salon de discussion&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
         </message>
         <message>
-            <source>
-                &amp;Remove
-            </source>
-            <translation>
-                &amp;Supprimer
-            </translation>
+            <source>&amp;Remove</source>
+            <translation>&amp;Supprimer</translation>
         </message>
         <message>
-            <source>
-                Group Name
-            </source>
-            <translation>
-                Nom du groupe
-            </translation>
+            <source>Group Name</source>
+            <translation>Nom du groupe</translation>
         </message>
         <message>
-            <source>
-                &amp;Add
-            </source>
-            <translation>
-                &amp;Ajouter
-            </translation>
+            <source>&amp;Add</source>
+            <translation>&amp;Ajouter</translation>
         </message>
         <message>
-            <source>
-                (Conference participants)
-            </source>
-            <translation>
-                (Participants à la conférence)
-            </translation>
+            <source>(Conference participants)</source>
+            <translation>(Participants à la conférence)</translation>
         </message>
     </context>
     <context>
-        <name>
-            ContactGroupPopupMenu
-        </name>
+        <name>ContactGroupPopupMenu</name>
         <message>
-            <source>
-                Remove Contact Group
-            </source>
-            <translation>
-                Supprimer le groupe
-            </translation>
+            <source>Remove Contact Group</source>
+            <translation>Supprimer le groupe</translation>
         </message>
         <message>
-            <source>
-                Rename Contact Group
-            </source>
-            <translation>
-                Renommer le groupe
-            </translation>
+            <source>Rename Contact Group</source>
+            <translation>Renommer le groupe</translation>
         </message>
         <message>
-            <source>
-                Delete group
-            </source>
-            <translation>
-                Supprimer le groupe
-            </translation>
+            <source>Delete group</source>
+            <translation>Supprimer le groupe</translation>
         </message>
         <message>
-            <source>
-                Do you really want to delete this group?
-            </source>
-            <translation>
-                Etes-vous sur de vouloir supprimer ce groupe ?
-            </translation>
+            <source>Do you really want to delete this group?</source>
+            <translation>Etes-vous sur de vouloir supprimer ce groupe ?</translation>
         </message>
         <message>
-            <source>
-                &amp;Yes
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
+            <source>&amp;Yes</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
 _ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                &amp;Oui
-            </translation>
+#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>&amp;Oui</translation>
         </message>
         <message>
-            <source>
-                &amp;No
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
+            <source>&amp;No</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
 _ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                &amp;Non
-            </translation>
+#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>&amp;Non</translation>
         </message>
     </context>
     <context>
-        <name>
-            QtContactList
-        </name>
+        <name>QtContactList</name>
         <message>
-            <source>
-                &amp;Yes
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
+            <source>&amp;Yes</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
 _ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                &amp;Oui
-            </translation>
+#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>&amp;Oui</translation>
         </message>
         <message>
-            <source>
-                &amp;No
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
+            <source>&amp;No</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
 _ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                &amp;Non
-            </translation>
+#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>&amp;Non</translation>
         </message>
         <message>
-            <source>
-                Merge %1 with %2?
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
+            <source>Merge %1 with %2?</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
 _ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Fusionner %1 avec %2 ?
-            </translation>
+#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Fusionner %1 avec %2 ?</translation>
         </message>
         <message>
-            <source>
-                WengoPhone - Merge Contacts
-            </source>
-            <translation>
-                WengoPhone - Fusion de contact
-            </translation>
+            <source>WengoPhone - Merge Contacts</source>
+            <translation>WengoPhone - Fusion de contact</translation>
         </message>
     </context>
     <context>
-        <name>
-            QtFileTransfer
-        </name>
+        <name>QtFileTransfer</name>
         <message>
-            <source>
-                &amp;Yes
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
+            <source>&amp;Yes</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
 _ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                &amp;Oui
-            </translation>
+#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>&amp;Oui</translation>
         </message>
         <message>
-            <source>
-                &amp;No
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
+            <source>&amp;No</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
 _ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                &amp;Non
-            </translation>
+#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>&amp;Non</translation>
         </message>
         <message>
-            <source>
-                Choose a directory
-            </source>
-            <translation>
-                Choisissez un répertoire
-            </translation>
+            <source>Choose a directory</source>
+            <translation>Choisissez un répertoire</translation>
         </message>
         <message>
-            <source>
-                Overwrite File?
-            </source>
-            <translation>
-                Remplacer le fichier?
-            </translation>
+            <source>Overwrite File?</source>
+            <translation>Remplacer le fichier?</translation>
         </message>
         <message>
-            <source>
-                A file called %1 already exists.Do you want to overwrite it?
-            </source>
-            <translation>
-                Un fichier appelé %1 existe déjà. Voulez vous le remplacer ?
-            </translation>
+            <source>A file called %1 already exists.Do you want to overwrite it?</source>
+            <translation>Un fichier appelé %1 existe déjà. Voulez vous le remplacer ?</translation>
         </message>
     </context>
     <context>
-        <name>
-            ContactList
-        </name>
+        <name>ContactList</name>
         <message>
-            <source>
-                Contact List
-            </source>
-            <translation>
-                Liste de contacts
-            </translation>
+            <source>Contact List</source>
+            <translation>Liste de contacts</translation>
         </message>
     </context>
     <context>
-        <name>
-            ContactWidget
-        </name>
+        <name>ContactWidget</name>
         <message>
-            <source>
-                No mobile phone number set
-            </source>
-            <translation>
-                Pas de numéro de téléphone portable
-            </translation>
+            <source>No mobile phone number set</source>
+            <translation>Pas de numéro de téléphone portable</translation>
         </message>
         <message>
-            <source>
-                No landline phone number set
-            </source>
-            <translation>
-                Pas de numéro de téléphone fixe
-            </translation>
+            <source>No landline phone number set</source>
+            <translation>Pas de numéro de téléphone fixe</translation>
         </message>
     </context>
     <context>
-        <name>
-            SmsWindow
-        </name>
+        <name>SmsWindow</name>
         <message>
-            <source>
-                Send
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Envoyer
-            </translation>
+            <source>Send</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Envoyer</translation>
         </message>
         <message>
-            <source>
-                WengoPhone - SMS
-            </source>
-            <translation>
-                WengoPhone - SMS
-            </translation>
+            <source>WengoPhone - SMS</source>
+            <translation>WengoPhone - SMS</translation>
         </message>
         <message>
-            <source>
-                Phone number:
-            </source>
-            <translation>
-                Numéro de téléphone:
-            </translation>
+            <source>Phone number:</source>
+            <translation>Numéro de téléphone:</translation>
         </message>
         <message>
-            <source>
-                Signature:
-            </source>
-            <translation>
-                Signature:
-            </translation>
+            <source>Signature:</source>
+            <translation>Signature:</translation>
         </message>
         <message>
-            <source>
-                Click here to add a phone number
-            </source>
-            <translation>
-                Cliquer ici pour ajouter un numéro téléphonique
-            </translation>
+            <source>Click here to add a phone number</source>
+            <translation>Cliquer ici pour ajouter un numéro téléphonique</translation>
         </message>
         <message>
-            <source>
-                0 /160
-            </source>
-            <translation>
-                0 /160
-            </translation>
+            <source>0 /160</source>
+            <translation>0 /160</translation>
         </message>
         <message>
-            <source>
-                Enter your signature here
-            </source>
-            <translation>
-                Entrer votre signature ici
-            </translation>
+            <source>Enter your signature here</source>
+            <translation>Entrer votre signature ici</translation>
         </message>
         <message>
-            <source>
-                Enter the phone number here
-            </source>
-            <translation>
-                Entrer le numéro de téléphone ici
-            </translation>
+            <source>Enter the phone number here</source>
+            <translation>Entrer le numéro de téléphone ici</translation>
         </message>
     </context>
     <context>
-        <name>
-            CreditWidget
-        </name>
+        <name>CreditWidget</name>
         <message>
-            <source>
-                Click here to buy Wengo's credits
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Cliquer ici pour créditer votre compte
-            </translation>
+            <source>Click here to buy Wengo's credits</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Cliquer ici pour créditer votre compte</translation>
         </message>
         <message>
-            <source>
-                Your Wengo phone number
-            </source>
-            <translation>
-                Votre numéro Wengo
-            </translation>
+            <source>Your Wengo phone number</source>
+            <translation>Votre numéro Wengo</translation>
         </message>
         <message>
-            <source>
-                Not Available
-            </source>
-            <translation>
-                Non disponible
-            </translation>
+            <source>Not Available</source>
+            <translation>Non disponible</translation>
         </message>
         <message>
-            <source>
-                Your phone number:
-            </source>
-            <translation>
-                Votre numéro de téléphone:
-            </translation>
+            <source>Your phone number:</source>
+            <translation>Votre numéro de téléphone:</translation>
         </message>
         <message>
-            <source>
-                Click here to change your call forward settings
-            </source>
-            <translation>
-                Cliquez ici pour modifier le transfer d'appel
-            </translation>
+            <source>Click here to change your call forward settings</source>
+            <translation>Cliquez ici pour modifier le transfer d'appel</translation>
         </message>
         <message>
-            <source>
-                Call forward mode:
-            </source>
-            <translation>
-                Mode de transfert d'appel:
-            </translation>
+            <source>Call forward mode:</source>
+            <translation>Mode de transfert d'appel:</translation>
         </message>
         <message>
-            <source>
-                Purchase call out credits
-            </source>
-            <translation>
-                Acheter des crédits de communication
-            </translation>
+            <source>Purchase call out credits</source>
+            <translation>Acheter des crédits de communication</translation>
         </message>
         <message>
-            <source>
-                Call Forward Method
-            </source>
-            <translation>
-                Méthode du transfert d'appel:
-            </translation>
+            <source>Call Forward Method</source>
+            <translation>Méthode du transfert d'appel:</translation>
         </message>
     </context>
     <context>
-        <name>
-            DialpadWidget
-        </name>
+        <name>DialpadWidget</name>
         <message>
-            <source>
-                Audio Smileys
-            </source>
-            <translation>
-                Smileys audios
-            </translation>
+            <source>Audio Smileys</source>
+            <translation>Smileys audios</translation>
         </message>
     </context>
     <context>
-        <name>
-            EventWidget
-        </name>
+        <name>EventWidget</name>
         <message>
-            <source>
-                0
-            </source>
-            <translation>
-                0
-            </translation>
+            <source>0</source>
+            <translation>0</translation>
         </message>
         <message>
-            <source>
-                Click here to call your voice mail
-            </source>
-            <translation>
-                Cliquez ici pour appeler votre messagerie
-            </translation>
+            <source>Click here to call your voice mail</source>
+            <translation>Cliquez ici pour appeler votre messagerie</translation>
         </message>
         <message>
-            <source>
-                New Voice Mail:
-            </source>
-            <translation>
-                Nouveau Mail Vocal:
-            </translation>
+            <source>New Voice Mail:</source>
+            <translation>Nouveau Mail Vocal:</translation>
         </message>
         <message>
-            <source>
-                Click here to see missed call(s)
-            </source>
-            <translation>
-                Cliquez ici pour voir les appels en absence
-            </translation>
+            <source>Click here to see missed call(s)</source>
+            <translation>Cliquez ici pour voir les appels en absence</translation>
         </message>
         <message>
-            <source>
-                Missed Call(s):
-            </source>
-            <translation>
-                Appel(s) Manqué(s):
-            </translation>
+            <source>Missed Call(s):</source>
+            <translation>Appel(s) Manqué(s):</translation>
         </message>
     </context>
     <context>
-        <name>
-            GeneralSettings
-        </name>
+        <name>GeneralSettings</name>
         <message>
-            <source>
-                &amp;Edit my profile
-            </source>
-            <translation>
-                Editer mon &amp;Profil
-            </translation>
+            <source>&amp;Edit my profile</source>
+            <translation>Editer mon &amp;Profil</translation>
         </message>
         <message>
-            <source>
-                General Settings
-            </source>
-            <translation>
-                Configuration générale
-            </translation>
+            <source>General Settings</source>
+            <translation>Configuration générale</translation>
         </message>
         <message>
-            <source>
-                Idle status
-            </source>
-            <translation>
-                Inactivité
-            </translation>
+            <source>Idle status</source>
+            <translation>Inactivité</translation>
         </message>
         <message>
-            <source>
-                minutes
-            </source>
-            <translation>
-                minutes
-            </translation>
+            <source>minutes</source>
+            <translation>minutes</translation>
         </message>
         <message>
-            <source>
-                Show me as &quot;Away&quot; when I am inactive for:
-            </source>
-            <translation>
-                Changer mon statut en &quot;absent&quot; après une période d'inactivité de:
-            </translation>
+            <source>Show me as &quot;Away&quot; when I am inactive for:</source>
+            <translation>Changer mon statut en &quot;absent&quot; après une période d'inactivité de:</translation>
         </message>
         <message>
-            <source>
-                When I double-click on a contact 
-            </source>
-            <translation>
-                Quand je double-clique sur un contact 
-            </translation>
+            <source>When I double-click on a contact </source>
+            <translation>Quand je double-clique sur un contact </translation>
         </message>
         <message>
-            <source>
-                Start a free call if applicable
-            </source>
-            <translation>
-                Passer un appel PC à PC si possible
-            </translation>
+            <source>Start a free call if applicable</source>
+            <translation>Passer un appel PC à PC si possible</translation>
         </message>
         <message>
-            <source>
-                When I start my computer
-            </source>
-            <translation>
-                Au démarrage du système
-            </translation>
+            <source>When I start my computer</source>
+            <translation>Au démarrage du système</translation>
         </message>
         <message>
-            <source>
-                Automatically start WengoPhone
-            </source>
-            <translation>
-                Démarrer le WengoPhone automatiquement
-            </translation>
+            <source>Automatically start WengoPhone</source>
+            <translation>Démarrer le WengoPhone automatiquement</translation>
         </message>
         <message>
-            <source>
-                Call cell phone or land line if contact not online
-            </source>
-            <translation>
-                Appeler le mobile ou la ligne fixe si le contact n'est pas disponible
-            </translation>
+            <source>Call cell phone or land line if contact not online</source>
+            <translation>Appeler le mobile ou la ligne fixe si le contact n'est pas disponible</translation>
         </message>
         <message>
-            <source>
-                Always start a chat
-            </source>
-            <translation>
-                Toujours commencer un chat
-            </translation>
+            <source>Always start a chat</source>
+            <translation>Toujours commencer un chat</translation>
         </message>
     </context>
     <context>
-        <name>
-            IMProfileWidget
-        </name>
+        <name>IMProfileWidget</name>
         <message>
-            <source>
-                Edit My Profile
-            </source>
-            <translation>
-                Editer mon profil
-            </translation>
+            <source>Edit My Profile</source>
+            <translation>Editer mon profil</translation>
         </message>
         <message>
-            <source>
-                AIM/ICQ
-            </source>
-            <translation>
-                AIM/ICQ
-            </translation>
+            <source>AIM/ICQ</source>
+            <translation>AIM/ICQ</translation>
         </message>
         <message>
-            <source>
-                Yahoo!
-            </source>
-            <translation>
-                Yahoo!
-            </translation>
+            <source>Yahoo!</source>
+            <translation>Yahoo!</translation>
         </message>
         <message>
-            <source>
-                Wengo
-            </source>
-            <translation>
-                Wengo
-            </translation>
+            <source>Wengo</source>
+            <translation>Wengo</translation>
         </message>
         <message>
-            <source>
-                Jabber/GoogleTalk
-            </source>
-            <translation>
-                GoogleTalk/Jabber
-            </translation>
+            <source>Jabber/GoogleTalk</source>
+            <translation>GoogleTalk/Jabber</translation>
         </message>
         <message>
-            <source>
-                MSN
-            </source>
-            <translation>
-                MSN
-            </translation>
+            <source>MSN</source>
+            <translation>MSN</translation>
         </message>
         <message>
-            <source>
-                Enter your nickname here
-            </source>
-            <translation>
-                Entrez votre pseudo ici
-            </translation>
+            <source>Enter your nickname here</source>
+            <translation>Entrez votre pseudo ici</translation>
         </message>
     </context>
     <context>
-        <name>
-            QtIMProfileWidget
-        </name>
+        <name>QtIMProfileWidget</name>
         <message>
-            <source>
-                Edit My Profile
-            </source>
-            <translation>
-                Editer mon profil
-            </translation>
+            <source>Edit My Profile</source>
+            <translation>Editer mon profil</translation>
         </message>
     </context>
     <context>
-        <name>
-            QtToolBar
-        </name>
+        <name>QtToolBar</name>
         <message>
-            <source>
-                Edit My Profile
-            </source>
-            <translation>
-                Editer mon profil
-            </translation>
+            <source>Edit My Profile</source>
+            <translation>Editer mon profil</translation>
         </message>
         <message>
-            <source>
-                Add a Contact
-            </source>
-            <translation>
-                Ajouter un contact
-            </translation>
+            <source>Add a Contact</source>
+            <translation>Ajouter un contact</translation>
         </message>
     </context>
     <context>
-        <name>
-            LanguagesSettings
-        </name>
+        <name>LanguagesSettings</name>
         <message>
-            <source>
-                Language
-            </source>
-            <translation>
-                Langue
-            </translation>
+            <source>Language</source>
+            <translation>Langue</translation>
         </message>
     </context>
     <context>
-        <name>
-            QtLanguagesSettings
-        </name>
+        <name>QtLanguagesSettings</name>
         <message>
-            <source>
-                Language
-            </source>
-            <translation>
-                Langue
-            </translation>
+            <source>Language</source>
+            <translation>Langue</translation>
         </message>
     </context>
     <context>
-        <name>
-            QtWengoConfigDialog
-        </name>
+        <name>QtWengoConfigDialog</name>
         <message>
-            <source>
-                Language
-            </source>
-            <translation>
-                Langue
-            </translation>
+            <source>Language</source>
+            <translation>Langue</translation>
         </message>
         <message>
-            <source>
-                General
-            </source>
-            <translation>
-                Général
-            </translation>
+            <source>General</source>
+            <translation>Général</translation>
         </message>
         <message>
-            <source>
-                Accounts
-            </source>
-            <translation>
-                Comptes
-            </translation>
+            <source>Accounts</source>
+            <translation>Comptes</translation>
         </message>
         <message>
-            <source>
-                Advanced
-            </source>
-            <translation>
-                Avancé
-            </translation>
+            <source>Advanced</source>
+            <translation>Avancé</translation>
         </message>
         <message>
-            <source>
-                Audio
-            </source>
-            <translation>
-                Audio
-            </translation>
+            <source>Audio</source>
+            <translation>Audio</translation>
         </message>
         <message>
-            <source>
-                Call Forward
-            </source>
-            <translation>
-                Transfert d'appel
-            </translation>
+            <source>Call Forward</source>
+            <translation>Transfert d'appel</translation>
         </message>
         <message>
-            <source>
-                Notifications &amp; Sounds
-            </source>
-            <translation type="unfinished">
-                Alertes &amp; Sons
-            </translation>
+            <source>Notifications &amp; Sounds</source>
+            <translation type="unfinished">Alertes &amp; Sons</translation>
         </message>
         <message>
-            <source>
-                Privacy
-            </source>
-            <translation>
-                Confidentialité
-            </translation>
+            <source>Privacy</source>
+            <translation>Confidentialité</translation>
         </message>
         <message>
-            <source>
-                Video
-            </source>
-            <translation>
-                Vidéo
-            </translation>
+            <source>Video</source>
+            <translation>Vidéo</translation>
         </message>
     </context>
     <context>
-        <name>
-            PrivacySettings
-        </name>
+        <name>PrivacySettings</name>
         <message>
-            <source>
-                Manage blocked users
-            </source>
-            <translation>
-                Gérer les contacts bloqués
-            </translation>
+            <source>Manage blocked users</source>
+            <translation>Gérer les contacts bloqués</translation>
         </message>
         <message>
-            <source>
-                Privacy Rules 
-            </source>
-            <translation>
-                Confidentialité 
-            </translation>
+            <source>Privacy Rules </source>
+            <translation>Confidentialité </translation>
         </message>
         <message>
-            <source>
-                When I sign into Wengo
-            </source>
-            <translation>
-                Quand je me connecte sur Wengo
-            </translation>
+            <source>When I sign into Wengo</source>
+            <translation>Quand je me connecte sur Wengo</translation>
         </message>
         <message>
-            <source>
-                Always sign in as &quot;Invisible&quot; (appear offline to all users)
-            </source>
-            <translation>
-                Toutjours se connecter en mode invisible (les autres utilisateurs ne vous voient pas)
-            </translation>
+            <source>Always sign in as &quot;Invisible&quot; (appear offline to all users)</source>
+            <translation>Toutjours se connecter en mode invisible (les autres utilisateurs ne vous 
+voient pas)</translation>
         </message>
         <message>
-            <source>
-                Allow chats from
-            </source>
-            <translation>
-                Autorisez les chats provenant
-            </translation>
+            <source>Allow chats from</source>
+            <translation>Autorisez les chats provenant</translation>
         </message>
         <message>
-            <source>
-                Only people from my contact list
-            </source>
-            <translation>
-                Uniquement de mes contacts
-            </translation>
+            <source>Only people from my contact list</source>
+            <translation>Uniquement de mes contacts</translation>
         </message>
         <message>
-            <source>
-                Anyone
-            </source>
-            <translation>
-                Tout le monde
-            </translation>
+            <source>Anyone</source>
+            <translation>Tout le monde</translation>
         </message>
         <message>
-            <source>
-                Allow calls from
-            </source>
-            <translation>
-                Autoriser les appels provenant
-            </translation>
+            <source>Allow calls from</source>
+            <translation>Autoriser les appels provenant</translation>
         </message>
     </context>
     <context>
-        <name>
-            NotificationSettings
-        </name>
+        <name>NotificationSettings</name>
         <message>
-            <source>
-                Activate sounds for/when
-            </source>
-            <translation>
-                Activer le son pour/quand
-            </translation>
+            <source>Activate sounds for/when</source>
+            <translation>Activer le son pour/quand</translation>
         </message>
         <message>
-            <source>
-                Advanced Notifications
-            </source>
-            <translation>
-                Notifications avancées
-            </translation>
+            <source>Advanced Notifications</source>
+            <translation>Notifications avancées</translation>
         </message>
         <message>
-            <source>
-                Do not show any pop-up window
-            </source>
-            <translation>
-                Ne montrer aucune pop-up
-            </translation>
+            <source>Do not show any pop-up window</source>
+            <translation>Ne montrer aucune pop-up</translation>
         </message>
         <message>
-            <source>
-                No audio notifications
-            </source>
-            <translation>
-                Aucune notification
-            </translation>
+            <source>No audio notifications</source>
+            <translation>Aucune notification</translation>
         </message>
         <message>
-            <source>
-                When switched to &quot;Away&quot;:
-            </source>
-            <translation>
-                Quand l'état change en &quot;Away&quot;:
-            </translation>
+            <source>When switched to &quot;Away&quot;:</source>
+            <translation>Quand l'état change en &quot;Away&quot;:</translation>
         </message>
         <message>
-            <source>
-                When switched to &quot;Do Not Disturb&quot;:
-            </source>
-            <translation>
-                Quand l'état change en &quot;Ne pas déranger&quot;:
-            </translation>
+            <source>When switched to &quot;Do Not Disturb&quot;:</source>
+            <translation>Quand l'état change en &quot;Ne pas déranger&quot;:</translation>
         </message>
         <message>
-            <source>
-                Standard Notifications
-            </source>
-            <translation>
-                Notifications standards
-            </translation>
+            <source>Standard Notifications</source>
+            <translation>Notifications standards</translation>
         </message>
         <message>
-            <source>
-                No sound
-            </source>
-            <translation>
-                Aucun son
-            </translation>
+            <source>No sound</source>
+            <translation>Aucun son</translation>
         </message>
         <message>
-            <source>
-                Sound file
-            </source>
-            <translation>
-                Fichier
-            </translation>
+            <source>Sound file</source>
+            <translation>Fichier</translation>
         </message>
         <message>
-            <source>
-                Play sound file
-            </source>
-            <translation>
-                Jouer le son
-            </translation>
+            <source>Play sound file</source>
+            <translation>Jouer le son</translation>
         </message>
         <message>
-            <source>
-                Find a sound file
-            </source>
-            <translation>
-                Parcourir
-            </translation>
+            <source>Find a sound file</source>
+            <translation>Parcourir</translation>
         </message>
         <message>
-            <source>
-                Incoming call (ringtone)
-            </source>
-            <translation>
-                Appel entrant (sonnerie)
-            </translation>
+            <source>Incoming call (ringtone)</source>
+            <translation>Appel entrant (sonnerie)</translation>
         </message>
         <message>
-            <source>
-                Call closed (hang up tone)
-            </source>
-            <translation type="unfinished">
-                Raccrochage (tonalité)
-            </translation>
+            <source>Call closed (hang up tone)</source>
+            <translation type="unfinished">Raccrochage (tonalité)</translation>
         </message>
         <message>
-            <source>
-                Incoming chat
-            </source>
-            <translation>
-                Chat entrant
-            </translation>
+            <source>Incoming chat</source>
+            <translation>Chat entrant</translation>
         </message>
         <message>
-            <source>
-                IM account connected
-            </source>
-            <translation>
-                Connexion d'un compte de messagerie
-            </translation>
+            <source>IM account connected</source>
+            <translation>Connexion d'un compte de messagerie</translation>
         </message>
         <message>
-            <source>
-                IM account disconnected
-            </source>
-            <translation>
-                Déconnexion d'un compte de messagerie
-            </translation>
+            <source>IM account disconnected</source>
+            <translation>Déconnexion d'un compte de messagerie</translation>
         </message>
         <message>
-            <source>
-                Contact online
-            </source>
-            <translation>
-                Contact en ligne
-            </translation>
+            <source>Contact online</source>
+            <translation>Contact en ligne</translation>
         </message>
         <message>
-            <source>
-                Show pop-up window for incoming calls
-            </source>
-            <translation>
-                Afficher un pop-up pour les appels entrants
-            </translation>
+            <source>Show pop-up window for incoming calls</source>
+            <translation>Afficher un pop-up pour les appels entrants</translation>
         </message>
         <message>
-            <source>
-                Show pop-up window when a contact is turning online
-            </source>
-            <translation>
-                Afficher une pop-up quand un contact se connecte
-            </translation>
+            <source>Show pop-up window when a contact is turning online</source>
+            <translation>Afficher une pop-up quand un contact se connecte</translation>
         </message>
         <message>
-            <source>
-                Show pop-up window for incoming chats
-            </source>
-            <translation>
-                Afficher une pop-up pour les chats entrants
-            </translation>
+            <source>Show pop-up window for incoming chats</source>
+            <translation>Afficher une pop-up pour les chats entrants</translation>
         </message>
     </context>
     <context>
-        <name>
-            QtNotificationSettings
-        </name>
+        <name>QtNotificationSettings</name>
         <message>
-            <source>
-                Incoming call (ringtone)
-            </source>
-            <translation>
-                Appel entrant (sonnerie)
-            </translation>
+            <source>Incoming call (ringtone)</source>
+            <translation>Appel entrant (sonnerie)</translation>
         </message>
         <message>
-            <source>
-                Call closed (hang up tone)
-            </source>
-            <translation type="unfinished">
-                Raccrochage (tonalité)
-            </translation>
+            <source>Call closed (hang up tone)</source>
+            <translation type="unfinished">Raccrochage (tonalité)</translation>
         </message>
         <message>
-            <source>
-                Incoming chat
-            </source>
-            <translation>
-                Chat entrant
-            </translation>
+            <source>Incoming chat</source>
+            <translation>Chat entrant</translation>
         </message>
         <message>
-            <source>
-                IM account connected
-            </source>
-            <translation>
-                Connexion d'un compte de messagerie
-            </translation>
+            <source>IM account connected</source>
+            <translation>Connexion d'un compte de messagerie</translation>
         </message>
         <message>
-            <source>
-                IM account disconnected
-            </source>
-            <translation>
-                Déconnexion d'un compte de messagerie
-            </translation>
+            <source>IM account disconnected</source>
+            <translation>Déconnexion d'un compte de messagerie</translation>
         </message>
         <message>
-            <source>
-                Contact online
-            </source>
-            <translation>
-                Contact en ligne
-            </translation>
+            <source>Contact online</source>
+            <translation>Contact en ligne</translation>
         </message>
         <message>
-            <source>
-                Notifications &amp; Sounds
-            </source>
-            <translation type="unfinished">
-                Alertes &amp; Sons
-            </translation>
+            <source>Notifications &amp; Sounds</source>
+            <translation type="unfinished">Alertes &amp; Sons</translation>
         </message>
         <message>
-            <source>
-                Choose a sound file
-            </source>
-            <translation>
-                Choisir un son
-            </translation>
+            <source>Choose a sound file</source>
+            <translation>Choisir un son</translation>
         </message>
         <message>
-            <source>
-                Sounds
-            </source>
-            <translation>
-                Sons
-            </translation>
+            <source>Sounds</source>
+            <translation>Sons</translation>
         </message>
     </context>
     <context>
-        <name>
-            QtGeneralSettings
-        </name>
+        <name>QtGeneralSettings</name>
         <message>
-            <source>
-                General
-            </source>
-            <translation>
-                Général
-            </translation>
+            <source>General</source>
+            <translation>Général</translation>
         </message>
     </context>
     <context>
-        <name>
-            QtProfileDetails
-        </name>
+        <name>QtProfileDetails</name>
         <message>
-            <source>
-                Advanced &gt;&gt;
-            </source>
-            <translation>
-                Avancé &gt;&gt;
-            </translation>
+            <source>Advanced &gt;&gt;</source>
+            <translation>Avancé &gt;&gt;</translation>
         </message>
         <message>
-            <source>
-                WengoPhone
-            </source>
-            <translation>
-                WengoPhone
-            </translation>
+            <source>WengoPhone</source>
+            <translation>WengoPhone</translation>
         </message>
         <message>
-            <source>
-                Choose an avatar
-            </source>
-            <translation>
-                Choisissez un avatar
-            </translation>
+            <source>Choose an avatar</source>
+            <translation>Choisissez un avatar</translation>
         </message>
         <message>
-            <source>
-                Images
-            </source>
-            <translation>
-                Images
-            </translation>
+            <source>Images</source>
+            <translation>Images</translation>
         </message>
         <message>
-            <source>
-                A contact must have a group, please set a group.
-            </source>
-            <translation>
-                Un contact doit être placé dans un groupe, veuillez sélectionnez un groupe pour votre contact.
-            </translation>
+            <source>A contact must have a group, please set a group.</source>
+            <translation>Un contact doit être placé dans un groupe, veuillez sélectionnez un groupe 
+pour votre contact.</translation>
         </message>
         <message>
-            <source>
-                WengoPhone - No Group Selected
-            </source>
-            <translation>
-                WengoPhone - Aucun groupe sélectionné
-            </translation>
+            <source>WengoPhone - No Group Selected</source>
+            <translation>WengoPhone - Aucun groupe sélectionné</translation>
         </message>
         <message>
-            <source>
-                &lt;&lt; Simple
-            </source>
-            <translation>
-                &lt;&lt; Basique
-            </translation>
+            <source>&lt;&lt; Simple</source>
+            <translation>&lt;&lt; Basique</translation>
         </message>
     </context>
     <context>
-        <name>
-            QObject
-        </name>
+        <name>QObject</name>
         <message>
-            <source>
-                WengoPhone
-            </source>
-            <translation>
-                WengoPhone
-            </translation>
+            <source>WengoPhone</source>
+            <translation>WengoPhone</translation>
         </message>
         <message>
-            <source>
-                WengoPhone is already running.
-            </source>
-            <translation>
-                Le WengoPhone est déja lancé.
-            </translation>
+            <source>WengoPhone is already running.</source>
+            <translation>Le WengoPhone est déja lancé.</translation>
         </message>
         <message>
-            <source>
-                Can't send SMS unless you're connected to a SIP service.
-            </source>
-            <translation>
-                Vous ne pouvez pas envoyer de SMS lorsque vous êtes déconnecté du service Wengo.
-            </translation>
+            <source>Can't send SMS unless you're connected to a SIP service.</source>
+            <translation>Vous ne pouvez pas envoyer de SMS lorsque vous êtes déconnecté du service 
+Wengo.</translation>
         </message>
     </context>
     <context>
-        <name>
-            QtAccountSettings
-        </name>
+        <name>QtAccountSettings</name>
         <message>
-            <source>
-                Accounts
-            </source>
-            <translation>
-                Comptes
-            </translation>
+            <source>Accounts</source>
+            <translation>Comptes</translation>
         </message>
     </context>
     <context>
-        <name>
-            QtAdvancedSettings
-        </name>
+        <name>QtAdvancedSettings</name>
         <message>
-            <source>
-                Advanced
-            </source>
-            <translation>
-                Avancé
-            </translation>
+            <source>Advanced</source>
+            <translation>Avancé</translation>
         </message>
     </context>
     <context>
-        <name>
-            QtAudioSettings
-        </name>
+        <name>QtAudioSettings</name>
         <message>
-            <source>
-                Audio
-            </source>
-            <translation>
-                Audio
-            </translation>
+            <source>Audio</source>
+            <translation>Audio</translation>
         </message>
     </context>
     <context>
-        <name>
-            QtCallBar
-        </name>
+        <name>QtCallBar</name>
         <message>
-            <source>
-                +(country code) number or nickname
-            </source>
-            <translation>
-                +(code pays) numéro ou pseudo
-            </translation>
+            <source>+(country code) number or nickname</source>
+            <translation>+(code pays) numéro ou pseudo</translation>
         </message>
     </context>
     <context>
-        <name>
-            QtCallForwardSettings
-        </name>
+        <name>QtCallForwardSettings</name>
         <message>
-            <source>
-                Call Forward
-            </source>
-            <translation>
-                Transfert d'appel
-            </translation>
+            <source>Call Forward</source>
+            <translation>Transfert d'appel</translation>
         </message>
     </context>
     <context>
-        <name>
-            QtChatHistoryWidget
-        </name>
+        <name>QtChatHistoryWidget</name>
         <message>
-            <source>
-                &amp;Save As...
-            </source>
-            <translation>
-                &amp;Enregistrer sous...
-            </translation>
+            <source>&amp;Save As...</source>
+            <translation>&amp;Enregistrer sous...</translation>
         </message>
         <message>
-            <source>
-                Save conversation to html
-            </source>
-            <translation>
-                Enregistrer la conversation en html
-            </translation>
+            <source>Save conversation to html</source>
+            <translation>Enregistrer la conversation en html</translation>
         </message>
         <message>
-            <source>
-                Save As
-            </source>
-            <translation>
-                Enregistrer sous
-            </translation>
+            <source>Save As</source>
+            <translation>Enregistrer sous</translation>
         </message>
     </context>
     <context>
-        <name>
-            QtChatTabWidget
-        </name>
+        <name>QtChatTabWidget</name>
         <message>
-            <source>
-                Close chat
-            </source>
-            <translation>
-                Fermer le chat
-            </translation>
+            <source>Close chat</source>
+            <translation>Fermer le chat</translation>
         </message>
     </context>
     <context>
-        <name>
-            QtChatWidget
-        </name>
+        <name>QtChatWidget</name>
         <message>
-            <source>
-                send
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                envoyer
-            </translation>
+            <source>send</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>envoyer</translation>
         </message>
         <message>
-            <source>
-                 has joined the chat
-            </source>
-            <translation>
-                 a rejoint le chat
-            </translation>
+            <source> has joined the chat</source>
+            <translation> a rejoint le chat</translation>
         </message>
         <message>
-            <source>
-                 has left the chat
-            </source>
-            <translation>
-                 a quitté le chat
-            </translation>
+            <source> has left the chat</source>
+            <translation> a quitté le chat</translation>
         </message>
     </context>
     <context>
-        <name>
-            QtChatWindow
-        </name>
+        <name>QtChatWindow</name>
         <message>
-            <source>
-                Edit Contact
-            </source>
-            <translation>
-                Editer le contact
-            </translation>
+            <source>Edit Contact</source>
+            <translation>Editer le contact</translation>
         </message>
         <message>
-            <source>
-                 is typing
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                 est en train d'écrire un message
-            </translation>
+            <source> is typing</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation> est en train d'écrire un message</translation>
         </message>
         <message>
-            <source>
-                 has not been transmitted!
-            </source>
-            <translation>
-                 n'a pas été transmis!
-            </translation>
+            <source> has not been transmitted!</source>
+            <translation> n'a pas été transmis!</translation>
         </message>
     </context>
     <context>
-        <name>
-            QtUserProfile
-        </name>
+        <name>QtUserProfile</name>
         <message>
-            <source>
-                Edit Contact
-            </source>
-            <translation>
-                Editer le contact
-            </translation>
+            <source>Edit Contact</source>
+            <translation>Editer le contact</translation>
         </message>
         <message>
-            <source>
-                &amp;Authorize
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                &amp;Autoriser
-            </translation>
+            <source>&amp;Authorize</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>&amp;Autoriser</translation>
         </message>
         <message>
-            <source>
-                &amp;Block
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                &amp;Bloquer
-            </translation>
+            <source>&amp;Block</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>&amp;Bloquer</translation>
         </message>
         <message>
-            <source>
-                WengoPhone - Authorization Request
-            </source>
-            <translation>
-                WengoPhone - Autorisation requise
-            </translation>
+            <source>WengoPhone - Authorization Request</source>
+            <translation>WengoPhone - Autorisation requise</translation>
         </message>
     </context>
     <context>
-        <name>
-            QtConferenceCallWidget
-        </name>
+        <name>QtConferenceCallWidget</name>
         <message>
-            <source>
-                Call SIP
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Appeler une adresse SIP
-            </translation>
+            <source>Call SIP</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Appeler une adresse SIP</translation>
         </message>
         <message>
-            <source>
-                Call land line
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Appeler une ligne fixe
-            </translation>
+            <source>Call land line</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Appeler une ligne fixe</translation>
         </message>
         <message>
-            <source>
-                Call Mobile
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Appeler un Mobile
-            </translation>
+            <source>Call Mobile</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Appeler un Mobile</translation>
         </message>
     </context>
     <context>
-        <name>
-            QtConfigPanel
-        </name>
+        <name>QtConfigPanel</name>
         <message>
-            <source>
-                Input: 
-            </source>
-            <translation>
-                Entrée: 
-            </translation>
+            <source>Input: </source>
+            <translation>Entrée: </translation>
         </message>
         <message>
-            <source>
-                Output: 
-            </source>
-            <translation>
-                Sortie: 
-            </translation>
+            <source>Output: </source>
+            <translation>Sortie: </translation>
         </message>
     </context>
     <context>
-        <name>
-            QtContactWidget
-        </name>
+        <name>QtContactWidget</name>
         <message>
-            <source>
-                Click here to call
-            </source>
-            <translation>
-                Cliquer ici pour appeler
-            </translation>
+            <source>Click here to call</source>
+            <translation>Cliquer ici pour appeler</translation>
         </message>
         <message>
-            <source>
-                Click here to set a phone number
-            </source>
-            <translation>
-                Cliquer ici pour renseigner un numéro de téléphone
-            </translation>
+            <source>Click here to set a phone number</source>
+            <translation>Cliquer ici pour renseigner un numéro de téléphone</translation>
         </message>
         <message>
-            <source>
-                Click here to edit the contact
-            </source>
-            <translation>
-                Cliquer ici pour éditer le contact
-            </translation>
+            <source>Click here to edit the contact</source>
+            <translation>Cliquer ici pour éditer le contact</translation>
         </message>
         <message>
-            <source>
-                Click here to send a SMS
-            </source>
-            <translation>
-                Cliquer ici pour envoyer un SMS
-            </translation>
+            <source>Click here to send a SMS</source>
+            <translation>Cliquer ici pour envoyer un SMS</translation>
         </message>
         <message>
-            <source>
-                Click here to start a chat
-            </source>
-            <translation>
-                Cliquez ici pour démarrer un chat
-            </translation>
+            <source>Click here to start a chat</source>
+            <translation>Cliquez ici pour démarrer un chat</translation>
         </message>
         <message>
-            <source>
-                Click here to start a free call
-            </source>
-            <translation>
-                Cliquez ici pour démarrer un appel gratuit
-            </translation>
+            <source>Click here to start a free call</source>
+            <translation>Cliquez ici pour démarrer un appel gratuit</translation>
         </message>
     </context>
     <context>
-        <name>
-            QtEventWidget
-        </name>
+        <name>QtEventWidget</name>
         <message>
-            <source>
-                WengoPhone - Voice Mail
-            </source>
-            <translation>
-                WengoPhone - Messagerie
-            </translation>
+            <source>WengoPhone - Voice Mail</source>
+            <translation>WengoPhone - Messagerie</translation>
         </message>
         <message>
-            <source>
-                Do you want to call your voice mail?
-            </source>
-            <translation>
-                Voulez-vous appeler votre messagerie ?
-            </translation>
+            <source>Do you want to call your voice mail?</source>
+            <translation>Voulez-vous appeler votre messagerie ?</translation>
         </message>
     </context>
     <context>
-        <name>
-            QtHistory
-        </name>
+        <name>QtHistory</name>
         <message>
-            <source>
-                Do you want to call %1?
-            </source>
-            <translation>
-                Voulez vous appeler %1 ?
-            </translation>
+            <source>Do you want to call %1?</source>
+            <translation>Voulez vous appeler %1 ?</translation>
         </message>
         <message>
-            <source>
-                Incoming call
-            </source>
-            <translation>
-                Appel entrant
-            </translation>
+            <source>Incoming call</source>
+            <translation>Appel entrant</translation>
         </message>
         <message>
-            <source>
-                Outgoing call
-            </source>
-            <translation>
-                Appel sortant
-            </translation>
+            <source>Outgoing call</source>
+            <translation>Appel sortant</translation>
         </message>
         <message>
-            <source>
-                Rejected call
-            </source>
-            <translation>
-                Appel en absence
-            </translation>
+            <source>Rejected call</source>
+            <translation>Appel en absence</translation>
         </message>
         <message>
-            <source>
-                Outgoing SMS
-            </source>
-            <translation>
-                SMS
-            </translation>
+            <source>Outgoing SMS</source>
+            <translation>SMS</translation>
         </message>
         <message>
-            <source>
-                Missed call
-            </source>
-            <translation>
-                Appel en absence
-            </translation>
+            <source>Missed call</source>
+            <translation>Appel en absence</translation>
         </message>
         <message>
-            <source>
-                WengoPhone - Call History
-            </source>
-            <translation>
-                WengoPhone - Historique des appels
-            </translation>
+            <source>WengoPhone - Call History</source>
+            <translation>WengoPhone - Historique des appels</translation>
         </message>
     </context>
     <context>
-        <name>
-            QtHistoryWidget
-        </name>
+        <name>QtHistoryWidget</name>
         <message>
-            <source>
-                Incoming call
-            </source>
-            <translation>
-                Appel entrant
-            </translation>
+            <source>Incoming call</source>
+            <translation>Appel entrant</translation>
         </message>
         <message>
-            <source>
-                Outgoing call
-            </source>
-            <translation>
-                Appel sortant
-            </translation>
+            <source>Outgoing call</source>
+            <translation>Appel sortant</translation>
         </message>
         <message>
-            <source>
-                Rejected call
-            </source>
-            <translation>
-                Appel en absence
-            </translation>
+            <source>Rejected call</source>
+            <translation>Appel en absence</translation>
         </message>
         <message>
-            <source>
-                Outgoing SMS
-            </source>
-            <translation>
-                SMS
-            </translation>
+            <source>Outgoing SMS</source>
+            <translation>SMS</translation>
         </message>
         <message>
-            <source>
-                Missed call
-            </source>
-            <translation>
-                Appel en absence
-            </translation>
+            <source>Missed call</source>
+            <translation>Appel en absence</translation>
         </message>
         <message>
-            <source>
-                Chat
-            </source>
-            <translation>
-                Chat
-            </translation>
+            <source>Chat</source>
+            <translation>Chat</translation>
         </message>
         <message>
-            <source>
-                All
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Tout
-            </translation>
+            <source>All</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Tout</translation>
         </message>
         <message>
-            <source>
-                SMS
-            </source>
-            <translation>
-                SMS
-            </translation>
+            <source>SMS</source>
+            <translation>SMS</translation>
         </message>
         <message>
-            <source>
-                Erase this entry
-            </source>
-            <translation>
-                Effacer cette élément
-            </translation>
+            <source>Erase this entry</source>
+            <translation>Effacer cette élément</translation>
         </message>
         <message>
-            <source>
-                Open in SMS window
-            </source>
-            <translation>
-                Ouvrir dans une fenêtre SMS
-            </translation>
+            <source>Open in SMS window</source>
+            <translation>Ouvrir dans une fenêtre SMS</translation>
         </message>
         <message>
-            <source>
-                Call this peer
-            </source>
-            <translation>
-                Appeler cette personne
-            </translation>
+            <source>Call this peer</source>
+            <translation>Appeler cette personne</translation>
         </message>
         <message>
-            <source>
-                Clear Outgoing Calls
-            </source>
-            <translation>
-                Effacer les appels sortants
-            </translation>
+            <source>Clear Outgoing Calls</source>
+            <translation>Effacer les appels sortants</translation>
         </message>
         <message>
-            <source>
-                Clear Incoming Calls
-            </source>
-            <translation>
-                Effacer les appels entrants
-            </translation>
+            <source>Clear Incoming Calls</source>
+            <translation>Effacer les appels entrants</translation>
         </message>
         <message>
-            <source>
-                Clear Missed Calls
-            </source>
-            <translation>
-                Effacer les appels manqués
-            </translation>
+            <source>Clear Missed Calls</source>
+            <translation>Effacer les appels manqués</translation>
         </message>
         <message>
-            <source>
-                Clear Rejected Calls
-            </source>
-            <translation>
-                Effacer les appels refusés
-            </translation>
+            <source>Clear Rejected Calls</source>
+            <translation>Effacer les appels refusés</translation>
         </message>
         <message>
-            <source>
-                Clear SMS
-            </source>
-            <translation>
-                Effacer les SMS
-            </translation>
+            <source>Clear SMS</source>
+            <translation>Effacer les SMS</translation>
         </message>
         <message>
-            <source>
-                Clear All
-            </source>
-            <translation>
-                Tout nettoyer
-            </translation>
+            <source>Clear All</source>
+            <translation>Tout nettoyer</translation>
         </message>
     </context>
     <context>
-        <name>
-            WsDirectory
-        </name>
+        <name>WsDirectory</name>
         <message>
-            <source>
-                All
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Tout
-            </translation>
+            <source>All</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Tout</translation>
         </message>
         <message>
-            <source>
-                Search
-            </source>
-            <translation>
-                Rechercher
-            </translation>
+            <source>Search</source>
+            <translation>Rechercher</translation>
         </message>
         <message>
-            <source>
-                WengoPhone - Search for Wengo contacts
-            </source>
-            <translation>
-                Wengophone - Rechercher un contact Wengo
-            </translation>
+            <source>WengoPhone - Search for Wengo contacts</source>
+            <translation>Wengophone - Rechercher un contact Wengo</translation>
         </message>
         <message>
-            <source>
-                When entering a combined search, please separate words with a blank.
-            </source>
-            <translation>
-                Quand vous utilisez plusieurs critères, veuillez les séparer par des espaces.
-            </translation>
+            <source>When entering a combined search, please separate words with a blank.</source>
+            <translation>Quand vous utilisez plusieurs critères, veuillez les séparer par des espaces.</translation>
         </message>
         <message>
-            <source>
-                Nickname
-            </source>
-            <translation>
-                Pseudo
-            </translation>
+            <source>Nickname</source>
+            <translation>Pseudo</translation>
         </message>
         <message>
-            <source>
-                First Name
-            </source>
-            <translation>
-                Prénom
-            </translation>
+            <source>First Name</source>
+            <translation>Prénom</translation>
         </message>
         <message>
-            <source>
-                Last Name
-            </source>
-            <translation>
-                Nom
-            </translation>
+            <source>Last Name</source>
+            <translation>Nom</translation>
         </message>
         <message>
-            <source>
-                City
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation>
-                Ville
-            </translation>
+            <source>City</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation>Ville</translation>
         </message>
         <message>
-            <source>
-                Country
-            </source>
-            <translation>
-                Pays
-            </translation>
+            <source>Country</source>
+            <translation>Pays</translation>
         </message>
         <message>
-            <source>
-                &lt;span style=&quot;font-size:18pt;&quot;&gt;Search for Wengo contacts&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;&lt;span&gt;Enter name, nickname, city or email and click the search button&lt;/span&gt;
-            </source>
-            <translation>
-                &lt;span style=&quot;font-size:18pt;&quot;&gt;Rechercher un contact Wengo&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;&lt;span&gt;Saisissez un nom, un pseudo, une ville ou un email et cliquez sur Rechercher !&lt;/span&gt;
-            </translation>
+            <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Search for Wengo contacts&lt;/span&gt;&lt;br /&gt;&lt;br 
+/&gt;&lt;span&gt;Enter name, nickname, city or email and click the search 
+button&lt;/span&gt;</source>
+            <translation>&lt;span style=&quot;font-size:18pt;&quot;&gt;Rechercher un contact Wengo&lt;/span&gt;&lt;br /&gt;&lt;br 
+/&gt;&lt;span&gt;Saisissez un nom, un pseudo, une ville ou un email et cliquez sur 
+Rechercher !&lt;/span&gt;</translation>
         </message>
     </context>
     <context>
-        <name>
-            QtIMAccountPlugin
-        </name>
+        <name>QtIMAccountPlugin</name>
         <message>
-            <source>
-                Please enter a login
-            </source>
-            <translation>
-                Veuiller entrer un identifiant
-            </translation>
+            <source>Please enter a login</source>
+            <translation>Veuiller entrer un identifiant</translation>
         </message>
     </context>
     <context>
-        <name>
-            QtLogin
-        </name>
+        <name>QtLogin</name>
         <message>
-            <source>
-                Please enter your email address&lt;br/&gt;and your password
-            </source>
-            <translation>
-                Veuillez saisir votre adresse email&lt;br/&gt;et votre mot de passe
-            </translation>
+            <source>Please enter your email address&lt;br/&gt;and your password</source>
+            <translation>Veuillez saisir votre adresse email&lt;br/&gt;et votre mot de passe</translation>
         </message>
         <message>
-            <source>
-                Wrong email/password entered
-            </source>
-            <translation>
-                Erreur de saisie des identifiants
-            </translation>
+            <source>Wrong email/password entered</source>
+            <translation>Erreur de saisie des identifiants</translation>
         </message>
         <message>
-            <source>
-                Click on Login to connect to Wengo
-            </source>
-            <translation>
-                Cliquer sur Se connecter
-            </translation>
+            <source>Click on Login to connect to Wengo</source>
+            <translation>Cliquer sur Se connecter</translation>
         </message>
     </context>
     <context>
-        <name>
-            QtPrivacySettings
-        </name>
+        <name>QtPrivacySettings</name>
         <message>
-            <source>
-                Privacy
-            </source>
-            <translation>
-                Confidentialité
-            </translation>
+            <source>Privacy</source>
+            <translation>Confidentialité</translation>
         </message>
     </context>
     <context>
-        <name>
-            QtProfileBar
-        </name>
+        <name>QtProfileBar</name>
         <message>
-            <source>
-                active
-            </source>
-            <translation>
-                activé
-            </translation>
+            <source>active</source>
+            <translation>activé</translation>
         </message>
         <message>
-            <source>
-                voicemail
-            </source>
-            <translation>
-                messagerie
-            </translation>
+            <source>voicemail</source>
+            <translation>messagerie</translation>
         </message>
         <message>
-            <source>
-                inactive
-            </source>
-            <translation>
-                inactif
-            </translation>
+            <source>inactive</source>
+            <translation>inactif</translation>
         </message>
         <message>
-            <source>
-                unauthorized
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation type="unfinished">
-                Interdit
-            </translation>
+            <source>unauthorized</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation type="unfinished">Interdit</translation>
         </message>
         <message>
-            <source>
-                NickName
-            </source>
-            <translation>
-                Pseudo
-            </translation>
+            <source>NickName</source>
+            <translation>Pseudo</translation>
         </message>
         <message>
-            <source>
-                Click here to change your status
-            </source>
-            <translation>
-                Cliquer ici pour changer de statut
-            </translation>
+            <source>Click here to change your status</source>
+            <translation>Cliquer ici pour changer de statut</translation>
         </message>
     </context>
     <context>
-        <name>
-            QtRenameGroup
-        </name>
+        <name>QtRenameGroup</name>
         <message>
-            <source>
-                Bad group name
-            </source>
-            <translation>
-                Mauvais nom de groupe
-            </translation>
+            <source>Bad group name</source>
+            <translation>Mauvais nom de groupe</translation>
         </message>
         <message>
-            <source>
-                Group name cannot be empty
-            </source>
-            <translation>
-                Le nom du groupe ne peut être vide
-            </translation>
+            <source>Group name cannot be empty</source>
+            <translation>Le nom du groupe ne peut être vide</translation>
         </message>
     </context>
     <context>
-        <name>
-            QtSms
-        </name>
+        <name>QtSms</name>
         <message>
-            <source>
-                Wengo SMS service
-            </source>
-            <translation>
-                Envoyer des SMS avec Wengo
-            </translation>
+            <source>Wengo SMS service</source>
+            <translation>Envoyer des SMS avec Wengo</translation>
         </message>
         <message>
-            <source>
-                Your SMS has not been sent
-            </source>
-            <translation>
-                Votre SMS n'a pas été envoyé
-            </translation>
+            <source>Your SMS has not been sent</source>
+            <translation>Votre SMS n'a pas été envoyé</translation>
         </message>
         <message>
-            <source>
-                Your SMS has been sent
-            </source>
-            <translation>
-                Votre SMS a été envoyé
-            </translation>
+            <source>Your SMS has been sent</source>
+            <translation>Votre SMS a été envoyé</translation>
         </message>
         <message>
-            <source>
-                Please fill in a phone number.
-            </source>
-            <translation>
-                Veuillez renseigner le numéro de téléphone.
-            </translation>
+            <source>Please fill in a phone number.</source>
+            <translation>Veuillez renseigner le numéro de téléphone.</translation>
         </message>
         <message>
-            <source>
-                Your message is too long.This will send 
-            </source>
-            <translation>
-                Votre message est trop long. Cela correspond à 
-            </translation>
+            <source>Your message is too long.This will send </source>
+            <translation>Votre message est trop long. Cela correspond à </translation>
         </message>
         <message>
-            <source>
-                 SMS.
-            </source>
-            <translation>
-                 SMS.
-            </translation>
+            <source> SMS.</source>
+            <translation> SMS.</translation>
         </message>
         <message>
-            <source>
-                Do you want to continue?
-            </source>
-            <translation>
-                Voulez vous continuer?
-            </translation>
+            <source>Do you want to continue?</source>
+            <translation>Voulez vous continuer?</translation>
         </message>
     </context>
     <context>
-        <name>
-            QtSoftUpdate
-        </name>
+        <name>QtSoftUpdate</name>
         <message>
-            <source>
-                WengoPhone - Update failed
-            </source>
-            <translation>
-                Wengophone - La mise à jour a échouée
-            </translation>
+            <source>WengoPhone - Update failed</source>
+            <translation>Wengophone - La mise à jour a échouée</translation>
         </message>
         <message>
-            <source>
-                WengoPhone update failed to start: try to update WengoPhone manually
-            </source>
-            <translation>
-                La mise à jour du WengoPhone n'a pas pu démarrer: Essayez de mettre à jour le WengoPhone manuellement
-            </translation>
+            <source>WengoPhone update failed to start: try to update WengoPhone manually</source>
+            <translation>La mise à jour du WengoPhone n'a pas pu démarrer: Essayez de mettre à jour 
+le WengoPhone manuellement</translation>
         </message>
     </context>
     <context>
-        <name>
-            QtStatusBar
-        </name>
+        <name>QtStatusBar</name>
         <message>
-            <source>
-                Audio Configuration OK
-            </source>
-            <translation>
-                Configuration audio OK
-            </translation>
+            <source>Audio Configuration OK</source>
+            <translation>Configuration audio OK</translation>
         </message>
         <message>
-            <source>
-                Internet Connection OK
-            </source>
-            <translation>
-                Connexion Internet OK
-            </translation>
+            <source>Internet Connection OK</source>
+            <translation>Connexion Internet OK</translation>
         </message>
         <message>
-            <source>
-                Internet Connection Error
-            </source>
-            <translation>
-                Erreur de connexion Internet
-            </translation>
+            <source>Internet Connection Error</source>
+            <translation>Erreur de connexion Internet</translation>
         </message>
         <message>
-            <source>
-                Not connected
-            </source>
-            <translation>
-                Déconnecté
-            </translation>
+            <source>Not connected</source>
+            <translation>Déconnecté</translation>
         </message>
         <message>
-            <source>
-                An error occured
-            </source>
-            <translation>
-                Une erreur s'est produite
-            </translation>
+            <source>An error occured</source>
+            <translation>Une erreur s'est produite</translation>
         </message>
         <message>
-            <source>
-                Register done
-            </source>
-            <translation>
-                Identification effectuée
-            </translation>
+            <source>Register done</source>
+            <translation>Identification effectuée</translation>
         </message>
         <message>
-            <source>
-                Unregister done
-            </source>
-            <translation>
-                Déconnexion effectuée
-            </translation>
+            <source>Unregister done</source>
+            <translation>Déconnexion effectuée</translation>
         </message>
         <message>
-            <source>
-                Connecting
-            </source>
-            <translation>
-                Connexion
-            </translation>
+            <source>Connecting</source>
+            <translation>Connexion</translation>
         </message>
     </context>
     <context>
-        <name>
-            QtSubscribe
-        </name>
+        <name>QtSubscribe</name>
         <message>
-            <source>
-                Confirm password does not matched password
-            </source>
-            <translation>
-                Le mot de passe de confirmation est invalide
-            </translation>
+            <source>Confirm password does not matched password</source>
+            <translation>Le mot de passe de confirmation est invalide</translation>
         </message>
         <message>
-            <source>
-                Unknown Error
-            </source>
-            <translation>
-                Erreur inconnue
-            </translation>
+            <source>Unknown Error</source>
+            <translation>Erreur inconnue</translation>
         </message>
         <message>
-            <source>
-                You cannot use this email address, already in use
-            </source>
-            <translation>
-                Vous ne pouvez pas utiliser cette adresse, elle est déjà utilisée avec un autre compte
-            </translation>
+            <source>You cannot use this email address, already in use</source>
+            <translation>Vous ne pouvez pas utiliser cette adresse, elle est déjà utilisée avec un 
+autre compte</translation>
         </message>
         <message>
-            <source>
-                You cannot use this nickname, already in use
-            </source>
-            <translation>
-                Ce pseudo est déja pris
-            </translation>
+            <source>You cannot use this nickname, already in use</source>
+            <translation>Ce pseudo est déja pris</translation>
         </message>
         <message>
-            <source>
-                Your password does not contain enough characters (6 minimum), try another one
-            </source>
-            <translation>
-                Votre mot de passe est trop court (6 caracères minimum), choissisez un autre mot de passe
-            </translation>
+            <source>Your password does not contain enough characters (6 minimum), try another one</source>
+            <translation>Votre mot de passe est trop court (6 caracères minimum), choissisez un autre 
+mot de passe</translation>
         </message>
         <message>
-            <source>
-                Subscription Failed
-            </source>
-            <translation>
-                votre inscription a échouée
-            </translation>
+            <source>Subscription Failed</source>
+            <translation>votre inscription a échouée</translation>
         </message>
     </context>
     <context>
-        <name>
-            QtUserProfilePresenceMenu
-        </name>
+        <name>QtUserProfilePresenceMenu</name>
         <message>
-            <source>
-                Online
-            </source>
-            <translation>
-                En ligne
-            </translation>
+            <source>Online</source>
+            <translation>En ligne</translation>
         </message>
         <message>
-            <source>
-                Do Not Disturb
-            </source>
-            <translation>
-                Ne pas déranger
-            </translation>
+            <source>Do Not Disturb</source>
+            <translation>Ne pas déranger</translation>
         </message>
         <message>
-            <source>
-                Invisible
-            </source>
-            <translation>
-                Invisible
-            </translation>
+            <source>Invisible</source>
+            <translation>Invisible</translation>
         </message>
         <message>
-            <source>
-                Away
-            </source>
-            <translation>
-                Absent
-            </translation>
+            <source>Away</source>
+            <translation>Absent</translation>
         </message>
         <message>
-            <source>
-                Offline (Disconnect)
-            </source>
-            <translation>
-                Hors ligne (Déconnecté)
-            </translation>
+            <source>Offline (Disconnect)</source>
+            <translation>Hors ligne (Déconnecté)</translation>
         </message>
     </context>
     <context>
-        <name>
-            QtWsDirectory
-        </name>
+        <name>QtWsDirectory</name>
         <message>
-            <source>
-                Add a Contact
-            </source>
-            <translation>
-                Ajouter un contact
-            </translation>
+            <source>Add a Contact</source>
+            <translation>Ajouter un contact</translation>
         </message>
         <message>
-            <source>
-                Search Wengo Contacts
-            </source>
-            <translation>
-                Rechercher un contact
-            </translation>
+            <source>Search Wengo Contacts</source>
+            <translation>Rechercher un contact</translation>
         </message>
         <message>
-            <source>
-                No contact match your query
-            </source>
-            <translation>
-                Aucun contact ne correspond à vos critères
-            </translation>
+            <source>No contact match your query</source>
+            <translation>Aucun contact ne correspond à vos critères</translation>
         </message>
     </context>
     <context>
-        <name>
-            QtTreeViewDelegate
-        </name>
+        <name>QtTreeViewDelegate</name>
         <message>
-            <source>
-                Contacts list
-            </source>
-            <translation>
-                Liste de Contacts
-            </translation>
+            <source>Contacts list</source>
+            <translation>Liste de Contacts</translation>
         </message>
     </context>
     <context>
-        <name>
-            QtUserProfileHandler
-        </name>
+        <name>QtUserProfileHandler</name>
         <message>
-            <source>
-                Would you like to import contacts and IM accounts previously created in the default profile to the profile named %1?
-            </source>
-            <translation>
-                Voulez vous importer les contacts et les comptes IM créés avec le profile par défaut pour le proile %1?
-            </translation>
+            <source>Would you like to import contacts and IM accounts previously created in the 
+default profile to the profile named %1?</source>
+            <translation>Voulez vous importer les contacts et les comptes IM créés avec le profile 
+par défaut pour le proile %1?</translation>
         </message>
         <message>
-            <source>
-                WengoPhone - Importing contacts and IM accounts
-            </source>
-            <translation>
-                WengoPhone - Importation des contacts et des comptes IM
-            </translation>
+            <source>WengoPhone - Importing contacts and IM accounts</source>
+            <translation>WengoPhone - Importation des contacts et des comptes IM</translation>
         </message>
     </context>
     <context>
-        <name>
-            QtVideoSettings
-        </name>
+        <name>QtVideoSettings</name>
         <message>
-            <source>
-                Video
-            </source>
-            <translation>
-                Vidéo
-            </translation>
+            <source>Video</source>
+            <translation>Vidéo</translation>
         </message>
         <message>
-            <source>
-                Normal
-            </source>
-            <translation>
-                Normale
-            </translation>
+            <source>Normal</source>
+            <translation>Normale</translation>
         </message>
         <message>
-            <source>
-                Good
-            </source>
-            <translation>
-                Bonne
-            </translation>
+            <source>Good</source>
+            <translation>Bonne</translation>
         </message>
         <message>
-            <source>
-                Very good
-            </source>
-            <translation>
-                Très bonne
-            </translation>
+            <source>Very good</source>
+            <translation>Très bonne</translation>
         </message>
         <message>
-            <source>
-                Excellent
-            </source>
-            <translation>
-                Excellent
-            </translation>
+            <source>Excellent</source>
+            <translation>Excellent</translation>
         </message>
     </context>
     <context>
-        <name>
-            VideoSettings
-        </name>
+        <name>VideoSettings</name>
         <message>
-            <source>
-                Normal
-            </source>
-            <translation>
-                Normale
-            </translation>
+            <source>Normal</source>
+            <translation>Normale</translation>
         </message>
         <message>
-            <source>
-                Good
-            </source>
-            <translation>
-                Bonne
-            </translation>
+            <source>Good</source>
+            <translation>Bonne</translation>
         </message>
         <message>
-            <source>
-                Very good
-            </source>
-            <translation>
-                Très bonne
-            </translation>
+            <source>Very good</source>
+            <translation>Très bonne</translation>
         </message>
         <message>
-            <source>
-                Excellent
-            </source>
-            <translation>
-                Excellent
-            </translation>
+            <source>Excellent</source>
+            <translation>Excellent</translation>
         </message>
         <message>
-            <source>
-                Video Settings
-            </source>
-            <translation>
-                Vidéo
-            </translation>
+            <source>Video Settings</source>
+            <translation>Vidéo</translation>
         </message>
         <message>
-            <source>
-                Enable video
-            </source>
-            <translation>
-                Activer la vidéo
-            </translation>
+            <source>Enable video</source>
+            <translation>Activer la vidéo</translation>
         </message>
         <message>
-            <source>
-                Webcam device:
-            </source>
-            <translation>
-                Webcam:
-            </translation>
+            <source>Webcam device:</source>
+            <translation>Webcam:</translation>
         </message>
         <message>
-            <source>
-                Video quality
-            </source>
-            <translation>
-                Qualité vidéo
-            </translation>
+            <source>Video quality</source>
+            <translation>Qualité vidéo</translation>
         </message>
         <message>
-            <source>
-                Down (kbit/s)
-            </source>
-            <translation>
-                Téléchargement (kbit/s)
-            </translation>
+            <source>Down (kbit/s)</source>
+            <translation>Téléchargement (kbit/s)</translation>
         </message>
         <message>
-            <source>
-                Up (kbit/s)
-            </source>
-            <translation>
-                Upload (kbit/s)
-            </translation>
+            <source>Up (kbit/s)</source>
+            <translation>Upload (kbit/s)</translation>
         </message>
         <message>
-            <source>
-                0 to 512
-            </source>
-            <translation>
-                0 à 512
-            </translation>
+            <source>0 to 512</source>
+            <translation>0 à 512</translation>
         </message>
         <message>
-            <source>
-                0 to 128
-            </source>
-            <translation>
-                0 à 128
-            </translation>
+            <source>0 to 128</source>
+            <translation>0 à 128</translation>
         </message>
         <message>
-            <source>
-                512 to 2048
-            </source>
-            <translation>
-                512 à 2048
-            </translation>
+            <source>512 to 2048</source>
+            <translation>512 à 2048</translation>
         </message>
         <message>
-            <source>
-                128 to 256
-            </source>
-            <translation>
-                128 à 256
-            </translation>
+            <source>128 to 256</source>
+            <translation>128 à 256</translation>
         </message>
         <message>
-            <source>
-                2048+
-            </source>
-            <translation>
-                2048+
-            </translation>
+            <source>2048+</source>
+            <translation>2048+</translation>
         </message>
         <message>
-            <source>
-                256+
-            </source>
-            <translation>
-                256+
-            </translation>
+            <source>256+</source>
+            <translation>256+</translation>
         </message>
         <message>
-            <source>
-                8192+
-            </source>
-            <translation>
-                8192+
-            </translation>
+            <source>8192+</source>
+            <translation>8192+</translation>
         </message>
         <message>
-            <source>
-                1024+
-            </source>
-            <translation>
-                1024+
-            </translation>
+            <source>1024+</source>
+            <translation>1024+</translation>
         </message>
         <message>
-            <source>
-                Video quality depends on your Internet connection bandwidth
-            </source>
-            <translation>
-                La qualité de la vidéo dépend de la vitesse de votre connexion Internet
-            </translation>
+            <source>Video quality depends on your Internet connection bandwidth</source>
+            <translation>La qualité de la vidéo dépend de la vitesse de votre connexion Internet</translation>
         </message>
         <message>
-            <source>
-                Make a test video call
-            </source>
-            <translation>
-                Effectuer un appel vidéo de test
-            </translation>
+            <source>Make a test video call</source>
+            <translation>Effectuer un appel vidéo de test</translation>
         </message>
         <message>
-            <source>
-                Webcam Selection
-            </source>
-            <translation>
-                Sélection de la webcam
-            </translation>
+            <source>Webcam Selection</source>
+            <translation>Sélection de la webcam</translation>
         </message>
         <message>
-            <source>
-                Webcam Preview
-            </source>
-            <translation>
-                Cliquez pour visualiser votre image
-            </translation>
+            <source>Webcam Preview</source>
+            <translation>Cliquez pour visualiser votre image</translation>
         </message>
         <message>
-            <source>
-                Connection Type
-            </source>
-            <translation>
-                Type de connection
-            </translation>
+            <source>Connection Type</source>
+            <translation>Type de connection</translation>
         </message>
         <message>
-            <source>
-                &lt;b&gt;Warning!&lt;/b&gt; When used for the first time we recommend that you select&lt;br&gt;the normal video quality mode, then you can try different modes to find out&lt;br&gt;the most suitable one&lt;br&gt;&lt;br&gt;&lt;b&gt;Tips&lt;/b&gt;: Go to http://test.lvcm.com to determine your Internet connection bandwidth
-            </source>
-            <translation>
-                &lt;b&gt;Attention!&lt;/b&gt;Pour une première expérience, nous vous recommandons le niveau normal&lt;br&gt;Par la suite, testez les autres niveaux pour déterminer la configuration optimale&lt;br&gt;&lt;br&gt;&lt;b&gt;Astuce&lt;/b&gt;: Rendez vous sur http://test.lvcm.com pour déterminer la vitesse de votre connexion Internet
-            </translation>
+            <source>&lt;b&gt;Warning!&lt;/b&gt; When used for the first time we recommend that you 
+select&lt;br&gt;the normal video quality mode, then you can try different modes to 
+find out&lt;br&gt;the most suitable one&lt;br&gt;&lt;br&gt;&lt;b&gt;Tips&lt;/b&gt;: Go to 
+http://test.lvcm.com to determine your Internet connection bandwidth</source>
+            <translation>&lt;b&gt;Attention!&lt;/b&gt;Pour une première expérience, nous vous recommandons le 
+niveau normal&lt;br&gt;Par la suite, testez les autres niveaux pour déterminer la 
+configuration optimale&lt;br&gt;&lt;br&gt;&lt;b&gt;Astuce&lt;/b&gt;: Rendez vous sur 
+http://test.lvcm.com pour déterminer la vitesse de votre connexion Internet</translation>
         </message>
     </context>
     <context>
-        <name>
-            QtWsDirectoryContact
-        </name>
+        <name>QtWsDirectoryContact</name>
         <message>
-            <source>
-                Wengo number: 
-            </source>
-            <translation>
-                Numéro Wengo: 
-            </translation>
+            <source>Wengo number: </source>
+            <translation>Numéro Wengo: </translation>
         </message>
         <message>
-            <source>
-                City: 
-            </source>
-            <translation>
-                Ville: 
-            </translation>
+            <source>City: </source>
+            <translation>Ville: </translation>
         </message>
         <message>
-            <source>
-                Country: 
-            </source>
-            <translation>
-                Pays: 
-            </translation>
+            <source>Country: </source>
+            <translation>Pays: </translation>
         </message>
         <message>
-            <source>
-                SIP address: 
-            </source>
-            <translation>
-                Adresse SIP: 
-            </translation>
+            <source>SIP address: </source>
+            <translation>Adresse SIP: </translation>
         </message>
     </context>
     <context>
-        <name>
-            SimpleIMContactManager
-        </name>
+        <name>SimpleIMContactManager</name>
         <message>
-            <source>
-                Update your profile
-            </source>
-            <translation>
-                Compléter votre profil
-            </translation>
+            <source>Update your profile</source>
+            <translation>Compléter votre profil</translation>
         </message>
         <message>
-            <source>
-                Jabber/GoogleTalk ID:
-            </source>
-            <translation>
-                Jabber/GoogleTalk Identifiant:
-            </translation>
+            <source>Jabber/GoogleTalk ID:</source>
+            <translation>Jabber/GoogleTalk Identifiant:</translation>
         </message>
         <message>
-            <source>
-                Search
-            </source>
-            <translation>
-                Rechercher
-            </translation>
+            <source>Search</source>
+            <translation>Rechercher</translation>
         </message>
         <message>
-            <source>
-                Wengo ID:
-            </source>
-            <translation>
-                Wengo Identifiant:
-            </translation>
+            <source>Wengo ID:</source>
+            <translation>Wengo Identifiant:</translation>
         </message>
         <message>
-            <source>
-                MSN ID:
-            </source>
-            <translation>
-                MSN Identifiant:
-            </translation>
+            <source>MSN ID:</source>
+            <translation>MSN Identifiant:</translation>
         </message>
         <message>
-            <source>
-                AIM/ICQ ID:
-            </source>
-            <translation>
-                AIM/ICQ Identifiant:
-            </translation>
+            <source>AIM/ICQ ID:</source>
+            <translation>AIM/ICQ Identifiant:</translation>
         </message>
         <message>
-            <source>
-                Yahoo! ID:
-            </source>
-            <translation>
-                Yahoo! Identifiant:
-            </translation>
+            <source>Yahoo! ID:</source>
+            <translation>Yahoo! Identifiant:</translation>
         </message>
     </context>
     <context>
-        <name>
-            StatusBarWidget
-        </name>
+        <name>StatusBarWidget</name>
         <message>
-            <source>
-                Audio Configuration Error
-            </source>
-            <translation>
-                Erreur de configuration audio
-            </translation>
+            <source>Audio Configuration Error</source>
+            <translation>Erreur de configuration audio</translation>
         </message>
         <message>
-            <source>
-                Not Connected
-            </source>
-            <translation>
-                Déconnecté
-            </translation>
+            <source>Not Connected</source>
+            <translation>Déconnecté</translation>
         </message>
     </context>
     <context>
-        <name>
-            VideoWindow
-        </name>
+        <name>VideoWindow</name>
         <message>
-            <source>
-                WengoPhone - Video
-            </source>
-            <translation>
-                WengoPhone - Vidéo
-            </translation>
+            <source>WengoPhone - Video</source>
+            <translation>WengoPhone - Vidéo</translation>
         </message>
     </context>
     <context>
-        <name>
-            aboutWindow
-        </name>
+        <name>aboutWindow</name>
         <message>
-            <source>
-                Dialog
-            </source>
-            <comment>
-                #-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-            </comment>
-            <translation type="unfinished">
-                Dialogue
-            </translation>
+            <source>Dialog</source>
+            <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
+            <translation type="unfinished">Dialogue</translation>
         </message>
         <message>
-            <source>
-                help
-            </source>
-            <translation>
-                Aide
-            </translation>
+            <source>help</source>
+            <translation>Aide</translation>
         </message>
         <message>
-            <source>
-                config...
-            </source>
-            <translation>
-                config...
-            </translation>
+            <source>config...</source>
+            <translation>config...</translation>
         </message>
         <message>
-            <source>
-                update
-            </source>
-            <translation>
-                mise à jour
-            </translation>
+            <source>update</source>
+            <translation>mise à jour</translation>
         </message>
         <message>
-            <source>
-                GroupBox
-            </source>
-            <translation>
-                Groupe de Boîte
-            </translation>
+            <source>GroupBox</source>
+            <translation>Groupe de Boîte</translation>
         </message>
         <message>
-            <source>
-                &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#000000;&quot;&gt;This is a Qt demo application for a skin system.&lt;/span&gt;&lt;/p&gt;&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#000000;&quot;&gt;&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#000000;&quot;&gt;The skin system works as a Qt style plugin through the QStyle class.&lt;/p&gt;&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#000000;&quot;&gt;&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#000000;&quot;&gt;This example works using Qt version 4.0.0 &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
-            </source>
-            <translation>
-                &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#000000;&quot;&gt;This is a Qt demo application for a skin system.&lt;/span&gt;&lt;/p&gt;&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#000000;&quot;&gt;&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#000000;&quot;&gt;The skin system works as a Qt style plugin through the QStyle class.&lt;/p&gt;&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#000000;&quot;&gt;&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#000000;&quot;&gt;This example works using Qt version 4.0.0 &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
-            </translation>
+            <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
+white-space: pre-wrap; font-family:MS Shell Dlg; font-weight:400; font-
+style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-
+bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-
+indent:0px;&quot;&gt;&lt;span style=&quot; color:#000000;&quot;&gt;This is a Qt demo application 
+for a skin system.&lt;/span&gt;&lt;/p&gt;&lt;p style=&quot;-qt-paragraph-type:empty; margin-
+top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
+indent:0; text-indent:0px; color:#000000;&quot;&gt;&lt;/p&gt;&lt;p style=&quot; margin-top:0px; 
+margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; 
+text-indent:0px; color:#000000;&quot;&gt;The skin system works as a Qt style plugin 
+through the QStyle class.&lt;/p&gt;&lt;p style=&quot;-qt-paragraph-type:empty; margin-
+top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
+indent:0; text-indent:0px; color:#000000;&quot;&gt;&lt;/p&gt;&lt;p style=&quot; margin-top:0px; 
+margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; 
+text-indent:0px; color:#000000;&quot;&gt;This example works using Qt version 4.0.0 
+&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+            <translation>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
+white-space: pre-wrap; font-family:MS Shell Dlg; font-weight:400; font-
+style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-
+bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-
+indent:0px;&quot;&gt;&lt;span style=&quot; color:#000000;&quot;&gt;This is a Qt demo application 
+for a skin system.&lt;/span&gt;&lt;/p&gt;&lt;p style=&quot;-qt-paragraph-type:empty; margin-
+top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
+indent:0; text-indent:0px; color:#000000;&quot;&gt;&lt;/p&gt;&lt;p style=&quot; margin-top:0px; 
+margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; 
+text-indent:0px; color:#000000;&quot;&gt;The skin system works as a Qt style plugin 
+through the QStyle class.&lt;/p&gt;&lt;p style=&quot;-qt-paragraph-type:empty; margin-
+top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
+indent:0; text-indent:0px; color:#000000;&quot;&gt;&lt;/p&gt;&lt;p style=&quot; margin-top:0px; 
+margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; 
+text-indent:0px; color:#000000;&quot;&gt;This example works using Qt version 4.0.0 
+&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
         </message>
     </context>
 </TS>
