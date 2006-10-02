@@ -95,16 +95,9 @@ void WengoPhone::exitAfterTimeout() {
 }
 
 WengoPhone::~WengoPhone() {
-	/*while (!_terminate) {
-		//Waiting for end of model thread
-		Thread::msleep(100);
-	}*/
-
 	//Deleting created objects
 	OWSAFE_DELETE(_coIpManager);
-
 	OWSAFE_DELETE(_userProfileHandler);
-
 	OWSAFE_DELETE(_startupSettingListener);
 	////
 
@@ -124,11 +117,6 @@ void WengoPhone::init() {
 	ConfigImporter importer(*_userProfileHandler);
 	importer.importConfig(config.getConfigDir());
 
-	//LocalNetworkAccount always created and added by default
-	/*LocalNetworkAccount * localAccount = new LocalNetworkAccount();
-	localAccount->init();
-	addPhoneLine(localAccount);*/
-
 	_userProfileHandler->init();
 
 	//initFinishedEvent
@@ -137,12 +125,10 @@ void WengoPhone::init() {
 
 void WengoPhone::run() {
 	init();
+
 	LOG_DEBUG("model thread is ready for events");
 
 	runEvents();
-
-	//If we are here this means WengoPhone::terminate() has been called
-	//and Thread::_terminate = true
 }
 
 void WengoPhone::terminate() {

@@ -52,6 +52,7 @@
 #endif
 
 #include <util/Logger.h>
+#include <util/SafeDelete.h>
 
 #include <cutil/global.h>
 
@@ -132,7 +133,7 @@ int main(int argc, char * argv[]) {
 	//CWengoPhone creates PWengoPhone (QtWengoPhone, GtkWengoPhone...)
 	//thus creating CWengoPhone at the very beginning makes the gui
 	//to be shown before everything is fully loaded
-	WengoPhone wengoPhone;
+	WengoPhone &wengoPhone = WengoPhone::getInstance();
 	CWengoPhone cWengoPhone(wengoPhone);
 	pFactory->processEvents();
 
@@ -166,11 +167,14 @@ int main(int argc, char * argv[]) {
 
 	pFactory->exec();
 
-	cWengoPhone.terminate();
+	WengoPhone::deleteInstance();
+	OWSAFE_DELETE(sipFactory);
+	OWSAFE_DELETE(imFactory);
 
 	LOG_DEBUG("WengoPhone ended");
 
 	return EXIT_SUCCESS;
 }
+
 
 

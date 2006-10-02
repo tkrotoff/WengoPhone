@@ -89,50 +89,23 @@ UserProfile::UserProfile()
 
 UserProfile::~UserProfile() {
 	disconnect();
+
 	if (_activePhoneLine) {
-		Thread::sleep(5);
+		Thread::sleep(5); // Sleep for PhApi: lets time to it to unregister
 		_activePhoneLine->getSipWrapper().terminate();
 	}
 
-	if (_activePhoneLine) {
-		delete _activePhoneLine;
-	}
-
-	if (_activePhoneCall) {
-		delete _activePhoneCall;
-	}
-
-	if (_history) {
-		delete _history;
-	}
-
-	if (_imAccountHandler) {
-		delete _imAccountHandler;
-	}
-
-	if (_wsSms) {
-		delete _wsSms;
-	}
-
-	if (_wsSoftUpdate) {
-		delete _wsSoftUpdate;
-	}
-
-	if (_wsInfo) {
-		delete _wsInfo;
-	}
-
-	if (_wsDirectory) {
-		delete _wsDirectory;
-	}
-
-	if (_wsCallForward) {
-		delete _wsCallForward;
-	}
-
-	if (_wenboxPlugin) {
-		delete _wenboxPlugin;
-	}
+	OWSAFE_DELETE(_activePhoneCall);
+	_phoneLineList.clear();
+	OWSAFE_DELETE(_activePhoneLine);
+	OWSAFE_DELETE(_wsSms);
+	OWSAFE_DELETE(_wsSoftUpdate);
+	OWSAFE_DELETE(_wsInfo);
+	OWSAFE_DELETE(_wsDirectory);
+	OWSAFE_DELETE(_wsCallForward);
+	OWSAFE_DELETE(_history);
+	OWSAFE_DELETE(_wenboxPlugin);
+	OWSAFE_DELETE(_imAccountHandler);
 }
 
 void UserProfile::init() {

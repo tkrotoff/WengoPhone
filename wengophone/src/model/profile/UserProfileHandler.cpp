@@ -28,6 +28,7 @@
 
 #include <util/File.h>
 #include <util/Logger.h>
+#include <util/SafeDelete.h>
 
 UserProfileHandler::UserProfileHandler() {
 	_currentUserProfile = NULL;
@@ -38,16 +39,14 @@ UserProfileHandler::UserProfileHandler() {
 }
 
 UserProfileHandler::~UserProfileHandler() {
-	if (_desiredUserProfile) {
-		delete _desiredUserProfile;
-	}
+	OWSAFE_DELETE(_desiredUserProfile);
 
 	if (_currentUserProfile) {
-		_currentUserProfile->disconnect();
 		saveUserProfile(*_currentUserProfile);
 		setLastUsedUserProfile(*_currentUserProfile);
 		WsUrl::setWengoAccount(NULL);
-		delete _currentUserProfile;
+
+		OWSAFE_DELETE(_currentUserProfile);
 	}
 }
 
@@ -193,8 +192,7 @@ void UserProfileHandler::currentUserProfileReleased() {
 	if (_currentUserProfile) {
 		saveUserProfile(*_currentUserProfile);
 		WsUrl::setWengoAccount(NULL);
-		delete _currentUserProfile;
-		_currentUserProfile = NULL;
+		OWSAFE_DELETE(_currentUserProfile);
 	}
 
 	if (_importDefaultProfileToProfile) {
@@ -232,8 +230,7 @@ void UserProfileHandler::initializeCurrentUserProfile() {
 		&& !_currentUserProfile->getWengoAccount()->isValid()
 		&& !_currentUserProfile->isWengoAccountValid()) {
 		WengoAccount wengoAccount = *_currentUserProfile->getWengoAccount();
-		delete _currentUserProfile;
-		_currentUserProfile = NULL;
+		OWSAFE_DELETE(_currentUserProfile);
 		wengoAccountNotValidEvent(*this, wengoAccount);
 	} else {
 		WsUrl::setWengoAccount(_currentUserProfile->getWengoAccount());
