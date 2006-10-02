@@ -7,8 +7,7 @@
     </message>
     <message>
         <source>Password:</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Mot de passe :</translation>
+        <translation type="unfinished">Mot de passe :</translation>
     </message>
     <message>
         <source>Login:</source>
@@ -22,10 +21,6 @@
         <source>Get a new AIM Account</source>
         <translation>Créez un nouveau compte AIM</translation>
     </message>
-    <message>
-        <source>Password:</source>
-        <translation type="unfinished">Mot de passe :</translation>
-    </message>
 </context>
 <context>
     <name>AboutWindow</name>
@@ -38,13 +33,13 @@
         <translation>À propos</translation>
     </message>
     <message>
-        <source>This program is free software; you can redistribute it and/ormodify it under 
-the terms of the GNU General Public Licenseas published by the Free Software 
-Foundation; either version 2of the License, or (at your option) any later 
+        <source>This program is free software; you can redistribute it and/ormodify it under
+the terms of the GNU General Public Licenseas published by the Free Software
+Foundation; either version 2of the License, or (at your option) any later
 version.</source>
-        <translation type="obsolete">This program is free software; you can redistribute it and/ormodify it under 
-the terms of the GNU General Public Licenseas published by the Free Software 
-Foundation; either version 2of the License, or (at your option) any later 
+        <translation type="obsolete">This program is free software; you can redistribute it and/ormodify it under
+the terms of the GNU General Public Licenseas published by the Free Software
+Foundation; either version 2of the License, or (at your option) any later
 version.</translation>
     </message>
     <message>
@@ -86,45 +81,45 @@ of the License, or (at your option) any later version.</source>
         <translation>test.bmp</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
+        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot;
 white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-
 weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
 top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Contact: 
+indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Contact:
 &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="obsolete">&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
+        <translation type="obsolete">&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot;
 white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-
 weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
 top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Contact: 
+indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Contact:
 &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
+        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot;
 white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-
 weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
 top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Filename: 
+indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Filename:
 &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="obsolete">&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
+        <translation type="obsolete">&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot;
 white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-
 weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
 top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Nom du 
+indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Nom du
 fichier: &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
+        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot;
 white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-
 weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
 top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;&lt;h1&gt;Incoming 
+indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;&lt;h1&gt;Incoming
 file&lt;/h1&gt;&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="obsolete">&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
+        <translation type="obsolete">&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot;
 white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-
 weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
 top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;&lt;h1&gt;Réception 
+indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;&lt;h1&gt;Réception
 de fichier&lt;/h1&gt;&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
@@ -164,20 +159,15 @@ de fichier&lt;/h1&gt;&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translat
     </message>
     <message>
         <source>Add</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Ajouter</translation>
+        <translation type="unfinished">Ajouter</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-_ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Annuler</translation>
+        <translation type="unfinished">Annuler</translation>
     </message>
     <message>
         <source>WengoPhone - Add a Contact Account</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">WengoPhone - Ajouter le compte IM d&apos;un contact</translation>
+        <translation type="unfinished">WengoPhone - Ajouter le compte IM d&apos;un contact</translation>
     </message>
     <message>
         <source>Account:</source>
@@ -186,18 +176,6 @@ _ OBSOLETE
     <message>
         <source>Contact Type (protocol):</source>
         <translation type="unfinished">Type de contact (protocole):</translation>
-    </message>
-    <message>
-        <source>WengoPhone - Add a Contact Account</source>
-        <translation type="unfinished">WengoPhone - Ajouter le compte IM d&apos;un contact</translation>
-    </message>
-    <message>
-        <source>Add</source>
-        <translation type="unfinished">Ajouter</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="unfinished">Annuler</translation>
     </message>
 </context>
 <context>
@@ -216,8 +194,7 @@ _ OBSOLETE
     </message>
     <message>
         <source>Status</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Statut</translation>
+        <translation type="unfinished">Statut</translation>
     </message>
     <message>
         <source>Type</source>
@@ -235,17 +212,12 @@ _ OBSOLETE
         <source>Save</source>
         <translation>Enregistrer</translation>
     </message>
-    <message>
-        <source>Status</source>
-        <translation type="unfinished">Statut</translation>
-    </message>
 </context>
 <context>
     <name>AdvancedSettings</name>
     <message>
         <source>Add</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Ajouter</translation>
+        <translation type="unfinished">Ajouter</translation>
     </message>
     <message>
         <source>Advanced Settings</source>
@@ -264,18 +236,14 @@ _ OBSOLETE
         <translation>Fenêtre de configuration avancée</translation>
     </message>
     <message>
-        <source>Warning, this part is for advanced users.&lt;br&gt;Any mistake can badly damage 
+        <source>Warning, this part is for advanced users.&lt;br&gt;Any mistake can badly damage
 the software.</source>
-        <translation type="obsolete">Attention, cette section est dédiée aux utilisateurs avertis.&lt;br&gt; Toute 
+        <translation type="obsolete">Attention, cette section est dédiée aux utilisateurs avertis.&lt;br&gt; Toute
 mauvaise manipulation peut endommager le logiciel.</translation>
     </message>
     <message>
         <source>Warning, this part is for advanced users.&lt;br&gt;Any mistake can badly damage the software.</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Add</source>
-        <translation type="unfinished">Ajouter</translation>
     </message>
 </context>
 <context>
@@ -327,11 +295,11 @@ mauvaise manipulation peut endommager le logiciel.</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;An update is available, click &lt;span style=&quot; text-
-decoration: underline; color:#0000ff;&quot;&gt;here&lt;/span&gt; to download the new 
+decoration: underline; color:#0000ff;&quot;&gt;here&lt;/span&gt; to download the new
 version&lt;br /&gt;&lt;br /&gt;Version:%1&lt;br /&gt;File Size:%2 (MB)&lt;br /&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="obsolete">&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;Une mise à jour est disponible, cliquez &lt;span 
-style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;ici&lt;/span&gt; pour 
-télécharger la nouvelle version&lt;br /&gt;&lt;br /&gt;Version:%1&lt;br /&gt;Taille:%2 (MB)&lt;br 
+        <translation type="obsolete">&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;Une mise à jour est disponible, cliquez &lt;span
+style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;ici&lt;/span&gt; pour
+télécharger la nouvelle version&lt;br /&gt;&lt;br /&gt;Version:%1&lt;br /&gt;Taille:%2 (MB)&lt;br
 /&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
@@ -358,16 +326,16 @@ télécharger la nouvelle version&lt;br /&gt;&lt;br /&gt;Version:%1&lt;br /&gt;T
         <translation>Transférer tous vos appels non aboutis vers la messagerie vocale</translation>
     </message>
     <message>
-        <source>Call forwards to my mobile are billed on standard rates and needs Wengo 
-credits. You need to fill up a mobile phone number in your profile before 
+        <source>Call forwards to my mobile are billed on standard rates and needs Wengo
+credits. You need to fill up a mobile phone number in your profile before
 using call forwarding.</source>
-        <translation type="obsolete">Les transferts d&apos;appel vers mon mobile sont facturés sur la base de la 
-grille tarifaire standard et nécessitent un crédit de Wengo&apos;s. L&apos;activation 
+        <translation type="obsolete">Les transferts d&apos;appel vers mon mobile sont facturés sur la base de la
+grille tarifaire standard et nécessitent un crédit de Wengo&apos;s. L&apos;activation
 du transfert nécessite de renseigner un numéro mobile dans votre profil.</translation>
     </message>
     <message>
         <source>Forward calls to my mobile when I choose &quot;mobile&quot; status</source>
-        <translation type="obsolete">Transférer les appels vers mon mobile lorsque je sélectionne le statut 
+        <translation type="obsolete">Transférer les appels vers mon mobile lorsque je sélectionne le statut
 &quot;mobile&quot;</translation>
     </message>
     <message>
@@ -387,13 +355,13 @@ du transfert nécessite de renseigner un numéro mobile dans votre profil.</tran
         <translation>2ème:</translation>
     </message>
     <message>
-        <source>Call forwarding is active if you&apos;re not connected to Wengo, when your line 
-is busy or 20 seconds after you did not answer a call. You can configure up 
-to three call forwards to landlines, mobile phones or voice mail (if 
+        <source>Call forwarding is active if you&apos;re not connected to Wengo, when your line
+is busy or 20 seconds after you did not answer a call. You can configure up
+to three call forwards to landlines, mobile phones or voice mail (if
 applicable)</source>
-        <translation type="obsolete">Le transfert d&apos;appel est actif si vous n&apos;êtes pas connecté à Wengo, si votre 
-ligne est occupée ou si vous ne répondez pas 20 secondes après avoir reçu un 
-appel. Vous pouvez configurer jusqu&apos;à 3 transferts d&apos;appel vers des 
+        <translation type="obsolete">Le transfert d&apos;appel est actif si vous n&apos;êtes pas connecté à Wengo, si votre
+ligne est occupée ou si vous ne répondez pas 20 secondes après avoir reçu un
+appel. Vous pouvez configurer jusqu&apos;à 3 transferts d&apos;appel vers des
 téléphones fixes, téléphones portables ou la boite vocale (si disponible).</translation>
     </message>
     <message>
@@ -447,8 +415,7 @@ téléphones fixes, téléphones portables ou la boite vocale (si disponible).</
     </message>
     <message>
         <source>&amp;Tools</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">&amp;Outils</translation>
+        <translation type="unfinished">&amp;Outils</translation>
     </message>
     <message>
         <source>&amp;Help</source>
@@ -456,8 +423,7 @@ téléphones fixes, téléphones portables ou la boite vocale (si disponible).</
     </message>
     <message>
         <source>&amp;Actions</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">&amp;Actions</translation>
+        <translation type="unfinished">&amp;Actions</translation>
     </message>
     <message>
         <source>Main Toolbar</source>
@@ -486,14 +452,6 @@ téléphones fixes, téléphones portables ou la boite vocale (si disponible).</
     <message>
         <source>&amp;Save History As...</source>
         <translation>&amp;Enregistrer l&apos;historique sous...</translation>
-    </message>
-    <message>
-        <source>&amp;Tools</source>
-        <translation type="unfinished">&amp;Outils</translation>
-    </message>
-    <message>
-        <source>&amp;Actions</source>
-        <translation type="unfinished">&amp;Actions</translation>
     </message>
     <message>
         <source>Call Contact</source>
@@ -541,16 +499,16 @@ téléphones fixes, téléphones portables ou la boite vocale (si disponible).</
         <translation type="obsolete">Envoyer</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
+        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot;
 white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-
 weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot;-qt-
-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; 
+paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px;
 margin-right:0px; -qt-block-indent:0; text-indent:0px; font-
 size:8pt;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="obsolete">&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
+        <translation type="obsolete">&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot;
 white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-
 weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot;-qt-
-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; 
+paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px;
 margin-right:0px; -qt-block-indent:0; text-indent:0px; font-
 size:8pt;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
@@ -564,9 +522,6 @@ size:8pt;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>Call</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-_ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
         <translation type="obsolete">Appel</translation>
     </message>
     <message>
@@ -600,10 +555,7 @@ _ OBSOLETE
     <name>ConferenceCallWidget</name>
     <message>
         <source>Cancel</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-_ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Annuler</translation>
+        <translation type="unfinished">Annuler</translation>
     </message>
     <message>
         <source>WengoPhone - Create a Conference</source>
@@ -622,26 +574,22 @@ _ OBSOLETE
         <translation>Appeler</translation>
     </message>
     <message>
-        <source>&lt;span style=&quot; font-size:18pt;&quot;&gt;Conference&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;Please enter 
+        <source>&lt;span style=&quot; font-size:18pt;&quot;&gt;Conference&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;Please enter
 two phone numbers &lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-
-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;or Wengo 
+left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;or Wengo
 contact ID in order&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-
-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;to create 
+left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;to create
 a 3-way conference.&lt;/p&gt;</source>
-        <translation type="obsolete">&lt;span style=&quot; font-size:18pt;&quot;&gt;Conference&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;Veuillez 
+        <translation type="obsolete">&lt;span style=&quot; font-size:18pt;&quot;&gt;Conference&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;Veuillez
 saisir deux numéros de téléphone &lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-
 bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-
-indent:0px;&quot;&gt;ou deux pseudos Wengo afin&lt;/p&gt;&lt;p style=&quot; margin-top:0px; 
-margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; 
+indent:0px;&quot;&gt;ou deux pseudos Wengo afin&lt;/p&gt;&lt;p style=&quot; margin-top:0px;
+margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0;
 text-indent:0px;&quot;&gt;de créer une conférence.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>...</source>
         <translation>...</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="unfinished">Annuler</translation>
     </message>
     <message>
         <source>&lt;span style=&quot; font-size:18pt;&quot;&gt;Conference&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;Please enter two phone numbers &lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;or Wengo contact ID in order&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;to create a 3-way conference.&lt;/p&gt;</source>
@@ -652,23 +600,20 @@ text-indent:0px;&quot;&gt;de créer une conférence.&lt;/p&gt;</translation>
     <name>ConferenceInviteWidget</name>
     <message>
         <source>Cancel</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-_ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Annuler</translation>
+        <translation type="unfinished">Annuler</translation>
     </message>
     <message>
-        <source>&lt;span style=&quot; font-size:18pt;&quot;&gt;Conference&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;Please enter 
+        <source>&lt;span style=&quot; font-size:18pt;&quot;&gt;Conference&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;Please enter
 two phone numbers &lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-
-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;or Wengo 
+left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;or Wengo
 contact ID in order&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-
-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;to create 
+left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;to create
 a 3-way conference.&lt;/p&gt;</source>
-        <translation type="obsolete">&lt;span style=&quot; font-size:18pt;&quot;&gt;Conference&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;Veuillez 
+        <translation type="obsolete">&lt;span style=&quot; font-size:18pt;&quot;&gt;Conference&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;Veuillez
 saisir deux numéros de téléphone &lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-
 bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-
-indent:0px;&quot;&gt;ou deux pseudos Wengo afin&lt;/p&gt;&lt;p style=&quot; margin-top:0px; 
-margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; 
+indent:0px;&quot;&gt;ou deux pseudos Wengo afin&lt;/p&gt;&lt;p style=&quot; margin-top:0px;
+margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0;
 text-indent:0px;&quot;&gt;de créer une conférence.&lt;/p&gt;</translation>
     </message>
     <message>
@@ -691,10 +636,6 @@ text-indent:0px;&quot;&gt;de créer une conférence.&lt;/p&gt;</translation>
         <source>&lt;span style=&quot; font-size:18pt;&quot;&gt;Conference&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;Please enter two phone numbers &lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;or Wengo contact ID in order&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;to create a 3-way conference.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="unfinished">Annuler</translation>
-    </message>
 </context>
 <context>
     <name>ContactGroupPopupMenu</name>
@@ -713,20 +654,6 @@ text-indent:0px;&quot;&gt;de créer une conférence.&lt;/p&gt;</translation>
     <message>
         <source>Do you really want to delete this group?</source>
         <translation>Etes-vous sur de vouloir supprimer ce groupe ?</translation>
-    </message>
-    <message>
-        <source>&amp;Yes</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-_ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">&amp;Oui</translation>
-    </message>
-    <message>
-        <source>&amp;No</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-_ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">&amp;Non</translation>
     </message>
     <message>
         <source>&amp;Yes</source>
@@ -759,84 +686,54 @@ _ OBSOLETE
     <name>CrashReport</name>
     <message>
         <source>Cancel</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-_ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Annuler</translation>
-    </message>
-    <message>
-        <source>Program Failure</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Echec du programme</translation>
-    </message>
-    <message>
-        <source>The WengoPhone execution failed and has generated a diagnostic file.&lt;br&gt;This 
-file contains usefull information to solve the problem you are 
-encounting.&lt;br&gt;Thanks for your contribution.&lt;br&gt;&lt;br&gt;The WengoPhone 
-Development Team.</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">L&apos;execution du WengoPhone a échoué et un rapport d&apos;erreur a été généré.Ce 
-rapport contient des informations essentielles aux développeurs pour 
-résoudre le problème rencontré.Merci de votre participation.L&apos;équipe de 
-développement du WengoPhone.</translation>
-    </message>
-    <message>
-        <source>Send</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Envoyer</translation>
-    </message>
-    <message>
-        <source>Optional Information</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Informations facultatives</translation>
-    </message>
-    <message>
-        <source>In order to help the developers you can complete this report. This step is 
-optional.&lt;br&gt;Use Case Description:</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Afin d&apos;aider les développeurs vous pouvez compléter ce rapport. Cette étape 
-est facultative.Décriverz les circonsances du problème:</translation>
-    </message>
-    <message>
-        <source>Your Mail:</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Votre Email:</translation>
+        <translation type="unfinished">Annuler</translation>
     </message>
     <message>
         <source>Program Failure</source>
         <translation type="unfinished">Echec du programme</translation>
     </message>
     <message>
-        <source>The WengoPhone execution failed and has generated a diagnostic file.&lt;br&gt;This file contains usefull information to solve the problem you are encounting.&lt;br&gt;Thanks for your contribution.&lt;br&gt;&lt;br&gt;The WengoPhone Development Team.</source>
-        <translation type="unfinished"></translation>
+        <source>The WengoPhone execution failed and has generated a diagnostic file.&lt;br&gt;This
+file contains usefull information to solve the problem you are
+encounting.&lt;br&gt;Thanks for your contribution.&lt;br&gt;&lt;br&gt;The WengoPhone
+Development Team.</source>
+        <translation type="obsolete">L&apos;execution du WengoPhone a échoué et un rapport d&apos;erreur a été généré.Ce
+rapport contient des informations essentielles aux développeurs pour
+résoudre le problème rencontré.Merci de votre participation.L&apos;équipe de
+développement du WengoPhone.</translation>
     </message>
     <message>
         <source>Send</source>
         <translation type="unfinished">Envoyer</translation>
     </message>
     <message>
-        <source>Cancel</source>
-        <translation type="unfinished">Annuler</translation>
-    </message>
-    <message>
         <source>Optional Information</source>
         <translation type="unfinished">Informations facultatives</translation>
     </message>
     <message>
-        <source>In order to help the developers you can complete this report. This step is optional.&lt;br&gt;Use Case Description:</source>
-        <translation type="unfinished"></translation>
+        <source>In order to help the developers you can complete this report. This step is
+optional.&lt;br&gt;Use Case Description:</source>
+        <translation type="obsolete">Afin d&apos;aider les développeurs vous pouvez compléter ce rapport. Cette étape
+est facultative.Décriverz les circonsances du problème:</translation>
     </message>
     <message>
         <source>Your Mail:</source>
         <translation type="unfinished">Votre Email:</translation>
+    </message>
+    <message>
+        <source>The WengoPhone execution failed and has generated a diagnostic file.&lt;br&gt;This file contains usefull information to solve the problem you are encounting.&lt;br&gt;Thanks for your contribution.&lt;br&gt;&lt;br&gt;The WengoPhone Development Team.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>In order to help the developers you can complete this report. This step is optional.&lt;br&gt;Use Case Description:</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>CreditWidget</name>
     <message>
         <source>Click here to buy Wengo&apos;s credits</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Cliquer ici pour créditer votre compte</translation>
+        <translation type="unfinished">Cliquer ici pour créditer votre compte</translation>
     </message>
     <message>
         <source>Your Wengo phone number</source>
@@ -865,10 +762,6 @@ est facultative.Décriverz les circonsances du problème:</translation>
     <message>
         <source>Call Forward Method</source>
         <translation>Méthode du transfert d&apos;appel:</translation>
-    </message>
-    <message>
-        <source>Click here to buy Wengo&apos;s credits</source>
-        <translation type="unfinished">Cliquer ici pour créditer votre compte</translation>
     </message>
 </context>
 <context>
@@ -912,10 +805,7 @@ est facultative.Décriverz les circonsances du problème:</translation>
     <name>FileTransferItem</name>
     <message>
         <source>Cancel</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-_ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Annuler</translation>
+        <translation type="unfinished">Annuler</translation>
     </message>
     <message>
         <source>Form</source>
@@ -929,10 +819,6 @@ _ OBSOLETE
         <source>Pause</source>
         <translation>Pause</translation>
     </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="unfinished">Annuler</translation>
-    </message>
 </context>
 <context>
     <name>FileTransferWidget</name>
@@ -945,17 +831,17 @@ _ OBSOLETE
         <translation>WengoPhone - Gestionnaire du Transfert de Fichiers</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
+        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot;
 white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-
 weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
 top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
-indent:0; text-indent:0px;&quot;&gt;Click here to change your download 
+indent:0; text-indent:0px;&quot;&gt;Click here to change your download
 folder&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="obsolete">&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
+        <translation type="obsolete">&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot;
 white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-
 weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
 top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
-indent:0; text-indent:0px;&quot;&gt;Cliquer ici pour changer votre dossier de 
+indent:0; text-indent:0px;&quot;&gt;Cliquer ici pour changer votre dossier de
 téléchargement&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
@@ -971,16 +857,16 @@ téléchargement&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
         <translation>Envoi</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
+        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot;
 white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-
 weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
 top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
 indent:0; text-indent:0px;&quot;&gt;Clean all items in the list&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="obsolete">&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
+        <translation type="obsolete">&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot;
 white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-
 weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
 top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
-indent:0; text-indent:0px;&quot;&gt;Nettoyer tous les éléments de la 
+indent:0; text-indent:0px;&quot;&gt;Nettoyer tous les éléments de la
 liste&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
@@ -1007,13 +893,13 @@ liste&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
         <translation>Salon de discussion</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
+        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot;
 white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-
 weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
 top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
 indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt; font-
 weight:600;&quot;&gt;Chat room&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="obsolete">&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
+        <translation type="obsolete">&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot;
 white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-
 weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
 top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
@@ -1092,8 +978,7 @@ weight:600;&quot;&gt;Salon de discussion&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;
     <name>GoogleTalkSettings</name>
     <message>
         <source>Password:</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Mot de passe :</translation>
+        <translation type="unfinished">Mot de passe :</translation>
     </message>
     <message>
         <source>Login:</source>
@@ -1110,10 +995,6 @@ weight:600;&quot;&gt;Salon de discussion&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;
     <message>
         <source>Get a new GoogleTalk Account</source>
         <translation>Créez un nouveau compte GoogleTalk</translation>
-    </message>
-    <message>
-        <source>Password:</source>
-        <translation type="unfinished">Mot de passe :</translation>
     </message>
 </context>
 <context>
@@ -1132,11 +1013,6 @@ weight:600;&quot;&gt;Salon de discussion&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;
     </message>
     <message>
         <source>Duration</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Durée</translation>
-    </message>
-    <message>
-        <source>Duration</source>
         <translation type="unfinished">Durée</translation>
     </message>
 </context>
@@ -1144,10 +1020,7 @@ weight:600;&quot;&gt;Salon de discussion&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;
     <name>HttpProxyLoginWindow</name>
     <message>
         <source>Cancel</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-_ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Annuler</translation>
+        <translation type="unfinished">Annuler</translation>
     </message>
     <message>
         <source>WengoPhone - Local HTTP Proxy</source>
@@ -1171,31 +1044,20 @@ _ OBSOLETE
     </message>
     <message>
         <source>OK</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-_ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">OK</translation>
+        <translation type="unfinished">OK</translation>
     </message>
     <message>
-        <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;HTTP Proxy 
-Authentication&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;Your local HTTP proxy uses 
+        <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;HTTP Proxy
+Authentication&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;Your local HTTP proxy uses
 authentication&lt;br&gt;Please enter your login and password&lt;/span&gt;</source>
-        <translation type="obsolete">&lt;span style=&quot;font-size:18pt;&quot;&gt;HTTP Proxy 
-Authentication&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;Votre proxy HTTP local requiert une 
-authentification&lt;br&gt;Veuiller saisisir votre identifiant et votre mot de 
+        <translation type="obsolete">&lt;span style=&quot;font-size:18pt;&quot;&gt;HTTP Proxy
+Authentication&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;Votre proxy HTTP local requiert une
+authentification&lt;br&gt;Veuiller saisisir votre identifiant et votre mot de
 passe&lt;/span&gt;</translation>
     </message>
     <message>
         <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;HTTP Proxy Authentication&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;Your local HTTP proxy uses authentication&lt;br&gt;Please enter your login and password&lt;/span&gt;</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation type="unfinished">OK</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="unfinished">Annuler</translation>
     </message>
 </context>
 <context>
@@ -1210,13 +1072,11 @@ passe&lt;/span&gt;</translation>
     </message>
     <message>
         <source>Add</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Ajouter</translation>
+        <translation type="unfinished">Ajouter</translation>
     </message>
     <message>
         <source>Protocol</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Protocole</translation>
+        <translation type="unfinished">Protocole</translation>
     </message>
     <message>
         <source>Enabled</source>
@@ -1234,23 +1094,12 @@ passe&lt;/span&gt;</translation>
         <source>WengoPhone - My Instant Messaging Accounts (MSN, Jabber...)</source>
         <translation>WengoPhone - Mes comptes de Messagerie Instantannée (MSN, Jabber...)</translation>
     </message>
-    <message>
-        <source>Protocol</source>
-        <translation type="unfinished">Protocole</translation>
-    </message>
-    <message>
-        <source>Add</source>
-        <translation type="unfinished">Ajouter</translation>
-    </message>
 </context>
 <context>
     <name>IMAccountTemplate</name>
     <message>
         <source>Cancel</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-_ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Annuler</translation>
+        <translation type="unfinished">Annuler</translation>
     </message>
     <message>
         <source>Save</source>
@@ -1260,17 +1109,12 @@ _ OBSOLETE
         <source>IM Account Settings</source>
         <translation>Paramètres des comptes IM</translation>
     </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="unfinished">Annuler</translation>
-    </message>
 </context>
 <context>
     <name>IMContactManager</name>
     <message>
         <source>Add</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Ajouter</translation>
+        <translation type="unfinished">Ajouter</translation>
     </message>
     <message>
         <source>Delete</source>
@@ -1278,27 +1122,16 @@ _ OBSOLETE
     </message>
     <message>
         <source>Contact ID</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-_ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Identifiant du contact</translation>
+        <translation type="unfinished">Identifiant du contact</translation>
     </message>
     <message>
         <source>Click on the add button below to add a new ID</source>
-        <translation>Cliquer sur le bouton Ajouter ci dessous pour associer un identifiant de 
+        <translation>Cliquer sur le bouton Ajouter ci dessous pour associer un identifiant de
 messagerie à ce contact</translation>
     </message>
     <message>
         <source>Contact Type (protocol)</source>
         <translation>Type de contact (protocole)</translation>
-    </message>
-    <message>
-        <source>Add</source>
-        <translation type="unfinished">Ajouter</translation>
-    </message>
-    <message>
-        <source>Contact ID</source>
-        <translation type="unfinished">Identifiant du contact</translation>
     </message>
 </context>
 <context>
@@ -1336,8 +1169,7 @@ messagerie à ce contact</translation>
     <name>JabberSettings</name>
     <message>
         <source>Password:</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Mot de passe :</translation>
+        <translation type="unfinished">Mot de passe :</translation>
     </message>
     <message>
         <source>Login:</source>
@@ -1379,10 +1211,6 @@ messagerie à ce contact</translation>
         <source>&lt;u&gt;Advanced Options&lt;/u&gt;</source>
         <translation>&lt;u&gt;Options avancées&lt;/u&gt;</translation>
     </message>
-    <message>
-        <source>Password:</source>
-        <translation type="unfinished">Mot de passe :</translation>
-    </message>
 </context>
 <context>
     <name>LanguagesSettings</name>
@@ -1395,8 +1223,7 @@ messagerie à ce contact</translation>
     <name>LoginWindow</name>
     <message>
         <source>Password:</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Mot de passe :</translation>
+        <translation type="unfinished">Mot de passe :</translation>
     </message>
     <message>
         <source>Login</source>
@@ -1404,10 +1231,7 @@ messagerie à ce contact</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-_ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Annuler</translation>
+        <translation type="unfinished">Annuler</translation>
     </message>
     <message>
         <source>WengoPhone - Login</source>
@@ -1422,11 +1246,11 @@ _ OBSOLETE
         <translation type="obsolete">Vous n&apos;avez pas encore d&apos;identifiants de connexion ?</translation>
     </message>
     <message>
-        <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Login&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;Please enter your 
+        <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Login&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;Please enter your
 email address and&lt;br&gt;password&lt;/span&gt;</source>
-        <translation type="obsolete">&lt;span style=&quot;font-size:18pt;&quot;&gt;Connexion&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;Pour utiliser 
-Wengo vous devez disposer de vos&lt;br&gt;identifiants de connexion (l’e-mail et 
-le mot de&lt;/span&gt;&lt;span&gt;passe que vous avez déclarés lors de 
+        <translation type="obsolete">&lt;span style=&quot;font-size:18pt;&quot;&gt;Connexion&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;Pour utiliser
+Wengo vous devez disposer de vos&lt;br&gt;identifiants de connexion (l’e-mail et
+le mot de&lt;/span&gt;&lt;span&gt;passe que vous avez déclarés lors de
 votre&lt;/span&gt;&lt;br&gt;inscription</translation>
     </message>
     <message>
@@ -1442,14 +1266,6 @@ votre&lt;/span&gt;&lt;br&gt;inscription</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Password:</source>
-        <translation type="unfinished">Mot de passe :</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="unfinished">Annuler</translation>
-    </message>
-    <message>
         <source>Click here if you don&apos;t have a Wengo account</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1458,8 +1274,7 @@ votre&lt;/span&gt;&lt;br&gt;inscription</translation>
     <name>MSNSettings</name>
     <message>
         <source>Password:</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Mot de passe :</translation>
+        <translation type="unfinished">Mot de passe :</translation>
     </message>
     <message>
         <source>Login:</source>
@@ -1476,10 +1291,6 @@ votre&lt;/span&gt;&lt;br&gt;inscription</translation>
     <message>
         <source>Get a new MSN Account</source>
         <translation>Créez un nouveau compte MSN</translation>
-    </message>
-    <message>
-        <source>Password:</source>
-        <translation type="unfinished">Mot de passe :</translation>
     </message>
 </context>
 <context>
@@ -1619,40 +1430,29 @@ votre&lt;/span&gt;&lt;br&gt;inscription</translation>
     <name>PhoneCallWidget</name>
     <message>
         <source>Status</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Statut</translation>
-    </message>
-    <message>
-        <source>Duration</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Durée</translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
-white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-
-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-size:13pt; 
-font-weight:600;&quot;&gt;NickName or number&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
-white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-
-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-size:13pt; 
-font-weight:600;&quot;&gt;Pseudo ou numéro&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-size:13pt; font-weight:600;&quot;&gt;NickName or number&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Statut</translation>
     </message>
     <message>
         <source>Duration</source>
         <translation type="unfinished">Durée</translation>
     </message>
     <message>
-        <source>Status</source>
-        <translation type="unfinished">Statut</translation>
+        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot;
+white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-
+weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
+top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
+indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-size:13pt;
+font-weight:600;&quot;&gt;NickName or number&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="obsolete">&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot;
+white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-
+weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
+top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
+indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-size:13pt;
+font-weight:600;&quot;&gt;Pseudo ou numéro&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-size:13pt; font-weight:600;&quot;&gt;NickName or number&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1671,7 +1471,7 @@ font-weight:600;&quot;&gt;Pseudo ou numéro&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&
     </message>
     <message>
         <source>Always sign in as &quot;Invisible&quot; (appear offline to all users)</source>
-        <translation>Toutjours se connecter en mode invisible (les autres utilisateurs ne vous 
+        <translation>Toutjours se connecter en mode invisible (les autres utilisateurs ne vous
 voient pas)</translation>
     </message>
     <message>
@@ -1695,10 +1495,7 @@ voient pas)</translation>
     <name>ProfileDetails</name>
     <message>
         <source>Cancel</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-_ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Annuler</translation>
+        <translation type="unfinished">Annuler</translation>
     </message>
     <message>
         <source>Save</source>
@@ -1710,13 +1507,11 @@ _ OBSOLETE
     </message>
     <message>
         <source>Phone Numbers</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Numéros de téléphone</translation>
+        <translation type="unfinished">Numéros de téléphone</translation>
     </message>
     <message>
         <source>Mobile phone</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Téléphone Mobile</translation>
+        <translation type="unfinished">Téléphone Mobile</translation>
     </message>
     <message>
         <source>Click to change avatar</source>
@@ -1732,8 +1527,7 @@ _ OBSOLETE
     </message>
     <message>
         <source>dd MMMM yyyy</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">dd MMMM yyyy</translation>
+        <translation type="unfinished">dd MMMM yyyy</translation>
     </message>
     <message>
         <source>State:</source>
@@ -1749,23 +1543,19 @@ _ OBSOLETE
     </message>
     <message>
         <source>Unknown</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Inconnu</translation>
+        <translation type="unfinished">Inconnu</translation>
     </message>
     <message>
         <source>Male</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Homme</translation>
+        <translation type="unfinished">Homme</translation>
     </message>
     <message>
         <source>Female</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Femme</translation>
+        <translation type="unfinished">Femme</translation>
     </message>
     <message>
         <source>Home phone</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Numéro de téléphone personnel</translation>
+        <translation type="unfinished">Numéro de téléphone personnel</translation>
     </message>
     <message>
         <source>First Name:</source>
@@ -1789,7 +1579,7 @@ _ OBSOLETE
     </message>
     <message>
         <source>Fill in all your network Id to stay connected with your contacts</source>
-        <translation>Veuillez renseigner tous vos identifiants pour rester connecté avec vos 
+        <translation>Veuillez renseigner tous vos identifiants pour rester connecté avec vos
 contacts</translation>
     </message>
     <message>
@@ -1812,38 +1602,6 @@ contacts</translation>
         <source>Notes</source>
         <translation>Notes</translation>
     </message>
-    <message>
-        <source>Phone Numbers</source>
-        <translation type="unfinished">Numéros de téléphone</translation>
-    </message>
-    <message>
-        <source>Home phone</source>
-        <translation type="unfinished">Numéro de téléphone personnel</translation>
-    </message>
-    <message>
-        <source>Mobile phone</source>
-        <translation type="unfinished">Téléphone Mobile</translation>
-    </message>
-    <message>
-        <source>dd MMMM yyyy</source>
-        <translation type="unfinished">dd MMMM yyyy</translation>
-    </message>
-    <message>
-        <source>Unknown</source>
-        <translation type="unfinished">Inconnu</translation>
-    </message>
-    <message>
-        <source>Male</source>
-        <translation type="unfinished">Homme</translation>
-    </message>
-    <message>
-        <source>Female</source>
-        <translation type="unfinished">Femme</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="unfinished">Annuler</translation>
-    </message>
 </context>
 <context>
     <name>QObject</name>
@@ -1857,7 +1615,7 @@ contacts</translation>
     </message>
     <message>
         <source>Can&apos;t send SMS unless you&apos;re connected to a SIP service.</source>
-        <translation>Vous ne pouvez pas envoyer de SMS lorsque vous êtes déconnecté du service 
+        <translation>Vous ne pouvez pas envoyer de SMS lorsque vous êtes déconnecté du service
 Wengo.</translation>
     </message>
 </context>
@@ -1922,8 +1680,7 @@ Wengo.</translation>
     <name>QtChatWidget</name>
     <message>
         <source>send</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">envoyer</translation>
+        <translation type="unfinished">envoyer</translation>
     </message>
     <message>
         <source> has joined the chat</source>
@@ -1932,10 +1689,6 @@ Wengo.</translation>
     <message>
         <source> has left the chat</source>
         <translation> a quitté le chat</translation>
-    </message>
-    <message>
-        <source>send</source>
-        <translation type="unfinished">envoyer</translation>
     </message>
 </context>
 <context>
@@ -1946,35 +1699,15 @@ Wengo.</translation>
     </message>
     <message>
         <source> is typing</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete"> est en train d&apos;écrire un message</translation>
+        <translation type="unfinished"> est en train d&apos;écrire un message</translation>
     </message>
     <message>
         <source> has not been transmitted!</source>
         <translation> n&apos;a pas été transmis!</translation>
     </message>
-    <message>
-        <source> is typing</source>
-        <translation type="unfinished"> est en train d&apos;écrire un message</translation>
-    </message>
 </context>
 <context>
     <name>QtConferenceCallWidget</name>
-    <message>
-        <source>Call SIP</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Appeler une adresse SIP</translation>
-    </message>
-    <message>
-        <source>Call land line</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Appeler une ligne fixe</translation>
-    </message>
-    <message>
-        <source>Call Mobile</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Appeler un Mobile</translation>
-    </message>
     <message>
         <source>Call SIP</source>
         <translation type="unfinished">Appeler une adresse SIP</translation>
@@ -2003,32 +1736,26 @@ Wengo.</translation>
     <name>QtContactList</name>
     <message>
         <source>&amp;Yes</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-_ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">&amp;Oui</translation>
+        <translation type="unfinished">&amp;Oui</translation>
     </message>
     <message>
         <source>&amp;No</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-_ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">&amp;Non</translation>
+        <translation type="unfinished">&amp;Non</translation>
     </message>
     <message>
         <source>Merge %1 with %2?</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-_ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Fusionner %1 avec %2 ?</translation>
+        <translation type="unfinished">Fusionner %1 avec %2 ?</translation>
     </message>
     <message>
         <source>WengoPhone - Merge Contacts</source>
         <translation>WengoPhone - Fusion de contact</translation>
     </message>
+</context>
+<context>
+    <name>QtContactManager</name>
     <message>
-        <source>Merge %1 with %2?</source>
-        <translation type="unfinished">Fusionner %1 avec %2 ?</translation>
+        <source>Call</source>
+        <translation type="unfinished">Appel</translation>
     </message>
     <message>
         <source>&amp;Yes</source>
@@ -2038,39 +1765,13 @@ _ OBSOLETE
         <source>&amp;No</source>
         <translation type="unfinished">&amp;Non</translation>
     </message>
-</context>
-<context>
-    <name>QtContactManager</name>
-    <message>
-        <source>Call</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-_ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Appel</translation>
-    </message>
-    <message>
-        <source>&amp;Yes</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-_ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">&amp;Oui</translation>
-    </message>
-    <message>
-        <source>&amp;No</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-_ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">&amp;Non</translation>
-    </message>
     <message>
         <source>Mobile phone</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Téléphone Mobile</translation>
+        <translation type="unfinished">Téléphone Mobile</translation>
     </message>
     <message>
         <source>Home phone</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Numéro de téléphone personnel</translation>
+        <translation type="unfinished">Numéro de téléphone personnel</translation>
     </message>
     <message>
         <source>WengoPhone</source>
@@ -2082,74 +1783,7 @@ _ OBSOLETE
     </message>
     <message>
         <source>Delete contact</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Supprimer le contact</translation>
-    </message>
-    <message>
-        <source>Work phone</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Téléphone Bureau</translation>
-    </message>
-    <message>
-        <source>Send SMS</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-_ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-_ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Envoyer un SMS</translation>
-    </message>
-    <message>
-        <source>Edit contact</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Editer le contact</translation>
-    </message>
-    <message>
-        <source>Block contact</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Bloquer le contact</translation>
-    </message>
-    <message>
-        <source>Forward to Cell phone</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Transférer vers mon mobile</translation>
-    </message>
-    <message>
-        <source>Start chat</source>
-        <translation>Commencer un chat</translation>
-    </message>
-    <message>
-        <source>Invite to conference</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Inviter à la conférence</translation>
-    </message>
-    <message>
-        <source>Do you really want to delete this contact?</source>
-        <translation>Voulez vous vraiment supprimer ce contact?</translation>
-    </message>
-    <message>
-        <source>Delete contact</source>
         <translation type="unfinished">Supprimer le contact</translation>
-    </message>
-    <message>
-        <source>&amp;Yes</source>
-        <translation type="unfinished">&amp;Oui</translation>
-    </message>
-    <message>
-        <source>&amp;No</source>
-        <translation type="unfinished">&amp;Non</translation>
-    </message>
-    <message>
-        <source>Call</source>
-        <translation type="unfinished">Appel</translation>
-    </message>
-    <message>
-        <source>Mobile phone</source>
-        <translation type="unfinished">Téléphone Mobile</translation>
-    </message>
-    <message>
-        <source>Home phone</source>
-        <translation type="unfinished">Numéro de téléphone personnel</translation>
     </message>
     <message>
         <source>Work phone</source>
@@ -2172,8 +1806,16 @@ _ OBSOLETE
         <translation type="unfinished">Transférer vers mon mobile</translation>
     </message>
     <message>
+        <source>Start chat</source>
+        <translation>Commencer un chat</translation>
+    </message>
+    <message>
         <source>Invite to conference</source>
         <translation type="unfinished">Inviter à la conférence</translation>
+    </message>
+    <message>
+        <source>Do you really want to delete this contact?</source>
+        <translation>Voulez vous vraiment supprimer ce contact?</translation>
     </message>
 </context>
 <context>
@@ -2218,17 +1860,11 @@ _ OBSOLETE
     <name>QtFileTransfer</name>
     <message>
         <source>&amp;Yes</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-_ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">&amp;Oui</translation>
+        <translation type="unfinished">&amp;Oui</translation>
     </message>
     <message>
         <source>&amp;No</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-_ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">&amp;Non</translation>
+        <translation type="unfinished">&amp;Non</translation>
     </message>
     <message>
         <source>Choose a directory</source>
@@ -2242,23 +1878,12 @@ _ OBSOLETE
         <source>A file called %1 already exists.Do you want to overwrite it?</source>
         <translation>Un fichier appelé %1 existe déjà. Voulez vous le remplacer ?</translation>
     </message>
-    <message>
-        <source>&amp;Yes</source>
-        <translation type="unfinished">&amp;Oui</translation>
-    </message>
-    <message>
-        <source>&amp;No</source>
-        <translation type="unfinished">&amp;Non</translation>
-    </message>
 </context>
 <context>
     <name>QtFileTransferItem</name>
     <message>
         <source>Cancel</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-_ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Annuler</translation>
+        <translation type="unfinished">Annuler</translation>
     </message>
     <message>
         <source>Remove</source>
@@ -2323,10 +1948,6 @@ _ OBSOLETE
     <message>
         <source>Uploading...</source>
         <translation>Envoi...</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="unfinished">Annuler</translation>
     </message>
 </context>
 <context>
@@ -2395,8 +2016,7 @@ _ OBSOLETE
     </message>
     <message>
         <source>All</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Tout</translation>
+        <translation type="unfinished">Tout</translation>
     </message>
     <message>
         <source>SMS</source>
@@ -2438,19 +2058,12 @@ _ OBSOLETE
         <source>Clear All</source>
         <translation>Tout nettoyer</translation>
     </message>
-    <message>
-        <source>All</source>
-        <translation type="unfinished">Tout</translation>
-    </message>
 </context>
 <context>
     <name>QtIMAccountManager</name>
     <message>
         <source>Cancel</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-_ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Annuler</translation>
+        <translation type="unfinished">Annuler</translation>
     </message>
     <message>
         <source>Are sure you want to delete this account?</source>
@@ -2465,10 +2078,6 @@ _ OBSOLETE
 </source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="unfinished">Annuler</translation>
-    </message>
 </context>
 <context>
     <name>QtIMAccountPlugin</name>
@@ -2481,10 +2090,7 @@ _ OBSOLETE
     <name>QtIMContactManager</name>
     <message>
         <source>Cancel</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-_ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Annuler</translation>
+        <translation type="unfinished">Annuler</translation>
     </message>
     <message>
         <source>&amp;Delete</source>
@@ -2498,10 +2104,6 @@ _ OBSOLETE
         <source>Are sure you want to delete this IM contact?
 </source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="unfinished">Annuler</translation>
     </message>
 </context>
 <context>
@@ -2576,13 +2178,11 @@ _ OBSOLETE
     <name>QtPhoneCall</name>
     <message>
         <source>Status</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Statut</translation>
+        <translation type="unfinished">Statut</translation>
     </message>
     <message>
         <source>Invite to conference</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Inviter à la conférence</translation>
+        <translation type="unfinished">Inviter à la conférence</translation>
     </message>
     <message>
         <source>Resume</source>
@@ -2590,10 +2190,7 @@ _ OBSOLETE
     </message>
     <message>
         <source>Accept</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-_ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Décrocher</translation>
+        <translation type="unfinished">Décrocher</translation>
     </message>
     <message>
         <source>Hang-up</source>
@@ -2601,8 +2198,7 @@ _ OBSOLETE
     </message>
     <message>
         <source>Hold</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Mettre en attente</translation>
+        <translation type="unfinished">Mettre en attente</translation>
     </message>
     <message>
         <source>Stop video</source>
@@ -2610,8 +2206,7 @@ _ OBSOLETE
     </message>
     <message>
         <source>Add contact</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Ajouter un contact</translation>
+        <translation type="unfinished">Ajouter un contact</translation>
     </message>
     <message>
         <source>Error</source>
@@ -2650,7 +2245,7 @@ _ OBSOLETE
         <translation>WengoPhone - Commencer la conférence</translation>
     </message>
     <message>
-        <source>When you are ready to start the conference, click on the button belowPlease 
+        <source>When you are ready to start the conference, click on the button belowPlease
 wait for a few seconds...</source>
         <translation type="obsolete">Quand vous êtres prêt à lancer la conférence, cliquez sur le bouton ci-
 dessousVeuillez patientez...</translation>
@@ -2662,26 +2257,6 @@ dessousVeuillez patientez...</translation>
     <message>
         <source>Initialization...</source>
         <translation>Initialisation...</translation>
-    </message>
-    <message>
-        <source>Status</source>
-        <translation type="unfinished">Statut</translation>
-    </message>
-    <message>
-        <source>Accept</source>
-        <translation type="unfinished">Décrocher</translation>
-    </message>
-    <message>
-        <source>Hold</source>
-        <translation type="unfinished">Mettre en attente</translation>
-    </message>
-    <message>
-        <source>Invite to conference</source>
-        <translation type="unfinished">Inviter à la conférence</translation>
-    </message>
-    <message>
-        <source>Add contact</source>
-        <translation type="unfinished">Ajouter un contact</translation>
     </message>
     <message>
         <source>When you are ready to start the conference, click on the button below
@@ -2716,8 +2291,7 @@ Please wait for a few seconds...</source>
     </message>
     <message>
         <source>unauthorized</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Interdit</translation>
+        <translation type="unfinished">Interdit</translation>
     </message>
     <message>
         <source>NickName</source>
@@ -2726,10 +2300,6 @@ Please wait for a few seconds...</source>
     <message>
         <source>Click here to change your status</source>
         <translation>Cliquer ici pour changer de statut</translation>
-    </message>
-    <message>
-        <source>unauthorized</source>
-        <translation type="unfinished">Interdit</translation>
     </message>
 </context>
 <context>
@@ -2752,7 +2322,7 @@ Please wait for a few seconds...</source>
     </message>
     <message>
         <source>A contact must have a group, please set a group.</source>
-        <translation>Un contact doit être placé dans un groupe, veuillez sélectionnez un groupe 
+        <translation>Un contact doit être placé dans un groupe, veuillez sélectionnez un groupe
 pour votre contact.</translation>
     </message>
     <message>
@@ -2824,7 +2394,7 @@ This will send </source>
     </message>
     <message>
         <source>WengoPhone update failed to start: try to update WengoPhone manually</source>
-        <translation>La mise à jour du WengoPhone n&apos;a pas pu démarrer: Essayez de mettre à jour 
+        <translation>La mise à jour du WengoPhone n&apos;a pas pu démarrer: Essayez de mettre à jour
 le WengoPhone manuellement</translation>
     </message>
 </context>
@@ -2875,7 +2445,7 @@ le WengoPhone manuellement</translation>
     </message>
     <message>
         <source>You cannot use this email address, already in use</source>
-        <translation>Vous ne pouvez pas utiliser cette adresse, elle est déjà utilisée avec un 
+        <translation>Vous ne pouvez pas utiliser cette adresse, elle est déjà utilisée avec un
 autre compte</translation>
     </message>
     <message>
@@ -2884,7 +2454,7 @@ autre compte</translation>
     </message>
     <message>
         <source>Your password does not contain enough characters (6 minimum), try another one</source>
-        <translation>Votre mot de passe est trop court (6 caracères minimum), choissisez un autre 
+        <translation>Votre mot de passe est trop court (6 caracères minimum), choissisez un autre
 mot de passe</translation>
     </message>
     <message>
@@ -2896,39 +2466,27 @@ mot de passe</translation>
     <name>QtSystray</name>
     <message>
         <source>Status</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Statut</translation>
+        <translation type="unfinished">Statut</translation>
     </message>
     <message>
         <source>Call</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-_ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Appel</translation>
+        <translation type="unfinished">Appel</translation>
     </message>
     <message>
         <source>Call SIP</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Appeler une adresse SIP</translation>
+        <translation type="unfinished">Appeler une adresse SIP</translation>
     </message>
     <message>
         <source>Call land line</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Appeler une ligne fixe</translation>
+        <translation type="unfinished">Appeler une ligne fixe</translation>
     </message>
     <message>
         <source>Call Mobile</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Appeler un Mobile</translation>
+        <translation type="unfinished">Appeler un Mobile</translation>
     </message>
     <message>
         <source>Send SMS</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-_ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-_ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Envoyer un SMS</translation>
+        <translation type="unfinished">Envoyer un SMS</translation>
     </message>
     <message>
         <source>Internet Connection Error</source>
@@ -2964,37 +2522,6 @@ _ OBSOLETE
     </message>
     <message>
         <source>Send a SMS</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Envoyer un SMS</translation>
-    </message>
-    <message>
-        <source>Start a chat</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Commencer un chat</translation>
-    </message>
-    <message>
-        <source>Place Call</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Composer un appel</translation>
-    </message>
-    <message>
-        <source>Offline</source>
-        <translation>Déconnecté</translation>
-    </message>
-    <message>
-        <source>Call</source>
-        <translation type="unfinished">Appel</translation>
-    </message>
-    <message>
-        <source>Status</source>
-        <translation type="unfinished">Statut</translation>
-    </message>
-    <message>
-        <source>Send a SMS</source>
-        <translation type="unfinished">Envoyer un SMS</translation>
-    </message>
-    <message>
-        <source>Send SMS</source>
         <translation type="unfinished">Envoyer un SMS</translation>
     </message>
     <message>
@@ -3006,16 +2533,8 @@ _ OBSOLETE
         <translation type="unfinished">Composer un appel</translation>
     </message>
     <message>
-        <source>Call SIP</source>
-        <translation type="unfinished">Appeler une adresse SIP</translation>
-    </message>
-    <message>
-        <source>Call Mobile</source>
-        <translation type="unfinished">Appeler un Mobile</translation>
-    </message>
-    <message>
-        <source>Call land line</source>
-        <translation type="unfinished">Appeler une ligne fixe</translation>
+        <source>Offline</source>
+        <translation>Déconnecté</translation>
     </message>
 </context>
 <context>
@@ -3044,33 +2563,23 @@ _ OBSOLETE
     </message>
     <message>
         <source>&amp;Authorize</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">&amp;Autoriser</translation>
-    </message>
-    <message>
-        <source>&amp;Block</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">&amp;Bloquer</translation>
-    </message>
-    <message>
-        <source>WengoPhone - Authorization Request</source>
-        <translation>WengoPhone - Autorisation requise</translation>
-    </message>
-    <message>
-        <source>&amp;Authorize</source>
         <translation type="unfinished">&amp;Autoriser</translation>
     </message>
     <message>
         <source>&amp;Block</source>
         <translation type="unfinished">&amp;Bloquer</translation>
     </message>
+    <message>
+        <source>WengoPhone - Authorization Request</source>
+        <translation>WengoPhone - Autorisation requise</translation>
+    </message>
 </context>
 <context>
     <name>QtUserProfileHandler</name>
     <message>
-        <source>Would you like to import contacts and IM accounts previously created in the 
+        <source>Would you like to import contacts and IM accounts previously created in the
 default profile to the profile named %1?</source>
-        <translation type="obsolete">Voulez vous importer les contacts et les comptes IM créés avec le profile 
+        <translation type="obsolete">Voulez vous importer les contacts et les comptes IM créés avec le profile
 par défaut pour le proile %1?</translation>
     </message>
     <message>
@@ -3186,15 +2695,11 @@ par défaut pour le proile %1?</translation>
     <name>QtWengoPhone</name>
     <message>
         <source>Call</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-_ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Appel</translation>
+        <translation type="unfinished">Appel</translation>
     </message>
     <message>
         <source>Home</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Domicile</translation>
+        <translation type="unfinished">Domicile</translation>
     </message>
     <message>
         <source>Conference</source>
@@ -3202,20 +2707,12 @@ _ OBSOLETE
     </message>
     <message>
         <source>Please hold all the phone calls before to place a new one</source>
-        <translation>Veuillez mettre votre correspondant en attente avant de lancer un nouvel 
+        <translation>Veuillez mettre votre correspondant en attente avant de lancer un nouvel
 appel</translation>
     </message>
     <message>
         <source>WengoPhone - Call Error</source>
         <translation>WengoPhone - Erreur d&apos;appel</translation>
-    </message>
-    <message>
-        <source>Home</source>
-        <translation type="unfinished">Domicile</translation>
-    </message>
-    <message>
-        <source>Call</source>
-        <translation type="unfinished">Appel</translation>
     </message>
     <message>
         <source>Add a Contact</source>
@@ -3260,17 +2757,11 @@ appel</translation>
     <name>RenameGroupDialog</name>
     <message>
         <source>Cancel</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-_ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Annuler</translation>
+        <translation type="unfinished">Annuler</translation>
     </message>
     <message>
         <source>OK</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-_ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">OK</translation>
+        <translation type="unfinished">OK</translation>
     </message>
     <message>
         <source>Enter the new group name:</source>
@@ -3280,21 +2771,12 @@ _ OBSOLETE
         <source>WengoPhone - Rename Contact Group</source>
         <translation>WengoPhone - Renommer un groupe de contacts</translation>
     </message>
-    <message>
-        <source>OK</source>
-        <translation type="unfinished">OK</translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="unfinished">Annuler</translation>
-    </message>
 </context>
 <context>
     <name>SimpleIMAccountManager</name>
     <message>
         <source>Password:</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Mot de passe :</translation>
+        <translation type="unfinished">Mot de passe :</translation>
     </message>
     <message>
         <source>Login:</source>
@@ -3323,10 +2805,6 @@ _ OBSOLETE
     <message>
         <source>GoogleTalk</source>
         <translation>GoogleTalk</translation>
-    </message>
-    <message>
-        <source>Password:</source>
-        <translation type="unfinished">Mot de passe :</translation>
     </message>
 </context>
 <context>
@@ -3364,8 +2842,7 @@ _ OBSOLETE
     <name>SmsWindow</name>
     <message>
         <source>Send</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Envoyer</translation>
+        <translation type="unfinished">Envoyer</translation>
     </message>
     <message>
         <source>WengoPhone - SMS</source>
@@ -3395,26 +2872,19 @@ _ OBSOLETE
         <source>Enter the phone number here</source>
         <translation>Entrer le numéro de téléphone ici</translation>
     </message>
-    <message>
-        <source>Send</source>
-        <translation type="unfinished">Envoyer</translation>
-    </message>
 </context>
 <context>
     <name>SoftUpdateWindow</name>
     <message>
         <source>Cancel</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-_ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Annuler</translation>
+        <translation type="unfinished">Annuler</translation>
     </message>
     <message>
         <source>WengoPhone - Downloading update</source>
         <translation>WengoPhone - Mise à jour</translation>
     </message>
     <message>
-        <source>Downloading WengoPhone update...Version:%1URL:%2File Size:%3 (MB)Speed:%4 
+        <source>Downloading WengoPhone update...Version:%1URL:%2File Size:%3 (MB)Speed:%4
 (kB/s)</source>
         <translation type="obsolete">Téléchargement en cours...Version:%1URL:%2Taille:%3 (MB)Vitesse:%4 (kB/s)</translation>
     </message>
@@ -3426,10 +2896,6 @@ URL:<byte value="x9"/>%2
 File Size:<byte value="x9"/>%3 (MB)
 Speed:<byte value="x9"/>%4 (kB/s)</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="unfinished">Annuler</translation>
     </message>
 </context>
 <context>
@@ -3447,8 +2913,7 @@ Speed:<byte value="x9"/>%4 (kB/s)</source>
     <name>SubscribeWengo1</name>
     <message>
         <source>Password:</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Mot de passe :</translation>
+        <translation type="unfinished">Mot de passe :</translation>
     </message>
     <message>
         <source>Email:</source>
@@ -3484,7 +2949,7 @@ Speed:<byte value="x9"/>%4 (kB/s)</source>
     </message>
     <message>
         <source>&lt;i&gt;Please check your email and confirm the above details within 48 hours&lt;/i&gt;</source>
-        <translation>&lt;i&gt;Veuillez vérifier votre boîte aux lettres, et confirmer les informations 
+        <translation>&lt;i&gt;Veuillez vérifier votre boîte aux lettres, et confirmer les informations
 ci-dessus sous 48 heures&lt;/i&gt;</translation>
     </message>
     <message>
@@ -3492,14 +2957,10 @@ ci-dessus sous 48 heures&lt;/i&gt;</translation>
         <translation>J&apos;ai lu et j&apos;accepte les conditions générales d&apos;utilisation</translation>
     </message>
     <message>
-        <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Account Creation&lt;/span&gt;&lt;br /&gt;&lt;br 
+        <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Account Creation&lt;/span&gt;&lt;br /&gt;&lt;br
 /&gt;&lt;span&gt;Please fill in the details below&lt;/span&gt;</source>
-        <translation type="obsolete">&lt;span style=&quot;font-size:18pt;&quot;&gt;Création du compte&lt;/span&gt;&lt;br /&gt;&lt;br 
+        <translation type="obsolete">&lt;span style=&quot;font-size:18pt;&quot;&gt;Création du compte&lt;/span&gt;&lt;br /&gt;&lt;br
 /&gt;&lt;span&gt;Veuillez remplir le formulaire suivant&lt;/span&gt;</translation>
-    </message>
-    <message>
-        <source>Password:</source>
-        <translation type="unfinished">Mot de passe :</translation>
     </message>
     <message>
         <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Account Creation&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;&lt;span&gt;Please fill in the details below&lt;/span&gt;</source>
@@ -3510,8 +2971,7 @@ ci-dessus sous 48 heures&lt;/i&gt;</translation>
     <name>SubscribeWengo2</name>
     <message>
         <source>Password:</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Mot de passe :</translation>
+        <translation type="unfinished">Mot de passe :</translation>
     </message>
     <message>
         <source>Email:</source>
@@ -3527,7 +2987,7 @@ ci-dessus sous 48 heures&lt;/i&gt;</translation>
     </message>
     <message>
         <source>Please note your details needed to access your account:</source>
-        <translation>Mémoriser bien ces informations, elles sont nécessaire pour utiliser votre 
+        <translation>Mémoriser bien ces informations, elles sont nécessaire pour utiliser votre
 compte:</translation>
     </message>
     <message>
@@ -3539,14 +2999,10 @@ compte:</translation>
         <translation>Ajouter un compte IM à votre profil</translation>
     </message>
     <message>
-        <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Contratulations!&lt;/span&gt;&lt;br /&gt;&lt;br 
+        <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Contratulations!&lt;/span&gt;&lt;br /&gt;&lt;br
 /&gt;&lt;span&gt;Your account has been successfully created&lt;/span&gt;</source>
-        <translation type="obsolete">&lt;span style=&quot;font-size:18pt;&quot;&gt;Contratulations!&lt;/span&gt;&lt;br /&gt;&lt;br 
+        <translation type="obsolete">&lt;span style=&quot;font-size:18pt;&quot;&gt;Contratulations!&lt;/span&gt;&lt;br /&gt;&lt;br
 /&gt;&lt;span&gt;Votre compte a été crée avec succès&lt;/span&gt;</translation>
-    </message>
-    <message>
-        <source>Password:</source>
-        <translation type="unfinished">Mot de passe :</translation>
     </message>
     <message>
         <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Contratulations!&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;&lt;span&gt;Your account has been successfully created&lt;/span&gt;
@@ -3671,13 +3127,13 @@ compte:</translation>
         <translation>Type de connection</translation>
     </message>
     <message>
-        <source>&lt;b&gt;Warning!&lt;/b&gt; When used for the first time we recommend that you 
-select&lt;br&gt;the normal video quality mode, then you can try different modes to 
-find out&lt;br&gt;the most suitable one&lt;br&gt;&lt;br&gt;&lt;b&gt;Tips&lt;/b&gt;: Go to 
+        <source>&lt;b&gt;Warning!&lt;/b&gt; When used for the first time we recommend that you
+select&lt;br&gt;the normal video quality mode, then you can try different modes to
+find out&lt;br&gt;the most suitable one&lt;br&gt;&lt;br&gt;&lt;b&gt;Tips&lt;/b&gt;: Go to
 http://test.lvcm.com to determine your Internet connection bandwidth</source>
-        <translation type="obsolete">&lt;b&gt;Attention!&lt;/b&gt;Pour une première expérience, nous vous recommandons le 
-niveau normal&lt;br&gt;Par la suite, testez les autres niveaux pour déterminer la 
-configuration optimale&lt;br&gt;&lt;br&gt;&lt;b&gt;Astuce&lt;/b&gt;: Rendez vous sur 
+        <translation type="obsolete">&lt;b&gt;Attention!&lt;/b&gt;Pour une première expérience, nous vous recommandons le
+niveau normal&lt;br&gt;Par la suite, testez les autres niveaux pour déterminer la
+configuration optimale&lt;br&gt;&lt;br&gt;&lt;b&gt;Astuce&lt;/b&gt;: Rendez vous sur
 http://test.lvcm.com pour déterminer la vitesse de votre connexion Internet</translation>
     </message>
     <message>
@@ -3696,10 +3152,7 @@ http://test.lvcm.com pour déterminer la vitesse de votre connexion Internet</tr
     <name>WengoConfigDialog</name>
     <message>
         <source>Cancel</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-_ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Annuler</translation>
+        <translation type="unfinished">Annuler</translation>
     </message>
     <message>
         <source>Save</source>
@@ -3741,10 +3194,6 @@ _ OBSOLETE
         <source>WengoPhone - Configuration</source>
         <translation>WengoPhone - Configuration</translation>
     </message>
-    <message>
-        <source>Cancel</source>
-        <translation type="unfinished">Annuler</translation>
-    </message>
 </context>
 <context>
     <name>WengoPhoneWindow</name>
@@ -3758,8 +3207,7 @@ _ OBSOLETE
     </message>
     <message>
         <source>&amp;Tools</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">&amp;Outils</translation>
+        <translation type="unfinished">&amp;Outils</translation>
     </message>
     <message>
         <source>&amp;Help</source>
@@ -3767,8 +3215,7 @@ _ OBSOLETE
     </message>
     <message>
         <source>&amp;Actions</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">&amp;Actions</translation>
+        <translation type="unfinished">&amp;Actions</translation>
     </message>
     <message>
         <source>WengoPhone</source>
@@ -3788,8 +3235,7 @@ _ OBSOLETE
     </message>
     <message>
         <source>&amp;Contacts</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">&amp;Contacts</translation>
+        <translation type="unfinished">&amp;Contacts</translation>
     </message>
     <message>
         <source>Clear &amp;History</source>
@@ -3801,13 +3247,11 @@ _ OBSOLETE
     </message>
     <message>
         <source>&amp;Close</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">&amp;Fermer</translation>
+        <translation type="unfinished">&amp;Fermer</translation>
     </message>
     <message>
         <source>&amp;About</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">&amp;À propos</translation>
+        <translation type="unfinished">&amp;À propos</translation>
     </message>
     <message>
         <source>&amp;Configuration</source>
@@ -3930,26 +3374,6 @@ _ OBSOLETE
         <translation>Appels refusés</translation>
     </message>
     <message>
-        <source>&amp;Contacts</source>
-        <translation type="unfinished">&amp;Contacts</translation>
-    </message>
-    <message>
-        <source>&amp;Actions</source>
-        <translation type="unfinished">&amp;Actions</translation>
-    </message>
-    <message>
-        <source>&amp;Tools</source>
-        <translation type="unfinished">&amp;Outils</translation>
-    </message>
-    <message>
-        <source>&amp;Close</source>
-        <translation type="unfinished">&amp;Fermer</translation>
-    </message>
-    <message>
-        <source>&amp;About</source>
-        <translation type="unfinished">&amp;À propos</translation>
-    </message>
-    <message>
         <source>Log &amp;Off/Log In</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3985,10 +3409,7 @@ _ OBSOLETE
     <name>Wizard</name>
     <message>
         <source>Cancel</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-_ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Annuler</translation>
+        <translation type="unfinished">Annuler</translation>
     </message>
     <message>
         <source>Finish</source>
@@ -4003,10 +3424,6 @@ _ OBSOLETE
         <translation>&lt; Précédent</translation>
     </message>
     <message>
-        <source>Cancel</source>
-        <translation type="unfinished">Annuler</translation>
-    </message>
-    <message>
         <source>Simple Wizard - Step %1 of %2</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4015,8 +3432,7 @@ _ OBSOLETE
     <name>WsDirectory</name>
     <message>
         <source>All</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Tout</translation>
+        <translation type="unfinished">Tout</translation>
     </message>
     <message>
         <source>Search</source>
@@ -4044,28 +3460,19 @@ _ OBSOLETE
     </message>
     <message>
         <source>City</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Ville</translation>
+        <translation type="unfinished">Ville</translation>
     </message>
     <message>
         <source>Country</source>
         <translation>Pays</translation>
     </message>
     <message>
-        <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Search for Wengo contacts&lt;/span&gt;&lt;br /&gt;&lt;br 
-/&gt;&lt;span&gt;Enter name, nickname, city or email and click the search 
+        <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Search for Wengo contacts&lt;/span&gt;&lt;br /&gt;&lt;br
+/&gt;&lt;span&gt;Enter name, nickname, city or email and click the search
 button&lt;/span&gt;</source>
-        <translation type="obsolete">&lt;span style=&quot;font-size:18pt;&quot;&gt;Rechercher un contact Wengo&lt;/span&gt;&lt;br /&gt;&lt;br 
-/&gt;&lt;span&gt;Saisissez un nom, un pseudo, une ville ou un email et cliquez sur 
+        <translation type="obsolete">&lt;span style=&quot;font-size:18pt;&quot;&gt;Rechercher un contact Wengo&lt;/span&gt;&lt;br /&gt;&lt;br
+/&gt;&lt;span&gt;Saisissez un nom, un pseudo, une ville ou un email et cliquez sur
 Rechercher !&lt;/span&gt;</translation>
-    </message>
-    <message>
-        <source>All</source>
-        <translation type="unfinished">Tout</translation>
-    </message>
-    <message>
-        <source>City</source>
-        <translation type="unfinished">Ville</translation>
     </message>
     <message>
         <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Search for Wengo contacts&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;&lt;span&gt;Enter name, nickname, city or email and click the search button&lt;/span&gt;</source>
@@ -4076,20 +3483,15 @@ Rechercher !&lt;/span&gt;</translation>
     <name>WsDirectoryContact</name>
     <message>
         <source>Add</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Ajouter</translation>
+        <translation type="unfinished">Ajouter</translation>
     </message>
     <message>
         <source>Status</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Statut</translation>
+        <translation type="unfinished">Statut</translation>
     </message>
     <message>
         <source>Call</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#
-_ OBSOLETE
-#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Appel</translation>
+        <translation type="unfinished">Appel</translation>
     </message>
     <message>
         <source>City:</source>
@@ -4115,25 +3517,12 @@ _ OBSOLETE
         <source>SIP address:</source>
         <translation>Adresse SIP:</translation>
     </message>
-    <message>
-        <source>Status</source>
-        <translation type="unfinished">Statut</translation>
-    </message>
-    <message>
-        <source>Call</source>
-        <translation type="unfinished">Appel</translation>
-    </message>
-    <message>
-        <source>Add</source>
-        <translation type="unfinished">Ajouter</translation>
-    </message>
 </context>
 <context>
     <name>YahooSettings</name>
     <message>
         <source>Password:</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Mot de passe :</translation>
+        <translation type="unfinished">Mot de passe :</translation>
     </message>
     <message>
         <source>Login:</source>
@@ -4159,17 +3548,12 @@ _ OBSOLETE
         <source>Get a new Yahoo! Account</source>
         <translation>Créer un nouveau compte Yahoo!</translation>
     </message>
-    <message>
-        <source>Password:</source>
-        <translation type="unfinished">Mot de passe :</translation>
-    </message>
 </context>
 <context>
     <name>aboutWindow</name>
     <message>
         <source>Dialog</source>
-        <comment>#-#-#-#-#  qtwengophone_fr.po (PACKAGE VERSION)  #-#-#-#-#</comment>
-        <translation type="obsolete">Dialogue</translation>
+        <translation type="unfinished">Dialogue</translation>
     </message>
     <message>
         <source>help</source>
@@ -4188,42 +3572,38 @@ _ OBSOLETE
         <translation>Groupe de Boîte</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
+        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot;
 white-space: pre-wrap; font-family:MS Shell Dlg; font-weight:400; font-
 style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-
 bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-
-indent:0px;&quot;&gt;&lt;span style=&quot; color:#000000;&quot;&gt;This is a Qt demo application 
+indent:0px;&quot;&gt;&lt;span style=&quot; color:#000000;&quot;&gt;This is a Qt demo application
 for a skin system.&lt;/span&gt;&lt;/p&gt;&lt;p style=&quot;-qt-paragraph-type:empty; margin-
 top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
-indent:0; text-indent:0px; color:#000000;&quot;&gt;&lt;/p&gt;&lt;p style=&quot; margin-top:0px; 
-margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; 
-text-indent:0px; color:#000000;&quot;&gt;The skin system works as a Qt style plugin 
+indent:0; text-indent:0px; color:#000000;&quot;&gt;&lt;/p&gt;&lt;p style=&quot; margin-top:0px;
+margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0;
+text-indent:0px; color:#000000;&quot;&gt;The skin system works as a Qt style plugin
 through the QStyle class.&lt;/p&gt;&lt;p style=&quot;-qt-paragraph-type:empty; margin-
 top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
-indent:0; text-indent:0px; color:#000000;&quot;&gt;&lt;/p&gt;&lt;p style=&quot; margin-top:0px; 
-margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; 
-text-indent:0px; color:#000000;&quot;&gt;This example works using Qt version 4.0.0 
+indent:0; text-indent:0px; color:#000000;&quot;&gt;&lt;/p&gt;&lt;p style=&quot; margin-top:0px;
+margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0;
+text-indent:0px; color:#000000;&quot;&gt;This example works using Qt version 4.0.0
 &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="obsolete">&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
+        <translation type="obsolete">&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot;
 white-space: pre-wrap; font-family:MS Shell Dlg; font-weight:400; font-
 style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-
 bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-
-indent:0px;&quot;&gt;&lt;span style=&quot; color:#000000;&quot;&gt;This is a Qt demo application 
+indent:0px;&quot;&gt;&lt;span style=&quot; color:#000000;&quot;&gt;This is a Qt demo application
 for a skin system.&lt;/span&gt;&lt;/p&gt;&lt;p style=&quot;-qt-paragraph-type:empty; margin-
 top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
-indent:0; text-indent:0px; color:#000000;&quot;&gt;&lt;/p&gt;&lt;p style=&quot; margin-top:0px; 
-margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; 
-text-indent:0px; color:#000000;&quot;&gt;The skin system works as a Qt style plugin 
+indent:0; text-indent:0px; color:#000000;&quot;&gt;&lt;/p&gt;&lt;p style=&quot; margin-top:0px;
+margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0;
+text-indent:0px; color:#000000;&quot;&gt;The skin system works as a Qt style plugin
 through the QStyle class.&lt;/p&gt;&lt;p style=&quot;-qt-paragraph-type:empty; margin-
 top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
-indent:0; text-indent:0px; color:#000000;&quot;&gt;&lt;/p&gt;&lt;p style=&quot; margin-top:0px; 
-margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; 
-text-indent:0px; color:#000000;&quot;&gt;This example works using Qt version 4.0.0 
+indent:0; text-indent:0px; color:#000000;&quot;&gt;&lt;/p&gt;&lt;p style=&quot; margin-top:0px;
+margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0;
+text-indent:0px; color:#000000;&quot;&gt;This example works using Qt version 4.0.0
 &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-        <source>Dialog</source>
-        <translation type="unfinished">Dialogue</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#000000;&quot;&gt;This is a Qt demo application for a skin system.&lt;/span&gt;&lt;/p&gt;&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#000000;&quot;&gt;&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#000000;&quot;&gt;The skin system works as a Qt style plugin through the QStyle class.&lt;/p&gt;&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#000000;&quot;&gt;&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#000000;&quot;&gt;This example works using Qt version 4.0.0 &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
