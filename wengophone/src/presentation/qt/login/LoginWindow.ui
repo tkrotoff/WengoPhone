@@ -559,12 +559,9 @@
       </spacer>
      </item>
      <item row="0" column="1" >
-      <widget class="QToolButton" name="createWengoAccountButton" >
+      <widget class="QPushButton" name="createWengoAccountButton" >
        <property name="text" >
-        <string>You don't have a Wengo account?</string>
-       </property>
-       <property name="autoRaise" >
-        <bool>true</bool>
+        <string>Click here if you don't have a Wengo account</string>
        </property>
       </widget>
      </item>

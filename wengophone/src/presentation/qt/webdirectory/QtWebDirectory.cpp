@@ -19,11 +19,13 @@
 
 #include "QtWebDirectory.h"
 
+#include <model/webservices/url/WsUrl.h>
+
 #include <QtGui/QtGui>
 
 QtWebDirectory::QtWebDirectory(QWidget * parent) : QtBrowser(parent) {
-	setUrl("http://www.wengo.fr/public/public.php?page=smart_directory");
-	QWidget * widget = (QWidget*)getWidget();
+	setUrl(WsUrl::URL_WENGO_SEARCH_INT);
+	QWidget * widget = (QWidget*) getWidget();
 	widget->resize(715, 569);
 	widget->setWindowTitle(tr("Directory"));
 }
@@ -32,7 +34,7 @@ QtWebDirectory::~QtWebDirectory() {
 }
 
 void QtWebDirectory::raise() {
-	QWidget * widget = (QWidget*)getWidget();
+	QWidget * widget = (QWidget*) getWidget();
 	widget->show();
 	widget->raise();
 }

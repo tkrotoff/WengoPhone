@@ -129,7 +129,7 @@
      <x>0</x>
      <y>0</y>
      <width>310</width>
-     <height>29</height>
+     <height>19</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuHelp" >
@@ -214,16 +214,7 @@
    <addaction name="menuTools" />
    <addaction name="menuHelp" />
   </widget>
-  <widget class="QStatusBar" name="statusBar" >
-   <property name="geometry" >
-    <rect>
-     <x>0</x>
-     <y>495</y>
-     <width>310</width>
-     <height>22</height>
-    </rect>
-   </property>
-  </widget>
+  <widget class="QStatusBar" name="statusBar" />
   <widget class="QToolBar" name="toolBar" >
    <property name="windowTitle" >
     <string>ToolBar</string>
@@ -424,7 +415,7 @@
     <iconset/>
    </property>
    <property name="text" >
-    <string>Log &amp;Off / Log In</string>
+    <string>Log &amp;Off/Log In</string>
    </property>
   </action>
   <action name="actionOpenChatWindow" >

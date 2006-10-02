@@ -28,18 +28,18 @@
 #include <util/WebBrowser.h>
 #include <util/Logger.h>
 
-static const std::string URL_WENGO_ACCOUNTCREATION = "https://www.wengo.fr/public/public.php?page=subscribe_wengos";
-static const std::string URL_WENGO_FORUM = "http://www.wengo.fr/public/public.php?page=forum";
-static const std::string URL_WENGO_CALLOUT = "http://www.wengo.fr/public/public.php?page=product_callout";
-static const std::string URL_WENGO_SMS = "http://www.wengo.fr/public/public.php?page=product_sms";
-static const std::string URL_WENGO_VOICEMAIL = "http://www.wengo.fr/public/public.php?page=product_voicemail";
-static const std::string URL_WENGO_SEARCH_EXT = "http://www.wengo.fr/public/public.php?page=main_smart_directory_ng";
-static const std::string URL_WENGO_SEARCH_INT = "http://www.wengo.fr/public/public.php?page=smart_directory_ng";
-static const std::string URL_WENGO_FAQ = "http://www.wengo.fr/public/public.php?page=wiki";
-static const std::string URL_WENGO_ACCOUNT = "https://www.wengo.fr/auth/auth.php?page=homepage";
-static const std::string URL_WENGO_BUYWENGOS = "https://www.wengo.fr/auth/auth.php?page=reload";
-static const std::string URL_WENGO_DOWNLOAD = "http://www.wengo.fr/public/public.php?page=download";
-static const std::string URL_WENGO_PHONENUMBER = "https://www.wengo.fr/auth/auth.php?page=display_account";
+const std::string WsUrl::URL_WENGO_ACCOUNTCREATION = "https://www.wengo.fr/public/public.php?page=subscribe_wengos";
+const std::string WsUrl::URL_WENGO_FORUM = "http://www.wengo.fr/public/public.php?page=forum";
+const std::string WsUrl::URL_WENGO_CALLOUT = "http://www.wengo.fr/public/public.php?page=product_callout";
+const std::string WsUrl::URL_WENGO_SMS = "http://www.wengo.fr/public/public.php?page=product_sms";
+const std::string WsUrl::URL_WENGO_VOICEMAIL = "http://www.wengo.fr/public/public.php?page=product_voicemail";
+const std::string WsUrl::URL_WENGO_SEARCH_EXT = "http://www.wengo.fr/public/public.php?page=main_smart_directory_ng";
+const std::string WsUrl::URL_WENGO_SEARCH_INT = "http://www.wengo.fr/public/public.php?page=smart_directory_ng";
+const std::string WsUrl::URL_WENGO_FAQ = "http://www.wengo.fr/public/public.php?page=wiki";
+const std::string WsUrl::URL_WENGO_ACCOUNT = "https://www.wengo.fr/auth/auth.php?page=homepage";
+const std::string WsUrl::URL_WENGO_BUYWENGOS = "https://www.wengo.fr/auth/auth.php?page=reload";
+const std::string WsUrl::URL_WENGO_DOWNLOAD = "http://www.wengo.fr/public/public.php?page=download";
+const std::string WsUrl::URL_WENGO_PHONENUMBER = "https://www.wengo.fr/auth/auth.php?page=display_account";
 
 WengoAccount * WsUrl::_wengoAccount = NULL;
 
