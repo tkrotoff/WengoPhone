@@ -154,5 +154,6 @@ void QtCallBar::phoneComboBoxClickedSlot() {
 }
 
 void QtCallBar::languageChanged() {
+	_phoneComboBox->languageChanged();
 	_phoneComboBox->setEditText(tr("+(country code) number or nickname"));
 }

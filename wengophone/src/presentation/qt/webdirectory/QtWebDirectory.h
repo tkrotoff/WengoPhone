@@ -39,8 +39,13 @@ public:
 
 	void raise();
 
+private Q_SLOTS:
+
+	void languageChanged();
+
 private:
 
+	void init();
 };
 
 #endif	//OWQTBROWSERWIDGET_H

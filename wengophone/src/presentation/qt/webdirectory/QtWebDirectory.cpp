@@ -21,20 +21,34 @@
 
 #include <model/webservices/url/WsUrl.h>
 
+#include <qtutil/LanguageChangeEventFilter.h>
+
 #include <QtGui/QtGui>
 
-QtWebDirectory::QtWebDirectory(QWidget * parent) : QtBrowser(parent) {
-	setUrl(WsUrl::URL_WENGO_SEARCH_INT);
-	QWidget * widget = (QWidget*) getWidget();
+QtWebDirectory::QtWebDirectory(QWidget * parent)
+	: QtBrowser(parent) {
+
+	QWidget * widget = (QWidget *) getWidget();
 	widget->resize(715, 569);
-	widget->setWindowTitle(tr("Directory"));
+	LANGUAGE_CHANGE(widget);
+	init();
 }
 
 QtWebDirectory::~QtWebDirectory() {
 }
 
 void QtWebDirectory::raise() {
-	QWidget * widget = (QWidget*) getWidget();
+	QWidget * widget = (QWidget *) getWidget();
 	widget->show();
 	widget->raise();
+}
+
+void QtWebDirectory::init() {
+	setUrl(WsUrl::getWengoDirectoryUrl());
+	QWidget * widget = (QWidget *) getWidget();
+	widget->setWindowTitle(tr("WengoPhone - Directory"));
+}
+
+void QtWebDirectory::languageChanged() {
+	init();
 }

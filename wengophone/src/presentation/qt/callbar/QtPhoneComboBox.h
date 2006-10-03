@@ -56,11 +56,15 @@ public Q_SLOTS:
 
 	void setEditText(const QString & text);
 
+	void languageChanged();
+
 private Q_SLOTS:
 
 	void comboBoxActivated();
 
 private:
+
+	void init();
 
 	void setToolTipText();
 
@@ -73,6 +77,9 @@ private:
 	void leaveEvent(QEvent * event);
 
 	bool _cleared;
+
+	/** Tool tip text already set? */
+	bool _toolTipTextDone;
 
 	QString _toolTip;
 

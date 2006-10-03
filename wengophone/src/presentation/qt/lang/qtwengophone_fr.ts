@@ -64,7 +64,7 @@ modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2
 of the License, or (at your option) any later version.</source>
         <translation>Ce programme est libre, vous pouvez le redistribuer et/ou
-le modifier selon les termes de la Licence Publique Générale GNU 
+le modifier selon les termes de la Licence Publique Générale GNU
 publiée par la Free Software Foundation (version 2 ou bien toute
 autre version ultérieure choisie par vous).</translation>
     </message>
@@ -2657,8 +2657,8 @@ par défaut pour le proile %1?</translation>
 <context>
     <name>QtWebDirectory</name>
     <message>
-        <source>Directory</source>
-        <translation>Annuaire</translation>
+        <source>WengoPhone - Directory</source>
+        <translation>WengoPhone - Annuaire</translation>
     </message>
 </context>
 <context>

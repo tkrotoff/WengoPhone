@@ -44,11 +44,6 @@ class WsUrl : NonCopyable {
 public:
 
 	/**
-	 * @see showWengoSmartDirectory()
-	 */
-	static const std::string URL_WENGO_SEARCH_INT;
-
-	/**
 	 * Opens a web browser and shows the Wengo account informations inside.
 	 */
 	static void showWengoAccount();
@@ -103,6 +98,13 @@ public:
 	 */
 	static void showWengoPhoneNumber();
 
+	/**
+	 * Gets the Wengo directory url.
+	 *
+	 * @return Wengo directory url
+	 */
+	static std::string getWengoDirectoryUrl();
+
 private:
 
 	/**
@@ -120,64 +122,25 @@ private:
 	static void openWengoUrlWithAuth(const std::string & url);
 
 	/**
+	 * Gets url without authentication.
+	 *
+	 * @param url the url to transform
+	 */
+	static std::string getUrlWithoutAuth(const std::string & url);
+
+	/**
+	 * Gets url with authentication.
+	 *
+	 * @param url the url to transform
+	 */
+	static std::string getUrlWithAuth(const std::string & url);
+
+	/**
 	 * Sets the value of _wengoAccount.
 	 */
-	static void setWengoAccount(WengoAccount * wengoAccount) { _wengoAccount = wengoAccount; }
-
-	/**
-	 * @see showWengoAccountCreation()
-	 */
-	static const std::string URL_WENGO_ACCOUNTCREATION;
-
-	/**
-	 * @see showWengoForum()
-	 */
-	static const std::string URL_WENGO_FORUM;
-
-	/**
-	 * @see showWengoCallOut()
-	 */
-	static const std::string URL_WENGO_CALLOUT;
-
-	/**
-	 * @see showWengoSMS()
-	 */
-	static const std::string URL_WENGO_SMS;
-
-	/**
-	 * @see showWengoVoiceMail()
-	 */
-	static const std::string URL_WENGO_VOICEMAIL;
-
-	/**
-	 * @see showWengoSmartDirectory()
-	 */
-	static const std::string URL_WENGO_SEARCH_EXT;
-
-	/**
-	 * @see showWengoFAQ()
-	 */
-	static const std::string URL_WENGO_FAQ;
-
-	/**
-	 * @see showWengoAccount()
-	 */
-	static const std::string URL_WENGO_ACCOUNT;
-
-	/**
-	 * @see showWengoBuyWengos()
-	 */
-	static const std::string URL_WENGO_BUYWENGOS;
-
-	/**
-	 * @see showWengoDownload()
-	 */
-	static const std::string URL_WENGO_DOWNLOAD;
-
-	/**
-	 * @see showWengoPhoneNumber()
-	 */
-	static const std::string URL_WENGO_PHONENUMBER;
+	static void setWengoAccount(WengoAccount * wengoAccount) {
+		_wengoAccount = wengoAccount;
+	}
 
 	/** Link to the current WengoAccount. */
 	static WengoAccount * _wengoAccount;

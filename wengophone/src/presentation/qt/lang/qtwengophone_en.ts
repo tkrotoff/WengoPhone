@@ -2322,7 +2322,7 @@ This will send </source>
 <context>
     <name>QtWebDirectory</name>
     <message>
-        <source>Directory</source>
+        <source>WengoPhone - Directory</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

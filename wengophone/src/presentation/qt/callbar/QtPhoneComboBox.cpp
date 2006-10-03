@@ -23,31 +23,36 @@
 #include <util/Logger.h>
 
 #include <qtutil/SafeConnect.h>
+#include <qtutil/LanguageChangeEventFilter.h>
 
 #include <QtGui/QtGui>
 
 QtPhoneComboBox::QtPhoneComboBox(QWidget * parent)
 	: QComboBox(parent) {
 
+	setLineEdit(new QtPhoneComboBoxLineEdit(this));
+
+	SAFE_CONNECT(this, SIGNAL(activated(const QString &)), SLOT(comboBoxActivated()));
+
+	LANGUAGE_CHANGE(this);
+	init();
+}
+
+void QtPhoneComboBox::init() {
 	_cleared = false;
+	_toolTipTextDone = false;
 	_originalPalette = palette();
 
 	//Grey color
 	_greyPalette.setColor(QPalette::Text, Qt::gray);
-
-	setLineEdit(new QtPhoneComboBoxLineEdit(this));
-
-	SAFE_CONNECT(this, SIGNAL(activated(const QString &)), SLOT(comboBoxActivated()));
 }
 
 QtPhoneComboBox::~QtPhoneComboBox() {
 }
 
 void QtPhoneComboBox::setEditText(const QString & text) {
-	static bool already = true;
-
-	if (already) {
-		already = false;
+	if (!_toolTipTextDone) {
+		_toolTipTextDone = true;
 		_toolTip = text;
 		setToolTipText();
 	} else {
@@ -103,6 +108,11 @@ void QtPhoneComboBox::comboBoxActivated() {
 	//Text color back to original color
 	lineEdit()->setPalette(_originalPalette);
 }
+
+void QtPhoneComboBox::languageChanged() {
+	init();
+}
+
 
 
 QtPhoneComboBoxLineEdit::QtPhoneComboBoxLineEdit(QtPhoneComboBox * qtPhoneComboBox) {
