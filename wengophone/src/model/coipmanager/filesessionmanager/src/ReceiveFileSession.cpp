@@ -121,7 +121,6 @@ unsigned ReceiveFileSession::getFileSize() const {
 
 void ReceiveFileSession::moduleFinishedEventHandler(CoIpModule & sender) {
 	moduleFinishedEvent(*this);
-	OWSAFE_DELETE(_currentFileSessionImp);
 }
 
 void ReceiveFileSession::fileTransferEventHandler(IFileSession & sender,
