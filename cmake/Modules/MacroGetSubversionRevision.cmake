@@ -19,14 +19,19 @@ macro (MACRO_GET_SUBVERSION_REVISION _revision)
   if (_SVN_EXECUTEABLE AND _SVN_DOT_DIR)
     execute_process(
       COMMAND
-        svn info ${CMAKE_SOURCE_DIR}
+        svnversion ${CMAKE_SOURCE_DIR}
       RESULT_VARIABLE
         _SVN_REVISION_RESULT_VARIABLE
       OUTPUT_VARIABLE
         _SVN_REVISION_OUTPUT_VARIABLE
     )
 
-    string(REGEX REPLACE ".*Revision: ([0-9]+).*" "\\1" _SVN_REVISION ${_SVN_REVISION_OUTPUT_VARIABLE})
+    #string(REGEX REPLACE ".*Revision: ([0-9]+).*" "\\1" _SVN_REVISION ${_SVN_REVISION_OUTPUT_VARIABLE})
+    if(_SVN_REVISION_RESULT_VARIABLE)
+      set(_SVN_REVISION ${_SVN_REVISION_OUTPUT_VARIABLE}
+    else(_SVN_REVISION_RESULT_VARIABLE)
+      set(_SVN_REVISION 0)
+    endif(_SVN_REVISION_RESULT_VARIABLE)
   endif (_SVN_EXECUTEABLE AND _SVN_DOT_DIR)
 
   set(${_revision} ${${_revision}} ${_SVN_REVISION})
