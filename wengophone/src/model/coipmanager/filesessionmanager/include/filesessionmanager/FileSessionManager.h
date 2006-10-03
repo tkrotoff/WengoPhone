@@ -76,12 +76,12 @@ private:
 		IReceiveFileSession * iReceiveFileSession);
 
 	/**
-	 * Create a ISendFileSession suitable for the given Account.
+	 * Create a ISendFileSession suitable for the given contact.
 	 *
 	 * @return a pointer to the new FileSession.
 	 * Must be destroyed by the caller.
 	 */
-	ISendFileSession * createFileSessionForAccount(const Account & account);
+	ISendFileSession * createFileSessionForContact(const std::string & contactId);
 
 	/** Vector of available FileSessionManager. */
 	std::vector<IFileSessionManager *> _fileSessionManagerVector;

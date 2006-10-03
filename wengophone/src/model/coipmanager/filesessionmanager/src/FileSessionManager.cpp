@@ -20,10 +20,16 @@
 #include <filesessionmanager/FileSessionManager.h>
 
 #include <filesessionmanager/SendFileSession.h>
+#include <filesessionmanager/ISendFileSession.h>
 
 #include "../implementation/phapi/include/phapifilesessionmanager/PhApiFileSessionManager.h"
 
 #include <imwrapper/Account.h>
+#include <imwrapper/IMContactSet.h>
+#include <model/contactlist/ContactList.h>
+#include <model/contactlist/ContactProfile.h>
+#include <model/profile/UserProfile.h>
+#include <model/contactlist/Contact.h>
 
 #include <util/Logger.h>
 
@@ -48,20 +54,35 @@ SendFileSession * FileSessionManager::createSendFileSession() {
 	return newFileSession;
 }
 
-ISendFileSession * FileSessionManager::createFileSessionForAccount(const Account & account) {
+ISendFileSession * FileSessionManager::createFileSessionForContact(const std::string & contactId) {
 	ISendFileSession * result = NULL;
 
-	for (std::vector<IFileSessionManager *>::const_iterator it = _fileSessionManagerVector.begin();
-		it != _fileSessionManagerVector.end();
-		++it) {
-		if ((*it)->isProtocolSupported(account.getProtocol())) {
-			result = (*it)->createSendFileSession();
+	Contact * contact = _userProfile.getContactList().getContact(contactId);
+	if (contact) {
+
+		ContactProfile contactProfile = *contact;
+	
+		for (std::vector<IFileSessionManager *>::const_iterator it = _fileSessionManagerVector.begin();
+			it != _fileSessionManagerVector.end();
+			++it) {
+	
+			for (IMContactSet::const_iterator contactIterator = contactProfile.getIMContactSet().begin();
+				contactIterator != contactProfile.getIMContactSet().end();
+				contactIterator++) {
+		
+				if ((*it)->isProtocolSupported((*contactIterator).getProtocol())) {
+					result = (*it)->createSendFileSession();
+					result->setAccount((*contactIterator).getIMAccount());
+					IMContactSet imContactSet;
+					imContactSet.insert(*contactIterator);
+					result->setIMContactSet(imContactSet);
+				}
+			}
 		}
 	}
 
 	if (!result) {
-		LOG_ERROR("no FileSession implementation available for protocol " + 
-			EnumIMProtocol::toString(account.getProtocol()));
+		LOG_ERROR("no FileSession implementation available");
 	}
 
 	return result;

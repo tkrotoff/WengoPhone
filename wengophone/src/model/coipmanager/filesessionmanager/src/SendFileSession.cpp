@@ -79,42 +79,23 @@ void SendFileSession::start() {
 
 	bool done = false;
 	while (!done) {
-		// A FileSession is created for each Account to be used.
 		std::string contact = *_contactIdList.begin();
-		IMAccount imAccount = findFirstValidAccount(contact);
-		if (!imAccount.empty()) {
+		ISendFileSession * fileSessionImp =
+			_fileSessionManager.createFileSessionForContact(contact);
+
+		if (fileSessionImp) {
 			done = true;
-			ISendFileSession * fileSessionImp =
-				_fileSessionManager.createFileSessionForAccount(imAccount);
-			if (fileSessionImp) {
-				_currentFileSessionImp = fileSessionImp;
-				_currentFileSessionImp->setAccount(&imAccount);
-				_currentFileSessionImp->moduleFinishedEvent +=
-					boost::bind(&SendFileSession::moduleFinishedEventHandler, this, _1);
-				_currentFileSessionImp->fileTransferEvent +=
-					boost::bind(&SendFileSession::fileTransferEventHandler, this, _1, _2, _3, _4);
-				_currentFileSessionImp->fileTransferProgressionEvent +=
-					boost::bind(&SendFileSession::fileTransferProgressionEventHandler, this, _1, _2, _3, _4);
+			_currentFileSessionImp = fileSessionImp;
+			_currentFileSessionImp->moduleFinishedEvent +=
+				boost::bind(&SendFileSession::moduleFinishedEventHandler, this, _1);
+			_currentFileSessionImp->fileTransferEvent +=
+				boost::bind(&SendFileSession::fileTransferEventHandler, this, _1, _2, _3, _4);
+			_currentFileSessionImp->fileTransferProgressionEvent +=
+				boost::bind(&SendFileSession::fileTransferProgressionEventHandler, this, _1, _2, _3, _4);
 
-				_currentFileSessionImp->setFileList(_fileVector);
+			_currentFileSessionImp->setFileList(_fileVector);
 
-				// Find valid contacts.
-				IMContactSet imContactSet;
-				for (StringList::const_iterator it = _contactIdList.begin();
-					it != _contactIdList.end();
-					++it) {
-					Contact * myContact = _userProfile.getContactList().getContact(*it);
-					const IMContact * imContact = myContact->getFirstValidIMContact(imAccount);
-					if (imContact) {
-						imContactSet.insert(*imContact);
-					}
-				}
-
-				_currentFileSessionImp->setIMContactSet(imContactSet);
-				////
-
-				_currentFileSessionImp->start();
-			}
+			_currentFileSessionImp->start();
 		} else {
 			LOG_ERROR("cannot find any account usable with this contact."
 				" Removing contact from list and checking next one.");
