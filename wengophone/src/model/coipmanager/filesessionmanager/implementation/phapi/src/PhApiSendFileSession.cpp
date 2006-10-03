@@ -97,7 +97,7 @@ void PhApiSendFileSession::start() {
 		if(fileType == String::null) {
 			fileType = "*";
 		}
-		_currentCallID = wrapper->sendFile(vlid,
+		_currentCallID = wrapper.sendFile(vlid,
 			fullIdentity,
 			contactUri,
 			(*_currentFile).getFullPath(),
