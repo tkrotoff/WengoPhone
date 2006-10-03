@@ -93,12 +93,16 @@ void PhApiSendFileSession::start() {
 		int vlid = wAccount->getVLineID();
 		std::string fullIdentity = wAccount->getDisplayName()+std::string(" <")+wAccount->getFullIdentity()+std::string(">");
 		std::string contactUri = std::string("sip:")+(*_currentContact).getContactId()+std::string("@voip.wengo.fr"); // FIXME get the real domain
-		_currentCallID = wrapper.sendFile(vlid,
+		std::string fileType = (*_currentFile).getExtension();
+		if(fileType == String::null) {
+			fileType = "*";
+		}
+		_currentCallID = wrapper->sendFile(vlid,
 			fullIdentity,
 			contactUri,
 			(*_currentFile).getFullPath(),
 			(*_currentFile).getFileName(),
-			(*_currentFile).getExtension(),
+			fileType,
 			(*_currentFile).getSize());
 	}
 	LOG_DEBUG("end of transfer start");
