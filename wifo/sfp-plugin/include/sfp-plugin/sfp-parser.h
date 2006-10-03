@@ -38,12 +38,12 @@
 #define SFP_CRYPTED_KEY_LINE				'k'
 #define SFP_CRYPTED_KEY_LINE_FORMAT			"k=%s %s\n" /* (key_info) (crypted_key) */
 #define SFP_FILE_INFO_LINE					'f'
-#define SFP_FILE_INFO_LINE_FORMAT			"f=%s \"%s\" %s\n" /* (filename) (file_type) (file_size) */
+#define SFP_FILE_INFO_LINE_FORMAT			"f=\"%s\" \"%s\" %s\n" /* (filename) (file_type) (file_size) */
 #define SFP_CONNECTION_ID_LINE				's'
 #define SFP_CONNECTION_ID_LINE_FORMAT		"s=%s\n" /* (connection_id) */
 
 // ----- PREDEFINED VALUES -----
-#define SFP_PROTOCOL_VERSION				"0.1.1"
+#define SFP_PROTOCOL_VERSION				"0.1.2"
 #define SFP_NETWORK_TYPE_INTERNET			"IN"
 #define SFP_ADDRESS_TYPE_IPV4				"IPv4"
 #define SFP_ADDRESS_TYPE_IPV6				"IPv6"
