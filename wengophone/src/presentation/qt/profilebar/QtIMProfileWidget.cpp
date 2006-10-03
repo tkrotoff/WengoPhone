@@ -342,4 +342,5 @@ void QtIMProfileWidget::profileChangedEventHandler() {
 
 void QtIMProfileWidget::languageChanged() {
 	_ui->retranslateUi(_imProfileWidget);
+	init();
 }
