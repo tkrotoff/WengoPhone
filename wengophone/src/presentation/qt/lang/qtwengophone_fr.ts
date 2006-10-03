@@ -369,7 +369,7 @@ téléphones fixes, téléphones portables ou la boite vocale (si disponible).</
     </message>
     <message>
         <source>For example +3314500XXXX (+33 is the country code and 14500XXXX is the phone number)</source>
-        <translation>Par exemple +3314500XXXX (+33 est le code pays and 14500XXXX est le numéro)</translation>
+        <translation>Par exemple +3314500XXXX (+33 est le code pays et 14500XXXX est le numéro)</translation>
     </message>
     <message>
         <source>(+ country code) phone number</source>
@@ -1594,8 +1594,7 @@ font-weight:600;&quot;&gt;Pseudo ou numéro&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&
     </message>
     <message>
         <source>Fill in all your network Id to stay connected with your contacts</source>
-        <translation>Veuillez renseigner tous vos identifiants pour rester connecté avec vos
-contacts</translation>
+        <translation>Veuillez renseigner tous vos identifiants pour rester connecté avec vos contacts</translation>
     </message>
     <message>
         <source>Contact</source>
