@@ -19,18 +19,24 @@
 
 #include <qtutil/ToolTipLineEdit.h>
 
+#include <qtutil/LanguageChangeEventFilter.h>
+
 #include <QtGui/QtGui>
 
 ToolTipLineEdit::ToolTipLineEdit(QWidget * parent)
 	: QLineEdit(parent) {
 
+	LANGUAGE_CHANGE(this);
+	init();
+}
+
+void ToolTipLineEdit::init() {
 	_cleared = false;
+	_toolTipTextDone = false;
 	_originalPalette = palette();
 
 	//Grey color
 	_greyPalette.setColor(QPalette::Text, Qt::gray);
-
-	_toolTipTextDone = false;
 }
 
 void ToolTipLineEdit::setText(const QString & text) {
@@ -87,4 +93,8 @@ void ToolTipLineEdit::leaveEvent(QEvent * event) {
 		setToolTipText();
 	}
 	QLineEdit::leaveEvent(event);
+}
+
+void ToolTipLineEdit::languageChanged() {
+	init();
 }

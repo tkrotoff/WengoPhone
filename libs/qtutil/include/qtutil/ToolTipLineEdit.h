@@ -41,13 +41,26 @@ public:
 
 	ToolTipLineEdit(QWidget * parent);
 
+	/**
+	 * @see QLineEdit::text()
+	 */
 	QString text() const;
 
 public Q_SLOTS:
 
+	/**
+	 * @see QLineEdit::setText()
+	 */
 	void setText(const QString & text);
 
+	void languageChanged();
+
 private:
+
+	/**
+	 * Initializes the ToolTopLineEdit.
+	 */
+	void init();
 
 	void setToolTipText();
 
