@@ -78,6 +78,8 @@ private Q_SLOTS:
 
 	void aliasTextChanged();
 
+	void languageChanged();
+
 private:
 
 	/**

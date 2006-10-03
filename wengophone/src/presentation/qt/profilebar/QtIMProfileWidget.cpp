@@ -37,6 +37,7 @@
 #include <util/SafeDelete.h>
 #include <thread/ThreadEvent.h>
 
+#include <qtutil/LanguageChangeEventFilter.h>
 #include <qtutil/SafeConnect.h>
 #include <qtutil/PixmapMerging.h>
 
@@ -71,6 +72,8 @@ QtIMProfileWidget::QtIMProfileWidget(CUserProfile & cUserProfile, CWengoPhone & 
 
 	_ui = new Ui::IMProfileWidget();
 	_ui->setupUi(_imProfileWidget);
+
+	LANGUAGE_CHANGE(_imProfileWidget);
 
 	//Widget connections
 	SAFE_CONNECT(_ui->msnButton, SIGNAL(clicked()), SLOT(msnClicked()));
@@ -335,4 +338,8 @@ void QtIMProfileWidget::profileChangedEventHandler() {
 	typedef ThreadEvent0<void ()> MyThreadEvent;
 	MyThreadEvent * event = new MyThreadEvent(boost::bind(&QtIMProfileWidget::init, this));
 	PFactory::postEvent(event);
+}
+
+void QtIMProfileWidget::languageChanged() {
+	_ui->retranslateUi(_imProfileWidget);
 }

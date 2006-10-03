@@ -21,6 +21,7 @@
 
 #include "QtPhoneComboBox.h"
 
+#include <qtutil/LanguageChangeEventFilter.h>
 #include <qtutil/WengoStyleLabel.h>
 #include <qtutil/MouseEventFilter.h>
 
@@ -29,6 +30,13 @@
 QtCallBar::QtCallBar(QWidget * parent)
 	: QFrame(parent) {
 
+	init();
+}
+
+QtCallBar::~QtCallBar() {
+}
+
+void QtCallBar::init() {
 	setFrameShape(QFrame::NoFrame);
 
 	//callButton
@@ -76,7 +84,7 @@ QtCallBar::QtCallBar(QWidget * parent)
 	//phoneComboBox
 	_phoneComboBox = new QtPhoneComboBox(phoneComboBoxContainerLabel);
 	_phoneComboBox->setEditable(true);
-	_phoneComboBox->setEditText(tr("+(country code) number or nickname"));
+	languageChanged();
 	_phoneComboBox->setMaximumSize(QSize(10000, 22));
 	_phoneComboBox->setAutoCompletion(false);
 	connect(_phoneComboBox->lineEdit(), SIGNAL(returnPressed()), SLOT(phoneComboBoxReturnPressedSlot()));
@@ -93,9 +101,8 @@ QtCallBar::QtCallBar(QWidget * parent)
 	layout->addWidget(phoneComboBoxContainerLabel, 0, 0);
 	layout->addWidget(_hangUpButton, 0, 1);
 	layout->addWidget(_callButton, 0, 2);
-}
 
-QtCallBar::~QtCallBar() {
+	LANGUAGE_CHANGE(this);
 }
 
 void QtCallBar::setEnabledCallButton(bool enable) {
@@ -144,4 +151,8 @@ void QtCallBar::phoneComboBoxEditTextChangedSlot(const QString & text) {
 
 void QtCallBar::phoneComboBoxClickedSlot() {
 	phoneComboBoxClicked();
+}
+
+void QtCallBar::languageChanged() {
+	_phoneComboBox->setEditText(tr("+(country code) number or nickname"));
 }

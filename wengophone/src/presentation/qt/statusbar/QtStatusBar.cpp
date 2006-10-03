@@ -40,6 +40,7 @@
 #include <util/Logger.h>
 #include <util/SafeDelete.h>
 
+#include <qtutil/LanguageChangeEventFilter.h>
 #include <qtutil/SafeConnect.h>
 
 #include <QtGui/QtGui>
@@ -48,7 +49,8 @@ static const char * MNG_FORMAT = "MNG";
 
 QtStatusBar::QtStatusBar(CWengoPhone & cWengoPhone, QStatusBar * statusBar, QtToolBar * qtToolBar)
 	: QObjectThreadSafe(statusBar),
-	_cWengoPhone(cWengoPhone), _qtToolBar(qtToolBar) {
+	_cWengoPhone(cWengoPhone),
+	_qtToolBar(qtToolBar) {
 
 	_statusBar = statusBar;
 
@@ -58,6 +60,8 @@ QtStatusBar::QtStatusBar(CWengoPhone & cWengoPhone, QStatusBar * statusBar, QtTo
 
 	_ui = new Ui::StatusBarWidget();
 	_ui->setupUi(_statusBarWidget);
+
+	LANGUAGE_CHANGE(_statusBarWidget);
 
 	//_cWengoPhone.networkDiscoveryStateChangedEvent += boost::bind(&QtStatusBar::networkDiscoveryStateChangedEventHandler, this, _1, _2);
 
@@ -224,4 +228,9 @@ void QtStatusBar::updatePhoneLineState() {
 void QtStatusBar::init() {
 	updateInternetConnectionState();
 	updatePhoneLineState();
+}
+
+void QtStatusBar::languageChanged() {
+	_ui->retranslateUi(_statusBarWidget);
+	init();
 }

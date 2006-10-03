@@ -91,7 +91,11 @@ private Q_SLOTS:
 
 	void phoneComboBoxClickedSlot();
 
+	void languageChanged();
+
 private:
+
+	void init();
 
 	WengoStyleLabel * _callButton;
 

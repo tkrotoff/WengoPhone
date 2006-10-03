@@ -63,6 +63,8 @@ private Q_SLOTS:
 
 	void paintEvent(QEvent * event);
 
+	void languageChanged();
+
 private:
 
 	void initThreadSafe() { }

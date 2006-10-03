@@ -90,6 +90,8 @@ private Q_SLOTS:
 
 	void cancelClicked();
 
+	void languageChanged();
+
 private:
 
 	void setLogin(const QString & login);

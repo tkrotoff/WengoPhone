@@ -31,6 +31,7 @@
 
 #include <util/Logger.h>
 
+#include <qtutil/LanguageChangeEventFilter.h>
 #include <qtutil/PaintEventFilter.h>
 
 #include <QtGui/QtGui>
@@ -43,6 +44,8 @@ QtConfigPanel::QtConfigPanel(CWengoPhone & cWengoPhone, QWidget * parent)
 
 	_ui = new Ui::WengoPhoneWindowConfigPanel();
 	_ui->setupUi(_configPanelWidget);
+
+	LANGUAGE_CHANGE(_configPanelWidget);
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	config.valueChangedEvent += boost::bind(&QtConfigPanel::configChangedEventHandler, this, _1, _2);
@@ -166,4 +169,8 @@ void QtConfigPanel::paintEvent(QEvent * event) {
 	QPainter painter(_configPanelWidget);
 	painter.fillRect(rect, QBrush(lg));
 	painter.end();
+}
+
+void QtConfigPanel::languageChanged() {
+	_ui->retranslateUi(_configPanelWidget);
 }

@@ -29,6 +29,7 @@
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
 
+#include <qtutil/LanguageChangeEventFilter.h>
 #include <qtutil/WidgetBackgroundImage.h>
 
 #include <util/Logger.h>
@@ -43,6 +44,8 @@ QtLogin::QtLogin(QWidget * parent, CUserProfileHandler & cUserProfileHandler)
 
 	_ui = new Ui::LoginWindow();
 	_ui->setupUi(_loginWindow);
+
+	LANGUAGE_CHANGE(_loginWindow);
 
 	WidgetBackgroundImage::setBackgroundImage(_ui->loginLabel, ":pics/headers/login.png", true);
 
@@ -232,4 +235,8 @@ void QtLogin::setLoginLabel(const QString & message) {
 	QString loginLabel = QString("<font size=\"18\">Login</font><br/>%1").arg(message);
 
 	_ui->loginLabel->setText(loginLabel);
+}
+
+void QtLogin::languageChanged() {
+	_ui->retranslateUi(_loginWindow);
 }

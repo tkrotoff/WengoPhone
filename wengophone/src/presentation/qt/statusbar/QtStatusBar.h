@@ -57,6 +57,10 @@ public:
 
 	void phoneLineStateChanged(EnumPhoneLineState::PhoneLineState state);
 
+private Q_SLOTS:
+
+	void languageChanged();
+
 private:
 
 	/**
