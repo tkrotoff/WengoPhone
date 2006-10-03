@@ -599,12 +599,7 @@ text-indent:0px;&quot;&gt;de créer une conférence.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&lt;span style=&quot; font-size:18pt;&quot;&gt;Conference&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;Please enter two phone numbers &lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;or Wengo contact ID in order&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;to create a 3-way conference.&lt;/p&gt;</source>
-        <translation>&lt;span style=&quot; font-size:18pt;&quot;&gt;Conference&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;Veuillez
-saisir deux numéros de téléphone &lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-
-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-
-indent:0px;&quot;&gt;ou deux pseudos Wengo afin&lt;/p&gt;&lt;p style=&quot; margin-top:0px;
-margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0;
-text-indent:0px;&quot;&gt;de créer une conférence.&lt;/p&gt;</translation>
+        <translation>&lt;span style=&quot; font-size:18pt;&quot;&gt;Conference&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;Veuillez saisir deux numéros de téléphone &lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;ou deux pseudos Wengo afin&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;de créer une conférence.&lt;/p&gt;</translation>
     </message>
 </context>
 <context>
