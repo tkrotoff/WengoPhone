@@ -40,6 +40,7 @@ StartupSettingListener::StartupSettingListener() {
 	appPath = Path::getApplicationBundlePath();
 #endif
 	_startup = new Startup("WengoPhoneNG", appPath);
+	_startup->setStartup(ConfigManager::getInstance().getCurrentConfig().getGeneralAutoStart());
 
 	ConfigManager::getInstance().getCurrentConfig().valueChangedEvent +=
 		boost::bind(&StartupSettingListener::startupSettingChanged, this, _1, _2);
