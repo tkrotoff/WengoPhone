@@ -189,6 +189,11 @@ static struct vline *ph_find_vline_by_rid(int rid);
 static char *ph_get_proxy(const char *from);
 static int   ph_get_vline_id(const char *userid, const char *altid);
 
+// mutex for ph_release_call
+GMutex * ph_media_stop_mutex;
+#define PH_MSESSION_STOP_LOCK() g_mutex_lock(ph_media_stop_mutex)
+#define PH_MSESSION_STOP_UNLOCK() g_mutex_unlock(ph_media_stop_mutex)
+////
 
 int getPublicPort(char *local_voice_port, char *local_video_port, char *public_voice_port, char *public_video_port);
 
@@ -626,6 +631,7 @@ ph_locate_call(eXosip_event_t *je, int creatit)
 void ph_release_call(phcall_t *ca)
 {
   DBG_SIP_NEGO("SIP_NEGO: ph_release_call\n", 0, 0, 0);
+  PH_MSESSION_STOP_LOCK();
 
   if (ph_call_hasaudio(ca)) {
       ph_call_media_stop(ca);
@@ -633,6 +639,7 @@ void ph_release_call(phcall_t *ca)
 
   memset(ca, 0, sizeof(phcall_t));
   ca->cid = -1;
+  PH_MSESSION_STOP_UNLOCK();
 }
 
 // <ncouturier>
@@ -2949,6 +2956,8 @@ phInit(phCallbacks_t *cbk, char * server, int asyncmode)
   {
     osip_thread_create(20000, ph_api_thread, 0);
   }
+
+  ph_media_stop_mutex = g_mutex_new();
 
   phIsInitialized = 1;
 
