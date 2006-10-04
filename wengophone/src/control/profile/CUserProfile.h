@@ -233,6 +233,8 @@ private:
 
 	UserProfile & _userProfile;
 
+	CWengoPhone & _cWengoPhone;
+
 	PUserProfile * _pUserProfile;
 
 	CContactList _cContactList;
@@ -252,8 +254,6 @@ private:
 	CSoftUpdate * _cSoftUpdate;
 
 	CPhoneLine * _cPhoneLine;
-
-	CWengoPhone & _cWengoPhone;
 };
 
 #endif	//OWCUSERPROFILE_H

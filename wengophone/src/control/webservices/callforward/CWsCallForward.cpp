@@ -22,7 +22,7 @@
 #include <control/CWengoPhone.h>
 
 CWsCallForward::CWsCallForward(CWengoPhone & cWengoPhone, WsCallForward & wsCallForward)
-	: _cWengoPhone(cWengoPhone), _wsCallForward(wsCallForward) {
+	: _wsCallForward(wsCallForward), _cWengoPhone(cWengoPhone) {
 
 	_wsCallForward.wsCallForwardEvent += wsCallForwardEvent;
 }
