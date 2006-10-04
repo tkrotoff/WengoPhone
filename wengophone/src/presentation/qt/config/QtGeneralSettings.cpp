@@ -32,6 +32,7 @@
 #include <model/config/Config.h>
 #include <model/config/ConfigManager.h>
 
+#include <cutil/global.h>
 #include <qtutil/SafeConnect.h>
 
 #include <QtGui/QtGui>
@@ -43,6 +44,10 @@ QtGeneralSettings::QtGeneralSettings(CWengoPhone & cWengoPhone, QWidget * parent
 
 	_ui = new Ui::GeneralSettings();
 	_ui->setupUi(_generalSettingsWidget);
+
+#ifdef OS_LINUX
+	_ui->autoStartGroupBox->hide();
+#endif
 
 	if (cWengoPhone.getCUserProfileHandler().getCUserProfile()) {
 		QtWengoPhone *qtWengoPhone = dynamic_cast<QtWengoPhone *>(cWengoPhone.getPresentation());
