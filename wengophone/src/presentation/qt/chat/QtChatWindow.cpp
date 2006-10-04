@@ -94,6 +94,10 @@ QtChatWindow::QtChatWindow(QWidget * parent, CChatHandler & cChatHandler, IMChat
 	resize(490, 470);
 	setWindowTitle("WengoChat");
 
+#ifdef OS_LINUX
+	setWindowIcon(QIcon(QPixmap(":/pics/avatar_default.png")));
+#endif
+
 	QtEmoticonsManager::getInstance();
 
 	if (imChatSession.isUserCreated()) {
