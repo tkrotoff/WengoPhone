@@ -232,7 +232,7 @@ void PresenceHandler::authorizationRequestEventHandler(IMPresence & sender, cons
 	MyThreadEvent * event =
 		new MyThreadEvent(boost::bind(&PresenceHandler::authorizationRequestEventHandlerThreadSafe, this, _1, _2, _3), &sender.getIMAccount(), contactId, message);
 
-	WengoPhone::postEvent(event);
+	WengoPhone::getInstance().postEvent(event);
 }
 
 void PresenceHandler::authorizationRequestEventHandlerThreadSafe(IMAccount * imAccount, std::string contactId, std::string message) {

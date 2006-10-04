@@ -127,7 +127,7 @@ void CHistory::unseenMissedCallsChangedEventHandlerThreadSafe(int count) {
 void CHistory::removeHistoryMemento(unsigned id) {
 	typedef ThreadEvent1<void (unsigned id), unsigned> MyThreadEvent;
 	MyThreadEvent * event = new MyThreadEvent(boost::bind(&CHistory::removeHistoryMementoThreadSafe, this, _1), id);
-	WengoPhone::postEvent(event);
+	WengoPhone::getInstance().postEvent(event);
 }
 
 void CHistory::removeHistoryMementoThreadSafe(unsigned id) {
@@ -137,7 +137,7 @@ void CHistory::removeHistoryMementoThreadSafe(unsigned id) {
 void CHistory::clear(HistoryMemento::State state) {
 	typedef ThreadEvent1<void (HistoryMemento::State state), HistoryMemento::State> MyThreadEvent;
 	MyThreadEvent * event = new MyThreadEvent(boost::bind(&CHistory::clearThreadSafe, this, _1), state);
-	WengoPhone::postEvent(event);
+	WengoPhone::getInstance().postEvent(event);
 }
 
 void CHistory::clearThreadSafe(HistoryMemento::State state) {
@@ -155,7 +155,7 @@ std::string CHistory::getMementoPeer(unsigned id) const {
 void CHistory::replay(unsigned id) {
 	typedef ThreadEvent1<void (unsigned id), unsigned> MyThreadEvent;
 	MyThreadEvent * event = new MyThreadEvent(boost::bind(&CHistory::replayThreadSafe, this, _1), id);
-	WengoPhone::postEvent(event);
+	WengoPhone::getInstance().postEvent(event);
 }
 
 void CHistory::replayThreadSafe(unsigned id) {
@@ -169,7 +169,7 @@ HistoryMementoCollection * CHistory::getMementos(HistoryMemento::State state, in
 void CHistory::resetUnseenMissedCalls() {
 	typedef ThreadEvent0<void ()> MyThreadEvent;
 	MyThreadEvent * event = new MyThreadEvent(boost::bind(&CHistory::resetUnseenMissedCallsThreadSafe, this));
-	WengoPhone::postEvent(event);
+	WengoPhone::getInstance().postEvent(event);
 }
 
 void CHistory::resetUnseenMissedCallsThreadSafe() {

@@ -96,7 +96,7 @@ void CContactList::contactMovedEventHandler(ContactList & sender, ContactGroup &
 
 	typedef ThreadEvent3<void (std::string, std::string, std::string), std::string, std::string, std::string> MyThreadEvent;
 	MyThreadEvent * event = new MyThreadEvent(boost::bind(&CContactList::contactMovedEventHandlerThreadSafe, this, _1, _2, _3),
-			dstContactGroup.getUUID(), srcContactGroup.getUUID(), contact.getUUID());
+		dstContactGroup.getUUID(), srcContactGroup.getUUID(), contact.getUUID());
 	PFactory::postEvent(event);
 }
 
@@ -211,7 +211,7 @@ StringList CContactList::getContactIds() const {
 void CContactList::addContact(const ContactProfile & contactProfile) {
 	typedef ThreadEvent1<void (ContactProfile contactProfile), ContactProfile> MyThreadEvent;
 	MyThreadEvent * event = new MyThreadEvent(boost::bind(&CContactList::addContactThreadSafe, this, _1), contactProfile);
-	WengoPhone::postEvent(event);
+	WengoPhone::getInstance().postEvent(event);
 }
 
 void CContactList::addContactThreadSafe(ContactProfile contactProfile) {
@@ -224,7 +224,7 @@ void CContactList::addContactThreadSafe(ContactProfile contactProfile) {
 void CContactList::removeContact(const std::string & contactId) {
 	typedef ThreadEvent1<void (std::string contactId), std::string> MyThreadEvent;
 	MyThreadEvent * event = new MyThreadEvent(boost::bind(&CContactList::removeContactThreadSafe, this, _1), contactId);
-	WengoPhone::postEvent(event);
+	WengoPhone::getInstance().postEvent(event);
 }
 
 void CContactList::removeContactThreadSafe(std::string contactId) {
@@ -237,7 +237,7 @@ void CContactList::removeContactThreadSafe(std::string contactId) {
 void CContactList::updateContact(const ContactProfile & contactProfile) {
 	typedef ThreadEvent1<void (ContactProfile contactProfile), ContactProfile> MyThreadEvent;
 	MyThreadEvent * event = new MyThreadEvent(boost::bind(&CContactList::updateContactThreadSafe, this, _1), contactProfile);
-	WengoPhone::postEvent(event);
+	WengoPhone::getInstance().postEvent(event);
 }
 
 void CContactList::updateContactThreadSafe(ContactProfile contactProfile) {
@@ -265,7 +265,7 @@ void CContactList::addContactGroupThreadSafe(std::string name) {
 void CContactList::removeContactGroup(const std::string & groupId) {
 	typedef ThreadEvent1<void (std::string contactId), std::string> MyThreadEvent;
 	MyThreadEvent * event = new MyThreadEvent(boost::bind(&CContactList::removeContactGroupThreadSafe, this, _1), groupId);
-	WengoPhone::postEvent(event);
+	WengoPhone::getInstance().postEvent(event);
 }
 
 void CContactList::removeContactGroupThreadSafe(std::string groupId) {
@@ -275,7 +275,7 @@ void CContactList::removeContactGroupThreadSafe(std::string groupId) {
 void CContactList::renameContactGroup(const std::string & groupId, const std::string & name) {
 	typedef ThreadEvent2<void (std::string contactId, std::string name), std::string, std::string> MyThreadEvent;
 	MyThreadEvent * event = new MyThreadEvent(boost::bind(&CContactList::renameContactGroupThreadSafe, this, _1, _2), groupId, name);
-	WengoPhone::postEvent(event);
+	WengoPhone::getInstance().postEvent(event);
 }
 
 void CContactList::renameContactGroupThreadSafe(std::string groupId, std::string name) {
@@ -285,7 +285,7 @@ void CContactList::renameContactGroupThreadSafe(std::string groupId, std::string
 void CContactList::merge(const std::string & dstContactId, const std::string & srcContactId) {
 	typedef ThreadEvent2<void (std::string dstContactId, std::string srcContactId), std::string, std::string> MyThreadEvent;
 	MyThreadEvent * event = new MyThreadEvent(boost::bind(&CContactList::mergeThreadSafe, this, _1, _2), dstContactId, srcContactId);
-	WengoPhone::postEvent(event);
+	WengoPhone::getInstance().postEvent(event);
 }
 
 void CContactList::mergeThreadSafe(std::string dstContactId, std::string srcContactId) {

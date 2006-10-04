@@ -50,7 +50,7 @@
 
 PFactory * PFactory::_factory = NULL;
 
-QtFactory::QtFactory(int argc, char * argv[]) {
+QtFactory::QtFactory(int & argc, char * argv[]) {
 #if defined(OS_MACOSX) 
 	_app = new QtMacApplication(argc, argv);
 

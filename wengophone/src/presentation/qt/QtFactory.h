@@ -70,7 +70,7 @@ class QtFactory : public QObject, public PFactory {
 	Q_OBJECT
 public:
 
-	QtFactory(int argc, char * argv[]);
+	QtFactory(int & argc, char * argv[]);
 
 	void processEvents();
 

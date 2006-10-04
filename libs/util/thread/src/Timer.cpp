@@ -31,7 +31,7 @@ public:
 
 	PrivateThread();
 
-	~PrivateThread();
+	virtual ~PrivateThread();
 
 	void start(unsigned firstTime, unsigned timeout, unsigned nbShots);
 
@@ -43,8 +43,14 @@ public:
 
 private:
 
+	/**
+	 * Sleeps and check at constant interval if the Timer
+	 * must be stopped. If so, the method returns
+	 */
+	void msleepAndCheck(unsigned time);
+
 	/** @see Thread::start() */
-	void run();
+	virtual void run();
 
 	/** Number of retries currenlty done, _nbRetry is always <= _nbShots. */
 	unsigned _nbRetry;
@@ -91,25 +97,45 @@ void PrivateThread::stop() {
 }
 
 void PrivateThread::run() {
-	msleep(_firstTime);
+	msleepAndCheck(_firstTime);
 
-	while ((_nbShots == 0) || (_nbRetry < _nbShots)) {
+	while (!_stop && ((_nbShots == 0) || (_nbRetry < _nbShots))) {
 		_nbRetry++;
-
-		//If timer has been stopped
-		if (_stop) {
-			return;
-		}
 
 		if (_nbRetry == _nbShots) {
 			lastTimeoutEvent(*this);
 		} else {
 			timeoutEvent(*this);
 		}
-		msleep(_timeout);
+
+		msleepAndCheck(_timeout);
 	}
 }
 
+void PrivateThread::msleepAndCheck(unsigned time) {
+	unsigned sleepTime = time;
+
+	if (sleepTime > 500) {
+		sleepTime = 500;
+	}
+
+	unsigned remainingTime = time;
+	int actualSleepTime = 0;
+	while (remainingTime > 0) {
+		if (_stop) {
+			return;
+		}
+
+		if ((remainingTime - sleepTime) < 0) {
+			actualSleepTime = remainingTime;
+		} else {
+			actualSleepTime = sleepTime;
+		}
+
+		msleep(actualSleepTime);
+		remainingTime -= actualSleepTime;
+	}
+}
 
 Timer::Timer() {
 }

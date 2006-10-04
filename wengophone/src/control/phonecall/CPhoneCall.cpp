@@ -113,7 +113,7 @@ void CPhoneCall::hangUp() {
 
 	typedef ThreadEvent0<void ()> MyThreadEvent;
 	MyThreadEvent * event = new MyThreadEvent(boost::bind(&CPhoneCall::hangUpThreadSafe, this));
-	WengoPhone::postEvent(event);
+	WengoPhone::getInstance().postEvent(event);
 }
 
 void CPhoneCall::hangUpThreadSafe() {
@@ -123,7 +123,7 @@ void CPhoneCall::hangUpThreadSafe() {
 void CPhoneCall::accept() {
 	typedef ThreadEvent0<void ()> MyThreadEvent;
 	MyThreadEvent * event = new MyThreadEvent(boost::bind(&CPhoneCall::acceptThreadSafe, this));
-	WengoPhone::postEvent(event);
+	WengoPhone::getInstance().postEvent(event);
 }
 
 void CPhoneCall::acceptThreadSafe() {
@@ -133,7 +133,7 @@ void CPhoneCall::acceptThreadSafe() {
 void CPhoneCall::hold() {
 	typedef ThreadEvent0<void ()> MyThreadEvent;
 	MyThreadEvent * event = new MyThreadEvent(boost::bind(&CPhoneCall::holdThreadSafe, this));
-	WengoPhone::postEvent(event);
+	WengoPhone::getInstance().postEvent(event);
 }
 
 void CPhoneCall::holdThreadSafe() {
@@ -143,7 +143,7 @@ void CPhoneCall::holdThreadSafe() {
 void CPhoneCall::resume() {
 	typedef ThreadEvent0<void ()> MyThreadEvent;
 	MyThreadEvent * event = new MyThreadEvent(boost::bind(&CPhoneCall::resumeThreadSafe, this));
-	WengoPhone::postEvent(event);
+	WengoPhone::getInstance().postEvent(event);
 }
 
 void CPhoneCall::resumeThreadSafe() {
@@ -153,7 +153,7 @@ void CPhoneCall::resumeThreadSafe() {
 void CPhoneCall::blindTransfer(const std::string & phoneNumber) {
 	typedef ThreadEvent1<void (std::string), std::string> MyThreadEvent;
 	MyThreadEvent * event = new MyThreadEvent(boost::bind(&CPhoneCall::blindTransferThreadSafe, this, _1), phoneNumber);
-	WengoPhone::postEvent(event);
+	WengoPhone::getInstance().postEvent(event);
 }
 
 void CPhoneCall::blindTransferThreadSafe(std::string phoneNumber) {
