@@ -71,7 +71,6 @@ void QtWebcamButton::configChangedEventHandler(Settings & sender, const std::str
 }
 
 void QtWebcamButton::configChangedEventHandlerThreadSafe(Settings & sender, const std::string & key) {
-	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
 	if (key == Config::VIDEO_ENABLE_KEY || key == Config::VIDEO_WEBCAM_DEVICE_KEY) {
 		changeWebcamButtonState();

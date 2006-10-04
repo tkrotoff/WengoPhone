@@ -84,9 +84,9 @@ private:
 
 	void updatePresentationThreadSafe();
 
-	CUserProfile & _cUserProfile;
-
 	QtWengoPhone & _qtWengoPhone;
+
+	CUserProfile & _cUserProfile;
 };
 
 #endif //OWQTUSERPROFILE_H

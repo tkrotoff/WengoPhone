@@ -62,8 +62,6 @@ void QtYahooSettings::init() {
 		return;
 	}
 
-	IMAccountParameters & param = _imAccount->getIMAccountParameters();
-
 	_ui->loginLineEdit->setText(QString::fromStdString(_imAccount->getLogin()));
 	_ui->passwordLineEdit->setText(QString::fromStdString(_imAccount->getPassword()));
 }

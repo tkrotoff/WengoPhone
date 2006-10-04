@@ -53,8 +53,8 @@
 QtContactManager::QtContactManager(CUserProfile & cUserProfile, CWengoPhone & cWengoPhone,
 	QtContactList & qtContactList, QObject * parent, QTreeWidget * target)
 	: QObject(parent),
-	_cUserProfile(cUserProfile),
 	_cWengoPhone(cWengoPhone),
+	_cUserProfile(cUserProfile),
 	_qtContactList(qtContactList) {
 
 	LANGUAGE_CHANGE(this);

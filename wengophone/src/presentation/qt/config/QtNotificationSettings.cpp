@@ -100,7 +100,6 @@ void QtNotificationSettings::saveConfig() {
 }
 
 void QtNotificationSettings::soundComboBoxActivated(const QString & text) {
-	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
 	std::string soundFile;
 	if (text == tr("Incoming call (ringtone)")) {

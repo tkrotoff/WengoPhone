@@ -119,11 +119,11 @@ void QtSoftUpdate::dataReadProgressEventHandler(double bytesDone, double bytesTo
 }
 
 void QtSoftUpdate::dataReadProgressEventHandlerThreadSafe(double bytesDone, double bytesTotal, unsigned downloadSpeed) {
-	LOG_DEBUG("progress=" + String::fromNumber(bytesDone));
+	LOG_DEBUG("progress=" + String::fromDouble(bytesDone));
 
 	//progressBar
-	_ui->progressBar->setRange(0, bytesTotal);
-	_ui->progressBar->setValue(bytesDone);
+	_ui->progressBar->setRange(0, (int)bytesTotal);
+	_ui->progressBar->setValue((int)bytesDone);
 
 	_ui->updateTextLabel->setText(_originalLabelText.arg(downloadSpeed));
 

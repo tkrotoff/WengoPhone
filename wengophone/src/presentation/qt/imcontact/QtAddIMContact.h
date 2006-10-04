@@ -72,9 +72,9 @@ private:
 
 	QDialog * _addIMContactWindow;
 
-	CUserProfile & _cUserProfile;
-
 	ContactProfile & _contactProfile;
+
+	CUserProfile & _cUserProfile;
 };
 
 #endif	//OWQTADDIMCONTACT_H

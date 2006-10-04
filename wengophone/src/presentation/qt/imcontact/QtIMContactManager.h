@@ -72,9 +72,9 @@ private:
 
 	QWidget * _parent;
 
-	CUserProfile & _cUserProfile;
-
 	ContactProfile & _contactProfile;
+
+	CUserProfile & _cUserProfile;
 };
 
 #endif //OWQTIMCONTACTMANAGER_H

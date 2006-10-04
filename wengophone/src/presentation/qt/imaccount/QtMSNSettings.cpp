@@ -63,8 +63,6 @@ void QtMSNSettings::init() {
 		return;
 	}
 
-	IMAccountParameters & params = _imAccount->getIMAccountParameters();
-
 	_ui->loginLineEdit->setText(QString::fromStdString(_imAccount->getLogin()));
 	_ui->passwordLineEdit->setText(QString::fromStdString(_imAccount->getPassword()));
 }

@@ -214,7 +214,7 @@ void QtSimpleIMContactManager::saveIMContacts() {
 
 void QtSimpleIMContactManager::searchWengoContactButtonClicked() {
 	//_imContactManagerWidget->parentWidget()->close();
-	QtWengoPhone * qtWengoPhone = (QtWengoPhone *) _cUserProfile.getCWengoPhone().getPresentation();
+	//QtWengoPhone * qtWengoPhone = (QtWengoPhone *) _cUserProfile.getCWengoPhone().getPresentation();
 	//qtWengoPhone->searchWengoContact();
 }
 

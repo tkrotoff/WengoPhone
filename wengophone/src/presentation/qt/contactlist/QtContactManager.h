@@ -172,12 +172,6 @@ private:
 
 	QAction * _callAction;
 
-	QtContactList & _qtContactList;
-
-	CUserProfile & _cUserProfile;
-
-	CWengoPhone & _cWengoPhone;
-
 	Qt::MouseButton _button;
 
 	int _timerId;
@@ -195,6 +189,12 @@ private:
 	bool _canShow;
 
 	bool _wantShow;
+
+	CWengoPhone & _cWengoPhone;
+
+	CUserProfile & _cUserProfile;
+
+	QtContactList & _qtContactList;
 
 	/**
 	 * Translated strings

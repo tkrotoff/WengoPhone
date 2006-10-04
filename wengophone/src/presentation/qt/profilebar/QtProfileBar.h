@@ -170,9 +170,6 @@ private:
 
 	void paintEvent(QPaintEvent * event);
 
-
-	ConnectHandler & _connectHandler;
-
 	QGridLayout * _gridlayout;
 
 	QGridLayout * _widgetLayout;
@@ -204,6 +201,8 @@ private:
 	CUserProfile & _cUserProfile;
 
 	CWengoPhone & _cWengoPhone;
+
+	ConnectHandler & _connectHandler;
 };
 
 #endif	//QTPROFILEBAR_H

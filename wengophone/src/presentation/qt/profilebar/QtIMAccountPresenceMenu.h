@@ -62,9 +62,9 @@ private Q_SLOTS:
 
 private:
 
-	IMAccount & _imAccount;
-
 	CUserProfile & _cUserProfile;
+
+	IMAccount & _imAccount;
 };
 
 #endif	//OWQTIMACCOUNTPRESENCEMENU_H
