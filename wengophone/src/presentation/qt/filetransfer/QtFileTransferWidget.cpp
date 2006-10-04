@@ -48,6 +48,10 @@ QtFileTransferWidget::QtFileTransferWidget(QWidget * parent)
 	_ui->setupUi(this);
 	////
 
+#ifdef OS_LINUX
+	setWindowIcon(QIcon(QPixmap(":/pics/avatar_default.png")));
+#endif
+
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	if (!config.getFileTransferDownloadFolder().empty()) {
 		setDownloadFolder(QString::fromStdString(config.getFileTransferDownloadFolder()));
@@ -129,8 +133,7 @@ void QtFileTransferWidget::addReceiveItem(ReceiveFileSession * fileSession) {
 	_ui->downloadTransferListWidget->insertItem(0, item);
 	_ui->downloadTransferListWidget->setItemWidget(item, fileTransferItem);
 	showDownloadTab();
-	show();
-	raise();
+	showAndRaise();
 }
 
 void QtFileTransferWidget::addSendItem(SendFileSession * fileSession,
@@ -144,8 +147,7 @@ void QtFileTransferWidget::addSendItem(SendFileSession * fileSession,
 	_ui->uploadTransferListWidget->insertItem(0, item);
 	_ui->uploadTransferListWidget->setItemWidget(item, fileTransferItem);
 	showUploadTab();
-	show();
-	raise();
+	showAndRaise();
 }
 
 void QtFileTransferWidget::setDownloadFolder(const QString & folder) {
@@ -169,3 +171,10 @@ void QtFileTransferWidget::showUploadTab() {
 void QtFileTransferWidget::itemRemoveClicked() {
 	clean(false);
 }
+
+void QtFileTransferWidget::showAndRaise() {
+	show();
+	raise();
+	setVisible(true);
+}
+

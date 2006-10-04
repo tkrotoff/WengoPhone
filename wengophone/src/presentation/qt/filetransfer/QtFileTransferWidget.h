@@ -53,6 +53,8 @@ public:
 	void addSendItem(SendFileSession * fileSession, const std::string & filename,
 		const std::string & contactId, const std::string & contact);
 
+	void showAndRaise();
+
 private Q_SLOTS:
 
 	/**
