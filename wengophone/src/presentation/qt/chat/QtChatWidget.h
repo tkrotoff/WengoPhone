@@ -83,9 +83,36 @@ public:
 
 	void setIMChatSession(IMChatSession * imChatSession);
 
+	/**
+	 * Adds a message to the history and display it.
+	 *
+	 * @param senderName name of the contact who sends the message
+	 * @param str the message
+	 */
 	void addToHistory(const QString & senderName, const QString & str);
 
+	/**
+	 * Displays a satus message.
+	 *
+	 * Behaves same as addToHistory but set the text color to the status message
+	 * color and does not display a contact name.
+	 */
+	void addStatusMessage(const QString & statusMessage);
+
 	void saveHistoryAsHtml();
+
+	/**
+	 * Sets the Contact state.
+	 *
+	 * If not connected and the last status was connected,
+	 * the ChatEditWidget will be disabled and a status message
+	 * will be displayed saying the contact went offline.
+	 *
+	 * If connect and the last status was disconnected,
+	 * the ChatEditWidget will be enabled and a status message
+	 * will be displayed saying the contact when online.
+	 **/
+	void setContactConnected(bool connected);
 
 public Q_SLOTS:
 
@@ -209,6 +236,9 @@ private:
 	EmoticonsWidget * _emoticonsWidget;
 
 	Ui::ChatWidget _ui;
+
+	/** True if the Contact in this Widget is connected. */
+	bool _isContactConnected;
 
 	// font style settings
 	QFont _currentFont;

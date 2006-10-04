@@ -57,11 +57,14 @@
 static const int CHAT_NOT_TYPING_DELAY = 1000;
 static const int CHAT_STOPPED_TYPING_DELAY = 1000;
 static const QString CHAT_USER_BACKGOUND_COLOR = "#F0EFFF";
-static const QString CHAT_USER_FORGROUND_COLOR = "#000000";
+static const QString CHAT_USER_FOREGROUND_COLOR = "#000000";
 
 QtChatWidget::QtChatWidget(CChatHandler & cChatHandler,
-	QtWengoPhone * qtWengoPhone, int sessionId, QWidget * parent, QtChatTabWidget * qtChatTabWidget) :
-	QWidget(parent), _cChatHandler(cChatHandler),_qtWengoPhone(qtWengoPhone) {
+	QtWengoPhone * qtWengoPhone, int sessionId,
+	QWidget * parent, QtChatTabWidget * qtChatTabWidget) :
+	QWidget(parent),
+	_cChatHandler(cChatHandler),
+	_qtWengoPhone(qtWengoPhone) {
 
 	//Default nickname for testing purpose
 	_nickName = "Wengo";
@@ -75,6 +78,8 @@ QtChatWidget::QtChatWidget(CChatHandler & cChatHandler,
 	_bold = false;
 	_italic = false;
 	_underline = false;
+
+	_isContactConnected = true;
 
 	//setup ui
 	_ui.setupUi(this);
@@ -308,7 +313,8 @@ void QtChatWidget::addToHistory(const QString & senderName, const QString & str)
 	}
 
 	// insert "header" code html
-	QString header = QtChatUtils::getUserHeader(getUserColor(senderName),CHAT_USER_FORGROUND_COLOR, senderName);
+	QString header = QtChatUtils::getHeader(getUserColor(senderName),
+		CHAT_USER_FOREGROUND_COLOR, senderName);
 	_chatHistory->insertHtml(header);
 	////
 
@@ -321,6 +327,12 @@ void QtChatWidget::addToHistory(const QString & senderName, const QString & str)
 	////
 
 	_chatHistory->ensureCursorVisible();
+}
+
+void QtChatWidget::addStatusMessage(const QString & statusMessage) {
+	QString message = QtChatUtils::getHeader(CHAT_USER_BACKGOUND_COLOR,
+		"#ff0000", "<i>" + statusMessage + "</i>");
+	_chatHistory->insertHtml(message);
 }
 
 void QtChatWidget::sendMessage() {
@@ -463,7 +475,7 @@ void QtChatWidget::updateAvatarFrame() {
 		ContactProfile profile = cContactList.getContactProfile(contactId);
 
 		std::string data = profile.getIcon().getData();
-			QPixmap pixmap;
+		QPixmap pixmap;
 		pixmap.loadFromData((uchar *)data.c_str(), data.size());
 		_avatarFrame->addRemoteContact(
 			QString::fromStdString(contactId),
@@ -494,4 +506,25 @@ void QtChatWidget::sendFileToSession(const QString & filename) {
 
 void QtChatWidget::saveHistoryAsHtml() {
 	_chatHistory->saveHistoryAsHtmlSlot();
+}
+
+void QtChatWidget::setContactConnected(bool connected) {
+	QtContactList * qtContactList = _qtWengoPhone->getQtContactList();
+	CContactList & cContactList = qtContactList->getCContactList();
+	ContactProfile profile = cContactList.getContactProfile(_contactId.toStdString());
+	QString contactName = QString::fromStdString(profile.getShortDisplayName());
+
+	if (connected && !_isContactConnected) {
+		_chatEdit->setEnabled(true);
+		_ui.sendButton->setEnabled(true);
+		_chatEdit->setPlainText("");
+		addStatusMessage(QString(tr("%1 is connected.")).arg(contactName));
+	} else if (!connected && _isContactConnected) {
+		_chatEdit->setEnabled(false);
+		_ui.sendButton->setEnabled(false);
+		_chatEdit->setPlainText(QString(tr("%1 is not connected. You cannot send a message")).arg(contactName));
+		addStatusMessage(QString(tr("%1 is disconnected.")).arg(contactName));
+	}
+
+	_isContactConnected = connected;
 }

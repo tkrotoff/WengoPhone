@@ -154,7 +154,7 @@ const QString QtChatUtils::decodeMessage(EnumIMProtocol::IMProtocol protocol, co
 	return toReturn;
 }
 
-const QString QtChatUtils::getUserHeader(const QString & bgColor, const QString & textColor, const QString & nickName) {
+const QString QtChatUtils::getHeader(const QString & bgColor, const QString & textColor, const QString & message) {
 	QString header = QString(
 		"<table border=\"0\" width=\"100%\" cellspacing=\"0\""
 		"cellpadding=\"3\"><tr>"
@@ -168,7 +168,7 @@ const QString QtChatUtils::getUserHeader(const QString & bgColor, const QString 
 		"</tr></table>").
 		arg(bgColor).
 		arg(textColor).
-		arg(nickName).
+		arg(message).
 		arg(bgColor).
 		arg(textColor).
 		arg(QTime::currentTime().toString());

@@ -407,3 +407,8 @@ void ContactProfile::setWengoPhoneId(const std::string & wengoPhoneId) {
 	Profile::setWengoPhoneId(wengoPhoneId);
 	addIMContact(IMContact(EnumIMProtocol::IMProtocolWengo, wengoPhoneId));
 }
+
+bool ContactProfile::isAvailable() const {
+	return ((getPresenceState() != EnumPresenceState::PresenceStateOffline)
+		&& ((getPresenceState() != EnumPresenceState::PresenceStateUnknown)));
+}

@@ -354,6 +354,8 @@ void QtChatWindow::statusChangedSlot(QString contactId) {
 	QString displayName = QString::fromStdString(sdname);
 
 	// search for the tab that contain sender
+	// FIXME: the contact could be in several tabs: for instance when
+	// we do a single-chat and a multi-chat with this contact
 	for (int i = 0; i < _tabWidget->count(); i++) {
 		QtChatWidget * widget = (QtChatWidget *) _tabWidget->widget(i);
 		if (widget) {
@@ -361,18 +363,19 @@ void QtChatWindow::statusChangedSlot(QString contactId) {
 				switch(pstate) {
 				case EnumPresenceState::PresenceStateOnline:
 					_tabWidget->setTabIcon(i, QIcon(QPixmap(":/pics/status/online.png")));
+					widget->setContactConnected(true);
 					break;
 				case EnumPresenceState::PresenceStateOffline:
-
-					//TODO: call widget->disableEditWidget()
 					_tabWidget->setTabIcon(i, QIcon(QPixmap(":/pics/status/offline.png")));
-
+					widget->setContactConnected(false);
 					break;
 				case EnumPresenceState::PresenceStateDoNotDisturb:
 					_tabWidget->setTabIcon(i, QIcon(QPixmap(":/pics/status/donotdisturb.png")));
+					widget->setContactConnected(true);
 					break;
 				case EnumPresenceState::PresenceStateAway:
 					_tabWidget->setTabIcon(i, QIcon(QPixmap(":/pics/status/away.png")));
+					widget->setContactConnected(true);
 					break;
 				default:
 					_tabWidget->setTabIcon(i, QIcon(QPixmap(":/pics/contact/chat.png")));
@@ -382,6 +385,8 @@ void QtChatWindow::statusChangedSlot(QString contactId) {
 			}
 		}
 	}
+
+	updateToolBarActions();
 }
 
 void QtChatWindow::copyQAction(QObject * actionParent, QAction * action) {
@@ -461,14 +466,17 @@ void QtChatWindow::updateToolBarActions() {
 	QString contactId;
 	QtContactList * qtContactList;
 	ContactProfile contactProfile;
+
 	if (widget) {
 		contactId = widget->getContactId();
 		qtContactList = _qtWengoPhone.getQtContactList();
 		contactProfile = qtContactList->getCContactList().getContactProfile(contactId.toStdString());
 
-		_ui->actionCallContact->setEnabled(contactProfile.hasCall());
+		_ui->actionCallContact->setEnabled(contactProfile.hasCall()
+			&& contactProfile.isAvailable());
 		_ui->actionSendSms->setEnabled(!contactProfile.getMobilePhone().empty());
-		_ui->actionSendFile->setEnabled(!contactProfile.getFirstWengoId().empty());
+		_ui->actionSendFile->setEnabled(!contactProfile.getFirstWengoId().empty()
+			&& contactProfile.isAvailable());
 		_ui->actionCreateChatConf->setEnabled(widget->canDoMultiChat());
 		_ui->actionContactInfo->setEnabled(true);
 		//TODO: uncomment when block a contact will be implemented
@@ -700,6 +708,7 @@ void QtChatWindow::statusMessageReceivedSLot(IMChatSession * sender, int status,
 		if (widget->getSessionId() == sender->getId()) {
 			_chatWidget = qobject_cast<QtChatWidget *>(_tabWidget->widget(i));
 			_chatWidget->addToHistory("", message + tr(" has not been transmitted!"));
+
 			if (_tabWidget->currentWidget() != _chatWidget) {
 				if (isMinimized()) {
 					_tabWidget->setCurrentIndex(i);
@@ -707,9 +716,11 @@ void QtChatWindow::statusMessageReceivedSLot(IMChatSession * sender, int status,
 					_tabWidget->setBlinkingTab(i);
 				}
 			}
+
 			if (isMinimized()) {
 				flashWindow();
 			}
+
 			return;
 		}
 	}

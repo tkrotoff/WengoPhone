@@ -63,14 +63,14 @@ public:
 	static const QString decodeMessage(EnumIMProtocol::IMProtocol protocol, const QString & message);
 
 	/**
-	 * Gets a HTML table to display the nickName and the current time.
+	 * Gets a HTML table to display a message and the current time.
 	 *
 	 * @param bgColor background color.
 	 * @param textColor text color.
-	 * @param nickName the nickname.
+	 * @param message the message.
 	 * @return the html table.
 	 */
-	static const QString getUserHeader(const QString & bgColor, const QString & textColor, const QString & nickName);
+	static const QString getHeader(const QString & bgColor, const QString & textColor, const QString & message);
 
 private:
 

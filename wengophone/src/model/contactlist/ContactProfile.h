@@ -191,6 +191,11 @@ public:
 	EnumPresenceState::PresenceState getPresenceState() const;
 
 	/**
+	 * @return true if presence state is different of Unknown and Offline.
+	 */
+	bool isAvailable() const;
+
+	/**
 	 * Gets the UUID of this Contact.
 	 *
 	 * @return the UUID of this Contact.
