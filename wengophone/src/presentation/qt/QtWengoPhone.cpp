@@ -628,6 +628,7 @@ void QtWengoPhone::phoneComboBoxClicked() {
 				LOG_FATAL("unknown HistoryMemento state=" + String::fromNumber(state));
 			}
 		}
+		delete mementos;
 	}
 }
 
