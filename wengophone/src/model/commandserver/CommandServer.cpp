@@ -208,7 +208,19 @@ void CommandServer::incomingRequestEventHandler(ServerSocket & sender, const std
 			}
 			////
 
-			showAddContactEvent(nickname, sip, firstname, lastname, country, city, state, group);
+			// work around a f*c*i*g VS 2003 bug that produces an INTERNAL COMPILER ERROR.
+			contact_info_t contact_info;
+			contact_info.wengoName = nickname;
+			contact_info.sip = sip;
+			contact_info.firstname = firstname;
+			contact_info.lastname = lastname;
+			contact_info.country = country;
+			contact_info.city = city;
+			contact_info.state = state;
+			contact_info.group = group;
+			showAddContactEvent(contact_info);
+			//showAddContactEvent(nickname, sip, firstname, lastname, country, city, state, group);
+			////
 		}
 
 	} else {

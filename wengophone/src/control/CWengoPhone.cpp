@@ -55,7 +55,10 @@ void CWengoPhone::initPresentationThreadSafe() {
 	_wengoPhone.exitEvent += boost::bind(&CWengoPhone::exitEventHandler, this);
 
 	CommandServer & commandServer = CommandServer::getInstance(_wengoPhone);
-	commandServer.showAddContactEvent += boost::bind(&CWengoPhone::showAddContactEventHandler, this, _1, _2, _3, _4, _5, _6, _7, _8);
+// work around a f*c*i*g VS 2003 bug that produces an INTERNAL COMPILER ERROR.
+	//commandServer.showAddContactEvent += boost::bind(&CWengoPhone::showAddContactEventHandler, this, _1, _2, _3, _4, _5, _6, _7, _8);
+	commandServer.showAddContactEvent += boost::bind(&CWengoPhone::showAddContactEventHandler, this, _1);
+////
 }
 
 Presentation * CWengoPhone::getPresentation() const {
@@ -99,6 +102,8 @@ void CWengoPhone::exitEventHandlerThreadSafe() {
 	}
 }
 
+// work around a f*c*i*g VS 2003 bug that produces an INTERNAL COMPILER ERROR.
+/*
 void CWengoPhone::showAddContactEventHandler(const std::string & wengoName,
 	const std::string & sip, const std::string & firstname,
 	const std::string & lastname, const std::string & country,
@@ -107,3 +112,10 @@ void CWengoPhone::showAddContactEventHandler(const std::string & wengoName,
 
 	_pWengoPhone->showAddContact(wengoName, sip, firstname, lastname, country, city, state, group);
 }
+*/
+void CWengoPhone::showAddContactEventHandler(contact_info_t contactInfo) {
+	_pWengoPhone->showAddContact(contactInfo.wengoName, contactInfo.sip,
+		contactInfo.firstname, contactInfo.lastname, contactInfo.country, 
+		contactInfo.city, contactInfo.state, contactInfo.group);
+}
+////
