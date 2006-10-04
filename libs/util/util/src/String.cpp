@@ -153,6 +153,18 @@ std::string String::fromUnsignedLongLong(unsigned long long number) {
 	return ss.str();
 }
 
+std::string String::fromUnsignedInt(unsigned int number) {
+	stringstream ss;
+	ss << number;
+	return ss.str();
+}
+
+std::string String::fromDouble(double number) {
+	stringstream ss;
+	ss << number;
+	return ss.str();
+}
+
 static unsigned char hex_to_int(unsigned char ch) {
 	if (ch >= 'A' && ch <= 'F') {
 		return ch - 'A' + 10;

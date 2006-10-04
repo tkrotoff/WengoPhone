@@ -196,6 +196,22 @@ public:
 	static std::string fromBoolean(bool boolean);
 
 	/**
+	 * Gets a string from an unsigned int.
+	 *
+	 * @param number unsigned int to convert into a string
+	 * @return unsigned int converted to a string
+	 */
+	static std::string fromUnsignedInt(unsigned int number);
+
+	/**
+	 * Gets a string from an double.
+	 *
+	 * @param number double to convert into a string
+	 * @return double converted to a string
+	 */
+	static std::string fromDouble(double number);
+
+	/**
 	 * Gets a string from a long.
 	 *
 	 * @param number long to convert into a string
