@@ -24,7 +24,6 @@
 #include "PhoneCallState.h"
 
 #include <model/phoneline/IPhoneLine.h>
-#include <sipwrapper/SipWrapper.h>
 
 #include <util/Logger.h>
 
@@ -40,7 +39,6 @@ ConferenceCallParticipant::ConferenceCallParticipant(ConferenceCall & conference
 }
 
 void ConferenceCallParticipant::joinConference() {
-	SipWrapper & sipWrapper = _phoneCall.getPhoneLine().getSipWrapper();
 	int callId = _phoneCall.getCallId();
 
 	if (_phoneCall.getState() == EnumPhoneCallState::PhoneCallStateHold) {

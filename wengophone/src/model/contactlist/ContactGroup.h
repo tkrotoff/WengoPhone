@@ -147,11 +147,11 @@ private:
 	/** Defines the vector of Contact. */
 	typedef std::vector<Contact *> ContactVector;
 
-	/** List of Contact associated with the ContactGroup. */
-	ContactVector _contactList;
-
 	/** Name of the ContactGroup. */
 	std::string _groupName;
+
+	/** List of Contact associated with the ContactGroup. */
+	ContactVector _contactList;
 
 	/** The UUID of this ContactGroup. */
 	std::string _uuid;

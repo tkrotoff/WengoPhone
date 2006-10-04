@@ -67,10 +67,10 @@ private:
 	void videoFrameReceivedEventHandler(SipWrapper & sender, int callId,
 		piximage* remoteVideoFrame, piximage* localVideoFrame);
 
+	SipWrapper & _sipWrapper;
+
 	/** WengoPhone instance in order to access the phone lines and the phone calls. */
 	UserProfile & _userProfile;
-
-	SipWrapper & _sipWrapper;
 };
 
 #endif	//SIPCALLBACKS_H

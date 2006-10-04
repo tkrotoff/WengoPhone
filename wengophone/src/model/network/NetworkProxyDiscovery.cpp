@@ -103,7 +103,6 @@ void NetworkProxyDiscovery::run() {
 		LOG_DEBUG("discovering network proxy...");
 		_state = NetworkProxyDiscoveryStateDiscovering;
 
-		Config & config = ConfigManager::getInstance().getCurrentConfig();
 		LOG_DEBUG("searching for proxy...");
 
 		char * localProxyUrl = get_local_http_proxy_address();
