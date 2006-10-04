@@ -265,27 +265,28 @@ void QtContactManager::defaultAction(QTreeWidgetItem * item) {
 		QtContactListManager * ul = QtContactListManager::getInstance();
 		QString userId = item->text(0);
 		ContactProfile contactProfile = _qtContactList.getCContactList().getContactProfile(userId.toStdString());
+
 		if (config.getGeneralClickStartChat()) {
 			ul->startChat(userId);
 			return;
 		}
+
 		if (config.getGeneralClickStartFreeCall()) {
-			QString str = QString::fromUtf8(contactProfile.getFirstFreePhoneNumber().c_str());
-			if (!str.isEmpty()) {
+			if (!contactProfile.getFirstFreePhoneNumber().empty()) {
 				ul->startFreeCall(userId);
 				return;
 			}
 		}
+
 		if (config.getGeneralClickCallCellPhone()) {
-			QString str = QString::fromUtf8(contactProfile.getMobilePhone().c_str());
-			if (!str.isEmpty()) {
-				if (EnumPresenceState::PresenceStateOnline != contactProfile.getPresenceState()) {
-					ul->startCall(userId);
-					return;
-				}
+			if (!contactProfile.getMobilePhone().empty()
+				|| !contactProfile.getHomePhone().empty()) {
+				ul->startCall(userId);
+				return;
 			}
 		}
- 		if (!ul->getWengoPhoneNumber(userId).isEmpty()) {
+
+		if (!ul->getWengoPhoneNumber(userId).isEmpty()) {
 			ul->startCall(userId);
 		}
 	}
