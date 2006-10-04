@@ -62,8 +62,6 @@ public:
 
 private Q_SLOTS:
 
-	void searchWengoContactButtonClicked();
-
 	void msnLineEditClicked();
 
 	void aimLineEditClicked();

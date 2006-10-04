@@ -23,6 +23,7 @@
 #include <util/SafeDelete.h>
 
 #include <qtutil/SafeConnect.h>
+#include <qtutil/WidgetBackgroundImage.h>
 
 #include <QtGui/QtGui>
 
@@ -36,23 +37,9 @@ QtToaster::QtToaster(QWidget * toaster, QFrame * toasterWindowFrame)
 	_toaster->setParent(_toaster->parentWidget(), Qt::ToolTip | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
 	_toaster->setAttribute(Qt::WA_DeleteOnClose, true);
 
-	_toaster->resize(190, 150);
+	WidgetBackgroundImage::setBackgroundImage(toasterWindowFrame, ":pics/toaster/toaster-background.png", true);
 
-	QRect r = toasterWindowFrame->rect();
-
-	QLinearGradient lg(QPointF(1, r.top()), QPointF(1, r.bottom()));
-	lg.setColorAt(0, qApp->palette().color(QPalette::Window));
-
-	QColor dest = qApp->palette().color(QPalette::Window);
-	float red = ((float) dest.red()) / 1.3f;
-	float blue = ((float) dest.blue()) / 1.3f;
-	float green = ((float) dest.green()) / 1.3f;
-	dest = QColor((int) red, (int) green, (int) blue);
-	lg.setColorAt(1, dest);
-
-	QPalette palette = toasterWindowFrame->palette();
-	palette.setBrush(toasterWindowFrame->backgroundRole(), QBrush(lg));
-	toasterWindowFrame->setPalette(palette);
+	_toaster->resize(184, 128);
 }
 
 void QtToaster::close() {

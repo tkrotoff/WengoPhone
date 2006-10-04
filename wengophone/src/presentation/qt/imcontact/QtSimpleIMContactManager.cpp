@@ -64,9 +64,6 @@ QtSimpleIMContactManager::QtSimpleIMContactManager(ContactProfile & contactProfi
 	_jabberLineEditMouseEventFilter = new MousePressEventFilter(this, SLOT(jabberLineEditClicked()));
 	_ui->jabberLineEdit->installEventFilter(_jabberLineEditMouseEventFilter);
 
-	_ui->searchWengoContactButton->hide();
-	SAFE_CONNECT(_ui->searchWengoContactButton, SIGNAL(clicked()), SLOT(searchWengoContactButtonClicked()));
-
 	loadIMContacts();
 }
 
@@ -210,12 +207,6 @@ void QtSimpleIMContactManager::saveIMContacts() {
 	if (_ui->jabberLineEdit->isEnabled()) {
 		addIMContactsOfProtocol(EnumIMProtocol::IMProtocolJabber, _ui->jabberLineEdit->text());
 	}
-}
-
-void QtSimpleIMContactManager::searchWengoContactButtonClicked() {
-	//_imContactManagerWidget->parentWidget()->close();
-	//QtWengoPhone * qtWengoPhone = (QtWengoPhone *) _cUserProfile.getCWengoPhone().getPresentation();
-	//qtWengoPhone->searchWengoContact();
 }
 
 void QtSimpleIMContactManager::msnLineEditClicked() {
