@@ -38,6 +38,8 @@
 
 #include <QtGui/QtGui>
 
+#include <limits.h>
+
 QtFileTransfer::QtFileTransfer(QObject * parent, CoIpManager * coIpManager)
 	: QObject(parent),
 	_coIpManager(coIpManager) {
@@ -131,17 +133,29 @@ void QtFileTransfer::newReceiveFileSessionCreatedEventHandlerSlot(ReceiveFileSes
 
 void QtFileTransfer::createSendFileSession(IMContactSet imContactSet, const std::string & filename, CContactList & cContactList) {
 
-	SendFileSession * fileSession = _coIpManager->getFileSessionManager().createSendFileSession();
-	fileSession->addFile(File(filename));
+	File file(filename);
 
-	for (IMContactSet::const_iterator it = imContactSet.begin(); it != imContactSet.end(); ++it) {
-		std::string contactId = cContactList.findContactThatOwns(*it);
-		fileSession->addContact(contactId);
+	// check the file size
+	if (file.getSize() < INT_MAX) {
 
-		_qtFileTransferWidget->addSendItem(fileSession, filename, contactId, (*it).getContactId());
+		SendFileSession * fileSession = _coIpManager->getFileSessionManager().createSendFileSession();
+		fileSession->addFile(file);
+	
+		for (IMContactSet::const_iterator it = imContactSet.begin(); it != imContactSet.end(); ++it) {
+			std::string contactId = cContactList.findContactThatOwns(*it);
+			fileSession->addContact(contactId);
+	
+			_qtFileTransferWidget->addSendItem(fileSession, filename, contactId, (*it).getContactId());
+		}
+		fileSession->start();
+
+	} else {
+
+		QMessageBox::warning(_qtFileTransferWidget, tr("File size error"),
+			tr("%1 exceeds the maximum authorized size.").arg(QString::fromStdString(file.getFileName())),
+			QMessageBox::Ok, 0, 0
+		);
 	}
-
-	fileSession->start();
 }
 
 bool QtFileTransfer::isFileInDir(const QString & dirname, const QString & filename) {
