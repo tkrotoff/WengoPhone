@@ -2,6 +2,11 @@
 
 export TERM=xterm
 
+function configure() {
+	cmake "$@" ..
+}
+
+
 SCRIPT="$0"
 COUNT=0
 while [ -L "${SCRIPT}" ]
@@ -17,38 +22,57 @@ BUILDDIR=$(dirname ${SCRIPT})
 
 cd ${BUILDDIR}
 
+OPTIONS="-DCMAKE_INSTALL_PREFIX=/usr --graphviz=${BUILDDIR}/wengophone.dot"
+
+if [ "$(uname -m)" == "x86_64" ]; then
+	OPTIONS="${OPTIONS} -DLIB_SUFFIX=64"
+fi
+
 case $1 in
 	configure)
-		if [ "$(uname -m)" == "x86_64" ]; then
-			cmake -DCMAKE_INSTALL_PREFIX=/usr -DLIB_SUFFIX=64 --graphviz=${BUILDDIR}/wengophone.dot "$@" ..
-		else
-			cmake -DCMAKE_INSTALL_PREFIX=/usr --graphviz=${BUILDDIR}/wengophone.dot "$@" ..
-		fi
-		DOT=$(which dot)
-		if [ -n "${DOT}" ]; then
-			${DOT} -Tpng -o${BUILDDIR}/wengophone.png ${BUILDDIR}/wengophone.dot
-			${DOT} -Tsvg -o${BUILDDIR}/wengophone.svg ${BUILDDIR}/wengophone.dot
-		fi
+		shift
+		configure ${OPTIONS} "$@"
 	;;
-	make)
-		if [ "$(uname -m)" == "x86_64" ]; then
-			cmake -DCMAKE_INSTALL_PREFIX=/usr -DLIB_SUFFIX=64 --graphviz=${BUILDDIR}/wengophone.dot "$@" ..
-		else
-			cmake -DCMAKE_INSTALL_PREFIX=/usr --graphviz=${BUILDDIR}/wengophone.dot "$@" ..
-		fi
-		DOT=$(which dot)
-		if [ -n "${DOT}" ]; then
-			${DOT} -Tpng -o${BUILDDIR}/wengophone.png ${BUILDDIR}/wengophone.dot
-			${DOT} -Tsvg -o${BUILDDIR}/wengophone.svg ${BUILDDIR}/wengophone.dot
-		fi
+	final)
+		shift
+		OPTIONS="${OPTIONS} -DCMAKE_BUILD_TYPE=Release"
+		configure ${OPTIONS} "$@"
 		make
 	;;
+	release)
+		shift
+		OPTIONS="${OPTIONS} -DCMAKE_BUILD_TYPE=Release"
+		configure ${OPTIONS} "$@"
+		make
+	;;
+	debug)
+		shift
+		OPTIONS="${OPTIONS} -DCMAKE_BUILD_TYPE=Debug"
+		configure ${OPTIONS} "$@"
+		make
+	;;
+	verbose)
+		shift
+		OPTIONS="${OPTIONS} -DCMAKE_BUILD_TYPE=Debug -DCMAKE_VERBOSE_MAKEFILE=1"
+		configure ${OPTIONS} "$@"
+		make VERBOSE=1
+	;;
 	*)
-		echo "Usage: $(basename $0) (configure|make|graph)"
+	echo "Usage: $(basename $0) (configure|final|release|debug|verbose)"
 		echo
 		echo "  configure - run cmake configure"
-		echo "  make - run configure and build wengophone"
+		echo "  final - run configure and build wengophone in release mode"
+		echo "  release - run configure and build wengophone in release with some debug info mode"
+		echo "  debug - run configure and build wengophone in debug mode"
+		echo "  verbose - run configure and make in verbose mode and build wengophone in debug mode"
 		echo
+		exit 0
 	;;
 esac
+
+DOT=$(which dot)
+if [ -n "${DOT}" ]; then
+	${DOT} -Tpng -o${BUILDDIR}/wengophone.png ${BUILDDIR}/wengophone.dot
+	${DOT} -Tsvg -o${BUILDDIR}/wengophone.svg ${BUILDDIR}/wengophone.dot
+fi
 
