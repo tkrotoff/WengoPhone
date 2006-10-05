@@ -214,6 +214,10 @@ void QtChatWidget::contactRemovedEventHandler(IMChatSession & sender, const IMCo
 
 void QtChatWidget::contactAddedEventSlot(const IMContact & imContact) {
 
+	if (_imChatSession->isContactInSession(imContact)) {
+		return;
+	}
+
 	QtContactList * qtContactList = _qtWengoPhone->getQtContactList();
 	CContactList & cContactList = qtContactList->getCContactList();
 	std::string contactId = cContactList.findContactThatOwns(imContact);
