@@ -212,3 +212,15 @@ const IMChatSession::IMChatMessageList IMChatSession::getReceivedMessage(unsigne
 
 	return result;
 }
+
+bool IMChatSession::isContactInSession(const IMContact & imContact) const {
+	IMContactSet::iterator it;
+
+	for (it = _imContactSet.begin(); it != _imContactSet.end(); it++) {
+		
+		if (imContact == (*it)) {
+			return true;
+		}
+	}
+	return false;
+}

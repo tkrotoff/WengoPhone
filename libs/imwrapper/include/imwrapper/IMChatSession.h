@@ -236,6 +236,13 @@ public:
 		return _imContactSet;
 	}
 
+	/**
+	 * Check if an IMContact is in the session
+	 * @param imContact the IMContact
+	 * @return true if the contact is in the session otherwise false
+	 */
+	bool isContactInSession(const IMContact & imContact) const;
+
 	IMChat & getIMChat() { return _imChat; }
 
 	bool operator == (const IMChatSession & imChatSession) const;
