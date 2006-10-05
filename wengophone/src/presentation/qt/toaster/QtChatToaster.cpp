@@ -37,6 +37,13 @@ QtChatToaster::QtChatToaster()
 	_ui = new Ui::ChatToaster();
 	_ui->setupUi(_chatToasterWidget);
 
+	_ui->chatButton->setPixmaps(QPixmap(":/pics/toaster/chat.png"),
+			QPixmap(),
+			QPixmap(),
+			QPixmap(":/pics/toaster/chat.png"),
+			QPixmap(),
+			QPixmap());
+
 	SAFE_CONNECT(_ui->chatButton, SIGNAL(clicked()), SLOT(chatButtonSlot()));
 
 	SAFE_CONNECT(_ui->closeButton, SIGNAL(clicked()), SLOT(close()));

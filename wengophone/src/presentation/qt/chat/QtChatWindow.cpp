@@ -647,8 +647,7 @@ void QtChatWindow::showToaster(IMChatSession * imChatSession) {
 
 	QtContactList * qtContactList = _qtWengoPhone.getQtContactList();
 	CContactList & cContactList = qtContactList->getCContactList();
-	QPixmap result;
-	QPixmap background = QPixmap(":/pics/avatar_background.png");
+	QPixmap avatar;
 	QtChatToaster * toaster = new QtChatToaster();
 
 	if (imChatSession->getIMContactSet().size() > 0) {
@@ -660,7 +659,7 @@ void QtChatWindow::showToaster(IMChatSession * imChatSession) {
 				message += ", ";
 			}
 			QString contactId = QString::fromStdString(cContactList.findContactThatOwns((*it)));
-			message+=getShortDisplayName(contactId,
+			message += getShortDisplayName(contactId,
 				QString::fromStdString((*it).getContactId()));
 
 			std::string contact =  _cChatHandler.getCUserProfile().getCContactList().findContactThatOwns((*it));
@@ -669,24 +668,16 @@ void QtChatWindow::showToaster(IMChatSession * imChatSession) {
 				OWPicture picture = contactProfile.getIcon();
 				std::string data = picture.getData();
 				if (!data.empty()) {
-					result.loadFromData((uchar *) data.c_str(), data.size());
+					avatar.loadFromData((uchar *) data.c_str(), data.size());
 				}
 			}
 		}
 		toaster->setMessage(message);
 	}
 
-	if (!result.isNull()) {
-		QPainter pixpainter(& background);
-		pixpainter.drawPixmap(5, 5, result.scaled(60, 60));
-		pixpainter.end();
-	} else {
-		result = QPixmap(":pics/toaster/avatar_default.png");
-		QPainter pixpainter(& background);
-		pixpainter.drawPixmap(5, 5, result.scaled(60, 60));
-		pixpainter.end();
+	if (!avatar.isNull()) {
+		toaster->setPixmap(avatar);
 	}
-	toaster->setPixmap(background);
 	SAFE_CONNECT(toaster, SIGNAL(chatButtonClicked()), SLOT(show()));
 	toaster->show();
 }
