@@ -134,6 +134,8 @@ public:
 
 	void showHistory();
 
+	void ensureVisible(bool doMinimizeStuff = false);
+
 	void showAddContact(const std::string & nickname, const std::string & sip,
 		const std::string & firstname, const std::string & lastname,
 		const std::string & country, const std::string & city,

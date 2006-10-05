@@ -392,6 +392,8 @@ void QtWengoPhone::makeCallErrorEventHandlerThreadSafe() {
 }
 
 void QtWengoPhone::addPhoneCall(QtPhoneCall * qtPhoneCall) {
+	ensureVisible();
+
 	_activeTabBeforeCall = _ui->tabWidget->currentWidget();
 
 	QtContactCallListWidget * qtContactCallListWidget = new QtContactCallListWidget(_cWengoPhone,_wengoPhoneWindow);
@@ -407,10 +409,6 @@ void QtWengoPhone::addPhoneCall(QtPhoneCall * qtPhoneCall) {
 	if (qtPhoneCall->isIncoming()) {
 		_qtCallBar->setEnabledCallButton(true);
 	}
-
-	_wengoPhoneWindow->showNormal();
-	_wengoPhoneWindow->raise();
-	_wengoPhoneWindow->setVisible(true);
 }
 
 void QtWengoPhone::addToConference(QString phoneNumber, PhoneCall * targetCall) {
@@ -752,6 +750,8 @@ void QtWengoPhone::showAddContact(const std::string & nickname,
 void QtWengoPhone::showAddContactThreadSafe(QString nickname, QString sip, QString firstname,
 	QString lastname, QString country, QString city, QString state,  QString group) {
 
+	ensureVisible();
+
 	if (_cWengoPhone.getCUserProfileHandler().getCUserProfile()) {
 
 		//FIXME this method should not be called if no UserProfile has been set
@@ -770,4 +770,12 @@ void QtWengoPhone::showAddContactThreadSafe(QString nickname, QString sip, QStri
 			_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCContactList().addContact(contactProfile);
 		}
 	}
+}
+
+void QtWengoPhone::ensureVisible(bool doMinimizeStuff) {
+	if (doMinimizeStuff) {
+		_wengoPhoneWindow->showMinimized();
+	}
+	_wengoPhoneWindow->activateWindow();
+	_wengoPhoneWindow->showNormal();
 }

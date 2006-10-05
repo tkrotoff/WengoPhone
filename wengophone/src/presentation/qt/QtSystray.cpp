@@ -303,9 +303,7 @@ void QtSystray::connectionStateEventHandlerThreadSafe(bool connected) {
 }
 
 void QtSystray::showMainWindow() {
-	_qtWengoPhone->getWidget()->showMinimized();
-	_qtWengoPhone->getWidget()->showNormal();
-	_qtWengoPhone->getWidget()->activateWindow();
+	_qtWengoPhone->ensureVisible(true);
 }
 
 void QtSystray::hide() {
