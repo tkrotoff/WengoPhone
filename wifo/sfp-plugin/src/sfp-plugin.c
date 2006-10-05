@@ -125,6 +125,18 @@ static unsigned int sfp_can_do_udp();
 static void sfp_receive_terminaison(sfp_session_info_t * session, sfp_returncode_t code);
 static void sfp_send_terminaison(sfp_session_info_t * session, sfp_returncode_t code);
 static void sfp_progressionCallback(sfp_session_info_t * session, int percentage);
+
+static void sfp_session_updateState(sfp_session_info_t * session, sfp_action_t action);
+static unsigned int sfp_session_isInitiated(sfp_session_info_t * session);
+static unsigned int sfp_session_isRunning(sfp_session_info_t * session);
+static unsigned int sfp_session_isCancelled(sfp_session_info_t * session);
+static unsigned int sfp_session_isCancelledByPeer(sfp_session_info_t * session);
+static unsigned int sfp_session_isPaused(sfp_session_info_t * session);
+static unsigned int sfp_session_isPausedByPeer(sfp_session_info_t * session);
+static unsigned int sfp_session_isComplete(sfp_session_info_t * session);
+static unsigned int sfp_session_isFinished(sfp_session_info_t * session);
+static unsigned int sfp_session_hasFailed(sfp_session_info_t * session);
+
 // ------
 
 /*************** PLUGIN SERVICES ****************/
@@ -244,7 +256,7 @@ SFP_PLUGIN_EXPORTS int sfp_send_file(int vlid, void *userdata, char * uri, char 
 	}
 
 	// get an available file transfer port
-	if(sfp_transfer_get_free_port(session) != SUCCESS){
+	if(!strfilled(session->http_proxy) && sfp_transfer_get_free_port(session) != SUCCESS){
 		m_log_error("Could not find a free transfer port","sfp_send_file");
 		free_sfp_session_info(&session);
 		return FALSE;
@@ -364,7 +376,6 @@ SFP_PLUGIN_EXPORTS int sfp_receive_file(int cid, const char * filename){
 * @return	TRUE if succeeded; FALSE else
 */
 SFP_PLUGIN_EXPORTS int sfp_cancel_transfer(int call_id){
-	//int res;
 	sfp_session_info_t * session = NULL;
 
 	// retrieve the session corresponding to the transfer to stop
@@ -373,25 +384,30 @@ SFP_PLUGIN_EXPORTS int sfp_cancel_transfer(int call_id){
 		return FALSE;
 	}
 
-	// if the session isn't yet ended
-	if(session->state == SFP_SESSION_RUNNING){ // the receive / send thread is active yet; INVITE has been answered by a 200OK
-		// set the session in a cancelled transfer state
-		session->state = SFP_SESSION_CANCELLED;
-		phBye(call_id);
-	}else if(session->state == SFP_SESSION_INITIATED){ // the receive / send thread is not active yet; still in INVITE phase
-		// set the session in a cancelled transfer state
-		session->state = SFP_SESSION_CANCELLED;
-		// send a BYE
-		phBye(call_id);
+	if(session->isInitiated(session)) {
+		session->updateState(session, SFP_ACTION_CANCEL);
+		if(session->isCancelled(session)) {
+			// send a BYE
+			phBye(call_id);
 
-		// notify the GUI
-		if(sfp_cbks != NULL && sfp_cbks->transferCancelled) sfp_cbks->transferCancelled(call_id, session->short_filename, session->file_type, session->file_size);
+			// remove the session
+			sfp_remove_session_info(call_id);
+			return TRUE;
+		}
+	}else if(session->isRunning(session)) {
+		session->updateState(session, SFP_ACTION_CANCEL);
+		if(session->isCancelled(session)) {
+			// send a BYE
+			phBye(call_id);
 
-		// remove the session
-		sfp_remove_session_info(call_id);
+			// notify the GUI
+			if(sfp_cbks != NULL && sfp_cbks->transferCancelled) sfp_cbks->transferCancelled(call_id, session->short_filename, session->file_type, session->file_size);
+
+			return TRUE;
+		}
 	}
 
-	return TRUE;
+	return FALSE;
 }
 
 /**
@@ -402,7 +418,6 @@ SFP_PLUGIN_EXPORTS int sfp_cancel_transfer(int call_id){
 * @return	TRUE if succeeded; FALSE else
 */
 SFP_PLUGIN_EXPORTS int sfp_pause_transfer(int call_id){
-	int holdOn = FALSE;
 	sfp_session_info_t * session = NULL;
 
 	if((session = sfp_get_session_info(call_id)) == NULL){
@@ -410,10 +425,12 @@ SFP_PLUGIN_EXPORTS int sfp_pause_transfer(int call_id){
 		return FALSE;
 	}
 
-	if((holdOn = phHoldOn(call_id, "application/sfp")) == TRUE){
-		session->state = SFP_SESSION_PAUSED;
-		if(sfp_cbks != NULL && sfp_cbks->transferPaused) sfp_cbks->transferPaused(call_id, session->remote_username, session->short_filename, session->file_type, session->file_size);
-		return TRUE;
+	if(phHoldOn(call_id, "application/sfp") == TRUE){
+		session->updateState(session, SFP_ACTION_PAUSE);
+		if(session->isPaused(session)) {
+			if(sfp_cbks != NULL && sfp_cbks->transferPaused) sfp_cbks->transferPaused(call_id, session->remote_username, session->short_filename, session->file_type, session->file_size);
+			return TRUE;
+		}
 	}
 
 	return FALSE;
@@ -427,7 +444,6 @@ SFP_PLUGIN_EXPORTS int sfp_pause_transfer(int call_id){
 * @return	TRUE if succeeded; FALSE else
 */
 SFP_PLUGIN_EXPORTS int sfp_resume_transfer(int call_id){
-	int holdOff = FALSE;
 	sfp_session_info_t * session = NULL;
 
 	if((session = sfp_get_session_info(call_id)) == NULL){
@@ -435,9 +451,12 @@ SFP_PLUGIN_EXPORTS int sfp_resume_transfer(int call_id){
 		return FALSE;
 	}
 
-	if((holdOff = phHoldOff(call_id, "application/sfp")) == TRUE){
-		session->state = SFP_SESSION_RESUMED;		
-		return TRUE;
+	if(phHoldOff(call_id, "application/sfp") == TRUE){
+		session->updateState(session, SFP_ACTION_RESUME);
+		if(session->isRunning(session)) {
+			if(sfp_cbks != NULL && sfp_cbks->transferResumed) sfp_cbks->transferResumed(call_id, session->remote_username, session->short_filename, session->file_type, session->file_size);
+			return TRUE;
+		}
 	}
 
 	return FALSE;
@@ -451,8 +470,38 @@ SFP_PLUGIN_EXPORTS int sfp_resume_transfer(int call_id){
 * @return	a new allocated session info
 */
 static sfp_session_info_t * create_sfp_session_info(){
-	sfp_session_info_t * session = (sfp_session_info_t *)malloc(sizeof(sfp_session_info_t));
+	phProxy_t proxy_info;
+	sfp_session_info_t * session = NULL;
+
+	if( (session = (sfp_session_info_t *)malloc(sizeof(sfp_session_info_t))) == NULL) {
+		m_log_error("Could not allocate memory for the sfp_session_info_t!", "create_sfp_session_info");
+		return NULL;
+	}
+
 	memset(session, 0, sizeof(sfp_session_info_t));
+
+	session->_state = SFP_SESSION_INITIATED;
+	session->progressionCallback = &sfp_progressionCallback;
+	session->sendBye = &phBye;
+	
+	session->local_socket = -1;
+	
+	getProxyInfo(&proxy_info);
+	strncpy(session->http_proxy, proxy_info.http_proxy, sizeof(proxy_info.http_proxy));
+	session->http_proxy_port = proxy_info.http_proxy_port;
+	strncpy(session->http_proxy_user, proxy_info.http_proxy_user, sizeof(proxy_info.http_proxy_user));
+	strncpy(session->http_proxy_passwd, proxy_info.http_proxy_passwd, sizeof(proxy_info.http_proxy_passwd));
+
+	session->updateState = &sfp_session_updateState;
+	session->isInitiated = &sfp_session_isInitiated;
+	session->isRunning = &sfp_session_isRunning;
+	session->isCancelled = &sfp_session_isCancelled;
+	session->isCancelledByPeer = &sfp_session_isCancelledByPeer;
+	session->isPaused = &sfp_session_isPaused;
+	session->isPausedByPeer = &sfp_session_isPausedByPeer;
+	session->isComplete = &sfp_session_isComplete;
+	session->isFinished = &sfp_session_isFinished;
+	session->hasFailed = &sfp_session_hasFailed;
 
 	return session;
 }
@@ -648,8 +697,6 @@ static sfp_session_info_t * sfp_make_session(int vlid){
 	sfp_add_property(&(session->local_mode), SFP_MODE_ACTIVE); // mode defaults to active
 	sfp_add_property(&(session->ip_protocol), sfp_get_default_ip_protocol());
 	sfp_add_property(&(session->packet_size), sfp_get_default_packet_size());
-	session->state = SFP_SESSION_INITIATED;
-	session->progressionCallback = &sfp_progressionCallback;
 
 	return session;
 }
@@ -721,6 +768,8 @@ static sfp_session_info_t * sfp_make_session_info_from_body_info(int call_id, sf
 	}else if( (call_id <= 0) || (call_id > 0 && (session = sfp_get_session_info(call_id)) == NULL) ){
 		// else create one
 		session = create_sfp_session_info();
+		
+		session->local_socket = -1;
 	}
 	// then if we have a session, fill it
 	if(session != NULL && in_or_out == SFP_INCOMING_INFO){ // we are the receiver of the SFP message
@@ -993,64 +1042,36 @@ static unsigned int sfp_can_do_udp(){
 * @param	[in][out]	session : the session info
 * @param	[in]	code : the return code of the thread (TRUE or FALSE for the moment)
 */
-static void sfp_receive_terminaison(sfp_session_info_t * session, sfp_returncode_t code){
+static void sfp_receive_terminaison(sfp_session_info_t * session, sfp_returncode_t code) {
 	int call_id = -1;
 
-	if(session != NULL){
+	if(session != NULL) {
 		call_id = session->call_id;
-	}else{
+	} else {
 		m_log_error("No given session","sfp_receive_terminaison");
-		// TODO notify GUI
 		return;
 	}
 
-	if(code != SUCCESS){
-		if(session->state == SFP_SESSION_CANCELLED){
-			// notify GUI
+	if(code != SUCCESS) {
+		if(sfp_cbks != NULL && sfp_cbks->transferFromPeerFailed) sfp_cbks->transferFromPeerFailed(call_id, session->remote_username, session->short_filename, session->file_type, session->file_size);
+		// MAYBE send a BYE?
+		remove(session->filename);
+	} else if(code == SUCCESS) {
+		if(session->isCancelled(session)) {
 			if(sfp_cbks != NULL && sfp_cbks->transferCancelled) sfp_cbks->transferCancelled(call_id, session->short_filename, session->file_type, session->file_size);
-
 			remove(session->filename);
-		}else if(session->state == SFP_SESSION_CLOSED_BY_PEER){			
-			// notify GUI
-			if(sfp_cbks != NULL && sfp_cbks->transferClosedByPeer) sfp_cbks->transferClosedByPeer(call_id, session->remote_username, session->short_filename, session->file_type, session->file_size);
-			
-			remove(session->filename);
-		}else if(session->state == SFP_SESSION_RECEIVED_INCOMPLETE){			
-			// notify GUI
-			if(sfp_cbks != NULL && sfp_cbks->transferFromPeerStopped) sfp_cbks->transferFromPeerStopped(call_id, session->remote_username, session->short_filename, session->file_type, session->file_size);
-
-			remove(session->filename);
-		}else{ // local errors
-			// transfer failed
-			if(sfp_cbks != NULL && sfp_cbks->transferFromPeerFailed) sfp_cbks->transferFromPeerFailed(call_id, session->remote_username, session->short_filename, session->file_type, session->file_size);
-
-			remove(session->filename);
-			// send a BYE
-			phBye(call_id);
-		}		
-	}else if(code == SUCCESS){
-		if(session->state == SFP_SESSION_RECEIVED_COMPLETE){
-			// notify GUI of the end of the receive
-			if(sfp_cbks != NULL && sfp_cbks->transferFromPeerFinished) sfp_cbks->transferFromPeerFinished(call_id, session->remote_username, session->short_filename, session->file_type, session->file_size);
-
-			session->state = SFP_SESSION_FINISHED;
-
-			// close the call
-			phBye(call_id);
-		}else if(session->state == SFP_SESSION_CANCELLED){
-			// notify GUI
-			if(sfp_cbks != NULL && sfp_cbks->transferCancelled) sfp_cbks->transferCancelled(call_id, session->short_filename, session->file_type, session->file_size);
-
-			remove(session->filename);
-		}else if(session->state == SFP_SESSION_CANCELLED_BY_PEER){			
-			// notify GUI
+		} else if(session->isCancelledByPeer(session)) {
 			if(sfp_cbks != NULL && sfp_cbks->transferCancelledByPeer) sfp_cbks->transferCancelledByPeer(call_id, session->remote_username, session->short_filename, session->file_type, session->file_size);
-
+			remove(session->filename);
+		} else if(session->isFinished(session)) {
+			if(sfp_cbks != NULL && sfp_cbks->transferFromPeerFinished) sfp_cbks->transferFromPeerFinished(call_id, session->remote_username, session->short_filename, session->file_type, session->file_size);
+		} else {
+			if(sfp_cbks != NULL && sfp_cbks->transferFromPeerFailed) sfp_cbks->transferFromPeerFailed(call_id, session->remote_username, session->short_filename, session->file_type, session->file_size);
+			// MAYBE send a BYE?
 			remove(session->filename);
 		}
 	}
 
-	// free the session
 	sfp_remove_session_info(session->call_id);
 }
 
@@ -1068,49 +1089,27 @@ static void sfp_send_terminaison(sfp_session_info_t * session, sfp_returncode_t 
 		call_id = session->call_id;
 	}else{
 		m_log_error("No given session","sfp_send_terminaison");
-		// TODO notify GUI
 		return;
 	}
 
-	if(code != SUCCESS){
-		if(session->state == SFP_SESSION_CANCELLED){			
-			// notify GUI
+	if(code != SUCCESS) {
+		if(sfp_cbks != NULL && sfp_cbks->transferFromPeerFailed) sfp_cbks->transferFromPeerFailed(call_id, session->remote_username, session->short_filename, session->file_type, session->file_size);
+		phBye(call_id);
+	} else if(code == SUCCESS) {
+		if(session->isCancelled(session)) {
 			if(sfp_cbks != NULL && sfp_cbks->transferCancelled) sfp_cbks->transferCancelled(call_id, session->short_filename, session->file_type, session->file_size);
-
-		}else if(session->state == SFP_SESSION_CLOSED_BY_PEER){ // received a BYE while still sending
-			// notify GUI
-			if(sfp_cbks != NULL && sfp_cbks->transferClosedByPeer) sfp_cbks->transferClosedByPeer(call_id, session->remote_username, session->short_filename, session->file_type, session->file_size);
-
-			// free the session
-			sfp_remove_session_info(session->call_id);
-		}else if(session->state == SFP_SESSION_SENT_INCOMPLETE){			
-			// notify GUI
-			if(sfp_cbks != NULL && sfp_cbks->transferToPeerStopped) sfp_cbks->transferToPeerStopped(call_id, session->remote_username, session->short_filename, session->file_type, session->file_size);
-
-		}else{ // local errors
-			// transfer failed
-			if(sfp_cbks != NULL && sfp_cbks->transferToPeerFailed) sfp_cbks->transferToPeerFailed(call_id, session->remote_username, session->short_filename, session->file_type, session->file_size);
-
-			// send a BYE
-			phBye(call_id);
-		}
-	}else if(code == SUCCESS){
-		if(session->state == SFP_SESSION_SENT_COMPLETE){
-			// notify GUI of the end of the send
-			if(sfp_cbks != NULL && sfp_cbks->transferToPeerFinished) sfp_cbks->transferToPeerFinished(call_id, session->remote_username, session->short_filename, session->file_type, session->file_size);
-
-			session->state = SFP_SESSION_FINISHED;
-		}else if(session->state == SFP_SESSION_CANCELLED){			
-			// notify GUI
-			if(sfp_cbks != NULL && sfp_cbks->transferCancelled) sfp_cbks->transferCancelled(call_id, session->short_filename, session->file_type, session->file_size);
-
-		}else if(session->state == SFP_SESSION_CANCELLED_BY_PEER){			
-			// notify GUI
+		} else if(session->isCancelledByPeer(session)) {
 			if(sfp_cbks != NULL && sfp_cbks->transferCancelledByPeer) sfp_cbks->transferCancelledByPeer(call_id, session->remote_username, session->short_filename, session->file_type, session->file_size);
+		} else if(session->isFinished(session)) {
+			if(sfp_cbks != NULL && sfp_cbks->transferFromPeerFinished) sfp_cbks->transferFromPeerFinished(call_id, session->remote_username, session->short_filename, session->file_type, session->file_size);
+		} else {
+			if(sfp_cbks != NULL && sfp_cbks->transferToPeerFailed) sfp_cbks->transferToPeerFailed(call_id, session->remote_username, session->short_filename, session->file_type, session->file_size);
+			phBye(call_id);
 		}
 	}
 
-	// do not free the session here, but at the receive of a BYE from the receiver
+	// suppress the session
+	sfp_remove_session_info(call_id);
 }
 /**
 * Callback that get called by the transfer thread to notify top level program of the progression of the transfer
@@ -1165,7 +1164,7 @@ static void sfp_on_EXOSIP_CALL_NEW(eXosip_event_t * event){
 	session->call_id = event->cid;
 
 	// set the local usable port
-	if(sfp_transfer_get_free_port(session) != SUCCESS){
+	if(!strfilled(session->http_proxy) && sfp_transfer_get_free_port(session) != SUCCESS){
 		m_log_error("Could not find a free port","sfp_on_EXOSIP_CALL_NEW");
 		// free the received infos
 		sfp_free_sfp_info(&received_info);
@@ -1213,10 +1212,10 @@ static void sfp_on_EXOSIP_CALL_ANSWERED(eXosip_event_t * event){
 		m_log_error("Could not retrieve session","sfp_on_EXOSIP_CALL_ANSWERED");
 		// free the received info
 		sfp_free_sfp_info(&received_info);
-		return; // TODO notify GUI
+		return;
 	}
 
-	if(session->state != SFP_SESSION_PAUSED && session->state != SFP_SESSION_RESUMED){
+	if(session->isInitiated(session)){ // INVITE has been sent, waiting for a 200 OK to start the transfer
 		if(event == NULL){
 			m_log_error("Received (null) event","sfp_on_EXOSIP_CALL_ANSWERED");
 			return; // TODO notify GUI
@@ -1257,17 +1256,14 @@ static void sfp_on_EXOSIP_CALL_ANSWERED(eXosip_event_t * event){
 			// TODO free le thread
 			m_log_error("Could not create send thread", "sfp_on_EXOSIP_CALL_ANSWERED");
 			phCancel(event->cid);
-			// TODO notify GUI
+			
+			if(sfp_cbks != NULL && sfp_cbks->transferToPeerFailed) sfp_cbks->transferToPeerFailed(event->cid, session->remote_username, session->short_filename, session->file_type, session->file_size);
+			sfp_remove_session_info(event->cid);
+
 			return;
 		}else{
-			// notify GUI of the begining of the send
 			if(sfp_cbks != NULL && sfp_cbks->sendingFileBegin) sfp_cbks->sendingFileBegin(event->cid, session->remote_username, session->short_filename, session->file_type, session->file_size);	
 		}
-	}
-
-	if(session->state == SFP_SESSION_RESUMED){
-		session->state = SFP_SESSION_RUNNING;
-		if(sfp_cbks != NULL && sfp_cbks->transferResumed) sfp_cbks->transferResumed(event->cid, session->remote_username, session->short_filename, session->file_type, session->file_size);
 	}
 }
 
@@ -1285,7 +1281,7 @@ static void sfp_on_EXOSIP_CALL_PROCEEDING(eXosip_event_t * event){ // TRYING rec
 		return; // TODO notify GUI
 	}
 
-	if(session->state != SFP_SESSION_PAUSED){
+	if(session->isInitiated(session)){
 		phProceeding(event->cid, event->status_code);
 		if(sfp_cbks != NULL && sfp_cbks->waitingForAnswer) sfp_cbks->waitingForAnswer(event->cid, event->remote_uri);
 	}
@@ -1305,7 +1301,7 @@ static void sfp_on_EXOSIP_CALL_RINGING(eXosip_event_t * event){ // destination f
 		return; // TODO notify GUI
 	}
 
-	if(session->state != SFP_SESSION_PAUSED){
+	if(session->isInitiated(session)){
 		phRinging(event->cid);
 		if(sfp_cbks != NULL && sfp_cbks->waitingForAnswer) sfp_cbks->waitingForAnswer(event->cid, event->remote_uri);
 
@@ -1399,19 +1395,23 @@ static void sfp_on_EXOSIP_CALL_CLOSED(eXosip_event_t * event){ // BYE received
 		return; // TODO notify GUI
 	}
 
-	if(session->state == SFP_SESSION_INITIATED){
-		if(sfp_cbks != NULL && sfp_cbks->transferCancelledByPeer) sfp_cbks->transferCancelledByPeer(event->cid, session->remote_username, session->short_filename, session->file_type, session->file_size);
-		sfp_remove_session_info(event->cid);
-	}else if(session->state != SFP_SESSION_FINISHED){
-		session->state = SFP_SESSION_CANCELLED_BY_PEER;
-	}else{
-		session->state = SFP_SESSION_CLOSED_BY_PEER;
-		if(sfp_cbks != NULL && sfp_cbks->transferClosedByPeer) sfp_cbks->transferClosedByPeer(event->cid, session->remote_username, session->short_filename, session->file_type, session->file_size);
-		// suppress the session
-		sfp_remove_session_info(event->cid);
-	}
+	if(session->isInitiated(session)) {
+		session->updateState(session, SFP_ACTION_BYE_OR_CANCEL_RECEIVED);
+		if(session->isCancelledByPeer(session)) {
+			if(sfp_cbks != NULL && sfp_cbks->transferCancelledByPeer) sfp_cbks->transferCancelledByPeer(event->cid, session->remote_username, session->short_filename, session->file_type, session->file_size);
+			sfp_remove_session_info(event->cid);
+			phEndCall(event->cid, event->status_code);
+		}
 
-	phEndCall(event->cid, event->status_code);
+	} else if(session->isRunning(session)) {
+		session->updateState(session, SFP_ACTION_BYE_OR_CANCEL_RECEIVED);
+		if(session->isCancelledByPeer(session)) {
+			if(sfp_cbks != NULL && sfp_cbks->transferCancelledByPeer) sfp_cbks->transferCancelledByPeer(event->cid, session->remote_username, session->short_filename, session->file_type, session->file_size);
+			phEndCall(event->cid, event->status_code);
+		}
+	} else {
+		session->updateState(session, SFP_ACTION_BYE_OR_CANCEL_RECEIVED);
+	}
 }
 
 
@@ -1424,9 +1424,10 @@ static void sfp_on_EXOSIP_CALL_HOLD(eXosip_event_t * event){
 		return; // TODO notify GUI
 	}
 
-	session->state = SFP_SESSION_PAUSED;
-
-	if(sfp_cbks != NULL && sfp_cbks->transferPausedByPeer) sfp_cbks->transferPausedByPeer(event->cid, session->remote_username, session->short_filename, session->file_type, session->file_size);
+	session->updateState(session, SFP_ACTION_HOLDON_RECEIVED);
+	if(session->isPausedByPeer(session)) {
+		if(sfp_cbks != NULL && sfp_cbks->transferPausedByPeer) sfp_cbks->transferPausedByPeer(event->cid, session->remote_username, session->short_filename, session->file_type, session->file_size);
+	}
 }
 
 
@@ -1439,7 +1440,198 @@ static void sfp_on_EXOSIP_CALL_OFFHOLD(eXosip_event_t * event){
 		return; // TODO notify GUI
 	}
 
-	session->state = SFP_SESSION_RUNNING;
+	session->updateState(session, SFP_ACTION_HOLDOFF_RECEIVED);
+	if(session->isRunning(session)) {
+		if(sfp_cbks != NULL && sfp_cbks->transferResumedByPeer) sfp_cbks->transferResumedByPeer(event->cid, session->remote_username, session->short_filename, session->file_type, session->file_size);
+	}
 
-	if(sfp_cbks != NULL && sfp_cbks->transferResumedByPeer) sfp_cbks->transferResumedByPeer(event->cid, session->remote_username, session->short_filename, session->file_type, session->file_size);
 }
+
+
+/* ----- FUNCTIONS TO MANIPULATE A SFP_SESSION_INFO_T ----- */
+
+static void sfp_session_updateState(sfp_session_info_t * session, sfp_action_t action) {
+	switch(action) {
+		case SFP_ACTION_START :
+			switch(session->_state) {
+				case SFP_SESSION_INITIATED :
+					session->_state = SFP_SESSION_RUNNING;
+					break;
+				default :
+					break;
+			}
+			break;
+
+		case SFP_ACTION_CANCEL :
+			switch(session->_state) {
+				case SFP_SESSION_INITIATED :
+					session->_state = SFP_SESSION_CANCELLED;
+					break;
+				case SFP_SESSION_RUNNING :
+					session->_state = SFP_SESSION_CANCELLED;
+					break;
+				default :
+					break;
+			}
+			break;
+
+		case SFP_ACTION_BYE_OR_CANCEL_RECEIVED :
+			switch(session->_state) {
+				case SFP_SESSION_INITIATED :
+					session->_state = SFP_SESSION_CANCELLED_BY_PEER;
+					break;
+				case SFP_SESSION_RUNNING :
+					session->_state = SFP_SESSION_CANCELLED_BY_PEER;
+					break;
+				case SFP_SESSION_COMPLETE :
+					session->_state = SFP_SESSION_FINISHED;
+					break;
+				case SFP_SESSION_PAUSED :
+					session->_state = SFP_SESSION_CANCELLED_BY_PEER;
+					break;
+				case SFP_SESSION_PAUSED_BY_PEER :
+					session->_state = SFP_SESSION_CANCELLED_BY_PEER;
+					break;
+				default :
+					session->_state = SFP_SESSION_FAILED;
+					break;
+			}
+			break;
+
+		case SFP_ACTION_PAUSE :
+			switch(session->_state) {
+				case SFP_SESSION_RUNNING :
+					session->_state = SFP_SESSION_PAUSED;
+					break;
+				default :
+					break;
+			}
+			break;
+
+		case SFP_ACTION_HOLDON_RECEIVED :
+			switch(session->_state) {
+				case SFP_SESSION_RUNNING :
+					session->_state = SFP_SESSION_PAUSED_BY_PEER;
+					break;
+				default :
+					break;
+			}
+			break;
+
+		case SFP_ACTION_RESUME :
+			switch(session->_state) {
+				case SFP_SESSION_PAUSED :
+					session->_state = SFP_SESSION_RUNNING;
+					break;
+				default :
+					break;
+			}
+			break;
+
+		case SFP_ACTION_HOLDOFF_RECEIVED :
+			switch(session->_state) {
+				case SFP_SESSION_PAUSED_BY_PEER :
+					session->_state = SFP_SESSION_RUNNING;
+					break;
+				default :
+					break;
+			}
+			break;
+
+		case SFP_ACTION_SOCKET_CLOSED :
+			switch(session->_state) {
+				case SFP_SESSION_COMPLETE :
+					session->_state = SFP_SESSION_FINISHED;
+					break;
+				case SFP_SESSION_RUNNING :
+					session->_state = SFP_SESSION_FAILED;
+					break;
+				case SFP_SESSION_PAUSED :
+					session->_state = SFP_SESSION_FAILED;
+					break;
+				case SFP_SESSION_PAUSED_BY_PEER :
+					session->_state = SFP_SESSION_FAILED;
+					break;
+				default :
+					break;
+			}
+			break;
+
+		case SFP_ACTION_TRANSFER_COMPLETED :
+			switch(session->_state) {
+				case SFP_SESSION_RUNNING :
+					session->_state = SFP_SESSION_COMPLETE;
+					break;
+				default :
+					break;
+			}
+			break;
+
+		default :
+			break;
+	}
+}
+
+static unsigned int sfp_session_isInitiated(sfp_session_info_t * session) {
+	if(session->_state == SFP_SESSION_INITIATED) {
+		return TRUE;
+	}
+	return FALSE;
+}
+
+static unsigned int sfp_session_isRunning(sfp_session_info_t * session) {
+	if(session->_state == SFP_SESSION_RUNNING) {
+		return TRUE;
+	}
+	return FALSE;
+}
+
+static unsigned int sfp_session_isCancelled(sfp_session_info_t * session) {
+	if(session->_state == SFP_SESSION_CANCELLED) {
+		return TRUE;
+	}
+	return FALSE;
+}
+
+static unsigned int sfp_session_isCancelledByPeer(sfp_session_info_t * session) {
+	if(session->_state == SFP_SESSION_CANCELLED_BY_PEER) {
+		return TRUE;
+	}
+	return FALSE;
+}
+
+static unsigned int sfp_session_isPaused(sfp_session_info_t * session) {
+	if(session->_state == SFP_SESSION_PAUSED) {
+		return TRUE;
+	}
+	return FALSE;
+}
+
+static unsigned int sfp_session_isPausedByPeer(sfp_session_info_t * session) {
+	if(session->_state == SFP_SESSION_PAUSED_BY_PEER) {
+		return TRUE;
+	}
+	return FALSE;
+}
+
+static unsigned int sfp_session_isComplete(sfp_session_info_t * session) {
+	if(session->_state == SFP_SESSION_COMPLETE) {
+		return TRUE;
+	}
+	return FALSE;
+}
+
+static unsigned int sfp_session_isFinished(sfp_session_info_t * session) {
+	if(session->_state == SFP_SESSION_FINISHED) {
+		return TRUE;
+	}
+	return FALSE;
+}
+
+static unsigned int sfp_session_hasFailed(sfp_session_info_t * session) {
+	if(session->_state == SFP_SESSION_FAILED) {
+		return TRUE;
+	}
+	return FALSE;
+}
+/* ----- */

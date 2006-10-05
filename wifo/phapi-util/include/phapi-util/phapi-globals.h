@@ -1,6 +1,7 @@
 #ifndef __PHAPI_GLOBALS_H__
 #define __PHAPI_GLOBALS_H__
 
+
 #ifndef WIN32
 
 #define SOCKET	int

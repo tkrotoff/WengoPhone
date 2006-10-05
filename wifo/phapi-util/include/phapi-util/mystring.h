@@ -25,6 +25,7 @@
 #ifdef WIN32
 
 #define	strcasecmp	stricmp
+#define	strncasecmp	strnicmp
 #define	strdup		_strdup
 
 #endif /* WIN32 */

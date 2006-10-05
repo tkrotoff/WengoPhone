@@ -19,6 +19,7 @@ if WengoCCMSVC():
 	include_path += ['include/phapi-util/msvc']
 	sources += [
 		'src/msvc/pthread.c',
+		'src/msvc/unistd.c',
 	]
 	defines = {
 		'WIN32' : 1,

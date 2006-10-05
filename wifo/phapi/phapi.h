@@ -1043,6 +1043,24 @@ MY_DLLEXPORT int phHoldOn(int call_id, const char * bodytype);
 
 MY_DLLEXPORT int phHoldOff(int call_id, const char * bodytype);
 
+/**
+ * Structure used to store proxy information used in PhApi
+ */
+struct phProxy {
+	char http_proxy[128];
+	int  http_proxy_port;
+	char http_proxy_user[128];
+	char http_proxy_passwd[128];
+};
+typedef struct phProxy phProxy_t;
+
+/**
+ * Retrieves the proxy information used in PhApi configuration
+ *
+ * @param	[out]	proxy_info : the structure to store the proxy information
+ */
+MY_DLLEXPORT void getProxyInfo(phProxy_t * proxy_info);
+
 // </ncouturier>
 
 /********************CONFIG*********************/

@@ -5421,5 +5421,14 @@ MY_DLLEXPORT int phHoldOff(int call_id, const char * bodytype){
 	return FALSE;
 }
 
+MY_DLLEXPORT void getProxyInfo(phProxy_t * proxy_info) {
+	if(proxy_info != NULL) {
+		strncpy(proxy_info->http_proxy, phcfg.http_proxy, sizeof(proxy_info->http_proxy));
+		proxy_info->http_proxy_port = phcfg.http_proxy_port;
+		strncpy(proxy_info->http_proxy_user, phcfg.http_proxy_user, sizeof(proxy_info->http_proxy_user));
+		strncpy(proxy_info->http_proxy_passwd, phcfg.http_proxy_passwd, sizeof(proxy_info->http_proxy_passwd));
+	}
+}
+
 // -----
 // </ncouturier>

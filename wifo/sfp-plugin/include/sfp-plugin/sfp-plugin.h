@@ -53,15 +53,32 @@ extern "C" {
 		SFP_SESSION_RUNNING,
 		SFP_SESSION_CANCELLED,
 		SFP_SESSION_CANCELLED_BY_PEER,
+		SFP_SESSION_COMPLETE,
+		SFP_SESSION_FINISHED,
 		SFP_SESSION_PAUSED,
+		SFP_SESSION_PAUSED_BY_PEER,
+		SFP_SESSION_FAILED,
+
 		SFP_SESSION_RESUMED,
 		SFP_SESSION_RECEIVED_COMPLETE,
 		SFP_SESSION_RECEIVED_INCOMPLETE,
 		SFP_SESSION_SENT_INCOMPLETE,
 		SFP_SESSION_SENT_COMPLETE,
 		SFP_SESSION_CLOSED_BY_PEER,
-		SFP_SESSION_FINISHED
+		
 	} sfp_session_state_t;
+
+	typedef enum sfp_action {
+		SFP_ACTION_START,
+		SFP_ACTION_CANCEL,
+		SFP_ACTION_BYE_OR_CANCEL_RECEIVED,
+		SFP_ACTION_PAUSE,
+		SFP_ACTION_HOLDON_RECEIVED,
+		SFP_ACTION_RESUME,
+		SFP_ACTION_HOLDOFF_RECEIVED,
+		SFP_ACTION_SOCKET_CLOSED,
+		SFP_ACTION_TRANSFER_COMPLETED
+	} sfp_action_t;
 
 	typedef struct sfp_session_info_s sfp_session_info_t;
 
@@ -91,13 +108,33 @@ extern "C" {
 		// TODO uri?
 		struct sockaddr_in local_address;
 		SOCKET local_socket;
-		sfp_session_state_t state;
 		int call_id;
 		void (*terminaisonCallback)(sfp_session_info_t * session, sfp_returncode_t code);
 		void (*progressionCallback)(sfp_session_info_t * session, int percentage);
+		void (*sendBye)(int call_id);
+
+		sfp_session_state_t _state;
+		/* ----- functions to manipulate the states */
+		void (*updateState)(sfp_session_info_t * session, sfp_action_t action);
+		unsigned int (*isInitiated)(sfp_session_info_t * session);
+		unsigned int (*isRunning)(sfp_session_info_t * session);
+		unsigned int (*isCancelled)(sfp_session_info_t * session);
+		unsigned int (*isCancelledByPeer)(sfp_session_info_t * session);
+		unsigned int (*isPaused)(sfp_session_info_t * session);
+		unsigned int (*isPausedByPeer)(sfp_session_info_t * session);
+		unsigned int (*isComplete)(sfp_session_info_t * session);
+		unsigned int (*isFinished)(sfp_session_info_t * session);
+		unsigned int (*hasFailed)(sfp_session_info_t * session);
+		/* ----- */
 
 		/* JULIEN */
 		char * connection_id;
+		
+		/* Proxy infos */
+		char http_proxy[128];
+		int  http_proxy_port;
+		char http_proxy_user[128];
+		char http_proxy_passwd[128];
 	};
 
 	/**

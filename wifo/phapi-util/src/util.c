@@ -195,7 +195,7 @@ PHAPI_UTIL_EXPORTS unsigned int sscanf2(const char * buffer, char * format, ...)
 						inter_text_length = (int)strlen(buf_text);
 					}
 					// copies the found string into a given parameter
-					if(inter_text_length > 0){
+					if(inter_text_length >= 0){
 						s_arg = va_arg(ap, char *);
 						s_arg_size = va_arg(ap, int);
 						//
@@ -304,7 +304,7 @@ PHAPI_UTIL_EXPORTS unsigned int sscanf3(char ** text, char * format, ...){
 						inter_text_length = (int)strlen(buf_text);
 					}
 					// copies the found string into a given parameter
-					if(inter_text_length > 0){
+					if(inter_text_length >= 0){
 						s_arg = va_arg(ap, char *);
 						s_arg_size = va_arg(ap, int);
 						//

@@ -1,21 +1,21 @@
 /*
- * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- */
+* WengoPhone, a voice over Internet phone
+* Copyright (C) 2004-2005  Wengo
+*
+* This program is free software; you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation; either version 2 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program; if not, write to the Free Software
+* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+*/
 
 /*
 * TODO
@@ -35,10 +35,12 @@
 #include <phapi-util/phapi-globals.h>
 #include <phapi-util/mystring.h>
 
+#include <curl/curl.h>
 
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <fcntl.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <math.h>
@@ -67,20 +69,29 @@
 #define WAIT_FOR_BYE_DELAY						5000 // microseconds
 
 
+struct sfp_connection {
+	SOCKET sckt;
+	CURL * curl_data;
+};
+typedef struct sfp_connection sfp_connection_t;
+
+
 // ----- PRIVATE FUNCTION DECLARATION -----
 static sfp_returncode_t sfp_transfer_send_file2(char * filename, unsigned int ip_protocol, unsigned int mode, const char * ip, unsigned short port, sfp_session_info_t * session);
 static sfp_returncode_t sfp_transfer_receive_file2(char * filename, unsigned int ip_protocol, unsigned int mode, const char * ip, unsigned short port, sfp_session_info_t * session);
 static sfp_returncode_t sfp_transfer_send_switch(FILE * stream, unsigned int ip_protocol, unsigned int mode, const char * ip, unsigned short port, sfp_session_info_t * session);
 static sfp_returncode_t sfp_transfer_receive_switch(FILE * stream, unsigned int ip_protocol, unsigned int mode, const char * ip, unsigned short port, sfp_session_info_t * session);
 static sfp_returncode_t init_connection(struct sockaddr_in * address, SOCKET * sckt, unsigned int ip_protocol, const char * ip, unsigned short port);
-static void finalize_connection(SOCKET sckt);
-static sfp_returncode_t sfp_transfer_send_active(FILE * stream, SOCKET sckt, struct sockaddr_in address, sfp_session_info_t * session);
+static void finalize_connection(sfp_connection_t * connection);
+static sfp_returncode_t sfp_transfer_send_active(FILE * stream, SOCKET sckt, sfp_session_info_t * session);
 static sfp_returncode_t sfp_transfer_send_passive(FILE * stream, SOCKET sckt, struct sockaddr_in address, sfp_session_info_t * session);
-static sfp_returncode_t sfp_transfer_receive_active(FILE * stream, SOCKET sckt, struct sockaddr_in address, sfp_session_info_t * session);
+static sfp_returncode_t sfp_transfer_receive_active(FILE * stream, SOCKET sckt, sfp_session_info_t * session);
 static sfp_returncode_t sfp_transfer_receive_passive(FILE * stream, SOCKET sckt, struct sockaddr_in address, sfp_session_info_t * session);
-static unsigned int send_udp(FILE * stream, SOCKET sckt, struct sockaddr_in address);
-static unsigned int receive_udp(FILE * stream, SOCKET sckt, struct sockaddr_in address);
 static void notify_progress(sfp_session_info_t * session, unsigned long actual, unsigned long final, unsigned int * increase);
+static sfp_returncode_t sfp_connect(sfp_connection_t * connection, struct sockaddr_in * address, sfp_session_info_t * session, int * http_code);
+static int sfp_get_http_req(int fd, char *buff, int size);
+static int sfp_get_sid_from_http_req(char *query, int size, char * buff, int size_of_buff);
+static void sfp_get_proxy_auth_type(sfp_session_info_t * session, long * type);
 // -----
 
 // ----- PRIVATE FUNCTION DEFINITION -----
@@ -102,8 +113,7 @@ unsigned int sfp_transfer_send_file(sfp_session_info_t * session){
 		return FAILURE;
 	}
 
-	// mark the session as running
-	session->state = SFP_SESSION_RUNNING;
+	session->updateState(session, SFP_ACTION_START);
 
 	if(session->local_mode != NULL && strequals(session->local_mode, SFP_MODE_ACTIVE)){
 		mode = SFP_TRANSFER_ACTIVE;
@@ -160,7 +170,7 @@ unsigned int sfp_transfer_receive_file(sfp_session_info_t * session){
 	}
 
 	// mark the session as running
-	session->state = SFP_SESSION_RUNNING;
+	session->updateState(session, SFP_ACTION_START);
 
 	if(session->local_mode != NULL && strequals(session->local_mode, SFP_MODE_ACTIVE)){
 		mode = SFP_TRANSFER_ACTIVE;
@@ -288,28 +298,33 @@ static sfp_returncode_t sfp_transfer_receive_file2(char * filename, unsigned int
 */
 static sfp_returncode_t sfp_transfer_send_switch(FILE * stream, unsigned int ip_protocol, unsigned int mode, const char * ip, unsigned short port, sfp_session_info_t * session){
 	struct sockaddr_in address;
-	SOCKET sckt = 0;
+	sfp_connection_t connection;
 	sfp_returncode_t success = SUCCESS;
-	
+	int http_code;
+
+	connection.sckt = -1;
+	connection.curl_data = NULL;
+
 	if(ip_protocol == SOCK_STREAM){ // TCP
 		if(mode == SFP_TRANSFER_ACTIVE){
-			if(init_connection(&address, &sckt, ip_protocol, ip, port) == SUCCESS){
-				success = sfp_transfer_send_active(stream, sckt, address, session);
-				finalize_connection(sckt);
-			}else{
+			if(session->local_socket >= 0){
+				close(session->local_socket);
+			}
+			if(!strfilled(session->http_proxy)) {
+				if(init_connection(&address, &(connection.sckt), ip_protocol, ip, port) != SUCCESS) {
+					finalize_connection(&connection);
+					return NETWORK_INITIALIZATION_FAILED;
+				}
+			}
+			if(sfp_connect(&connection, &address, session, &http_code) != SUCCESS) {
+				finalize_connection(&connection);
 				return NETWORK_INITIALIZATION_FAILED;
 			}
+			success = sfp_transfer_send_active(stream, connection.sckt, session);
 		}else if(mode == SFP_TRANSFER_PASSIVE){
 			success = sfp_transfer_send_passive(stream, session->local_socket, session->local_address, session);
-			finalize_connection(session->local_socket);
 		}
-	}else if(ip_protocol == SOCK_DGRAM){ // UDP
-		if(init_connection(&address, &sckt, ip_protocol, ip, port) == SUCCESS){
-			success = send_udp(stream, sckt, address);
-			finalize_connection(sckt);
-		}else{
-			return NETWORK_INITIALIZATION_FAILED;
-		}
+		finalize_connection(&connection);
 	}
 
 	return success; // TODO
@@ -328,28 +343,33 @@ static sfp_returncode_t sfp_transfer_send_switch(FILE * stream, unsigned int ip_
 */
 static sfp_returncode_t sfp_transfer_receive_switch(FILE * stream, unsigned int ip_protocol, unsigned int mode, const char * ip, unsigned short port, sfp_session_info_t * session){
 	struct sockaddr_in address;
-	SOCKET sckt = 0;
+	sfp_connection_t connection;
 	sfp_returncode_t success = SUCCESS;
-	
+	int http_code;
+
+	connection.sckt = -1;
+	connection.curl_data = NULL;
+
 	if(ip_protocol == SOCK_STREAM){ // TCP
 		if(mode == SFP_TRANSFER_ACTIVE){
-			if(init_connection(&address, &sckt, ip_protocol, ip, port) == SUCCESS){
-				success = sfp_transfer_receive_active(stream, sckt, address, session);
-				finalize_connection(sckt);
-			}else{
+			if(session->local_socket >= 0){
+				close(session->local_socket);
+			}
+			if(!strfilled(session->http_proxy)) {
+				if(init_connection(&address, &(connection.sckt), ip_protocol, ip, port) != SUCCESS) {
+					finalize_connection(&connection);
+					return NETWORK_INITIALIZATION_FAILED;
+				}
+			}
+			if(sfp_connect(&connection, &address, session, &http_code) != SUCCESS){
+				finalize_connection(&connection);
 				return NETWORK_INITIALIZATION_FAILED;
 			}
+			success = sfp_transfer_receive_active(stream, connection.sckt, session);			
 		}else if(mode == SFP_TRANSFER_PASSIVE){
 			success = sfp_transfer_receive_passive(stream, session->local_socket, session->local_address, session);
-			finalize_connection(session->local_socket);
 		}
-	}else if(ip_protocol == SOCK_DGRAM){ // UDP
-		if(init_connection(&address, &sckt, ip_protocol, ip, port) == SUCCESS){
-			success = receive_udp(stream, sckt, address);
-			finalize_connection(sckt);
-		}else{
-			return NETWORK_INITIALIZATION_FAILED;
-		}
+		finalize_connection(&connection);
 	}
 
 	return success; // TODO
@@ -392,13 +412,9 @@ int sfp_transfer_send_connect_id(SOCKET sckt, char * connect_id, int size)
 * @param	[in][out]	session : a session info
 * @return	TRUE if the sending succeeded; FALSE else
 */
-static sfp_returncode_t sfp_transfer_send_active(FILE * stream, SOCKET sckt, struct sockaddr_in address, sfp_session_info_t * session){
-	char message[256];
+static sfp_returncode_t sfp_transfer_send_active(FILE * stream, SOCKET sckt, sfp_session_info_t * session){
 	char buffer[READ_WRITE_BUFFER_SIZE];
 	size_t read = 0;
-	int retries = SFP_MAX_RETRIES;
-	int wait_time = SFP_WAIT_TIME_BASE;
-	int res_connect = -1;
 	int sent = 0;
 	int tmp_sent = 0;
 	long total_sent = 0;
@@ -407,39 +423,21 @@ static sfp_returncode_t sfp_transfer_send_active(FILE * stream, SOCKET sckt, str
 	fd_set sckts;
 	struct timeval timeout = {SFP_TIMEOUT_SEC, 0};
 	int max_sckt;
-
-	while((res_connect = connect(sckt, (struct sockaddr *)&address, sizeof(address))) < 0 && retries-- > 0){
-		sprintf(message, "Waiting for %d ms", wait_time);
-		m_log(message, "sfp_transfer_send_active");
-		if(session->state == SFP_SESSION_CLOSED_BY_PEER || session->state == SFP_SESSION_CANCELLED || session->state == SFP_SESSION_CANCELLED_BY_PEER){
-			break;
-		}
-		sleep(wait_time);
-		wait_time = wait_time * 2;
-	}
-	if(res_connect < 0){
-		m_log_error("Could not connect to peer", "sfp_transfer_send_active");
-		return CANT_CONNECT; // fail
-	}
-
-	/* JULIEN */
-	if (!session->connection_id || session->connection_id[0] == 0)
-		return TRANSFER_CORRUPTION;
-	if (sfp_transfer_send_connect_id(sckt, session->connection_id, strlen(session->connection_id)) < 0){
-		m_log_error("Could not send connection ID", "sfp_transfer_send_active");
-		return TRANSFER_CORRUPTION;
-	}
-	/* ****** */
+	int wait_time = SFP_WAIT_TIME_BASE;
+	int retries = SFP_MAX_RETRIES;
 
 	memset(buffer, 0, sizeof(buffer));
 	while((read = fread(buffer, sizeof(char), READ_WRITE_BUFFER_SIZE, stream)) > 0){
 		// if the transfer has been paused, wait
-		while(session->state == SFP_SESSION_PAUSED){
+		while(session->isPaused(session) || session->isPausedByPeer(session)){
 			usleep(WAIT_PAUSE_DELAY);
 		}
 		// if the transfer has been cancelled stop sending
-		if(session->state == SFP_SESSION_CLOSED_BY_PEER || session->state == SFP_SESSION_CANCELLED_BY_PEER || session->state == SFP_SESSION_CANCELLED){
+		if(session->isCancelledByPeer(session)){
 			return SUCCESS;
+		}
+		if(session->isCancelled(session)) {
+			break;
 		}
 		sent = 0;
 		while(sent < (int)read){
@@ -449,20 +447,16 @@ static sfp_returncode_t sfp_transfer_send_active(FILE * stream, SOCKET sckt, str
 			timeout.tv_sec = SFP_TIMEOUT_SEC;
 			timeout.tv_usec = 0;
 			if(select(max_sckt, NULL, &sckts, NULL, &timeout) > 0){
-				if((tmp_sent = send(sckt, buffer, (int)read, 0)) >= 0){
+				if((tmp_sent = send(sckt, buffer, (int)read-sent, MSG_NOSIGNAL)) >= 0){
 					sent += tmp_sent;
 				}else{
-					// wait little time to see if it is not because a BYE (CANCELLED_BY_PEER) has been received
-					//usleep(WAIT_FOR_BYE_DELAY);
-					//if(session->state == SFP_SESSION_CANCELLED_BY_PEER){
-					//	return SUCCESS;
-					//}else{
-						m_log_error("Send failed", "sfp_transfer_send_active");
-						return TRANSFER_CORRUPTION; // fail
-					//}
+					session->updateState(session, SFP_ACTION_SOCKET_CLOSED);
+					m_log_error("Send failed", "sfp_transfer_send_active");
+					return TRANSFER_CORRUPTION; // fail
 				}
 			}else{
 				FD_CLR(sckt, &sckts);
+				session->updateState(session, SFP_ACTION_SOCKET_CLOSED);
 				m_log_error("Connection timed out", "sfp_transfer_send_active");
 				return CONNECTION_TIMED_OUT; // fail
 			}
@@ -483,10 +477,30 @@ static sfp_returncode_t sfp_transfer_send_active(FILE * stream, SOCKET sckt, str
 
 	// check that we have sent it all
 	if(total_sent < total_to_send){ // TODO verify
-		session->state = SFP_SESSION_SENT_INCOMPLETE;
-		return TRANSFER_CORRUPTION;
-	}else if(total_sent == total_to_send){
-		session->state = SFP_SESSION_SENT_COMPLETE;
+		if(session->isCancelled(session)) {
+			// wait that the receiver disconnects (receives the BYE)
+			FD_ZERO(&sckts);
+			FD_SET(sckt, &sckts);
+			max_sckt = sckt+1;
+			timeout.tv_sec = SFP_TIMEOUT_SEC;
+			timeout.tv_usec = 0;
+			select(max_sckt, &sckts, NULL, NULL, &timeout); // wait on read
+			FD_CLR(sckt, &sckts);
+			return SUCCESS;
+		} else {
+			session->updateState(session, SFP_ACTION_SOCKET_CLOSED);
+			return TRANSFER_CORRUPTION;
+		}
+	} else if(total_sent == total_to_send) {
+		session->updateState(session, SFP_ACTION_TRANSFER_COMPLETED);
+		// wait little time to receive the BYE from receiver or timeout
+		while(!session->isFinished(session) && retries-- > 0) {
+			sleep(wait_time);
+			wait_time = wait_time * 2;
+		}
+		if(!session->isFinished(session)) { // BYE has not been received
+			//return FAILURE; // TODO what should we do?
+		}
 	}
 
 	return SUCCESS; // TODO
@@ -514,79 +528,71 @@ static sfp_returncode_t sfp_transfer_send_passive(FILE * stream, SOCKET sckt, st
 	long total_sent = 0;
 	long total_to_send = (unsigned long)atol(session->file_size);
 	unsigned int increase = 0;
-
-	/* JULIEN */
-	int ret = 0;
-	int cread = 0;
-	int total = 0;
-	char cid_buff[32];
-	/* ****** */
+	char http_req[2048];
+	char cid[32];
+	int wait_time = SFP_WAIT_TIME_BASE;
+	int retries = SFP_MAX_RETRIES;
 
 	addrlen = (socklen_t)sizeof(address);
 
 	if(listen(sckt, 5) < 0){
 		return CANT_LISTEN_ON_SOCKET; // fail
 	}
-	
-	// use select to do a timeout in order not to stay blocked if peer cannot send file
-	memset(cid_buff, 0, sizeof(cid_buff));
-	while (1){
-		
-		FD_ZERO(&sckts);
-		FD_SET(sckt, &sckts);
-		if (tmp > 0)
-			FD_SET(tmp, &sckts);
 
-		max_sckt = (sckt > tmp ? sckt : tmp) + 1;
-		
-		ret = select(max_sckt, &sckts, NULL, NULL, &timeout);
-		if (ret <= 0){
-			// no connection received
-			FD_CLR(sckt, &sckts);
-			return CONNECTION_TIMED_OUT; // fail
-		}
-		if(FD_ISSET(sckt, &sckts)){
-			tmp = accept(sckt, (struct sockaddr *)&address, &addrlen); // should block until someone connects
-			if(tmp < 0){
-				return CANT_ACCEPT_CONNECTION; // fail
-			}
-		}
-		else if (FD_ISSET(tmp, &sckts)){
-			if (total < (sizeof(cid_buff) -1)){
-				if ((cread = recv(tmp, &cid_buff[total], 1, 0)) > 0)
-					total += cread;
-				else
-					return CANT_ACCEPT_CONNECTION; // fail
-
-				if (cid_buff[total] == '\n') {
-					cid_buff[total] = '\0';
-					break;
-				}
-			} 
-			else {
-				return CANT_ACCEPT_CONNECTION; // fail
-			}
-		}
-		else
-			return CANT_ACCEPT_CONNECTION; // fail
+	// use select to do a timeout in order not to stay blocked if peer cannot receive file
+	FD_ZERO(&sckts);
+	FD_SET(sckt, &sckts);
+	max_sckt = (int)sckt + 1;
+	if(select(max_sckt, NULL, &sckts, NULL, &timeout) <= 0){
+		// no connection received
+		FD_CLR(sckt, &sckts);
+		m_log_error("Connection timed out", "sfp_transfer_send_passive");
+		return CONNECTION_TIMED_OUT; // fail
 	}
-	// CHECK CONNECTION ID
-	if (strcmp(cid_buff, session->connection_id) != 0)
-		return CANT_ACCEPT_CONNECTION; // fail
-	/* ****** */
-
+	if(FD_ISSET(sckt, &sckts) == 0){
+		FD_CLR(sckt, &sckts);
+		m_log_error("Connection timed out", "sfp_transfer_send_passive");
+		return CONNECTION_TIMED_OUT; // fail
+	}
 	FD_CLR(sckt, &sckts);
+
+	tmp = accept(sckt, (struct sockaddr *)&address, &addrlen);
+	if(tmp < 0){
+		m_log_error("Accept failed", "sfp_transfer_send_passive");
+		return CANT_ACCEPT_CONNECTION; // fail
+	}
+
+	// receive the HTTP GET request
+	if(sfp_get_http_req(tmp, http_req, sizeof(http_req)-1) <= 0) {
+		m_log_error("Couldn't get the HTTP GET request", "sfp_transfer_send_passive");
+		return CANT_ACCEPT_CONNECTION; // fail
+	}
+
+	// extract the connection id
+	if(sfp_get_sid_from_http_req(http_req, sizeof(http_req)-1, cid, sizeof(cid)-1) < 0) {
+		m_log_error("Couldn't extract the connection id from the HTTP GET request", "sfp_transfer_send_passive");
+		return CANT_ACCEPT_CONNECTION; // fail
+	}
+
+	// compare connection ids
+	if (strcasecmp(cid, session->connection_id) != 0) {
+		m_log_error("Connection ids do not match", "sfp_transfer_send_passive");
+		return CANT_ACCEPT_CONNECTION; // fail
+	}
 
 	memset(buffer, 0, sizeof(buffer));
 	while((read = fread(buffer, sizeof(char), READ_WRITE_BUFFER_SIZE, stream)) > 0){
 		// if the transfer has been paused, wait
-		while(session->state == SFP_SESSION_PAUSED){
+		while(session->isPaused(session) || session->isPausedByPeer(session)){
 			usleep(WAIT_PAUSE_DELAY);
 		}
 		// if the transfer has been cancelled stop sending
-		if(session->state == SFP_SESSION_CLOSED_BY_PEER || session->state == SFP_SESSION_CANCELLED_BY_PEER || session->state == SFP_SESSION_CANCELLED){
-			finalize_connection(tmp);
+		if(session->isCancelledByPeer(session)){
+			close(tmp);
 			return SUCCESS;
+		}
+		if(session->isCancelled(session)){
+			break;
 		}
 		sent = 0;
 		while(sent < (int)read){
@@ -596,25 +602,22 @@ static sfp_returncode_t sfp_transfer_send_passive(FILE * stream, SOCKET sckt, st
 			timeout.tv_sec = SFP_TIMEOUT_SEC;
 			timeout.tv_usec = 0;
 			if(select(max_sckt, NULL, &sckts, NULL, &timeout) > 0){
-				if((tmp_sent = send(tmp, buffer, (int)read, 0)) >= 0){
+				if((tmp_sent = send(tmp, buffer, (int)read-sent, MSG_NOSIGNAL)) >= 0){
 					sent += tmp_sent;
 				}else{
-					// wait little time to see if it is not because a BYE (CANCELLED_BY_PEER) has been received
-					//usleep(WAIT_FOR_BYE_DELAY);
-					//if(session->state == SFP_SESSION_CANCELLED_BY_PEER){
-					//	return SUCCESS;
-					//}else{
-						m_log_error("Send failed", "sfp_transfer_send_active");
-						return TRANSFER_CORRUPTION; // fail
-					//}
+					session->updateState(session, SFP_ACTION_SOCKET_CLOSED);
+					m_log_error("Send failed", "sfp_transfer_send_active");
+					return TRANSFER_CORRUPTION; // fail
+					
 				}
 			}else{
 				FD_CLR(tmp, &sckts);
+				session->updateState(session, SFP_ACTION_SOCKET_CLOSED);
 				m_log_error("Connection timed out", "sfp_transfer_send_active");
 				return CONNECTION_TIMED_OUT; // fail
 			}
 		}
-		
+
 		total_sent += sent;
 
 		if(total_sent > total_to_send){
@@ -624,22 +627,45 @@ static sfp_returncode_t sfp_transfer_send_passive(FILE * stream, SOCKET sckt, st
 
 		// notify the progession of the transfer
 		notify_progress(session, total_sent, total_to_send, &increase);
-		
-		memset(buffer, 0, sizeof(buffer));
-	}
 
-	finalize_connection(tmp);
+		memset(buffer, 0, sizeof(buffer));
+	}	
 
 	// check that we have sent it all
 	if(total_sent < total_to_send){ // TODO verify
-		session->state = SFP_SESSION_SENT_INCOMPLETE;
-		return TRANSFER_CORRUPTION;
+		if(session->isCancelled(session)) {
+			// wait that the receiver disconnects (receives the BYE) or timeout
+			FD_ZERO(&sckts);
+			FD_SET(tmp, &sckts);
+			max_sckt = (int)tmp+1;
+			timeout.tv_sec = SFP_TIMEOUT_SEC;
+			timeout.tv_usec = 0;
+			select(max_sckt, &sckts, NULL, NULL, &timeout); // wait on read
+			FD_CLR(tmp, &sckts);
+			close(tmp);
+			return SUCCESS;
+		} else {
+			session->updateState(session, SFP_ACTION_SOCKET_CLOSED);
+			close(tmp);
+			return TRANSFER_CORRUPTION;
+		}
 	}else if(total_sent == total_to_send){
-		session->state = SFP_SESSION_SENT_COMPLETE;
+		session->updateState(session, SFP_ACTION_TRANSFER_COMPLETED);
+		// wait little time to receive the BYE from receiver or timeout
+		while(!session->isFinished(session) && retries-- > 0) {
+			sleep(wait_time);
+			wait_time = wait_time * 2;
+		}
+		if(!session->isFinished(session)) { // BYE has not been received
+			//return FAILURE; // TODO what should we do?
+		}
 	}
+
+	close(tmp);
 
 	return SUCCESS; // TODO
 }
+
 
 /**
 * Receives the file read from network and writes it into a strean, in TCP and in active mode (means that it does a "connect").
@@ -650,47 +676,34 @@ static sfp_returncode_t sfp_transfer_send_passive(FILE * stream, SOCKET sckt, st
 * @param	[in][out]	session : a session info
 * @return	TRUE if the receiving succeeded; FALSE else
 */
-static sfp_returncode_t sfp_transfer_receive_active(FILE * stream, SOCKET sckt, struct sockaddr_in address, sfp_session_info_t * session){
+static sfp_returncode_t sfp_transfer_receive_active(FILE * stream, SOCKET sckt, sfp_session_info_t * session){
 	char buffer[READ_WRITE_BUFFER_SIZE];
 	int received = 0;
 	char message[256];
-	int retries = SFP_MAX_RETRIES;
-	int wait_time = SFP_WAIT_TIME_BASE;
-	int res_connect = -1;
 	long total_received = 0;
 	long total_to_receive = (unsigned long)atol(session->file_size);
 	unsigned int increase = 0;
+	char http_req[2048];
+	fd_set sckts;
+	struct timeval timeout = {SFP_TIMEOUT_SEC, 0};
+	int max_sckt = (int)sckt + 1;
 
-	while((res_connect = connect(sckt, (struct sockaddr *)&address, sizeof(address))) < 0 && retries-- > 0){
-		sprintf(message, "Waiting for %d ms", wait_time);
-		m_log(message, "sfp_transfer_receive_active");
-		if(session->state == SFP_SESSION_CLOSED_BY_PEER || session->state == SFP_SESSION_CANCELLED || session->state == SFP_SESSION_CANCELLED_BY_PEER){
-			break;
-		}
-		sleep(wait_time);
-		wait_time = wait_time * 2;
+	FD_ZERO(&sckts);
+	FD_SET(sckt, &sckts);
+	if(select(max_sckt, &sckts, NULL, NULL, &timeout) == 0) {
+		FD_CLR(sckt, &sckts);
+		m_log_error("Connection timed out", "sfp_transfer_receive_active");
+		return CONNECTION_TIMED_OUT;
 	}
-	if(res_connect < 0){
-		m_log_error("Could not connect to peer", "sfp_transfer_send_active");
-		return CANT_CONNECT; // fail
-	}
-
-	/* JULIEN */
-	if (!session->connection_id || session->connection_id[0] == 0)
-		return TRANSFER_CORRUPTION;
-	if (sfp_transfer_send_connect_id(sckt, session->connection_id, strlen(session->connection_id)) < 0){
-		m_log_error("Could not send connection ID", "sfp_transfer_send_active");
-		return TRANSFER_CORRUPTION;
-	}
-	/* ****** */
 
 	memset(buffer, 0, sizeof(buffer));
 	while((received = recv(sckt, buffer, READ_WRITE_BUFFER_SIZE, 0)) > 0){
 		total_received += (unsigned long)received;
 
-		if(total_received > total_to_receive){
-			m_log_error("Received more bytes than declared", "sfp_transfer_receive_active");
-			return TRANSFER_CORRUPTION; // TODO errorcode
+		// if the transfer has been paused, wait 
+		// (wait loop because we could have received data while we paused)
+		while(session->isPaused(session) || session->isPausedByPeer(session)){
+			usleep(WAIT_PAUSE_DELAY);
 		}
 
 		// notify the progession of the transfer
@@ -699,35 +712,39 @@ static sfp_returncode_t sfp_transfer_receive_active(FILE * stream, SOCKET sckt, 
 		//sprintf(message, "Received %d char", received);
 		m_log(message,"sfp_transfer_receive_active");
 		// if the transfer has been cancelled stop sending
-		if(session->state == SFP_SESSION_CLOSED_BY_PEER || session->state == SFP_SESSION_CANCELLED_BY_PEER){
+		if(session->isCancelledByPeer(session)){
 			return SUCCESS;
 		}
-		if((int)fwrite(buffer, sizeof(char), received, stream) < received){
+		// if session is cancelled, continue receiving but drop the data until the receiver receives the BYE and disconnects
+		if(!session->isCancelled(session) && (int)fwrite(buffer, sizeof(char), received, stream) < received){
 			m_log_error("Wrote less char than what's been received", "sfp_transfer_receive_active");
 			return WRITE_ERROR; // fail
-		}else{
-			// success
 		}
+
+		if(total_received > total_to_receive){
+			m_log_error("Received more bytes than declared", "sfp_transfer_receive_active");
+			return TRANSFER_CORRUPTION;
+		}else if(total_received == total_to_receive) {
+			session->updateState(session, SFP_ACTION_TRANSFER_COMPLETED);
+			session->sendBye(session->call_id);
+			// only wait for the recv to fail (BYE has been sent, waiting for disconection)
+		}
+
 		memset(buffer, 0, sizeof(buffer));
 	}
-	
-	// if recv failed or finishes and we are in a cancel state, it could because we cancelled
-	// (sent a BYE) the transfer and peer therefore closed the socket
-	if(session->state == SFP_SESSION_CANCELLED){
-		return SUCCESS;
-	}
-	// wait little time to see if it is not because a BYE (CANCELLED_BY_PEER) has been received
-	usleep(WAIT_FOR_BYE_DELAY);
-	if(session->state == SFP_SESSION_CANCELLED_BY_PEER){
-		return SUCCESS;
-	}
+
+	session->updateState(session, SFP_ACTION_SOCKET_CLOSED);
 
 	// check that we have received it all
-	if(total_received < total_to_receive){ // TODO verify
-		session->state = SFP_SESSION_RECEIVED_INCOMPLETE;
+	if(total_received < total_to_receive){
+
+		// if recv failed and we are in a cancel state, it could be because we cancelled
+		// (sent a BYE) the transfer and peer therefore closed the socket
+		if(session->isCancelled(session) || session->isCancelledByPeer(session)){
+			return SUCCESS;
+		}
+
 		return TRANSFER_CORRUPTION;
-	}else if(total_received == total_to_receive){
-		session->state = SFP_SESSION_RECEIVED_COMPLETE;
 	}
 
 	return SUCCESS;
@@ -753,178 +770,110 @@ static sfp_returncode_t sfp_transfer_receive_passive(FILE * stream, SOCKET sckt,
 	long total_received = 0;
 	long total_to_receive = (unsigned long)atol(session->file_size);
 	unsigned int increase = 0;
+	char http_req[2048];
+	char cid[32];
 
-	/* JULIEN */
-	int ret = 0;
-	int cread = 0;
-	int total = 0;
-	char cid_buff[32];
-	/* ****** */
-	
+
 	addrlen = (socklen_t)sizeof(address);
 
 	if(listen(sckt, 5) < 0){
 		return CANT_LISTEN_ON_SOCKET; // fail
 	}
 
-	/* JULIEN */
-	// use select to do a timeout in order not to stay blocked if peer cannot send file
-	memset(cid_buff, 0, sizeof(cid_buff));
-	while (1){
-		
-		FD_ZERO(&sckts);
-		FD_SET(sckt, &sckts);
-		if (tmp > 0)
-			FD_SET(tmp, &sckts);
-
-		max_sckt = (sckt > tmp ? sckt : tmp) + 1;
-		
-		ret = select(max_sckt, &sckts, NULL, NULL, &timeout);
-		if (ret <= 0){
-			// no connection received
-			FD_CLR(sckt, &sckts);
-			return CONNECTION_TIMED_OUT; // fail
-		}
-		if(FD_ISSET(sckt, &sckts)){
-			tmp = accept(sckt, (struct sockaddr *)&address, &addrlen); // should block until someone connects
-			if(tmp < 0){
-				return CANT_ACCEPT_CONNECTION; // fail
-			}
-		}
-		else if (FD_ISSET(tmp, &sckts)){
-			if (total < (sizeof(cid_buff) -1)){
-				if ((cread = recv(tmp, &cid_buff[total], 1, 0)) > 0)
-					total += cread;
-				else
-					return CANT_ACCEPT_CONNECTION; // fail
-
-				if (cid_buff[total - 1] == '\n') {
-					cid_buff[total - 1] = '\0';
-					break;
-				}
-			} 
-			else {
-				return CANT_ACCEPT_CONNECTION; // fail
-			}
-		}
-		else
-			return CANT_ACCEPT_CONNECTION; // fail
+	// use select to do a timeout in order not to stay blocked if peer cannot receive file
+	FD_ZERO(&sckts);
+	FD_SET(sckt, &sckts);
+	max_sckt = (int)sckt + 1;
+	if(select(max_sckt, NULL, &sckts, NULL, &timeout) <= 0){
+		// no connection received
+		FD_CLR(sckt, &sckts);
+		m_log_error("Connection timed out", "sfp_transfer_receive_passive");
+		return CONNECTION_TIMED_OUT; // fail
 	}
-	// CHECK CONNECTION ID
-	if (strcmp(cid_buff, session->connection_id) != 0)
-		return CANT_ACCEPT_CONNECTION; // fail
-	/* ****** */
-
+	if(FD_ISSET(sckt, &sckts) == 0){
+		FD_CLR(sckt, &sckts);
+		m_log_error("Connection timed out", "sfp_transfer_receive_passive");
+		return CONNECTION_TIMED_OUT; // fail
+	}
 	FD_CLR(sckt, &sckts);
+
+	tmp = accept(sckt, (struct sockaddr *)&address, &addrlen);
+	if(tmp < 0){
+		m_log_error("Accept failed", "sfp_transfer_receive_passive");
+		return CANT_ACCEPT_CONNECTION; // fail
+	}
+
+	// receive the HTTP GET request
+	if(sfp_get_http_req(tmp, http_req, sizeof(http_req)-1) <= 0) {
+		m_log_error("Couldn't get the HTTP GET request", "sfp_transfer_receive_passive");
+		return CANT_ACCEPT_CONNECTION; // fail
+	}
+
+	// extract the connection id
+	if(sfp_get_sid_from_http_req(http_req, sizeof(http_req)-1, cid, sizeof(cid)-1) < 0) {
+		m_log_error("Couldn't extract the connection id from the HTTP GET request", "sfp_transfer_receive_passive");
+		return CANT_ACCEPT_CONNECTION; // fail
+	}
+
+	// compare connection ids
+	if (strcasecmp(cid, session->connection_id) != 0) {
+		m_log_error("Connection ids do not match", "sfp_transfer_receive_passive");
+		return CANT_ACCEPT_CONNECTION; // fail
+	}
+
 
 	memset(buffer, 0, sizeof(buffer));
 	while((received = recv(tmp, buffer, READ_WRITE_BUFFER_SIZE, 0)) > 0){
 		total_received += (unsigned long)received;
 
-		if(total_received > total_to_receive){
-			m_log_error("Received more bytes than declared", "sfp_transfer_receive_passive");
-			return TRANSFER_CORRUPTION; // TODO errorcode
+		// if the transfer has been paused, wait 
+		// (wait loop because we could have received data while we paused)
+		while(session->isPaused(session) || session->isPausedByPeer(session)){
+			usleep(WAIT_PAUSE_DELAY);
 		}
 
 		// notify the progession of the transfer
 		notify_progress(session, total_received, total_to_receive, &increase);
 
 		// if the transfer has been cancelled stop sending
-		if(session->state == SFP_SESSION_CLOSED_BY_PEER || session->state == SFP_SESSION_CANCELLED_BY_PEER){
-			finalize_connection(tmp);
+		if(session->isCancelledByPeer(session)){
+			close(tmp);
 			return SUCCESS;
 		}
-		if(fwrite(buffer, sizeof(char), received, stream) < received){
+		if(!session->isCancelled(session) && fwrite(buffer, sizeof(char), received, stream) < received){
 			m_log_error("Wrote less char than what's been received", "sfp_transfer_receive_passive");
 			return WRITE_ERROR; // fail
 		}
+
+		if(total_received > total_to_receive){
+			m_log_error("Received more bytes than declared", "sfp_transfer_receive_passive");
+			return TRANSFER_CORRUPTION;
+		}else if(total_received == total_to_receive) {
+			session->updateState(session, SFP_ACTION_TRANSFER_COMPLETED);
+			session->sendBye(session->call_id);
+			// only wait for the recv to fail (BYE has been sent, waiting for disconection)
+		}
+
 		memset(buffer, 0, sizeof(buffer));
 	}
-	
-	finalize_connection(tmp);
 
-	// if recv failed or finishes and we are in a cancel state, it could because we cancelled
-	// (sent a BYE) the transfer and peer therefore closed the socket
-	if(session->state == SFP_SESSION_CANCELLED){
-		return SUCCESS;
-	}
-	// wait little time to see if it is not because a BYE (CANCELLED_BY_PEER) has been received
-	usleep(WAIT_FOR_BYE_DELAY);
-	if(session->state == SFP_SESSION_CANCELLED_BY_PEER){
-		return SUCCESS;
-	}
-	
+	session->updateState(session, SFP_ACTION_SOCKET_CLOSED);
 
-	// check that we have received it all
 	if(total_received < total_to_receive){ // TODO verify
-		session->state = SFP_SESSION_RECEIVED_INCOMPLETE;
+		// if recv failed and we are in a cancel state, it could because we cancelled
+		// (sent a BYE) the transfer and peer therefore closed the socket
+		if(session->isCancelled(session) || session->isCancelledByPeer(session)){
+			close(tmp);
+			return SUCCESS;
+		}
+
+		close(tmp);
 		return TRANSFER_CORRUPTION;
-	}else if(total_received == total_to_receive){
-		session->state = SFP_SESSION_RECEIVED_COMPLETE;
 	}
 
-	return SUCCESS; // TODO
-}
+	close(tmp);
 
-
-/**
-* WARNING Needs to be implemented fully.
-*
-* Sends the file read from a stream, in UDP.
-*
-* @param	[in]	stream : the file stream from which to read
-* @param	[in]	sckt : the socket used for transfer
-* @param	[in]	sockaddr_in : the adress used for transfer
-* @return	TRUE if the sending succeeded; FALSE else
-*/
-static unsigned int send_udp(FILE * stream, SOCKET sckt, struct sockaddr_in address){
-	char buffer[READ_WRITE_BUFFER_SIZE];
-	size_t read;
-
-	memset(buffer, 0, sizeof(buffer));
-	while((read = fread(buffer, sizeof(char), READ_WRITE_BUFFER_SIZE, stream)) > 0){
-		if(sendto(sckt, buffer, (int)read, 0, (struct sockaddr *)&address, sizeof(address)) < (int)read ){
-			return FALSE; // fail
-		}else{
-			// success
-		}
-		memset(buffer, 0, sizeof(buffer));
-	}
-
-	return TRUE; // TODO
-}
-
-/**
-* WARNING Needs to be implemented fully.
-*
-* Receives the file read from a stream, in UDP.
-*
-* @param	[in]	stream : the file stream into which to write
-* @param	[in]	sckt : the socket used for transfer
-* @param	[in]	sockaddr_in : the adress used for transfer
-* @return	TRUE if the receiving succeeded; FALSE else
-*/
-static unsigned int receive_udp(FILE * stream, SOCKET sckt, struct sockaddr_in address){
-	char buffer[READ_WRITE_BUFFER_SIZE];
-	socklen_t fromlen;
-	int received;
-
-	fromlen = (socklen_t)sizeof(address);
-
-	memset(buffer, 0, sizeof(buffer));
-	while((received = recvfrom(sckt, buffer, READ_WRITE_BUFFER_SIZE, 0, (struct sockaddr *)&address, &fromlen)) > 0){
-		if((int)fwrite(buffer, sizeof(char), received, stream) < received){
-			return FALSE; // fail
-		}else{
-			// success
-		}
-		memset(buffer, 0, sizeof(buffer));
-	}
-
-	// TODO indicateur de fin de transfer
-	//finalize_connection(sckt);
-
-	return TRUE; // TODO
+	return SUCCESS;
 }
 
 /**
@@ -938,7 +887,7 @@ static unsigned int receive_udp(FILE * stream, SOCKET sckt, struct sockaddr_in a
 * @return	TRUE if the initialization succeeded; FALSE else
 */
 static sfp_returncode_t init_connection(struct sockaddr_in * address, SOCKET * sckt, unsigned int ip_protocol, const char * ip, unsigned short port){
-#ifdef WIN32  // TODO other OSes
+#ifdef WIN32
 	int opt;
 #endif /* WIN32 */
 
@@ -953,7 +902,7 @@ static sfp_returncode_t init_connection(struct sockaddr_in * address, SOCKET * s
 		return CANT_GET_SOCKET; // fail
 	}
 
-#ifdef WIN32  // TODO other OSes
+#ifdef WIN32
 	opt = SFP_REUSABLE_SOCKET;
 	if(setsockopt(*sckt, SOL_SOCKET, SO_REUSEADDR, (char *)&opt, sizeof(opt)) < 0){
 		m_log("Could not ste the socket in reusable mode","init_connection");
@@ -970,8 +919,12 @@ static sfp_returncode_t init_connection(struct sockaddr_in * address, SOCKET * s
 *
 * @return	TRUE
 */
-static void finalize_connection(SOCKET sckt){
-	close(sckt);
+static void finalize_connection(sfp_connection_t * connection) {
+	if(connection->curl_data != NULL) {
+		curl_easy_cleanup(connection->curl_data);
+	} else if(connection->sckt >= 0){
+		close(connection->sckt);
+	}
 }
 
 /**
@@ -1005,9 +958,9 @@ static void notify_progress(sfp_session_info_t * session, unsigned long actual, 
 }
 
 sfp_returncode_t sfp_transfer_get_free_port(sfp_session_info_t * session){
-//#ifdef WIN32  // TODO other OSes
-//	int opt;
-//#endif /* WIN32 */
+#ifdef WIN32
+	int opt;
+#endif /* WIN32 */
 	int res_bind = -1;
 	unsigned short port;
 	char temp[33];
@@ -1026,13 +979,13 @@ sfp_returncode_t sfp_transfer_get_free_port(sfp_session_info_t * session){
 		return CANT_GET_SOCKET; // fail
 	}
 
-//#ifdef WIN32  // TODO other OSes
-//	opt = SFP_REUSABLE_SOCKET;
-//	if(setsockopt(session->local_socket, SOL_SOCKET, SO_REUSEADDR, (char *)&opt, sizeof(opt)) < 0){
-//		m_log("Could not ste the socket in reusable mode","init_connection");
-//		return FALSE;
-//	}
-//#endif /* WIN32 */
+#ifdef WIN32
+	opt = SFP_REUSABLE_SOCKET;
+	if(setsockopt(session->local_socket, SOL_SOCKET, SO_REUSEADDR, (char *)&opt, sizeof(opt)) < 0){
+		m_log("Could not ste the socket in reusable mode","init_connection");
+		return FALSE;
+	}
+#endif /* WIN32 */
 
 	port = (unsigned short)atoi(session->local_port);
 
@@ -1048,7 +1001,7 @@ sfp_returncode_t sfp_transfer_get_free_port(sfp_session_info_t * session){
 
 	if(port >= SFP_MAX_PORT){
 		m_log_error("Could not get a free transfer port", "sfp_transfer_get_free_port");
-		finalize_connection(session->local_socket);
+		close(session->local_socket);
 		return NO_AVAILABLE_PORT; // fail
 	}
 
@@ -1060,3 +1013,257 @@ sfp_returncode_t sfp_transfer_get_free_port(sfp_session_info_t * session){
 
 	return SUCCESS;
 }
+
+static sfp_returncode_t sfp_connect(sfp_connection_t * connection, struct sockaddr_in * address, sfp_session_info_t * session, int * http_code) {
+	char query[512] = "";
+
+	int res_connect = -1;
+	int wait_time = SFP_WAIT_TIME_BASE;
+	char message[256];
+	int retries = SFP_MAX_RETRIES;
+	unsigned int sent = 0;
+	int tmp_sent = 0;
+	fd_set sckts;
+	struct timeval timeout = {SFP_TIMEOUT_SEC, 0};
+	int max_sckt;
+	char buffer[1024] = "";
+
+	char url_buff[1024];
+	char proxy_buff[1024];
+	char login_buff[1024];
+	char header_buff[1024];
+	int curl_ret = -1;
+	struct curl_slist * slist = NULL;
+	u_long nonblocking = FALSE;
+	int sckt_flags;
+
+	if(strfilled(session->http_proxy)) {
+		*http_code = 404;
+
+		connection->curl_data = curl_easy_init();
+
+		if(connection->curl_data) {
+			curl_easy_setopt(connection->curl_data, CURLOPT_VERBOSE, 1);
+
+			snprintf(url_buff, sizeof(url_buff), "http://%s:%s", session->remote_ip, session->remote_port);
+			curl_easy_setopt(connection->curl_data, CURLOPT_URL, url_buff);
+
+			snprintf(proxy_buff, sizeof(proxy_buff), "%s:%d", session->http_proxy, session->http_proxy_port);
+			curl_easy_setopt(connection->curl_data, CURLOPT_PROXY, proxy_buff);
+
+			curl_easy_setopt(connection->curl_data, CURLOPT_CONNECTTIMEOUT, SFP_TIMEOUT_SEC);
+
+			if(strfilled(session->http_proxy_user) && strfilled(session->http_proxy_passwd)){
+				long auth_type = 0;
+
+				snprintf(login_buff, sizeof(login_buff), "%s:%s", session->http_proxy_user, session->http_proxy_passwd);
+				sfp_get_proxy_auth_type(session, &auth_type);
+				curl_easy_setopt(connection->curl_data, CURLOPT_PROXYUSERPWD, login_buff);
+				curl_easy_setopt(connection->curl_data, CURLOPT_PROXYAUTH, auth_type);
+			}
+
+			curl_easy_setopt(connection->curl_data, CURLOPT_HTTPPROXYTUNNEL, 1);
+
+			snprintf(header_buff, sizeof(header_buff), "ConnectionId: %s", session->connection_id);
+			slist = curl_slist_append(slist, header_buff);
+			slist = curl_slist_append(slist, "Connection: Keep-Alive");  
+			slist = curl_slist_append(slist, "Pragma: no-cache");
+			slist = curl_slist_append(slist, "Cache-Control: no-cache");
+			curl_easy_setopt(connection->curl_data, CURLOPT_HTTPHEADER, slist);
+
+			curl_ret = curl_easy_perform(connection->curl_data);
+
+			curl_easy_getinfo(connection->curl_data, CURLINFO_RESPONSE_CODE, http_code);
+
+			if (curl_ret != 0) {
+				finalize_connection(connection);
+				return FAILURE;
+			}
+
+			curl_slist_free_all(slist);
+
+			curl_easy_getinfo(connection->curl_data, CURLINFO_LASTSOCKET, &(connection->sckt));
+			if(connection->sckt == -1) {
+				return FAILURE;
+			}
+
+			sckt_flags = fcntl(connection->sckt, F_GETFL, 0);
+			if(fcntl(connection->sckt, F_SETFL, sckt_flags & ~O_NONBLOCK) != 0) {
+			//if(ioctlsocket(connection->sckt, FIONBIO, &nonblocking) != 0) {
+				return FAILURE;
+			}
+
+			return SUCCESS;
+		}
+
+	} else {
+
+		// connection
+		while((res_connect = connect(connection->sckt, (struct sockaddr *)address, sizeof(*address))) < 0 && retries-- > 0){
+			sprintf(message, "Waiting for %d ms", wait_time);
+			m_log(message, "sfp_transfer_send_active");
+			if(session->isCancelled(session) || session->isCancelledByPeer(session)){
+				break;
+			}
+			sleep(wait_time);
+			wait_time = wait_time * 2;
+		}
+		if(res_connect < 0){
+			m_log_error("Could not connect to peer", "sfp_transfer_send_active");
+			return CANT_CONNECT; // fail
+		}
+
+		if (!session->connection_id || session->connection_id[0] == 0) {
+			return FAILURE;
+		}
+
+		snprintf(query, sizeof(query), "GET / HTTP/1.1\r\nConnectionId: %s\r\n\r\n", session->connection_id);
+
+		// send the query with the connection id
+		while(sent < strlen(query)){
+			FD_ZERO(&sckts);
+			FD_SET(connection->sckt, &sckts);
+			max_sckt = connection->sckt+1;
+			timeout.tv_sec = SFP_TIMEOUT_SEC;
+			timeout.tv_usec = 0;
+			if(select(max_sckt, NULL, &sckts, NULL, &timeout) > 0){
+				if((tmp_sent = send(connection->sckt, query, strlen(query)-sent, MSG_NOSIGNAL)) >= 0){
+					sent += tmp_sent;
+				} else {
+					return FAILURE;
+				}
+			}else{
+				FD_CLR(connection->sckt, &sckts);
+				m_log_error("Connection timed out", "sfp_transfer_send_active");
+				return CONNECTION_TIMED_OUT; // fail
+			}
+		}
+
+		FD_ZERO(&sckts);
+		FD_SET(connection->sckt, &sckts);
+		max_sckt = connection->sckt+1;
+		timeout.tv_sec = SFP_TIMEOUT_SEC;
+		timeout.tv_usec = 0;
+		// wait on read, till timeout or till a receiver disconnection
+		if(select(max_sckt, &sckts, NULL, NULL, &timeout) <= 0) {
+			FD_CLR(connection->sckt, &sckts);
+			return FAILURE;
+		}
+		if(sfp_get_http_req(connection->sckt, buffer, sizeof(buffer)-1) <= 0) {
+			FD_CLR(connection->sckt, &sckts);
+			return FAILURE;
+		}
+		FD_CLR(connection->sckt, &sckts);
+
+		if(strncasecmp(buffer, "HTTP/1.0 200 OK", 15) != 0) {
+			return FAILURE;
+		}
+
+		return SUCCESS;
+	}
+
+	return FAILURE;
+}
+
+
+/* <julien> */
+static int sfp_get_http_req(int fd, char *buff, int size)
+{
+	int ret = 0;
+	int cread = 0;
+	int total = 0;
+	struct timeval timeout = {3, 0};
+	fd_set sckts;
+	while (1)
+	{           FD_ZERO(&sckts);
+	FD_SET(fd, &sckts);
+	ret = select(fd + 1, &sckts, NULL, NULL, &timeout);
+	if (ret <= 0)
+		return -1;
+	if (FD_ISSET(fd, &sckts))
+	{
+		if (total < size)
+		{
+			if ((cread = recv(fd, &buff[total], 1, 0)) > 0)
+				total += cread;
+			else
+				return -1;
+			if (total > 3 && !strncmp("\r\n\r\n", buff + total - 4, 4))
+			{
+				break;
+			}
+		}
+		else
+		{
+			return -1;
+		}
+	}
+	else
+		return -1;
+	}
+	return total;
+}
+
+static int sfp_get_sid_from_http_req(char *query, int size, char * buff, int size_of_buff)
+{
+	char  *tmp;
+	int    i, j;
+
+	tmp = 0;
+	if (size && strncmp(query, "GET", 3) == 0)
+	{           
+		for (i = 0; i < size; i++)
+		{
+			if (strncasecmp(query + i, "connectionid:", 13) == 0)
+			{
+				while (i < size && ((*(query + i) < '0') || (*(query + i) > '9')))
+					i++;
+				for (tmp = query + i, j = 0;
+					((i+j) < size) && (*(tmp+j) >= '0') && (*(tmp+j) <= '9'); j++);
+					if ((i+j) < size)
+					{
+						if (j >= size_of_buff)
+						{
+							fprintf(stderr, "Error parsing GET query : %s", query);
+							return -1;
+						}
+						memcpy(buff, query + i, j);
+						buff[j] = 0;
+						break;
+					}
+			}
+		}
+	}
+
+	if(strlen(buff) <= 0){
+		fprintf(stderr, "Error parsing GET query : %s", query);
+		return -1;
+	}
+	return 0;
+}
+
+static void sfp_get_proxy_auth_type(sfp_session_info_t * session, long * type)
+{
+		CURL *curl_tmp;
+		char url_buff[1024];
+		char proxy_buff[1024];
+		int ret;
+
+		ret = 0;
+		curl_tmp = curl_easy_init();
+
+		snprintf(url_buff, sizeof(url_buff), "http://%s:%s", session->remote_ip, session->remote_port);
+		curl_easy_setopt(curl_tmp, CURLOPT_URL, url_buff);
+
+		snprintf(proxy_buff, sizeof(proxy_buff), "%s:%d", session->http_proxy, session->http_proxy_port);
+		curl_easy_setopt(curl_tmp, CURLOPT_PROXY, proxy_buff);
+
+		curl_easy_setopt(curl_tmp, CURLOPT_HTTPPROXYTUNNEL, 1);
+		ret = curl_easy_perform(curl_tmp);
+
+		curl_easy_getinfo(curl_tmp, CURLINFO_PROXYAUTH_AVAIL, &type);
+		
+		// free the Curl tmp handle
+		curl_easy_cleanup(curl_tmp);
+}
+/* </julien> */

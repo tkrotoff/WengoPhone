@@ -40,6 +40,7 @@ if (WIN32)
   set(phapi-util_SRCS
     ${phapi-util_SRCS}
     src/msvc/pthread.c
+    src/msvc/unistd.c
   )
 endif (WIN32)
 
