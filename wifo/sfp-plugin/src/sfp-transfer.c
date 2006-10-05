@@ -1261,7 +1261,7 @@ static void sfp_get_proxy_auth_type(sfp_session_info_t * session, long * type)
 		curl_easy_setopt(curl_tmp, CURLOPT_HTTPPROXYTUNNEL, 1);
 		ret = curl_easy_perform(curl_tmp);
 
-		curl_easy_getinfo(curl_tmp, CURLINFO_PROXYAUTH_AVAIL, &type);
+		curl_easy_getinfo(curl_tmp, CURLINFO_PROXYAUTH_AVAIL, type);
 		
 		// free the Curl tmp handle
 		curl_easy_cleanup(curl_tmp);

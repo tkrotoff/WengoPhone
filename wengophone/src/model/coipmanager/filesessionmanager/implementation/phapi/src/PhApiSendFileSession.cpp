@@ -220,7 +220,7 @@ void PhApiSendFileSession::transferFromPeerFailedEventHandler(PhApiSFPWrapper & 
 
 void PhApiSendFileSession::transferToPeerFailedEventHandler(PhApiSFPWrapper & sender, int callID, std::string contactID, std::string fileName, std::string fileType, int fileSize){
 	if(callID == _currentCallID &&
-		(*_currentContact).getContactId().compare(contactID) == 0 &&
+		//(*_currentContact).getContactId().compare(contactID) == 0 &&
 		(*_currentFile).getFileName().compare(fileName) == 0 &&
 		(*_currentFile).getSize() == fileSize){
 		fileTransferEvent(*this, IFileSession::IFileSessionEventFileTransferFailed, *_currentContact, *_currentFile);

@@ -1320,6 +1320,8 @@ static void sfp_on_EXOSIP_CALL_REQUESTFAILURE(eXosip_event_t * event){
 		return; // TODO notify GUI
 	}
 
+	if(sfp_cbks != NULL && sfp_cbks->transferToPeerFailed) sfp_cbks->transferToPeerFailed(event->cid, "", session->short_filename, session->file_type, session->file_size);
+
 	sfp_remove_session_info(event->cid);
 
 	phRequestFailure(event->cid, event->status_code);
@@ -1338,6 +1340,8 @@ static void sfp_on_EXOSIP_CALL_SERVERFAILURE(eXosip_event_t * event){
 		m_log_error("Could not retrieve session","sfp_on_EXOSIP_CALL_ANSWERED");
 		return; // TODO notify GUI
 	}
+
+	if(sfp_cbks != NULL && sfp_cbks->transferToPeerFailed) sfp_cbks->transferToPeerFailed(event->cid, "", session->short_filename, session->file_type, session->file_size);
 
 	sfp_remove_session_info(event->cid);
 
@@ -1358,6 +1362,8 @@ static void sfp_on_EXOSIP_CALL_GLOBALFAILURE(eXosip_event_t * event){
 		return; // TODO notify GUI
 	}
 
+	if(sfp_cbks != NULL && sfp_cbks->transferToPeerFailed) sfp_cbks->transferToPeerFailed(event->cid, "", session->short_filename, session->file_type, session->file_size);
+
 	sfp_remove_session_info(event->cid);
 
 	phGlobalFailure(event->cid, event->status_code);
@@ -1374,6 +1380,8 @@ static void sfp_on_EXOSIP_CALL_NOANSWER(eXosip_event_t * event){
 		m_log_error("Could not retrieve session","sfp_on_EXOSIP_CALL_ANSWERED");
 		return; // TODO notify GUI
 	}
+
+	if(sfp_cbks != NULL && sfp_cbks->transferToPeerFailed) sfp_cbks->transferToPeerFailed(event->cid, "", session->short_filename, session->file_type, session->file_size);
 
 	sfp_remove_session_info(event->cid);
 
