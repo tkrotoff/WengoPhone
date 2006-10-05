@@ -214,7 +214,7 @@ const IMChatSession::IMChatMessageList IMChatSession::getReceivedMessage(unsigne
 }
 
 bool IMChatSession::isContactInSession(const IMContact & imContact) const {
-	IMContactSet::iterator it;
+	IMContactSet::const_iterator it;
 
 	for (it = _imContactSet.begin(); it != _imContactSet.end(); it++) {
 		
