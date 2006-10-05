@@ -156,6 +156,17 @@
         </property>
         <item>
          <widget class="QLabel" name="titleLabel" >
+          <property name="font" >
+           <font>
+            <family>Sans Serif</family>
+            <pointsize>9</pointsize>
+            <weight>75</weight>
+            <italic>false</italic>
+            <bold>true</bold>
+            <underline>false</underline>
+            <strikeout>false</strikeout>
+           </font>
+          </property>
           <property name="text" >
            <string>WengoPhone - Incoming Call</string>
           </property>
