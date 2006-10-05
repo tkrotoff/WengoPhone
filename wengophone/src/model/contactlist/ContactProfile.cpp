@@ -214,7 +214,7 @@ EnumPresenceState::PresenceState ContactProfile::computePresenceState() const {
 
 	if (onlineIMContact > 0) {
 		return EnumPresenceState::PresenceStateOnline;
-	} else if ((_imContactSet.size() != 0) && (offlineIMContact == _imContactSet.size())) {
+	} else if ( (!hasPhoneNumber()) && (_imContactSet.size() != 0) && (offlineIMContact == _imContactSet.size())) {
 		return EnumPresenceState::PresenceStateOffline;
 	} else if ((_imContactSet.size() != 0) && (dndIMContact == _imContactSet.size())) {
 		return EnumPresenceState::PresenceStateDoNotDisturb;
