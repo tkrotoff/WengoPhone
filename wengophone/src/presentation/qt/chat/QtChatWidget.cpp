@@ -331,7 +331,7 @@ void QtChatWidget::addToHistory(const QString & senderName, const QString & str)
 
 void QtChatWidget::addStatusMessage(const QString & statusMessage) {
 	QString message = QtChatUtils::getHeader(CHAT_USER_BACKGOUND_COLOR,
-		"#ff0000", "<i>" + statusMessage + "</i>");
+		"#888888", "<i>" + statusMessage + "</i>");
 	_chatHistory->insertHtml(message);
 }
 
@@ -512,7 +512,13 @@ void QtChatWidget::setContactConnected(bool connected) {
 	QtContactList * qtContactList = _qtWengoPhone->getQtContactList();
 	CContactList & cContactList = qtContactList->getCContactList();
 	ContactProfile profile = cContactList.getContactProfile(_contactId.toStdString());
-	QString contactName = QString::fromStdString(profile.getShortDisplayName());
+
+	QString contactName;
+	if (!profile.getShortDisplayName().empty()) {
+		contactName = QString::fromStdString(profile.getShortDisplayName());
+	} else {
+		contactName = QString::fromStdString(profile.getDisplayName());
+	}
 
 	if (connected && !_isContactConnected) {
 		_chatEdit->setEnabled(true);
