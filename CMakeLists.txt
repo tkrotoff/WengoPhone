@@ -14,11 +14,15 @@ include(DefineWengoOptions)
 include(DefineInstallationPaths)
 
 # add macros
+include(MacroEnsureOutOfSourceBuild)
 include(MacroGetSubversionRevision)
 include(MacroGenerateQtQmFiles)
 include(MacroAddCompileFlags)
 include(MacroAddLinkFlags)
 include(MacroAddPlugin)
+
+# disallow in-source build
+macro_ensure_out_of_source_build("WengoPhone requires an out of source build. Please create a separate build directory and run 'cmake path_to_wengophone [options]' there.")
 
 # get svn revision
 include(MacroGetSubversionRevision)
