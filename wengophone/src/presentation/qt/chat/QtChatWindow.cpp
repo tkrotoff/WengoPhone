@@ -379,6 +379,7 @@ void QtChatWindow::statusChangedSlot(QString contactId) {
 					break;
 				default:
 					_tabWidget->setTabIcon(i, QIcon(QPixmap(":/pics/contact/chat.png")));
+					widget->setContactConnected(false);
 					break;
 				}
 				break;
