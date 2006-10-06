@@ -30,6 +30,7 @@
 #include <pthread.h>
 #include <signal.h>
 #include <time.h>
+#include <unistd.h>
 #include <assert.h>
 #include <string.h>
 
@@ -131,7 +132,8 @@ int cgt_timer_stop(w_timer_t *ti) {
     struct clock_gettime_metadata *ptm = (struct clock_gettime_metadata *)
                                        ti->impl_data;
     ptm->running = 0;
-    pthread_join(&ptm->w_timer_thread, NULL);
+    //pthread_join(&ptm->w_timer_thread, NULL);
+	usleep(2*ptm->ts.tv_nsec / 1000);
 	return 0;
 }
 
