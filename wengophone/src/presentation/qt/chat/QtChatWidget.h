@@ -115,6 +115,8 @@ public:
 	 **/
 	void setContactConnected(bool connected);
 
+	bool canDoFileTransfer();
+
 public Q_SLOTS:
 
 	/**

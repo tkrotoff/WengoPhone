@@ -477,18 +477,7 @@ void QtChatWindow::updateToolBarActions() {
 		_ui->actionCallContact->setEnabled(contactProfile.hasCall()
 			&& contactProfile.isAvailable());
 		_ui->actionSendSms->setEnabled(!contactProfile.getMobilePhone().empty());
-
-		bool fileTransferOk = false;
-		if (!contactProfile.getFirstWengoId().empty() && contactProfile.isAvailable()) {
-			IMContact imContact = contactProfile.getFirstAvailableWengoIMContact();
-			if ( (imContact.getPresenceState() != EnumPresenceState::PresenceStateOffline) &&
-			     (imContact.getPresenceState() != EnumPresenceState::PresenceStateUnknown) &&
-			     (imContact.getPresenceState() != EnumPresenceState::PresenceStateUnavailable)) {
-
-				 fileTransferOk = true;
-			}
-		}
-		_ui->actionSendFile->setEnabled(fileTransferOk);
+		_ui->actionSendFile->setEnabled(widget->canDoFileTransfer());
 
 		_ui->actionCreateChatConf->setEnabled(widget->canDoMultiChat());
 		_ui->actionContactInfo->setEnabled(true);

@@ -504,6 +504,10 @@ void QtChatWidget::updateUserAvatar() {
 
 void QtChatWidget::sendFileToSession(const QString & filename) {
 
+	if (!canDoFileTransfer()) {
+		return;
+	}
+
 	QtContactList * qtContactList = _qtWengoPhone->getQtContactList();
 	CContactList & cContactList = qtContactList->getCContactList();
 	QtFileTransfer * qtFileTransfer = _qtWengoPhone->getFileTransfer();
@@ -552,4 +556,21 @@ void QtChatWidget::contactChangedSlot(QString contactId) {
 	QPixmap pixmap;
 	pixmap.loadFromData((uchar *)data.c_str(), data.size());
 	_avatarFrame->updateContact(contactId, pixmap, QString::fromStdString(profile.getDisplayName()));
+}
+
+bool QtChatWidget::canDoFileTransfer() {
+	QtContactList * qtContactList = _qtWengoPhone->getQtContactList();
+	CContactList & cContactList = qtContactList->getCContactList();
+	ContactProfile contactProfile = cContactList.getContactProfile(_contactId.toStdString());
+
+	if (!contactProfile.getFirstWengoId().empty() && contactProfile.isAvailable()) {
+		IMContact imContact = contactProfile.getFirstAvailableWengoIMContact();
+		if ( (imContact.getPresenceState() != EnumPresenceState::PresenceStateOffline) &&
+				(imContact.getPresenceState() != EnumPresenceState::PresenceStateUnknown) &&
+				(imContact.getPresenceState() != EnumPresenceState::PresenceStateUnavailable)) {
+	
+				return true;
+		}
+	}
+	return false;
 }
