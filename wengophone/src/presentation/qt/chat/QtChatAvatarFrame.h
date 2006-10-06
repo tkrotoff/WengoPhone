@@ -24,6 +24,7 @@
 
 #include <QtGui/QWidget>
 #include <QtCore/QList>
+#include <QtCore/QStringList>
 
 class QHBoxLayout;
 class QtChatAvatarWidget;
@@ -45,6 +46,8 @@ public:
 
 	void removeRemoteContact(const QString & contactId);
 
+	void updateContact(const QString & id, QPixmap avatar, const QString & displayName);
+
 private:
 
 	typedef QList<QtChatAvatarWidget*> WidgetList;
@@ -54,6 +57,8 @@ private:
 	QVBoxLayout * _layout;
 
 	Ui::AvatarFrame _ui;
+
+	QStringList _contactIdList;
 };
 
 #endif	//OWQTCHATAVATARFRAME_H

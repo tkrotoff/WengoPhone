@@ -33,6 +33,7 @@
 
 #include <model/WengoPhone.h>
 #include <model/profile/UserProfile.h>
+#include <model/profile/Profile.h>
 
 #include <control/CWengoPhone.h>
 #include <control/contactlist/CContactList.h>
@@ -49,6 +50,7 @@
 #include <util/File.h>
 #include <util/Logger.h>
 #include <cutil/global.h>
+#include <qtutil/SafeConnect.h>
 
 #include <QtGui/QtGui>
 
@@ -113,26 +115,29 @@ QtChatWidget::QtChatWidget(CChatHandler & cChatHandler,
 	////
 
 	//signal connection
-	connect (cwm, SIGNAL(enterPressed(Qt::KeyboardModifiers)), SLOT(enterPressed(Qt::KeyboardModifiers)));
-	connect (cwm, SIGNAL(deletePressed()), SLOT(deletePressed()));
-	connect (cwm, SIGNAL(ctrlTabPressed()), qtChatTabWidget, SLOT(ctrlTabPressedSlot()));
-	connect (_ui.sendButton, SIGNAL(clicked()), SLOT(sendButtonClicked()));
-	connect (_editActionBar, SIGNAL(fontLabelClicked()), SLOT(changeFont()));
-	connect (_editActionBar, SIGNAL(emoticonsLabelClicked()), SLOT(chooseEmoticon()));
-	connect (_editActionBar, SIGNAL(fontColorLabelClicked()), SLOT(changeFontColor()));
-	connect (_editActionBar, SIGNAL(boldLabelClicked()), SLOT(boldClickedSlot()));
-	connect (_editActionBar, SIGNAL(italicLabelClicked()), SLOT(italicClickedSlot()));
-	connect (_editActionBar, SIGNAL(underlineLabelClicked()), SLOT(underlineClickedSlot()));
+	connect(cwm, SIGNAL(enterPressed(Qt::KeyboardModifiers)), SLOT(enterPressed(Qt::KeyboardModifiers)));
+	connect(cwm, SIGNAL(deletePressed()), SLOT(deletePressed()));
+	connect(cwm, SIGNAL(ctrlTabPressed()), qtChatTabWidget, SLOT(ctrlTabPressedSlot()));
+	connect(_ui.sendButton, SIGNAL(clicked()), SLOT(sendButtonClicked()));
+	connect(_editActionBar, SIGNAL(fontLabelClicked()), SLOT(changeFont()));
+	connect(_editActionBar, SIGNAL(emoticonsLabelClicked()), SLOT(chooseEmoticon()));
+	connect(_editActionBar, SIGNAL(fontColorLabelClicked()), SLOT(changeFontColor()));
+	connect(_editActionBar, SIGNAL(boldLabelClicked()), SLOT(boldClickedSlot()));
+	connect(_editActionBar, SIGNAL(italicLabelClicked()), SLOT(italicClickedSlot()));
+	connect(_editActionBar, SIGNAL(underlineLabelClicked()), SLOT(underlineClickedSlot()));
 	connect(_emoticonsWidget, SIGNAL(emoticonClicked(QtEmoticon)), SLOT(emoticonSelected(QtEmoticon)));
 	connect(_emoticonsWidget, SIGNAL(closed()), _chatEdit, SLOT(setFocus()));
 	connect(_chatEdit, SIGNAL(textChanged()), SLOT(chatEditTextChanged()));
 	connect(_chatEdit, SIGNAL(fileDragged(const QString &)), SLOT(sendFileToSession(const QString &)));
-	connect (this, SIGNAL(contactAddedEventSignal(const IMContact &)),
+	connect(this, SIGNAL(contactAddedEventSignal(const IMContact &)),
 		SLOT(contactAddedEventSlot(const IMContact &)));
-	connect (this, SIGNAL(contactRemovedEventSignal(const IMContact &)),
+	connect(this, SIGNAL(contactRemovedEventSignal(const IMContact &)),
 		SLOT(contactRemovedEventSlot(const IMContact &)));
-
 	connect(_ui.avatarFrameButton, SIGNAL(clicked()), SLOT(avatarFrameButtonClicked()));
+
+	QtContactList * qtContactList = _qtWengoPhone->getQtContactList();
+	connect(qtContactList, SIGNAL(contactChangedEventSignal(QString)), SLOT(contactChangedSlot(QString)));
+
 	addAvatarFrame();
 	_cChatHandler.getCUserProfile().getUserProfile().profileChangedEvent +=
 		boost::bind(&QtChatWidget::updateUserAvatar, this);
@@ -399,7 +404,6 @@ void QtChatWidget::setIMChatSession(IMChatSession * imChatSession) {
 	_imChatSession->contactRemovedEvent +=
 		boost::bind(&QtChatWidget::contactRemovedEventHandler, this, _1, _2);
 	_imChatSession->changeTypingState(IMChat::TypingStateNotTyping);
-
 }
 
 void QtChatWidget::chatEditTextChanged() {
@@ -537,4 +541,15 @@ void QtChatWidget::setContactConnected(bool connected) {
 	}
 
 	_isContactConnected = connected;
+}
+
+void QtChatWidget::contactChangedSlot(QString contactId) {
+
+	QtContactList * qtContactList = _qtWengoPhone->getQtContactList();
+	CContactList & cContactList = qtContactList->getCContactList();
+	ContactProfile profile = cContactList.getContactProfile(contactId.toStdString());
+	std::string data = profile.getIcon().getData();
+	QPixmap pixmap;
+	pixmap.loadFromData((uchar *)data.c_str(), data.size());
+	_avatarFrame->updateContact(contactId, pixmap, QString::fromStdString(profile.getDisplayName()));
 }

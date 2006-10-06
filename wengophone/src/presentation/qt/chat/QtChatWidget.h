@@ -34,6 +34,7 @@
 
 #include <QtGui/QtGui>
 
+class Profile;
 class QtChatEditActionBarWidget;
 class QtChatEditWidget;
 class QtChatHistoryWidget;
@@ -162,6 +163,8 @@ private Q_SLOTS:
 	void italicClickedSlot();
 
 	void underlineClickedSlot();
+
+	void contactChangedSlot(QString contactId);
 
 private:
 

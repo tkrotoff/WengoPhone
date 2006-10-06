@@ -58,6 +58,8 @@ public:
 
 	void setupPixmap(QPixmap pixmap);
 
+	void setToolTip(const QString & nickname);
+
 private:
 
 	void setupNickname(const QString & nickname);

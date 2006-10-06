@@ -49,6 +49,13 @@ void QtChatAvatarFrame::setUserPixmap(QPixmap pixmap) {
 }
 
 void QtChatAvatarFrame::addRemoteContact(const QString & id, const QString & displayName, const QString & contactId, QPixmap avatar) {
+
+	if (!_contactIdList.indexOf(id)) {
+		return;
+	} else {
+		_contactIdList.append(id);
+	}
+
 	QtChatAvatarWidget * avatarWidget = new QtChatAvatarWidget(
 		_ui.remoteAvatarFrame, id, avatar, displayName, contactId, QtChatAvatarWidget::BIG);
 	avatarWidget->setupPixmap(avatar);
@@ -62,13 +69,24 @@ void QtChatAvatarFrame::addRemoteContact(const QString & id, const QString & dis
 
 void QtChatAvatarFrame::removeRemoteContact(const QString & contactId) {
 
-	for(int i = 0; i < _widgetList.size(); i++) {
-		if(_widgetList[i]->getContactId() == contactId) {
+	for (int i = 0; i < _widgetList.size(); i++) {
+		if (_widgetList[i]->getContactId() == contactId) {
 			QGridLayout * glayout = dynamic_cast<QGridLayout *>(_ui.remoteAvatarFrame->layout());
 			glayout->removeWidget(_widgetList[i]);
 			glayout->update();
 			delete _widgetList[i];
 			_widgetList.removeAt(i);
+		}
+	}
+	_contactIdList.removeAll(contactId);
+}
+
+void QtChatAvatarFrame::updateContact(const QString & id, QPixmap avatar, const QString & displayName) {
+	for(int i = 0; i < _widgetList.size(); i++) {
+		QtChatAvatarWidget * chatAvatarWidget = _widgetList[i];
+		if (chatAvatarWidget->getContactId() == id) {
+			chatAvatarWidget->setupPixmap(avatar);
+			chatAvatarWidget->setToolTip(displayName);
 		}
 	}
 }

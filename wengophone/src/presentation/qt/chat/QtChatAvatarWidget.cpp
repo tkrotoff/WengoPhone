@@ -29,7 +29,7 @@ QtChatAvatarWidget::QtChatAvatarWidget(QWidget * parent, const QString & id,
 
 	_ui.setupUi(this);
 	//setupPixmap(picture);
-	_ui.pictureLabel->setToolTip(nickname);
+	setToolTip(nickname);
 	//setupNickname(contactId);
 	/*
 	if (_nicknameMode != NONE) {
@@ -98,4 +98,8 @@ void QtChatAvatarWidget::setupNickname(const QString & nickname) {
 		temp += nickname[i];
 	}
 	_ui.nicknameLabel->setText(temp);
+}
+
+void QtChatAvatarWidget::setToolTip(const QString & nickname) {
+	_ui.pictureLabel->setToolTip(nickname);
 }
