@@ -41,7 +41,6 @@ class HistoryMementoCollection {
 	friend class History;
 public:
 
-
 	static const unsigned int SERIALIZATION_VERSION = 1;
 
 	/**
@@ -118,9 +117,10 @@ private:
 	 *
 	 * @param state filter memento by State
 	 * @param count specify number of mementos to be returned
+	 * @param noDuplicates if true no duplicates mementos are returned
 	 * @return a pointer to a HistoryMementoCollection
 	 */
-	HistoryMementoCollection * getMementos(HistoryMemento::State state, int count = -1);
+	HistoryMementoCollection * getMementos(HistoryMemento::State state, int count = -1, bool noDuplicates = true);
 
 	/**
 	 * Return the HistoryMemento's id associated to the given callId.
@@ -160,6 +160,13 @@ private:
 	 * @param max max entries
 	 */
 	void setMaxEntries(unsigned int max);
+
+	/**
+	 * Check if a peer in already in the collection.
+	 * @param peer the peer.
+	 * @return true if the peer is already in the collection.
+	 */
+	static bool isPeerInCollection(HistoryMementoCollection * collection, const std::string & peer);
 
 	/**	 global static history id for mementos */
 	static unsigned int _historyId;

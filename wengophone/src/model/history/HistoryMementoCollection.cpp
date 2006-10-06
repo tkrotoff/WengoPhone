@@ -112,7 +112,7 @@ void HistoryMementoCollection::privateAdd(unsigned int id, HistoryMemento * meme
 	_privateCollection[id] = memento;
 }
 
-HistoryMementoCollection * HistoryMementoCollection::getMementos(HistoryMemento::State state, int count) {
+HistoryMementoCollection * HistoryMementoCollection::getMementos(HistoryMemento::State state, int count, bool noDuplicates) {
 
 	int c = 0;
 	HistoryMementoCollection * toReturn = new HistoryMementoCollection();
@@ -121,6 +121,13 @@ HistoryMementoCollection * HistoryMementoCollection::getMementos(HistoryMemento:
 	for (it = _privateCollection.rbegin(); it != _privateCollection.rend(); it++) {
 
 		if ((state == HistoryMemento::Any) || ((*it).second->getState() == state)) {
+
+			if (noDuplicates) {
+				if (HistoryMementoCollection::isPeerInCollection(toReturn, ((*it).second)->getPeer())) {
+					continue;
+				}
+			}
+
 			toReturn->privateAdd((*it).first, (*it).second);
 			c++;
 		}
@@ -144,7 +151,7 @@ std::string HistoryMementoCollection::toString() {
 	std::string toReturn = "_historyId: " + String::fromNumber(_historyId) + "\n";
 
 	HistoryMap::iterator it;
-	for(it = _privateCollection.begin(); it != _privateCollection.end(); it++) {
+	for (it = _privateCollection.begin(); it != _privateCollection.end(); it++) {
 		toReturn += ( "id: " + String::fromNumber((*it).first) + "/" + (*it).second->toString() + "\n");
 	}
 	return toReturn;
@@ -160,3 +167,13 @@ unsigned int HistoryMementoCollection::getMementoId(HistoryMemento * memento) {
 	return 0;
 }
 
+bool HistoryMementoCollection::isPeerInCollection(HistoryMementoCollection * collection, const std::string & peer) {
+	HistoryMap::iterator it;
+	for (it = collection->begin(); it != collection->end(); it++) {
+		HistoryMemento * memento = (*it).second;
+		if ((memento->getPeer() == peer)) {
+			return true;
+		}
+	}
+	return false;
+}
