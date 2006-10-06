@@ -4999,6 +4999,26 @@ MY_DLLEXPORT int phAccept(int cid, const char * bodytype, const char * body){
 
 	return 0;
 }
+
+MY_DLLEXPORT int phReject(int cid) {
+	int i;
+	phcall_t *ca = ph_locate_call_by_cid(cid);
+
+	DBG_SIP_NEGO("SIP NEGO: phReject\n", 0, 0, 0);
+	if (!ca) {
+		return -PH_BADCID;
+	}
+
+	eXosip_lock();
+	i = eXosip_answer_call(ca->did, 486, 0, ph_get_call_contact(ca), 0, 0, 0);
+	eXosip_unlock();
+
+	ph_release_call(ca);
+
+	return i;
+
+}
+
 /**
 * Generic PhApi service. Creates a new call in PhApi.
 *

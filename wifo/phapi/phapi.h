@@ -962,6 +962,14 @@ MY_DLLEXPORT int phCallAnswered(int call_id, int did, int status_code);
 MY_DLLEXPORT int phAccept(int cid, const char * bodytype, const char * body);
 
 /**
+* Generic PhApi service. Sends a 486 BUSY
+*
+* @param	[in]	cid : the call id
+* @return	TRUE if succeeds; FALSE else
+*/
+MY_DLLEXPORT int phReject(int cid);
+
+/**
 * Generic PhApi service. Sends a CANCEL, DECLINE or a BYE that must be sent
 *
 * @param	[in]	call_id : the call id

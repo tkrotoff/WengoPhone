@@ -388,7 +388,7 @@ SFP_PLUGIN_EXPORTS int sfp_cancel_transfer(int call_id){
 		session->updateState(session, SFP_ACTION_CANCEL);
 		if(session->isCancelled(session)) {
 			// send a BYE
-			phBye(call_id);
+			phReject(call_id);
 
 			// remove the session
 			sfp_remove_session_info(call_id);
@@ -1320,7 +1320,12 @@ static void sfp_on_EXOSIP_CALL_REQUESTFAILURE(eXosip_event_t * event){
 		return; // TODO notify GUI
 	}
 
-	if(sfp_cbks != NULL && sfp_cbks->transferToPeerFailed) sfp_cbks->transferToPeerFailed(event->cid, "", session->short_filename, session->file_type, session->file_size);
+	if(event->status_code == 486) {
+		if(sfp_cbks != NULL && sfp_cbks->transferCancelledByPeer) sfp_cbks->transferCancelledByPeer(event->cid, "", session->short_filename, session->file_type, session->file_size);
+	} else {
+		if(sfp_cbks != NULL && sfp_cbks->transferToPeerFailed) sfp_cbks->transferToPeerFailed(event->cid, "", session->short_filename, session->file_type, session->file_size);
+	}
+
 
 	sfp_remove_session_info(event->cid);
 
