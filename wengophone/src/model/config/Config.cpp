@@ -253,7 +253,7 @@ Config::Config(const std::string & name)
 	_keyDefaultValueMap[VIDEO_ENABLE_KEY] = true;
 	_keyDefaultValueMap[VIDEO_WEBCAM_DEVICE_KEY] = WebcamDriver::getInstance()->getDefaultDevice();
 	_keyDefaultValueMap[VIDEO_QUALITY_KEY] = (int) EnumVideoQuality::VideoQualityNormal;
-	_keyDefaultValueMap[VIDEO_ENABLE_XVIDEO] = true;
+	_keyDefaultValueMap[VIDEO_ENABLE_XVIDEO] = false;
 	_keyDefaultValueMap[VIDEO_ENABLE_FLIP] = false;
 
 	_keyDefaultValueMap[WENGO_SERVER_HOSTNAME_KEY] = std::string("ws.wengo.fr");
