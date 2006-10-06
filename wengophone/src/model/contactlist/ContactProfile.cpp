@@ -351,8 +351,8 @@ bool ContactProfile::hasAvailableSIPNumber() const {
 	return (!getFirstAvailableSIPNumber().empty());
 }
 
-std::string ContactProfile::getFirstAvailableWengoId() const {
-	std::string result;
+IMContact ContactProfile::getFirstAvailableWengoIMContact() const {
+	IMContact result;
 
 	for (IMContactSet::const_iterator it = _imContactSet.begin();
 		it != _imContactSet.end();
@@ -360,12 +360,16 @@ std::string ContactProfile::getFirstAvailableWengoId() const {
 			
 		if (((*it).getProtocol() == EnumIMProtocol::IMProtocolWengo)
 			&& ((*it).getPresenceState() != EnumPresenceState::PresenceStateOffline)) {
-			result = (*it).getContactId();
+			result = *it;
 			break;
 		}
 	}
 
 	return result;
+}
+
+std::string ContactProfile::getFirstAvailableWengoId() const {
+	return getFirstAvailableWengoIMContact().getContactId();
 }
 
 std::string ContactProfile::getFirstWengoId() const {

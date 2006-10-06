@@ -167,6 +167,13 @@ public:
 	std::string getFirstAvailableWengoId() const;
 
 	/**
+	 * Gets the first available Wengo IMContact that is online.
+	 *
+	 * @return the first available Wengo IMContact.
+	 */
+	IMContact getFirstAvailableWengoIMContact() const;
+
+	/**
 	 * Gets the first Wengo contact.
 	 *
 	 * @return the first available Wengo contact id.
