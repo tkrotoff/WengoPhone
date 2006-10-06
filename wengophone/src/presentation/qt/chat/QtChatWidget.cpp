@@ -505,6 +505,23 @@ void QtChatWidget::updateUserAvatar() {
 void QtChatWidget::sendFileToSession(const QString & filename) {
 
 	if (!canDoFileTransfer()) {
+
+		QtContactList * qtContactList = _qtWengoPhone->getQtContactList();
+		CContactList & cContactList = qtContactList->getCContactList();
+		ContactProfile contactProfile = cContactList.getContactProfile(_contactId.toStdString());
+
+		if (contactProfile.getFirstWengoId().empty()) {
+
+			QString myMess = tr("Your file can not be sent: your contact must be connected on the Wengo network. ");
+			//myMess += tr("An automatic message has been sent to him");
+			addStatusMessage(myMess);
+
+			QString hisMess = "<span style=\" background-color:#FAFF91;\"><i>";
+			hisMess += tr("Your contact wishes to send a file with Wengo. ");
+			hisMess += tr("Go to http://wengo.com/index.php/download to install it.");
+			hisMess += "</i></span>";
+			_imChatSession->sendMessage(hisMess.toStdString());
+		}
 		return;
 	}
 
