@@ -121,7 +121,7 @@ void QtFileTransfer::newReceiveFileSessionCreatedEventHandlerSlot(ReceiveFileSes
 
 		_qtFileTransferWidget->setDownloadFolder(downloadFolder);
 		_qtFileTransferWidget->addReceiveItem(fileSession);
-		fileSession->setFilePath(downloadFolder.toStdString());
+		fileSession->setFilePath(std::string(downloadFolder.toAscii().data()));
 		fileSession->start();
 
 	// the user refuse the file transfer.
