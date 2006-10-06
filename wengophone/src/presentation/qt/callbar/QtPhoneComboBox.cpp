@@ -23,7 +23,6 @@
 #include <util/Logger.h>
 
 #include <qtutil/SafeConnect.h>
-#include <qtutil/LanguageChangeEventFilter.h>
 
 #include <QtGui/QtGui>
 
@@ -34,7 +33,6 @@ QtPhoneComboBox::QtPhoneComboBox(QWidget * parent)
 
 	SAFE_CONNECT(this, SIGNAL(activated(const QString &)), SLOT(comboBoxActivated()));
 
-	LANGUAGE_CHANGE(this);
 	init();
 }
 
