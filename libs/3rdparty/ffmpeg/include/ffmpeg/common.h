@@ -6,6 +6,10 @@
 #ifndef COMMON_H
 #define COMMON_H
 
+#ifdef _MSC_VER
+#define inline __inline
+#endif
+
 #ifndef M_PI
 #define M_PI    3.14159265358979323846
 #endif
@@ -186,7 +190,7 @@ typedef uint64_t      uint_fast64_t;
 /* misc math functions */
 extern FF_IMPORT_ATTR const uint8_t ff_log2_tab[256];
 
-static int av_log2(unsigned int v)
+static inline int av_log2(unsigned int v)
 {
     int n;
 
@@ -204,7 +208,7 @@ static int av_log2(unsigned int v)
     return n;
 }
 
-static int av_log2_16bit(unsigned int v)
+static inline int av_log2_16bit(unsigned int v)
 {
     int n;
 
@@ -219,7 +223,7 @@ static int av_log2_16bit(unsigned int v)
 }
 
 /* median of 3 */
-static int mid_pred(int a, int b, int c)
+static inline int mid_pred(int a, int b, int c)
 {
 #if 0
     int t= (a-b)&((a-b)>>31);
@@ -252,7 +256,7 @@ static int mid_pred(int a, int b, int c)
  * @param amax maximum value of the clip range
  * @return cliped value
  */
-static int clip(int a, int amin, int amax)
+static inline int clip(int a, int amin, int amax)
 {
     if (a < amin)      return amin;
     else if (a > amax) return amax;
@@ -264,7 +268,7 @@ static int clip(int a, int amin, int amax)
  * @param a value to clip
  * @return cliped value
  */
-static uint8_t clip_uint8(int a)
+static inline uint8_t clip_uint8(int a)
 {
     if (a&(~255)) return (-a)>>31;
     else          return a;
@@ -276,7 +280,7 @@ int64_t ff_gcd(int64_t a, int64_t b);
 /**
  * converts fourcc string to int
  */
-static int ff_get_fourcc(const char *s){
+static inline int ff_get_fourcc(const char *s){
 #ifdef HAVE_AV_CONFIG_H
     assert( strlen(s)==4 );
 #endif
@@ -305,7 +309,7 @@ static int ff_get_fourcc(const char *s){
 
 #if defined(ARCH_X86) || defined(ARCH_X86_64) || defined(ARCH_POWERPC)
 #if defined(ARCH_X86_64)
-static uint64_t read_time(void)
+static inline uint64_t read_time(void)
 {
         uint64_t a, d;
         asm volatile(   "rdtsc\n\t"
@@ -314,7 +318,7 @@ static uint64_t read_time(void)
         return (d << 32) | (a & 0xffffffff);
 }
 #elif defined(ARCH_X86)
-static long long read_time(void)
+static inline long long read_time(void)
 {
         long long l;
         asm volatile(   "rdtsc\n\t"
@@ -323,7 +327,7 @@ static long long read_time(void)
         return l;
 }
 #else //FIXME check ppc64
-static uint64_t read_time(void)
+static inline uint64_t read_time(void)
 {
     uint32_t tbu, tbl, temp;
 
