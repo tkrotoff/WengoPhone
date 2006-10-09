@@ -62,6 +62,7 @@ QtCallToaster::QtCallToaster()
 	SAFE_CONNECT(_ui->closeButton, SIGNAL(clicked()), SLOT(close()));
 
 	_toaster = new QtToaster(_callToasterWidget, _ui->windowFrame);
+	_toaster->setTimeOnTop(10000);
 }
 
 QtCallToaster::~QtCallToaster() {

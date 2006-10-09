@@ -27,6 +27,8 @@
 
 #include <QtGui/QtGui>
 
+static const unsigned TIME_TO_SHOW = 20;
+
 QtToaster::QtToaster(QWidget * toaster, QFrame * toasterWindowFrame)
 	: QObject(toaster) {
 
@@ -40,6 +42,10 @@ QtToaster::QtToaster(QWidget * toaster, QFrame * toasterWindowFrame)
 	WidgetBackgroundImage::setBackgroundImage(toasterWindowFrame, ":pics/toaster/toaster-background.png", true);
 
 	_toaster->resize(184, 128);
+}
+
+void QtToaster::setTimeOnTop(unsigned time) {
+	_timeOnTop = time;
 }
 
 void QtToaster::close() {
@@ -64,7 +70,7 @@ void QtToaster::show() {
 
 	_timer = new QTimer(this);
 	SAFE_CONNECT(_timer, SIGNAL(timeout()), SLOT(changeToasterPosition()));
-	_timer->start(20);
+	_timer->start(TIME_TO_SHOW);
 }
 
 void QtToaster::changeToasterPosition() {
@@ -82,7 +88,7 @@ void QtToaster::changeToasterPosition() {
 			_show = false;
 			_timer->stop();
 			//Waits 5 seconds with the toaster on top
-			_timer->start(5000);
+			_timer->start(_timeOnTop);
 		}
 	}
 
@@ -93,7 +99,7 @@ void QtToaster::changeToasterPosition() {
 		QRect screenGeometry = desktop->screenGeometry(desktop->primaryScreen());
 
 		_timer->stop();
-		_timer->start(20);
+		_timer->start(TIME_TO_SHOW);
 
 		if (p.y() > (screenGeometry.bottom())) {
 			//Closes the toaster -> hide it completely

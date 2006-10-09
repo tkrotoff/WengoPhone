@@ -39,6 +39,13 @@ public:
 
 	QtToaster(QWidget * toaster, QFrame * toasterWindowFrame);
 
+	/**
+	 * Sets the time with the toaster on top.
+	 *
+	 * @param time time toaster on top in milliseconds
+	 */
+	void setTimeOnTop(unsigned time);
+
 	void show();
 
 	void close();
@@ -54,6 +61,8 @@ private:
 	QTimer * _timer;
 
 	bool _show;
+
+	unsigned _timeOnTop;
 };
 
 #endif	//OWQTTOASTER_H
