@@ -149,24 +149,31 @@ int ph_audio_arts_open(phastream_t *as, const char *name, int rate, int framesiz
   ad = (struct arts_priv_data *) malloc (sizeof(struct arts_priv_data));
 
   errcode = arts_init();
-  if(errcode != 0) {
+  if(errcode != 0)
+  {
     DBG_DYNA_AUDIO_DRV("Failed to initialize Arts, %s\n", arts_error_text(errcode));
   }
 
   ad->input_stream = arts_record_stream(rate, 16, 1, "phapi-in");
-  if (!ad->input_stream) {
+  if (!ad->input_stream)
+  {
       DBG_DYNA_AUDIO_DRV("Arts: can't open record stream\n");
       return -PH_NORESOURCES;
-  } else {
+  }
+  else
+  {
       DBG_DYNA_AUDIO_DRV("Arts: open record stream\n");
       printStreamInfo(ad->input_stream);
   }
 
   ad->output_stream = arts_play_stream(rate, 16, 1, "phapi-out");
-  if (!ad->output_stream) {
+  if (!ad->output_stream)
+  {
       DBG_DYNA_AUDIO_DRV("Arts: can't open play stream\n");
       return -PH_NORESOURCES;
-  } else {
+  }
+  else
+  {
       DBG_DYNA_AUDIO_DRV("Arts: open arts play stream\n");
       printStreamInfo(ad->output_stream);
   }
@@ -192,13 +199,17 @@ int ph_audio_arts_write(phastream_t *as, void *buf, int len) {
   struct arts_priv_data *ad = as->drvinfo;
   int write_r;
 
-  if (ad->output_stream) {
+  if (ad->output_stream)
+  {
     DBG_DYNA_AUDIO_DRV("Arts: write callback, buffer len: %d\n", len);
     write_r = arts_write(ad->output_stream, buf, len);
-    if(write_r > 0) {
+    if(write_r > 0)
+	{
       DBG_DYNA_AUDIO_DRV("Arts: write callback, write %d / bufferlen: %d\n", write_r, len);
       return write_r;
-    } else {
+    }
+	else
+	{
       DBG_DYNA_AUDIO_DRV("Arts: write callback, could not write buffer\n");
       DBG_DYNA_AUDIO_DRV("%s\n", arts_error_text(write_r));
       return 0;
@@ -212,12 +223,16 @@ int ph_audio_arts_read(phastream_t *as, void *buf, int len) {
   struct arts_priv_data *ad = as->drvinfo;
   int read_r;
 
-  if (ad->input_stream) {
+  if (ad->input_stream)
+  {
     read_r = arts_read(ad->input_stream, buf, len);
-    if(read_r > 0) {
+    if(read_r > 0)
+	{
       DBG_DYNA_AUDIO_DRV("Arts: read callback, read %d / bufferlen: %d\n", read_r, len);
       return read_r;
-    } else {
+    }
+	else
+	{
       DBG_DYNA_AUDIO_DRV("Arts: read callback, could not read buffer\n");
       DBG_DYNA_AUDIO_DRV("%s\n", arts_error_text(read_r));
       return 0;

@@ -153,7 +153,8 @@ winmm_audio_read_cbk(HWAVEIN hWaveIn, UINT uMsg, DWORD dwInstance, DWORD dwParam
       }
 
 #ifdef DO_ECHO_CAN
-      if (!dev->read_closing) {
+      if (!dev->read_closing)
+	  {
         mmtime_in.wType = TIME_SAMPLES;
         mmtime_out.wType = TIME_SAMPLES;
         waveInGetPosition(dev->hWaveIn, &mmtime_in, sizeof(MMTIME));

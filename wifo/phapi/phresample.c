@@ -260,7 +260,8 @@ void * ph_resample_mic_init0(int clockrate, int actual_clockrate)
   ctx_mic->src_data = calloc(1, sizeof(SRC_DATA));
   ctx_mic->src_data->src_ratio = recRatio;
   ctx_mic->src_state = src_new(SRC_LINEAR, 1, &libsamplerate_error);
-  if( libsamplerate_error ) {
+  if( libsamplerate_error )
+  {
     DBG_DYNA_AUDIO_RESAMPLE("RESAMPLE: error in libsamplerate: %s\n", src_strerror(libsamplerate_error));
   }
 
@@ -285,7 +286,8 @@ void * ph_resample_spk_init0(int clockrate, int actual_clockrate)
   ctx_spk->src_data = calloc(1, sizeof(SRC_DATA));
   ctx_spk->src_data->src_ratio = playRatio;
   ctx_spk->src_state = src_new(SRC_LINEAR, 1, &libsamplerate_error);
-  if( libsamplerate_error ) {
+  if( libsamplerate_error )
+  {
     DBG_DYNA_AUDIO_RESAMPLE("RESAMPLE: error in libsamplerate: %s\n", src_strerror(libsamplerate_error));
   }
 
@@ -300,7 +302,8 @@ void ph_resample_cleanup0(void* resample_audiodrv_ctx)
 {
   struct phresamplectx *ctx = (struct phresamplectx *)resample_audiodrv_ctx;
 
-  if (ctx) {
+  if (ctx)
+  {
     src_delete(ctx->src_state);
     free(ctx);
   }
@@ -315,12 +318,14 @@ void ph_resample_audio0(void *ctx, void *inbuf, int inbsize, void *outbuf, int *
   //outbsize is the excepted frame size after resampling
   int postsampling_framesize = *outbsize;
 
-  if (!ctx) {
+  if (!ctx)
+  {
     return;
   }    
   ctx_filter = (struct phresamplectx *)ctx;
 
-  if (!postsampling_framesize) {
+  if (!postsampling_framesize)
+  {
     postsampling_framesize = (int)(inbsize*ctx_filter->src_data->src_ratio);
   }
 
@@ -342,7 +347,8 @@ void ph_resample_audio0(void *ctx, void *inbuf, int inbsize, void *outbuf, int *
 
   //process resampling
   errorCode = src_process(ctx_filter->src_state, ctx_filter->src_data);
-  if( errorCode ) {
+  if( errorCode )
+  {
     DBG_DYNA_AUDIO_RESAMPLE("RESAMPLE: error in libresample: %s\n", src_strerror(errorCode));
     return;
   }
@@ -354,7 +360,8 @@ void ph_resample_audio0(void *ctx, void *inbuf, int inbsize, void *outbuf, int *
 
   //hack: if resample filter is in acquisition mode (we hope it is only for the first samples),
   //it does not had out enough samples
-  if (*outbsize != postsampling_framesize) {
+  if (*outbsize != postsampling_framesize)
+  {
     DBG_DYNA_AUDIO_RESAMPLE("RESAMPLE: acquisition mode: dropping !: generated: %d , wished: %d\n",
       *outbsize, postsampling_framesize);
 

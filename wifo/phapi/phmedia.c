@@ -557,7 +557,9 @@ int ph_media_start(phcall_t *ca, int port, int videoport,
     ph_media_video_start(ca, videoport, frameDisplay);
 }
   else
+  {
     ph_media_video_stop(ca);
+  }
 #endif
 
   return ret;

@@ -128,7 +128,9 @@ int phadfile_open(phastream_t *as, const char *name, int rate, int framesize, ph
 
   pd = calloc(1, sizeof(*pd));
   if (!pd)
+  {
     return -PH_NORESOURCES;
+  }
   memset(pd, 0, sizeof(*pd));
 
   mic_tmpfilename = getenv("PH_AD_FILE_MIC_FILE");
@@ -149,7 +151,9 @@ int phadfile_open(phastream_t *as, const char *name, int rate, int framesize, ph
   
   pd->mic_fd = fopen(pd->mic_filename,"rb");
   if (!pd->mic_fd)
+  {
     return -PH_NORESOURCES;
+  }
 
   ph_media_audio_fast_recording_init(&pd->spk_recorder, pd->spk_filename);
   as->drvinfo = pd;
@@ -179,7 +183,8 @@ int phadfile_read(phastream_t *as, void *buf, int len) {
   // for a quick hack, we loop by dropping the last unaligned chunk
   could_read = fread(buf, 1, len, pd->mic_fd);
   DBG_DYNA_AUDIO_DRV("phad_file: just read %d bytes from file\n", could_read);
-  if (could_read < len) {
+  if (could_read < len)
+  {
 	  rewind(pd->mic_fd);
 	  fread(buf, 1, len, pd->mic_fd);
   }

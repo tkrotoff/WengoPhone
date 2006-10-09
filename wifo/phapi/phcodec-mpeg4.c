@@ -93,7 +93,8 @@ void *mpeg4_encoder_init(void *ctx) {
 	mpeg4t->encoder_ctx.context->thread_count = 1;
 
 	if (avcodec_open(mpeg4t->encoder_ctx.context,
-			mpeg4t->encoder_ctx.encoder) < 0) {
+			mpeg4t->encoder_ctx.encoder) < 0)
+	{
 		return 0;
 	}
 

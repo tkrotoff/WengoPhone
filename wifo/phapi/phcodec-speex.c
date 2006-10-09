@@ -74,7 +74,9 @@ void *ph_speex_enc_init(SpeexMode *mode)
 
   speex = (struct speexenc*) calloc(sizeof(struct speexenc), 1);
   if (!speex)
+  {
     return 0;
+  }
 
   speex->st = speex_encoder_init(mode);
 
@@ -113,7 +115,9 @@ void *ph_speex_dec_init(SpeexMode *mode)
 
   speex = (struct speexdec *)calloc(sizeof(struct speexdec), 1);
   if (!speex)
+  {
     return 0;
+  }
 
   speex->st = speex_decoder_init(mode);
 

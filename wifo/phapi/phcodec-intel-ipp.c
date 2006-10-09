@@ -212,7 +212,9 @@ int ph_g729_encode(void *ctx, const void *src, int srcsize, void *dst, int dstsi
     
 
     if (!ctx)
+	{
       return 0;
+	}
     
     blocks = div(srcsize, codec->pInfo.framesize);
 
@@ -278,7 +280,9 @@ int ph_g729_decode(void *ctx, const void *src, int srcsize, void *dst, int dstsi
     int origsize = srcsize;
 
     if (!ctx)
+	{
       return 0;
+	}
 
     for(x = 0; x < origsize; x += frameSize) 
       {
@@ -376,7 +380,9 @@ int main(int argc, char *argv[])
 
 			rn = read(ifile, ibuf, G729_ENCODED_FRAME_SIZE);
 			if (!rn)
+			{
 				break;
+			}
 			cn = ph_g729_decode(codec, ibuf, rn, obuf, sizeof(obuf));
 			wn = write(ofile, obuf, cn);
 		}
@@ -392,7 +398,9 @@ int main(int argc, char *argv[])
 			rn = read(ifile, ibuf, G729_FRAME_SAMPLES*2);
            // printf("read %d bytes\n", rn);
 			if (!rn)
+			{
 				break;
+			}
 			cn = ph_g729_encode(codec, ibuf, rn, obuf, sizeof(obuf));
 			wn = write(ofile, obuf, cn);
             // printf("wrote %d bytes\n", wn);

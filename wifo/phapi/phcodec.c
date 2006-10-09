@@ -63,16 +63,20 @@ static inline int val_seg(int val)
 {
 	int r = 0;
 	val >>= 7;
-	if (val & 0xf0) {
+	if (val & 0xf0)
+	{
 		val >>= 4;
 		r += 4;
 	}
-	if (val & 0x0c) {
+	if (val & 0x0c)
+	{
 		val >>= 2;
 		r += 2;
 	}
 	if (val & 0x02)
+	{
 		r += 1;
+	}
 	return r;
 }
 
@@ -102,9 +106,12 @@ static inline unsigned char s16_to_alaw(int pcm_val)
 	int		seg;
 	unsigned char	aval;
 
-	if (pcm_val >= 0) {
+	if (pcm_val >= 0)
+	{
 		mask = 0xD5;
-	} else {
+	}
+	else
+	{
 		mask = 0x55;
 		pcm_val = -pcm_val;
 		if (pcm_val > 0x7fff)
@@ -112,8 +119,11 @@ static inline unsigned char s16_to_alaw(int pcm_val)
 	}
 
 	if (pcm_val < 256)
+	{
 		aval = pcm_val >> 4;
-	else {
+	}
+	else
+	{
 		/* Convert the scaled magnitude to segment number. */
 		seg = val_seg(pcm_val);
 		aval = (seg << 4) | ((pcm_val >> (seg + 3)) & 0x0f);
@@ -133,8 +143,11 @@ static inline alaw_to_s16(unsigned char a_val)
 	a_val ^= 0x55;
 	t = a_val & 0x7f;
 	if (t < 16)
+	{
 		t = (t << 4) + 8;
-	else {
+	}
+	else
+	{
 		seg = (t >> 4) & 0x07;
 		t = ((t & 0x0f) << 4) + 0x108;
 		t <<= seg -1;
@@ -177,15 +190,20 @@ static unsigned char s16_to_ulaw(int pcm_val)	/* 2's complement (16-bit range) *
 	int seg;
 	unsigned char uval;
 
-	if (pcm_val < 0) {
+	if (pcm_val < 0)
+	{
 		pcm_val = 0x84 - pcm_val;
 		mask = 0x7f;
-	} else {
+	}
+	else
+	{
 		pcm_val += 0x84;
 		mask = 0xff;
 	}
 	if (pcm_val > 0x7fff)
+	{
 		pcm_val = 0x7fff;
+	}
 
 	/* Convert the scaled magnitude to segment number. */
 	seg = val_seg(pcm_val);

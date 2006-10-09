@@ -36,10 +36,12 @@ ph_media_audio_recording_record_one(recording_t *recording, short c1, short c2, 
   short *samples = recording->samples+recording->nchannels*recording->position;
 
   *samples++ = c1;
-  if (recording->nchannels > 1) {
+  if (recording->nchannels > 1)
+  {
     *samples++ = c2;
   }
-  if (recording->nchannels > 2) {
+  if (recording->nchannels > 2)
+  {
     *samples++ = c3;
   }
 
@@ -64,11 +66,13 @@ void
 ph_media_audio_recording_close(recording_t *recording) 
 {
   ph_media_audio_recording_dump(recording);
-  if(recording->fd) {
+  if(recording->fd)
+  {
     fclose(recording->fd);
   }
 
-  if (recording->samples) {
+  if (recording->samples)
+  {
     free(recording->samples);
   }
 }
@@ -86,7 +90,8 @@ ph_media_audio_fast_recording_init(recording_t *recording, const char *filename)
 void
 ph_media_audio_fast_recording_record(recording_t *recording, const void *payload, int size)
 {
-  if(recording->fd) {
+  if(recording->fd)
+  {
     fwrite(payload, 1, size, recording->fd);
   }
 }

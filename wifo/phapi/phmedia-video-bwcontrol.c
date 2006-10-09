@@ -215,7 +215,8 @@ void ph_video_bwcontrol_apply_user_params(phvstream_t *stream) {
 	stream->fps = fps;
 	stream->fps_interleave_time = (1000/fps);
 
-	if (stream->wt) {
+	if (stream->wt)
+	{
 		webcam_set_fps(stream->wt, fps);
 	}
 }
@@ -260,16 +261,20 @@ ph_video_bwcontrol_thread(void *p)
 
 		for (it = pos - 2; it > pos - 5; it -= 1) {
 			rr = (rtcp_t *) osip_list_get(&stream->rr_sent_q, it);
-			if (!rr) {
+			if (!rr)
+			{
 				continue;
 			}
 
 			printf("Current lost %d, item lost %d\n",
 				rr->r.rr.rr[0].lost, rr2->r.rr.rr[0].lost);
 
-			if (rr->r.rr.rr[0].lost > rr2->r.rr.rr[0].lost) {
+			if (rr->r.rr.rr[0].lost > rr2->r.rr.rr[0].lost)
+			{
 				d_rate -= KB_PER_SEC(1);
-			} else {
+			}
+			else
+			{
 				d_rate += KB_PER_SEC(1);
 			}
 		}
@@ -286,8 +291,8 @@ ph_video_bwcontrol_thread(void *p)
 				av_enc_t->context->rc_max_rate, d_rate);
 
 		if (d_rate >= ABSOLUTE_MIN_RATE &&
-			d_rate <= ABSOLUTE_MAX_RATE && stream->ms.running) {
-
+			d_rate <= ABSOLUTE_MAX_RATE && stream->ms.running)
+		{
 			av_enc_t->context->rc_max_rate = d_rate;
 			av_enc_t->context->rc_min_rate = d_rate;
 			av_enc_t->context->bit_rate = d_rate;

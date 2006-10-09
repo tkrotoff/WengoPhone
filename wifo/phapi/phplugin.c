@@ -1,7 +1,7 @@
 /*
  * phapi   phone api
  *
- * Copyright (C) 2004        Vadim Lebedev <vadim@mbdsys.com>
+ * Copyright (C) 2006 Wengo SAS
  *
  * This is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -47,7 +47,8 @@ mappinglist_t * content_types_to_plugins = NULL;
 * @return	TRUE if the plugin could be registered; FALSE else
 */
 MY_DLLEXPORT unsigned int phplugin_register(phplugin_t * plugin){
-	if(content_types_to_plugins == NULL){
+	if(content_types_to_plugins == NULL)
+	{
 		content_types_to_plugins = create_mappinglist();
 	}
 	return mappinglist_put(content_types_to_plugins, &(plugin->content_type), plugin, &phplugin_content_type_equals);
@@ -91,7 +92,8 @@ phplugin_t * phplugin_get_plugin_associated_to_content_type(phplugin_content_typ
 * @return	TRUE if the plugin could be associated to the call_id; FALSE else
 */
 unsigned int phplugin_associate_callid_to_plugin(int call_id, phplugin_t * plugin){
-	if(callids_to_plugins == NULL){
+	if(callids_to_plugins == NULL)
+	{
 		callids_to_plugins = create_mappinglist();
 	}
 	return mappinglist_put_with_int_key(callids_to_plugins, call_id, plugin);
@@ -104,7 +106,8 @@ unsigned int phplugin_associate_callid_to_plugin(int call_id, phplugin_t * plugi
 * @return	TRUE if the plugin could be dis-associated to the call_id; FALSE else
 */
 unsigned int phplugin_disassociate_callid_from_any_plugin(int call_id){
-	if(mappinglist_remove_with_int_key(callids_to_plugins, call_id) != NULL){		
+	if(mappinglist_remove_with_int_key(callids_to_plugins, call_id) != NULL)
+	{		
 		return TRUE;
 	}
 	return FALSE;
@@ -126,7 +129,8 @@ unsigned int phplugin_associate_callid_to_plugin2(int call_id, const char * body
 	// get the plugin associated with the content type
 	plugin = phplugin_get_plugin_associated_to_content_type(content_type);
 	// associates the plugin to the call id
-	if(plugin != NULL){
+	if(plugin != NULL)
+	{
 		phplugin_associate_callid_to_plugin(call_id, plugin);
 		return TRUE;
 	}
@@ -156,11 +160,13 @@ static unsigned int phplugin_content_type_equals(void * element_a, void * elemen
 	phplugin_content_type_t * _a;
 	phplugin_content_type_t * _b;
 
-	if(element_a != NULL && element_b != NULL){
+	if(element_a != NULL && element_b != NULL)
+	{
 		_a = (phplugin_content_type_t *)element_a;
 		_b = (phplugin_content_type_t *)element_b;
 
-		if(strcasecmp(_a->type, _b->type)==0 && strcasecmp(_a->subtype, _b->subtype)==0){
+		if(strcasecmp(_a->type, _b->type)==0 && strcasecmp(_a->subtype, _b->subtype)==0)
+		{
 			return TRUE;
 		}
 	}

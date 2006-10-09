@@ -334,7 +334,9 @@ int AEC::dtd(REAL d, REAL x)
     }
     // rotate Ndx
     if (++dtdNdx >= NLMS_LEN / DTD_LEN)
+	{
       dtdNdx = 0;
+	}
     max_x[dtdNdx] = 0.0f;
   }
   // The Geigel DTD algorithm with Hangover timer Thold
@@ -343,7 +345,9 @@ int AEC::dtd(REAL d, REAL x)
   }
 
   if (hangover)
+  {
     --hangover;
+  }
 
   return (hangover > 0);
 }
@@ -597,7 +601,9 @@ int AEC16KHZ::dtd(REAL d, REAL x)
     }
     // rotate Ndx
     if (++dtdNdx >= NLMS_LEN / DTD_LEN)
+	{
       dtdNdx = 0;
+	}
     max_x[dtdNdx] = 0.0f;
   }
   // The Geigel DTD algorithm with Hangover timer Thold
@@ -606,7 +612,9 @@ int AEC16KHZ::dtd(REAL d, REAL x)
   }
 
   if (hangover)
+  {
     --hangover;
+  }
 
   return (hangover > 0);
 }
@@ -661,10 +669,14 @@ extern "C" {
 
 void *create_AEC(int boost, int samplingfreq){
   AEC_Base *aec;
-  if (samplingfreq == 16000) 
+  if (samplingfreq == 16000)
+  {
     aec =  new AEC16KHZ();
+  }
   else
+  {
     aec =  new AEC();
+  }
 
   aec->setambient(M55dB_PCM);
   return aec;
@@ -672,7 +684,9 @@ void *create_AEC(int boost, int samplingfreq){
 
 short do_AEC(void *ec, short ref, short mic){
   if(ec)
+  {
     return((short)(((class AEC_Base *)ec)->doAEC((int)mic, (int)ref)));
+	}
 
   return mic;
 }

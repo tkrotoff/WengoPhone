@@ -100,7 +100,9 @@ ph_pa_callback(const void *input, void *output,
 
   needMore = frameCount*2 - outCount;
   if (needMore > 0)
+  {
     memset(outCount + (char *)output, 0, needMore);
+  }
 
   return as->ms.running ? paContinue : paAbort;
 }
@@ -121,7 +123,9 @@ ph_pa_icallback(const void *input, void *output,
 
   needMore = frameCount*2 - outCount;
   if (needMore > 0)
+  {
     memset(outCount + (char *)output, 0, needMore);
+  }
 
   return as->ms.running ? paContinue : paAbort;
 }
@@ -163,7 +167,9 @@ void ph_pa_driver_init()
 
   lat = getenv("PH_PA_LATENCY");
   if (lat)
+  {
       ph_pa_latency = atoi(lat);
+  }
 }
 
 PaStream *pa_dev_open(phastream_t *as, int output, char *name, int rate, int framesize, int latencymsecs)
@@ -182,24 +188,33 @@ PaStream *pa_dev_open(phastream_t *as, int output, char *name, int rate, int fra
 
   DBG_DYNA_AUDIO_DRV("phad_pa - pa_dev_open: asking for (name: \"%s\", rate: %d, framesize: %d)\n", name, rate, framesize, 0);
 
-  if (!strncasecmp(name, "pa:", 3)) {
+  if (!strncasecmp(name, "pa:", 3))
+  {
     name += 3;
   }
 
-  if (in = strstr(name,"IN=")) {
+  if (in = strstr(name,"IN="))
+  {
     inputParameters.device = atoi(in + 3);
-  } else {
+  }
+  else
+  {
     inputParameters.device = Pa_GetDefaultInputDevice();
-    if (inputParameters.device == paNoDevice) {
+    if (inputParameters.device == paNoDevice)
+	{
       return 0;
     }
   }
 
-  if (out = strstr(name,"OUT=")) {
+  if (out = strstr(name,"OUT="))
+  {
     outputParameters.device = atoi(out + 4);
-  } else {
+  }
+  else
+  {
     outputParameters.device = Pa_GetDefaultOutputDevice();
-    if (outputParameters.device == paNoDevice) {
+    if (outputParameters.device == paNoDevice)
+	{
       return 0;
     }
   }
@@ -236,13 +251,15 @@ PaStream *pa_dev_open(phastream_t *as, int output, char *name, int rate, int fra
     }
   }
 
-  if (rateIndex == -1) {
+  if (rateIndex == -1)
+  {
       return 0;
   }
 
   /* check if the initial match is accepted */
   err = Pa_IsFormatSupported( &inputParameters, &outputParameters, standardSampleRates[rateIndex] );
-  if ( err == paFormatIsSupported ) {
+  if ( err == paFormatIsSupported )
+  {
     as->actual_rate = (int) standardSampleRates[rateIndex];
   }
   else
@@ -260,7 +277,8 @@ PaStream *pa_dev_open(phastream_t *as, int output, char *name, int rate, int fra
       }
     }
 
-    if (rateIndex == -1) {
+    if (rateIndex == -1)
+	{
       return 0;
     }
   }
@@ -279,7 +297,8 @@ PaStream *pa_dev_open(phastream_t *as, int output, char *name, int rate, int fra
     framesize,
     0,0);
 
-  if (output) {
+  if (output)
+  {
     err = Pa_OpenStream(
               &stream,
               (output == PH_PA_INOUT) ? &inputParameters : 0,
@@ -289,7 +308,9 @@ PaStream *pa_dev_open(phastream_t *as, int output, char *name, int rate, int fra
               0, /* paClipOff, */  /* we won't output out of range samples so don't bother clipping them */
               (output == PH_PA_INOUT) ? ph_pa_callback : ph_pa_ocallback,
               as );
-  } else {
+  }
+  else
+  {
     err = Pa_OpenStream(
               &stream,
               &inputParameters,
@@ -300,7 +321,8 @@ PaStream *pa_dev_open(phastream_t *as, int output, char *name, int rate, int fra
               ph_pa_icallback,
               as );
   }
-  if( err != paNoError ) {
+  if( err != paNoError )
+  {
     return 0;
   }
 
@@ -316,7 +338,9 @@ int pa_stream_open(phastream_t *as, char *name, int rate, int framesize, ph_audi
 
   pd = calloc(sizeof(*pd), 1);
   if (!pd)
+  {
     return -PH_NORESOURCES;
+  }
 
   DBG_DYNA_AUDIO_DRV("pa_stream_open: (name: %s, rate: %d, framesize: %d)\n", name, rate, framesize, 0);
 
@@ -396,7 +420,9 @@ void pa_stream_start(phastream_t *as)
   Pa_StartStream(PAIDEV(as));
 
   if (PAODEV(as) != PAIDEV(as))
+  {
     Pa_StartStream(PAODEV(as));
+  }
 
 }
 

@@ -32,7 +32,9 @@ ph_mediabuf_new(int size)
   mb = (ph_mediabuf_t *) malloc(sizeof(*mb) + (size + 1) );
 
   if (!mb)
+  {
     return 0;
+  }
 
   DONT(printf("allocated mediabuf = %08x size=%d\n", mb, size));
   
@@ -47,7 +49,9 @@ void ph_mediabuf_free(ph_mediabuf_t *mb)
 {
   DONT(printf("ph_mediabuf_free(%08x)\n",mb));
   if (mb)
+  {
     free(mb);
+  }
 }
 
 void ph_mediabuf_init(ph_mediabuf_t *mb, void *buf, int size)
@@ -60,7 +64,9 @@ void ph_mediabuf_init(ph_mediabuf_t *mb, void *buf, int size)
 void ph_mediabuf_cleanup(ph_mediabuf_t *mb)
 {
   if (mb->buf)
+  {
     free(mb->buf);
+  }
 }
 
 
@@ -177,20 +183,28 @@ int ph_mediabuf_loadwavffile(int fd,  int samplerate, ph_mediabuf_t **pmb)
   filedatalen = wav_read_header(fd, &wfmt);
 
   if (filedatalen <= 0)
+  {
     return BAD_HDR;
+  }
 
   if (wfmt.channels != 1 && wfmt.bits_per_sample != 16)
+  {
     return BAD_FMT;
+  }
 
 
   if (wfmt.samplerate != 16000 && wfmt.samplerate != 8000)
+  {
     return BAD_FMT;
+  }
 
   if (samplerate == wfmt.samplerate)
     {
       mb = ph_mediabuf_new((int) filedatalen);
       if (!mb)
-	return NO_MEM;
+	  {
+		return NO_MEM;
+	  }
 
       if (filedatalen != read(fd, (char *) (mb->buf),  filedatalen))
 	{
@@ -266,10 +280,14 @@ int ph_mediabuf_loadwavffile(int fd,  int samplerate, ph_mediabuf_t **pmb)
 err:
 
   if (audiodata)
+  {
     free(audiodata);
+  }
   
   if (mb)
+  {
     ph_mediabuf_free(mb);
+  }
 
   *pmb = 0;
   return errcode;
@@ -288,12 +306,16 @@ ph_mediabuf_load(const char *filename, int samplerate)
 
 
   if (16000 != samplerate && samplerate != 8000)
+  {
     return 0;
+  }
 
   fd = open(filename, OPENMODE);
   
   if (fd == -1)
+  {
     return 0;
+  }
 
   err = ph_mediabuf_loadwavffile(fd, samplerate, &mb);
   if (err > 0 || err != BAD_HDR)
@@ -313,7 +335,9 @@ ph_mediabuf_load(const char *filename, int samplerate)
     {
       mb = ph_mediabuf_new((int) flen);
       if (mb)
-	read(fd, (char *) (mb->buf),  flen);
+	  {
+		read(fd, (char *) (mb->buf),  flen);
+	  }
       close(fd);
       return mb;
     }
@@ -348,7 +372,9 @@ ph_mediabuf_load(const char *filename, int samplerate)
 		*dst++ = buf[i];
 	    }
 	  else
+	  {
 	    break;
+	  }
 
 	  flen -= blen;
 	}

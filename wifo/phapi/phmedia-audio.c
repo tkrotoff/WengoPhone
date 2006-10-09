@@ -396,7 +396,9 @@ void ph_audio_vad_cleanup(phastream_t *stream)
     CNG_UNLOCK(stream);
 #if 0
     if ( stream->cngi.cng_lock )
+	{
       g_mutex_free(stream->cng_lock);
+	}
 #endif
     }
   stream->cngi.cng = 0;
@@ -588,8 +590,13 @@ static int max_sil;
 void print_pwrstats(phastream_t *s)
 {
   if(s->cngi.pwr_size)
-    DBG_DYNA_AUDIO("\nPWR SUM: min %x max %x mean %x max_sil_cnt %d\n", min_pwr/s->cngi.pwr_size, max_pwr/s->cngi.pwr_size,
-       s->cngi.mean_pwr/s->cngi.pwr_size, max_sil);
+  {
+    DBG_DYNA_AUDIO("\nPWR SUM: min %x max %x mean %x max_sil_cnt %d\n",
+	  	min_pwr/s->cngi.pwr_size,
+	  	max_pwr/s->cngi.pwr_size,
+	  	s->cngi.mean_pwr/s->cngi.pwr_size,
+	  	max_sil);
+  }
 }
 #endif
 
@@ -852,11 +859,15 @@ ph_handle_network_data(phastream_t *stream)
 #if 0
   freespace = audio_stream_get_out_space(stream, &used); 
   if (used*2 >= codec->decoded_framesize)
+  {
     return;
+  }
 
  freespace = audio_stream_get_out_space(stream, &usedspace);
  if (!freespace)
+ {
      return;
+ }
 #endif
 
   while (stream->ms.running)
@@ -1544,7 +1555,9 @@ int ph_audio_rec_cbk(phastream_t *stream, void *buf_dataleft, int size_dataleft)
     }
     else
 #endif
+	{
       ph_encode_and_send_audio_frame(stream, buf_dataleft, internal_framesize);
+	}
 
     size_dataleft -= internal_framesize;
     processed += internal_framesize;
@@ -2244,7 +2257,9 @@ setup_aec(struct ph_msession_s *s, phastream_t *stream)
 
 #if 0
     if (!lat)
+	{
       lat = "120";
+	}
 #endif
 
       stream->audio_loop_latency = 0;
@@ -2844,7 +2859,9 @@ int ph_msession_audio_stream_start(struct ph_msession_s *s, const char* deviceId
       }
       else
 #endif
+	  {
         rtp_session_set_remote_addr(stream->ms.rtp_session, stream->ms.remote_ip,	stream->ms.remote_port);
+	  }
 
       DBG_MEDIA_ENGINE("ph_msession_audio_start: audio stream reset done\n");
       return 0;

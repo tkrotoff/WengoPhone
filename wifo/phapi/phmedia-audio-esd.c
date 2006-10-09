@@ -142,14 +142,16 @@ int ph_audio_esd_open(phastream_t *as, const char *name, int rate, int framesize
     ad->rec_sock = esd_record_stream(ad->rec_format, rate,
             ad->host, NULL);
 
-    if (ad->rec_sock <= 0) {
+    if (ad->rec_sock <= 0)
+	{
         return -PH_NORESOURCES;
     }
 
     ad->out_sock = esd_play_stream(ad->out_format, rate,
             ad->host, NULL);
 
-    if (ad->out_sock <= 0) {
+    if (ad->out_sock <= 0)
+	{
         return -PH_NORESOURCES;
     }
 

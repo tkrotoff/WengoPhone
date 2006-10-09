@@ -31,7 +31,9 @@ int wav_read_header(int fd,  WAVEAUDIOFORMAT *fmt)
   int riff_length;
   
   if (sizeof(riff_chunk) != read(fd, &riff_chunk, sizeof(riff_chunk)))
+  {
     return -1;
+  }
   
   if (strncmp(riff_chunk.info, "RIFF", 4) != 0)
     {
@@ -41,7 +43,9 @@ int wav_read_header(int fd,  WAVEAUDIOFORMAT *fmt)
   riff_length = riff_chunk.length;
   
   if (4 != read(fd, wavestr, 4))
+  {
     return -1;
+  }
   
   
   if (strncmp(wavestr, "WAVE", 4) != 0)
@@ -58,7 +62,9 @@ int wav_read_header(int fd,  WAVEAUDIOFORMAT *fmt)
         }
       
       if (!strncmp(riff_chunk.info, "fmt ", 4))
+	  {
         break;
+	  }
       
       lseek(fd, riff_chunk.length, SEEK_CUR);
       
@@ -90,7 +96,9 @@ int wav_read_header(int fd,  WAVEAUDIOFORMAT *fmt)
         }
       
       if (!strncmp(riff_chunk.info, "data", 4))
+	  {
         break;
+	  }
       
       lseek(fd, riff_chunk.length, SEEK_CUR);
       

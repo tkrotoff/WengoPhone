@@ -102,7 +102,8 @@ void *ph_amr_enc_init(void *dummy){
   struct amrencoder *amr;
   DBG("AMR EMBED ENCODER INIT\n");
   amr = malloc(sizeof(struct amrencoder));
-  if(amr == NULL){
+  if(amr == NULL)
+  {
     DBG("MALLOC FAILED!!!!!\n");
     return NULL;
   }
@@ -112,7 +113,8 @@ void *ph_amr_enc_init(void *dummy){
   amr->dtx = 0;
 #endif
   DBG("AMR EMBED ENC initializing...");
-  if (Speech_Encode_Frame_init(&amr->enc, amr->dtx, "encoder") || sid_sync_init (&amr->sid_state)){
+  if (Speech_Encode_Frame_init(&amr->enc, amr->dtx, "encoder") || sid_sync_init (&amr->sid_state))
+  {
     free(amr);
     DBG("failed\n");
     return NULL;
@@ -128,12 +130,14 @@ void *ph_amr_dec_init(void *dummy){
   struct amrdecoder *amr;
   DBG("AMR EMBED DECODER init\n");
   amr = malloc(sizeof(struct amrdecoder));
-  if(amr == NULL){
+  if(amr == NULL)
+  {
     DBG("MALLOC FAILED!!!!!\n");
     return NULL;
   }
   DBG("AMR EMBED DEC initializing...\n");
-  if (Speech_Decode_Frame_init(&amr->dec, "Decoder")){
+  if (Speech_Decode_Frame_init(&amr->dec, "Decoder"))
+  {
     free(amr);
     DBG("failed\n");
     return NULL;
@@ -187,7 +191,8 @@ int ph_amr_encode(void *ctx, const void *src, int srcsize, void *dst, int dstsiz
   Speech_Encode_Frame(amr->enc, amr->mode, new_speech, &serial[1], &amr->used_mode); 
   sid_sync (amr->sid_state, amr->used_mode, &amr->tx_type);
 
-  if ((frame%10) == 0) {
+  if ((frame%10) == 0)
+  {
    DBG("\rtxtype=%d mode=%d used_mode=%d", amr->tx_type, amr->mode, amr->used_mode);
   }
 
@@ -195,9 +200,12 @@ int ph_amr_encode(void *ctx, const void *src, int srcsize, void *dst, int dstsiz
   packed_size = PackBits(amr->used_mode, amr->mode, amr->tx_type, &serial[1], packed_bits);
   /* perform homing if homing frame was detected at encoder input */
   if(packed_size != 32)
+  {
     DBG("packed size: %d\n", packed_size);
+  }
 
-  if (amr->reset_flag != 0){
+  if (amr->reset_flag != 0)
+  {
     Speech_Encode_Frame_reset(amr->enc);
     sid_sync_reset(amr->sid_state);
   }
@@ -222,7 +230,8 @@ int ph_amr_decode(void *ctx, const void *src, int srcsize, void *dst, int dstsiz
   q  = (toc >> 2) & 0x01;
   ft = (toc >> 3) & 0x0F;
   
-  if(ft > 8 && ft < 15){
+  if(ft > 8 && ft < 15)
+  {
     /* invalid frame, discard all packet */
     printf ("\rRejected: rxtype=%d mode=%d", amr->rx_type, ft);
     return 0;
@@ -230,21 +239,28 @@ int ph_amr_decode(void *ctx, const void *src, int srcsize, void *dst, int dstsiz
 
   amr->rx_type = UnpackBits(q, ft, packed_bits+1, &amr->mode, &serial[1]);
   frame++;
-  if ((frame%10) == 0) {
+  if ((frame%10) == 0)
+  {
    printf ("\rrxtype=%d mode=%d", amr->rx_type, ft);
   }
   if (amr->rx_type == RX_NO_DATA)
+  {
     amr->mode = amr->dec->prev_mode;
+  }
   else
+  {
     amr->dec->prev_mode = amr->mode;
+  }
   
   /* if homed: check if this frame is another homing frame */
-  if (amr->reset_flag_old == 1){
+  if (amr->reset_flag_old == 1)
+  {
     /* only check until end of first subframe */
     amr->reset_flag = decoder_homing_frame_test_first(serial, amr->mode);
   }
   /* produce encoder homing frame if homed & input=decoder homing frame */
-  if ((amr->reset_flag != 0) && (amr->reset_flag_old != 0)){
+  if ((amr->reset_flag != 0) && (amr->reset_flag_old != 0))
+  {
     for (i = 0; i < L_FRAME; i++){
       *out++ = EHF_MASK;
     }
@@ -253,12 +269,14 @@ int ph_amr_decode(void *ctx, const void *src, int srcsize, void *dst, int dstsiz
     Speech_Decode_Frame(amr->dec, amr->mode, &serial[1], amr->rx_type, out);
   }
   /* if not homed: check whether current frame is a homing frame */
-  if (amr->reset_flag_old == 0){
+  if (amr->reset_flag_old == 0)
+  {
     /* check whole frame */
     amr->reset_flag = decoder_homing_frame_test(&serial[1], amr->mode);
   }
   /* reset decoder if current frame is a homing frame */
-  if (amr->reset_flag != 0){
+  if (amr->reset_flag != 0)
+  {
     Speech_Decode_Frame_reset(amr->dec);
   }
   amr->reset_flag_old = amr->reset_flag;
@@ -320,7 +338,8 @@ static void *ph_amr_enc_init(void *dummy)
 #endif
   DBG("AMR ENC initializing...");
   enc = Encoder_Interface_init(dtx);
-  if (enc == NULL){
+  if (enc == NULL)
+  {
     DBG("failed\n");
     return NULL;
   }else{
@@ -338,7 +357,8 @@ static void *ph_amr_dec_init(void *dummy)
   void *dec;
   DBG("AMR DEC initializing...");
   dec = Decoder_Interface_init();
-  if (dec == NULL){
+  if (dec == NULL)
+  {
     DBG("failed\n");
     return NULL;
   }else{

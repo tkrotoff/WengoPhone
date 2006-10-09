@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005 David Ferlier <david.ferlier@wengo.fr>
+ * Copyright (C) 2005-2006 Wengo SAS
  *
  * This is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -67,7 +67,8 @@ int phcodec_avcodec_decode(void *ctx, const void *src,
 	dec_len = avcodec_decode_video(decoder_t->context,
 		dst, &got_picture, (uint8_t *)src, srcsize);
 
-	if (got_picture) {
+	if (got_picture)
+	{
 		return dec_len;
 	}
 
@@ -97,8 +98,10 @@ int phcodec_avcodec_encoder_init(ph_avcodec_encoder_ctx_t *encoder_t, void *ctx,
 	encoder_t->encoder = avcodec_find_encoder(
 			meta_t->avcodec_encoder_id);
 
-	if (!encoder_t->encoder) {
-		if (!encoder_t->encoder) {
+	if (!encoder_t->encoder)
+	{
+		if (!encoder_t->encoder)
+		{
 #ifdef DEBUG
 			printf("Couldn't find coded with id %d\n",
 				meta_t->avcodec_encoder_id);
@@ -150,7 +153,8 @@ int phcodec_avcodec_decoder_init(ph_avcodec_decoder_ctx_t * decoder_t, void *ctx
 
 	decoder_t->decoder = avcodec_find_decoder(meta_t->avcodec_decoder_id);
 
-	if (!decoder_t->decoder) {
+	if (!decoder_t->decoder)
+	{
 		return -1;
 	}
 
@@ -159,7 +163,8 @@ int phcodec_avcodec_decoder_init(ph_avcodec_decoder_ctx_t * decoder_t, void *ctx
 	//decoder_t->context->dsp_mask = (FF_MM_MMX|FF_MM_MMXEXT|FF_MM_SSE|FF_MM_SSE2);
 	decoder_t->context->idct_algo = FF_IDCT_AUTO;
 
-	if (avcodec_open(decoder_t->context, decoder_t->decoder) < 0) {
+	if (avcodec_open(decoder_t->context, decoder_t->decoder) < 0) 
+	{
 		return -1;
 	}
 	return 0;
@@ -189,7 +194,8 @@ void phcodec_avcodec_video_rtp_callback(struct AVCodecContext * context, void *d
 
 	video_stream->mbCounter += packetNumber;
 	eof = (video_stream->mbCounter == QCIF_MACROBLOCKS_IN_ONE_FRAME);
-	if (eof) {
+	if (eof)
+	{
 		video_stream->mbCounter = 0;
 	}
 

@@ -68,7 +68,9 @@ void tg_tone_init(struct tonegen *tg, unsigned freq, unsigned samplefreq, int re
   unsigned long tmp;
 
   if (reset)
+  {
     tg->acc = 0;
+  }
 
   tmp =  freq * (1lu << 16);
   tg->inc = tmp / samplefreq;

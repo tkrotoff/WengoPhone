@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005 David Ferlier <david.ferlier@wengo.fr>
+ * Copyright (C) 2005-2006 Wengo SAS
  *
  * This is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -73,7 +73,8 @@ int h264_encoder_init(void *ctx) {
 	phcodec_avcodec_encoder_init(&h264t->encoder_ctx, &h264t->meta, s);
 
 	if (avcodec_open(h264t->encoder_ctx.context,
-			h264t->encoder_ctx.encoder) < 0) {
+			h264t->encoder_ctx.encoder) < 0)
+	{
 		return -1;
 	}
 

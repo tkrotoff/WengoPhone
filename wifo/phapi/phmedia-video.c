@@ -93,9 +93,12 @@ void phmedia_video_rtpsend_callback (void *ctx, void *data, int size,
 	m1 = rtp_session_create_packet(video_stream->ms.rtp_session,
 			RTP_FIXED_HEADER_SIZE, (uint8_t *)encap_data, size+4);
 	if (!m1)
+	{
 		return;
+	}
 
-	if (eof) {
+	if (eof)
+	{
 		rtp_set_markbit(m1, 1);
 	}
 
@@ -120,7 +123,8 @@ webcamerrorcode ph_media_video_initialize_webcam(phvstream_t *vstream) {
 
 	err = webcam_set_device(vstream->wt, cfg->video_config.video_device);
 
-	if (err == WEBCAM_OK) {
+	if (err == WEBCAM_OK)
+	{
 		
         // beware: you must initialize these video_config parameters
         // while debugging, you can always try PHMEDIA_VIDEO_FRAME_WIDTH, PHMEDIA_VIDEO_FRAME_HEIGHT. 320,240 is a very good guess
@@ -159,7 +163,8 @@ void webcam_frame_callback(webcam *sender, piximage *image, void *userdata) {
 	phvstream_t *video_stream = (phvstream_t *) userdata;
 	(void)sender;
 
-	if (!video_stream || !video_stream->ms.running) {
+	if (!video_stream || !video_stream->ms.running)
+	{
 		return;
 	}
 
@@ -190,7 +195,8 @@ phm_videoframe_t *ph_media_video_new_video_frame(piximage *image) {
 
 
 void ph_media_free_video_frame(phm_videoframe_t *ptr) {
-	if (ptr) {
+	if (ptr)
+	{
 		free(ptr);
 	}
 }
@@ -221,7 +227,8 @@ int ph_media_video_send_frame(phvstream_t *video_stream, phm_videoframe_t *phmvf
 	image_captured = &(phmvf->image);
 
 	// if asked, a copy of the frame is put in cache on the stream
-	if (cache) {
+	if (cache)
+	{
 		// TODO: check that size is ok for the processing buffer
 		memcpy(video_stream->local_frame_cache->data, image_captured->data,
 			pix_size(image_captured->palette, image_captured->width, image_captured->height));
@@ -309,7 +316,8 @@ void ph_media_video_alloc_processing_buffers(phvstream_t *vstream, pixosi nego_p
 }
 
 void ph_media_video_check_processing_buffers(phvstream_t *vstream, pixosi pix_source, unsigned width_source, unsigned height_source){
-	if ((width_source != vstream->width_proc_source) || (height_source != vstream->height_proc_source) || (pix_source != vstream->pix_proc_source)) {
+	if ((width_source != vstream->width_proc_source) || (height_source != vstream->height_proc_source) || (pix_source != vstream->pix_proc_source))
+	{
 		ph_media_video_free_processing_buffers(vstream);
 		ph_media_video_alloc_processing_buffers(vstream, pix_source, width_source, height_source);
 	}
@@ -419,9 +427,11 @@ int ph_msession_video_start(struct ph_msession_s *s, const char *deviceid)
         }
         else
 #endif
+		{
 	rtp_session_set_remote_addr(video_stream->ms.rtp_session,
 				    video_stream->ms.remote_ip,
 				    video_stream->ms.remote_port);
+		}
 
     return 0;
 
@@ -456,11 +466,13 @@ int ph_msession_video_start(struct ph_msession_s *s, const char *deviceid)
   video_stream->rtpCallback = &phmedia_video_rtpsend_callback;
   video_stream->mtx = osip_mutex_init();
 
-  if (codec->encoder_init) {
+  if (codec->encoder_init)
+  {
     video_stream->ms.encoder_ctx = codec->encoder_init(video_stream);
   }
 
-  if (codec->decoder_init) {
+  if (codec->decoder_init)
+  {
     video_stream->ms.decoder_ctx = codec->decoder_init(video_stream);
   }
 
@@ -510,20 +522,25 @@ int ph_msession_video_start(struct ph_msession_s *s, const char *deviceid)
   video_stream->wt = webcam_get_instance();
 
   // choice of the frame server and init sequence
-  if (sp->traffictype & PH_MSTREAM_TRAFFIC_OUT) {
-    if (ph_media_video_initialize_webcam(video_stream)) {
+  if (sp->traffictype & PH_MSTREAM_TRAFFIC_OUT)
+  {
+    if (ph_media_video_initialize_webcam(video_stream))
+	{
       video_stream->phmfs_webcam.state = 1;
-    } else {
+    }
+	else
+	{
       video_stream->phmfs_onewaycam.state = 1; // init
     }
-  } else {
+  } else
+  {
     video_stream->phmfs_onewaycam.state = 1; // init
   }
 
 
 	// choice 1: start sequence of the webcam frame server
-	if (video_stream->phmfs_webcam.state == 1)  {
-
+	if (video_stream->phmfs_webcam.state == 1)
+	{
 		// create processing buffer after nego with the webcam
 		ph_media_video_alloc_processing_buffers(video_stream,
 				webcam_get_palette(video_stream->wt),
@@ -540,7 +557,8 @@ int ph_msession_video_start(struct ph_msession_s *s, const char *deviceid)
 	}
 
 	// choice 2: start sequence of the virtual webcam frame server
-	if (video_stream->phmfs_onewaycam.state == 1) {
+	if (video_stream->phmfs_onewaycam.state == 1)
+	{
 
 		// note :	this "virtual" webcam may seem a little strange, but it facilitates NAT traversal right now
 		//			and makes it possible to have only the tx or rx having a cam
@@ -598,7 +616,8 @@ int ph_msession_video_start(struct ph_msession_s *s, const char *deviceid)
   /*
    * If the user wants us to automatically adjust the bandwidth, then do it */
 
-  if (sp->videoconfig  == PHAPI_VIDEO_LINE_AUTOMATIC) {
+  if (sp->videoconfig  == PHAPI_VIDEO_LINE_AUTOMATIC)
+  {
 
     /* Place callbacks for RRs */
     video_session->rtcp_rr_sent_cb = ph_video_rtcp_rr_sent;
@@ -658,19 +677,23 @@ int ph_media_video_flush_queue(phvstream_t *stream, unsigned long seqnumber_star
 		phvs = (struct ph_video_stream_packet *) osip_list_get(
 			&stream->received_packets_q, it);
 
-		if (!phvs) {
+		if (!phvs)
+		{
 			continue;
 		}
 
-		if (phvs->seqnumber < seqnumber_start) {
+		if (phvs->seqnumber < seqnumber_start)
+		{
 			continue;
 		}
 
-		if (phvs->seqnumber > seqnumber_end) {
+		if (phvs->seqnumber > seqnumber_end)
+		{
 			continue;
 		}
 
-		if (!phvs->mp->b_cont) {
+		if (!phvs->mp->b_cont)
+		{
 			continue;
 		}
 
@@ -678,7 +701,8 @@ int ph_media_video_flush_queue(phvstream_t *stream, unsigned long seqnumber_star
 
 #if 0
 
-		if (video_decoder->buf_index + len_received >= MAX_DEC_BUFFER_SIZE) {
+		if (video_decoder->buf_index + len_received >= MAX_DEC_BUFFER_SIZE)
+		{
 			video_decoder->buf_index = 0;
 			break;
 		}
@@ -694,7 +718,8 @@ int ph_media_video_flush_queue(phvstream_t *stream, unsigned long seqnumber_star
 	for (it = q_size - 1; it >= 0; it -= 1) {
 		phvs = (struct ph_video_stream_packet *) osip_list_get(
 			&stream->received_packets_q, it);
-		if (phvs && phvs->seqnumber <= seqnumber_end) {
+		if (phvs && phvs->seqnumber <= seqnumber_end)
+		{
 			osip_list_remove(&stream->received_packets_q, it);
 			freemsg(phvs->mp);
 			free(phvs);
@@ -706,21 +731,24 @@ int ph_media_video_flush_queue(phvstream_t *stream, unsigned long seqnumber_star
 	 * Time to check if we didn't overflow the fps set on the encoder
 	 *
 	 */
-	if (video_decoder->buf_index != 0) {
+	if (video_decoder->buf_index != 0)
+	{
 		len = codec->decode(video_decoder, video_decoder->data_dec,
 			video_decoder->buf_index, picIn,
 			38016);
 
-		if (!len) {
-      DBG_MEDIA_ENGINE("Can't decode !\n");
+		if (!len)
+		{
+      		DBG_MEDIA_ENGINE("Can't decode !\n");
 			return 0;
-		} else {
-
+		}
+		else
+		{
 			stream->stat_num_decoded_total_over_5s++;
-
 			gettimeofday(&now_time, 0);
 			ph_tvsub(&now_time, &stream->last_decode_time);
-			if (picIn->pict_type != FF_I_TYPE && (now_time.tv_usec / 1000) < stream->fps_interleave_time) {
+			if (picIn->pict_type != FF_I_TYPE && (now_time.tv_usec / 1000) < stream->fps_interleave_time)
+			{
 				stream->stat_num_decoded_dropped_over_5s++;
 				return 0;
 			}
@@ -787,13 +815,14 @@ ph_handle_video_network_data(phvstream_t *stream, unsigned long timestamp,
 	{
 
 
-		if (mp->b_cont) {
-
+		if (mp->b_cont)
+		{
 			rx_observed_timestamp = rtp_get_timestamp(mp);
 			rx_observed_seqnumber = rtp_get_seqnumber(mp);
 			rx_observed_markbit = rtp_get_markbit(mp);
 
-			if (stream->rx_trace_initialize == 0) {
+			if (stream->rx_trace_initialize == 0)
+			{
 				stream->rx_trace_initialize = 1;
 				stream->rx_current_timestamp = rx_observed_timestamp;
 				stream->rx_current_seqnumber = rx_observed_seqnumber;
@@ -805,7 +834,8 @@ ph_handle_video_network_data(phvstream_t *stream, unsigned long timestamp,
 			phvs->seqnumber = rx_observed_seqnumber;
 			osip_list_add(&stream->received_packets_q, phvs, -1);
 
-			if (rx_observed_markbit) {
+			if (rx_observed_markbit)
+			{
 				flushed = ph_media_video_flush_queue(stream, stream->rx_current_seqnumber, rx_observed_seqnumber);
 				stream->rx_trace_initialize = 0;
 				*ts_inc = 90000;
@@ -815,7 +845,8 @@ ph_handle_video_network_data(phvstream_t *stream, unsigned long timestamp,
 			}
 
 			// beware of this algorithm with clients that put a different ts on each slice (!)
-			if (!rx_observed_markbit && (rx_observed_timestamp > stream->rx_current_timestamp)) {
+			if (!rx_observed_markbit && (rx_observed_timestamp > stream->rx_current_timestamp))
+			{
 				flushed = ph_media_video_flush_queue(stream, stream->rx_current_seqnumber, rx_observed_seqnumber-1);
 				stream->rx_current_timestamp = rx_observed_timestamp;
 				stream->rx_current_seqnumber = rx_observed_seqnumber;
@@ -838,7 +869,8 @@ void ph_video_handle_data(phvstream_t *stream) {
 
 	stream->threadcount_encoding += 1;
 
-	if (!stream->ms.running) {
+	if (!stream->ms.running)
+	{
 		return;
 	}
 
@@ -856,7 +888,8 @@ void ph_video_handle_data(phvstream_t *stream) {
 	stream->rxtstamp += rxts_inc;
 
 	// if the 'onewaycam' frame server is activated, it must produce a frame now
-	if ((stream->phmfs_onewaycam.state == 2) && (stream->threadcount_encoding%15==0)) {
+	if ((stream->phmfs_onewaycam.state == 2) && (stream->threadcount_encoding%15==0))
+	{
 		fs_phmvf = (phm_videoframe_t*) malloc(sizeof(phm_videoframe_t));
 		//fs_phmvf->image = (piximage *)malloc(sizeof(piximage));
 		fs_phmvf->image.data = stream->phmfs_onewaycam.buffer;
@@ -871,15 +904,18 @@ void ph_video_handle_data(phvstream_t *stream) {
 
 	// iterate over the available local frames in order to flush them into to the encoder
 	q_size = osip_list_size(&stream->webcam_frames_q);
-	if (q_size > 1) {
-    DBG_MEDIA_ENGINE("webcam_frames_q overrun - %d\n", q_size);
+	if (q_size > 1)
+	{
+    	DBG_MEDIA_ENGINE("webcam_frames_q overrun - %d\n", q_size);
 	}
 	for (it = 0; it < q_size; it += 1) {
 		phmvf = (phm_videoframe_t *) osip_list_get(&stream->webcam_frames_q, 0);
-		if (!phmvf) {
+		if (!phmvf)
+		{
 			continue;
 		}
-		if (it == (q_size-1)) {
+		if (it == (q_size-1))
+		{
 			//printf("calling send_frame\n");
 			ph_media_video_send_frame(stream, phmvf, 1);
 		}
@@ -913,13 +949,17 @@ void ph_msession_video_stop(struct ph_msession_s *s)
   phvstream_t *stream = (phvstream_t *) msp->streamerData;
 
   if (!(s->activestreams & (1 << PH_MSTREAM_VIDEO1)))
+  {
       return;
+  }
 
   s->activestreams &= ~(1 << PH_MSTREAM_VIDEO1);
 
 
   if (!stream)
+  {
     return;
+  }
 
   stream->ms.running = 0;
   msp->streamerData = 0;
@@ -933,7 +973,8 @@ void ph_msession_video_stop(struct ph_msession_s *s)
 	stream->ms.media_io_thread = 0;
   }
     
-  if (msp->videoconfig == PHAPI_VIDEO_LINE_AUTOMATIC) {
+  if (msp->videoconfig == PHAPI_VIDEO_LINE_AUTOMATIC)
+  {
     osip_thread_join(stream->media_bw_control_thread);
   }
 
@@ -941,16 +982,21 @@ void ph_msession_video_stop(struct ph_msession_s *s)
   stream->phmfs_webcam.state = 0;
   stream->wt = 0;
 
-  if (stream->phmfs_onewaycam.state == 2) {
+  if (stream->phmfs_onewaycam.state == 2)
+  {
     av_free(stream->phmfs_onewaycam.buffer);
     stream->phmfs_onewaycam.state = 0;
   }
 
   if (stream->ms.codec->encoder_cleanup)
+  {
     stream->ms.codec->encoder_cleanup(stream->ms.encoder_ctx);
+  }
 
   if (stream->ms.codec->decoder_cleanup)
+  {
     stream->ms.codec->decoder_cleanup(stream->ms.decoder_ctx);
+  }
 
   ph_media_video_free_processing_buffers(stream);
 
@@ -1002,7 +1048,9 @@ ph_video_io_thread(void *p)
 		gettimeofday(&start_time, 0);
 
 		if (!stream->ms.running)
+		{
 			break;
+		}
 		
 		ph_video_handle_data(stream);
 		

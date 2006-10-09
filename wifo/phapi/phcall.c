@@ -10,7 +10,9 @@ ph_locate_call_by_cid(phConfig_t *cfg, int cid)
   for(ca = cfg->ph_calls; ca < &cfg->ph_calls[PH_MAX_CALLS];  ca++)
     {
       if (ca->cid == cid)
-	return ca;
+	  {
+		return ca;
+	  }
     }
 
   return 0;
@@ -21,7 +23,8 @@ void phReleaseTerminatedCalls(phConfig_t *cfg)
 	phcall_t *ca;
 	for(ca = cfg->ph_calls; ca < &cfg->ph_calls[PH_MAX_CALLS];  ca++)
     {
-		if ((ca->cid != -1) && (ph_media_is_stream_stopped(ca) == 1)) {
+		if ((ca->cid != -1) && (ph_media_is_stream_stopped(ca) == 1))
+		{
 			ph_release_call(cfg, ca);
 		}
     }
@@ -35,7 +38,9 @@ ph_locate_call_by_rcid(phConfig_t *cfg, int cid)
   for(ca = cfg->ph_calls; ca < &cfg->ph_calls[PH_MAX_CALLS];  ca++)
     {
       if (ca->rcid == cid)
-	return ca;
+	  {
+		return ca;
+	  }
     }
 
   return 0;
@@ -50,7 +55,9 @@ ph_locate_call_by_rdid(phConfig_t *cfg, int did)
   for(ca = cfg->ph_calls; ca < &cfg->ph_calls[PH_MAX_CALLS];  ca++)
     {
       if (ca->rdid == did)
-	return ca;
+	  {
+		return ca;
+	  }
     }
 
   return 0;
@@ -63,7 +70,9 @@ ph_allocate_call(phConfig_t *cfg, int cid)
   phcall_t *ca = ph_locate_call_by_cid(cfg, -1);
 
   if (!ca)
+  {
     return 0;
+  }
 
   ca->cid = cid;
   ca->cfg = cfg;
@@ -81,7 +90,9 @@ ph_locate_call(phConfig_t *cfg, eXosip_event_t *je, int creatit)
   for(ca = cfg->ph_calls; ca < &cfg->ph_calls[PH_MAX_CALLS];  ca++)
     {
       if (ca->cid == -1 && !newca)
-	newca = ca;
+	  {
+		newca = ca;
+	  }
 
       if (ca->cid == je->cid)
 	{
@@ -98,8 +109,10 @@ ph_locate_call(phConfig_t *cfg, eXosip_event_t *je, int creatit)
     if (creatit)   
       {
 	/* allocate a new one */
-	if (!newca)  
+	if (!newca)
+	{
 	  return 0; /* !!! BUG !!! */
+	}
 	ca = newca;
 	memset(ca, 0, sizeof(*ca));
 	ca->cid = -1;
@@ -109,7 +122,9 @@ ph_locate_call(phConfig_t *cfg, eXosip_event_t *je, int creatit)
  
   
   if (!ca)
+  {
     return 0;
+  }
 
 
   /* update the call information */

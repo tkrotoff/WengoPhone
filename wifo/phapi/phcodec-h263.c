@@ -89,7 +89,8 @@ void *h263_encoder_init(void *ctx) {
 	h263t->encoder_ctx.context->bit_rate = DEFAULT_RATE;
 
 	if (avcodec_open(h263t->encoder_ctx.context,
-			h263t->encoder_ctx.encoder) < 0) {
+			h263t->encoder_ctx.encoder) < 0)
+	{
 		return 0;
 	}
 

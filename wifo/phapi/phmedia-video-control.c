@@ -55,17 +55,20 @@ int phVideoControlChangeFps(int callid, int fps) {
 	phvstream_t *stream;
 
 	ca = ph_locate_call_by_cid(callid);
-	if (!ca) {
+	if (!ca) 
+	{
 		return -PH_BADCID;
 	}
 
 	stream = (phvstream_t *) ca->ph_video_stream;
 
-	if (!ca->ph_video_stream || !stream->ms.running) {
+	if (!ca->ph_video_stream || !stream->ms.running)
+	{
 		return -PH_ERROR;
 	}
 
-	if (ca->video_payload != PH_MEDIA_H263_PAYLOAD) {
+	if (ca->video_payload != PH_MEDIA_H263_PAYLOAD)
+	{
 		return -PH_ERROR;
 	}
 
@@ -76,7 +79,8 @@ int phVideoControlChangeFps(int callid, int fps) {
 	 *
 	 */
 
-	if (stream->wt) {
+	if (stream->wt)
+	{
 		webcam_set_fps(stream->wt, fps);
 	}
 
@@ -98,7 +102,8 @@ int phVideoControlChangeQuality(int callid, int quality) {
 	phvstream_t *stream;
 
 	ca = ph_locate_call_by_cid(callid);
-	if (!ca) {
+	if (!ca)
+	{
 #ifdef DEBUG
 		printf("Can't find call (phchangefps)\n");
 #endif
@@ -107,11 +112,13 @@ int phVideoControlChangeQuality(int callid, int quality) {
 
 	stream = (phvstream_t *) ca->ph_video_stream;
 
-	if (!ca->ph_video_stream || !stream->ms.running) {
+	if (!ca->ph_video_stream || !stream->ms.running)
+	{
 		return -PH_ERROR;
 	}
 
-	if (ca->video_payload != PH_MEDIA_H263_PAYLOAD) {
+	if (ca->video_payload != PH_MEDIA_H263_PAYLOAD)
+	{
 		return -PH_ERROR;
 	}
 
@@ -143,17 +150,20 @@ int phVideoControlSetBitrate(int callid, int maxrate, int minrate) {
 	phvstream_t *stream;
 
 	ca = ph_locate_call_by_cid(callid);
-	if (!ca) {
+	if (!ca)
+	{
 		return -PH_BADCID;
 	}
 
 	stream = (phvstream_t *) ca->ph_video_stream;
 
-	if (!ca->ph_video_stream || !stream->ms.running) {
+	if (!ca->ph_video_stream || !stream->ms.running)
+	{
 		return 0;
 	}
 
-	if (ca->video_payload != PH_MEDIA_H263_PAYLOAD) {
+	if (ca->video_payload != PH_MEDIA_H263_PAYLOAD)
+	{
 		return 0;
 	}
 
@@ -181,12 +191,14 @@ void phVideoControlCodecSet(int callid, struct phVideoCodecConfig *pvcc) {
 	phvstream_t *stream;
 
 	ca = ph_locate_call_by_cid(callid);
-	if (!ca) {
+	if (!ca)
+	{
 		return;
 	}
 
 	stream = (phvstream_t *) ca->ph_video_stream;
-	if (!ca->ph_video_stream || !stream->ms.running) {
+	if (!ca->ph_video_stream || !stream->ms.running)
+	{
 		return;
 	}
 
@@ -216,12 +228,14 @@ void phVideoControlCodecGet(int callid, struct phVideoCodecConfig *pvcc) {
 	phvstream_t *stream;
 
 	ca = ph_locate_call_by_cid(callid);
-	if (!ca) {
+	if (!ca)
+	{
 		return;
 	}
 
 	stream = (phvstream_t *) ca->ph_video_stream;
-	if (!ca->ph_video_stream || !stream->ms.running) {
+	if (!ca->ph_video_stream || !stream->ms.running)
+	{
 		return;
 	}
 

@@ -306,7 +306,9 @@ static OSStatus output_renderer(void *inRefCon,
 
 	/* did we fill the playback buffer completely? */
 	if (!outCount)
+	{
 		return noErr;
+	}
 
 	needMore = outCount;
 	while (needMore > decodedFrameSize) {
@@ -318,7 +320,9 @@ static OSStatus output_renderer(void *inRefCon,
 		playBuf += chunkSize;
 		
 		if (chunkSize != decodedFrameSize)
+		{
 			break;
+		}
 	}
 
 	if (needMore >= decodedFrameSize) {
@@ -353,7 +357,9 @@ static OSStatus output_renderer(void *inRefCon,
 		
 		/* if we still need more data fill it with zeroes */
 		if (needMore > 0)
+		{
 			memset(playBuf, 0, needMore);
+		}
 	}
 	
 	return noErr;	
