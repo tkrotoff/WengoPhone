@@ -340,10 +340,12 @@ void QtPhoneCall::videoFrameReceivedEvent(piximage * remoteVideoFrame, piximage 
 				OWSAFE_DELETE(_videoWindow);
 				_videoWindow = new QtVideoQt(_phoneCallWidget);
 				SAFE_CONNECT(_videoWindow, SIGNAL(toggleFlipVideoImageSignal()), SLOT(toggleFlipVideoImage()));
+				showVideoWidget();
 			}
 		} else {
 			_videoWindow = new QtVideoQt(_phoneCallWidget);
 			SAFE_CONNECT(_videoWindow, SIGNAL(toggleFlipVideoImageSignal()), SLOT(toggleFlipVideoImage()));
+			showVideoWidget();
 		}
 	}
 #else
@@ -354,9 +356,9 @@ void QtPhoneCall::videoFrameReceivedEvent(piximage * remoteVideoFrame, piximage 
 		_showVideo = true;
 		_videoWindow = new QtVideoQt(_phoneCallWidget);
 		SAFE_CONNECT(_videoWindow, SIGNAL(toggleFlipVideoImageSignal()), SLOT(toggleFlipVideoImage()));
+		showVideoWidget();
 	}
 #endif
-	showVideoWidget();
 	_videoWindow->showImage(remoteVideoFrame, localVideoFrame);
 }
 
