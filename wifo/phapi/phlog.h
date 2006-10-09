@@ -30,7 +30,7 @@
 /* 0 to disable, 1 log to file LOG_FILE and 2 log to stdout */
 #define ACTIVATE_SIPNEGO_DBG 0
 #define ACTIVATE_MEDIA_ENGINE_DBG 0
-#define ACTIVATE_MEDIA_ENGINE_VIDEO_DBG 1
+#define ACTIVATE_MEDIA_ENGINE_VIDEO_DBG 0
 #define ACTIVATE_CODEC_LOOKUP_DBG 0
 #define ACTIVATE_DYNA_AUDIO_DBG 0
 #define ACTIVATE_DYNA_AUDIO_RESAMPLE_DBG 0
@@ -51,9 +51,10 @@ int logToFile(char *fmt, ...);
 #endif
 
 #define print_dbg(x) printf("%s:%s:%d ",x, __FILE__, __LINE__); printf
+#define log2file_dbg(x) logToFile("(%s:%s:%d) ",x, __FILE__, __LINE__); logToFile
 
 #if (ACTIVATE_SIPNEGO_DBG == 1)
-  #define DBG_SIP_NEGO logToFile
+  #define DBG_SIP_NEGO log2file_dbg("DBG_SIP_NEGO")
 #elif (ACTIVATE_SIPNEGO_DBG == 2)
   #define DBG_SIP_NEGO print_dbg("DBG_SIP_NEGO")
 #else
@@ -65,7 +66,7 @@ int logToFile(char *fmt, ...);
 #endif
 
 #if (ACTIVATE_MEDIA_ENGINE_DBG == 1)
-  #define DBG_MEDIA_ENGINE logToFile
+  #define DBG_MEDIA_ENGINE log2file_dbg("DBG_MEDIA_ENGINE")
 #elif (ACTIVATE_MEDIA_ENGINE_DBG == 2)
   #define DBG_MEDIA_ENGINE print_dbg("DBG_MEDIA_ENGINE")
 #else
@@ -77,7 +78,7 @@ int logToFile(char *fmt, ...);
 #endif
 
 #if (ACTIVATE_MEDIA_ENGINE_VIDEO_DBG == 1)
-  #define DBG_MEDIA_ENGINE_VIDEO logToFile
+  #define DBG_MEDIA_ENGINE_VIDEO log2file_dbg("DBG_MEDIA_ENGINE_VIDEO")
 #elif (ACTIVATE_MEDIA_ENGINE_VIDEO_DBG == 2)
   #define DBG_MEDIA_ENGINE_VIDEO print_dbg("DBG_MEDIA_ENGINE_VIDEO")
 #else
@@ -89,7 +90,7 @@ int logToFile(char *fmt, ...);
 #endif
 
 #if (ACTIVATE_CODEC_LOOKUP_DBG == 1)
-  #define DBG_CODEC_LOOKUP logToFile
+  #define DBG_CODEC_LOOKUP log2file_dbg("DBG_CODEC_LOOKUP")
 #elif (ACTIVATE_CODEC_LOOKUP_DBG == 2)
   #define DBG_CODEC_LOOKUP print_dbg("DBG_CODEC_LOOKUP")
 #else
@@ -101,7 +102,7 @@ int logToFile(char *fmt, ...);
 #endif
 
 #if (ACTIVATE_DYNA_AUDIO_DBG == 1)
-  #define DBG_DYNA_AUDIO logToFile
+  #define DBG_DYNA_AUDIO log2file_dbg("DBG_DYNA_AUDIO")
 #elif (ACTIVATE_DYNA_AUDIO_DBG == 2)
   #define DBG_DYNA_AUDIO print_dbg("DBG_DYNA_AUDIO")
 #else
@@ -113,7 +114,7 @@ int logToFile(char *fmt, ...);
 #endif
 
 #if (ACTIVATE_DYNA_AUDIO_RESAMPLE_DBG == 1)
-  #define DBG_DYNA_AUDIO_RESAMPLE logToFile
+  #define DBG_DYNA_AUDIO_RESAMPLE log2file_dbg("DBG_DYNA_AUDIO_RESAMPLE")
 #elif (ACTIVATE_DYNA_AUDIO_RESAMPLE_DBG == 2)
   #define DBG_DYNA_AUDIO_RESAMPLE print_dbg("DBG_DYNA_AUDIO_RESAMPLE")
 #else
@@ -125,7 +126,7 @@ int logToFile(char *fmt, ...);
 #endif
 
 #if (ACTIVATE_DYNA_AUDIO_ECHO_DBG == 1)
-  #define DBG_DYNA_AUDIO_ECHO logToFile
+  #define DBG_DYNA_AUDIO_ECHO log2file_dbg("DBG_DYNA_AUDIO_ECHO")
 #elif (ACTIVATE_DYNA_AUDIO_ECHO_DBG == 2)
   #define DBG_DYNA_AUDIO_ECHO print_dbg("DBG_DYNA_AUDIO_ECHO")
 #else
@@ -137,7 +138,7 @@ int logToFile(char *fmt, ...);
 #endif
 
 #if (ACTIVATE_DYNA_AUDIO_RX_DBG == 1)
-  #define DBG_DYNA_AUDIO_RX logToFile
+  #define DBG_DYNA_AUDIO_RX log2file_dbg("DBG_DYNA_AUDIO_RX")
 #elif (ACTIVATE_DYNA_AUDIO_RX_DBG == 2)
   #define DBG_DYNA_AUDIO_RX print_dbg("DBG_DYNA_AUDIO_RX")
 #else
@@ -149,7 +150,7 @@ int logToFile(char *fmt, ...);
 #endif
 
 #if (ACTIVATE_DYNA_AUDIO_TX_DBG == 1)
-  #define DBG_DYNA_AUDIO_TX logToFile
+  #define DBG_DYNA_AUDIO_TX log2file_dbg("DBG_DYNA_AUDIO_TX")
 #elif (ACTIVATE_DYNA_AUDIO_TX_DBG == 2)
   #define DBG_DYNA_AUDIO_TX print_dbg("DBG_DYNA_AUDIO_TX")
 #else
@@ -161,7 +162,7 @@ int logToFile(char *fmt, ...);
 #endif
 
 #if (ACTIVATE_DYNA_AUDIO_DRV_DBG == 1)
-  #define DBG_DYNA_AUDIO_DRV logToFile
+  #define DBG_DYNA_AUDIO_DRV log2file_dbg("DBG_DYNA_AUDIO_DRV")
 #elif (ACTIVATE_DYNA_AUDIO_DRV_DBG == 2)
   #define DBG_DYNA_AUDIO_DRV print_dbg("DBG_DYNA_AUDIO_DRV")
 #else
