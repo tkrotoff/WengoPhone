@@ -2,10 +2,6 @@ if (WIN32)
   subdirs(
     portaudio
   )
-else (WIN32)
-  subdirs(
-    gaim
-  )
 endif (WIN32)
 
 if (UNIX)
@@ -17,6 +13,7 @@ if (UNIX)
 endif (UNIX)
 
 subdirs(
+  gaim
   curl
   tinyxml
   util
@@ -32,4 +29,3 @@ subdirs(
   sound
   timer
 )
-

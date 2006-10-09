@@ -36,15 +36,13 @@ set(QT_MIN_VERSION 4.1.2)
 find_package(Qt4 REQUIRED)
 find_package(Boost REQUIRED)
 
-if (UNIX AND NOT WIN32)
-  find_package(GLIB2 REQUIRED)
-endif (UNIX AND NOT WIN32)
-
 if (WIN32)
   find_package(OpenSSLInternal REQUIRED)
+  find_package(GLIB2Internal REQUIRED)
   find_package(FFMPEGInternal REQUIRED)
 else (WIN32)
   find_package(OpenSSL REQUIRED)
+  find_package(GLIB2 REQUIRED)
   find_package(FFMPEG REQUIRED)
 endif (WIN32)
 

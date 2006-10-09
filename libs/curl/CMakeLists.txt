@@ -52,6 +52,14 @@ if (APPLE)
   )
 endif (APPLE)
 
+if (WIN32)
+  set(OWCURL_LINK_LIBRARIES
+    ${OWCURL_LINK_LIBRARIES}
+    ws2_32
+    winmm
+  )
+endif (WIN32)
+
 set(owcurl_SRCS
   lib/base64.c
   lib/connect.c
@@ -132,4 +140,3 @@ install(
   DESTINATION
     ${LIB_INSTALL_DIR}
 )
-

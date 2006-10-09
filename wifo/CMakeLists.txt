@@ -31,6 +31,7 @@ subdirs(
   phapi/fidlib
   phapi/gsm
   phapi/ilbc
+  phapi/speex
   phapi/speexec
   phapi/stun
   phapi

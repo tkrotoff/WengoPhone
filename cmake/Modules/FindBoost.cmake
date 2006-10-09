@@ -348,6 +348,18 @@ else (BOOST_LIBRARIES AND BOOST_INCLUDE_DIRS)
     endif (Boost_FIND_REQUIRED)
   endif (BOOST_FOUND)
 
+  if (MSVC)
+    set(BOOST_LIBRARIES
+      ""
+    )
+    set(BOOST_PROGRAM_OPTIONS_LIBRARY
+      ""
+    )
+    set(BOOST_SIGNALS_LIBRARY
+      ""
+    )
+  endif (MSVC)
+
   # show the BOOST_INCLUDE_DIRS and BOOST_LIBRARIES variables only in the advanced view
   mark_as_advanced(BOOST_INCLUDE_DIRS BOOST_LIBRARIES)
 

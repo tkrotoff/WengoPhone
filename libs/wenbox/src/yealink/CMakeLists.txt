@@ -5,9 +5,14 @@ find_package(Boost REQUIRED)
 # find precompiled ylusbtel
 find_library(YLUSBTEL_LIBRARY
   NAMES
-    ylusbtel
+    YLUSBTEL
   PATH
     ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
+# hack because the find_library does not work, why? no idea...
+set(YLUSBTEL_LIBRARY
+  ${CMAKE_CURRENT_SOURCE_DIR}/YLUSBTEL
 )
 
 # needed include directories to build yealinkwenbox
@@ -47,4 +52,3 @@ install(
   DESTINATION
     ${PLUGIN_INSTALL_DIR}
 )
-
