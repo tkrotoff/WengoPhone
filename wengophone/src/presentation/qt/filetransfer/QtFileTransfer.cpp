@@ -72,7 +72,7 @@ void QtFileTransfer::newReceiveFileSessionCreatedEventHandlerSlot(ReceiveFileSes
 
 	LOG_DEBUG("incoming file: " + fileSession->getFileName() + "from: " + fileSession->getIMContact().getContactId());
 
-	_qtFileTransferWidget->show();
+	_qtFileTransferWidget->showAndRaise();
 	QtFileTransferAcceptDialog qtFileTransferAcceptDialog(_qtFileTransferWidget);
 	qtFileTransferAcceptDialog.setFileName(filename);
 	qtFileTransferAcceptDialog.setContactName(contact);

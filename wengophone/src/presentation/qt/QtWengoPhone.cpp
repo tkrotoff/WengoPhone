@@ -772,10 +772,8 @@ void QtWengoPhone::showAddContactThreadSafe(QString nickname, QString sip, QStri
 	}
 }
 
-void QtWengoPhone::ensureVisible(bool doMinimizeStuff) {
-	if (doMinimizeStuff) {
-		_wengoPhoneWindow->showMinimized();
-	}
+void QtWengoPhone::ensureVisible() {
+	_wengoPhoneWindow->showMinimized();
 	_wengoPhoneWindow->activateWindow();
 	_wengoPhoneWindow->showNormal();
 }

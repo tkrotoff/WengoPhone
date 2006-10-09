@@ -173,8 +173,7 @@ void QtFileTransferWidget::itemRemoveClicked() {
 }
 
 void QtFileTransferWidget::showAndRaise() {
-	show();
-	raise();
-	setVisible(true);
+	showMinimized();
+	activateWindow();
+	showNormal();
 }
-
