@@ -121,11 +121,13 @@ webcamerrorcode ph_media_video_initialize_webcam(phvstream_t *vstream) {
 	phConfig_t *cfg = phGetConfig();
 	webcamerrorcode err;
 
+    DBG_MEDIA_ENGINE_VIDEO("webcam init: trying to set video device (%s)...\n...", cfg->video_config.video_device);
 	err = webcam_set_device(vstream->wt, cfg->video_config.video_device);
 
 	if (err == WEBCAM_OK)
 	{
 		
+	    DBG_MEDIA_ENGINE_VIDEO("OK\n");
         // beware: you must initialize these video_config parameters
         // while debugging, you can always try PHMEDIA_VIDEO_FRAME_WIDTH, PHMEDIA_VIDEO_FRAME_HEIGHT. 320,240 is a very good guess
 		webcam_set_resolution(vstream->wt,
@@ -136,6 +138,7 @@ webcamerrorcode ph_media_video_initialize_webcam(phvstream_t *vstream) {
 		webcam_set_palette(vstream->wt, PIX_OSI_YUV420P);
 	}
 
+    DBG_MEDIA_ENGINE_VIDEO("webcam init: end of initialization\n");
 	return err;
 }
 
@@ -521,26 +524,33 @@ int ph_msession_video_start(struct ph_msession_s *s, const char *deviceid)
   // wt is always initialized because the webcam object holds the convertImage function...
   video_stream->wt = webcam_get_instance();
 
-  // choice of the frame server and init sequence
-  if (sp->traffictype & PH_MSTREAM_TRAFFIC_OUT)
-  {
-    if (ph_media_video_initialize_webcam(video_stream))
+	// choice of the frame server and init sequence
+	DBG_MEDIA_ENGINE_VIDEO("choosing type of frame server...\n");
+	if (sp->traffictype & PH_MSTREAM_TRAFFIC_OUT)
 	{
-      video_stream->phmfs_webcam.state = 1;
-    }
+		DBG_MEDIA_ENGINE_VIDEO("...would like a real webcam\n");
+		if (ph_media_video_initialize_webcam(video_stream))
+		{
+			DBG_MEDIA_ENGINE_VIDEO("...got a real webcam\n");
+			video_stream->phmfs_webcam.state = 1;
+		}
+		else
+		{
+			DBG_MEDIA_ENGINE_VIDEO("...got a virtual webcam\n");
+			video_stream->phmfs_onewaycam.state = 1; // init
+		}
+	}
 	else
 	{
-      video_stream->phmfs_onewaycam.state = 1; // init
-    }
-  } else
-  {
-    video_stream->phmfs_onewaycam.state = 1; // init
-  }
+		DBG_MEDIA_ENGINE_VIDEO("...would like and got a virtual webcam\n");
+		video_stream->phmfs_onewaycam.state = 1; // init
+	}
 
 
 	// choice 1: start sequence of the webcam frame server
 	if (video_stream->phmfs_webcam.state == 1)
 	{
+		DBG_MEDIA_ENGINE_VIDEO("start the real webcam engine\n");
 		// create processing buffer after nego with the webcam
 		ph_media_video_alloc_processing_buffers(video_stream,
 				webcam_get_palette(video_stream->wt),
@@ -562,6 +572,8 @@ int ph_msession_video_start(struct ph_msession_s *s, const char *deviceid)
 
 		// note :	this "virtual" webcam may seem a little strange, but it facilitates NAT traversal right now
 		//			and makes it possible to have only the tx or rx having a cam
+
+		DBG_MEDIA_ENGINE_VIDEO("start the virtual webcam engine\n");
 
 		// create processing buffer after nego with the webcam
 		ph_media_video_alloc_processing_buffers(video_stream,
