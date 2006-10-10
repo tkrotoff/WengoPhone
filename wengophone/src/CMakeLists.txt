@@ -98,6 +98,7 @@ set(owphone_SRCS
   model/connect/ConnectHandler.cpp
   model/chat/ChatHandler.cpp
   model/wenbox/WenboxPlugin.cpp
+  model/wenbox/EnumWenboxStatus.cpp
   model/phonecall/SipAddress.cpp
   model/phonecall/PhoneCall.cpp
   model/phonecall/PhoneCallState.cpp
