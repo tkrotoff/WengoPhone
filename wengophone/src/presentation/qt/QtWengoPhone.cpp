@@ -392,7 +392,7 @@ void QtWengoPhone::makeCallErrorEventHandlerThreadSafe() {
 }
 
 void QtWengoPhone::addPhoneCall(QtPhoneCall * qtPhoneCall) {
-	ensureVisible();
+	ensureVisible(false);
 
 	_activeTabBeforeCall = _ui->tabWidget->currentWidget();
 
@@ -750,7 +750,7 @@ void QtWengoPhone::showAddContact(const std::string & nickname,
 void QtWengoPhone::showAddContactThreadSafe(QString nickname, QString sip, QString firstname,
 	QString lastname, QString country, QString city, QString state,  QString group) {
 
-	ensureVisible();
+	ensureVisible(false);
 
 	if (_cWengoPhone.getCUserProfileHandler().getCUserProfile()) {
 
@@ -772,8 +772,10 @@ void QtWengoPhone::showAddContactThreadSafe(QString nickname, QString sip, QStri
 	}
 }
 
-void QtWengoPhone::ensureVisible() {
-	_wengoPhoneWindow->showMinimized();
+void QtWengoPhone::ensureVisible(bool doMinimizeStuff) {
+	if (doMinimizeStuff) {
+		_wengoPhoneWindow->showMinimized();
+	}
 	_wengoPhoneWindow->activateWindow();
 	_wengoPhoneWindow->showNormal();
 }
