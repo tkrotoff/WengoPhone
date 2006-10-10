@@ -30,6 +30,8 @@ set(OWCURL_DEFINITIONS
   -DUSE_OPENSSL
 )
 
+option(WITH_SHARED_OWCURL "Build owcurl as shared library" ON)
+
 if (APPLE)
   find_package(ZLIB REQUIRED)
 
@@ -130,13 +132,17 @@ add_definitions(
   ${OWCURL_DEFINITIONS}
 )
 
-add_library(${OWCURL_LIBRARY} SHARED ${owcurl_SRCS})
+if (WITH_SHARED_OWCURL)
+  add_library(${OWCURL_LIBRARY} SHARED ${owcurl_SRCS})
+  install(
+    TARGETS
+      ${OWCURL_LIBRARY}
+    DESTINATION
+      ${LIB_INSTALL_DIR}
+  )
+else (WITH_SHARED_OWCURL)
+  add_library(${OWCURL_LIBRARY} STATIC ${owcurl_SRCS})
+endif (WITH_SHARED_OWCURL)
 
 target_link_libraries(${OWCURL_LINK_LIBRARIES})
 
-install(
-  TARGETS
-    ${OWCURL_LIBRARY}
-  DESTINATION
-    ${LIB_INSTALL_DIR}
-)

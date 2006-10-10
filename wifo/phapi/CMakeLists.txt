@@ -256,7 +256,7 @@ endif (WIN32)
 
 if (UNIX AND NOT WIN32)
   if (APPLE)
-    set(WITH_PHAPI_SHARED OFF)
+    set(WITH_SHARED_PHAPI OFF)
 
     set(phapi_SRCS
       ${phapi_SRCS}
@@ -416,13 +416,6 @@ include_directories(${SPEEX_INCLUDE_DIRS})
 macro_add_plugin(phspeexplugin ${phapi_speex_plugin_SRCS})
 macro_add_compile_flags(phspeexplugin ${PHAPI_OPTIMIZATION_FLAGS})
 target_link_libraries(phspeexplugin ${SPEEX_LIBRARIES})
-
-install(
-  TARGETS
-    ${PHAPI_LIBRARY}
-  DESTINATION
-    ${LIB_INSTALL_DIR}
-)
 
 install(
   TARGETS

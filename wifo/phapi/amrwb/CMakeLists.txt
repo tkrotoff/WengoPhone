@@ -41,7 +41,7 @@ include_directories(
   ${AMRWB_INCLUDE_DIRS}
 )
 
-add_library(${AMRWB_LIBRARY} STATIC ${amrwb_SRCS})
+add_library(${AMRWB_LIBRARY} SHARED ${amrwb_SRCS})
 
 target_link_libraries(${AMRWB_LINK_LIBRARIES})
 

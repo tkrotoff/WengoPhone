@@ -79,7 +79,7 @@ case $1 in
 	;;
 esac
 
-DOT=$(which dot)
+DOT=$(which dot 2>/dev/null)
 if [ -n "${DOT}" ]; then
 	${DOT} -Tpng -o${BUILDDIR}/wengophone.png ${BUILDDIR}/wengophone.dot
 	${DOT} -Tsvg -o${BUILDDIR}/wengophone.svg ${BUILDDIR}/wengophone.dot
