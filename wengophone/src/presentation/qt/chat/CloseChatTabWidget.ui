@@ -43,7 +43,7 @@
       <string/>
      </property>
      <property name="icon" >
-      <iconset resource="../wengophone.qrc" >:/pics/chat/block-b.png</iconset>
+      <iconset resource="../wengophone.qrc" >:/pics/chat/chat_close.png</iconset>
      </property>
      <property name="iconSize" >
       <size>
