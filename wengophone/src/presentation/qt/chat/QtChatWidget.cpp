@@ -516,10 +516,10 @@ void QtChatWidget::sendFileToSession(const QString & filename) {
 			//myMess += tr("An automatic message has been sent to him");
 			addStatusMessage(myMess);
 
-			QString hisMess = "<span style=\" background-color:#FAFF91;\"><i>";
+			QString hisMess = "<i>";
 			hisMess += tr("Your contact wishes to send a file with Wengo. ");
 			hisMess += tr("Go to http://wengo.com/index.php/download to install it.");
-			hisMess += "</i></span>";
+			hisMess += "</i>";
 			_imChatSession->sendMessage(hisMess.toStdString());
 		}
 		return;
