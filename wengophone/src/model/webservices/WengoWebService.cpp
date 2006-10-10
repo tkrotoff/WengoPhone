@@ -110,8 +110,6 @@ void WengoWebService::answerReceivedEventHandler(IHttpRequest * sender, int requ
 			_caller->answerReceived(String::null, requestId);
 		}
 	}
-
-	delete sender;
 }
 
 

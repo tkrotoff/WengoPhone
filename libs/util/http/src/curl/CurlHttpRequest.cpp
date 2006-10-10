@@ -20,6 +20,7 @@
 #include "CurlHttpRequest.h"
 
 #include <http/HttpRequest.h>
+#include <http/HttpRequestManager.h>
 
 #include <util/Logger.h>
 #include <util/Uuid.h>
@@ -79,7 +80,8 @@ int CurlHttpRequest::sendRequest(bool sslProtocol, const std::string & hostname,
 	_postMethod = postMethod;
 
 	_lastRequestId = Uuid::generateInteger();
-	start();
+
+	HttpRequestManager::getInstance().addAndStart(this);
 
 	return _lastRequestId;
 }

@@ -159,8 +159,6 @@ public:
 private:
 
 	// Inherited from Thread
-	void start();
-
 	void run();
 	////
 

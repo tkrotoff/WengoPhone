@@ -24,6 +24,7 @@
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
 #include <model/config/CommandLineParser.h>
+
 #include <control/CWengoPhone.h>
 
 #ifdef GTKINTERFACE
