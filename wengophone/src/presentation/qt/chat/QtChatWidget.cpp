@@ -544,9 +544,9 @@ void QtChatWidget::setContactConnected(bool connected) {
 
 	QString contactName;
 	if (!profile.getShortDisplayName().empty()) {
-		contactName = QString::fromStdString(profile.getShortDisplayName());
+		contactName = QString::fromUtf8(profile.getShortDisplayName().c_str());
 	} else {
-		contactName = QString::fromStdString(profile.getDisplayName());
+		contactName = QString::fromUtf8(profile.getDisplayName().c_str());
 	}
 
 	if (connected && !_isContactConnected) {
