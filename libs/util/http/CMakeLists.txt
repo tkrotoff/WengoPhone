@@ -31,6 +31,7 @@ endif (WIN32)
 
 set(owhttp_SRCS
   src/HttpRequest.cpp
+  src/HttpRequestManager.cpp
   src/curl/CurlHttpRequest.cpp
   src/null/NullHttpRequest.cpp
   #src/qt/QtHttpRequest.cpp
