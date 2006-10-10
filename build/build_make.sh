@@ -3,7 +3,16 @@
 export TERM=xterm
 
 function configure() {
-	cmake "$@" ..
+	cmake "$@" .. || exit 1
+}
+
+function compile() {
+	CPUCOUNT=$(grep -c processor /proc/cpuinfo)
+	if [ "${CPUCOUNT}" -gt "1" ]; then
+		make -j${CPUCOUNT}
+	else
+		make
+	fi
 }
 
 
@@ -37,25 +46,25 @@ case $1 in
 		shift
 		OPTIONS="${OPTIONS} -DCMAKE_BUILD_TYPE=Release"
 		configure ${OPTIONS} "$@"
-		make
+		compile
 	;;
 	release)
 		shift
 		OPTIONS="${OPTIONS} -DCMAKE_BUILD_TYPE=Release"
 		configure ${OPTIONS} "$@"
-		make
+		compile
 	;;
 	debug)
 		shift
 		OPTIONS="${OPTIONS} -DCMAKE_BUILD_TYPE=Debug"
 		configure ${OPTIONS} "$@"
-		make
+		compile
 	;;
 	verbose)
 		shift
 		OPTIONS="${OPTIONS} -DCMAKE_BUILD_TYPE=Debug -DCMAKE_VERBOSE_MAKEFILE=1"
 		configure ${OPTIONS} "$@"
-		make VERBOSE=1
+		compile VERBOSE=1
 	;;
 	*)
 	echo "Usage: $(basename $0) (configure|final|release|debug|verbose)"
