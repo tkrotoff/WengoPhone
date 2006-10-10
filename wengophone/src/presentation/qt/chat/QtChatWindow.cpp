@@ -379,7 +379,12 @@ void QtChatWindow::statusChangedSlot(QString contactId) {
 					break;
 				default:
 					_tabWidget->setTabIcon(i, QIcon(QPixmap(":/pics/contact/chat.png")));
-					widget->setContactConnected(false);
+					if (!displayName.isEmpty()) {
+						// If Display name is empty, it means that the Contact is not in the ContactList.
+						// Thus we should not say that the contact is offline as we don't really know its
+						// status.
+						widget->setContactConnected(false);
+					}
 					break;
 				}
 				break;
@@ -609,14 +614,17 @@ void QtChatWindow::addChat(IMChatSession * session, const IMContact & from) {
 	_chatWidget->setContactId(QString::fromStdString(qtContactList->getCContactList().findContactThatOwns(from)));
 
 	SAFE_CONNECT(qtContactList, SIGNAL(contactChangedEventSignal(QString )), SLOT(statusChangedSlot(QString)));
+
 	if (_tabWidget->count() > 0) {
 		tabNumber = _tabWidget->insertTab(_tabWidget->count(), _chatWidget, senderName);
 	} else {
 		tabNumber = _tabWidget->insertTab(0, _chatWidget, senderName);
 	}
+
 	if (session->isUserCreated()) {
 		_tabWidget->setCurrentIndex(tabNumber);
 	}
+
 	statusChangedSlot(QString::fromStdString(cContactList.findContactThatOwns(from)));
 
 	setWindowTitle(_tabWidget->tabText(tabNumber));
