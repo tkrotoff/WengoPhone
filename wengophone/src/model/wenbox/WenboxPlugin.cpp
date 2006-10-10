@@ -19,6 +19,8 @@
 
 #include "WenboxPlugin.h"
 
+#include "EnumWenboxStatus.h"
+
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
 #include <model/phonecall/PhoneCall.h>
@@ -28,6 +30,7 @@
 #include <sound/AudioDeviceManager.h>
 
 #include <util/Logger.h>
+#include <util/SafeDelete.h>
 
 using namespace std;
 
@@ -35,20 +38,33 @@ WenboxPlugin::WenboxPlugin(UserProfile & userProfile)
 	: _userProfile(userProfile) {
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
-	config.valueChangedEvent += boost::bind(&WenboxPlugin::wenboxConfigChangedEventHandler, this, _1, _2);
 
 	_wenbox = new Wenbox();
-	openWenbox();
+	EnumWenboxStatus::WenboxStatus wenboxStatus = EnumWenboxStatus::toWenboxStatus(config.getWenboxEnable());
+	if (_wenbox->open()) {
+		if (wenboxStatus == EnumWenboxStatus::WenboxStatusNotConnected) {
+			wenboxStatus = EnumWenboxStatus::WenboxStatusEnable;
+		}
+	} else {
+		wenboxStatus = EnumWenboxStatus::WenboxStatusNotConnected;
+	}
+
+	config.valueChangedEvent += boost::bind(&WenboxPlugin::wenboxConfigChangedEventHandler, this, _1, _2);
+
+	config.set(Config::WENBOX_ENABLE_KEY, EnumWenboxStatus::toString(wenboxStatus));
 }
 
 WenboxPlugin::~WenboxPlugin() {
-	delete _wenbox;
+	OWSAFE_DELETE(_wenbox);
 }
 
 void WenboxPlugin::openWenbox() {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	EnumWenboxStatus::WenboxStatus wenboxStatus = EnumWenboxStatus::toWenboxStatus(config.getWenboxEnable());
+
 	if (_wenbox->open()) {
-		if (config.getWenboxEnable()) {
+
+		if (wenboxStatus == EnumWenboxStatus::WenboxStatusEnable) {
 			//Disable Half-duplex mode
 			config.set(Config::AUDIO_HALFDUPLEX_KEY, false);
 			//Enable AEC
@@ -61,8 +77,6 @@ void WenboxPlugin::openWenbox() {
 		} else {
 			_wenbox->close();
 		}
-	} else {
-		config.set(Config::WENBOX_ENABLE_KEY, false);
 	}
 }
 
@@ -76,7 +90,7 @@ void WenboxPlugin::closeWenbox() {
 void WenboxPlugin::wenboxConfigChangedEventHandler(Settings & sender, const std::string & key) {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	if (key == Config::WENBOX_ENABLE_KEY) {
-		if (config.getWenboxEnable()) {
+		if (EnumWenboxStatus::toWenboxStatus(config.getWenboxEnable()) == EnumWenboxStatus::WenboxStatusEnable) {
 			openWenbox();
 		} else {
 			closeWenbox();
@@ -193,8 +207,7 @@ StringList WenboxPlugin::getWenboxAudioDeviceId(bool outputAudioDeviceId) const 
 			audioDeviceList = AudioDeviceManager::getInputDeviceList();
 		}
 		for (std::list<AudioDevice>::const_iterator it = audioDeviceList.begin();
-			it  != audioDeviceList.end();
-			it++) {
+			it  != audioDeviceList.end(); it++) {
 			StringList audioDevice = (*it).getData();
 
 			if (String(audioDevice[0]).contains(wenboxAudioDeviceName)) {

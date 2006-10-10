@@ -32,33 +32,34 @@
 #include <cutil/global.h>
 #include <util/File.h>
 #include <util/Logger.h>
+#include <util/SafeDelete.h>
 #include <util/StringList.h>
+
+#include <qtutil/SafeConnect.h>
 
 #include <QtGui/QtGui>
 
 QtDialpad::QtDialpad(QtWengoPhone * qtWengoPhone)
-	: QObject(NULL) {
+	: QWidget(NULL) {
 
 	_qtWengoPhone = qtWengoPhone;
 
-	_dialpadWidget = new QWidget(NULL);
-
 	_ui = new Ui::DialpadWidget();
-	_ui->setupUi(_dialpadWidget);
+	_ui->setupUi(this);
 
-	connect(_ui->zeroButton, SIGNAL(clicked()), SLOT(zeroButtonClicked()));
-	connect(_ui->oneButton, SIGNAL(clicked()), SLOT(oneButtonClicked()));
-	connect(_ui->twoButton, SIGNAL(clicked()), SLOT(twoButtonClicked()));
-	connect(_ui->threeButton, SIGNAL(clicked()), SLOT(threeButtonClicked()));
-	connect(_ui->fourButton, SIGNAL(clicked()), SLOT(fourButtonClicked()));
-	connect(_ui->fiveButton, SIGNAL(clicked()), SLOT(fiveButtonClicked()));
-	connect(_ui->sixButton, SIGNAL(clicked()), SLOT(sixButtonClicked()));
-	connect(_ui->sevenButton, SIGNAL(clicked()), SLOT(sevenButtonClicked()));
-	connect(_ui->eightButton, SIGNAL(clicked()), SLOT(eightButtonClicked()));
-	connect(_ui->nineButton, SIGNAL(clicked()), SLOT(nineButtonClicked()));
-	connect(_ui->starButton, SIGNAL(clicked()), SLOT(starButtonClicked()));
-	connect(_ui->poundButton, SIGNAL(clicked()), SLOT(poundButtonClicked()));
-	connect(_ui->audioSmileysComboBox, SIGNAL(activated(int)), SLOT(audioSmileysComboBoxActivated(int)));
+	SAFE_CONNECT(_ui->zeroButton, SIGNAL(clicked()), SLOT(zeroButtonClicked()));
+	SAFE_CONNECT(_ui->oneButton, SIGNAL(clicked()), SLOT(oneButtonClicked()));
+	SAFE_CONNECT(_ui->twoButton, SIGNAL(clicked()), SLOT(twoButtonClicked()));
+	SAFE_CONNECT(_ui->threeButton, SIGNAL(clicked()), SLOT(threeButtonClicked()));
+	SAFE_CONNECT(_ui->fourButton, SIGNAL(clicked()), SLOT(fourButtonClicked()));
+	SAFE_CONNECT(_ui->fiveButton, SIGNAL(clicked()), SLOT(fiveButtonClicked()));
+	SAFE_CONNECT(_ui->sixButton, SIGNAL(clicked()), SLOT(sixButtonClicked()));
+	SAFE_CONNECT(_ui->sevenButton, SIGNAL(clicked()), SLOT(sevenButtonClicked()));
+	SAFE_CONNECT(_ui->eightButton, SIGNAL(clicked()), SLOT(eightButtonClicked()));
+	SAFE_CONNECT(_ui->nineButton, SIGNAL(clicked()), SLOT(nineButtonClicked()));
+	SAFE_CONNECT(_ui->starButton, SIGNAL(clicked()), SLOT(starButtonClicked()));
+	SAFE_CONNECT(_ui->poundButton, SIGNAL(clicked()), SLOT(poundButtonClicked()));
+	SAFE_CONNECT(_ui->audioSmileysComboBox, SIGNAL(activated(int)), SLOT(audioSmileysComboBoxActivated(int)));
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	QStringList listAudioSmileys = getListAudioSmileys();
@@ -69,12 +70,16 @@ QtDialpad::QtDialpad(QtWengoPhone * qtWengoPhone)
 	}
 }
 
+QtDialpad::~QtDialpad() {
+	OWSAFE_DELETE(_ui);
+}
+
 QStringList QtDialpad::getListAudioSmileys() const {
 	QStringList listAudioSmileys;
 
 #if !defined(OS_MACOSX)
 	/*
-	 * Audio smileys are deactivated on MacOS X because Raw files cannot 
+	 * Audio smileys are deactivated on MacOS X because Raw files cannot
 	 * currently be played on this platform.
 	 */
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
@@ -109,7 +114,8 @@ void QtDialpad::playTone(const std::string & tone) {
 
 	if (_ui->audioSmileysComboBox->currentIndex() == 0) {
 		_qtWengoPhone->dialpad(tone, String::null);
-		Sound::play(File::convertPathSeparators(config.getAudioSmileysDir() + soundFile + ".wav"), config.getAudioRingerDeviceId());
+		//FIXME desactivates DTMF playing inside GUI
+		//Sound::play(File::convertPathSeparators(config.getAudioSmileysDir() + soundFile + ".wav"), config.getAudioRingerDeviceId());
 	} else {
 		soundFile = config.getAudioSmileysDir() + _ui->audioSmileysComboBox->currentText().toStdString()
 				+ File::getPathSeparator() + soundFile + ".raw";
@@ -170,6 +176,8 @@ void QtDialpad::poundButtonClicked() {
 
 void QtDialpad::audioSmileysComboBoxActivated(int index) {
 	/*
+	FIXME does not change sound theme icons
+
 	static const QString originalZeroButtonText = _ui->zeroButton->text();
 	static const QString originalOneButtonText = _ui->oneButton->text();
 	static const QString originalTwoButtonText = _ui->twoButton->text();

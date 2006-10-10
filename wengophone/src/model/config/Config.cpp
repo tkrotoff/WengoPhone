@@ -19,6 +19,8 @@
 
 #include "Config.h"
 
+#include <model/wenbox/EnumWenboxStatus.h>
+
 #include <sipwrapper/EnumNatType.h>
 #include <sipwrapper/EnumVideoQuality.h>
 
@@ -252,7 +254,7 @@ Config::Config(const std::string & name)
 
 	_keyDefaultValueMap[VIDEO_ENABLE_KEY] = true;
 	_keyDefaultValueMap[VIDEO_WEBCAM_DEVICE_KEY] = WebcamDriver::getInstance()->getDefaultDevice();
-	_keyDefaultValueMap[VIDEO_QUALITY_KEY] = (int) EnumVideoQuality::VideoQualityNormal;
+	_keyDefaultValueMap[VIDEO_QUALITY_KEY] = EnumVideoQuality::toString(EnumVideoQuality::VideoQualityNormal);
 	_keyDefaultValueMap[VIDEO_ENABLE_XVIDEO] = false;
 	_keyDefaultValueMap[VIDEO_ENABLE_FLIP] = false;
 
@@ -265,7 +267,7 @@ Config::Config(const std::string & name)
 	_keyDefaultValueMap[WENGO_CIRPACK_PATH_KEY] = std::string("/cirpack/index.php");
 	_keyDefaultValueMap[WENGO_DIRECTORY_PATH_KEY] = std::string("/directory/index.php");
 
-	_keyDefaultValueMap[WENBOX_ENABLE_KEY] = true;
+	_keyDefaultValueMap[WENBOX_ENABLE_KEY] = EnumWenboxStatus::toString(EnumWenboxStatus::WenboxStatusNotConnected);
 	_keyDefaultValueMap[IEACTIVEX_ENABLE_KEY] = true;
 
 	_keyDefaultValueMap[CMDLINE_BACKGROUND_MODE_ENABLE_KEY] = false;
@@ -639,8 +641,8 @@ std::string Config::getVideoWebcamDevice() const {
 	}
 }
 
-int Config::getVideoQuality() const {
-	return EnumVideoQuality::checkValue(getIntegerKeyValue(VIDEO_QUALITY_KEY));
+std::string Config::getVideoQuality() const {
+	return getStringKeyValue(VIDEO_QUALITY_KEY);
 }
 
 bool Config::getXVideoEnable() const {
@@ -651,8 +653,8 @@ bool Config::getVideoFlipEnable() const {
 	return getBooleanKeyValue(VIDEO_ENABLE_FLIP);
 }
 
-bool Config::getWenboxEnable() const {
-	return getBooleanKeyValue(WENBOX_ENABLE_KEY);
+std::string Config::getWenboxEnable() const {
+	return getStringKeyValue(WENBOX_ENABLE_KEY);
 }
 
 bool Config::getIEActiveXEnable() const {
@@ -679,8 +681,6 @@ std::string Config::getLinuxPreferedBrowser() const {
 	return getStringKeyValue(LINUX_PREFERED_BROWSER);
 }
 
-
 std::string Config::getLastUploadedFileFolder() const {
 		return getStringKeyValue(FILETRANSFER_LASTUPLOADEDFILE_FOLDER);
 }
-

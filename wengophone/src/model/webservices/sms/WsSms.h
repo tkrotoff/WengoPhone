@@ -29,6 +29,8 @@ class UserProfile;
 /**
  * Wengo SMS web service.
  *
+ * Permits to send SMS.
+ *
  * @author Mathieu Stute
  */
 class WsSms : public WengoWebService {

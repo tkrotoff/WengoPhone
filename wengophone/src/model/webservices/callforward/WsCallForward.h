@@ -25,12 +25,13 @@
 class Settings;
 
 /**
- * @class WsCallForward call forward web service.
+ * Call forward web service.
+ *
+ * Sets the call forward method on the server the user wants.
  *
  * @author Mathieu Stute
  */
 class WsCallForward : public WengoWebService {
-
 public:
 
 	enum WsCallForwardStatus {
@@ -61,17 +62,17 @@ public:
 	Event<void (WsCallForward & sender, int id, WsCallForwardStatus status)> wsCallForwardEvent;
 
 	/**
-	 * Disable call forward.
+	 * Disables call forward.
 	 */
 	void disableCallForward();
 
 	/**
-	 * Forward all calls to voicemail.
+	 * Forwards all calls to voicemail.
 	 */
 	void forwardToVoiceMail();
 
 	/**
-	 * Forward calls to number or nickname.
+	 * Forwards calls to number or nickname.
 	 *
 	 * @param number1 first forward number.
 	 * @param number2 second forward number.

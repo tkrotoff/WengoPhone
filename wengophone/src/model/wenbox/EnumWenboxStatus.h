@@ -17,51 +17,51 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef OWENUMVIDEOQUALITY_H
-#define OWENUMVIDEOQUALITY_H
+#ifndef OWENUMWENBOXSTATUS_H
+#define OWENUMWENBOXSTATUS_H
 
 #include <util/NonCopyable.h>
 
 #include <string>
 
 /**
- * Video quality.
- *
- * Video quality depends on your Internet connection bandwidth.
+ * The Wenbox has 3 states: enable, disable, no Wenbox connected.
  *
  * @author Tanguy Krotoff
  */
-class EnumVideoQuality : NonCopyable {
+class EnumWenboxStatus : NonCopyable {
 public:
 
-	enum VideoQuality {
+	enum WenboxStatus {
+		/**
+		 * Wenbox connected and enabled.
+		 */
+		WenboxStatusEnable,
 
-		/** Down=0-512kbit/s up=0-128kbit/s. */
-		VideoQualityNormal,
+		/**
+		 * Wenbox connected but disabled.
+		 */
+		WenboxStatusDisable,
 
-		/** Down=512-2048kbit/s up=128-256kbit/s. */
-		VideoQualityGood,
-
-		/** Down=+2048kbit/s up=+256kbit/s. */
-		VideoQualityVeryGood,
-
-		/** Down=+8192kbit/s up=+1024kbit/s. */
-		VideoQualityExcellent
+		/**
+		 * Wenbox not connected (not found).
+		 */
+		WenboxStatusNotConnected
 	};
 
 	/**
-	 * Converts a VideoQuality into a string.
+	 * Converts a WenboxStatus into a string.
 	 *
 	 * @return the string
 	 */
-	static std::string toString(VideoQuality videoQuality);
+	static std::string toString(WenboxStatus wenboxStatus);
 
 	/**
-	 * Converts a string into a VideoQuality.
+	 * Converts a string into a WenboxStatus.
 	 *
-	 * @return the VideoQuality
+	 * @return the WenboxStatus
 	 */
-	static VideoQuality toVideoQuality(const std::string & videoQuality);
+	static WenboxStatus toWenboxStatus(const std::string & wenboxStatus);
 };
 
-#endif	//OWENUMVIDEOQUALITY_H
+#endif	//OWENUMWENBOXSTATUS_H

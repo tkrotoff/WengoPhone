@@ -62,7 +62,7 @@ void WsCallForward::forwardToNumber(const std::string & number1, const std::stri
 
 	std::string query = "action=callforward";
 	query += "&activate=1";
-	
+
 	query += "&num1=" + number1;
 	query += "&num2=" + number2;
 	query += "&num3=" + number3;
@@ -79,22 +79,22 @@ void WsCallForward::answerReceived(const std::string & answer, int requestId) {
 	TiXmlHandle docHandle(& doc);
 
 	TiXmlElement * response = docHandle.FirstChild("response").Element();
-	if( !response ) {
+	if (!response) {
 		wsCallForwardEvent(*this, requestId, WsCallForwardStatusUrlError);
 		return;
 	}
 
 	TiXmlElement * elt = response->FirstChildElement("code");
-	if( elt && (elt->FirstChild()) ) {
-		
+	if (elt && (elt->FirstChild())) {
+
 		std::string r = elt->FirstChild()->ToText()->Value();
-		
+
 		//TODO: change when the ws doc will be updated
-		if( r == "OK" ) {
+		if (r == "OK") {
 			wsCallForwardEvent(*this, requestId, WsCallForwardStatusOk);
-		} else if( r == "401" ) {
+		} else if (r == "401") {
 			wsCallForwardEvent(*this, requestId, WsCallForwardStatusAuthenticationError);
-		} else if( r == "404" ) {
+		} else if (r == "404") {
 			wsCallForwardEvent(*this, requestId, WsCallForwardStatusUrlError);
 		} else {
 		}

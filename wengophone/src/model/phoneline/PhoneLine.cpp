@@ -498,7 +498,7 @@ void PhoneLine::configureSipWrapper() {
 	_sipWrapper->setNatType(EnumNatType::toNatType(natType));
 
 	//Setting video quality
-	_sipWrapper->setVideoQuality((EnumVideoQuality::VideoQuality) config.getVideoQuality());
+	_sipWrapper->setVideoQuality(EnumVideoQuality::toVideoQuality(config.getVideoQuality()));
 
 	//Setting audio devices
 	_sipWrapper->setCallOutputAudioDevice(AudioDevice(config.getAudioOutputDeviceId()));

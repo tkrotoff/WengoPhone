@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef ENUMNATTYPE_H
-#define ENUMNATTYPE_H
+#ifndef OWENUMNATTYPE_H
+#define OWENUMNATTYPE_H
 
 #include <util/NonCopyable.h>
 
@@ -117,4 +117,4 @@ public:
 	static NatType toNatType(const std::string & natType);
 };
 
-#endif	//ENUMNATTYPE_H
+#endif	//OWENUMNATTYPE_H

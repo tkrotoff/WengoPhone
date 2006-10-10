@@ -30,6 +30,9 @@
  *
  * Implements a default value for keys.
  *
+ * FIXME merge with settings? I don't remember why this code is not inside Settings
+ * probably because of the default value implementation + the serialization inside Settings -> problem?
+ *
  * @see Settings
  * @author Tanguy Krotoff
  * @author Philippe Bernery
@@ -56,11 +59,35 @@ public:
 	 */
 	boost::any getDefaultValue(const std::string & key) const;
 
+
 	/**
-	 * reset to key to its default value
+	 * Resets to key to its default value.
+	 *
 	 * @param key key to reset
 	 */
 	void resetToDefaultValue(const std::string & key);
+
+	/**
+	 * Makes it impossible to use set() with a wrong value type.
+	 *
+	 * @see Settings::set()
+	 */
+	void set(const std::string & key, const std::string & value);
+
+	/**
+	 * @see set()
+	 */
+	void set(const std::string & key, const StringList & value);
+
+	/**
+	 * @see set()
+	 */
+	void set(const std::string & key, bool value);
+
+	/**
+	 * @see set()
+	 */
+	void set(const std::string & key, int value);
 
 protected:
 

@@ -21,6 +21,8 @@
 
 #include <util/Logger.h>
 
+#include <qtutil/SafeConnect.h>
+
 #include <QtCore/QtCore>
 #include <QtGui/QCursor>
 
@@ -31,7 +33,7 @@ Idle::Idle(QObject * parent)
 
 	_timer = new QTimer(parent);
 	_timer->setSingleShot(true);
-	connect(_timer, SIGNAL(timeout()), SLOT(timeout()));
+	SAFE_CONNECT(_timer, SIGNAL(timeout()), SLOT(timeout()));
 
 	//Check mouse position every second
 	static const int CHECK_MOUSE_POS_TIMEOUT = 1000;
@@ -39,7 +41,7 @@ Idle::Idle(QObject * parent)
 	_checkMousePosTimer = new QTimer(parent);
 	_checkMousePosTimer->setSingleShot(false);
 	_checkMousePosTimer->setInterval(CHECK_MOUSE_POS_TIMEOUT);
-	connect(_checkMousePosTimer, SIGNAL(timeout()), SLOT(checkMousePos()));
+	SAFE_CONNECT(_checkMousePosTimer, SIGNAL(timeout()), SLOT(checkMousePos()));
 	_checkMousePosTimer->start();
 }
 

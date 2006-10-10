@@ -25,6 +25,8 @@
 /**
  * WengoPhone update web service.
  *
+ * Checks for the availability of WengoPhone updates.
+ *
  * @author Tanguy Krotoff
  */
 class WsSoftUpdate : public WengoWebService {

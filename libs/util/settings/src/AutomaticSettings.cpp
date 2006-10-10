@@ -27,6 +27,47 @@ AutomaticSettings::AutomaticSettings() {
 AutomaticSettings::~AutomaticSettings() {
 }
 
+void AutomaticSettings::set(const std::string & key, const std::string & value) {
+	boost::any defaultValue = getDefaultValue(key);
+
+	if (isString(defaultValue)) {
+		Settings::set(key, value);
+	} else {
+		LOG_FATAL("the default value doesn't match a string value");
+	}
+}
+
+void AutomaticSettings::set(const std::string & key, const StringList & value) {
+	boost::any defaultValue = getDefaultValue(key);
+
+	if (isStringList(defaultValue)) {
+		Settings::set(key, value);
+	} else {
+		LOG_FATAL("the default value doesn't match a StringList value");
+	}
+}
+
+void AutomaticSettings::set(const std::string & key, bool value) {
+	boost::any defaultValue = getDefaultValue(key);
+
+	if (isBoolean(defaultValue)) {
+		Settings::set(key, value);
+	} else {
+		LOG_FATAL("the default value doesn't match a boolean value");
+	}
+}
+
+void AutomaticSettings::set(const std::string & key, int value) {
+	boost::any defaultValue = getDefaultValue(key);
+
+	if (isInteger(defaultValue)) {
+		Settings::set(key, value);
+	} else {
+		LOG_FATAL("the default value doesn't match an integer value");
+	}
+}
+
+
 StringList AutomaticSettings::getAllKeys() const {
 	StringList tmp;
 	for (Keys::const_iterator it = _keyDefaultValueMap.begin(); it != _keyDefaultValueMap.end(); ++it) {
@@ -94,5 +135,5 @@ StringList AutomaticSettings::getStringListKeyValue(const std::string & key) con
 }
 
 void AutomaticSettings::resetToDefaultValue(const std::string & key) {
-	set(key, getDefaultValue(key));
+	Settings::set(key, getDefaultValue(key));
 }

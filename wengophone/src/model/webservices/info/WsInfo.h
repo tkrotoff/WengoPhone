@@ -25,6 +25,11 @@
 /**
  * Wengo information web service.
  *
+ * Retrieves general information about the user and its server configuration:
+ * - the call forward method used
+ * - the amount of credits
+ * - the land line number associated with the user
+ *
  * @author Mathieu Stute
  */
 class WsInfo : public WengoWebService {
@@ -53,7 +58,7 @@ public:
 	};
 
 	/**
-	 * Default constructor
+	 * Default constructor.
 	 *
 	 * @param wengoAccount the WengoAccount used for web services
 	 */
@@ -133,42 +138,42 @@ public:
 	Event<void (WsInfo & sender, int id, WsInfoStatus status, bool voicemail)> wsInfoActiveVoiceMailEvent;
 
 	/**
-	 * Set/unset wengo's request
+	 * Sets/unsets wengo's request.
 	 *
 	 * @param wengos if true enable wengo's request
 	 */
 	void getWengosCount(bool wengos);
 
 	/**
-	 * Set/unset sms count request
+	 * Sets/unsets sms count request.
 	 *
 	 * @param sms if true enable sms count request
 	 */
 	void getSmsCount(bool sms);
 
 	/**
-	 * Set/unset active mail request
+	 * Sets/unsets active mail request.
 	 *
 	 * @param mail if true enable active mail request
 	 */
 	void getActiveMail(bool mail);
 
 	/**
-	 * Set/unset voice mail count request
+	 * Sets/unsets voice mail count request.
 	 *
 	 * @param voicemail if true enable voice mail count request
 	 */
 	void getUnreadVoiceMail(bool voicemail);
 
 	/**
-	 * Set/unset call forward request
+	 * Sets/unsets call forward request.
 	 *
 	 * @param callForward if true enable call forward request
 	 */
 	void getCallForwardInfo(bool callForward);
 
 	/**
-	 * Set/unset landline number request
+	 * Sets/unsets landline number request.
 	 *
 	 * @param landlineNumber if true enable landline number request
 	 */
@@ -188,22 +193,22 @@ private:
 	 */
 	void answerReceived(const std::string & answer, int id);
 
-	/** activate wengos count */
+	/** Activates wengos count. */
 	bool _wengosCount;
 
-	/** activate sms count */
+	/** Activates sms count. */
 	bool _smsCount;
 
-	/** activate active mail request */
+	/** Activates active mail request. */
 	bool _activeMail;
 
-	/** activate unread voice mail count */
+	/** Activates unread voice mail count. */
 	bool _unreadVoiceMail;
 
-	/** activate unread voice mail count */
+	/** Activates unread voice mail count. */
 	bool _callForward;
 
-	/** activate landline number request */
+	/** Activates landline number request. */
 	bool _landlineNumber;
 
 	static const std::string WENGOSCOUNT_TAG;

@@ -117,13 +117,13 @@ void Settings::set(const std::string & key, int value) {
 }
 
 void Settings::set(const std::string & key, boost::any value) {
-	if(isBoolean(value)) {
+	if (isBoolean(value)) {
 		set(key, boost::any_cast<bool>(value));
-	} else if(isInteger(value)) {
+	} else if (isInteger(value)) {
 		set(key, boost::any_cast<int>(value));
-	} else if(isString(value)) {
+	} else if (isString(value)) {
 		set(key, boost::any_cast<std::string>(value));
-	} else if(isStringList(value)) {
+	} else if (isStringList(value)) {
 		set(key, boost::any_cast<StringList>(value));
 	}
 }

@@ -25,14 +25,17 @@
 
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
+#include <model/wenbox/EnumWenboxStatus.h>
 
 #include <sound/AudioDeviceManager.h>
 #include <sound/VolumeControl.h>
 
 #include <util/Logger.h>
+#include <util/SafeDelete.h>
 
 #include <qtutil/LanguageChangeEventFilter.h>
 #include <qtutil/PaintEventFilter.h>
+#include <qtutil/SafeConnect.h>
 
 #include <QtGui/QtGui>
 
@@ -51,16 +54,19 @@ QtConfigPanel::QtConfigPanel(CWengoPhone & cWengoPhone, QWidget * parent)
 	config.valueChangedEvent += boost::bind(&QtConfigPanel::configChangedEventHandler, this, _1, _2);
 
 	//inputSoundSlider
-	connect(_ui->inputSoundSlider, SIGNAL(valueChanged(int)), SLOT(inputVolumeSliderValueChanged(int)));
+	SAFE_CONNECT(_ui->inputSoundSlider, SIGNAL(valueChanged(int)), SLOT(inputVolumeSliderValueChanged(int)));
 
 	//outputSoundSlider
-	connect(_ui->outputSoundSlider, SIGNAL(valueChanged(int)), SLOT(outputVolumeSliderValueChanged(int)));
+	SAFE_CONNECT(_ui->outputSoundSlider, SIGNAL(valueChanged(int)), SLOT(outputVolumeSliderValueChanged(int)));
 
 	//enableWenboxCheckBox
-	connect(_ui->enableWenboxCheckBox, SIGNAL(toggled(bool)), SLOT(enableWenboxCheckBoxToggled(bool)));
+	SAFE_CONNECT(_ui->enableWenboxCheckBox, SIGNAL(clicked(bool)), SLOT(enableWenboxCheckBoxToggled(bool)));
+	if (EnumWenboxStatus::toWenboxStatus(config.getWenboxEnable()) == EnumWenboxStatus::WenboxStatusNotConnected) {
+		_ui->enableWenboxCheckBox->setEnabled(false);
+	}
 
 	//halfDuplexCheckBox
-	connect(_ui->halfDuplexCheckBox, SIGNAL(toggled(bool)), SLOT(halfDuplexCheckBoxToggled(bool)));
+	SAFE_CONNECT(_ui->halfDuplexCheckBox, SIGNAL(toggled(bool)), SLOT(halfDuplexCheckBoxToggled(bool)));
 
 	configChangedEventHandler(config, Config::AUDIO_INPUT_DEVICEID_KEY);
 	configChangedEventHandler(config, Config::AUDIO_OUTPUT_DEVICEID_KEY);
@@ -68,17 +74,17 @@ QtConfigPanel::QtConfigPanel(CWengoPhone & cWengoPhone, QWidget * parent)
 	configChangedEventHandler(config, Config::AUDIO_HALFDUPLEX_KEY);
 
 	//videoSettingsButton
-	connect(_ui->videoSettingsButton, SIGNAL(clicked()), SLOT(videoSettingsClicked()));
+	SAFE_CONNECT(_ui->videoSettingsButton, SIGNAL(clicked()), SLOT(videoSettingsClicked()));
 
 	//audioSettingsButton
-	connect(_ui->audioSettingsButton, SIGNAL(clicked()), SLOT(audioSettingsClicked()));
+	SAFE_CONNECT(_ui->audioSettingsButton, SIGNAL(clicked()), SLOT(audioSettingsClicked()));
 
 	PaintEventFilter * paintFilter = new PaintEventFilter(this, SLOT(paintEvent(QEvent *)));
 	_configPanelWidget->installEventFilter(paintFilter);
 }
 
 QtConfigPanel::~QtConfigPanel() {
-	delete _ui;
+	OWSAFE_DELETE(_ui);
 }
 
 void QtConfigPanel::inputVolumeSliderValueChanged(int value) {
@@ -95,7 +101,13 @@ void QtConfigPanel::outputVolumeSliderValueChanged(int value) {
 
 void QtConfigPanel::enableWenboxCheckBoxToggled(bool checked) {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
-	config.set(Config::WENBOX_ENABLE_KEY, checked);
+	if (EnumWenboxStatus::toWenboxStatus(config.getWenboxEnable()) != EnumWenboxStatus::WenboxStatusNotConnected) {
+		if (checked) {
+			config.set(Config::WENBOX_ENABLE_KEY, EnumWenboxStatus::toString(EnumWenboxStatus::WenboxStatusEnable));
+		} else {
+			config.set(Config::WENBOX_ENABLE_KEY, EnumWenboxStatus::toString(EnumWenboxStatus::WenboxStatusDisable));
+		}
+	}
 }
 
 void QtConfigPanel::halfDuplexCheckBoxToggled(bool checked) {
@@ -130,7 +142,17 @@ void QtConfigPanel::configChangedEventHandlerThreadSafe(Settings & sender, const
 
 	if (key == Config::WENBOX_ENABLE_KEY) {
 		//enableWenboxCheckBox
-		_ui->enableWenboxCheckBox->setChecked(config.getWenboxEnable());
+		EnumWenboxStatus::WenboxStatus wenboxStatus = EnumWenboxStatus::toWenboxStatus(config.getWenboxEnable());
+		if (wenboxStatus == EnumWenboxStatus::WenboxStatusNotConnected) {
+			_ui->enableWenboxCheckBox->setEnabled(false);
+			_ui->enableWenboxCheckBox->setChecked(false);
+		} else if (wenboxStatus == EnumWenboxStatus::WenboxStatusEnable) {
+			_ui->enableWenboxCheckBox->setEnabled(true);
+			_ui->enableWenboxCheckBox->setChecked(true);
+		} else if (wenboxStatus == EnumWenboxStatus::WenboxStatusDisable) {
+			_ui->enableWenboxCheckBox->setEnabled(true);
+			_ui->enableWenboxCheckBox->setChecked(false);
+		}
 	}
 
 	if (key == Config::AUDIO_HALFDUPLEX_KEY) {

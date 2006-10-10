@@ -61,6 +61,11 @@ Wenbox::~Wenbox() {
 
 bool Wenbox::open() {
 	if (_wenboxPrivate) {
+		if (_open) {
+			//Avoid to open the Wenbox a second time
+			return _open;
+		}
+
 		LOG_DEBUG("open device");
 		_open = _wenboxPrivate->open();
 		return _open;

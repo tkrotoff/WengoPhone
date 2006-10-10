@@ -47,8 +47,9 @@
 #include "statusbar/QtStatusBar.h"
 #include "webservices/directory/QtWsDirectory.h"
 #include "webservices/sms/QtSms.h"
+
 #if (defined OS_WINDOWS) && (defined QT_COMMERCIAL)
-#include "webdirectory/QtWebDirectory.h"
+	#include "webdirectory/QtWebDirectory.h"
 #endif
 
 #include <control/CWengoPhone.h>
@@ -163,7 +164,7 @@ void QtWengoPhone::initThreadSafe() {
 
 	//QtDialpad
 	QtDialpad * qtDialpad = new QtDialpad(this);
-	Widget::createLayout(_ui->tabDialpad)->addWidget(qtDialpad->getWidget());
+	Widget::createLayout(_ui->tabDialpad)->addWidget(qtDialpad);
 
 	//QtHistoryWidget
 	_qtHistoryWidget = NULL;
@@ -563,9 +564,8 @@ void QtWengoPhone::dialpad(const std::string & tone, const std::string & soundFi
 			} else {
 				phoneCall->playSoundFile(soundFile);
 			}
-		} else {
-			_qtCallBar->setPhoneComboBoxEditText(_qtCallBar->getPhoneComboBoxCurrentText() + tone);
 		}
+		_qtCallBar->setPhoneComboBoxEditText(_qtCallBar->getPhoneComboBoxCurrentText() + tone);
 	}
 }
 

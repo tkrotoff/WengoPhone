@@ -50,8 +50,7 @@ std::string EnumNatType::toString(NatType natType) {
 EnumNatType::NatType EnumNatType::toNatType(const std::string & natType) {
 	init();
 	for (NatTypeMap::const_iterator it = _natTypeMap.begin();
-		it != _natTypeMap.end();
-		++it) {
+		it != _natTypeMap.end(); ++it) {
 
 		if ((*it).second == natType) {
 			return (*it).first;

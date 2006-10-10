@@ -65,7 +65,7 @@ QtPhoneCall::QtPhoneCall(CPhoneCall & cPhoneCall)
 	_hold = true;
 	_showVideo = false;
 
-	_phoneCallWidget = new QWidget(_qtWengoPhone->getWidget());
+	_phoneCallWidget = new QWidget(NULL);
 
 	_ui = new Ui::PhoneCallWidget();
 	_ui->setupUi(_phoneCallWidget);

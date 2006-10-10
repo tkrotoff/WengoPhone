@@ -28,7 +28,10 @@ class ContactProfile;
 class UserProfile;
 
 /**
- * Search for Wengo users web service
+ * Search for Wengo users web service.
+ *
+ * FIXME not used anymore: implemented directly as a webpage
+ * inside a web browser (ActiveX IE under Windows).
  *
  * @ingroup model
  * @author Mathieu Stute

@@ -25,6 +25,8 @@
 /**
  * Wengo subscribe web service.
  *
+ * Creates a Wengo account directly from WengoPhone.
+ *
  * @author Mathieu Stute
  */
 class WsSubscribe : public WengoWebService {
@@ -72,6 +74,7 @@ public:
 	 * @param id request unique id
 	 * @param status subscription status (ok or error)
 	 * @param error error message
+	 * @param password Wengo password chosen by the user
 	 */
 	Event<void (WsSubscribe & sender, int id, SubscriptionStatus status,
 				const std::string & errorMessage, const std::string & password)> wengoSubscriptionEvent;

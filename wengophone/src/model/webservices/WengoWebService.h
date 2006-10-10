@@ -28,6 +28,8 @@ class WengoAccount;
 /**
  * WengoWebService.
  *
+ * Class helper to create web services easily.
+ *
  * @author Mathieu Stute
  */
 class WengoWebService : public Trackable {

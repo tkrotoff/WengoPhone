@@ -34,8 +34,10 @@
 #include <sipwrapper/EnumVideoQuality.h>
 
 #include <util/Logger.h>
+#include <util/SafeDelete.h>
 
 #include <qtutil/StringListConvert.h>
+#include <qtutil/SafeConnect.h>
 
 #include <QtGui/QtGui>
 
@@ -43,7 +45,8 @@ static const int VIDEO_QUALITY_COLUMN = 0;
 static const char * VIDEO_TEST_CALL = "334";
 
 QtVideoSettings::QtVideoSettings(CWengoPhone & cWengoPhone, QWidget * parent)
-	: QWidget(NULL), _cWengoPhone(cWengoPhone) {
+	: QWidget(NULL),
+	_cWengoPhone(cWengoPhone) {
 
 	_ui = new Ui::VideoSettings();
 	_ui->setupUi(this);
@@ -51,10 +54,10 @@ QtVideoSettings::QtVideoSettings(CWengoPhone & cWengoPhone, QWidget * parent)
 	_webcamDriver = WebcamDriver::getInstance();
 	_rgbImage = NULL;
 
-	connect(this, SIGNAL(newWebcamImage(QImage *)), SLOT(newWebcamImageCaptured(QImage *)), Qt::QueuedConnection);
-	connect(_ui->webcamDeviceComboBox, SIGNAL(activated(const QString &)), SLOT(startWebcamPreview(const QString &)));
-	connect(_ui->makeTestVideoCallButton, SIGNAL(clicked()), SLOT(makeTestCallClicked()));
-	connect(_ui->webcamPreviewButton, SIGNAL(clicked()), SLOT(webcamPreview()));
+	SAFE_CONNECT(this, SIGNAL(newWebcamImage(QImage *)), SLOT(newWebcamImageCaptured(QImage *)), Qt::QueuedConnection);
+	SAFE_CONNECT(_ui->webcamDeviceComboBox, SIGNAL(activated(const QString &)), SLOT(startWebcamPreview(const QString &)));
+	SAFE_CONNECT(_ui->makeTestVideoCallButton, SIGNAL(clicked()), SLOT(makeTestCallClicked()));
+	SAFE_CONNECT(_ui->webcamPreviewButton, SIGNAL(clicked()), SLOT(webcamPreview()));
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	//No webcam driver
@@ -68,7 +71,7 @@ QtVideoSettings::QtVideoSettings(CWengoPhone & cWengoPhone, QWidget * parent)
 }
 
 QtVideoSettings::~QtVideoSettings() {
-	delete _ui;
+	OWSAFE_DELETE(_ui);
 }
 
 QString QtVideoSettings::getName() const {
@@ -83,7 +86,7 @@ void QtVideoSettings::saveConfig() {
 
 	QTreeWidgetItem * item = _ui->videoQualityTreeWidget->currentItem();
 	if (item) {
-		int videoQuality = EnumVideoQuality::VideoQualityNormal;
+		EnumVideoQuality::VideoQuality videoQuality = EnumVideoQuality::VideoQualityNormal;
 		QString text = item->text(VIDEO_QUALITY_COLUMN);
 		if (tr("Normal") == text) {
 			videoQuality = EnumVideoQuality::VideoQualityNormal;
@@ -100,7 +103,7 @@ void QtVideoSettings::saveConfig() {
 		else {
 			LOG_FATAL("unknown video quality=" + text.toStdString());
 		}
-		config.set(Config::VIDEO_QUALITY_KEY, videoQuality);
+		config.set(Config::VIDEO_QUALITY_KEY, EnumVideoQuality::toString(videoQuality));
 	}
 }
 
@@ -113,7 +116,7 @@ void QtVideoSettings::readConfig() {
 	_ui->webcamDeviceComboBox->addItems(StringListConvert::toQStringList(_webcamDriver->getDeviceList()));
 	_ui->webcamDeviceComboBox->setCurrentIndex(_ui->webcamDeviceComboBox->findText(QString::fromUtf8(config.getVideoWebcamDevice().c_str())));
 
-	int videoQuality = config.getVideoQuality();
+	EnumVideoQuality::VideoQuality videoQuality = EnumVideoQuality::toVideoQuality(config.getVideoQuality());
 	QString videoQualityText;
 
 	switch (videoQuality) {
@@ -157,7 +160,7 @@ void QtVideoSettings::frameCapturedEventHandler(IWebcamDriver * sender, piximage
 
 void QtVideoSettings::newWebcamImageCaptured(QImage * image) {
 	_ui->webcamPreviewLabel->setPixmap(QPixmap::fromImage(*image));
-	delete image;
+	OWSAFE_DELETE(image);
 }
 
 void QtVideoSettings::startWebcamPreview(const QString & deviceName) {

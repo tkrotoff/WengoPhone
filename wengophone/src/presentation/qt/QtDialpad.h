@@ -17,30 +17,32 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QTDIALPAD_H
-#define QTDIALPAD_H
+#ifndef OWQTDIALPAD_H
+#define OWQTDIALPAD_H
 
 #include <util/NonCopyable.h>
 
-#include <QtCore/QObject>
+#include <QtGui/QWidget>
 
 #include <string>
 
 class QtWengoPhone;
 
-class QWidget;
 class QStringList;
 namespace Ui { class DialpadWidget; }
 
-class QtDialpad : public QObject, NonCopyable {
+/**
+ * Dialpad widget: where the user clicks for DTMF.
+ *
+ * @author Tanguy Krotoff
+ */
+class QtDialpad : public QWidget, NonCopyable {
 	Q_OBJECT
 public:
 
 	QtDialpad(QtWengoPhone * qtWengoPhone);
 
-	QWidget * getWidget() const {
-		return _dialpadWidget;
-	}
+	~QtDialpad();
 
 private Q_SLOTS:
 
@@ -84,9 +86,7 @@ private:
 
 	Ui::DialpadWidget * _ui;
 
-	QWidget * _dialpadWidget;
-
 	QtWengoPhone * _qtWengoPhone;
 };
 
-#endif	//QTDIALPAD_H
+#endif	//OWQTDIALPAD_H

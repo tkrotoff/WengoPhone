@@ -19,21 +19,39 @@
 
 #include <sipwrapper/EnumVideoQuality.h>
 
-EnumVideoQuality::VideoQuality EnumVideoQuality::checkValue(int videoQuality) {
-	switch (videoQuality) {
-	case VideoQualityNormal:
-		return VideoQualityNormal;
+#include <util/Logger.h>
 
-	case VideoQualityGood:
-		return VideoQualityGood;
+#include <map>
 
-	case VideoQualityVeryGood:
-		return VideoQualityVeryGood;
+typedef std::map<EnumVideoQuality::VideoQuality, std::string> VideoQualityMap;
+static VideoQualityMap _videoQualityMap;
 
-	case VideoQualityExcellent:
-		return VideoQualityExcellent;
+static void init() {
+	_videoQualityMap[EnumVideoQuality::VideoQualityNormal] = "VideoQualityNormal";
+	_videoQualityMap[EnumVideoQuality::VideoQualityGood] = "VideoQualityGood";
+	_videoQualityMap[EnumVideoQuality::VideoQualityVeryGood] = "VideoQualityVeryGood";
+	_videoQualityMap[EnumVideoQuality::VideoQualityExcellent] = "VideoQualityExcellent";
+}
 
-	default:
-		return VideoQualityNormal;
+std::string EnumVideoQuality::toString(VideoQuality videoQuality) {
+	init();
+	std::string tmp = _videoQualityMap[videoQuality];
+	if (tmp.empty()) {
+		LOG_FATAL("unknown VideoQuality=" + String::fromNumber(videoQuality));
 	}
+	return tmp;
+}
+
+EnumVideoQuality::VideoQuality EnumVideoQuality::toVideoQuality(const std::string & videoQuality) {
+	init();
+	for (VideoQualityMap::const_iterator it = _videoQualityMap.begin();
+		it != _videoQualityMap.end(); ++it) {
+
+		if ((*it).second == videoQuality) {
+			return (*it).first;
+		}
+	}
+
+	LOG_FATAL("unknown VideoQuality=" + videoQuality);
+	return VideoQualityNormal;
 }

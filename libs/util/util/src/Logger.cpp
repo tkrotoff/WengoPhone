@@ -90,7 +90,7 @@ void Logger::log(Level level, const std::string & className, const std::string &
 
 	std::string tmp = "(" + levelString + ") " + Time().toString();
 	if ((!filename.empty()) && (!line.empty())) {
-		tmp = filename + ":" + line + " ";
+		tmp += " " + filename + ":" + line;
 	}
 	tmp += " " + className +  ": " + message;
 

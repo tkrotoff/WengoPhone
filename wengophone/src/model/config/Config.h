@@ -22,6 +22,8 @@
 
 #include <settings/AutomaticSettings.h>
 
+#include <model/wenbox/EnumWenboxStatus.h>
+
 #include <util/String.h>
 #include <util/StringList.h>
 
@@ -403,7 +405,7 @@ public:
 	std::string getVideoWebcamDevice() const;
 
 	static const std::string VIDEO_QUALITY_KEY;
-	int getVideoQuality() const;
+	std::string getVideoQuality() const;
 
 	static const std::string VIDEO_ENABLE_XVIDEO;
 	bool getXVideoEnable() const;
@@ -441,9 +443,9 @@ public:
 	 * @{
 	 */
 
-	/** Wenbox support enable or not. */
+	/** Wenbox support enable, disable or not connected (not found). */
 	static const std::string WENBOX_ENABLE_KEY;
-	bool getWenboxEnable() const;
+	std::string getWenboxEnable() const;
 
 	/** @} */
 
