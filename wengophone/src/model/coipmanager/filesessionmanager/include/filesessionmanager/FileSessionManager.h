@@ -57,6 +57,10 @@ public:
 	 */
 	Event< void (FileSessionManager & sender, ReceiveFileSession fileSession)> newReceiveFileSessionCreatedEvent;
 
+	Event <void (FileSessionManager & sender)> needUpgradeEvent;
+
+	Event <void (FileSessionManager & sender)> peerNeedsUpgradeEvent;
+
 	FileSessionManager(UserProfile & userProfile);
 
 	virtual ~FileSessionManager();
@@ -74,6 +78,10 @@ private:
 	 */
 	void newIReceiveFileSessionCreatedEventHandler(IFileSessionManager & sender, 
 		IReceiveFileSession * iReceiveFileSession);
+
+	void needUpgradeEventHandler(IFileSessionManager & sender);
+
+	void peerNeedsUpgradeEventHandler(IFileSessionManager & sender);
 
 	/**
 	 * Create a ISendFileSession suitable for the given contact.

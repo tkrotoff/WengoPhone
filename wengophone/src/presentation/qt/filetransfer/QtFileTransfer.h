@@ -76,6 +76,10 @@ Q_SIGNALS:
 	 */
 	void newReceiveFileSessionCreatedEventHandlerSignal(ReceiveFileSession * fileSession);
 
+	void needUpgradeEventHandlerSignal();
+
+	void peerNeedsUpgradeEventHandlerSignal();
+
 private Q_SLOTS:
 
 	/**
@@ -83,12 +87,20 @@ private Q_SLOTS:
 	 */
 	void newReceiveFileSessionCreatedEventHandlerSlot(ReceiveFileSession * fileSession);
 
+	void needUpgradeEventHandlerSlot();
+
+	void peerNeedsUpgradeEventHandlerSlot();
+
 private:
 
 	/**
 	 * @see FileSessionManager::newReceiveFileSessionCreatedEvent
 	 */
 	void newReceiveFileSessionCreatedEventHandler(FileSessionManager & sender, ReceiveFileSession fileSession);
+
+	void needUpgradeEventHandler(FileSessionManager & sender);
+
+	void peerNeedsUpgradeEventHandler(FileSessionManager & sender);
 
 	/**
 	 * Test if a file is in a dir.

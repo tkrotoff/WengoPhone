@@ -38,7 +38,14 @@ FileSessionManager::FileSessionManager(UserProfile & userProfile)
 
 	PhApiFileSessionManager * phapiManager = new PhApiFileSessionManager(_userProfile);
 	phapiManager->newIReceiveFileSessionCreatedEvent += boost::bind(&FileSessionManager::newIReceiveFileSessionCreatedEventHandler, this, _1, _2);
+
+	phapiManager->needUpgradeEvent += boost::bind(&FileSessionManager::needUpgradeEventHandler, this, _1);
+
+	phapiManager->peerNeedsUpgradeEvent += boost::bind(&FileSessionManager::peerNeedsUpgradeEventHandler, this, _1);
+
 	_fileSessionManagerVector.push_back(phapiManager);
+
+	
 }
 
 FileSessionManager::~FileSessionManager() {
@@ -94,4 +101,12 @@ void FileSessionManager::newIReceiveFileSessionCreatedEventHandler(IFileSessionM
 	ReceiveFileSession newFileSession(_userProfile, iReceiveFileSession);
 
 	newReceiveFileSessionCreatedEvent(*this, newFileSession);
+}
+
+void FileSessionManager::needUpgradeEventHandler(IFileSessionManager & sender) {
+	needUpgradeEvent(*this);
+}
+
+void FileSessionManager::peerNeedsUpgradeEventHandler(IFileSessionManager & sender) {
+	peerNeedsUpgradeEvent(*this);
 }

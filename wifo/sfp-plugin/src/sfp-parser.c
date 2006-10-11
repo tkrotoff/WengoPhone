@@ -18,6 +18,7 @@
  */
 
 #include <sfp-plugin/sfp-commons.h>
+#include <sfp-plugin/sfp-plugin.h>
 #include <sfp-plugin/sfp-parser.h>
 
 #include <phapi-util/mystdio.h>
@@ -110,7 +111,11 @@ sfp_info_t * sfp_parse_message(char * text){
 					//msscanf(&text, SFP_VERSION_LINE_FORMAT, &(info->protocol_version));
 					sscanf3(&text, SFP_VERSION_LINE_FORMAT, info->protocol_version, sizeof(info->protocol_version));
 					// if protocol version differs, don't try to parse the rest of the message
-					if(strcmp(info->protocol_version, SFP_PROTOCOL_VERSION) != 0){
+					if(strcmp(info->protocol_version, SFP_PROTOCOL_VERSION) < 0){
+						if(sfp_cbks != NULL && sfp_cbks->peerNeedUpgrade) sfp_cbks->peerNeedUpgrade();
+						return NULL;
+					}else if(strcmp(info->protocol_version, SFP_PROTOCOL_VERSION) > 0){
+						if(sfp_cbks != NULL && sfp_cbks->needUpgrade) sfp_cbks->needUpgrade();
 						return NULL;
 					}
 					break;

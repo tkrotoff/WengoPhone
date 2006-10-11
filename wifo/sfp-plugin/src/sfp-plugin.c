@@ -89,7 +89,7 @@ static phplugin_t * plugin = NULL;
 /**
 * Callbacks used by the plugin and given by the top level program
 */
-static sfp_callbacks_t * sfp_cbks = NULL;
+sfp_callbacks_t * sfp_cbks = NULL;
 // -----
 
 // ----- PRIVATE FUNCTIONS DECLARATION -----

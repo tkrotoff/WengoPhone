@@ -181,8 +181,17 @@ extern "C" {
 		void (*transferResumedByPeer)(int cid, char * username, char * short_filename, char * file_type, char * file_size);
 		/** The user resumed the transfer */
 		void (*transferResumed)(int cid, char * username, char * short_filename, char * file_type, char * file_size);
+		/** The peer need to upgrade his version */
+		void (*peerNeedUpgrade)(void);
+		/** The user need to upgrade his version */
+		void (*needUpgrade)(void);
 	};
 	typedef struct sfp_callbacks sfp_callbacks_t;
+
+	/**
+	* Callbacks used by the plugin and given by the top level program
+	*/
+	extern sfp_callbacks_t * sfp_cbks;
 
 	/************* PLUGIN SERVICES *************/
 

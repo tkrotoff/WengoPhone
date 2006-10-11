@@ -47,6 +47,10 @@ private :
 
 	void newIncomingFileEventHandler(PhApiSFPWrapper & sender, int callID, std::string contactID, std::string fileName, std::string fileType, int fileSize);
 
+	void needUpgradeEventHandler(PhApiSFPWrapper & sender);
+
+	void peerNeedsUpgradeEventHandler(PhApiSFPWrapper & sender);
+
 };
 
 #endif	//OWPHAPIFILESESSIONMANAGER_H

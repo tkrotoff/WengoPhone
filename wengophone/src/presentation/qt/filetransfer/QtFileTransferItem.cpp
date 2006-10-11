@@ -19,6 +19,8 @@
 
 #include "QtFileTransferItem.h"
 
+#include "QtFileTransferUpgradeDialog.h"
+
 #include "ui_FileTransferItem.h"
 
 #include <util/Logger.h>
@@ -145,6 +147,7 @@ void QtFileTransferItem::open() {
 void QtFileTransferItem::updateState(int e) {
 
 	IFileSession::IFileSessionEvent event = (IFileSession::IFileSessionEvent) e;
+	QtFileTransferUpgradeDialog  * qtFileTransferUpgradeDialog;
 
 	switch(event) {
 	case IFileSession::IFileSessionEventInviteToTransfer:
@@ -162,6 +165,28 @@ void QtFileTransferItem::updateState(int e) {
 	case IFileSession::IFileSessionEventFileTransferFailed:
 		stateChangeEvent(tr("Failed"));
 		updateButtonsFinished();
+		qtFileTransferUpgradeDialog = new QtFileTransferUpgradeDialog(this);
+		qtFileTransferUpgradeDialog->setHeader("<html><head><meta name=\"qrichtext\" content=\"1\" />"
+			"</head><body style=\" white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt;"
+			"font-weight:400; font-style:normal; text-decoration:none;\"><p style=\" margin-top:0px;"
+			"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">"
+			"<span style=\" font-size:18pt; font-weight:600; color:#ffffff;\">An error<br> occured during<br>"
+			"the file transfer</span></p></body></html>");
+		qtFileTransferUpgradeDialog->setStatus("<html><head><meta name=\"qrichtext\" content=\"1\" />"
+			"</head><body style=\" white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt;"
+			"font-weight:400; font-style:normal; text-decoration:none;\"><p style=\" margin-top:0px;"
+			"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"
+			"font-size:8pt;\"><span style=\" font-weight:600;\">This may be caused by:"
+			"</span> <br>- Your WengoPhone is not up to date. Please download the latest version on"
+			"www.wengo.com<br>- The Wengo network may be temporarily unavailable. Please try later.</p></body></html>");
+
+		if (qtFileTransferUpgradeDialog->exec() == QDialog::Accepted) {
+
+		} else {
+
+		}
+
+		OWSAFE_DELETE(qtFileTransferUpgradeDialog);
 		break;
 	case IFileSession::IFileSessionEventFileTransferPaused:
 		stateChangeEvent(tr("Paused"));

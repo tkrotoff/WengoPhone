@@ -43,7 +43,7 @@
 #define SFP_CONNECTION_ID_LINE_FORMAT		"s=%s\n" /* (connection_id) */
 
 // ----- PREDEFINED VALUES -----
-#define SFP_PROTOCOL_VERSION				"0.1.2"
+#define SFP_PROTOCOL_VERSION				"0.1.3"
 #define SFP_NETWORK_TYPE_INTERNET			"IN"
 #define SFP_ADDRESS_TYPE_IPV4				"IPv4"
 #define SFP_ADDRESS_TYPE_IPV6				"IPv6"

@@ -50,6 +50,10 @@ public:
 	Event< void (IFileSessionManager & sender, IReceiveFileSession * iReceiveFileSession)> 
 		newIReceiveFileSessionCreatedEvent;
 
+	Event <void (IFileSessionManager & sender)> needUpgradeEvent;
+
+	Event <void (IFileSessionManager & sender)> peerNeedsUpgradeEvent;
+
 	IFileSessionManager(UserProfile & userProfile);
 
 	virtual ~IFileSessionManager();

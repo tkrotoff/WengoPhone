@@ -65,6 +65,10 @@ public :
 	static Event<void (PhApiSFPWrapper & sender, int callID, std::string contactID, std::string fileName, std::string fileType, int fileSize)> transferResumedByPeerEvent;
 	
 	static Event<void (PhApiSFPWrapper & sender, int callID, std::string contactID, std::string fileName, std::string fileType, int fileSize)> transferResumedEvent;
+
+	static Event<void (PhApiSFPWrapper & sender)> peerNeedsUpgradeEvent;
+
+	static Event<void (PhApiSFPWrapper & sender)> needUpgradeEvent;
 };
 
 #endif	//OWPHAPISFPEVENT_H

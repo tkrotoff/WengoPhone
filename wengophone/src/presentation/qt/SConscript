@@ -150,6 +150,7 @@ headers = [
 	'filetransfer/QtFileTransferItem.h',
 	'filetransfer/QtFileTransferDownloadItem.h',
 	'filetransfer/QtFileTransferUploadItem.h',
+	'filetransfer/QtFileTransferUpgradeDialog.h',
 
 	'webdirectory/QtWebDirectory.h',
 ]
@@ -285,6 +286,7 @@ sources = [
 	'filetransfer/QtFileTransferItem.cpp',
 	'filetransfer/QtFileTransferDownloadItem.cpp',
 	'filetransfer/QtFileTransferUploadItem.cpp',
+	'filetransfer/QtFileTransferUpgradeDialog.cpp',
 
 	'webdirectory/QtWebDirectory.cpp',
 
@@ -360,6 +362,7 @@ forms = [
 	'filetransfer/AcceptDialog.ui',
 	'filetransfer/FileTransferWidget.ui',
 	'filetransfer/FileTransferItem.ui',
+	'filetransfer/UpgradeDialog.ui',
 
 	'history/HistoryWidget.ui',
 

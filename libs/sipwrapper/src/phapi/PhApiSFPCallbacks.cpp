@@ -102,8 +102,16 @@ extern "C" {
 	static void transferResumed(int cid, char * username, char * short_filename, char * file_type, char * file_size){
 		PhApiSFPCallbacks::transferResumed(cid, std::string((const char *) username), std::string((const char *) short_filename), std::string((const char *) file_type), String(file_size).toInteger());
 	}
+
+	static void peerNeedsUpgrade() {
+		PhApiSFPCallbacks::peerNeedsUpgrade();
+	}
 	
-	static sfp_callbacks_t sfp_cbks = {
+	static void needUpgrade() {
+		PhApiSFPCallbacks::needUpgrade();
+	}
+	
+	static sfp_callbacks_t phapi_sfp_cbks = {
 		inviteToTransfer,
 		newIncomingFile,
 		waitingForAnswer,
@@ -123,7 +131,9 @@ extern "C" {
 		transferPausedByPeer,
 		transferPaused,
 		transferResumedByPeer,
-		transferResumed
+		transferResumed,
+		peerNeedsUpgrade,
+		needUpgrade
 	};
 
 }
@@ -193,6 +203,14 @@ void PhApiSFPCallbacks::transferResumed(int callID, std::string contactID, std::
 	PhApiSFPEvent::transferResumedEvent(PhApiSFPWrapper::getInstance(), callID, contactID, fileName, fileType, fileSize);
 }
 
+void PhApiSFPCallbacks::peerNeedsUpgrade() {
+	PhApiSFPEvent::peerNeedsUpgradeEvent(PhApiSFPWrapper::getInstance());
+}
+
+void PhApiSFPCallbacks::needUpgrade() {
+	PhApiSFPEvent::needUpgradeEvent(PhApiSFPWrapper::getInstance());
+}
+
 const sfp_callbacks_t * PhApiSFPCallbacks::getCallbacks(){
-	return &sfp_cbks;
+	return &phapi_sfp_cbks;
 }

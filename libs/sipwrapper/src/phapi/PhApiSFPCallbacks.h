@@ -65,6 +65,10 @@ public:
 
 	static void transferResumed(int cid, std::string contactID, std::string short_filename, std::string file_type, int file_size);
 
+	static void peerNeedsUpgrade();
+
+	static void needUpgrade();
+
 	static const sfp_callbacks_t * getCallbacks();
 
 };
