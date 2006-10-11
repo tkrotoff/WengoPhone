@@ -54,7 +54,7 @@ QtVideoSettings::QtVideoSettings(CWengoPhone & cWengoPhone, QWidget * parent)
 	_webcamDriver = WebcamDriver::getInstance();
 	_rgbImage = NULL;
 
-	SAFE_CONNECT(this, SIGNAL(newWebcamImage(QImage *)), SLOT(newWebcamImageCaptured(QImage *)), Qt::QueuedConnection);
+	SAFE_CONNECT_TYPE(this, SIGNAL(newWebcamImage(QImage *)), SLOT(newWebcamImageCaptured(QImage *)), Qt::QueuedConnection);
 	SAFE_CONNECT(_ui->webcamDeviceComboBox, SIGNAL(activated(const QString &)), SLOT(startWebcamPreview(const QString &)));
 	SAFE_CONNECT(_ui->makeTestVideoCallButton, SIGNAL(clicked()), SLOT(makeTestCallClicked()));
 	SAFE_CONNECT(_ui->webcamPreviewButton, SIGNAL(clicked()), SLOT(webcamPreview()));
