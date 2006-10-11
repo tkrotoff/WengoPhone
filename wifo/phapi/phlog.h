@@ -25,12 +25,16 @@
 /*********************User configuration part *************************/
 
 /* log filename */
+#ifdef __APPLE__ /* Temporary hack */
+#define LOG_FILE "/tmp/phlogger.log"
+#else
 #define LOG_FILE "phlogger.log"
+#endif
 
 /* 0 to disable, 1 log to file LOG_FILE and 2 log to stdout */
 #define ACTIVATE_SIPNEGO_DBG 0
 #define ACTIVATE_MEDIA_ENGINE_DBG 0
-#define ACTIVATE_MEDIA_ENGINE_VIDEO_DBG 1
+#define ACTIVATE_MEDIA_ENGINE_VIDEO_DBG 0
 #define ACTIVATE_CODEC_LOOKUP_DBG 0
 #define ACTIVATE_DYNA_AUDIO_DBG 0
 #define ACTIVATE_DYNA_AUDIO_RESAMPLE_DBG 0
