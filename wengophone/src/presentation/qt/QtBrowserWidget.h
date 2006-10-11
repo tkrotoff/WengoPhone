@@ -61,6 +61,11 @@ public:
 
 private Q_SLOTS:
 
+	/**
+	 * Re-initializes the browser.
+	 */
+	void userProfileDeleted();
+
 private:
 
 	void urlClickedEventHandler(std::string url);

@@ -639,6 +639,10 @@ void QtWengoPhone::showHistory() {
 }
 
 void QtWengoPhone::currentUserProfileWillDieEventHandlerSlot() {
+	//Signal for re-initializing graphical components
+	//when there is no user profile anymore
+	userProfileDeleted();
+
 	OWSAFE_DELETE(_qtFileTransfer);
 	OWSAFE_DELETE(_qtIdle);
 	OWSAFE_DELETE(_qtProfileBar);

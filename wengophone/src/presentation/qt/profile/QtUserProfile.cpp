@@ -58,10 +58,13 @@ void QtUserProfile::initThreadSafe() {
 	SAFE_CONNECT_TYPE(this, SIGNAL(authorizationRequestEventHandlerSignal(PresenceHandler *, IMContact, QString)),
 		SLOT(authorizationRequestEventHandlerSlot(PresenceHandler *, IMContact, QString)), Qt::QueuedConnection);
 
+	//SAFE_CONNECT(_qtWengoPhone, SLOT(), SIGNAL());
+
 	_qtWengoPhone.getQtBrowserWidget().loadAccountURL();
 }
 
 QtUserProfile::~QtUserProfile() {
+	LOG_DEBUG("QtUserProfile");
 }
 
 void QtUserProfile::updatePresentation() {
@@ -114,8 +117,7 @@ void QtUserProfile::loginStateChangedEventHandlerSlot(SipAccount * sender, int i
 	_qtWengoPhone.updatePresentation();
 }
 
-void QtUserProfile::networkDiscoveryStateChangedEventHandlerSlot(SipAccount * sender,
-	int iState) {
+void QtUserProfile::networkDiscoveryStateChangedEventHandlerSlot(SipAccount * sender, int iState) {
 
 	//SipAccount::NetworkDiscoveryState state = (SipAccount::NetworkDiscoveryState) iState;
 }

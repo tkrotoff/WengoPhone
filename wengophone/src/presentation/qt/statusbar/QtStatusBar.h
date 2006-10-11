@@ -61,6 +61,11 @@ private Q_SLOTS:
 
 	void languageChanged();
 
+	/**
+	 * Re-initializes the status bar.
+	 */
+	void userProfileDeleted();
+
 private:
 
 	/**

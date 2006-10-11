@@ -36,6 +36,8 @@
 #include <util/Logger.h>
 #include <util/SafeDelete.h>
 
+#include <qtutil/SafeConnect.h>
+
 #include <QtBrowser.h>
 
 #include <QtGui/QtGui>
@@ -63,6 +65,9 @@ QtBrowserWidget::QtBrowserWidget(QtWengoPhone & qtWengoPhone)
 	}
 #endif
 
+	//browser re-initialization
+	SAFE_CONNECT(&_qtWengoPhone, SIGNAL(userProfileDeleted()), SLOT(userProfileDeleted()));
+
 	loadDefaultURL();
 }
 
@@ -76,6 +81,10 @@ QWidget * QtBrowserWidget::getWidget() const {
 	}
 
 	return (QWidget*) _qtBrowser->getWidget();
+}
+
+void QtBrowserWidget::userProfileDeleted() {
+	loadDefaultURL();
 }
 
 void QtBrowserWidget::loadDefaultURL() {

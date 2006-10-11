@@ -21,6 +21,7 @@
 
 #include "ui_StatusBarWidget.h"
 
+#include <presentation/qt/QtWengoPhone.h>
 #include <presentation/qt/QtToolBar.h>
 
 #include <control/CWengoPhone.h>
@@ -87,6 +88,9 @@ QtStatusBar::QtStatusBar(CWengoPhone & cWengoPhone, QStatusBar * statusBar, QtTo
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	config.valueChangedEvent += boost::bind(&QtStatusBar::checkSoundConfig, this, _1, _2);
 	checkSoundConfigThreadSafe(Config::AUDIO_OUTPUT_DEVICEID_KEY);
+
+	//status bar re-initialization
+	SAFE_CONNECT((QtWengoPhone *) _cWengoPhone.getPresentation(), SIGNAL(userProfileDeleted()), SLOT(userProfileDeleted()));
 
 	init();
 }
@@ -167,6 +171,11 @@ void QtStatusBar::connectionStateEventHandlerThreadSafe(bool connected) {
 
 void QtStatusBar::updateInternetConnectionState() {
 	connectionStateEventHandlerThreadSafe(NetworkObserver::getInstance().isConnected());
+}
+
+void QtStatusBar::userProfileDeleted() {
+	_ui->sipConnectionLabel->setPixmap(QPixmap(":/pics/statusbar/network_status_error.png"));
+	_ui->sipConnectionLabel->setToolTip(tr("Not connected"));
 }
 
 void QtStatusBar::updatePhoneLineState() {

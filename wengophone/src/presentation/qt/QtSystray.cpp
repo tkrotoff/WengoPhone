@@ -79,6 +79,9 @@ QtSystray::QtSystray(QObject * parent)
 	phoneLineStateChanged(EnumPhoneLineState::PhoneLineStateProgress);
 	_trayIcon->show();
 
+	//systray re-initialization
+	SAFE_CONNECT(_qtWengoPhone, SIGNAL(userProfileDeleted()), SLOT(userProfileDeleted()));
+
 	setTrayMenu();
 }
 
@@ -251,6 +254,10 @@ void QtSystray::setSystrayIcon(QVariant status) {
 			break;
 		}
 	}
+}
+
+void QtSystray::userProfileDeleted() {
+	connectionStateEventHandlerThreadSafe(false);
 }
 
 void QtSystray::phoneLineStateChanged(EnumPhoneLineState::PhoneLineState state) {

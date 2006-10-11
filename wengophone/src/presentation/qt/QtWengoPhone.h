@@ -172,6 +172,15 @@ private Q_SLOTS:
 
 Q_SIGNALS:
 
+	/**
+	 * Current user profile has been deleted.
+	 *
+	 * Graphical components should be re-initialized:
+	 * QtContactList, QtHistoryWidget, QtProfileBar are removed.
+	 * QtSystray, QtBrowserWidget have to be re-initialized.
+	 */
+	void userProfileDeleted();
+
 	void showAddContactSignal(QString nickname, QString sip, QString firstname,
 		QString lastname, QString country, QString city, QString state, QString group);
 

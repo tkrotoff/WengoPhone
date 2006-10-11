@@ -68,6 +68,11 @@ private Q_SLOTS:
 
 	void sendSms(QAction * action);
 
+	/**
+	 * Re-initializes the systray.
+	 */
+	void userProfileDeleted();
+
 private:
 
 	void connectionIsUpEventHandler();
