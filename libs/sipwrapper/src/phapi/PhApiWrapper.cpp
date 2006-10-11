@@ -917,17 +917,17 @@ void PhApiWrapper::init() {
 	//Plugin path
 	strncpy(phcfg.plugin_path, _pluginPath.c_str(), sizeof(phcfg.plugin_path));
 
-	std::string audioCodecList = PhApiCodecList::AUDIO_CODEC_SPEEXWB + "," +
-		PhApiCodecList::AUDIO_CODEC_AMRWB + "," +
-		PhApiCodecList::AUDIO_CODEC_AMRNB + "," +
+	std::string audioCodecList =
+		PhApiCodecList::AUDIO_CODEC_SPEEXWB + "," +
 		PhApiCodecList::AUDIO_CODEC_ILBC + "," +
+		PhApiCodecList::AUDIO_CODEC_AMRWB + "," +
 		PhApiCodecList::AUDIO_CODEC_PCMU + "," +
 		PhApiCodecList::AUDIO_CODEC_PCMA + "," +
+		PhApiCodecList::AUDIO_CODEC_AMRNB + "," +
 		PhApiCodecList::AUDIO_CODEC_GSM;
 
-	std::string videoCodecList = PhApiCodecList::VIDEO_CODEC_H263 + "," +
-		PhApiCodecList::VIDEO_CODEC_H264 + "," +
-		PhApiCodecList::VIDEO_CODEC_MPEG4;
+	std::string videoCodecList =
+		PhApiCodecList::VIDEO_CODEC_H263;
 
 	//Codec list
 	strncpy(phcfg.audio_codecs, audioCodecList.c_str(), sizeof(phcfg.audio_codecs));
