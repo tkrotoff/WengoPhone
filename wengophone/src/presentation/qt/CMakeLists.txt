@@ -221,6 +221,7 @@ qt4_wrap_cpp(qtwengophone_SRCS
   filetransfer/QtFileTransferItem.h
   filetransfer/QtFileTransferDownloadItem.h
   filetransfer/QtFileTransferUploadItem.h
+  filetransfer/QtFileTransferUpgradeDialog.h
 )
 
 set(qtwengophone_SRCS
@@ -355,6 +356,7 @@ set(qtwengophone_SRCS
   filetransfer/QtFileTransferItem.cpp
   filetransfer/QtFileTransferDownloadItem.cpp
   filetransfer/QtFileTransferUploadItem.cpp
+  filetransfer/QtFileTransferUpgradeDialog.cpp
 )
 
 if (WIN32)
@@ -485,6 +487,7 @@ qt4_wrap_ui(qtwengophone_SRCS
   filetransfer/AcceptDialog.ui
   filetransfer/FileTransferWidget.ui
   filetransfer/FileTransferItem.ui
+  filetransfer/UpgradeDialog.ui
 
   history/HistoryWidget.ui
 
