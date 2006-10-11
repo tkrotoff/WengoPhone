@@ -180,12 +180,12 @@ protected:
 	/**
 	 * Mutex used for postEvent() and runEvents().
 	 */
-	Mutex _mutex;
+	Mutex _threadMutex;
 
 	/**
 	 * Condition used for postEvent().
 	 */
-	Condition _condition;
+	Condition _threadCondition;
 
 	/**
 	 * If this thread should be terminate or not.

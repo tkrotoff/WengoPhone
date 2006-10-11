@@ -33,7 +33,7 @@ Thread::Thread() {
 }
 
 Thread::~Thread() {
-	Mutex::ScopedLock scopedLock(_mutex);
+	Mutex::ScopedLock scopedLock(_threadMutex);
 
 	if (_thread && _threadRunning) {
 		scopedLock.unlock();
@@ -50,7 +50,7 @@ void Thread::start() {
 }
 
 void Thread::runThread() {
-	Mutex::ScopedLock scopedLock(_mutex);
+	Mutex::ScopedLock scopedLock(_threadMutex);
 	_threadRunning = true;
 	scopedLock.unlock();
 
@@ -62,7 +62,7 @@ void Thread::runThread() {
 }
 
 void Thread::join() {
-	Mutex::ScopedLock scopedLock(_mutex);
+	Mutex::ScopedLock scopedLock(_threadMutex);
 
 	if (_threadRunning) {
 		scopedLock.unlock();
@@ -71,11 +71,11 @@ void Thread::join() {
 }
 
 void Thread::postEvent(IThreadEvent * event) {
-	Mutex::ScopedLock scopedLock(_mutex);
+	Mutex::ScopedLock scopedLock(_threadMutex);
 	_eventQueue.push(event);
 	scopedLock.unlock();
 
-	_condition.notify_all();
+	_threadCondition.notify_all();
 }
 
 void Thread::sleep(unsigned long seconds) {
@@ -117,7 +117,7 @@ void Thread::msleep(unsigned long milliseconds) {
 }
 
 void Thread::runEvents() {
-	Mutex::ScopedLock scopedLock(_mutex);
+	Mutex::ScopedLock scopedLock(_threadMutex);
 
 	while (true) {
 		while (!_eventQueue.empty()) {
@@ -134,15 +134,15 @@ void Thread::runEvents() {
 			return;
 		}
 
-		_condition.wait(scopedLock);
+		_threadCondition.wait(scopedLock);
 	}
 }
 
 void Thread::terminate() {
-	Mutex::ScopedLock scopedLock(_mutex);
+	Mutex::ScopedLock scopedLock(_threadMutex);
 	_terminate = true;
 	scopedLock.unlock();
 
-	_condition.notify_all();
+	_threadCondition.notify_all();
 }
 

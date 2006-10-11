@@ -191,27 +191,13 @@ NetworkProxy NetworkProxyDiscovery::getNetworkProxy() const {
 }
 
 void NetworkProxyDiscovery::connectionIsUpEventHandler(NetworkObserver & sender) {
-	typedef ThreadEvent0<void ()> MyThreadEvent;
-	MyThreadEvent * event =
-		new MyThreadEvent(boost::bind(&NetworkProxyDiscovery::connectionIsUpEventHandlerThreadSafe, this));
+	Mutex::ScopedLock lock(_mutex);
 
-	postEvent(event);
-}
-
-void NetworkProxyDiscovery::connectionIsUpEventHandlerThreadSafe() {
 	if (_state != NetworkProxyDiscoveryStateDiscovered) {
 		discoverProxy();
 	}
 }
 
 void NetworkProxyDiscovery::connectionIsDownEventHandler(NetworkObserver & sender) {
-	typedef ThreadEvent0<void ()> MyThreadEvent;
-	MyThreadEvent * event =
-		new MyThreadEvent(boost::bind(&NetworkProxyDiscovery::connectionIsDownEventHandlerThreadSafe, this));
-
-	postEvent(event);
-}
-
-void NetworkProxyDiscovery::connectionIsDownEventHandlerThreadSafe() {
 	terminate();
 }

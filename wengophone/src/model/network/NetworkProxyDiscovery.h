@@ -152,14 +152,11 @@ private:
 	 * @see NetworkObserver::connectionIsUpEvent
 	 */
 	void connectionIsUpEventHandler(NetworkObserver & sender);
-	void connectionIsUpEventHandlerThreadSafe();
 
 	/**
 	 * @see NetworkObserver::connectionIsDownEvent
 	 */
 	void connectionIsDownEventHandler(NetworkObserver & sender);
-	void connectionIsDownEventHandlerThreadSafe();
-
 
 	static NetworkProxyDiscovery * _networkProxyDiscoveryInstance;
 
