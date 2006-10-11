@@ -42,6 +42,9 @@ DirectXWebcamDriver::DirectXWebcamDriver(WebcamDriver * driver, int flags)
 	_pGrabber = NULL;
 	_pNull = NULL;
 	_iam = NULL;
+	_pGraph = NULL;
+	_pCap = NULL;
+	_pBuild = NULL;
 }
 
 DirectXWebcamDriver::~DirectXWebcamDriver() {
@@ -50,6 +53,7 @@ DirectXWebcamDriver::~DirectXWebcamDriver() {
 }
 
 void DirectXWebcamDriver::cleanup() {
+	LOG_DEBUG("Cleaning up the Direct X webcam driver");
 	_isOpen = false;
 	_cachedWidth = 0;
 	_cachedHeight = 0;
@@ -66,6 +70,8 @@ void DirectXWebcamDriver::cleanup() {
 
 StringList DirectXWebcamDriver::getDeviceList() {
 	StringList deviceList;
+
+	LOG_DEBUG("Direct X Get Device List");
 
 	//create an enumerator
 	CComPtr< ICreateDevEnum > pCreateDevEnum;
@@ -126,6 +132,8 @@ StringList DirectXWebcamDriver::getDeviceList() {
 std::string DirectXWebcamDriver::getDefaultDevice() {
 	std::string defaultDevice;
 
+	LOG_DEBUG("Direct X Get Default Device");
+	
 	//create an enumerator
 	CComPtr< ICreateDevEnum > pCreateDevEnum;
 	pCreateDevEnum.CoCreateInstance(CLSID_SystemDeviceEnum);
@@ -186,6 +194,11 @@ std::string DirectXWebcamDriver::getDefaultDevice() {
 
 webcamerrorcode DirectXWebcamDriver::setDevice(const std::string & deviceName) {
 	//TODO: test if a webcam is already open
+
+	//TODO: refactor the COM initialization phase to avoid
+	//multiple initalisations and better handle unitialization
+	//cf trac ticket #1008
+	CoInitialize(NULL);
 
 	_pBuild.CoCreateInstance(CLSID_CaptureGraphBuilder2);
 	if (!_pBuild) {

@@ -76,7 +76,7 @@ WebcamDriver::~WebcamDriver() {
 }
 
 void WebcamDriver::cleanup() {
-	LOG_DEBUG("Cleaning up the webcam driver");
+	LOG_DEBUG("Cleaning up the Meta webcam driver");
 	_webcamPrivate->cleanup();
 
 	initializeConvImage();
