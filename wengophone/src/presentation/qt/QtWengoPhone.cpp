@@ -188,6 +188,8 @@ void QtWengoPhone::initThreadSafe() {
 		_ui->tabWidget->insertTab(_ui->tabWidget->count(), _qtBrowserWidget->getWidget(), tr("Home"));
 		_ui->tabWidget->setCurrentWidget(_qtBrowserWidget->getWidget());
 	}
+#else
+	 _ui->tabWidget->setCurrentIndex(0);
 #endif
 
 	//QtConfigPanel
