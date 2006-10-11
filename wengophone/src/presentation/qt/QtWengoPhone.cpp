@@ -58,6 +58,7 @@
 #include <control/history/CHistory.h>
 
 #include <model/WengoPhone.h>
+#include <model/commandserver/ContactInfo.h>
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
 #include <model/connect/ConnectHandler.h>
@@ -197,10 +198,6 @@ void QtWengoPhone::initThreadSafe() {
 	int configPanelIndex = _ui->configPanel->addWidget(qtConfigPanel->getWidget());
 	_ui->configPanel->setCurrentIndex(configPanelIndex);
 	_ui->configPanel->hide();
-
-	SAFE_CONNECT(this, SIGNAL(showAddContactSignal(QString, QString, QString,
-		QString, QString, QString, QString, QString)), SLOT(showAddContactThreadSafe(
-		QString, QString, QString, QString, QString, QString, QString, QString)));
 
 	updatePresentation();
 
@@ -735,26 +732,7 @@ void QtWengoPhone::languageChanged() {
 #endif
 }
 
-void QtWengoPhone::showAddContact(const std::string & nickname,
-	const std::string & sip, const std::string & firstname,
-	const std::string & lastname, const std::string & country,
-	const std::string & city, const std::string & state,
-	const std::string & group) {
-
-	QString qNick = QString::fromStdString(nickname);
-	QString qSip = QString::fromStdString(sip);
-	QString qFirstname = QString::fromStdString(firstname);
-	QString qLastname = QString::fromStdString(lastname);
-	QString qCountry = QString::fromStdString(country);
-	QString qCity = QString::fromStdString(city);
-	QString qState = QString::fromStdString(state);
-	QString qGroup = QString::fromStdString(group);
-
-	showAddContactSignal(qNick, qSip, qFirstname, qLastname, qCountry, qCity, qState, qGroup);
-}
-
-void QtWengoPhone::showAddContactThreadSafe(QString nickname, QString sip, QString firstname,
-	QString lastname, QString country, QString city, QString state,  QString group) {
+void QtWengoPhone::showAddContact(ContactInfo contactInfo) {
 
 	ensureVisible(false);
 
@@ -765,13 +743,27 @@ void QtWengoPhone::showAddContactThreadSafe(QString nickname, QString sip, QStri
 		QtProfileDetails qtProfileDetails(*_cWengoPhone.getCUserProfileHandler().getCUserProfile(),
 			contactProfile, _wengoPhoneWindow, tr("Add a Contact"));
 
-		qtProfileDetails.setWengoName(nickname);
-		qtProfileDetails.setFirstName(firstname);
-		qtProfileDetails.setLastName(lastname);
-		qtProfileDetails.setCountry(country);
-		qtProfileDetails.setCity(city);
-		qtProfileDetails.setState(state);
-		qtProfileDetails.setGroup(group);
+		//FIXME to remove when wdeal will be able to handle SIP presence
+		if (contactInfo.group == "wdeal") {
+			qtProfileDetails.setWengoName(QString::fromStdString(contactInfo.wengoName));
+		} else {
+			qtProfileDetails.setWengoName(QString::fromStdString(contactInfo.wengoName));
+		}
+		///
+
+		if (contactInfo.group == "wdeal") {
+			qtProfileDetails.setFirstName(QString::fromStdString(contactInfo.firstname));
+		} else {
+			qtProfileDetails.setFirstName(QString::fromStdString(contactInfo.wdealServiceTitle));
+		}
+
+		qtProfileDetails.setLastName(QString::fromStdString(contactInfo.lastname));
+		qtProfileDetails.setCountry(QString::fromStdString(contactInfo.country));
+		qtProfileDetails.setCity(QString::fromStdString(contactInfo.city));
+		qtProfileDetails.setState(QString::fromStdString(contactInfo.state));
+		qtProfileDetails.setGroup(QString::fromStdString(contactInfo.group));
+		qtProfileDetails.setWebsite(QString::fromStdString(contactInfo.website));
+
 		if (qtProfileDetails.show()) {
 			_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCContactList().addContact(contactProfile);
 		}

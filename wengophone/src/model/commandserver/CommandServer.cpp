@@ -19,6 +19,8 @@
 
 #include "CommandServer.h"
 
+#include "ContactInfo.h"
+
 #include <model/chat/ChatHandler.h>
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
@@ -33,6 +35,7 @@
 #include <imwrapper/IMContactSet.h>
 
 #include <util/Logger.h>
+#include <util/SafeDelete.h>
 
 CommandServer * CommandServer::_commandServerInstance = NULL;
 const std::string CommandServer::_queryStatus = "1|s";
@@ -49,6 +52,8 @@ const std::string COUNTRY_STR = "country=";
 const std::string CITY_STR = "city=";
 const std::string STATE_STR = "state=";
 const std::string GROUP_STR = "group=";
+const std::string WDEALSERVICETITLE_STR = "title=";
+const std::string URL_STR = "url=";
 
 CommandServer::CommandServer(WengoPhone & wengoPhone)
 	: _wengoPhone(wengoPhone) {
@@ -62,7 +67,7 @@ CommandServer::CommandServer(WengoPhone & wengoPhone)
 }
 
 CommandServer::~CommandServer() {
-	delete _serverSocket;
+	OWSAFE_DELETE(_serverSocket);
 }
 
 CommandServer & CommandServer::getInstance(WengoPhone & wengoPhone) {
@@ -167,60 +172,46 @@ void CommandServer::incomingRequestEventHandler(ServerSocket & sender, const std
 
 			// extract the information
 			StringList l = query.split("/");
-			std::string nickname;
-			std::string sip;
-			std::string firstname;
-			std::string lastname;
-			std::string country;
-			std::string city;
-			std::string state;
-			std::string group;
+
+			ContactInfo contactInfo;
 
 			if (l.size() == 2) {
 				String infos = String(l[1]);
-				StringList contactInfo = infos.split("&");
+				StringList contactInfoList = infos.split("&");
 
-				for(unsigned int i = 0; i < contactInfo.size(); i++) {
-	
-					String info = contactInfo[i];
+				for (unsigned i = 0; i < contactInfoList.size(); i++) {
+
+					String info = contactInfoList[i];
 
 					// TODO: remove name= when the new protocol will be respected
 					if (info.beginsWith("name=")) {
-						nickname = info.substr(5, info.size() - 5);
+						contactInfo.wengoName = info.substr(5, info.size() - 5);
 					} else if (info.beginsWith(NICKNAME_STR)) {
-						nickname = info.substr(NICKNAME_STR.size(), info.size() - NICKNAME_STR.size());
+						contactInfo.wengoName = info.substr(NICKNAME_STR.size(), info.size() - NICKNAME_STR.size());
 					} else if (info.beginsWith(SIP_STR)) {
-						sip = info.substr(SIP_STR.size(), info.size() - SIP_STR.size());
+						contactInfo.sip = info.substr(SIP_STR.size(), info.size() - SIP_STR.size());
 					} else if (info.beginsWith(FIRSTNAME_STR)) {
-						firstname = info.substr(FIRSTNAME_STR.size(), info.size() - FIRSTNAME_STR.size());
+						contactInfo.firstname = info.substr(FIRSTNAME_STR.size(), info.size() - FIRSTNAME_STR.size());
 					} else if (info.beginsWith(LASTNAME_STR)) {
-						lastname = info.substr(LASTNAME_STR.size(), info.size() - LASTNAME_STR.size());
+						contactInfo.lastname = info.substr(LASTNAME_STR.size(), info.size() - LASTNAME_STR.size());
 					} else if (info.beginsWith(COUNTRY_STR)) {
-						country = info.substr(COUNTRY_STR.size(), info.size() - COUNTRY_STR.size());
+						contactInfo.country = info.substr(COUNTRY_STR.size(), info.size() - COUNTRY_STR.size());
 					} else if (info.beginsWith(CITY_STR)) {
-						city = info.substr(CITY_STR.size(), info.size() - CITY_STR.size());
+						contactInfo.city = info.substr(CITY_STR.size(), info.size() - CITY_STR.size());
 					} else if (info.beginsWith(STATE_STR)) {
-						state = info.substr(STATE_STR.size(), info.size() - STATE_STR.size());
+						contactInfo.state = info.substr(STATE_STR.size(), info.size() - STATE_STR.size());
 					} else if (info.beginsWith(GROUP_STR)) {
-						group = info.substr(GROUP_STR.size(), info.size() - GROUP_STR.size());
+						contactInfo.group = info.substr(GROUP_STR.size(), info.size() - GROUP_STR.size());
+					} else if (info.beginsWith(WDEALSERVICETITLE_STR)) {
+						contactInfo.wdealServiceTitle = info.substr(WDEALSERVICETITLE_STR.size(), info.size() - WDEALSERVICETITLE_STR.size());
+					} else if (info.beginsWith(URL_STR)) {
+						contactInfo.website = info.substr(URL_STR.size(), info.size() - URL_STR.size());
 					}
 				}
 			}
 			////
 
-			// work around a f*c*i*g VS 2003 bug that produces an INTERNAL COMPILER ERROR.
-			contact_info_t contact_info;
-			contact_info.wengoName = nickname;
-			contact_info.sip = sip;
-			contact_info.firstname = firstname;
-			contact_info.lastname = lastname;
-			contact_info.country = country;
-			contact_info.city = city;
-			contact_info.state = state;
-			contact_info.group = group;
-			showAddContactEvent(contact_info);
-			//showAddContactEvent(nickname, sip, firstname, lastname, country, city, state, group);
-			////
+			showAddContactEvent(contactInfo);
 		}
 
 	} else {

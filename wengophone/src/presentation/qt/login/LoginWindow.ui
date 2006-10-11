@@ -307,6 +307,9 @@
      </property>
      <item row="1" column="1" >
       <widget class="QToolButton" name="forgotPasswordButton" >
+       <property name="cursor" >
+        <cursor>13</cursor>
+       </property>
        <property name="text" >
         <string>Forgot your password?</string>
        </property>
@@ -317,6 +320,9 @@
      </item>
      <item row="0" column="1" >
       <widget class="QToolButton" name="helpButton" >
+       <property name="cursor" >
+        <cursor>13</cursor>
+       </property>
        <property name="layoutDirection" >
         <enum>Qt::LeftToRight</enum>
        </property>
@@ -560,6 +566,9 @@
      </item>
      <item row="0" column="1" >
       <widget class="QPushButton" name="createWengoAccountButton" >
+       <property name="cursor" >
+        <cursor>13</cursor>
+       </property>
        <property name="text" >
         <string>Click here if you don't have a Wengo account</string>
        </property>

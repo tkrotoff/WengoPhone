@@ -73,6 +73,8 @@ public:
 
 	void setState(const QString & state);
 
+	void setWebsite(const QString & website);
+
 public Q_SLOTS:
 
 	void changeUserProfileAvatar();
@@ -95,6 +97,16 @@ private Q_SLOTS:
 	 * Changes _ui->imStackedWidget widget.
 	 */
 	void advancedButtonClicked();
+
+	/**
+	 * Shows the contact web page.
+	 */
+	void websiteButtonClicked();
+
+	/**
+	 * Shows the contact email.
+	 */
+	void emailButtonClicked();
 
 private:
 

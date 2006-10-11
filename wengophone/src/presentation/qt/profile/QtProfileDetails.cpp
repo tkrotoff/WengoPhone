@@ -39,6 +39,7 @@
 
 #include <util/CountryList.h>
 #include <util/Logger.h>
+#include <util/WebBrowser.h>
 #include <util/SafeDelete.h>
 #include <cutil/global.h>
 
@@ -52,7 +53,7 @@
 
 static const char * PNG_FORMAT = "PNG";
 
-QtProfileDetails::QtProfileDetails(CUserProfile & cUserProfile, 
+QtProfileDetails::QtProfileDetails(CUserProfile & cUserProfile,
 	ContactProfile & contactProfile, QWidget * parent, const QString & windowTitle)
 	: QObject(parent),
 	_cUserProfile(cUserProfile),
@@ -134,6 +135,8 @@ void QtProfileDetails::init(QWidget * parent) {
 
 	SAFE_CONNECT(_ui->cancelButton, SIGNAL(clicked()), SLOT(cancelButtonClicked()));
 	SAFE_CONNECT(_ui->advancedButton, SIGNAL(clicked()), SLOT(advancedButtonClicked()));
+	SAFE_CONNECT(_ui->websiteButton, SIGNAL(clicked()), SLOT(websiteButtonClicked()));
+	SAFE_CONNECT(_ui->emailButton, SIGNAL(clicked()), SLOT(emailButtonClicked()));
 
 	_qtIMContactManager = NULL;
 	_qtIMAccountManager = NULL;
@@ -362,6 +365,14 @@ void QtProfileDetails::advancedButtonClicked() {
 	}
 }
 
+void QtProfileDetails::websiteButtonClicked() {
+	WebBrowser::openUrl(_ui->webLineEdit->text().toStdString());
+}
+
+void QtProfileDetails::emailButtonClicked() {
+	WebBrowser::openUrl("mailto:" + _ui->emailLineEdit->text().toStdString());
+}
+
 void QtProfileDetails::setWengoName(const QString & wengoName) {
 	_qtIMContactManager->setWengoName(wengoName);
 }
@@ -388,4 +399,8 @@ void QtProfileDetails::setCity(const QString & city) {
 
 void QtProfileDetails::setState(const QString & state) {
 	_ui->stateLineEdit->setText(state);
+}
+
+void QtProfileDetails::setWebsite(const QString & website) {
+	_ui->webLineEdit->setText(website);
 }

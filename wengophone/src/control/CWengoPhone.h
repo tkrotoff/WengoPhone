@@ -21,8 +21,8 @@
 #define OWCWENGOPHONE_H
 
 #include <control/Control.h>
-#include <model/commandserver/CommandServer.h>
 
+class ContactInfo;
 class PWengoPhone;
 class WengoPhone;
 class Presentation;
@@ -78,16 +78,9 @@ private:
 
 	void wsSubscribeCreatedEventHandler(WengoPhone & sender, WsSubscribe & wsSubscribe);
 
-	// work around a f*c*i*g VS 2003 bug that produces an INTERNAL COMPILER ERROR.
-	/*
-	void showAddContactEventHandler(const std::string & wengoName,
-		const std::string & sip, const std::string & firstname,
-		const std::string & lastname, const std::string & country,
-		const std::string & city, const std::string & state,
-		const std::string & group);
-	*/
-	void showAddContactEventHandler(contact_info_t contactInfo);
-	////
+	void showAddContactEventHandler(ContactInfo contactInfo);
+
+	void showAddContactEventHandlerThreadSafe(ContactInfo contactInfo);
 
 	void exitEventHandler();
 

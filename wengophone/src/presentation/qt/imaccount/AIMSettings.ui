@@ -86,6 +86,9 @@
      </property>
      <item row="0" column="1" >
       <widget class="QToolButton" name="forgotPasswordButton" >
+       <property name="cursor" >
+        <cursor>13</cursor>
+       </property>
        <property name="text" >
         <string>Forgot your AIM password?</string>
        </property>
@@ -106,6 +109,9 @@
      </item>
      <item row="1" column="1" >
       <widget class="QToolButton" name="createAccountButton" >
+       <property name="cursor" >
+        <cursor>13</cursor>
+       </property>
        <property name="text" >
         <string>Get a new AIM Account</string>
        </property>

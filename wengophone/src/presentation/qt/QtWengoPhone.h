@@ -38,6 +38,7 @@
 #include <string>
 
 class CWengoPhone;
+class ContactInfo;
 class IMContact;
 class PPhoneLine;
 class PhoneCall;
@@ -136,10 +137,7 @@ public:
 
 	void ensureVisible(bool doMinimizeStuff = true);
 
-	void showAddContact(const std::string & nickname, const std::string & sip,
-		const std::string & firstname, const std::string & lastname,
-		const std::string & country, const std::string & city,
-		const std::string & state, const std::string & group);
+	void showAddContact(ContactInfo contactInfo);
 
 public Q_SLOTS:
 
@@ -167,9 +165,6 @@ private Q_SLOTS:
 
 	void languageChanged();
 
-	void showAddContactThreadSafe(QString nickname, QString sip, QString firstname,
-		QString lastname, QString country, QString city, QString state,  QString group);
-
 Q_SIGNALS:
 
 	/**
@@ -180,9 +175,6 @@ Q_SIGNALS:
 	 * QtSystray, QtBrowserWidget have to be re-initialized.
 	 */
 	void userProfileDeleted();
-
-	void showAddContactSignal(QString nickname, QString sip, QString firstname,
-		QString lastname, QString country, QString city, QString state, QString group);
 
 private:
 

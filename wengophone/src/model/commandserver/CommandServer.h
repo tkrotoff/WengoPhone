@@ -24,19 +24,7 @@
 #include <util/Event.h>
 
 class WengoPhone;
-
-// work around a f*c*i*g VS 2003 bug that produces an INTERNAL COMPILER ERROR.
-typedef struct contact_info_s {
-	std::string wengoName;
-	std::string sip;
-	std::string firstname;
-	std::string lastname;
-	std::string country;
-	std::string city;
-	std::string state;
-	std::string group;
-} contact_info_t;
-////
+class ContactInfo;
 
 /**
  * Command server. Listen for local connections,
@@ -48,20 +36,14 @@ typedef struct contact_info_s {
 class CommandServer {
 public:
 
-	// work around a f*c*i*g VS 2003 bug that produces an INTERNAL COMPILER ERROR.
 	/**
-	 * @param sender this class.
-	 * @param wengoName the wengoName of the contact.
+	 * A contact has to be added to the contact list.
+	 *
+	 * work around a f*c*i*g VS 2003 bug that produces an INTERNAL COMPILER ERROR.
+	 *
+	 * @param contactInfo contact informations (firstname, lastname, SIP address...)
 	 */
-	/*
-	Event<void (const std::string & wengoName,
-		const std::string & sip, const std::string & firstname,
-		const std::string & lastname, const std::string & country,
-		const std::string & city, const std::string & state,
-		const std::string & group)> showAddContactEvent;
-	*/
-	Event<void (contact_info_t contactInfo)> showAddContactEvent;
-	////
+	Event<void (ContactInfo contactInfo)> showAddContactEvent;
 
 	CommandServer(WengoPhone & wengoPhone);
 
