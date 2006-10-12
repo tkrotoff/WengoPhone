@@ -272,7 +272,7 @@ bool ProfileXMLSerializer::unserializeContent(TiXmlHandle & rootElt) {
 
 	// Retrieving emails
 	TiXmlNode * email = NULL;
-	while ((email = rootElt.Node()->IterateChildren("email", email))) {
+	while ((rootElt.Node()) && (email = rootElt.Node()->IterateChildren("email", email))) {
 		TiXmlElement * emailElt = email->ToElement();
 		string typeAttr = string(emailElt->Attribute("type"));
 		if (typeAttr == "home") {
