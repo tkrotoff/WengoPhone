@@ -27,21 +27,21 @@ using namespace std;
 
 IMContact::IMContact() {
 	_imAccount = NULL;
-	_presenceState = EnumPresenceState::PresenceStateOffline;
+	_presenceState = EnumPresenceState::PresenceStateUnknown;
 	_protocol = EnumIMProtocol::IMProtocolUnknown;
 }
 
 IMContact::IMContact(const IMAccount & imAccount, const std::string & contactId)
 	: _imAccount(&imAccount) {
 	_contactId = contactId;
-	_presenceState = EnumPresenceState::PresenceStateOffline;
+	_presenceState = EnumPresenceState::PresenceStateUnknown;
 	_protocol = EnumIMProtocol::IMProtocolUnknown;
 }
 
 IMContact::IMContact(EnumIMProtocol::IMProtocol protocol, const std::string & contactId) {
 	_imAccount = NULL;
 	_contactId = contactId;
-	_presenceState = EnumPresenceState::PresenceStateOffline;
+	_presenceState = EnumPresenceState::PresenceStateUnknown;
 	_protocol = protocol;
 }
 
