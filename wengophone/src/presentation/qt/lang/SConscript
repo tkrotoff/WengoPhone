@@ -12,6 +12,14 @@ if WengoGetConsoleArgument('update-qtwengophone-translations'):
 qtwengophone_translations = [
 	env.WengoQtLanguageRelease('qtwengophone_fr.ts', 'qtwengophone_fr.qm'),
 	env.WengoQtLanguageRelease('qtwengophone_en.ts', 'qtwengophone_en.qm'),
+	env.WengoQtLanguageRelease('qtwengophone_de.ts', 'qtwengophone_de.qm'),
+	env.WengoQtLanguageRelease('qtwengophone_it.ts', 'qtwengophone_it.qm'),
+	env.WengoQtLanguageRelease('qtwengophone_pl.ts', 'qtwengophone_pl.qm'),
+	env.WengoQtLanguageRelease('qtwengophone_sv.ts', 'qtwengophone_sv.qm'),
+	env.WengoQtLanguageRelease('qtwengophone_zh.ts', 'qtwengophone_zh.qm'),
+	env.WengoQtLanguageRelease('qtwengophone_es.ts', 'qtwengophone_es.qm'),
+	env.WengoQtLanguageRelease('qtwengophone_tr.ts', 'qtwengophone_tr.qm'),
+	env.WengoQtLanguageRelease('qtwengophone_ja.ts', 'qtwengophone_ja.qm'),
 ]
 
 env.WengoAlias('qtwengophone-translations', qtwengophone_translations)
