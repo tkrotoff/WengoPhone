@@ -71,6 +71,8 @@ public:
 
 	QString getWorkPhone(const QString & contactId) const;
 
+	QString getWebsite(const QString & contactId) const;
+
 	void setButton(const QString & contactId, const Qt::MouseButton button);
 
 	void setOpenStatus(const QString & contactId, bool value);

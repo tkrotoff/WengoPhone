@@ -42,7 +42,6 @@ class QAction;
 /**
  * Qt Presentation manager for the ContactList
  *
- * @author Mr K.
  * @author Philippe Bernery
  */
 class QtContactManager : public QObject {
@@ -94,7 +93,7 @@ private Q_SLOTS:
 
 	void deleteContact();
 
-	void editContact(bool checked);
+	void editContact();
 
 	void inviteToConference();
 
@@ -106,19 +105,21 @@ private Q_SLOTS:
 
 	void sortContacts(bool bypassTimer = false);
 
-	void startChat(bool checked);
+	void startChat();
 
-	void sendFile(bool checked);
+	void sendFile();
 
-	void startHomeCall(bool checked);
+	void startHomeCall();
 
-	void startMobileCall(bool checked);
+	void startMobileCall();
 
-	void startSMS(bool checked);
+	void startSMS();
 
-	void startWengoCall(bool checked);
+	void startWengoCall();
 
-	void startWorkCall(bool checked);
+	void startWorkCall();
+
+	void goToWebsite();
 
 	void treeViewSelectionChanged();
 
@@ -207,6 +208,7 @@ private:
 	QString _trStringWorkPhone;
 	QString _trStringWengoPhone;
 	QString _trStringSendSMS;
+	QString _trStringWebsite;
 	QString _trStringSendFile;
 	QString _trStringEditContact;
 	QString _trStringDeleteContact;

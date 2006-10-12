@@ -190,7 +190,7 @@ void QtWengoPhone::initThreadSafe() {
 		_ui->tabWidget->setCurrentWidget(_qtBrowserWidget->getWidget());
 	}
 #else
-	 _ui->tabWidget->setCurrentIndex(0);
+	_ui->tabWidget->setCurrentIndex(0);
 #endif
 
 	//QtConfigPanel
@@ -625,7 +625,7 @@ void QtWengoPhone::phoneComboBoxClicked() {
 				LOG_FATAL("unknown HistoryMemento state=" + String::fromNumber(state));
 			}
 		}
-		delete mementos;
+		OWSAFE_DELETE(mementos);
 	}
 }
 
@@ -744,17 +744,17 @@ void QtWengoPhone::showAddContact(ContactInfo contactInfo) {
 			contactProfile, _wengoPhoneWindow, tr("Add a Contact"));
 
 		//FIXME to remove when wdeal will be able to handle SIP presence
-		if (contactInfo.group == "wdeal") {
-			qtProfileDetails.setWengoName(QString::fromStdString(contactInfo.wengoName));
+		if (contactInfo.group == "WDeal") {
+			qtProfileDetails.setHomePhone(QString::fromStdString(contactInfo.wengoName));
 		} else {
 			qtProfileDetails.setWengoName(QString::fromStdString(contactInfo.wengoName));
 		}
 		///
 
-		if (contactInfo.group == "wdeal") {
-			qtProfileDetails.setFirstName(QString::fromStdString(contactInfo.firstname));
-		} else {
+		if (contactInfo.group == "WDeal") {
 			qtProfileDetails.setFirstName(QString::fromStdString(contactInfo.wdealServiceTitle));
+		} else {
+			qtProfileDetails.setFirstName(QString::fromStdString(contactInfo.firstname));
 		}
 
 		qtProfileDetails.setLastName(QString::fromStdString(contactInfo.lastname));

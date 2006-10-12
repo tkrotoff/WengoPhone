@@ -42,6 +42,7 @@
 
 #include <sipwrapper/EnumPhoneCallState.h>
 
+#include <util/WebBrowser.h>
 #include <util/Logger.h>
 #include <util/SafeDelete.h>
 
@@ -95,7 +96,7 @@ QtContactManager::QtContactManager(CUserProfile & cUserProfile, CWengoPhone & cW
 		qtWengoPhone, SLOT(addToConference(QString, PhoneCall *)));
 }
 
-void QtContactManager::startSMS(bool) {
+void QtContactManager::startSMS() {
 	QtContactListManager * ul = QtContactListManager::getInstance();
 	QTreeWidgetItem * item = _tree->currentItem();
 	if (ul && item) {
@@ -103,7 +104,7 @@ void QtContactManager::startSMS(bool) {
 	}
 }
 
-void QtContactManager::startChat(bool) {
+void QtContactManager::startChat() {
 	QtContactListManager * ul = QtContactListManager::getInstance();
 	QTreeWidgetItem * item = _tree->currentItem();
 	if (ul && item) {
@@ -111,7 +112,7 @@ void QtContactManager::startChat(bool) {
 	}
 }
 
-void QtContactManager::sendFile(bool checked) {
+void QtContactManager::sendFile() {
 	QtContactListManager * ul = QtContactListManager::getInstance();
 	QTreeWidgetItem * item = _tree->currentItem();
 	if (ul && item) {
@@ -119,7 +120,7 @@ void QtContactManager::sendFile(bool checked) {
 	}
 }
 
-void QtContactManager::editContact(bool) {
+void QtContactManager::editContact() {
 	QTreeWidgetItem * item = _tree->currentItem();
 	if (item) {
 		editContact(item->text(0));
@@ -462,7 +463,7 @@ void QtContactManager::redrawContacts() {
 			std::string contactGroupId = cprofile.getGroupId();
 			QList < QTreeWidgetItem * > list;
 			if (groupsAreHidden()) {
-				list = _tree->findItems(QtContactList::DEFAULT_GROUP_NAME,Qt::MatchExactly);
+				list = _tree->findItems(QtContactList::DEFAULT_GROUP_NAME, Qt::MatchExactly);
 			} else {
 				list =_tree->findItems(QString::fromStdString(contactGroupId), Qt::MatchExactly);
 			}
@@ -501,10 +502,10 @@ QMenu * QtContactManager::createConferenceMenu() {
 		PhoneLine::PhoneCallList phoneCallList = phoneLine->getPhoneCallList();
 		PhoneLine::PhoneCallList::iterator it;
 		for (it = phoneCallList.begin(); it != phoneCallList.end(); it++) {
-			if ((* it)->getState()!=EnumPhoneCallState::PhoneCallStateClosed) {
-				QtConferenceAction *action=new
-					QtConferenceAction(QString::fromStdString((* it)->getPeerSipAddress().getUserName()), menu);
-				action->setPhoneCall((* it));
+			if ((*it)->getState() != EnumPhoneCallState::PhoneCallStateClosed) {
+				QtConferenceAction * action = new
+					QtConferenceAction(QString::fromStdString((*it)->getPeerSipAddress().getUserName()), menu);
+				action->setPhoneCall((*it));
 				SAFE_CONNECT(action, SIGNAL(triggered(bool)), SLOT(inviteToConference()));
 				menu->addAction(action);
 			}
@@ -532,50 +533,64 @@ void QtContactManager::inviteToConference() {
 
 QMenu * QtContactManager::createMenu() {
 	QAction * action = NULL;
-	QTreeWidgetItem * item = _tree->currentItem();
-	QString contactId = item->text(0);
+	QString contactId = _tree->currentItem()->text(0);
 	QMenu * menu = new QMenu(dynamic_cast <QWidget *> (parent()));
 	QtContactListManager * ul = QtContactListManager::getInstance();
 
 	//Call menu
 	if (ul->hasPhoneNumber(contactId)) {
 		QMenu * callMenu = menu->addMenu(QIcon(":/pics/actions/accept-phone.png"), _trStringCall);
-		if (! ul->getMobilePhone(contactId).isEmpty()) {
+
+		if (!ul->getMobilePhone(contactId).isEmpty()) {
 			action = callMenu->addAction( _trStringMobilePhone);
-			SAFE_CONNECT(action, SIGNAL(triggered(bool)), SLOT(startMobileCall(bool)));
+			SAFE_CONNECT(action, SIGNAL(triggered(bool)), SLOT(startMobileCall()));
 		}
 
 		if (!ul->getHomePhone(contactId).isEmpty()) {
 			action = callMenu->addAction(_trStringHomePhone);
-			SAFE_CONNECT(action, SIGNAL(triggered(bool)), SLOT(startHomeCall(bool)));
+			SAFE_CONNECT(action, SIGNAL(triggered(bool)), SLOT(startHomeCall()));
 		}
 
 		if (!ul->getWorkPhone(contactId).isEmpty()) {
 			action = callMenu->addAction(_trStringWorkPhone);
-			SAFE_CONNECT(action, SIGNAL(triggered(bool)), SLOT(startWorkCall(bool)));
+			SAFE_CONNECT(action, SIGNAL(triggered(bool)), SLOT(startWorkCall()));
 		}
 
 		if (!ul->getWengoPhoneNumber(contactId).isEmpty()) {
 			action = callMenu->addAction(_trStringWengoPhone);
-			SAFE_CONNECT(action, SIGNAL(triggered(bool)), SLOT(startWengoCall(bool)));
+			SAFE_CONNECT(action, SIGNAL(triggered(bool)), SLOT(startWengoCall()));
 		}
 	}
+
 	action = menu->addAction(QIcon(":/pics/actions/chat.png"), _trStringStartChat);
-	SAFE_CONNECT(action, SIGNAL(triggered(bool)), SLOT(startChat(bool)));
+	SAFE_CONNECT(action, SIGNAL(triggered(bool)), SLOT(startChat()));
+
 	action = menu->addAction(QIcon(":/pics/actions/send-sms-16.png"), _trStringSendSMS);
-	SAFE_CONNECT(action, SIGNAL(triggered(bool)), SLOT(startSMS(bool)));
+	SAFE_CONNECT(action, SIGNAL(triggered(bool)), SLOT(startSMS()));
 
 	action = menu->addAction(QIcon(":/pics/filetransfer/send-file.png"), _trStringSendFile);
-	SAFE_CONNECT(action, SIGNAL(triggered(bool)), SLOT(sendFile(bool)));
+	SAFE_CONNECT(action, SIGNAL(triggered(bool)), SLOT(sendFile()));
 
 	//FIXME Desactivated for the moment due to a crash
 	//menu->addMenu(createConferenceMenu());
 
 	menu->addSeparator();
+
+	QString website = ul->getWebsite(contactId);
+	action = menu->addAction(QIcon(":/pics/contact/home.png"), _trStringWebsite);
+	SAFE_CONNECT(action, SIGNAL(triggered(bool)), SLOT(goToWebsite()));
+	if (website.isEmpty()) {
+		action->setEnabled(false);
+	}
+
+	menu->addSeparator();
+
 	action = menu->addAction(_trStringEditContact);
-	SAFE_CONNECT(action, SIGNAL(triggered(bool)), SLOT(editContact(bool)));
+	SAFE_CONNECT(action, SIGNAL(triggered(bool)), SLOT(editContact()));
+
 	action = menu->addAction(_trStringDeleteContact);
 	SAFE_CONNECT(action, SIGNAL(triggered(bool)), SLOT(deleteContact()));
+
 	//menu->addSeparator();
 	//menu->addAction(_trStringBlockContact);
 	//menu->addAction(_trStringForwardToCellPhone);
@@ -583,7 +598,7 @@ QMenu * QtContactManager::createMenu() {
 	return menu;
 }
 
-void QtContactManager::startMobileCall(bool) {
+void QtContactManager::startMobileCall() {
 	QtContactListManager * ul = QtContactListManager::getInstance();
 	QTreeWidgetItem * item = _tree->currentItem();
 	if (ul && item) {
@@ -592,7 +607,7 @@ void QtContactManager::startMobileCall(bool) {
 	}
 }
 
-void QtContactManager::startHomeCall(bool) {
+void QtContactManager::startHomeCall() {
 	QtContactListManager * ul = QtContactListManager::getInstance();
 	QTreeWidgetItem * item = _tree->currentItem();
 	if (ul && item) {
@@ -601,7 +616,7 @@ void QtContactManager::startHomeCall(bool) {
 	}
 }
 
-void QtContactManager::startWorkCall(bool) {
+void QtContactManager::startWorkCall() {
 	QtContactListManager * ul = QtContactListManager::getInstance();
 	QTreeWidgetItem * item = _tree->currentItem();
 	if (ul && item) {
@@ -610,12 +625,25 @@ void QtContactManager::startWorkCall(bool) {
 	}
 }
 
-void QtContactManager::startWengoCall(bool) {
+void QtContactManager::startWengoCall() {
 	QtContactListManager * ul = QtContactListManager::getInstance();
 	QTreeWidgetItem * item = _tree->currentItem();
 	if (ul && item) {
 		QtContact * qtContact = ul->getContact(item->text(0));
 		qtContact->startCall(qtContact->getWengoPhoneNumber());
+	}
+}
+
+void QtContactManager::goToWebsite() {
+	QtContactListManager * ul = QtContactListManager::getInstance();
+	QTreeWidgetItem * item = _tree->currentItem();
+	if (ul && item) {
+		QtContact * qtContact = ul->getContact(item->text(0));
+		QString website = qtContact->getWebsite();
+		if (!website.contains("http://")) {
+			website = "http://" + website;
+		}
+		WebBrowser::openUrl(website.toStdString());
 	}
 }
 
@@ -637,7 +665,7 @@ void QtContactManager::removeContact(const QString & contactId) {
 					closeUserInfo();
 					item = group->takeChild(i);
 					ul->removeContact(qtContact);
-					delete item;
+					OWSAFE_DELETE(item);
 					found = true;
 				}
 			}
@@ -769,11 +797,12 @@ void QtContactManager::languageChanged() {
 	_trStringWorkPhone = tr("Work phone");
 	_trStringWengoPhone = tr("WengoPhone");
 	_trStringSendSMS = tr("Send SMS");
-	_trStringSendFile = tr("Send File");
+	_trStringWebsite = tr("Go to website");
+	_trStringSendFile = tr("Send file");
 	_trStringEditContact = tr("Edit contact");
 	_trStringDeleteContact = tr("Delete contact");
 	_trStringBlockContact = tr("Block contact");
-	_trStringForwardToCellPhone = tr("Forward to Cell phone");
+	_trStringForwardToCellPhone = tr("Forward to mobile phone");
 	_trStringStartChat = tr("Start chat");
 	_trStringInviteToConference = tr("Invite to conference");
 }

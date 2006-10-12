@@ -111,6 +111,8 @@ public:
 
 	QString getPreferredNumber() const;
 
+	QString getWebsite() const;
+
 	bool hasPhoneNumber() const;
 
 	QString getDisplayName() const;

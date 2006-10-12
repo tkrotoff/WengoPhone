@@ -120,6 +120,14 @@ QString QtContactListManager::getWorkPhone(const QString & contactId) const {
 	return QString::null;
 }
 
+QString QtContactListManager::getWebsite(const QString & contactId) const {
+	QMutexLocker locker(_mutex);
+	if (contains(contactId)) {
+		return _contactList[contactId]->getWebsite();
+	}
+	return QString::null;
+}
+
 bool QtContactListManager::contains(const QString & contactId) const {
 	QMutexLocker locker(_mutex);
 	return _contactList.contains(contactId);

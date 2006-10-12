@@ -75,6 +75,8 @@ public:
 
 	void setWebsite(const QString & website);
 
+	void setHomePhone(const QString & homePhone);
+
 public Q_SLOTS:
 
 	void changeUserProfileAvatar();
@@ -112,8 +114,8 @@ private:
 
 	void init(QWidget * parent);
 
-	/** Full the country list widget. */
-	void fullCountryList();
+	/** Populates the country list widget. */
+	void populateCountryList();
 
 	void readProfile();
 

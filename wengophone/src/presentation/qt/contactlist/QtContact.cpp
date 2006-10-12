@@ -174,6 +174,10 @@ QString QtContact::getHomePhone() const {
 	return QString::fromStdString(_contactProfile.getHomePhone());
 }
 
+QString QtContact::getWebsite() const {
+	return QString::fromStdString(_contactProfile.getWebsite());
+}
+
 QString QtContact::getWorkPhone() const {
 	return QString::fromStdString(_contactProfile.getWorkPhone());
 }

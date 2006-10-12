@@ -131,7 +131,7 @@ void QtProfileDetails::init(QWidget * parent) {
 	_ui = new Ui::ProfileDetails();
 	_ui->setupUi(_profileDetailsWindow);
 
-	fullCountryList();
+	populateCountryList();
 
 	SAFE_CONNECT(_ui->cancelButton, SIGNAL(clicked()), SLOT(cancelButtonClicked()));
 	SAFE_CONNECT(_ui->advancedButton, SIGNAL(clicked()), SLOT(advancedButtonClicked()));
@@ -144,7 +144,7 @@ void QtProfileDetails::init(QWidget * parent) {
 	readProfile();
 }
 
-void QtProfileDetails::fullCountryList() {
+void QtProfileDetails::populateCountryList() {
 	_ui->countryComboBox->addItems(StringListConvert::toQStringList(CountryList::getCountryList()));
 }
 
@@ -366,18 +366,18 @@ void QtProfileDetails::advancedButtonClicked() {
 }
 
 void QtProfileDetails::websiteButtonClicked() {
-	std::string website = _ui->webLineEdit->text().toStdString();
+	String website = _ui->webLineEdit->text().toStdString();
 	if (!website.empty()) {
+		if (!website.contains("http://")) {
+			website = "http://" + website;
+		}
 		WebBrowser::openUrl(website);
 	}
 }
 
 void QtProfileDetails::emailButtonClicked() {
-	String email = _ui->emailLineEdit->text().toStdString();
+	std::string email = _ui->emailLineEdit->text().toStdString();
 	if (!email.empty()) {
-		if (!email.contains("http://")) {
-			email = "http://" + email;
-		}
 		WebBrowser::openUrl("mailto:" + email);
 	}
 }
@@ -412,4 +412,8 @@ void QtProfileDetails::setState(const QString & state) {
 
 void QtProfileDetails::setWebsite(const QString & website) {
 	_ui->webLineEdit->setText(website);
+}
+
+void QtProfileDetails::setHomePhone(const QString & homePhone) {
+	_ui->homePhoneLineEdit->setText(homePhone);
 }
