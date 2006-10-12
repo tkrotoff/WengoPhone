@@ -160,3 +160,28 @@ void QtContactMenu::setPresenceIcon(QAction * action, EnumPresenceState::Presenc
 		break;
 	}
 }
+
+void QtContactMenu::populateWengoUsersContactId(QMenu * menu, CWengoPhone & cWengoPhone) {
+
+	CUserProfile * currentCUserProfile = cWengoPhone.getCUserProfileHandler().getCUserProfile();
+	if (currentCUserProfile) {
+
+		CContactList & currentCContactList = currentCUserProfile->getCContactList();
+		StringList currentContactsIds = currentCContactList.getContactIds();
+
+		for (StringList::const_iterator it = currentContactsIds.begin(); it != currentContactsIds.end(); ++it) {
+
+			ContactProfile tmpContactProfile = currentCContactList.getContactProfile(*it);
+			QString displayName = QString::fromUtf8(tmpContactProfile.getDisplayName().c_str());
+
+			if (tmpContactProfile.hasAvailableWengoId() &&
+				tmpContactProfile.getPresenceState() != EnumPresenceState::PresenceStateOffline) {
+
+				QAction * tmpAction = menu->addAction(displayName);
+				tmpAction->setData(QVariant(QString::fromStdString(*it)));
+				EnumPresenceState::PresenceState presenceState = tmpContactProfile.getPresenceState();
+				setPresenceIcon(tmpAction, presenceState);
+			}
+		}
+	}
+}

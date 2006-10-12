@@ -57,6 +57,9 @@
 
 		<file>pics/filetransfer/receive-file.png</file>
 		<file>pics/filetransfer/send-file.png</file>
+		<file>pics/filetransfer/download_folder.png</file>
+		<file>pics/filetransfer/cleanup.png</file>
+		<file>pics/filetransfer/filetransfer.png</file>
 
 		<file>pics/headers/IM.png</file>
 		<file>pics/headers/conference.png</file>
@@ -232,7 +235,6 @@
 		<file>pics/group_close.png</file>
 		<file>pics/group_close_reverse.png</file>
 		<file>pics/group_open.png</file>
-		<file>pics/icons-file-transfer.png</file>
 	</qresource>
 	<qresource prefix="/data" >
 		<file>AUTHORS</file>

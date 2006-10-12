@@ -79,12 +79,17 @@ QtContactWidget::QtContactWidget(const std::string & contactId, CWengoPhone & cW
 		_ui->chatButton->setEnabled(false);
 	}
 
+	if (!_contactProfile.hasFileTransfer()) {
+		_ui->sendFileButton->setEnabled(false);
+	}
+
 	SAFE_CONNECT(_ui->callButton, SIGNAL(clicked()), SLOT(callButtonClicked()));
 	SAFE_CONNECT(_ui->chatButton, SIGNAL(clicked()), SLOT(chatButtonClicked()));
 	SAFE_CONNECT(_ui->smsButton, SIGNAL(clicked()), SLOT(smsButtonClicked()));
 	SAFE_CONNECT(_ui->landlineButton, SIGNAL(clicked()), SLOT(landlineButtonClicked()));
 	SAFE_CONNECT(_ui->mobileButton, SIGNAL(clicked()), SLOT(mobileButtonClicked()));
 	SAFE_CONNECT(_ui->avatarButton, SIGNAL(clicked()), SLOT(avatarButtonClicked()));
+	SAFE_CONNECT(_ui->sendFileButton, SIGNAL(clicked()), SLOT(sendFileButtonClicked()));
 	SAFE_CONNECT_RECEIVER_TYPE(this, SIGNAL(editContact(QString)),
 		qtContactManager, SLOT(editContact(QString)), Qt::QueuedConnection);
 }
@@ -106,6 +111,11 @@ void QtContactWidget::smsButtonClicked() {
 void QtContactWidget::chatButtonClicked() {
 	QtContactListManager * ul = QtContactListManager::getInstance();
 	ul->startChat(QString::fromStdString(_contactId));
+}
+
+void QtContactWidget::sendFileButtonClicked() {
+	QtContactListManager * ul = QtContactListManager::getInstance();
+	ul->sendFile(QString::fromStdString(_contactId));
 }
 
 void QtContactWidget::contactProfileUpdated() {
@@ -146,6 +156,12 @@ void QtContactWidget::updateToolTips() {
 		_ui->callButton->setToolTip(tr("Click here to start a free call"));
 	} else {
 		_ui->callButton->setToolTip(QString::null);
+	}
+
+	if (_ui->sendFileButton->isEnabled()) {
+		_ui->sendFileButton->setToolTip(tr("Click here to send a file"));
+	} else {
+		_ui->sendFileButton->setToolTip(QString::null);
 	}
 }
 

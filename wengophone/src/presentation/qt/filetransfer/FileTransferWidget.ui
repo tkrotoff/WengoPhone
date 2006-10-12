@@ -44,7 +44,7 @@
       <string>...</string>
      </property>
      <property name="icon" >
-      <iconset resource="../wengophone.qrc" >:/pics/browse.png</iconset>
+      <iconset resource="../wengophone.qrc" >:/pics/filetransfer/download_folder.png</iconset>
      </property>
      <property name="autoDefault" >
       <bool>false</bool>
@@ -79,9 +79,6 @@
       <attribute name="title" >
        <string>Download</string>
       </attribute>
-      <attribute name="icon" >
-       <iconset resource="..\wengophone.qrc" >:/pics/filetransfer/receive-file.png</iconset>
-      </attribute>
       <layout class="QGridLayout" >
        <property name="margin" >
         <number>9</number>
@@ -107,9 +104,6 @@
      <widget class="QWidget" name="UploadTab" >
       <attribute name="title" >
        <string>Upload</string>
-      </attribute>
-      <attribute name="icon" >
-       <iconset resource="..\wengophone.qrc" >:/pics/filetransfer/send-file.png</iconset>
       </attribute>
       <layout class="QGridLayout" >
        <property name="margin" >
@@ -142,6 +136,9 @@
      </property>
      <property name="text" >
       <string>&amp;Clean</string>
+     </property>
+     <property name="icon" >
+      <iconset resource="../wengophone.qrc" >:/pics/filetransfer/cleanup.png</iconset>
      </property>
     </widget>
    </item>

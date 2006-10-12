@@ -108,6 +108,8 @@ private Q_SLOTS:
 
 	void startChat(bool checked);
 
+	void sendFile(bool checked);
+
 	void startHomeCall(bool checked);
 
 	void startMobileCall(bool checked);
@@ -205,6 +207,7 @@ private:
 	QString _trStringWorkPhone;
 	QString _trStringWengoPhone;
 	QString _trStringSendSMS;
+	QString _trStringSendFile;
 	QString _trStringEditContact;
 	QString _trStringDeleteContact;
 	QString _trStringBlockContact;

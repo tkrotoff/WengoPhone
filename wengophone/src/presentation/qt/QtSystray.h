@@ -39,6 +39,7 @@ class QPoint;
  * Systray class.
  *
  * @author Tanguy Krotoff
+ * @author Mathieu Stute
  */
 class QtSystray : public QObjectThreadSafe, public Trackable {
 	Q_OBJECT
@@ -67,6 +68,8 @@ private Q_SLOTS:
 	void startChat(QAction * action);
 
 	void sendSms(QAction * action);
+
+	void sendFile(QAction * action);
 
 	/**
 	 * Re-initializes the systray.
@@ -98,6 +101,8 @@ private:
 	QMenu * _startChatMenu;
 
 	QMenu * _callWengoMenu;
+
+	QMenu * _sendFileMenu;
 
 	QMenu * _callMobileMenu;
 

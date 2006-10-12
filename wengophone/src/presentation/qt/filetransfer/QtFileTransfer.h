@@ -69,6 +69,12 @@ public:
 	 */
 	QtFileTransferWidget * getFileTransferWidget() { return _qtFileTransferWidget; }
 
+	/**
+	 * Open a file chooser and return the chosen one.
+	 * @return the chosen file.
+	 */
+	const QString & getChosenFile() const;
+
 Q_SIGNALS:
 
 	/**

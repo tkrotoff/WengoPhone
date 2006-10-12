@@ -99,6 +99,8 @@ public:
 
 	void startFreeCall();
 
+	void sendFile();
+
 	QString getMobilePhone() const;
 
 	QString getHomePhone() const;

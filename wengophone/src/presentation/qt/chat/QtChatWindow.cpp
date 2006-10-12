@@ -33,6 +33,7 @@
 #include <presentation/qt/profile/QtUserProfileHandler.h>
 #include <presentation/qt/webservices/sms/QtSms.h>
 #include <presentation/qt/profile/QtProfileDetails.h>
+#include <presentation/qt/filetransfer/QtFileTransfer.h>
 
 #include <model/contactlist/ContactProfile.h>
 #include <model/config/ConfigManager.h>
@@ -236,15 +237,12 @@ void QtChatWindow::sendSmsToActiveTabContact() {
 void QtChatWindow::sendFileToActiveTabContact() {
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
-	QString startDir = QString::fromStdString(config.getLastUploadedFileFolder());
+	QtFileTransfer * qtFileTransfer = _qtWengoPhone.getFileTransfer();
+	if (!qtFileTransfer) {
+		return;
+	}
 
-	QString filename = QFileDialog::getOpenFileName(
-		this,
-		"Choose a file",
-		startDir,
-		"All files (*)"
-	);
-
+	QString filename = qtFileTransfer->getChosenFile();
 	if (!filename.isEmpty()) {
 		QFileInfo fileInfo(filename);
 		config.set(Config::FILETRANSFER_LASTUPLOADEDFILE_FOLDER, fileInfo.dir().absolutePath().toStdString());

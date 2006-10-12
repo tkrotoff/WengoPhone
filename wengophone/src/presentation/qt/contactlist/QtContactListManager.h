@@ -95,6 +95,8 @@ public:
 
 	void startCall(const QString & contactId);
 
+	void sendFile(const QString & contactId);
+
 	void clear();
 
 	/**

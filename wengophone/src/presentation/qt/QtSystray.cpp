@@ -61,6 +61,7 @@ QtSystray::QtSystray(QObject * parent)
 	_callWengoMenu = NULL;
 	_callMobileMenu = NULL;
 	_callLandlineMenu = NULL;
+	_sendFileMenu = NULL;
 
 	//Check Internet connection status
 	NetworkObserver::getInstance().connectionIsDownEvent +=
@@ -212,11 +213,26 @@ void QtSystray::updateCallMenu() {
 	////
 	////
 
+	//_sendFileMenu
+	if (!_sendFileMenu) {
+		_sendFileMenu = new QMenu(_qtWengoPhone->getWidget());
+		_sendFileMenu->setTitle(tr("Send File"));
+		_sendFileMenu->setIcon(QIcon(":/pics/filetransfer/send-file.png"));
+		SAFE_CONNECT(_sendFileMenu, SIGNAL(triggered(QAction *)), SLOT(sendFile(QAction *)));
+	}
+	_sendFileMenu->clear();
+	_trayMenu->addMenu(_sendFileMenu);
+	////
+
 	QtContactMenu::populateMobilePhoneMenu(_sendSmsMenu, cWengoPhone);
 	QtContactMenu::populateMobilePhoneMenu(_callMobileMenu, cWengoPhone);
 	QtContactMenu::populateFreeCallMenu(_callWengoMenu, cWengoPhone);
 	QtContactMenu::populateHomePhoneMenu(_callLandlineMenu, cWengoPhone);
 	QtContactMenu::populateChatMenu(_startChatMenu, cWengoPhone);
+	
+	
+	//TODO: call a new method populateFreeCallMenu with contactId
+	QtContactMenu::populateWengoUsersContactId(_sendFileMenu, cWengoPhone);
 }
 
 void QtSystray::setSystrayIcon(QVariant status) {
@@ -358,6 +374,18 @@ void QtSystray::sendSms(QAction * action) {
 				QObject::tr("WengoPhone"),
 				QObject::tr("Can't send SMS unless you're connected to a SIP service."),
 				QMessageBox::Ok, 0);
+		}
+	} else {
+		LOG_FATAL("QAction cannot be NULL");
+	}
+}
+
+void QtSystray::sendFile(QAction * action) {
+	if (action) {
+		QtContactListManager * contactListManager = QtContactListManager::getInstance();
+		if (contactListManager) {
+			LOG_DEBUG("sendfile=" + action->data().toString().toStdString());
+			contactListManager->sendFile(action->data().toString());
 		}
 	} else {
 		LOG_FATAL("QAction cannot be NULL");

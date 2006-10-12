@@ -44,6 +44,8 @@ public:
 
 	static void populateChatMenu(QMenu * menu, CWengoPhone & cWengoPhone);
 
+	static void populateWengoUsersContactId(QMenu * menun, CWengoPhone & cWengoPhone);
+
 private:
 
 	static void setPresenceIcon(QAction * action, EnumPresenceState::PresenceState presenceState);

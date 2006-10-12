@@ -83,6 +83,8 @@ private Q_SLOTS:
 
 	void avatarButtonClicked();
 
+	void sendFileButtonClicked();
+
 private:
 
 	void updateToolTips();

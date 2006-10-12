@@ -19,12 +19,16 @@
 
 #include "QtContact.h"
 
+#include <model/config/ConfigManager.h>
+#include <model/config/Config.h>
+
 #include <control/CWengoPhone.h>
 #include <control/contactlist/CContactList.h>
 #include <control/profile/CUserProfile.h>
 #include <control/profile/CUserProfileHandler.h>
 
 #include <presentation/qt/QtWengoPhone.h>
+#include <presentation/qt/filetransfer/QtFileTransfer.h>
 #include <presentation/qt/webservices/sms/QtSms.h>
 
 #include <util/Logger.h>
@@ -220,6 +224,28 @@ void QtContact::startCall(const QString & number) {
 
 void QtContact::startCall() {
 	_cWengoPhone.getCUserProfileHandler().getCUserProfile()->makeContactCall(_contactId);
+}
+
+void QtContact::sendFile() {
+
+	if (_contactProfile.hasAvailableWengoId()) {
+		QtWengoPhone * qtWengoPhone = (QtWengoPhone *) _cWengoPhone.getPresentation();
+		IMContactSet contactList;
+
+		IMContact imContact = _contactProfile.getFirstAvailableWengoIMContact();
+		contactList.insert(imContact);
+
+		QtFileTransfer * qtFileTransfer = qtWengoPhone->getFileTransfer();
+		if (qtFileTransfer) {
+
+			QString filename = qtFileTransfer->getChosenFile();
+			if (!filename.isEmpty()) {
+
+				qtFileTransfer->createSendFileSession(contactList, filename.toStdString(),
+					_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCContactList());
+			}
+		}
+	}
 }
 
 void QtContact::contactUpdated() {

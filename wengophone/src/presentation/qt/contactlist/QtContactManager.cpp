@@ -111,6 +111,14 @@ void QtContactManager::startChat(bool) {
 	}
 }
 
+void QtContactManager::sendFile(bool checked) {
+	QtContactListManager * ul = QtContactListManager::getInstance();
+	QTreeWidgetItem * item = _tree->currentItem();
+	if (ul && item) {
+		ul->sendFile(item->text(0));
+	}
+}
+
 void QtContactManager::editContact(bool) {
 	QTreeWidgetItem * item = _tree->currentItem();
 	if (item) {
@@ -557,6 +565,9 @@ QMenu * QtContactManager::createMenu() {
 	action = menu->addAction(QIcon(":/pics/actions/send-sms-16.png"), _trStringSendSMS);
 	SAFE_CONNECT(action, SIGNAL(triggered(bool)), SLOT(startSMS(bool)));
 
+	action = menu->addAction(QIcon(":/pics/filetransfer/send-file.png"), _trStringSendFile);
+	SAFE_CONNECT(action, SIGNAL(triggered(bool)), SLOT(sendFile(bool)));
+
 	//FIXME Desactivated for the moment due to a crash
 	//menu->addMenu(createConferenceMenu());
 
@@ -758,6 +769,7 @@ void QtContactManager::languageChanged() {
 	_trStringWorkPhone = tr("Work phone");
 	_trStringWengoPhone = tr("WengoPhone");
 	_trStringSendSMS = tr("Send SMS");
+	_trStringSendFile = tr("Send File");
 	_trStringEditContact = tr("Edit contact");
 	_trStringDeleteContact = tr("Delete contact");
 	_trStringBlockContact = tr("Block contact");

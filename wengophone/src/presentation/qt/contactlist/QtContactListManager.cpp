@@ -260,6 +260,15 @@ void QtContactListManager::startFreeCall(const QString & contactId) {
 	}
 }
 
+void QtContactListManager::sendFile(const QString & contactId) {
+	QMutexLocker locker(_mutex);
+	if (contains(contactId)) {
+		locker.unlock();
+		_contactList[contactId]->sendFile();
+		locker.relock();
+	}
+}
+
 void QtContactListManager::clear() {
 	QMutexLocker locker(_mutex);
 	QHash <QString, QtContact *>::iterator it;
