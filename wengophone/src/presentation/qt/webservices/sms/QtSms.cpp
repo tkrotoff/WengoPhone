@@ -86,7 +86,18 @@ void QtSms::setPhoneNumber(const QString & phoneNumber) {
 
 	_ui->phoneComboBox->clear();
 	if (!phoneNumber.isEmpty()) {
-		_ui->phoneComboBox->addItem(phoneNumber);
+		_ui->phoneComboBox->lineEdit()->setText(phoneNumber);
+	}
+}
+
+void QtSms::addPhoneNumber(const QString & phoneNumber) {
+
+	if (!phoneNumber.isEmpty()) {
+		if (_ui->phoneComboBox->lineEdit()->text().isEmpty()) {
+			_ui->phoneComboBox->lineEdit()->setText(phoneNumber);
+		} else {
+			_ui->phoneComboBox->lineEdit()->setText(_ui->phoneComboBox->lineEdit()->text() + "; " + phoneNumber);
+		}
 	}
 }
 
@@ -112,9 +123,12 @@ void QtSms::setText(const QString & text) {
 	fontSize = "13";
 #endif
 
-	_ui->smsText->setHtml("<html><head><meta name=\"qrichtext\" content=\"1\" /></head><body style=\" white-space: pre-wrap; font-family:Sans Serif; font-size:"
+	_ui->smsText->setHtml("<html><head><meta name=\"qrichtext\" content=\"1\" /></head>"
+		"<body style=\" white-space: pre-wrap; font-family:Sans Serif; font-size:"
 		+ fontSize
-		+ "pt; font-weight:400; font-style:normal; text-decoration:none;\"><p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">"
+		+ "pt; font-weight:400; font-style:normal; text-decoration:none;\">"
+		"<p style=\" margin-top:0px; margin-bottom:0px; "
+		"margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">"
 		+ mess
 		+ "</p></body></html>");
 	updateCounter();
@@ -151,6 +165,16 @@ void QtSms::sendButtonClicked() {
 		QMessageBox::warning(_smsWindow,
 			tr("Wengo SMS service"),
 			tr("Please fill in a phone number.")
+		);
+		return;
+	}
+
+	//check smsText.
+	if (_ui->smsText->toPlainText().isEmpty()) {
+
+		QMessageBox::warning(_smsWindow,
+			tr("Wengo SMS service"),
+			tr("You can not send an empty message.")
 		);
 		return;
 	}
@@ -220,18 +244,27 @@ int QtSms::getMessageLength() const {
 	return getCompleteMessage().length();
 }
 
-
 void QtSms::sendSms() {
 
-	//Converts to UTF-8
-	std::string phoneNumber(_ui->phoneComboBox->currentText().toUtf8().constData());
+	// format Converts to UTF-8
+	std::string numbers;
+	QString temp = _ui->phoneComboBox->currentText();
+	QStringList phoneNumbers = temp.split(QRegExp(",|;|&"));
+	for (int i = 0; i < phoneNumbers.size(); i++) {
+		QString number = phoneNumbers[i].remove(" ");
+		if (i == 0) {
+			numbers += std::string(number.toUtf8().constData());
+		} else {
+			numbers += ";" + std::string(number.toUtf8().constData());
+		}
+	}
 
 	QStringList messages = splitMessage();
 	for (int i = 0; i < messages.size(); i++) {
 
 		if (!messages[i].isEmpty()) {
 			std::string sms(messages[i].toUtf8().constData());
-			_cSms.sendSMS(phoneNumber, sms);
+			_cSms.sendSMS(numbers, sms);
 		}
 	}
 }
@@ -296,6 +329,6 @@ void QtSms::updatePhoneNumberLineEdit(QAction * action) {
 
 	if (action) {
 		QString data = action->data().toString();
-		setPhoneNumber(data);
+		addPhoneNumber(data);
 	}
 }

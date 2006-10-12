@@ -77,11 +77,18 @@ public:
 	void updatePresentation() {}
 
 	/**
-	 * Set the phone number.
+	 * Set the phone number(s).
 	 * 
 	 * @param phoneNumber the phone number.
 	 */
 	void setPhoneNumber(const QString & phoneNumber);
+
+	/**
+	 * Add a phone number.
+	 * 
+	 * @param phoneNumber the phone number to add.
+	 */
+	void addPhoneNumber(const QString & phoneNumber);
 
 	/**
 	 * Set the message text.

@@ -8,12 +8,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>351</width>
-    <height>324</height>
+    <width>386</width>
+    <height>279</height>
    </rect>
   </property>
   <property name="windowTitle" >
    <string>WengoPhone - SMS</string>
+  </property>
+  <property name="sizeGripEnabled" >
+   <bool>true</bool>
   </property>
   <layout class="QGridLayout" >
    <property name="margin" >
@@ -116,7 +119,7 @@
       </sizepolicy>
      </property>
      <property name="text" >
-      <string>Phone number:</string>
+      <string>Phone number(s):</string>
      </property>
     </widget>
    </item>
@@ -131,7 +134,7 @@
       </sizepolicy>
      </property>
      <property name="toolTip" >
-      <string>Enter the phone number here</string>
+      <string>Enter phone number(s) here&lt;br>They must be separated by &amp; or ; or ,</string>
      </property>
      <property name="editable" >
       <bool>true</bool>
