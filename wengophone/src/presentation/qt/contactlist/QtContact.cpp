@@ -47,12 +47,7 @@ QtContact::QtContact(const std::string & contactId, CWengoPhone & cWengoPhone, Q
 void QtContact::paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & ) {
 	QMutexLocker locker(&_mutex);
 
-	QRect painterRect;
-	QPixmap px;
-	QtContactPixmap * spx;
-	int x;
-
-	spx = QtContactPixmap::getInstance();
+	QtContactPixmap * spx = QtContactPixmap::getInstance();
 
 	QColor selectedBackground = SELECTION_BACKGROUND;
 
@@ -65,9 +60,9 @@ void QtContact::paint(QPainter * painter, const QStyleOptionViewItem & option, c
 	// Draw the status pixmap
 	QtContactPixmap::ContactPixmap status = getStatus();
 
-	px = spx->getPixmap(status);
-	painterRect = option.rect;
-	x = painterRect.left();
+	QPixmap px = spx->getPixmap(status);
+	QRect painterRect = option.rect;
+	int x = painterRect.left();
 
 	_centeredPx_y = ((painterRect.bottom() - painterRect.top()) - px.size().height()) / 2;
 
@@ -107,7 +102,7 @@ QtContactPixmap::ContactPixmap QtContact::getStatus() const {
 
 	switch (_contactProfile.getPresenceState()) {
 	case EnumPresenceState::PresenceStateUnknown:
-			status = QtContactPixmap::ContactUnknown;
+		status = QtContactPixmap::ContactUnknown;
 		break;
 	case EnumPresenceState::PresenceStateOnline:
 		status = QtContactPixmap::ContactOnline;

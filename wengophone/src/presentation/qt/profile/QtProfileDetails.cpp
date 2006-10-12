@@ -366,11 +366,20 @@ void QtProfileDetails::advancedButtonClicked() {
 }
 
 void QtProfileDetails::websiteButtonClicked() {
-	WebBrowser::openUrl(_ui->webLineEdit->text().toStdString());
+	std::string website = _ui->webLineEdit->text().toStdString();
+	if (!website.empty()) {
+		WebBrowser::openUrl(website);
+	}
 }
 
 void QtProfileDetails::emailButtonClicked() {
-	WebBrowser::openUrl("mailto:" + _ui->emailLineEdit->text().toStdString());
+	String email = _ui->emailLineEdit->text().toStdString();
+	if (!email.empty()) {
+		if (!email.contains("http://")) {
+			email = "http://" + email;
+		}
+		WebBrowser::openUrl("mailto:" + email);
+	}
 }
 
 void QtProfileDetails::setWengoName(const QString & wengoName) {
