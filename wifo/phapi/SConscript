@@ -97,7 +97,6 @@ libs = [
 	'eXosip',
 	'ortp',
 	'osip',
-	'ilbc',
 	'stun',
 	'gsm',
 	'wtimer',
@@ -130,6 +129,10 @@ defines = {
 	'USE_PLUGINS' : 1,
 }
 
+if WengoGetConsoleArgument("enable-ilbc"):
+   defines['ENABLE_ILBC'] = 1
+   libs += ["ilbc"]
+ 
 # To activate FORCED 16 KHZ SAMPLING
 defines['PH_FORCE_16KHZ'] = 1
 

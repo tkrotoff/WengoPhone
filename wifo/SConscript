@@ -15,22 +15,28 @@ else:
 
 WengoSetVariable('phapi_optimization_flags', phapi_optimization_flags)
 
-projects = [
-	'httptunnel',
-	'netlib',
-	'ortp',
-	'libosip2',
-	'eXosip',
+phapi_subprojects = [ 
 	'phapi-util',
 	'phapi/amrwb',
 	'phapi/amrnb',
 	'phapi/stun',
 	'phapi/gsm',
-	'phapi/ilbc',
 	'phapi/speex',
 	'phapi/speexec',
 	'phapi/fidlib',
 	'phapi/msdirent',
+]
+
+if WengoGetConsoleArgument('enable-ilbc'):
+   phapi_subprojects += [ 'phapi/ilbc' ]
+
+
+projects = [
+	'httptunnel',
+	'netlib',
+	'ortp',
+	'libosip2',
+	'eXosip'] + phapi_subprojects + [
 	'phapi',
 	'miniua',
 	'sfp-plugin',

@@ -36,6 +36,7 @@ args = {
 	'speexwb-replaces-g726wb' : 1,
 
 	'enable-ipp' : 0,
+	'enable-ilbc' : 1,
 }
 
 if not WengoOSMacOSX():
