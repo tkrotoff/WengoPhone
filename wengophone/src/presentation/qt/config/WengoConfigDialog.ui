@@ -15,6 +15,9 @@
   <property name="windowTitle" >
    <string>WengoPhone - Configuration</string>
   </property>
+  <property name="sizeGripEnabled" >
+   <bool>true</bool>
+  </property>
   <layout class="QGridLayout" >
    <property name="margin" >
     <number>9</number>
@@ -60,64 +63,40 @@
       <property name="text" >
        <string>General</string>
       </property>
-      <property name="icon" >
-       <iconset resource="..\wengophone.qrc" >:/pics/config/general.png</iconset>
-      </property>
      </item>
      <item>
       <property name="text" >
        <string>Language</string>
-      </property>
-      <property name="icon" >
-       <iconset resource="..\wengophone.qrc" >:/pics/config/languages.png</iconset>
       </property>
      </item>
      <item>
       <property name="text" >
        <string>Accounts</string>
       </property>
-      <property name="icon" >
-       <iconset resource="..\wengophone.qrc" >:/pics/config/imaccounts.png</iconset>
-      </property>
      </item>
      <item>
       <property name="text" >
        <string>Audio</string>
-      </property>
-      <property name="icon" >
-       <iconset resource="..\wengophone.qrc" >:/pics/config/audio.png</iconset>
       </property>
      </item>
      <item>
       <property name="text" >
        <string>Video</string>
       </property>
-      <property name="icon" >
-       <iconset resource="..\wengophone.qrc" >:/pics/config/video.png</iconset>
-      </property>
      </item>
      <item>
       <property name="text" >
        <string>Notifications &amp; Sounds</string>
-      </property>
-      <property name="icon" >
-       <iconset resource="..\wengophone.qrc" >:/pics/config/notifications.png</iconset>
       </property>
      </item>
      <item>
       <property name="text" >
        <string>Call Forward</string>
       </property>
-      <property name="icon" >
-       <iconset resource="..\wengophone.qrc" >:/pics/config/call-forward.png</iconset>
-      </property>
      </item>
      <item>
       <property name="text" >
        <string>Advanced</string>
-      </property>
-      <property name="icon" >
-       <iconset resource="..\wengophone.qrc" >:/pics/config/advanced.png</iconset>
       </property>
      </item>
     </widget>
@@ -205,4 +184,3 @@
   </connection>
  </connections>
 </ui>
-

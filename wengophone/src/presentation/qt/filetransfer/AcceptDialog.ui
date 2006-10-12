@@ -9,11 +9,14 @@
     <x>0</x>
     <y>0</y>
     <width>328</width>
-    <height>16</height>
+    <height>166</height>
    </rect>
   </property>
   <property name="windowTitle" >
    <string>File Transfer</string>
+  </property>
+  <property name="sizeGripEnabled" >
+   <bool>true</bool>
   </property>
   <layout class="QGridLayout" >
    <property name="margin" >
