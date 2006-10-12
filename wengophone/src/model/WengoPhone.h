@@ -91,9 +91,7 @@ public:
 	/**
 	 * Gets the CoIpManager.
 	 */
-	CoIpManager * getCoIpManager() {
-		return _coIpManager;
-	}
+	CoIpManager * getCoIpManager() const;
 
 	/**
 	 * Prepares the model to terminate.
@@ -124,17 +122,6 @@ private:
 	virtual ~WengoPhone();
 
 	/**
-	 * @see UserProfileHandler::currentUserProfileWillDieEvent
-	 */
-	void currentUserProfileWillDieEventHandler(UserProfileHandler & sender);
-
-	/**
-	 * @see UserProfileHandler::userProfileInitializedEvent
-	 */
-	void userProfileInitializedEventHandler(UserProfileHandler & sender,
-		UserProfile & userProfile);
-
-	/**
 	 * Entry point of the application, equivalent to main().
 	 */
 	void init();
@@ -156,8 +143,6 @@ private:
 	void exitAfterTimeout();
 
 	UserProfileHandler * _userProfileHandler;
-
-	CoIpManager * _coIpManager;
 
 	StartupSettingListener * _startupSettingListener;
 };

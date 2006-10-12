@@ -58,7 +58,8 @@ UserProfile::UserProfile()
 	_connectHandler(*this),
 	_presenceHandler(*this),
 	_chatHandler(*this),
-	_contactList(*this) {
+	_contactList(*this),
+	_coIpManager(*this) {
 
 	_wsSms = NULL;
 	_wsInfo = NULL;

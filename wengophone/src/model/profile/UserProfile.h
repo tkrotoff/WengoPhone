@@ -22,6 +22,8 @@
 
 #include "Profile.h"
 
+#include <coipmanager/CoIpManager.h>
+
 #include <imwrapper/EnumPresenceState.h>
 #include <imwrapper/IMAccountHandler.h>
 
@@ -261,6 +263,9 @@ public:
 
 	/** Gets the WsDirectory */
 	WsDirectory * getWsDirectory()  { return _wsDirectory; }
+
+	/** Gets the CoIpManager. */
+	CoIpManager & getCoIpManager() { return _coIpManager; }
 
 	/** True if history has been loaded. */
 	bool isHistoryLoaded() const {
@@ -559,6 +564,8 @@ private:
 	ChatHandler _chatHandler;
 
 	ContactList _contactList;
+
+	CoIpManager _coIpManager;
 
 	EnumPresenceState::PresenceState _presenceState;
 

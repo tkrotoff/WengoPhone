@@ -19,6 +19,7 @@
 
 #include "WengoPhone.h"
 
+#include <model/profile/UserProfile.h>
 #include <model/profile/UserProfileHandler.h>
 
 #include "classic/ClassicExterminator.h"
@@ -32,21 +33,19 @@
 
 #include "WengoPhoneBuildId.h"
 
-#include <coipmanager/CoIpManager.h>
 #include <cutil/global.h>
 #include <http/HttpRequest.h>
 #include <http/HttpRequestManager.h>
 #include <system/RegisterProtocol.h>
 #include <thread/Timer.h>
 #include <util/Logger.h>
-#include <util/SafeDelete.h>
 #include <util/Path.h>
+#include <util/SafeDelete.h>
 
 #include <sstream>
 
 WengoPhone::WengoPhone() {
 	_startupSettingListener = new StartupSettingListener();
-	_coIpManager = NULL;
 
 	//set HttpRequest User Agent
 	std::stringstream ss;
@@ -80,11 +79,7 @@ WengoPhone::WengoPhone() {
 
 	//Creating the UserProfileHandler instance
 	_userProfileHandler = new UserProfileHandler();
-	_userProfileHandler->currentUserProfileWillDieEvent +=
-		boost::bind(&WengoPhone::currentUserProfileWillDieEventHandler, this, _1);
-	_userProfileHandler->userProfileInitializedEvent +=
-		boost::bind(&WengoPhone::userProfileInitializedEventHandler, this, _1, _2);
-	////
+		////
 
 	RegisterProtocol registerProtocol("wengo");
 	std::string executableFullName = Path::getApplicationDirPath() + config.getExecutableName();
@@ -101,7 +96,6 @@ void WengoPhone::exitAfterTimeout() {
 
 WengoPhone::~WengoPhone() {
 	//Deleting created objects
-	OWSAFE_DELETE(_coIpManager);
 	OWSAFE_DELETE(_userProfileHandler);
 	OWSAFE_DELETE(_startupSettingListener);
 	////
@@ -161,12 +155,13 @@ void WengoPhone::valueChangedEventHandler(Settings & sender, const std::string &
 	saveConfiguration();
 }
 
-void WengoPhone::currentUserProfileWillDieEventHandler(UserProfileHandler & sender) {
-	//TODO: must check if no is using the CoIpManager.
-	OWSAFE_DELETE(_coIpManager);
-}
+CoIpManager * WengoPhone::getCoIpManager() const {
+	CoIpManager *result = NULL;
+	UserProfile *userProfile = _userProfileHandler->getCurrentUserProfile();
 
-void WengoPhone::userProfileInitializedEventHandler(UserProfileHandler & sender,
-	UserProfile & userProfile) {
-	_coIpManager = new CoIpManager(userProfile);
+	if (userProfile) {
+		result = &userProfile->getCoIpManager();
+	}
+
+	return result;
 }
