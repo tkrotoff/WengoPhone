@@ -9,9 +9,9 @@ function configure() {
 function compile() {
 	CPUCOUNT=$(grep -c processor /proc/cpuinfo)
 	if [ "${CPUCOUNT}" -gt "1" ]; then
-		make -j${CPUCOUNT}
+		make -j${CPUCOUNT} "$1"
 	else
-		make
+		make "$1"
 	fi
 }
 
