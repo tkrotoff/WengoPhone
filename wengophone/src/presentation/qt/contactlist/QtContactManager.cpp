@@ -568,7 +568,7 @@ QMenu * QtContactManager::createMenu() {
 	action = menu->addAction(QIcon(":/pics/actions/send-sms-16.png"), _trStringSendSMS);
 	SAFE_CONNECT(action, SIGNAL(triggered(bool)), SLOT(startSMS()));
 
-	action = menu->addAction(QIcon(":/pics/filetransfer/send-file.png"), _trStringSendFile);
+	action = menu->addAction(QIcon(":/pics/actions/send_file.png"), _trStringSendFile);
 	SAFE_CONNECT(action, SIGNAL(triggered(bool)), SLOT(sendFile()));
 
 	//FIXME Desactivated for the moment due to a crash

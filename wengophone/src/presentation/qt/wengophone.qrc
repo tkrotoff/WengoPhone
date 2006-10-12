@@ -212,6 +212,7 @@
 		<file>pics/actions/send-sms-16.png</file>
 		<file>pics/actions/delete.png</file>
 		<file>pics/actions/add-contact.png</file>
+		<file>pics/actions/send_file.png</file>
 
 		<file>pics/cancel.png</file>
 		<file>pics/browse.png</file>

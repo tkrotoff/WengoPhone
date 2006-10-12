@@ -217,7 +217,7 @@ void QtSystray::updateCallMenu() {
 	if (!_sendFileMenu) {
 		_sendFileMenu = new QMenu(_qtWengoPhone->getWidget());
 		_sendFileMenu->setTitle(tr("Send File"));
-		_sendFileMenu->setIcon(QIcon(":/pics/filetransfer/send-file.png"));
+		_sendFileMenu->setIcon(QIcon(":/pics/actions/send_file.png"));
 		SAFE_CONNECT(_sendFileMenu, SIGNAL(triggered(QAction *)), SLOT(sendFile(QAction *)));
 	}
 	_sendFileMenu->clear();
