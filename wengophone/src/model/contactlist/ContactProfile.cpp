@@ -133,7 +133,8 @@ void ContactProfile::setGroupId(const std::string & groupId) {
 
 bool ContactProfile::hasIM() const {
 	return (getPresenceState() != EnumPresenceState::PresenceStateOffline &&
-		getPresenceState() != EnumPresenceState::PresenceStateUnknown);
+		getPresenceState() != EnumPresenceState::PresenceStateUnknown && 
+		getPresenceState() != EnumPresenceState::PresenceStateUnavailable);
 }
 
 bool ContactProfile::hasCall() const {
@@ -146,6 +147,18 @@ bool ContactProfile::hasCall() const {
 
 bool ContactProfile::hasVideo() const {
 	return hasAvailableWengoId();
+}
+
+bool ContactProfile::hasFileTransfer() const {
+	if (!getFirstWengoId().empty() && isAvailable()) {
+		IMContact imContact = getFirstAvailableWengoIMContact();
+		if ((imContact.getPresenceState() != EnumPresenceState::PresenceStateOffline) &&
+			(imContact.getPresenceState() != EnumPresenceState::PresenceStateUnknown) &&
+			(imContact.getPresenceState() != EnumPresenceState::PresenceStateUnavailable)) {
+				return true;
+		}
+	}
+	return false;
 }
 
 std::string ContactProfile::getPreferredNumber() const {

@@ -154,6 +154,11 @@ public:
 	bool hasVideo() const;
 
 	/**
+	 * @return true if we can transfer a file with this Contact.
+	 */
+	bool hasFileTransfer() const;
+	
+	/**
 	 * @return free phone number (Wengo ID, SIP address).
 	 * an empty string if no phone number found
 	 */
@@ -233,6 +238,12 @@ public:
 		return _groupId;
 	}
 
+	/**
+	 * @return true when a wengo IMContact has been declared 
+	 * and this id is online.
+	 */
+	bool hasAvailableWengoId() const;
+
 	virtual void setMobilePhone(const std::string & mobilePhone) { Profile::setMobilePhone(mobilePhone); updatePresenceState(); }
 
 	virtual void setHomePhone(const std::string & homePhone) { Profile::setHomePhone(homePhone); updatePresenceState(); }
@@ -264,12 +275,6 @@ protected:
 
 	/** Copy a ContactProfile. */
 	virtual void copy(const ContactProfile & contactProfile);
-
-	/**
-	 * @return true when a wengo IMContact has been declared 
-	 * and this id is online.
-	 */
-	bool hasAvailableWengoId() const;
 
 	/**
 	 * Checks if a SIP number is available.
