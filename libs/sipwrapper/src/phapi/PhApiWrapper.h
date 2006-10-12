@@ -223,6 +223,8 @@ public:
 
 	void subscribeToPresenceOf(const std::string & contactId);
 
+	void unsubscribeToPresenceOf(const std::string & contactId);
+
 	void blockContact(const std::string & contactId);
 
 	void unblockContact(const std::string & contactId);

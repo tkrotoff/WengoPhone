@@ -46,6 +46,7 @@ public:
 	virtual void changeMyAlias(const std::string & nickname);
 	virtual void changeMyIcon(const OWPicture & picture);
 	virtual void subscribeToPresenceOf(const std::string & contactId);
+	virtual void unsubscribeToPresenceOf(const std::string & contactId);
 	virtual void blockContact(const std::string & contactId);
 	virtual void unblockContact(const std::string & contactId);
 	virtual void authorizeContact(const std::string & contactId, bool authorized, const std::string message);

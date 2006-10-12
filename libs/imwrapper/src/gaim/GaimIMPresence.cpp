@@ -91,8 +91,10 @@ void GaimIMPresence::changeMyIcon(const OWPicture & picture)
 	gaim_account_set_buddy_icon(gAccount, file.getFullPath().c_str());
 }
 
-void GaimIMPresence::subscribeToPresenceOf(const std::string & contactId)
-{
+void GaimIMPresence::subscribeToPresenceOf(const std::string & contactId) {
+}
+
+void GaimIMPresence::unsubscribeToPresenceOf(const std::string & contactId) {
 }
 
 void GaimIMPresence::blockContact(const std::string & contactId)

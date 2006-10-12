@@ -157,6 +157,7 @@ void Contact::_removeIMContact(const IMContact & imContact) {
 	IMContactSet::iterator it = _imContactSet.find(imContact);
 
 	if (it != _imContactSet.end()) {
+		_userProfile.getPresenceHandler().unsubscribeToPresenceOf(*it);
 		contactChangedEvent(*this);
 		_imContactSet.erase(it);
 	}

@@ -73,7 +73,15 @@ void PhApiIMPresence::changeMyIcon(const OWPicture & picture) {
 
 void PhApiIMPresence::subscribeToPresenceOf(const std::string & contactId) {
 	_phApiWrapper.subscribeToPresenceOf(contactId);
-	_contactList.push_back(contactId);
+	_contactList.insert(contactId);
+}
+
+void PhApiIMPresence::unsubscribeToPresenceOf(const std::string & contactId) {
+	_phApiWrapper.unsubscribeToPresenceOf(contactId);
+	std::set<std::string>::iterator it = _contactList.find(contactId);
+	if (it != _contactList.end()) {
+		_contactList.erase(it);
+	}
 }
 
 void PhApiIMPresence::blockContact(const std::string & contactId) {

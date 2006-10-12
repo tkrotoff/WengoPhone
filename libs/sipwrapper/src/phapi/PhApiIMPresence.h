@@ -23,7 +23,7 @@
 #include "PhApiFactory.h"
 
 #include <imwrapper/IMPresence.h>
-#include <list>
+#include <set>
 
 class IMAccount;
 
@@ -44,6 +44,8 @@ public:
 	void changeMyIcon(const OWPicture & picture);
 
 	void subscribeToPresenceOf(const std::string & contactId);
+
+	void unsubscribeToPresenceOf(const std::string & contactId);
 
 	void blockContact(const std::string & contactId);
 
@@ -67,7 +69,7 @@ private:
 
 	const std::string getRessourcePath();
 
-	std::list<std::string> _contactList;
+	std::set<std::string> _contactList;
 
 	/** Current icon filename. */
 	std::string _iconFilename;

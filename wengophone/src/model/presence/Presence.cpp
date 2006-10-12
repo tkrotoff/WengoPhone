@@ -27,6 +27,7 @@
 #include <imwrapper/IMWrapperFactory.h>
 
 #include <util/Logger.h>
+#include <util/SafeDelete.h>	
 
 Presence::Presence(IMAccount & imAccount)
 	: _imAccount(imAccount) {
@@ -47,9 +48,7 @@ Presence::Presence(IMAccount & imAccount)
 }
 
 Presence::~Presence() {
-	if (_imPresence) {
-		delete _imPresence;
-	}
+	OWSAFE_DELETE(_imPresence);
 }
 
 void Presence::changeMyPresence(EnumPresenceState::PresenceState state, const std::string & note) {
@@ -68,6 +67,10 @@ void Presence::changeMyIcon(const OWPicture & picture) {
 
 void Presence::subscribeToPresenceOf(const std::string & contactId) {
 	_imPresence->subscribeToPresenceOf(contactId);
+}
+
+void Presence::unsubscribeToPresenceOf(const std::string & contactId) {
+	_imPresence->unsubscribeToPresenceOf(contactId);
 }
 
 void Presence::blockContact(const std::string & contactId) {

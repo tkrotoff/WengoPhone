@@ -91,6 +91,11 @@ public:
 	void subscribeToPresenceOf(const std::string & contactId);
 
 	/**
+	 * @see IMPresence::unsubscribeToPresenceOf
+	 */
+	void unsubscribeToPresenceOf(const std::string & contactId);
+
+	/**
 	 * @see IMPresence::blockContact
 	 */
 	void blockContact(const std::string & contactId);

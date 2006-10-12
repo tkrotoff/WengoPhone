@@ -53,9 +53,29 @@ void PresenceHandler::subscribeToPresenceOf(const IMContact & imContact) {
 	if (it != _presenceMap.end()) {
 		LOG_DEBUG("subscribing to presence of=" + imContact.getContactId());
 		(*it).second->subscribeToPresenceOf(imContact.getContactId());
+		_subscribedContacts.push_back(&imContact);
 	} else {
 		//Presence for 'protocol' has not yet been created. The contactId is pushed in the pending subscription list
 		_pendingSubscriptions.insert(pair<IMAccount *, const IMContact *>((IMAccount *)imContact.getIMAccount(), &imContact));
+	}
+}
+
+void PresenceHandler::unsubscribeToPresenceOf(const IMContact & imContact) {
+	PresenceMap::iterator it = findPresence(_presenceMap, (IMAccount *) imContact.getIMAccount());
+
+	if (it != _presenceMap.end()) {
+		LOG_DEBUG("unsubscribing to presence of=" + imContact.getContactId());
+		for (std::list<const IMContact *>::iterator subIt = _subscribedContacts.begin();
+			subIt != _subscribedContacts.end();
+			++subIt) {
+			if ((*subIt) == &imContact) {
+				_subscribedContacts.erase(subIt);
+				break;
+			}
+		}
+		(*it).second->unsubscribeToPresenceOf(imContact.getContactId());
+	} else {
+		LOG_ERROR("cannot find associated Presence instance");
 	}
 }
 
@@ -101,31 +121,48 @@ void PresenceHandler::connectedEventHandler(ConnectHandler & sender, IMAccount &
 
 		(*it).second->changeMyPresence(presenceState, String::null);
 
+		// Launch subscriptions to all already subscribed contacts
+		for (std::list<const IMContact *>::const_iterator subIt = _subscribedContacts.begin();
+			subIt != _subscribedContacts.end();
+			++subIt) {
+			LOG_DEBUG("subscribing to presence of=" + (*subIt)->getContactId());
+			(*it).second->subscribeToPresenceOf((*subIt)->getContactId());
+		}
+		////
+
 		//Launch all pending subscriptions
 		IMContactMultiMap::iterator pendIt = _pendingSubscriptions.find(&imAccount);
 		while (pendIt != _pendingSubscriptions.end()) {
 			LOG_DEBUG("subscribing to presence of=" + (*pendIt).second->getContactId());
 			(*it).second->subscribeToPresenceOf((*pendIt).second->getContactId());
-			//TODO: should we keep the list in case of disconnection?
+			_subscribedContacts.push_back((*pendIt).second);
 			_pendingSubscriptions.erase(pendIt);
 			pendIt = _pendingSubscriptions.find(&imAccount);
 		}
+		////
 	} else {
 		LOG_FATAL("the given IMAccount has not been added yet");
 	}
 }
 
 void PresenceHandler::disconnectedEventHandler(ConnectHandler & sender, IMAccount & imAccount) {
-	PresenceMap::iterator it = _presenceMap.find(&imAccount);
-
 	LOG_DEBUG("an account is disconnected, login=" + imAccount.getLogin()
 		+ " protocol=" + String::fromNumber(imAccount.getProtocol()));
+
+	PresenceMap::iterator it = _presenceMap.find(&imAccount);
 	if (it != _presenceMap.end()) {
-		//The presence state is now used to save the last presence state
-		//used when connected. @see IMAccount::_presenceState
-		//(*it).second->changeMyPresence(EnumPresenceState::PresenceStateOffline, String::null);
+		for (std::list<const IMContact *>::const_iterator subIt = _subscribedContacts.begin();
+			subIt != _subscribedContacts.end();
+			++subIt) {
+			if (*(*subIt)->getIMAccount() == imAccount) {
+				LOG_DEBUG("unsubscribing to presence of=" + (*subIt)->getContactId());
+				(*it).second->unsubscribeToPresenceOf((*subIt)->getContactId());
+				presenceStateChangedEvent(*this, EnumPresenceState::PresenceStateUnknown,
+					String::null, *(*subIt));
+			}
+		}
 	} else {
-		LOG_ERROR("this IMAccount has already been added=" + imAccount.getLogin());
+		LOG_ERROR("cannot found " + imAccount.getLogin());
 	}
 }
 
@@ -206,6 +243,9 @@ void PresenceHandler::presenceStateChangedEventHandlerThreadSafe(IMAccount * imA
 	EnumPresenceState::PresenceState state, std::string note, std::string from) {
 
 	LOG_DEBUG("presence of=" + imAccount->getLogin() + " changed=" + EnumPresenceState::toString(state));
+	if (!imAccount->isConnected()) {
+		state = EnumPresenceState::PresenceStateUnknown;
+	}
 	presenceStateChangedEvent(*this, state, note, IMContact(*imAccount, from));
 }
 

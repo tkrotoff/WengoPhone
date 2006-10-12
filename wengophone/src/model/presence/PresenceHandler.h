@@ -31,6 +31,7 @@
 #include <util/NonCopyable.h>
 #include <util/Trackable.h>
 
+#include <list>
 #include <map>
 
 class Connect;
@@ -133,6 +134,13 @@ public:
 	void subscribeToPresenceOf(const IMContact & imContact);
 
 	/**
+	 * Unsubscribes to the presence of an IMContact.
+	 *
+	 * @param imContact the IMContact
+	 */
+	void unsubscribeToPresenceOf(const IMContact & imContact);
+
+	/**
 	 * @see IMPresence::blockContact
 	 */
 	void blockContact(const IMContact & imContact);
@@ -233,6 +241,9 @@ private:
 	PresenceMap _presenceMap;
 
 	IMContactMultiMap _pendingSubscriptions;
+
+	/** List of Contact for which Presence State has been subsribed. */
+	std::list<const IMContact *> _subscribedContacts;
 
 	UserProfile & _userProfile;
 };

@@ -729,6 +729,11 @@ void PhApiWrapper::subscribeToPresenceOf(const std::string & contactId) {
 	}
 }
 
+void PhApiWrapper::unsubscribeToPresenceOf(const std::string & contactId) {
+	std::string sipAddress = "sip:" + contactId + "@" + _wengoRealm;
+
+}
+
 void PhApiWrapper::messageProgress(int messageId, const phMsgStateInfo_t * info) {
 	_callbacks->messageProgress(messageId, info);
 }

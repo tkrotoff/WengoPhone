@@ -151,6 +151,13 @@ public:
 	virtual void subscribeToPresenceOf(const std::string & contactId) = 0;
 
 	/**
+	 * Unsubscribes to the presence of a contact.
+	 *
+	 * @param contactId id of the contact
+	 */
+	virtual void unsubscribeToPresenceOf(const std::string & contactId) = 0;
+
+	/**
 	 * Avoid a contact to see my Presence.
 	 *
 	 * @param contactId contact id
