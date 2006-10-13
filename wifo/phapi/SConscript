@@ -121,7 +121,6 @@ defines = {
 	'USE_WAVEIN_CBK' : 1,
 	'PSEUDO_AEC' : 0,
 	'NO_ECHO__SUPPRESSOR' : 1,
-	'ENABLE_ILBC' : 1,
 	'OSIP_MT' : 1,
 	'ENABLE_TRACE' : 0,
 	'PH_VIDEO_USELOCK' : 1,

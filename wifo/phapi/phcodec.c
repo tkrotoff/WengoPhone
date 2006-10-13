@@ -16,9 +16,6 @@
 #include "rtpport.h" // only for GMutex <- phmedia.h <- phcodec-h263.h
 #include "phcodec.h"
 
-#include "ilbc/iLBC_define.h"
-#include "ilbc/iLBC_encode.h"
-#include "ilbc/iLBC_decode.h"
 //#define FIXED_AMR 1
 
 void ph_media_plugin_codec_init(const char *dirpath);
@@ -28,10 +25,15 @@ void ph_media_plugin_codec_init(const char *dirpath);
 #ifndef NO_GSM
 #define NO_GSM 1
 #endif
-#ifndef NO_ILBC
-#define NO_ILBC 1
-#endif
 #endif  //EMBED
+
+
+#ifdef ENABLE_ILBC
+#include "ilbc/iLBC_define.h"
+#include "ilbc/iLBC_encode.h"
+#include "ilbc/iLBC_decode.h"
+#endif
+
 
 #ifdef PHAPI_VIDEO_SUPPORT
 #include "phcodec-h263.h"
@@ -44,9 +46,7 @@ void ph_media_plugin_codec_init(const char *dirpath);
 #include "gsm/gsm.h"
 #include "gsm/private.h"
 #endif
-#ifndef NO_ILBC
-#define ENABLE_ILBC 1
-#endif
+
 
 #if defined(WIN32) && !defined(__GNUC__)
 # define inline _inline
