@@ -78,7 +78,7 @@ void QtFileTransfer::newReceiveFileSessionCreatedEventHandlerSlot(ReceiveFileSes
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	QString downloadFolder;
-	QString filename =  QString::fromStdString(fileSession->getFileName());
+	QString filename =  QString::fromUtf8(fileSession->getFileName().c_str());
 	QString contact = QString::fromStdString(fileSession->getIMContact().getContactId());
 
 	LOG_DEBUG("incoming file: " + fileSession->getFileName() + "from: " + fileSession->getIMContact().getContactId());
@@ -91,7 +91,7 @@ void QtFileTransfer::newReceiveFileSessionCreatedEventHandlerSlot(ReceiveFileSes
 	// the user accept the file transfer
 	if (qtFileTransferAcceptDialog.exec() == QDialog::Accepted) {
 
-		QDir dir(QString::fromStdString(config.getFileTransferDownloadFolder()));
+		QDir dir(QString::fromUtf8(config.getFileTransferDownloadFolder().c_str()));
 		// if no download folder set then choose one
 		// or if the choosen folder does not exists anymore.
 		if ((config.getFileTransferDownloadFolder().empty()) || (!dir.exists())) {
@@ -99,12 +99,12 @@ void QtFileTransfer::newReceiveFileSessionCreatedEventHandlerSlot(ReceiveFileSes
 			downloadFolder = QFileDialog::getExistingDirectory(
 				_qtFileTransferWidget,
 				tr("Choose a directory"),
-				"",
+				QString::null,
 				QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks
 			);
 
 			if (!downloadFolder.isEmpty()) {
-				config.set(Config::FILETRANSFER_DOWNLOAD_FOLDER, downloadFolder.toStdString());
+				config.set(Config::FILETRANSFER_DOWNLOAD_FOLDER, std::string(downloadFolder.toUtf8().constData()));
 			} else {
 				//TODO: warn the user is has set no download folder.
 				fileSession->stop();
@@ -112,7 +112,7 @@ void QtFileTransfer::newReceiveFileSessionCreatedEventHandlerSlot(ReceiveFileSes
 				return;
 			}
 		} else {
-			downloadFolder = QString::fromStdString(config.getFileTransferDownloadFolder());
+			downloadFolder = QString::fromUtf8(config.getFileTransferDownloadFolder().c_str());
 		}
 
 		// here we're sure to have a download folder,
@@ -132,7 +132,7 @@ void QtFileTransfer::newReceiveFileSessionCreatedEventHandlerSlot(ReceiveFileSes
 
 		_qtFileTransferWidget->setDownloadFolder(downloadFolder);
 		_qtFileTransferWidget->addReceiveItem(fileSession);
-		fileSession->setFilePath(std::string(downloadFolder.toAscii().data()));
+		fileSession->setFilePath(std::string(downloadFolder.toUtf8().constData()));
 		fileSession->start();
 
 	// the user refuse the file transfer.
