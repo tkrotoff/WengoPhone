@@ -529,7 +529,7 @@ void QtChatWidget::sendFileToSession(const QString & filename) {
 	CContactList & cContactList = qtContactList->getCContactList();
 	QtFileTransfer * qtFileTransfer = _qtWengoPhone->getFileTransfer();
 	if (qtFileTransfer) {
-		qtFileTransfer->createSendFileSession(_imChatSession->getIMContactSet(), std::string(filename.toAscii().data()), cContactList);
+		qtFileTransfer->createSendFileSession(_imChatSession->getIMContactSet(), std::string(filename.toUtf8().constData()), cContactList);
 	}
 }
 
