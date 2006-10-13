@@ -245,7 +245,7 @@ void QtChatWindow::sendFileToActiveTabContact() {
 	QString filename = qtFileTransfer->getChosenFile();
 	if (!filename.isEmpty()) {
 		QFileInfo fileInfo(filename);
-		config.set(Config::FILETRANSFER_LASTUPLOADEDFILE_FOLDER, fileInfo.dir().absolutePath().toStdString());
+		config.set(Config::FILETRANSFER_LASTUPLOADEDFILE_FOLDER_KEY, fileInfo.dir().absolutePath().toStdString());
 	}
 
 	if (!filename.isEmpty()) {

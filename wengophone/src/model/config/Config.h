@@ -54,6 +54,8 @@ public:
 	 *  - multi-profile management
 	 * version 4: WengoPhone NG Final:
 	 *  - added a new type of protocol: Wengo
+	 * version 5:
+	 * - video quality value is now a string rather than an integer
 	 */
 	static const int CONFIG_VERSION;
 
@@ -242,23 +244,23 @@ public:
 	std::string getProfileLastUsedName() const;
 
 	/** Profile all widget enabled. */
-	static const std::string PROFILE_ALL;
+	static const std::string PROFILE_ALL_KEY;
 	bool getProfileAll() const;
 
 	/** Profile window width. */
-	static const std::string PROFILE_WIDTH;
+	static const std::string PROFILE_WIDTH_KEY;
 	int getProfileWidth() const;
 
 	/** Profile window height. */
-	static const std::string PROFILE_HEIGHT;
+	static const std::string PROFILE_HEIGHT_KEY;
 	int getProfileHeight() const;
 
 	/** Profile window position X. */
-	static const std::string PROFILE_POSX;
+	static const std::string PROFILE_POSX_KEY;
 	int getProfilePosX() const;
 
 	/** Profile window position Y. */
-	static const std::string PROFILE_POSY;
+	static const std::string PROFILE_POSY_KEY;
 	int getProfilePoxY() const;
 
 	/** @} */
@@ -407,10 +409,10 @@ public:
 	static const std::string VIDEO_QUALITY_KEY;
 	std::string getVideoQuality() const;
 
-	static const std::string VIDEO_ENABLE_XVIDEO;
+	static const std::string VIDEO_ENABLE_XVIDEO_KEY;
 	bool getXVideoEnable() const;
 
-	static const std::string VIDEO_ENABLE_FLIP;
+	static const std::string VIDEO_ENABLE_FLIP_KEY;
 	bool getVideoFlipEnable() const;
 
 	/** @} */
@@ -487,12 +489,12 @@ public:
 	 * @{
 	 */
 
-	/** download folder. */
-	static const std::string FILETRANSFER_DOWNLOAD_FOLDER;
+	/** Download folder. */
+	static const std::string FILETRANSFER_DOWNLOAD_FOLDER_KEY;
 	std::string getFileTransferDownloadFolder() const;
 
 	/** Path to the last uploaded file. */
-	static const std::string FILETRANSFER_LASTUPLOADEDFILE_FOLDER;
+	static const std::string FILETRANSFER_LASTUPLOADEDFILE_FOLDER_KEY;
 	std::string getLastUploadedFileFolder() const;
 
 	/** @} */
@@ -503,7 +505,7 @@ public:
 	 */
 
 	/** Prefered browser. */
-	static const std::string LINUX_PREFERED_BROWSER;
+	static const std::string LINUX_PREFERED_BROWSER_KEY;
 	std::string getLinuxPreferedBrowser() const;
 
 	/** @} */

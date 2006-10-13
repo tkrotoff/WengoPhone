@@ -83,6 +83,8 @@ private:
 
 	bool importConfigFromV3toV4();
 
+	bool importConfigFromV4toV5();
+
 	bool importContactsFromV1toV3(const std::string & fromDir, UserProfile & userProfile);
 
 	void addContactDetails(Contact & contact, void * structVcard);

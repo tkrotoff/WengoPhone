@@ -37,7 +37,7 @@
 	#include <CoreFoundation/CoreFoundation.h>
 #endif
 
-const int Config::CONFIG_VERSION = 4;
+const int Config::CONFIG_VERSION = 5;
 
 const std::string Config::CONFIG_VERSION_KEY = "config.version";
 
@@ -73,10 +73,10 @@ const std::string Config::AUDIO_AEC_KEY = "audio.aec";
 const std::string Config::AUDIO_HALFDUPLEX_KEY = "audio.halfduplex";
 
 const std::string Config::PROFILE_LAST_USED_NAME_KEY = "profile.last_used_name";
-const std::string Config::PROFILE_WIDTH = "profile.width";
-const std::string Config::PROFILE_HEIGHT = "profile.height";
-const std::string Config::PROFILE_POSX = "profile.posx";
-const std::string Config::PROFILE_POSY = "profile.posy";
+const std::string Config::PROFILE_WIDTH_KEY = "profile.width";
+const std::string Config::PROFILE_HEIGHT_KEY = "profile.height";
+const std::string Config::PROFILE_POSX_KEY = "profile.posx";
+const std::string Config::PROFILE_POSY_KEY = "profile.posy";
 
 const std::string Config::CALL_FORWARD_MODE_KEY = "call.forward.mode";
 const std::string Config::CALL_FORWARD_PHONENUMBER1_KEY = "call.forward.phonenumber1";
@@ -113,8 +113,8 @@ const std::string Config::PRIVACY_SIGN_AS_INVISIBLE_KEY = "privacy.sign.as.invis
 const std::string Config::VIDEO_ENABLE_KEY = "video.enable";
 const std::string Config::VIDEO_WEBCAM_DEVICE_KEY = "video.webcam.device";
 const std::string Config::VIDEO_QUALITY_KEY = "video.quality";
-const std::string Config::VIDEO_ENABLE_XVIDEO = "video.xvideo.enable";
-const std::string Config::VIDEO_ENABLE_FLIP = "video.flip.enable";
+const std::string Config::VIDEO_ENABLE_XVIDEO_KEY = "video.xvideo.enable";
+const std::string Config::VIDEO_ENABLE_FLIP_KEY = "video.flip.enable";
 
 const std::string Config::WENGO_SERVER_HOSTNAME_KEY = "wengo.server.hostname";
 const std::string Config::WENGO_SMS_PATH_KEY = "wengo.sms.path";
@@ -137,10 +137,10 @@ const std::string Config::CMDLINE_PLACECALL_KEY = "cmdline.placecall";
 
 const std::string Config::CMDSERVER_AUTHORIZED_KEY = "cmdserver.authorized";
 
-const std::string Config::FILETRANSFER_DOWNLOAD_FOLDER = "filetransfer.downloadfolder";
-const std::string Config::FILETRANSFER_LASTUPLOADEDFILE_FOLDER = "filetransfer.lastuploadedfilefolder";
+const std::string Config::FILETRANSFER_DOWNLOAD_FOLDER_KEY = "filetransfer.downloadfolder";
+const std::string Config::FILETRANSFER_LASTUPLOADEDFILE_FOLDER_KEY = "filetransfer.lastuploadedfilefolder";
 
-const std::string Config::LINUX_PREFERED_BROWSER = "linux.prefered.browser";
+const std::string Config::LINUX_PREFERED_BROWSER_KEY = "linux.prefered.browser";
 
 Config::Config(const std::string & name)
 	: AutomaticSettings() {
@@ -171,10 +171,8 @@ Config::Config(const std::string & name)
 	resourcesPath = Path::getApplicationDirPath();
 #elif defined(OS_MACOSX)
 	resourcesPath = Path::getApplicationResourcesDirPath();
-#elif defined(OS_LINUX)
- #if defined(OW_RESOURCEDIR)
+#elif defined(OS_LINUX) and defined(OW_RESOURCEDIR)
 	resourcesPath = OW_RESOURCEDIR + File::getPathSeparator();
- #endif
 #endif
 	_keyDefaultValueMap[RESOURCES_DIR_KEY] = resourcesPath;
 	_keyDefaultValueMap[EXECUTABLE_NAME_KEY] = empty;
@@ -217,10 +215,10 @@ Config::Config(const std::string & name)
 	_keyDefaultValueMap[AUDIO_HALFDUPLEX_KEY] = false;
 
 	_keyDefaultValueMap[PROFILE_LAST_USED_NAME_KEY] = empty;
-	_keyDefaultValueMap[PROFILE_WIDTH] = 340;
-	_keyDefaultValueMap[PROFILE_HEIGHT] = 600;
-	_keyDefaultValueMap[PROFILE_POSX] = 100;
-	_keyDefaultValueMap[PROFILE_POSY] = 100;
+	_keyDefaultValueMap[PROFILE_WIDTH_KEY] = 340;
+	_keyDefaultValueMap[PROFILE_HEIGHT_KEY] = 600;
+	_keyDefaultValueMap[PROFILE_POSX_KEY] = 100;
+	_keyDefaultValueMap[PROFILE_POSY_KEY] = 100;
 
 	_keyDefaultValueMap[CALL_FORWARD_MODE_KEY] = std::string("unauthorized");
 	_keyDefaultValueMap[CALL_FORWARD_PHONENUMBER1_KEY] = empty;
@@ -255,8 +253,8 @@ Config::Config(const std::string & name)
 	_keyDefaultValueMap[VIDEO_ENABLE_KEY] = true;
 	_keyDefaultValueMap[VIDEO_WEBCAM_DEVICE_KEY] = WebcamDriver::getInstance()->getDefaultDevice();
 	_keyDefaultValueMap[VIDEO_QUALITY_KEY] = EnumVideoQuality::toString(EnumVideoQuality::VideoQualityNormal);
-	_keyDefaultValueMap[VIDEO_ENABLE_XVIDEO] = false;
-	_keyDefaultValueMap[VIDEO_ENABLE_FLIP] = false;
+	_keyDefaultValueMap[VIDEO_ENABLE_XVIDEO_KEY] = false;
+	_keyDefaultValueMap[VIDEO_ENABLE_FLIP_KEY] = false;
 
 	_keyDefaultValueMap[WENGO_SERVER_HOSTNAME_KEY] = std::string("ws.wengo.fr");
 	_keyDefaultValueMap[WENGO_SMS_PATH_KEY] = std::string("/sms/sendsms.php");
@@ -277,10 +275,10 @@ Config::Config(const std::string & name)
 
 	_keyDefaultValueMap[LAST_CHAT_HISTORY_SAVE_DIR_KEY] = Path::getHomeDirPath();
 
-	_keyDefaultValueMap[FILETRANSFER_DOWNLOAD_FOLDER] = empty;
-	_keyDefaultValueMap[FILETRANSFER_LASTUPLOADEDFILE_FOLDER] = empty;
+	_keyDefaultValueMap[FILETRANSFER_DOWNLOAD_FOLDER_KEY] = empty;
+	_keyDefaultValueMap[FILETRANSFER_LASTUPLOADEDFILE_FOLDER_KEY] = empty;
 
-	_keyDefaultValueMap[LINUX_PREFERED_BROWSER] = empty;
+	_keyDefaultValueMap[LINUX_PREFERED_BROWSER_KEY] = empty;
 }
 
 Config::~Config() {
@@ -495,19 +493,19 @@ std::string Config::getProfileLastUsedName() const {
 }
 
 int Config::getProfileWidth() const {
-	return getIntegerKeyValue(PROFILE_WIDTH);
+	return getIntegerKeyValue(PROFILE_WIDTH_KEY);
 }
 
 int Config::getProfileHeight() const {
-	return getIntegerKeyValue(PROFILE_HEIGHT);
+	return getIntegerKeyValue(PROFILE_HEIGHT_KEY);
 }
 
 int Config::getProfilePosX() const {
-	return getIntegerKeyValue(PROFILE_POSX);
+	return getIntegerKeyValue(PROFILE_POSX_KEY);
 }
 
 int Config::getProfilePoxY() const {
-	return getIntegerKeyValue(PROFILE_POSY);
+	return getIntegerKeyValue(PROFILE_POSY_KEY);
 }
 
 std::string Config::getCallForwardMode() const {
@@ -646,11 +644,11 @@ std::string Config::getVideoQuality() const {
 }
 
 bool Config::getXVideoEnable() const {
-	return getBooleanKeyValue(VIDEO_ENABLE_XVIDEO);
+	return getBooleanKeyValue(VIDEO_ENABLE_XVIDEO_KEY);
 }
 
 bool Config::getVideoFlipEnable() const {
-	return getBooleanKeyValue(VIDEO_ENABLE_FLIP);
+	return getBooleanKeyValue(VIDEO_ENABLE_FLIP_KEY);
 }
 
 std::string Config::getWenboxEnable() const {
@@ -674,13 +672,13 @@ std::string Config::getCmdServerAuthorized() const {
 }
 
 std::string Config::getFileTransferDownloadFolder() const {
-	return getStringKeyValue(FILETRANSFER_DOWNLOAD_FOLDER);
+	return getStringKeyValue(FILETRANSFER_DOWNLOAD_FOLDER_KEY);
 }
 
 std::string Config::getLinuxPreferedBrowser() const {
-	return getStringKeyValue(LINUX_PREFERED_BROWSER);
+	return getStringKeyValue(LINUX_PREFERED_BROWSER_KEY);
 }
 
 std::string Config::getLastUploadedFileFolder() const {
-		return getStringKeyValue(FILETRANSFER_LASTUPLOADEDFILE_FOLDER);
+	return getStringKeyValue(FILETRANSFER_LASTUPLOADEDFILE_FOLDER_KEY);
 }

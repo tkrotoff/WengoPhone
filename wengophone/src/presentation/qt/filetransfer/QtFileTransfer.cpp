@@ -104,7 +104,7 @@ void QtFileTransfer::newReceiveFileSessionCreatedEventHandlerSlot(ReceiveFileSes
 			);
 
 			if (!downloadFolder.isEmpty()) {
-				config.set(Config::FILETRANSFER_DOWNLOAD_FOLDER, std::string(downloadFolder.toUtf8().constData()));
+				config.set(Config::FILETRANSFER_DOWNLOAD_FOLDER_KEY, std::string(downloadFolder.toUtf8().constData()));
 			} else {
 				//TODO: warn the user is has set no download folder.
 				fileSession->stop();
@@ -152,11 +152,11 @@ void QtFileTransfer::createSendFileSession(IMContactSet imContactSet, const std:
 
 		SendFileSession * fileSession = _coIpManager->getFileSessionManager().createSendFileSession();
 		fileSession->addFile(file);
-	
+
 		for (IMContactSet::const_iterator it = imContactSet.begin(); it != imContactSet.end(); ++it) {
 			std::string contactId = cContactList.findContactThatOwns(*it);
 			fileSession->addContact(contactId);
-	
+
 			_qtFileTransferWidget->addSendItem(fileSession, filename, contactId, (*it).getContactId());
 		}
 		fileSession->start();
@@ -230,7 +230,7 @@ void QtFileTransfer::peerNeedsUpgradeEventHandlerSlot() {
 		"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"
 		"font-size:8pt;\"><span style=\" font-weight:600;\">A contact is trying to send you a file:"
 		"</span> but his WengoPhone must be upgraded in order to receive it. Tell him to download the latest version.</p></body></html>"));
-	
+
 
 	if (qtFileTransferUpgradeDialog.exec() == QDialog::Accepted) {
 

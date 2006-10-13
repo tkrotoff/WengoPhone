@@ -572,5 +572,5 @@ void QtPhoneCall::toggleFlipVideoImage() {
 	PhoneLine & phoneLine = dynamic_cast < PhoneLine & > (_cPhoneCall.getPhoneCall().getPhoneLine());
 	bool flip = !config.getVideoFlipEnable();
 	phoneLine.flipVideoImage(flip);
-	config.set(Config::VIDEO_ENABLE_FLIP, flip);
+	config.set(Config::VIDEO_ENABLE_FLIP_KEY, flip);
 }

@@ -152,8 +152,7 @@ void QtFileTransferWidget::addSendItem(SendFileSession * fileSession,
 
 void QtFileTransferWidget::setDownloadFolder(const QString & folder) {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
-	//config.set(Config::FILETRANSFER_DOWNLOAD_FOLDER, folder.toUtf8().constData());
-	config.set(Config::FILETRANSFER_DOWNLOAD_FOLDER, std::string(folder.toUtf8().constData()));
+	config.set(Config::FILETRANSFER_DOWNLOAD_FOLDER_KEY, std::string(folder.toUtf8().constData()));
 	QDir dir(folder);
 	_ui->pathButton->setText(dir.dirName());
 	_downloadFolder = folder;

@@ -37,6 +37,8 @@
 #include <util/Logger.h>
 #include <util/SafeDelete.h>
 
+#include <boost/regex.hpp>
+
 CommandServer * CommandServer::_commandServerInstance = NULL;
 const std::string CommandServer::_queryStatus = "1|s";
 const std::string CommandServer::_queryCall = "1|o|call/";
@@ -44,7 +46,7 @@ const std::string CommandServer::_querySms = "1|o|sms/";
 const std::string CommandServer::_queryChat = "1|o|chat/";
 const std::string CommandServer::_queryAddContact = "1|o|addc/";
 
-const std::string NICKNAME_STR = "pseudo=";
+const std::string NICKNAME_STR = "pseudo";
 const std::string SIP_STR = "sip=";
 const std::string FIRSTNAME_STR = "firstname=";
 const std::string LASTNAME_STR = "lastname=";
@@ -170,46 +172,68 @@ void CommandServer::incomingRequestEventHandler(ServerSocket & sender, const std
 		UserProfile * userProfile = _wengoPhone.getUserProfileHandler().getCurrentUserProfile();
 		if (userProfile) {
 
-			// extract the information
-			StringList l = query.split("/");
-
 			ContactInfo contactInfo;
+			boost::cmatch what;
 
-			if (l.size() == 2) {
-				String infos = String(l[1]);
-				StringList contactInfoList = infos.split("&");
-
-				for (unsigned i = 0; i < contactInfoList.size(); i++) {
-
-					String info = contactInfoList[i];
-
-					// TODO: remove name= when the new protocol will be respected
-					if (info.beginsWith("name=")) {
-						contactInfo.wengoName = info.substr(5, info.size() - 5);
-					} else if (info.beginsWith(NICKNAME_STR)) {
-						contactInfo.wengoName = info.substr(NICKNAME_STR.size(), info.size() - NICKNAME_STR.size());
-					} else if (info.beginsWith(SIP_STR)) {
-						contactInfo.sip = info.substr(SIP_STR.size(), info.size() - SIP_STR.size());
-					} else if (info.beginsWith(FIRSTNAME_STR)) {
-						contactInfo.firstname = info.substr(FIRSTNAME_STR.size(), info.size() - FIRSTNAME_STR.size());
-					} else if (info.beginsWith(LASTNAME_STR)) {
-						contactInfo.lastname = info.substr(LASTNAME_STR.size(), info.size() - LASTNAME_STR.size());
-					} else if (info.beginsWith(COUNTRY_STR)) {
-						contactInfo.country = info.substr(COUNTRY_STR.size(), info.size() - COUNTRY_STR.size());
-					} else if (info.beginsWith(CITY_STR)) {
-						contactInfo.city = info.substr(CITY_STR.size(), info.size() - CITY_STR.size());
-					} else if (info.beginsWith(STATE_STR)) {
-						contactInfo.state = info.substr(STATE_STR.size(), info.size() - STATE_STR.size());
-					} else if (info.beginsWith(GROUP_STR)) {
-						contactInfo.group = info.substr(GROUP_STR.size(), info.size() - GROUP_STR.size());
-					} else if (info.beginsWith(WDEALSERVICETITLE_STR)) {
-						contactInfo.wdealServiceTitle = info.substr(WDEALSERVICETITLE_STR.size(), info.size() - WDEALSERVICETITLE_STR.size());
-					} else if (info.beginsWith(URL_STR)) {
-						contactInfo.website = info.substr(URL_STR.size(), info.size() - URL_STR.size());
-					}
-				}
+			boost::regex expression(NICKNAME_STR);
+			if (boost::regex_match(query.c_str(), what, expression)) {
+				std::string match(what[1].first, what[1].second);
+				contactInfo.wengoName = match;
 			}
-			////
+
+			expression = SIP_STR + "(.*)";
+			if (boost::regex_match(query.c_str(), what, expression)) {
+				std::string match(what[1].first, what[1].second);
+				contactInfo.sip = match;
+			}
+
+			expression = FIRSTNAME_STR + "([^&]*)";
+			if (boost::regex_match(query.c_str(), what, expression)) {
+				std::string match(what[1].first, what[1].second);
+				contactInfo.firstname = match;
+			}
+
+			expression = LASTNAME_STR + "([^&]*)";
+			if (boost::regex_match(query.c_str(), what, expression)) {
+				std::string match(what[1].first, what[1].second);
+				contactInfo.lastname = match;
+			}
+
+			expression = COUNTRY_STR + "([^&]*)";
+			if (boost::regex_match(query.c_str(), what, expression)) {
+				std::string match(what[1].first, what[1].second);
+				contactInfo.country = match;
+			}
+
+			expression = CITY_STR + "([^&]*)";
+			if (boost::regex_match(query.c_str(), what, expression)) {
+				std::string match(what[1].first, what[1].second);
+				contactInfo.city = match;
+			}
+
+			expression = STATE_STR + "([^&]*)";
+			if (boost::regex_match(query.c_str(), what, expression)) {
+				std::string match(what[1].first, what[1].second);
+				contactInfo.state = match;
+			}
+
+			expression = GROUP_STR + "([^&]*)";
+			if (boost::regex_match(query.c_str(), what, expression)) {
+				std::string match(what[1].first, what[1].second);
+				contactInfo.group = match;
+			}
+
+			expression = WDEALSERVICETITLE_STR + "([^&]*)";
+			if (boost::regex_match(query.c_str(), what, expression)) {
+				std::string match(what[1].first, what[1].second);
+				contactInfo.wdealServiceTitle = match;
+			}
+
+			expression = URL_STR + "\"([^\"]*)";
+			if (boost::regex_match(query.c_str(), what, expression)) {
+				std::string match(what[1].first, what[1].second);
+				contactInfo.website = match;
+			}
 
 			showAddContactEvent(contactInfo);
 		}
@@ -219,17 +243,17 @@ void CommandServer::incomingRequestEventHandler(ServerSocket & sender, const std
 		Config & config = ConfigManager::getInstance().getCurrentConfig();
 
 		//"emulate" a http server. Needed for Flash sockets
-		std::string temp = "<?xml version=\"1.0\"?>\n"
+		std::string tmp = "<?xml version=\"1.0\"?>\n"
 			"<!DOCTYPE cross-domain-policy SYSTEM \"http://www.macromedia.com/xml/dtds/cross-domain-policy.dtd\">\n"
 			"<cross-domain-policy>\n"
 			"<allow-access-from domain=\"button.wdeal.com\" to-ports=\"*\" />\n"
 			"<allow-access-from domain=\"button.wengo.com\" to-ports=\"*\" />\n";
 		if (!config.getCmdServerAuthorized().empty()) {
-			temp += "<allow-access-from domain=\"" + config.getCmdServerAuthorized() + "\" to-ports=\"*\" />\n";
+			tmp += "<allow-access-from domain=\"" + config.getCmdServerAuthorized() + "\" to-ports=\"*\" />\n";
 		}
-		temp += "<allow-access-from domain=\"localhost\" to-ports=\"*\" />\n"
+		tmp += "<allow-access-from domain=\"localhost\" to-ports=\"*\" />\n"
 				"</cross-domain-policy>";
-		_serverSocket->writeToClient(connectionId, buildHttpForFlash(temp));
+		_serverSocket->writeToClient(connectionId, buildHttpForFlash(tmp));
 	}
 }
 

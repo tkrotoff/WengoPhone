@@ -575,13 +575,13 @@ void QtWengoPhone::prepareToExitApplication() {
 
 	//Save the window size
 	QSize winsize = _wengoPhoneWindow->size();
-	config.set(Config::PROFILE_WIDTH, winsize.width());
-	config.set(Config::PROFILE_HEIGHT, winsize.height());
+	config.set(Config::PROFILE_WIDTH_KEY, winsize.width());
+	config.set(Config::PROFILE_HEIGHT_KEY, winsize.height());
 
 	//Save the window position
 	QPoint winpos = _wengoPhoneWindow->pos();
-	config.set(Config::PROFILE_POSX,winpos.x());
-	config.set(Config::PROFILE_POSY,winpos.y());
+	config.set(Config::PROFILE_POSX_KEY, winpos.x());
+	config.set(Config::PROFILE_POSY_KEY, winpos.y());
 
 	QApplication::closeAllWindows();
 	QCoreApplication::processEvents();

@@ -122,10 +122,8 @@ StringList mySplit(const std::string & str, char sep) {
 	return wordList;
 }
 
-static void initVcard(vcard_t *mVcard)
-{
-	if (mVcard)
-	{
+static void initVcard(vcard_t * mVcard) {
+	if (mVcard) {
 		mVcard->gender = UNKNOWN;
 		mVcard->blocked = false;
 		mVcard->birthday.day = 1;
@@ -135,10 +133,11 @@ static void initVcard(vcard_t *mVcard)
 }
 
 static const unsigned CONFIG_UNKNOWN = 0;
-static const unsigned  CONFIG_VERSION1 = 1;
-static const unsigned  CONFIG_VERSION2 = 2;
-static const unsigned  CONFIG_VERSION3 = 3;
-static const unsigned  CONFIG_VERSION4 = 4;
+static const unsigned CONFIG_VERSION1 = 1;
+static const unsigned CONFIG_VERSION2 = 2;
+static const unsigned CONFIG_VERSION3 = 3;
+static const unsigned CONFIG_VERSION4 = 4;
+static const unsigned CONFIG_VERSION5 = 5;
 
 static const std::string USERPROFILE_FILENAME = "userprofile.xml";
 static const std::string USERCONFIG_FILENAME = "user.config";
@@ -146,6 +145,7 @@ static const std::string IMACCOUNTS_FILENAME = "imaccounts.xml";
 static const std::string CONTACTLIST_FILENAME = "contactlist.xml";
 static const std::string NEW_HISTORY_FILENAME = "history.xml";
 static const std::string OLD_HISTORY_FILENAME = "_history";
+static const std::string CONFIG_FILENAME = "config.xml";
 
 ConfigImporter::ConfigImporter(UserProfileHandler & userProfileHandler)
 	: _userProfileHandler(userProfileHandler) {
@@ -177,12 +177,13 @@ unsigned ConfigImporter::detectLastVersion() {
 		if (File::exists(ConfigPathV2 + "profiles")) {
 			//See ConfigXMLSerializer::unserialize to understand the '0'
 			//and the config.set.
-			if (config.getConfigVersion() == 0) {
+			unsigned currentVersion = config.getConfigVersion();
+			if (currentVersion == 0) {
 				config.set(Config::CONFIG_VERSION_KEY, Config::CONFIG_VERSION);
 				return CONFIG_VERSION3;
 			} else {
 				config.set(Config::CONFIG_VERSION_KEY, Config::CONFIG_VERSION);
-				return CONFIG_VERSION4;
+				return currentVersion;
 			}
 		} else if (File::exists(ConfigPathV2 + "user.config")) {
 			return CONFIG_VERSION2;
@@ -214,6 +215,10 @@ void ConfigImporter::makeImportConfig(unsigned from, unsigned to) {
 	} else if (from == CONFIG_VERSION3) {
 		if (to == CONFIG_VERSION4) {
 			importConfigFromV3toV4();
+		}
+	} else if (from == CONFIG_VERSION4) {
+		if (to == CONFIG_VERSION5) {
+			importConfigFromV4toV5();
 		}
 	}
 }
@@ -256,8 +261,7 @@ bool ConfigImporter::classicVcardParser(const string & vcardFile, void * structV
 		key = lastLine.substr(0, pos);
 		value = lastLine.substr(pos + 1, lastLine.length() - (pos + 1));
 
-		if (!value.empty())
-		{
+		if (!value.empty()) {
 			if (!key.compare("N")) {
 				StringList mList = mySplit(value, ';');
 				mVcard->lname = mList[0];
@@ -805,6 +809,29 @@ bool ConfigImporter::importConfigFromV3toV4() {
 			////
 		}
 	}
+
+	return true;
+}
+
+bool ConfigImporter::importConfigFromV4toV5() {
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	std::string configFilename = config.getConfigDir() + CONFIG_FILENAME;
+
+	//Replacing in config.xml
+	FileReader iConfigFile(configFilename);
+	iConfigFile.open();
+	String data = iConfigFile.read();
+	iConfigFile.close();
+
+	data.replace("<video.quality><int>0</int></video.quality>", "<video.quality><string>VideoQualityNormal</string></video.quality>");
+	data.replace("<video.quality><int>1</int></video.quality>", "<video.quality><string>VideoQualityGood</string></video.quality>");
+	data.replace("<video.quality><int>2</int></video.quality>", "<video.quality><string>VideoQualityVeryGood</string></video.quality>");
+	data.replace("<video.quality><int>3</int></video.quality>", "<video.quality><string>VideoQualityExcellent</string></video.quality>");
+
+	FileWriter oConfigFile(configFilename);
+	oConfigFile.write(data);
+	oConfigFile.close();
+	////
 
 	return true;
 }
