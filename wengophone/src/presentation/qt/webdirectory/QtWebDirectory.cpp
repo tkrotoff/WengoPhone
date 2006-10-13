@@ -38,6 +38,7 @@ QtWebDirectory::~QtWebDirectory() {
 }
 
 void QtWebDirectory::raise() {
+	setUrl(WsUrl::getWengoDirectoryUrl());
 	QWidget * widget = (QWidget *) getWidget();
 	widget->show();
 	widget->raise();
