@@ -239,7 +239,7 @@ void QtFileTransfer::peerNeedsUpgradeEventHandlerSlot() {
 	}
 }
 
-const QString & QtFileTransfer::getChosenFile() const {
+const QString QtFileTransfer::getChosenFile() const {
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	QString startDir = QString::fromStdString(config.getLastUploadedFileFolder());
@@ -252,3 +252,4 @@ const QString & QtFileTransfer::getChosenFile() const {
 	);
 	return filename;
 }
+

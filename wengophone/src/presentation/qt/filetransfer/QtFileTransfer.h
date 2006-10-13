@@ -73,7 +73,7 @@ public:
 	 * Open a file chooser and return the chosen one.
 	 * @return the chosen file.
 	 */
-	const QString & getChosenFile() const;
+	const QString getChosenFile() const;
 
 Q_SIGNALS:
 
