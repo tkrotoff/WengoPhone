@@ -75,7 +75,7 @@ PhApiReceiveFileSession::~PhApiReceiveFileSession(){}
 
 void PhApiReceiveFileSession::start() {
 	LOG_DEBUG("starting file transfer");
-	PhApiSFPWrapper::getInstance().receiveFile(_currentCallID, _filePath+_fileName);
+	PhApiSFPWrapper::getInstance().receiveFile(_currentCallID, File::convertPathSeparators(_filePath+_fileName));
 	LOG_DEBUG("end of transfer start");
 }
 
