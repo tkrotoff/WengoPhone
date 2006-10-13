@@ -46,7 +46,7 @@ const std::string CommandServer::_querySms = "1|o|sms/";
 const std::string CommandServer::_queryChat = "1|o|chat/";
 const std::string CommandServer::_queryAddContact = "1|o|addc/";
 
-const std::string NICKNAME_STR = "pseudo";
+const std::string NICKNAME_STR = "pseudo=";
 const std::string SIP_STR = "sip=";
 const std::string FIRSTNAME_STR = "firstname=";
 const std::string LASTNAME_STR = "lastname=";
@@ -175,62 +175,62 @@ void CommandServer::incomingRequestEventHandler(ServerSocket & sender, const std
 			ContactInfo contactInfo;
 			boost::cmatch what;
 
-			boost::regex expression(NICKNAME_STR);
-			if (boost::regex_match(query.c_str(), what, expression)) {
+			boost::regex expression(NICKNAME_STR + "([^&]*)");
+			if (boost::regex_search(query.c_str(), what, expression)) {
 				std::string match(what[1].first, what[1].second);
 				contactInfo.wengoName = match;
 			}
 
-			expression = SIP_STR + "(.*)";
-			if (boost::regex_match(query.c_str(), what, expression)) {
+			expression = SIP_STR + "([^&]*)";
+			if (boost::regex_search(query.c_str(), what, expression)) {
 				std::string match(what[1].first, what[1].second);
 				contactInfo.sip = match;
 			}
 
 			expression = FIRSTNAME_STR + "([^&]*)";
-			if (boost::regex_match(query.c_str(), what, expression)) {
+			if (boost::regex_search(query.c_str(), what, expression)) {
 				std::string match(what[1].first, what[1].second);
 				contactInfo.firstname = match;
 			}
 
 			expression = LASTNAME_STR + "([^&]*)";
-			if (boost::regex_match(query.c_str(), what, expression)) {
+			if (boost::regex_search(query.c_str(), what, expression)) {
 				std::string match(what[1].first, what[1].second);
 				contactInfo.lastname = match;
 			}
 
 			expression = COUNTRY_STR + "([^&]*)";
-			if (boost::regex_match(query.c_str(), what, expression)) {
+			if (boost::regex_search(query.c_str(), what, expression)) {
 				std::string match(what[1].first, what[1].second);
 				contactInfo.country = match;
 			}
 
 			expression = CITY_STR + "([^&]*)";
-			if (boost::regex_match(query.c_str(), what, expression)) {
+			if (boost::regex_search(query.c_str(), what, expression)) {
 				std::string match(what[1].first, what[1].second);
 				contactInfo.city = match;
 			}
 
 			expression = STATE_STR + "([^&]*)";
-			if (boost::regex_match(query.c_str(), what, expression)) {
+			if (boost::regex_search(query.c_str(), what, expression)) {
 				std::string match(what[1].first, what[1].second);
 				contactInfo.state = match;
 			}
 
 			expression = GROUP_STR + "([^&]*)";
-			if (boost::regex_match(query.c_str(), what, expression)) {
+			if (boost::regex_search(query.c_str(), what, expression)) {
 				std::string match(what[1].first, what[1].second);
 				contactInfo.group = match;
 			}
 
 			expression = WDEALSERVICETITLE_STR + "([^&]*)";
-			if (boost::regex_match(query.c_str(), what, expression)) {
+			if (boost::regex_search(query.c_str(), what, expression)) {
 				std::string match(what[1].first, what[1].second);
 				contactInfo.wdealServiceTitle = match;
 			}
 
 			expression = URL_STR + "\"([^\"]*)";
-			if (boost::regex_match(query.c_str(), what, expression)) {
+			if (boost::regex_search(query.c_str(), what, expression)) {
 				std::string match(what[1].first, what[1].second);
 				contactInfo.website = match;
 			}

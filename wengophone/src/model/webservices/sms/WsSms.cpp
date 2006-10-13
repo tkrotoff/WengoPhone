@@ -35,9 +35,9 @@ WsSms::WsSms(WengoAccount * wengoAccount, UserProfile & userProfile)
 	//Setup SMS web service
 	setHostname(config.getWengoServerHostname());
 	setGet(true);
-	setHttps(false);
+	setHttps(true);
 	setServicePath(config.getWengoSMSPath());
-	setPort(80);
+	setPort(443);
 	setWengoAuthentication(true);
 }
 
