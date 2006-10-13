@@ -124,7 +124,7 @@ void QtContactMenu::populateChatMenu(QMenu * menu, CWengoPhone & cWengoPhone) {
 			QString displayName = QString::fromUtf8(tmpContactProfile.getDisplayName().c_str());
 
 			if (tmpContactProfile.getPreferredIMContact() != NULL &&
-				tmpContactProfile.getPresenceState() != EnumPresenceState::PresenceStateOffline) {
+				tmpContactProfile.hasIM()) {
 
 				QAction * tmpAction = menu->addAction(displayName);
 				tmpAction->setData(QVariant(QString::fromStdString(*it)));
