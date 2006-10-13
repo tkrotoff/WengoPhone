@@ -22,6 +22,7 @@
 #include <PhApiSFPEvent.h>
 
 #include <util/Logger.h>
+#include <util/File.h>
 
 PhApiReceiveFileSession::PhApiReceiveFileSession(){}
 
