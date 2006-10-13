@@ -19,8 +19,9 @@
 
 #include "ConfigImporter.h"
 
-#include "ConfigManager.h"
 #include "Config.h"
+#include "ConfigManager.h"
+#include "ConfigManagerFileStorage.h"
 
 #include <model/account/wengo/WengoAccount.h>
 #include <model/contactlist/Contact.h>
@@ -831,6 +832,11 @@ bool ConfigImporter::importConfigFromV4toV5() {
 	FileWriter oConfigFile(configFilename);
 	oConfigFile.write(data);
 	oConfigFile.close();
+	////
+
+	// Reloading config
+	ConfigManagerFileStorage configManagerStorage(ConfigManager::getInstance());
+	configManagerStorage.load(config.getConfigDir());
 	////
 
 	return true;
