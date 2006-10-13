@@ -538,38 +538,51 @@ QMenu * QtContactManager::createMenu() {
 	QtContactListManager * ul = QtContactListManager::getInstance();
 
 	//Call menu
-	if (ul->hasPhoneNumber(contactId)) {
-		QMenu * callMenu = menu->addMenu(QIcon(":/pics/actions/accept-phone.png"), _trStringCall);
+	QMenu * callMenu = menu->addMenu(QIcon(":/pics/actions/accept-phone.png"), _trStringCall);
 
-		if (!ul->getMobilePhone(contactId).isEmpty()) {
-			action = callMenu->addAction( _trStringMobilePhone);
-			SAFE_CONNECT(action, SIGNAL(triggered(bool)), SLOT(startMobileCall()));
-		}
+	if (!ul->getMobilePhone(contactId).isEmpty()) {
+		action = callMenu->addAction( _trStringMobilePhone);
+		SAFE_CONNECT(action, SIGNAL(triggered(bool)), SLOT(startMobileCall()));
+	}
 
-		if (!ul->getHomePhone(contactId).isEmpty()) {
-			action = callMenu->addAction(_trStringHomePhone);
-			SAFE_CONNECT(action, SIGNAL(triggered(bool)), SLOT(startHomeCall()));
-		}
+	if (!ul->getHomePhone(contactId).isEmpty()) {
+		action = callMenu->addAction(_trStringHomePhone);
+		SAFE_CONNECT(action, SIGNAL(triggered(bool)), SLOT(startHomeCall()));
+	}
 
-		if (!ul->getWorkPhone(contactId).isEmpty()) {
-			action = callMenu->addAction(_trStringWorkPhone);
-			SAFE_CONNECT(action, SIGNAL(triggered(bool)), SLOT(startWorkCall()));
-		}
+	/*
+	if (!ul->getWorkPhone(contactId).isEmpty()) {
+		action = callMenu->addAction(_trStringWorkPhone);
+		SAFE_CONNECT(action, SIGNAL(triggered(bool)), SLOT(startWorkCall()));
+	}
+	*/
 
-		if (!ul->getWengoPhoneNumber(contactId).isEmpty()) {
-			action = callMenu->addAction(_trStringWengoPhone);
-			SAFE_CONNECT(action, SIGNAL(triggered(bool)), SLOT(startWengoCall()));
-		}
+	if (!ul->getWengoPhoneNumber(contactId).isEmpty()) {
+		action = callMenu->addAction(_trStringWengoPhone);
+		SAFE_CONNECT(action, SIGNAL(triggered(bool)), SLOT(startWengoCall()));
+	}
+
+	if (!ul->hasPhoneNumber(contactId)) {
+		callMenu->setEnabled(false);
 	}
 
 	action = menu->addAction(QIcon(":/pics/actions/chat.png"), _trStringStartChat);
 	SAFE_CONNECT(action, SIGNAL(triggered(bool)), SLOT(startChat()));
+	if (!ul->hasIM(contactId)) {
+		action->setEnabled(false);
+	}
 
 	action = menu->addAction(QIcon(":/pics/actions/send-sms-16.png"), _trStringSendSMS);
 	SAFE_CONNECT(action, SIGNAL(triggered(bool)), SLOT(startSMS()));
+	if (ul->getMobilePhone(contactId).isEmpty()) {
+		action->setEnabled(false);
+	}
 
 	action = menu->addAction(QIcon(":/pics/actions/send_file.png"), _trStringSendFile);
 	SAFE_CONNECT(action, SIGNAL(triggered(bool)), SLOT(sendFile()));
+	if (!ul->hasFileTransfer(contactId)) {
+		action->setEnabled(false);
+	}
 
 	//FIXME Desactivated for the moment due to a crash
 	//menu->addMenu(createConferenceMenu());

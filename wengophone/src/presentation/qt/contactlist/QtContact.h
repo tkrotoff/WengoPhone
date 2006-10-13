@@ -65,6 +65,8 @@ public:
 
 	bool hasVideo() const;
 
+	bool hasFileTransfer() const;
+
 	void setMouseOn(bool value) { _mouseOn = value; }
 
 	QtContactPixmap::ContactPixmap getStatus() const;

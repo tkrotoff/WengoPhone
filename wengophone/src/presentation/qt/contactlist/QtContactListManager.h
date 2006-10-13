@@ -61,6 +61,8 @@ public:
 
 	bool hasPhoneNumber(const QString & contactId) const;
 
+	bool hasFileTransfer(const QString & contactId) const;
+
 	QtContact * getContact(const QString & contactId) const;
 
 	QString getPreferredNumber(const QString & contactId) const;

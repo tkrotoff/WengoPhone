@@ -156,6 +156,14 @@ bool QtContactListManager::hasIM(const QString & contactId) const {
 	return false;
 }
 
+bool QtContactListManager::hasFileTransfer(const QString & contactId) const {
+	QMutexLocker locker(_mutex);
+	if (contains(contactId)) {
+		return _contactList[contactId]->hasFileTransfer();
+	}
+	return false;
+}
+
 bool QtContactListManager::hasCall(const QString & contactId) const {
 	QMutexLocker locker(_mutex);
 	if (contains(contactId)) {

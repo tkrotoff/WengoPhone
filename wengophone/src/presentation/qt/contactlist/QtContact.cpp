@@ -222,6 +222,10 @@ bool QtContact::hasVideo() const {
 	return _contactProfile.hasVideo();
 }
 
+bool QtContact::hasFileTransfer() const {
+	return _contactProfile.hasFileTransfer();
+}
+
 void QtContact::startCall(const QString & number) {
 	_cWengoPhone.getCUserProfileHandler().getCUserProfile()->makeCall(number.toStdString());
 }
