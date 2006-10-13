@@ -23,7 +23,7 @@
 * timeouts de transfer
 * code strengthen
 * on est limite a la taille d'un unsigned long pour la taille maxi de transfer de fichier
-* unregister doit nettoyer les structures allouées
+* unregister doit nettoyer les structures allouï¿½s
 */
 
 #include <sfp-plugin/sfp-commons.h>
@@ -225,7 +225,18 @@ static sfp_returncode_t sfp_transfer_send_file2(char * filename, unsigned int ip
 	FILE * stream = NULL;
 	unsigned int success = SUCCESS;
 
+#ifdef WIN32 /* to handle UTF-8 */
+	wchar_t filename4win[1024];
+	int sizeoffilename4win = sizeof(filename4win);
+	int sizeoffilename = strlen(filename) * sizeof(char);
+	char opts[6] = "r\0b\0\0\0";
+	
+	memset(&filename4win, 0, sizeof(filename4win));
+	UTF8ToUTF16LE((unsigned char *)filename4win, &sizeoffilename4win, (const unsigned char *)filename, &sizeoffilename);
+	if((stream = _wfopen(filename4win, (const wchar_t *)opts)) == NULL){
+#else /* WIN32 */
 	if((stream = fopen(filename, "rb")) == NULL){
+#endif /* WIN32 */
 		m_log_error("Could not open file in read mode", "sfp_transfer_send_file2");
 		return CANT_READ_FILE; // fail
 	}else{
@@ -263,7 +274,18 @@ static sfp_returncode_t sfp_transfer_receive_file2(char * filename, unsigned int
 	FILE * stream = NULL;
 	unsigned int success = SUCCESS;
 
+#ifdef WIN32 /* to handle UTF-8 */
+	wchar_t filename4win[1024];
+	int sizeoffilename4win = sizeof(filename4win);
+	int sizeoffilename = strlen(filename) * sizeof(char);
+	char opts[6] = "w\0b\0\0\0";
+	
+	memset(&filename4win, 0, sizeof(filename4win));
+	UTF8ToUTF16LE((unsigned char *)filename4win, &sizeoffilename4win, (const unsigned char *)filename, &sizeoffilename);
+	if((stream = _wfopen(filename4win, (const wchar_t *)opts)) == NULL){
+#else /* WIN32 */
 	if((stream = fopen(filename, "wb")) == NULL){
+#endif /* WIN32 */
 		m_log_error("Could not open file in write mode", "sfp_transfer_receive_file2");
 		return CANT_WRITE_FILE; // fail
 	}else{
