@@ -23,6 +23,8 @@
 
 #include <stdio.h>
 
+static int xmlLittleEndian = 1;
+
 /**
 *
 * WARNING : needs improvements
@@ -524,4 +526,107 @@ PHAPI_UTIL_EXPORTS void itostr(int value, char * buffer, const size_t sizeof_buf
 	}
 
 	free(temp);
+}
+
+PHAPI_UTIL_EXPORTS int UTF8ToUTF16LE(unsigned char* outb, int *outlen, const unsigned char* in, int *inlen) {
+	unsigned short* out = (unsigned short*) outb;
+	const unsigned char* processed = in;
+	unsigned short* outstart= out;
+	unsigned short* outend;
+	const unsigned char* inend= in+*inlen;
+	unsigned int c, d;
+	int trailing;
+	unsigned char *tmp;
+	unsigned short tmp1, tmp2;
+
+	if (in == NULL) {
+		/*
+		* initialization, add the Byte Order Mark
+		*/
+		if (*outlen >= 2) {
+			outb[0] = 0xFF;
+			outb[1] = 0xFE;
+			*outlen = 2;
+			*inlen = 0;
+#ifdef DEBUG_ENCODING
+			xmlGenericError(xmlGenericErrorContext,
+				"Added FFFE Byte Order Mark\n");
+#endif
+			return(2);
+		}
+		*outlen = 0;
+		*inlen = 0;
+		return(0);
+	}
+	outend = out + (*outlen / 2);
+	while (in < inend) {
+		d= *in++;
+		if      (d < 0x80)  { c= d; trailing= 0; }
+		else if (d < 0xC0) {
+			/* trailing byte in leading position */
+			*outlen = (out - outstart) * 2;
+			*inlen = processed - in;
+			return(-2);
+		} else if (d < 0xE0)  { c= d & 0x1F; trailing= 1; }
+		else if (d < 0xF0)  { c= d & 0x0F; trailing= 2; }
+		else if (d < 0xF8)  { c= d & 0x07; trailing= 3; }
+		else {
+			/* no chance for this in UTF-16 */
+			*outlen = (out - outstart) * 2;
+			*inlen = processed - in;
+			return(-2);
+		}
+
+		if (inend - in < trailing) {
+			break;
+		}
+
+		for ( ; trailing; trailing--) {
+			if ((in >= inend) || (((d= *in++) & 0xC0) != 0x80))
+				break;
+			c <<= 6;
+			c |= d & 0x3F;
+		}
+
+		/* assertion: c is a single UTF-4 value */
+		if (c < 0x10000) {
+			if (out >= outend)
+				break;
+			if (xmlLittleEndian) {
+				*out++ = c;
+			} else {
+				tmp = (unsigned char *) out;
+				*tmp = c ;
+				*(tmp + 1) = c >> 8 ;
+				out++;
+			}
+		}
+		else if (c < 0x110000) {
+			if (out+1 >= outend)
+				break;
+			c -= 0x10000;
+			if (xmlLittleEndian) {
+				*out++ = 0xD800 | (c >> 10);
+				*out++ = 0xDC00 | (c & 0x03FF);
+			} else {
+				tmp1 = 0xD800 | (c >> 10);
+				tmp = (unsigned char *) out;
+				*tmp = (unsigned char) tmp1;
+				*(tmp + 1) = tmp1 >> 8;
+				out++;
+
+				tmp2 = 0xDC00 | (c & 0x03FF);
+				tmp = (unsigned char *) out;
+				*tmp  = (unsigned char) tmp2;
+				*(tmp + 1) = tmp2 >> 8;
+				out++;
+			}
+		}
+		else
+			break;
+		processed = in;
+	}
+	*outlen = (out - outstart) * 2;
+	*inlen = processed - in;
+	return(0);
 }

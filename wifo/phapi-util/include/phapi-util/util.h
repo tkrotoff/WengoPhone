@@ -184,6 +184,21 @@ extern "C" {
 
 	PHAPI_UTIL_EXPORTS void itostr(int value, char * buffer, const size_t sizeof_buffer, int radix);
 
+	/**
+	 * UTF8ToUTF16LE:
+	 * @outb:  a pointer to an array of bytes to store the result
+	 * @outlen:  the length of @outb
+	 * @in:  a pointer to an array of UTF-8 chars
+	 * @inlen:  the length of @in
+	 *
+	 * Take a block of UTF-8 chars in and try to convert it to an UTF-16LE
+	 * block of chars out.
+	 *
+	 * Returns the number of byte written, or -1 by lack of space, or -2
+	 *     if the transcoding failed.
+	 */
+	PHAPI_UTIL_EXPORTS int UTF8ToUTF16LE(unsigned char* outb, int *outlen, const unsigned char* in, int *inlen);
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
