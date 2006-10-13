@@ -54,7 +54,7 @@ QtFileTransferWidget::QtFileTransferWidget(QWidget * parent)
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	if (!config.getFileTransferDownloadFolder().empty()) {
-		setDownloadFolder(QString::fromStdString(config.getFileTransferDownloadFolder()));
+		setDownloadFolder(QString::fromUtf8(config.getFileTransferDownloadFolder().c_str()));
 	}
 
 	//connect signals to slots
