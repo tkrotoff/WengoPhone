@@ -212,7 +212,7 @@ void PhoneCall::close() {
 		if (_state->getCode() == EnumPhoneCallState::PhoneCallStateIncoming) {
 			_callRejected = true;
 			_phoneLine.rejectCall(_callId);
-		} else {
+		} else if (_state->getCode() != EnumPhoneCallState::PhoneCallStateError) {
 			_phoneLine.closeCall(_callId);
 		}
 		setState(EnumPhoneCallState::PhoneCallStateClosed);

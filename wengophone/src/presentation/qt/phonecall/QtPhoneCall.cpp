@@ -32,15 +32,15 @@
 #include <presentation/qt/QtWengoPhone.h>
 #include <presentation/qt/statusbar/QtStatusBar.h>
 
+#include <control/CWengoPhone.h>
 #include <control/phonecall/CPhoneCall.h>
 #include <control/profile/CUserProfileHandler.h>
-#include <control/CWengoPhone.h>
 
-#include <model/phonecall/PhoneCall.h>
-#include <model/phonecall/ConferenceCall.h>
-#include <model/phoneline/PhoneLine.h>
-#include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
+#include <model/config/ConfigManager.h>
+#include <model/phonecall/ConferenceCall.h>
+#include <model/phonecall/PhoneCall.h>
+#include <model/phoneline/PhoneLine.h>
 
 #include <sipwrapper/CodecList.h>
 #include <sipwrapper/SipWrapper.h>
@@ -370,6 +370,7 @@ void QtPhoneCall::acceptActionTriggered(bool) {
 void QtPhoneCall::rejectActionTriggered(bool) {
 	LOG_DEBUG("phone call hangup");
 	switch (_cPhoneCall.getState()) {
+	case EnumPhoneCallState::PhoneCallStateError:
 	case EnumPhoneCallState::PhoneCallStateResumed:
 	case EnumPhoneCallState::PhoneCallStateTalking:
 	case EnumPhoneCallState::PhoneCallStateDialing:
