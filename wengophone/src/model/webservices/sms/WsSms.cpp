@@ -35,9 +35,9 @@ WsSms::WsSms(WengoAccount * wengoAccount, UserProfile & userProfile)
 	//Setup SMS web service
 	setHostname(config.getWengoServerHostname());
 	setGet(true);
-	setHttps(true);
+	setHttps(false);
 	setServicePath(config.getWengoSMSPath());
-	setPort(443);
+	setPort(80);
 	setWengoAuthentication(true);
 }
 
@@ -46,7 +46,8 @@ int WsSms::sendSMS(const std::string & phoneNumber, const std::string & message)
 	String message2 = String::encodeUrl(message);
 	message2.replace("%2e", ".", false);
 
-	setParameters("message=" + message2 + "&target=" + phoneNumber);
+	String numbers = String::encodeUrl(phoneNumber);
+	setParameters("message=" + message2 + "&target=" + numbers);
 
 	//Call the web service
 	int requestId = call(this);
