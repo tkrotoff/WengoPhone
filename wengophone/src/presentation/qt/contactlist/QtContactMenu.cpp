@@ -154,6 +154,10 @@ void QtContactMenu::setPresenceIcon(QAction * action, EnumPresenceState::Presenc
 		action->setIcon(QIcon(":/pics/status/donotdisturb.png"));
 		break;
 	case EnumPresenceState::PresenceStateUnknown:
+		action->setIcon(QIcon(":/pics/status/unknown.png"));
+		break;
+	case EnumPresenceState::PresenceStateUnavailable:
+		action->setIcon(QIcon(":/pics/status/wengo-id.png"));
 		break;
 	default:
 		LOG_FATAL("unknown presenceState=" + String::fromNumber(presenceState));
