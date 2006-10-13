@@ -189,7 +189,7 @@ void QtToolBar::searchWengoContact() {
 #if (defined OS_WINDOWS) && (defined QT_COMMERCIAL)
 	QtWebDirectory * qtWebDirectory = _qtWengoPhone.getQtWebDirectory();
 	if (qtWebDirectory) {
-		qtWebDirectory->show();
+		qtWebDirectory->raise();
 	}
 #else
 	WsUrl::showWengoSmartDirectory();
