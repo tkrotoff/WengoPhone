@@ -32,9 +32,9 @@
 QtFileTransferDownloadItem::QtFileTransferDownloadItem(QWidget * parent, ReceiveFileSession * fileSession, const QString & path)
 	: QtFileTransferItem(parent, QtFileTransferItem::Download), _receiveFileSession(fileSession) {
 
-	_filename = path + QString(QDir::separator()) + QString::fromStdString(fileSession->getFileName());
+	_filename = path + QString(QDir::separator()) + QString::fromUtf8(fileSession->getFileName().c_str());
 
-	setFilename(QString::fromStdString(fileSession->getFileName()));
+	setFilename(QString::fromUtf8(fileSession->getFileName().c_str()));
 	setContact(QString::fromStdString(_receiveFileSession->getIMContact().getContactId()));
 
 	// bind to fileSession events

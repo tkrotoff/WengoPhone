@@ -117,7 +117,7 @@ void QtFileTransferWidget::clean(bool cleanButton) {
 void QtFileTransferWidget::pathButtonClicked() {
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
-	QString startFolder = QString::fromStdString(config.getFileTransferDownloadFolder());
+	QString startFolder = QString::fromUtf8(config.getFileTransferDownloadFolder().c_str());
 	QString dirName = QFileDialog::getExistingDirectory(this, "Select a directory", startFolder);
 	if (!dirName.isEmpty()) {
 		setDownloadFolder(dirName);
@@ -140,7 +140,7 @@ void QtFileTransferWidget::addSendItem(SendFileSession * fileSession,
 	const std::string & filename, const std::string & contactId, const std::string & contact) {
 
 	QtFileTransferUploadItem * fileTransferItem = new QtFileTransferUploadItem(this, fileSession,
-			QString::fromStdString(filename), contactId, contact);
+			QString::fromUtf8(filename.c_str()), contactId, contact);
 	SAFE_CONNECT(fileTransferItem, SIGNAL(removeClicked()), SLOT(itemRemoveClicked()));
 	QListWidgetItem * item = new QListWidgetItem(/*_ui->uploadTransferListWidget*/);
 	item->setSizeHint(fileTransferItem->minimumSizeHint());
@@ -152,7 +152,8 @@ void QtFileTransferWidget::addSendItem(SendFileSession * fileSession,
 
 void QtFileTransferWidget::setDownloadFolder(const QString & folder) {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
-	config.set(Config::FILETRANSFER_DOWNLOAD_FOLDER, folder.toStdString());
+	//config.set(Config::FILETRANSFER_DOWNLOAD_FOLDER, folder.toUtf8().constData());
+	config.set(Config::FILETRANSFER_DOWNLOAD_FOLDER, std::string(folder.toUtf8().constData()));
 	QDir dir(folder);
 	_ui->pathButton->setText(dir.dirName());
 	_downloadFolder = folder;
