@@ -196,18 +196,18 @@ void QtFileTransfer::peerNeedsUpgradeEventHandler(FileSessionManager & sender) {
 
 void QtFileTransfer::needUpgradeEventHandlerSlot() {
 	QtFileTransferUpgradeDialog qtFileTransferUpgradeDialog(_qtFileTransferWidget);
-	qtFileTransferUpgradeDialog.setHeader("<html><head><meta name=\"qrichtext\" content=\"1\" />"
+	qtFileTransferUpgradeDialog.setHeader(tr("<html><head><meta name=\"qrichtext\" content=\"1\" />"
 		"</head><body style=\" white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt;"
 		"font-weight:400; font-style:normal; text-decoration:none;\"><p style=\" margin-top:0px;"
 		"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">"
 		"<span style=\" font-size:18pt; font-weight:600; color:#ffffff;\">Please upgrade<br> your"
-		"WengoPhone</span></p></body></html>");
-	qtFileTransferUpgradeDialog.setStatus("<html><head><meta name=\"qrichtext\" content=\"1\" />"
+		"WengoPhone</span></p></body></html>"));
+	qtFileTransferUpgradeDialog.setStatus(tr("<html><head><meta name=\"qrichtext\" content=\"1\" />"
 		"</head><body style=\" white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt;"
 		"font-weight:400; font-style:normal; text-decoration:none;\"><p style=\" margin-top:0px;"
 		"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"
 		"font-size:8pt;\"><span style=\" font-weight:600;\">The file cannot be received:"
-		"</span> you must upgrade your WengoPhone in order to receive it.</p></body></html>");
+		"</span> you must upgrade your WengoPhone in order to receive it.</p></body></html>"));
 
 	if (qtFileTransferUpgradeDialog.exec() == QDialog::Accepted) {
 
@@ -218,18 +218,18 @@ void QtFileTransfer::needUpgradeEventHandlerSlot() {
 
 void QtFileTransfer::peerNeedsUpgradeEventHandlerSlot() {
 	QtFileTransferUpgradeDialog qtFileTransferUpgradeDialog(_qtFileTransferWidget);
-	qtFileTransferUpgradeDialog.setHeader("<html><head><meta name=\"qrichtext\" content=\"1\" />"
+	qtFileTransferUpgradeDialog.setHeader(tr("<html><head><meta name=\"qrichtext\" content=\"1\" />"
 		"</head><body style=\" white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt;"
 		"font-weight:400; font-style:normal; text-decoration:none;\"><p style=\" margin-top:0px;"
 		"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">"
 		"<span style=\" font-size:18pt; font-weight:600; color:#ffffff;\">Tell your contact<br> to"
-		"upgrade<br> his WengoPhone</span></p></body></html>");
-	qtFileTransferUpgradeDialog.setStatus("<html><head><meta name=\"qrichtext\" content=\"1\" />"
+		"upgrade<br> his WengoPhone</span></p></body></html>"));
+	qtFileTransferUpgradeDialog.setStatus(tr("<html><head><meta name=\"qrichtext\" content=\"1\" />"
 		"</head><body style=\" white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt;"
 		"font-weight:400; font-style:normal; text-decoration:none;\"><p style=\" margin-top:0px;"
 		"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"
 		"font-size:8pt;\"><span style=\" font-weight:600;\">A contact is trying to send you a file:"
-		"</span> but his WengoPhone must be upgraded in order to receive it. Tell him to download the latest version.</p></body></html>");
+		"</span> but his WengoPhone must be upgraded in order to receive it. Tell him to download the latest version.</p></body></html>"));
 	
 
 	if (qtFileTransferUpgradeDialog.exec() == QDialog::Accepted) {
