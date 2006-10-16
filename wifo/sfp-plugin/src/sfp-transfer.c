@@ -92,6 +92,7 @@ static sfp_returncode_t sfp_connect(sfp_connection_t * connection, struct sockad
 static int sfp_get_http_req(int fd, char *buff, int size);
 static int sfp_get_sid_from_http_req(char *query, int size, char * buff, int size_of_buff);
 static void sfp_get_proxy_auth_type(sfp_session_info_t * session, long * type);
+static int sfp_send_http_req_200ok(SOCKET sckt);
 // -----
 
 // ----- PRIVATE FUNCTION DEFINITION -----
@@ -802,11 +803,11 @@ static sfp_returncode_t sfp_transfer_receive_passive(FILE * stream, SOCKET sckt,
 		return CANT_LISTEN_ON_SOCKET; // fail
 	}
 
-	// use select to do a timeout in order not to stay blocked if peer cannot receive file
+	// wait for a connection (wait on read to receive the HTTP GET request)
 	FD_ZERO(&sckts);
 	FD_SET(sckt, &sckts);
 	max_sckt = (int)sckt + 1;
-	if(select(max_sckt, NULL, &sckts, NULL, &timeout) <= 0){
+	if(select(max_sckt, &sckts, NULL, NULL, &timeout) <= 0){
 		// no connection received
 		FD_CLR(sckt, &sckts);
 		m_log_error("Connection timed out", "sfp_transfer_receive_passive");
@@ -818,7 +819,8 @@ static sfp_returncode_t sfp_transfer_receive_passive(FILE * stream, SOCKET sckt,
 		return CONNECTION_TIMED_OUT; // fail
 	}
 	FD_CLR(sckt, &sckts);
-
+	
+	// accept the connection
 	tmp = accept(sckt, (struct sockaddr *)&address, &addrlen);
 	if(tmp < 0){
 		m_log_error("Accept failed", "sfp_transfer_receive_passive");
@@ -843,6 +845,34 @@ static sfp_returncode_t sfp_transfer_receive_passive(FILE * stream, SOCKET sckt,
 		return CANT_ACCEPT_CONNECTION; // fail
 	}
 
+	// answer the HTTP GET request by a HTTP 200 OK
+	if(sfp_send_http_req_200ok(tmp) != SUCCESS) {
+		m_log_error("Cannot send HTTP 200 OK", "sfp_transfer_receive_passive");
+		return CANT_ACCEPT_CONNECTION; // fail
+	}
+
+	// use select to do a timeout in order not to stay blocked if peer cannot send file
+	/*FD_ZERO(&sckts);
+	FD_SET(sckt, &sckts);
+	max_sckt = (int)sckt + 1;
+	if(select(max_sckt, NULL, &sckts, NULL, &timeout) <= 0){
+		// no connection received
+		FD_CLR(sckt, &sckts);
+		m_log_error("Connection timed out", "sfp_transfer_receive_passive");
+		return CONNECTION_TIMED_OUT; // fail
+	}
+	if(FD_ISSET(sckt, &sckts) == 0){
+		FD_CLR(sckt, &sckts);
+		m_log_error("Connection timed out", "sfp_transfer_receive_passive");
+		return CONNECTION_TIMED_OUT; // fail
+	}
+	FD_CLR(sckt, &sckts);
+
+	tmp = accept(sckt, (struct sockaddr *)&address, &addrlen);
+	if(tmp < 0){
+		m_log_error("Accept failed", "sfp_transfer_receive_passive");
+		return CANT_ACCEPT_CONNECTION; // fail
+	}*/
 
 	memset(buffer, 0, sizeof(buffer));
 	while((received = recv(tmp, buffer, READ_WRITE_BUFFER_SIZE, 0)) > 0){
@@ -1123,7 +1153,7 @@ static sfp_returncode_t sfp_connect(sfp_connection_t * connection, struct sockad
 		// connection
 		while((res_connect = connect(connection->sckt, (struct sockaddr *)address, sizeof(*address))) < 0 && retries-- > 0){
 			sprintf(message, "Waiting for %d ms", wait_time);
-			m_log(message, "sfp_transfer_send_active");
+			m_log(message, "sfp_connect");
 			if(session->isCancelled(session) || session->isCancelledByPeer(session)){
 				break;
 			}
@@ -1131,7 +1161,7 @@ static sfp_returncode_t sfp_connect(sfp_connection_t * connection, struct sockad
 			wait_time = wait_time * 2;
 		}
 		if(res_connect < 0){
-			m_log_error("Could not connect to peer", "sfp_transfer_send_active");
+			m_log_error("Could not connect to peer", "sfp_connect");
 			return CANT_CONNECT; // fail
 		}
 
@@ -1156,7 +1186,7 @@ static sfp_returncode_t sfp_connect(sfp_connection_t * connection, struct sockad
 				}
 			}else{
 				FD_CLR(connection->sckt, &sckts);
-				m_log_error("Connection timed out", "sfp_transfer_send_active");
+				m_log_error("Connection timed out", "sfp_connect");
 				return CONNECTION_TIMED_OUT; // fail
 			}
 		}
@@ -1287,5 +1317,43 @@ static void sfp_get_proxy_auth_type(sfp_session_info_t * session, long * type)
 		
 		// free the Curl tmp handle
 		curl_easy_cleanup(curl_tmp);
+}
+
+static int sfp_send_http_req_200ok(SOCKET sckt) {
+	const char * query = "HTTP/1.0 200 OK\r\n\r\n";
+
+	unsigned int sent = 0;
+	int tmp_sent = 0;
+	fd_set sckts;
+	struct timeval timeout = {SFP_TIMEOUT_SEC, 0};
+	int max_sckt = -1;
+
+	FD_ZERO(&sckts);
+	FD_SET(sckt, &sckts);
+	max_sckt = sckt+1;
+	timeout.tv_sec = SFP_TIMEOUT_SEC;
+	timeout.tv_usec = 0;
+
+	// send
+	while(sent < strlen(query)){
+		FD_ZERO(&sckts);
+		FD_SET(sckt, &sckts);
+		max_sckt = sckt+1;
+		timeout.tv_sec = SFP_TIMEOUT_SEC;
+		timeout.tv_usec = 0;
+		if(select(max_sckt, NULL, &sckts, NULL, &timeout) > 0){
+			if((tmp_sent = send(sckt, query, strlen(query)-sent, MSG_NOSIGNAL)) >= 0){
+				sent += tmp_sent;
+			} else {
+				return FAILURE;
+			}
+		}else{
+			FD_CLR(sckt, &sckts);
+			m_log_error("Connection timed out", "sfp_send_http_req_200ok");
+			return CONNECTION_TIMED_OUT; // fail
+		}
+	}
+
+	return SUCCESS;
 }
 /* </julien> */
