@@ -27,8 +27,9 @@
 #include <filesessionmanager/ReceiveFileSession.h>
 #include <filesessionmanager/SendFileSession.h>
 
-#include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
+#include <model/config/ConfigManager.h>
+#include <model/profile/AvatarList.h>
 
 #include <util/Logger.h>
 #include <util/SafeDelete.h>
@@ -49,7 +50,7 @@ QtFileTransferWidget::QtFileTransferWidget(QWidget * parent)
 	////
 
 #ifdef OS_LINUX
-	setWindowIcon(QIcon(QPixmap(":/pics/avatar_default.png")));
+	setWindowIcon(QIcon(QPixmap(QString::fromStdString(AvatarList::getInstance().getDefaultAvatar().getFullPath()))));
 #endif
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
