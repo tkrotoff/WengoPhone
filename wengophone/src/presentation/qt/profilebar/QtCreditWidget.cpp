@@ -23,9 +23,11 @@
 
 #include <presentation/qt/config/QtWengoConfigDialog.h>
 
-#include <control/CWengoPhone.h>
-
+#include <model/profile/UserProfile.h>
+#include <model/phoneline/IPhoneLine.h>
 #include <model/webservices/url/WsUrl.h>
+
+#include <control/CWengoPhone.h>
 
 #include <qtutil/LanguageChangeEventFilter.h>
 #include <qtutil/SafeConnect.h>
@@ -34,9 +36,9 @@
 
 #include <QtGui/QtGui>
 
-QtCreditWidget::QtCreditWidget(CWengoPhone & cWengoPhone, QWidget * parent)
+QtCreditWidget::QtCreditWidget(CWengoPhone & cWengoPhone, UserProfile & userProfile, QWidget * parent)
 	: QObjectThreadSafe(NULL),
-	_cWengoPhone(cWengoPhone) {
+	_cWengoPhone(cWengoPhone), _userProfile(userProfile) {
 
 	typedef PostEvent0<void ()> MyPostEvent;
 	MyPostEvent * event = new MyPostEvent(boost::bind(&QtCreditWidget::initThreadSafe, this));
@@ -61,6 +63,9 @@ void QtCreditWidget::initThreadSafe() {
 
 	//buyCreditsButton
 	SAFE_CONNECT(_ui->buyCreditsButton, SIGNAL(clicked()), SLOT(buyCreditsClicked()));
+
+	//voiceMailButton
+	SAFE_CONNECT(_ui->voiceMailButton, SIGNAL(clicked()), SLOT(voiceMailClicked()));
 
 	LANGUAGE_CHANGE(_creditWidget);
 }
@@ -112,4 +117,12 @@ void QtCreditWidget::landlineNumberClicked() {
 void QtCreditWidget::languageChanged() {
 	_ui->retranslateUi(_creditWidget);
 	updatePresentationThreadSafe();
+}
+
+void QtCreditWidget::voiceMailClicked() {
+	IPhoneLine * phoneLine = _userProfile.getActivePhoneLine();
+	if (phoneLine) {
+		phoneLine->makeCall("123");
+	}
+
 }

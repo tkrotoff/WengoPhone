@@ -25,6 +25,7 @@
 #include <QtCore/QString>
 
 class CWengoPhone;
+class UserProfile;
 
 class QWidget;
 namespace Ui { class CreditWidget; }
@@ -40,7 +41,7 @@ class QtCreditWidget : public QObjectThreadSafe {
 	Q_OBJECT
 public:
 
-	QtCreditWidget(CWengoPhone & cWengoPhone, QWidget * parent);
+	QtCreditWidget(CWengoPhone & cWengoPhone, UserProfile & userProfile, QWidget * parent);
 
 	virtual ~QtCreditWidget();
 
@@ -60,13 +61,11 @@ private Q_SLOTS:
 
 	void landlineNumberClicked();
 
+	void voiceMailClicked();
+
 	void languageChanged();
 
 private:
-
-	QString _callForwardMode;
-
-	QString _landlineNumber;
 
 	void initThreadSafe();
 
@@ -74,7 +73,13 @@ private:
 
 	CWengoPhone & _cWengoPhone;
 
+	UserProfile & _userProfile;
+
 	QWidget * _creditWidget;
+
+	QString _callForwardMode;
+
+	QString _landlineNumber;
 
 	Ui::CreditWidget * _ui;
 };

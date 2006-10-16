@@ -157,7 +157,7 @@ QtProfileBar::QtProfileBar(CWengoPhone & cWengoPhone, CUserProfile & cUserProfil
 	_eventWidget = new QtEventWidget(_cWengoPhone, _cUserProfile, this);
 	//_eventWidget->getWidget()->setVisible(false);
 
-	_creditWidget = new QtCreditWidget(_cWengoPhone, this);
+	_creditWidget = new QtCreditWidget(_cWengoPhone, _cUserProfile.getUserProfile(), this);
 
 	_cUserProfile.getUserProfile().wsInfoCreatedEvent +=
 		boost::bind(&QtProfileBar::wsInfoCreatedEventHandler, this, _1, _2);
