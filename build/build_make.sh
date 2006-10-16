@@ -44,19 +44,19 @@ case $1 in
 	;;
 	final)
 		shift
-		OPTIONS="${OPTIONS} -DCMAKE_BUILD_TYPE=Release"
+		OPTIONS="${OPTIONS} -DCMAKE_BUILD_TYPE=Release -DCMAKE_VERBOSE_MAKEFILE=0"
 		configure ${OPTIONS} "$@"
 		compile
 	;;
 	release)
 		shift
-		OPTIONS="${OPTIONS} -DCMAKE_BUILD_TYPE=Release"
+		OPTIONS="${OPTIONS} -DCMAKE_BUILD_TYPE=Release -DCMAKE_VERBOSE_MAKEFILE=0"
 		configure ${OPTIONS} "$@"
 		compile
 	;;
 	debug)
 		shift
-		OPTIONS="${OPTIONS} -DCMAKE_BUILD_TYPE=Debug"
+		OPTIONS="${OPTIONS} -DCMAKE_BUILD_TYPE=Debug -DCMAKE_VERBOSE_MAKEFILE=0"
 		configure ${OPTIONS} "$@"
 		compile
 	;;

@@ -26,8 +26,6 @@ subdirs(
   netlib
   ortp
   phapi-util
-  phapi/amrnb
-  phapi/amrwb
   phapi/fidlib
   phapi/gsm
   phapi/ilbc

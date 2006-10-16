@@ -95,6 +95,28 @@ set(phapi_SRCS
 # phapi plugins
 set(phapi_amr_plugin_SRCS
   phcodec-amr-wrapper.c
+  amrnb/interf_dec.c
+  amrnb/interf_enc.c
+  amrnb/sp_dec.c
+  amrnb/sp_enc.c
+  amrwb/dec_acelp.c
+  amrwb/dec_dtx.c
+  amrwb/dec_gain.c
+  amrwb/dec_if.c
+  amrwb/dec_lpc.c
+  amrwb/dec_main.c
+  amrwb/dec_rom.c
+  amrwb/dec_util.c
+  amrwb/enc_acelp.c
+  amrwb/enc_dtx.c
+  amrwb/enc_gain.c
+  amrwb/enc_if.c
+  amrwb/enc_lpc.c
+  amrwb/enc_main.c
+  amrwb/enc_rom.c
+  amrwb/enc_util.c
+  amrwb/if_rom.c
+
 )
 
 set(phapi_speex_plugin_SRCS
@@ -406,9 +428,13 @@ set_target_properties(
 ### phapi plugins
 
 # amr
+include_directories(
+  amrwb
+  ambnb
+)
 macro_add_plugin(phamrplugin ${phapi_amr_plugin_SRCS})
 macro_add_compile_flags(phamrplugin ${PHAPI_OPTIMIZATION_FLAGS})
-target_link_libraries(phamrplugin amrwb amrnb)
+target_link_libraries(phamrplugin)
 
 # speex
 #find_package(Speex REQUIRED)
