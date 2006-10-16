@@ -107,9 +107,6 @@ typedef struct _ca_dev {
 	char *convertedInputBuffer; 
 	UInt32 convertedInputCount;
 	
-	char *recordBuffer;
-	unsigned recordBufferCount;
-	
 	unsigned sumDataSize;
 } ca_dev;
 
@@ -383,20 +380,17 @@ static OSStatus input_proc(AudioDeviceID device,
 		decodedFrameSize *= 2;
 	}
 
-	cadev->recordBuffer = inputData->mBuffers[0].mData;
-	cadev->recordBufferCount = inputData->mBuffers[0].mDataByteSize;
-	
 	DBG_DYNA_AUDIO_DRV("**CoreAudio: available input data: %d\n",
-		  inputData->mBuffers[0].mDataByteSize);
+		inputData->mBuffers[0].mDataByteSize);
 
 	DBG_DYNA_AUDIO_DRV("**CoreAudio: phapi framesize:%d, input converter buffer size: %d\n",
 		decodedFrameSize, cadev->inputConverterBufferSize);
 	
 	memcpy(cadev->tmpInputBuffer + cadev->tmpInputCount, 
-		cadev->recordBuffer, cadev->recordBufferCount);
-	cadev->tmpInputCount += cadev->recordBufferCount;
+		inputData->mBuffers[0].mData, inputData->mBuffers[0].mDataByteSize);
+	cadev->tmpInputCount += inputData->mBuffers[0].mDataByteSize;
 	
-	if (cadev->tmpInputCount >= cadev->inputConverterBufferSize) {
+	while (cadev->tmpInputCount >= cadev->inputConverterBufferSize) {
 		cadev->convertedInputCount = decodedFrameSize;
 		unsigned savedtmpInputCount = cadev->tmpInputCount;
 		cadev->currentInputBuffer = cadev->tmpInputBuffer;
