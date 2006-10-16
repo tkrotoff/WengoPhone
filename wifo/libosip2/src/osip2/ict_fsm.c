@@ -444,6 +444,7 @@ ict_retransmit_ack (osip_transaction_t * ict, osip_event_t * evt)
 			   evt->sip);
 
   osip_message_free (evt->sip);
+  evt->sip = 0;
 
   i = osip->cb_send_message (ict, ict->ack, ict->ict_context->destination,
 			     ict->ict_context->port, ict->out_socket);
