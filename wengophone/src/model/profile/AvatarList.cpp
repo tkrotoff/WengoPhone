@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2006  Wengo
+ * Copyright (C) 2004-2005  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,22 +17,25 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef OWSAFEDELETE_H
-#define OWSAFEDELETE_H
+#include "AvatarList.h"
 
-#ifndef NULL
-#define NULL (void *) (0)
-#endif
+#include <model/config/Config.h>
+#include <model/config/ConfigManager.h>
 
-/**
- * Deletes a valid pointer and sets it to NULL.
- *
- * @author Philippe Bernery
- */
-#define OWSAFE_DELETE(p) \
-if (p) { \
-	delete (p); \
-	(p) = NULL; \
+#include <util/File.h>
+#include <util/Path.h>
+
+AvatarList::AvatarList() {
 }
 
-#endif	//OWSAFEDELETE_H
+AvatarList::~AvatarList() {
+}
+
+Avatar AvatarList::getDefaultAvatar() const {
+	return Avatar(getAvatarPath() + "default-avatar.png");
+}
+
+std::string AvatarList::getAvatarPath() const {
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	return File::convertPathSeparators(config.getResourcesDir() + "pics/avatars/");
+}

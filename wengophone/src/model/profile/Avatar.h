@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2006  Wengo
+ * Copyright (C) 2004-2005  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,22 +17,43 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef OWSAFEDELETE_H
-#define OWSAFEDELETE_H
+#ifndef OWAVATAR_H
+#define OWAVATAR_H
 
-#ifndef NULL
-#define NULL (void *) (0)
-#endif
+#include <string>
 
 /**
- * Deletes a valid pointer and sets it to NULL.
+ * Represents an Avatar.
  *
  * @author Philippe Bernery
  */
-#define OWSAFE_DELETE(p) \
-if (p) { \
-	delete (p); \
-	(p) = NULL; \
-}
+class Avatar {
+public:
 
-#endif	//OWSAFEDELETE_H
+	/**
+	 * @param fullpath Fullpath to the avatar file.
+	 */
+	Avatar(std::string fullpath);
+
+	Avatar(const Avatar & avatar);
+
+	~Avatar();
+
+	/**
+	 * @return the name of the Avatar. Usually the last part
+	 * of the path to the Avatar.
+	 */
+	std::string getName() const;
+
+	/**
+	 * @return the full path to the Avatar.
+	 */
+	std::string getFullPath() const;
+
+protected:
+
+	std::string _fullpath;
+
+};
+
+#endif //OWAVATAR_H

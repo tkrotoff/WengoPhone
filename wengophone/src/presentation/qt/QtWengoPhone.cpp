@@ -69,6 +69,7 @@
 #include <model/phonecall/SipAddress.h>
 #include <model/phonecall/ConferenceCall.h>
 #include <model/phoneline/IPhoneLine.h>
+#include <model/profile/AvatarList.h>
 #include <model/profile/UserProfile.h>
 
 #include <imwrapper/EnumPresenceState.h>
@@ -137,7 +138,7 @@ void QtWengoPhone::initThreadSafe() {
 	_ui->setupUi(_wengoPhoneWindow);
 
 #ifdef OS_LINUX
-	_wengoPhoneWindow->setWindowIcon(QIcon(QPixmap(":/pics/avatar_default.png")));
+	_wengoPhoneWindow->setWindowIcon(QIcon(QPixmap(QString::fromStdString(AvatarList::getInstance().getDefaultAvatar().getFullPath()))));
 #endif
 
 	//Translation

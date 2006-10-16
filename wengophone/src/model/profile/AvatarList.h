@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2006  Wengo
+ * Copyright (C) 2004-2005  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,22 +17,40 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef OWSAFEDELETE_H
-#define OWSAFEDELETE_H
+#ifndef OWAVATARLIST_H
+#define OWAVATARLIST_H
 
-#ifndef NULL
-#define NULL (void *) (0)
-#endif
+#include <util/Singleton.h>
+
+#include "Avatar.h"
 
 /**
- * Deletes a valid pointer and sets it to NULL.
- *
- * @author Philippe Bernery
+ * Provides service to get the list of avatar available in $RESOURCES_DIR/pics/avatars
  */
-#define OWSAFE_DELETE(p) \
-if (p) { \
-	delete (p); \
-	(p) = NULL; \
-}
+class AvatarList : public Singleton<AvatarList> {
+	friend class Singleton<AvatarList>;
+public:
 
-#endif	//OWSAFEDELETE_H
+	/**
+	 * Get the Default Avatar.
+	 *
+	 * Thread-safety: reentrant.
+	 */
+	Avatar getDefaultAvatar() const;
+
+private:
+
+	AvatarList();
+
+	~AvatarList();
+
+	/**
+	 * Get the path to the Avatars.
+	 *
+	 * Thread-safety: reentrant.
+	 */
+	std::string getAvatarPath() const;
+
+};
+
+#endif //OWAVATARLIST_H

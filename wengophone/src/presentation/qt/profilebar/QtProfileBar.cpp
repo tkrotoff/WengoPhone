@@ -33,8 +33,9 @@
 #include <control/profile/CUserProfileHandler.h>
 
 #include <model/account/wengo/WengoAccount.h>
-#include <model/profile/UserProfile.h>
 #include <model/presence/PresenceHandler.h>
+#include <model/profile/AvatarList.h>
+#include <model/profile/UserProfile.h>
 
 #include <imwrapper/IMAccount.h>
 
@@ -48,14 +49,6 @@ QtProfileBar::QtProfileBar(CWengoPhone & cWengoPhone, CUserProfile & cUserProfil
 	_cUserProfile(cUserProfile),
 	_cWengoPhone(cWengoPhone),
 	_connectHandler(connectHandler) {
-
-	//Sets a default avatar for the UserProfile if there is no avatar yet
-	UserProfile & userProfile = _cUserProfile.getUserProfile();
-	std::string data = userProfile.getIcon().getData();
-	if (data.empty()) {
-		QtProfileDetails::setProfileAvatarFileName(userProfile, ":/pics/avatar_default.png");
-	}
-	///
 
 	_isOpen = false;
 	_nickNameWidgetVisible = false;

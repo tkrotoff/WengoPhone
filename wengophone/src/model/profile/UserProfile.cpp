@@ -31,6 +31,7 @@
 #include <model/phoneline/PhoneLine.h>
 #include <model/phoneline/PhoneLineState.h>
 #include <model/phoneline/IPhoneLine.h>
+#include <model/profile/AvatarList.h>
 #include <model/history/History.h>
 #include <model/webservices/sms/WsSms.h>
 #include <model/webservices/softupdate/WsSoftUpdate.h>
@@ -77,6 +78,11 @@ UserProfile::UserProfile()
 	_wengoAccountMustConnectAfterInit = false;
 	_wenboxPlugin = NULL;
 	_historyLoaded = false;
+
+	// Settings Avatar to default
+	Avatar avatar = AvatarList::getInstance().getDefaultAvatar();
+	_icon = OWPicture::pictureFromFile(avatar.getFullPath());
+	////
 
 	_history = new History(*this);
 	_history->mementoUpdatedEvent += boost::bind(&UserProfile::historyChangedEventHandler, this, _1, _2);

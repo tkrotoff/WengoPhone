@@ -35,9 +35,10 @@
 #include <presentation/qt/profile/QtProfileDetails.h>
 #include <presentation/qt/filetransfer/QtFileTransfer.h>
 
-#include <model/contactlist/ContactProfile.h>
-#include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
+#include <model/config/ConfigManager.h>
+#include <model/contactlist/ContactProfile.h>
+#include <model/profile/AvatarList.h>
 
 #include <control/CWengoPhone.h>
 #include <control/profile/CUserProfile.h>
@@ -96,7 +97,7 @@ QtChatWindow::QtChatWindow(QWidget * parent, CChatHandler & cChatHandler, IMChat
 	setWindowTitle("WengoChat");
 
 #ifdef OS_LINUX
-	setWindowIcon(QIcon(QPixmap(":/pics/avatar_default.png")));
+	setWindowIcon(QIcon(QPixmap(QString::fromStdString(AvatarList::getInstance().getDefaultAvatar().getFullPath()))));
 #endif
 
 	QtEmoticonsManager::getInstance();

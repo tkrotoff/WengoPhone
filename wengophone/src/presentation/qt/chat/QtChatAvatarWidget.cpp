@@ -21,6 +21,8 @@
 
 #include <QtGui/QtGui>
 
+#include <model/profile/AvatarList.h>
+
 #include <util/Logger.h>
 
 QtChatAvatarWidget::QtChatAvatarWidget(QWidget * parent, const QString & id,
@@ -43,7 +45,7 @@ void QtChatAvatarWidget::setupPixmap(QPixmap pixmap) {
 
 	//TODO:: resize fond_avatar.png
 	QPixmap background = QPixmap(":/pics/avatar_background.png");
-	QPixmap defaultAvatar(":/pics/avatar_default.png");
+	QPixmap defaultAvatar(QString::fromStdString(AvatarList::getInstance().getDefaultAvatar().getFullPath()));
 	QPainter painter(&background);
 
 	if (!pixmap.isNull()) {
