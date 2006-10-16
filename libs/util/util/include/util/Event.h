@@ -174,16 +174,17 @@ private:
 	 */
 	template<typename Slot>
 	bool alreadyConnected(const Slot & slot) {
-		for (typename SlotList::iterator it = _slotList.begin(); it != _slotList.end(); it++) {
+		for (typename SlotList::iterator it = _slotList.begin(); it != _slotList.end();) {
 			SlotConnection sc = *it;
 			if (sc.slot == slot) {
 				if (sc.connection.connected()) {
 					return true;
 				} else {
 					typename SlotList::iterator it2 = it;
-					it++;
-					_slotList.erase(it2);
+					it = _slotList.erase(it2);
 				}
+			} else {
+				it++;
 			}
 		}
 		return false;

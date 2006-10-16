@@ -107,11 +107,12 @@ void Contact::copy(const ContactProfile & contactProfile) {
 
 	// Removes not present IMContacts
 	for (IMContactSet::const_iterator it = _imContactSet.begin();
-		it != _imContactSet.end();
-		++it) {
+		it != _imContactSet.end();) {
 		if (!contactProfile.hasIMContact(*it)) {
 			IMContactSet::const_iterator curIt = it++;
 			_contactList.removeIMContact(*this, *curIt);
+		} else {
+			it++;
 		}
 	}
 	////
@@ -184,7 +185,7 @@ const IMContact * Contact::getFirstValidIMContact(const IMAccount & imAccount) c
 	for (IMContactSet::const_iterator it = _imContactSet.begin();
 		it != _imContactSet.end();
 		++it) {
-		if ((*it).getIMAccount() 
+		if ((*it).getIMAccount()
 			&& ((*(*it).getIMAccount()) == imAccount)
 			&& (((*it).getPresenceState() != EnumPresenceState::PresenceStateUnknown)
 				|| ((*it).getPresenceState() != EnumPresenceState::PresenceStateOffline))) {
@@ -193,7 +194,7 @@ const IMContact * Contact::getFirstValidIMContact(const IMAccount & imAccount) c
 		}
 	}
 
-	return result;	
+	return result;
 }
 
 void Contact::imContactChangedEventHandler(IMContact & sender) {
