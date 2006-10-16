@@ -180,6 +180,7 @@ nist_rcv_request (osip_transaction_t * nist, osip_event_t * evt)
     {
       /* delete retransmission */
       osip_message_free (evt->sip);
+      evt->sip = 0;
 
       __osip_message_callback (OSIP_NIST_REQUEST_RECEIVED_AGAIN, nist,
 			       nist->orig_request);

@@ -206,6 +206,7 @@ ist_rcv_invite (osip_transaction_t * ist, osip_event_t * evt)
     {
       /* delete retransmission */
       osip_message_free (evt->sip);
+      evt->sip = 0;
 
       __osip_message_callback (OSIP_IST_INVITE_RECEIVED_AGAIN, ist,
 			       ist->orig_request);
