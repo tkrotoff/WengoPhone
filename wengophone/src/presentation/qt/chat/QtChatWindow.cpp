@@ -323,7 +323,7 @@ void QtChatWindow::typingStateChangedThreadSafe(const IMChatSession * sender, co
 			}
 		}
 	}
-	delete state;
+	OWSAFE_DELETE(state);
 }
 
 void QtChatWindow::imContactChangedEventHandler(IMContact & sender) {

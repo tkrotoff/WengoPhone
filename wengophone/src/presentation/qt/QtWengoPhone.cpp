@@ -745,7 +745,7 @@ void QtWengoPhone::showAddContact(ContactInfo contactInfo) {
 
 		//FIXME to remove when wdeal will be able to handle SIP presence
 		if (contactInfo.group == "WDeal") {
-			qtProfileDetails.setHomePhone(QString::fromStdString(contactInfo.wengoName));
+			qtProfileDetails.setHomePhone(QString::fromStdString(contactInfo.sip));
 		} else {
 			qtProfileDetails.setWengoName(QString::fromStdString(contactInfo.wengoName));
 		}
