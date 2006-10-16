@@ -88,7 +88,7 @@ public:
 	unsigned size() const {
 		return _contactList.size();
 	}
-	
+
 	/**
 	 * @return a list containing all mobile phone number
 	 */
@@ -109,9 +109,9 @@ public:
 	 * @param contactGroup group to compare
 	 * @return true if equal
 	 */
-	bool operator == (const ContactGroup & contactGroup) const;
+	bool operator==(const ContactGroup & contactGroup) const;
 
-	bool operator < (const ContactGroup & contactGroup) const;
+	bool operator<(const ContactGroup & contactGroup) const;
 
 	std::string serialize();
 

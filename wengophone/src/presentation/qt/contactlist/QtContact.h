@@ -57,6 +57,8 @@ public:
 
 	QString getUserName() const;
 
+	QString getGroupName() const;
+
 	bool hasIM() const;
 
 	bool hasCall() const;

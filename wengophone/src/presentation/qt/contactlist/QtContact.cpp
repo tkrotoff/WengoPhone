@@ -101,6 +101,12 @@ QString QtContact::getUserName() const {
 	return QString::fromUtf8(_contactProfile.getDisplayName().c_str());
 }
 
+QString QtContact::getGroupName() const {
+	std::string groupId = _contactProfile.getGroupId();
+	std::string groupName = _cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCContactList().getContactGroupName(groupId);
+	return QString::fromUtf8(groupName.c_str());
+}
+
 QtContactPixmap::ContactPixmap QtContact::getStatus() const {
 	QtContactPixmap::ContactPixmap status;
 
@@ -125,6 +131,9 @@ QtContactPixmap::ContactPixmap QtContact::getStatus() const {
 		break;
 	case EnumPresenceState::PresenceStateUnavailable:
 		status = QtContactPixmap::ContactNoStatus;
+		if (getGroupName() == "WDeal") {
+			status = QtContactPixmap::ContactWDeal;
+		}
 		break;
 	default:
 		LOG_FATAL("unknown state=" + String::fromNumber(_contactProfile.getPresenceState()));

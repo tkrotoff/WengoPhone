@@ -43,7 +43,8 @@ public:
 		ContactCall,
 		ContactVideo,
 		ContactGroupOpen,
-		ContactGroupClose
+		ContactGroupClose,
+		ContactWDeal
 	};
 
 	static QtContactPixmap * getInstance();

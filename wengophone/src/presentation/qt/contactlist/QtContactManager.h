@@ -40,7 +40,7 @@ class QSize;
 class QAction;
 
 /**
- * Qt Presentation manager for the ContactList
+ * Qt Presentation manager for the ContactList.
  *
  * @author Philippe Bernery
  */
@@ -87,8 +87,6 @@ public Q_SLOTS:
 
 private Q_SLOTS:
 
-	void closeUserInfo();
-
 	void defaultAction(QTreeWidgetItem * item);
 
 	void deleteContact();
@@ -99,7 +97,15 @@ private Q_SLOTS:
 
 	void itemClicked(QTreeWidgetItem * item, int column);
 
-	void openUserInfo(QTreeWidgetItem * item);
+	/**
+	 * Opens the contact panel inside the contact list.
+	 */
+	void openContactInfo(QTreeWidgetItem * item);
+
+	/**
+	 * Closes the contact panel inside the contact list.
+	 */
+	void closeContactInfo();
 
 	void redrawContacts();
 

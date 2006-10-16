@@ -85,8 +85,8 @@ QtContactManager::QtContactManager(CUserProfile & cUserProfile, CWengoPhone & cW
 	SAFE_CONNECT(target, SIGNAL(itemSelectionChanged()), SLOT(treeViewSelectionChanged()));
 	SAFE_CONNECT(target, SIGNAL(itemClicked(QTreeWidgetItem *, int)), SLOT(itemClicked(QTreeWidgetItem *, int)));
 
-	SAFE_CONNECT(keyFilter, SIGNAL(openItem(QTreeWidgetItem *)), SLOT(openUserInfo(QTreeWidgetItem *)));
-	SAFE_CONNECT(keyFilter, SIGNAL(closeItem(QTreeWidgetItem *)), SLOT(closeUserInfo()));
+	SAFE_CONNECT(keyFilter, SIGNAL(openItem(QTreeWidgetItem *)), SLOT(openContactInfo(QTreeWidgetItem *)));
+	SAFE_CONNECT(keyFilter, SIGNAL(closeItem(QTreeWidgetItem *)), SLOT(closeContactInfo()));
 	SAFE_CONNECT(keyFilter, SIGNAL(deleteItem(QTreeWidgetItem *)), SLOT(deleteContact()));
 	SAFE_CONNECT(keyFilter, SIGNAL(enterPressed(QTreeWidgetItem *)),SLOT(defaultAction(QTreeWidgetItem *)));
 
@@ -155,11 +155,11 @@ void QtContactManager::deleteContact() {
 
 void QtContactManager::treeViewSelectionChanged() {
 	if (_button == Qt::NoButton) {
-		closeUserInfo();
+		closeContactInfo();
 	}
 }
 
-void QtContactManager::closeUserInfo() {
+void QtContactManager::closeContactInfo() {
 	if (_previous) {
 		if (!_previous->parent()) {
 			//It's a group
@@ -177,9 +177,9 @@ void QtContactManager::closeUserInfo() {
 	}
 }
 
-void QtContactManager::openUserInfo(QTreeWidgetItem * item) {
+void QtContactManager::openContactInfo(QTreeWidgetItem * item) {
 	if (_previous) {
-		closeUserInfo();
+		closeContactInfo();
 	}
 
 	if (!item) {
@@ -187,7 +187,16 @@ void QtContactManager::openUserInfo(QTreeWidgetItem * item) {
 	}
 
 	if (item->parent()) {
+
 		QtContactListManager * ul = QtContactListManager::getInstance();
+
+		//Does not expand if contact is part of the WDeal contact group
+		QtContact * qtContact = ul->getContact(item->text(0));
+		if (qtContact->getGroupName() == "WDeal") {
+			return;
+		}
+		///
+
 		_previous = item;
 		ul->setOpenStatus(_previous->text(0), true);
 		item->setSizeHint(0, QSize(-1, ul->getHeight(item->text(0))));
@@ -225,9 +234,9 @@ void QtContactManager::itemClicked(QTreeWidgetItem * item, int) {
 
 	if (item->parent()) {
 		if (_previous == item) {
-			closeUserInfo();
+			closeContactInfo();
 		} else {
-			openUserInfo(item);
+			openContactInfo(item);
 		}
 	}
 
@@ -675,7 +684,7 @@ void QtContactManager::removeContact(const QString & contactId) {
 				item = group->child(i);
 				qtContact = ul->getContact(item->text(0));
 				if (qtContact->getId() == contactId) {
-					closeUserInfo();
+					closeContactInfo();
 					item = group->takeChild(i);
 					ul->removeContact(qtContact);
 					OWSAFE_DELETE(item);
