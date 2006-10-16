@@ -413,6 +413,17 @@ téléphones fixes, téléphones portables ou la boite vocale (si disponible).</
     </message>
 </context>
 <context>
+    <name>ChatContactListItem</name>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished">Formulaire</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>ChatMainWindow</name>
     <message>
         <source>MainWindow</source>
@@ -475,6 +486,17 @@ téléphones fixes, téléphones portables ou la boite vocale (si disponible).</
     <message>
         <source>&amp;Actions</source>
         <translation>&amp;Actions</translation>
+    </message>
+</context>
+<context>
+    <name>ChatRoomWidget</name>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished">Formulaire</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -779,6 +801,10 @@ est facultative.Décriverz les circonsances du problème:</translation>
     <message>
         <source>Click here to buy Wengo&apos;s credits</source>
         <translation>Cliquer ici pour acheter des crédits de communication</translation>
+    </message>
+    <message>
+        <source>Call Voice Mail</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1846,6 +1872,18 @@ Wengo.</translation>
         <source>send</source>
         <translation>envoyer</translation>
     </message>
+    <message>
+        <source>Your file can not be sent: your contact must be connected on the Wengo network. </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Your contact wishes to send a file with Wengo. </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Go to http://wengo.com/index.php/download to install it.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QtChatWindow</name>
@@ -2078,11 +2116,23 @@ _ OBSOLETE
     </message>
     <message>
         <source>Forward to Cell phone</source>
-        <translation>Transférer vers mon mobile</translation>
+        <translation type="obsolete">Transférer vers mon mobile</translation>
     </message>
     <message>
         <source>Invite to conference</source>
         <translation>Inviter à la conférence</translation>
+    </message>
+    <message>
+        <source>Go to website</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Send file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Forward to mobile phone</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2110,6 +2160,10 @@ _ OBSOLETE
     <message>
         <source>Click here to start a free call</source>
         <translation>Cliquez ici pour démarrer un appel gratuit</translation>
+    </message>
+    <message>
+        <source>Click here to send a file</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2166,6 +2220,22 @@ _ OBSOLETE
     <message>
         <source>&amp;No</source>
         <translation>&amp;Non</translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt;font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px;margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:18pt; font-weight:600; color:#ffffff;&quot;&gt;Please upgrade&lt;br&gt; yourWengoPhone&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt;font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px;margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;font-size:8pt;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;The file cannot be received:&lt;/span&gt; you must upgrade your WengoPhone in order to receive it.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt;font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px;margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:18pt; font-weight:600; color:#ffffff;&quot;&gt;Tell your contact&lt;br&gt; toupgrade&lt;br&gt; his WengoPhone&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt;font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px;margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;font-size:8pt;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;A contact is trying to send you a file:&lt;/span&gt; but his WengoPhone must be upgraded in order to receive it. Tell him to download the latest version.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2244,6 +2314,14 @@ _ OBSOLETE
     <message>
         <source>Cancel</source>
         <translation>Annuler</translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt;font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px;margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:18pt; font-weight:600; color:#ffffff;&quot;&gt;An error&lt;br&gt; occured during&lt;br&gt;the file transfer&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt;font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px;margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;font-size:8pt;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;This may be caused by:&lt;/span&gt; &lt;br&gt;- Your WengoPhone is not up to date. Please download the latest version onwww.wengo.com&lt;br&gt;- The Wengo network may be temporarily unavailable. Please try later.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2728,6 +2806,10 @@ Il sera découpé en</translation>
         <translation> SMS.
 </translation>
     </message>
+    <message>
+        <source>You can not send an empty message.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QtSoftUpdate</name>
@@ -2930,6 +3012,10 @@ _ OBSOLETE
         <source>Call land line</source>
         <translation>Appeler une ligne fixe</translation>
     </message>
+    <message>
+        <source>Send File</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QtToolBar</name>
@@ -3040,6 +3126,10 @@ défaut pour le profil %1?</translation>
         <source>Excellent</source>
         <translation>Excellente</translation>
     </message>
+    <message>
+        <source>Normale</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>QtWebDirectory</name>
@@ -3085,6 +3175,10 @@ défaut pour le profil %1?</translation>
     <message>
         <source>Video</source>
         <translation>Vidéo</translation>
+    </message>
+    <message>
+        <source>Languages</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3290,15 +3384,23 @@ _ OBSOLETE
     </message>
     <message>
         <source>Phone number:</source>
-        <translation>Numéro de téléphone:</translation>
+        <translation type="obsolete">Numéro de téléphone:</translation>
     </message>
     <message>
         <source>Enter the phone number here</source>
-        <translation>Entrer le numéro de téléphone ici</translation>
+        <translation type="obsolete">Entrer le numéro de téléphone ici</translation>
     </message>
     <message>
         <source>Send</source>
         <translation>Envoyer</translation>
+    </message>
+    <message>
+        <source>Phone number(s):</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enter phone number(s) here&lt;br&gt;They must be separated by &amp; or ; or ,</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3462,10 +3564,44 @@ compte:</translation>
     </message>
 </context>
 <context>
+    <name>UpgradeDialog</name>
+    <message>
+        <source>File Transfer</source>
+        <translation type="unfinished">Transfert de Fichiers</translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:18pt; font-weight:600; color:#ffffff;&quot;&gt;upgrade&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Status:&lt;/span&gt; blah blah blah&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Ok</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>UserFrame</name>
     <message>
         <source>Form</source>
         <translation>Formulaire</translation>
+    </message>
+</context>
+<context>
+    <name>UserWidget</name>
+    <message>
+        <source>Avatar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No cell phone number set</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No phone number set</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
