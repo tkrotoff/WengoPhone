@@ -84,7 +84,12 @@ QWidget * QtBrowserWidget::getWidget() const {
 }
 
 void QtBrowserWidget::userProfileDeleted() {
-	loadDefaultURL();
+	if (!_qtBrowser) {
+		return;
+	}
+
+	std::string defaultURL = QCoreApplication::applicationDirPath().toStdString() + "/" + LOCAL_WEB_DIR + "/logged-off.html";
+	_qtBrowser->setUrl(defaultURL);
 }
 
 void QtBrowserWidget::loadDefaultURL() {
