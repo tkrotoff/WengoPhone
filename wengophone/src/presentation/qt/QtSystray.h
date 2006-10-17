@@ -76,6 +76,8 @@ private Q_SLOTS:
 	 */
 	void userProfileDeleted();
 
+	void languageChanged();
+
 private:
 
 	void connectionIsUpEventHandler();
@@ -86,7 +88,7 @@ private:
 
 	QMenu * createStatusMenu();
 
-	void updateCallMenu();
+	void updateMenu();
 
 	void initThreadSafe() { }
 
@@ -95,18 +97,6 @@ private:
 	QMenu * _trayMenu;
 
 	QMenu * _callMenu;
-
-	QMenu * _sendSmsMenu;
-
-	QMenu * _startChatMenu;
-
-	QMenu * _callWengoMenu;
-
-	QMenu * _sendFileMenu;
-
-	QMenu * _callMobileMenu;
-
-	QMenu * _callLandlineMenu;
 
 	TrayIcon * _trayIcon;
 };

@@ -37,6 +37,7 @@
 #include <util/Logger.h>
 
 #include <qtutil/SafeConnect.h>
+#include <qtutil/LanguageChangeEventFilter.h>
 
 #include <QtGui/QtGui>
 
@@ -56,12 +57,6 @@ QtSystray::QtSystray(QObject * parent)
 	_qtWengoPhone = (QtWengoPhone *) parent;
 
 	_callMenu = NULL;
-	_sendSmsMenu = NULL;
-	_startChatMenu = NULL;
-	_callWengoMenu = NULL;
-	_callMobileMenu = NULL;
-	_callLandlineMenu = NULL;
-	_sendFileMenu = NULL;
 
 	//Check Internet connection status
 	NetworkObserver::getInstance().connectionIsDownEvent +=
@@ -84,6 +79,8 @@ QtSystray::QtSystray(QObject * parent)
 	SAFE_CONNECT(_qtWengoPhone, SIGNAL(userProfileDeleted()), SLOT(userProfileDeleted()));
 
 	setTrayMenu();
+
+	LANGUAGE_CHANGE(_trayIcon);
 }
 
 QtSystray::~QtSystray() {
@@ -106,7 +103,7 @@ void QtSystray::setTrayMenu() {
 	//Start a call session
 	_callMenu = new QMenu(tr("Call"));
 	_callMenu->setIcon(QIcon(":/pics/contact/call.png"));
-	updateCallMenu();
+	updateMenu();
 	_trayMenu->addMenu(_callMenu);
 
 	//Change status menu
@@ -150,89 +147,73 @@ QMenu * QtSystray::createStatusMenu() {
 	return menu;
 }
 
-void QtSystray::updateCallMenu() {
+void QtSystray::updateMenu() {
 	CWengoPhone & cWengoPhone = _qtWengoPhone->getCWengoPhone();
 
-	//_sendSmsMenu
-	if (!_sendSmsMenu) {
-		_sendSmsMenu = new QMenu(_qtWengoPhone->getWidget());
-		_sendSmsMenu->setTitle(tr("Send a SMS"));
-		_sendSmsMenu->setIcon(QIcon(":/pics/contact/sms.png"));
-		SAFE_CONNECT(_sendSmsMenu, SIGNAL(triggered(QAction *)), SLOT(sendSms(QAction *)));
-	}
-	_sendSmsMenu->clear();
+	//sendSmsMenu
+	QMenu * sendSmsMenu = new QMenu(_qtWengoPhone->getWidget());
+	sendSmsMenu->setTitle(tr("Send a SMS"));
+	sendSmsMenu->setIcon(QIcon(":/pics/contact/sms.png"));
+	SAFE_CONNECT(sendSmsMenu, SIGNAL(triggered(QAction *)), SLOT(sendSms(QAction *)));
+	sendSmsMenu->clear();
 
-	QAction * sendSmsBlankAction = _sendSmsMenu->addAction(QIcon(":/pics/contact/sms.png"), tr("Send SMS"));
+	QAction * sendSmsBlankAction = sendSmsMenu->addAction(QIcon(":/pics/contact/sms.png"), tr("Send SMS"));
 	sendSmsBlankAction->setData(String::null);
-	_trayMenu->addMenu(_sendSmsMenu);
-	////
+	_trayMenu->addMenu(sendSmsMenu);
+	QtContactMenu::populateMobilePhoneMenu(sendSmsMenu, cWengoPhone);
+	///
 
-	//_startChatMenu
-	if (!_startChatMenu) {
-		_startChatMenu = new QMenu(_qtWengoPhone->getWidget());
-		_startChatMenu->setIcon(QIcon(":/pics/contact/chat.png"));
-		SAFE_CONNECT(_startChatMenu, SIGNAL(triggered(QAction *)), SLOT(startChat(QAction *)));
-	}
-	_startChatMenu->clear();
-	_startChatMenu->setTitle(tr("Start a chat"));
-	_trayMenu->addMenu(_startChatMenu);
-	////
+	//startChatMenu
+	QMenu * startChatMenu = new QMenu(_qtWengoPhone->getWidget());
+	startChatMenu->setIcon(QIcon(":/pics/contact/chat.png"));
+	SAFE_CONNECT(startChatMenu, SIGNAL(triggered(QAction *)), SLOT(startChat(QAction *)));
+	startChatMenu->clear();
+	startChatMenu->setTitle(tr("Start a chat"));
+	_trayMenu->addMenu(startChatMenu);
+	QtContactMenu::populateChatMenu(startChatMenu, cWengoPhone);
+	///
 
-	// call menu
+	//call menu
 	QAction * placeCallBlankAction = _callMenu->addAction(QIcon(":/pics/contact/call.png"), tr("Place Call"));
 	placeCallBlankAction->setData(String::null);
 
-	//_callWengoMenu
-	if (!_callWengoMenu) {
-		_callWengoMenu = new QMenu(_qtWengoPhone->getWidget());
-		_callWengoMenu->setTitle(tr("Call SIP"));
-		SAFE_CONNECT(_callWengoMenu, SIGNAL(triggered(QAction *)), SLOT(makeCall(QAction *)));
-	}
-	_callWengoMenu->clear();
-	_callMenu->addMenu(_callWengoMenu);
-	////
+	//callWengoMenu
+	QMenu * callWengoMenu = new QMenu(_qtWengoPhone->getWidget());
+	callWengoMenu->setTitle(tr("Call SIP"));
+	SAFE_CONNECT(callWengoMenu, SIGNAL(triggered(QAction *)), SLOT(makeCall(QAction *)));
+	callWengoMenu->clear();
+	_callMenu->addMenu(callWengoMenu);
+	QtContactMenu::populateFreeCallMenu(callWengoMenu, cWengoPhone);
+	///
 
-	//_callMobileMenu
-	if (!_callMobileMenu) {
-		_callMobileMenu = new QMenu(_qtWengoPhone->getWidget());
-		_callMobileMenu->setTitle(tr("Call Mobile"));
-		SAFE_CONNECT(_callMobileMenu, SIGNAL(triggered(QAction *)), SLOT(makeCall(QAction *)));
-	}
-	_callMobileMenu->clear();
-	_callMenu->addMenu(_callMobileMenu);
-	////
+	//callMobileMenu
+	QMenu * callMobileMenu = new QMenu(_qtWengoPhone->getWidget());
+	callMobileMenu->setTitle(tr("Call Mobile"));
+	SAFE_CONNECT(callMobileMenu, SIGNAL(triggered(QAction *)), SLOT(makeCall(QAction *)));
+	callMobileMenu->clear();
+	_callMenu->addMenu(callMobileMenu);
+	QtContactMenu::populateMobilePhoneMenu(callMobileMenu, cWengoPhone);
+	///
 
-	//_callLandlineMenu
-	if (!_callLandlineMenu) {
-		_callLandlineMenu = new QMenu(_qtWengoPhone->getWidget());
-		_callLandlineMenu->setTitle(tr("Call land line"));
-		SAFE_CONNECT(_callLandlineMenu, SIGNAL(triggered(QAction *)), SLOT(makeCall(QAction *)));
-	}
-	_callLandlineMenu->clear();
-	_callMenu->addMenu(_callLandlineMenu);
-	////
-	////
+	//callLandlineMenu
+	QMenu * callLandlineMenu = new QMenu(_qtWengoPhone->getWidget());
+	callLandlineMenu->setTitle(tr("Call land line"));
+	SAFE_CONNECT(callLandlineMenu, SIGNAL(triggered(QAction *)), SLOT(makeCall(QAction *)));
+	callLandlineMenu->clear();
+	_callMenu->addMenu(callLandlineMenu);
+	QtContactMenu::populateHomePhoneMenu(callLandlineMenu, cWengoPhone);
+	///
 
-	//_sendFileMenu
-	if (!_sendFileMenu) {
-		_sendFileMenu = new QMenu(_qtWengoPhone->getWidget());
-		_sendFileMenu->setTitle(tr("Send File"));
-		_sendFileMenu->setIcon(QIcon(":/pics/actions/send_file.png"));
-		SAFE_CONNECT(_sendFileMenu, SIGNAL(triggered(QAction *)), SLOT(sendFile(QAction *)));
-	}
-	_sendFileMenu->clear();
-	_trayMenu->addMenu(_sendFileMenu);
-	////
-
-	QtContactMenu::populateMobilePhoneMenu(_sendSmsMenu, cWengoPhone);
-	QtContactMenu::populateMobilePhoneMenu(_callMobileMenu, cWengoPhone);
-	QtContactMenu::populateFreeCallMenu(_callWengoMenu, cWengoPhone);
-	QtContactMenu::populateHomePhoneMenu(_callLandlineMenu, cWengoPhone);
-	QtContactMenu::populateChatMenu(_startChatMenu, cWengoPhone);
-	
-	
+	//sendFileMenu
+	QMenu * sendFileMenu = new QMenu(_qtWengoPhone->getWidget());
+	sendFileMenu->setTitle(tr("Send File"));
+	sendFileMenu->setIcon(QIcon(":/pics/actions/send_file.png"));
+	SAFE_CONNECT(sendFileMenu, SIGNAL(triggered(QAction *)), SLOT(sendFile(QAction *)));
+	sendFileMenu->clear();
+	_trayMenu->addMenu(sendFileMenu);
 	//TODO: call a new method populateFreeCallMenu with contactId
-	QtContactMenu::populateWengoUsersContactId(_sendFileMenu, cWengoPhone);
+	QtContactMenu::populateWengoUsersContactId(sendFileMenu, cWengoPhone);
+	///
 }
 
 void QtSystray::setSystrayIcon(QVariant status) {
@@ -390,4 +371,8 @@ void QtSystray::sendFile(QAction * action) {
 	} else {
 		LOG_FATAL("QAction cannot be NULL");
 	}
+}
+
+void QtSystray::languageChanged() {
+	updateMenu();
 }
