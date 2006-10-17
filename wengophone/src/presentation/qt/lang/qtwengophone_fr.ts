@@ -1,4 +1,4 @@
-﻿<!DOCTYPE TS><TS>
+<!DOCTYPE TS><TS>
 <context>
     <name>AIMSettings</name>
     <message>
@@ -301,11 +301,11 @@ version.</translation>
     <name>ChatContactListItem</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Formulaire</translation>
+        <translation>Formulaire</translation>
     </message>
     <message>
         <source></source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -367,11 +367,11 @@ version.</translation>
     <name>ChatRoomWidget</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Formulaire</translation>
+        <translation>Formulaire</translation>
     </message>
     <message>
         <source></source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -573,7 +573,7 @@ version.</translation>
     </message>
     <message>
         <source>Call Voice Mail</source>
-        <translation type="unfinished"></translation>
+        <translation>Appeler la boite vocale</translation>
     </message>
 </context>
 <context>
@@ -1419,7 +1419,7 @@ Wengo.</translation>
     </message>
     <message>
         <source>%1 is not connected. You cannot send a message</source>
-        <translation>%1 n&apos;est pas connecté. Vous ne pouvez pas envoyer de message.</translation>
+        <translation>%1 n&apos;est pas connecté. Vous ne pouvez pas lui envoyer de message</translation>
     </message>
     <message>
         <source>%1 is disconnected.</source>
@@ -1431,15 +1431,15 @@ Wengo.</translation>
     </message>
     <message>
         <source>Your file can not be sent: your contact must be connected on the Wengo network. </source>
-        <translation type="unfinished"></translation>
+        <translation>Votre fichier ne peut être envoyé: votre contact doit être connecté sur le réseau Wengo.</translation>
     </message>
     <message>
         <source>Your contact wishes to send a file with Wengo. </source>
-        <translation type="unfinished"></translation>
+        <translation>Votre contact souhaite vous envoyer un fichier avec le WengoPhone.</translation>
     </message>
     <message>
         <source>Go to http://wengo.com/index.php/download to install it.</source>
-        <translation type="unfinished"></translation>
+        <translation>Allez sur http://wengo.com/index.php/download pour l&apos;installer.</translation>
     </message>
 </context>
 <context>
@@ -1566,15 +1566,15 @@ Wengo.</translation>
     </message>
     <message>
         <source>Go to website</source>
-        <translation type="unfinished"></translation>
+        <translation>Aller sur son site Internet</translation>
     </message>
     <message>
         <source>Send file</source>
-        <translation type="unfinished"></translation>
+        <translation>Envoyer un fichier</translation>
     </message>
     <message>
         <source>Forward to mobile phone</source>
-        <translation type="unfinished"></translation>
+        <translation>Transférer vers un mobile</translation>
     </message>
 </context>
 <context>
@@ -1605,7 +1605,7 @@ Wengo.</translation>
     </message>
     <message>
         <source>Click here to send a file</source>
-        <translation type="unfinished"></translation>
+        <translation>Cliquez ici pour envoyer un fichier</translation>
     </message>
 </context>
 <context>
@@ -1651,19 +1651,19 @@ Wengo.</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt;font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px;margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:18pt; font-weight:600; color:#ffffff;&quot;&gt;Please upgrade&lt;br&gt; yourWengoPhone&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt;font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px;margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:18pt; font-weight:600; color:#ffffff;&quot;&gt;Veuillez mettre à jour&lt;br&gt; votre WengoPhone&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt;font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px;margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;font-size:8pt;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;The file cannot be received:&lt;/span&gt; you must upgrade your WengoPhone in order to receive it.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt;font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px;margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;font-size:8pt;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Le fichier ne peut être reçu:&lt;/span&gt; vous devez mettre à jour votre WengoPhone pour le recevoir.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt;font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px;margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:18pt; font-weight:600; color:#ffffff;&quot;&gt;Tell your contact&lt;br&gt; toupgrade&lt;br&gt; his WengoPhone&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt;font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px;margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:18pt; font-weight:600; color:#ffffff;&quot;&gt;Dites à votre contact&lt;br&gt; de mettre à jour&lt;br&gt; son WengoPhone&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt;font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px;margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;font-size:8pt;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;A contact is trying to send you a file:&lt;/span&gt; but his WengoPhone must be upgraded in order to receive it. Tell him to download the latest version.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt;font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px;margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;font-size:8pt;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Un contact souhaite vous envoyer un fichier:&lt;/span&gt; mais son WengoPhone doit être mis-à-jour pour le recevoir. Dites lui de télécharger la dernière version.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
 </context>
 <context>
@@ -1738,11 +1738,11 @@ Wengo.</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt;font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px;margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:18pt; font-weight:600; color:#ffffff;&quot;&gt;An error&lt;br&gt; occured during&lt;br&gt;the file transfer&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt;font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px;margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:18pt; font-weight:600; color:#ffffff;&quot;&gt;Une erreur&lt;br&gt; est survenue pendant&lt;br&gt;le transfert de fichier&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt;font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px;margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;font-size:8pt;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;This may be caused by:&lt;/span&gt; &lt;br&gt;- Your WengoPhone is not up to date. Please download the latest version onwww.wengo.com&lt;br&gt;- The Wengo network may be temporarily unavailable. Please try later.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt;font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px;margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;font-size:8pt;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Cela peut être dû à:&lt;/span&gt; &lt;br&gt;- Votre WengoPhone n&apos;est pas mis-à-jour. Veuillez télécharger la dernière version sur www.wengo.com&lt;br&gt;- Le réseau Wengo peut être temporairement indisponible. Veuillez essayer plus tard.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
 </context>
 <context>
@@ -2156,7 +2156,7 @@ Il sera découpé en</translation>
     </message>
     <message>
         <source>You can not send an empty message.</source>
-        <translation type="unfinished"></translation>
+        <translation>Vous ne pouvez pas envoyer un message vide.</translation>
     </message>
 </context>
 <context>
@@ -2311,7 +2311,7 @@ mot de passe</translation>
     </message>
     <message>
         <source>Send File</source>
-        <translation type="unfinished"></translation>
+        <translation>Envoyer un fichier</translation>
     </message>
 </context>
 <context>
@@ -2409,7 +2409,7 @@ mot de passe</translation>
     </message>
     <message>
         <source>Normale</source>
-        <translation type="unfinished"></translation>
+        <translation>Normale</translation>
     </message>
 </context>
 <context>
@@ -2459,7 +2459,7 @@ mot de passe</translation>
     </message>
     <message>
         <source>Languages</source>
-        <translation type="unfinished"></translation>
+        <translation>Langues</translation>
     </message>
 </context>
 <context>
@@ -2633,11 +2633,11 @@ appel</translation>
     </message>
     <message>
         <source>Phone number(s):</source>
-        <translation type="unfinished"></translation>
+        <translation>Numéro(s) de téléphone:</translation>
     </message>
     <message>
         <source>Enter phone number(s) here&lt;br&gt;They must be separated by &amp; or ; or ,</source>
-        <translation type="unfinished"></translation>
+        <translation>Saisissez vos numéros de téléphone ici&lt;br&gt;Ils doivent être séparés par &amp; ou ; ou ,</translation>
     </message>
 </context>
 <context>
@@ -2770,19 +2770,19 @@ compte:</translation>
     <name>UpgradeDialog</name>
     <message>
         <source>File Transfer</source>
-        <translation type="unfinished">Transfert de Fichiers</translation>
+        <translation>Transfert de fichiers</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:18pt; font-weight:600; color:#ffffff;&quot;&gt;upgrade&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:18pt; font-weight:600; color:#ffffff;&quot;&gt;mis-à-jour&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Status:&lt;/span&gt; blah blah blah&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Statut:&lt;/span&gt; blah blah blah&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>&amp;Ok</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Ok</translation>
     </message>
 </context>
 <context>
@@ -2796,15 +2796,15 @@ compte:</translation>
     <name>UserWidget</name>
     <message>
         <source>Avatar</source>
-        <translation type="unfinished"></translation>
+        <translation>Avatar</translation>
     </message>
     <message>
         <source>No cell phone number set</source>
-        <translation type="unfinished"></translation>
+        <translation>Pas de numéro de téléphone portable</translation>
     </message>
     <message>
         <source>No phone number set</source>
-        <translation type="unfinished"></translation>
+        <translation>Pas de numéro de téléphone fixe </translation>
     </message>
 </context>
 <context>
