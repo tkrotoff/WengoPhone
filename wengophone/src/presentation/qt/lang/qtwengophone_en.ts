@@ -297,10 +297,6 @@ of the License, or (at your option) any later version.</source>
 <context>
     <name>ChatContactListItem</name>
     <message>
-        <source>Form</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source></source>
         <translation type="unfinished"></translation>
     </message>
@@ -362,10 +358,6 @@ of the License, or (at your option) any later version.</source>
 </context>
 <context>
     <name>ChatRoomWidget</name>
-    <message>
-        <source>Form</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message>
         <source></source>
         <translation type="unfinished"></translation>
@@ -566,10 +558,6 @@ of the License, or (at your option) any later version.</source>
     </message>
     <message>
         <source>Call Forward Method</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Call Voice Mail</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1338,7 +1326,7 @@ of the License, or (at your option) any later version.</source>
     </message>
     <message>
         <source>Can&apos;t send SMS unless you&apos;re connected to a SIP service.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Can&apos;t send SMS unless you&apos;re connected to the Wengo network.</translation>
     </message>
 </context>
 <context>
@@ -1456,7 +1444,7 @@ of the License, or (at your option) any later version.</source>
     <name>QtConferenceCallWidget</name>
     <message>
         <source>Call SIP</source>
-        <translation type="unfinished"></translation>
+        <translation>Call Wengo contact</translation>
     </message>
     <message>
         <source>Call land line</source>
@@ -2274,7 +2262,7 @@ This will send </source>
     </message>
     <message>
         <source>Call SIP</source>
-        <translation type="unfinished"></translation>
+        <translation>Call Wengo contact</translation>
     </message>
     <message>
         <source>Place Call</source>
@@ -2394,10 +2382,6 @@ This will send </source>
         <source>Excellent</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>Normale</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>QtWebDirectory</name>
@@ -2442,10 +2426,6 @@ This will send </source>
     </message>
     <message>
         <source>Advanced</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Languages</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2507,7 +2487,7 @@ This will send </source>
     </message>
     <message>
         <source>SIP address: </source>
-        <translation type="unfinished"></translation>
+        <translation>Wengo address:</translation>
     </message>
 </context>
 <context>
@@ -2767,21 +2747,6 @@ Speed:<byte value="x9"/>%4 (kB/s)</source>
     <name>UserFrame</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>UserWidget</name>
-    <message>
-        <source>Avatar</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>No cell phone number set</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>No phone number set</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3242,7 +3207,7 @@ Speed:<byte value="x9"/>%4 (kB/s)</source>
     </message>
     <message>
         <source>SIP address:</source>
-        <translation type="unfinished"></translation>
+        <translation>Wengo address:</translation>
     </message>
     <message>
         <source>City:</source>
