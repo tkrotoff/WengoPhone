@@ -773,16 +773,18 @@ stunRand()
 	  }
 #elif defined(__GNUC__) && ( defined(__i686__) || defined(__i386__) || defined(__x86_64__) )
       asm("rdtsc" : "=A" (tick));
-#elif defined (__SUNPRO_CC) || defined( __sparc__ )	
-      tick = gethrtime();
-#elif defined(__MACH__) || defined( __powerpc__ )
-      int fd=open("/dev/random",O_RDONLY);
-      read(fd,&tick,sizeof(tick));
-      closesocket(fd);
-#elif defined(EMBED)
-      tick = rand();
 #else
-#     error Need some way to seed the random number generator 
+      int fd=open("/dev/random",O_RDONLY);
+      if (fd < 0)
+          fd=open("/dev/urandom",O_RDONLY);
+
+      if (fd >= 0)
+      {
+          read(fd,&tick,sizeof(tick));
+          close(fd);
+      }
+      else
+          tick = time(NULL);
 #endif 
       seed = (tick);
 #ifdef WIN32

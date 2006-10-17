@@ -718,8 +718,6 @@ stunRand()
       tick |= lowtick;
 #elif defined(__GNUC__) && ( defined(__i686__) || defined(__i386__) || defined(__x86_64__) )
       asm("rdtsc" : "=A" (tick));
-#elif defined (__SUNPRO_CC) || defined( __sparc__ )
-      tick = gethrtime();
 #else
 	  int fd=open("/dev/random",O_RDONLY);
 	  if (fd < 0)
