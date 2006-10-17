@@ -152,6 +152,8 @@ set(owphone_SRCS
   model/contactlist/ContactListFileStorage.cpp
   model/contactlist/ContactListRPCStorage.cpp
   model/contactlist/IMContactListHandler.cpp
+  model/profile/Avatar.cpp
+  model/profile/AvatarList.cpp
   model/profile/Profile.cpp
   model/profile/ProfileXMLSerializer.cpp
   model/profile/UserProfile.cpp
