@@ -22,6 +22,7 @@
 #include <model/webservices/url/WsUrl.h>
 
 #include <qtutil/LanguageChangeEventFilter.h>
+#include <qtutil/CloseEventFilter.h>
 
 #include <QtGui/QtGui>
 
@@ -29,6 +30,10 @@ QtWebDirectory::QtWebDirectory(QWidget * parent)
 	: QtBrowser(parent) {
 
 	QWidget * widget = (QWidget *) getWidget();
+
+	CloseEventFilter * closeEventFilter = new CloseEventFilter(this, SLOT(CloseEventFilterSlot()));
+	widget->installEventFilter(closeEventFilter);
+
 	widget->resize(715, 569);
 	LANGUAGE_CHANGE(widget);
 	init();
@@ -38,7 +43,6 @@ QtWebDirectory::~QtWebDirectory() {
 }
 
 void QtWebDirectory::raise() {
-	setUrl(WsUrl::getWengoDirectoryUrl());
 	QWidget * widget = (QWidget *) getWidget();
 	widget->show();
 	widget->raise();
@@ -52,4 +56,8 @@ void QtWebDirectory::init() {
 
 void QtWebDirectory::languageChanged() {
 	init();
+}
+
+void QtWebDirectory::CloseEventFilterSlot() {
+	setUrl(WsUrl::getWengoDirectoryUrl());
 }

@@ -41,6 +41,8 @@ public:
 
 private Q_SLOTS:
 
+	void CloseEventFilterSlot();
+
 	void languageChanged();
 
 private:
