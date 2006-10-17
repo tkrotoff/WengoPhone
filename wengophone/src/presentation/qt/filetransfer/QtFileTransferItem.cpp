@@ -61,7 +61,7 @@ QtFileTransferItem::~QtFileTransferItem() {
 }
 
 void QtFileTransferItem::setFilename(const QString & filename) {
-	_ui->filenameLabel->setText(filename);
+	_ui->filenameLabel->setText("<b>" + filename + "</b>");
 }
 
 void QtFileTransferItem::setState(const QString & state) {
@@ -70,9 +70,9 @@ void QtFileTransferItem::setState(const QString & state) {
 
 void QtFileTransferItem::setContact(const QString & contact) {
 	if (_type == Download) {
-		_ui->contactLabel->setText("  " + tr("From: ") + contact);
+		_ui->contactLabel->setText("  <i>" + tr("From: ") + contact + "</i>");
 	} else {
-		_ui->contactLabel->setText("  " + tr("To: ") + contact);
+		_ui->contactLabel->setText("  <i>" + tr("To: ") + contact + "</i>");
 	}
 }
 
@@ -173,10 +173,10 @@ void QtFileTransferItem::updateState(int e) {
 			"<span style=\" font-size:18pt; font-weight:600; color:#ffffff;\">An error<br> occured during<br>"
 			"the file transfer</span></p></body></html>"));
 		qtFileTransferUpgradeDialog->setStatus(tr("<html><head><meta name=\"qrichtext\" content=\"1\" />"
-			"</head><body style=\" white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt;"
+			"</head><body style=\" white-space: pre-wrap; font-family:MS Shell Dlg;"
 			"font-weight:400; font-style:normal; text-decoration:none;\"><p style=\" margin-top:0px;"
 			"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"
-			"font-size:8pt;\"><span style=\" font-weight:600;\">This may be caused by:"
+			"><span style=\" font-weight:600;\">This may be caused by:"
 			"</span> <br>- Your WengoPhone is not up to date. Please download the latest version on"
 			"www.wengo.com<br>- The Wengo network may be temporarily unavailable. Please try later.</p></body></html>"));
 

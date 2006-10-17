@@ -32,17 +32,6 @@
      </property>
      <item>
       <widget class="QLabel" name="filenameLabel" >
-       <property name="font" >
-        <font>
-         <family>Sans Serif</family>
-         <pointsize>9</pointsize>
-         <weight>75</weight>
-         <italic>false</italic>
-         <bold>true</bold>
-         <underline>false</underline>
-         <strikeout>false</strikeout>
-        </font>
-       </property>
        <property name="text" >
         <string/>
        </property>
@@ -50,19 +39,8 @@
      </item>
      <item>
       <widget class="QLabel" name="contactLabel" >
-       <property name="font" >
-        <font>
-         <family>Sans Serif</family>
-         <pointsize>9</pointsize>
-         <weight>50</weight>
-         <italic>true</italic>
-         <bold>false</bold>
-         <underline>false</underline>
-         <strikeout>false</strikeout>
-        </font>
-       </property>
        <property name="text" >
-        <string>From:</string>
+        <string>&lt;i>From:&lt;/i></string>
        </property>
       </widget>
      </item>
@@ -112,8 +90,8 @@
       <widget class="QPushButton" name="cancelOpenButton" >
        <property name="maximumSize" >
         <size>
-         <width>64</width>
-         <height>18</height>
+         <width>84</width>
+         <height>20</height>
         </size>
        </property>
        <property name="text" >
@@ -125,8 +103,8 @@
       <widget class="QPushButton" name="removePauseResumeButton" >
        <property name="maximumSize" >
         <size>
-         <width>64</width>
-         <height>18</height>
+         <width>84</width>
+         <height>20</height>
         </size>
        </property>
        <property name="text" >

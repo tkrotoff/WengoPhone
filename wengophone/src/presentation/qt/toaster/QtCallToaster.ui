@@ -77,9 +77,6 @@
         </item>
         <item row="0" column="1" >
          <widget class="QLabel" name="pixmapLabel" >
-          <property name="pixmap" >
-           <pixmap resource="../wengophone.qrc" >:/pics/avatar_default.png</pixmap>
-          </property>
           <property name="alignment" >
            <set>Qt::AlignCenter</set>
           </property>
