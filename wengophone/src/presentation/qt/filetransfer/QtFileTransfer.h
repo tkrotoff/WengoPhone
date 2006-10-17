@@ -61,7 +61,7 @@ public:
 	 * @param filename the file to upload.
 	 * @param cContactList a reference to the CContactList.
 	 */
-	void createSendFileSession(IMContactSet imContactSet, const std::string & filename, CContactList & cContactList);
+	void createSendFileSession(IMContactSet imContactSet, const QString & filename, CContactList & cContactList);
 
 	/**
 	 * Return a pointer to the File Transfer Widget.

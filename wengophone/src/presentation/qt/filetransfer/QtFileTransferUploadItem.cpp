@@ -23,6 +23,7 @@
 
 #include <util/Logger.h>
 #include <util/SafeDelete.h>
+#include <util/File.h>
 
 #include <qtutil/SafeConnect.h>
 
@@ -36,7 +37,8 @@ QtFileTransferUploadItem::QtFileTransferUploadItem(QWidget * parent, SendFileSes
 
 	_filename = filename;
 
-	setFilename(QString::fromStdString(fileSession->getFileList()[0].getFileName()));
+	File f(filename.toStdString());
+	setFilename(QString::fromStdString(f.getFileName()));
 	setContact(QString::fromStdString(contact));
 
 	// bind to fileSession events

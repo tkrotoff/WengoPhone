@@ -258,7 +258,7 @@ void QtContact::sendFile() {
 			QString filename = qtFileTransfer->getChosenFile();
 			if (!filename.isEmpty()) {
 
-				qtFileTransfer->createSendFileSession(contactList, filename.toStdString(),
+				qtFileTransfer->createSendFileSession(contactList, filename,
 					_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCContactList());
 			}
 		}

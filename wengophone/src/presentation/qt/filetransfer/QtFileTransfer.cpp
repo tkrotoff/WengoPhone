@@ -143,9 +143,9 @@ void QtFileTransfer::newReceiveFileSessionCreatedEventHandlerSlot(ReceiveFileSes
 	}
 }
 
-void QtFileTransfer::createSendFileSession(IMContactSet imContactSet, const std::string & filename, CContactList & cContactList) {
+void QtFileTransfer::createSendFileSession(IMContactSet imContactSet, const QString & filename, CContactList & cContactList) {
 
-	File file(filename);
+	File file(std::string(filename.toUtf8().constData()), File::UTF8);
 
 	// check the file size
 	if (file.getSize() < INT_MAX) {
@@ -157,7 +157,7 @@ void QtFileTransfer::createSendFileSession(IMContactSet imContactSet, const std:
 			std::string contactId = cContactList.findContactThatOwns(*it);
 			fileSession->addContact(contactId);
 
-			_qtFileTransferWidget->addSendItem(fileSession, filename, contactId, (*it).getContactId());
+			_qtFileTransferWidget->addSendItem(fileSession, filename.toStdString(), contactId, (*it).getContactId());
 		}
 		fileSession->start();
 

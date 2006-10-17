@@ -199,6 +199,39 @@ extern "C" {
 	 */
 	PHAPI_UTIL_EXPORTS int UTF8ToUTF16LE(unsigned char* outb, int *outlen, const unsigned char* in, int *inlen);
 
+	/**
+	* asciiToUTF8:
+	* @out:  a pointer to an array of bytes to store the result
+	* @outlen:  the length of @out
+	* @in:  a pointer to an array of ASCII chars
+	* @inlen:  the length of @in
+	*
+	* Take a block of ASCII chars in and try to convert it to an UTF-8
+	* block of chars out.
+	* Returns 0 if success, or -1 otherwise
+	* The value of @inlen after return is the number of octets consumed
+	*     as the return value is positive, else unpredictable.
+	* The value of @outlen after return is the number of ocetes consumed.
+	*/
+	PHAPI_UTIL_EXPORTS int asciiToUTF8(unsigned char* out, int *outlen, const unsigned char* in, int *inlen);
+
+	/**
+	* UTF8Toascii:
+	* @out:  a pointer to an array of bytes to store the result
+	* @outlen:  the length of @out
+	* @in:  a pointer to an array of UTF-8 chars
+	* @inlen:  the length of @in
+	*
+	* Take a block of UTF-8 chars in and try to convert it to an ASCII
+	* block of chars out.
+	*
+	* Returns 0 if success, -2 if the transcoding fails, or -1 otherwise
+	* The value of @inlen after return is the number of octets consumed
+	*     as the return value is positive, else unpredictable.
+	* The value of @outlen after return is the number of ocetes consumed.
+	*/
+	PHAPI_UTIL_EXPORTS int UTF8Toascii(unsigned char* out, int *outlen, const unsigned char* in, int *inlen);
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

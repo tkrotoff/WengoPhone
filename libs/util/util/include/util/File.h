@@ -40,7 +40,12 @@
 class File : NonCopyable {
 public:
 
-	File(const std::string & filename);
+	enum Encoding {
+		DEFAULT,
+		UTF8
+	};
+	
+	File(const std::string & filename, File::Encoding enc = File::DEFAULT);
 
 	File(const File & file);
 
@@ -165,6 +170,8 @@ public:
 protected:
 
 	std::string _filename;
+
+	File::Encoding _encoding;
 };
 
 

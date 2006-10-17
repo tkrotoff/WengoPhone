@@ -49,19 +49,20 @@ using namespace std;
 	#include <direct.h>
 #endif
 
-File::File(const std::string & filename)
-	: _filename(filename) {
+File::File(const std::string & filename, File::Encoding enc)
+	: _filename(filename), _encoding(enc) {
 }
 
 File::File(const File & file)
-	: _filename(file._filename) {
+	: _filename(file._filename), _encoding(file._encoding) {
 }
 
 File & File::operator = (const File & file) {
 	_filename = file._filename;
+	_encoding = file._encoding;
 	return *this;
 }
-	
+
 std::string File::getExtension() const {
 	/*int posLastElm = _filename.find_last_of(getPathSeparator());
 
@@ -226,11 +227,27 @@ StringList File::getFileList() const {
 unsigned File::getSize() const {
 	struct stat sb;
 
-	if (stat(_filename.c_str(), &sb) == 0) {
-		return sb.st_size;
-	} else {
+#ifdef OS_WINDOWS
+	wchar_t filename4win[4096];
+	struct _stat sb4win;
+
+	if(_encoding == File::UTF8) {
+		MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, (LPCSTR)_filename.c_str(), -1, (LPWSTR)&filename4win, sizeof(filename4win));
+		if(_wstat(filename4win, &sb4win) == 0) {
+			return sb4win.st_size;
+		}
 		return 0;
 	}
+#endif
+
+	if(_encoding == File::DEFAULT) {
+		if (stat(_filename.c_str(), &sb) == 0) {
+			return sb.st_size;
+		}
+		return 0;
+	}
+
+	return 0;
 }
 
 std::string File::convertPathSeparators(const std::string & path) {
