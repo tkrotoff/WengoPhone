@@ -71,7 +71,11 @@ void QtContactMenu::populateFreeCallMenu(QMenu * menu, CWengoPhone & cWengoPhone
 			ContactProfile tmpContactProfile = currentCContactList.getContactProfile(*it);
 			QString displayName = QString::fromUtf8(tmpContactProfile.getDisplayName().c_str());
 
-			if (tmpContactProfile.hasFreeCall()) {
+			if (tmpContactProfile.hasFreeCall() &&
+				tmpContactProfile.getPresenceState() != EnumPresenceState::PresenceStateOffline && 
+				tmpContactProfile.getPresenceState() != EnumPresenceState::PresenceStateUnknown && 
+				tmpContactProfile.getPresenceState() != EnumPresenceState::PresenceStateUnavailable) {
+
 				QString freePhoneNumber = QString::fromStdString(tmpContactProfile.getFirstFreePhoneNumber());
 				QAction * tmpAction;
 				tmpAction = menu->addAction(displayName);
@@ -179,7 +183,9 @@ void QtContactMenu::populateWengoUsersContactId(QMenu * menu, CWengoPhone & cWen
 			QString displayName = QString::fromUtf8(tmpContactProfile.getDisplayName().c_str());
 
 			if (tmpContactProfile.hasAvailableWengoId() &&
-				tmpContactProfile.getPresenceState() != EnumPresenceState::PresenceStateOffline) {
+				tmpContactProfile.getPresenceState() != EnumPresenceState::PresenceStateOffline && 
+				tmpContactProfile.getPresenceState() != EnumPresenceState::PresenceStateUnknown && 
+				tmpContactProfile.getPresenceState() != EnumPresenceState::PresenceStateUnavailable) {
 
 				QAction * tmpAction = menu->addAction(displayName);
 				tmpAction->setData(QVariant(QString::fromStdString(*it)));
