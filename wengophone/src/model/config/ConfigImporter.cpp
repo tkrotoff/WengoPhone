@@ -152,16 +152,35 @@ ConfigImporter::ConfigImporter(UserProfileHandler & userProfileHandler)
 	: _userProfileHandler(userProfileHandler) {
 }
 
-bool ConfigImporter::importConfig(const string & str) {
+void ConfigImporter::importConfig() {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
-	int localVersion = detectLastVersion();
+	unsigned localVersion = detectLastVersion();
 
 	if (localVersion != CONFIG_UNKNOWN && localVersion < config.CONFIG_VERSION) {
-		makeImportConfig(localVersion, config.CONFIG_VERSION);
-		return true;
-	}
+		if (localVersion == CONFIG_VERSION1) {
+			importConfigFromV1toV3();
+			localVersion = CONFIG_VERSION3;
+		}
 
-	return false;
+		if (localVersion == CONFIG_VERSION2) {
+			importConfigFromV2toV3();
+			localVersion = CONFIG_VERSION3;
+		}
+
+		if (localVersion == CONFIG_VERSION3) {
+			importConfigFromV3toV4();
+			localVersion = CONFIG_VERSION4;
+		}
+
+		if (localVersion == CONFIG_VERSION4) {
+			importConfigFromV4toV5();
+			localVersion = CONFIG_VERSION5;
+		}
+
+		if (localVersion < config.CONFIG_VERSION) {
+			LOG_FATAL("importer: config=" + String::fromNumber(localVersion) + " failed to reach config=" + String::fromNumber(config.CONFIG_VERSION));
+		}
+	}
 }
 
 unsigned ConfigImporter::detectLastVersion() {
@@ -196,32 +215,6 @@ unsigned ConfigImporter::detectLastVersion() {
 	}
 
 	return CONFIG_UNKNOWN;
-}
-
-void ConfigImporter::makeImportConfig(unsigned from, unsigned to) {
-	if (from == CONFIG_VERSION1) {
-		if (to == CONFIG_VERSION3) {
-			importConfigFromV1toV3();
-		} else if (to == CONFIG_VERSION4) {
-			importConfigFromV1toV3();
-			importConfigFromV3toV4();
-		}
-	} else if (from == CONFIG_VERSION2) {
-		if (to == CONFIG_VERSION3) {
-			importConfigFromV2toV3();
-		} else if (to == CONFIG_VERSION4) {
-			importConfigFromV2toV3();
-			importConfigFromV3toV4();
-		}
-	} else if (from == CONFIG_VERSION3) {
-		if (to == CONFIG_VERSION4) {
-			importConfigFromV3toV4();
-		}
-	} else if (from == CONFIG_VERSION4) {
-		if (to == CONFIG_VERSION5) {
-			importConfigFromV4toV5();
-		}
-	}
 }
 
 string ConfigImporter::getWengoClassicConfigPath() {
@@ -627,12 +620,12 @@ void * ConfigImporter::getLastWengoUser(const std::string & configUserFile, unsi
 				pos1 = lastLine.find_last_of('[');
 			}
 
-			lastUser->password = ((String)lastLine.substr(pos1 + 1, pos2 - (pos1 + 1))).trim();
+			lastUser->password = ((String) lastLine.substr(pos1 + 1, pos2 - (pos1 + 1))).trim();
 		}
 		else if (!strncmp(lastLine.c_str(), "<autoLogin>", 11)) {
 			int pos1 = lastLine.find_first_of('>');
 			int pos2 = lastLine.find_last_of('<');
-			string resp = ((String)lastLine.substr(pos1 + 1, pos2 - (pos1 + 1))).trim();
+			string resp = ((String) lastLine.substr(pos1 + 1, pos2 - (pos1 + 1))).trim();
 
 			if (resp == (version == CONFIG_VERSION2 ? "1" : "true")) {
 				lastUser->auto_login = true;

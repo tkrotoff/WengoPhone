@@ -223,7 +223,7 @@ WenboxPlugin & PhoneCall::getWenboxPlugin() const {
 	return *_phoneLine.getUserProfile().getWenboxPlugin();
 }
 
-void PhoneCall::videoFrameReceived(piximage* remoteVideoFrame, piximage* localVideoFrame) {
+void PhoneCall::videoFrameReceived(piximage * remoteVideoFrame, piximage * localVideoFrame) {
 	videoFrameReceivedEvent(*this, remoteVideoFrame, localVideoFrame);
 }
 

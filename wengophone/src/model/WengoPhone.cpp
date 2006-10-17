@@ -112,9 +112,9 @@ void WengoPhone::init() {
 	//Remove WengoPhone Classic from startup registry
 	ClassicExterminator::removeClassicFromStartup();
 
-	//Imports the Config from WengoPhone Classic.
+	//Imports the config from a previous WengoPhone version
 	ConfigImporter importer(*_userProfileHandler);
-	importer.importConfig(config.getConfigDir());
+	importer.importConfig();
 
 	_userProfileHandler->init();
 

@@ -30,7 +30,7 @@ class UserProfile;
 class UserProfileHandler;
 
 /**
- * Import configuration from WengoPhone classic.
+ * Imports the config from a previous WengoPhone version.
  *
  * @ingroup model
  * @author Julien Bossart
@@ -42,13 +42,11 @@ public:
 	ConfigImporter(UserProfileHandler & userProfileHandler);
 
 	/**
-	 * Imports the WengoPhone Classic Config only if no WengoPhone NG
-	 * configuration exists in the given folder.
+	 * Imports a config from a particular version to the last one.
 	 *
-	 * @return true if configuration has been imported, false if no configuration
-	 * found or the configuration has already been imported.
+	 * If this method fails it makes a LOG_FATAL() -> assertion failed
 	 */
-	bool importConfig(const std::string & str);
+	void importConfig();
 
 private:
 
@@ -68,14 +66,6 @@ private:
 	static std::string classicVCardToString(void * structVcard);
 
 	static void * getLastWengoUser(const std::string & configUserFile, unsigned version);
-
-	/**
-	 * Imports a config from a particular version to another one.
-	 *
-	 * @param from version from which we want to import
-	 * @param to version we want to have
-	 */
-	void makeImportConfig(unsigned from, unsigned to);
 
 	bool importConfigFromV1toV3();
 

@@ -129,7 +129,7 @@ public:
 	 * @param remoteVideoFrame received
 	 * @param localWebcam local webcam
 	 */
-	void videoFrameReceived(piximage* remoteVideoFrame, piximage* localVideoFrame);
+	void videoFrameReceived(piximage * remoteVideoFrame, piximage * localVideoFrame);
 
 	/**
 	 * Changes the state of this PhoneCall.
