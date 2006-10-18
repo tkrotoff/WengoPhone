@@ -240,7 +240,7 @@ unsigned File::getSize() const {
 	}
 #endif
 
-	if(_encoding == File::DEFAULT) {
+	if(_encoding == File::DEFAULT || _encoding == File::UTF8) {
 		if (stat(_filename.c_str(), &sb) == 0) {
 			return sb.st_size;
 		}
