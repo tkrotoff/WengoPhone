@@ -50,11 +50,13 @@ using namespace std;
 #endif
 
 File::File(const std::string & filename, File::Encoding enc)
-	: _filename(filename), _encoding(enc) {
+	: _filename(filename),
+	_encoding(enc) {
 }
 
 File::File(const File & file)
-	: _filename(file._filename), _encoding(file._encoding) {
+	: _filename(file._filename),
+	_encoding(file._encoding) {
 }
 
 File & File::operator = (const File & file) {
@@ -107,7 +109,7 @@ bool File::remove() {
 	bool result = false;
 
 	if (isDirectory(_filename)) {
-		// Removing all files in dir recursively
+		//Removing all files in dir recursively
 		StringList dirList = getDirectoryList();
 		for (StringList::const_iterator it = dirList.begin();
 			it != dirList.end(); ++it) {
@@ -231,16 +233,16 @@ unsigned File::getSize() const {
 	wchar_t filename4win[4096];
 	struct _stat sb4win;
 
-	if(_encoding == File::UTF8) {
-		MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, (LPCSTR)_filename.c_str(), -1, (LPWSTR)&filename4win, sizeof(filename4win));
-		if(_wstat(filename4win, &sb4win) == 0) {
+	if (_encoding == File::UTF8) {
+		MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, (LPCSTR) _filename.c_str(), -1, (LPWSTR) &filename4win, sizeof(filename4win));
+		if (_wstat(filename4win, &sb4win) == 0) {
 			return sb4win.st_size;
 		}
 		return 0;
 	}
 #endif
 
-	if(_encoding == File::DEFAULT || _encoding == File::UTF8) {
+	if (_encoding == File::DEFAULT || _encoding == File::UTF8) {
 		if (stat(_filename.c_str(), &sb) == 0) {
 			return sb.st_size;
 		}

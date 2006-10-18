@@ -48,7 +48,7 @@ QtAbout::QtAbout(QWidget * parent) {
 
 	_ui->wengoPhoneBuildIdStringLabel->setText(WengoPhoneBuildId::SOFTPHONE_NAME + QString(" ") +
 					WengoPhoneBuildId::VERSION +
-					QString(" rev") + QString::number(WengoPhoneBuildId::REVISION) +
+					QString(" rev") + WengoPhoneBuildId::REVISION +
 					QString("-") + QString::number(WengoPhoneBuildId::BUILDID));
 
 	QFile file(":/data/AUTHORS");

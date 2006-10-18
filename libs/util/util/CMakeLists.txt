@@ -42,6 +42,10 @@ if (WIN32)
   set(owutil_SRCS ${owutil_SRCS}
     src/win/UuidWin.cpp
   )
+  set(OWUTIL_LINK_LIBRARIES
+      ${OWUTIL_LINK_LIBRARIES}
+      Rpcrt4
+  )
 endif (WIN32)
 
 

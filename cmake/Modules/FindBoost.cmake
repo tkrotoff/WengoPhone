@@ -75,6 +75,7 @@ else (BOOST_LIBRARIES AND BOOST_INCLUDE_DIRS)
       /usr/local/include
       /opt/local/include
       /sw/include
+      ${BOOST_SEARCH_DIRS}
     PATH_SUFFIXES
       ${BOOST_PATH_SUFFIX}
   )
@@ -334,6 +335,7 @@ else (BOOST_LIBRARIES AND BOOST_INCLUDE_DIRS)
     )
   endif (BOOST_WSERIALIZATION_FOUND)
 
+  message(STATUS "include= ${BOOST_INCLUDE_DIRS}")
   if (BOOST_INCLUDE_DIRS AND BOOST_LIBRARIES)
      set(BOOST_FOUND TRUE)
   endif (BOOST_INCLUDE_DIRS AND BOOST_LIBRARIES)

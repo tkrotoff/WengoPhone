@@ -64,6 +64,7 @@ include_directories(
   ${OWPHAPIWRAPPER_INCLUDE_DIRS}
 )
 
+add_definitions(-DPHAPI_DLL)
 
 add_library(${OWPHAPIWRAPPER_LIBRARY} STATIC ${owphapiwrapper_SRCS})
 

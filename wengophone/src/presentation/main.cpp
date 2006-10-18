@@ -76,7 +76,7 @@ std::string getAddionnalInfo() {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	std::string info = "User: " + config.getProfileLastUsedName() + String::EOL;
 	info += "buildid: " + String::fromUnsignedLongLong(WengoPhoneBuildId::BUILDID) + String::EOL;
-	info += "revision: " + String::fromUnsignedLongLong(WengoPhoneBuildId::REVISION) + String::EOL;
+	info += "revision: " + String(WengoPhoneBuildId::REVISION) + String::EOL;
 	return info;
 }
 
@@ -97,7 +97,7 @@ int main(int argc, char * argv[]) {
 	LOG_DEBUG(String::EOL + getAddionnalInfo());
 
 #ifdef CC_MSVC
-	MemoryDump * memoryDump = new MemoryDump("WengoPhoneNG", String::fromUnsignedLongLong(WengoPhoneBuildId::REVISION).c_str());
+	MemoryDump * memoryDump = new MemoryDump("WengoPhoneNG", WengoPhoneBuildId::REVISION);
 
 	memoryDump->setLanguage(config.getLanguage().c_str());
 	memoryDump->SetGetAdditionnalInfo(getAddionnalInfo);

@@ -81,8 +81,6 @@ set(QTWENGOPHONE_LINK_LIBRARIES
   ${QT_QTXML_LIBRARY}
   #${QT_QTUITOOLS_LIBRARY}
   QtUiTools
-
-  gnutls
 )
 
 

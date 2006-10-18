@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef WENGOPHONEBUILDID_H
-#define WENGOPHONEBUILDID_H
+#ifndef OWWENGOPHONEBUILDID_H
+#define OWWENGOPHONEBUILDID_H
 
 /**
  * Identifies uniquely a revision of WengoPhone.
@@ -34,6 +34,8 @@ public:
 	 * This is a unique id for each release.
 	 * It permits WengoPhone to check if a more recent version of itself exist.
 	 * Format: year/month/day hour:minutes:seconds
+	 *
+	 * Do not modify this to a string, keep it as a number!
 	 */
 	static const unsigned long long BUILDID;
 
@@ -46,9 +48,26 @@ public:
 	static const char * VERSION;
 
 	/**
-	 * Revision number (Subversion revision).
+	 * Revision number (subversion revision).
+	 *
+	 * Check console command 'svnversion -n':
+	 *
+	 * <pre>
+	 * The version number will be a single number if the working
+	 * copy is single revision, unmodified, not switched and with
+	 * an URL that matches the TRAIL_URL argument.  If the working
+	 * copy is unusual the version number will be more complex:
+	 *
+	 * 4123:4168     mixed revision working copy
+	 * 4168M         modified working copy
+	 * 4123S         switched working copy
+	 * 4123:4168MS   mixed revision, modified, switched working copy
+	 *
+	 * If invoked on a directory that is not a working copy, an
+	 * exported directory say, the program will output 'exported'.
+	 * </pre>
 	 */
-	static const unsigned long long REVISION;
+	static const char * REVISION;
 
 	/**
 	 * Softphone name when connecting on the Wengo platform.
@@ -65,4 +84,4 @@ private:
 	WengoPhoneBuildId& operator=(const WengoPhoneBuildId &);
 };
 
-#endif	//WENGOPHONEBUILDID_H
+#endif	//OWWENGOPHONEBUILDID_H
