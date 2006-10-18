@@ -188,7 +188,7 @@ void QtVideoSettings::hideEvent(QHideEvent * event) {
 
 void QtVideoSettings::makeTestCallClicked() {
 	CUserProfile * cUserProfile = _cWengoPhone.getCUserProfileHandler().getCUserProfile();
-	if (cUserProfile) {
+	if ((cUserProfile) && (cUserProfile->getUserProfile().getActivePhoneLine())) {
 		cUserProfile->getUserProfile().getActivePhoneLine()->makeCall(VIDEO_TEST_CALL);
 	}
 }
