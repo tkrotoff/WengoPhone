@@ -1,14 +1,6 @@
 # opt flags for phapi and plugins
 if (MSVC)
   set(PHAPI_OPTIMIZATION_FLAGS
-    /Ox
-    /Ob2
-    /Oi
-    /Ot
-    /Oy
-    /G7
-    /GX-
-    /GR-
     /arch:SSE
   )
 else (MSVC)
@@ -37,3 +29,8 @@ subdirs(
   #TODO: miniua
 )
 
+if (MSVC)
+  subdirs(
+    phapi/msdirent
+  )
+endif (MSVC)

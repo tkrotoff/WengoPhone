@@ -27,19 +27,19 @@ else (FFMPEG_LIBRARIES AND FFMPEG_INCLUDE_DIRS)
       ffmpeg
   )
 
-  find_library(AVUTIL-49_LIBRARY
+  find_library(AVUTIL_LIBRARY
     NAMES
       avutil-49
     PATHS
       ${CMAKE_SOURCE_DIR}/libs/3rdparty/ffmpeg/binary-lib/msvc
   )
-  find_library(AVCODEC-51_LIBRARY
+  find_library(AVCODEC_LIBRARY
     NAMES
       avcodec-51
     PATHS
       ${CMAKE_SOURCE_DIR}/libs/3rdparty/ffmpeg/binary-lib/msvc
   )
-  find_library(AVFORMAT-50_LIBRARY
+  find_library(AVFORMAT_LIBRARY
     NAMES
       avformat-50
     PATHS
@@ -50,9 +50,9 @@ else (FFMPEG_LIBRARIES AND FFMPEG_INCLUDE_DIRS)
     ${FFMPEG_INCLUDE_DIR}
   )
   set(FFMPEG_LIBRARIES
-    ${AVUTIL-49_LIBRARY}
-    ${AVCODEC-51_LIBRARY}
-    ${AVFORMAT-50_LIBRARY}
+    ${AVUTIL_LIBRARY}
+    ${AVCODEC_LIBRARY}
+    ${AVFORMAT_LIBRARY}
 )
 
   if (FFMPEG_INCLUDE_DIRS AND FFMPEG_LIBRARIES)
@@ -73,4 +73,3 @@ else (FFMPEG_LIBRARIES AND FFMPEG_INCLUDE_DIRS)
   mark_as_advanced(FFMPEG_INCLUDE_DIRS FFMPEG_LIBRARIES)
 
 endif (FFMPEG_LIBRARIES AND FFMPEG_INCLUDE_DIRS)
-

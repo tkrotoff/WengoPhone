@@ -33,7 +33,7 @@ if (WIN32)
   )
 
   set(OSIP2_DEFINITIONS
-    ${OSIP_DEFINITIONS}
+    ${OSIP2_DEFINITIONS}
     -DWIN32
   )
 endif (WIN32)
@@ -126,4 +126,3 @@ add_definitions(
 add_library(${OSIP2_LIBRARY} STATIC ${osip2_SRCS})
 
 target_link_libraries(${OSIP2_LINK_LIBRARIES})
-

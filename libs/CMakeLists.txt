@@ -4,6 +4,12 @@ if (WIN32)
   )
 endif (WIN32)
 
+if (NOT MSVC)
+  subdirs(
+    gaim
+  )
+endif (NOT MSVC)
+
 if (UNIX)
   if (NOT APPLE)
     subdirs(
@@ -13,7 +19,6 @@ if (UNIX)
 endif (UNIX)
 
 subdirs(
-  gaim
   curl
   tinyxml
   util

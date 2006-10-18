@@ -360,12 +360,21 @@ set(qtwengophone_SRCS
 )
 
 if (WIN32)
-  if (MSVC)
-    qt4_add_resources(qtwengophone_SRCS
-      win32/wengophone.rc
-    )
-  else (MSVC)
-  endif (MSVC)
+  #if (MSVC)
+  #  qt4_add_resources(qtwengophone_SRCS
+  #    win32/wengophone.rc
+  #  )
+  #else (MSVC)
+  #endif (MSVC)
+  set(QTWENGOPHONE_INCLUDE_DIRS
+    ${QTWENGOPHONE_INCLUDE_DIRS}
+    ${OWMEMORYDUMP_INCLUDE_DIRS}
+  )
+
+  set(QTWENGOPHONE_LINK_LIBRARIES
+    ${QTWENGOPHONE_LINK_LIBRARIES}
+    ${OWMEMORYDUMP_LIBRARY}
+  )
 endif (WIN32)
 
 if (UNIX AND NOT WIN32)

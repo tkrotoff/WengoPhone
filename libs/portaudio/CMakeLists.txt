@@ -21,7 +21,14 @@ set(PORTAUDIO_DEFINITIONS
   -DPA_LITTLE_ENDIAN
   -DPA_NO_ASIO
   -DPA_NO_WDMKS
+  -DPA_NO_DS
 )
+
+#defines['PA_LITTLE_ENDIAN'] = 1
+#defines['PA_NO_ASIO'] = 1
+#defines['PA_NO_WDMKS'] = 1
+#defines['PA_NO_WMME'] = 1
+#defines['PA_NO_DS'] = 1
 
 set(portaudio_SRCS
   pa_common/pa_allocation.c
@@ -62,4 +69,3 @@ add_definitions(
 add_library(${PORTAUDIO_LIBRARY} STATIC ${portaudio_SRCS})
 
 target_link_libraries(${PORTAUDIO_LINK_LIBRARIES})
-

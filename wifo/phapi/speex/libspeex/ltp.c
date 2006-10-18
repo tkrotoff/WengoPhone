@@ -1,22 +1,22 @@
-/* Copyright (C) 2002-2006 Jean-Marc Valin 
+/* Copyright (C) 2002-2006 Jean-Marc Valin
    File: ltp.c
    Long-Term Prediction functions
 
    Redistribution and use in source and binary forms, with or without
    modification, are permitted provided that the following conditions
    are met:
-   
+
    - Redistributions of source code must retain the above copyright
    notice, this list of conditions and the following disclaimer.
-   
+
    - Redistributions in binary form must reproduce the above copyright
    notice, this list of conditions and the following disclaimer in the
    documentation and/or other materials provided with the distribution.
-   
+
    - Neither the name of the Xiph.org Foundation nor the names of its
    contributors may be used to endorse or promote products derived from
    this software without specific prior written permission.
-   
+
    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
    ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
    LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
@@ -52,6 +52,10 @@
 #include "ltp_arm4.h"
 #elif defined (BFIN_ASM)
 #include "ltp_bfin.h"
+#endif
+
+#ifdef _MSC_VER
+#define inline __inline
 #endif
 
 #ifndef OVERRIDE_INNER_PROD
@@ -124,7 +128,7 @@ void pitch_xcorr(const spx_word16_t *_x, const spx_word16_t *_y, spx_word32_t *c
          part4 = MAC16_16(part4,*x,y2);
          x++;
          y3=*y++;
-         
+
          sum1 = ADD32(sum1,SHR32(part1,6));
          sum2 = ADD32(sum2,SHR32(part2,6));
          sum3 = ADD32(sum3,SHR32(part3,6));
@@ -304,15 +308,15 @@ static int pitch_gain_search_3tap_vq(
   int                i;
 
   for (i=0;i<gain_cdbk_size;i++) {
-         
+
     ptr = gain_cdbk+4*i;
     g[0]=ADD16((spx_word16_t)ptr[0],32);
     g[1]=ADD16((spx_word16_t)ptr[1],32);
     g[2]=ADD16((spx_word16_t)ptr[2],32);
     gain_sum = (spx_word16_t)ptr[3];
-         
+
     sum = compute_pitch_error(C16, g, pitch_control);
-         
+
     if (sum>best_sum && gain_sum<=max_gain) {
       best_sum=sum;
       best_cdbk=i;
@@ -361,11 +365,11 @@ spx_word32_t cumul_gain
 
    if (cumul_gain > 262144)
       max_gain = 31;
-   
+
    x[0]=tmp1;
    x[1]=tmp1+nsf;
    x[2]=tmp1+2*nsf;
-   
+
    {
       VARDECL(spx_mem_t *mm);
       int pp=pitch-1;
@@ -408,17 +412,17 @@ spx_word32_t cumul_gain
       spx_word16_t C16[9];
 #else
       spx_word16_t *C16=C;
-#endif      
+#endif
       C[0]=corr[2];
       C[1]=corr[1];
       C[2]=corr[0];
       C[3]=A[1][2];
       C[4]=A[0][1];
-      C[5]=A[0][2];      
+      C[5]=A[0][2];
       C[6]=A[2][2];
       C[7]=A[1][1];
       C[8]=A[0][0];
-      
+
       /*plc_tuning *= 2;*/
       if (plc_tuning<2)
          plc_tuning=2;
@@ -520,13 +524,13 @@ spx_word32_t *cumul_gain
    const ltp_params *params;
    const signed char *gain_cdbk;
    int   gain_cdbk_size;
-   
+
    VARDECL(int *nbest);
-   
+
    params = (const ltp_params*) par;
    gain_cdbk_size = 1<<params->gain_bits;
    gain_cdbk = params->gain_cdbk + 4*gain_cdbk_size*cdbk_offset;
-   
+
    N=complexity;
    if (N>10)
       N=10;
@@ -544,18 +548,18 @@ spx_word32_t *cumul_gain
          exc[i]=0;
       return start;
    }
-   
+
    if (N>end-start+1)
       N=end-start+1;
    if (end != start)
       open_loop_nbest_pitch(sw, start, end, nsf, nbest, NULL, N, stack);
    else
       nbest[0] = start;
-   
+
    ALLOC(best_exc, nsf, spx_sig_t);
    ALLOC(new_target, nsf, spx_word16_t);
    ALLOC(best_target, nsf, spx_word16_t);
-   
+
    for (i=0;i<N;i++)
    {
       pitch=nbest[i];

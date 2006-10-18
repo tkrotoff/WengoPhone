@@ -39,6 +39,7 @@ find_package(Boost REQUIRED)
 if (WIN32)
   find_package(OpenSSLInternal REQUIRED)
   find_package(GLIB2Internal REQUIRED)
+  find_package(GAIMInternal REQUIRED)
   find_package(FFMPEGInternal REQUIRED)
 else (WIN32)
   find_package(OpenSSL REQUIRED)
@@ -61,4 +62,3 @@ subdirs(
   wengophone
   crashreport
 )
-

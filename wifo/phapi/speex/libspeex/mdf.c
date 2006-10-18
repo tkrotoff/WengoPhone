@@ -33,36 +33,36 @@
 /*
    The echo canceller is based on the MDF algorithm described in:
 
-   J. S. Soo, K. K. Pang Multidelay block frequency adaptive filter, 
-   IEEE Trans. Acoust. Speech Signal Process., Vol. ASSP-38, No. 2, 
+   J. S. Soo, K. K. Pang Multidelay block frequency adaptive filter,
+   IEEE Trans. Acoust. Speech Signal Process., Vol. ASSP-38, No. 2,
    February 1990.
-   
-   We use the Alternatively Updated MDF (AUMDF) variant. Robustness to 
+
+   We use the Alternatively Updated MDF (AUMDF) variant. Robustness to
    double-talk is achieved using a variable learning rate as described in:
-   
-   Valin, J.-M., On Adjusting the Learning Rate in Frequency Domain Echo 
+
+   Valin, J.-M., On Adjusting the Learning Rate in Frequency Domain Echo
    Cancellation With Double-Talk. To appear in IEEE Transactions on Audio,
    Speech and Language Processing, 2006.
    http://people.xiph.org/~jm/papers/valin_taslp2006.pdf
-   
+
    There is no explicit double-talk detection, but a continuous variation
    in the learning rate based on residual echo, double-talk and background
    noise.
-   
+
    About the fixed-point version:
-   All the signals are represented with 16-bit words. The filter weights 
+   All the signals are represented with 16-bit words. The filter weights
    are represented with 32-bit words, but only the top 16 bits are used
    in most cases. The lower 16 bits are completely unreliable (due to the
    fact that the update is done only on the top bits), but help in the
    adaptation -- probably by removing a "threshold effect" due to
    quantization (rounding going to zero) when the gradient is small.
-   
+
    Another kludge that seems to work good: when performing the weight
    update, we only move half the way toward the "goal" this seems to
    reduce the effect of quantization noise in the update phase. This
    can be seen as applying a gradient descent on a "soft constraint"
    instead of having a hard constraint.
-   
+
 */
 
 #ifdef HAVE_CONFIG_H
@@ -74,6 +74,10 @@
 #include "fftwrap.h"
 #include "pseudofloat.h"
 #include "math_approx.h"
+
+#ifdef _MSC_VER
+#define inline __inline
+#endif
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
@@ -161,7 +165,7 @@ static inline void filter_dc_notch16(const spx_int16_t *in, spx_word16_t radius,
    den2 = MULT16_16_Q15(radius,radius) + MULT16_16_Q15(QCONST16(.7,15),MULT16_16_Q15(32767-radius,32767-radius));
 #else
    den2 = radius*radius + .7*(1-radius)*(1-radius);
-#endif   
+#endif
    /*printf ("%d %d %d %d %d %d\n", num[0], num[1], num[2], den[0], den[1], den[2]);*/
    for (i=0;i<len;i++)
    {
@@ -293,7 +297,7 @@ SpeexEchoState *speex_echo_state_init(int frame_size, int filter_length)
 #endif
 
    st->fft_table = spx_fft_init(N);
-   
+
    st->e = (spx_word16_t*)speex_alloc(N*sizeof(spx_word16_t));
    st->x = (spx_word16_t*)speex_alloc(N*sizeof(spx_word16_t));
    st->d = (spx_word16_t*)speex_alloc(N*sizeof(spx_word16_t));
@@ -349,7 +353,7 @@ SpeexEchoState *speex_echo_state_init(int frame_size, int filter_length)
          st->prop[i] = DIV32(MULT16_16(QCONST16(.8,15), st->prop[i]),sum);
       }
    }
-   
+
    st->memX=st->memD=st->memE=0;
    st->preemph = QCONST16(.9,15);
    if (st->sampling_rate<12000)
@@ -362,7 +366,7 @@ SpeexEchoState *speex_echo_state_init(int frame_size, int filter_length)
    st->notch_mem[0] = st->notch_mem[1] = 0;
    st->adapted = 0;
    st->Pey = st->Pyy = FLOAT_ONE;
-   
+
    st->play_buf = (spx_int16_t*)speex_alloc(2*st->frame_size*sizeof(spx_int16_t));
    st->play_buf_pos = 0;
 
@@ -385,7 +389,7 @@ void speex_echo_state_reset(SpeexEchoState *st)
    for (i=0;i<N;i++)
       st->E[i] = 0;
    st->notch_mem[0] = st->notch_mem[1] = 0;
-  
+
    st->saturated = 0;
    st->adapted = 0;
    st->sum_adapt = 0;
@@ -475,7 +479,7 @@ void speex_echo_cancel(SpeexEchoState *st, const spx_int16_t *ref, const spx_int
    spx_float_t alpha, alpha_1;
    spx_word16_t RER;
    spx_word32_t tmp32;
-   
+
    N = st->window_size;
    M = st->M;
    st->cancel_count++;
@@ -501,16 +505,16 @@ void speex_echo_cancel(SpeexEchoState *st, const spx_int16_t *ref, const spx_int
       {
          tmp32 = 32767;
          st->saturated = 1;
-      }      
+      }
       if (tmp32 < -32767)
       {
          tmp32 = -32767;
          st->saturated = 1;
-      }      
+      }
 #endif
       st->x[i+st->frame_size] = EXTRACT16(tmp32);
       st->memX = echo[i];
-      
+
       tmp = st->d[i];
       st->d[i] = st->d[i+st->frame_size];
       tmp32 = SUB32(EXTEND32(tmp), EXTEND32(MULT16_16_P15(st->preemph, st->memD)));
@@ -519,7 +523,7 @@ void speex_echo_cancel(SpeexEchoState *st, const spx_int16_t *ref, const spx_int
       {
          tmp32 = 32767;
          st->saturated = 1;
-      }      
+      }
       if (tmp32 < -32767)
       {
          tmp32 = -32767;
@@ -539,9 +543,9 @@ void speex_echo_cancel(SpeexEchoState *st, const spx_int16_t *ref, const spx_int
 
    /* Convert x (echo input) to frequency domain */
    spx_fft(st->fft_table, st->x, &st->X[0]);
-   
+
 #ifdef SMOOTH_BLOCKS
-   spectral_mul_accum(st->X, st->W, st->Y, N, M);   
+   spectral_mul_accum(st->X, st->W, st->Y, N, M);
    spx_ifft(st->fft_table, st->Y, st->e);
 #endif
 
@@ -553,12 +557,12 @@ void speex_echo_cancel(SpeexEchoState *st, const spx_int16_t *ref, const spx_int
          weighted_spectral_mul_conj(st->power_1, &st->X[(j+1)*N], st->E, st->PHI, N);
          for (i=0;i<N;i++)
             st->W[j*N+i] += MULT16_32_Q15(st->prop[j], st->PHI[i]);
-         
-      }   
+
+      }
    }
-   
+
    st->saturated = 0;
-   
+
    /* Update weight to prevent circular convolution (MDF / AUMDF) */
    for (j=0;j<M;j++)
    {
@@ -597,8 +601,8 @@ void speex_echo_cancel(SpeexEchoState *st, const spx_int16_t *ref, const spx_int
    spectral_mul_accum(st->X, st->W, st->Y, N, M);
    spx_ifft(st->fft_table, st->Y, st->y);
 
-   
-   /* Compute error signal (for the output with de-emphasis) */ 
+
+   /* Compute error signal (for the output with de-emphasis) */
    for (i=0;i<st->frame_size;i++)
    {
       spx_word32_t tmp_out;
@@ -625,7 +629,7 @@ void speex_echo_cancel(SpeexEchoState *st, const spx_int16_t *ref, const spx_int
       st->memE = tmp_out;
    }
 
-   /* Compute error signal (filter update version) */ 
+   /* Compute error signal (filter update version) */
    for (i=0;i<st->frame_size;i++)
    {
       st->e[i] = 0;
@@ -649,12 +653,12 @@ void speex_echo_cancel(SpeexEchoState *st, const spx_int16_t *ref, const spx_int
    power_spectrum(st->E, st->Rf, N);
    power_spectrum(st->Y, st->Yf, N);
    power_spectrum(st->X, st->Xf, N);
-   
+
    /* Smooth echo energy estimate over time */
    for (j=0;j<=st->frame_size;j++)
       st->power[j] = MULT16_32_Q15(ss_1,st->power[j]) + 1 + MULT16_32_Q15(ss,st->Xf[j]);
-   
-   /* Enable this to compute the power based only on the tail (would need to compute more 
+
+   /* Enable this to compute the power based only on the tail (would need to compute more
       efficiently to make this really useful */
    if (0)
    {
@@ -685,7 +689,7 @@ void speex_echo_cancel(SpeexEchoState *st, const spx_int16_t *ref, const spx_int
       st->Yh[j] = (1-st->spec_average)*st->Yh[j] + st->spec_average*st->Yf[j];
 #endif
    }
-   
+
    Pyy = FLOAT_SQRT(Pyy);
    Pey = FLOAT_DIVU(Pey,Pyy);
 
@@ -713,7 +717,7 @@ void speex_echo_cancel(SpeexEchoState *st, const spx_int16_t *ref, const spx_int
    else
       leak_estimate = SHL16(leak_estimate,1);
    /*printf ("%f\n", leak_estimate);*/
-   
+
    /* Compute Residual to Error Ratio */
 #ifdef FIXED_POINT
    tmp32 = MULT16_32_Q15(leak_estimate,Syy);
@@ -777,7 +781,7 @@ void speex_echo_cancel(SpeexEchoState *st, const spx_int16_t *ref, const spx_int
          tmp32 = .25*See;
 #endif
       adapt_rate = FLOAT_EXTRACT16(FLOAT_SHL(FLOAT_DIV32(tmp32, See),15));
-      
+
       for (i=0;i<=st->frame_size;i++)
          st->power_1[i] = FLOAT_SHL(FLOAT_DIV32(EXTEND32(adapt_rate),ADD32(st->power[i],10)),WEIGHT_SHIFT+1);
 
@@ -802,15 +806,15 @@ void speex_echo_cancel(SpeexEchoState *st, const spx_int16_t *ref, const spx_int
          for (i=0;i<N;i++)
             st->last_y[i] = st->x[i];
       }
-      
+
       /* Apply hanning window (should pre-compute it)*/
       for (i=0;i<N;i++)
          st->y[i] = MULT16_16_Q15(st->window[i],st->last_y[i]);
-      
+
       /* Compute power spectrum of the echo */
       spx_fft(st->fft_table, st->y, st->Y);
       power_spectrum(st->Y, st->Yps, N);
-      
+
 #ifdef FIXED_POINT
       if (leak_estimate > 16383)
          leak2 = 32767;
@@ -833,7 +837,7 @@ int speex_echo_ctl(SpeexEchoState *st, int request, void *ptr)
 {
    switch(request)
    {
-      
+
       case SPEEX_ECHO_GET_FRAME_SIZE:
          (*(int*)ptr) = st->frame_size;
          break;

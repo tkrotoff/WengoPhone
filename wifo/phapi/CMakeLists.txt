@@ -19,6 +19,13 @@ set(PHAPI_INCLUDE_DIRS
   CACHE INTERNAL "phapi include directories"
 )
 
+if (MSVC)
+  set(PHAPI_INCLUDE_DIRS
+    ${PHAPI_INCLUDE_DIRS}
+    ${MSDIRENT_INCLUDE_DIRS}
+  )
+endif (MSVC)
+
 set(PHAPI_LIBRARY
   phapi
   CACHE INTERNAL "phapi library"
@@ -40,6 +47,13 @@ set(PHAPI_LINK_LIBRARIES
   ${SPEEXEC_LIBRARY}
   ${WTIMER_LIBRARY}
 )
+
+if (MSVC)
+  set(PHAPI_LINK_LIBRARIES
+    ${PHAPI_LINK_LIBRARIES}
+    ${MSDIRENT_LIBRARY}
+  )
+endif (MSVC)
 
 set(PHAPI_DEFINITIONS
   -DUSE_PCM=1
@@ -207,7 +221,7 @@ if (WITH_HTTPTUNNEL)
   add_definitions(-DUSE_HTTP_TUNNEL)
 endif (WITH_HTTPTUNNEL)
 
-if (WITH_VIDEO)
+#if (WITH_VIDEO)
   set(PHAPI_INCLUDE_DIRS
     ${PHAPI_INCLUDE_DIRS}
     ${FFMPEG_INCLUDE_DIRS}
@@ -217,10 +231,11 @@ if (WITH_VIDEO)
 
   set(PHAPI_LINK_LIBRARIES
     ${PHAPI_LINK_LIBRARIES}
-    ${AVUTIL_LIBRARY}
-    ${AVCODEC_LIBRARY}
+    ${FFMPEG_LIBRARIES}
     ${WEBCAM_LIBRARY}
   )
+
+message(STATUS "avcodec=" ${FFMPEG_LIBRARIES})
 
   add_definitions(-DPHAPI_VIDEO_SUPPORT)
 
@@ -234,7 +249,8 @@ if (WITH_VIDEO)
     phmedia-video-bwcontrol.c
     phcodec-avcodec-wrapper.c
   )
-endif (WITH_VIDEO)
+
+#endif (WITH_VIDEO)
 
 # system specific phapi options
 
@@ -372,8 +388,14 @@ endif (UNIX AND NOT WIN32)
 if (NOT APPLE)
   set(PHAPI_LINK_LIBRARIES
     ${PHAPI_LINK_LIBRARIES}
-    ${PORTAUDIO_LIBRARIES}
+    ${PORTAUDIO_LIBRARY}
   )
+
+  set(PHAPI_INCLUDE_DIRS
+      ${PHAPI_INCLUDE_DIRS}
+      ${PORTAUDIO_INCLUDE_DIRS}
+      CACHE INTERNAL "phapi include directories"
+    )
 
   add_definitions(-DENABLE_PORTAUDIO)
 
@@ -441,7 +463,7 @@ target_link_libraries(phamrplugin)
 include_directories(${SPEEX_INCLUDE_DIRS})
 macro_add_plugin(phspeexplugin ${phapi_speex_plugin_SRCS})
 macro_add_compile_flags(phspeexplugin ${PHAPI_OPTIMIZATION_FLAGS})
-target_link_libraries(phspeexplugin ${SPEEX_LIBRARIES})
+target_link_libraries(phspeexplugin ${SPEEX_LIBRARY})
 
 install(
   TARGETS
@@ -450,4 +472,3 @@ install(
   DESTINATION
     ${PLUGIN_INSTALL_DIR}
 )
-

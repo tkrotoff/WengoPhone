@@ -106,7 +106,7 @@ defines = {
 	'PA_NO_WDMKS' : 1,
 	'SIZEOF_SHORT' : 2,
 	'SIZEOF_INT' : 4,
-	'SIZEOF_LONG' :4
+	'SIZEOF_LONG' : 4,
 }
 
 if WengoDebugMode():
@@ -149,7 +149,7 @@ elif WengoOSWindows():
 	defines['PA_NO_WDMKS'] = 1
 	sources += sources_win
 	headers += headers_win
-	
+
 	if WengoGetConsoleArgument('portaudio-dsound') == 1:
 		sources += source_dsound
 		headers += headers_dsound
