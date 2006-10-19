@@ -83,14 +83,20 @@ void WebcamDriver::cleanup() {
 }
 
 StringList WebcamDriver::getDeviceList() {
+	Mutex::ScopedLock lock(_mutex);
+
 	return _webcamPrivate->getDeviceList();
 }
 
 std::string WebcamDriver::getDefaultDevice() {
+	Mutex::ScopedLock lock(_mutex);
+
 	return _webcamPrivate->getDefaultDevice();
 }
 
 webcamerrorcode WebcamDriver::setDevice(const std::string & deviceName) {
+	Mutex::ScopedLock lock(_mutex);
+
 	if (!_isRunning) {
 		cleanup();
 
@@ -108,10 +114,14 @@ webcamerrorcode WebcamDriver::setDevice(const std::string & deviceName) {
 }
 
 bool WebcamDriver::isOpen() const {
+	Mutex::ScopedLock lock(_mutex);
+
 	return _webcamPrivate->isOpen();
 }
 
 void WebcamDriver::startCapture() {
+	Mutex::ScopedLock lock(_mutex);
+
 	if (!_isRunning) {
 		LOG_DEBUG("starting capture");
 		_webcamPrivate->startCapture();
@@ -122,11 +132,15 @@ void WebcamDriver::startCapture() {
 }
 
 void WebcamDriver::pauseCapture() {
+	Mutex::ScopedLock lock(_mutex);
+
 	LOG_DEBUG("pausing capture");
 	_webcamPrivate->pauseCapture();
 }
 
 void WebcamDriver::stopCapture() {
+	Mutex::ScopedLock lock(_mutex);
+
 	if (_isRunning) {
 		LOG_DEBUG("stopping capture");
 		_webcamPrivate->stopCapture();
@@ -136,6 +150,8 @@ void WebcamDriver::stopCapture() {
 }
 
 webcamerrorcode WebcamDriver::setPalette(pixosi palette) {
+	Mutex::ScopedLock lock(_mutex);
+
 	if (!_isRunning) {
 		if (_webcamPrivate->setPalette(palette) == WEBCAM_NOK) {
 			LOG_DEBUG("this webcam does not support palette #" + String::fromNumber(palette));
@@ -159,6 +175,8 @@ webcamerrorcode WebcamDriver::setPalette(pixosi palette) {
 }
 
 pixosi WebcamDriver::getPalette() const {
+	Mutex::ScopedLock lock(_mutex);
+
 	if (isFormatForced()) {
 		return _desiredPalette;
 	} else {
@@ -167,6 +185,8 @@ pixosi WebcamDriver::getPalette() const {
 }
 
 webcamerrorcode WebcamDriver::setFPS(unsigned fps) {
+	Mutex::ScopedLock lock(_mutex);
+
 	if (!_isRunning) {
 		if (_webcamPrivate->setFPS(fps) == WEBCAM_NOK) {
 			LOG_DEBUG("this webcam does not support the desired fps(" + String::fromNumber(fps) + "), will force it");
@@ -186,10 +206,14 @@ webcamerrorcode WebcamDriver::setFPS(unsigned fps) {
 }
 
 unsigned WebcamDriver::getFPS() const {
+	Mutex::ScopedLock lock(_mutex);
+
 	return _forcedFPS;
 }
 
 webcamerrorcode WebcamDriver::setResolution(unsigned width, unsigned height) {
+	Mutex::ScopedLock lock(_mutex);
+
 	if (!_isRunning) {
 		LOG_DEBUG("try to change resolution: (width, height)=" + String::fromNumber(width) + "," + String::fromNumber(height));
 		if (_webcamPrivate->setResolution(width, height) == WEBCAM_NOK) {
@@ -213,6 +237,8 @@ webcamerrorcode WebcamDriver::setResolution(unsigned width, unsigned height) {
 }
 
 unsigned WebcamDriver::getWidth() const {
+	Mutex::ScopedLock lock(_mutex);
+
 	if (isFormatForced()) {
 		return _desiredWidth;
 	} else {
@@ -221,6 +247,8 @@ unsigned WebcamDriver::getWidth() const {
 }
 
 unsigned WebcamDriver::getHeight() const {
+	Mutex::ScopedLock lock(_mutex);
+
 	if (isFormatForced()) {
 		return _desiredHeight;
 	} else {
@@ -229,22 +257,32 @@ unsigned WebcamDriver::getHeight() const {
 }
 
 void WebcamDriver::setBrightness(int brightness) {
+	Mutex::ScopedLock lock(_mutex);
+
 	_webcamPrivate->setBrightness(brightness);
 }
 
 int WebcamDriver::getBrightness() const {
+	Mutex::ScopedLock lock(_mutex);
+
 	return _webcamPrivate->getBrightness();
 }
 
 void WebcamDriver::setContrast(int contrast) {
+	Mutex::ScopedLock lock(_mutex);
+
 	_webcamPrivate->setContrast(contrast);
 }
 
 int WebcamDriver::getContrast() const {
+	Mutex::ScopedLock lock(_mutex);
+
 	return _webcamPrivate->getContrast();
 }
 
 void WebcamDriver::flipHorizontally(bool flip) {
+	Mutex::ScopedLock lock(_mutex);
+
 	if (flip) {
 		LOG_DEBUG("enable horizontal flip");
 		_convFlags |= PIX_FLIP_HORIZONTALLY;
@@ -255,6 +293,8 @@ void WebcamDriver::flipHorizontally(bool flip) {
 }
 
 void WebcamDriver::frameBufferAvailable(piximage *image) {
+	Mutex::ScopedLock lock(_mutex);
+
 	float now;
 	float fpsTimerInter = 1000 / (float)_forcedFPS;
 

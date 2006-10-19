@@ -26,6 +26,8 @@
 
 #include <cutil/global.h>
 
+#include <thread/Mutex.h>
+
 #if defined(OS_WIN32)
 	class DirectXWebcamDriver;
 #elif defined(OS_MACOSX)
@@ -191,6 +193,10 @@ private:
 
 	/** True if the WebcamDriver is running and used. */
 	bool _isRunning;
+
+	/** Mutex for thread safety. */
+	mutable Mutex _mutex;
+
 };
 
 #endif	//OWWEBCAMDRIVER_H
