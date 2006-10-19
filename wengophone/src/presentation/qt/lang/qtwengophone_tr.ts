@@ -377,17 +377,6 @@ ya da sesli mesaj sisteminize (eğer varsa) yönelik yapılandırabilirsiniz.</t
     </message>
 </context>
 <context>
-    <name>ChatContactListItem</name>
-    <message>
-        <source>Form</source>
-        <translation type="unfinished">Form</translation>
-    </message>
-    <message>
-        <source></source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>ChatMainWindow</name>
     <message>
         <source>MainWindow</source>
@@ -427,7 +416,7 @@ ya da sesli mesaj sisteminize (eğer varsa) yönelik yapılandırabilirsiniz.</t
     </message>
     <message>
         <source>createChatConf</source>
-        <translation></translation>
+        <translation>createChatConf</translation>
     </message>
     <message>
         <source>Show Contact Info</source>
@@ -443,17 +432,6 @@ ya da sesli mesaj sisteminize (eğer varsa) yönelik yapılandırabilirsiniz.</t
     </message>
 </context>
 <context>
-    <name>ChatRoomWidget</name>
-    <message>
-        <source>Form</source>
-        <translation type="unfinished">Form</translation>
-    </message>
-    <message>
-        <source></source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>ChatToaster</name>
     <message>
         <source>Message</source>
@@ -461,7 +439,7 @@ ya da sesli mesaj sisteminize (eğer varsa) yönelik yapılandırabilirsiniz.</t
     </message>
     <message>
         <source>Incoming Chat</source>
-        <translation></translation>
+        <translation>Gelen Sohbet</translation>
     </message>
 </context>
 <context>
@@ -741,11 +719,15 @@ zorunlu değildir. &lt;br&gt; Hata Tanımı kısmını kullanınız:</translatio
     </message>
     <message>
         <source>From:</source>
-        <translation>Arayan:</translation>
+        <translation type="obsolete">Arayan:</translation>
     </message>
     <message>
         <source>Pause</source>
         <translation>Ara ver</translation>
+    </message>
+    <message>
+        <source>&lt;i&gt;From:&lt;/i&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -878,7 +860,7 @@ weight:600;&quot;&gt;Sohbet odası&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&
     </message>
     <message>
         <source>Idle status</source>
-        <translation></translation>
+        <translation>Boşta</translation>
     </message>
     <message>
         <source>minutes</source>
@@ -1233,7 +1215,7 @@ adresinizi ve &lt;br&gt;şifrenizi girin&lt;/span&gt;</translation>
     </message>
     <message>
         <source>Hang Up</source>
-        <translation></translation>
+        <translation>Kapat</translation>
     </message>
 </context>
 <context>
@@ -1319,7 +1301,7 @@ adresinizi ve &lt;br&gt;şifrenizi girin&lt;/span&gt;</translation>
     </message>
     <message>
         <source>Call closed (hang up tone)</source>
-        <translation></translation>
+        <translation>Çağrı sona erdi (kapanma sinyali)</translation>
     </message>
     <message>
         <source>Incoming chat</source>
@@ -1643,7 +1625,7 @@ font-weight:600;&quot;&gt;Takma ad ya da numara&lt;/span&gt;&lt;/p&gt;&lt;/body&
     <name>QtConferenceCallWidget</name>
     <message>
         <source>Call SIP</source>
-        <translation></translation>
+        <translation>SIP Adresine Çağrı Yap</translation>
     </message>
     <message>
         <source>Call land line</source>
@@ -1802,7 +1784,7 @@ font-weight:600;&quot;&gt;Takma ad ya da numara&lt;/span&gt;&lt;/p&gt;&lt;/body&
     </message>
     <message>
         <source>Do you want to call your voice mail?</source>
-        <translation></translation>
+        <translation>Sesli mesaj sisteminize çağrı bırakmak mı istiyorsunuz?</translation>
     </message>
 </context>
 <context>
@@ -1825,7 +1807,7 @@ font-weight:600;&quot;&gt;Takma ad ya da numara&lt;/span&gt;&lt;/p&gt;&lt;/body&
     </message>
     <message>
         <source>A file called %1 already exists.Do you want to overwrite it?</source>
-        <translation></translation>
+        <translation>%1 isimli dosya zaten mevcut. Üzerine yazmak mı istiyorsunuz?</translation>
     </message>
     <message>
         <source>File size error</source>
@@ -1833,7 +1815,7 @@ font-weight:600;&quot;&gt;Takma ad ya da numara&lt;/span&gt;&lt;/p&gt;&lt;/body&
     </message>
     <message>
         <source>%1 exceeds the maximum authorized size.</source>
-        <translation></translation>
+        <translation>%1 izin verilen maksimum boyutu aşıyor.</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt;font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px;margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:18pt; font-weight:600; color:#ffffff;&quot;&gt;Please upgrade&lt;br&gt; yourWengoPhone&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
@@ -1927,7 +1909,7 @@ font-weight:600;&quot;&gt;Takma ad ya da numara&lt;/span&gt;&lt;/p&gt;&lt;/body&
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt;font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px;margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;font-size:8pt;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;This may be caused by:&lt;/span&gt; &lt;br&gt;- Your WengoPhone is not up to date. Please download the latest version onwww.wengo.com&lt;br&gt;- The Wengo network may be temporarily unavailable. Please try later.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg;font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px;margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;This may be caused by:&lt;/span&gt; &lt;br&gt;- Your WengoPhone is not up to date. Please download the latest version onwww.wengo.com&lt;br&gt;- The Wengo network may be temporarily unavailable. Please try later.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2064,7 +2046,7 @@ font-weight:600;&quot;&gt;Takma ad ya da numara&lt;/span&gt;&lt;/p&gt;&lt;/body&
     <name>QtIMAccountPlugin</name>
     <message>
         <source>Please enter a login</source>
-        <translation></translation>
+        <translation>Lütfen kullanıcı adını girin</translation>
     </message>
 </context>
 <context>
@@ -2124,7 +2106,7 @@ font-weight:600;&quot;&gt;Takma ad ya da numara&lt;/span&gt;&lt;/p&gt;&lt;/body&
     </message>
     <message>
         <source>Call closed (hang up tone)</source>
-        <translation></translation>
+        <translation>Çağrı sona erdi (kapanma sinyali)</translation>
     </message>
     <message>
         <source>Incoming chat</source>
@@ -2183,7 +2165,7 @@ font-weight:600;&quot;&gt;Takma ad ya da numara&lt;/span&gt;&lt;/p&gt;&lt;/body&
     </message>
     <message>
         <source>Hang-up</source>
-        <translation></translation>
+        <translation>Kapat</translation>
     </message>
     <message>
         <source>Hold</source>
@@ -2252,7 +2234,7 @@ Please wait for a few seconds...</source>
     <name>QtProfileBar</name>
     <message>
         <source>Click here to change your status</source>
-        <translation></translation>
+        <translation>Durumunuzu değiştirmek için buraya tıklayın</translation>
     </message>
     <message>
         <source>NickName</source>
@@ -2344,6 +2326,10 @@ Please wait for a few seconds...</source>
         <translation>SMS&apos;iniz gönderildi</translation>
     </message>
     <message>
+        <source>You can not send an empty message.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Your message is too long.
 This will send </source>
         <translation type="unfinished"></translation>
@@ -2351,10 +2337,6 @@ This will send </source>
     <message>
         <source> SMS.
 </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>You can not send an empty message.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2439,7 +2421,7 @@ This will send </source>
     </message>
     <message>
         <source>Call SIP</source>
-        <translation></translation>
+        <translation>SIP Adresine Çağrı Yap</translation>
     </message>
     <message>
         <source>Call land line</source>
@@ -2550,6 +2532,12 @@ This will send </source>
 <context>
     <name>QtUserProfileHandler</name>
     <message>
+        <source>Would you like to import contacts and IM accounts previously created in the 
+default profile to the profile named %1?</source>
+        <translation type="obsolete">Geçmişte %1 profili ile tanımlanmış hızlı mesajlaşma hesaplarınızı ve 
+bağlantılarınızı içeri aktarmayı ister misiniz?</translation>
+    </message>
+    <message>
         <source>WengoPhone - Importing contacts and IM accounts</source>
         <translation>WengoPhone - Bağlantıları ve hesapları içe aktarıyor</translation>
     </message>
@@ -2603,10 +2591,6 @@ This will send </source>
         <source>Excellent</source>
         <translation>Mükemmel</translation>
     </message>
-    <message>
-        <source>Normale</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>QtWebDirectory</name>
@@ -2652,10 +2636,6 @@ This will send </source>
     <message>
         <source>Video</source>
         <translation>Video</translation>
-    </message>
-    <message>
-        <source>Languages</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2777,7 +2757,7 @@ This will send </source>
     <name>SimpleIMContactManager</name>
     <message>
         <source>Update your profile</source>
-        <translation></translation>
+        <translation>Profilinizi güncelleyin</translation>
     </message>
     <message>
         <source>Yahoo! ID:</source>
@@ -2991,7 +2971,7 @@ başarıyla yaratılmıştır&lt;/span&gt;</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Status:&lt;/span&gt; blah blah blah&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Status:&lt;/span&gt; blah blah blah&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3004,21 +2984,6 @@ başarıyla yaratılmıştır&lt;/span&gt;</translation>
     <message>
         <source>Form</source>
         <translation>Form</translation>
-    </message>
-</context>
-<context>
-    <name>UserWidget</name>
-    <message>
-        <source>Avatar</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>No cell phone number set</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>No phone number set</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3110,6 +3075,16 @@ başarıyla yaratılmıştır&lt;/span&gt;</translation>
     <message>
         <source>Video quality depends on your Internet connection bandwidth</source>
         <translation>Görüntü kalitesi internet bağlantınızın bant genişliği ile doğru orantılıdır</translation>
+    </message>
+    <message>
+        <source>&lt;b&gt;Warning!&lt;/b&gt; When used for the first time we recommend that you 
+select&lt;br&gt;the normal video quality mode, then you can try different modes to 
+find out&lt;br&gt;the most suitable one&lt;br&gt;&lt;br&gt;&lt;b&gt;Tips&lt;/b&gt;: Go to 
+http://test.lvcm.com to determine your Internet connection bandwidth</source>
+        <translation type="obsolete">&lt;b&gt;Dikkat!&lt;/b&gt; İlk kullanımda ayarlarda &lt;br&gt;normal görüntü kalitesini seçin, 
+sonraki denemelerde farklı bileşenleri seçerek&lt;br&gt;sisteminizin 
+kaldırabileceği en iyi ayarları bulun&lt;br&gt;&lt;br&gt;&lt;b&gt;İpucu&lt;/b&gt;: 
+http://test.lvcm.com adresine giderek internet bant genişliğinizi test edin</translation>
     </message>
     <message>
         <source>Make a test video call</source>
@@ -3298,11 +3273,11 @@ başarıyla yaratılmıştır&lt;/span&gt;</translation>
     </message>
     <message>
         <source>&amp;HangUp</source>
-        <translation></translation>
+        <translation>Kapat</translation>
     </message>
     <message>
         <source>&amp;Hold/Resume</source>
-        <translation></translation>
+        <translation>Ara ver/Devam et</translation>
     </message>
     <message>
         <source>Show/Hide &amp;Groups</source>
@@ -3314,7 +3289,7 @@ başarıyla yaratılmıştır&lt;/span&gt;</translation>
     </message>
     <message>
         <source>Log &amp;Off/Log In</source>
-        <translation></translation>
+        <translation>Bağlantıyı kes/Bağlan</translation>
     </message>
     <message>
         <source>Open &amp;Chat Window</source>
@@ -3377,7 +3352,7 @@ başarıyla yaratılmıştır&lt;/span&gt;</translation>
     </message>
     <message>
         <source>Loud Speakers</source>
-        <translation></translation>
+        <translation>Hoparlörler</translation>
     </message>
 </context>
 <context>

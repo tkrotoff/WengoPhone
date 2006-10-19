@@ -231,7 +231,7 @@ entrante&lt;/h1&gt;&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translatio
         <source>Warning, this part is for advanced users.&lt;br&gt;Any mistake can badly damage 
 the software.</source>
         <translation type="obsolete">Atención, esta sección es para usuarios avanzados.&lt;br&gt;Un error puede dañar 
-el sofware</translation>
+el sofware.</translation>
     </message>
     <message>
         <source>Automatically answer incoming calls from</source>
@@ -368,17 +368,6 @@ de teléfono)</translation>
     </message>
 </context>
 <context>
-    <name>ChatContactListItem</name>
-    <message>
-        <source>Form</source>
-        <translation type="unfinished">Formulario</translation>
-    </message>
-    <message>
-        <source></source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>ChatMainWindow</name>
     <message>
         <source>MainWindow</source>
@@ -431,17 +420,6 @@ de teléfono)</translation>
     <message>
         <source>&amp;Save History As...</source>
         <translation>&amp;Salvar Historial Cómo...</translation>
-    </message>
-</context>
-<context>
-    <name>ChatRoomWidget</name>
-    <message>
-        <source>Form</source>
-        <translation type="unfinished">Formulario</translation>
-    </message>
-    <message>
-        <source></source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -732,11 +710,15 @@ reporte.&lt;br&gt;Descripción del Caso:</translation>
     </message>
     <message>
         <source>From:</source>
-        <translation>Dé:</translation>
+        <translation type="obsolete">Dé:</translation>
     </message>
     <message>
         <source>Pause</source>
         <translation>Pausa</translation>
+    </message>
+    <message>
+        <source>&lt;i&gt;From:&lt;/i&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1560,7 +1542,7 @@ resto de los usuarios)</translation>
     </message>
     <message>
         <source>Save conversation to html</source>
-        <translation></translation>
+        <translation>Guardar conversación en html</translation>
     </message>
     <message>
         <source>Save As</source>
@@ -1772,11 +1754,11 @@ resto de los usuarios)</translation>
     </message>
     <message>
         <source>Click here to start a chat</source>
-        <translation type="unfinished">Pulse aquí para empezar una charla</translation>
+        <translation>Pulse aquí para empezar una charla</translation>
     </message>
     <message>
         <source>Click here to start a free call</source>
-        <translation type="unfinished">Pulsar aquí para hacer una llamada gratuíta</translation>
+        <translation>Pulsar aquí para hacer una llamada gratuíta</translation>
     </message>
     <message>
         <source>Click here to send a file</source>
@@ -1916,7 +1898,7 @@ resto de los usuarios)</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt;font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px;margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;font-size:8pt;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;This may be caused by:&lt;/span&gt; &lt;br&gt;- Your WengoPhone is not up to date. Please download the latest version onwww.wengo.com&lt;br&gt;- The Wengo network may be temporarily unavailable. Please try later.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg;font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px;margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;This may be caused by:&lt;/span&gt; &lt;br&gt;- Your WengoPhone is not up to date. Please download the latest version onwww.wengo.com&lt;br&gt;- The Wengo network may be temporarily unavailable. Please try later.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2098,7 +2080,7 @@ resto de los usuarios)</translation>
     </message>
     <message>
         <source>Wrong email/password entered</source>
-        <translation></translation>
+        <translation type="unfinished">Email y/o contraseña introducida incorrecta</translation>
     </message>
     <message>
         <source>Click on Login to connect to Wengo</source>
@@ -2210,7 +2192,7 @@ inferior. Por favor espere unos segundos...</translation>
     </message>
     <message>
         <source>Ringing</source>
-        <translation></translation>
+        <translation type="unfinished">Llamando</translation>
     </message>
     <message>
         <source>Redirected</source>
@@ -2337,6 +2319,10 @@ Please wait for a few seconds...</source>
         <translation>Su SMS ha sido enviado</translation>
     </message>
     <message>
+        <source>You can not send an empty message.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Your message is too long.
 This will send </source>
         <translation type="unfinished"></translation>
@@ -2344,10 +2330,6 @@ This will send </source>
     <message>
         <source> SMS.
 </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>You can not send an empty message.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2402,7 +2384,7 @@ WengoPhone de manera automática</translation>
     <name>QtSubscribe</name>
     <message>
         <source>Confirm password does not matched password</source>
-        <translation></translation>
+        <translation>La contraseña de confimación no coincide con la contraseña</translation>
     </message>
     <message>
         <source>Unknown Error</source>
@@ -2599,10 +2581,6 @@ nueva</translation>
         <source>Excellent</source>
         <translation>Excelente</translation>
     </message>
-    <message>
-        <source>Normale</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>QtWebDirectory</name>
@@ -2648,10 +2626,6 @@ nueva</translation>
     <message>
         <source>Video</source>
         <translation>Video</translation>
-    </message>
-    <message>
-        <source>Languages</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2974,7 +2948,7 @@ Speed:<byte value="x9"/>%4 (kB/s)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Status:&lt;/span&gt; blah blah blah&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Status:&lt;/span&gt; blah blah blah&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2987,21 +2961,6 @@ Speed:<byte value="x9"/>%4 (kB/s)</source>
     <message>
         <source>Form</source>
         <translation>Formulario</translation>
-    </message>
-</context>
-<context>
-    <name>UserWidget</name>
-    <message>
-        <source>Avatar</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>No cell phone number set</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>No phone number set</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3032,15 +2991,15 @@ Speed:<byte value="x9"/>%4 (kB/s)</source>
     </message>
     <message>
         <source>Webcam Selection</source>
-        <translation></translation>
+        <translation type="unfinished">Selección de la webcam</translation>
     </message>
     <message>
         <source>Webcam device:</source>
-        <translation></translation>
+        <translation type="unfinished">Dispositivo de la webcam:</translation>
     </message>
     <message>
         <source>Webcam Preview</source>
-        <translation></translation>
+        <translation type="unfinished">Previsualización de la webcam</translation>
     </message>
     <message>
         <source>Connection Type</source>
@@ -3076,7 +3035,7 @@ Speed:<byte value="x9"/>%4 (kB/s)</source>
     </message>
     <message>
         <source>2048+</source>
-        <translation></translation>
+        <translation>2048+</translation>
     </message>
     <message>
         <source>256+</source>
@@ -3394,11 +3353,11 @@ Speed:<byte value="x9"/>%4 (kB/s)</source>
     </message>
     <message>
         <source>WengoPhone - Search for Wengo contacts</source>
-        <translation></translation>
+        <translation>WengoPhone - Buscar contactos Wengo</translation>
     </message>
     <message>
         <source>Nickname</source>
-        <translation></translation>
+        <translation>Apodo</translation>
     </message>
     <message>
         <source>First Name</source>

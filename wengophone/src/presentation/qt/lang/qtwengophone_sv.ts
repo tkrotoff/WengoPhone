@@ -377,17 +377,6 @@ mobiltelefoner eller röstmeddelande (om möjligt)</translation>
     </message>
 </context>
 <context>
-    <name>ChatContactListItem</name>
-    <message>
-        <source>Form</source>
-        <translation type="unfinished">Formulär</translation>
-    </message>
-    <message>
-        <source></source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>ChatMainWindow</name>
     <message>
         <source>MainWindow</source>
@@ -440,17 +429,6 @@ mobiltelefoner eller röstmeddelande (om möjligt)</translation>
     <message>
         <source>&amp;Save History As...</source>
         <translation>&amp;Spara historik som...</translation>
-    </message>
-</context>
-<context>
-    <name>ChatRoomWidget</name>
-    <message>
-        <source>Form</source>
-        <translation type="unfinished">Formulär</translation>
-    </message>
-    <message>
-        <source></source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -741,11 +719,15 @@ valfritt.&lt;br&gt;Beskrivning:</translation>
     </message>
     <message>
         <source>From:</source>
-        <translation>Från:</translation>
+        <translation type="obsolete">Från:</translation>
     </message>
     <message>
         <source>Pause</source>
         <translation>Paus</translation>
+    </message>
+    <message>
+        <source>&lt;i&gt;From:&lt;/i&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1635,7 +1617,7 @@ font-weight:600;&quot;&gt;Smeknamn eller nummer&lt;/span&gt;&lt;/p&gt;&lt;/body&
     <name>QtChatWindow</name>
     <message>
         <source>Edit Contact</source>
-        <translation>Rediger kontakt</translation>
+        <translation>Redigera kontakt</translation>
     </message>
     <message>
         <source> is typing</source>
@@ -1715,7 +1697,7 @@ font-weight:600;&quot;&gt;Smeknamn eller nummer&lt;/span&gt;&lt;/p&gt;&lt;/body&
     </message>
     <message>
         <source>Edit Contact</source>
-        <translation>Rediger kontakt</translation>
+        <translation>Redigera kontakt</translation>
     </message>
     <message>
         <source>Delete contact</source>
@@ -1934,7 +1916,7 @@ font-weight:600;&quot;&gt;Smeknamn eller nummer&lt;/span&gt;&lt;/p&gt;&lt;/body&
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt;font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px;margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;font-size:8pt;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;This may be caused by:&lt;/span&gt; &lt;br&gt;- Your WengoPhone is not up to date. Please download the latest version onwww.wengo.com&lt;br&gt;- The Wengo network may be temporarily unavailable. Please try later.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg;font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px;margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;This may be caused by:&lt;/span&gt; &lt;br&gt;- Your WengoPhone is not up to date. Please download the latest version onwww.wengo.com&lt;br&gt;- The Wengo network may be temporarily unavailable. Please try later.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2206,11 +2188,11 @@ font-weight:600;&quot;&gt;Smeknamn eller nummer&lt;/span&gt;&lt;/p&gt;&lt;/body&
     </message>
     <message>
         <source>Talking</source>
-        <translation>Talar</translation>
+        <translation>Tal</translation>
     </message>
     <message>
         <source>Talking - conference</source>
-        <translation>Talar - konferens</translation>
+        <translation>Tal - konferens</translation>
     </message>
     <message>
         <source>WengoPhone - Proceed Conference</source>
@@ -2252,7 +2234,7 @@ Please wait for a few seconds...</source>
     <name>QtPrivacySettings</name>
     <message>
         <source>Privacy</source>
-        <translation>Integritet</translation>
+        <translation>Konfidentialitet</translation>
     </message>
 </context>
 <context>
@@ -2355,6 +2337,10 @@ Please wait for a few seconds...</source>
         <translation>Ditt SMS har skickats</translation>
     </message>
     <message>
+        <source>You can not send an empty message.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Your message is too long.
 This will send </source>
         <translation type="unfinished"></translation>
@@ -2362,10 +2348,6 @@ This will send </source>
     <message>
         <source> SMS.
 </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>You can not send an empty message.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2545,7 +2527,7 @@ Försök igen</translation>
     <name>QtUserProfile</name>
     <message>
         <source>Edit Contact</source>
-        <translation>Rediger kontakt</translation>
+        <translation>Redigera kontakt</translation>
     </message>
     <message>
         <source>WengoPhone - Authorization Request</source>
@@ -2622,10 +2604,6 @@ standardprofilen till profilen med namnet %1?</translation>
         <source>Excellent</source>
         <translation>Otroligt bra</translation>
     </message>
-    <message>
-        <source>Normale</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>QtWebDirectory</name>
@@ -2666,15 +2644,11 @@ standardprofilen till profilen med namnet %1?</translation>
     </message>
     <message>
         <source>Privacy</source>
-        <translation>Integritet</translation>
+        <translation>Konfidentialitet</translation>
     </message>
     <message>
         <source>Video</source>
         <translation>Video</translation>
-    </message>
-    <message>
-        <source>Languages</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3010,7 +2984,7 @@ konto har skapats&lt;/span&gt;</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Status:&lt;/span&gt; blah blah blah&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Status:&lt;/span&gt; blah blah blah&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3023,21 +2997,6 @@ konto har skapats&lt;/span&gt;</translation>
     <message>
         <source>Form</source>
         <translation>Formulär</translation>
-    </message>
-</context>
-<context>
-    <name>UserWidget</name>
-    <message>
-        <source>Avatar</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>No cell phone number set</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>No phone number set</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3240,7 +3199,7 @@ Internetanslutning</translation>
     </message>
     <message>
         <source>Dialpad</source>
-        <translation>Nummerbricka</translation>
+        <translation>Knappsats</translation>
     </message>
     <message>
         <source>&amp;Contacts</source>

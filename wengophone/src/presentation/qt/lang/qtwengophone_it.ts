@@ -30,7 +30,7 @@
     </message>
     <message>
         <source>About</source>
-        <translation>Informazioni</translation>
+        <translation>Informazioni su</translation>
     </message>
     <message>
         <source>WengoPhone, a voice over Internet phone</source>
@@ -128,7 +128,7 @@ entrata&lt;/h1&gt;&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation
     </message>
     <message>
         <source>&amp;Cancel</source>
-        <translation>&amp;Annulla</translation>
+        <translation>A&amp;nnulla</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Contact: &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
@@ -378,17 +378,6 @@ o segreteria telefonica (se disponibile)</translation>
     </message>
 </context>
 <context>
-    <name>ChatContactListItem</name>
-    <message>
-        <source>Form</source>
-        <translation type="unfinished">Modulo</translation>
-    </message>
-    <message>
-        <source></source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>ChatMainWindow</name>
     <message>
         <source>MainWindow</source>
@@ -441,17 +430,6 @@ o segreteria telefonica (se disponibile)</translation>
     <message>
         <source>&amp;Save History As...</source>
         <translation>&amp;Salva Cronologia come...</translation>
-    </message>
-</context>
-<context>
-    <name>ChatRoomWidget</name>
-    <message>
-        <source>Form</source>
-        <translation type="unfinished">Modulo</translation>
-    </message>
-    <message>
-        <source></source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -742,11 +720,15 @@ passaggio è facoltativo.&lt;br&gt;Descrivi come si è verificato il problema:</
     </message>
     <message>
         <source>From:</source>
-        <translation>Da:</translation>
+        <translation type="obsolete">Da:</translation>
     </message>
     <message>
         <source>Pause</source>
         <translation>Pausa</translation>
+    </message>
+    <message>
+        <source>&lt;i&gt;From:&lt;/i&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1937,7 +1919,7 @@ linea)</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt;font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px;margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;font-size:8pt;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;This may be caused by:&lt;/span&gt; &lt;br&gt;- Your WengoPhone is not up to date. Please download the latest version onwww.wengo.com&lt;br&gt;- The Wengo network may be temporarily unavailable. Please try later.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg;font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px;margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;This may be caused by:&lt;/span&gt; &lt;br&gt;- Your WengoPhone is not up to date. Please download the latest version onwww.wengo.com&lt;br&gt;- The Wengo network may be temporarily unavailable. Please try later.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2358,6 +2340,10 @@ Please wait for a few seconds...</source>
         <translation>Il tuo SMS è stato inviato</translation>
     </message>
     <message>
+        <source>You can not send an empty message.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Your message is too long.
 This will send </source>
         <translation type="unfinished"></translation>
@@ -2365,10 +2351,6 @@ This will send </source>
     <message>
         <source> SMS.
 </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>You can not send an empty message.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2624,10 +2606,6 @@ profilo predefinito nel profilo %1?</translation>
         <source>Excellent</source>
         <translation>Eccellente</translation>
     </message>
-    <message>
-        <source>Normale</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>QtWebDirectory</name>
@@ -2673,10 +2651,6 @@ profilo predefinito nel profilo %1?</translation>
     <message>
         <source>Video</source>
         <translation>Video</translation>
-    </message>
-    <message>
-        <source>Languages</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -3013,7 +2987,7 @@ tuo account è stato creato con successo&lt;/span&gt;</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Status:&lt;/span&gt; blah blah blah&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Status:&lt;/span&gt; blah blah blah&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3026,21 +3000,6 @@ tuo account è stato creato con successo&lt;/span&gt;</translation>
     <message>
         <source>Form</source>
         <translation>Modulo</translation>
-    </message>
-</context>
-<context>
-    <name>UserWidget</name>
-    <message>
-        <source>Avatar</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>No cell phone number set</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>No phone number set</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

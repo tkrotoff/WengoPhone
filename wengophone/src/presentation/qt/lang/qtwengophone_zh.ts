@@ -78,6 +78,34 @@ of the License, or (at your option) any later version.</source>
         <translation>test.bmp</translation>
     </message>
     <message>
+        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
+white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-
+weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
+top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
+indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Filename: 
+&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="obsolete">&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
+white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-
+weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
+top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
+indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;文件名称: 
+&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
+white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-
+weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
+top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
+indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;&lt;h1&gt;Incoming 
+file&lt;/h1&gt;&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="obsolete">&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
+white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-
+weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
+top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
+indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-
+weight:600;&quot;&gt;&lt;h1&gt;要接受的文件&lt;/h1&gt;&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
         <source>&amp;Accept</source>
         <translation>接受</translation>
     </message>
@@ -267,6 +295,11 @@ color:#0000ff;&quot;&gt;here&lt;/span&gt; 下载最新版本&lt;br /&gt;&lt;br /
         <translation>呼叫转移设置</translation>
     </message>
     <message>
+        <source>For example +3314500XXXX (+33 is the country code and 14500XXXX is the phone 
+number)</source>
+        <translation type="obsolete">例如+3314500XXXX （+33是国家码，14500XXXX是电话号码）</translation>
+    </message>
+    <message>
         <source>3rd:</source>
         <translation>第三</translation>
     </message>
@@ -280,7 +313,7 @@ color:#0000ff;&quot;&gt;here&lt;/span&gt; 下载最新版本&lt;br /&gt;&lt;br /
     </message>
     <message>
         <source>(+ country code) phone number</source>
-        <translation></translation>
+        <translation>（+国家码）电话号码</translation>
     </message>
     <message>
         <source>Forward all unanswered calls to message box</source>
@@ -322,17 +355,6 @@ applicable)</source>
     </message>
 </context>
 <context>
-    <name>ChatContactListItem</name>
-    <message>
-        <source>Form</source>
-        <translation type="unfinished">表格</translation>
-    </message>
-    <message>
-        <source></source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>ChatMainWindow</name>
     <message>
         <source>MainWindow</source>
@@ -364,11 +386,11 @@ applicable)</source>
     </message>
     <message>
         <source>Call Contact</source>
-        <translation></translation>
+        <translation>呼叫联系人</translation>
     </message>
     <message>
         <source>Send a File</source>
-        <translation></translation>
+        <translation>发送文件</translation>
     </message>
     <message>
         <source>createChatConf</source>
@@ -376,7 +398,7 @@ applicable)</source>
     </message>
     <message>
         <source>Show Contact Info</source>
-        <translation></translation>
+        <translation>显示联系人信息</translation>
     </message>
     <message>
         <source>blockContact</source>
@@ -388,17 +410,6 @@ applicable)</source>
     </message>
 </context>
 <context>
-    <name>ChatRoomWidget</name>
-    <message>
-        <source>Form</source>
-        <translation type="unfinished">表格</translation>
-    </message>
-    <message>
-        <source></source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>ChatToaster</name>
     <message>
         <source>Message</source>
@@ -406,7 +417,7 @@ applicable)</source>
     </message>
     <message>
         <source>Incoming Chat</source>
-        <translation></translation>
+        <translation>新消息</translation>
     </message>
 </context>
 <context>
@@ -682,11 +693,15 @@ optional.&lt;br&gt;Use Case Description:</source>
     </message>
     <message>
         <source>From:</source>
-        <translation>来自：</translation>
+        <translation type="obsolete">来自：</translation>
     </message>
     <message>
         <source>Pause</source>
         <translation>暂停</translation>
+    </message>
+    <message>
+        <source>&lt;i&gt;From:&lt;/i&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -698,6 +713,19 @@ optional.&lt;br&gt;Use Case Description:</source>
     <message>
         <source>WengoPhone - File Transfer Manager</source>
         <translation>WengoPhone-文件传输管理</translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
+white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-
+weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
+top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
+indent:0; text-indent:0px;&quot;&gt;Click here to change your download 
+folder&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="obsolete">&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
+white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-
+weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
+top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
+indent:0; text-indent:0px;&quot;&gt;点击这里改变你的下载文件夹folder&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>Download folder:</source>
@@ -1849,7 +1877,7 @@ font-weight:600;&quot;&gt;昵称或号码&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt;font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px;margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;font-size:8pt;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;This may be caused by:&lt;/span&gt; &lt;br&gt;- Your WengoPhone is not up to date. Please download the latest version onwww.wengo.com&lt;br&gt;- The Wengo network may be temporarily unavailable. Please try later.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg;font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px;margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;This may be caused by:&lt;/span&gt; &lt;br&gt;- Your WengoPhone is not up to date. Please download the latest version onwww.wengo.com&lt;br&gt;- The Wengo network may be temporarily unavailable. Please try later.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2269,6 +2297,10 @@ Please wait for a few seconds...</source>
         <translation>你的短信已经发出</translation>
     </message>
     <message>
+        <source>You can not send an empty message.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Your message is too long.
 This will send </source>
         <translation type="unfinished"></translation>
@@ -2276,10 +2308,6 @@ This will send </source>
     <message>
         <source> SMS.
 </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>You can not send an empty message.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2533,10 +2561,6 @@ default profile to the profile named %1?</source>
         <source>Excellent</source>
         <translation>非常好</translation>
     </message>
-    <message>
-        <source>Normale</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>QtWebDirectory</name>
@@ -2582,10 +2606,6 @@ default profile to the profile named %1?</source>
     <message>
         <source>Video</source>
         <translation>视频</translation>
-    </message>
-    <message>
-        <source>Languages</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2917,7 +2937,7 @@ Speed:<byte value="x9"/>%4 (kB/s)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Status:&lt;/span&gt; blah blah blah&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Status:&lt;/span&gt; blah blah blah&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2930,21 +2950,6 @@ Speed:<byte value="x9"/>%4 (kB/s)</source>
     <message>
         <source>Form</source>
         <translation>表格</translation>
-    </message>
-</context>
-<context>
-    <name>UserWidget</name>
-    <message>
-        <source>Avatar</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>No cell phone number set</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>No phone number set</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
