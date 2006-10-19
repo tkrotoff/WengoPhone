@@ -24,8 +24,10 @@
 
 #include <pixertool/pixertool.h>
 
+#include <thread/Mutex.h>
 #include <util/Trackable.h>
 
+#include <QtGui/QPixmap>
 #include <QtGui/QWidget>
 
 class IWebcamDriver;
@@ -64,7 +66,7 @@ private Q_SLOTS:
 
 	void webcamPreview();
 
-	void newWebcamImageCaptured(QImage * image);
+	void newWebcamImageCaptured();
 
 	void startWebcamPreview(const QString & deviceName);
 
@@ -72,7 +74,7 @@ private Q_SLOTS:
 
 Q_SIGNALS:
 
-	void newWebcamImage(QImage * image);
+	void newWebcamImage();
 
 private:
 
@@ -90,6 +92,10 @@ private:
 
 	/** Contains the converted picture from the Webcam. */
 	piximage * _rgbImage;
+
+	QPixmap _lastWebcamPixmap;
+
+	Mutex _mutex;
 
 	CWengoPhone & _cWengoPhone;
 };

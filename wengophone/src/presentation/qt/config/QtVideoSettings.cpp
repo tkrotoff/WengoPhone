@@ -54,7 +54,7 @@ QtVideoSettings::QtVideoSettings(CWengoPhone & cWengoPhone, QWidget * parent)
 	_webcamDriver = WebcamDriver::getInstance();
 	_rgbImage = NULL;
 
-	SAFE_CONNECT_TYPE(this, SIGNAL(newWebcamImage(QImage *)), SLOT(newWebcamImageCaptured(QImage *)), Qt::QueuedConnection);
+	SAFE_CONNECT_TYPE(this, SIGNAL(newWebcamImage()), SLOT(newWebcamImageCaptured()), Qt::QueuedConnection);
 	SAFE_CONNECT(_ui->webcamDeviceComboBox, SIGNAL(activated(const QString &)), SLOT(startWebcamPreview(const QString &)));
 	SAFE_CONNECT(_ui->makeTestVideoCallButton, SIGNAL(clicked()), SLOT(makeTestCallClicked()));
 	SAFE_CONNECT(_ui->webcamPreviewButton, SIGNAL(clicked()), SLOT(webcamPreview()));
@@ -147,6 +147,8 @@ void QtVideoSettings::readConfig() {
 }
 
 void QtVideoSettings::frameCapturedEventHandler(IWebcamDriver * sender, piximage * image) {
+	Mutex::ScopedLock lock(_mutex);
+
 	//TODO: optimize: free and alloc a new piximage only if the size changed
 	if (_rgbImage) {
 		pix_free(_rgbImage);
@@ -155,12 +157,15 @@ void QtVideoSettings::frameCapturedEventHandler(IWebcamDriver * sender, piximage
 
 	pix_convert(PIX_NO_FLAG, _rgbImage, image);
 
-	newWebcamImage(new QImage(_rgbImage->data, _rgbImage->width, _rgbImage->height, QImage::Format_RGB32));
+	_lastWebcamPixmap = QPixmap::fromImage(QImage(_rgbImage->data, _rgbImage->width, _rgbImage->height, QImage::Format_RGB32));
+
+	newWebcamImage();
 }
 
-void QtVideoSettings::newWebcamImageCaptured(QImage * image) {
-	_ui->webcamPreviewLabel->setPixmap(QPixmap::fromImage(*image));
-	OWSAFE_DELETE(image);
+void QtVideoSettings::newWebcamImageCaptured() {
+	Mutex::ScopedLock lock(_mutex);
+
+	_ui->webcamPreviewLabel->setPixmap(_lastWebcamPixmap);
 }
 
 void QtVideoSettings::startWebcamPreview(const QString & deviceName) {
