@@ -11,6 +11,18 @@ else (MSVC)
   )
 endif (MSVC)
 
+if (WIN32)
+  if (MSVC)
+    subdirs(
+      phapi/msdirent
+    )
+  endif (MSVC)
+
+  subdirs(
+    phapi/speex
+  )
+endif (WIN32)
+
 subdirs(
   libosip2
   eXosip
@@ -21,7 +33,6 @@ subdirs(
   phapi/fidlib
   phapi/gsm
   phapi/ilbc
-  phapi/speex
   phapi/speexec
   phapi/stun
   phapi
@@ -29,8 +40,3 @@ subdirs(
   #TODO: miniua
 )
 
-if (MSVC)
-  subdirs(
-    phapi/msdirent
-  )
-endif (MSVC)

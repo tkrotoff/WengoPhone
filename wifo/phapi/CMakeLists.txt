@@ -459,7 +459,10 @@ macro_add_compile_flags(phamrplugin ${PHAPI_OPTIMIZATION_FLAGS})
 target_link_libraries(phamrplugin)
 
 # speex
-#find_package(Speex REQUIRED)
+if (NOT WIN32)
+  find_package(Speex REQUIRED)
+endif (NOT WIN32)
+
 include_directories(${SPEEX_INCLUDE_DIRS})
 macro_add_plugin(phspeexplugin ${phapi_speex_plugin_SRCS})
 macro_add_compile_flags(phspeexplugin ${PHAPI_OPTIMIZATION_FLAGS})
