@@ -1,0 +1,61 @@
+MACRO_CREATE_PROJECT(owwebcam)
+
+MACRO_USE_LIBRARIES(
+	owutil
+	owpixertool
+)
+
+MACRO_ADD_INCLUDE_DIRS(
+	${CMAKE_CURRENT_SOURCE_DIR}/include
+)
+
+MACRO_ADD_SOURCES(
+	src/WebcamDriver.cpp
+	src/webcam.cpp
+)
+
+MACRO_ADD_DEFINITIONS(
+	-DOWWEBCAM_DLL
+)
+
+MACRO_ADD_PRIVATE_DEFINITIONS(
+	-DOWWEBCAM_DLL
+	-DBUILD_OWWEBCAM_DLL
+)
+
+if (UNIX AND NOT WIN32 OR APPLE)
+	MACRO_USE_LIBRARIES(
+		owthread
+	)
+endif (UNIX AND NOT WIN32 OR APPLE)
+
+if (MSVC)
+	MACRO_ADD_LINK_LIBRARIES(
+		winmm
+		strmiids
+		comsupp
+	)
+
+	MACRO_ADD_SOURCES(
+		src/directx/DirectXWebcamDriver.cpp
+		src/directx/DirectXWebcamUtils.cpp
+	)
+endif (MSVC)
+
+if (UNIX AND NOT WIN32)
+	if (APPLE)
+		MACRO_ADD_INCLUDE_DIRS(
+			/System/Library/Frameworks/Quicktime.framework/Headers
+		)
+
+		MACRO_ADD_SOURCES(
+			src/quicktime/QuicktimeWebcamDriver.cpp
+		)
+	else (APPLE)
+		MACRO_ADD_SOURCES(
+			src/v4l/V4LWebcamDriver.cpp
+		)
+	endif (APPLE)
+endif (UNIX AND NOT WIN32)
+
+MACRO_CREATE_SHARED_LIBRARY()
