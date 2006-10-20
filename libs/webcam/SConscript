@@ -1,6 +1,7 @@
 env = WengoGetEnvironment()
 
 libs = [
+    'owthread',
 	'owutil',
 	'pixertool',
 ]
