@@ -17,13 +17,13 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "AvatarList.h"
-
 #include <model/config/Config.h>
 #include <model/config/ConfigManager.h>
 
 #include <util/File.h>
 #include <util/Path.h>
+
+#include "AvatarList.h"
 
 AvatarList::AvatarList() {
 }
