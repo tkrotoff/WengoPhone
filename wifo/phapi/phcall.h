@@ -63,6 +63,8 @@ struct phcall {
 	int  user_mflags;
 	/* structure holding the description of all the media sessions related to the call */
 	struct ph_msession_s *mses;
+	/* used by sVoIP to indicate that the call is crypted */
+	int iscrypted; 
 };
 
 typedef struct phcall phcall_t;

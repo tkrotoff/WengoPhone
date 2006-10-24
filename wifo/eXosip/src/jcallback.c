@@ -48,12 +48,13 @@
 #include "eXosip2.h"
 #include <eXosip/eXosip_cfg.h>
 
+#include <svoip_phapi.h>
+
 extern eXosip_t eXosip;
 
 #ifdef TEST_AUDIO
 static pid_t pid = 0;
 #endif
-
 
 /* Private functions */
 
@@ -142,6 +143,7 @@ int cb_udp_snd_message(osip_transaction_t *tr, osip_message_t *sip, char *host,
   char *message;
   int i;
   osip_route_t *o_proxy = 0;
+  jinfo_t *jinfo = NULL;
 
   if (eXosip.j_socket==0 && !eXosip.use_tunnel)
 	  return -1;
@@ -181,6 +183,37 @@ int cb_udp_snd_message(osip_transaction_t *tr, osip_message_t *sip, char *host,
   if (o_proxy)
     osip_route_free(o_proxy);
 
+  /* sVoIP integration */
+  // SPIKE_SRTP: Check if a outgoing packet has to be processed by sVoIP
+  if (tr)
+    {
+      int cid = -1;
+      jinfo = osip_transaction_get_your_instance(tr);
+      /* Check that the jcall structure is available and 
+	 has enabled crypting */
+      if (jinfo && jinfo->jc/* && jinfo->jc->iscrypted*/)
+	{
+	  /* Get the CID from the jcall structure */
+	  cid = jinfo->jc->c_id;  
+	}       
+      if (cid >= 0)
+	{
+	  /* The connection is crypted */
+	  if (MSG_IS_RESPONSE_FOR(sip, "INVITE") && sip->status_code == 200)
+	    sVoIP_phapi_handle_ok_out(cid, sip); // 200OK augmented here
+	  else
+	    /*	  if (MSG_IS_RESPONSE_FOR(sip, "INVITE") && sip->status_code == 180)
+	    sVoIP_phapi_handle_hanging_out(cid, sip); // 180 Hanging augmented here
+	    else*/
+	  if (MSG_IS_INVITE(sip))
+	    sVoIP_phapi_handle_invite_out(cid, sip); // INVITE augmented here
+	  else
+	  if (MSG_IS_BYE(sip))
+	    sVoIP_phapi_handle_bye_out(cid, sip); // Close crypted session here
+	  jinfo->jc->iscrypted = sVoIP_phapi_isCrypted(cid);
+	}
+    }
+  /* sVoIP */
 
   i = osip_message_to_str(sip, &message, &length);
 
@@ -407,6 +440,24 @@ static void cb_nist_kill_transaction(int type, osip_transaction_t *tr)
 
 static void cb_rcvinvite  (int type, osip_transaction_t *tr,osip_message_t *sip)
 {
+  /* sVoIP integration */
+  // SPIKE_SRTP: Check if an incoming INVITE packet has to be processed by sVoIP
+  if (tr)
+    {
+      int	cid = -1;
+      jinfo_t	*jinfo = NULL;
+      jinfo = osip_transaction_get_your_instance(tr);
+      /* Check call structure */
+      if ( jinfo  && jinfo->jc /*&&  jinfo->jc->iscrypted */)
+	  cid = jinfo->jc->c_id;
+      if (cid >= 0)
+	{
+	  sVoIP_phapi_handle_invite_in(cid, sip);
+	  jinfo->jc->iscrypted = sVoIP_phapi_isCrypted(cid);
+	}
+    }
+  /* sVoIP */
+
   OSIP_TRACE(osip_trace(__FILE__,__LINE__,OSIP_INFO1,NULL,"cb_rcvinvite (id=%i)\n", tr->transactionid));
 }
 
@@ -427,6 +478,21 @@ static void cb_rcvregister(int type, osip_transaction_t *tr,osip_message_t *sip)
 
 static void cb_rcvbye     (int type, osip_transaction_t *tr,osip_message_t *sip)
 {
+  /* sVoIP integration */
+  // SPIKE_SRTP: Check if an incoming BYE packet has to be processed by sVoIP
+  if (tr)
+    {
+      int	cid = -1;
+      jinfo_t	*jinfo = NULL;
+      jinfo = osip_transaction_get_your_instance(tr);
+      /* Check call structure */
+      if ( jinfo  && jinfo->jc /*&&  jinfo->jc->iscrypted */)
+	  cid = jinfo->jc->c_id;
+      if (cid >= 0)
+	sVoIP_phapi_handle_bye_in(cid, sip);
+    }
+  /* sVoIP */
+
   OSIP_TRACE(osip_trace(__FILE__,__LINE__,OSIP_INFO1,NULL,"cb_rcvbye (id=%i)\r\n", tr->transactionid));
 #ifdef TEST_AUDIO
   if (pid!=0)
@@ -440,6 +506,21 @@ static void cb_rcvbye     (int type, osip_transaction_t *tr,osip_message_t *sip)
 
 static void cb_rcvcancel  (int type, osip_transaction_t *tr,osip_message_t *sip)
 {
+  /* sVoIP integration */
+  // SPIKE_SRTP: Check if an incoming CANCEL packet has to be processed by sVoIP
+  if (tr)
+    {
+      int	cid = -1;
+      jinfo_t	*jinfo = NULL;
+      jinfo = osip_transaction_get_your_instance(tr);
+      /* Check call structure */
+      if ( jinfo  && jinfo->jc /*&& jinfo->jc->iscrypted*/)
+	  cid = jinfo->jc->c_id;
+      if (cid >= 0)
+	sVoIP_phapi_handle_cancel_in(cid, sip);
+    }
+  /* sVoIP */
+
   OSIP_TRACE(osip_trace(__FILE__,__LINE__,OSIP_INFO1,NULL,"cb_rcvcancel (id=%i)\r\n", tr->transactionid));
 }
 
@@ -1068,6 +1149,18 @@ static void cb_rcv2xx_4invite(osip_transaction_t *tr,osip_message_t *sip)
     return;
   jd = jinfo->jd;
   jc = jinfo->jc;
+
+  /* sVoIP integration */
+  // SPIKE_SRTP: Check if an incoming 200OK packet has to be processed by sVoIP
+  if (jc /* && jc->iscrypted*/)
+  {
+    int	cid = -1;
+    cid = jinfo->jc->c_id;
+    if (cid >= 0)
+      sVoIP_phapi_handle_ok_in(cid, sip);
+  }
+  /* sVoIP */
+
   if (jd == NULL) /* This transaction initiate a dialog in the case of
 		     INVITE (else it would be attached to a "jd" element. */
     {

@@ -436,6 +436,30 @@ rtp_session_signal_disconnect_by_callback (RtpSession * session, char *signal,
   return -ENOENT;
 }
 
+/**
+ *rtp_session_set_callbacks:
+ *@session:		a rtp session.
+ *@pre_recv_cb:		a callback for pre-recv action
+ *@post_recv_cb:	a callback for post-recv action
+ *@pre_send_cb:		a callback for pre-send action
+ *@post_send_cb:	a callback for post-send action
+ *
+ *	Set callbacks for pre/post actions on each RTP packet that has been sent or received 
+ *	Returns: 0 on success.
+**/
+int
+rtp_session_set_callbacks (RtpSession *session, 
+			   RtpCallback pre_recv_cb, RtpCallback post_recv_cb,
+			   RtpCallback pre_send_cb, RtpCallback post_send_cb
+			   )
+{
+  session->rtp_pre_recv_cb = pre_recv_cb;
+  session->rtp_post_recv_cb = post_recv_cb;
+  session->rtp_pre_send_cb = pre_send_cb;
+  session->rtp_post_send_cb = post_send_cb;
+  return 0;
+}
+
 
 /**
  *rtp_session_set_local_addr:
@@ -978,6 +1002,9 @@ rtp_send (RtpSession * session, mblk_t * m)
   for (i = 0; i < hdr->cc; i++)
     hdr->csrc[i] = htonl (hdr->csrc[i]);
 
+  /* Callback for pre-send action */
+  if (session->rtp_pre_send_cb != NULL)
+      session->rtp_pre_send_cb(session, &error, m);
 
   if (USING_TUNNEL (session))
     {
@@ -991,16 +1018,16 @@ rtp_send (RtpSession * session, mblk_t * m)
 	}
     }
   else if (session->flags & RTP_SESSION_USING_EXT_SOCKETS)
-    {
-      error =
-	send (session->rtp.socket, m->b_rptr, (m->b_wptr - m->b_rptr), 0);
-    }
+    error = send (session->rtp.socket, m->b_rptr, (m->b_wptr - m->b_rptr), 0);
   else
     error = sendto (session->rtp.socket, m->b_rptr,
 		    (m->b_wptr - m->b_rptr), 0,
 		    (struct sockaddr *) &session->rtp.rem_addr,
 		    sizeof (session->rtp.rem_addr));
 
+  /* Callback for post-send action */
+  if (session->rtp_post_send_cb != NULL)
+    session->rtp_post_send_cb(session, &error, m);
 
   if (error < 0)
     g_warning ("Error sending rtp packet: %s.", getSocketError ());
@@ -1466,6 +1493,10 @@ rtp_recv (RtpSession * session)
 #else
 	  mp = allocb (session->max_buf_size, 0);
 #endif
+	  /* Callback for pre-recv action */
+	  if (session->rtp_pre_recv_cb != NULL)
+	    session->rtp_pre_recv_cb(session, &error, mp);
+
 	  //<MINHPQ>
 
 	  if (USING_TUNNEL (session))
@@ -1492,6 +1523,7 @@ rtp_recv (RtpSession * session)
 				  (struct sockaddr *) &remaddr, &addrlen);
 	    }
 
+
 	  if (error > 0)
 	    {
 #ifdef MBDB_LOCAL_POOL
@@ -1506,6 +1538,10 @@ rtp_recv (RtpSession * session)
 	      mp->b_wptr += error;
 	      mp->b_datap->db_lim = mp->b_wptr;
 #endif
+	      /* Callback for post-recv action */
+	      if (session->rtp_post_recv_cb != NULL)
+		session->rtp_post_recv_cb(session, &error, mp);
+
 	      /* then put the new message on queue */
 	      rtp_parse (session, mp);
 	    }
@@ -1554,6 +1590,10 @@ rtp_recv (RtpSession * session)
 #endif
 	  if (mp != NULL)
 	    {
+	      /* Callback for pre-recv action */
+	      if (session->rtp_pre_recv_cb != NULL)
+		session->rtp_pre_recv_cb(session, &error, mp);
+
 	      if (USING_TUNNEL (session))
 		{
 		  err2 =
@@ -1595,6 +1635,10 @@ rtp_recv (RtpSession * session)
 	      mp->b_wptr += err2;
 	      mp->b_datap->db_lim = mp->b_wptr;
 #endif
+	      /* Callback for post-recv action */
+	      if (session->rtp_post_recv_cb != NULL)
+		session->rtp_post_recv_cb(session, &error, mp);
+
 	      /* then put the new message on queue */
 	      gettimeofday (&mp->bts, NULL);
 
@@ -1624,6 +1668,10 @@ rtp_recv (RtpSession * session)
 
 	  if (mp != NULL)
 	    {
+	      /* Callback for pre-recv action */
+	      if (session->rtp_pre_recv_cb != NULL)
+		session->rtp_pre_recv_cb(session, &error, mp);
+
 	      if (USING_TUNNEL (session))
 		{
 		  err2 =
@@ -1660,6 +1708,10 @@ rtp_recv (RtpSession * session)
 	      mp->b_datap->db_lim = mp->b_wptr;
 	      /* then put the new message on queue */
 #endif
+	      /* Callback for post-recv action */
+	      if (session->rtp_post_recv_cb != NULL)
+		session->rtp_post_recv_cb(session, &error, mp);
+
 	      rtcp_parse (session, mp->b_rptr, mp->b_wptr - mp->b_rptr);
 	      freemsg (mp);
 	    }

@@ -208,6 +208,10 @@ typedef struct ssrc_queue
 	gint q_count;	/*number of ssrc in the RtpSources q */
 } ssrc_queue_t;
 
+/*
+typedef void (*rtp_presend_cb)(RtpSession *, mblk_t *);
+typedef void (*rtp_presend_cb)(RtpSession *, mblk_t *);
+*/
 
 struct _RtpSession
 {
@@ -223,6 +227,12 @@ struct _RtpSession
 
 	gint max_buf_size;
 	int  terminated;
+
+	RtpDataCallback	rtp_pre_send_cb; /* Callback for pre-send actions */
+	RtpDataCallback	rtp_post_send_cb; /* Callback for post-send actions */
+
+	RtpDataCallback	rtp_pre_recv_cb; /* Callback for pre-recv actions */
+	RtpDataCallback	rtp_post_recv_cb; /* Callback for post-recv actions */
 
 	void (*rtcp_rr_sent_cb)(RtpSession *, rtcp_t *);
 	void (*rtcp_rr_received_cb)(RtpSession *, rtcp_t *);
@@ -283,6 +293,7 @@ struct _RtpSession
 
   RtpSource	peer;
 
+  int externalID;
 };
 	
 
@@ -309,6 +320,11 @@ void rtp_session_init(RtpSession *session, gint mode, const char *cname);
 #define rtp_session_set_max_rq_size(s,size) (s)->rtp.max_rq_size=(size)
 
 RtpSession *rtp_session_new (gint mode);
+
+int rtp_session_set_callbacks (RtpSession *session, 
+			       RtpCallback pre_recv_cb, RtpCallback post_recv_cb,
+			       RtpCallback pre_send_cb, RtpCallback post_send_cb
+			       );
 
 void rtp_session_set_scheduling_mode(RtpSession *session, gint yesno);
 void rtp_session_set_blocking_mode(RtpSession *session, gint yesno);

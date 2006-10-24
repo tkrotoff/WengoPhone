@@ -35,8 +35,11 @@ projects = [
 	'httptunnel',
 	'netlib',
 	'ortp',
+	'srtp',
 	'libosip2',
-	'eXosip'] + phapi_subprojects + [
+	'eXosip',
+	'sVoIP'
+        ] + phapi_subprojects + [
 	'phapi',
 	'miniua',
 	'sfp-plugin',

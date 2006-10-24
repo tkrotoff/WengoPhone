@@ -162,6 +162,7 @@ struct eXosip_call_t {
   osip_negotiation_ctx_t  *c_ctx;
   char                     c_sdp_port[10];
   char                     c_video_port[10];
+  int			  iscrypted; /* used by sVoIP to indicate if the call is crypted */
   eXosip_call_t           *next;
   eXosip_call_t           *parent;
 };

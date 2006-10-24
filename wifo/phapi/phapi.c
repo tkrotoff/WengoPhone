@@ -975,7 +975,7 @@ phLinePlaceCall_withCa(int vlid, const char *uri, void *userdata, int rcid, int 
     {
 #endif
 	eXosip_lock();
-	DBG_SIP_NEGO("NO STUN ports (a.local=%s, a.public=%s) (v.local=%s, v.public=%s)\n",local_voice_port,0,local_video_port);
+	DBG_SIP_NEGO("NO STUN ports (a.local=%s, a.public=%s) (v.local=%s, v.public=%s)\n",local_voice_port,0,local_video_port,0);
 	i = eXosip_initiate_call(invite, userdata, NULL, local_voice_port, optional(local_video_port),  0, 0);
 
 #ifdef STUN_ENABLE
@@ -1294,7 +1294,7 @@ phAcceptCall3(int cid, void *userData, int streams)
         }
 
         eXosip_lock();
-		DBG_SIP_NEGO("STUN ports (a.local=%s, a.public=%s) (v.local=%s, v.public=%s)\n",local_voice_port,public_voice_port,local_video_port,public_video_port);
+	DBG_SIP_NEGO("STUN ports (a.local=%s, a.public=%s) (v.local=%s, v.public=%s)\n",local_voice_port,public_voice_port,local_video_port,public_video_port);
         i = eXosip_answer_call(ca->did, 200, local_voice_port, ph_get_call_contact(ca), optional(local_video_port) , optional(public_voice_port) , optional(public_video_port));
     }
     else 
@@ -1303,7 +1303,7 @@ phAcceptCall3(int cid, void *userData, int streams)
     
         
     eXosip_lock();
-	DBG_SIP_NEGO("NO STUN ports (a.local=%s, a.public=%s) (v.local=%s, v.public=%s)\n",local_voice_port,0,local_video_port);
+    DBG_SIP_NEGO("NO STUN ports (a.local=%s, a.public=%s) (v.local=%s, v.public=%s)\n",local_voice_port,0,local_video_port,0);
     i = eXosip_answer_call(ca->did, 200, local_voice_port, ph_get_call_contact(ca), optional(local_video_port), 0, 0);
 
 
@@ -3069,11 +3069,41 @@ void DEBUGTRACE(const char * mess)
   }
 }
 
+// SPIKE_SRTP: enable / disable cipher mode using environnment variable
+/**
+ * @brief enable / disable cipher mode using environnment variable
+ */
+static void 
+ph_cipher_init()
+{
+  char *cipherMode_str = getenv("SVOIP_PHAPI_CIPHERMODE");
+
+  fprintf(stdout,"sVoIP cipherMode_str = %s\n", cipherMode_str);
+  if (cipherMode_str == NULL)
+    {
+      sVoIP_phapi_setCipherMode(0);
+    }
+  else
+    {
+      if (!strcmp(cipherMode_str, "NULL"))
+	{
+	  fprintf(stdout,"sVoIP will not ciphered\n");
+	  sVoIP_phapi_setCipherMode(0);
+	}
+      if (!strcmp(cipherMode_str, "SRTP"))
+	{
+	  fprintf(stdout,"sVoIP uses SRTP\n");
+	  sVoIP_phapi_setCipherMode(1);
+	}
+    }
+}
+
 MY_DLLEXPORT int
 phInit(phCallbacks_t *cbk, char * server, int asyncmode)
 {
   int i;
-  char buf[200];
+
+  ph_cipher_init();
 
   memset(vcontact, 0, sizeof(vcontact));
 
@@ -3731,6 +3761,7 @@ ph_call_new(eXosip_event_t *je)
   phCallStateInfo_t info;
   phcall_t *ca;
   struct vline *vl;
+
 
   clear(info);
   if (ph_busyFlag)

@@ -4,7 +4,10 @@ env['WIN32_INSERT_DEF'] = 1
 
 libs = []
 lib_path = []
-include_path = ['src']
+include_path = [
+	'include',
+	'src'
+]
 defines = {
 	'RTP_MAX_SIZE' : 8192
 }

@@ -97,6 +97,7 @@ libs = [
 	'eXosip',
 	'ortp',
 	'osip',
+	'sVoIP',
 	'stun',
 	'gsm',
 	'wtimer',

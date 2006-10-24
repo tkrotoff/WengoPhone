@@ -35,8 +35,14 @@
 #include <telephonyevents.h>
 #include <assert.h>
 
+
+#include <svoip_phapi.h> // sVoIP
+extern void sVoIP_phapi_recvRtp(RtpSession *rtp_session, gpointer error, mblk_t *mp);
+extern void sVoIP_phapi_sendRtp(RtpSession *rtp_session, gpointer error, mblk_t *mp);
+
 #include "phapi.h"
 #include "phmedia.h"
+#include "phcall.h" // sVoIP
 #include "phrecorder.h"
 #include "phcodec.h"
 #include "tonegen.h"
@@ -2660,6 +2666,34 @@ phastream_t * ph_msession_audio_stream_hardstart(struct ph_msession_s *s, int co
   DBG_MEDIA_ENGINE("ph_msession_audio_start: opening session remoteport: %d\n", stream->ms.remote_port);
 
   session = rtp_session_new(RTP_SESSION_SENDRECV);
+
+  /* sVoIP integration */
+  // SPIKE_SRTP: Check that the call is crypted, and set the callbacks
+  // for the RTP session. Use externalID to give CID to the RTP functions.
+  if (s && s->cbkInfo) 
+    {
+      phcall_t *jc;
+
+      jc = (phcall_t*)s->cbkInfo;
+      //if (jc->iscrypted)
+      if (sVoIP_phapi_isCrypted(jc->cid))
+      {
+	session->externalID = jc->cid;
+	rtp_session_set_callbacks(session, NULL, 
+				  sVoIP_phapi_recvRtp, sVoIP_phapi_sendRtp, NULL);	
+      }
+    }
+  /*  else 
+    {
+      if (stream && stream->ms.mses && stream->ms.mses->cbkInfo) 
+	session->externalID = ((phcall_t*)(stream->ms.mses->cbkInfo))->cid;
+      else
+	{
+	  fprintf(stdout,"unable to set session->externalID"); fflush(stdout);
+	  session->externalID = -1;
+	}
+	}*/
+  /* sVoIP */
 
 #ifdef USE_HTTP_TUNNEL
   if (sp->flags & PH_MSTREAM_FLAG_TUNNEL)

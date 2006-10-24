@@ -1366,6 +1366,7 @@ sdp_message_parse (sdp_message_t * sdp, const char *buf)
      v=0
      o=user1 53655765 2353687637 IN IP4 128.3.4.5
      s=Mbone Audio
+     a=session's attributes
      i=Discussion of Mbone Engineering Issues
      e=mbone@somewhere.com
      c=IN IP4 224.2.0.1/127
@@ -1420,6 +1421,21 @@ sdp_message_parse (sdp_message_t * sdp, const char *buf)
     }
   ptr = next_buf;
 
+  /* sVoIP NL: not useful anymore, maybe should be removed */
+  /* 0 or more "a" header for session */
+  i = 1;
+  while (i == 1)		/* no more "a" header */
+    {
+      i = sdp_message_parse_a (sdp, ptr, &next_buf);
+      if (i == -1)		/* header is bad */
+	return -1;
+      ptr = next_buf;
+      if (*ptr == '\0' || (*ptr == '\r') || (*ptr == '\n'))
+	return 0;
+    }
+    /* sVoIP */
+
+  
   i = sdp_message_parse_i (sdp, ptr, &next_buf);
   if (i == -1)			/* header is bad */
     return -1;

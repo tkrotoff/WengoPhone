@@ -48,6 +48,9 @@
 #include "phvstream.h"
 #include "phcodec-h263.h"
 
+/* sVoIP */
+extern void sVoIP_phapi_recvRtp(RtpSession *rtp_session, gpointer error, mblk_t *mp);
+extern void sVoIP_phapi_sendRtp(RtpSession *rtp_session, gpointer error, mblk_t *mp);
 
 
 #ifdef USE_HTTP_TUNNEL
@@ -486,6 +489,28 @@ int ph_msession_video_start(struct ph_msession_s *s, const char *deviceid)
 #endif
 
   video_session = rtp_session_new(RTP_SESSION_SENDRECV);
+
+  // SPIKE_SRTP: Check that the call is crypted, and set the callbacks
+  // for the RTP session. Use externalID to give CID to the RTP functions.
+  // Maybe ciphering two streams at the same time can raise issues,
+  // Disable this code and check again.
+#if 1
+  /* sVoIP integration */
+  if (s && s->cbkInfo) 
+    {
+      phcall_t *jc;
+
+      jc = (phcall_t*)s->cbkInfo;
+      if (sVoIP_phapi_isCrypted(jc->cid))
+      //    if (jc->iscrypted)
+      {
+	video_session->externalID = jc->cid;
+	rtp_session_set_callbacks(video_session, NULL, 
+				  sVoIP_phapi_recvRtp, sVoIP_phapi_sendRtp, NULL);	
+      }
+    }
+  /* sVoIP */
+#endif
 
 #ifdef USE_HTTP_TUNNEL
     if (sp->flags & PH_MSTREAM_FLAG_TUNNEL)

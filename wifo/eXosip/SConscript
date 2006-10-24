@@ -3,11 +3,13 @@ env = WengoGetEnvironment()
 env['WIN32_INSERT_DEF'] = 1
 
 libs = [
+	'sVoIP',
 	'osip'
 ]
 lib_path = []
 include_path = [
-	'include'
+	'include',
+	'../sVoIP/include'
 ]
 defines = {
 	'OSIP_MT' : 1,
