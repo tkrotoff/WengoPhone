@@ -1,0 +1,27 @@
+# - OW_PROJECT_LOG()
+# Shows debug informations about the current project
+#
+# Copyright (C) 2006  Wengo
+#
+# Redistribution and use is allowed according to the terms of the BSD license.
+# For details see the accompanying COPYING file.
+
+
+macro (OW_PROJECT_LOG)
+
+	ow_check_project()
+
+	message(STATUS "**")
+	message(STATUS "** PROJECT_NAME=${PROJECT_NAME}")
+	#message(STATUS "** ${PROJECT_NAME}_SRCS=${${PROJECT_NAME}_SRCS}")
+	message(STATUS "** ${PROJECT_NAME}_PUBLIC_INCLUDE_DIRS=${${PROJECT_NAME}_PUBLIC_INCLUDE_DIRS}")
+	message(STATUS "** ${PROJECT_NAME}_PRIVATE_INCLUDE_DIRS=${${PROJECT_NAME}_PRIVATE_INCLUDE_DIRS}")
+	message(STATUS "** ${PROJECT_NAME}_PUBLIC_LIBRARIES=${${PROJECT_NAME}_PUBLIC_LIBRARIES}")
+	message(STATUS "** ${PROJECT_NAME}_PRIVATE_LIBRARIES=${${PROJECT_NAME}_PRIVATE_LIBRARIES}")
+	message(STATUS "** ${PROJECT_NAME}_PUBLIC_DEFINITIONS=${${PROJECT_NAME}_PUBLIC_DEFINITIONS}")
+	message(STATUS "** ${PROJECT_NAME}_PRIVATE_DEFINITIONS=${${PROJECT_NAME}_PRIVATE_DEFINITIONS}")
+	message(STATUS "** ${PROJECT_NAME}_PRIVATE_COMPILE_FLAGS=${${PROJECT_NAME}_PRIVATE_COMPILE_FLAGS}")
+	message(STATUS "** ${PROJECT_NAME}_PRIVATE_LINK_FLAGS=${${PROJECT_NAME}_PRIVATE_LINK_FLAGS}")
+	message(STATUS "**")
+
+endmacro (MACRO_PROJECT_LOG)
