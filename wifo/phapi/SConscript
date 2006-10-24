@@ -100,14 +100,13 @@ libs = [
 	'stun',
 	'gsm',
 	'wtimer',
-	'owutil',
-    'phapi-util',
+	'phapi-util',
 	'fidlib',
 	'speexec',
 ]
 
 lib_path = []
-include_path = ['.']
+include_path = ['.', '/usr/include/ffmpeg']
 defines = {
 	'USE_PCM' : 1,
 	'NEED_ECMUX' : 1,
@@ -196,6 +195,7 @@ if WengoGetConsoleArgument('enable-video'):
 		'avcodec',
 		'webcam',
 		'pixertool',
+		'owutil',
 	]
 	defines['PHAPI_VIDEO_SUPPORT'] = 1
 
