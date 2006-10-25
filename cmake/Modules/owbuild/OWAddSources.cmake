@@ -9,7 +9,7 @@
 
 macro (OW_ADD_SOURCES)
 
-	macro_check_project()
+	ow_check_project()
 
 	if (${PROJECT_NAME}_SRCS)
 		set(${PROJECT_NAME}_SRCS
