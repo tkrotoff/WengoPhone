@@ -125,8 +125,10 @@ void PresenceHandler::connectedEventHandler(ConnectHandler & sender, IMAccount &
 		for (std::list<const IMContact *>::const_iterator subIt = _subscribedContacts.begin();
 			subIt != _subscribedContacts.end();
 			++subIt) {
-			LOG_DEBUG("subscribing to presence of=" + (*subIt)->getContactId());
-			(*it).second->subscribeToPresenceOf((*subIt)->getContactId());
+			if (*(*subIt)->getIMAccount() == imAccount) {
+				LOG_DEBUG("subscribing to presence of=" + (*subIt)->getContactId());
+				(*it).second->subscribeToPresenceOf((*subIt)->getContactId());
+			}
 		}
 		////
 
