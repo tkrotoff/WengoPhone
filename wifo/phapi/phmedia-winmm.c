@@ -508,7 +508,7 @@ int winmm_stream_read(phastream_t *as, void *buf,  int len)
     memcpy(buf, whp->lpData + whp->dwUser , len);
   }
 
-  whp->dwBytesRecorded = -len;
+  whp->dwBytesRecorded -= len;
   whp->dwBufferLength = dev->inBufferSize;
   whp->dwUser += len;
 
