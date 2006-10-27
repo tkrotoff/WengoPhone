@@ -189,7 +189,7 @@ done
 echo " done"
 
 ##
-# Change install name of qtwengophone
+# Change install name of WengoPhone
 ##
 echo -n "Changing install names..." 
 EXTLIBS_DEP="libglib-2.0.0.dylib $INTLLIB libiconv.2.dylib libgthread-2.0.0.dylib libgmodule-2.0.0.dylib libgnutls.12.dylib"
@@ -204,6 +204,14 @@ changeWengoPhoneInstallName "$QTDIR/lib/QtCore.framework/Versions/4.0/QtCore" "Q
 changeWengoPhoneInstallName "$QTDIR/lib/QtGui.framework/Versions/4.0/QtGui" "QtGui.framework/Versions/4.0/QtGui"
 changeWengoPhoneInstallName "$QTDIR/lib/QtXml.framework/Versions/4.0/QtXml" "QtXml.framework/Versions/4.0/QtXml"
 changeWengoPhoneInstallName "$QTDIR/lib/QtSvg.framework/Versions/4.0/QtSvg" "QtSvg.framework/Versions/4.0/QtSvg"
+
+##
+# Change install name of WengoPhone. Libraries that could be installed by fink but that are available by
+# default on Mac OS X.
+##
+changeWengoPhoneInstallName "/sw/lib/libssl.0.9.7.dylib" "/usr/lib/libssl.dylib"
+changeWengoPhoneInstallName "/sw/lib/libcrypto.0.9.7.dylib" "/usr/lib/libcrypto.dylib"
+changeWengoPhoneInstallName "/sw/lib/libxml2.2.dylib" "/usr/lib/libxml2.dylib"
 
 ##
 # Change install name of copied libraries
