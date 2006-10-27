@@ -37,7 +37,6 @@ QtToaster::QtToaster(QWidget * toaster, QFrame * toasterWindowFrame)
 
 	_toaster = toaster;
 	_toaster->setParent(_toaster->parentWidget(), Qt::ToolTip | Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
-	_toaster->setAttribute(Qt::WA_DeleteOnClose, true);
 
 	WidgetBackgroundImage::setBackgroundImage(toasterWindowFrame, ":pics/toaster/toaster-background.png", true);
 
