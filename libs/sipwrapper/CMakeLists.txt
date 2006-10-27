@@ -1,43 +1,24 @@
-project(owsipwrapper)
+ow_create_project(owsipwrapper)
 
 #subdirs(
-#  src/phapi
+	#src/phapi
 #)
 
-# needed include directories to build owsipwrapper
-# saves the variable in internal cache for later use
-set(OWSIPWRAPPER_INCLUDE_DIRS
-  ${CMAKE_CURRENT_SOURCE_DIR}/include
-  ${OWUTIL_INCLUDE_DIRS}
-  CACHE INTERNAL "owsipwrapper include directories"
+ow_use_public_libraries(
+	owutil
 )
 
-set(OWSIPWRAPPER_LIBRARY
-  owsipwrapper
-  CACHE INTERNAL "owsipwrapper library"
+ow_add_public_include_dirs(
+	${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
-# owsipwrapper lib and dependencies
-set(OWSIPWRAPPER_LINK_LIBRARIES
-  ${OWSIPWRAPPER_LIBRARY}
-  ${OWUTIL_LIBRARY}
+ow_add_sources(
+	src/SipWrapperFactory.cpp
+	src/EnumPhoneCallState.cpp
+	src/EnumPhoneLineState.cpp
+	src/EnumNatType.cpp
+	src/EnumVideoQuality.cpp
+	src/CodecList.cpp
 )
 
-set(owsipwrapper_SRCS
-  src/SipWrapperFactory.cpp
-  src/EnumPhoneCallState.cpp
-  src/EnumPhoneLineState.cpp
-  src/EnumNatType.cpp
-  src/EnumVideoQuality.cpp
-  src/CodecList.cpp
-)
-
-include_directories(
-  ${OWSIPWRAPPER_INCLUDE_DIRS}
-)
-
-
-add_library(${OWSIPWRAPPER_LIBRARY} STATIC ${owsipwrapper_SRCS})
-
-target_link_libraries(${OWSIPWRAPPER_LINK_LIBRARIES})
-
+ow_create_static_library()

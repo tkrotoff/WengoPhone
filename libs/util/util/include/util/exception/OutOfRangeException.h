@@ -20,6 +20,7 @@
 #ifndef OWOUTOFRANGEEXCEPTION_H
 #define OWOUTOFRANGEEXCEPTION_H
 
+#include <util/owutildll.h>
 #include <util/exception/Exception.h>
 
 /**
@@ -31,7 +32,7 @@
  * @see std::out_of_range
  * @author Tanguy Krotoff
  */
-class OutOfRangeException : public Exception {
+class OWUTIL_API OutOfRangeException : public Exception {
 public:
 
 	OutOfRangeException(const std::string & message)

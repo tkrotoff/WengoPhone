@@ -22,6 +22,7 @@
 
 #include <cutil/global.h>
 
+#include <util/owutildll.h>
 #include <util/NonCopyable.h>
 
 #include <string>
@@ -49,26 +50,26 @@ public:
 	 *
 	 * @return application executable path
 	 */
-	static std::string getApplicationDirPath();
+	OWUTIL_API static std::string getApplicationDirPath();
 
 	/**
 	 * Gets the configuration directory.
 	 *
 	 * @return the configuration directory path
 	 */
-	static std::string getConfigurationDirPath();
+	OWUTIL_API static std::string getConfigurationDirPath();
 
 	/**
 	 * @see File::getPathSeparator()
 	 */
-	static std::string getPathSeparator();
+	OWUTIL_API static std::string getPathSeparator();
 
 	/**
 	 * Gets the home directory path.
 	 *
 	 * @return the home dir of the current user.
 	 */
-	static std::string getHomeDirPath();
+	OWUTIL_API static std::string getHomeDirPath();
 
 #ifdef OS_MACOSX
 	//Special extensions for MacOS X
@@ -78,21 +79,21 @@ public:
 	 *
 	 * e.g: /Application/WengoPhone.app/
 	 */
-	static std::string getApplicationBundlePath();
+	OWUTIL_API static std::string getApplicationBundlePath();
 
 	/**
 	 * Gets the Private Frameworks path.
 	 *
 	 * e.g: full-path-tp-application.app/Contents/Frameworks
 	 */
-	static std::string getApplicationPrivateFrameworksDirPath();
+	OWUTIL_API static std::string getApplicationPrivateFrameworksDirPath();
 
 	/**
 	 * Gets the Resources path.
 	 *
 	 * e.g: full-path-tp-application.app/Contents/Resources
 	 */
-	static std::string getApplicationResourcesDirPath();
+	OWUTIL_API static std::string getApplicationResourcesDirPath();
 #endif
 };
 

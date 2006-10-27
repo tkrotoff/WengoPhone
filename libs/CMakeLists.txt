@@ -19,18 +19,17 @@ if (UNIX)
 endif (UNIX)
 
 subdirs(
-  curl
-  tinyxml
-  util
-  wenbox
-  qtutil
-  idle
-  owbrowser
-  trayicon
-  softupdater
-  pixertool
-  webcam
-  skinstyle
-  sound
-  timer
+	curl
+	tinyxml
+	util
+	wenbox
+	qtutil
+	idle
+	owbrowser
+	trayicon
+	softupdater
+	pixertool
+	webcam
+	sound
+	timer
 )

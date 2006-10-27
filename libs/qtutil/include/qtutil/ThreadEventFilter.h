@@ -20,6 +20,8 @@
 #ifndef OWTHREADEVENTFILTER_H
 #define OWTHREADEVENTFILTER_H
 
+#include <qtutil/owqtutildll.h>
+
 #include <QtCore/QObject>
 
 class QEvent;
@@ -33,7 +35,7 @@ class ThreadEventFilter : public QObject {
 	Q_OBJECT
 public:
 
-	ThreadEventFilter();
+	OWQTUTIL_API ThreadEventFilter();
 
 private:
 

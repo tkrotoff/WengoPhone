@@ -65,7 +65,7 @@ unsigned pix_size(pixosi pix, unsigned width, unsigned height) {
 	return avpicture_get_size(pix_ffmpeg_from_pix_osi(pix), width, height);
 }
 
-pixerrorcode pix_convert(int flags, piximage *img_dst, piximage *img_src) {
+pixerrorcode pix_convert(int flags, piximage * img_dst, piximage * img_src) {
 
 	uint8_t * buf_source = img_src->data;
 	int need_avfree = 0;
@@ -182,7 +182,7 @@ static uint8_t * _nv12_to_yuv420p(uint8_t * data, unsigned width, unsigned heigh
 	return buf_target;
 }
 
-piximage * pix_copy(piximage *src) {
+piximage * pix_copy(piximage * src) {
 	piximage * result = pix_alloc(src->palette, src->width, src->height);
 	memcpy(result->data, src->data, pix_size(src->palette, src->width, src->height));
 

@@ -20,8 +20,11 @@
 #ifndef OWHTTPREQUESTMANAGER_H
 #define OWHTTPREQUESTMANAGER_H
 
+#include <http/owhttpdll.h>
 #include <http/IHttpRequest.h>
+
 #include <thread/Thread.h>
+
 #include <util/Singleton.h>
 #include <util/Trackable.h>
 
@@ -31,15 +34,13 @@
  * @author Philippe Bernery
  */
 class HttpRequestManager : public Singleton<HttpRequestManager>, public Thread, public Trackable {
-
 	friend class Singleton<HttpRequestManager>;
-
 public:
 
 	/**
 	 * Adds an IHttpRequest to the manager and starts it.
 	 */
-	void addAndStart(IHttpRequest *httpRequest);
+	OWHTTP_API void addAndStart(IHttpRequest * httpRequest);
 
 private:
 
@@ -56,9 +57,9 @@ private:
 	/**
 	 * Joins and deletes the HttpTequest.
 	 */
-	void joinAndDelete(IHttpRequest *httpRequest);
+	void joinAndDelete(IHttpRequest * httpRequest);
 
 	virtual void run();
 };
 
-#endif //OWHTTPREQUESTMANAGER_H
+#endif	//OWHTTPREQUESTMANAGER_H

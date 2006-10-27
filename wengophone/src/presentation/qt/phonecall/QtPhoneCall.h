@@ -30,6 +30,7 @@ class PhoneCall;
 class CPhoneCall;
 class QtVideo;
 class QtWengoPhone;
+class QtCallToaster;
 
 class QMenu;
 class QAction;
@@ -160,6 +161,8 @@ private:
 
 	//FIXME hack in order to prevent a crash
 	bool _closed;
+
+	QtCallToaster * _callToaster;
 };
 
 #endif	//OWQTPHONECALL_H

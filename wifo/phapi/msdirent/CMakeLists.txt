@@ -1,23 +1,11 @@
-project(msdirent)
+ow_create_project(msdirent)
 
-set(MSDIRENT_INCLUDE_DIRS
-  ${CMAKE_CURRENT_SOURCE_DIR}
-  CACHE INTERNAL "msdirent include directory"
+ow_add_public_include_dirs(
+	${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-set(MSDIRENT_LIBRARY
-  msdirent
-  CACHE INTERNAL "msdirent library"
+ow_add_sources(
+	msdirent.c
 )
 
-set(MSDIRENT_LINK_LIBRARIES
-  ${MSDIRENT_LIBRARY}
-)
-
-set(msdirent_SRCS
-  msdirent.c
-)
-
-include_directories(${MSDIRENT_INCLUDE_DIRS})
-
-add_library(${MSDIRENT_LIBRARY} STATIC ${msdirent_SRCS})
+ow_create_static_library()

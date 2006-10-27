@@ -72,7 +72,7 @@ void GaimIMPresence::changeMyAlias(const std::string & nickname)
 
 	if (gAccount && gaim_account_is_connected(gAccount)) {
 		if (nickname.empty()) {
-			gaim_account_set_alias(gAccount, "", TRUE);	
+			gaim_account_set_alias(gAccount, "", TRUE);
 		} else {
 			gaim_account_set_alias(gAccount, nickname.c_str(), TRUE);
 		}

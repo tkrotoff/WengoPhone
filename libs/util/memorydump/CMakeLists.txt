@@ -1,40 +1,30 @@
-project(owmemorydump)
+ow_create_project(owmemorydump)
 
-# needed include directories to build owmemorydump
-# saves the variable in internal cache for later use
-set(OWMEMORYDUMP_INCLUDE_DIRS
-  ${CMAKE_CURRENT_SOURCE_DIR}/include
-  ${OWUTIL_INCLUDE_DIRS}
-  CACHE INTERNAL "owmemorydump include directories"
+ow_use_public_libraries(
+	owutil
 )
 
-set(OWMEMORYDUMP_LIBRARY
-  owmemorydump
-  CACHE INTERNAL "owmemorydump library"
-)
-
-# owmemorydump lib and dependencies
-set(OWMEMORYDUMP_LINK_LIBRARIES
-  ${OWMEMORYDUMP_LIBRARY}
-  ${OWUTIL_LIBRARY}
+ow_add_public_include_dirs(
+	${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
 if (MSVC)
-  set(OWMEMORYDUMP_LINK_LIBRARIES
-    ${OWMEMORYDUMP_LINK_LIBRARIES}
-    shlwapi
-  )
+	ow_add_private_libraries(
+		shlwapi
+	)
 endif (MSVC)
 
-set(owmemorydump_SRCS
-  src/win32/MemoryDump.cpp
+#ow_add_public_definitions(
+#	-DOWMEMORYDUMP_DLL
+#)
+
+#ow_add_private_definitions(
+#	-DOWMEMORYDUMP_DLL
+#	-DBUILD_OWMEMORYDUMP_DLL
+#)
+
+ow_add_sources(
+	src/win32/MemoryDump.cpp
 )
 
-include_directories(
-  ${OWMEMORYDUMP_INCLUDE_DIRS}
-)
-
-add_library(${OWMEMORYDUMP_LIBRARY} STATIC ${owmemorydump_SRCS})
-
-target_link_libraries(${OWMEMORYDUMP_LINK_LIBRARIES})
-
+ow_create_static_library()

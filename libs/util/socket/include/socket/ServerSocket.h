@@ -20,6 +20,8 @@
 #ifndef OWSERVERSOCKET_H
 #define OWSERVERSOCKET_H
 
+#include <socket/owsocketdll.h>
+
 #include <util/Event.h>
 #include <thread/Thread.h>
 
@@ -87,14 +89,14 @@ public:
 	 * @param listeningIp listening ip
 	 * @param port listening port
 	 */
-	ServerSocket(const std::string & listeningIp, int port);
+	OWSOCKET_API ServerSocket(const std::string & listeningIp, int port);
 
-	~ServerSocket();
+	OWSOCKET_API ~ServerSocket();
 
 	/**
 	 * Starts the thread.
 	 */
-	void init();
+	OWSOCKET_API void init();
 
 	/**
 	 * Sends data to a connection.
@@ -103,7 +105,7 @@ public:
 	 * @param data data to be written on the socket
 	 * @return true if writing has succeeded
 	 */
-	bool writeToClient(const std::string & connectionId, const std::string & data);
+	OWSOCKET_API bool writeToClient(const std::string & connectionId, const std::string & data);
 
 private:
 

@@ -20,6 +20,7 @@
 #ifndef OWFILENOTFOUNDEXCEPTION_H
 #define OWFILENOTFOUNDEXCEPTION_H
 
+#include <util/owutildll.h>
 #include <util/exception/Exception.h>
 
 /**
@@ -30,7 +31,7 @@
  * @see java.io.FileNotFoundException
  * @author Tanguy Krotoff
  */
-class FileNotFoundException : public Exception {
+class OWUTIL_API FileNotFoundException : public Exception {
 public:
 
 	FileNotFoundException(const std::string & message)

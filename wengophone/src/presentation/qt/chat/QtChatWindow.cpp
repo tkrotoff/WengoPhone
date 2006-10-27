@@ -599,54 +599,56 @@ void QtChatWindow::addChatSession(IMChatSession * imChatSession) {
 void QtChatWindow::addChat(IMChatSession * session, const IMContact & from) {
 
 	QtContactList * qtContactList = _qtWengoPhone.getQtContactList();
-	CContactList & cContactList = qtContactList->getCContactList();
+	if (qtContactList) {
+		CContactList & cContactList = qtContactList->getCContactList();
 
-	QString contactId = QString::fromStdString(cContactList.findContactThatOwns(from));
-	std::string tmpNickName = session->getIMChat().getIMAccount().getLogin();
-	QString nickName = QString::fromUtf8(tmpNickName.c_str());
+		QString contactId = QString::fromStdString(cContactList.findContactThatOwns(from));
+		std::string tmpNickName = session->getIMChat().getIMAccount().getLogin();
+		QString nickName = QString::fromUtf8(tmpNickName.c_str());
 
-	QString senderName = getShortDisplayName(contactId, QString::fromStdString(from.getContactId()));
-	int tabNumber;
+		QString senderName = getShortDisplayName(contactId, QString::fromStdString(from.getContactId()));
+		int tabNumber;
 
-	_chatWidget = new QtChatWidget(_cChatHandler, &_qtWengoPhone, session->getId(), _tabWidget, _tabWidget);
-	_chatWidget->setIMChatSession(session);
-	_chatWidget->setContactId(QString::fromStdString(qtContactList->getCContactList().findContactThatOwns(from)));
+		_chatWidget = new QtChatWidget(_cChatHandler, &_qtWengoPhone, session->getId(), _tabWidget, _tabWidget);
+		_chatWidget->setIMChatSession(session);
+		_chatWidget->setContactId(QString::fromStdString(qtContactList->getCContactList().findContactThatOwns(from)));
 
-	SAFE_CONNECT(qtContactList, SIGNAL(contactChangedEventSignal(QString )), SLOT(statusChangedSlot(QString)));
+		SAFE_CONNECT(qtContactList, SIGNAL(contactChangedEventSignal(QString )), SLOT(statusChangedSlot(QString)));
 
-	if (_tabWidget->count() > 0) {
-		tabNumber = _tabWidget->insertTab(_tabWidget->count(), _chatWidget, senderName);
-	} else {
-		tabNumber = _tabWidget->insertTab(0, _chatWidget, senderName);
-	}
-
-	if (session->isUserCreated()) {
-		_tabWidget->setCurrentIndex(tabNumber);
-	}
-
-	statusChangedSlot(QString::fromStdString(cContactList.findContactThatOwns(from)));
-
-	setWindowTitle(_tabWidget->tabText(tabNumber));
-	_chatWidget->setNickName(nickName);
-	// Adding probably missed message
-	_lastReceivedMessageIndex[session->getId()] = -1;
-	IMChatSession::IMChatMessageList imChatMessageList = session->getReceivedMessage(_lastReceivedMessageIndex[session->getId()]+1);
-	if (imChatMessageList.size() > 0) {
-		_lastReceivedMessageIndex[session->getId()] += imChatMessageList.size();
-		IMChatSession::IMChatMessageList::iterator imChatMessageListIterator = imChatMessageList.begin();
-		while(imChatMessageListIterator != imChatMessageList.end()){
-			IMChatSession::IMChatMessage * imChatMessage = * imChatMessageListIterator;
-			_chatWidget->addToHistory(getShortDisplayName(contactId,QString::fromStdString(from.getContactId())),
-				QString::fromUtf8(imChatMessage->getMessage().c_str()));
-			imChatMessageListIterator++;
+		if (_tabWidget->count() > 0) {
+			tabNumber = _tabWidget->insertTab(_tabWidget->count(), _chatWidget, senderName);
+		} else {
+			tabNumber = _tabWidget->insertTab(0, _chatWidget, senderName);
 		}
+
+		if (session->isUserCreated()) {
+			_tabWidget->setCurrentIndex(tabNumber);
+		}
+
+		statusChangedSlot(QString::fromStdString(cContactList.findContactThatOwns(from)));
+
+		setWindowTitle(_tabWidget->tabText(tabNumber));
+		_chatWidget->setNickName(nickName);
+		// Adding probably missed message
+		_lastReceivedMessageIndex[session->getId()] = -1;
+		IMChatSession::IMChatMessageList imChatMessageList = session->getReceivedMessage(_lastReceivedMessageIndex[session->getId()]+1);
+		if (imChatMessageList.size() > 0) {
+			_lastReceivedMessageIndex[session->getId()] += imChatMessageList.size();
+			IMChatSession::IMChatMessageList::iterator imChatMessageListIterator = imChatMessageList.begin();
+			while (imChatMessageListIterator != imChatMessageList.end()){
+				IMChatSession::IMChatMessage * imChatMessage = * imChatMessageListIterator;
+				_chatWidget->addToHistory(getShortDisplayName(contactId,QString::fromStdString(from.getContactId())),
+					QString::fromUtf8(imChatMessage->getMessage().c_str()));
+				imChatMessageListIterator++;
+			}
+		}
+		////
+		if (!isVisible() || isMinimized()) {
+			_tabWidget->setCurrentIndex(tabNumber);
+		}
+		std::string contact = _cChatHandler.getCUserProfile().getCContactList().findContactThatOwns(from);
+		updateToolBarActions();
 	}
-	////
-	if (!isVisible() || isMinimized()) {
-		_tabWidget->setCurrentIndex(tabNumber);
-	}
-	std::string contact = _cChatHandler.getCUserProfile().getCContactList().findContactThatOwns(from);
-	updateToolBarActions();
 }
 
 void QtChatWindow::showToaster(IMChatSession * imChatSession) {
@@ -656,40 +658,45 @@ void QtChatWindow::showToaster(IMChatSession * imChatSession) {
 	}
 
 	QtContactList * qtContactList = _qtWengoPhone.getQtContactList();
-	CContactList & cContactList = qtContactList->getCContactList();
-	QPixmap avatar;
-	QtChatToaster * toaster = new QtChatToaster();
+	if (qtContactList) {
+		CContactList & cContactList = qtContactList->getCContactList();
+		QPixmap avatar;
+		QtChatToaster * toaster = new QtChatToaster();
 
-	if (imChatSession->getIMContactSet().size() > 0) {
-		QString message;
-		for (IMContactSet::const_iterator it = imChatSession->getIMContactSet().begin();
-			it != imChatSession->getIMContactSet().end();
-			++it) {
-			if (it != imChatSession->getIMContactSet().begin()) {
-				message += ", ";
-			}
-			QString contactId = QString::fromStdString(cContactList.findContactThatOwns((*it)));
-			message += getShortDisplayName(contactId,
-				QString::fromStdString((*it).getContactId()));
+		if (imChatSession->getIMContactSet().size() > 0) {
+			QString message;
+			for (IMContactSet::const_iterator it = imChatSession->getIMContactSet().begin();
+				it != imChatSession->getIMContactSet().end();
+				++it) {
+				if (it != imChatSession->getIMContactSet().begin()) {
+					message += ", ";
+				}
+				QString contactId = QString::fromStdString(cContactList.findContactThatOwns((*it)));
+				message += getShortDisplayName(contactId,
+					QString::fromStdString((*it).getContactId()));
 
-			std::string contact =  _cChatHandler.getCUserProfile().getCContactList().findContactThatOwns((*it));
-			if (!contact.empty()) {
-				ContactProfile contactProfile = _cChatHandler.getCUserProfile().getCContactList().getContactProfile(contact);
-				OWPicture picture = contactProfile.getIcon();
-				std::string data = picture.getData();
-				if (!data.empty()) {
-					avatar.loadFromData((uchar *) data.c_str(), data.size());
+				std::string contact =  _cChatHandler.getCUserProfile().getCContactList().findContactThatOwns((*it));
+				if (!contact.empty()) {
+					ContactProfile contactProfile = _cChatHandler.getCUserProfile().getCContactList().getContactProfile(contact);
+					OWPicture picture = contactProfile.getIcon();
+					std::string data = picture.getData();
+					if (!data.empty()) {
+						avatar.loadFromData((uchar *) data.c_str(), data.size());
+					}
 				}
 			}
+			toaster->setMessage(message);
 		}
-		toaster->setMessage(message);
-	}
 
-	if (!avatar.isNull()) {
-		toaster->setPixmap(avatar);
+		if (!avatar.isNull()) {
+			toaster->setPixmap(avatar);
+		} else {
+			QPixmap defaultAvatar(QString::fromStdString(AvatarList::getInstance().getDefaultAvatar().getFullPath()));
+			toaster->setPixmap(defaultAvatar);
+		}
+		SAFE_CONNECT(toaster, SIGNAL(chatButtonClicked()), SLOT(show()));
+		toaster->show();
 	}
-	SAFE_CONNECT(toaster, SIGNAL(chatButtonClicked()), SLOT(show()));
-	toaster->show();
 }
 
 void QtChatWindow::imChatSessionWillDieEventHandler(IMChatSession & sender) {

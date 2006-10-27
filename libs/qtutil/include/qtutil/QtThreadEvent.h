@@ -20,6 +20,8 @@
 #ifndef OWQTTHREADEVENT_H
 #define OWQTTHREADEVENT_H
 
+#include <qtutil/owqtutildll.h>
+
 #include <thread/ThreadEvent.h>
 
 #include <QtCore/QEvent>
@@ -33,7 +35,7 @@
  * @see QCoreApplication::postEvent()
  * @author Tanguy Krotoff
  */
-class QtThreadEvent : public QEvent, public IThreadEvent {
+class OWQTUTIL_API QtThreadEvent : public QEvent, public IThreadEvent {
 public:
 
 	/** QtThreadEvent is a QEvent with a specific value. */

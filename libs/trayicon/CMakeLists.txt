@@ -1,57 +1,39 @@
-project(owtrayicon)
+ow_create_project(owtrayicon)
 
-# needed include directories to build owtrayicon
-# saves the variable in internal cache for later use
-set(OWTRAYICON_INCLUDE_DIRS
-  ${CMAKE_CURRENT_SOURCE_DIR}
-  ${QT_INCLUDE_DIR}
-  CACHE INTERNAL "owtrayicon include directories"
+ow_add_public_include_dirs(
+	${QT_INCLUDE_DIR}
+	${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-set(OWTRAYICON_LIBRARY
-  owtrayicon
-  CACHE INTERNAL "owtrayicon library"
-)
-
-# owtrayicon lib and dependencies
-set(OWTRAYICON_LINK_LIBRARIES
-  ${OWTRAYICON_LIBRARY}
-  ${QT_QTCORE_LIBRARY}
-  ${QT_QTGUI_LIBRARY}
+ow_add_private_libraries(
+	${QT_QTCORE_LIBRARY}
+	${QT_QTGUI_LIBRARY}
 )
 
 qt4_wrap_cpp(owtrayicon_SRCS
-  trayicon.h
+	trayicon.h
 )
 
-set(owtrayicon_SRCS
-  ${owtrayicon_SRCS}
-  trayicon.cpp
+ow_add_sources(
+	trayicon.cpp
 )
 
 if (WIN32)
-  set(owtrayicon_SRCS ${owtrayicon_SRCS}
-    trayicon_win.cpp
-  )
+	ow_add_sources(
+		trayicon_win.cpp
+	)
 endif (WIN32)
 
 if (UNIX AND NOT WIN32)
-  if (APPLE)
-    set(owtrayicon_SRCS ${owtrayicon_SRCS}
-      trayicon_mac.cpp
-    )
-  else (APPLE)
-    set(owtrayicon_SRCS ${owtrayicon_SRCS}
-      trayicon_x11.cpp
-    )
-  endif (APPLE)
+	if (APPLE)
+		ow_add_sources(
+			trayicon_mac.cpp
+		)
+	else (APPLE)
+		ow_add_sources(
+			trayicon_x11.cpp
+		)
+	endif (APPLE)
 endif (UNIX AND NOT WIN32)
 
-include_directories(
-  ${OWTRAYICON_INCLUDE_DIRS}
-)
-
-add_library(${OWTRAYICON_LIBRARY} STATIC ${owtrayicon_SRCS})
-
-target_link_libraries(${OWTRAYICON_LINK_LIBRARIES})
-
+ow_create_static_library()

@@ -49,7 +49,9 @@ void QtToaster::setTimeOnTop(unsigned time) {
 }
 
 void QtToaster::close() {
-	_timer->stop();
+	if (_timer) {
+		_timer->stop();
+	}
 	_toaster->close();
 }
 

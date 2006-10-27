@@ -17,8 +17,10 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef PIXERTOOL_H
-#define PIXERTOOL_H
+#ifndef OWPIXERTOOL_H
+#define OWPIXERTOOL_H
+
+#include <pixertool/owpixertooldll.h>
 
 #include <stdint.h>
 
@@ -37,7 +39,8 @@ extern "C" {
 #endif
 
 /**
- * Palette identifiers
+ * Palette identifiers.
+ *
  * See http://www.fourcc.org for details about formats
  */
 typedef enum {
@@ -68,20 +71,20 @@ typedef enum {
 	PIX_OSI_NV12 //23
 } pixosi;
 
-/** Flags for pix_convert */
+/** Flags for pix_convert. */
 enum {
 	PIX_NO_FLAG,
 	/** Flip image horizontally */
 	PIX_FLIP_HORIZONTALLY
 };
 
-/** Error code */
+/** Error code. */
 typedef enum {
 	PIX_OK,
 	PIX_NOK
 } pixerrorcode;
 
-/** Image */
+/** Image. */
 typedef struct _piximage {
 	uint8_t *data;
 	unsigned width;
@@ -90,35 +93,36 @@ typedef struct _piximage {
 } piximage;
 
 /**
- * Allocate memory for image.
+ * Allocates memory for image.
  *
  * @param width width of image
  * @param height height of image
  * @param pix desired palette
  * @return pointer to newly allocated data
  */
-piximage * pix_alloc(pixosi pix, unsigned width, unsigned height);
+OWPIXERTOOL_API piximage * pix_alloc(pixosi pix, unsigned width, unsigned height);
 
 /**
- * Free memory allocated with pixNew.
+ * Free memory allocated with pix_alloc.
  *
  * @param ptr pointer to allocated data
  */
-void pix_free(piximage *ptr);
+OWPIXERTOOL_API void pix_free(piximage * ptr);
 
 /**
- * Compute size of image in memory.
+ * Computes size of image in memory.
  *
  * @param width width of picture
  * @param height height of picture
  * @param pix used palette
  * @return size of image
  */
-unsigned pix_size(pixosi pix, unsigned width, unsigned height);
+OWPIXERTOOL_API unsigned pix_size(pixosi pix, unsigned width, unsigned height);
 
 /**
- * Convert image data from original palette to desired palette.
- * Resize picture if img_dst size is different from img_src.
+ * Converts image data from original palette to desired palette.
+ *
+ * Resizes picture if img_dst size is different from img_src.
  * //TODO: beware of resize. it can only work when img_src is in YUV420
  *         (cf ffmpeg.avcodec.h function img_resample)
  *
@@ -127,18 +131,18 @@ unsigned pix_size(pixosi pix, unsigned width, unsigned height);
  * @param img_src source image
  * @return the converted image. NULL if format is not supported
  */
-pixerrorcode pix_convert(int flags, piximage *img_dst, piximage *img_src);
+OWPIXERTOOL_API pixerrorcode pix_convert(int flags, piximage * img_dst, piximage * img_src);
 
 /**
- * Copy a piximage.
+ * Copies a piximage.
  *
  * @param src the piximage to copy
  * @return the copy of the piximage
  */
-piximage * pix_copy(piximage *src);
+OWPIXERTOOL_API piximage * pix_copy(piximage * src);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif	//PIXERTOOL_H
+#endif	//OWPIXERTOOL_H

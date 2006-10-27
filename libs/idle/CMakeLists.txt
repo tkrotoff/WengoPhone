@@ -1,44 +1,30 @@
-project(owidle)
+ow_create_project(owidle)
 
 include(${QT_USE_FILE})
 
-# needed include directories to build owidle
-# saves the variable in internal cache for later use
-set(OWIDLE_INCLUDE_DIRS
-  ${CMAKE_CURRENT_SOURCE_DIR}/include
-  ${OWUTIL_INCLUDE_DIRS}
-  ${OWQTUTIL_INCLUDE_DIRS}
-  CACHE INTERNAL "owidle include directories"
+ow_use_public_libraries(
+	owutil
 )
 
-set(OWIDLE_LIBRARY
-  owidle
-  CACHE INTERNAL "owidle library"
+ow_use_private_libraries(
+	owqtutil
 )
 
-# owidle lib and dependencies
-set(OWIDLE_LINK_LIBRARIES
-  ${OWIDLE_LIBRARY}
-  ${OWUTIL_LIBRARY}
-  ${OWQTUTIL_LIBRARY}
-  ${QT_QTCORE_LIBRARY}
-  ${QT_QTGUI_LIBRARY}
+ow_add_public_include_dirs(
+	${CMAKE_CURRENT_SOURCE_DIR}/include
+)
+
+ow_add_private_libraries(
+	${QT_QTCORE_LIBRARY}
+	${QT_QTGUI_LIBRARY}
 )
 
 qt4_wrap_cpp(owidle_SRCS
-  include/idle/Idle.h
+	include/idle/Idle.h
 )
 
-set(owidle_SRCS
-  ${owidle_SRCS}
-  src/Idle.cpp
+ow_add_sources(
+	src/Idle.cpp
 )
 
-include_directories(
-  ${OWIDLE_INCLUDE_DIRS}
-)
-
-add_library(${OWIDLE_LIBRARY} STATIC ${owidle_SRCS})
-
-target_link_libraries(${OWIDLE_LINK_LIBRARIES})
-
+ow_create_static_library()

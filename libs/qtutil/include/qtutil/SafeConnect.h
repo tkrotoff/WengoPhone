@@ -20,6 +20,8 @@
 #ifndef OWSAFECONNECT_H
 #define OWSAFECONNECT_H
 
+#include <qtutil/owqtutildll.h>
+
 #include <util/NonCopyable.h>
 
 #include <QtCore/Qt>
@@ -75,13 +77,13 @@ public:
 	/**
 	 * @see QObject::connect()
 	 */
-	static void connect(const QObject * sender, const char * signal, const QObject * receiver, const char * method,
+	OWQTUTIL_API static void connect(const QObject * sender, const char * signal, const QObject * receiver, const char * method,
 			Qt::ConnectionType type = Qt::AutoCompatConnection);
 
 	/**
 	 * @see QObject::disconnect()
 	 */
-	static void disconnect(const QObject * sender, const char * signal, const QObject * receiver, const char * method);
+	OWQTUTIL_API static void disconnect(const QObject * sender, const char * signal, const QObject * receiver, const char * method);
 };
 
 #endif	//OWSAFECONNECT_H

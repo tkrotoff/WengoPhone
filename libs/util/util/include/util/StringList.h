@@ -20,6 +20,7 @@
 #ifndef OWSTRINGLIST_H
 #define OWSTRINGLIST_H
 
+#include <util/owutildll.h>
 #include <util/List.h>
 
 #include <string>
@@ -40,23 +41,23 @@
 class StringList : public List<std::string> {
 public:
 
-	static StringList null;
+	OWUTIL_API static StringList null;
 
-	StringList();
+	OWUTIL_API StringList();
 
 	/**
 	 * Converts a std::list<std::string> to a StringList using a constructor.
 	 *
 	 * @param strList list<string> to convert to StringList
 	 */
-	StringList(const std::list<std::string> & strList);
+	OWUTIL_API StringList(const std::list<std::string> & strList);
 
 	/**
 	 * Converts this StringList to std::list<std::string>.
 	 *
 	 * @return the converted StringList to std::list<std::string>
 	 */
-	operator std::list<std::string>();
+	OWUTIL_API operator std::list<std::string>();
 
 	/**
 	 * Permits to use StringList as an array.
@@ -66,17 +67,17 @@ public:
 	 * @return the std::string that corresponds to the index i inside the StringList
 	 *         or String::null if index i is bigger than length()
 	 */
-	std::string operator[](unsigned i) const;
+	OWUTIL_API std::string operator[](unsigned i) const;
 
 	/**
 	 * @see List::operator+=
 	 */
-	void operator+=(const StringList & strList);
+	OWUTIL_API void operator+=(const StringList & strList);
 
 	/**
 	 * @see List::operator+=
 	 */
-	void operator+=(const std::string & str);
+	OWUTIL_API void operator+=(const std::string & str);
 
 	/**
 	 * Gets the number of occurrences of a string contained inside the StringList.
@@ -97,7 +98,7 @@ public:
 	 * @param caseSensitive the search is case sensitive; otherwise the search is case insensitive
 	 * @return number of occurences of the value str inside the StringList (0 if no occurence)
 	 */
-	unsigned contains(const std::string & str, bool caseSensitive = true) const;
+	OWUTIL_API unsigned contains(const std::string & str, bool caseSensitive = true) const;
 
 	/**
 	 * Joins the string list into a single string given a separator.
@@ -105,7 +106,7 @@ public:
 	 * @param separator string delimiter
 	 * @return the joined string with each element separated by the separator
 	 */
-	std::string join(const std::string & separator) const;
+	OWUTIL_API std::string join(const std::string & separator) const;
 
 	enum SortingOrder {
 		Ascendant,
@@ -117,12 +118,12 @@ public:
 	 *
 	 * @param order sorting order
 	 */
-	void sort(SortingOrder order = Ascendant);
+	OWUTIL_API void sort(SortingOrder order = Ascendant);
 
 	/**
 	 * Removes duplicated strings if any.
 	 */
-	void removeDuplicatedStrings();
+	OWUTIL_API void removeDuplicatedStrings();
 
 	/**
 	 * Constructs a single string from every string
@@ -131,7 +132,7 @@ public:
 	 * @param separator the separator used to constructs the string
 	 * @return the resulting string
 	 */
-	std::string toString(const std::string & separator = " ");
+	OWUTIL_API std::string toString(const std::string & separator = " ");
 
 private:
 

@@ -157,7 +157,7 @@ public:
 	 * @return true if we can transfer a file with this Contact.
 	 */
 	bool hasFileTransfer() const;
-	
+
 	/**
 	 * @return free phone number (Wengo ID, SIP address).
 	 * an empty string if no phone number found
@@ -221,9 +221,9 @@ public:
 	 */
 	bool isBlocked() { return _blocked; }
 
-	// Inherited from Profile
+	//Inherited from Profile
 	OWPicture getIcon() const;
-	////
+	///
 
 	/**
 	 * Actually sets the groupId.
@@ -239,7 +239,7 @@ public:
 	}
 
 	/**
-	 * @return true when a wengo IMContact has been declared 
+	 * @return true when a wengo IMContact has been declared
 	 * and this id is online.
 	 */
 	bool hasAvailableWengoId() const;

@@ -30,7 +30,7 @@
 class KeyPressEventFilter : public EventFilter {
 public:
 
-	KeyPressEventFilter(QObject * receiver, const char * member);
+	OWQTUTIL_API KeyPressEventFilter(QObject * receiver, const char * member);
 
 private:
 
@@ -46,12 +46,11 @@ private:
 class KeyReleaseEventFilter : public EventFilter {
 public:
 
-	KeyReleaseEventFilter(QObject * receiver, const char * member);
+	OWQTUTIL_API KeyReleaseEventFilter(QObject * receiver, const char * member);
 
 private:
 
 	virtual bool eventFilter(QObject * watched, QEvent * event);
 };
-
 
 #endif	//OWKEYEVENTFILTER_H

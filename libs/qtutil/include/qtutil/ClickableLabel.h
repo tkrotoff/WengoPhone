@@ -20,6 +20,8 @@
 #ifndef OWCLICKABLELABEL_H
 #define OWCLICKABLELABEL_H
 
+#include <qtutil/owqtutildll.h>
+
 #include <QtGui/QLabel>
 
 class QMouseEvent;
@@ -36,15 +38,15 @@ class ClickableLabel : public QLabel {
 	Q_OBJECT
 public:
 
-	ClickableLabel(QWidget * parent);
+	OWQTUTIL_API ClickableLabel(QWidget * parent);
 
 Q_SIGNALS:
 
 	/** Left click signal. */
-	void clicked();
+	OWQTUTIL_API void clicked();
 
 	/** Right click signal. */
-	void rightClicked();
+	OWQTUTIL_API void rightClicked();
 
 private:
 

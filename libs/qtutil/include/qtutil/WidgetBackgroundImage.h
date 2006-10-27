@@ -17,8 +17,10 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef WIDGETBACKGROUNDIMAGE_H
-#define WIDGETBACKGROUNDIMAGE_H
+#ifndef OWWIDGETBACKGROUNDIMAGE_H
+#define OWWIDGETBACKGROUNDIMAGE_H
+
+#include <qtutil/owqtutildll.h>
 
 #include <util/NonCopyable.h>
 
@@ -41,7 +43,7 @@ public:
 	 * @param imageFile background image filename
 	 * @param resizeWidget true if widget should be resize to fit the image; false otherwise
 	 */
-	static void setBackgroundImage(QWidget * widget, const char * imageFile, bool resizeWidget);
+	OWQTUTIL_API static void setBackgroundImage(QWidget * widget, const char * imageFile, bool resizeWidget);
 };
 
-#endif	//WIDGETBACKGROUNDIMAGE_H
+#endif	//OWWIDGETBACKGROUNDIMAGE_H

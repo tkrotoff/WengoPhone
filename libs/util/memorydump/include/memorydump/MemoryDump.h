@@ -20,6 +20,8 @@
 #ifndef OWMEMORYDUMP_H
 #define OWMEMORYDUMP_H
 
+#include <memorydump/owmemorydumpdll.h>
+
 #include <util/NonCopyable.h>
 
 #include <windows.h>
@@ -76,27 +78,27 @@ public:
 	 *
 	 * @param applicationName name of the application (e.g WengoPhone)
 	 */
-	MemoryDump(const char * applicationName, const char * revision);
+	OWMEMORYDUMP_API MemoryDump(const char * applicationName, const char * revision);
 
-	~MemoryDump();
+	OWMEMORYDUMP_API ~MemoryDump();
 
 	/**
 	 * Sets the Qt widgets style to use.
 	 *
 	 * @param styleName name of the style to use
 	 */
-	void setStyle(const char * styleName);
+	OWMEMORYDUMP_API void setStyle(const char * styleName);
 
 	/**
 	 * Sets the language for translating MemoryDump.
 	 *
 	 * @param languageFilename path to the Qt translation file (.qm)
 	 */
-	void setLanguage(const char * languageFilename);
+	OWMEMORYDUMP_API void setLanguage(const char * languageFilename);
 
-	static void SetGetAdditionnalInfo(std::string (*proc)());
+	OWMEMORYDUMP_API static void SetGetAdditionnalInfo(std::string (*proc)());
 
-	static std::string (*getAdditionnalInfo)();
+	OWMEMORYDUMP_API static std::string (*getAdditionnalInfo)();
 
 private:
 

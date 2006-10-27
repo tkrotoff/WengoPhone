@@ -20,6 +20,8 @@
 #ifndef OWWINDOWSREGISTRY_H
 #define OWWINDOWSREGISTRY_H
 
+#include <system/owsystemdll.h>
+
 #include <windows.h>
 
 #include <string>
@@ -39,7 +41,7 @@ public:
 	 * @param key the key to test.
 	 * @return true if exists otherwise return false.
 	 */
-	static bool keyExists(HKEY rootKey, const std::string & key);
+	OWSYSTEM_API static bool keyExists(HKEY rootKey, const std::string & key);
 
 	/**
 	 * Tests the existence of a registry entry.
@@ -49,7 +51,7 @@ public:
 	 * @param entry the entry to test.
 	 * @return true if exists otherwise return false.
 	 */
-	static bool entryExists(HKEY rootKey, const std::string & subkey, const std::string & entry);
+	OWSYSTEM_API static bool entryExists(HKEY rootKey, const std::string & subkey, const std::string & entry);
 
 	/**
 	 * Gets the value of a registry entry.
@@ -59,7 +61,7 @@ public:
 	 * @param entry the entry to test.
 	 * @return the value of the entry if success otherwise an empty string.
 	 */
-	static std::string getValue(HKEY rootKey, const std::string & subkey, const std::string & entry);
+	OWSYSTEM_API static std::string getValue(HKEY rootKey, const std::string & subkey, const std::string & entry);
 
 	/**
 	 * Creates a registry entry.
@@ -69,7 +71,7 @@ public:
 	 * @param entry the name of the key.
 	 * @return true if success otherwise false.
 	 */
-	static bool createKey(HKEY rootKey, const std::string & subkey, const std::string & key, const std::string & defaultValue = "");
+	OWSYSTEM_API static bool createKey(HKEY rootKey, const std::string & subkey, const std::string & key, const std::string & defaultValue = "");
 
 	/**
 	 * Deletes a registry entry.
@@ -79,7 +81,7 @@ public:
 	 * @param entry the name of the key.
 	 * @return true if success otherwise false.
 	 */
-	static bool deleteKey(HKEY rootKey, const std::string & subkey, const std::string & key);
+	OWSYSTEM_API static bool deleteKey(HKEY rootKey, const std::string & subkey, const std::string & key);
 
 	/**
 	 * Creates an entry in a registry key.
@@ -90,7 +92,7 @@ public:
 	 * @param value value of the entry.
 	 * @return true if success otherwise false.
 	 */
-	static bool createEntry(HKEY rootKey, const std::string & subkey, const std::string & entry, const std::string & value);
+	OWSYSTEM_API static bool createEntry(HKEY rootKey, const std::string & subkey, const std::string & entry, const std::string & value);
 
 	/**
 	 * Removes an entry to a registry key.
@@ -100,7 +102,7 @@ public:
 	 * @param entry the name of the entry.
 	 * @return true if success otherwise false.
 	 */
-	static bool removeEntry(HKEY rootKey, const std::string & subkey, const std::string & entry);
+	OWSYSTEM_API static bool removeEntry(HKEY rootKey, const std::string & subkey, const std::string & entry);
 };
 
 #endif	//OWWINDOWSREGISTRY_H

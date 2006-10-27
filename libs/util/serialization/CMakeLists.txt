@@ -1,34 +1,24 @@
-project(owserialization)
+ow_create_project(owserialization)
 
-# needed include directories to build owserialization
-# saves the variable in internal cache for later use
-set(OWSERIALIZATION_INCLUDE_DIRS
-  ${CMAKE_CURRENT_SOURCE_DIR}/include
-  ${OWUTIL_INCLUDE_DIRS}
-  CACHE INTERNAL "owserialization include directories"
+ow_use_public_libraries(
+	owutil
 )
 
-set(OWSERIALIZATION_LIBRARY
-  owserialization
-  CACHE INTERNAL "owserialization library"
+ow_add_public_include_dirs(
+	${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
-# OWSERIALIZATION lib and dependencies
-# saves the variable in internal cache for later use
-set(OWSERIALIZATION_LINK_LIBRARIES
-  ${OWSERIALIZATION_LIBRARY}
-  ${OWUTIL_LIBRARY}
+#ow_add_public_definitions(
+#	-DOWSERIALIZATION_DLL
+#)
+
+#ow_add_private_definitions(
+#	-DOWSERIALIZATION_DLL
+#	-DBUILD_OWSERIALIZATION_DLL
+#)
+
+ow_add_sources(
+	src/fake.cpp
 )
 
-set(owserialization_SRCS
-  src/fake.cpp
-)
-
-include_directories(
-  ${OWSERIALIZATION_INCLUDE_DIRS}
-)
-
-add_library(${OWSERIALIZATION_LIBRARY} STATIC ${owserialization_SRCS})
-
-target_link_libraries(${OWSERIALIZATION_LINK_LIBRARIES})
-
+ow_create_static_library()

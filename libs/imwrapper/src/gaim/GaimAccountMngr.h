@@ -21,13 +21,14 @@
 #define GAIMACCOUNTMNGR_H
 
 #include <imwrapper/IMAccount.h>
-#include <util/Trackable.h>
 
-#include <list>
+#include <util/Trackable.h>
 
 extern "C" {
 #include <gaim/account.h>
 }
+
+#include <list>
 
 void *gaim_wg_get_handle();
 

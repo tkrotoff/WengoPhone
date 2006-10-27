@@ -20,8 +20,10 @@
 #ifndef OWTHREAD_H
 #define OWTHREAD_H
 
+#include <thread/owthreaddll.h>
 #include <thread/Condition.h>
 #include <thread/Mutex.h>
+
 #include <util/Interface.h>
 
 #include <queue>
@@ -58,20 +60,20 @@ namespace boost { class thread; }
 class Thread : Interface {
 public:
 
-	Thread();
+	OWTHREAD_API Thread();
 
 	/**
 	 * Events contained in the Event Queue are executed
 	 * before deleting this Thread instance.
 	 */
-	virtual ~Thread();
+	OWTHREAD_API virtual ~Thread();
 
 	/**
 	 * Starts/creates the Thread with a given priority.
 	 *
 	 * Calls the pure virtual method run().
 	 */
-	void start();
+	OWTHREAD_API void start();
 
 	/**
 	 * Blocks a Thread.
@@ -81,7 +83,7 @@ public:
 	 *
 	 * This provides similar functionality to the POSIX pthread_join() function.
 	 */
-	void join();
+	OWTHREAD_API void join();
 
 	/**
 	 * Adds a ThreadEvent to the thread main loop.
@@ -92,7 +94,7 @@ public:
 	 *
 	 * @param event to inject inside the thread main loop
 	 */
-	void postEvent(IThreadEvent * event);
+	OWTHREAD_API void postEvent(IThreadEvent * event);
 
 	/**
 	 * Causes the current thread to sleep.
@@ -101,7 +103,7 @@ public:
 	 *
 	 * @param seconds number of seconds the current thread should sleep
 	 */
-	static void sleep(unsigned long seconds);
+	OWTHREAD_API static void sleep(unsigned long seconds);
 
 	/**
 	 * Causes the current thread to sleep.
@@ -111,7 +113,7 @@ public:
 	 * @see sleep()
 	 * @param milliseconds number of milliseconds the current thread should sleep
 	 */
-	static void msleep(unsigned long milliseconds);
+	OWTHREAD_API static void msleep(unsigned long milliseconds);
 
 protected:
 
@@ -145,12 +147,12 @@ protected:
 	 * }
 	 * </pre>
 	 */
-	virtual void run() = 0;
+	OWTHREAD_API virtual void run() = 0;
 
 	/**
 	 * Runs the events inserted inside the main thread loop via postEvent().
 	 */
-	void runEvents();
+	OWTHREAD_API void runEvents();
 
 	/**
 	 * Terminates the execution of the thread.
@@ -169,7 +171,7 @@ protected:
 	 * }
 	 * </pre>
 	 */
-	void terminate();
+	OWTHREAD_API void terminate();
 
 	/** Defines the vector of ThreadEvent. */
 	typedef std::queue < IThreadEvent * > Events;
@@ -212,4 +214,3 @@ private:
 };
 
 #endif	//OWTHREAD_H
-

@@ -145,4 +145,3 @@ void Thread::terminate() {
 
 	_threadCondition.notify_all();
 }
-

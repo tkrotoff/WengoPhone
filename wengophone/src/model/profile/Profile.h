@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef PROFILE_H
-#define PROFILE_H
+#ifndef OWPROFILE_H
+#define OWPROFILE_H
 
 #include "EnumSex.h"
 #include "StreetAddress.h"
@@ -119,8 +119,8 @@ public:
 	virtual void setAlias(const std::string & alias) { _alias = alias; profileChangedEvent(*this); }
 	virtual std::string getAlias() const { return _alias; }
 
-	virtual void setWengoPhoneId(const std::string & wengoPhoneId) { _wengoPhoneId = wengoPhoneId; profileChangedEvent(*this); } 
-	virtual std::string getWengoPhoneId() const { return _wengoPhoneId; } 
+	virtual void setWengoPhoneId(const std::string & wengoPhoneId) { _wengoPhoneId = wengoPhoneId; profileChangedEvent(*this); }
+	virtual std::string getWengoPhoneId() const { return _wengoPhoneId; }
 
 	virtual void setIcon(const OWPicture & icon) { _icon = icon; profileChangedEvent(*this); }
 	virtual OWPicture getIcon() const { return _icon; }
@@ -182,7 +182,6 @@ protected:
 	OWPicture _icon;
 
 	std::string _smsSignature;
-
 };
 
-#endif	//PROFILE_H
+#endif	//OWPROFILE_H

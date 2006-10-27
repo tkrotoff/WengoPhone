@@ -30,7 +30,7 @@
 class EnabledChangeEventFilter : public EventFilter {
 public:
 
-	EnabledChangeEventFilter(QObject * receiver, const char * member);
+	OWQTUTIL_API EnabledChangeEventFilter(QObject * receiver, const char * member);
 
 private:
 

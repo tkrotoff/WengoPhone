@@ -25,9 +25,10 @@
 
 #include <util/Event.h>
 #include <util/Interface.h>
-#include <util/OWPicture.h>
 #include <util/Trackable.h>
-#include <util/String.h>
+#include <util/OWPicture.h>
+
+#include <string>
 
 /**
  * Wrapper for Instant Messaging presence.
@@ -125,7 +126,7 @@ public:
 	 *        used only with PresenceUserDefined
 	 */
 	virtual void changeMyPresence(EnumPresenceState::PresenceState state,
-		const std::string & note = String::null) {
+		const std::string & note = "") {
 		_imAccount.setPresenceState(state);
 	}
 

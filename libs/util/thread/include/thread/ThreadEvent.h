@@ -20,6 +20,8 @@
 #ifndef OWTHREADEVENT_H
 #define OWTHREADEVENT_H
 
+#include <thread/owthreaddll.h>
+
 #include <util/Interface.h>
 
 #include <boost/function.hpp>

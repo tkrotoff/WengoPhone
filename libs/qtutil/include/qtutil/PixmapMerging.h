@@ -20,6 +20,10 @@
 #ifndef OWPIXMAPMERGING_H
 #define OWPIXMAPMERGING_H
 
+#include <qtutil/owqtutildll.h>
+
+#include <util/NonCopyable.h>
+
 #include <string>
 
 class QPixmap;
@@ -29,7 +33,7 @@ class QPixmap;
  *
  * @author Tanguy Krotoff
  */
-class PixmapMerging {
+class PixmapMerging : NonCopyable {
 public:
 
 	/**
@@ -41,7 +45,7 @@ public:
 	 * @param foregroundPixmapData an 'array' with the foreground picture data
 	 * @param backgroundPixmapFilename background pixmap filename e.g ":/pics/avatar_background.png"
 	 */
-	static QPixmap merge(const std::string & foregroundPixmapData, const std::string & backgroundPixmapFilename);
+	OWQTUTIL_API static QPixmap merge(const std::string & foregroundPixmapData, const std::string & backgroundPixmapFilename);
 };
 
 #endif	//OWPIXMAPMERGING_H

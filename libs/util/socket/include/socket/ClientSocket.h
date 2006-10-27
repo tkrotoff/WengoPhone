@@ -20,6 +20,8 @@
 #ifndef OWSOCKETCLIENT_H
 #define OWSOCKETCLIENT_H
 
+#include <socket/owsocketdll.h>
+
 #include <util/Event.h>
 
 #include <string>
@@ -58,9 +60,9 @@ public:
 	 */
 	Event<void (ClientSocket & sender, const std::string & data)> dataReceivedEvent;
 
-	ClientSocket();
+	OWSOCKET_API ClientSocket();
 
-	~ClientSocket();
+	OWSOCKET_API ~ClientSocket();
 
 	/**
 	 * Connects to a server.
@@ -68,7 +70,7 @@ public:
 	 * @param ip remote ip
 	 * @param port remote port
 	 */
-	void connect(const std::string & ip, int port);
+	OWSOCKET_API void connect(const std::string & ip, int port);
 
 	/**
 	 * Sends data to the server.
@@ -76,7 +78,7 @@ public:
 	 * @param data data to be written
 	 * @return true if writing has succeeded
 	 */
-	bool write(const std::string & data);
+	OWSOCKET_API bool write(const std::string & data);
 
 	/**
 	 * Sends data to the server.
@@ -84,7 +86,7 @@ public:
 	 * @param data data to be written
 	 * @return true if writing has succeeded
 	 */
-	bool disconnect();
+	OWSOCKET_API bool disconnect();
 
 private:
 

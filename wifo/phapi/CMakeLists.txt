@@ -1,85 +1,64 @@
-project(phapi)
+option(WITH_SPEEXWB_REPLACES_AMRWB "" OFF)
+option(WITH_SPEEXWB_REPLACES_AMRNB "" OFF)
+option(WITH_SPEEXWB_REPLACES_G726WB "" ON)
 
-# needed include directories to build phapi
-# saves the variable in internal cache for later use
-set(PHAPI_INCLUDE_DIRS
-  ${CMAKE_CURRENT_SOURCE_DIR}
-  ${OSIP2_INCLUDE_DIRS}
-  ${EXOSIP_INCLUDE_DIRS}
-  ${ORTP_INCLUDE_DIRS}
-  ${ILBC_INCLUDE_DIRS}
-  ${STUN_INCLUDE_DIRS}
-  ${GSM_INCLUDE_DIRS}
-  ${OWUTIL_INCLUDE_DIRS}
-  ${OWWEBCAM_INCLUDE_DIRS}
-  ${PHAPI-UTIL_INCLUDE_DIRS}
-  ${FIDLIB_INCLUDE_DIRS}
-  ${SPEEXEC_INCLUDE_DIRS}
-  ${WTIMER_INCLUDE_DIRS}
-  CACHE INTERNAL "phapi include directories"
+#include(CMakeLists-phamrplugin.txt)
+include(CMakeLists-phspeexplugin.txt)
+
+ow_create_project(phapi)
+
+ow_use_private_libraries(
+	osip2
+	exosip
+	ortp
+	ilbc
+	stun
+	gsm
+	owutil
+	phapi-util
+	fidlib
+	speexec
+	wtimer
+	svoip
+)
+
+ow_add_public_include_dirs(
+	${CMAKE_CURRENT_SOURCE_DIR}
 )
 
 if (MSVC)
-  set(PHAPI_INCLUDE_DIRS
-    ${PHAPI_INCLUDE_DIRS}
-    ${MSDIRENT_INCLUDE_DIRS}
-  )
+	ow_use_private_libraries(
+		msdirent
+	)
 endif (MSVC)
 
-set(PHAPI_LIBRARY
-  phapi
-  CACHE INTERNAL "phapi library"
-)
-
-# phapi lib and dependencies
-set(PHAPI_LINK_LIBRARIES
-  ${PHAPI_LIBRARY}
-  ${OWUTIL_LIBRARY}
-  ${OWWEBCAM_LIBRARY}
-  ${OSIP2_LIBRARY}
-  ${EXOSIP_LIBRARY}
-  ${ORTP_LIBRARY}
-  ${ILBC_LIBRARY}
-  ${STUN_LIBRARY}
-  ${GSM_LIBRARY}
-  ${PHAPI-UTIL_LIBRARY}
-  ${FIDLIB_LIBRARY}
-  ${SPEEXEC_LIBRARY}
-  ${WTIMER_LIBRARY}
-)
-
-if (MSVC)
-  set(PHAPI_LINK_LIBRARIES
-    ${PHAPI_LINK_LIBRARIES}
-    ${MSDIRENT_LIBRARY}
-  )
-endif (MSVC)
-
-set(PHAPI_DEFINITIONS
-  -DUSE_PCM=1
-  -DNEED_ECMUX=1
-  -DMINIMIZE_COPYING=1
-  -DSCHEDULING_MODE=0
-  -DBLOCKING_MODE=0
-  -DDO_ECHO_CAN=1
-  -DENABLE_AMR_WB=1
-  -DENABLE_AMR=1
-  -DMY_DLLEXPORTS=1
-  -DUSE_WAVEIN_CBK=1
-  -DPSEUDO_AEC=0
-  -DNO_ECHO__SUPPRESSOR=1
-  -DENABLE_ILBC=1
-  -DOSIP_MT=1
-  -DENABLE_TRACE=0
-  -DPH_VIDEO_USELOCK=1
-  -DUSE_SPXEC=1
-  -DUSE_PLUGINS=1
-  -DPH_FORCE_16KHZ=1
-  -DWENGOPHONE_UA="\\"wengo/v1/wengophoneng/wengo/rev${SVN_REVISION}/trunk/\\""
+ow_add_private_definitions(
+	-DUSE_PCM=1
+	-DNEED_ECMUX=1
+	-DMINIMIZE_COPYING=1
+	-DSCHEDULING_MODE=0
+	-DBLOCKING_MODE=0
+	-DDO_ECHO_CAN=1
+	-DENABLE_AMR_WB=1
+	-DENABLE_AMR=1
+	-DMY_DLLEXPORTS=1
+	-DUSE_WAVEIN_CBK=1
+	-DPSEUDO_AEC=0
+	-DNO_ECHO__SUPPRESSOR=1
+	-DENABLE_ILBC=1
+	-DOSIP_MT=1
+	-DENABLE_TRACE=0
+	-DPH_VIDEO_USELOCK=1
+	-DUSE_SPXEC=1
+	-DUSE_PLUGINS=1
+	-DPH_FORCE_16KHZ=1
+	-DWENGOPHONE_UA="""wengo/v1/wengophoneng/wengo/rev${SVN_REVISION}/trunk/"""
 )
 
 if (WITH_BUILDID)
-  add_definitions(-DSUBVERSION_REVISION="${SVN_REVISION}")
+	ow_add_private_definitions(
+		-DSUBVERSION_REVISION="${SVN_REVISION}"
+	)
 endif (WITH_BUILDID)
 
 # PH_FORCE_16KHZ : activate FORCED 16 KHZ SAMPLING
@@ -87,391 +66,237 @@ endif (WITH_BUILDID)
 # WENGOPHONE_UA : set the wengophone user agent. It should
 #                 be later changed to "Wengophone NG"
 
-set(phapi_SRCS
-  phcodec.c
-  phmbuf.c
-  wav.c
-  tonegen.c
-  phmedia-audio-null.c
-  phmedia-audio-file.c
-  phapi.c
-  phaudiodriver.c
-  phmedia.c
-  phrecorder.c
-  phmedia-audio.c
-  aec2.cpp
-  phresample.c
-  phlog.c
-  phplugin.c
-  phplugin-sdp.c
+ow_add_sources(
+	phcodec.c
+	phmbuf.c
+	wav.c
+	tonegen.c
+	phmedia-audio-null.c
+	phmedia-audio-file.c
+	phapi.c
+	phaudiodriver.c
+	phmedia.c
+	phrecorder.c
+	phmedia-audio.c
+	aec2.cpp
+	phresample.c
+	phlog.c
+	phplugin.c
+	phplugin-sdp.c
 )
 
-# phapi plugins
-set(phapi_amr_plugin_SRCS
-  phcodec-amr-wrapper.c
-  amrnb/interf_dec.c
-  amrnb/interf_enc.c
-  amrnb/sp_dec.c
-  amrnb/sp_enc.c
-  amrwb/dec_acelp.c
-  amrwb/dec_dtx.c
-  amrwb/dec_gain.c
-  amrwb/dec_if.c
-  amrwb/dec_lpc.c
-  amrwb/dec_main.c
-  amrwb/dec_rom.c
-  amrwb/dec_util.c
-  amrwb/enc_acelp.c
-  amrwb/enc_dtx.c
-  amrwb/enc_gain.c
-  amrwb/enc_if.c
-  amrwb/enc_lpc.c
-  amrwb/enc_main.c
-  amrwb/enc_rom.c
-  amrwb/enc_util.c
-  amrwb/if_rom.c
-
-)
-
-set(phapi_speex_plugin_SRCS
-  phcodec-speex.c
-)
-
-
-### phapi options
-
-# plugins
-option(WITH_SPEEXWB_REPLACES_AMRWB "" OFF)
-option(WITH_SPEEXWB-REPLACES-AMRNB "" OFF)
-option(WITH_SPEEXWB-REPLACES-G726WB "" ON)
-
-if (WITH_SPEEXWB-REPLACES-G726WB)
-  set(PHAPI_DEFINITIONS
-    ${PHAPI_DEFINITIONS}
-    -DPH_SPEEXWB_REPLACES_G726WB
-  )
-
-  set(PHAPI_AMR_DEFINITIONS
-    -DPH_SPEEXWB_REPLACES_G726WB
-  )
-
-  set(PHAPI_SPEEXEC_DEFINITONS
-    -DPH_SPEEXWB_REPLACES_G726WB
-  )
-else (WITH_SPEEXWB-REPLACES-G726WB)
-  if (WITH_SPEEXWB-REPLACES-AMRNB)
-    set(PHAPI_DEFINITIONS
-      ${PHAPI_DEFINITIONS}
-      -DPH_SPEEXWB_REPLACES_AMRNB
-    )
-
-    set(PHAPI_AMR_DEFINITIONS
-      -DPH_SPEEXWB_REPLACES_AMRNB
-    )
-
-    set(PHAPI_SPEEXEC_DEFINITONS
-      -DPH_SPEEXWB_REPLACES_AMRNB
-    )
-  else (WITH_SPEEXWB-REPLACES-AMRNB)
-    if (WITH_SPEEXWB_REPLACES_AMRWB)
-      set(PHAPI_DEFINITIONS
-        ${PHAPI_DEFINITIONS}
-        -DPH_SPEEXWB_REPLACES_AMRWB
-      )
-
-      set(PHAPI_AMR_DEFINITIONS
-        -DPH_SPEEXWB_REPLACES_AMRWB
-      )
-
-      set(PHAPI_SPEEXEC_DEFINITONS
-        -D-DPH_SPEEXWB_REPLACES_AMRWB
-      )
-    endif (WITH_SPEEXWB_REPLACES_AMRWB)
-  endif (WITH_SPEEXWB-REPLACES-AMRNB)
-endif (WITH_SPEEXWB-REPLACES-G726WB)
+if (WITH_SPEEXWB_REPLACES_G726WB)
+	ow_add_private_definitions(
+		-DPH_SPEEXWB_REPLACES_G726WB
+	)
+else (WITH_SPEEXWB_REPLACES_G726WB)
+	if (WITH_SPEEXWB_REPLACES_AMRNB)
+		ow_add_private_definitions(
+			-DPH_SPEEXWB_REPLACES_AMRNB
+		)
+	else (WITH_SPEEXWB_REPLACES_AMRNB)
+		if (WITH_SPEEXWB_REPLACES_AMRWB)
+			ow_add_private_definitions(
+				-DPH_SPEEXWB_REPLACES_AMRWB
+			)
+		endif (WITH_SPEEXWB_REPLACES_AMRWB)
+	endif (WITH_SPEEXWB_REPLACES_AMRNB)
+endif (WITH_SPEEXWB_REPLACES_G726WB)
 
 # embedded
 option(WITH_EMBEDDED_PHAPI "" OFF)
 if (WITH_EMBEDDED_PHAPI)
-  add_definitions(-DSCHEDULING_MODE)
+	ow_add_private_definitions(
+		-DSCHEDULING_MODE
+	)
 endif (WITH_EMBEDDED_PHAPI)
 
 option(WITH_SHARED_PHAPI "Build phapi as shared library" ON)
 
 option(WITH_QOS_DEBUG "Build with QOS debug support" OFF)
 if (WITH_QOS_DEBUG)
-  add_definitons(-DPHAPI_QOS_DEBUG)
+	ow_add_private_definitions(
+		-DPHAPI_QOS_DEBUG
+	)
 endif (WITH_QOS_DEBUG)
 
 option(WITH_HTTPTUNNEL "Build phapi with httptunnel support" ON)
 if (WITH_HTTPTUNNEL)
-  set(PHAPI_INCLUDE_DIRS
-    ${PHAPI_INCLUDE_DIRS}
-    ${OPENSSL_INCLUDE_DIRS}
-    ${HTTPTUNNEL_INCLUDE_DIRS}
-    CACHE INTERNAL "phapi include directories"
-  )
+	ow_use_private_libraries(
+		httptunnel
+	)
 
-  set(PHAPI_LINK_LIBRARIES
-    ${PHAPI_LINK_LIBRARIES}
-    ${OPENSSL_LIBRARIES}
-    httptunnel
-  )
-
-  add_definitions(-DUSE_HTTP_TUNNEL)
+	ow_add_private_definitions(
+		-DUSE_HTTP_TUNNEL
+	)
 endif (WITH_HTTPTUNNEL)
 
 #if (WITH_VIDEO)
-  set(PHAPI_INCLUDE_DIRS
-    ${PHAPI_INCLUDE_DIRS}
-    ${FFMPEG_INCLUDE_DIRS}
-    ${WEBCAM_INCLUDE_DIRS}
-    CACHE INTERNAL "phapi include directories"
-  )
+	ow_use_private_libraries(
+		owwebcam
+	)
 
-  set(PHAPI_LINK_LIBRARIES
-    ${PHAPI_LINK_LIBRARIES}
-    ${FFMPEG_LIBRARIES}
-    ${WEBCAM_LIBRARY}
-  )
+	ow_add_private_definitions(
+		-DPHAPI_VIDEO_SUPPORT
+	)
 
-message(STATUS "avcodec=" ${FFMPEG_LIBRARIES})
-
-  add_definitions(-DPHAPI_VIDEO_SUPPORT)
-
-  set(phapi_SRCS
-    ${phapi_SRCS}
-    phcodec-h263.c
-    phcodec-h264.c
-    phcodec-mpeg4.c
-    phmedia-video.c
-    phmedia-video-control.c
-    phmedia-video-bwcontrol.c
-    phcodec-avcodec-wrapper.c
-  )
-
+	ow_add_sources(
+		phcodec-h263.c
+		phcodec-h264.c
+		phcodec-mpeg4.c
+		phmedia-video.c
+		phmedia-video-control.c
+		phmedia-video-bwcontrol.c
+		phcodec-avcodec-wrapper.c
+	)
 #endif (WITH_VIDEO)
 
 # system specific phapi options
 
 if (WIN32)
-  set(PHAPI_LINK_LIBRARIES
-    ${PHAPI_LINK_LIBRARIES}
-      msdirent
-      winmm
-      ws2_32
-      user32
-      shell32
-      advapi32
-      wininet
-      iphlpapi
-      strmiids
-      ole32
-  )
+	ow_add_private_libraries(
+		winmm
+		ws2_32
+		user32
+		shell32
+		advapi32
+		wininet
+		iphlpapi
+		strmiids
+		ole32
+	)
 
-  set(phapi_SRCS
-    ${phapi_SRCS}
-    phmedia-winmm.c
-  )
+	ow_add_sources(
+		phmedia-winmm.c
+	)
 
-  if (MSVC)
-    set(PHAPI_DEFINITIONS
-      ${PHAPI_DEFINITIONS}
-      -DT_MSVC
-    )
+	if (MSVC)
+		ow_add_private_definitions(
+			-DT_MSVC
+		)
 
-    set(PHAPI_LINK_LIBRARIES
-      ${PHAPI_LINK_LIBRARIES}
-      comsupp
-    )
-  else (MSVC)
-    set(PHAPI_LINK_LIBRARIES
-      ${PHAPI_LINK_LIBRARIES}
-      gdi32
-    )
-  endif (MSVC)
+		ow_add_private_libraries(
+			comsupp
+		)
+	else (MSVC)
+		ow_add_private_libraries(
+			gdi32
+		)
+	endif (MSVC)
 endif (WIN32)
 
 if (UNIX AND NOT WIN32)
-  if (APPLE)
-    set(WITH_SHARED_PHAPI OFF)
+	if (APPLE)
+		set(WITH_SHARED_PHAPI OFF)
 
-    set(phapi_SRCS
-      ${phapi_SRCS}
-      phmedia-coreaudio.c
-    )
-  else (APPLE)
-    set(PHAPI_INCLUDE_DIRS
-      ${PHAPI_INCLUDE_DIRS}
-      ${GLIB2_INCLUDE_DIRS}
-      CACHE INTERNAL "phapi include directories"
-    )
+		ow_add_sources(
+			phmedia-coreaudio.c
+		)
+	else (APPLE)
+		ow_use_private_libraries(
+			GLIB2
+		)
 
-    set(PHAPI_LINK_LIBRARIES
-      ${PHAPI_LINK_LIBRARIES}
-      ${GTHREAD2_LIBRARY}
-      pthread
-      rt
-    )
+		ow_add_private_libraries(
+			pthread
+			rt
+		)
 
-    option(WITH_SAMPLERATE "Build phapi with samplerate support" OFF)
-    if (WITH_SAMPLERATE)
-      set(PHAPI_LINK_LIBRARIES
-        ${PHAPI_LINK_LIBRARIES}
-        ${SAMPLERATE_LIBRARIES}
-        CACHE INTERNAL "phapi libraries"
-      )
+		option(WITH_SAMPLERATE "Build phapi with samplerate support" OFF)
+		if (WITH_SAMPLERATE)
+			ow_use_private_libraries(
+				samplerate
+			)
 
-      add_definitions(-DPH_USE_RESAMPLE)
-    endif (WITH_SAMPLERATE)
+			ow_add_private_definitions(
+				-DPH_USE_RESAMPLE
+			)
+		endif (WITH_SAMPLERATE)
 
-    option(WITH_PHAPI_AUDIO_ALSA "Build phapi with alsa support" ON)
-    if (WITH_PHAPI_AUDIO_ALSA)
-      find_package(Alsa REQUIRED)
+		option(WITH_PHAPI_AUDIO_ALSA "Build phapi with alsa support" ON)
+		if (WITH_PHAPI_AUDIO_ALSA)
+			find_package(Alsa REQUIRED)
 
-      set(PHAPI_LINK_LIBRARIES
-        ${PHAPI_LINK_LIBRARIES}
-        ${ASOUND_LIBRARY}
-        CACHE INTERNAL "phapi libraries"
-      )
+			ow_add_private_libraries(
+				${ASOUND_LIBRARY}
+			)
 
-      add_definitions(-DENABLE_ALSA)
+			ow_add_private_definitions(
+				-DENABLE_ALSA
+			)
 
-      set(phapi_SRCS
-        ${phapi_SRCS}
-        phmedia-alsa.c
-      )
-    endif (WITH_PHAPI_AUDIO_ALSA)
+			ow_add_sources(
+				phmedia-alsa.c
+			)
+		endif (WITH_PHAPI_AUDIO_ALSA)
 
-    option(WITH_PHAPI_AUDIO_ARTS "Build phapi with arts support" OFF)
-    if (WITH_PHAPI_AUDIO_ARTS)
-      find_package(ARTS REQUIRED)
+		option(WITH_PHAPI_AUDIO_ARTS "Build phapi with arts support" OFF)
+		if (WITH_PHAPI_AUDIO_ARTS)
+			find_package(ARTS REQUIRED)
 
-      include_directories(
-        ${ARTS_INCLUDE_DIRS}
-      )
+			ow_use_private_libraries(
+				ARTS
+			)
 
-      set(PHAPI_LINK_LIBRARIES
-        ${PHAPI_LINK_LIBRARIES}
-        ${ARTS_LIBRARY}
-      )
+			ow_add_private_definitions(
+				-DENABLE_ARTS
+			)
 
-      add_definitions(-DENABLE_ARTS)
-      set(phapi_SRCS
-        ${phapi_SRCS}
-        phmedia-audio-arts.c
-      )
-    endif (WITH_PHAPI_AUDIO_ARTS)
+			ow_add_sources(
+				phmedia-audio-arts.c
+			)
+		endif (WITH_PHAPI_AUDIO_ARTS)
 
-    option(WITH_PHAPI_AUDIO_ESD "Build phapi with esd support" OFF)
-    if (WITH_PHAPI_AUDIO_ESD)
-      find_package(ESD REQUIRED)
+		option(WITH_PHAPI_AUDIO_ESD "Build phapi with esd support" OFF)
+		if (WITH_PHAPI_AUDIO_ESD)
+			find_package(ESD REQUIRED)
 
-      include_directories(
-        ${ESD_INCLUDE_DIRS}
-      )
+			ow_use_private_libraries(
+				ESD
+			)
 
-      set(PHAPI_LINK_LIBRARIES
-        ${PHAPI_LINK_LIBRARIES}
-        ${ESD_LIBRARY}
-      )
-      add_definitions(-DENABLE_ESD)
+			ow_add_private_definitions(
+				-DENABLE_ESD
+			)
 
-      set(phapi_SRCS
-        ${phapi_SRCS}
-        phmedia-audio-esd.c
-      )
-    endif (WITH_PHAPI_AUDIO_ESD)
-  endif (APPLE)
+			ow_add_sources(
+				phmedia-audio-esd.c
+			)
+		endif (WITH_PHAPI_AUDIO_ESD)
+	endif (APPLE)
 endif (UNIX AND NOT WIN32)
 
 if (NOT APPLE)
-  set(PHAPI_LINK_LIBRARIES
-    ${PHAPI_LINK_LIBRARIES}
-    ${PORTAUDIO_LIBRARY}
-  )
+	ow_use_private_libraries(
+		portaudio
+	)
 
-  set(PHAPI_INCLUDE_DIRS
-      ${PHAPI_INCLUDE_DIRS}
-      ${PORTAUDIO_INCLUDE_DIRS}
-      CACHE INTERNAL "phapi include directories"
-    )
+	ow_add_private_definitions(
+		-DENABLE_PORTAUDIO
+	)
 
-  add_definitions(-DENABLE_PORTAUDIO)
-
-  set(phapi_SRCS
-    ${phapi_SRCS}
-    phmedia-portaudio.c
-  )
+	ow_add_sources(
+		phmedia-portaudio.c
+	)
 endif (NOT APPLE)
 
-include_directories(
-  ${PHAPI_INCLUDE_DIRS}
-)
-
-add_definitions(
-  ${PHAPI_DEFINITIONS}
-)
-
-# phapi
-if (WITH_SHARED_PHAPI)
-  add_definitions(-DBUILD_PHAPI_DLL)
-  add_library(${PHAPI_LIBRARY} SHARED ${phapi_SRCS})
-  install(
-    TARGETS
-      ${PHAPI_LIBRARY}
-    LIBRARY DESTINATION
-      ${LIB_INSTALL_DIR}
-  )
-else (WITH_SHARED_PHAPI)
-  add_library(${PHAPI_LIBRARY} STATIC ${phapi_SRCS})
-endif (WITH_SHARED_PHAPI)
-
 if (APPLE)
-    macro_add_link_flags(phapi
-      "-framework AudioUnit"
-      "-framework CoreAudio"
-      "-framework AudioToolbox"
-      "-framework CoreServices"
-    )
+	ow_add_private_link_flags(
+		-framework AudioUnit
+		-framework CoreAudio
+		-framework AudioToolbox
+		-framework CoreServices
+	)
 endif (APPLE)
 
-target_link_libraries(${PHAPI_LINK_LIBRARIES})
+ow_set_library_version(0.2.0 0)
 
-set_target_properties(
-  ${PHAPI_LIBRARY}
-  PROPERTIES
-    VERSION
-      0.2.0
-    SOVERSION
-      0
-)
+if (WITH_SHARED_PHAPI)
+	ow_add_private_definitions(
+		-DBUILD_PHAPI_DLL
+	)
 
-### phapi plugins
-
-# amr
-include_directories(
-  amrwb
-  ambnb
-)
-macro_add_plugin(phamrplugin ${phapi_amr_plugin_SRCS})
-macro_add_compile_flags(phamrplugin ${PHAPI_OPTIMIZATION_FLAGS})
-target_link_libraries(phamrplugin)
-
-# speex
-if (NOT WIN32)
-  find_package(Speex REQUIRED)
-endif (NOT WIN32)
-
-include_directories(${SPEEX_INCLUDE_DIRS})
-macro_add_plugin(phspeexplugin ${phapi_speex_plugin_SRCS})
-macro_add_compile_flags(phspeexplugin ${PHAPI_OPTIMIZATION_FLAGS})
-target_link_libraries(phspeexplugin ${SPEEX_LIBRARY})
-
-install(
-  TARGETS
-    phamrplugin
-    phspeexplugin
-  DESTINATION
-    ${PLUGIN_INSTALL_DIR}
-)
+	ow_create_shared_library()
+else (WITH_SHARED_PHAPI)
+	ow_create_static_library()
+endif (WITH_SHARED_PHAPI)

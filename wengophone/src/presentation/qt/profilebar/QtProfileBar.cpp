@@ -42,6 +42,7 @@
 #include <util/Logger.h>
 
 #include <qtutil/WengoStyleLabel.h>
+#include <qtutil/SafeConnect.h>
 
 QtProfileBar::QtProfileBar(CWengoPhone & cWengoPhone, CUserProfile & cUserProfile,
 		ConnectHandler & connectHandler, QWidget * parent)
@@ -135,10 +136,10 @@ QtProfileBar::QtProfileBar(CWengoPhone & cWengoPhone, CUserProfile & cUserProfil
 	_creditLabel->setTextColor(Qt::white);
 
 	//Objects connection
-	connect(_statusLabel, SIGNAL(clicked()), SLOT(statusClicked()));
-	connect(_nicknameLabel, SIGNAL(clicked()), SLOT(nicknameClicked()));
-//	connect(_eventsLabel, SIGNAL(clicked()), SLOT(eventsClicked()));
-	connect(_creditLabel, SIGNAL(clicked()), SLOT(creditClicked()));
+	SAFE_CONNECT(_statusLabel, SIGNAL(clicked()), SLOT(statusClicked()));
+	SAFE_CONNECT(_nicknameLabel, SIGNAL(clicked()), SLOT(nicknameClicked()));
+//	SAFE_CONNECT(_eventsLabel, SIGNAL(clicked()), SLOT(eventsClicked()));
+	SAFE_CONNECT(_creditLabel, SIGNAL(clicked()), SLOT(creditClicked()));
 
 	//resize
 	setMinimumSize(QSize(120, 65));
@@ -172,38 +173,36 @@ QtProfileBar::QtProfileBar(CWengoPhone & cWengoPhone, CUserProfile & cUserProfil
 	presence.myPresenceStatusEvent +=
 		boost::bind(&QtProfileBar::myPresenceStatusEventHandler, this, _1, _2, _3);
 
-	connect(this, SIGNAL(connectedEventSignal(IMAccount *)),
+	SAFE_CONNECT_RECEIVER_TYPE(this, SIGNAL(connectedEventSignal(IMAccount *)),
 		_qtImProfileWidget, SLOT(connected(IMAccount *)), Qt::QueuedConnection);
 
-	connect(this, SIGNAL(disconnectedEventSignal(IMAccount *, bool, const QString &)),
+	SAFE_CONNECT_RECEIVER_TYPE(this, SIGNAL(disconnectedEventSignal(IMAccount *, bool, const QString &)),
 		_qtImProfileWidget, SLOT(disconnected(IMAccount *, bool, const QString &)), Qt::QueuedConnection);
 
-	connect(this, SIGNAL(connectionProgressEventSignal(IMAccount *, int, int, const QString &)),
+	SAFE_CONNECT_RECEIVER_TYPE(this, SIGNAL(connectionProgressEventSignal(IMAccount *, int, int, const QString &)),
 		_qtImProfileWidget, SLOT(connectionProgress(IMAccount *, int, int, const QString &)), Qt::QueuedConnection);
 
-	if (!connect(this,SIGNAL(myPresenceStatusEventSignal(QVariant)),
-		this, SLOT(myPresenceStatusEventSlot(QVariant)), Qt::QueuedConnection)) {
-		LOG_FATAL("Signal / slot connection error");
-	}
+	SAFE_CONNECT_RECEIVER_TYPE(this, SIGNAL(myPresenceStatusEventSignal(QVariant)),
+		this, SLOT(myPresenceStatusEventSlot(QVariant)), Qt::QueuedConnection);
 
 	if (_cUserProfile.getCHistory()) {
 		_eventWidget->setMissedCall(_cUserProfile.getCHistory()->getUnseenMissedCalls());
 	}
 
-	connect(this, SIGNAL(wsInfoWengosEvent(float)),
+	SAFE_CONNECT_TYPE(this, SIGNAL(wsInfoWengosEvent(float)),
 		SLOT(wsInfoWengosEventSlot(float)), Qt::QueuedConnection);
-	connect(this, SIGNAL(wsInfoVoiceMailEvent(int)),
+	SAFE_CONNECT_TYPE(this, SIGNAL(wsInfoVoiceMailEvent(int)),
 		SLOT(wsInfoVoiceMailEventSlot(int)), Qt::QueuedConnection);
-	connect(this, SIGNAL(wsInfoLandlineNumberEvent(const QString &)),
+	SAFE_CONNECT_TYPE(this, SIGNAL(wsInfoLandlineNumberEvent(const QString &)),
 		SLOT(wsInfoLandlineNumberEventSlot(const QString &)), Qt::QueuedConnection);
-	connect(this, SIGNAL(wsCallForwardInfoEvent(const QString &)),
+	SAFE_CONNECT_TYPE(this, SIGNAL(wsCallForwardInfoEvent(const QString &)),
 		SLOT(wsCallForwardInfoEventSlot(const QString &)), Qt::QueuedConnection);
-	connect(this, SIGNAL(phoneLineCreatedEvent()),
+	SAFE_CONNECT_TYPE(this, SIGNAL(phoneLineCreatedEvent()),
 		SLOT(phoneLineCreatedEventSlot()), Qt::QueuedConnection);
 
 	QtUserProfile * qtUserProfile = ((QtUserProfile *) (_cUserProfile.getPresentation()));
-	connect(qtUserProfile, SIGNAL(cHistoryCreatedEventHandlerSignal()),
-		SLOT(cHistoryCreatedEventHandlerSlot()), Qt::QueuedConnection);
+	/*SAFE_CONNECT_TYPE(qtUserProfile, SIGNAL(cHistoryCreatedEventHandlerSignal()),
+		SLOT(cHistoryCreatedEventHandlerSlot()), Qt::QueuedConnection);*/
 
 	//Check if events already occured
 	//FIXME: must not use model class
@@ -396,17 +395,15 @@ void QtProfileBar::createStatusMenu() {
 	bool connected = _cUserProfile.getUserProfile().isConnected();
 	QtUserProfilePresenceMenu * menu = new QtUserProfilePresenceMenu(EnumPresenceState::PresenceStateUnknown, connected, QString::null, this);
 
-	connect(menu, SIGNAL(onlineClicked()), SLOT(onlineClicked()));
+	SAFE_CONNECT(menu, SIGNAL(onlineClicked()), SLOT(onlineClicked()));
 
-	connect(menu, SIGNAL(doNotDisturbClicked()), SLOT(doNotDisturbClicked()));
+	SAFE_CONNECT(menu, SIGNAL(doNotDisturbClicked()), SLOT(doNotDisturbClicked()));
 
-	connect(menu, SIGNAL(invisibleClicked()), SLOT(invisibleClicked()));
+	SAFE_CONNECT(menu, SIGNAL(invisibleClicked()), SLOT(invisibleClicked()));
 
-	connect(menu, SIGNAL(awayClicked()), SLOT(awayClicked()));
+	SAFE_CONNECT(menu, SIGNAL(awayClicked()), SLOT(awayClicked()));
 
-	connect(menu, SIGNAL(disconnectClicked()), SLOT(disconnectClicked()));
-
-	connect(menu, SIGNAL(connectClicked()), SLOT(connectClicked()));
+	SAFE_CONNECT(menu, SIGNAL(disconnectClicked()), SLOT(disconnectClicked()));
 
 	QPoint p = _statusLabel->pos();
 	p.setY(p.y() + _statusLabel->rect().bottom() - 18);

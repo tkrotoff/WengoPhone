@@ -20,6 +20,8 @@
 #ifndef OWWEBCAM_H
 #define OWWEBCAM_H
 
+#include <webcam/owwebcamdll.h>
+
 #include <pixertool/pixertool.h>
 
 /*TODO: add function to set factory*/
@@ -77,19 +79,19 @@ typedef void (webcamcallback)(webcam * sender, piximage * image, void * userData
 /**
  * @see IWebcamDriver::getDeviceList()
  */
-webcamdevicelist * webcam_get_device_list(webcam *);
+OWWEBCAM_API webcamdevicelist * webcam_get_device_list(webcam *);
 
 /**
  * Release memory used by a webcamdevicelist.
  *
  * @param devlist list to release
  */
-void webcam_release_webcamdevicelist(webcamdevicelist * devlist);
+OWWEBCAM_API void webcam_release_webcamdevicelist(webcamdevicelist * devlist);
 
 /**
  * @see IWebcamDriver::getDefaultDevice()
  */
-const char * webcam_get_default_device(webcam * wc);
+OWWEBCAM_API const char * webcam_get_default_device(webcam * wc);
 
 /**
  * Gets instance of webcam.
@@ -98,33 +100,33 @@ const char * webcam_get_default_device(webcam * wc);
  *
  * @return the new webcam
  */
-webcam * webcam_get_instance();
+OWWEBCAM_API webcam * webcam_get_instance();
 
 /**
  * @see IWebcamDriver::setFlags(int flags)
  */
-void webcam_set_flags(webcam * wc, int flags);
+OWWEBCAM_API void webcam_set_flags(webcam * wc, int flags);
 
 /**
  * @see IWebcamDriver::unsetFlags()
  */
-void webcam_unset_flags(webcam * wc, int flags);
+OWWEBCAM_API void webcam_unset_flags(webcam * wc, int flags);
 
 /**
  * @see IWebcamDriver::isFlagSet()
  */
-int webcam_is_flag_set(webcam * wc, int flag);
+OWWEBCAM_API int webcam_is_flag_set(webcam * wc, int flag);
 
 /**
  * Release webcam.
  *
  */
-void webcam_release(webcam * wc);
+OWWEBCAM_API void webcam_release(webcam * wc);
 
 /**
  * @see IWebcamDriver::setDevice()
  */
-webcamerrorcode webcam_set_device(webcam * wc, const char * device_name);
+OWWEBCAM_API webcamerrorcode webcam_set_device(webcam * wc, const char * device_name);
 
 /**
  * Adds a callback.
@@ -134,94 +136,94 @@ webcamerrorcode webcam_set_device(webcam * wc, const char * device_name);
  * @param callback the callback to register
  * @param userData user data to send to callback
  */
-void webcam_add_callback(webcam * wc, webcamcallback * callback, void * userData);
+OWWEBCAM_API void webcam_add_callback(webcam * wc, webcamcallback * callback, void * userData);
 
 /**
  * Removes the callback from callback list.
  *
  * @param callback the callback to unregister
  */
-void webcam_remove_callback(webcam * wc, webcamcallback * callback);
+OWWEBCAM_API void webcam_remove_callback(webcam * wc, webcamcallback * callback);
 
 /**
  * @see IWebcamDriver::startCapture()
  */
-void webcam_start_capture(webcam * wc);
+OWWEBCAM_API void webcam_start_capture(webcam * wc);
 
 /**
  * @see IWebcamDriver::pauseCapture()
  */
-void webcam_pause_capture(webcam * wc);
+OWWEBCAM_API void webcam_pause_capture(webcam * wc);
 
 /**
  * @see IWebcamDriver::stopCapture()
  */
-void webcam_stop_capture(webcam * wc);
+OWWEBCAM_API void webcam_stop_capture(webcam * wc);
 
 /**
  * @see IWebcamDriver::getWidth()
  */
-unsigned webcam_get_width(webcam * wc);
+OWWEBCAM_API unsigned webcam_get_width(webcam * wc);
 
 /**
  * @see IWebcamDriver::getHeight()
  */
-unsigned webcam_get_height(webcam * wc);
+OWWEBCAM_API unsigned webcam_get_height(webcam * wc);
 
 /**
  * @see IWebcamDriver::getPalette()
  */
-pixosi webcam_get_palette(webcam * wc);
+OWWEBCAM_API pixosi webcam_get_palette(webcam * wc);
 
 /**
  * @see IWebcamDriver::setPalette()
  */
-webcamerrorcode webcam_set_palette(webcam * wc, pixosi palette);
+OWWEBCAM_API webcamerrorcode webcam_set_palette(webcam * wc, pixosi palette);
 
 /**
  * @see IWebcamDriver::isOpen()
  */
-int webcam_is_open(webcam * wc);
+OWWEBCAM_API int webcam_is_open(webcam * wc);
 
 /**
  * @see IWebcamDriver::setFPS()
  */
-webcamerrorcode webcam_set_fps(webcam * wc, unsigned fps);
+OWWEBCAM_API webcamerrorcode webcam_set_fps(webcam * wc, unsigned fps);
 
 /**
  * @see IWebcamDriver::getFPS()
  */
-unsigned webcam_get_fps(webcam * wc);
+OWWEBCAM_API unsigned webcam_get_fps(webcam * wc);
 
 /**
  * @see IWebcamDriver::setResolution()
  */
-void webcam_set_resolution(webcam * wc, unsigned width, unsigned height);
+OWWEBCAM_API void webcam_set_resolution(webcam * wc, unsigned width, unsigned height);
 
 /**
  * @see IWebcamDriver::flipHorizontally()
  */
-void webcam_flip_horizontally(webcam * wc, int flip);
+OWWEBCAM_API void webcam_flip_horizontally(webcam * wc, int flip);
 
 /**
  * @see IWebcamDriver::setBrightness()
  */
-void webcam_set_brightness(webcam * wc, int brightness);
+OWWEBCAM_API void webcam_set_brightness(webcam * wc, int brightness);
 
 /**
  * @see IWebcamDriver::getBrightness()
  */
-int webcam_get_brightness(webcam * wc);
+OWWEBCAM_API int webcam_get_brightness(webcam * wc);
 
 /**
  * @see IWebcamDriver::setContrast()
  */
-void webcam_set_contrast(webcam * wc, int contrast);
+OWWEBCAM_API void webcam_set_contrast(webcam * wc, int contrast);
 
 /**
  * @see IWebcamDriver::getContrast()
  */
-int webcam_get_contrast(webcam * wc);
+OWWEBCAM_API int webcam_get_contrast(webcam * wc);
 
 #ifdef __cplusplus
 }

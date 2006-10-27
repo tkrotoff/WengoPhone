@@ -1,35 +1,16 @@
-project(owmultiimwrapper)
+ow_create_project(owmultiimwrapper)
 
-# needed include directories to build owmultiimwrapper
-# saves the variable in internal cache for later use
-set(OWMULTIIMWRAPPER_INCLUDE_DIRS
-  ${CMAKE_CURRENT_SOURCE_DIR}/multiim
-  ${OWPHAPIWRAPPER_INCLUDE_DIRS}
-  ${OWGAIMWRAPPER_INCLUDE_DIRS}
-  CACHE INTERNAL "owmultiimwrapper include directories"
+ow_use_private_libraries(
+	owgaimwrapper
+	owphapiwrapper
 )
 
-set(OWMULTIIMWRAPPER_LIBRARY
-  owmultiimwrapper
-  CACHE INTERNAL "owmultiimwrapper library"
+ow_add_public_include_dirs(
+	${CMAKE_CURRENT_SOURCE_DIR}/multiim
 )
 
-# owmultiimwrapper lib and dependencies
-set(OWMULTIIMWRAPPER_LINK_LIBRARIES
-  ${OWMULTIIMWRAPPER_LIBRARY}
-  ${OWPHAPIWRAPPER_LIBRARY}
-  ${OWGAIMWRAPPER_LIBRARY}
+ow_add_sources(
+	MultiIMFactory.cpp
 )
 
-set(owmultiimwrapper_SRCS
-  MultiIMFactory.cpp
-)
-
-include_directories(
-  ${OWMULTIIMWRAPPER_INCLUDE_DIRS}
-)
-
-add_library(${OWMULTIIMWRAPPER_LIBRARY} STATIC ${owmultiimwrapper_SRCS})
-
-target_link_libraries(${OWMULTIIMWRAPPER_LINK_LIBRARIES})
-
+ow_create_static_library()

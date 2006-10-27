@@ -20,6 +20,8 @@
 #ifndef OBJECT_H
 #define OBJECT_H
 
+#include <qtutil/owqtutildll.h>
+
 #include <util/NonCopyable.h>
 
 #include <QtCore/QString>
@@ -35,7 +37,7 @@
  *
  * @author Tanguy Krotoff
  */
-class Object : NonCopyable {
+class OWQTUTIL_API Object : NonCopyable {
 public:
 
 	/**

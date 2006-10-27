@@ -47,21 +47,21 @@ public:
 	 *
 	 * @return list of input audio devices
 	 */
-	static std::list<AudioDevice> getInputDeviceList();
+	OWSOUND_API static std::list<AudioDevice> getInputDeviceList();
 
 	/**
 	 * Gets the list of output audio devices.
 	 *
 	 * @return list of output audio devices
 	 */
-	static std::list<AudioDevice> getOutputDeviceList();
+	OWSOUND_API static std::list<AudioDevice> getOutputDeviceList();
 
 	/**
 	 * Gets the default output device.
 	 *
 	 * @return the default output device
 	 */
-	static AudioDevice getDefaultOutputDevice();
+	OWSOUND_API static AudioDevice getDefaultOutputDevice();
 
 	/**
 	 * Sets the default output audio device.
@@ -70,14 +70,14 @@ public:
 	 * @return true if the default output audio device has been changed,
 	 * false if an error occured
 	 */
-	static bool setDefaultOutputDevice(const AudioDevice & audioDevice);
+	OWSOUND_API static bool setDefaultOutputDevice(const AudioDevice & audioDevice);
 
 	/**
 	 * Gets the default input audio device.
 	 *
 	 * @return the default input device
 	 */
-	static AudioDevice getDefaultInputDevice();
+	OWSOUND_API static AudioDevice getDefaultInputDevice();
 
 	/**
 	 * Sets the default input audio device.
@@ -86,7 +86,7 @@ public:
 	 * @return true if the default input audio device has been changed
 	 * false if an error occured
 	 */
-	static bool setDefaultInputDevice(const AudioDevice & audioDevice);
+	OWSOUND_API static bool setDefaultInputDevice(const AudioDevice & audioDevice);
 
 private:
 

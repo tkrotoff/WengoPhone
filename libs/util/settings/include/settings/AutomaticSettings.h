@@ -40,24 +40,24 @@
 class AutomaticSettings : public Settings {
 public:
 
-	AutomaticSettings();
+	OWSETTINGS_API AutomaticSettings();
 
-	~AutomaticSettings();
+	OWSETTINGS_API ~AutomaticSettings();
 
 	/**
 	 * @see Settings::getAllKeys()
 	 */
-	StringList getAllKeys() const;
+	OWSETTINGS_API StringList getAllKeys() const;
 
 	/**
 	 * @see Settings::getAny()
 	 */
-	boost::any getAny(const std::string & key) const;
+	OWSETTINGS_API boost::any getAny(const std::string & key) const;
 
 	/**
 	 * @see getAny()
 	 */
-	boost::any getDefaultValue(const std::string & key) const;
+	OWSETTINGS_API boost::any getDefaultValue(const std::string & key) const;
 
 
 	/**
@@ -65,29 +65,29 @@ public:
 	 *
 	 * @param key key to reset
 	 */
-	void resetToDefaultValue(const std::string & key);
+	OWSETTINGS_API void resetToDefaultValue(const std::string & key);
 
 	/**
 	 * Makes it impossible to use set() with a wrong value type.
 	 *
 	 * @see Settings::set()
 	 */
-	void set(const std::string & key, const std::string & value);
+	OWSETTINGS_API void set(const std::string & key, const std::string & value);
 
 	/**
 	 * @see set()
 	 */
-	void set(const std::string & key, const StringList & value);
+	OWSETTINGS_API void set(const std::string & key, const StringList & value);
 
 	/**
 	 * @see set()
 	 */
-	void set(const std::string & key, bool value);
+	OWSETTINGS_API void set(const std::string & key, bool value);
 
 	/**
 	 * @see set()
 	 */
-	void set(const std::string & key, int value);
+	OWSETTINGS_API void set(const std::string & key, int value);
 
 protected:
 
@@ -96,14 +96,14 @@ protected:
 	 *
 	 * @see Settings::get()
 	 */
-	std::string get(const std::string &, const std::string &) const {
+	OWSETTINGS_API std::string get(const std::string &, const std::string &) const {
 		return String::null;
 	}
 
 	/**
 	 * @see get()
 	 */
-	StringList get(const std::string &, const StringList &) const {
+	OWSETTINGS_API StringList get(const std::string &, const StringList &) const {
 		static const StringList empty;
 		return empty;
 	}
@@ -111,21 +111,21 @@ protected:
 	/**
 	 * @see get()
 	 */
-	bool get(const std::string &, bool) const {
+	OWSETTINGS_API bool get(const std::string &, bool) const {
 		return false;
 	}
 
 	/**
 	 * @see get()
 	 */
-	int get(const std::string &, int) const {
+	OWSETTINGS_API int get(const std::string &, int) const {
 		return 0;
 	}
 
 	/**
 	 * @see get()
 	 */
-	boost::any getAny(const std::string &, const boost::any &) const {
+	OWSETTINGS_API boost::any getAny(const std::string &, const boost::any &) const {
 		static const boost::any empty;
 		return empty;
 	}
@@ -133,22 +133,22 @@ protected:
 	/**
 	 * @see get()
 	 */
-	bool getBooleanKeyValue(const std::string & key) const;
+	OWSETTINGS_API bool getBooleanKeyValue(const std::string & key) const;
 
 	/**
 	 * @see get()
 	 */
-	int getIntegerKeyValue(const std::string & key) const;
+	OWSETTINGS_API int getIntegerKeyValue(const std::string & key) const;
 
 	/**
 	 * @see get()
 	 */
-	std::string getStringKeyValue(const std::string & key) const;
+	OWSETTINGS_API std::string getStringKeyValue(const std::string & key) const;
 
 	/**
 	 * @see get()
 	 */
-	StringList getStringListKeyValue(const std::string & key) const;
+	OWSETTINGS_API StringList getStringListKeyValue(const std::string & key) const;
 
 	/** Associates a key to a default value. */
 	Keys _keyDefaultValueMap;

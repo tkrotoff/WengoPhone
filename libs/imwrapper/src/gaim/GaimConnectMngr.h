@@ -20,12 +20,12 @@
 #ifndef GAIMCONNECTMNGR_H
 #define GAIMCONNECTMNGR_H
 
-extern "C" {
-#include "gaim/connection.h"
-}
-
 #include "GaimIMConnect.h"
 #include "GaimAccountMngr.h"
+
+extern "C" {
+#include <gaim/connection.h>
+}
 
 #include <list>
 

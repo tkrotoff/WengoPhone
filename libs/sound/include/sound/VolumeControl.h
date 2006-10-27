@@ -37,17 +37,17 @@ public:
 	 * @param audioDevice the AudioDevice we want to set the volume
 	 * It it copied internally.
 	 */
-	VolumeControl(const AudioDevice & audioDevice);
+	OWSOUND_API VolumeControl(const AudioDevice & audioDevice);
 
-	bool setLevel(unsigned level);
+	OWSOUND_API bool setLevel(unsigned level);
 
-	int getLevel();
+	OWSOUND_API int getLevel();
 
-	bool setMute(bool mute);
+	OWSOUND_API bool setMute(bool mute);
 
-	bool isMuted();
+	OWSOUND_API bool isMuted();
 
-	bool isSettable() const;
+	OWSOUND_API bool isSettable() const;
 
 private:
 

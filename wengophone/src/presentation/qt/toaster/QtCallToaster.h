@@ -50,6 +50,10 @@ public:
 
 	void show();
 
+public Q_SLOTS:
+
+	void close();
+
 Q_SIGNALS:
 
 	void hangUpButtonClicked();
@@ -61,8 +65,6 @@ private Q_SLOTS:
 	void hangUpButtonSlot();
 
 	void pickUpButtonSlot();
-
-	void close();
 
 private:
 

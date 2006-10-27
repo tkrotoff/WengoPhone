@@ -20,6 +20,8 @@
 #ifndef OWNONRESIZEABLEWIDGET_H
 #define OWNONRESIZEABLEWIDGET_H
 
+#include <qtutil/owqtutildll.h>
+
 #include <QtCore/QObject>
 
 class QWidget;
@@ -33,7 +35,7 @@ class NonResizeableWidget : public QObject {
 	Q_OBJECT
 public:
 
-	NonResizeableWidget(QWidget * widget);
+	OWQTUTIL_API NonResizeableWidget(QWidget * widget);
 
 private Q_SLOTS:
 

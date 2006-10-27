@@ -1,37 +1,31 @@
-project(owsocket)
+ow_create_project(owsocket)
 
-# needed include directories to build owsocket
-# saves the variable in internal cache for later use
-set(OWSOCKET_INCLUDE_DIRS
-  ${CMAKE_CURRENT_SOURCE_DIR}/include
-  ${OWUTIL_INCLUDE_DIRS}
-  ${OWTHREAD_INCLUDE_DIRS}
-  CACHE INTERNAL "owsocket include directories"
+ow_use_public_libraries(
+	owthread
 )
 
-set(OWSOCKET_LIBRARY
-  owsocket
-  CACHE INTERNAL "owsocket library"
+ow_add_public_include_dirs(
+	${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
-# owsocket lib and dependencies
-set(OWSOCKET_LINK_LIBRARIES
-  ${OWSOCKET_LIBRARY}
-  ${OWUTIL_LIBRARY}
-  ${OWTHREAD_LIBRARY}
+#ow_add_public_definitions(
+#	-DOWSOCKET_DLL
+#)
+
+#ow_add_private_definitions(
+#	-DOWSOCKET_DLL
+#	-DBUILD_OWSOCKET_DLL
+#)
+
+ow_add_sources(
+	src/ServerSocket.cpp
+	src/ClientSocket.cpp
 )
 
-include_directories(
-  ${OWSOCKET_INCLUDE_DIRS}
-)
+if (WIN32)
+	ow_add_private_libraries(
+		Ws2_32
+	)
+endif (WIN32)
 
-#sources
-set(owsocket_SRCS
-  src/ServerSocket.cpp
-  src/ClientSocket.cpp
-)
-
-add_library(${OWSOCKET_LIBRARY} STATIC ${owsocket_SRCS})
-
-target_link_libraries(${OWSOCKET_LINK_LIBRARIES})
-
+ow_create_static_library()

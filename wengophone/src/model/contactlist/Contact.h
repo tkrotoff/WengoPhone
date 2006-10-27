@@ -62,7 +62,10 @@ public:
 	 *
 	 * @param number the preferred phone number
 	 */
-	void setPreferredPhoneNumber(const std::string & number) { _preferredNumber = number; contactChangedEvent(*this); }
+	void setPreferredPhoneNumber(const std::string & number) {
+		_preferredNumber = number;
+		contactChangedEvent(*this);
+	}
 
 	/**
 	 * Set the preferred IMContact to use.
@@ -70,7 +73,10 @@ public:
 	 * @param the imContact to set. The given reference must stay valid during
 	 * the execution (this must be a reference to an IMContact of this Contact).
 	 */
-	void setPreferredIMContact(const IMContact & imContact) { _preferredIMContact = (IMContact *)&imContact; contactChangedEvent(*this); }
+	void setPreferredIMContact(const IMContact & imContact) {
+		_preferredIMContact = (IMContact *) &imContact;
+		contactChangedEvent(*this);
+	}
 
 	/**
 	 * Add an IMContact to the Contact.

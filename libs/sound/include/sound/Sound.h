@@ -20,6 +20,7 @@
 #ifndef OWSOUND_H
 #define OWSOUND_H
 
+#include <sound/owsounddll.h>
 #include <sound/AudioDevice.h>
 #include <sound/ISound.h>
 
@@ -39,13 +40,13 @@ public:
 	 *
 	 * @param filename sound file
 	 */
-	Sound(const std::string & filename);
+	OWSOUND_API Sound(const std::string & filename);
 
-	virtual ~Sound();
+	OWSOUND_API virtual ~Sound();
 
-	void setLoops(int loops);
+	OWSOUND_API void setLoops(int loops);
 
-	bool setWaveOutDevice(const AudioDevice & device);
+	OWSOUND_API bool setWaveOutDevice(const AudioDevice & device);
 
 	/**
 	 * Plays the sound in a file called filename.
@@ -53,11 +54,11 @@ public:
 	 * @param filename sound file
 	 * @param deviceName wave out audio device name
 	 */
-	static void play(const std::string & filename, const AudioDevice & device = AudioDevice::null);
+	OWSOUND_API static void play(const std::string & filename, const AudioDevice & device = AudioDevice::null);
 
-	void play();
+	OWSOUND_API void play();
 
-	void stop();
+	OWSOUND_API void stop();
 
 private:
 

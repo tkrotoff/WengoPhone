@@ -20,6 +20,8 @@
 #ifndef OWEXCEPTION_H
 #define OWEXCEPTION_H
 
+#include <util/owutildll.h>
+
 #include <string>
 
 /**
@@ -32,7 +34,7 @@
  * @see java.lang.Exception
  * @author Tanguy Krotoff
  */
-class Exception {
+class OWUTIL_API Exception {
 public:
 
 	Exception();

@@ -20,6 +20,8 @@
 #ifndef OWWIDGET_H
 #define OWWIDGET_H
 
+#include <qtutil/owqtutildll.h>
+
 #include <util/NonCopyable.h>
 
 class QWidget;
@@ -40,7 +42,7 @@ public:
 	 * @param parent QWidget where to create the layout
 	 * @return QGridLayout
 	 */
-	static QGridLayout * createLayout(QWidget * parent);
+	OWQTUTIL_API static QGridLayout * createLayout(QWidget * parent);
 
 	/**
 	 * Transforms a QWidget into a QDialog.
@@ -48,7 +50,7 @@ public:
 	 * @param widget QWidget to transform into a QDialog
 	 * @return the QDialog created
 	 */
-	static QDialog * transformToWindow(QWidget * widget);
+	OWQTUTIL_API static QDialog * transformToWindow(QWidget * widget);
 };
 
 #endif	//OWWIDGET_H

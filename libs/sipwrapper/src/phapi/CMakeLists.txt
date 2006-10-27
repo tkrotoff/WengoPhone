@@ -1,78 +1,58 @@
-project(owphapiwrapper)
+ow_create_project(owphapiwrapper)
 
-# needed include directories to build owphapiwrapper
-# saves the variable in internal cache for later use
-set(OWPHAPIWRAPPER_INCLUDE_DIRS
-  ${CMAKE_CURRENT_SOURCE_DIR}
-  ${OWTHREAD_INCLUDE_DIRS}
-  ${OWUTIL_INCLUDE_DIRS}
-  ${OWSOUND_INCLUDE_DIRS}
-  ${TINYXML_INCLUDE_DIRS}
-  ${PIXERTOOL_INCLUDE_DIRS}
-  ${OWIMWRAPPER_INCLUDE_DIRS}
-  ${OWSIPWRAPPER_INCLUDE_DIRS}
-  ${PHAPI_INCLUDE_DIRS}
-  ${SFP-PLUGIN_INCLUDE_DIRS}
-  CACHE INTERNAL "owphapiwrapper include directories"
+ow_use_public_libraries(
+	owthread
+	owsound
+	owimwrapper
+	owsipwrapper
+	phapi
+	sfp-plugin
 )
 
-set(OWPHAPIWRAPPER_LIBRARY
-  owphapiwrapper
-  CACHE INTERNAL "owphapiwrapper library"
+ow_use_private_libraries(
+	tinyxml
 )
 
-# owphapiwrapper lib and dependencies
-set(OWPHAPIWRAPPER_LINK_LIBRARIES
-  ${OWPHAPIWRAPPER_LIBRARY}
-  ${OWUTIL_LIBRARY}
-  ${OWTHREAD_LIBRARY}
-  ${OWSOUND_LIBRARY}
-  ${TINYXML_LIBRARY}
-  ${PIXERTOOL_LIBRARY}
-  ${OWIMWRAPPER_LIBRARY}
-  ${OWSIPWRAPPER_LIBRARY}
-  ${PHAPI_LIBRARY}
-  ${ORTP_LIBRARY}
-  ${STUN_LIBRARY}
-  ${HTTPTUNNEL_LIBRARY}
-  ${SFP-PLUGIN_LIBRARY}
+ow_add_public_include_dirs(
+	${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-set(owphapiwrapper_SRCS
-  PhApiFactory.cpp
-  PhApiWrapper.cpp
-  PhApiCallbacks.cpp
-  PhApiIMChat.cpp
-  PhApiIMConnect.cpp
-  PhApiIMPresence.cpp
-  PhApiCodecList.cpp
-  PhApiSFPCallbacks.cpp
-  PhApiSFPWrapper.cpp
-  PhApiSFPEvent.cpp
+ow_add_private_libraries(
+	${ortp_LIBRARIES}
+	${stun_LIBRARIES}
+	${httptunnel_LIBRARIES}
+)
+
+ow_add_sources(
+	PhApiFactory.cpp
+	PhApiWrapper.cpp
+	PhApiCallbacks.cpp
+	PhApiIMChat.cpp
+	PhApiIMConnect.cpp
+	PhApiIMPresence.cpp
+	PhApiCodecList.cpp
+	PhApiSFPCallbacks.cpp
+	PhApiSFPWrapper.cpp
+	PhApiSFPEvent.cpp
 )
 
 if (WITH_VIDEO)
-  set(OWPHAPIWRAPPER_LINK_LIBRARIES
-    ${OWPHAPIWRAPPER_LINK_LIBRARIES}
-    ${PIXERTOOL_LIBRARY}
-  )
-
-  add_definitions(-DENABLE_VIDEO)
+	ow_use_public_libraries(
+		owpixertool
+	)
+	ow_add_private_definitions(
+		-DENABLE_VIDEO
+	)
 endif (WITH_VIDEO)
 
-include_directories(
-  ${OWPHAPIWRAPPER_INCLUDE_DIRS}
+ow_add_private_definitions(
+	-DPHAPI_DLL
 )
 
-add_definitions(-DPHAPI_DLL)
-
-add_library(${OWPHAPIWRAPPER_LIBRARY} STATIC ${owphapiwrapper_SRCS})
+ow_create_static_library()
 
 if (APPLE)
-  macro_add_link_flags(${OWPHAPIWRAPPER_LIBRARY}
-    "-framework CoreFoundation"
-  )
+	ow_add_private_link_flags(
+		"-framework CoreFoundation"
+	)
 endif (APPLE)
-
-target_link_libraries(${OWPHAPIWRAPPER_LINK_LIBRARIES})
-

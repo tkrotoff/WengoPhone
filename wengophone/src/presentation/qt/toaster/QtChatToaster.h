@@ -50,6 +50,10 @@ public:
 
 	void show();
 
+public Q_SLOTS:
+
+	void close();
+
 Q_SIGNALS:
 
 	void chatButtonClicked();
@@ -57,8 +61,6 @@ Q_SIGNALS:
 private Q_SLOTS:
 
 	void chatButtonSlot();
-
-	void close();
 
 private:
 

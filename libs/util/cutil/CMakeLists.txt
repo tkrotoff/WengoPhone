@@ -1,41 +1,34 @@
-project(owcutil)
+ow_create_project(owcutil)
 
-set(OWCUTIL_INCLUDE_DIRS
-  ${CMAKE_CURRENT_SOURCE_DIR}/include
-  CACHE INTERNAL "owcutil include directory"
+ow_add_public_include_dirs(
+	${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
-set(OWCUTIL_LIBRARY
-  owcutil
-  CACHE INTERNAL "owcutil library"
+ow_add_sources(
+	src/fake.c
+	src/strlcat.c
+	src/strlcpy.c
 )
 
-set(OWCUTIL_LINK_LIBRARIES
-  ${OWCUTIL_LIBRARY}
-)
+#ow_add_public_definitions(
+#	-DOWCUTIL_DLL
+#)
 
-set(owcutil_SRCS
-  src/fake.c
-  src/strlcat.c
-  src/strlcpy.c
-)
+#ow_add_private_definitions(
+#	-DOWCUTIL_DLL
+#	-DBUILD_OWCUTIL_DLL
+#)
 
 if (MSVC)
-  set(OWCUTIL_INCLUDE_DIRS
-    ${OWCUTIL_INCLUDE_DIRS}
-    ${owcutil_SOURCE_DIR}/include/cutil/msvc
-    CACHE INTERNAL "owcutil include directory"
-  )
+	ow_add_public_include_dirs(
+		${CMAKE_CURRENT_SOURCE_DIR}/include/cutil/msvc
+	)
 endif (MSVC)
-
-include_directories(${OWCUTIL_INCLUDE_DIRS})
 
 if (MSVC)
-  set(owcutil_SRCS
-    ${owcutil_SRCS}
-    src/msvc/dirent.c
-  )
+	ow_add_sources(
+		src/msvc/dirent.c
+	)
 endif (MSVC)
 
-add_library(${OWCUTIL_LIBRARY} STATIC ${owcutil_SRCS})
-
+ow_create_static_library()

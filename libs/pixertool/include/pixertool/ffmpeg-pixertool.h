@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef FFMPEG_PIXERTOOL_H
-#define FFMPEG_PIXERTOOL_H
+#ifndef OWFFMPEG_PIXERTOOL_H
+#define OWFFMPEG_PIXERTOOL_H
 
 #include <pixertool/pixertool.h>
 
@@ -37,7 +37,7 @@ extern "C" {
  * @param pix palette identifier to convert
  * @return equivalent pixosi identifier
  */
-pixosi pix_ffmpeg_to_pix_osi(int pix);
+OWPIXERTOOL_API pixosi pix_ffmpeg_to_pix_osi(int pix);
 
 /**
  * Palette identifier conversion.
@@ -48,20 +48,20 @@ pixosi pix_ffmpeg_to_pix_osi(int pix);
  * @param pix palette identifier to convert
  * @return equivalent ffmpeg identifier
  */
-int pix_ffmpeg_from_pix_osi(pixosi pix);
+OWPIXERTOOL_API int pix_ffmpeg_from_pix_osi(pixosi pix);
 
 /**
- * Fill an AVPicture with a piximage.
+ * Fills an AVPicture with a piximage.
  *
  * Data are not copied so src pointer must stay valid
  *
  * @param dst AVPicture to fill
  * @param src the piximage to convert
  */
-void pix_fill_avpicture(AVPicture *dst, piximage *src);
+OWPIXERTOOL_API void pix_fill_avpicture(AVPicture *dst, piximage *src);
 
 /**
- * Convert an AVPicture to an img_dst
+ * Converts an AVPicture to an img_dst.
  *
  * This function exists because of AVPicture buffer size. They are not
  * sometimes bigger than real picture size so img_src->data[0] is unusable to
@@ -74,10 +74,10 @@ void pix_fill_avpicture(AVPicture *dst, piximage *src);
  * @param src_fmt format of the AVPicture
  * @return the converted image. NULL if format is not supported
  */
-pixerrorcode pix_convert_avpicture(int flags, piximage *img_dst, AVPicture *img_src, pixosi src_fmt);
+OWPIXERTOOL_API pixerrorcode pix_convert_avpicture(int flags, piximage *img_dst, AVPicture *img_src, pixosi src_fmt);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif	//FFMPEG_PIXERTOOL_H
+#endif	//OWFFMPEG_PIXERTOOL_H

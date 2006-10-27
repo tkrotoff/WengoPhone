@@ -20,6 +20,8 @@
 #ifndef WIZARD_H
 #define WIZARD_H
 
+#include <qtutil/owqtutildll.h>
+
 #include <util/NonCopyable.h>
 
 #include <QtCore/QObject>
@@ -40,25 +42,25 @@ class Wizard : public QObject, NonCopyable {
 	Q_OBJECT
 public:
 
-	Wizard(QWidget * parent);
+	OWQTUTIL_API Wizard(QWidget * parent);
 
-	~Wizard();
+	OWQTUTIL_API ~Wizard();
 
-	void show();
+	OWQTUTIL_API void show();
 
-	void addPage(QWidget * page);
+	OWQTUTIL_API void addPage(QWidget * page);
 
 Q_SIGNALS:
 
-	void finished();
+	OWQTUTIL_API void finished();
 
 private Q_SLOTS:
 
-	void backButtonClicked();
+	OWQTUTIL_API void backButtonClicked();
 
-	void nextButtonClicked();
+	OWQTUTIL_API void nextButtonClicked();
 
-	void finishedButtonClicked();
+	OWQTUTIL_API void finishedButtonClicked();
 
 private:
 

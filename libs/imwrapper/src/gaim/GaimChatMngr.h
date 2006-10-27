@@ -23,11 +23,11 @@
 #include "GaimIMChat.h"
 #include "GaimAccountMngr.h"
 
-#include <list>
-
 extern "C" {
-#include "gaim/conversation.h"
+#include <gaim/conversation.h>
 }
+
+#include <list>
 
 /**
  *

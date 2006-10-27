@@ -22,8 +22,6 @@
 
 #include <settings/Settings.h>
 
-#include <util/NonCopyable.h>
-
 #include <boost/archive/xml_iarchive.hpp>
 #include <boost/archive/xml_oarchive.hpp>
 #include <boost/archive/archive_exception.hpp>
@@ -33,7 +31,7 @@ public:
 
 	static const unsigned int SERIALIZATION_VERSION = 1;
 
-	SettingsSerializer(Settings & settings)
+	OWSETTINGS_API SettingsSerializer(Settings & settings)
 		: _settings(settings) {
 	}
 

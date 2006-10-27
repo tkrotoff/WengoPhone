@@ -20,6 +20,8 @@
 #ifndef OWTIMER_H
 #define OWTIMER_H
 
+#include <thread/owthreaddll.h>
+
 #include <util/Event.h>
 #include <util/List.h>
 #include <util/Trackable.h>
@@ -51,9 +53,9 @@ public:
 	 */
 	Event<void (Timer & sender)> lastTimeoutEvent;
 
-	Timer();
+	OWTHREAD_API Timer();
 
-	~Timer();
+	OWTHREAD_API ~Timer();
 
 	/**
 	 * Starts the specified task for execution at the specified time.
@@ -62,12 +64,12 @@ public:
 	 * @param timeout number of milliseconds timeout for the execution of the task
 	 * @param nbShots number of task shots/retries, if 0 then no limit
 	 */
-	void start(unsigned firstTime, unsigned timeout, unsigned nbShots = 0);
+	OWTHREAD_API void start(unsigned firstTime, unsigned timeout, unsigned nbShots = 0);
 
 	/**
 	 * Stops/Terminates the task.
 	 */
-	void stop();
+	OWTHREAD_API void stop();
 
 private:
 

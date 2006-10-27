@@ -41,10 +41,10 @@ class WebcamDriverFactory;
 //TODO: implements a setFlags method for WEBCAM_FORCE_PALETTE_CONVERSION
 
 /**
- *
+ * @see IWebcamDriver
  * @author Philippe Bernery
  */
-class WebcamDriver : public IWebcamDriver {
+class OWWEBCAM_API WebcamDriver : public IWebcamDriver {
 public:
 
 	/**

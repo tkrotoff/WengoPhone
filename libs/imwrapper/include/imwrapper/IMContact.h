@@ -72,7 +72,7 @@ public:
 
 	IMContact(const IMContact & imContact);
 
-	IMContact & operator = (const IMContact & imContact);
+	IMContact & operator=(const IMContact & imContact);
 
 	IMContact();
 
@@ -83,9 +83,9 @@ public:
 	 *
 	 * @param imContact the IMContact to test
 	 */
-	bool operator == (const IMContact & imContact) const;
+	bool operator==(const IMContact & imContact) const;
 
-	bool operator < (const IMContact & imContact) const;
+	bool operator<(const IMContact & imContact) const;
 
 	const IMAccount * getIMAccount() const {
 		return _imAccount;

@@ -21,6 +21,7 @@
 #define OWACCOUNT_H
 
 #include <imwrapper/EnumIMProtocol.h>
+
 #include <util/NonCopyable.h>
 
 /**
@@ -55,7 +56,7 @@ public:
 
 protected:
 
-	/** 
+	/**
 	 * Copy this Account in account.
 	 */
 	virtual void copyTo(Account * account) const;

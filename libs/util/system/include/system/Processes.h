@@ -20,6 +20,8 @@
 #ifndef OWPROCESSES_H
 #define OWPROCESSES_H
 
+#include <system/owsystemdll.h>
+
 #include <util/NonCopyable.h>
 
 #include <string>
@@ -38,7 +40,7 @@ public:
 	 * @param processName name of the process
 	 * @return true if the process is running; false otherwise
 	 */
-	static bool isRunning(const std::string & processName);
+	OWSYSTEM_API static bool isRunning(const std::string & processName);
 
 	/**
 	 * Kills a running process.
@@ -46,7 +48,7 @@ public:
 	 * @param processName name of the process
 	 * @return true if the process was killed; false otherwise
 	 */
-	static bool killProcess(const std::string & processName);
+	OWSYSTEM_API static bool killProcess(const std::string & processName);
 };
 
 #endif	//OWPROCESSES_H

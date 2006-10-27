@@ -1,114 +1,95 @@
-project(owsound)
+ow_create_project(owsound)
 
-# needed include directories to build owsound
-# saves the variable in internal cache for later use
-set(OWSOUND_INCLUDE_DIRS
-  ${CMAKE_CURRENT_SOURCE_DIR}/include
-  ${OWUTIL_INCLUDE_DIRS}
-  ${OWTHREAD_INCLUDE_DIRS}
-  CACHE INTERNAL "owsound include directories"
+ow_use_public_libraries(
+	owthread
 )
 
-set(OWSOUND_LIBRARY
-  owsound
-  CACHE INTERNAL "owsound library"
+ow_add_public_include_dirs(
+	${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
-# owsound lib and dependencies
-set(OWSOUND_LINK_LIBRARIES
-  ${OWSOUND_LIBRARY}
-  ${OWUTIL_LIBRARY}
-  ${OWTHREAD_LIBRARY}
-)
+#ow_add_public_definitions(
+#	-DOWSOUND_DLL
+#)
 
-set(owsound_SRCS
-  src/AudioDevice.cpp
-  src/VolumeControl.cpp
-  src/EnumDeviceType.cpp
+#ow_add_private_definitions(
+#	-DOWSOUND_DLL
+#	-DBUILD_OWSOUND_DLL
+#)
+
+ow_add_sources(
+	src/AudioDevice.cpp
+	src/VolumeControl.cpp
+	src/EnumDeviceType.cpp
 )
 
 if (MSVC)
-  set(OWSOUND_LINK_LIBRARIES
-    ${OWSOUND_LINK_LIBRARIES}
-    winmm
-    advapi32
-  )
+	ow_add_private_libraries(
+		winmm
+		advapi32
+	)
 
-  set(owsound_SRCS
-    ${owsound_SRCS}
-    src/win32/Sound.cpp
-    src/win32/Win32VolumeControl.cpp
-    src/win32/Win32AudioDevice.cpp
-    src/win32/SoundThread.cpp
-    src/win32/Win32AudioDeviceId.cpp
-    src/win32/playsound/SoundFile.cpp
-    src/win32/playsound/PlaySoundFile.cpp
-  )
+	ow_add_sources(
+		src/win32/Sound.cpp
+		src/win32/Win32VolumeControl.cpp
+		src/win32/Win32AudioDevice.cpp
+		src/win32/SoundThread.cpp
+		src/win32/Win32AudioDeviceId.cpp
+		src/win32/playsound/SoundFile.cpp
+		src/win32/playsound/PlaySoundFile.cpp
+	)
 endif (MSVC)
 
 if (UNIX AND NOT WIN32)
-  if (APPLE)
-    set(owsound_SRCS
-      ${owsound_SRCS}
-      src/mac/AudioDeviceManager.cpp
-      src/mac/CoreAudioUtilities.cpp
-      src/mac/MacAudioDevice.cpp
-      src/mac/MacSound.cpp
-      src/mac/MacVolumeControl.cpp
-      src/mac/Sound.cpp
-    )
-  else (APPLE)
-    set(OWSOUND_LINK_LIBRARIES
-      ${OWSOUND_LINK_LIBRARIES}
-      ${PORTAUDIO_LIBRARIES}
-    )
+	if (APPLE)
+		ow_add_sources(
+			src/mac/AudioDeviceManager.cpp
+			src/mac/CoreAudioUtilities.cpp
+			src/mac/MacAudioDevice.cpp
+			src/mac/MacSound.cpp
+			src/mac/MacVolumeControl.cpp
+			src/mac/Sound.cpp
+		)
+	else (APPLE)
+		ow_add_private_libraries(
+			${PORTAUDIO_LIBRARIES}
+		)
 
-    set(owsound_SRCS
-      ${owsound_SRCS}
-      src/unix/Sound.cpp
-      src/unix/UnixVolumeControl.cpp
-      src/portaudio/AudioDeviceManager.cpp
-      src/portaudio/PAAudioDevice.cpp
-    )
-  endif (APPLE)
+		ow_add_sources(
+			src/unix/Sound.cpp
+			src/unix/UnixVolumeControl.cpp
+			src/portaudio/AudioDeviceManager.cpp
+			src/portaudio/PAAudioDevice.cpp
+		)
+	endif (APPLE)
 endif (UNIX AND NOT WIN32)
 
 if (WITH_PORTAUDIO AND WIN32)
-  set(owsound_SRCS
-    ${owsound_SRCS}
-    src/portaudio/AudioDeviceManager.cpp
-    src/portaudio/PAAudioDevice.cpp
-  )
+	ow_add_sources(
+		src/portaudio/AudioDeviceManager.cpp
+		src/portaudio/PAAudioDevice.cpp
+	)
 else (WITH_PORTAUDIO AND WIN32)
-  if (WIN32)
-    set(OWSOUND_LINK_LIBRARIES
-      ${OWSOUND_LINK_LIBRARIES}
-      ${PORTAUDIO_LIBRARIES}
-    )
+	if (WIN32)
+		ow_add_private_libraries(
+			${PORTAUDIO_LIBRARIES}
+		)
 
-    set(owsound_SRCS
-      ${owsound_SRCS}
-      src/win32/AudioDeviceManager.cpp
-    )
-  endif (WIN32)
+		ow_add_sources(
+			src/win32/AudioDeviceManager.cpp
+		)
+	endif (WIN32)
 endif (WITH_PORTAUDIO AND WIN32)
 
-include_directories(
-  ${OWSOUND_INCLUDE_DIRS}
-)
-
-add_library(owsound STATIC ${owsound_SRCS})
-
 if (APPLE)
-  macro_add_link_flags(${OWSOUND_LIBRARY}
-    -framework CoreAudio
-    -framework Cocoa
-  )
+	ow_add_private_link_flags(
+		-framework CoreAudio
+		-framework Cocoa
+	)
 
-  macro_add_compile_flags(${OWSOUND_LIBRARY}
-    "-x objective-c++"
-  )
+	ow_add_private_compile_flags(
+		-x objective-c++
+	)
 endif (APPLE)
 
-target_link_libraries(${OWSOUND_LINK_LIBRARIES})
-
+ow_create_static_library()

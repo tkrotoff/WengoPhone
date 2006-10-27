@@ -20,6 +20,8 @@
 #ifndef OWSAFESTRINGS_H
 #define OWSAFESTRINGS_H
 
+#include <cutil/owcutildll.h>
+
 #include <stddef.h>
 
 /**
@@ -33,7 +35,7 @@
  * @author Sebastien Tricaud
  */
 
-size_t strlcpy(char * dst, const char * src, size_t size);
-size_t strlcat(char * dst, const char * src, size_t size);
+OWCUTIL_API size_t strlcpy(char * dst, const char * src, size_t size);
+OWCUTIL_API size_t strlcat(char * dst, const char * src, size_t size);
 
 #endif	//OWSAFESTRINGS_H

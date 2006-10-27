@@ -20,6 +20,8 @@
 #ifndef OWSTRINGLISTXMLSERIALIZER_H
 #define OWSTRINGLISTXMLSERIALIZER_H
 
+#include <settings/owsettingsdll.h>
+
 #include <serialization/Serializable.h>
 
 class StringList;
@@ -27,11 +29,11 @@ class StringList;
 class StringListXMLSerializer : public Serializable {
 public:
 
-	StringListXMLSerializer(StringList & stringList);
+	OWSETTINGS_API StringListXMLSerializer(StringList & stringList);
 
-	std::string serialize();
+	OWSETTINGS_API std::string serialize();
 
-	bool unserialize(const std::string & data);
+	OWSETTINGS_API bool unserialize(const std::string & data);
 
 private:
 

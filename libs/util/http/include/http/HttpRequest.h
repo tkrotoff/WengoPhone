@@ -20,6 +20,7 @@
 #ifndef OWHTTPREQUEST_H
 #define OWHTTPREQUEST_H
 
+#include <http/owhttpdll.h>
 #include <http/IHttpRequest.h>
 
 #include <util/Trackable.h>
@@ -50,11 +51,11 @@ public:
 	/** HTTP GET method separator tag (e.g ? in wengo.fr/login.php?login=mylogin&password=mypassword). */
 	static const std::string HTTP_GET_SEPARATOR;
 
-	HttpRequest();
+	OWHTTP_API HttpRequest();
 
-	virtual ~HttpRequest();
+	OWHTTP_API virtual ~HttpRequest();
 
-	int sendRequest(bool sslProtocol,
+	OWHTTP_API int sendRequest(bool sslProtocol,
 			const std::string & hostname,
 			unsigned int hostPort,
 			const std::string & path,
@@ -75,7 +76,7 @@ public:
 	 * @see sendRequest(bool, const std::string &, unsigned int, const std::string &, const std::string &, bool)
 	 * @return HTTP request ID
 	 */
-	int sendRequest(const std::string & url, const std::string & data, bool postMethod = false);
+	OWHTTP_API int sendRequest(const std::string & url, const std::string & data, bool postMethod = false);
 
 	/**
 	 * Sets the local proxy settings.
@@ -88,7 +89,7 @@ public:
 	 * @param username HTTP proxy username
 	 * @param password HTTP proxy password
 	 */
-	static void setProxy(const std::string & host,
+	OWHTTP_API static void setProxy(const std::string & host,
 		unsigned int port,
 		const std::string & username,
 		const std::string & password) {
@@ -104,7 +105,7 @@ public:
 	 *
 	 * @return HTTP proxy hostname
 	 */
-	static const std::string & getProxyHost() {
+	OWHTTP_API static const std::string & getProxyHost() {
 		return _proxyHost;
 	}
 
@@ -113,7 +114,7 @@ public:
 	 *
 	 * @return HTTP proxy port number
 	 */
-	static unsigned int getProxyPort() {
+	OWHTTP_API static unsigned int getProxyPort() {
 		return _proxyPort;
 	}
 
@@ -122,7 +123,7 @@ public:
 	 *
 	 * @return HTTP proxy username
 	 */
-	static const std::string & getProxyUsername() {
+	OWHTTP_API static const std::string & getProxyUsername() {
 		return _proxyUsername;
 	}
 
@@ -131,7 +132,7 @@ public:
 	 *
 	 * @return HTTP proxy password
 	 */
-	static const std::string & getProxyPassword() {
+	OWHTTP_API static const std::string & getProxyPassword() {
 		return _proxyPassword;
 	}
 
@@ -140,7 +141,7 @@ public:
 	 *
 	 * @param userAgent the user agent
 	 */
-	static void setUserAgent(const std::string & userAgent) {
+	OWHTTP_API static void setUserAgent(const std::string & userAgent) {
 		_userAgent = userAgent;
 	}
 
@@ -149,16 +150,15 @@ public:
 	 *
 	 * @param userAgent the user agent
 	 */
-	static const std::string & getUserAgent() {
+	OWHTTP_API static const std::string & getUserAgent() {
 		return _userAgent;
 	}
 
-	void abort();
-
+	OWHTTP_API void abort();
 
 private:
 
-	// Inherited from Thread
+	//Inherited from Thread
 	void run();
 	////
 

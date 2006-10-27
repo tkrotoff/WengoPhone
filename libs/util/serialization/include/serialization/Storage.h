@@ -20,6 +20,8 @@
 #ifndef OWSTORAGE_H
 #define OWSTORAGE_H
 
+#include <serialization/owserializationdll.h>
+
 #include <util/Interface.h>
 
 #include <string>
@@ -33,7 +35,7 @@
 class Storage : Interface {
 public:
 
-	virtual ~Storage() {
+	OWSERIALIZATION_API virtual ~Storage() {
 	}
 
 	/**
@@ -42,7 +44,7 @@ public:
 	 * @param url the url where to load the data from
 	 * @return true if success
 	 */
-	virtual bool load(const std::string & url) = 0;
+	OWSERIALIZATION_API virtual bool load(const std::string & url) = 0;
 
 	/**
 	 * Saves the datas to a media.
@@ -50,7 +52,7 @@ public:
 	 * @param url the url where to save the data to
 	 * @return true if success
 	 */
-	virtual bool save(const std::string & url) = 0;
+	OWSERIALIZATION_API virtual bool save(const std::string & url) = 0;
 };
 
 #endif //OWSTORAGE_H

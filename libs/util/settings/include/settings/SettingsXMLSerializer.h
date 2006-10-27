@@ -20,6 +20,8 @@
 #ifndef OWSETTINGSXMLSERIALIZER_H
 #define OWSETTINGSXMLSERIALIZER_H
 
+#include <settings/owsettingsdll.h>
+
 #include <serialization/Serializable.h>
 
 class Settings;
@@ -27,11 +29,11 @@ class Settings;
 class SettingsXMLSerializer : public Serializable {
 public:
 
-	SettingsXMLSerializer(Settings & settings);
+	OWSETTINGS_API SettingsXMLSerializer(Settings & settings);
 
-	std::string serialize();
+	OWSETTINGS_API std::string serialize();
 
-	virtual bool unserialize(const std::string & data);
+	OWSETTINGS_API virtual bool unserialize(const std::string & data);
 
 protected:
 

@@ -20,6 +20,8 @@
 #ifndef OWDATE_H
 #define OWDATE_H
 
+#include <util/owutildll.h>
+
 #include <ctime>
 #include <string>
 
@@ -35,12 +37,12 @@ public:
 	/**
 	 * Creates a date with the current time.
 	 */
-	Date();
+	OWUTIL_API Date();
 
 	/**
 	 * Copy constructor.
 	 */
-	Date(const Date & date);
+	OWUTIL_API Date(const Date & date);
 
 	/**
 	 * Creates a date from a day a month and a year.
@@ -49,52 +51,52 @@ public:
 	 * @param month month of the date
 	 * @param year year of the date
 	 */
-	Date(unsigned day, unsigned month, unsigned year);
+	OWUTIL_API Date(unsigned day, unsigned month, unsigned year);
 
-	~Date();
+	OWUTIL_API ~Date();
 
-	bool operator==(const Date & date) const;
+	OWUTIL_API bool operator==(const Date & date) const;
 
 	/**
 	 * @return the day number of the date. Day range: 1-31.
 	 */
-	unsigned getDay() const;
+	OWUTIL_API unsigned getDay() const;
 
 	/**
 	 * Sets the date day.
 	 *
 	 * @see getDay()
 	 */
-	void setDay(unsigned day);
+	OWUTIL_API void setDay(unsigned day);
 
 	/**
 	 * @return the month number of the date. Month range: 1-12.
 	 */
-	unsigned getMonth() const;
+	OWUTIL_API unsigned getMonth() const;
 
 	/**
 	 * Sets the date month.
 	 *
 	 * @see getMonth()
 	 */
-	void setMonth(unsigned month);
+	OWUTIL_API void setMonth(unsigned month);
 
 	/**
 	 * Gets the date year. Year range: 0-infinite.
 	 */
-	unsigned getYear() const;
+	OWUTIL_API unsigned getYear() const;
 
 	/**
 	 * Sets date year.
 	 *
 	 * @see getYear()
 	 */
-	void setYear(unsigned year);
+	OWUTIL_API void setYear(unsigned year);
 
 	/**
 	 * @return a string representing the date. (e.g: "dd/mm/yyyy")
 	 */
-	std::string toString() const;
+	OWUTIL_API std::string toString() const;
 
 private:
 	unsigned _day;

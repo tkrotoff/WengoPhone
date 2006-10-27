@@ -173,4 +173,3 @@ void Timer::lastTimeoutEventHandler(PrivateThread & thread) {
 		lastTimeoutEvent(*this);
 	}
 }
-

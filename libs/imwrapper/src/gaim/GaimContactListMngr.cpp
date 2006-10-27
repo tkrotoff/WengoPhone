@@ -153,7 +153,7 @@ const char *GaimContactListMngr::FindBuddyGroup(GaimBuddy *gBuddy)
 	GaimGroup *gGroup = gaim_buddy_get_group(gBuddy);
 	GaimAccount	*gAccount = gaim_buddy_get_account(gBuddy);
 	const char *gPrclId = gaim_account_get_protocol_id(gAccount);
-	
+
 	if (gGroup)
 		return gGroup->name;
 	else
@@ -166,7 +166,7 @@ void GaimContactListMngr::NewBuddyAdded(GaimBuddy *gBuddy)
 	const char *gPrclId = gaim_account_get_protocol_id(gAccount);
 	IMAccount *account = _accountMngr->FindIMAccount(gaim_account_get_username(gAccount),
 		GaimIMPrcl::GetEnumIMProtocol(gPrclId));
-	
+
 	if (account == NULL)
 		return;
 
@@ -185,7 +185,7 @@ void GaimContactListMngr::NewBuddyAdded(GaimBuddy *gBuddy)
 void GaimContactListMngr::NewGroupAdded(GaimGroup *gGroup)
 {
 	// GAIM CONTACT LIST GROUPS ARE NOT ASSOCIATED WITH ANY ACCOUNTS
-	// THAT'S WHY WE TAKE THE FIRST FOUND IM_CONTACTLIST 
+	// THAT'S WHY WE TAKE THE FIRST FOUND IM_CONTACTLIST
 	// TO SEND NEW_GROUP_ADDDED EVENT
 
 	IMAccount *account = _accountMngr->GetFirstIMAccount();
@@ -203,7 +203,7 @@ void GaimContactListMngr::NewGroupAdded(GaimGroup *gGroup)
 void GaimContactListMngr::NewNodeCbk(GaimBlistNode *node)
 {
 	fprintf(stderr, "GaimContactListMngr : NewNodeCbk()\n");
-	
+
 	switch (node->type)
 	{
 		case GAIM_BLIST_BUDDY_NODE:
@@ -252,15 +252,15 @@ void GaimContactListMngr::UpdateBuddy(GaimBuddyList *list, GaimBuddy *gBuddy)
 	GaimPresence *gPresence = gaim_buddy_get_presence(gBuddy);
 	const char *gPresenceId = GetGaimPresenceId(gPresence);
 	const char *gPrclId = gaim_account_get_protocol_id(gAccount);
-	
+
 	account = _accountMngr->FindIMAccount(gaim_account_get_username(gAccount),
 		GaimIMPrcl::GetEnumIMProtocol(gPrclId));
-	
+
 	if (account)
 	{
 		GaimIMContactList *mIMBList = FindIMContactList(*account);
 		GaimIMPresence *mIMPresence = _presenceMngr->FindIMPresence(*account);
-	
+
 		if (mIMBList)
 		{
 			const char * groupName = FindBuddyGroup(gBuddy);
@@ -290,7 +290,7 @@ void GaimContactListMngr::UpdateBuddyIcon(GaimBuddy *buddy)
 	GaimIMPresence *mIMPresence = NULL;
 	GaimAccount	*gAccount = gaim_buddy_get_account(buddy);
 	const char *gPrclId = gaim_account_get_protocol_id(gAccount);
-	
+
 	account = _accountMngr->FindIMAccount(gaim_account_get_username(gAccount),
 		GaimIMPrcl::GetEnumIMProtocol(gPrclId));
 
@@ -304,11 +304,11 @@ void GaimContactListMngr::UpdateBuddyIcon(GaimBuddy *buddy)
 		LOG_FATAL("IMPresence not found!");
 		return;
 	}
-	
+
 	size_t size;
 	OWPicture picture;
 	const char *data = (const char *)gaim_buddy_icon_get_data(buddy->icon, &size);
-		
+
 	if (data && size > 0)
 		picture = OWPicture::pictureFromData(std::string(data, size));
 

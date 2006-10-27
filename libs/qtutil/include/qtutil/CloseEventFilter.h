@@ -30,7 +30,7 @@
 class CloseEventFilter : public EventFilter {
 public:
 
-	CloseEventFilter(QObject * receiver, const char * member);
+	OWQTUTIL_API CloseEventFilter(QObject * receiver, const char * member);
 
 private:
 

@@ -20,6 +20,7 @@
 #ifndef OWIWEBCAMDRIVER_H
 #define OWIWEBCAMDRIVER_H
 
+#include <webcam/owwebcamdll.h>
 #include <webcam/webcam.h>
 
 #include <pixertool/pixertool.h>
@@ -36,7 +37,7 @@
  *
  * @author Philippe Bernery
  */
-class IWebcamDriver : NonCopyable, public Trackable {
+class OWWEBCAM_API IWebcamDriver : NonCopyable, public Trackable {
 public:
 
 	/**

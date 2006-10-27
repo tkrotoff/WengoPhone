@@ -30,7 +30,7 @@
 class ResizeEventFilter : public EventFilter {
 public:
 
-	ResizeEventFilter(QObject * receiver, const char * member);
+	OWQTUTIL_API ResizeEventFilter(QObject * receiver, const char * member);
 
 private:
 

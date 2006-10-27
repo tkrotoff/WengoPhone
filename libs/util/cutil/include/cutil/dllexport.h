@@ -39,7 +39,7 @@
  * #endif
  *
  * class API MyClass
- * extern API publicFunction()
+ * API int publicFunction()
  * class EXCEPTIONAPI(API) PublicThrowableClass
  * class DLLLOCAL MyClass
  * </pre>

@@ -43,12 +43,12 @@ if not WengoOSMacOSX():
 	args['enable-libsound-portaudio'] = 1
 
 if WengoOSLinux() or WengoOSBSD():
-	args['enable-samplerate'] = 1 
+	args['enable-samplerate'] = 1
 else:
-    args['enable-samplerate'] = 0
+	args['enable-samplerate'] = 0
 
 WengoAddConsoleArguments(args)
 if WengoGetConsoleArgument("enable-debug-console"):
 	WengoShowWindowsConsole(True)
 else:
-	WengoShowWindowsConsole(False)
+	WengoShowWindowsConsole(True)

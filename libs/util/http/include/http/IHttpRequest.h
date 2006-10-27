@@ -21,6 +21,7 @@
 #define OWIHTTPREQUEST_H
 
 #include <util/Event.h>
+
 #include <thread/Thread.h>
 
 #include <string>

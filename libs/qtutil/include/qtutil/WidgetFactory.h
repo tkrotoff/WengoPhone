@@ -17,8 +17,10 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef WIDGETFACTORY_H
-#define WIDGETFACTORY_H
+#ifndef OWWIDGETFACTORY_H
+#define OWWIDGETFACTORY_H
+
+#include <qtutil/owqtutildll.h>
 
 #include <util/NonCopyable.h>
 
@@ -40,7 +42,7 @@ public:
 	 *
 	 * @see QFormBuilder::load()
 	 */
-	static QWidget * create(const QString & uiFile, QWidget * parent);
+	OWQTUTIL_API static QWidget * create(const QString & uiFile, QWidget * parent);
 };
 
-#endif	//WIDGETFACTORY_H
+#endif	//OWWIDGETFACTORY_H

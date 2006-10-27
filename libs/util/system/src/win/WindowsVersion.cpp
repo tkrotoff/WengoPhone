@@ -17,6 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#include <system/WindowsVersion.h>
+
 #include <windows.h>
 #include <stdio.h>
 
@@ -25,7 +27,7 @@
 
 typedef void (WINAPI *PGNSI)(LPSYSTEM_INFO);
 
-char * getWindowsVersion() {
+char * WindowsVersion::getVersion() {
 	OSVERSIONINFOEX osvi;
 	SYSTEM_INFO si;
 	PGNSI pGNSI;

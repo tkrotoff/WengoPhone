@@ -20,10 +20,14 @@
 #ifndef OWPICTURE_H
 #define OWPICTURE_H
 
+#include <util/owutildll.h>
+
 #include <string>
 
 /**
  * Represents a picture.
+ *
+ * Named OWPicture rather than Picture because of a conflict under MacOSX.
  *
  * TODO
  * - Detect the picture format from header.
@@ -37,21 +41,22 @@ public:
 	/**
 	 * Constructs an empty OWPicture.
 	 */
-	OWPicture();
+	OWUTIL_API OWPicture();
 
-	OWPicture(const OWPicture & picture);
+	OWUTIL_API OWPicture(const OWPicture & picture);
 
-	OWPicture & operator = (const OWPicture & picture);
+	OWUTIL_API OWPicture & operator=(const OWPicture & picture);
 
 	/**
 	 * Constructs a OWPicture from data in memory.
+	 *
 	 * These data must include the header available in the file from where
 	 * it has been extracted. The construtor will then guess the picture format
 	 * from this header.
 	 *
 	 * @param data OWPicture data
 	 */
-	static OWPicture pictureFromData(const std::string & data);
+	OWUTIL_API static OWPicture pictureFromData(const std::string & data);
 
 	/**
 	 * Constructs a OWPicture from a file.
@@ -60,27 +65,30 @@ public:
 	 *
 	 * @param data OWPicture data
 	 */
-	static OWPicture pictureFromFile(const std::string & filename);
+	OWUTIL_API static OWPicture pictureFromFile(const std::string & filename);
 
 	/**
 	 * Gets the data with format header.
 	 *
 	 * @return the data
 	 */
-	std::string getData() const;
+	OWUTIL_API std::string getData() const;
 
 	/**
 	 * Gets the name of the file from which the OWPicture has been created.
+	 *
 	 * This does not return the complete path of the file.
+	 *
 	 * @return the filename
 	 */
-	std::string getFilename() const;
+	OWUTIL_API std::string getFilename() const;
 
 	/**
 	 * Set the filename of the OWPicture.
+	 *
 	 * Only the last part of the past is saved.
 	 */
-	void setFilename(const std::string & filename);
+	OWUTIL_API void setFilename(const std::string & filename);
 
 private:
 

@@ -20,6 +20,8 @@
 #ifndef OWUUID_H
 #define OWUUID_H
 
+#include <util/owutildll.h>
+
 #include <string>
 
 /**
@@ -41,14 +43,14 @@ public:
 	 *
 	 * @return unique ID generated
 	 */
-	static int generateInteger();
+	OWUTIL_API static int generateInteger();
 
 	/**
 	 * Generates a UUID.
 	 *
 	 * @return a string containing a UUID.
 	 */
-	static std::string generateString();
+	OWUTIL_API static std::string generateString();
 };
 
 #endif	//OWUUID_H

@@ -40,9 +40,9 @@ class QObjectThreadSafe : public QObject {
 	Q_OBJECT
 public:
 
-	QObjectThreadSafe(QObject * parent);
+	OWQTUTIL_API QObjectThreadSafe(QObject * parent);
 
-	virtual ~QObjectThreadSafe();
+	OWQTUTIL_API virtual ~QObjectThreadSafe();
 
 	/**
 	 * Initialization of the QObjectThreadSafe subclass object.
@@ -56,21 +56,21 @@ public:
 	 * </pre>
 	 * __SUBCLASS__ should be replaced by the QObjectThreadSafe subclass name.
 	 */
-	virtual void initThreadSafe() = 0;
+	OWQTUTIL_API virtual void initThreadSafe() = 0;
 
 	/**
 	 * Posts via QCoreApplication::postEvent() the specific QEvent.
 	 *
 	 * @param event PostEvent to post
 	 */
-	void postEvent(PostEvent * event);
+	OWQTUTIL_API void postEvent(PostEvent * event);
 
 	/**
 	 * Blocks/unblocks the reception of events send via postEvent().
 	 *
 	 * @param block true then block events; if false unblock events
 	 */
-	void blockEvents(bool block);
+	OWQTUTIL_API void blockEvents(bool block);
 
 private Q_SLOTS:
 

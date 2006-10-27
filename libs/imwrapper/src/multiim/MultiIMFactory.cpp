@@ -21,11 +21,13 @@
 
 #include <imwrapper/IMAccount.h>
 #include <imwrapper/EnumIMProtocol.h>
+
 #include <PhApiFactory.h>
 #include <GaimIMFactory.h>
 
 MultiIMFactory::MultiIMFactory(PhApiFactory & phApiFactory, GaimIMFactory & gaimIMFactory)
-	: _phApiFactory(phApiFactory), _gaimIMFactory(gaimIMFactory) {
+	: _phApiFactory(phApiFactory),
+	_gaimIMFactory(gaimIMFactory) {
 }
 
 IMConnect * MultiIMFactory::createIMConnect(IMAccount & account) {

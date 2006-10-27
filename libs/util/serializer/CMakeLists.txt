@@ -1,37 +1,29 @@
-project(owserializer)
+ow_create_project(owserializer)
 
-# needed include directories to build owserializer
-# saves the variable in internal cache for later use
-set(OWSERIALIZER_INCLUDE_DIRS
-  ${CMAKE_CURRENT_SOURCE_DIR}/include
-  ${OWSERIALIZATION_INCLUDE_DIRS}
-  ${TINYXML_INCLUDE_DIRS}
-  CACHE INTERNAL "owserializer include directories"
+ow_use_public_libraries(
+	owserialization
 )
 
-set(OWSERIALIZER_LIBRARY
-  owserializer
-  CACHE INTERNAL "owserializer library"
+ow_use_private_libraries(
+	tinyxml
 )
 
-# owserializer lib and dependencies
-set(OWSERIALIZER_LINK_LIBRARIES
-  ${OWSERIALIZER_LIBRARY}
-  ${OWSERIALIZATION_LIBRARY}
-  ${TINYXML_LIBRARIES}
+ow_add_public_include_dirs(
+	${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
-set(owserializer_SRCS
-  src/DateXMLSerializer.cpp
-  src/TimeXMLSerializer.cpp
+#ow_add_public_definitions(
+#	-DOWSERIALIZER_DLL
+#)
+
+#ow_add_private_definitions(
+#	-DOWSERIALIZER_DLL
+#	-DBUILD_OWSERIALIZER_DLL
+#)
+
+ow_add_sources(
+	src/DateXMLSerializer.cpp
+	src/TimeXMLSerializer.cpp
 )
 
-
-include_directories(
-  ${OWSERIALIZER_INCLUDE_DIRS}
-)
-
-add_library(${OWSERIALIZER_LIBRARY} STATIC ${owserializer_SRCS})
-
-target_link_libraries(${OWSERIALIZER_LINK_LIBRARIES})
-
+ow_create_static_library()

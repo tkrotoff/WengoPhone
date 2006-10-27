@@ -34,7 +34,7 @@
  * @ingroup model
  * @author Julien Bossart
  */
-class GaimIMPresence : public IMPresence 
+class GaimIMPresence : public IMPresence
 {
 	friend class GaimIMFactory;
 

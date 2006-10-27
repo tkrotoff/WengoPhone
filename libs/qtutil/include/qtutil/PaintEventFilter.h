@@ -30,7 +30,7 @@
 class PaintEventFilter : public EventFilter {
 public:
 
-	PaintEventFilter(QObject * receiver, const char * member);
+	OWQTUTIL_API PaintEventFilter(QObject * receiver, const char * member);
 
 private:
 

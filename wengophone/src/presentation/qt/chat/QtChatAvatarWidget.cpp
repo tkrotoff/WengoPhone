@@ -26,7 +26,7 @@
 #include <util/Logger.h>
 
 QtChatAvatarWidget::QtChatAvatarWidget(QWidget * parent, const QString & id,
-	QPixmap picture, const QString & nickname, const QString & contactId, PictureMode pmode, NicknameMode nmode)
+	QPixmap picture, const QString & nickname, const QString & contactId, OWPictureMode pmode, NicknameMode nmode)
 	: QWidget(parent), _pictureMode(pmode), _nicknameMode(nmode), _contactId(id) {
 
 	_ui.setupUi(this);

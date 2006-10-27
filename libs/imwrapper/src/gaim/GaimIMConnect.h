@@ -24,6 +24,7 @@
 
 #include <imwrapper/IMAccount.h>
 #include <imwrapper/IMConnect.h>
+
 class IMAccountParameters;
 
 /**

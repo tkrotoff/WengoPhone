@@ -20,6 +20,7 @@
 #ifndef OWLOGGER_H
 #define OWLOGGER_H
 
+#include <util/owutildll.h>
 #include <util/NonCopyable.h>
 #include <util/String.h>
 #include <util/Event.h>
@@ -99,24 +100,24 @@ public:
 	Event<void (const std::string & message)> messageAddedEvent;
 
 	/** Singleton. */
-	static Logger logger;
+	OWUTIL_API static Logger logger;
 
-	~Logger();
+	OWUTIL_API ~Logger();
 
-	void debug(const std::string & className, const std::string & message);
+	OWUTIL_API void debug(const std::string & className, const std::string & message);
 
-	void info(const std::string & className, const std::string & message);
+	OWUTIL_API void info(const std::string & className, const std::string & message);
 
-	void warn(const std::string & className, const std::string & message);
+	OWUTIL_API void warn(const std::string & className, const std::string & message);
 
-	void error(const std::string & className, const std::string & message);
+	OWUTIL_API void error(const std::string & className, const std::string & message);
 
-	void fatal(const std::string & className, const std::string & message, const std::string & filename, const std::string & line);
+	OWUTIL_API void fatal(const std::string & className, const std::string & message, const std::string & filename, const std::string & line);
 
 	/**
 	 * Flushes the logger.
 	 */
-	void flush();
+	OWUTIL_API void flush();
 
 private:
 

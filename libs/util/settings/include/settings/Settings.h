@@ -20,11 +20,15 @@
 #ifndef OWSETTINGS_H
 #define OWSETTINGS_H
 
+#include <settings/owsettingsdll.h>
+
 #include <serialization/Serializable.h>
 
+#include <thread/RecursiveMutex.h>
+
+#include <util/NonCopyable.h>
 #include <util/StringList.h>
 #include <util/Event.h>
-#include <thread/RecursiveMutex.h>
 
 #include <boost/any.hpp>
 #include <map>
@@ -40,7 +44,7 @@
  * @author Tanguy Krotoff
  * @author Mathieu Stute
  */
-class Settings {
+class Settings : NonCopyable {
 	friend class SettingsXMLSerializer;
 public:
 
@@ -52,20 +56,20 @@ public:
 	 */
 	Event<void (Settings & sender, const std::string & key)> valueChangedEvent;
 
-	Settings();
+	OWSETTINGS_API Settings();
 
-	Settings(const Settings & settings);
+	OWSETTINGS_API Settings(const Settings & settings);
 
-	Settings & operator=(const Settings & settings);
+	OWSETTINGS_API Settings & operator=(const Settings & settings);
 
-	virtual ~Settings();
+	OWSETTINGS_API virtual ~Settings();
 
 	/**
 	 * Gets all the keys.
 	 *
 	 * @return list of all keys, including subkeys
 	 */
-	StringList getAllKeys() const;
+	OWSETTINGS_API StringList getAllKeys() const;
 
 	/**
 	 * Removes the setting key.
@@ -76,14 +80,14 @@ public:
 	 *
 	 * @param key key to remove
 	 */
-	void remove(const std::string & key);
+	OWSETTINGS_API void remove(const std::string & key);
 
 	/**
 	 * Checks if the specified key exists.
 	 *
 	 * @return true if there exists a setting called key; returns false otherwise
 	 */
-	bool contains(const std::string & key) const;
+	OWSETTINGS_API bool contains(const std::string & key) const;
 
 	/**
 	 * Sets the value of a key.
@@ -91,27 +95,27 @@ public:
 	 * @param key the key
 	 * @param value key value
 	 */
-	void set(const std::string & key, const std::string & value);
+	OWSETTINGS_API void set(const std::string & key, const std::string & value);
 
 	/**
 	 * @see set()
 	 */
-	void set(const std::string & key, const StringList & value);
+	OWSETTINGS_API void set(const std::string & key, const StringList & value);
 
 	/**
 	 * @see set()
 	 */
-	void set(const std::string & key, bool value);
+	OWSETTINGS_API void set(const std::string & key, bool value);
 
 	/**
 	 * @see set()
 	 */
-	void set(const std::string & key, int value);
+	OWSETTINGS_API void set(const std::string & key, int value);
 
 	/**
 	 * @see set()
 	 */
-	void set(const std::string & key, boost::any value);
+	OWSETTINGS_API void set(const std::string & key, boost::any value);
 
 	/**
 	 * Gets the value for a given key.
@@ -120,34 +124,34 @@ public:
 	 * @param defaultValue default value to return if no other value
 	 * @return the value associated with the key or the default value if the value doesn't exist
 	 */
-	std::string get(const std::string & key, const std::string & defaultValue) const;
+	OWSETTINGS_API std::string get(const std::string & key, const std::string & defaultValue) const;
 
 	/**
 	 * @see get()
 	 */
-	StringList get(const std::string & key, const StringList & defaultValue) const;
+	OWSETTINGS_API StringList get(const std::string & key, const StringList & defaultValue) const;
 
 	/**
 	 * @see get()
 	 */
-	bool get(const std::string & key, bool defaultValue) const;
+	OWSETTINGS_API bool get(const std::string & key, bool defaultValue) const;
 
 	/**
 	 * @see get()
 	 */
-	int get(const std::string & key, int defaultValue) const;
+	OWSETTINGS_API int get(const std::string & key, int defaultValue) const;
 
 	/**
 	 * Gets the value for a given key in a generic manner.
 	 *
 	 * @see get()
 	 */
-	boost::any getAny(const std::string & key, const boost::any & defaultValue) const;
+	OWSETTINGS_API boost::any getAny(const std::string & key, const boost::any & defaultValue) const;
 
 	/**
 	 * @return number of elements
 	 */
-	unsigned size() const {
+	OWSETTINGS_API unsigned size() const {
 		return _keyMap.size();
 	}
 
@@ -157,7 +161,7 @@ public:
 	 * @param value to check
 	 * @return true if value is a boolean; false otherwise
 	 */
-	static bool isBoolean(const boost::any & value);
+	OWSETTINGS_API static bool isBoolean(const boost::any & value);
 
 	/**
 	 * Checks if the value is an integer.
@@ -165,7 +169,7 @@ public:
 	 * @param value to check
 	 * @return true if value is an integer; false otherwise
 	 */
-	static bool isInteger(const boost::any & value);
+	OWSETTINGS_API static bool isInteger(const boost::any & value);
 
 	/**
 	 * Checks if the value is a std::string.
@@ -173,7 +177,7 @@ public:
 	 * @param value to check
 	 * @return true if value is a std::string; false otherwise
 	 */
-	static bool isString(const boost::any & value);
+	OWSETTINGS_API static bool isString(const boost::any & value);
 
 	/**
 	 * Checks if the value is a StringList.
@@ -181,11 +185,11 @@ public:
 	 * @param value to check
 	 * @return true if value is a StringList; false otherwise
 	 */
-	static bool isStringList(const boost::any & value);
+	OWSETTINGS_API static bool isStringList(const boost::any & value);
 
 protected:
 
-	virtual void copy(const Settings & settings);
+	OWSETTINGS_API virtual void copy(const Settings & settings);
 
 	typedef std::map<const std::string, boost::any> Keys;
 	Keys _keyMap;

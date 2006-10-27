@@ -40,28 +40,36 @@
 #include <qtutil/LanguageChangeEventFilter.h>
 #include <qtutil/SafeConnect.h>
 #include <qtutil/PixmapMerging.h>
+#include <qtutil/AnimatedButton.h>
 
 #include <QtGui/QtGui>
+
+static const char * MNG_FORMAT = "MNG";
 
 static const char * PICS_MSN_ON = ":pics/protocols/msn.png";
 static const char * PICS_MSN_OFF = ":pics/protocols/msn_off.png";
 static const char * PICS_MSN_ERROR = ":pics/protocols/msn_error.png";
+static const char * PICS_MSN_PROGRESS = ":pics/protocols/msn-progress.mng";
 
 static const char * PICS_YAHOO_ON = ":pics/protocols/yahoo.png";
 static const char * PICS_YAHOO_OFF = ":pics/protocols/yahoo_off.png";
 static const char * PICS_YAHOO_ERROR = ":pics/protocols/yahoo_error.png";
+static const char * PICS_YAHOO_PROGRESS = ":pics/protocols/yahoo-progress.mng";
 
 static const char * PICS_WENGO_ON = ":pics/protocols/wengo.png";
 static const char * PICS_WENGO_OFF = ":pics/protocols/wengo_off.png";
 static const char * PICS_WENGO_ERROR = ":pics/protocols/wengo_error.png";
+static const char * PICS_WENGO_PROGRESS = ":pics/protocols/wengo-progress.mng";
 
 static const char * PICS_AIM_ON = ":pics/protocols/aim.png";
 static const char * PICS_AIM_OFF = ":pics/protocols/aim_off.png";
 static const char * PICS_AIM_ERROR = ":pics/protocols/aim_error.png";
+static const char * PICS_AIM_PROGRESS = ":pics/protocols/aim-progress.mng";
 
 static const char * PICS_JABBER_ON = ":pics/protocols/jabber.png";
 static const char * PICS_JABBER_OFF = ":pics/protocols/jabber_off.png";
 static const char * PICS_JABBER_ERROR = ":pics/protocols/jabber_error.png";
+static const char * PICS_JABBER_PROGRESS = ":pics/protocols/jabber-progress.mng";
 
 QtIMProfileWidget::QtIMProfileWidget(CUserProfile & cUserProfile, CWengoPhone & cWengoPhone, QWidget * parent)
 	: QObject(parent),
@@ -72,6 +80,12 @@ QtIMProfileWidget::QtIMProfileWidget(CUserProfile & cUserProfile, CWengoPhone & 
 
 	_ui = new Ui::IMProfileWidget();
 	_ui->setupUi(_imProfileWidget);
+
+	_msnProgressMovie = NULL;
+	_wengoProgressMovie = NULL;
+	_yahooProgressMovie = NULL;
+	_aimProgressMovie = NULL;
+	_jabberProgressMovie = NULL;
 
 	LANGUAGE_CHANGE(_imProfileWidget);
 
@@ -93,6 +107,12 @@ QtIMProfileWidget::QtIMProfileWidget(CUserProfile & cUserProfile, CWengoPhone & 
 }
 
 QtIMProfileWidget::~QtIMProfileWidget() {
+	OWSAFE_DELETE(_msnProgressMovie);
+	OWSAFE_DELETE(_wengoProgressMovie);
+	OWSAFE_DELETE(_yahooProgressMovie);
+	OWSAFE_DELETE(_aimProgressMovie);
+	OWSAFE_DELETE(_jabberProgressMovie);
+
 	OWSAFE_DELETE(_ui);
 }
 
@@ -105,26 +125,36 @@ void QtIMProfileWidget::connected(IMAccount * pImAccount) {
 
 	switch (imProtocol) {
 	case EnumIMProtocol::IMProtocolMSN:
+		//Stops animated pixmap
+		OWSAFE_DELETE(_msnProgressMovie);
 		_ui->msnButton->setIcon(QPixmap(PICS_MSN_ON));
 		_ui->msnButton->setToolTip("MSN");
 		break;
 
 	case EnumIMProtocol::IMProtocolWengo:
+		//Stops animated pixmap
+		OWSAFE_DELETE(_wengoProgressMovie);
 		_ui->wengoButton->setIcon(QPixmap(PICS_WENGO_ON));
 		_ui->wengoButton->setToolTip("Wengo");
 		break;
 
 	case EnumIMProtocol::IMProtocolYahoo:
+		//Stops animated pixmap
+		OWSAFE_DELETE(_yahooProgressMovie);
 		_ui->yahooButton->setIcon(QPixmap(PICS_YAHOO_ON));
 		_ui->yahooButton->setToolTip("Yahoo!");
 		break;
 
 	case EnumIMProtocol::IMProtocolAIMICQ:
+		//Stops animated pixmap
+		OWSAFE_DELETE(_aimProgressMovie);
 		_ui->aimButton->setIcon(QPixmap(PICS_AIM_ON));
 		_ui->aimButton->setToolTip("AIM/ICQ");
 		break;
 
 	case EnumIMProtocol::IMProtocolJabber:
+		//Stops animated pixmap
+		OWSAFE_DELETE(_jabberProgressMovie);
 		_ui->jabberButton->setIcon(QPixmap(PICS_JABBER_ON));
 		_ui->jabberButton->setToolTip("Jabber/GoogleTalk");
 		break;
@@ -142,6 +172,8 @@ void QtIMProfileWidget::disconnected(IMAccount * pImAccount, bool connectionErro
 
 	switch (imProtocol) {
 	case EnumIMProtocol::IMProtocolMSN: {
+		//Stops animated pixmap
+		OWSAFE_DELETE(_msnProgressMovie);
 		if (connectionError) {
 			_ui->msnButton->setIcon(QPixmap(PICS_MSN_ERROR));
 			_ui->msnButton->setToolTip("MSN Error: " + reason);
@@ -153,6 +185,8 @@ void QtIMProfileWidget::disconnected(IMAccount * pImAccount, bool connectionErro
 	}
 
 	case EnumIMProtocol::IMProtocolWengo: {
+		//Stops animated pixmap
+		OWSAFE_DELETE(_wengoProgressMovie);
 		if (connectionError) {
 			_ui->wengoButton->setIcon(QPixmap(PICS_WENGO_ERROR));
 			_ui->wengoButton->setToolTip("Wengo Error: " + reason);
@@ -164,6 +198,8 @@ void QtIMProfileWidget::disconnected(IMAccount * pImAccount, bool connectionErro
 	}
 
 	case EnumIMProtocol::IMProtocolYahoo: {
+		//Stops animated pixmap
+		OWSAFE_DELETE(_yahooProgressMovie);
 		if (connectionError) {
 			_ui->yahooButton->setIcon(QPixmap(PICS_YAHOO_ERROR));
 			_ui->yahooButton->setToolTip("Yahoo! Error: " + reason);
@@ -175,6 +211,8 @@ void QtIMProfileWidget::disconnected(IMAccount * pImAccount, bool connectionErro
 	}
 
 	case EnumIMProtocol::IMProtocolAIMICQ: {
+		//Stops animated pixmap
+		OWSAFE_DELETE(_aimProgressMovie);
 		if (connectionError) {
 			_ui->aimButton->setIcon(QPixmap(PICS_AIM_ERROR));
 			_ui->aimButton->setToolTip("AIM/ICQ Error: " + reason);
@@ -186,6 +224,8 @@ void QtIMProfileWidget::disconnected(IMAccount * pImAccount, bool connectionErro
 	}
 
 	case EnumIMProtocol::IMProtocolJabber: {
+		//Stops animated pixmap
+		OWSAFE_DELETE(_jabberProgressMovie);
 		if (connectionError) {
 			_ui->jabberButton->setIcon(QPixmap(PICS_JABBER_ERROR));
 			_ui->jabberButton->setToolTip("Jabber/GoogleTalk Error: " + reason);
@@ -208,27 +248,27 @@ void QtIMProfileWidget::connectionProgress(IMAccount * pImAccount,
 
 	switch (imProtocol) {
 	case EnumIMProtocol::IMProtocolMSN:
-		_ui->msnButton->setIcon(QPixmap(PICS_MSN_ERROR));
+		_msnProgressMovie = new AnimatedButton(_ui->msnButton, PICS_MSN_PROGRESS);
 		_ui->msnButton->setToolTip("MSN Info: " + infoMessage);
 		break;
 
 	case EnumIMProtocol::IMProtocolWengo:
-		_ui->wengoButton->setIcon(QPixmap(PICS_WENGO_ERROR));
+		_wengoProgressMovie = new AnimatedButton(_ui->wengoButton, PICS_WENGO_PROGRESS);
 		_ui->wengoButton->setToolTip("Wengo Info: " + infoMessage);
 		break;
 
 	case EnumIMProtocol::IMProtocolYahoo:
-		_ui->yahooButton->setIcon(QPixmap(PICS_YAHOO_ERROR));
+		_yahooProgressMovie = new AnimatedButton(_ui->wengoButton, PICS_YAHOO_PROGRESS);
 		_ui->yahooButton->setToolTip("Yahoo! Info: " + infoMessage);
 		break;
 
 	case EnumIMProtocol::IMProtocolAIMICQ:
-		_ui->aimButton->setIcon(QPixmap(PICS_AIM_ERROR));
+		_aimProgressMovie = new AnimatedButton(_ui->aimButton, PICS_AIM_PROGRESS);
 		_ui->aimButton->setToolTip("AIM/ICQ Info: " + infoMessage);
 		break;
 
 	case EnumIMProtocol::IMProtocolJabber:
-		_ui->jabberButton->setIcon(QPixmap(PICS_JABBER_ERROR));
+		_jabberProgressMovie = new AnimatedButton(_ui->jabberButton, PICS_JABBER_PROGRESS);
 		_ui->jabberButton->setToolTip("Jabber/GoogleTalk Info: " + infoMessage);
 		break;
 

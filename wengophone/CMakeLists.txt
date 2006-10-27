@@ -1,8 +1,8 @@
 # TODO : test dir
 
 subdirs(
-  pics
-  sounds
-  src
-  #test
+	pics
+	sounds
+	src
+	#test
 )

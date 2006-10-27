@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef DIRECTX_PIXERTOOL_H
-#define DIRECTX_PIXERTOOL_H
+#ifndef OWDIRECTX_PIXERTOOL_H
+#define OWDIRECTX_PIXERTOOL_H
 
 //Warning: this file can only be included by a C++ file
 
@@ -60,7 +60,7 @@ extern "C" const __declspec(selectany) GUID OUR_MEDIASUBTYPE_NV12 =
  * @param pix palette identifier to convert
  * @return equivalent pixosi identifier
  */
-pixosi pix_directx_to_pix_osi(GUID pix);
+OWPIXERTOOL_API pixosi pix_directx_to_pix_osi(GUID pix);
 
 /**
  * Palette identifier conversion.
@@ -71,6 +71,6 @@ pixosi pix_directx_to_pix_osi(GUID pix);
  * @param pix palette identifier to convert
  * @return equivalent directx identifier
  */
-GUID pix_directx_from_pix_osi(pixosi pix);
+OWPIXERTOOL_API GUID pix_directx_from_pix_osi(pixosi pix);
 
-#endif	//DIRECTX_PIXERTOOL_H
+#endif	//OWDIRECTX_PIXERTOOL_H

@@ -20,6 +20,8 @@
 #ifndef OWREGISTERPROTOCOL_H
 #define OWREGISTERPROTOCOL_H
 
+#include <system/owsystemdll.h>
+
 #include <string>
 
 /**
@@ -34,13 +36,13 @@
 class RegisterProtocol {
 public:
 
-	RegisterProtocol(const std::string & protocol);
+	OWSYSTEM_API RegisterProtocol(const std::string & protocol);
 
-	bool bind(const std::string & command, const std::string & icon = "", const std::string & url = "");
+	OWSYSTEM_API bool bind(const std::string & command, const std::string & icon = "", const std::string & url = "");
 
-	bool isBinded() const;
+	OWSYSTEM_API bool unbind();
 
-	bool unbind();
+	OWSYSTEM_API bool isBinded() const;
 
 private:
 

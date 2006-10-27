@@ -30,7 +30,7 @@
 class MouseMoveEventFilter : public EventFilter {
 public:
 
-	MouseMoveEventFilter(QObject * receiver, const char * member);
+	OWQTUTIL_API MouseMoveEventFilter(QObject * receiver, const char * member);
 
 private:
 
@@ -46,7 +46,7 @@ private:
 class MousePressEventFilter : public EventFilter {
 public:
 
-	MousePressEventFilter(QObject * receiver, const char * member, Qt::MouseButton button = Qt::NoButton);
+	OWQTUTIL_API MousePressEventFilter(QObject * receiver, const char * member, Qt::MouseButton button = Qt::NoButton);
 
 private:
 
@@ -64,7 +64,7 @@ private:
 class MouseReleaseEventFilter : public EventFilter {
 public:
 
-	MouseReleaseEventFilter(QObject * receiver, const char * member, Qt::MouseButton button = Qt::NoButton);
+	OWQTUTIL_API MouseReleaseEventFilter(QObject * receiver, const char * member, Qt::MouseButton button = Qt::NoButton);
 
 private:
 
@@ -82,7 +82,7 @@ private:
 class MouseHoverEnterEventFilter : public EventFilter {
 public:
 
-	MouseHoverEnterEventFilter(QObject * receiver, const char * member);
+	OWQTUTIL_API MouseHoverEnterEventFilter(QObject * receiver, const char * member);
 
 private:
 
@@ -98,7 +98,7 @@ private:
 class MouseHoverLeaveEventFilter : public EventFilter {
 public:
 
-	MouseHoverLeaveEventFilter(QObject * receiver, const char * member);
+	OWQTUTIL_API MouseHoverLeaveEventFilter(QObject * receiver, const char * member);
 
 private:
 

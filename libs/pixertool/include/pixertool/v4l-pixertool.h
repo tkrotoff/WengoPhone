@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef V4L_PIXERTOOL_H
-#define V4L_PIXERTOOL_H
+#ifndef OWV4L_PIXERTOOL_H
+#define OWV4L_PIXERTOOL_H
 
 #include <pixertool/pixertool.h>
 
@@ -52,4 +52,4 @@ int pix_v4l_from_pix_osi(pixosi pix);
 }
 #endif
 
-#endif	//V4L_PIXERTOOL_H
+#endif	//OWV4L_PIXERTOOL_H

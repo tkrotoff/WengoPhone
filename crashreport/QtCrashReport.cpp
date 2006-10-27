@@ -26,8 +26,10 @@
 #include <util/Time.h>
 #include <util/Path.h>
 #include <util/File.h>
-#include <thread/Thread.h>
+#include <util/SafeDelete.h>
 #include <util/Logger.h>
+
+#include <thread/Thread.h>
 
 #ifdef OS_WINDOWS
 	#include <system/WindowsVersion.h>
@@ -70,7 +72,7 @@ QtCrashReport::QtCrashReport(const std::string & dumpfile, const std::string & a
 }
 
 QtCrashReport::~QtCrashReport() {
-	delete _ui;
+	OWSAFE_DELETE(_ui);
 }
 
 void QtCrashReport::sendButtonClicked() {
@@ -151,7 +153,7 @@ void QtCrashReport::createDescriptionFile() const {
 	file.write("Time: " + Time().toString() + String::EOL);
 
 #ifdef OS_WINDOWS
-	file.write("Windows version: " + std::string(getWindowsVersion()) + String::EOL);
+	file.write("Windows version: " + std::string(WindowsVersion::getVersion()) + String::EOL);
 #endif
 
 	if (_ui->mailLineEdit) {

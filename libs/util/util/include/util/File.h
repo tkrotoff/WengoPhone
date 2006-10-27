@@ -20,6 +20,7 @@
 #ifndef OWFILE_H
 #define OWFILE_H
 
+#include <util/owutildll.h>
 #include <util/Interface.h>
 #include <util/StringList.h>
 
@@ -48,21 +49,21 @@ public:
 		UTF8
 	};
 
-	File(const std::string & filename, File::Encoding enc = File::DEFAULT);
+	OWUTIL_API File(const std::string & filename, File::Encoding enc = File::DEFAULT);
 
-	File(const File & file);
+	OWUTIL_API File(const File & file);
 
-	virtual ~File() {
+	OWUTIL_API virtual ~File() {
 	}
 
-	File & operator = (const File & file);
+	OWUTIL_API File & operator=(const File & file);
 
 	/**
 	 * Gets the file extension.
 	 *
 	 * @return the file extension or empty string if there's no extension
 	 */
-	std::string getExtension() const;
+	OWUTIL_API std::string getExtension() const;
 
 	/**
 	 * Moves a file.
@@ -72,14 +73,14 @@ public:
 	 *
 	 * @return true if the operation succeeds otherwise false.
 	 */
-	bool move(const std::string & newPath, bool overwrite = false);
+	OWUTIL_API bool move(const std::string & newPath, bool overwrite = false);
 
 	/**
 	 * Removes a file or a directory recursively.
 	 *
 	 * @return true if the operation succeeds otherwise false.
 	 */
-	bool remove();
+	OWUTIL_API bool remove();
 
 	/**
 	 * Gets the path to the file.
@@ -88,28 +89,28 @@ public:
 	 *
 	 * @return path to the file
 	 */
-	std::string getPath() const;
+	OWUTIL_API std::string getPath() const;
 
 	/**
 	 * Gets the full path to the file.
 	 *
 	 * @return path to the file
 	 */
-	std::string getFullPath() const;
+	OWUTIL_API std::string getFullPath() const;
 
 	/**
 	* Gets the name of the file without its path.
 	*
 	* @return the name of the file without its path
 	*/
-	std::string getFileName() const;
+	OWUTIL_API std::string getFileName() const;
 
 	/**
 	 * Gets directory list.
 	 *
 	 * @return a list of directories contained in 'this' directory
 	 */
-	StringList getDirectoryList() const;
+	OWUTIL_API StringList getDirectoryList() const;
 
 	/**
 	 * Gets file list.
@@ -118,14 +119,14 @@ public:
 	 *
 	 * @return a list of files contained in 'this' directory
 	 */
-	StringList getFileList() const;
+	OWUTIL_API StringList getFileList() const;
 
 	/**
 	 * Gets the file size.
 	 *
 	 * @return the file size in bytes.
 	 */
-	unsigned getSize() const;
+	OWUTIL_API unsigned getSize() const;
 
 	/**
 	 * Gets pathName with the '/' separators converted to separators that are appropriate for the underlying operating system.
@@ -135,14 +136,14 @@ public:
 	 * @param path path to convert
 	 * @return path converted
 	 */
-	static std::string convertPathSeparators(const std::string & path);
+	OWUTIL_API static std::string convertPathSeparators(const std::string & path);
 
 	/**
 	 * Gets the native directory separator: "/" under Unix (including Mac OS X) and "\" under Windows.
 	 *
 	 * @return native system path separator
 	 */
-	static std::string getPathSeparator();
+	OWUTIL_API static std::string getPathSeparator();
 
 	/**
 	 * Creates directories recursively if the path does not exist.
@@ -151,24 +152,24 @@ public:
 	 *
 	 * @param path the path to create
 	 */
-	static void createPath(const std::string & path);
+	OWUTIL_API static void createPath(const std::string & path);
 
 	/**
 	 * Creates a temporary file.
 	 *
 	 * @return the temporary file
 	 */
-	static File createTemporaryFile();
+	OWUTIL_API static File createTemporaryFile();
 
 	/**
 	 * @return true if the given path exists.
 	 */
-	static bool exists(const std::string & path);
+	OWUTIL_API static bool exists(const std::string & path);
 
 	/**
 	 * @return true if the file is a directory.
 	 */
-	static bool isDirectory(const std::string & filename);
+	OWUTIL_API static bool isDirectory(const std::string & filename);
 
 protected:
 
@@ -219,15 +220,15 @@ protected:
 class FileReader : public File, public IFile {
 public:
 
-	FileReader(const std::string & filename);
+	OWUTIL_API FileReader(const std::string & filename);
 
-	FileReader(const FileReader & fileReader);
+	OWUTIL_API FileReader(const FileReader & fileReader);
 
-	FileReader(const File & file);
+	OWUTIL_API FileReader(const File & file);
 
-	~FileReader();
+	OWUTIL_API ~FileReader();
 
-	bool open();
+	OWUTIL_API bool open();
 
 	/**
 	 * Reads data from the file.
@@ -237,9 +238,9 @@ public:
 	 *
 	 * @return data read from the file
 	 */
-	std::string read();
+	OWUTIL_API std::string read();
 
-	void close();
+	OWUTIL_API void close();
 
 private:
 
@@ -257,13 +258,13 @@ private:
 class FileWriter : public File, public IFile {
 public:
 
-	FileWriter(const std::string & filename, bool binaryMode = true);
+	OWUTIL_API FileWriter(const std::string & filename, bool binaryMode = true);
 
-	FileWriter(const FileWriter & fileWriter, bool binaryMode = true);
+	OWUTIL_API FileWriter(const FileWriter & fileWriter, bool binaryMode = true);
 
-	FileWriter(const File & file, bool binaryMode = true);
+	OWUTIL_API FileWriter(const File & file, bool binaryMode = true);
 
-	~FileWriter();
+	OWUTIL_API ~FileWriter();
 
 	/**
 	 * Writes data to the file.
@@ -273,9 +274,9 @@ public:
 	 *
 	 * @param data data to write to the file
 	 */
-	void write(const std::string & data);
+	OWUTIL_API void write(const std::string & data);
 
-	void close();
+	OWUTIL_API void close();
 
 private:
 

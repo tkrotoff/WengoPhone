@@ -30,14 +30,15 @@
 using namespace std;
 
 IMContactXMLSerializer::IMContactXMLSerializer(IMContact & imContact, IMAccountHandler & imAccountHandler)
-: _imContact(imContact), _imAccountHandler(imAccountHandler) {
+	: _imContact(imContact),
+	_imAccountHandler(imAccountHandler) {
 }
 
 std::string IMContactXMLSerializer::serialize() {
 	string result;
 	EnumIMProtocol::IMProtocol protocol;
 
-	result += ("<im protocol=\"" 
+	result += ("<im protocol=\""
 		+ EnumIMProtocol::toString(_imContact.getProtocol())
 		+ "\">\n");
 
@@ -48,7 +49,7 @@ std::string IMContactXMLSerializer::serialize() {
 	}
 
 	if (_imContact.getIMAccount()) {
-		result += ("<account>" + _imContact.getIMAccount()->getLogin() + "</account>\n");	
+		result += ("<account>" + _imContact.getIMAccount()->getLogin() + "</account>\n");
 	}
 
 	if (!_imContact._icon.getData().empty()) {
@@ -68,7 +69,7 @@ bool IMContactXMLSerializer::unserialize(const std::string & data) {
 	TiXmlHandle docHandle(&doc);
 	TiXmlHandle im = docHandle.FirstChild("im");
 
-	// Retrieving associated account
+	//Retrieving associated account
 	EnumIMProtocol::IMProtocol protocol;
 
 	TiXmlElement * lastChildElt = im.Element();
@@ -102,14 +103,14 @@ bool IMContactXMLSerializer::unserialize(const std::string & data) {
 	}
 	////
 
-	// Retrieving alias
+	//Retrieving alias
 	TiXmlText * alias = im.FirstChild("alias").FirstChild().Text();
 	if (alias) {
 		_imContact._alias = alias->Value();
 	}
 	////
 
-	// Retrieving icon
+	//Retrieving icon
 	TiXmlText * photo = im.FirstChild("photo").FirstChild().Text();
 	if (photo) {
 		OWPicture picture = OWPicture::pictureFromData(Base64::decode(photo->Value()));

@@ -20,22 +20,14 @@
 #ifndef OWIWENBOX_H
 #define OWIWENBOX_H
 
+#include <wenbox/owwenboxdll.h>
+
 #include <cutil/dllexport.h>
 
 #include <util/Interface.h>
 
 #include <string>
 #include <list>
-
-#ifdef WENBOX_DLL
-	#ifdef BUILD_WENBOX_DLL
-		#define API DLLEXPORT
-	#else
-		#define API DLLIMPORT
-	#endif
-#else
-	#define API
-#endif
 
 /**
  * Plugin interface for USB phone devices.
@@ -248,6 +240,6 @@ public:
  * Used for loading the DLL at runtime.
  * It's easier to load at runtime a C function rather than a C++ method.
  */
-extern "C" API IWenbox * getInstance();
+extern "C" OWWENBOX_API IWenbox * getInstance();
 
 #endif	//OWIWENBOX_H

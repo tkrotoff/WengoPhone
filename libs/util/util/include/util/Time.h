@@ -20,6 +20,8 @@
 #ifndef OWTIME_H
 #define OWTIME_H
 
+#include <util/owutildll.h>
+
 #include <ctime>
 #include <string>
 
@@ -35,12 +37,12 @@ public:
 	/**
 	 * Creates a time with the current time.
 	 */
-	Time();
+	OWUTIL_API Time();
 
 	/**
 	 * Copy constructor.
 	 */
-	Time(const Time & time);
+	OWUTIL_API Time(const Time & time);
 
 	/**
 	 * Creates a time from an hour  a minute and a second.
@@ -49,46 +51,46 @@ public:
 	 * @param minute minutes of the time
 	 * @param second seconds of the time
 	 */
-	Time(unsigned hour, unsigned minute, unsigned second);
+	OWUTIL_API Time(unsigned hour, unsigned minute, unsigned second);
 
-	~Time();
+	OWUTIL_API ~Time();
 
-	bool operator==(const Time & time) const;
+	OWUTIL_API bool operator==(const Time & time) const;
 
 	/**
 	 * @return the hour of the time. range: 0-23.
 	 */
-	unsigned getHour() const;
+	OWUTIL_API unsigned getHour() const;
 
 	/**
 	 * Sets the hour.
 	 */
-	void setHour(unsigned hour);
+	OWUTIL_API void setHour(unsigned hour);
 
 	/**
 	 * @return the minute of the time. range: 0-59.
 	 */
-	unsigned getMinute() const;
+	OWUTIL_API unsigned getMinute() const;
 
 	/**
 	 * Sets the minute.
 	 */
-	void setMinute(unsigned minute);
+	OWUTIL_API void setMinute(unsigned minute);
 
 	/**
 	 * Gets the second. range: 0-59.
 	 */
-	unsigned getSecond() const;
+	OWUTIL_API unsigned getSecond() const;
 
 	/**
 	 * Sets second.
 	 */
-	void setSecond(unsigned second);
+	OWUTIL_API void setSecond(unsigned second);
 
 	/**
 	 * @return a string representing the time. (e.g: "hh/mm/ss")
 	 */
-	std::string toString() const;
+	OWUTIL_API std::string toString() const;
 
 private:
 	unsigned _hour;

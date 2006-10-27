@@ -76,7 +76,7 @@ int pix_quicktime_from_pix_osi(pixosi pix) {
 	return palette;
 }
 
-const char *pix_quicktime_to_string(unsigned pix) {
+const char * pix_quicktime_to_string(unsigned pix) {
 	static char pixfmt[512];
 
 	//Description are taken from Apple documentation

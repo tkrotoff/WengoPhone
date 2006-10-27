@@ -20,6 +20,7 @@
 #ifndef OWBASE64_H
 #define OWBASE64_H
 
+#include <util/owutildll.h>
 #include <util/NonCopyable.h>
 
 #include <string>
@@ -46,7 +47,7 @@ public:
 	 * @param stringToEncode string to encode
 	 * @return encoded string
 	 */
-	static std::string encode(const std::string & stringToEncode);
+	OWUTIL_API static std::string encode(const std::string & stringToEncode);
 
 	/**
 	 * Decodes using base64.
@@ -54,7 +55,7 @@ public:
 	 * @param encodedString encoded string
 	 * @return decoded string
 	 */
-	static std::string decode(const std::string & encodedString);
+	OWUTIL_API static std::string decode(const std::string & encodedString);
 };
 
 #endif	//OWBASE64_H

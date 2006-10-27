@@ -21,6 +21,8 @@
 
 #include <thread/ThreadEvent.h>
 
+#include <util/SafeDelete.h>
+
 HttpRequestManager::HttpRequestManager() {
 	start();
 }
@@ -49,5 +51,6 @@ void HttpRequestManager::answerReceivedEventHandler(IHttpRequest * sender, int r
 }
 
 void HttpRequestManager::joinAndDelete(IHttpRequest *httpRequest) {
-	delete httpRequest; // Delete will join the Thread. @see Thread::~Thread
+	//Delete will join the Thread. @see Thread::~Thread
+	OWSAFE_DELETE(httpRequest);
 }

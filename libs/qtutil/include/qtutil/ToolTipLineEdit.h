@@ -20,6 +20,8 @@
 #ifndef OWTOOLTIPLINEEDIT_H
 #define OWTOOLTIPLINEEDIT_H
 
+#include <qtutil/owqtutildll.h>
+
 #include <QtGui/QLineEdit>
 #include <QtGui/QPalette>
 #include <QtCore/QString>
@@ -39,21 +41,21 @@ class ToolTipLineEdit : public QLineEdit {
 	Q_OBJECT
 public:
 
-	ToolTipLineEdit(QWidget * parent);
+	OWQTUTIL_API ToolTipLineEdit(QWidget * parent);
 
 	/**
 	 * @see QLineEdit::text()
 	 */
-	QString text() const;
+	OWQTUTIL_API QString text() const;
 
 public Q_SLOTS:
 
 	/**
 	 * @see QLineEdit::setText()
 	 */
-	void setText(const QString & text);
+	OWQTUTIL_API void setText(const QString & text);
 
-	void languageChanged();
+	OWQTUTIL_API void languageChanged();
 
 private:
 

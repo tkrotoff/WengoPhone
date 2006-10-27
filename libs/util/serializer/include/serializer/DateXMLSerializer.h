@@ -20,6 +20,8 @@
 #ifndef OWDATEXMLSERIALIZER_H
 #define OWDATEXMLSERIALIZER_H
 
+#include <serializer/owserializerdll.h>
+
 #include <serialization/Serializable.h>
 
 class Date;
@@ -32,11 +34,11 @@ class Date;
 class DateXMLSerializer : public Serializable {
 public:
 
-	DateXMLSerializer(Date & date);
+	OWSERIALIZER_API DateXMLSerializer(Date & date);
 
-	std::string serialize();
+	OWSERIALIZER_API std::string serialize();
 
-	bool unserialize(const std::string & data);
+	OWSERIALIZER_API bool unserialize(const std::string & data);
 
 private:
 

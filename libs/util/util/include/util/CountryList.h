@@ -20,6 +20,7 @@
 #ifndef OWCOUNTRYLIST_H
 #define OWCOUNTRYLIST_H
 
+#include <util/owutildll.h>
 #include <util/NonCopyable.h>
 
 #include "StringList.h"
@@ -37,7 +38,7 @@ public:
 	 *
 	 * @return a StringList of Country
 	 */
-	static StringList getCountryList();
+	OWUTIL_API static StringList getCountryList();
 };
 
 #endif //OWCOUNTRYLIST_H

@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef QUICKTIME_PIXERTOOL_H
-#define QUICKTIME_PIXERTOOL_H
+#ifndef OWQUICKTIME_PIXERTOOL_H
+#define OWQUICKTIME_PIXERTOOL_H
 
 #include <pixertool/pixertool.h>
 
@@ -49,14 +49,15 @@ pixosi pix_quicktime_to_pix_osi(int pix);
 int pix_quicktime_from_pix_osi(pixosi pix);
 
 /**
- * Get a string describing the format.
+ * Gets a string describing the format.
+ *
  * @param pix pixel format quicktime id
  * @return the string describing the format
  */
-const char *pix_quicktime_to_string(unsigned pix);
+const char * pix_quicktime_to_string(unsigned pix);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif	//QUICKTIME_PIXERTOOL_H
+#endif	//OWQUICKTIME_PIXERTOOL_H

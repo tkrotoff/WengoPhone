@@ -31,16 +31,21 @@
 
 #include <presentation/qt/QtWengoPhone.h>
 #include <presentation/qt/statusbar/QtStatusBar.h>
+#include <presentation/qt/contactlist/QtContactList.h>
 
 #include <control/CWengoPhone.h>
+#include <control/profile/CUserProfile.h>
+#include <control/profile/CUserProfileHandler.h>
 #include <control/phonecall/CPhoneCall.h>
 #include <control/profile/CUserProfileHandler.h>
 
 #include <model/config/Config.h>
 #include <model/config/ConfigManager.h>
+#include <model/contactlist/ContactProfile.h>
 #include <model/phonecall/ConferenceCall.h>
 #include <model/phonecall/PhoneCall.h>
 #include <model/phoneline/PhoneLine.h>
+#include <model/profile/AvatarList.h>
 
 #include <sipwrapper/CodecList.h>
 #include <sipwrapper/SipWrapper.h>
@@ -60,6 +65,7 @@ QtPhoneCall::QtPhoneCall(CPhoneCall & cPhoneCall)
 	_videoWindow = NULL;
 	_closed = false;
 
+	_callToaster = NULL;
 	_remoteVideoFrame = NULL;
 	_localVideoFrame = NULL;
 	_hold = true;
@@ -75,10 +81,10 @@ QtPhoneCall::QtPhoneCall(CPhoneCall & cPhoneCall)
 	QString sipAddress = QString::fromStdString(_cPhoneCall.getPeerSipAddress());
 
 	std::string tmpDisplayName = _cPhoneCall.getPhoneCall().getPeerSipAddress().getDisplayName();
-	QString userInfo = QString::fromUtf8(tmpDisplayName.c_str());
+	QString userName = QString::fromUtf8(tmpDisplayName.c_str());
 
-	if (userInfo.isEmpty()) {
-		userInfo = QString::fromStdString(_cPhoneCall.getPhoneCall().getPeerSipAddress().getUserName());
+	if (userName.isEmpty()) {
+		userName = QString::fromStdString(_cPhoneCall.getPhoneCall().getPeerSipAddress().getUserName());
 	}
 
 	//init flip
@@ -87,13 +93,13 @@ QtPhoneCall::QtPhoneCall(CPhoneCall & cPhoneCall)
 	phoneLine.flipVideoImage(config.getVideoFlipEnable());
 	////
 
-	userInfo = getDisplayName(userInfo);
+	userName = getDisplayName(userName);
 
 	QString tmp = QString("<html><head><meta name='qrichtext' content='1'/></head><body "
 		"style=white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt;"
 		" font-weight:400; font-style:normal; text-decoration:none;'><p style=' margin-top:0px; "
 		" margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; "
-		"font-size:8pt;'><span style=' font-size:13pt; font-weight:600;'>%1</span></p></body></html>").arg(userInfo);
+		"font-size:8pt;'><span style=' font-size:13pt; font-weight:600;'>%1</span></p></body></html>").arg(userName);
 
 	_ui->nickNameLabel->setText(tmp);
 	_ui->nickNameLabel->setToolTip(sipAddress);
@@ -140,7 +146,7 @@ QtPhoneCall::QtPhoneCall(CPhoneCall & cPhoneCall)
 	_phoneCallWidget->installEventFilter(filter);
 	SAFE_CONNECT(filter, SIGNAL(openPopup(int, int)), SLOT(openPopup(int, int)));
 
-	showToaster(userInfo);
+	showToaster(userName);
 
 	if (!_cPhoneCall.getPhoneCall().getConferenceCall()) {
 		_qtWengoPhone->addPhoneCall(this);
@@ -365,6 +371,9 @@ void QtPhoneCall::videoFrameReceivedEvent(piximage * remoteVideoFrame, piximage 
 void QtPhoneCall::acceptActionTriggered(bool) {
 	_ui->statusLabel->setText(tr("Initialization..."));
 	_cPhoneCall.accept();
+	if (_callToaster) {
+		_callToaster->close();
+	}
 }
 
 void QtPhoneCall::rejectActionTriggered(bool) {
@@ -534,16 +543,42 @@ void QtPhoneCall::showToaster(const QString & userName) {
 		return;
 	}
 
-	QtCallToaster * toaster = new QtCallToaster();
-	toaster->setMessage(userName);
-	SAFE_CONNECT(toaster, SIGNAL(pickUpButtonClicked()), SLOT(acceptCall()));
-	SAFE_CONNECT(toaster, SIGNAL(hangUpButtonClicked()), SLOT(rejectCall()));
-	toaster->show();
+	OWSAFE_DELETE(_callToaster);
+	_callToaster = new QtCallToaster();
+	_callToaster->setMessage(userName);
+
+	QPixmap defaultAvatar(QString::fromStdString(AvatarList::getInstance().getDefaultAvatar().getFullPath()));
+	_callToaster->setPixmap(defaultAvatar);
+
+	QtContactList * qtContactList = _qtWengoPhone->getQtContactList();
+	if (qtContactList) {
+		CContactList & cContactList = qtContactList->getCContactList();
+		IMContact imContact(EnumIMProtocol::IMProtocolWengo, userName.toStdString());
+		std::string contactId = cContactList.findContactThatOwns(imContact);
+		ContactProfile contactProfile = cContactList.getContactProfile(contactId);
+		OWPicture picture = contactProfile.getIcon();
+		std::string data = picture.getData();
+		QPixmap avatar;
+		if (!data.empty()) {
+			avatar.loadFromData((uchar *) data.c_str(), data.size());
+		}
+		if (!avatar.isNull()) {
+			_callToaster->setPixmap(avatar);
+		}
+	}
+
+	SAFE_CONNECT(_callToaster, SIGNAL(pickUpButtonClicked()), SLOT(acceptCall()));
+	SAFE_CONNECT(_callToaster, SIGNAL(hangUpButtonClicked()), SLOT(rejectCall()));
+	_callToaster->show();
 }
 
 void QtPhoneCall::close() {
 	//FIXME hack to prevent a crash
 	_closed = true;
+
+	if (_callToaster) {
+		_callToaster->close();
+	}
 
 	_qtWengoPhone->getQtStatusBar().showMessage(QString::null);
 	_ui->durationLabel = NULL;

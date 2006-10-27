@@ -20,6 +20,8 @@
 #ifndef OWTIMEXMLSERIALIZER_H
 #define OWTIMEXMLSERIALIZER_H
 
+#include <serializer/owserializerdll.h>
+
 #include <serialization/Serializable.h>
 
 class Time;
@@ -32,11 +34,11 @@ class Time;
 class TimeXMLSerializer : public Serializable {
 public:
 
-	TimeXMLSerializer(Time & time);
+	OWSERIALIZER_API TimeXMLSerializer(Time & time);
 
-	std::string serialize();
+	OWSERIALIZER_API std::string serialize();
 
-	bool unserialize(const std::string & data);
+	OWSERIALIZER_API bool unserialize(const std::string & data);
 
 private:
 

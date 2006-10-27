@@ -20,6 +20,8 @@
 #ifndef POSTEVENTFILTER_H
 #define POSTEVENTFILTER_H
 
+#include <qtutil/owqtutildll.h>
+
 #include <boost/function.hpp>
 #include <boost/bind.hpp>
 
@@ -36,7 +38,7 @@
  * @see QObjectThreadSafe
  * @author Tanguy Krotoff
  */
-class PostEvent : public QEvent {
+class OWQTUTIL_API PostEvent : public QEvent {
 public:
 
 	/** PostEvent is a QEvent with a specifi value. */
@@ -55,7 +57,7 @@ public:
  * @author Tanguy Krotoff
  */
 template<typename Signature>
-class PostEvent0 : public PostEvent {
+class OWQTUTIL_API PostEvent0 : public PostEvent {
 public:
 
 	template<typename Callback>
@@ -80,7 +82,7 @@ private:
  * @author Tanguy Krotoff
  */
 template<typename Signature, typename Arg1>
-class PostEvent1 : public PostEvent {
+class OWQTUTIL_API PostEvent1 : public PostEvent {
 public:
 
 	template<typename Callback>
@@ -108,7 +110,7 @@ private:
  * @author Tanguy Krotoff
  */
 template<typename Signature, typename Arg1, typename Arg2>
-class PostEvent2 : public PostEvent {
+class OWQTUTIL_API PostEvent2 : public PostEvent {
 public:
 
 	template<typename Callback>
@@ -139,7 +141,7 @@ private:
  * @author Tanguy Krotoff
  */
 template<typename Signature, typename Arg1, typename Arg2, typename Arg3>
-class PostEvent3 : public PostEvent {
+class OWQTUTIL_API PostEvent3 : public PostEvent {
 public:
 
 	template<typename Callback>
@@ -173,7 +175,7 @@ private:
  * @author Tanguy Krotoff
  */
 template<typename Signature, typename Arg1, typename Arg2, typename Arg3, typename Arg4>
-class PostEvent4 : public PostEvent {
+class OWQTUTIL_API PostEvent4 : public PostEvent {
 public:
 
 	template<typename Callback>

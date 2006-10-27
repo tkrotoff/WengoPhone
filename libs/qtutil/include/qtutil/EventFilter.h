@@ -20,6 +20,8 @@
 #ifndef OWEVENTFILTER_H
 #define OWEVENTFILTER_H
 
+#include <qtutil/owqtutildll.h>
+
 #include <util/NonCopyable.h>
 
 #include <QtCore/QObject>

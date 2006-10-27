@@ -115,16 +115,16 @@ int pix_ffmpeg_from_pix_osi(pixosi pix) {
 	return palette;
 }
 
-void pix_fill_avpicture(AVPicture *dst , piximage *src) {
+void pix_fill_avpicture(AVPicture * dst , piximage * src) {
 	avpicture_fill(dst, src->data, pix_ffmpeg_from_pix_osi(src->palette),
 		src->width, src->height);
 }
 
-pixerrorcode pix_convert_avpicture(int flags, piximage *img_dst, AVPicture *img_src, pixosi src_fmt) {
+pixerrorcode pix_convert_avpicture(int flags, piximage * img_dst, AVPicture * img_src, pixosi src_fmt) {
 	pixosi desiredPalette = pix_ffmpeg_from_pix_osi(img_dst->palette);
 
 	if (!pictureBuffer) {
-		pictureBuffer = (AVPicture *)malloc(sizeof(AVPicture));
+		pictureBuffer = (AVPicture *) malloc(sizeof(AVPicture));
 		atexit(pix_ffmpeg_cleanup);
 	}
 

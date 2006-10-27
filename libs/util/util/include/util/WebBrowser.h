@@ -20,6 +20,7 @@
 #ifndef OWWEBBROWSER_H
 #define OWWEBBROWSER_H
 
+#include <util/owutildll.h>
 #include <util/NonCopyable.h>
 
 #include <string>
@@ -39,15 +40,9 @@ public:
 	 * @param url URL to open inside the web browser
 	 * @return true if the web browser was found and the URL opened, false otherwise
 	 */
-	static bool openUrl(const std::string & url);
-
-	static void setBrowser(const std::string & browser) {
-		_browser = browser;
-	}
+	OWUTIL_API static bool openUrl(const std::string & url);
 
 private:
-
-	static std::string _browser;
 };
 
 #endif	//OWWEBBROWSER_H

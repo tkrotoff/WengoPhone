@@ -1,45 +1,36 @@
-project(owshlibloader)
+ow_create_project(owshlibloader)
 
-# needed include directories to build owshlibloader
-# saves the variable in internal cache for later use
-set(OWSHLIBLOADER_INCLUDE_DIRS
-  ${CMAKE_CURRENT_SOURCE_DIR}/include
-  ${OWUTIL_INCLUDE_DIRS}
-  CACHE INTERNAL "owshlibloader include directories"
+ow_use_public_libraries(
+	owutil
 )
 
-set(OWSHLIBLOADER_LIBRARY
-  owshlibloader
-  CACHE INTERNAL "owshlibloader library"
+ow_add_public_include_dirs(
+	${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
-# owshlibloader lib and dependencies
-set(OWSHLIBLOADER_LINK_LIBRARIES
-  ${OWSHLIBLOADER_LIBRARY}
-  ${OWUTIL_LIBRARY}
-)
+#ow_add_public_definitions(
+#	-DOWSHLIBLOADER_DLL
+#)
 
-set(owshlibloader_SRCS
-  src/SharedLibLoader.cpp
+#ow_add_private_definitions(
+#	-DOWSHLIBLOADER_DLL
+#	-DBUILD_OWSHLIBLOADER_DLL
+#)
+
+ow_add_sources(
+	src/SharedLibLoader.cpp
 )
 
 if (WIN32)
-  set(owshlibloader_SRCS ${owshlibloader_SRCS}
-    src/win32/Win32SharedLibLoader.cpp
-  )
+	ow_add_sources(
+		src/win32/Win32SharedLibLoader.cpp
+	)
 endif (WIN32)
 
 if (UNIX)
-  set(owshlibloader_SRCS ${owshlibloader_SRCS}
-    src/posix/PosixSharedLibLoader.cpp
-  )
+	ow_add_sources(
+		src/posix/PosixSharedLibLoader.cpp
+	)
 endif (UNIX)
 
-include_directories(
-  ${OWSHLIBLOADER_INCLUDE_DIRS}
-)
-
-add_library(${OWSHLIBLOADER_LIBRARY} STATIC ${owshlibloader_SRCS})
-
-target_link_libraries(${OWSHLIBLOADER_LINK_LIBRARIES})
-
+ow_create_static_library()

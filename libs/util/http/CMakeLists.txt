@@ -1,53 +1,46 @@
-project(owhttp)
+ow_create_project(owhttp)
 
-# needed include directories to build owhttp
-# saves the variable in internal cache for later use
-set(OWHTTP_INCLUDE_DIRS
-  ${CMAKE_CURRENT_SOURCE_DIR}/include
-  ${OWTHREAD_INCLUDE_DIRS}
-  ${OWCURL_INCLUDE_DIRS}
-  CACHE INTERNAL "owhttp include directories"
+ow_use_public_libraries(
+	owthread
+	owcurl
 )
 
-set(OWHTTP_LIBRARY
-  owhttp
-  CACHE INTERNAL "owhttp library"
+ow_use_private_libraries(
+	owcurl
 )
 
-# owhttp lib and dependencies
-set(OWHTTP_LINK_LIBRARIES
-  ${OWHTTP_LIBRARY}
-  ${OWTHREAD_LIBRARY}
-  ${OWCURL_LIBRARY}
+ow_add_public_include_dirs(
+	${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
 if (WIN32)
-  set(OWHTTP_LINK_LIBRARIES
-    ${OWHTTP_LINK_LIBRARIES}
-    advapi32
-    shell32
-  )
+	ow_add_private_libraries(
+		advapi32
+		shell32
+	)
 endif (WIN32)
 
-set(owhttp_SRCS
-  src/HttpRequest.cpp
-  src/HttpRequestManager.cpp
-  src/curl/CurlHttpRequest.cpp
-  src/null/NullHttpRequest.cpp
-  #src/qt/QtHttpRequest.cpp
+#ow_add_public_definitions(
+#	-DOWHTTP_DLL
+#)
+
+#ow_add_private_definitions(
+#	-DOWHTTP_DLL
+#	-DBUILD_OWHTTP_DLL
+#)
+
+ow_add_sources(
+	src/HttpRequest.cpp
+	src/HttpRequestManager.cpp
+	src/curl/CurlHttpRequest.cpp
+	src/null/NullHttpRequest.cpp
+	#src/qt/QtHttpRequest.cpp
 )
-
-include_directories(
-  ${OWHTTP_INCLUDE_DIRS}
-)
-
-add_library(${OWHTTP_LIBRARY} STATIC ${owhttp_SRCS})
-
-target_link_libraries(${OWHTTP_LINK_LIBRARIES})
 
 if (APPLE)
-  macro_add_link_flags(${OWHTTP_LIBRARY}
-    "-framework CoreFoundation"
-  )
+	ow_add_private_link_flags(
+		-framework CoreFoundation
+	)
 endif (APPLE)
 
+ow_create_static_library()

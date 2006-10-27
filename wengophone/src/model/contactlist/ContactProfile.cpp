@@ -133,7 +133,7 @@ void ContactProfile::setGroupId(const std::string & groupId) {
 
 bool ContactProfile::hasIM() const {
 	return (getPresenceState() != EnumPresenceState::PresenceStateOffline &&
-		getPresenceState() != EnumPresenceState::PresenceStateUnknown && 
+		getPresenceState() != EnumPresenceState::PresenceStateUnknown &&
 		getPresenceState() != EnumPresenceState::PresenceStateUnavailable);
 }
 
@@ -370,7 +370,7 @@ IMContact ContactProfile::getFirstAvailableWengoIMContact() const {
 	for (IMContactSet::const_iterator it = _imContactSet.begin();
 		it != _imContactSet.end();
 		++it) {
-			
+
 		if (((*it).getProtocol() == EnumIMProtocol::IMProtocolWengo)
 			&& ((*it).getPresenceState() != EnumPresenceState::PresenceStateOffline)) {
 			result = *it;

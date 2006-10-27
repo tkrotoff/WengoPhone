@@ -20,6 +20,8 @@
 #ifndef OWWENGOSTYLELABEL_H
 #define OWWENGOSTYLELABEL_H
 
+#include <qtutil/owqtutildll.h>
+
 #include <QtGui/QLabel>
 #include <QtGui/QPixmap>
 #include <QtGui/QColor>
@@ -38,12 +40,12 @@ public:
 		Normal,
 		Toggled,
 	};
-	
-	WengoStyleLabel(QWidget * parent, Mode = Normal, Qt::AlignmentFlag hAlign = Qt::AlignHCenter);
 
-	~WengoStyleLabel();
+	OWQTUTIL_API WengoStyleLabel(QWidget * parent, Mode = Normal, Qt::AlignmentFlag hAlign = Qt::AlignHCenter);
 
-	void setPixmaps(const QPixmap & normalLeftPixmap,
+	OWQTUTIL_API ~WengoStyleLabel();
+
+	OWQTUTIL_API void setPixmaps(const QPixmap & normalLeftPixmap,
 			const QPixmap & normalRightPixmap,
 			const QPixmap & normalFillPixmap,
 			const QPixmap & pressedLeftPixmap,
@@ -54,25 +56,25 @@ public:
 
 	void setRightPixmaps(const QPixmap & normalRightPixmap, const QPixmap & pressedRightPixmap);*/
 
-	void setTextColor(const QColor & color);
+	OWQTUTIL_API void setTextColor(const QColor & color);
 
 	//void setBackgroundColor(const QColor & color);
 
-	void setTextAlignment(int alignment) {
+	OWQTUTIL_API void setTextAlignment(int alignment) {
 		_alignment = alignment;
 	}
 
-	void setSelected(bool value) {
+	OWQTUTIL_API void setSelected(bool value) {
 		_selected = value;
 	}
 
 public Q_SLOTS:
 
-	void setText(const QString & text);
+	OWQTUTIL_API void setText(const QString & text);
 
 Q_SIGNALS:
 
-	void clicked();
+	OWQTUTIL_API void clicked();
 
 private:
 

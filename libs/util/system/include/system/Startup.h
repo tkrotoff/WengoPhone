@@ -20,6 +20,8 @@
 #ifndef OWSTARTUP_H
 #define OWSTARTUP_H
 
+#include <system/owsystemdll.h>
+
 #include <util/NonCopyable.h>
 
 #include <string>
@@ -40,9 +42,9 @@ public:
 	 * @param executablePath path to the executable
 	 *        (e.g C:/Program Files/Wengo/wengophone.exe -background)
 	 */
-	Startup(const std::string & applicationName, const std::string & executablePath);
+	OWSYSTEM_API Startup(const std::string & applicationName, const std::string & executablePath);
 
-	~Startup();
+	OWSYSTEM_API ~Startup();
 
 	/**
 	 * Sets an executable as an application startup.
@@ -50,14 +52,14 @@ public:
 	 * @param startup true if the application should start or not
 	 * @return true if success, false otherwise
 	 */
-	bool setStartup(bool startup = true);
+	OWSYSTEM_API bool setStartup(bool startup = true);
 
 	/**
 	 * Gets if the executable is an application startup.
 	 *
 	 * @return true if an application startup, false otherwise
 	 */
-	bool isStartup();
+	OWSYSTEM_API bool isStartup();
 
 private:
 

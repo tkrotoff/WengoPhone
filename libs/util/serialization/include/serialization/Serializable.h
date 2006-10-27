@@ -20,6 +20,8 @@
 #ifndef OWSERIALIZABLE_H
 #define OWSERIALIZABLE_H
 
+#include <serialization/owserializationdll.h>
+
 #include <string>
 
 /**
@@ -30,15 +32,15 @@
 class Serializable {
 public:
 
-	virtual ~Serializable() {
+	OWSERIALIZATION_API virtual ~Serializable() {
 	}
 
 	/**
 	 * Cannot be const.
 	 */
-	virtual std::string serialize() /*const*/ = 0;
+	OWSERIALIZATION_API virtual std::string serialize() /*const*/ = 0;
 
-	virtual bool unserialize(const std::string & data) = 0;
+	OWSERIALIZATION_API virtual bool unserialize(const std::string & data) = 0;
 };
 
 #endif	//OWSERIALIZABLE_H

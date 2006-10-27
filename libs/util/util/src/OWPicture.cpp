@@ -30,7 +30,7 @@ OWPicture::OWPicture(const OWPicture & picture) {
 	copy(picture);
 }
 
-OWPicture & OWPicture::operator = (const OWPicture & picture) {
+OWPicture & OWPicture::operator=(const OWPicture & picture) {
 	copy(picture);
 
 	return *this;

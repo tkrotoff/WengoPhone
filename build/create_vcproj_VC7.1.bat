@@ -1,0 +1,1 @@
+cmake .. -DCMAKE_VERBOSE_MAKEFILE=1 -G "Visual Studio 7 .NET 2003"

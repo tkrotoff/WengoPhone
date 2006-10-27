@@ -20,6 +20,10 @@
 #ifndef OWWINDOWSVERSION_H
 #define OWWINDOWSVERSION_H
 
+#include <system/owsystemdll.h>
+
+#include <util/NonCopyable.h>
+
 /**
  * Simple library to retrieve a human readable
  * string representing the windows version.
@@ -69,15 +73,10 @@
  *
  * @author Mathieu Stute
  */
+class WindowsVersion : NonCopyable {
+public:
 
-#ifdef  __cplusplus
-extern "C" {
-#endif
-
-char * getWindowsVersion();
-
-#ifdef  __cplusplus
-}
-#endif
+	OWSYSTEM_API static char * getVersion();
+};
 
 #endif	//OWWINDOWSVERSION_H

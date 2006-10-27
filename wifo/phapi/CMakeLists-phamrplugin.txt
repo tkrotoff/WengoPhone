@@ -1,0 +1,55 @@
+ow_create_project(phamrplugin)
+
+ow_use_public_libraries(
+	amrwb
+	amrnb
+)
+
+if (WITH_SPEEXWB_REPLACES_G726WB)
+	ow_add_private_definitions(
+		-DPH_SPEEXWB_REPLACES_G726WB
+	)
+else (WITH_SPEEXWB_REPLACES_G726WB)
+	if (WITH_SPEEXWB_REPLACES_AMRNB)
+		ow_add_private_definitions(
+			-DPH_SPEEXWB_REPLACES_AMRNB
+		)
+	else (WITH_SPEEXWB_REPLACES_AMRNB)
+		if (WITH_SPEEXWB_REPLACES_AMRWB)
+			ow_add_private_definitions(
+				-DPH_SPEEXWB_REPLACES_AMRWB
+			)
+		endif (WITH_SPEEXWB_REPLACES_AMRWB)
+	endif (WITH_SPEEXWB_REPLACES_AMRNB)
+endif (WITH_SPEEXWB_REPLACES_G726WB)
+
+ow_add_private_compile_flags(
+	${PHAPI_OPTIMIZATION_FLAGS}
+)
+
+ow_add_sources(
+	phcodec-amr-wrapper.c
+	amrnb/interf_dec.c
+	amrnb/interf_enc.c
+	amrnb/sp_dec.c
+	amrnb/sp_enc.c
+	amrwb/dec_acelp.c
+	amrwb/dec_dtx.c
+	amrwb/dec_gain.c
+	amrwb/dec_if.c
+	amrwb/dec_lpc.c
+	amrwb/dec_main.c
+	amrwb/dec_rom.c
+	amrwb/dec_util.c
+	amrwb/enc_acelp.c
+	amrwb/enc_dtx.c
+	amrwb/enc_gain.c
+	amrwb/enc_if.c
+	amrwb/enc_lpc.c
+	amrwb/enc_main.c
+	amrwb/enc_rom.c
+	amrwb/enc_util.c
+	amrwb/if_rom.c
+)
+
+ow_create_plugin_library()

@@ -20,6 +20,8 @@
 #ifndef OWSTRINGLISTCONVERT_H
 #define OWSTRINGLISTCONVERT_H
 
+#include <qtutil/owqtutildll.h>
+
 #include <util/NonCopyable.h>
 
 class QStringList;
@@ -39,7 +41,7 @@ public:
 	 * @param strList StringList to convert
 	 * @return StringList converted into a QStringList
 	 */
-	static QStringList toQStringList(const StringList & strList);
+	OWQTUTIL_API static QStringList toQStringList(const StringList & strList);
 };
 
 #endif	//OWSTRINGLISTCONVERT_H

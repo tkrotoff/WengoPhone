@@ -20,6 +20,8 @@
 #ifndef OWAUDIODEVICE_H
 #define OWAUDIODEVICE_H
 
+#include <sound/owsounddll.h>
+
 #include <util/NonCopyable.h>
 #include <util/StringList.h>
 
@@ -32,7 +34,7 @@
 class AudioDevice : NonCopyable {
 public:
 
-	static AudioDevice null;
+	OWSOUND_API static AudioDevice null;
 
 	/**
 	 * Constructs an AudioDevice from a string identifying uniquely a
@@ -40,27 +42,27 @@ public:
 	 *
 	 * @param data @see getData for more info
 	 */
-	AudioDevice(const StringList & data);
+	OWSOUND_API AudioDevice(const StringList & data);
 
-	AudioDevice();
+	OWSOUND_API AudioDevice();
 
-	AudioDevice(const AudioDevice & audioDevice);
+	OWSOUND_API AudioDevice(const AudioDevice & audioDevice);
 
-	AudioDevice & operator=(const AudioDevice & audioDevice);
+	OWSOUND_API AudioDevice & operator=(const AudioDevice & audioDevice);
 
-	virtual ~AudioDevice();
+	OWSOUND_API virtual ~AudioDevice();
 
 	/**
 	 * Gets a human readable string representing this audio device.
 	 */
-	virtual std::string getName() const;
+	OWSOUND_API virtual std::string getName() const;
 
 	/**
 	 * Gets data that describe the device.
 	 *
 	 * This is system-dependent.
 	 */
-	virtual StringList getData() const;
+	OWSOUND_API virtual StringList getData() const;
 
 protected:
 

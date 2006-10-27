@@ -1,50 +1,29 @@
-project(httptunnel)
+ow_create_project(httptunnel)
 
-# needed include directories to build httptunnel
-# saves the variable in internal cache for later use
-set(HTTPTUNNEL_INCLUDE_DIRS
-  ${CMAKE_CURRENT_SOURCE_DIR}
-  ${OWCURL_INCLUDE_DIRS}
-  ${OPENSSL_INCLUDE_DIRS}
-  CACHE INTERNAL "httptunnel include directories"
+ow_use_public_libraries(
+	OPENSSL
 )
 
-set(HTTPTUNNEL_LIBRARY
-  httptunnel
-  CACHE INTERNAL "httptunnel library"
+ow_use_private_libraries(
+	owcurl
 )
 
-# httptunnel lib and dependencies
-set(HTTPTUNNEL_LINK_LIBRARIES
-  ${HTTPTUNNEL_LIBRARY}
-  ${OWCURL_LIBRARY}
-  ${OPENSSL_LIBRARIES}
+ow_add_public_include_dirs(
+	${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-set(HTTPTUNNEL_DEFINITIONS
-  -DHT_USE_SSL
+ow_add_private_definitions(
+	-DHT_USE_SSL
 )
 
 if (WIN32)
-  set(HTTPTUNNEL_DEFINITIONS
-    ${HTTPTUNNEL_DEFINITIONS}
-    -DWIN32
-  )
+	ow_add_private_definitions(
+		-DWIN32
+	)
 endif (WIN32)
 
-include_directories(
-  ${HTTPTUNNEL_INCLUDE_DIRS}
+ow_add_sources(
+	httptunnel.c
 )
 
-add_definitions(
-  ${HTTPTUNNEL_DEFINITIONS}
-)
-
-set(httptunnel_SRCS
-  httptunnel.c
-)
-
-add_library(${HTTPTUNNEL_LIBRARY} STATIC ${httptunnel_SRCS})
-
-target_link_libraries(${HTTPTUNNEL_LINK_LIBRARIES})
-
+ow_create_static_library()

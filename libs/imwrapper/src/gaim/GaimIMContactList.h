@@ -20,12 +20,11 @@
 #ifndef GAIMIMCONTACTLIST_H
 #define GAIMIMCONTACTLIST_H
 
-#include <string>
-
 #include <imwrapper/IMAccount.h>
 #include <imwrapper/IMContactList.h>
 #include <imwrapper/EnumPresenceState.h>
 
+#include <string>
 
 class GaimIMContactList : public IMContactList
 {
@@ -41,9 +40,9 @@ public:
 	virtual void removeGroup(const std::string & groupName);
 	virtual void changeGroupName(const std::string & oldGroupName, const std::string & newGroupName);
 	virtual void moveContactToGroup(const std::string & newGroupName,
-									const std::string & oldGroupName, 
+									const std::string & oldGroupName,
 									const std::string & contactId);
-	
+
 	bool equalsTo(std::string login, EnumIMProtocol::IMProtocol protocol);
 };
 

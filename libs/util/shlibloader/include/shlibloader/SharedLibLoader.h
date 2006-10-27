@@ -20,6 +20,8 @@
 #ifndef OWSHAREDLIBLOADER_H
 #define OWSHAREDLIBLOADER_H
 
+#include <shlibloader/owshlibloaderdll.h>
+
 #include <shlibloader/ISharedLibLoader.h>
 
 /**
@@ -33,20 +35,20 @@
 class SharedLibLoader : public ISharedLibLoader {
 public:
 
-	SharedLibLoader(const std::string & fileName);
+	OWSHLIBLOADER_API SharedLibLoader(const std::string & fileName);
 
-	~SharedLibLoader();
+	OWSHLIBLOADER_API ~SharedLibLoader();
 
-	bool load();
+	OWSHLIBLOADER_API bool load();
 
-	bool unload();
+	OWSHLIBLOADER_API bool unload();
 
-	void * resolve(const std::string & symbol);
+	OWSHLIBLOADER_API void * resolve(const std::string & symbol);
 
 	/**
 	 * @see ISharedLibLoader::resolve()
 	 */
-	static void * resolve(const std::string & fileName, const std::string & symbol);
+	OWSHLIBLOADER_API static void * resolve(const std::string & fileName, const std::string & symbol);
 
 	/**
 	 * Gets the system shared library extension.
@@ -55,7 +57,7 @@ public:
 	 * MacOSX: .dylib
 	 * UNIX: .so
 	 */
-	static std::string getSharedLibExtension();
+	OWSHLIBLOADER_API static std::string getSharedLibExtension();
 
 private:
 

@@ -23,11 +23,11 @@
 #include <imwrapper/IMContactList.h>
 #include "GaimIMContactList.h"
 
-#include <list>
-
 extern "C" {
-#include "gaim/blist.h"
+#include <gaim/blist.h>
 }
+
+#include <list>
 
 class GaimPresenceMngr;
 class GaimAccountMngr;
