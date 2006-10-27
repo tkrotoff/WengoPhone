@@ -1,5 +1,5 @@
 # - OW_ADD_SOURCES(src1 ... srcN)
-# Adds source files to the current project
+# Adds source files (.cpp, .c) to the current project
 #
 # Copyright (C) 2006  Wengo
 #

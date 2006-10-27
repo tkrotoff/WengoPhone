@@ -1,5 +1,5 @@
 # - OW_SET_LIBRARY_VERSION(build_version api_version)
-# Sets the library version
+# Sets the library version (build + api)
 #
 # Copyright (C) 2006  Wengo
 #
@@ -11,10 +11,12 @@ macro (OW_SET_LIBRARY_VERSION _build_version _api_version)
 
 	ow_check_project()
 
-	set_target_properties(${PROJECT_NAME}
-		PROPERTIES
-			VERSION _build_version
-			SOVERSION _api_version
+	set(${PROJECT_NAME}_BUILD_VERSION
+		${_build_version}
+	)
+
+	set(${PROJECT_NAME}_API_VERSION
+		${_api_version}
 	)
 
 endmacro (OW_SET_LIBRARY_VERSION)

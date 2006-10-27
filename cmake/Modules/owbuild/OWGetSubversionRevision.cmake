@@ -1,7 +1,7 @@
 # - OW_GET_SUBVERSION_REVISION(revision)
 # Gets the current subversion revision number
 #
-# Copyright (C) 2006, Andreas Schneider, <mail@cynapses.org>
+# Copyright (C) 2006  Andreas Schneider <mail@cynapses.org>
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING file.
@@ -24,7 +24,7 @@ macro (OW_GET_SUBVERSION_REVISION _revision)
 	)
 
 	if (_SVN_EXECUTEABLE AND _SVN_DOT_DIR)
-		message("-- Generating subversion revision")
+		message(STATUS "Generating subversion revision")
 		execute_process(
 			COMMAND
 				svnversion -n ${CMAKE_SOURCE_DIR}/cmake

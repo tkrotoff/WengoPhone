@@ -13,11 +13,6 @@ macro (OW_CREATE_SHARED_LIBRARY)
 
 	add_library(${PROJECT_NAME} SHARED ${${PROJECT_NAME}_SRCS})
 
-	ow_unique(unique ${${PROJECT_NAME}_LIBRARIES} ${${PROJECT_NAME}_PRIVATE_LIBRARIES})
-	target_link_libraries(${PROJECT_NAME} ${unique})
-
-	ow_project_log()
-
-	install(TARGETS ${PROJECT_NAME} DESTINATION bin/)
+	ow_finish_binary()
 
 endmacro (OW_CREATE_SHARED_LIBRARY)
