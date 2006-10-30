@@ -656,14 +656,11 @@ bool ConfigImporter::importConfigFromV1toV3() {
 		userProfile.setWengoAccount(wAccount);
 
 		if (userProfile.isWengoAccountValid()) {
-			String accountDir(userProfile.getProfileDirectory());
-			File::createPath(accountDir);
 			String oldPath = classicPath + lastUser->login + sep + "contacts" + sep;
-
 			importContactsFromV1toV3(oldPath, userProfile);
 
 			UserProfileFileStorage fStorage(userProfile);
-			fStorage.save(accountDir);
+			fStorage.save(userProfile.getName());
 		}
 	}
 
