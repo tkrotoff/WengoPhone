@@ -58,6 +58,7 @@ FileSessionManager::~FileSessionManager() {
 
 SendFileSession * FileSessionManager::createSendFileSession() {
 	SendFileSession * newFileSession = new SendFileSession(*this, _userProfile);
+	// HACK : Unique file transfer hack
 	newFileSession->moduleFinishedEvent += boost::bind(&FileSessionManager::moduleFinishedEventHandler, this, _1);
 	return newFileSession;
 }
@@ -112,6 +113,7 @@ void FileSessionManager::peerNeedsUpgradeEventHandler(IFileSessionManager & send
 	peerNeedsUpgradeEvent(*this);
 }
 
+// HACK : Unique file transfer hack
 void FileSessionManager::queueSession(SendFileSession * session) {
 	_sendSessions.push(session);
 	if(_sendSessions.size() == 1) {
@@ -119,6 +121,7 @@ void FileSessionManager::queueSession(SendFileSession * session) {
 	}
 }
 
+// HACK : Unique file transfer hack
 void FileSessionManager::moduleFinishedEventHandler(CoIpModule & sender) {
 	_sendSessions.pop();
 	if(_sendSessions.size() > 0) {

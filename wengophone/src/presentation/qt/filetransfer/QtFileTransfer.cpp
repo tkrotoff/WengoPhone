@@ -160,7 +160,7 @@ void QtFileTransfer::createSendFileSession(IMContactSet imContactSet, const QStr
 			_qtFileTransferWidget->addSendItem(fileSession, filename.toStdString(), contactId, (*it).getContactId());
 		}
 
-		//fileSession->start(); replaced below
+		// HACK : Unique file transfer hack
 		_coIpManager->getFileSessionManager().queueSession(fileSession);
 
 	} else {

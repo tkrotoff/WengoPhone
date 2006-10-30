@@ -72,6 +72,7 @@ public:
 	 */
 	SendFileSession * createSendFileSession();
 
+	// HACK : Unique file transfer hack
 	/**
 	 * Queues a SendFileSession and starts it if it is the only session.
 	 *
@@ -91,6 +92,7 @@ private:
 
 	void peerNeedsUpgradeEventHandler(IFileSessionManager & sender);
 
+	// HACK : Unique file transfer hack
 	/**
 	 * Handler used to start the next session in queue
 	 *
@@ -112,6 +114,7 @@ private:
 	/** Link to UserProfile. */
 	UserProfile & _userProfile;
 
+	// HACK : Unique file transfer hack
 	/** Queue to ensure that only one session is active at a time */
 	std::queue<SendFileSession *> _sendSessions;
 
