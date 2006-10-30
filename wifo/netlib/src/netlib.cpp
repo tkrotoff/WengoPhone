@@ -110,7 +110,6 @@ inline int closesocket(Socket fd) {return close(fd);}
 #define OPT_REQ	\
 "OPTIONS sip:nobody@nobody.com SIP/2.0\r\n\
 Via: SIP/2.0/UDP 192.168.1.1:5060;rport;branch=123456789\r\n\
-Route: <sip:voip.wengo.fr;lr>\r\n\
 From: nobody <sip:nobody@nobody.com>;tag=123456789\r\n\
 To: <sip:nobody@nobody.com>\r\n\
 Call-ID: 000001@192.168.1.1\r\n\
