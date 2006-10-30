@@ -83,6 +83,23 @@ public:
 	OWUTIL_API bool remove();
 
 	/**
+	 * Copies a file or a directory recursively.
+	 * 
+	 * @param dstPath destination path. Will be created if does not exist
+	 * @return true if operation successful
+	 */
+	bool copy(const std::string & path);
+
+	/**
+	 * Copy a single file.
+	 * 
+	 * @param dst destination path or file
+	 * @param src source
+	 * @return true if successful
+	 */
+	static bool copyFile(const std::string & dst, const std::string & src);
+
+	/**
 	 * Gets the path to the file.
 	 *
 	 * The path does not contain the filename, it stops at the last /

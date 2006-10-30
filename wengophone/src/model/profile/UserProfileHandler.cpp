@@ -69,12 +69,11 @@ StringList UserProfileHandler::getUserProfileNames() {
 
 UserProfile * UserProfileHandler::getUserProfile(const std::string & name) {
 	UserProfile * result = NULL;
-	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
 	if (userProfileExists(name)) {
 		result = new UserProfile();
 		UserProfileFileStorage userProfileStorage(*result);
-		userProfileStorage.load(File::convertPathSeparators(config.getConfigDir() + "profiles/" + name + "/"));
+		userProfileStorage.load(name);
 	}
 
 	return result;
@@ -253,8 +252,7 @@ void UserProfileHandler::init() {
 void UserProfileHandler::saveUserProfile(UserProfile & userProfile) {
 	Config config = ConfigManager::getInstance().getCurrentConfig();
 	UserProfileFileStorage userProfileStorage(userProfile);
-	userProfileStorage.save(File::convertPathSeparators(config.getConfigDir()
-		+ "profiles/" + userProfile.getName() + "/"));
+	userProfileStorage.save(userProfile.getName());
 }
 
 void UserProfileHandler::profileChangedEventHandler() {
@@ -299,8 +297,7 @@ void UserProfileHandler::actuallyImportDefaultProfileToProfile() {
 
 		// Deleting the 'Default' UserProfile directory
 		Config & config = ConfigManager::getInstance().getCurrentConfig();
-		File defaultUserProfileDir(File::convertPathSeparators(config.getConfigDir()
-			+ "profiles/" + UserProfile::DEFAULT_USERPROFILE_NAME + "/"));
+		File defaultUserProfileDir(UserProfileFileStorage::getProfilePath(UserProfile::DEFAULT_USERPROFILE_NAME));
 		defaultUserProfileDir.remove();
 
 		// Sets the current UserProfile to the new one

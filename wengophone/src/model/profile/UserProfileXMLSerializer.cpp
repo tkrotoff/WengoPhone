@@ -26,14 +26,12 @@
 
 #include <tinyxml.h>
 
-using namespace std;
-
 UserProfileXMLSerializer::UserProfileXMLSerializer(UserProfile & userProfile) 
 : ProfileXMLSerializer(userProfile), _userProfile(userProfile) {
 }
 
-string UserProfileXMLSerializer::serialize() {
-	string result;
+std::string UserProfileXMLSerializer::serialize() {
+	std::string result;
 
 	result += "<userprofile>\n";
 
@@ -49,7 +47,8 @@ string UserProfileXMLSerializer::serialize() {
 	return result;
 }
 
-bool UserProfileXMLSerializer::unserialize(const string & data) {
+bool UserProfileXMLSerializer::unserialize(const std::string & data) {
+	bool result = false;
 	TiXmlDocument doc;
 
 	doc.Parse(data.c_str());
@@ -57,22 +56,24 @@ bool UserProfileXMLSerializer::unserialize(const string & data) {
 	TiXmlHandle docHandle(&doc);
 	TiXmlHandle userprofile = docHandle.FirstChild("userprofile");
 
-	ProfileXMLSerializer::unserializeContent(userprofile);
-
-	// Retrieving wengoaccount
-	TiXmlNode * wengoaccount = userprofile.FirstChild("wengoaccount").Node();
-	if (wengoaccount) {
-		TiXmlElement * wengoaccountElt = wengoaccount->ToElement();
-		string wengoaccountData;
-		wengoaccountData << *wengoaccountElt;
-		WengoAccount wengoAccount;
-		WengoAccountXMLSerializer serializer(wengoAccount);
-		if (serializer.unserialize(wengoaccountData) && !wengoAccount.getWengoLogin().empty()) {
-			_userProfile._wengoAccount = new WengoAccount(wengoAccount);
-			_userProfile.computeName();
+	result = ProfileXMLSerializer::unserializeContent(userprofile);
+	if (result) {
+		// Retrieving wengoaccount
+		TiXmlNode * wengoaccount = userprofile.FirstChild("wengoaccount").Node();
+		if (wengoaccount) {
+			TiXmlElement * wengoaccountElt = wengoaccount->ToElement();
+			std::string wengoaccountData;
+			wengoaccountData << *wengoaccountElt;
+			WengoAccount wengoAccount;
+			WengoAccountXMLSerializer serializer(wengoAccount);
+			result = serializer.unserialize(wengoaccountData);
+			if (result && !wengoAccount.getWengoLogin().empty()) {
+				_userProfile._wengoAccount = new WengoAccount(wengoAccount);
+				_userProfile.computeName();
+			}
 		}
+		/////
 	}
-	/////
 
-	return true;
+	return result;
 }

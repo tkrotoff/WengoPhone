@@ -22,10 +22,14 @@
 
 #include "UserProfileStorage.h"
 
+#include <util/Event.h>
+
 class UserProfileStorage;
 
 /**
- * UserProfile file storage.
+ * Saves the UserProfile object, its IMAccountHandler and its ContactList.
+ * If the save is successful, a backup is made to recover the profile in case
+ * of problem while saving it.
  *
  * @ingroup model
  * @author Philippe Bernery
@@ -33,19 +37,87 @@ class UserProfileStorage;
 class UserProfileFileStorage : public UserProfileStorage {
 public:
 
+	/**
+	 * Emitted when loading the profile failed and getting the backup
+	 * worked.
+	 */
+	Event < void (UserProfileFileStorage & sender, std::string profileName) > profileLoadedFromBackupsEvent;
+
+	/**
+	 * Emitted when loading the profile failed with both normal and backup way.
+	 */
+	Event < void (UserProfileFileStorage & sender, std::string profileName) > profileCannotBeLoadedEvent;
+	
+	/**
+	 * Gets the full path to the profile named 'profileName'.
+	 */
+	static std::string getProfilePath(const std::string & profileName);
+
 	UserProfileFileStorage(UserProfile & userProfile);
 
 	virtual ~UserProfileFileStorage();
 
-	virtual bool load(const std::string & url);
+	/**
+	 * Will load the profile named 'profileName'.
+	 * 
+	 * If an error occured while trying the profile,
+	 * the method will try to load the profile from 
+	 * the backup directory.
+	 * If it works a profileLoadedFromBackupsEvent
+	 * will be emitted.
+	 * If the backup cannot be loaded, it will be erased if it 
+	 * exists and a profileCannotBeLoadedEvent will be emitted.
+	 */  
+	virtual bool load(const std::string & profileName);
 
-	virtual bool save(const std::string & url);
+	virtual bool save(const std::string & profileName);
 
 private:
 
-	bool saveProfile(const std::string & url);
+	/**
+	 * Gets the temporary save profile dir.
+	 */
+	static std::string getTempProfilePath(const std::string & profileName);
 
+	/**
+	 * Gets the full path to the backup profile named 'profileName'.
+	 */
+	static std::string getBackupProfilePath(const std::string & profileName);
+
+	/**
+	 * Tries to load a profile from the 'profiles' dir.
+	 * 
+	 * @return false if error, true otherwise
+	 */  
+	bool loadFromProfiles(const std::string & profileName);
+
+	/**
+	 * Tries to load a profile from the 'backups' dir.
+	 * 
+	 * @return false if error, true otherwise
+	 */  
+	bool loadFromBackups(const std::string & profileName);
+
+	/**
+	 * Loads a profile from a dir.
+	 * 
+	 * @return false if error, true otherwise
+	 */
+	bool loadFromDir(const std::string & path);
+
+	/**
+	 * Loads the UserProfile object from url/userprofile.xml
+	 * 
+	 * @return false if error, true otherwise
+	 */
 	bool loadProfile(const std::string & url);
+
+	/**
+	 * Saves the UserProfile object in url/userprofile.xml
+	 * 
+	 * @return false if error, true otherwise
+	 */
+	bool saveProfile(const std::string & url);
 };
 
 #endif	//USERPROFILEFILESTORAGE_H

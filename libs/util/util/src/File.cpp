@@ -144,6 +144,76 @@ bool File::move(const std::string & newName, bool overwrite) {
 	}
 }
 
+bool File::copy(const std::string & path) {
+	bool result = false;
+
+	if (!exists(path)) {
+		createPath(path);
+	}
+
+	if (isDirectory(_filename)) {
+		// Creating all directories recursively
+		StringList dirList = getDirectoryList();
+		for (StringList::const_iterator it = dirList.begin();
+			it != dirList.end(); ++it) {
+			File subDir(_filename + getPathSeparator() + (*it));
+			subDir.copy(path + getPathSeparator() + (*it));
+		}
+
+		StringList fileList = getFileList();
+		for (StringList::const_iterator it = fileList.begin();
+			it != fileList.end(); ++it) {
+			File subFile(_filename + getPathSeparator() + (*it));
+			subFile.copy(path + getPathSeparator() + (*it));
+		}
+	}
+
+	result = copyFile(path, _filename);
+
+	return result;	
+}
+
+bool File::copyFile(const std::string & dst, const std::string & src) {
+	bool result = true;
+
+	createPath(dst);
+	
+	std::string destination;
+	if (isDirectory(dst)) {
+		File srcFile(src);
+		destination = dst + srcFile.getFileName();
+	} else {
+		destination = dst;	
+	}
+
+	ifstream ifile(src.c_str(), ios::binary);
+	ofstream ofile(destination.c_str(), ios::binary);
+
+	if (ifile.fail()) {
+		LOG_ERROR(src + " does not exist");
+	}
+
+	if (ofile.fail()) {
+		LOG_ERROR("cannot open " + dst + " for writing");
+	}
+
+	static const unsigned BUFFER_SIZE = 1024;
+	char buffer[BUFFER_SIZE];
+	while (!ifile.eof()) {
+		ifile.read(buffer, BUFFER_SIZE);
+		if (ifile.bad()) {
+			LOG_ERROR("error while reading data");
+			return false;	
+		}
+		ofile.write(buffer, ifile.gcount()); 
+	}
+
+	ifile.close();
+	ofile.close();
+
+	return result;
+}
+
 std::string File::getPath() const {
 	String path = _filename;
 	path = convertPathSeparators(path);

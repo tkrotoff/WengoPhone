@@ -36,9 +36,9 @@ public:
 
 	UserProfileXMLSerializer(UserProfile & userProfile);
 
-	std::string serialize();
+	virtual std::string serialize();
 
-	bool unserialize(const std::string & data);
+	virtual bool unserialize(const std::string & data);
 
 private:
 

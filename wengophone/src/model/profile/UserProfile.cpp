@@ -228,8 +228,7 @@ void UserProfile::setWengoAccount(const WengoAccount & wengoAccount) {
 			_wengoAccount->getPassword(), EnumIMProtocol::IMProtocolWengo);
 		_removeIMAccount(imAccount);
 
-		delete _wengoAccount;
-		_wengoAccount = NULL;
+		OWSAFE_DELETE(_wengoAccount);
 	}
 
 	if (!wengoAccount.getWengoLogin().empty()) {
