@@ -191,7 +191,8 @@ IMContact * ContactProfile::getPreferredIMContact() const {
 		for (IMContactSet::const_iterator it = _imContactSet.begin() ;
 			it != _imContactSet.end() ;
 			it++) {
-			if ((*it).getPresenceState() != EnumPresenceState::PresenceStateOffline) {
+			if (((*it).getPresenceState() != EnumPresenceState::PresenceStateOffline)
+				&& ((*it).getPresenceState() != EnumPresenceState::PresenceStateUnknown)) {
 				return (IMContact *)&(*it);
 				break;
 			}
