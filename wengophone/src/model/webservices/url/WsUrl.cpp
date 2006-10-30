@@ -70,7 +70,7 @@ std::string WsUrl::getUrlWithAuth(const std::string & url) {
 		finalUrl += "&password=" + _wengoAccount->getWengoPassword();
 		LOG_DEBUG("url to open=" + finalUrl);
 	} else {
-		LOG_FATAL("no WengoAccount set, this method should not be called");
+		LOG_WARN("no WengoAccount set, this method should not be called");
 	}
 
 	return finalUrl;
