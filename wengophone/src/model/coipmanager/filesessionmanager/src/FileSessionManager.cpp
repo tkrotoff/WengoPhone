@@ -58,6 +58,7 @@ FileSessionManager::~FileSessionManager() {
 
 SendFileSession * FileSessionManager::createSendFileSession() {
 	SendFileSession * newFileSession = new SendFileSession(*this, _userProfile);
+	newFileSession->moduleFinishedEvent += boost::bind(&FileSessionManager::moduleFinishedEventHandler, this, _1);
 	return newFileSession;
 }
 
@@ -109,4 +110,18 @@ void FileSessionManager::needUpgradeEventHandler(IFileSessionManager & sender) {
 
 void FileSessionManager::peerNeedsUpgradeEventHandler(IFileSessionManager & sender) {
 	peerNeedsUpgradeEvent(*this);
+}
+
+void FileSessionManager::queueSession(SendFileSession * session) {
+	_sendSessions.push(session);
+	if(_sendSessions.size() == 1) {
+		_sendSessions.front()->start();
+	}
+}
+
+void FileSessionManager::moduleFinishedEventHandler(CoIpModule & sender) {
+	_sendSessions.pop();
+	if(_sendSessions.size() > 0) {
+		_sendSessions.front()->start();
+	}
 }

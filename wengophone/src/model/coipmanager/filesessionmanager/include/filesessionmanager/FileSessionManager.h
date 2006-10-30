@@ -25,6 +25,7 @@
 #include <util/Event.h>
 
 #include <vector>
+#include <queue>
 
 class Account;
 class IFileSessionManager;
@@ -71,6 +72,13 @@ public:
 	 */
 	SendFileSession * createSendFileSession();
 
+	/**
+	 * Queues a SendFileSession and starts it if it is the only session.
+	 *
+	 * @param	the session to queue
+	 */
+	void queueSession(SendFileSession * session);
+
 private:
 
 	/**
@@ -82,6 +90,13 @@ private:
 	void needUpgradeEventHandler(IFileSessionManager & sender);
 
 	void peerNeedsUpgradeEventHandler(IFileSessionManager & sender);
+
+	/**
+	 * Handler used to start the next session in queue
+	 *
+	 * @param	the SendFileSession that finished, as a CoIpModule
+	 */
+	void moduleFinishedEventHandler(CoIpModule & sender);
 
 	/**
 	 * Create a ISendFileSession suitable for the given contact.
@@ -96,6 +111,9 @@ private:
 
 	/** Link to UserProfile. */
 	UserProfile & _userProfile;
+
+	/** Queue to ensure that only one session is active at a time */
+	std::queue<SendFileSession *> _sendSessions;
 
 };
 

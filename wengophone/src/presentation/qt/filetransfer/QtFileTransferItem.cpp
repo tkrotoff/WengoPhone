@@ -40,7 +40,7 @@ QtFileTransferItem::QtFileTransferItem(QWidget * parent, Type type)
 	_ui->setupUi(this);
 	_ui->progressBar->setMaximum(100);
 	setProgress(0);
-	setState(tr("Starting"));
+	setState(tr("Not started yet"));
 	updateButtonsInProgress();
 	////
 
