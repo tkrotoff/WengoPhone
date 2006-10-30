@@ -169,6 +169,11 @@ void QtSimpleIMContactManager::addIMContactsOfProtocol(EnumIMProtocol::IMProtoco
 		}
 	}
 
+	//Check if id is not empty
+	if (text.isEmpty()) {
+		return;
+	}
+
 	//Add IMContacts
 	for (int i = 0; i < contactIdListAfter.size(); i++) {
 		QString contactId = contactIdListAfter[i];
