@@ -151,7 +151,7 @@ void QtAudioSettings::readConfig() {
 
 void QtAudioSettings::makeTestCallClicked() {
 	CUserProfile * cUserProfile = _cWengoPhone.getCUserProfileHandler().getCUserProfile();
-	if (cUserProfile) {
+	if ((cUserProfile) && (cUserProfile->getUserProfile().getActivePhoneLine())) {
 		cUserProfile->getUserProfile().getActivePhoneLine()->makeCall(AUDIO_TEST_CALL);
 	}
 }
