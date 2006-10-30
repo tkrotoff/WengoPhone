@@ -61,6 +61,8 @@ std::string UserProfileFileStorage::getBackupProfilePath(const std::string & pro
 }
 
 bool UserProfileFileStorage::load(const std::string & profileName) {
+	Mutex::ScopedLock lock(_mutex);
+
 	bool result = false;
 
 	if (!loadFromProfiles(profileName)) {
@@ -116,13 +118,15 @@ bool UserProfileFileStorage::loadFromDir(const std::string & path) {
 }
 
 bool UserProfileFileStorage::save(const std::string & profileName) {
+	Mutex::ScopedLock lock(_mutex);
+
 	std::string path = getProfilePath(profileName);
 	std::string newPath = getTempProfilePath(profileName);
 
 	// Backuping the last save
 	if (File::exists(path)) {
 		File file(path);
-		file.move(getBackupProfilePath(profileName));
+		file.move(getBackupProfilePath(profileName), true);
 	}
 	////
 

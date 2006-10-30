@@ -22,6 +22,7 @@
 
 #include "UserProfileStorage.h"
 
+#include <thread/Mutex.h>
 #include <util/Event.h>
 
 class UserProfileStorage;
@@ -118,6 +119,10 @@ private:
 	 * @return false if error, true otherwise
 	 */
 	bool saveProfile(const std::string & url);
+
+	/** For thread-safe operations. */
+	Mutex _mutex;
+
 };
 
 #endif	//USERPROFILEFILESTORAGE_H

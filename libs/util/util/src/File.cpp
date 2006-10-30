@@ -134,7 +134,8 @@ bool File::remove() {
 
 bool File::move(const std::string & newName, bool overwrite) {
 	if (exists(newName) && overwrite) {
-		::remove(newName.c_str());
+		File file(newName);
+		file.remove();
 	}
 
 	if (!rename(_filename.c_str(), newName.c_str())) {
