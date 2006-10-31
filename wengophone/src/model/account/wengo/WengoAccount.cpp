@@ -263,35 +263,40 @@ bool WengoAccount::discoverForSIP() {
 
 	LOG_DEBUG("discovering network parameters for SIP connection");
 
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+
 	_localSIPPort = _networkDiscovery.getFreeLocalPort();
-	LOG_DEBUG("SIP will use " + String::fromNumber(_localSIPPort) + " as local SIP port");
+	
+	if (!config.getNetWorkTunnelNeeded()) {
+		LOG_DEBUG("SIP will use " + String::fromNumber(_localSIPPort) + " as local SIP port");
 
-	// Stun test
-	unsigned short iTestStun;
-	for (iTestStun = 0; iTestStun < _testStunRetry; iTestStun++) {
-		LOG_DEBUG("testUDP (Stun): " + String::fromNumber(iTestStun + 1));
-		if (_networkDiscovery.testUDP(_stunServer)) {
-			break;
+		// Stun test
+		unsigned short iTestStun;
+		for (iTestStun = 0; iTestStun < _testStunRetry; iTestStun++) {
+			LOG_DEBUG("testUDP (Stun): " + String::fromNumber(iTestStun + 1));
+			if (_networkDiscovery.testUDP(_stunServer)) {
+				break;
+			}
 		}
-	}
 
-	if (iTestStun == _testStunRetry) {
-		// Stun test failed
-		_networkDiscovery.setNatConfig(EnumNatType::NatTypeFullCone);
-	}
-	////
-
-	// SIP test with UDP
-	for (unsigned short i = 0; i < _testSIPRetry; i++) {
-		LOG_DEBUG("testSIP test number: " + String::fromNumber(i + 1));
-
-		if (_networkDiscovery.testSIP(_sipProxyServerHostname, _sipProxyServerPort, _localSIPPort)) {
-			LOG_DEBUG("SIP can connect via UDP");
-			_needsHttpTunnel = false;
-			return true;
+		if (iTestStun == _testStunRetry) {
+			// Stun test failed
+			_networkDiscovery.setNatConfig(EnumNatType::NatTypeFullCone);
 		}
+		////
+
+		// SIP test with UDP
+		for (unsigned short i = 0; i < _testSIPRetry; i++) {
+			LOG_DEBUG("testSIP test number: " + String::fromNumber(i + 1));
+
+			if (_networkDiscovery.testSIP(_sipProxyServerHostname, _sipProxyServerPort, _localSIPPort)) {
+				LOG_DEBUG("SIP can connect via UDP");
+				_needsHttpTunnel = false;
+				return true;
+			}
+		}
+		////
 	}
-	////
 
 	LOG_DEBUG("cannot connect via UDP");
 
