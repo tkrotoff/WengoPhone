@@ -58,11 +58,6 @@ public:
 	bool userProfileExists(const std::string & name) const;
 
 	/**
-	 * @see UserProfileHandler::createUserProfile
-	 */
-	void createUserProfile(const WengoAccount & wengoAccount);
-
-	/**
 	 * @see UserProfileHandler::createAndSetUserProfile
 	 */
 	void createAndSetUserProfile(const WengoAccount & wengoAccount);
@@ -138,11 +133,6 @@ private:
 	 */
 	void profileCannotBeLoadedEventHandler(UserProfileStorage &sender,
 		std::string profileName);
-
-	/**
-	 * @see createUserProfile
-	 */
-	void createUserProfileThreadSafe(WengoAccount wengoAccount);
 
 	/**
 	 * @see createAndSetUserProfile

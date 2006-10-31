@@ -33,6 +33,9 @@
 UserProfileHandler::UserProfileHandler() {
 	_currentUserProfile = NULL;
 	_desiredUserProfile = NULL;
+
+	cleanupUserProfileDirectories();
+
 	_saveTimer.lastTimeoutEvent +=
 		boost::bind(&UserProfileHandler::saveTimerLastTimeoutEventHandler, this, _1);
 }
@@ -83,11 +86,10 @@ UserProfile * UserProfileHandler::getUserProfile(const std::string & name) {
 	return result;
 }
 
-UserProfileHandler::UserProfileHandlerError UserProfileHandler::createUserProfile(const WengoAccount & wengoAccount) {
+void UserProfileHandler::createAndSetUserProfile(const WengoAccount & wengoAccount) {
 	Mutex::ScopedLock lock(_mutex);
 
 	UserProfile * userProfile = NULL;
-	UserProfileHandlerError result = UserProfileHandlerErrorNoError;
 	std::string profileName = wengoAccount.getWengoLogin();
 
 	if (profileName.empty()) {
@@ -97,19 +99,11 @@ UserProfileHandler::UserProfileHandlerError UserProfileHandler::createUserProfil
 	if (!userProfileExists(profileName)) {
 		userProfile = new UserProfile();
 		userProfile->wengoAccountValidityEvent +=
-			boost::bind(&UserProfileHandler::wengoAccountValidityEventHandler, this, _1, _2);
+				boost::bind(&UserProfileHandler::wengoAccountValidityEventHandler, this, _1, _2);
 		userProfile->setWengoAccount(wengoAccount); // Will launch SSO request
-		result = UserProfileHandlerErrorNoError;
 	} else {
 		LOG_ERROR("A UserProfile with the name: " + profileName + " already exists");
-		result = UserProfileHandlerErrorUserProfileAlreadyExists;
 	}
-
-	return result;
-}
-
-void UserProfileHandler::createAndSetUserProfile(const WengoAccount & wengoAccount) {
-	createUserProfile(wengoAccount);
 }
 
 bool UserProfileHandler::userProfileExists(const std::string & name) {
@@ -136,10 +130,11 @@ void UserProfileHandler::setCurrentUserProfile(const std::string & name,
 		(_currentUserProfile &&
 			((_currentUserProfile->getName() != name) ||
 			((wengoAccount.getWengoPassword() != result->getWengoAccount()->getWengoPassword()) ||
-					(wengoAccount.hasAutoLogin() != result->getWengoAccount()->hasAutoLogin()))))) {
+				(wengoAccount.hasAutoLogin() != result->getWengoAccount()->hasAutoLogin()))))) {
 
 		if (result) {
 			// If the WengoAccount is not empty, we update the one in UserProfile
+			// This can happen if the password has been changed
 			if (result->hasWengoAccount() &&
 				!wengoAccount.getWengoLogin().empty() &&
 				((wengoAccount.getWengoPassword() != result->getWengoAccount()->getWengoPassword()) ||
@@ -159,9 +154,11 @@ void UserProfileHandler::setCurrentUserProfile(const std::string & name,
 				initializeCurrentUserProfile();
 			}
 		} else {
+			// log off
 			if (_currentUserProfile && name.empty()) {
 				_desiredUserProfile = NULL;
 				currentUserProfileWillDieEvent(*this);
+			// when name is empty or do not match any profile
 			} else {
 				noCurrentUserProfileSetEvent(*this);
 			}
@@ -207,23 +204,10 @@ void UserProfileHandler::initializeCurrentUserProfile() {
 		boost::bind(&UserProfileHandler::profileChangedEventHandler, this);
 	_currentUserProfile->getContactList().contactChangedEvent +=
 		boost::bind(&UserProfileHandler::profileChangedEventHandler, this);
+	_currentUserProfile->wengoAccountValidityEvent +=
+		boost::bind(&UserProfileHandler::wengoAccountValidityEventHandlerForInitialize, this, _1, _2);
 
 	_currentUserProfile->init();
-
-	if (_currentUserProfile->hasWengoAccount()
-		&& !_currentUserProfile->getWengoAccount()->isValid()) {
-		WengoAccount wengoAccount = *_currentUserProfile->getWengoAccount();
-		OWSAFE_DELETE(_currentUserProfile);
-		wengoAccountNotValidEvent(*this, wengoAccount);
-	} else {
-		WsUrl::setWengoAccount(_currentUserProfile->getWengoAccount());
-
-		userProfileInitializedEvent(*this, *_currentUserProfile);
-
-		_currentUserProfile->connect();
-
-		setLastUsedUserProfile(*_currentUserProfile);
-	}
 }
 
 void UserProfileHandler::init() {
@@ -262,4 +246,35 @@ void UserProfileHandler::wengoAccountValidityEventHandler(UserProfile & sender, 
 
 	UserProfile *senderPtr = &sender;
 	OWSAFE_DELETE(senderPtr);
+}
+
+void UserProfileHandler::wengoAccountValidityEventHandlerForInitialize(UserProfile & sender, bool valid) {
+
+	if (!valid) {
+		WengoAccount wengoAccount = *_currentUserProfile->getWengoAccount();
+		OWSAFE_DELETE(_currentUserProfile);
+		wengoAccountNotValidEvent(*this, wengoAccount);
+	} else {
+		WsUrl::setWengoAccount(_currentUserProfile->getWengoAccount());
+
+		userProfileInitializedEvent(*this, *_currentUserProfile);
+
+		_currentUserProfile->connect();
+
+		setLastUsedUserProfile(*_currentUserProfile);
+	}
+}
+
+void UserProfileHandler::cleanupUserProfileDirectories() {
+
+	StringList userProfiles = getUserProfileNames();
+	StringList::iterator it;
+	for (it = userProfiles.begin(); it != userProfiles.end(); it++) {
+
+		if (String(*it).endsWith(".new")) {
+			Config & config = ConfigManager::getInstance().getCurrentConfig();
+			File profileDirectory(File::convertPathSeparators(config.getConfigDir() + "profiles/") + (*it));
+			profileDirectory.remove();
+		}
+	}
 }

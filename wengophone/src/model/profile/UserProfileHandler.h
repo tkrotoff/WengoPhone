@@ -40,12 +40,6 @@ class WengoPhone;
 class UserProfileHandler : public Trackable {
 public:
 
-	enum UserProfileHandlerError {
-		UserProfileHandlerErrorNoError,
-		UserProfileHandlerErrorUserProfileAlreadyExists,
-		UserProfileHandlerErrorWengoAccountNotValid
-	};
-
 	/**
 	 * No current UserProfile has been set. This can happen at the first launch
 	 * of the softphone when no UserProfile has been set.
@@ -134,18 +128,6 @@ public:
 	}
 
 	/**
-	 * Creates a new UserProfile.
-	 *
-	 * Calling this function will set the current UserProfile as the
-	 * the created UserProfile.
-	 *
-	 * @param wengoAccount a UserProfile is identified with a WengoAccount.
-	 *
-	 * @return an error code
-	 */
-	UserProfileHandlerError createUserProfile(const WengoAccount & wengoAccount);
-
-	/**
 	 * Creates a new UserProfile and set it as current UserProfile.
 	 *
 	 * @param wengoAccount a UserProfile is identified with a WengoAccount.
@@ -216,6 +198,16 @@ private:
 	 * @see UserProfile::wengoAccountValidityEvent
 	 */
 	void wengoAccountValidityEventHandler(UserProfile & sender, bool valid);
+
+	/**
+	 * @see UserProfile::wengoAccountValidityEvent
+	 */
+	void wengoAccountValidityEventHandlerForInitialize(UserProfile & sender, bool valid);
+
+	/**
+	 * Remove temporary profiles (.new directories)
+	 */
+	void cleanupUserProfileDirectories();
 
 	Mutex _mutex;
 

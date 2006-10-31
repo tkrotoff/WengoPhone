@@ -31,6 +31,7 @@
 
 #include <qtutil/LanguageChangeEventFilter.h>
 #include <qtutil/WidgetBackgroundImage.h>
+#include <qtutil/SafeConnect.h>
 
 #include <util/Logger.h>
 #include <util/WebBrowser.h>
@@ -49,16 +50,14 @@ QtLogin::QtLogin(QWidget * parent, CUserProfileHandler & cUserProfileHandler)
 
 	WidgetBackgroundImage::setBackgroundImage(_ui->loginLabel, ":pics/headers/login.png", true);
 
-	connect(_ui->createWengoAccountButton, SIGNAL(clicked()), SLOT(createWengoAccountButtonClicked()));
-
-	connect(_ui->helpButton, SIGNAL(clicked()), SLOT(helpButtonClicked()));
-
-	connect(_ui->forgotPasswordButton, SIGNAL(clicked()), SLOT(forgotPasswordButtonClicked()));
-
-	connect(_ui->loginComboBox, SIGNAL(currentIndexChanged(const QString &)),
+	SAFE_CONNECT(_ui->createWengoAccountButton, SIGNAL(clicked()), SLOT(createWengoAccountButtonClicked()));
+	SAFE_CONNECT(_ui->helpButton, SIGNAL(clicked()), SLOT(helpButtonClicked()));
+	SAFE_CONNECT(_ui->forgotPasswordButton, SIGNAL(clicked()), SLOT(forgotPasswordButtonClicked()));
+	SAFE_CONNECT(_ui->loginComboBox, SIGNAL(currentIndexChanged(const QString &)),
 		SLOT(currentIndexChanged(const QString &)));
-	connect(_ui->loginButton, SIGNAL(clicked()), SLOT(loginClicked()));
-	connect(_ui->cancelButton, SIGNAL(clicked()), SLOT(cancelClicked()));
+	SAFE_CONNECT(_ui->loginButton, SIGNAL(clicked()), SLOT(loginClicked()));
+	SAFE_CONNECT(_ui->cancelButton, SIGNAL(clicked()), SLOT(cancelClicked()));
+	SAFE_CONNECT(_ui->loginComboBox->lineEdit(), SIGNAL(textEdited(const QString &)), SLOT(loginTextEdited(const QString &)));
 
 	_infoPalette = _ui->loginLabel->palette();
 
@@ -89,6 +88,7 @@ int QtLogin::show() {
 
 	setInfoMessage(tr("Please enter your email address<br/>and your password"));
 
+	_ui->passwordLineEdit->setEnabled(false);
 	_loginWindow->show();
 
 	return 0;
@@ -99,6 +99,7 @@ int QtLogin::showWithInvalidWengoAccount(WengoAccount wengoAccount) {
 
 	setErrorMessage(tr("Wrong email/password entered"));
 
+	_ui->passwordLineEdit->setEnabled(true);
 	_loginWindow->show();
 
 	return 0;
@@ -114,6 +115,8 @@ int QtLogin::showWithWengoAccount(WengoAccount wengoAccount) {
 	setAutoLogin(wengoAccount.hasAutoLogin());
 
 	_ui->loginComboBox->setCurrentIndex(_ui->loginComboBox->findText(QString::fromStdString(wengoAccount.getWengoLogin())));
+
+	_ui->passwordLineEdit->setEnabled(false);
 
 	_dontUpdateWidgets = false;
 	////
@@ -133,7 +136,7 @@ void QtLogin::createWengoAccountButtonClicked() {
 	std::string lang = config.getLanguage();
 
 	if (lang == "fr") {
-		WebBrowser::openUrl("http://www.wengo.com/public/public.php?page=subscribe_wengos&lang=fra");
+		WebBrowser::openUrl("http://www.wengo.com/publipasswordLineEditc/public.php?page=subscribe_wengos&lang=fra");
 	} else {
 		WebBrowser::openUrl("http://www.wengo.com/public/public.php?page=subscribe_wengos&lang=eng");
 	}
@@ -201,7 +204,6 @@ void QtLogin::currentIndexChanged(const QString & profileName) {
 void QtLogin::loginClicked() {
 	std::string login = _ui->loginComboBox->currentText().toStdString();
 
-	//FIXME if login is empty we should create a default profile
 	if (!login.empty()) {
 		WengoAccount wengoAccount(login, _ui->passwordLineEdit->text().toStdString(), true);
 
@@ -235,6 +237,10 @@ void QtLogin::setLoginLabel(const QString & message) {
 	QString loginLabel = QString("<font size=\"18\">Login</font><br/>%1").arg(message);
 
 	_ui->loginLabel->setText(loginLabel);
+}
+
+void QtLogin::loginTextEdited(const QString & text) {
+	_ui->passwordLineEdit->setEnabled(true);
 }
 
 void QtLogin::languageChanged() {

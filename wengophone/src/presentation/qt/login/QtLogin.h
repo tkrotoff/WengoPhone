@@ -92,6 +92,8 @@ private Q_SLOTS:
 
 	void languageChanged();
 
+	void loginTextEdited(const QString & text);
+
 private:
 
 	void setLogin(const QString & login);

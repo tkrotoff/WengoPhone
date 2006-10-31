@@ -64,18 +64,6 @@ std::vector<std::string> CUserProfileHandler::getUserProfileNames() {
 	return _userProfileHandler.getUserProfileNames();
 }
 
-void CUserProfileHandler::createUserProfile(const WengoAccount & wengoAccount) {
-	typedef ThreadEvent1<void (WengoAccount), WengoAccount> MyThreadEvent;
-	MyThreadEvent * event =
-		new MyThreadEvent(boost::bind(&CUserProfileHandler::createUserProfileThreadSafe, this, _1), wengoAccount);
-
-	WengoPhone::getInstance().postEvent(event);
-}
-
-void CUserProfileHandler::createUserProfileThreadSafe(WengoAccount wengoAccount) {
-	_userProfileHandler.createUserProfile(wengoAccount);
-}
-
 void CUserProfileHandler::createAndSetUserProfile(const WengoAccount & wengoAccount) {
 	typedef ThreadEvent1<void (WengoAccount), WengoAccount> MyThreadEvent;
 	MyThreadEvent * event =

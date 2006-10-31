@@ -144,6 +144,12 @@ public:
 	OWUTIL_API bool beginsWith(const String & str) const;
 
 	/**
+	 * @param str the string to test
+	 * @return true if String ends with str
+	 */
+	bool endsWith(const String & str) const;
+
+	/**
 	 * Gets the number of occurences of the string str inside this string.
 	 *
 	 * @param str string to find

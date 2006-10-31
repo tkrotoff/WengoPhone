@@ -72,6 +72,14 @@ bool String::beginsWith(const String & str) const {
 	return (this->find(str) == 0);
 }
 
+bool String::endsWith(const String & str) const {
+	if (size() < str.size()) {
+		return false;
+	} else {
+		return (this->rfind(str) == (size() - str.size()));
+	}
+}
+
 bool String::contains(const std::string & str, bool caseSensitive) const {
 	string tmp(c_str());
 	String str2(str);
