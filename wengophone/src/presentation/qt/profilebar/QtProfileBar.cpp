@@ -405,6 +405,7 @@ void QtProfileBar::createStatusMenu() {
 
 	SAFE_CONNECT(menu, SIGNAL(disconnectClicked()), SLOT(disconnectClicked()));
 
+	//SAFE_CONNECT(menu, SIGNAL(connectClicked()), SLOT(connectClicked()));
 	QPoint p = _statusLabel->pos();
 	p.setY(p.y() + _statusLabel->rect().bottom() - 18);
 	menu->popup(mapToGlobal(p));
