@@ -56,10 +56,10 @@ QtFileTransfer::QtFileTransfer(QObject * parent, CoIpManager * coIpManager)
 	_coIpManager->getFileSessionManager().needUpgradeEvent +=
 		boost::bind(&QtFileTransfer::needUpgradeEventHandler, this, _1);
 
-	SAFE_CONNECT(this, SIGNAL(peerNeedsUpgradeEventHandlerSignal()),
-		SLOT(peerNeedsUpgradeEventHandlerSlot()));
+	SAFE_CONNECT(this, SIGNAL(peerNeedsUpgradeEventHandlerSignal(const QString &)),
+		SLOT(peerNeedsUpgradeEventHandlerSlot(const QString &)));
 	_coIpManager->getFileSessionManager().peerNeedsUpgradeEvent +=
-		boost::bind(&QtFileTransfer::peerNeedsUpgradeEventHandler, this, _1);
+		boost::bind(&QtFileTransfer::peerNeedsUpgradeEventHandler, this, _1, _2);
 }
 
 QtFileTransfer::~QtFileTransfer() {
@@ -192,8 +192,8 @@ void QtFileTransfer::needUpgradeEventHandler(FileSessionManager & sender) {
 	needUpgradeEventHandlerSignal();
 }
 
-void QtFileTransfer::peerNeedsUpgradeEventHandler(FileSessionManager & sender) {
-	peerNeedsUpgradeEventHandlerSignal();
+void QtFileTransfer::peerNeedsUpgradeEventHandler(FileSessionManager & sender, const std::string contactID) {
+	peerNeedsUpgradeEventHandlerSignal(QString::fromStdString(contactID));
 }
 
 void QtFileTransfer::needUpgradeEventHandlerSlot() {
@@ -218,7 +218,15 @@ void QtFileTransfer::needUpgradeEventHandlerSlot() {
 	}
 }
 
-void QtFileTransfer::peerNeedsUpgradeEventHandlerSlot() {
+void QtFileTransfer::peerNeedsUpgradeEventHandlerSlot(const QString & contactID) {
+	QString status = QString(tr("<html><head><meta name=\"qrichtext\" content=\"1\" />"
+		"</head><body style=\" white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt;"
+		"font-weight:400; font-style:normal; text-decoration:none;\"><p style=\" margin-top:0px;"
+		"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"
+		"font-size:8pt;\"><span style=\" font-weight:600;\">"))
+		+ contactID
+		+ QString(tr(" is trying to send you a file:"
+		"</span> but his WengoPhone must be upgraded in order to receive it. Tell him to download the latest version.</p></body></html>"));
 	QtFileTransferUpgradeDialog qtFileTransferUpgradeDialog(_qtFileTransferWidget);
 	qtFileTransferUpgradeDialog.setHeader(tr("<html><head><meta name=\"qrichtext\" content=\"1\" />"
 		"</head><body style=\" white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt;"
@@ -226,12 +234,7 @@ void QtFileTransfer::peerNeedsUpgradeEventHandlerSlot() {
 		"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">"
 		"<span style=\" font-size:18pt; font-weight:600; color:#ffffff;\">Tell your contact<br> to"
 		"upgrade<br> his WengoPhone</span></p></body></html>"));
-	qtFileTransferUpgradeDialog.setStatus(tr("<html><head><meta name=\"qrichtext\" content=\"1\" />"
-		"</head><body style=\" white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt;"
-		"font-weight:400; font-style:normal; text-decoration:none;\"><p style=\" margin-top:0px;"
-		"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"
-		"font-size:8pt;\"><span style=\" font-weight:600;\">A contact is trying to send you a file:"
-		"</span> but his WengoPhone must be upgraded in order to receive it. Tell him to download the latest version.</p></body></html>"));
+	qtFileTransferUpgradeDialog.setStatus(status);
 
 
 	if (qtFileTransferUpgradeDialog.exec() == QDialog::Accepted) {

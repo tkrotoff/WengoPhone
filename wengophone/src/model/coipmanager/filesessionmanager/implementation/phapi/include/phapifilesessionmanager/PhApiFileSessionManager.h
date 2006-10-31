@@ -49,7 +49,7 @@ private :
 
 	void needUpgradeEventHandler(PhApiSFPWrapper & sender);
 
-	void peerNeedsUpgradeEventHandler(PhApiSFPWrapper & sender);
+	void peerNeedsUpgradeEventHandler(PhApiSFPWrapper & sender, const std::string contactID);
 
 };
 

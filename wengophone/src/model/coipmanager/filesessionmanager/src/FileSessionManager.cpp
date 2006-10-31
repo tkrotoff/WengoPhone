@@ -41,7 +41,7 @@ FileSessionManager::FileSessionManager(UserProfile & userProfile)
 
 	phapiManager->needUpgradeEvent += boost::bind(&FileSessionManager::needUpgradeEventHandler, this, _1);
 
-	phapiManager->peerNeedsUpgradeEvent += boost::bind(&FileSessionManager::peerNeedsUpgradeEventHandler, this, _1);
+	phapiManager->peerNeedsUpgradeEvent += boost::bind(&FileSessionManager::peerNeedsUpgradeEventHandler, this, _1, _2);
 
 	_fileSessionManagerVector.push_back(phapiManager);
 
@@ -109,8 +109,8 @@ void FileSessionManager::needUpgradeEventHandler(IFileSessionManager & sender) {
 	needUpgradeEvent(*this);
 }
 
-void FileSessionManager::peerNeedsUpgradeEventHandler(IFileSessionManager & sender) {
-	peerNeedsUpgradeEvent(*this);
+void FileSessionManager::peerNeedsUpgradeEventHandler(IFileSessionManager & sender, const std::string contactID) {
+	peerNeedsUpgradeEvent(*this, contactID);
 }
 
 // HACK : Unique file transfer hack

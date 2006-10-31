@@ -52,7 +52,7 @@ public:
 
 	Event <void (IFileSessionManager & sender)> needUpgradeEvent;
 
-	Event <void (IFileSessionManager & sender)> peerNeedsUpgradeEvent;
+	Event <void (IFileSessionManager & sender, const std::string contactID)> peerNeedsUpgradeEvent;
 
 	IFileSessionManager(UserProfile & userProfile);
 

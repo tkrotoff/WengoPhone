@@ -112,7 +112,20 @@ sfp_info_t * sfp_parse_message(char * text){
 					sscanf3(&text, SFP_VERSION_LINE_FORMAT, info->protocol_version, sizeof(info->protocol_version));
 					// if protocol version differs, don't try to parse the rest of the message
 					if(strcmp(info->protocol_version, SFP_PROTOCOL_VERSION) < 0){
-						if(sfp_cbks != NULL && sfp_cbks->peerNeedUpgrade) sfp_cbks->peerNeedUpgrade();
+						while(*text != SFP_ORIGIN_LINE && *text != '\0') {
+							while(*text == '\n' && *text != '\0'){
+								text++;
+							}
+							if(*text != '\0') {
+								text++;
+							}
+						}
+						if(*text == SFP_ORIGIN_LINE) {
+							sscanf3(&text, SFP_ORIGIN_LINE_FORMAT, info->file_sending_id, sizeof(info->file_sending_id), info->username, sizeof(info->username), info->network_type, sizeof(info->network_type), info->ip_address_type, sizeof(info->ip_address_type), info->ip_address, sizeof(info->ip_address), info->address_port, sizeof(info->address_port));
+							if(sfp_cbks != NULL && sfp_cbks->peerNeedUpgrade) sfp_cbks->peerNeedUpgrade(info->username);
+						} else {
+							if(sfp_cbks != NULL && sfp_cbks->peerNeedUpgrade) sfp_cbks->peerNeedUpgrade("...");
+						}
 						return NULL;
 					}else if(strcmp(info->protocol_version, SFP_PROTOCOL_VERSION) > 0){
 						if(sfp_cbks != NULL && sfp_cbks->needUpgrade) sfp_cbks->needUpgrade();

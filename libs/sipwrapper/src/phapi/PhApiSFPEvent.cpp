@@ -51,6 +51,6 @@ Event<void (PhApiSFPWrapper & sender, int callID, std::string contactID, std::st
 
 Event<void (PhApiSFPWrapper & sender, int callID, std::string contactID, std::string fileName, std::string fileType, int fileSize)> PhApiSFPEvent::transferResumedEvent;
 
-Event<void (PhApiSFPWrapper & sender)> PhApiSFPEvent::peerNeedsUpgradeEvent;
+Event<void (PhApiSFPWrapper & sender, const std::string contactID)> PhApiSFPEvent::peerNeedsUpgradeEvent;
 
 Event<void (PhApiSFPWrapper & sender)> PhApiSFPEvent::needUpgradeEvent;

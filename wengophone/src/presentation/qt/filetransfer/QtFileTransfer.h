@@ -84,7 +84,7 @@ Q_SIGNALS:
 
 	void needUpgradeEventHandlerSignal();
 
-	void peerNeedsUpgradeEventHandlerSignal();
+	void peerNeedsUpgradeEventHandlerSignal(const QString & contactID);
 
 private Q_SLOTS:
 
@@ -95,7 +95,7 @@ private Q_SLOTS:
 
 	void needUpgradeEventHandlerSlot();
 
-	void peerNeedsUpgradeEventHandlerSlot();
+	void peerNeedsUpgradeEventHandlerSlot(const QString & contactID);
 
 private:
 
@@ -106,7 +106,7 @@ private:
 
 	void needUpgradeEventHandler(FileSessionManager & sender);
 
-	void peerNeedsUpgradeEventHandler(FileSessionManager & sender);
+	void peerNeedsUpgradeEventHandler(FileSessionManager & sender, const std::string contactID);
 
 	/**
 	 * Test if a file is in a dir.

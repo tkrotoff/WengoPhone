@@ -182,7 +182,7 @@ extern "C" {
 		/** The user resumed the transfer */
 		void (*transferResumed)(int cid, char * username, char * short_filename, char * file_type, char * file_size);
 		/** The peer need to upgrade his version */
-		void (*peerNeedUpgrade)(void);
+		void (*peerNeedUpgrade)(const char * username);
 		/** The user need to upgrade his version */
 		void (*needUpgrade)(void);
 	};

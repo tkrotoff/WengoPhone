@@ -103,8 +103,8 @@ extern "C" {
 		PhApiSFPCallbacks::transferResumed(cid, std::string((const char *) username), std::string((const char *) short_filename), std::string((const char *) file_type), String(file_size).toInteger());
 	}
 
-	static void peerNeedsUpgrade() {
-		PhApiSFPCallbacks::peerNeedsUpgrade();
+	static void peerNeedsUpgrade(const char * username) {
+		PhApiSFPCallbacks::peerNeedsUpgrade(std::string(username));
 	}
 	
 	static void needUpgrade() {
@@ -203,8 +203,8 @@ void PhApiSFPCallbacks::transferResumed(int callID, std::string contactID, std::
 	PhApiSFPEvent::transferResumedEvent(PhApiSFPWrapper::getInstance(), callID, contactID, fileName, fileType, fileSize);
 }
 
-void PhApiSFPCallbacks::peerNeedsUpgrade() {
-	PhApiSFPEvent::peerNeedsUpgradeEvent(PhApiSFPWrapper::getInstance());
+void PhApiSFPCallbacks::peerNeedsUpgrade(const std::string contactID) {
+	PhApiSFPEvent::peerNeedsUpgradeEvent(PhApiSFPWrapper::getInstance(), contactID);
 }
 
 void PhApiSFPCallbacks::needUpgrade() {

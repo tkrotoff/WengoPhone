@@ -60,7 +60,7 @@ public:
 
 	Event <void (FileSessionManager & sender)> needUpgradeEvent;
 
-	Event <void (FileSessionManager & sender)> peerNeedsUpgradeEvent;
+	Event <void (FileSessionManager & sender, const std::string contactID)> peerNeedsUpgradeEvent;
 
 	FileSessionManager(UserProfile & userProfile);
 
@@ -90,7 +90,7 @@ private:
 
 	void needUpgradeEventHandler(IFileSessionManager & sender);
 
-	void peerNeedsUpgradeEventHandler(IFileSessionManager & sender);
+	void peerNeedsUpgradeEventHandler(IFileSessionManager & sender, const std::string contactID);
 
 	// HACK : Unique file transfer hack
 	/**

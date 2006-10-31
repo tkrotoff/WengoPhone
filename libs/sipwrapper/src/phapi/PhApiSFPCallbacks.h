@@ -65,7 +65,7 @@ public:
 
 	static void transferResumed(int cid, std::string contactID, std::string short_filename, std::string file_type, int file_size);
 
-	static void peerNeedsUpgrade();
+	static void peerNeedsUpgrade(const std::string contactID);
 
 	static void needUpgrade();
 

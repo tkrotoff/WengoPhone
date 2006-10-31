@@ -28,7 +28,7 @@ PhApiFileSessionManager::PhApiFileSessionManager(UserProfile & userProfile)
 : IFileSessionManager(userProfile) {
 	PhApiSFPEvent::newIncomingFileEvent += boost::bind(&PhApiFileSessionManager::newIncomingFileEventHandler, this, _1, _2, _3, _4, _5, _6);
 	PhApiSFPEvent::needUpgradeEvent += boost::bind(&PhApiFileSessionManager::needUpgradeEventHandler, this, _1);
-	PhApiSFPEvent::peerNeedsUpgradeEvent += boost::bind(&PhApiFileSessionManager::peerNeedsUpgradeEventHandler, this, _1);
+	PhApiSFPEvent::peerNeedsUpgradeEvent += boost::bind(&PhApiFileSessionManager::peerNeedsUpgradeEventHandler, this, _1, _2);
 }
 
 PhApiFileSessionManager::~PhApiFileSessionManager() {
@@ -56,6 +56,6 @@ void PhApiFileSessionManager::needUpgradeEventHandler(PhApiSFPWrapper & sender) 
 	needUpgradeEvent(*this);
 }
 
-void PhApiFileSessionManager::peerNeedsUpgradeEventHandler(PhApiSFPWrapper & sender) {
-	peerNeedsUpgradeEvent(*this);
+void PhApiFileSessionManager::peerNeedsUpgradeEventHandler(PhApiSFPWrapper & sender, const std::string contactID) {
+	peerNeedsUpgradeEvent(*this, contactID);
 }
