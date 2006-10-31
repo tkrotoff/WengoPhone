@@ -70,17 +70,12 @@ StringList UserProfileHandler::getUserProfileNames() {
 }
 
 UserProfile * UserProfileHandler::getUserProfile(const std::string & name) {
-	UserProfile * result = NULL;
-
-	if (userProfileExists(name)) {
-		result = new UserProfile();
-		UserProfileFileStorage userProfileStorage(*result);
-		userProfileStorage.profileLoadedFromBackupsEvent += profileLoadedFromBackupsEvent;
-		userProfileStorage.profileCannotBeLoadedEvent += profileCannotBeLoadedEvent;
-
-		if (!userProfileStorage.load(name)) {
-			OWSAFE_DELETE(result);
-		}
+	UserProfile * result = new UserProfile();
+	UserProfileFileStorage userProfileStorage(*result);
+	userProfileStorage.profileLoadedFromBackupsEvent += profileLoadedFromBackupsEvent;
+	userProfileStorage.profileCannotBeLoadedEvent += profileCannotBeLoadedEvent;
+	if (!userProfileStorage.load(name)) {
+		OWSAFE_DELETE(result);
 	}
 
 	return result;
