@@ -29,7 +29,6 @@
 class CWengoPhone;
 class CUserProfile;
 class IMAccount;
-class AnimatedButton;
 
 class QMenu;
 class QWidget;
@@ -111,12 +110,6 @@ private:
 	CUserProfile & _cUserProfile;
 
 	CWengoPhone & _cWengoPhone;
-
-	AnimatedButton * _msnProgressMovie;
-	AnimatedButton * _wengoProgressMovie;
-	AnimatedButton * _yahooProgressMovie;
-	AnimatedButton * _aimProgressMovie;
-	AnimatedButton * _jabberProgressMovie;
 };
 
 #endif	//OWQTIMPROFILEWIDGET_H
