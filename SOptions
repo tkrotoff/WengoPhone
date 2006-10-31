@@ -21,7 +21,7 @@ args = {
 	'enable-phapi-audio-esd' : 0,
 	'portaudio-oss' : 1,
 	'portaudio-alsa' : 1,
-	'enable-xv-hwaccel' : 1,
+	'enable-xv-hwaccel' : 0,
 
 	#if 0 wmme support
 	'portaudio-dsound' : 0,
