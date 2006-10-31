@@ -98,6 +98,25 @@ void NetworkProxyDiscovery::run() {
 		return;
 	}
 
+	// Trying to ping an http server. We do this because sometimes 
+	// a system can be set to use a proxy whereas it could connect directly.
+	if (is_http_conn_allowed("www.google.com",
+		NULL, 0, NULL, NULL,
+		NETLIB_FALSE, 10) == HTTP_OK) {
+
+		LOG_DEBUG("can connect without proxy");
+
+		_networkProxy.setServer(String::null);
+		_networkProxy.setServerPort(0);
+		_networkProxy.setLogin(String::null);
+		_networkProxy.setPassword(String::null);
+
+		saveProxySettings();
+		_state = NetworkProxyDiscoveryStateDiscovered;
+		_condition.notify_all();
+		return;
+	}
+
 	//See below for explaination about this test
 	if (_state != NetworkProxyDiscoveryStateNeedsAuthentication) {
 		LOG_DEBUG("discovering network proxy...");
