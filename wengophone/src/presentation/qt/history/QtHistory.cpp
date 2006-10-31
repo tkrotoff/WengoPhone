@@ -40,6 +40,8 @@ QtHistory::QtHistory(CHistory & cHistory)
 	: QObject(NULL),
 	_cHistory(cHistory) {
 
+	_mutex = new QMutex(QMutex::Recursive);
+
 	_stateFilter = HistoryMemento::Any;
 	_historyWidget = new QtHistoryWidget(NULL);
 
@@ -53,6 +55,7 @@ QtHistory::QtHistory(CHistory & cHistory)
 }
 
 QtHistory::~QtHistory() {
+	delete _mutex;
 }
 
 QWidget * QtHistory::getWidget() const {
@@ -69,6 +72,8 @@ void QtHistory::showOnlyItemOfTypeSlot(int state) {
 }
 
 void QtHistory::updatePresentation() {
+	QMutexLocker locker(_mutex);
+
 	_historyWidget->clearHistory();
 
 	HistoryMementoCollection * collection = _cHistory.getHistory().getHistoryMementoCollection();

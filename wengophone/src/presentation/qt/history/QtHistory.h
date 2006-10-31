@@ -25,6 +25,7 @@
 #include <model/history/HistoryMemento.h>
 
 #include <QtCore/QObject>
+#include <QtCore/QMutex>
 
 class CHistory;
 class QtHistoryWidget;
@@ -95,6 +96,8 @@ private:
 	HistoryMemento::State _stateFilter;
 
 	CHistory & _cHistory;
+
+	mutable QMutex * _mutex;
 };
 
 #endif	//QTHISTORY_H
