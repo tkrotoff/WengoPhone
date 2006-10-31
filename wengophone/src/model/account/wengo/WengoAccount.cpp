@@ -376,6 +376,7 @@ void WengoAccount::answerReceived(const std::string & answer, int requestId) {
 			//SIP connection test can now be launched as _ssoTimer has been joined in init()
 		} else {
 			LOG_DEBUG("login/password not Ok");
+			_wengoLoginOk = false;
 			_ssoTimer.stop();
 			_ssoTimerFinished = true;
 		}
