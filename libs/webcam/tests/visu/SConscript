@@ -2,6 +2,7 @@ env = WengoGetQt4Environment()
 
 libs = [
 	'webcam',
+	'owthread',
 	'qt4',
 ]
 
