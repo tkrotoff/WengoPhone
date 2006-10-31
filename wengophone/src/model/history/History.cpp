@@ -147,13 +147,13 @@ bool History::load(const std::string & url) {
 
 		//clear & unserialize the history
 		clear(HistoryMemento::Any, false);
-		unserialize(data);
+		bool toReturn = unserialize(data);
 		historyLoadedEvent(*this);
 
-		return true;
+		return toReturn;
 	}
 
-	return false;
+	return true;
 }
 
 bool History::save(const std::string & url) {

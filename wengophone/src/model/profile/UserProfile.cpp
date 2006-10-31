@@ -384,7 +384,7 @@ void UserProfile::loginStateChangedEventHandler(SipAccount & sender, EnumSipLogi
 
 			addPhoneLine(*_wengoAccount);
 
-			loadHistory();
+			loadHistory(getProfileDirectory());
 
 			//FIXME: currently there is only one sip account and we are sure
 			//this is a Wengo account.
@@ -432,7 +432,7 @@ IPhoneLine * UserProfile::findWengoPhoneLine() {
 }
 
 void UserProfile::historyChangedEventHandler(History & sender, int id) {
-	saveHistory();
+	profileChangedEvent(*this);
 }
 
 void UserProfile::setIcon(const OWPicture & icon, IMAccount * imAccount) {
@@ -447,14 +447,15 @@ void UserProfile::connectedEventHandler(ConnectHandler & sender, IMAccount & imA
 	_presenceHandler.changeMyIcon(_icon, NULL);
 }
 
-void UserProfile::loadHistory() {
-	_history->load(getProfileDirectory() + "history.xml");
+bool UserProfile::loadHistory(const std::string & path) {
+	bool toReturn = _history->load(path + "history.xml");
 	_historyLoaded = true;
 	historyLoadedEvent(*this, *_history);
+	return toReturn;
 }
 
-void UserProfile::saveHistory() {
-	_history->save(getProfileDirectory() + "history.xml");
+bool UserProfile::saveHistory(const std::string & path) {
+	return _history->save(path + "history.xml");
 }
 
 bool UserProfile::hasWengoAccount() const {

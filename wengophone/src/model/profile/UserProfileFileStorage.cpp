@@ -114,6 +114,10 @@ bool UserProfileFileStorage::loadFromDir(const std::string & path) {
 		return false;
 	}
 
+	if (!_userProfile.loadHistory(path)) {
+		return false;
+	}
+
 	return true;
 }
 
@@ -153,13 +157,17 @@ bool UserProfileFileStorage::save(const std::string & profileName) {
 	if (!contactListFileStorage.save(newPath)) {
 		return false;
 	}
+
+	if (!_userProfile.saveHistory(newPath)) {
+		return false;
+	}
 	////
 
 	// If successful move the 'dir.new' to 'dir'
 	File file(newPath);
 	file.move(getProfilePath(profileName));
 	////
-
+	
 	return true;
 }
 

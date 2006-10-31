@@ -280,12 +280,12 @@ public:
 	/**
 	 * Loads the history.
 	 */
-	void loadHistory();
+	bool loadHistory(const std::string & path);
 
 	/**
 	 * Saves the history.
 	 */
-	void saveHistory();
+	bool saveHistory(const std::string & path);
 
 	/**
 	 * Sets the WengoAccount of this UserProfile.
