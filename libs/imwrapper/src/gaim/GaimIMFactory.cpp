@@ -133,10 +133,6 @@ static guint gaim_wg_input_add(gint fd, GaimInputCondition condition,
 	return closure->result;
 }
 
-static void sigpipe_catcher(int sig) {
-	LOG_DEBUG("SIGPIPE caught: " + String::fromNumber(sig));
-}
-
 gpointer GaimMainEventLoop(gpointer data) {
 	GMainLoop * loop = g_main_loop_new(NULL, FALSE);
 	g_main_loop_run(loop);
@@ -219,10 +215,6 @@ void GaimIMFactory::GaimIMInit() {
 	gaim_plugins_add_search_path(search_path);
 	gaim_plugins_add_search_path("plugins");
 	g_free(search_path);
-
-#if defined(OS_MACOSX) || defined(OS_LINUX)
-	signal(SIGPIPE, sigpipe_catcher);
-#endif
 
 	if (!gaim_core_init("Wengo GAIM")) {
 		fprintf(stderr, "Initialization of the Gaim core failed\n");

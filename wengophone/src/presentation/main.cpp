@@ -80,10 +80,18 @@ std::string getAddionnalInfo() {
 	return info;
 }
 
+static void sigpipe_catcher(int sig) {
+	LOG_DEBUG("SIGPIPE caught: " + String::fromNumber(sig));
+}
+
 int main(int argc, char * argv[]) {
 
 	//Todo before anything else: initializes the logger system
 	LOG_DEBUG("WengoPhone started");
+
+#if defined(OS_MACOSX) || defined(OS_LINUX)
+	signal(SIGPIPE, sigpipe_catcher);
+#endif
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
