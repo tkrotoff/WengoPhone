@@ -257,5 +257,6 @@ void UserProfileHandler::wengoAccountValidityEventHandler(UserProfile & sender, 
 		wengoAccountNotValidEvent(*this, *sender.getWengoAccount());
 	}
 
-	OWSAFE_DELETE(&sender);
+	UserProfile *senderPtr = &sender;
+	OWSAFE_DELETE(senderPtr);
 }
