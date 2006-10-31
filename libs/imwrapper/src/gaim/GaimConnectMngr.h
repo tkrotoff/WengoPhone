@@ -54,6 +54,8 @@ public:
 	static void ConnDisconnectedCbk(GaimConnection *gc);
 	static void ConnNoticeCbk(GaimConnection *gc, const char *text);
 	static void ConnReportDisconnectCbk(GaimConnection *gc, const char *text);
+	static void NetworkConnected();
+	static void NetworkDisconnected();
 	/* ********************************************** */
 
 private:

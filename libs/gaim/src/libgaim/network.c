@@ -26,6 +26,9 @@
 #include "internal.h"
 
 #ifndef _WIN32
+#include <resolv.h>
+#include <netinet/in.h>
+#include <arpa/nameser.h>
 #include <net/if.h>
 #include <sys/ioctl.h>
 #else
@@ -377,7 +380,10 @@ gaim_network_get_port_from_fd(int fd)
 }
 
 #ifdef _WIN32
-static guint
+#ifndef NS_NLA
+#define NS_NLA 15
+#endif
+static gint
 wgaim_get_connected_network_count(void)
 {
 	guint net_cnt = 0;
@@ -388,13 +394,18 @@ wgaim_get_connected_network_count(void)
 
 	memset(&qs, 0, sizeof(WSAQUERYSET));
 	qs.dwSize = sizeof(WSAQUERYSET);
-	qs.dwNameSpace = NS_ALL;
+	qs.dwNameSpace = NS_NLA;
 
 	retval = WSALookupServiceBegin(&qs, LUP_RETURN_ALL, &h);
 	if (retval != ERROR_SUCCESS) {
-		gchar *msg = g_win32_error_message(retval);
-		gaim_debug_warning("network", "Couldn't look up connected networks. %s (%lu).\n", msg, retval);
+		int errorid = WSAGetLastError();
+		gchar *msg = g_win32_error_message(errorid);
+		gaim_debug_warning("network", "Couldn't retrieve NLA SP lookup handle. "
+						"NLA service is probably not running. Message: %s (%d).\n",
+						msg, errorid);
 		g_free(msg);
+
+		return -1;
 	} else {
 		char buf[1024];
 		WSAQUERYSET *res = (LPWSAQUERYSET) buf;
@@ -415,16 +426,20 @@ wgaim_get_connected_network_count(void)
 
 static gboolean wgaim_network_change_thread_cb(gpointer data)
 {
-	guint new_count;
+	gint new_count;
 	GaimConnectionUiOps *ui_ops = gaim_connections_get_ui_ops();
 
 	new_count = wgaim_get_connected_network_count();
 
+	if (new_count < 0)
+		return FALSE;
+
 	gaim_debug_info("network", "Received Network Change Notification. Current network count is %d, previous count was %d.\n", new_count, current_network_count);
 
-	if (new_count > 0) {
+	if (new_count > 0 && ui_ops != NULL && ui_ops->network_connected != NULL) {
 		ui_ops->network_connected();
-	} else if (new_count == 0 && current_network_count > 0) {
+	} else if (new_count == 0 && current_network_count > 0 &&
+			   ui_ops != NULL && ui_ops->network_disconnected != NULL) {
 		ui_ops->network_disconnected();
 	}
 
@@ -437,15 +452,14 @@ static gpointer wgaim_network_change_thread(gpointer data)
 {
 	HANDLE h;
 	WSAQUERYSET qs;
+	time_t last_trigger = time(NULL);
 
 	int WSAAPI (*MyWSANSPIoctl) (
-	HANDLE hLookup, DWORD dwControlCode, LPVOID lpvInBuffer,
-	DWORD cbInBuffer, LPVOID lpvOutBuffer, DWORD cbOutBuffer,
-	LPDWORD lpcbBytesReturned, LPWSACOMPLETION lpCompletion) = NULL;
+		HANDLE hLookup, DWORD dwControlCode, LPVOID lpvInBuffer,
+		DWORD cbInBuffer, LPVOID lpvOutBuffer, DWORD cbOutBuffer,
+		LPDWORD lpcbBytesReturned, LPWSACOMPLETION lpCompletion) = NULL;
  
-	MyWSANSPIoctl = (void*) wgaim_find_and_loadproc("ws2_32.dll", "WSANSPIoctl");
-	if (!MyWSANSPIoctl) {
-		gaim_debug_error("network", "Couldn't load WSANSPIoctl from ws2_32.dll.\n");
+	if (!(MyWSANSPIoctl = (void*) wgaim_find_and_loadproc("ws2_32.dll", "WSANSPIoctl"))) {
 		g_thread_exit(NULL);
 		return NULL;
 	}
@@ -456,20 +470,42 @@ static gpointer wgaim_network_change_thread(gpointer data)
 
 		memset(&qs, 0, sizeof(WSAQUERYSET));
 		qs.dwSize = sizeof(WSAQUERYSET);
-		qs.dwNameSpace = NS_ALL;
+		qs.dwNameSpace = NS_NLA;
+		if (WSALookupServiceBegin(&qs, 0, &h) == SOCKET_ERROR) {
+			int errorid = WSAGetLastError();
+			gchar *msg = g_win32_error_message(errorid);
+			gaim_debug_warning("network", "Couldn't retrieve NLA SP lookup handle. "
+				"NLA service is probably not running. Message: %s (%d).\n",
+				msg, errorid);
+			g_free(msg);
+			g_thread_exit(NULL);
+			return NULL;
+		}
 
-		retval = WSALookupServiceBegin(&qs, LUP_RETURN_ALL, &h);
+		/* Make sure at least 30 seconds have elapsed since the last
+		 * notification so we don't peg the cpu if this keeps changing. */
+		if ((time(NULL) - last_trigger) < 30)
+			Sleep(30000);
+
+		last_trigger = time(NULL);
 
 		/* This will block until there is a network change */
-		/* This is missing from the MinGW libws2_32.a as of version 3.7.
-		 * When this patch: http://sourceforge.net/tracker/index.php?func=detail&aid=1576083&group_id=2435&atid=302435 gets into a release, we can call this directly
-		 * retval = WSANSPIoctl(h, SIO_NSP_NOTIFY_CHANGE, NULL, 0, NULL, 0, &retLen, NULL);*/
-		 retval = MyWSANSPIoctl(h, SIO_NSP_NOTIFY_CHANGE, NULL, 0, NULL, 0, &retLen, NULL);
+		if (MyWSANSPIoctl(h, SIO_NSP_NOTIFY_CHANGE, NULL, 0, NULL, 0, &retLen, NULL) == SOCKET_ERROR) {
+			int errorid = WSAGetLastError();
+			gchar *msg = g_win32_error_message(errorid);
+			gaim_debug_warning("network", "Unable to wait for changes. Message: %s (%d).\n",
+				msg, errorid);
+			g_free(msg);
+		}
 
 		retval = WSALookupServiceEnd(h);
 
 		g_idle_add(wgaim_network_change_thread_cb, NULL);
+
 	}
+
+	g_thread_exit(NULL);
+	return NULL;
 }
 #endif
 
@@ -489,7 +525,7 @@ gaim_network_is_available(void)
 		}
 		if (libnm_retval == LIBNM_ACTIVE_NETWORK_CONNECTION)	return TRUE;
 	}
-#elif _WIN32
+#elif defined _WIN32
 	return (current_network_count > 0);
 #endif
 	return TRUE;
@@ -511,13 +547,17 @@ nm_callback_func(libnm_glib_ctx* ctx, gpointer user_data)
 	switch(current)
 	{
 	case LIBNM_ACTIVE_NETWORK_CONNECTION:
-		ui_ops->network_connected();
+		/* Call res_init in case DNS servers have changed */
+		res_init();
+		if (ui_ops != NULL && ui_ops->network_connected != NULL)
+			ui_ops->network_connected();
 		prev = current;
 		break;
 	case LIBNM_NO_NETWORK_CONNECTION:
 		if (prev != LIBNM_ACTIVE_NETWORK_CONNECTION)
 			break;
-		ui_ops->network_disconnected();
+		if (ui_ops != NULL && ui_ops->network_disconnected != NULL)
+			ui_ops->network_disconnected();
 		prev = current;
 		break;
 	case LIBNM_NO_DBUS:
@@ -534,9 +574,17 @@ gaim_network_init(void)
 {
 #ifdef _WIN32
 	GError *err = NULL;
-	current_network_count = wgaim_get_connected_network_count();
-	if (!g_thread_create(wgaim_network_change_thread, NULL, FALSE, &err))
-		gaim_debug_error("network", "Couldn't create Network Monitor thread: %s\n", err ? err->message : "");
+	gint cnt = wgaim_get_connected_network_count();
+
+	if (cnt < 0) /* Assume there is a network */
+		current_network_count = 1;
+	/* Don't listen for network changes if we can't tell anyway */
+	else
+	{
+		current_network_count = cnt;
+		if (!g_thread_create(wgaim_network_change_thread, NULL, FALSE, &err))
+			gaim_debug_error("network", "Couldn't create Network Monitor thread: %s\n", err ? err->message : "");
+	}
 #endif
 
 	gaim_prefs_add_none  ("/core/network");

@@ -68,6 +68,7 @@ public:
 	static void CustomSmileyWriteCbk(GaimConversation *conv, const char *smile,
 									const guchar *data, gsize size);
 	static void CustomSmileyCloseCbk(GaimConversation *conv, const char *smile);
+	static void SendConfirm(GaimConversation *conv, const char *message);
 	/* ************************************************** */
 
 	static void UpdateBuddyTyping(GaimConversation *conv, GaimTypingState state);

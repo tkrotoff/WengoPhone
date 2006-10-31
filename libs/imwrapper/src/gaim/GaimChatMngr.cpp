@@ -144,6 +144,11 @@ static void C_CustomSmileyCloseCbk(GaimConversation *conv, const char *smile)
 	GaimChatMngr::CustomSmileyCloseCbk(conv, smile);
 }
 
+static void C_SendConfirm(GaimConversation *conv, const char *message)
+{
+	GaimChatMngr::SendConfirm(conv, message);
+}
+
 GaimConversationUiOps chat_wg_ops = {
 	C_CreateConversationCbk,
 	C_DestroyConversationCbk,	/* destroy_conversation */
@@ -159,6 +164,7 @@ GaimConversationUiOps chat_wg_ops = {
 	C_CustomSmileyAddCbk,		/* custom_smiley_add */
 	C_CustomSmileyWriteCbk,		/* custom_smiley_write */
 	C_CustomSmileyCloseCbk,		/* custom_smiley_close */
+	C_SendConfirm,				/* send_confirm */
 };
 
 
@@ -457,6 +463,10 @@ void GaimChatMngr::CustomSmileyWriteCbk(GaimConversation *conv, const char *smil
 }
 
 void GaimChatMngr::CustomSmileyCloseCbk(GaimConversation *conv, const char *smile)
+{
+}
+
+void GaimChatMngr::SendConfirm(GaimConversation *conv, const char *message)
 {
 }
 

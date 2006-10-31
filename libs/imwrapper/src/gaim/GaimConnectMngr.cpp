@@ -51,13 +51,25 @@ static void C_ConnReportDisconnectCbk(GaimConnection *gc, const char *text)
 	GaimConnectMngr::ConnReportDisconnectCbk(gc, text);
 }
 
+static void C_NetworkConnected()
+{
+	GaimConnectMngr::NetworkConnected();
+}
+
+static void C_NetworkDisconnected()
+{
+	GaimConnectMngr::NetworkDisconnected();
+}
+
 GaimConnectionUiOps conn_wg_ops =
 {
 	C_ConnProgressCbk,
 	C_ConnConnectedCbk,
 	C_ConnDisconnectedCbk,
 	C_ConnNoticeCbk,
-	C_ConnReportDisconnectCbk
+	C_ConnReportDisconnectCbk,
+	C_NetworkConnected,
+	C_NetworkDisconnected,
 };
 
 /* ************************************************** */
@@ -153,6 +165,16 @@ void GaimConnectMngr::ConnReportDisconnectCbk(GaimConnection *gc, const char *te
 		mIMConnect->setConnected(false);
 		mIMConnect->disconnectedEvent(*mIMConnect, true, text == NULL ? String::null : text);
 	}
+}
+
+void GaimConnectMngr::NetworkConnected()
+{
+	NetworkConnected();
+}
+
+void GaimConnectMngr::NetworkDisconnected()
+{
+	NetworkDisconnected();
 }
 
 /* **************** MANAGE CONNECT_LIST ****************** */
