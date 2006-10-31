@@ -209,9 +209,9 @@ changeWengoPhoneInstallName "$QTDIR/lib/QtSvg.framework/Versions/4.0/QtSvg" "QtS
 # Change install name of WengoPhone. Libraries that could be installed by fink but that are available by
 # default on Mac OS X.
 ##
-changeWengoPhoneInstallName "/sw/lib/libssl.0.9.7.dylib" "/usr/lib/libssl.dylib"
-changeWengoPhoneInstallName "/sw/lib/libcrypto.0.9.7.dylib" "/usr/lib/libcrypto.dylib"
-changeWengoPhoneInstallName "/sw/lib/libxml2.2.dylib" "/usr/lib/libxml2.dylib"
+install_name_tool -change "/sw/lib/libssl.0.9.7.dylib" "/usr/lib/libssl.dylib" $WENGO_EXE
+install_name_tool -change "/sw/lib/libcrypto.0.9.7.dylib" "/usr/lib/libcrypto.dylib" $WENGO_EXE
+install_name_tool -change "/sw/lib/libxml2.2.dylib" "/usr/lib/libxml2.dylib" $WENGO_EXE
 
 ##
 # Change install name of copied libraries

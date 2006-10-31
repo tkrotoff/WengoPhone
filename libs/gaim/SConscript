@@ -91,10 +91,19 @@ if WengoOSWindows() and WengoCCMSVC():
 if WengoOSMacOSX():
 	include_path += [
 		'/sw/include', # for gnutls
+		'/usr/include/libxml2', # for libxml
 	]
 
 	lib_path += [
 		'/sw/lib', # for gnutls. FIXME: works only with fink
+	]
+
+	libs += [
+		'xml2',
+		'pthread',
+		'z',
+		'iconv',
+		'm',
 	]
 
 	defines['MSG_NOSIGNAL'] = 0
@@ -318,7 +327,10 @@ if WengoCCGCC() or WengoCCMinGW():
 
 	env.ParseConfig('pkg-config --cflags --libs gthread-2.0')
 	env.ParseConfig('pkg-config --cflags --libs gmodule-2.0')
-	env.ParseConfig('pkg-config --cflags --libs libxml-2.0')
+
+	if not WengoOSMacOSX():
+		# This lib is installed by default on Mac OS X
+		env.ParseConfig('pkg-config --cflags --libs libxml-2.0')
 
 	env.WengoAddDefines(defines)
 	env.WengoAddLibPath(lib_path)
