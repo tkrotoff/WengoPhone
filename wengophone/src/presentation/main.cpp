@@ -61,6 +61,10 @@
 	#include <memorydump/MemoryDump.h>
 #endif
 
+#if defined(OS_MACOSX) || defined(OS_LINUX)
+	#include <signal.h>
+#endif
+
 #include <QtGui/QtGui>
 
 /**
