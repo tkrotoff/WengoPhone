@@ -58,7 +58,7 @@ QtVideoSettings::QtVideoSettings(CWengoPhone & cWengoPhone, QWidget * parent)
 	SAFE_CONNECT(_ui->webcamDeviceComboBox, SIGNAL(activated(const QString &)), SLOT(startWebcamPreview(const QString &)));
 	SAFE_CONNECT(_ui->makeTestVideoCallButton, SIGNAL(clicked()), SLOT(makeTestCallClicked()));
 	SAFE_CONNECT(_ui->webcamPreviewButton, SIGNAL(clicked()), SLOT(webcamPreview()));
-
+	
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	//No webcam driver
 	if (_webcamDriver->getDeviceList().empty()) {
@@ -148,6 +148,10 @@ void QtVideoSettings::readConfig() {
 
 void QtVideoSettings::frameCapturedEventHandler(IWebcamDriver * sender, piximage * image) {
 	Mutex::ScopedLock lock(_mutex);
+
+	if (!_ui->webcamSelectionGroupBox->isEnabled()) {
+		return;
+	}
 
 	//TODO: optimize: free and alloc a new piximage only if the size changed
 	if (_rgbImage) {

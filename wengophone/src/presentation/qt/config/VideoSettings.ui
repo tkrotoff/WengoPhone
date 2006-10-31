@@ -50,7 +50,7 @@
           <number>6</number>
          </property>
          <item row="0" column="0" >
-          <widget class="QGroupBox" name="groupBox_2" >
+          <widget class="QGroupBox" name="webcamSelectionGroupBox" >
            <property name="title" >
             <string>Webcam Selection</string>
            </property>
