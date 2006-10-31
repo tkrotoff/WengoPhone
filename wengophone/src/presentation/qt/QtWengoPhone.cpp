@@ -746,24 +746,24 @@ void QtWengoPhone::showAddContact(ContactInfo contactInfo) {
 
 		//FIXME to remove when wdeal will be able to handle SIP presence
 		if (contactInfo.group == "WDeal") {
-			qtProfileDetails.setHomePhone(QString::fromStdString(contactInfo.sip));
+			qtProfileDetails.setHomePhone(QString::fromUtf8(contactInfo.sip.c_str()));
 		} else {
-			qtProfileDetails.setWengoName(QString::fromStdString(contactInfo.wengoName));
+			qtProfileDetails.setWengoName(QString::fromUtf8(contactInfo.wengoName.c_str()));
 		}
 		///
 
 		if (contactInfo.group == "WDeal") {
-			qtProfileDetails.setFirstName(QString::fromStdString(contactInfo.wdealServiceTitle));
+			qtProfileDetails.setFirstName(QString::fromUtf8(contactInfo.wdealServiceTitle.c_str()));
 		} else {
-			qtProfileDetails.setFirstName(QString::fromStdString(contactInfo.firstname));
+			qtProfileDetails.setFirstName(QString::fromUtf8(contactInfo.firstname.c_str()));
 		}
 
-		qtProfileDetails.setLastName(QString::fromStdString(contactInfo.lastname));
-		qtProfileDetails.setCountry(QString::fromStdString(contactInfo.country));
-		qtProfileDetails.setCity(QString::fromStdString(contactInfo.city));
-		qtProfileDetails.setState(QString::fromStdString(contactInfo.state));
-		qtProfileDetails.setGroup(QString::fromStdString(contactInfo.group));
-		qtProfileDetails.setWebsite(QString::fromStdString(contactInfo.website));
+		qtProfileDetails.setLastName(QString::fromUtf8(contactInfo.lastname.c_str()));
+		qtProfileDetails.setCountry(QString::fromUtf8(contactInfo.country.c_str()));
+		qtProfileDetails.setCity(QString::fromUtf8(contactInfo.city.c_str()));
+		qtProfileDetails.setState(QString::fromUtf8(contactInfo.state.c_str()));
+		qtProfileDetails.setGroup(QString::fromUtf8(contactInfo.group.c_str()));
+		qtProfileDetails.setWebsite(QString::fromUtf8(contactInfo.website.c_str()));
 
 		if (qtProfileDetails.show()) {
 			_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCContactList().addContact(contactProfile);
