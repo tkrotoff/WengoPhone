@@ -53,11 +53,6 @@ public:
 	 * @see UserProfileHandler::wengoAccountNotValidEvent
 	 */
 	virtual void wengoAccountNotValidEventHandler(const WengoAccount & wengoAccount) = 0;
-
-	/**
-	 * @see UserProfileHandler::defaultUserProfileExistsEventHandler
-	 */
-	virtual void defaultUserProfileExistsEventHandler(const std::string & createdProfileName) = 0;
 };
 
 #endif	//PUSERPROFILEHANDLER_H

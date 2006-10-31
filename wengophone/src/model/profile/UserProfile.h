@@ -69,8 +69,6 @@ class UserProfile : public Profile, public Trackable {
 	friend class Connect;
 public:
 
-	static const std::string DEFAULT_USERPROFILE_NAME;
-
 	/**
 	 * Login procedure is done, event with the procedure result.
 	 *
@@ -84,6 +82,13 @@ public:
 	 * @see SipAccount::networkDiscoveryStateChangedEvent
 	 */
 	Event< void (SipAccount & sender, SipAccount::NetworkDiscoveryState state) > networkDiscoveryStateChangedEvent;
+
+	/**
+	 * Emitted when WengoAccount has been found valid after a SSO Request.
+	 *
+	 * @param valid true if WengoAccount is valid.
+	 */
+	Event<void (UserProfile & sender, bool valid) > wengoAccountValidityEvent;
 
 	/**
 	 * A new IMAccount has been added.
@@ -308,16 +313,6 @@ public:
 	}
 
 	/**
-	 * Check if the WengoAccount is valid.
-	 *
-	 * If no wengo account is set true is returned.
-	 * If a wengo account is set but the initalization has not been made
-	 * initialization is launched. The method blocks until initialization
-	 * is finished (it can take from few seconds to several minutes).
-	 */
-	bool isWengoAccountValid();
-
-	/**
 	 * Adds an IMAccount to this UserProfile.
 	 * This method should currently not be called to add a Wengo
 	 * IMAccount. A Wengo IMAccount is created internally when setWengoAccount
@@ -535,14 +530,6 @@ private:
 	WenboxPlugin * _wenboxPlugin;
 
 	bool _wengoAccountConnected;
-
-	bool _wengoAccountInitializationFinished;
-
-	bool _wengoAccountIsValid;
-
-	Condition _wengoAccountIsValidCondition;
-
-	Mutex _wengoAccountIsValidMutex;
 
 	/**
 	 * True if the UserProfile must connect after intialization of the

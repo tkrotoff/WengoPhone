@@ -52,8 +52,6 @@
 
 using namespace std;
 
-const std::string UserProfile::DEFAULT_USERPROFILE_NAME = "Default";
-
 UserProfile::UserProfile()
 	: _imContactListHandler(*this),
 	_connectHandler(*this),
@@ -73,8 +71,6 @@ UserProfile::UserProfile()
 	_imAccountHandler = new IMAccountHandler();
 	_presenceState = EnumPresenceState::PresenceStateOffline;
 	_wengoAccountConnected = false;
-	_wengoAccountInitializationFinished = false;
-	_wengoAccountIsValid = false;
 	_wengoAccountMustConnectAfterInit = false;
 	_wenboxPlugin = NULL;
 	_historyLoaded = false;
@@ -232,7 +228,6 @@ void UserProfile::setWengoAccount(const WengoAccount & wengoAccount) {
 	}
 
 	if (!wengoAccount.getWengoLogin().empty()) {
-		_wengoAccountInitializationFinished = false;
 		_wengoAccount = new WengoAccount(wengoAccount);
 		computeName();
 
@@ -358,9 +353,7 @@ void UserProfile::loginStateChangedEventHandler(SipAccount & sender, EnumSipLogi
 			_wengoAccount->getPassword(), EnumIMProtocol::IMProtocolWengo);
 		_addIMAccount(imAccount);
 
-		_wengoAccountIsValid = true;
-		_wengoAccountInitializationFinished = true;
-		_wengoAccountIsValidCondition.notify_all();
+		wengoAccountValidityEvent(*this, true);
 
 		if (_wengoAccountMustConnectAfterInit) {
 			_wengoAccountMustConnectAfterInit = false;
@@ -405,9 +398,7 @@ void UserProfile::loginStateChangedEventHandler(SipAccount & sender, EnumSipLogi
 	}
 
 	case EnumSipLoginState::SipLoginStatePasswordError: {
-		_wengoAccountIsValid = false;
-		_wengoAccountInitializationFinished = true;
-		_wengoAccountIsValidCondition.notify_all();
+		wengoAccountValidityEvent(*this, false);
 
 		break;
 	}
@@ -485,30 +476,9 @@ void UserProfile::wsCallForwardEventHandler(WsCallForward & sender,
 }
 
 void UserProfile::computeName() {
-	if (!_wengoAccount || _wengoAccount->getWengoLogin().empty()) {
-		_name = DEFAULT_USERPROFILE_NAME;
-	} else {
+	if (_wengoAccount) {
 		_name = _wengoAccount->getWengoLogin();
 	}
-}
-
-bool UserProfile::isWengoAccountValid() {
-	Mutex::ScopedLock lock(_wengoAccountIsValidMutex);
-
-	bool result = false;
-
-	if (!hasWengoAccount()) {
-		result = true;
-	} else {
-		// Waiting for end of Wengo initialization
-		if (!_wengoAccountInitializationFinished) {
-			_wengoAccountIsValidCondition.wait(lock);
-		}
-
-		result = _wengoAccountIsValid;
-	}
-
-	return result;
 }
 
 bool UserProfile::isConnected() const {

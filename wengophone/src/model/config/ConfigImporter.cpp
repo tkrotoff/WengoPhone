@@ -642,65 +642,44 @@ void * ConfigImporter::getLastWengoUser(const std::string & configUserFile, unsi
 }
 
 bool ConfigImporter::importConfigFromV1toV3() {
+	Mutex::ScopedLock lock(_wengoAccountValidityMutex);
 
-	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	string classicPath = getWengoClassicConfigPath();
 	File mDir(classicPath);
-	StringList dirList = mDir.getDirectoryList();
-	string sep = mDir.getPathSeparator();
-	UserProfile userProfile;
-
 	last_user_t * lastUser = (last_user_t *) getLastWengoUser(classicPath + USERCONFIG_FILENAME, CONFIG_VERSION1);
 	if (lastUser) {
+		UserProfile userProfile;
 		WengoAccount wAccount(lastUser->login, lastUser->password, true);
-		userProfile.setWengoAccount(wAccount);
-
-		if (userProfile.isWengoAccountValid()) {
+		userProfile.setWengoAccount(wAccount); // Launch SSO request
+		_wengoAccountValidityCondition.wait(lock);
+	
+		if (_wengoAccountValidityResult) {
+			string sep = mDir.getPathSeparator();
 			String oldPath = classicPath + lastUser->login + sep + "contacts" + sep;
 			importContactsFromV1toV3(oldPath, userProfile);
 
 			UserProfileFileStorage fStorage(userProfile);
 			fStorage.save(userProfile.getName());
+
+			Config & config = ConfigManager::getInstance().getCurrentConfig();
+			config.set(config.PROFILE_LAST_USED_NAME_KEY, userProfile.getName());
 		}
-	}
-
-/*	for (int i = 0; i < dirList.size(); i++) {
-		if (strcmp(lastUser->login.c_str(), dirList[i].c_str())) {
-			continue;
-		}
-
-		String newDir(config.getConfigDir() + sep + "profiles" + sep + dirList[i] + sep);
-		File::createPath(newDir);
-		string path = classicPath + dirList[i] + sep + "contacts" + sep;
-
-		UserProfile userProfile1;
-		WengoAccount wAccount(dirList[i], String::null, false);
-		userProfile1.setWengoAccount(wAccount);
-
-		importContactsFromV1toV3(path, userProfile1);
-
-		UserProfileFileStorage fStorage(userProfile1);
-		fStorage.save(newDir);
-	}
-*/
-	if (userProfile.isWengoAccountValid()) {
-		config.set(config.PROFILE_LAST_USED_NAME_KEY, userProfile.getName());
 	}
 
 	return true;
 }
 
 bool ConfigImporter::importConfigFromV2toV3() {
+	Mutex::ScopedLock lock(_wengoAccountValidityMutex);
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	String configDir = config.getConfigDir();
-	UserProfile userProfile;
-	string sep = File::getPathSeparator();
 
 	FileReader file(configDir + USERPROFILE_FILENAME);
 	if (file.open()) {
 		string data = file.read();
 		file.close();
 
+		UserProfile userProfile;
 		UserProfileXMLSerializer serializer(userProfile);
 		serializer.unserialize(data);
 
@@ -711,8 +690,9 @@ bool ConfigImporter::importConfigFromV2toV3() {
 
 		WengoAccount wAccount(lastUser->login, Base64::decode(lastUser->password), lastUser->auto_login);
 		userProfile.setWengoAccount(wAccount);
+		_wengoAccountValidityCondition.wait(lock);
 
-		if (userProfile.isWengoAccountValid()) {
+		if (_wengoAccountValidityResult) {
 			//remove user.config and userprofile.xml from the main directory
 			File userConfigFile(configDir + USERCONFIG_FILENAME);
 			userConfigFile.remove();
@@ -830,4 +810,9 @@ bool ConfigImporter::importConfigFromV4toV5() {
 	////
 
 	return true;
+}
+
+void ConfigImporter::wengoAccountValidityEventHandler(UserProfile & sender, bool valid) {
+	_wengoAccountValidityResult = valid;
+	_wengoAccountValidityCondition.notify_all();
 }

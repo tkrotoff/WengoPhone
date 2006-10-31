@@ -78,11 +78,6 @@ public:
 	void currentUserProfileReleased();
 
 	/**
-	 * @see UserProfileHandler::importDefaultProfileToProfile
-	 */
-	void importDefaultProfileToProfile(const std::string & profileName);
-
-	/**
 	 * Return a copy of the WengoAccount of the UserProfile named 'name'.
 	 *
 	 * If no UserProfile found the WengoAccount.getWengoLogin() will return
@@ -132,12 +127,6 @@ private:
 		WengoAccount & wengoAccount);
 
 	/**
-	 * @see UserProfileHandler::defaultUserProfileExists
-	 */
-	void defaultUserProfileExistsEventHandler(UserProfileHandler & sender,
-		const std::string & createdProfileName);
-
-	/**
 	 * @see createUserProfile
 	 */
 	void createUserProfileThreadSafe(WengoAccount wengoAccount);
@@ -157,11 +146,6 @@ private:
 	 * @see currentUserProfileReleased
 	 */
 	void currentUserProfileReleasedThreadSafe();
-
-	/**
-	 * @see importDefaultProfileToProfile
-	 */
-	void importDefaultProfileToProfileThreadSafe(std::string profileName);
 
 	CUserProfile * _cUserProfile;
 

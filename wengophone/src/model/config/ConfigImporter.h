@@ -23,6 +23,9 @@
 #include <model/account/SipAccount.h>
 #include <model/account/wengo/WengoAccount.h>
 
+#include <thread/Condition.h>
+#include <thread/Mutex.h>
+
 #include <string>
 
 class Contact;
@@ -78,6 +81,20 @@ private:
 	bool importContactsFromV1toV3(const std::string & fromDir, UserProfile & userProfile);
 
 	void addContactDetails(Contact & contact, void * structVcard);
+
+	/**
+	 * @see UserProfile::wengoAccountValidityEvent
+	 */
+	void wengoAccountValidityEventHandler(UserProfile & sender, bool valid);
+
+	/**
+	 * Used to block method importConfigFromVXtoVY until reception of 
+	 * wengoAccountValidityEvent.
+	 */
+	Condition _wengoAccountValidityCondition;
+	Mutex _wengoAccountValidityMutex;
+
+	bool _wengoAccountValidityResult;
 
 	UserProfileHandler & _userProfileHandler;
 };

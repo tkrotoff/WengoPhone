@@ -81,16 +81,6 @@ public:
 	Event<void (UserProfileHandler & sender,
 		WengoAccount & wengoAccount)> wengoAccountNotValidEvent;
 
-	/**
-	 * Emitted when a non-Default UserProfile has been created and when a
-	 * Default UserProfile exists.
-	 *
-	 * Thus a dialog window can appear to propose to import ContactList and
-	 * IMAccounts from the Default UserProfile to the created UserProfile.
-	 */
-	Event<void (UserProfileHandler & sender,
-		const std::string & createdProfileName)> defaultUserProfileExistsEvent;
-
 	UserProfileHandler();
 
 	~UserProfileHandler();
@@ -139,8 +129,6 @@ public:
 	 * the created UserProfile.
 	 *
 	 * @param wengoAccount a UserProfile is identified with a WengoAccount.
-	 * If the WengoAccount is empty (that is it has an empty login), a 'Default'
-	 * UserProfile is created.
 	 *
 	 * @return an error code
 	 */
@@ -150,8 +138,6 @@ public:
 	 * Creates a new UserProfile and set it as current UserProfile.
 	 *
 	 * @param wengoAccount a UserProfile is identified with a WengoAccount.
-	 * If the WengoAccount is empty (that is to say it has an empty login),
-	 *  a 'Default' UserProfile is created.
 	 */
 	void createAndSetUserProfile(const WengoAccount & wengoAccount);
 
@@ -168,12 +154,6 @@ public:
 	 * destroyed.
 	 */
 	void currentUserProfileReleased();
-
-	/**
-	 * Imports contacts and IM accounts from the 'Default' profile (if it
-	 * exists) to the given profile and delete the 'Default' profile.
-	 */
-	void importDefaultProfileToProfile(const std::string & profileName);
 
 	/**
 	 * Saves the last used UserProfile in Config.
@@ -197,11 +177,6 @@ private:
 	 */
 	void initializeCurrentUserProfile();
 
-	/*
-	 * @see Profile::profileChangedEvent
-	 */
-	void profileChangedEventHandler();
-
 	/**
 	 * Sets the last used UserProfile.
 	 *
@@ -216,15 +191,10 @@ private:
 	 */
 	void saveUserProfile(UserProfile & userProfile);
 
-	/**
-	 * @see importDefaultProfileToProfile
-	 * When calling importDefaultProfileToProfile, the current UserProfile
-	 * will be destroyed and thus UserProfileHandler must wait for the
-	 * release of the currentUserProfile. When currentUserProfileReleased
-	 * will be called it will call actuallyImportDefaultProfileToProfile to
-	 * actually import the default profile to the desired UserProfile.
+	/*
+	 * @see Profile::profileChangedEvent
 	 */
-	void actuallyImportDefaultProfileToProfile();
+	void profileChangedEventHandler();
 
 	/**
 	 * @see Timer::lastTimeoutEvent
@@ -232,16 +202,9 @@ private:
 	void saveTimerLastTimeoutEventHandler(Timer & sender);
 
 	/**
-	 * True if UserProfileHandler must call actuallyImportDefaultProfileToProfile
-	 * in currentUserProfileReleased.
+	 * @see UserProfile::wengoAccountValidityEvent
 	 */
-	bool _importDefaultProfileToProfile;
-
-	/**
-	 * Name of the UserProfile to import when calling
-	 * actuallyImportDefaultProfileToProfile.
-	 */
-	std::string _nameOfProfileToImport;
+	void wengoAccountValidityEventHandler(UserProfile & sender, bool valid);
 
 	Mutex _mutex;
 

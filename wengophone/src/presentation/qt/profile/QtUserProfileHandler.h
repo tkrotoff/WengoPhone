@@ -63,11 +63,6 @@ public:
 	 */
 	void wengoAccountNotValidEventHandler(const WengoAccount & wengoAccount);
 
-	/**
-	 * @see CUserProfileHandler::defaultUserProfileExistsEventHandler
-	 */
-	void defaultUserProfileExistsEventHandler(const std::string & createdProfileName);
-
 Q_SIGNALS:
 
 	/**
@@ -89,11 +84,6 @@ Q_SIGNALS:
 	 * @see wengoAccountNotValidEventHandler
 	 */
 	void wengoAccountNotValidEventHandlerSignal(WengoAccount wengoAccount);
-
-	/**
-	 * @see defaultUserProfileExistsEventHandler
-	 */
-	void defaultUserProfileExistsEventHandlerSignal(QString createdProfileName);
 
 public Q_SLOTS:
 
@@ -130,11 +120,6 @@ private Q_SLOTS:
 	 * @see wengoAccountNotValidEventHandler
 	 */
 	void wengoAccountNotValidEventHandlerSlot(WengoAccount wengoAccount);
-
-	/**
-	 * @see defaultUserProfileExistsEventHandler
-	 */
-	void defaultUserProfileExistsEventHandlerSlot(QString createdProfileName);
 
 private:
 

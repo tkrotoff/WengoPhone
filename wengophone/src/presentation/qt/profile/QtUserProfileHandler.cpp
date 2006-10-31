@@ -50,8 +50,6 @@ QtUserProfileHandler::QtUserProfileHandler(CUserProfileHandler & cUserProfileHan
 	qRegisterMetaType<WengoAccount>("WengoAccount");
 	SAFE_CONNECT_TYPE(this, SIGNAL(wengoAccountNotValidEventHandlerSignal(WengoAccount)),
 		SLOT(wengoAccountNotValidEventHandlerSlot(WengoAccount)), Qt::QueuedConnection);
-	SAFE_CONNECT_TYPE(this, SIGNAL(defaultUserProfileExistsEventHandlerSignal(QString)),
-		SLOT(defaultUserProfileExistsEventHandlerSlot(QString)), Qt::QueuedConnection);
 }
 
 void QtUserProfileHandler::initThreadSafe() {
@@ -92,10 +90,6 @@ void QtUserProfileHandler::wengoAccountNotValidEventHandler(const WengoAccount &
 	wengoAccountNotValidEventHandlerSignal(wengoAccount);
 }
 
-void QtUserProfileHandler::defaultUserProfileExistsEventHandler(const std::string & createdProfileName) {
-	defaultUserProfileExistsEventHandlerSignal(QString::fromStdString(createdProfileName));
-}
-
 void QtUserProfileHandler::noCurrentUserProfileSetEventHandlerSlot() {
 	showLoginWindow();
 }
@@ -111,22 +105,6 @@ void QtUserProfileHandler::userProfileInitializedEventHandlerSlot() {
 
 void QtUserProfileHandler::wengoAccountNotValidEventHandlerSlot(WengoAccount wengoAccount) {
 	_qtLogin->showWithInvalidWengoAccount(wengoAccount);
-}
-
-void QtUserProfileHandler::defaultUserProfileExistsEventHandlerSlot(QString createdProfileName) {
-	QString message = tr("Would you like to import contacts and IM accounts"
-		" previously created in the default profile to the profile named %1?");
-	message = message.arg(createdProfileName);
-
-	int ret = QMessageBox::question(_qtWengoPhone.getWidget(),
-		tr("WengoPhone - Importing contacts and IM accounts"),
-		message,
-		QMessageBox::Yes,
-		QMessageBox::No);
-
-	if (ret == QMessageBox::Yes) {
-		_cUserProfileHandler.importDefaultProfileToProfile(createdProfileName.toStdString());
-	}
 }
 
 void QtUserProfileHandler::showLoginWindow() {
