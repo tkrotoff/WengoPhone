@@ -298,6 +298,10 @@ StringList File::getFileList() const {
 		while ((ep = readdir(dp))) {
 			String file(ep->d_name);
 
+			if ((file == ".") || (file == "..")) {
+				continue;
+			}
+
 			std::string absPath = _filename + file;
 			if (!isDirectory(absPath)) {
 				fileList += file;
