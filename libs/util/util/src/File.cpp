@@ -95,8 +95,15 @@ std::string File::getExtension() const {
 bool File::isDirectory(const std::string & filename) {
 	struct stat statinfo;
 	bool result = false;
+	std::string myFilename = filename;
 
-	if (stat(filename.c_str(), &statinfo) == 0) {
+#ifdef OS_WINDOWS
+	if (myFilename.substr(myFilename.size() - 1, 1) == getPathSeparator()) {
+		myFilename = myFilename.substr(0, myFilename.size() - 1);
+	}
+#endif
+
+	if (stat(myFilename.c_str(), &statinfo) == 0) {
 		if (S_ISDIR(statinfo.st_mode)) {
 			result = true;
 		}
@@ -125,8 +132,14 @@ bool File::remove() {
 		}
 	}
 
-	if (!::remove(_filename.c_str())) {
-		result = true;
+	if (isDirectory(_filename)) {
+		if (!::rmdir(_filename.c_str())) {
+			result = true;
+		}
+	} else {
+		if (!::remove(_filename.c_str())) {
+			result = true;
+		}
 	}
 
 	return result;
