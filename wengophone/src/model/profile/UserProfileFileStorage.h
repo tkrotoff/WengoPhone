@@ -39,17 +39,6 @@ class UserProfileFileStorage : public UserProfileStorage {
 public:
 
 	/**
-	 * Emitted when loading the profile failed and getting the backup
-	 * worked.
-	 */
-	Event < void (UserProfileFileStorage & sender, std::string profileName) > profileLoadedFromBackupsEvent;
-
-	/**
-	 * Emitted when loading the profile failed with both normal and backup way.
-	 */
-	Event < void (UserProfileFileStorage & sender, std::string profileName) > profileCannotBeLoadedEvent;
-	
-	/**
 	 * Gets the full path to the profile named 'profileName'.
 	 */
 	static std::string getProfilePath(const std::string & profileName);

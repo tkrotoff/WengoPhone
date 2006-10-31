@@ -75,6 +75,7 @@ string ContactXMLSerializer::serialize() {
 bool ContactXMLSerializer::unserialize(const string & data) {
 	TiXmlDocument doc;
 	EnumIMProtocol imProtocol;
+	bool result = true;
 
 	doc.Parse(data.c_str());
 
@@ -92,13 +93,13 @@ bool ContactXMLSerializer::unserialize(const string & data) {
 
 	//Retrieving IMContacts
 	TiXmlNode * imLastChild = NULL;
-	while ((imLastChild = wgCard.Node()->IterateChildren("im", imLastChild))) {
+	while (result && (imLastChild = wgCard.Node()->IterateChildren("im", imLastChild))) {
 		string imData;
 		IMContact imContact(EnumIMProtocol::IMProtocolUnknown, String::null);
 		IMContactXMLSerializer imContactSerializer(imContact, _imAccountHandler);
 
 		imData << *imLastChild;
-		imContactSerializer.unserialize(imData);
+		result = imContactSerializer.unserialize(imData);
 
 		_contact._addIMContact(imContact);
 	}
@@ -106,5 +107,5 @@ bool ContactXMLSerializer::unserialize(const string & data) {
 
 	_contact.updatePresenceState();
 
-	return true;
+	return result;
 }

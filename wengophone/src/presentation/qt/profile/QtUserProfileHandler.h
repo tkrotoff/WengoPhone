@@ -43,25 +43,17 @@ public:
 
 	virtual ~QtUserProfileHandler();
 
-	/**
-	 * @see CUserProfileHandler::noCurrentUserProfileSetEventHandler
-	 */
-	void noCurrentUserProfileSetEventHandler();
+	virtual void noCurrentUserProfileSetEventHandler();
 
-	/**
-	 * @see CUserProfileHandler::currentUserProfileWillDieEventHandler
-	 */
-	void currentUserProfileWillDieEventHandler();
+	virtual void currentUserProfileWillDieEventHandler();
 
-	/**
-	 * @see CUserProfileHandler::userProfileInitializedEventHandler
-	 */
-	void userProfileInitializedEventHandler();
+	virtual void userProfileInitializedEventHandler();
 
-	/**
-	 * @see CUserProfileHandler::wengoAccountNotValidEventHandler
-	 */
-	void wengoAccountNotValidEventHandler(const WengoAccount & wengoAccount);
+	virtual void wengoAccountNotValidEventHandler(const WengoAccount & wengoAccount);
+
+	virtual void profileLoadedFromBackupsEventHandler(std::string profileName);
+
+	virtual void profileCannotBeLoadedEventHandler(std::string profileName);
 
 Q_SIGNALS:
 
@@ -84,6 +76,16 @@ Q_SIGNALS:
 	 * @see wengoAccountNotValidEventHandler
 	 */
 	void wengoAccountNotValidEventHandlerSignal(WengoAccount wengoAccount);
+
+	/**
+	 * @see profileLoadedFromBackupsEventHandler
+	 */
+	void profileLoadedFromBackupsEventHandlerSignal(QString profileName);
+
+	/**
+	 * @see profileCannotBeLoadedEventHandler
+	 */
+	void profileCannotBeLoadedEventHandlerSignal(QString profileName);
 
 public Q_SLOTS:
 
@@ -120,6 +122,16 @@ private Q_SLOTS:
 	 * @see wengoAccountNotValidEventHandler
 	 */
 	void wengoAccountNotValidEventHandlerSlot(WengoAccount wengoAccount);
+
+	/**
+	 * @see profileLoadedFromBackupsEventHandler
+	 */
+	void profileLoadedFromBackupsEventHandlerSlot(QString profileName);
+
+	/**
+	 * @see profileCannotBeLoadedEventHandler
+	 */
+	void profileCannotBeLoadedEventHandlerSlot(QString profileName);
 
 private:
 

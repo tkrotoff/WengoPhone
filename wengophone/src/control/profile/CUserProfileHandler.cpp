@@ -49,6 +49,10 @@ CUserProfileHandler::CUserProfileHandler(UserProfileHandler & userProfileHandler
 		boost::bind(&CUserProfileHandler::userProfileInitializedEventHandler, this, _1, _2);
 	_userProfileHandler.wengoAccountNotValidEvent +=
 		boost::bind(&CUserProfileHandler::wengoAccountNotValidEventHandler, this, _1, _2);
+	_userProfileHandler.profileLoadedFromBackupsEvent +=
+		boost::bind(&CUserProfileHandler::profileLoadedFromBackupsEventHandler, this, _1, _2);
+	_userProfileHandler.profileCannotBeLoadedEvent +=
+		boost::bind(&CUserProfileHandler::profileCannotBeLoadedEventHandler, this, _1, _2);
 }
 
 CUserProfileHandler::~CUserProfileHandler() {
@@ -148,4 +152,10 @@ void CUserProfileHandler::wengoAccountNotValidEventHandler(UserProfileHandler & 
 	_pUserProfileHandler->wengoAccountNotValidEventHandler(wengoAccount);
 }
 
+void CUserProfileHandler::profileLoadedFromBackupsEventHandler(UserProfileStorage &sender, std::string profileName) {
+	_pUserProfileHandler->profileLoadedFromBackupsEventHandler(profileName);
+}
 
+void CUserProfileHandler::profileCannotBeLoadedEventHandler(UserProfileStorage &sender, std::string profileName) {
+	_pUserProfileHandler->profileCannotBeLoadedEventHandler(profileName);
+}

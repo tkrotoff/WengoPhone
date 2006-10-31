@@ -72,6 +72,9 @@ UserProfile * UserProfileHandler::getUserProfile(const std::string & name) {
 	if (userProfileExists(name)) {
 		result = new UserProfile();
 		UserProfileFileStorage userProfileStorage(*result);
+		userProfileStorage.profileLoadedFromBackupsEvent += profileLoadedFromBackupsEvent;
+		userProfileStorage.profileCannotBeLoadedEvent += profileCannotBeLoadedEvent;
+
 		if (!userProfileStorage.load(name)) {
 			OWSAFE_DELETE(result);
 		}

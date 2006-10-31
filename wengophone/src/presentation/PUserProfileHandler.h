@@ -53,6 +53,16 @@ public:
 	 * @see UserProfileHandler::wengoAccountNotValidEvent
 	 */
 	virtual void wengoAccountNotValidEventHandler(const WengoAccount & wengoAccount) = 0;
+
+	/**
+	 * @see UserProfileStorage::profileLoadedFromBackupsEvent
+	 */
+	virtual void profileLoadedFromBackupsEventHandler(std::string profileName) = 0;
+
+	/**
+	 * @see UserProfileStorage::profileCannotBeLoadedEvent
+	 */
+	virtual void profileCannotBeLoadedEventHandler(std::string profileName) = 0;
 };
 
 #endif	//PUSERPROFILEHANDLER_H

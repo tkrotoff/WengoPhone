@@ -87,7 +87,8 @@ bool IMContactXMLSerializer::unserialize(const std::string & data) {
 		if (it != _imAccountHandler.end()) {
 			_imContact._imAccount = (IMAccount *)&(*it);
 		} else {
-			LOG_FATAL("this IMAccount does not exist in IMAccountHandler: " + account.getLogin());
+			LOG_ERROR("this IMAccount does not exist in IMAccountHandler: " + account.getLogin());
+			return false;
 		}
 		////
 	} else {

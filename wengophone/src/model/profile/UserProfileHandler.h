@@ -28,6 +28,7 @@
 
 class Profile;
 class UserProfile;
+class UserProfileStorage;
 class WengoAccount;
 class WengoPhone;
 
@@ -80,6 +81,16 @@ public:
 	 */
 	Event<void (UserProfileHandler & sender,
 		WengoAccount & wengoAccount)> wengoAccountNotValidEvent;
+
+	/**
+	 * @see UserProfileStorage::profileLoadedFromBackupsEvent
+	 */
+	Event < void (UserProfileStorage &sender, std::string profileName) > profileLoadedFromBackupsEvent;
+
+	/**
+	 * @see UserProfileStorage::profileCannotBeLoadedEvent
+	 */
+	Event < void (UserProfileStorage &sender, std::string profileName) > profileCannotBeLoadedEvent;
 
 	UserProfileHandler();
 

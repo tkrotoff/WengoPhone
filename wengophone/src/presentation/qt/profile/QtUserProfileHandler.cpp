@@ -50,6 +50,10 @@ QtUserProfileHandler::QtUserProfileHandler(CUserProfileHandler & cUserProfileHan
 	qRegisterMetaType<WengoAccount>("WengoAccount");
 	SAFE_CONNECT_TYPE(this, SIGNAL(wengoAccountNotValidEventHandlerSignal(WengoAccount)),
 		SLOT(wengoAccountNotValidEventHandlerSlot(WengoAccount)), Qt::QueuedConnection);
+	SAFE_CONNECT_TYPE(this, SIGNAL(profileLoadedFromBackupsEventHandlerSignal(QString)),
+		SLOT(profileLoadedFromBackupsEventHandlerSlot(QString)), Qt::QueuedConnection);
+	SAFE_CONNECT_TYPE(this, SIGNAL(profileCannotBeLoadedEventHandlerSignal(QString)),
+		SLOT(profileCannotBeLoadedEventHandlerSlot(QString)), Qt::QueuedConnection);
 }
 
 void QtUserProfileHandler::initThreadSafe() {
@@ -90,6 +94,14 @@ void QtUserProfileHandler::wengoAccountNotValidEventHandler(const WengoAccount &
 	wengoAccountNotValidEventHandlerSignal(wengoAccount);
 }
 
+void QtUserProfileHandler::profileLoadedFromBackupsEventHandler(std::string profileName) {
+	profileLoadedFromBackupsEventHandlerSignal(QString::fromStdString(profileName));
+}
+
+void QtUserProfileHandler::profileCannotBeLoadedEventHandler(std::string profileName) {
+	profileCannotBeLoadedEventHandlerSignal(QString::fromStdString(profileName));
+}
+
 void QtUserProfileHandler::noCurrentUserProfileSetEventHandlerSlot() {
 	showLoginWindow();
 }
@@ -105,6 +117,21 @@ void QtUserProfileHandler::userProfileInitializedEventHandlerSlot() {
 
 void QtUserProfileHandler::wengoAccountNotValidEventHandlerSlot(WengoAccount wengoAccount) {
 	_qtLogin->showWithInvalidWengoAccount(wengoAccount);
+}
+
+void QtUserProfileHandler::profileLoadedFromBackupsEventHandlerSlot(QString profileName) {
+	QMessageBox::warning(_qtWengoPhone.getWidget(), "WengoPhone",
+		tr("A problem occured while loading your profile.\n"
+			"The last backuped profile has been loaded: \n"
+			"you may have lost last changes made"),
+		QMessageBox::Ok, QMessageBox::NoButton);
+}
+
+void QtUserProfileHandler::profileCannotBeLoadedEventHandlerSlot(QString profileName) {
+	QMessageBox::warning(_qtWengoPhone.getWidget(), "WengoPhone",
+		tr("Your profile could not be loaded.\n"
+			"Choose another profile or create a new one."),
+		QMessageBox::Ok, QMessageBox::NoButton);
 }
 
 void QtUserProfileHandler::showLoginWindow() {

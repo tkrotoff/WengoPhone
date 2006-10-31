@@ -33,6 +33,7 @@ class CWengoPhone;
 class PUserProfileHandler;
 class UserProfile;
 class UserProfileHandler;
+class UserProfileStorage;
 
 /**
  * Control of UserProfileHandler.
@@ -125,6 +126,18 @@ private:
 	 */
 	void wengoAccountNotValidEventHandler(UserProfileHandler & sender,
 		WengoAccount & wengoAccount);
+
+	/**
+	 * @see UserProfileStorage::profileLoadedFromBackupsEvent
+	 */
+	void profileLoadedFromBackupsEventHandler(UserProfileStorage &sender,
+		std::string profileName);
+
+	/**
+	 * @see UserProfileStorage::profileCannotBeLoadedEvent
+	 */
+	void profileCannotBeLoadedEventHandler(UserProfileStorage &sender,
+		std::string profileName);
 
 	/**
 	 * @see createUserProfile

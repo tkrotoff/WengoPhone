@@ -22,6 +22,8 @@
 
 #include <serialization/Storage.h>
 
+#include <util/Event.h>
+
 class UserProfile;
 
 /**
@@ -33,6 +35,17 @@ class UserProfile;
 class UserProfileStorage : public Storage {
 public:
 
+	/**
+	 * Emitted when loading the profile failed and getting the backup
+	 * worked.
+	 */
+	Event < void (UserProfileStorage & sender, std::string profileName) > profileLoadedFromBackupsEvent;
+
+	/**
+	 * Emitted when loading the profile failed with both normal and backup way.
+	 */
+	Event < void (UserProfileStorage & sender, std::string profileName) > profileCannotBeLoadedEvent;
+	
 	UserProfileStorage(UserProfile & userProfile)
 		: _userProfile(userProfile) { }
 

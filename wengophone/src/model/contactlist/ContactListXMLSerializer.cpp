@@ -52,6 +52,7 @@ string ContactListXMLSerializer::serialize() {
 
 bool ContactListXMLSerializer::unserialize(const std::string & data) {
 	TiXmlDocument doc;
+	bool result = true;
 
 	doc.Parse(data.c_str());
 
@@ -61,15 +62,15 @@ bool ContactListXMLSerializer::unserialize(const std::string & data) {
 	if (contactlist) {
 		//Retrieving Contacts
 		TiXmlNode * lastChild = NULL;
-		while ((lastChild = contactlist->IterateChildren("wgcard", lastChild))) {
+		while (result && (lastChild = contactlist->IterateChildren("wgcard", lastChild))) {
 			string nodeData;
 			nodeData << *lastChild;
 			ContactXMLSerializer serializer(_contactList.createContact(),
 				_contactList, _imAccountHandler);
-			serializer.unserialize(nodeData);
+			result = serializer.unserialize(nodeData);
 		}
 		////
 	}
 
-	return true;
+	return result;
 }
