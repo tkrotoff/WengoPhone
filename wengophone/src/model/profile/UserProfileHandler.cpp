@@ -223,6 +223,8 @@ void UserProfileHandler::saveUserProfile(UserProfile & userProfile) {
 }
 
 void UserProfileHandler::profileChangedEventHandler() {
+	Mutex::ScopedLock lock(_mutex);
+	
 	if (!_saveTimerRunning) {
 		_saveTimerRunning = true;
 		_saveTimer.start(5000, 5000, 1);
@@ -230,6 +232,8 @@ void UserProfileHandler::profileChangedEventHandler() {
 }
 
 void UserProfileHandler::saveTimerLastTimeoutEventHandler(Timer & sender) {
+	Mutex::ScopedLock lock(_mutex);
+
 	saveUserProfile(*_currentUserProfile);
 	_saveTimerRunning = false;
 }
