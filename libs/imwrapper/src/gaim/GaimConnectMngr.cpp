@@ -169,12 +169,10 @@ void GaimConnectMngr::ConnReportDisconnectCbk(GaimConnection *gc, const char *te
 
 void GaimConnectMngr::NetworkConnected()
 {
-	NetworkConnected();
 }
 
 void GaimConnectMngr::NetworkDisconnected()
 {
-	NetworkDisconnected();
 }
 
 /* **************** MANAGE CONNECT_LIST ****************** */
