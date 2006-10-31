@@ -23,6 +23,7 @@
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
 #include <model/profile/UserProfile.h>
+#include <model/webservices/info/WsInfo.h>
 
 #include <util/Logger.h>
 
@@ -76,6 +77,11 @@ void WsSms::answerReceived(const std::string & answer, int requestId) {
 			//History: retrieve the HistoryMemento & update its state to Ok
 			_userProfile.getHistory().updateSMSState(requestId, HistoryMemento::OutgoingSmsOk);
 
+			WsInfo * wsInfo = _userProfile.getWsInfo();
+			if (wsInfo) {
+				wsInfo->getWengosCount(true);
+				wsInfo->execute();
+			}
 			return;
 		}
 	}
