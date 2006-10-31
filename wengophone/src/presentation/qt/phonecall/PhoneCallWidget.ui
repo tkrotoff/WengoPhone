@@ -303,7 +303,7 @@
       <string/>
      </property>
      <property name="pixmap" >
-      <pixmap resource="../wengophone.qrc" >:/pics/default-avatar.png</pixmap>
+      <pixmap/>
      </property>
      <property name="alignment" >
       <set>Qt::AlignCenter</set>
@@ -317,6 +317,9 @@
      </property>
      <property name="alignment" >
       <set>Qt::AlignCenter</set>
+     </property>
+     <property name="wordWrap" >
+      <bool>true</bool>
      </property>
     </widget>
    </item>
