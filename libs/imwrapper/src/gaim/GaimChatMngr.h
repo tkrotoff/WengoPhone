@@ -56,7 +56,7 @@ public:
 	static void WriteConvCbk(GaimConversation *conv, const char *name, const char *alias,
 							const char *message, GaimMessageFlags flags, time_t mtime);
 	static void ChatAddUsersCbk(GaimConversation *conv, GList *users,
-							GList *flags, GList *aliases, gboolean new_arrivals);
+								gboolean new_arrivals);
 	static void ChatRenameUserCbk(GaimConversation *conv, const char *old_name,
 								const char *new_name, const char *new_alias);
 	static void ChatRemoveUsersCbk(GaimConversation *conv, GList *users);

@@ -97,10 +97,9 @@ static void C_WriteConvCbk(GaimConversation *conv, const char *name, const char 
 	GaimChatMngr::WriteConvCbk(conv, name, alias, message, flags, mtime);
 }
 
-static void C_ChatAddUsersCbk(GaimConversation *conv, GList *users, GList *flags,
-						   GList *aliases, gboolean new_arrivals)
+static void C_ChatAddUsersCbk(GaimConversation *conv, GList *users, gboolean new_arrivals)
 {
-	GaimChatMngr::ChatAddUsersCbk(conv, users, flags, aliases, new_arrivals);
+	GaimChatMngr::ChatAddUsersCbk(conv, users, new_arrivals);
 }
 
 static void C_ChatRenameUserCbk(GaimConversation *conv, const char *old_name,
@@ -349,8 +348,7 @@ void GaimChatMngr::WriteConvCbk(GaimConversation *conv, const char *name, const 
 	}
 }
 
-void GaimChatMngr::ChatAddUsersCbk(GaimConversation *conv, GList *users,
-								   GList *flags, GList *aliases, gboolean new_arrivals)
+void GaimChatMngr::ChatAddUsersCbk(GaimConversation *conv, GList *users, gboolean new_arrivals)
 {
 	GList *l;
 	GaimAccount *gAccount = gaim_conversation_get_account(conv);

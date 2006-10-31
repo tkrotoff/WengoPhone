@@ -198,9 +198,9 @@ void GaimIMFactory::GaimIMInit() {
 	}
 
 #ifdef OS_WIN32
-	wgaim_init(GetModuleHandle(0));
+	wgaim_init();
 #endif
-
+	
 	std::string configPath;
 
 #if defined(OS_MACOSX) || defined(OS_WINDOWS)
@@ -220,7 +220,7 @@ void GaimIMFactory::GaimIMInit() {
 	gaim_plugins_add_search_path("plugins");
 	g_free(search_path);
 
-#ifdef OS_MACOSX
+#if defined(OS_MACOSX) || defined(OS_LINUX)
 	signal(SIGPIPE, sigpipe_catcher);
 #endif
 

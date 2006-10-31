@@ -23,7 +23,8 @@ CreateShortCut "$DESKTOP\${PRODUCT_NAME}.lnk" "$INSTDIR\qtwengophone.exe"
 File "${BUILD_DIR}\..\wengophone\COPYING"
 
 /** Gaim. */
-File "${BUILD_DIR}\gaim.dll"
+File "${BUILD_DIR}\libgaim.dll"
+File "${BUILD_DIR}\libxml2.dll"
 File "${BUILD_DIR}\iconv.dll"
 File "${BUILD_DIR}\intl.dll"
 File "${BUILD_DIR}\nspr4.dll"
@@ -34,16 +35,6 @@ File "${BUILD_DIR}\plds4.dll"
 File "${BUILD_DIR}\softokn3.dll"
 File "${BUILD_DIR}\ssl3.dll"
 File "${BUILD_DIR}\zlib1.dll"
-
-/** Temporary hack for PC Cillin antivirus false positive. */
-File "${BUILD_DIR}\idletrack.dll"
-File "${BUILD_DIR}\libatk-1.0-0.dll"
-File "${BUILD_DIR}\libgdk_pixbuf-2.0-0.dll"
-File "${BUILD_DIR}\libgdk-win32-2.0-0.dll"
-File "${BUILD_DIR}\libgobject-2.0-0.dll"
-File "${BUILD_DIR}\libgtk-win32-2.0-0.dll"
-File "${BUILD_DIR}\libpango-1.0-0.dll"
-File "${BUILD_DIR}\libpangowin32-1.0-0.dll"
 
 /** GLib. */
 File "${BUILD_DIR}\libglib-2.0-0.dll"

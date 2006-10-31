@@ -31,8 +31,8 @@
 
 /* sys/socket.h */
 int wgaim_socket(int ns, int style, int protocol);
-//#define socket( ns, style, protocol ) \
-//wgaim_socket( ns, style, protocol )
+//#define socket( namespace, style, protocol ) \
+//wgaim_socket( namespace, style, protocol )
 
 int wgaim_connect(int socket, struct sockaddr *addr, u_long length);
 //#define connect( socket, addr, length ) \
@@ -112,9 +112,13 @@ int wgaim_recv(int fd, void *buf, size_t len, int flags);
 //#define recv(fd, buf, len, flags) \
 //wgaim_recv(fd, buf, len, flags)
 
+int wgaim_send(int fd, const void *buf, unsigned int size, int flags);
+//#define send(socket, buf, buflen, flags) \
+//wgaim_send(socket, buf, buflen, flags)
+
 int wgaim_close(int fd);
-#define close( fd ) \
-wgaim_close( fd )
+//#define close( fd ) \
+//wgaim_close( fd )
 
 #ifndef sleep
 #define sleep(x) Sleep((x)*1000)
@@ -158,5 +162,8 @@ wgaim_rename(oldname, newname)
 struct tm *wgaim_localtime_r(const time_t *time, struct tm *resultp);
 #define localtime_r( time, resultp ) \
 wgaim_localtime_r( time, resultp )
+
+/* helper for gaim_utf8_strftime() by way of gaim_internal_strftime() in src/util.c */
+const char *wgaim_get_timezone_abbreviation(const struct tm *tm);
 
 #endif /* _LIBC_INTERFACE_H_ */

@@ -2,7 +2,7 @@
 /* config.h.in.  Generated from configure.ac by autoheader.  */
 
 /* configure arguments */
-#define CONFIG_ARGS " 'CFLAGS=-Wall -ggdb'"
+/* #undef CONFIG_ARGS */
 
 /* Define to one of `_getb67', `GETB67', `getb67' for Cray-2 and Cray-YMP
    systems. This function is required for `alloca.c' support on those systems.
@@ -125,6 +125,7 @@
 #define HAVE_FWPRINTF 1
 
 /* Define to 1 if you have the getaddrinfo function. */
+/* TODO: Use this on new enough versions of Windows */
 #define HAVE_GETADDRINFO 1
 
 /* Define to 1 if you have the `getcwd' function. */
@@ -166,6 +167,12 @@
 /* Define if you have the iconv() function. */
 #define HAVE_ICONV 1
 
+/* Defined when we have ilbc codec lib */
+/* #undef HAVE_ILBC */
+
+/* Define to 1 if you have the <iLBC_decode.h> header file. */
+/* #undef HAVE_ILBC_DECODE_H */
+
 /* Define if you have the 'intmax_t' type in <stdint.h> or <inttypes.h>. */
 #define HAVE_INTMAX_T 1
 
@@ -175,6 +182,9 @@
 /* Define if <inttypes.h> exists, doesn't clash with <sys/types.h>, and
    declares uintmax_t. */
 #define HAVE_INTTYPES_H_WITH_UINTMAX 1
+
+/* Define if we have IOKit */
+/* #undef HAVE_IOKIT */
 
 /* Define to 1 if you have the `krb_get_err_text' function. */
 /* #undef HAVE_KRB_GET_ERR_TEXT */
@@ -196,6 +206,9 @@
 
 /* Define if your <locale.h> file defines LC_MESSAGES. */
 #define HAVE_LC_MESSAGES 1
+
+/* Define to 1 if you have libgadu. */
+#define HAVE_LIBGADU 1
 
 /* Define to 1 if you have the `nsl' library (-lnsl). */
 #define HAVE_LIBNSL 1
@@ -308,7 +321,7 @@
 /* Define to 1 if you have the <signal.h> header file. */
 #define HAVE_SIGNAL_H 1
 
-/* define if we have silcmime.h */
+/* Define if we have silcmime.h */
 /* #undef HAVE_SILCMIME_H */
 
 /* Define to 1 if you have the <smime.h> header file. */
@@ -365,6 +378,9 @@
 
 /* Define to 1 if you have the `strftime' function. */
 #define HAVE_STRFTIME 1
+
+/* Define to 1 if you have a strftime() that supports the %z format string. */
+/* #undef HAVE_STRFTIME_Z_FORMAT */
 
 /* Define to 1 if you have the <strings.h> header file. */
 #define HAVE_STRINGS_H 1
@@ -513,13 +529,13 @@
 #define PACKAGE_NAME "gaim"
 
 /* Define to the full name and version of this package. */
-#define PACKAGE_STRING "gaim 2.0.0beta2"
+#define PACKAGE_STRING "gaim 2.0.0beta4"
 
 /* Define to the one symbol short name of this package. */
 #define PACKAGE_TARNAME "gaim"
 
 /* Define to the version of this package. */
-#define PACKAGE_VERSION "2.0.0beta2"
+#define PACKAGE_VERSION "2.0.0beta4"
 
 /* Define if <inttypes.h> exists and defines unusable PRI* macros. */
 /* #undef PRI_MACROS_BROKEN */
@@ -534,9 +550,9 @@
 /* If using the C implementation of alloca, define if you know the
    direction of stack growth for your system; otherwise it will be
    automatically deduced at run-time.
-	STACK_DIRECTION > 0 => grows toward higher addresses
-	STACK_DIRECTION < 0 => grows toward lower addresses
-	STACK_DIRECTION = 0 => direction of growth unknown */
+    STACK_DIRECTION > 0 => grows toward higher addresses
+    STACK_DIRECTION < 0 => grows toward lower addresses
+    STACK_DIRECTION = 0 => direction of growth unknown */
 /* #undef STACK_DIRECTION */
 
 /* Loads static protocol plugin module initialization functions. */
@@ -567,7 +583,7 @@ static void static_proto_init() { \
 #define USE_AO 1
 
 /* do we have gtkspell? */
-#define USE_GTKSPELL 
+#define USE_GTKSPELL 1
 
 /* Define if we're using XScreenSaver. */
 #define USE_SCREENSAVER 1
@@ -576,7 +592,7 @@ static void static_proto_init() { \
 #define USE_SM 1
 
 /* Version number of package */
-#define VERSION "2.0.0beta2"
+#define VERSION "2.0.0beta4"
 
 /* Define to 1 if your processor stores words with the most significant byte
    first (like Motorola and SPARC, unlike Intel and VAX). */
@@ -626,8 +642,17 @@ static void static_proto_init() { \
 /* #undef size_t */
 
 /* socklen_t size */
-/* #undef socklen_t */
+/* #define socklen_t int */
 
 /* Define to unsigned long or unsigned long long if <stdint.h> and
    <inttypes.h> don't define. */
 /* #undef uintmax_t */
+
+#define HAVE_LIBXML 1
+
+/*
+ * Following are added for Win32 version of Gaim
+ */
+#define HAVE_VSNPRINTF 1
+
+#define SIZEOF_TIME_T 4

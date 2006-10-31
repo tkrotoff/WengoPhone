@@ -1,6 +1,17 @@
 Gaim: The Pimpin' Penguin IM Client that's good for the soul!
 
 version 2.0.0:
+	Build Changes:
+	* With the Core/UI split completed, it is now possible to build Gaim
+	  without any UIs, creating a libgaim library upon which other UIs
+	  may be constructed
+	* A new ncurses-based console UI called gaim-text is now available
+	  (Sadrul Habib Chowdhury, Google Summer of Code)
+	* Reorganized the source tree to split apart the code for the UI
+	  changes and libgaim targets
+	* libxml2 is now required.  We switched from gmarkup to libxml2 for
+	  more correct XML parsing.
+
 	Status System:
 	* The code dealing with buddy and account status, away messages,
 	  away states, online/offline, etc has been completely rewritten.
@@ -12,6 +23,8 @@ version 2.0.0:
 	  becomes idle, load the "Buddy State Notification" plugin
 
 	Buddy List:
+	* Performance when manipulating and displaying the buddy list has
+	  been significantly improved (Aaron Sheldon, Google Summer of Code)
 	* Buddy icons are now shown in tooltips (Felipe Contreras)
 	* Tooltips now contain additional information about a "Person" that
 	  contains multiple online buddies
@@ -20,6 +33,11 @@ version 2.0.0:
 	* If Gaim is exited with the buddy list hidden in the docklet, it
 	  will remain hidden when Gaim is started again (Scott Shedden)
 	* Improved buddy list searching with CTRL+F
+	* Ability to set a buddy icon for all of your accounts at once via
+	  the buddy list (You can still set per-account icons via the
+	  account editor)
+	* The space wasted by the group expanders has been eliminated and
+	  the expander setting in .gtkrc-2.0 is no longer needed
 
 	Conversations and Chats:
 	* Timestamps honor the locale.  To use the traditional style,
@@ -44,19 +62,33 @@ version 2.0.0:
 	  IM/Send File/Get info/ignore the user
 	* Added tab management options to the tab right-click menu (Sadrul Habib
 	  Chowdhury)
-	* Brand new message queueing system (Casey Harkins)
+	* Brand new message queueing system.  Sounds are played when a
+	  message is queued rather than when the message is dequeued
+	  (Casey Harkins)
 	* Ability to find the last message from a user in a chat (Levi Bard
 	  and Sadrul Habib Chowdhury)
+	* Formatting is preserved across messages
+	  (There are known issues with pasting formatted text.  Either use "Paste
+	   as Plain Text", hit Ctrl-R after pasting, or use the Clear Formatting
+	   button on the toolbar.)
+	* Performance while joining large chat rooms has been significantly
+	  improved (Aaron Sheldon, Google Summer of Code)
 
 	Sounds:
 	* Beautiful new default sounds (Brad Turcotte)
-	* Use libao for playing sounds via NAS instead of accessing NAS directly
+	* Use GStreamer for playing sounds, instead of libao
 	* A volume control in the preferences (Casey Harkins)
 
 	Log Viewer:
 	* Log viewer aggregates logs from the same "Person"
 	* When opening the log viewer, show the most recent log by default
 	  (Peter McCurdy)
+	* Logs are now saved with the current timezone, which is displayed
+	  in the log viewer
+	* Text logs are linkified, so URLs are clickable
+	* The old logger now caches file offsets, so opening the log viewer
+	  for buddies with old logs should be much faster now if you have large
+	  log files (except the first time for a log, when the cache is built)
 
 	Plugins:
 	* Plugins are now accessed through a separate dialog from the Tools
@@ -85,6 +117,15 @@ version 2.0.0:
 	* The functionality of the auto-reconnect plugin has been
 	  moved into the Gaim core, and the plugin itself has been
 	  removed.
+	* 'Highlight when nick said' option added to Message Notification
+	  plugin.
+	* The system tray icon is now transparent (Dan Winship)
+	* New Log Reader plugin that can read and display logs from Adium,
+	  MSN Messenger, and Trillian in the log viewer
+	* New Contact Availability plugin that attempts to predict the
+	  times when people in your buddylist will most likely respond
+	  to you, based on times in the past when they have responded
+	  (Geoffrey Foster, Google Summer of Code)
 
 	MSN Features:
 	* Custom smiley receiving support (Irving Cordova & Francesco Fracassi)
@@ -99,6 +140,7 @@ version 2.0.0:
 	  authorization
 	* Account option to ignore chat and conference invitations (Peter
 	  Lawler)
+	* Added a /list command to bring up the room list (Peter Lawler)
 
 	AIM/ICQ Features:
 	* ICQ file transfer support with newer ICQ clients (Jonathan Clark,
@@ -115,6 +157,7 @@ version 2.0.0:
 	  channel or change your nick
 	* Added /nickserv, /memoserv, /chanserv and /operserv
 	  commands (Joao Luís Marques Pinto)
+	* Added CTCP VERSION via /version (Andrej Krivulčík)
 
 	Jabber Features:
 	* Support for SRV lookups
@@ -131,9 +174,13 @@ version 2.0.0:
 	* Bonjour (Rendezvous) protocol support (Juanjo Molinero Horno, Google
 	  Summer of Code)
 	* Updated Gadu-Gadu protocol support (Bartosz Oler, Google Summer of
-	  Code)
+	  Code).  This requires the libgadu library.  See
+	  http://gaim.sourceforge.net/faq2.php#libgadu for more information.
 	* SIP/SIMPLE support (Thomas Butter, Google Summer of Code)
 	* Sametime protocol support
+	  Requires the meanwhile library: http://meanwhile.sourceforge.net
+	* QQ protocol support (Mark Huetsch, Google Summer of Code)
+	* Removed support for the Napster and TOC protocols
 
 	Other Noteworthy Changes:
 	* UPnP and NAT traversal support (Adam J. Warrington, Google Summer of
@@ -142,8 +189,6 @@ version 2.0.0:
 	  better at lower resolutions (Sadrul Habib Chowdhury)
 	* New "find buddy" results dialog (Alex Converse)
 	* People using input methods can now use Enter again
-	* GNOME users can open received files by clicking on "Open" in the
-	  file transfer window
 	* Mouse-over hyperlink coloring is now themeable
 	* Buddy Pounces now have a proper management window. (Kevin Stange)
 	* Buddy icons maintain aspect ratio when resized
@@ -157,6 +202,12 @@ version 2.0.0:
 	  (Sadrul Habib Chowdhury)
 	* New e-mail notices are now grouped into one dialog.
 	  (Sadrul Habib Chowdhury)
+	* "Open" in the File Transfer window integrates with GNOME, KDE, and
+	  Windows and falls back to the browser in other environments.
+	* On Mac OS X, the keyboard/mouse idle time pref now uses system idle
+	  time instead of X11 idle time (Michael Culbertson)
+	* Autocomplete in the buddy pounce dialog (Sadrul Habib Chowdhury)
+	* Non-blocking socket I/O is used in most protocol plugins
 
 	Preference Changes:
 	* Preferences have been substantially reorganized and cleaned up

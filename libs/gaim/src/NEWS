@@ -1,5 +1,25 @@
 -=[ Gaim ]=-  The Pimpin' Penguin IM Client That's Good For The Soul!
 
+2.0.0beta4 (10/17/2006)
+	Sean: Still beta. Maybe the next one should be a gamma.. :)
+
+	Daniel: I'm super chuffed to announce that this will work with newer
+	(i.e. >= 2.8.0) versions of GTK+ on Windows.
+
+	Luke: Several significant changes in this one, including no longer
+	using libao for sound!  There are no doubt bugs here, but hopefully
+	nothing major.
+
+	Nathan: I don't have much to say, but yay for another beta!
+
+	Etan: I did a bunch of perl work for this beta again, there is now
+	some support for perl scripts to call functions in the gtk ui, it
+	still needs work.
+
+2.0.0beta3 (03/25/2006):
+	Mark: Yeah, I know, another beta.  Don't worry, we'll get this
+	puppy out the door eventually.
+
 2.0.0beta2 (01/24/2006):
 	Mark: So this is the new year, and I don't feel any different, but
 	Gaim is getting better.  We hope this will be our last beta before
