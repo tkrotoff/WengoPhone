@@ -73,7 +73,9 @@ UserProfile * UserProfileHandler::getUserProfile(const std::string & name) {
 	if (userProfileExists(name)) {
 		result = new UserProfile();
 		UserProfileFileStorage userProfileStorage(*result);
-		userProfileStorage.load(name);
+		if (!userProfileStorage.load(name)) {
+			OWSAFE_DELETE(result);
+		}
 	}
 
 	return result;
@@ -125,10 +127,8 @@ void UserProfileHandler::createAndSetUserProfile(const WengoAccount & wengoAccou
 
 bool UserProfileHandler::userProfileExists(const std::string & name) {
 	bool result = false;
-	Config & config = ConfigManager::getInstance().getCurrentConfig();
-	std::string path = File::convertPathSeparators(config.getConfigDir() + "profiles/" + name + "/");
 
-	if (!name.empty() && File::exists(path)) {
+	if (!name.empty() && File::exists(UserProfileFileStorage::getProfilePath(name))) {
 		result = true;
 	}
 
@@ -144,7 +144,7 @@ void UserProfileHandler::setCurrentUserProfile(const std::string & name,
 
 	// Check if the desired UserProfile is different from the current UserProfile
 	// and check if the WengoAccount of the current UserProfile is different from the given WengoAccount
-	// (if so the WengoAccount (only the password and keep password members) will be updated).
+	// (if so the WengoAccount (only 'password' and 'keep password' members) will be updated).
 	if (!_currentUserProfile ||
 		(_currentUserProfile &&
 			((_currentUserProfile->getName() != name) ||
