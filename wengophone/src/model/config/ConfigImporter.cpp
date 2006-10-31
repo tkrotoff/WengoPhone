@@ -649,11 +649,14 @@ bool ConfigImporter::importConfigFromV1toV3() {
 	last_user_t * lastUser = (last_user_t *) getLastWengoUser(classicPath + USERCONFIG_FILENAME, CONFIG_VERSION1);
 	if (lastUser) {
 		UserProfile userProfile;
+		userProfile.wengoAccountValidityEvent +=
+			boost::bind(&ConfigImporter::wengoAccountValidityEventHandler, this, _1, _2);
 		WengoAccount wAccount(lastUser->login, lastUser->password, true);
 		userProfile.setWengoAccount(wAccount); // Launch SSO request
 		_wengoAccountValidityCondition.wait(lock);
 	
 		if (_wengoAccountValidityResult) {
+			_wengoAccountValidityResult = false;
 			string sep = mDir.getPathSeparator();
 			String oldPath = classicPath + lastUser->login + sep + "contacts" + sep;
 			importContactsFromV1toV3(oldPath, userProfile);
@@ -679,20 +682,23 @@ bool ConfigImporter::importConfigFromV2toV3() {
 		string data = file.read();
 		file.close();
 
-		UserProfile userProfile;
-		UserProfileXMLSerializer serializer(userProfile);
-		serializer.unserialize(data);
-
 		last_user_t * lastUser = (last_user_t *) getLastWengoUser(configDir + USERCONFIG_FILENAME, CONFIG_VERSION2);
 		if (lastUser == NULL) {
 			return false;
 		}
+
+		UserProfile userProfile;
+		userProfile.wengoAccountValidityEvent +=
+			boost::bind(&ConfigImporter::wengoAccountValidityEventHandler, this, _1, _2);
+		UserProfileXMLSerializer serializer(userProfile);
+		serializer.unserialize(data);
 
 		WengoAccount wAccount(lastUser->login, Base64::decode(lastUser->password), lastUser->auto_login);
 		userProfile.setWengoAccount(wAccount);
 		_wengoAccountValidityCondition.wait(lock);
 
 		if (_wengoAccountValidityResult) {
+			_wengoAccountValidityResult = false;
 			//remove user.config and userprofile.xml from the main directory
 			File userConfigFile(configDir + USERCONFIG_FILENAME);
 			userConfigFile.remove();
