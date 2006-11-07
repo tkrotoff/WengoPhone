@@ -32,6 +32,7 @@ headers = [
 	'include/qtutil/SafeConnect.h',
 	'include/qtutil/LanguageChangeEventFilter.h',
 	'include/qtutil/CloseEventFilter.h',
+    'include/qtutil/UpQComboBox.h',
 	'include/qtutil/AnimatedButton.h',
 ]
 sources = [
@@ -57,6 +58,7 @@ sources = [
 	'src/SafeConnect.cpp',
 	'src/LanguageChangeEventFilter.cpp',
 	'src/CloseEventFilter.cpp',
+    'src/UpQComboBox.cpp',
 	'src/AnimatedButton.cpp',
 ]
 forms = [
