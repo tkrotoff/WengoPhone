@@ -57,7 +57,7 @@ public:
 
 	std::string getRepertory() const;
 
-	DialpadMode getDialpadMode() const;
+	DtmfTheme::DialpadMode getDialpadMode() const;
 
 private:
 
@@ -71,7 +71,7 @@ private:
 
 	std::string _imageFile;
 
-	DialpadMode _dialpadMode;
+	DtmfTheme::DialpadMode _dialpadMode;
 
 	ToneList _toneList;
 

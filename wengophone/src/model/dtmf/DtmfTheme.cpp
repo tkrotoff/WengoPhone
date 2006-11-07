@@ -34,7 +34,7 @@
 DtmfTheme::DtmfTheme(WengoPhone & wengoPhone, std::string repertory, std::string xmlDescriptor)
 	: _wengoPhone(wengoPhone), _repertory(repertory) {
 
-	_dialpadMode = DialpadMode::plain;
+	_dialpadMode = plain;
 	_name = "";
 	_imageFile = "";
 
@@ -51,14 +51,14 @@ DtmfTheme::DtmfTheme(WengoPhone & wengoPhone, std::string repertory, std::string
 		const char * attr = dialpadElt->Attribute("mode");
 		if(attr) {
 			if( std::string(attr) == "plain") {
-				_dialpadMode = DialpadMode::plain;
+				_dialpadMode = plain;
 			} else if( std::string(attr) == "iconified") {
-				_dialpadMode = DialpadMode::iconified;
+				_dialpadMode = iconified;
 			} else if( std::string(attr) == "svg") {
-				_dialpadMode = DialpadMode::svg;
+				_dialpadMode = svg;
 			}
 			else {
-				_dialpadMode = DialpadMode::unknown;
+				_dialpadMode = unknown;
 			}
 		}
 

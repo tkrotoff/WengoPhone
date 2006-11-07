@@ -50,26 +50,26 @@ public:
 
 	const std::string & getImageFile() const;
 
-	Action getLocalAction() const;
+	Tone::Action getLocalAction() const;
 
-	Action getRemoteAction() const;
+	Tone::Action getRemoteAction() const;
 
-	AudioFormat getAudioFormat() const;
+	Tone::AudioFormat getAudioFormat() const;
 
 private:
 
 	Tone(std::string key, std::string soundFile, std::string text = "",
-		std::string imageFile = "", Action localAction = Play,
-		Action remoteAction = Play, AudioFormat audioFormat = Raw);
+		std::string imageFile = "", Tone::Action localAction = Tone::Play,
+		Tone::Action remoteAction = Tone::Play, Tone::AudioFormat audioFormat = Tone::Raw);
 
 	/* action for local */
-	Action _localAction;
+	Tone::Action _localAction;
 
 	/* action for remote */
-	Action _remoteAction;
+	Tone::Action _remoteAction;
 
 	/* the format of the sound file associated with this Tone */
-	AudioFormat _audioFormat;
+	Tone::AudioFormat _audioFormat;
 
 	/* the path to the image file associated with this Tone */
 	std::string _imageFile;
