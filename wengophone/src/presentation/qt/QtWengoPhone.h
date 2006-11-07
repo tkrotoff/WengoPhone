@@ -60,6 +60,7 @@ class QtSystray;
 class QtToaster;
 class QtWsDirectory;
 class QtBrowserWidget;
+class QtDialpad;
 class UserProfile;
 #if (defined OS_WINDOWS) && (defined QT_COMMERCIAL)
 class QtWebDirectory;
@@ -88,11 +89,13 @@ public:
 
 	void updatePresentation();
 
-	void dialpad(const std::string & tone, const std::string & soundFile);
+	void dialpad(const std::string & tone);
 
 	void connectionStatusEventHandler(int totalSteps, int currentStep, const std::string & infoMsg);
 
 	QWidget * getWidget() const;
+
+	void setQtDialpad(QtDialpad * qtDialpad);
 
 	void setQtContactList(QtContactList * qtContactList);
 	QtContactList * getQtContactList() const;

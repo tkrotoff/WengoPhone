@@ -18,6 +18,7 @@
  */
 
 #include "QtDialpad.h"
+#include "QtSVGDialpad.h"
 
 #include "ui_DialpadWidget.h"
 
@@ -25,6 +26,9 @@
 
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
+#include <model/dtmf/DtmfTheme.h>
+
+#include <control/dtmf/CDtmfThemeManager.h>
 
 #include <sound/Sound.h>
 #include <sound/AudioDevice.h>
@@ -36,11 +40,13 @@
 #include <util/StringList.h>
 
 #include <qtutil/SafeConnect.h>
+#include <qtutil/UpQComboBox.h>
 
 #include <QtGui/QtGui>
 
-QtDialpad::QtDialpad(QtWengoPhone * qtWengoPhone)
-	: QWidget(NULL) {
+QtDialpad::QtDialpad(CDtmfThemeManager & cDtmfThemeManager, QtWengoPhone * qtWengoPhone)
+	: QWidget(NULL),
+	_cDtmfThemeManager(cDtmfThemeManager) {
 
 	_qtWengoPhone = qtWengoPhone;
 
@@ -59,49 +65,72 @@ QtDialpad::QtDialpad(QtWengoPhone * qtWengoPhone)
 	SAFE_CONNECT(_ui->nineButton, SIGNAL(clicked()), SLOT(nineButtonClicked()));
 	SAFE_CONNECT(_ui->starButton, SIGNAL(clicked()), SLOT(starButtonClicked()));
 	SAFE_CONNECT(_ui->poundButton, SIGNAL(clicked()), SLOT(poundButtonClicked()));
-	SAFE_CONNECT(_ui->audioSmileysComboBox, SIGNAL(activated(int)), SLOT(audioSmileysComboBoxActivated(int)));
+	
+	//add UpComboBox
+	_audioSmileysComboBox = new UpQComboBox(_ui->frameUpQComboBox);
+	_audioSmileysComboBox->setMinimumWidth( 150 );
+	SAFE_CONNECT(_audioSmileysComboBox, SIGNAL(activated(QString)), SLOT(audioSmileysComboBoxThemeChanged(QString)));
+	SAFE_CONNECT(_audioSmileysComboBox, SIGNAL(popUpDisplayed()), SLOT(refreshComboBox()));
 
-	Config & config = ConfigManager::getInstance().getCurrentConfig();
-	QStringList listAudioSmileys = getListAudioSmileys();
-	for (int i = 0; i < listAudioSmileys.size(); ++i) {
-		std::string theme = listAudioSmileys[i].toStdString();
-		std::string icon = config.getAudioSmileysDir() + theme + File::getPathSeparator() + theme + ".png";
-		_ui->audioSmileysComboBox->addItem(QIcon(QString::fromStdString(icon)), listAudioSmileys[i]);
-	}
+	//add svg viewer
+	_qtSVGDialpad = new QtSVGDialpad();
+	_ui->stackedWidget->addWidget( _qtSVGDialpad );
+
+	SAFE_CONNECT(_qtSVGDialpad, SIGNAL(keyZeroSelected()), SLOT(zeroButtonClicked()));
+	SAFE_CONNECT(_qtSVGDialpad, SIGNAL(keyOneSelected()), SLOT(oneButtonClicked()));
+	SAFE_CONNECT(_qtSVGDialpad, SIGNAL(keyTwoSelected()), SLOT(twoButtonClicked()));
+	SAFE_CONNECT(_qtSVGDialpad, SIGNAL(keyThreeSelected()), SLOT(threeButtonClicked()));
+	SAFE_CONNECT(_qtSVGDialpad, SIGNAL(keyFourSelected()), SLOT(fourButtonClicked()));
+	SAFE_CONNECT(_qtSVGDialpad, SIGNAL(keyFiveSelected()), SLOT(fiveButtonClicked()));
+	SAFE_CONNECT(_qtSVGDialpad, SIGNAL(keySixSelected()), SLOT(sixButtonClicked()));
+	SAFE_CONNECT(_qtSVGDialpad, SIGNAL(keySevenSelected()), SLOT(sevenButtonClicked()));
+	SAFE_CONNECT(_qtSVGDialpad, SIGNAL(keyEightSelected()), SLOT(eightButtonClicked()));
+	SAFE_CONNECT(_qtSVGDialpad, SIGNAL(keyNineSelected()), SLOT(nineButtonClicked()));
+	SAFE_CONNECT(_qtSVGDialpad, SIGNAL(keyStarSelected()), SLOT(starButtonClicked()));
+	SAFE_CONNECT(_qtSVGDialpad, SIGNAL(keyPoundSelected()), SLOT(poundButtonClicked()));
+
+	//comboBox Construction
+	fillComboBox();
+
+	qtWengoPhone->setQtDialpad(this);
 }
 
 QtDialpad::~QtDialpad() {
+	OWSAFE_DELETE( _qtSVGDialpad );
+	OWSAFE_DELETE( _audioSmileysComboBox );
 	OWSAFE_DELETE(_ui);
 }
 
-QStringList QtDialpad::getListAudioSmileys() const {
-	QStringList listAudioSmileys;
+void QtDialpad::fillComboBox() {
 
-#if !defined(OS_MACOSX)
-	/*
-	 * Audio smileys are deactivated on MacOS X because Raw files cannot
-	 * currently be played on this platform.
-	 */
-	Config & config = ConfigManager::getInstance().getCurrentConfig();
-
-	QDir dir(QString::fromStdString(config.getAudioSmileysDir()));
-	listAudioSmileys = dir.entryList(QDir::Dirs);
-
-	int index = listAudioSmileys.indexOf(".");
-	if (index != -1) {
-		listAudioSmileys.removeAt(index);
+	//comboBox Construction
+	std::list<std::string> themeList = _cDtmfThemeManager.getThemeList();
+	for (std::list<std::string>::const_iterator it = themeList.begin(); it != themeList.end(); ++it) {
+		std::string theme = *it;
+		std::string icon = _cDtmfThemeManager.getDtmfTheme(theme)->getRepertory() + _cDtmfThemeManager.getDtmfTheme(theme)->getImageFile();
+		_audioSmileysComboBox->addItem( QIcon( QString::fromStdString(icon) ), QString::fromStdString(theme), QVariant());
 	}
-	index = listAudioSmileys.indexOf("..");
-	if (index != -1) {
-		listAudioSmileys.removeAt(index);
-	}
-#endif
+}
 
-	return listAudioSmileys;
+void QtDialpad::refreshComboBox(){
+	if ( _cDtmfThemeManager.refreshDtmfThemes() ) {
+
+		//save current text
+		QString selectOne = _audioSmileysComboBox->currentText();
+
+		//refill the combobox
+		_audioSmileysComboBox->clear();
+		fillComboBox();
+
+		//load current text with is new position ( if possible )
+		int pos = _audioSmileysComboBox->findText(selectOne);
+		if( pos != -1 ) {
+			_audioSmileysComboBox->setCurrentIndex(pos);
+		}
+	}
 }
 
 void QtDialpad::playTone(const std::string & tone) {
-	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
 	std::string soundFile;
 	if (tone == "*") {
@@ -112,18 +141,8 @@ void QtDialpad::playTone(const std::string & tone) {
 		soundFile = tone;
 	}
 
-	if (_ui->audioSmileysComboBox->currentIndex() == 0) {
-		_qtWengoPhone->dialpad(tone, String::null);
-		//FIXME desactivates DTMF playing inside GUI
-		//Sound::play(File::convertPathSeparators(config.getAudioSmileysDir() + soundFile + ".wav"), config.getAudioRingerDeviceId());
-	} else {
-		soundFile = config.getAudioSmileysDir() + _ui->audioSmileysComboBox->currentText().toStdString()
-				+ File::getPathSeparator() + soundFile + ".raw";
-		_qtWengoPhone->dialpad(tone, File::convertPathSeparators(soundFile));
-		Sound::play(File::convertPathSeparators(soundFile), config.getAudioRingerDeviceId());
-	}
-
-	LOG_DEBUG("sound file=" + soundFile);
+	_cDtmfThemeManager.playTone(_audioSmileysComboBox->currentText().toStdString(), soundFile);
+	_qtWengoPhone->dialpad(tone);
 }
 
 void QtDialpad::oneButtonClicked() {
@@ -174,77 +193,24 @@ void QtDialpad::poundButtonClicked() {
 	playTone("#");
 }
 
-void QtDialpad::audioSmileysComboBoxActivated(int index) {
-	/*
-	FIXME does not change sound theme icons
+void QtDialpad::audioSmileysComboBoxThemeChanged(QString newThemeName) {
 
-	static const QString originalZeroButtonText = _ui->zeroButton->text();
-	static const QString originalOneButtonText = _ui->oneButton->text();
-	static const QString originalTwoButtonText = _ui->twoButton->text();
-	static const QString originalThreeButtonText = _ui->threeButton->text();
-	static const QString originalFourButtonText = _ui->fourButton->text();
-	static const QString originalFiveButtonText = _ui->fiveButton->text();
-	static const QString originalSixButtonText = _ui->sixButton->text();
-	static const QString originalSevenButtonText = _ui->sevenButton->text();
-	static const QString originalEightButtonText = _ui->eightButton->text();
-	static const QString originalNineButtonText = _ui->nineButton->text();
-	static const QString originalStarButtonText = _ui->starButton->text();
-	static const QString originalSharpButtonText = _ui->poundButton->text();
+	LOG_DEBUG( newThemeName.toStdString() );
 
-	if (index == 0) {
-		_ui->zeroButton->setIcon(QIcon());
-		_ui->zeroButton->setText(originalZeroButtonText);
-		_ui->oneButton->setIcon(QIcon());
-		_ui->oneButton->setText(originalOneButtonText);
-		_ui->twoButton->setIcon(QIcon());
-		_ui->twoButton->setText(originalTwoButtonText);
-		_ui->threeButton->setIcon(QIcon());
-		_ui->threeButton->setText(originalThreeButtonText);
-		_ui->fourButton->setIcon(QIcon());
-		_ui->fourButton->setText(originalFourButtonText);
-		_ui->fiveButton->setIcon(QIcon());
-		_ui->fiveButton->setText(originalFiveButtonText);
-		_ui->sixButton->setIcon(QIcon());
-		_ui->sixButton->setText(originalSixButtonText);
-		_ui->sevenButton->setIcon(QIcon());
-		_ui->sevenButton->setText(originalSevenButtonText);
-		_ui->eightButton->setIcon(QIcon());
-		_ui->eightButton->setText(originalEightButtonText);
-		_ui->nineButton->setIcon(QIcon());
-		_ui->nineButton->setText(originalNineButtonText);
-		_ui->starButton->setIcon(QIcon());
-		_ui->starButton->setText(originalStarButtonText);
-		_ui->poundButton->setIcon(QIcon());
-		_ui->poundButton->setText(originalSharpButtonText);
+	const DtmfTheme * newTheme = _cDtmfThemeManager.getDtmfTheme(newThemeName.toStdString());
+
+	if( newTheme->getDialpadMode() == DtmfTheme::svg ) {
+
+		//change theme
+		_qtSVGDialpad->setNewTheme(newTheme->getRepertory());
+
+		//active QtSVGDialpad
+		_ui->stackedWidget->setCurrentIndex(1);
+
+		//force repaint
+		_qtSVGDialpad->update();
+
 	} else {
-		Config & config = ConfigManager::getInstance().getCurrentConfig();
-		QString iconFile = QString::fromStdString(config.getAudioSmileysDir() +
-			_ui->audioSmileysComboBox->currentText().toStdString() + File::getPathSeparator());
-
-		_ui->zeroButton->setIcon(QIcon(iconFile + "0.png"));
-		_ui->zeroButton->setText(QString::null);
-		_ui->oneButton->setIcon(QIcon(iconFile + "1.png"));
-		_ui->oneButton->setText(QString::null);
-		_ui->twoButton->setIcon(QIcon(iconFile + "2.png"));
-		_ui->twoButton->setText(QString::null);
-		_ui->threeButton->setIcon(QIcon(iconFile + "3.png"));
-		_ui->threeButton->setText(QString::null);
-		_ui->fourButton->setIcon(QIcon(iconFile + "4.png"));
-		_ui->fourButton->setText(QString::null);
-		_ui->fiveButton->setIcon(QIcon(iconFile + "5.png"));
-		_ui->fiveButton->setText(QString::null);
-		_ui->sixButton->setIcon(QIcon(iconFile + "6.png"));
-		_ui->sixButton->setText(QString::null);
-		_ui->sevenButton->setIcon(QIcon(iconFile + "7.png"));
-		_ui->sevenButton->setText(QString::null);
-		_ui->eightButton->setIcon(QIcon(iconFile + "8.png"));
-		_ui->eightButton->setText(QString::null);
-		_ui->nineButton->setIcon(QIcon(iconFile + "9.png"));
-		_ui->nineButton->setText(QString::null);
-		_ui->starButton->setIcon(QIcon(iconFile + "star.png"));
-		_ui->starButton->setText(QString::null);
-		_ui->poundButton->setIcon(QIcon(iconFile + "pound.png"));
-		_ui->poundButton->setText(QString::null);
+		_ui->stackedWidget->setCurrentIndex(0);
 	}
-	*/
 }

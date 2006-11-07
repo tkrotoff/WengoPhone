@@ -28,6 +28,8 @@ class WengoPhone;
 class Presentation;
 class CUserProfileHandler;
 class WsSubscribe;
+class DtmfThemeManager;
+class CDtmfThemeManager;
 
 /**
  * @ingroup control
@@ -86,6 +88,8 @@ private:
 
 	void exitEventHandlerThreadSafe();
 
+	void dtmfThemeManagerCreatedEventHandler(WengoPhone & sender, DtmfThemeManager & dtmfThemeManager);
+
 	/** Direct link to the model. */
 	WengoPhone & _wengoPhone;
 
@@ -93,6 +97,9 @@ private:
 	PWengoPhone * _pWengoPhone;
 
 	CUserProfileHandler * _cUserProfileHandler;
+
+	/** DtmfThemeManager */
+	CDtmfThemeManager * _cDtmfThemeManager;
 };
 
 #endif	//OWCWENGOPHONE_H

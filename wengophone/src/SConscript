@@ -181,6 +181,10 @@ sources = [
 	'model/coipmanager/chatsessionmanager/src/IChatSessionManager.cpp',
 	##
 
+	'model/dtmf/Tone.cpp',
+	'model/dtmf/DtmfTheme.cpp',
+	'model/dtmf/DtmfThemeManager.cpp',
+
 	'control/wenbox/CWenboxPlugin.cpp',
 	'control/CWengoPhone.cpp',
 	'control/chat/CChatHandler.cpp',
@@ -196,6 +200,7 @@ sources = [
 	'control/webservices/directory/CWsDirectory.cpp',
 	'control/webservices/callforward/CWsCallForward.cpp',
 	'control/history/CHistory.cpp',
+	'control/dtmf/CDtmfThemeManager.cpp',
 
 	'presentation/PFactory.cpp'
 ]

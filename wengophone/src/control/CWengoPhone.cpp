@@ -23,10 +23,12 @@
 #include <presentation/PWengoPhone.h>
 
 #include <control/profile/CUserProfileHandler.h>
+#include <control/dtmf/CDtmfThemeManager.h>
 
 #include <model/commandserver/ContactInfo.h>
 #include <model/commandserver/CommandServer.h>
 #include <model/WengoPhone.h>
+#include <model/dtmf/DtmfThemeManager.h>
 
 #include <thread/ThreadEvent.h>
 #include <util/Logger.h>
@@ -55,6 +57,9 @@ void CWengoPhone::initPresentationThreadSafe() {
 	_wengoPhone.initFinishedEvent += boost::bind(&CWengoPhone::initFinishedEventHandler, this, _1);
 	_wengoPhone.exitEvent += boost::bind(&CWengoPhone::exitEventHandler, this);
 
+	//DTMFThemeManager
+	_wengoPhone.dtmfThemeManagerCreatedEvent += boost::bind(&CWengoPhone::dtmfThemeManagerCreatedEventHandler, this, _1, _2);
+
 	CommandServer & commandServer = CommandServer::getInstance(_wengoPhone);
 	commandServer.showAddContactEvent += boost::bind(&CWengoPhone::showAddContactEventHandler, this, _1);
 }
@@ -81,6 +86,10 @@ void CWengoPhone::start() {
 
 void CWengoPhone::terminate() {
 	_wengoPhone.prepareToTerminate();
+}
+
+void CWengoPhone::dtmfThemeManagerCreatedEventHandler(WengoPhone & sender, DtmfThemeManager & dtmfThemeManager) {
+	_cDtmfThemeManager = new CDtmfThemeManager(dtmfThemeManager, *this);
 }
 
 void CWengoPhone::initFinishedEventHandler(WengoPhone & sender) {

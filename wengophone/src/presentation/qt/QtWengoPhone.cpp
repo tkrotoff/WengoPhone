@@ -164,10 +164,6 @@ void QtWengoPhone::initThreadSafe() {
 	//Buttons initialization
 	initCallButtons();
 
-	//QtDialpad
-	QtDialpad * qtDialpad = new QtDialpad(this);
-	Widget::createLayout(_ui->tabDialpad)->addWidget(qtDialpad);
-
 	//QtHistoryWidget
 	_qtHistoryWidget = NULL;
 
@@ -319,6 +315,12 @@ void QtWengoPhone::setQtHistoryWidget(QtHistoryWidget * qtHistoryWidget) {
 
 	LOG_DEBUG("QtHistoryWidget added");
 }
+
+void QtWengoPhone::setQtDialpad(QtDialpad * qtDialpad) {
+	Widget::createLayout(_ui->tabDialpad)->addWidget(qtDialpad);
+	LOG_DEBUG("QtDialpad added");
+}
+
 
 void QtWengoPhone::initCallButtons() {
 	//callButton
@@ -544,27 +546,8 @@ void QtWengoPhone::updatePresentationThreadSafe() {
 	}
 }
 
-void QtWengoPhone::dialpad(const std::string & tone, const std::string & soundFile) {
+void QtWengoPhone::dialpad(const std::string & tone) {
 	if (_cWengoPhone.getCUserProfileHandler().getCUserProfile()) {
-		PhoneCall * phoneCall = _cWengoPhone.getCUserProfileHandler().getCUserProfile()->getActivePhoneCall();
-		if (phoneCall) {
-			if (soundFile.empty()) {
-				if (tone == "0") { phoneCall->playTone(EnumTone::Tone0); }
-				if (tone == "1") { phoneCall->playTone(EnumTone::Tone1); }
-				if (tone == "2") { phoneCall->playTone(EnumTone::Tone2); }
-				if (tone == "3") { phoneCall->playTone(EnumTone::Tone3); }
-				if (tone == "4") { phoneCall->playTone(EnumTone::Tone4); }
-				if (tone == "5") { phoneCall->playTone(EnumTone::Tone5); }
-				if (tone == "6") { phoneCall->playTone(EnumTone::Tone6); }
-				if (tone == "7") { phoneCall->playTone(EnumTone::Tone7); }
-				if (tone == "8") { phoneCall->playTone(EnumTone::Tone8); }
-				if (tone == "9") { phoneCall->playTone(EnumTone::Tone9); }
-				if (tone == "*") { phoneCall->playTone(EnumTone::ToneStar); }
-				if (tone == "#") { phoneCall->playTone(EnumTone::TonePound); }
-			} else {
-				phoneCall->playSoundFile(soundFile);
-			}
-		}
 		_qtCallBar->setPhoneComboBoxEditText(_qtCallBar->getPhoneComboBoxCurrentText() + tone);
 	}
 }

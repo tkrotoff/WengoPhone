@@ -32,6 +32,7 @@
 #include "webservices/softupdate/QtSoftUpdate.h"
 #include "webservices/directory/QtWsDirectory.h"
 #include "wenbox/QtWenboxPlugin.h"
+#include "QtDialpad.h"
 
 #include <util/File.h>
 #include <util/Logger.h>
@@ -93,6 +94,7 @@ void QtFactory::reset() {
 	_qtWsDirectory = NULL;
 	_qtSoftUpdate = NULL;
 	_qtHistory = NULL;
+	_qtDialpad = NULL;
 }
 
 PWengoPhone * QtFactory::createPresentationWengoPhone(CWengoPhone & cWengoPhone) {
@@ -192,4 +194,11 @@ PConferenceCall * QtFactory::createPresentationConferenceCall(CConferenceCall & 
 
 void QtFactory::postEventImpl(IThreadEvent * event) {
 	QCoreApplication::postEvent(this, new QtThreadEvent(event));
+}
+
+//DtmfThemeManager
+void QtFactory::createPresentationDtmfThemeManager(CDtmfThemeManager & _cDtmfThemeManager) {
+	if (!_qtDialpad) {
+		_qtDialpad = new QtDialpad(_cDtmfThemeManager, _qtWengoPhone);
+	}
 }

@@ -28,6 +28,7 @@
 #include "config/ConfigImporter.h"
 #include "config/ConfigManager.h"
 #include "config/ConfigManagerFileStorage.h"
+#include "dtmf/DtmfThemeManager.h"
 #include "network/NetworkObserver.h"
 #include "network/NetworkProxyDiscovery.h"
 
@@ -98,13 +99,13 @@ WengoPhone::~WengoPhone() {
 	//Deleting created objects
 	OWSAFE_DELETE(_userProfileHandler);
 	OWSAFE_DELETE(_startupSettingListener);
+	OWSAFE_DELETE(_dtmfThemeManager);
 	////
-
 	saveConfiguration();
 }
 
 void WengoPhone::init() {
-	ConfigManager::getInstance().getCurrentConfig();
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
 	//Remove WengoPhone Classic from startup registry
 	ClassicExterminator::killClassicExecutable();
@@ -115,6 +116,11 @@ void WengoPhone::init() {
 	//Imports the config from a previous WengoPhone version
 	ConfigImporter importer(*_userProfileHandler);
 	importer.importConfig();
+
+	//DTMFThemeManager
+	_dtmfThemeManager = new DtmfThemeManager(*this, config.getAudioSmileysDir());
+	//Sends the DtmfThemeManager creation event
+	dtmfThemeManagerCreatedEvent(*this, *_dtmfThemeManager);
 
 	_userProfileHandler->init();
 

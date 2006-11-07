@@ -32,6 +32,7 @@
 
 class CoIpManager;
 class ConfigImporter;
+class DtmfThemeManager;
 class UserProfile;
 class UserProfileHandler;
 
@@ -80,6 +81,14 @@ public:
 	 * @param sender this class
 	 */
 	Event<void (WengoPhone & sender)> exitEvent;
+
+	/**
+	 * Dtmf Theme Manager has been created.
+	 *
+	 * @param sender this class
+	 * @param dtfmThemeManager DtfmThemeManager created
+	 */
+	Event<void (WengoPhone & sender, DtmfThemeManager & dtmfThemeManager)> dtmfThemeManagerCreatedEvent;
 
 	/**
 	 * Gets the UserProfileHandler.
@@ -145,6 +154,10 @@ private:
 	UserProfileHandler * _userProfileHandler;
 
 	StartupSettingListener * _startupSettingListener;
+
+	/** DtmfThemeManager. */
+	DtmfThemeManager * _dtmfThemeManager;
 };
 
 #endif	//OWWENGOPHONE_H
+

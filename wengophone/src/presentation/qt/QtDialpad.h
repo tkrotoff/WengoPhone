@@ -27,8 +27,11 @@
 #include <string>
 
 class QtWengoPhone;
-
+class CDtmfThemeManager;
+class QtSVGDialpad;
 class QStringList;
+class UpQComboBox;
+
 namespace Ui { class DialpadWidget; }
 
 /**
@@ -40,7 +43,7 @@ class QtDialpad : public QWidget, NonCopyable {
 	Q_OBJECT
 public:
 
-	QtDialpad(QtWengoPhone * qtWengoPhone);
+	QtDialpad(CDtmfThemeManager & cDtmfThemeManager, QtWengoPhone * qtWengoPhone);
 
 	~QtDialpad();
 
@@ -70,23 +73,25 @@ private Q_SLOTS:
 
 	void poundButtonClicked();
 
-	void audioSmileysComboBoxActivated(int index);
+	void audioSmileysComboBoxThemeChanged(QString newThemeName);
+
+	void refreshComboBox();
 
 private:
 
-	/**
-	 * FIXME put this intelligence inside model/control.
-	 */
-	void playTone(const std::string & tone);
+	void fillComboBox();
 
-	/**
-	 * FIXME put this intelligence inside model/control.
-	 */
-	QStringList getListAudioSmileys() const;
+	void playTone(const std::string & tone);
 
 	Ui::DialpadWidget * _ui;
 
 	QtWengoPhone * _qtWengoPhone;
+
+	CDtmfThemeManager & _cDtmfThemeManager;
+
+	QtSVGDialpad * _qtSVGDialpad;
+
+	UpQComboBox * _audioSmileysComboBox;
 };
 
 #endif	//OWQTDIALPAD_H

@@ -51,6 +51,7 @@ class PHistory;
 class CHistory;
 class PConferenceCall;
 class CConferenceCall;
+class CDtmfThemeManager;
 
 class QtContactList;
 class QtChatHandler;
@@ -62,6 +63,7 @@ class QtHistory;
 class CWengoPhone;
 class QtWengoPhone;
 class QtUserProfileHandler;
+class QtDialpad;
 
 class QEvent;
 class QApplication;
@@ -104,6 +106,9 @@ public:
 
 	PConferenceCall * createPresentationConferenceCall(CConferenceCall & cConferenceCall);
 
+	//DtmfThemeManager
+	void createPresentationDtmfThemeManager(CDtmfThemeManager & _cDtmfThemeManager);
+
 private:
 
 	void postEventImpl(IThreadEvent * event);
@@ -129,6 +134,9 @@ private:
 	QtWengoPhone * _qtWengoPhone;
 
 	QtUserProfileHandler * _qtUserProfileHandler;
+
+	//DtmfThemeManager
+	QtDialpad * _qtDialpad;
 };
 
 #endif	//OWQTFACTORY_H

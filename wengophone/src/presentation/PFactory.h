@@ -54,6 +54,7 @@ class PUserProfileHandler;
 class CUserProfileHandler;
 class PConferenceCall;
 class CConferenceCall;
+class CDtmfThemeManager;
 
 class IThreadEvent;
 
@@ -111,6 +112,9 @@ public:
 	virtual PWsDirectory * createPresentationWsDirectory(CWsDirectory & cWsDirectory) = 0;
 
 	virtual PConferenceCall * createPresentationConferenceCall(CConferenceCall & cConferenceCall) = 0;
+
+	//DtmfThemeManager
+	virtual void createPresentationDtmfThemeManager(CDtmfThemeManager & _dtmfThemeManager) = 0;
 
 	/**
 	 * Because of the presentation event loop.
