@@ -1,0 +1,26 @@
+ow_create_project(qt4)
+
+ow_add_public_include_dirs(
+	${QT_INCLUDE_DIR}
+)
+
+if (CMAKE_BUILD_TYPE MATCHES Debug)
+	ow_add_public_libraries(
+		${QT_QTCORE_LIBRARY_DEBUG}
+		${QT_QTGUI_LIBRARY_DEBUG}
+		${QT_QTXML_LIBRARY_DEBUG}
+		QtUiToolsd
+	)
+else (CMAKE_BUILD_TYPE MATCHES Debug)
+	ow_add_public_libraries(
+		${QT_QTCORE_LIBRARY_RELEASE}
+		${QT_QTGUI_LIBRARY_RELEASE}
+		${QT_QTXML_LIBRARY_RELEASE}
+		QtUiTools
+	)
+endif (CMAKE_BUILD_TYPE MATCHES Debug)
+
+ow_add_public_definitions(
+	-DQT_DLL
+	-DQT_NO_KEYWORDS
+)
