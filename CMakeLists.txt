@@ -50,12 +50,6 @@ macro_ensure_out_of_source_build("WengoPhone requires an out of source build. Pl
 # get svn revision
 ow_get_subversion_revision(SVN_REVISION)
 
-# Compatibility between Qt4 and Boost
-add_definitions(-DQT_NO_KEYWORDS)
-
-# Qt as a DLL
-add_definitions(-DQT_DLL)
-
 # Boost as dynamic libraries
 add_definitions(-DBOOST_ALL_DYN_LINK)
 
@@ -75,6 +69,10 @@ else (WIN32)
 	find_package(GLIB2 REQUIRED)
 	find_package(FFMPEG REQUIRED)
 endif (WIN32)
+
+if (NOT MSVC)
+	find_package(XML2 REQUIRED)
+endif (NOT MSVC)
 
 if (NOT APPLE AND NOT WIN32)
 	find_package(Portaudio REQUIRED)

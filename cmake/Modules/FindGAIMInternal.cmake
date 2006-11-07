@@ -22,21 +22,26 @@ else (GAIM_LIBRARIES AND GAIM_INCLUDE_DIRS)
     NAMES
       gaim/core.h
     PATHS
-      ${CMAKE_SOURCE_DIR}/libs/gaim/include
+      ${CMAKE_SOURCE_DIR}/libs/3rdparty/gaim/include
   )
 
-  find_library(GAIM_LIBRARY
+  find_path(GAIM_PLUGIN_INCLUDE_DIR
+    NAMES
+      plugin.h
+    PATHS
+      ${CMAKE_SOURCE_DIR}/libs/3rdparty/gaim/src/libgaim
+  )
+
+  find_library(GAIM_LIBRARIES
     NAMES
       gaim
     PATHS
-      ${CMAKE_SOURCE_DIR}/libs/gaim/binary-lib/msvc
+      ${CMAKE_SOURCE_DIR}/libs/3rdparty/gaim/binary-lib/msvc
   )
 
   set(GAIM_INCLUDE_DIRS
     ${GAIM_INCLUDE_DIR}
-  )
-  set(GAIM_LIBRARIES
-    ${GAIM_LIBRARY}
+    ${GAIM_PLUGIN_INCLUDE_DIR}
   )
 
   if (GAIM_INCLUDE_DIRS AND GAIM_LIBRARIES)

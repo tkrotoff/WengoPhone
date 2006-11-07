@@ -13,8 +13,6 @@ ow_add_public_include_dirs(
 )
 
 ow_add_private_libraries(
-	${QT_QTCORE_LIBRARY}
-	${QT_QTGUI_LIBRARY}
 	${BOOST_PROGRAM_OPTIONS_LIBRARY}
 )
 

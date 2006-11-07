@@ -2,6 +2,7 @@ ow_create_project(owbrowser)
 
 ow_use_public_libraries(
 	owutil
+	qt4
 )
 
 ow_use_private_libraries(

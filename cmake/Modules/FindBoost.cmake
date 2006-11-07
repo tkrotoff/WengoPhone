@@ -356,6 +356,18 @@ else (BOOST_LIBRARIES AND BOOST_INCLUDE_DIRS)
     set(BOOST_PROGRAM_OPTIONS_LIBRARY
       ""
     )
+    set(BOOST_REGEX_LIBRARY
+      ""
+    )
+    set(BOOST_SIGNALS_LIBRARY
+      ""
+    )
+    set(BOOST_THREAD_LIBRARY
+      ""
+    )
+    set(BOOST_SERIALIZATION_LIBRARY
+      ""
+    )
   endif (MSVC)
 
   # show the BOOST_INCLUDE_DIRS and BOOST_LIBRARIES variables only in the advanced view

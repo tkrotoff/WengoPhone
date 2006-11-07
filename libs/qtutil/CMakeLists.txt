@@ -1,22 +1,12 @@
 ow_create_project(owqtutil)
 
-include(${QT_USE_FILE})
-
 ow_use_public_libraries(
 	owthread
+	qt4
 )
 
 ow_add_public_include_dirs(
 	${CMAKE_CURRENT_SOURCE_DIR}/include
-	${QT_INCLUDE_DIR}
-)
-
-ow_add_private_libraries(
-	${QT_QTCORE_LIBRARY}
-	${QT_QTGUI_LIBRARY}
-	${QT_QTXML_LIBRARY}
-	#${QT_QTUITOOLS_LIBRARY}
-	QtUiTools
 )
 
 #ow_add_public_definitions(

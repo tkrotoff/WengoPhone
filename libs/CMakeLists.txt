@@ -1,26 +1,27 @@
 if (WIN32)
-  subdirs(
-    portaudio
-  )
+	subdirs(
+		3rdparty/portaudio
+		3rdparty/tinyxml
+	)
 endif (WIN32)
 
 if (NOT MSVC)
-  subdirs(
-    gaim
-  )
+	subdirs(
+		3rdparty/gaim
+	)
 endif (NOT MSVC)
 
 if (UNIX)
-  if (NOT APPLE)
-    subdirs(
-      samplerate
-    )
-  endif (NOT APPLE)
+	if (NOT APPLE)
+		subdirs(
+			3rdparty/samplerate
+		)
+	endif (NOT APPLE)
 endif (UNIX)
 
 subdirs(
-	curl
-	tinyxml
+	3rdparty/qt4
+	owcurl
 	util
 	wenbox
 	qtutil

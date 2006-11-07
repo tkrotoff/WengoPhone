@@ -6,6 +6,7 @@ ow_create_project(owsipwrapper)
 
 ow_use_public_libraries(
 	owutil
+	owpixertool
 )
 
 ow_add_public_include_dirs(

@@ -21,7 +21,7 @@ set(CMAKE_COLOR_MAKEFILE ON)
 set(GENERIC_LIB_VERSION "2.0.0")
 set(GENERIC_LIB_SOVERSION "2")
 
-# Set the default build type to release with debug info
+# Set the default build type to debug
 if (NOT CMAKE_BUILD_TYPE)
 	set(CMAKE_BUILD_TYPE Debug
 		CACHE STRING

@@ -83,13 +83,6 @@ static gboolean gaim_wg_io_invoke(GIOChannel * source, GIOCondition condition, g
 
 #ifdef OS_WINDOWS
 	if (!gaim_cond) {
-#if DEBUG
-		gaim_debug(GAIM_DEBUG_MISC, "wg_eventloop",
-			"CLOSURE received GIOCondition of 0x%x, which does not"
-			" match 0x%x (READ) or 0x%x (WRITE)\n",
-			condition, GAIM_WG_READ_COND, GAIM_WG_WRITE_COND);
-#endif /* DEBUG */
-
 		return TRUE;
 	}
 #endif /* OS_WINDOWS */
@@ -196,7 +189,7 @@ void GaimIMFactory::GaimIMInit() {
 #ifdef OS_WIN32
 	wgaim_init();
 #endif
-	
+
 	std::string configPath;
 
 #if defined(OS_MACOSX) || defined(OS_WINDOWS)

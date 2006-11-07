@@ -1,7 +1,5 @@
 ow_create_project(qtwengophone)
 
-include(${QT_USE_FILE})
-
 subdirs(
 	pics/emoticons
 )
@@ -25,15 +23,6 @@ ow_use_private_libraries(
 
 ow_add_public_include_dirs(
 	${CMAKE_CURRENT_BINARY_DIR}
-	${QT_INCLUDE_DIR}
-)
-
-ow_add_private_libraries(
-	${QT_QTCORE_LIBRARY}
-	${QT_QTGUI_LIBRARY}
-	${QT_QTXML_LIBRARY}
-	#${QT_QTUITOOLS_LIBRARY}
-	QtUiTools
 )
 
 ow_add_private_definitions(

@@ -1,13 +1,11 @@
 ow_create_project(owtrayicon)
 
-ow_add_public_include_dirs(
-	${QT_INCLUDE_DIR}
-	${CMAKE_CURRENT_SOURCE_DIR}
+ow_use_public_libraries(
+	qt4
 )
 
-ow_add_private_libraries(
-	${QT_QTCORE_LIBRARY}
-	${QT_QTGUI_LIBRARY}
+ow_add_public_include_dirs(
+	${CMAKE_CURRENT_SOURCE_DIR}
 )
 
 qt4_wrap_cpp(owtrayicon_SRCS
