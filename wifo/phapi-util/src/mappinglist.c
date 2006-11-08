@@ -58,7 +58,7 @@ PHAPI_UTIL_EXPORTS mappinglist_t * create_mappinglist(){
 *	free_mappinglist(&list);
 * </pre>
 *
-* @param	[in][out]	list : a pointer to the list pointer to free and turn into NULL
+* @param	[in-out]	list : a pointer to the list pointer to free and turn into NULL
 */
 PHAPI_UTIL_EXPORTS void free_mappinglist(mappinglist_t ** list){
 	mappinglist_link_t * link;
@@ -136,7 +136,7 @@ static mappinglist_link_t * create_mappinglist_link_with_int_key(int key, void *
 *	free_mappinglist_link(&link);
 * </pre>
 *
-* @param	[in][out]	link : a pointer to the the link pointer to free and turn into NULL
+* @param	[in-out]	link : a pointer to the the link pointer to free and turn into NULL
 */
 static void free_mappinglist_link(mappinglist_link_t ** link){
 	(*link)->int_key = 0;
@@ -152,7 +152,7 @@ static void free_mappinglist_link(mappinglist_link_t ** link){
 * If the key is already used, the adding will be unsuccesful
 * (based on a comparator function, defaults to pointer equality check if no comparator provided)
 *
-* @param	[in][out]	list : a pointer to the list receiving the new element
+* @param	[in-out]	list : a pointer to the list receiving the new element
 * @param	[in]	key : a pointer to the key
 * @param	[in]	element : a pointer to the element
 * @param	[in]	equals : a pointer to the comparator function used to check the key equality
@@ -188,7 +188,7 @@ PHAPI_UTIL_EXPORTS unsigned int mappinglist_put(mappinglist_t * list, void * key
 * Puts an element in the mapping list associated to the given integer key
 * If the key is already used, the adding will be unsuccesful
 *
-* @param	[in][out]	list : a pointer to the list receiving the new element
+* @param	[in-out]	list : a pointer to the list receiving the new element
 * @param	[in]	key : an integer key
 * @param	[in]	element : a pointer to the element
 * @return	TRUE if the add was successful; FALSE else
@@ -223,7 +223,7 @@ PHAPI_UTIL_EXPORTS unsigned int mappinglist_put_with_int_key(mappinglist_t * lis
 * Removes the element associated to the key from the mapping list.
 * (based on a comparator function, defaults to pointer equality check if no comparator provided)
 *
-* @param	[in][out]	list : a pointer to the list from which the element associated to the key is removed
+* @param	[in-out]	list : a pointer to the list from which the element associated to the key is removed
 * @param	[in]	key : a pointer to the key
 * @param	[in]	equals : a pointer to the comparator function used to check the key equality
 * @return	the removed element if the suppression was successful; NULL else
@@ -264,7 +264,7 @@ PHAPI_UTIL_EXPORTS void * mappinglist_remove(mappinglist_t * list, void * key, u
 /**
 * Removes the element associated to the integer key from the mapping list
 *
-* @param	[in][out]	list : a pointer to the list from which the element associated to the key is removed
+* @param	[in-out]	list : a pointer to the list from which the element associated to the key is removed
 * @param	[in]	key : an integer key
 * @return	the removed element if the suppression was successful; NULL else
 */

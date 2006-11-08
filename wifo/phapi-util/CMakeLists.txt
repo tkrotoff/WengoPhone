@@ -15,6 +15,7 @@ ow_add_sources(
 	src/comparator.c
 	src/linkedlist.c
 	src/mappinglist.c
+	src/phSharedLib.c
 )
 
 if (WIN32)

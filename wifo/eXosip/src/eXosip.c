@@ -967,6 +967,7 @@ int eXosip_info_call(int jid, char *content_type, char *body)
 
 }
 
+/*TODO: Add a param to specify the size of the body instead of basing on the \0 at the end of body*/
 int eXosip_initiate_call_with_body(osip_message_t *invite,const char *bodytype, const char*body, void *reference){
 	eXosip_call_t *jc;
   osip_header_t *subject;
@@ -2907,6 +2908,24 @@ eXosip_reg_find(int rid)
     return NULL;
 }
 
+// <ncouturier>
+eXosip_reg_t *
+eXosip_reg_find_by_local_contact(const char * local_contact) {
+	eXosip_reg_t *jr;
+
+	if(local_contact == NULL || strlen(local_contact) <= 0) {
+		return NULL;
+	}
+
+	for (jr = eXosip.j_reg; jr != NULL; jr = jr->next) {
+		if (strncmp(jr->r_contact, local_contact, strlen(local_contact)) == 0) {
+			return jr;
+		}
+	}
+	return NULL;
+}
+// </ncouturier>
+
 int eXosip_register      (int rid, int registration_period)
 {
   osip_transaction_t *transaction;
@@ -3404,11 +3423,10 @@ int eXosip_subscribe    (char *to, char *from, char *route, const int winfo)
   
   osip_transaction_set_your_instance(transaction, __eXosip_new_jinfo(NULL, NULL, js, NULL));
   osip_transaction_add_event(transaction, sipevent);
-
   ADD_ELEMENT(eXosip.j_subscribes, js);
   eXosip_update(); /* fixed? */
   __eXosip_wakeup();
-  return 0;
+  return js->s_id;
 }
 
 int eXosip_subscribe_refresh  (int sid, const char *expires)

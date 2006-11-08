@@ -38,6 +38,8 @@
 #define snprintf _snprintf
 #endif
 
+#ifndef VS2005
+
 typedef struct {
 	BOOL(* IsResolvable) (LPSTR lpszHost);
 	DWORD(* GetIPAddress) (LPSTR lpszIPAddress, LPDWORD lpdwIPAddressSize);
@@ -54,6 +56,8 @@ typedef struct {
 	LPSTR lpszScriptBuffer;
 	DWORD dwScriptBufferSize;
 } AUTO_PROXY_SCRIPT_BUFFER;
+
+#endif
 
 typedef BOOL(CALLBACK * pfnInternetInitializeAutoProxyDll) (
 	DWORD dwVersion,
@@ -197,9 +201,9 @@ int _getProxyAddress()
 
 	/* ************ */
 
-	ret = RegOpenKeyEx(HKEY_CURRENT_USER, "Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings", 0, KEY_QUERY_VALUE, & result);
-	ret = RegQueryValueEx(result, "ProxyEnable", 0, 0, (LPBYTE) & enable, & enablesize);
-	ret = RegQueryValueEx(result, "ProxyServer", 0, 0, (LPBYTE)url, & size);
+	ret = RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings", 0, KEY_QUERY_VALUE, & result);
+	ret = RegQueryValueExA(result, "ProxyEnable", 0, 0, (LPBYTE) & enable, & enablesize);
+	ret = RegQueryValueExA(result, "ProxyServer", 0, 0, (LPBYTE)url, & size);
 
 	if (ret == ERROR_SUCCESS && enable == 1) {
 		if (_parseProxyUrl(url) == 0) {
@@ -210,7 +214,7 @@ int _getProxyAddress()
 
 	ZeroMemory(url, 1024);
 	size = 1024;
-	ret = RegQueryValueEx(result, "AutoConfigURL", 0, 0, (LPBYTE)url, & size);
+	ret = RegQueryValueExA(result, "AutoConfigURL", 0, 0, (LPBYTE)url, & size);
 	RegCloseKey(result);
 
 	if (ret != ERROR_SUCCESS) {
@@ -225,7 +229,7 @@ int _getProxyAddress()
 		return -1;
 	}
 
-	if (!(hModJS = LoadLibrary("jsproxy.dll"))) {
+	if (!(hModJS = LoadLibraryA("jsproxy.dll"))) {
 		return -1;
 	}
 
@@ -346,8 +350,8 @@ char **internet_explorer_proxyless_exception_list()
 	char buff[1024];
 	DWORD buff_size = sizeof(buff);
 
-	ret = RegOpenKeyEx(HKEY_CURRENT_USER, "Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings", 0, KEY_QUERY_VALUE, &result);
-	ret = RegQueryValueEx(result, "ProxyOverride", 0, 0, (LPBYTE)buff, &buff_size);
+	ret = RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings", 0, KEY_QUERY_VALUE, &result);
+	ret = RegQueryValueExA(result, "ProxyOverride", 0, 0, (LPBYTE)buff, &buff_size);
 	RegCloseKey(result);
 
 	list = my_split(buff, ';');

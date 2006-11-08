@@ -20,8 +20,6 @@
 #ifndef OWPHAPISFPWRAPPER_H
 #define OWPHAPISFPWRAPPER_H
 
-#include <sfp-plugin/sfp-plugin.h>
-
 #include <imwrapper/Account.h>
 #include <imwrapper/IMContact.h>
 
@@ -61,10 +59,6 @@ private :
 	~PhApiSFPWrapper();
 
 	void setBasePort(const unsigned int basePort);
-
-	void setCallbacks(const sfp_callbacks_t * callbacks);
-
-
 
 };
 

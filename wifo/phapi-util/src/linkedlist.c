@@ -29,7 +29,7 @@ PHAPI_UTIL_EXPORTS linkedlist_t * create_linkedlist(){
 /**
 * Frees a linked list
 *
-* @param	[in][out]	list : a pointer to the linked list pointer
+* @param	[in-out]	list : a pointer to the linked list pointer
 */
 PHAPI_UTIL_EXPORTS void free_linkedlist(linkedlist_t ** list){
 	if(list != NULL && *list != NULL){
@@ -64,7 +64,7 @@ static linkedlist_link_t * create_linkedlist_link(void * element){
 *	free_linkedlist_link(&link);
 * </pre>
 *
-* @param	[in][out]	link : a pointer to the linked list pointer to be freed and turned into NULL
+* @param	[in-out]	link : a pointer to the linked list pointer to be freed and turned into NULL
 */
 static void free_linkedlist_link(linkedlist_link_t ** link){
 	if(link != NULL && *link != NULL){
@@ -80,7 +80,7 @@ static void free_linkedlist_link(linkedlist_link_t ** link){
 * An element cannot be added more than once.
 * (based on a comparator function, defaults to pointer equality check if no comparator provided)
 *
-* @param	[in][out]	list : the list that receives the element
+* @param	[in-out]	list : the list that receives the element
 * @param	[in]	element : the element to add
 * @param	[in]	equals : a pointer to the comparator function used to check the element equality
 * @return	TRUE if the element could be added; FALSE else
@@ -113,7 +113,7 @@ PHAPI_UTIL_EXPORTS unsigned int linkedlist_add(linkedlist_t * list, void * eleme
 * Removes an element of the linked list.
 * (based on a comparator function, defaults to pointer equality check if no comparator provided)
 *
-* @param	[in][out]	list : the list from which the element is to be removed
+* @param	[in-out]	list : the list from which the element is to be removed
 * @param	[in]	element : the element to remove
 * @param	[in]	equals : a pointer to the comparator function used to check the element equality
 * @return	TRUE if the element could be removed; FALSE else
@@ -157,7 +157,7 @@ PHAPI_UTIL_EXPORTS unsigned int linkedlist_remove_element(linkedlist_t * list, v
 /**
 * Checks if the list, from the current position, has a next element
 *
-* @param	[in][out]	list : a linked list
+* @param	[in-out]	list : a linked list
 * @return	TRUE if the list has a next element; FALSE else
 */
 PHAPI_UTIL_EXPORTS unsigned int linkedlist_has_next(linkedlist_t * list){
@@ -176,7 +176,7 @@ PHAPI_UTIL_EXPORTS unsigned int linkedlist_has_next(linkedlist_t * list){
 /**
 * Moves the current position in the list before the first element
 *
-* @param	[in][out]	list : a linked list
+* @param	[in-out]	list : a linked list
 */
 PHAPI_UTIL_EXPORTS void linkedlist_move_before_first(linkedlist_t * list){
 	list->current = NULL;
@@ -185,7 +185,7 @@ PHAPI_UTIL_EXPORTS void linkedlist_move_before_first(linkedlist_t * list){
 /**
 * Moves the current position in the list to the first element
 *
-* @param	[in][out]	list : a linked list
+* @param	[in-out]	list : a linked list
 */
 PHAPI_UTIL_EXPORTS void linkedlist_move_first(linkedlist_t * list){
 	list->current = list->first;
@@ -194,7 +194,7 @@ PHAPI_UTIL_EXPORTS void linkedlist_move_first(linkedlist_t * list){
 /**
 * Moves from the current position to the next element
 *
-* @param	[in][out]	list : a linked list
+* @param	[in-out]	list : a linked list
 */
 PHAPI_UTIL_EXPORTS unsigned int linkedlist_move_next(linkedlist_t * list){
 	if(linkedlist_has_next(list)){
@@ -211,7 +211,7 @@ PHAPI_UTIL_EXPORTS unsigned int linkedlist_move_next(linkedlist_t * list){
 /**
 * Gets the element at the current position
 *
-* @param	[in][out]	list : a linked list
+* @param	[in-out]	list : a linked list
 * @return	the element at the current position
 */
 PHAPI_UTIL_EXPORTS void * linkedlist_get(linkedlist_t * list){
@@ -221,7 +221,7 @@ PHAPI_UTIL_EXPORTS void * linkedlist_get(linkedlist_t * list){
 /**
 * Removes all elements from the linked list but the elements are not freed
 *
-* @param	[in][out]	list : a linked list
+* @param	[in-out]	list : a linked list
 */
 PHAPI_UTIL_EXPORTS void linkedlist_clear(linkedlist_t * list){
 	linkedlist_link_t * link;

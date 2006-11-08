@@ -21,7 +21,7 @@
 
 #include <osipparser2/osip_port.h>
 #include <osipparser2/osip_rfc3264.h>
-#include <osip_rfc3264i.h> /* internal include */
+#include "osip_rfc3264i.h" /* internal include */
 
 /**
  * Initialize negotiation facility..

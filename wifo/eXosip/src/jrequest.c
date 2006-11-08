@@ -164,17 +164,32 @@ generating_request_out_of_dialog2(osip_message_t **dest, char *method_name,
     }
 
 
-  if (proxy!=NULL && proxy[0] != 0)
-    {  /* equal to a pre-existing route set */
-	   /* if the pre-existing route set contains a "lr" (compliance
-	      with bis-08) then the req_uri should contains the remote target
-	      URI */
-      osip_uri_param_t *lr_param;
-      osip_route_t *o_proxy;
+	if (proxy!=NULL && proxy[0] != 0)
+    {  
+		osip_uri_param_t *lr_param;
+		osip_route_t *o_proxy;
+
+		// MINH [
+		// Add this piece of code so that phcfg.proxy doesn't need to 
+		// contain the full route header. Instead, it will contain just
+		// the name or ip of the proxy
+		char tmp[200];
+		if (0 == strstr(proxy, "sip:"))
+		{
+			snprintf(tmp, sizeof(tmp), "<sip:%s;lr>", proxy);
+			proxy = tmp;
+		}		
+		// ] MINH
+
+		/* equal to a pre-existing route set */
+
+		/* if the pre-existing route set contains a "lr" (compliance
+		  with bis-08) then the req_uri should contains the remote target
+		  URI */
 #ifndef __VXWORKS_OS__
-      osip_route_init(&o_proxy);
+		osip_route_init(&o_proxy);
 #else
-      osip_route_init2(&o_proxy);
+		osip_route_init2(&o_proxy);
 #endif
       i = osip_route_parse(o_proxy, proxy);
       if (i!=0) {

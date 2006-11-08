@@ -1,6 +1,8 @@
 #ifndef __PHCALL_H__
 #define __PHCALL_H__ 1
 
+#include <eXosip/eXosip.h>
+
 #define PH_MAX_CALLS  32
 
 #ifdef __cplusplus
@@ -10,12 +12,16 @@ extern "C"
 
 struct phConfig;
 struct ph_msession_s;
+struct eXosip_event;
+struct owpl_plugin;
+
 
 /**
  * @struct memory representation of a call
  */
 struct phcall {
 	int cid;
+	int extern_cid; /* External call ID (eXosip callId for now) */
 	int did;
 	/* call id to which we're trasferring this call */
 	int txcid;
@@ -35,7 +41,7 @@ struct phcall {
 	int local_sdp_video_port;
 	struct phConfig *cfg;
 	int  _hasaudio;
-	int  isringing;
+	int  isringing; //DEPRECATED. This property will be removed soon. Do not use it anymore.
 	int  remotehold;
 	/* used by the 'hold call' state machine */
 	int  localhold;
@@ -65,6 +71,8 @@ struct phcall {
 	struct ph_msession_s *mses;
 	/* used by sVoIP to indicate that the call is crypted */
 	int iscrypted; 
+
+	struct owpl_plugin * owplPlugin;
 };
 
 typedef struct phcall phcall_t;
@@ -73,6 +81,10 @@ typedef struct phcall phcall_t;
  * phcall functions
  *
  */
+
+phcall_t *ph_locate_call(struct eXosip_event *je, int creatit);
+phcall_t *ph_allocate_call(int cid);
+phcall_t *ph_locate_call_for_refer(eXosip_event_t *je);
 
 phcall_t *ph_locate_call_by_cid(int cid);
 phcall_t *ph_locate_call_by_rcid(int cid);

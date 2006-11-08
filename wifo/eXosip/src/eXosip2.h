@@ -548,6 +548,16 @@ int eXosip_is_public_address(const char *addr);
 
 sdp_message_t *eXosip_get_sdp_body(osip_message_t *message);
 
+// <ncouturier>
+/**
+ * Finds the eXosip_reg_t associated with a local contact of form <sip:username@ip:port>
+ *
+ * @param	local_contact	<sip:username@ip:port>
+ * @return	the eXosip_reg_t associated with a local contact
+ */
+eXosip_reg_t * eXosip_reg_find_by_local_contact(const char * local_contact);
+// </ncouturier>
+
 
 #ifdef __cplusplus
 }

@@ -13,6 +13,8 @@
 #include "msdirent.h"
 #endif
 
+#include <phapi-util/phSharedLib.h>
+
 #include "rtpport.h" // only for GMutex <- phmedia.h <- phcodec-h263.h
 #include "phcodec.h"
 
@@ -542,33 +544,6 @@ const char entry_point_name[] = "ph_codec_plugin_init";
 #define HLIB HINSTANCE
 #define snprintf _snprintf
 struct stat { int x; };
-
-#define dlopen(a, b) LoadLibrary(a)
-#define dlsym(l, s)  GetProcAddress(l, s)
-#define dlclose(l)  FreeLibrary(l)
-
-static int is_shared_lib(const char *name)
-{
-    return strstr(name, ".dll") || strstr(name, ".DLL");
-}
-
-
-#elif defined(OS_MACOSX)
-
-#define HLIB void *
-static int is_shared_lib(const char *name)
-{
-	return 0 != strstr(name, ".dylib");
-}
-
-#else /* !MACOSX */
-
-#define HLIB void *
-static int is_shared_lib(const char *name)
-{
-    return 0 != strstr(name, ".so");
-}
-
 #endif
 
 
@@ -611,7 +586,7 @@ void ph_media_plugin_codec_init(const char *dirpath)
 
   while(0 != (entry = readdir(dir)))
   {
-    if (!is_shared_lib(entry->d_name)) 
+    if (!ph_is_shared_lib(entry->d_name)) 
     {
       continue;
     }

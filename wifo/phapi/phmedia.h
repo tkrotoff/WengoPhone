@@ -22,7 +22,7 @@
 #ifndef __PHMEDIA_H__
 #define __PHMEDIA_H__
 
-
+#include <rtpport.h> // only for GMutex
 
 
 #define PH_MEDIA_DTMF_PAYLOAD 101

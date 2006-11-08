@@ -21,121 +21,97 @@
 #include "PhApiSFPEvent.h"
 #include "PhApiSFPWrapper.h"
 
+#include <owpl_plugin.h>
+
 #include <util/String.h>
 
 extern "C" {
 
-	static void inviteToTransfer(int cid, char * uri, char * short_filename, char * file_type, char * file_size){
+	static void inviteToTransferHandler(int cid, char * uri, char * short_filename, char * file_type, char * file_size){
 		PhApiSFPCallbacks::inviteToTransfer(cid, std::string((const char *) uri), std::string((const char *) short_filename), std::string((const char *) file_type), String(file_size).toInteger());
 	}
 
-	static void newIncomingFile(int cid, char * username, char * short_filename, char * file_type, char * file_size){
+	static void newIncomingFileHandler(int cid, char * username, char * short_filename, char * file_type, char * file_size){
 		PhApiSFPCallbacks::newIncomingFile(cid, std::string((const char *) username), std::string((const char *) short_filename), std::string((const char *) file_type), String(file_size).toInteger());
 	}
 
-	static void waitingForAnswer(int cid, char * uri){
+	static void waitingForAnswerHandler(int cid, char * uri){
 		PhApiSFPCallbacks::waitingForAnswer(cid, std::string((const char *) uri));
 	}
 
-	static void transferCancelled(int cid, char * short_filename, char * file_type, char * file_size){
+	static void transferCancelledHandler(int cid, char * short_filename, char * file_type, char * file_size){
 		PhApiSFPCallbacks::transferCancelled(cid, std::string((const char *) short_filename), std::string((const char *) file_type), String(file_size).toInteger());
 	}
 
-	static void transferCancelledByPeer(int cid, char * username, char * short_filename, char * file_type, char * file_size){
+	static void transferCancelledByPeerHandler(int cid, char * username, char * short_filename, char * file_type, char * file_size){
 		PhApiSFPCallbacks::transferCancelledByPeer(cid, std::string((const char *) username), std::string((const char *) short_filename), std::string((const char *) file_type), String(file_size).toInteger());
 	}
 
-	static void sendingFileBegin(int cid, char * username, char * short_filename, char * file_type, char * file_size){
+	static void sendingFileBeginHandler(int cid, char * username, char * short_filename, char * file_type, char * file_size){
 		PhApiSFPCallbacks::sendingFileBegin(cid, std::string((const char *) username), std::string((const char *) short_filename), std::string((const char *) file_type), String(file_size).toInteger());
 	}
 	
-	static void receivingFileBegin(int cid, char * username, char * short_filename, char * file_type, char * file_size){
+	static void receivingFileBeginHandler(int cid, char * username, char * short_filename, char * file_type, char * file_size){
 		PhApiSFPCallbacks::receivingFileBegin(cid, std::string((const char *) username), std::string((const char *) short_filename), std::string((const char *) file_type), String(file_size).toInteger());
 	}
 
-	static void transferClosed(int cid, char * username, char * short_filename, char * file_type, char * file_size){
+	static void transferClosedHandler(int cid, char * username, char * short_filename, char * file_type, char * file_size){
 	}
 
-	static void transferClosedByPeer(int cid, char * username, char * short_filename, char * file_type, char * file_size){
+	static void transferClosedByPeerHandler(int cid, char * username, char * short_filename, char * file_type, char * file_size){
 	}
 
-	static void transferFromPeerFinished(int cid, char * username, char * short_filename, char * file_type, char * file_size){
+	static void transferFromPeerFinishedHandler(int cid, char * username, char * short_filename, char * file_type, char * file_size){
 		PhApiSFPCallbacks::transferFromPeerFinished(cid, std::string((const char *) username), std::string((const char *) short_filename), std::string((const char *) file_type), String(file_size).toInteger());
 	}
 
-	static void transferToPeerFinished(int cid, char * username, char * short_filename, char * file_type, char * file_size){
+	static void transferToPeerFinishedHandler(int cid, char * username, char * short_filename, char * file_type, char * file_size){
 		PhApiSFPCallbacks::transferToPeerFinished(cid, std::string((const char *) username), std::string((const char *) short_filename), std::string((const char *) file_type), String(file_size).toInteger());
 	}
 
-	static void transferFromPeerFailed(int cid, char * username, char * short_filename, char * file_type, char * file_size){
+	static void transferFromPeerFailedHandler(int cid, char * username, char * short_filename, char * file_type, char * file_size){
 		PhApiSFPCallbacks::transferFromPeerFailed(cid, std::string((const char *) username), std::string((const char *) short_filename), std::string((const char *) file_type), String(file_size).toInteger());
 	}
 
-	static void transferToPeerFailed(int cid, char * username, char * short_filename, char * file_type, char * file_size){
+	static void transferToPeerFailedHandler(int cid, char * username, char * short_filename, char * file_type, char * file_size){
 		PhApiSFPCallbacks::transferToPeerFailed(cid, std::string((const char *) username), std::string((const char *) short_filename), std::string((const char *) file_type), String(file_size).toInteger());
 	}
 
-	static void transferFromPeerStopped(int cid, char * username, char * short_filename, char * file_type, char * file_size){
+	static void transferFromPeerStoppedHandler(int cid, char * username, char * short_filename, char * file_type, char * file_size){
 		PhApiSFPCallbacks::transferFromPeerFailed(cid, std::string((const char *) username), std::string((const char *) short_filename), std::string((const char *) file_type), String(file_size).toInteger());
 	}
 
-	static void transferToPeerStopped(int cid, char * username, char * short_filename, char * file_type, char * file_size){
+	static void transferToPeerStoppedHandler(int cid, char * username, char * short_filename, char * file_type, char * file_size){
 		PhApiSFPCallbacks::transferToPeerFailed(cid, std::string((const char *) username), std::string((const char *) short_filename), std::string((const char *) file_type), String(file_size).toInteger());
 	}
 
-	static void transferProgression(int cid, int percentage){
+	static void transferProgressionHandler(int cid, int percentage){
 		PhApiSFPCallbacks::transferProgression(cid, percentage);
 	}
 
-	static void transferPausedByPeer(int cid, char * username, char * short_filename, char * file_type, char * file_size){
+	static void transferPausedByPeerHandler(int cid, char * username, char * short_filename, char * file_type, char * file_size){
 		PhApiSFPCallbacks::transferPausedByPeer(cid, std::string((const char *) username), std::string((const char *) short_filename), std::string((const char *) file_type), String(file_size).toInteger());
 	}
 
-	static void transferPaused(int cid, char * username, char * short_filename, char * file_type, char * file_size){
+	static void transferPausedHandler(int cid, char * username, char * short_filename, char * file_type, char * file_size){
 		PhApiSFPCallbacks::transferPaused(cid, std::string((const char *) username), std::string((const char *) short_filename), std::string((const char *) file_type), String(file_size).toInteger());
 	}
 
-	static void transferResumedByPeer(int cid, char * username, char * short_filename, char * file_type, char * file_size){
+	static void transferResumedByPeerHandler(int cid, char * username, char * short_filename, char * file_type, char * file_size){
 		PhApiSFPCallbacks::transferResumedByPeer(cid, std::string((const char *) username), std::string((const char *) short_filename), std::string((const char *) file_type), String(file_size).toInteger());
 	}
 
-	static void transferResumed(int cid, char * username, char * short_filename, char * file_type, char * file_size){
+	static void transferResumedHandler(int cid, char * username, char * short_filename, char * file_type, char * file_size){
 		PhApiSFPCallbacks::transferResumed(cid, std::string((const char *) username), std::string((const char *) short_filename), std::string((const char *) file_type), String(file_size).toInteger());
 	}
 
-	static void peerNeedsUpgrade(const char * username) {
+	static void peerNeedsUpgradeHandler(const char * username) {
 		PhApiSFPCallbacks::peerNeedsUpgrade(std::string(username));
 	}
 	
-	static void needUpgrade() {
+	static void needUpgradeHandler() {
 		PhApiSFPCallbacks::needUpgrade();
 	}
-	
-	static sfp_callbacks_t phapi_sfp_cbks = {
-		inviteToTransfer,
-		newIncomingFile,
-		waitingForAnswer,
-		transferCancelled,
-		transferCancelledByPeer,
-		sendingFileBegin,
-		receivingFileBegin,
-		transferClosedByPeer,
-		transferClosed,
-		transferFromPeerFinished,
-		transferToPeerFinished,
-		transferFromPeerFailed,
-		transferToPeerFailed,
-		transferFromPeerStopped,
-		transferToPeerStopped,
-		transferProgression,
-		transferPausedByPeer,
-		transferPaused,
-		transferResumedByPeer,
-		transferResumed,
-		peerNeedsUpgrade,
-		needUpgrade
-	};
-
 }
 
 
@@ -211,6 +187,27 @@ void PhApiSFPCallbacks::needUpgrade() {
 	PhApiSFPEvent::needUpgradeEvent(PhApiSFPWrapper::getInstance());
 }
 
-const sfp_callbacks_t * PhApiSFPCallbacks::getCallbacks(){
-	return &phapi_sfp_cbks;
+void PhApiSFPCallbacks::setCallbacks() {
+	owplPluginSetCallback("SFPPlugin", "inviteToTransfer", (owplPS_CommandProc)inviteToTransferHandler);
+	owplPluginSetCallback("SFPPlugin", "newIncomingFile", (owplPS_CommandProc)newIncomingFileHandler);
+	owplPluginSetCallback("SFPPlugin", "waitingForAnswer", (owplPS_CommandProc)waitingForAnswerHandler);
+	owplPluginSetCallback("SFPPlugin", "transferCancelled", (owplPS_CommandProc)transferCancelledHandler);
+	owplPluginSetCallback("SFPPlugin", "transferCancelledByPeer", (owplPS_CommandProc)transferCancelledByPeerHandler);
+	owplPluginSetCallback("SFPPlugin", "sendingFileBegin", (owplPS_CommandProc)sendingFileBeginHandler);
+	owplPluginSetCallback("SFPPlugin", "receivingFileBegin", (owplPS_CommandProc)receivingFileBeginHandler);
+	owplPluginSetCallback("SFPPlugin", "transferClosedByPeer", (owplPS_CommandProc)transferClosedByPeerHandler);
+	owplPluginSetCallback("SFPPlugin", "transferClosed", (owplPS_CommandProc)transferClosedHandler);
+	owplPluginSetCallback("SFPPlugin", "transferFromPeerFinished", (owplPS_CommandProc)transferFromPeerFinishedHandler);
+	owplPluginSetCallback("SFPPlugin", "transferToPeerFinished", (owplPS_CommandProc)transferToPeerFinishedHandler);
+	owplPluginSetCallback("SFPPlugin", "transferFromPeerFailed", (owplPS_CommandProc)transferFromPeerFailedHandler);
+	owplPluginSetCallback("SFPPlugin", "transferToPeerFailed", (owplPS_CommandProc)transferToPeerFailedHandler);
+	owplPluginSetCallback("SFPPlugin", "transferFromPeerStopped", (owplPS_CommandProc)transferFromPeerStoppedHandler);
+	owplPluginSetCallback("SFPPlugin", "transferToPeerStopped", (owplPS_CommandProc)transferToPeerStoppedHandler);
+	owplPluginSetCallback("SFPPlugin", "transferProgression", (owplPS_CommandProc)transferProgressionHandler);
+	owplPluginSetCallback("SFPPlugin", "transferPausedByPeer", (owplPS_CommandProc)transferPausedByPeerHandler);
+	owplPluginSetCallback("SFPPlugin", "transferPaused", (owplPS_CommandProc)transferPausedHandler);
+	owplPluginSetCallback("SFPPlugin", "transferResumedByPeer", (owplPS_CommandProc)transferResumedByPeerHandler);
+	owplPluginSetCallback("SFPPlugin", "transferResumed", (owplPS_CommandProc)transferResumedHandler);
+	owplPluginSetCallback("SFPPlugin", "peerNeedUpgrade", (owplPS_CommandProc)peerNeedsUpgradeHandler);
+	owplPluginSetCallback("SFPPlugin", "needUpgrade", (owplPS_CommandProc)needUpgradeHandler);
 }

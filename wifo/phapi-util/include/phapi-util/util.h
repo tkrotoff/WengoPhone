@@ -105,7 +105,7 @@ extern "C" {
 	*	sscanf2("25 bazaaar", "%d %s", i, string, sizeof(string));
 	* </pre>
 	*
-	* @param	[in][out]	text : the text to parse
+	* @param	[in-out]	text : the text to parse
 	* @param	[in]	format : the format for parsing (same syntax as printf, scanf, ...)
 	* @param	[out]	... : variables already allocated and receiving the extracted values
 	* @return	TRUE if succeeds; FALSE else
@@ -231,6 +231,8 @@ extern "C" {
 	* The value of @outlen after return is the number of ocetes consumed.
 	*/
 	PHAPI_UTIL_EXPORTS int UTF8Toascii(unsigned char* out, int *outlen, const unsigned char* in, int *inlen);
+
+	char *ph_split_host_port(char *buf, int bufsize, const char *host, int *port);
 
 #ifdef __cplusplus
 }

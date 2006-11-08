@@ -41,6 +41,7 @@ extern void sVoIP_phapi_recvRtp(RtpSession *rtp_session, gpointer error, mblk_t 
 extern void sVoIP_phapi_sendRtp(RtpSession *rtp_session, gpointer error, mblk_t *mp);
 
 #include "phapi.h"
+#include "phevents.h"
 #include "phmedia.h"
 #include "phcall.h" // sVoIP
 #include "phrecorder.h"
@@ -2136,6 +2137,7 @@ open_audio_device(struct ph_msession_s *s, phastream_t *stream, const char *devi
       {
         phcb->errorNotify(PH_NOAUDIODEVICE);
       }
+	  owplFireErrorEvent(OWPL_ERROR_NO_AUDIO_DEVICE, 0);
       return -1;
     }
 

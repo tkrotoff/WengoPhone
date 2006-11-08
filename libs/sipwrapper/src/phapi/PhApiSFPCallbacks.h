@@ -20,8 +20,6 @@
 #ifndef OWPHAPISFPCALLBACKS_H
 #define OWPHAPISFPCALLBACKS_H
 
-#include <sfp-plugin/sfp-plugin.h>
-
 #include <string>
 
 /**
@@ -69,7 +67,7 @@ public:
 
 	static void needUpgrade();
 
-	static const sfp_callbacks_t * getCallbacks();
+	static void setCallbacks();
 
 };
 

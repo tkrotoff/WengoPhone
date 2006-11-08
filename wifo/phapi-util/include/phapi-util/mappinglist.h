@@ -70,7 +70,7 @@ extern "C" {
 	*	free_mappinglist(&list);
 	* </pre>
 	*
-	* @param	[in][out]	list : a pointer to the list pointer to free and turn into NULL
+	* @param	[in-out]	list : a pointer to the list pointer to free and turn into NULL
 	*/
 	PHAPI_UTIL_EXPORTS void free_mappinglist(mappinglist_t ** list);
 
@@ -79,7 +79,7 @@ extern "C" {
 	* If the key is already used, the adding will be unsuccesful
 	* (based on a comparator function, defaults to pointer equality check if no comparator provided)
 	*
-	* @param	[in][out]	list : a pointer to the list receiving the new element
+	* @param	[in-out]	list : a pointer to the list receiving the new element
 	* @param	[in]	key : a pointer to the key
 	* @param	[in]	element : a pointer to the element
 	* @param	[in]	equals : a pointer to the comparator function used to check the key equality
@@ -91,7 +91,7 @@ extern "C" {
 	* Puts an element in the mapping list associated to the given integer key
 	* If the key is already used, the adding will be unsuccesful
 	*
-	* @param	[in][out]	list : a pointer to the list receiving the new element
+	* @param	[in-out]	list : a pointer to the list receiving the new element
 	* @param	[in]	key : an integer key
 	* @param	[in]	element : a pointer to the element
 	* @return	TRUE if the add was successful; FALSE else
@@ -102,7 +102,7 @@ extern "C" {
 	* Removes the element associated to the key from the mapping list.
 	* (based on a comparator function, defaults to pointer equality check if no comparator provided)
 	*
-	* @param	[in][out]	list : a pointer to the list from which the element associated to the key is removed
+	* @param	[in-out]	list : a pointer to the list from which the element associated to the key is removed
 	* @param	[in]	key : a pointer to the key
 	* @param	[in]	equals : a pointer to the comparator function used to check the key equality
 	* @return	the removed element if the suppression was successful; NULL else
@@ -112,7 +112,7 @@ extern "C" {
 	/**
 	* Removes the element associated to the integer key from the mapping list
 	*
-	* @param	[in][out]	list : a pointer to the list from which the element associated to the key is removed
+	* @param	[in-out]	list : a pointer to the list from which the element associated to the key is removed
 	* @param	[in]	key : an integer key
 	* @return	the removed element if the suppression was successful; NULL else
 	*/

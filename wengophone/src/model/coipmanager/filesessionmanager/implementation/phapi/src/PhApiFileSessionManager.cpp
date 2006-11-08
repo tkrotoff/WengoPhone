@@ -21,11 +21,25 @@
 #include "../include/phapifilesessionmanager/PhApiSendFileSession.h"
 #include "../include/phapifilesessionmanager/PhApiReceiveFileSession.h"
 
+#include "../../../../../../../../libs/sipwrapper/src/phapi/PhApiSFPCallbacks.h"
+
 #include <PhApiSFPEvent.h>
+
+#include <owpl_plugin.h>
 
 
 PhApiFileSessionManager::PhApiFileSessionManager(UserProfile & userProfile)
 : IFileSessionManager(userProfile) {
+#if defined(WIN32) || defined(WIN32_WCE)
+	owplPluginLoad("sfp-plugin.dll");
+#elif defined(OS_MACOSX)
+	owplPluginLoad("libsfp-plugin.dylib");
+#else
+	owplPluginLoad("libsfp-plugin.so");
+#endif
+	owplPluginSetParam("11000", 5, "SFPPlugin", "sfp_file_transfer_port");
+	owplPluginSetParam("tcp", 3, "SFPPlugin", "sfp_default_ip_protocol");
+	PhApiSFPCallbacks::setCallbacks();
 	PhApiSFPEvent::newIncomingFileEvent += boost::bind(&PhApiFileSessionManager::newIncomingFileEventHandler, this, _1, _2, _3, _4, _5, _6);
 	PhApiSFPEvent::needUpgradeEvent += boost::bind(&PhApiFileSessionManager::needUpgradeEventHandler, this, _1);
 	PhApiSFPEvent::peerNeedsUpgradeEvent += boost::bind(&PhApiFileSessionManager::peerNeedsUpgradeEventHandler, this, _1, _2);

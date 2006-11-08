@@ -20,42 +20,42 @@
 #include "PhApiSFPWrapper.h"
 #include "PhApiSFPCallbacks.h"
 
-#include <sfp-plugin/sfp-plugin.h> // TODO remove once we have a real plugin architecture
+#include <owpl_plugin.h>
 
 #include <util/String.h>
 
 PhApiSFPWrapper::PhApiSFPWrapper(){
-	sfp_register_plugin(); // TODO remove once we have a real plugin architecture
-	sfp_set_file_transfer_port("11000"); // TODO remove once we have a real plugin architecture
-	setCallbacks(PhApiSFPCallbacks::getCallbacks());
 }
 
 PhApiSFPWrapper::~PhApiSFPWrapper(){}
 
 int PhApiSFPWrapper::sendFile(int vlineID, std::string fullIdentity, std::string contactUri, std::string filename, std::string shortFilename, std::string fileType, unsigned int fileSize){
-	return sfp_send_file(vlineID, (void *)fullIdentity.c_str(), (char *)contactUri.c_str(), (char *)filename.c_str(), (char *)shortFilename.c_str(), (char *)fileType.c_str(), (char *)String::fromNumber(fileSize).c_str());
+    int retVal = 0;
+	owplPluginCallFunction(&retVal, "SFPPlugin", "sfp_send_file", "%d%s%s%s%s%s", vlineID, (char *)contactUri.c_str(), (char *)filename.c_str(), (char *)shortFilename.c_str(), (char *)fileType.c_str(), (char *)String::fromNumber(fileSize).c_str());
+    return retVal;
 }
 
 int PhApiSFPWrapper::receiveFile(int callId, std::string filename){
-	return sfp_receive_file(callId, (char *)filename.c_str());
+    int retVal = 0;
+	return owplPluginCallFunction(&retVal, "SFPPlugin", "sfp_receive_file", "%d%s", callId, (char *)filename.c_str());
 }
 
 int PhApiSFPWrapper::cancelTransfer(int callId){
-	return sfp_cancel_transfer(callId);
+    int retVal = 0;
+	return owplPluginCallFunction(&retVal, "SFPPlugin", "sfp_cancel_transfer", "%d", callId);
 }
 
 int PhApiSFPWrapper::pauseTransfer(int callId){
-	return sfp_pause_transfer(callId);
+    int retVal = 0;
+	return owplPluginCallFunction(&retVal, "SFPPlugin", "sfp_pause_transfer", "%d", callId);
 }
 
 int PhApiSFPWrapper::resumeTransfer(int callId){
-	return sfp_resume_transfer(callId);
+    int retVal = 0;
+	return owplPluginCallFunction(&retVal, "SFPPlugin", "sfp_resume_transfer", "%d", callId);
 }
 
 void PhApiSFPWrapper::setBasePort(const unsigned int basePort){
-	sfp_set_file_transfer_port(String::fromNumber(basePort).c_str());
-}
-
-void PhApiSFPWrapper::setCallbacks(const sfp_callbacks_t * callbacks){
-	sfp_set_plugin_callbacks(callbacks);
+	const char * port = String::fromNumber(basePort).c_str();
+	owplPluginSetParam(port, strlen(port), "SFPPlugin", "sfp_file_transfer_port");
 }

@@ -50,7 +50,6 @@ ow_add_private_definitions(
 	-DENABLE_TRACE=0
 	-DPH_VIDEO_USELOCK=1
 	-DUSE_SPXEC=1
-	-DUSE_PLUGINS=1
 	-DPH_FORCE_16KHZ=1
 	-DWENGOPHONE_UA="""wengo/v1/wengophoneng/wengo/rev${SVN_REVISION}/trunk/"""
 )
@@ -67,22 +66,24 @@ endif (WITH_BUILDID)
 #                 be later changed to "Wengophone NG"
 
 ow_add_sources(
-	phcodec.c
-	phmbuf.c
-	wav.c
-	tonegen.c
-	phmedia-audio-null.c
-	phmedia-audio-file.c
+	aec2.cpp
+	owpl_plugin.c
+	phapi-old.c
 	phapi.c
 	phaudiodriver.c
+	phcodec.c
+	phevents.c
+	phlog.c
+	phmbuf.c
+	phmedia-audio-file.c
+	phmedia-audio-null.c
+	phmedia-audio.c
 	phmedia.c
 	phrecorder.c
-	phmedia-audio.c
-	aec2.cpp
 	phresample.c
-	phlog.c
-	phplugin.c
-	phplugin-sdp.c
+	phvline.c
+	tonegen.c
+	wav.c
 )
 
 if (WITH_SPEEXWB_REPLACES_G726WB)

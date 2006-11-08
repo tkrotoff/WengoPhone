@@ -63,6 +63,7 @@ eXosip_event_init_for_call(int type,
 			   eXosip_call_t *jc,
 			   eXosip_dialog_t *jd)
 {
+	eXosip_reg_t * jr = NULL;
 	eXosip_event_t *je;
 	eXosip_event_init(&je, type);
 
@@ -77,8 +78,17 @@ eXosip_event_init_for_call(int type,
 		je->cid = jc->c_id;
 		je->external_reference = jc->external_reference;
 	}
-	if (jd!=NULL)
+	if (jd!=NULL) {
 		je->did = jd->d_id;
+		// <ncouturier> add the register id to every event
+		if(jd->d_localcontact != NULL && strlen(jd->d_localcontact) >= 0) {
+			jr = eXosip_reg_find_by_local_contact(jd->d_localcontact);
+			if(jr != NULL) {
+				je->rid = jr->r_id;
+			}
+		}
+		// </ncouturier>
+	}
 
 	/* fill in usefull info */
 	if (type==EXOSIP_CALL_NEW

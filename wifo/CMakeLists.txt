@@ -47,6 +47,6 @@ subdirs(
 	phapi/stun
 	phapi
 	#miniua
-	sfp-plugin
+	wifo-plugins/sfp-plugin
 	#tests/WifoPluginsConsole
 )

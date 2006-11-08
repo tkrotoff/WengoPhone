@@ -22,6 +22,7 @@
 #include <phapi-util/mystring.h>
 
 #include <stdio.h>
+#include <assert.h>
 
 static int xmlLittleEndian = 1;
 
@@ -242,7 +243,7 @@ PHAPI_UTIL_EXPORTS unsigned int sscanf2(const char * buffer, char * format, ...)
 *	sscanf2("25 bazaaar", "%d %s", i, string, sizeof(string));
 * </pre>
 *
-* @param	[in][out]	text : the text to parse
+* @param	[in-out]	text : the text to parse
 * @param	[in]	format : the format for parsing (same syntax as printf, scanf, ...)
 * @param	[out]	... : variables already allocated and receiving the extracted values
 * @return	TRUE if succeeds; FALSE else
@@ -759,4 +760,38 @@ PHAPI_UTIL_EXPORTS int UTF8Toascii(unsigned char* out, int *outlen, const unsign
 	*outlen = out - outstart;
 	*inlen = processed - instart;
 	return(0);
+}
+
+
+/*
+ * Get the host name and the port from a string of the form host:port
+ */
+char *
+ph_split_host_port(char *buf, int bufsize, const char *host, int *port)
+{
+	char *s;
+
+	assert(buf != 0);
+	assert(port != 0);
+
+	*port = 0;
+
+	if (!host) {
+		return 0;
+	}
+
+	if (!strchr(host, ':')) {
+		strncpy(buf, host, bufsize);
+	}
+	else {
+		strncpy(buf, host, bufsize);
+		s = strchr(buf, ':');
+		if (s)
+		{
+			*( char *) s = 0;
+			*port = atoi(s+1);
+		}
+	}
+
+	return buf;
 }

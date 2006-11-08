@@ -42,7 +42,7 @@ projects = [
         ] + phapi_subprojects + [
 	'phapi',
 	'miniua',
-	'sfp-plugin',
+	'wifo-plugins/sfp-plugin',
 	'tests/WifoPluginsConsole',
 ]
 
