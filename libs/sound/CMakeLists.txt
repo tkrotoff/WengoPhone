@@ -46,9 +46,9 @@ if (UNIX AND NOT WIN32)
 			src/mac/AudioDeviceManager.cpp
 			src/mac/CoreAudioUtilities.cpp
 			src/mac/MacAudioDevice.cpp
-			src/mac/MacSound.cpp
+			src/mac/MacSound.mm
 			src/mac/MacVolumeControl.cpp
-			src/mac/Sound.cpp
+			src/mac/Sound.mm
 		)
 	else (APPLE)
 		ow_add_private_libraries(
@@ -82,13 +82,9 @@ else (WITH_PORTAUDIO AND WIN32)
 endif (WITH_PORTAUDIO AND WIN32)
 
 if (APPLE)
-	ow_add_private_link_flags(
-		-framework CoreAudio
-		-framework Cocoa
-	)
-
-	ow_add_private_compile_flags(
-		-x objective-c++
+	ow_use_private_frameworks(
+		CoreAudio
+		Cocoa
 	)
 endif (APPLE)
 

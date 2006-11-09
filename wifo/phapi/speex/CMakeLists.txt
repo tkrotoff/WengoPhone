@@ -9,6 +9,7 @@ if (WIN32)
 		${speex_SOURCE_DIR}/win32
 	)
 endif (WIN32)
+
 if (APPLE)
 	ow_add_private_include_dirs(
 		${speex_SOURCE_DIR}/macosx

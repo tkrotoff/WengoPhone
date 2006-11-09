@@ -13,10 +13,13 @@ macro (OW_USE_PUBLIC_LIBRARIES)
 
 	foreach (loop ${ARGN})
 		if (NOT ${loop}_INCLUDE_DIRS)
-			message(FATAL_ERROR "${loop}_INCLUDE_DIRS empty")
+			if (NOT ${loop}_INCLUDE_DIR)
+				message(FATAL_ERROR "${loop}_INCLUDE_DIRS and ${loop}_INCLUDE_DIR empty")
+			endif (NOT ${loop}_INCLUDE_DIR)
 		endif (NOT ${loop}_INCLUDE_DIRS)
 		ow_add_public_include_dirs(
 			${${loop}_INCLUDE_DIRS}
+			${${loop}_INCLUDE_DIR}
 		)
 
 		#if (NOT ${loop}_LIBRARIES)

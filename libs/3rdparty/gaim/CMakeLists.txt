@@ -1,4 +1,4 @@
-ow_create_project(gaim)
+ow_create_project(GAIM)
 
 ow_use_public_libraries(
 	GLIB2
@@ -37,22 +37,22 @@ ow_add_sources(
 	src/libgaim/blist.c
 	src/libgaim/buddyicon.c
 	src/libgaim/cipher.c
+	src/libgaim/circbuffer.c
 	src/libgaim/cmds.c
 	src/libgaim/connection.c
 	src/libgaim/conversation.c
 	src/libgaim/core.c
 	src/libgaim/debug.c
 	src/libgaim/desktopitem.c
+	src/libgaim/dnsquery.c
 	src/libgaim/dnssrv.c
 	src/libgaim/eventloop.c
 	src/libgaim/ft.c
-	#src/libgaim/gaim_buffer.c
 	src/libgaim/getopt.c
 	src/libgaim/getopt1.c
 	src/libgaim/idle.c
 	src/libgaim/imgstore.c
 	src/libgaim/log.c
-	src/libgaim/media.c
 	src/libgaim/mime.c
 	src/libgaim/network.c
 	src/libgaim/notify.c
@@ -60,6 +60,7 @@ ow_add_sources(
 	src/libgaim/plugin.c
 	src/libgaim/pluginpref.c
 	src/libgaim/pounce.c
+	src/libgaim/prefix.c
 	src/libgaim/prefs.c
 	src/libgaim/privacy.c
 	src/libgaim/proxy.c
@@ -79,16 +80,7 @@ ow_add_sources(
 	src/libgaim/value.c
 	src/libgaim/whiteboard.c
 	src/libgaim/xmlnode.c
-	src/plugins/ssl/ssl.c
-	#src/plugins/tcl/tcl.c
-	#src/plugins/tcl/tcl_cmds.c
-	#src/plugins/tcl/tcl_signals.c
-	#src/plugins/tcl/tcl_glib.c
-	src/libgaim/protocols/irc/cmds.c
-	src/libgaim/protocols/irc/dcc_send.c
-	src/libgaim/protocols/irc/irc.c
-	src/libgaim/protocols/irc/msgs.c
-	src/libgaim/protocols/irc/parse.c
+	src/libgaim/plugins/ssl/ssl.c
 	src/libgaim/protocols/jabber/auth.c
 	src/libgaim/protocols/jabber/buddy.c
 	src/libgaim/protocols/jabber/chat.c
@@ -131,50 +123,40 @@ ow_add_sources(
 	src/libgaim/protocols/msn/transaction.c
 	src/libgaim/protocols/msn/user.c
 	src/libgaim/protocols/msn/userlist.c
-	src/libgaim/protocols/msn/utils.c
-	src/libgaim/protocols/napster/napster.c
-	src/libgaim/protocols/novell/nmconference.c
-	src/libgaim/protocols/novell/nmconn.c
-	src/libgaim/protocols/novell/nmcontact.c
-	src/libgaim/protocols/novell/nmevent.c
-	src/libgaim/protocols/novell/nmfield.c
-	src/libgaim/protocols/novell/nmmessage.c
-	src/libgaim/protocols/novell/nmrequest.c
-	src/libgaim/protocols/novell/nmrtf.c
-	src/libgaim/protocols/novell/nmuser.c
-	src/libgaim/protocols/novell/nmuserrecord.c
-	src/libgaim/protocols/novell/novell.c
-	src/libgaim/protocols/oscar/admin.c
-	src/libgaim/protocols/oscar/adverts.c
-	src/libgaim/protocols/oscar/auth.c
-	src/libgaim/protocols/oscar/bart.c
-	src/libgaim/protocols/oscar/bos.c
+	src/libgaim/protocols/msn/msn-utils.c
 	src/libgaim/protocols/oscar/bstream.c
-	src/libgaim/protocols/oscar/buddylist.c
-	src/libgaim/protocols/oscar/chat.c
-	src/libgaim/protocols/oscar/chatnav.c
-	src/libgaim/protocols/oscar/conn.c
-	src/libgaim/protocols/oscar/email.c
-	src/libgaim/protocols/oscar/ft.c
-	src/libgaim/protocols/oscar/icq.c
-	src/libgaim/protocols/oscar/im.c
-	src/libgaim/protocols/oscar/invite.c
-	src/libgaim/protocols/oscar/locate.c
+	src/libgaim/protocols/oscar/family_admin.c
+	src/libgaim/protocols/oscar/family_advert.c
+	src/libgaim/protocols/oscar/family_alert.c
+	src/libgaim/protocols/oscar/family_auth.c
+	src/libgaim/protocols/oscar/family_bart.c
+	src/libgaim/protocols/oscar/family_bos.c
+	src/libgaim/protocols/oscar/family_buddy.c
+	src/libgaim/protocols/oscar/family_chat.c
+	src/libgaim/protocols/oscar/family_chatnav.c
+	src/libgaim/protocols/oscar/family_feedbag.c
+	src/libgaim/protocols/oscar/family_icbm.c
+	src/libgaim/protocols/oscar/family_icq.c
+	src/libgaim/protocols/oscar/family_invite.c
+	src/libgaim/protocols/oscar/family_locate.c
+	src/libgaim/protocols/oscar/family_odir.c
+	src/libgaim/protocols/oscar/family_oservice.c
+	src/libgaim/protocols/oscar/family_popup.c
+	src/libgaim/protocols/oscar/family_stats.c
+	src/libgaim/protocols/oscar/family_translate.c
+	src/libgaim/protocols/oscar/family_userlookup.c
+	src/libgaim/protocols/oscar/flap_connection.c
 	src/libgaim/protocols/oscar/misc.c
 	src/libgaim/protocols/oscar/msgcookie.c
-	src/libgaim/protocols/oscar/odir.c
+	src/libgaim/protocols/oscar/odc.c
+	src/libgaim/protocols/oscar/oft.c
 	src/libgaim/protocols/oscar/oscar.c
-	src/libgaim/protocols/oscar/popups.c
+	src/libgaim/protocols/oscar/oscar_data.c
+	src/libgaim/protocols/oscar/peer.c
+	src/libgaim/protocols/oscar/peer_proxy.c
 	src/libgaim/protocols/oscar/rxhandlers.c
-	src/libgaim/protocols/oscar/rxqueue.c
-	src/libgaim/protocols/oscar/search.c
-	src/libgaim/protocols/oscar/service.c
 	src/libgaim/protocols/oscar/snac.c
-	src/libgaim/protocols/oscar/ssi.c
-	src/libgaim/protocols/oscar/stats.c
 	src/libgaim/protocols/oscar/tlv.c
-	src/libgaim/protocols/oscar/translate.c
-	src/libgaim/protocols/oscar/txqueue.c
 	src/libgaim/protocols/oscar/util.c
 	src/libgaim/protocols/yahoo/util.c
 	src/libgaim/protocols/yahoo/yahoo.c
@@ -188,8 +170,6 @@ ow_add_sources(
 	src/libgaim/protocols/yahoo/yahoo_profile.c
 	src/libgaim/protocols/yahoo/yahoochat.c
 	src/libgaim/protocols/yahoo/ycht.c
-	src/libgaim/prefix.c
-	src/libgaim/plugins/ssl/ssl-gnutls.c
 )
 
 ow_create_static_library()

@@ -52,7 +52,7 @@ ow_add_private_definitions(
 ow_create_static_library()
 
 if (APPLE)
-	ow_add_private_link_flags(
-		"-framework CoreFoundation"
+	ow_use_private_frameworks(
+		CoreFoundation
 	)
 endif (APPLE)

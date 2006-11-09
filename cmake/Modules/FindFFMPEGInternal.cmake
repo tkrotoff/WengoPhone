@@ -27,6 +27,11 @@ else (FFMPEG_LIBRARIES AND FFMPEG_INCLUDE_DIRS)
       ffmpeg
   )
 
+  set(FFMPEG_INCLUDE_DIRS
+    ${FFMPEG_INCLUDE_DIR}
+  )
+
+if (WIN32)
   find_library(AVUTIL_LIBRARY
     NAMES
       avutil-49
@@ -46,14 +51,33 @@ else (FFMPEG_LIBRARIES AND FFMPEG_INCLUDE_DIRS)
       ${CMAKE_SOURCE_DIR}/libs/3rdparty/ffmpeg/binary-lib/msvc
   )
 
-  set(FFMPEG_INCLUDE_DIRS
-    ${FFMPEG_INCLUDE_DIR}
-  )
   set(FFMPEG_LIBRARIES
     ${AVUTIL_LIBRARY}
     ${AVCODEC_LIBRARY}
     ${AVFORMAT_LIBRARY}
-)
+  )
+else (WIN32)
+  if (APPLE)
+    find_library(AVUTIL_LIBRARY
+      NAMES
+        avutil
+      PATHS
+        ${CMAKE_SOURCE_DIR}/libs/3rdparty/ffmpeg/binary-lib/macosx
+    )
+
+    find_library(AVCODEC_LIBRARY
+      NAMES
+        avcodec
+      PATHS
+        ${CMAKE_SOURCE_DIR}/libs/3rdparty/ffmpeg/binary-lib/macosx
+    )
+
+    set(FFMPEG_LIBRARIES
+      ${AVUTIL_LIBRARY}
+      ${AVCODEC_LIBRARY}
+    )
+  endif (APPLE)
+endif (WIN32)
 
   if (FFMPEG_INCLUDE_DIRS AND FFMPEG_LIBRARIES)
      set(FFMPEG_FOUND TRUE)

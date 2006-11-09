@@ -25,11 +25,13 @@ if (WIN32)
 			phapi/msdirent
 		)
 	endif (MSVC)
+endif (WIN32)
 
+if (WIN32 OR APPLE)
 	subdirs(
 		phapi/speex
 	)
-endif (WIN32)
+endif (WIN32 OR APPLE)
 
 subdirs(
 	httptunnel
@@ -47,6 +49,6 @@ subdirs(
 	phapi/stun
 	phapi
 	#miniua
-	wifo-plugins/sfp-plugin
+	wifo-plugins
 	#tests/WifoPluginsConsole
 )

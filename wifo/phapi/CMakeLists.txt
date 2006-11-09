@@ -9,7 +9,6 @@ ow_create_project(phapi)
 
 ow_use_private_libraries(
 	osip2
-	exosip
 	ortp
 	ilbc
 	stun
@@ -20,6 +19,10 @@ ow_use_private_libraries(
 	speexec
 	wtimer
 	svoip
+)
+
+ow_use_public_libraries(
+	exosip
 )
 
 ow_add_public_include_dirs(
@@ -51,7 +54,7 @@ ow_add_private_definitions(
 	-DPH_VIDEO_USELOCK=1
 	-DUSE_SPXEC=1
 	-DPH_FORCE_16KHZ=1
-	-DWENGOPHONE_UA="""wengo/v1/wengophoneng/wengo/rev${SVN_REVISION}/trunk/"""
+	-DWENGOPHONE_UA='"wengo/v1/wengophoneng/wengo/rev${SVN_REVISION}/trunk/"'
 )
 
 if (WITH_BUILDID)
@@ -282,11 +285,11 @@ if (NOT APPLE)
 endif (NOT APPLE)
 
 if (APPLE)
-	ow_add_private_link_flags(
-		-framework AudioUnit
-		-framework CoreAudio
-		-framework AudioToolbox
-		-framework CoreServices
+	ow_use_private_frameworks(
+		AudioUnit
+		CoreAudio
+		AudioToolbox
+		CoreServices
 	)
 endif (APPLE)
 

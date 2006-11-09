@@ -38,8 +38,8 @@ ow_add_sources(
 )
 
 if (APPLE)
-	ow_add_private_link_flags(
-		-framework CoreFoundation
+	ow_use_private_frameworks(
+		CoreFoundation
 	)
 endif (APPLE)
 

@@ -49,6 +49,7 @@ include(OWSetLibraryVersion)
 include(OWUnique)
 include(OWUsePrivateLibraries)
 include(OWUsePublicLibraries)
+include(OWUsePrivateFrameworks)
 
 # Disallow in-source build
 macro_ensure_out_of_source_build("WengoPhone requires an out of source build. Please create a separate build directory and run 'cmake path_to_wengophone [options]' there.")
@@ -68,9 +69,13 @@ if (WIN32)
 	find_package(FFMPEGInternal REQUIRED)
 	#find_package(PortaudioInternal REQUIRED)
 else (WIN32)
+	if (APPLE)
+		find_package(FFMPEGInternal REQUIRED)
+	else (APPLE)
+		find_package(FFMPEG REQUIRED)
+	endif (APPLE)
 	find_package(OpenSSL REQUIRED)
 	find_package(GLIB2 REQUIRED)
-	find_package(FFMPEG REQUIRED)
 endif (WIN32)
 
 if (NOT MSVC)
@@ -85,9 +90,43 @@ if (UNIX AND NOT WIN32 AND NOT APPLE)
 	find_package(UUID REQUIRED)
 endif (UNIX AND NOT WIN32 AND NOT APPLE)
 
-# Look for CMakeLists.txt files
+if (WIN32)
+	subdirs(
+		libs/3rdparty/portaudio
+	)
+endif (WIN32)
+
+if (NOT MSVC)
+	subdirs(
+		libs/3rdparty/gaim
+	)
+endif (NOT MSVC)
+
+if (UNIX)
+	if (NOT APPLE)
+		subdirs(
+			libs/3rdparty/samplerate
+		)
+	endif (NOT APPLE)
+endif (UNIX)
+
+
 subdirs(
-	libs
+	libs/3rdparty/boost
+	libs/3rdparty/qt4
+	libs/3rdparty/tinyxml
+	libs/owcurl
+	libs/util
+	libs/wenbox
+	libs/qtutil
+	libs/idle
+	libs/owbrowser
+	libs/trayicon
+	libs/softupdater
+	libs/pixertool
+	libs/webcam
+	libs/sound
+	libs/timer
 	wifo
 	libs/imwrapper
 	libs/imwrapper/src/gaim
@@ -95,5 +134,10 @@ subdirs(
 	libs/sipwrapper/src/phapi
 	libs/imwrapper/src/multiim
 	wengophone
-	crashreport
 )
+
+if (WIN32)
+	subdirs(
+		crashreport
+	)
+endif (WIN32)

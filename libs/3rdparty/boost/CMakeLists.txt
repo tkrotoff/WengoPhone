@@ -1,7 +1,7 @@
 ow_create_project(boost)
 
 ow_use_public_libraries(
-	Boost
+	BOOST
 )
 
 ow_add_public_definitions(

@@ -29,6 +29,7 @@ else (SPEEX_LIBRARIES AND SPEEX_INCLUDE_DIRS)
   find_path(SPEEX_INCLUDE_DIR
     NAMES
       speex/speex.h
+      speex.h
     PATHS
       ${_SpeexIncDir}
       /usr/include
@@ -40,6 +41,7 @@ else (SPEEX_LIBRARIES AND SPEEX_INCLUDE_DIRS)
   find_library(SPEEX_LIBRARY
     NAMES
       speex
+      Speex
     PATHS
       ${_SpeexLinkDir}
       /usr/lib
