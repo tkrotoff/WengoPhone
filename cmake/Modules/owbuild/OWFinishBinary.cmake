@@ -40,6 +40,10 @@ macro (OW_FINISH_BINARY)
 
 	ow_project_log()
 
-	install(TARGETS ${PROJECT_NAME} DESTINATION bin/)
+	if (CMAKE_BUILD_TYPE MATCHES Debug)
+		install(TARGETS ${PROJECT_NAME} DESTINATION debug)
+	else (CMAKE_BUILD_TYPE MATCHES Debug)
+		install(TARGETS ${PROJECT_NAME} DESTINATION release)
+	endif (CMAKE_BUILD_TYPE MATCHES Debug)
 
 endmacro (OW_FINISH_BINARY)
