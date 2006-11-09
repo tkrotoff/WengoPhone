@@ -11,14 +11,12 @@ ow_use_public_libraries(
 	owsocket
 	owimwrapper
 	owsipwrapper
-	owphapiwrapper
 	owmultiimwrapper
 	owwenbox
 	owsound
 )
 
 ow_use_private_libraries(
-	tinyxml
 	owwebcam
 	netlib
 )
@@ -144,6 +142,10 @@ ow_add_sources(
 	model/coipmanager/chatsessionmanager/src/IChatSessionManager.cpp
 	##
 
+	model/dtmf/Tone.cpp
+	model/dtmf/DtmfTheme.cpp
+	model/dtmf/DtmfThemeManager.cpp
+
 	control/wenbox/CWenboxPlugin.cpp
 	control/CWengoPhone.cpp
 	control/chat/CChatHandler.cpp
@@ -159,6 +161,7 @@ ow_add_sources(
 	control/webservices/directory/CWsDirectory.cpp
 	control/webservices/callforward/CWsCallForward.cpp
 	control/history/CHistory.cpp
+	control/dtmf/CDtmfThemeManager.cpp
 
 	presentation/PFactory.cpp
 )

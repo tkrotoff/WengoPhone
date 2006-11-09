@@ -120,9 +120,9 @@ void phmedia_video_rtpsend_callback (void *ctx, void *data, int size,
  *
  */
 
-webcamerrorcode ph_media_video_initialize_webcam(phvstream_t *vstream) {
+WebcamErrorCode ph_media_video_initialize_webcam(phvstream_t *vstream) {
 	phConfig_t *cfg = phGetConfig();
-	webcamerrorcode err;
+	WebcamErrorCode err;
 
     DBG_MEDIA_ENGINE_VIDEO("webcam init: trying to set video device (%s)...\n...", cfg->video_config.video_device);
 	err = webcam_set_device(vstream->wt, cfg->video_config.video_device);

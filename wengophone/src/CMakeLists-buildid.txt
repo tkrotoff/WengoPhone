@@ -1,5 +1,14 @@
 ow_create_project(owbuildid)
 
+ow_use_private_libraries(
+	GLIB2
+	GAIM
+	portaudio
+	tinyxml
+	owcurl
+	FFMPEG
+)
+
 if (WITH_BUILDID)
 	ow_add_private_definitions(
 		-DDD_BUILDID=0LL

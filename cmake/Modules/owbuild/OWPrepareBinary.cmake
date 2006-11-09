@@ -23,4 +23,7 @@ macro (OW_PREPARE_BINARY)
 	ow_unique(unique ${${PROJECT_NAME}_INCLUDE_DIRS} ${${PROJECT_NAME}_PRIVATE_INCLUDE_DIRS})
 	include_directories(${unique})
 
+	ow_unique(unique ${${PROJECT_NAME}_LIBRARY_DIRS} ${${PROJECT_NAME}_PRIVATE_LIBRARY_DIRS})
+	link_directories(${unique})
+
 endmacro (OW_PREPARE_BINARY)

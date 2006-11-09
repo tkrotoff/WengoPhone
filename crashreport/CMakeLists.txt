@@ -12,10 +12,6 @@ ow_add_public_include_dirs(
 	${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-ow_add_private_libraries(
-	${BOOST_PROGRAM_OPTIONS_LIBRARY}
-)
-
 qt4_wrap_cpp(owcrashreport_SRCS
 	FtpUpload.h
 	QtCrashReport.h

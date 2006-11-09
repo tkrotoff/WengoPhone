@@ -1,22 +1,26 @@
 project(wengophone)
 
-# global needed variables
+# Global needed variables
 set(APPLICATION_NAME ${PROJECT_NAME})
 set(APPLICATION_VERSION "2.0")
 
-# where to look first for cmake modules, before ${CMAKE_ROOT}/Modules/ is checked
+# Where to look first for cmake modules, before ${CMAKE_ROOT}/Modules/ is checked
 set(CMAKE_MODULE_PATH
 	${CMAKE_SOURCE_DIR}/cmake/Modules
 	${CMAKE_SOURCE_DIR}/cmake/Modules/owbuild
 )
 
-# add definitions
+# Prefix for installing files
+set(CMAKE_INSTALL_PREFIX
+	${CMAKE_SOURCE_DIR}/build
+)
+
+# Add definitions
 include(DefineWengoDefaults)
 include(DefineCompilerFlags)
 include(DefineWengoOptions)
-include(DefineInstallationPaths)
 
-# add macros
+# Add macros
 include(MacroEnsureOutOfSourceBuild)
 include(MacroGenerateQtQmFiles)
 
@@ -24,10 +28,12 @@ include(OWAddPrivateCompileFlags)
 include(OWAddPrivateDefinitions)
 include(OWAddPrivateIncludeDirs)
 include(OWAddPrivateLibraries)
+include(OWAddPrivateLibraryDirs)
 include(OWAddPrivateLinkFlags)
 include(OWAddPublicDefinitions)
 include(OWAddPublicIncludeDirs)
 include(OWAddPublicLibraries)
+include(OWAddPublicLibraryDirs)
 include(OWAddSources)
 include(OWCheckProject)
 include(OWCreateExecutable)
@@ -44,14 +50,11 @@ include(OWUnique)
 include(OWUsePrivateLibraries)
 include(OWUsePublicLibraries)
 
-# disallow in-source build
+# Disallow in-source build
 macro_ensure_out_of_source_build("WengoPhone requires an out of source build. Please create a separate build directory and run 'cmake path_to_wengophone [options]' there.")
 
-# get svn revision
+# Get svn revision
 ow_get_subversion_revision(SVN_REVISION)
-
-# Boost as dynamic libraries
-add_definitions(-DBOOST_ALL_DYN_LINK)
 
 # Global requirements
 set(QT_MIN_VERSION 4.1.2)
@@ -78,6 +81,11 @@ if (NOT APPLE AND NOT WIN32)
 	find_package(Portaudio REQUIRED)
 endif (NOT APPLE AND NOT WIN32)
 
+if (UNIX AND NOT WIN32 AND NOT APPLE)
+	find_package(UUID REQUIRED)
+endif (UNIX AND NOT WIN32 AND NOT APPLE)
+
+# Look for CMakeLists.txt files
 subdirs(
 	libs
 	wifo

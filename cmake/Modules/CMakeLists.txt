@@ -8,7 +8,7 @@ install(
   FILES
     ${cmakeFiles}
   DESTINATION
-  ${module_install_dir}
+    ${module_install_dir}
 )
 # the files listed here will be removed by remove_obsoleted_cmake_files.cmake, Alex
 set(FILES_TO_REMOVE

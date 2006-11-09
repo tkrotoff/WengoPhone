@@ -9,13 +9,11 @@ subdirs(
 ow_use_private_libraries(
 	owphone
 	owbuildid
+	qt4
 	owqtutil
 	owpixertool
 	owwebcam
 	owidle
-	GLIB2
-	GAIM
-	portaudio
 	owtrayicon
 	owbrowser
 	owsoftupdater
@@ -34,6 +32,7 @@ qt4_wrap_cpp(qtwengophone_SRCS
 	QtWengoPhone.h
 	QtConfigPanel.h
 	QtDialpad.h
+	QtSVGDialpad.h
 	QtAbout.h
 	QtHttpProxyLogin.h
 	QtIdle.h
@@ -167,6 +166,7 @@ ow_add_sources(
 	QtWengoPhone.cpp
 	QtConfigPanel.cpp
 	QtDialpad.cpp
+	QtSVGDialpad.cpp
 	QtWebcamButton.cpp
 	QtAbout.cpp
 	QtHttpProxyLogin.cpp

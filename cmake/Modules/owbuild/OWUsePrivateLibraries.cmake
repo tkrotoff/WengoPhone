@@ -19,12 +19,20 @@ macro (OW_USE_PRIVATE_LIBRARIES)
 			${${loop}_INCLUDE_DIRS}
 		)
 
-		if (NOT ${loop}_LIBRARIES)
-			message(FATAL_ERROR "${loop}_LIBRARIES empty")
-		endif (NOT ${loop}_LIBRARIES)
-		ow_add_private_libraries(
-			${${loop}_LIBRARIES}
-		)
+		#if (NOT ${loop}_LIBRARIES)
+		#	message(FATAL_ERROR "${loop}_LIBRARIES empty")
+		#endif (NOT ${loop}_LIBRARIES)
+		if (${loop}_LIBRARIES)
+			ow_add_private_libraries(
+				${${loop}_LIBRARIES}
+			)
+		endif (${loop}_LIBRARIES)
+
+		if (${loop}_LIBRARY_DIRS)
+			ow_add_private_library_dirs(
+				${${loop}_LIBRARY_DIRS}
+			)
+		endif (${loop}_LIBRARY_DIRS)
 
 		if (${loop}_DEFINITIONS)
 			ow_add_private_definitions(
