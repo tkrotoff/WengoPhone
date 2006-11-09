@@ -9,10 +9,13 @@
 
 macro (OW_CREATE_PROJECT name)
 
+	# Creates the variable ${PROJECT_NAME} containing the project name
 	project(${name})
 
 	set(${PROJECT_NAME}_SRCS "")
 
+	# Resets the include directories
+	set_directory_properties(PROPERTIES INCLUDE_DIRECTORIES "")
 	set(${PROJECT_NAME}_INCLUDE_DIRS "" CACHE INTERNAL "${PROJECT_NAME} public include directories")
 	set(${PROJECT_NAME}_PRIVATE_INCLUDE_DIRS "")
 
