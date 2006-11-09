@@ -15,14 +15,14 @@ ow_add_sources(
 	src/webcam.cpp
 )
 
-#ow_add_public_definitions(
-#	-DOWWEBCAM_DLL
-#)
+ow_add_public_definitions(
+	-DOWWEBCAM_DLL
+)
 
-#ow_add_private_definitions(
-#	-DOWWEBCAM_DLL
-#	-DBUILD_OWWEBCAM_DLL
-#)
+ow_add_private_definitions(
+	-DOWWEBCAM_DLL
+	-DBUILD_OWWEBCAM_DLL
+)
 
 if (UNIX AND NOT WIN32 OR APPLE)
 	ow_use_public_libraries(
@@ -59,4 +59,4 @@ if (UNIX AND NOT WIN32)
 	endif (APPLE)
 endif (UNIX AND NOT WIN32)
 
-ow_create_static_library()
+ow_create_shared_library()

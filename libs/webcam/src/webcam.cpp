@@ -54,10 +54,10 @@ static void webcam_frame_captured_event_handler(IWebcamDriver *sender, piximage 
 	}
 }
 
-webcamdevicelist * webcam_get_device_list(webcam *) {
+WebcamDeviceList * webcam_get_device_list(webcam *) {
 	IWebcamDriver * driver = WebcamDriver::getInstance();
 	StringList deviceList = driver->getDeviceList();
-	webcamdevicelist *devlist = (webcamdevicelist *) malloc(sizeof(webcamdevicelist));
+	WebcamDeviceList *devlist = (WebcamDeviceList *) malloc(sizeof(WebcamDeviceList));
 
 	devlist->count = deviceList.size();
 	devlist->name = (const char **) malloc(devlist->count * sizeof(const char *));
@@ -70,7 +70,7 @@ webcamdevicelist * webcam_get_device_list(webcam *) {
 	return devlist;
 }
 
-void webcam_release_webcamdevicelist(webcamdevicelist *devlist) {
+void webcam_release_WebcamDeviceList(WebcamDeviceList * devlist) {
 	if (devlist) {
 		if (devlist->name) {
 			for (register unsigned i = 0; i < devlist->count; i++) {
@@ -131,7 +131,7 @@ void webcam_release(webcam * wc) {
 	}
 }
 
-webcamerrorcode webcam_set_device(webcam * wc, const char * device_name) {
+WebcamErrorCode webcam_set_device(webcam * wc, const char * device_name) {
 	return wc->driver->setDevice(device_name);
 }
 
@@ -200,7 +200,7 @@ pixosi webcam_get_palette(webcam * wc) {
 	return wc->driver->getPalette();
 }
 
-webcamerrorcode webcam_set_palette(webcam * wc, pixosi palette) {
+WebcamErrorCode webcam_set_palette(webcam * wc, pixosi palette) {
 	return wc->driver->setPalette(palette);
 }
 
@@ -208,7 +208,7 @@ int webcam_is_open(webcam * wc) {
 	return wc->driver->isOpen();
 }
 
-webcamerrorcode webcam_set_fps(webcam * wc, unsigned fps) {
+WebcamErrorCode webcam_set_fps(webcam * wc, unsigned fps) {
 	return wc->driver->setFPS(fps);
 }
 

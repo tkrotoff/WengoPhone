@@ -43,7 +43,7 @@ string NullWebcamDriver::getDefaultDevice() {
 	return defaultDevice;
 }
 
-webcamerrorcode NullWebcamDriver::setDevice(const std::string & deviceName) {
+WebcamErrorCode NullWebcamDriver::setDevice(const std::string & deviceName) {
 	return WEBCAM_OK;
 }
 
@@ -60,7 +60,7 @@ void NullWebcamDriver::pauseCapture() {
 void NullWebcamDriver::stopCapture() {
 }
 
-webcamerrorcode NullWebcamDriver::setPalette(pixosi palette) {
+WebcamErrorCode NullWebcamDriver::setPalette(pixosi palette) {
 	return WEBCAM_OK;
 }
 
@@ -68,7 +68,7 @@ pixosi NullWebcamDriver::getPalette() const {
 	return PIX_OSI_UNSUPPORTED;
 }
 
-webcamerrorcode NullWebcamDriver::setFPS(unsigned fps) {
+WebcamErrorCode NullWebcamDriver::setFPS(unsigned fps) {
 	return WEBCAM_OK;
 }
 
@@ -76,7 +76,7 @@ unsigned NullWebcamDriver::getFPS() const {
 	return 0;
 }
 
-webcamerrorcode NullWebcamDriver::setResolution(unsigned width, unsigned height) {
+WebcamErrorCode NullWebcamDriver::setResolution(unsigned width, unsigned height) {
 	return WEBCAM_OK;
 }
 

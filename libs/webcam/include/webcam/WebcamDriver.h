@@ -38,13 +38,13 @@
 
 class WebcamDriverFactory;
 
-//TODO: implements a setFlags method for WEBCAM_FORCE_PALETTE_CONVERSION
-
 /**
+ * TODO: implements a setFlags method for WEBCAM_FORCE_PALETTE_CONVERSION
+ *
  * @see IWebcamDriver
  * @author Philippe Bernery
  */
-class OWWEBCAM_API WebcamDriver : public IWebcamDriver {
+class WebcamDriver : public IWebcamDriver {
 public:
 
 	/**
@@ -52,9 +52,7 @@ public:
 	 *
 	 * @param factory factory to use
 	 */
-	static void setFactory(WebcamDriverFactory * factory) {
-		_factory = factory;
-	}
+	OWWEBCAM_API static void setFactory(WebcamDriverFactory * factory);
 
 	/**
 	 * Gets instance of WebcamDriver.
@@ -62,61 +60,54 @@ public:
 	 * Implements singleton pattern. This method create a WebcamDriver with
 	 * WEBCAM_FORCE_IMAGE_FORMAT flag.
 	 */
-	static WebcamDriver * getInstance();
+	OWWEBCAM_API static WebcamDriver * getInstance();
+
+	OWWEBCAM_API void setFlags(int flags);
+
+	OWWEBCAM_API void unsetFlags(int flags);
+
+	OWWEBCAM_API bool isFlagSet(int flag);
+
+	OWWEBCAM_API StringList getDeviceList();
+
+	OWWEBCAM_API std::string getDefaultDevice();
+
+	OWWEBCAM_API WebcamErrorCode setDevice(const std::string & deviceName);
+
+	OWWEBCAM_API bool isOpen() const;
+
+	OWWEBCAM_API void startCapture();
+
+	OWWEBCAM_API void pauseCapture();
+
+	OWWEBCAM_API void stopCapture();
+
+	OWWEBCAM_API WebcamErrorCode setPalette(pixosi palette);
+
+	OWWEBCAM_API pixosi getPalette() const;
+
+	OWWEBCAM_API WebcamErrorCode setFPS(unsigned fps);
+
+	OWWEBCAM_API unsigned getFPS() const;
+
+	OWWEBCAM_API WebcamErrorCode setResolution(unsigned width, unsigned height);
+
+	OWWEBCAM_API unsigned getWidth() const;
+
+	OWWEBCAM_API unsigned getHeight() const;
+
+	OWWEBCAM_API void setBrightness(int brightness);
+
+	OWWEBCAM_API int getBrightness() const;
+
+	OWWEBCAM_API void setContrast(int contrast);
+
+	OWWEBCAM_API int getContrast() const;
+
+	OWWEBCAM_API void flipHorizontally(bool flip);
 
 	/** Do not use: this is an internal method. */
 	void cleanup();
-
-	void setFlags(int flags) {
-		_flags |= flags;
-	}
-
-	void unsetFlags(int flags) {
-		_flags &= ~flags;
-	}
-
-	bool isFlagSet(int flag) {
-		//FIXME warning under Visual C++ 7.1
-		return (_flags & flag);
-	}
-
-	StringList getDeviceList();
-
-	std::string getDefaultDevice();
-
-	webcamerrorcode setDevice(const std::string & deviceName);
-
-	bool isOpen() const;
-
-	void startCapture();
-
-	void pauseCapture();
-
-	void stopCapture();
-
-	webcamerrorcode setPalette(pixosi palette);
-
-	pixosi getPalette() const;
-
-	webcamerrorcode setFPS(unsigned fps);
-
-	unsigned getFPS() const;
-
-	webcamerrorcode setResolution(unsigned width, unsigned height);
-
-	unsigned getWidth() const;
-
-	unsigned getHeight() const;
-
-	void setBrightness(int brightness);
-
-	int getBrightness() const;
-
-	void setContrast(int contrast);
-
-	int getContrast() const;
-
-	void flipHorizontally(bool flip);
 
 private:
 
@@ -147,9 +138,7 @@ private:
 	/**
 	 * @see WEBCAM_FORCE_IMAGE_FORMAT
 	 */
-	bool isFormatForced() const {
-		return _flags & WEBCAM_FORCE_IMAGE_FORMAT;
-	}
+	bool isFormatForced() const;
 
 	/**
 	 * Initializes _convImage.
@@ -196,7 +185,6 @@ private:
 
 	/** Mutex for thread safety. */
 	mutable Mutex _mutex;
-
 };
 
 #endif	//OWWEBCAMDRIVER_H

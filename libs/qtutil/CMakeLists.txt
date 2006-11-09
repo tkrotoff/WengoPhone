@@ -44,6 +44,7 @@ qt4_wrap_cpp(owqtutil_SRCS
 	include/qtutil/LanguageChangeEventFilter.h
 	include/qtutil/CloseEventFilter.h
 	include/qtutil/AnimatedButton.h
+	include/qtutil/UpQComboBox.h
 )
 
 ow_add_sources(
@@ -70,6 +71,7 @@ ow_add_sources(
 	src/LanguageChangeEventFilter.cpp
 	src/CloseEventFilter.cpp
 	src/AnimatedButton.cpp
+	src/UpQComboBox.cpp
 )
 
 qt4_wrap_ui(owqtutil_SRCS

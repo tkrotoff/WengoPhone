@@ -188,7 +188,7 @@ string QuicktimeWebcamDriver::getDefaultDevice() {
 	return _defaultDevice;
 }
 
-webcamerrorcode QuicktimeWebcamDriver::setDevice(const std::string &deviceName) {
+WebcamErrorCode QuicktimeWebcamDriver::setDevice(const std::string &deviceName) {
 	OSErr err = noErr;
 	unsigned colonPos = deviceName.find(":", 0);
 	string device = deviceName.substr(0, colonPos);
@@ -346,7 +346,7 @@ void QuicktimeWebcamDriver::stopCapture() {
 	_timer.stop();
 }
 
-webcamerrorcode QuicktimeWebcamDriver::setPalette(pixosi palette) {
+WebcamErrorCode QuicktimeWebcamDriver::setPalette(pixosi palette) {
 	if (_PGWorld) {
 		QTUpdateGWorld(&_PGWorld,
 			pix_quicktime_from_pix_osi(palette),
@@ -379,7 +379,7 @@ pixosi QuicktimeWebcamDriver::getPalette() const {
 	return _palette;
 }
 
-webcamerrorcode QuicktimeWebcamDriver::setFPS(unsigned fps) {
+WebcamErrorCode QuicktimeWebcamDriver::setFPS(unsigned fps) {
 	OSErr err = noErr;
 
 	err = SGSetFrameRate(_SGChanVideo, fps);
@@ -404,7 +404,7 @@ unsigned QuicktimeWebcamDriver::getFPS() const {
 	return (unsigned)framerate;
 }
 
-webcamerrorcode QuicktimeWebcamDriver::setResolution(unsigned width, unsigned height) {
+WebcamErrorCode QuicktimeWebcamDriver::setResolution(unsigned width, unsigned height) {
 	OSErr err = noErr;
 	Rect newBounds;
 

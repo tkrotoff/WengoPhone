@@ -21,6 +21,7 @@ endif (UNIX)
 
 subdirs(
 	3rdparty/qt4
+	3rdparty/boost
 	owcurl
 	util
 	wenbox

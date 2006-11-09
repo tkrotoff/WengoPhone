@@ -1,20 +1,12 @@
 ow_create_project(owutil)
 
-if (UNIX AND NOT WIN32 AND NOT APPLE)
-	find_package(UUID REQUIRED)
-endif (UNIX AND NOT WIN32 AND NOT APPLE)
-
 ow_use_public_libraries(
 	owcutil
+	boost
 )
 
 ow_add_public_include_dirs(
 	${CMAKE_CURRENT_SOURCE_DIR}/include
-	${BOOST_INCLUDE_DIRS}
-)
-
-ow_add_private_libraries(
-	${BOOST_SIGNALS_LIBRARY}
 )
 
 #ow_add_public_definitions(

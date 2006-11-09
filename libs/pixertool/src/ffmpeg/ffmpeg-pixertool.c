@@ -24,7 +24,7 @@
 #include <stdlib.h>
 
 /** Used by pix_convert_avpicture */
-static AVPicture *pictureBuffer = NULL;
+static AVPicture * pictureBuffer = NULL;
 
 /** Called at program exit */
 static void pix_ffmpeg_cleanup(void);

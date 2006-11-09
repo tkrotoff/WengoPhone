@@ -6,11 +6,6 @@ ow_use_public_libraries(
 
 ow_add_public_include_dirs(
 	${CMAKE_CURRENT_SOURCE_DIR}/include
-	${BOOST_INCLUDE_DIRS}
-)
-
-ow_add_private_libraries(
-	${BOOST_THREAD_LIBRARY}
 )
 
 #ow_add_public_definitions(

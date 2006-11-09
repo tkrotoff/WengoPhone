@@ -192,7 +192,7 @@ std::string DirectXWebcamDriver::getDefaultDevice() {
 	return defaultDevice;
 }
 
-webcamerrorcode DirectXWebcamDriver::setDevice(const std::string & deviceName) {
+WebcamErrorCode DirectXWebcamDriver::setDevice(const std::string & deviceName) {
 	//TODO: test if a webcam is already open
 
 	//TODO: refactor the COM initialization phase to avoid
@@ -323,7 +323,7 @@ void DirectXWebcamDriver::stopCapture() {
 	}
 }
 
-webcamerrorcode DirectXWebcamDriver::setPalette(pixosi palette) {
+WebcamErrorCode DirectXWebcamDriver::setPalette(pixosi palette) {
 	setCaps(palette, getFPS(), getWidth(), getHeight());
 	if (_cachedPalette != palette) {
 		return WEBCAM_NOK;
@@ -336,7 +336,7 @@ pixosi DirectXWebcamDriver::getPalette() const {
 	return _cachedPalette;
 }
 
-webcamerrorcode DirectXWebcamDriver::setFPS(unsigned fps) {
+WebcamErrorCode DirectXWebcamDriver::setFPS(unsigned fps) {
 	setCaps(getPalette(), fps, getWidth(), getHeight());
 
 	//TODO: check if fps is correctly set
@@ -347,7 +347,7 @@ unsigned DirectXWebcamDriver::getFPS() const {
 	return _cachedFPS;
 }
 
-webcamerrorcode DirectXWebcamDriver::setResolution(unsigned width, unsigned height) {
+WebcamErrorCode DirectXWebcamDriver::setResolution(unsigned width, unsigned height) {
 	setCaps(getPalette(), getFPS(), width, height);
 	if ((_cachedWidth != width) || (_cachedHeight != height)) {
 		return WEBCAM_NOK;
@@ -383,7 +383,7 @@ void DirectXWebcamDriver::flipHorizontally(bool flip) {
 	//TODO: add horizontal flip support
 }
 
-webcamerrorcode DirectXWebcamDriver::setCaps(pixosi palette, unsigned fps, unsigned resolutionWidth, unsigned resolutionHeight) {
+WebcamErrorCode DirectXWebcamDriver::setCaps(pixosi palette, unsigned fps, unsigned resolutionWidth, unsigned resolutionHeight) {
 
 	_cachedFPS = fps;
 

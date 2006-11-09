@@ -31,6 +31,10 @@ using namespace std;
 
 WebcamDriver * WebcamDriver::instance = NULL;
 
+void WebcamDriver::setFactory(WebcamDriverFactory * factory) {
+	_factory = factory;
+}
+
 WebcamDriver * WebcamDriver::getInstance() {
 	if (!instance) {
 		instance = new WebcamDriver(WEBCAM_FORCE_IMAGE_FORMAT);
@@ -82,6 +86,19 @@ void WebcamDriver::cleanup() {
 	initializeConvImage();
 }
 
+void WebcamDriver::setFlags(int flags) {
+	_flags |= flags;
+}
+
+void WebcamDriver::unsetFlags(int flags) {
+	_flags &= ~flags;
+}
+
+bool WebcamDriver::isFlagSet(int flag) {
+	//FIXME warning under Visual C++ 7.1
+	return (_flags & flag);
+}
+
 StringList WebcamDriver::getDeviceList() {
 	Mutex::ScopedLock lock(_mutex);
 
@@ -94,7 +111,7 @@ std::string WebcamDriver::getDefaultDevice() {
 	return _webcamPrivate->getDefaultDevice();
 }
 
-webcamerrorcode WebcamDriver::setDevice(const std::string & deviceName) {
+WebcamErrorCode WebcamDriver::setDevice(const std::string & deviceName) {
 	Mutex::ScopedLock lock(_mutex);
 
 	if (!_isRunning) {
@@ -149,7 +166,7 @@ void WebcamDriver::stopCapture() {
 	}
 }
 
-webcamerrorcode WebcamDriver::setPalette(pixosi palette) {
+WebcamErrorCode WebcamDriver::setPalette(pixosi palette) {
 	Mutex::ScopedLock lock(_mutex);
 
 	if (!_isRunning) {
@@ -184,7 +201,7 @@ pixosi WebcamDriver::getPalette() const {
 	}
 }
 
-webcamerrorcode WebcamDriver::setFPS(unsigned fps) {
+WebcamErrorCode WebcamDriver::setFPS(unsigned fps) {
 	Mutex::ScopedLock lock(_mutex);
 
 	if (!_isRunning) {
@@ -211,7 +228,7 @@ unsigned WebcamDriver::getFPS() const {
 	return _forcedFPS;
 }
 
-webcamerrorcode WebcamDriver::setResolution(unsigned width, unsigned height) {
+WebcamErrorCode WebcamDriver::setResolution(unsigned width, unsigned height) {
 	Mutex::ScopedLock lock(_mutex);
 
 	if (!_isRunning) {
@@ -325,6 +342,10 @@ void WebcamDriver::frameBufferAvailable(piximage *image) {
 		//LOG_DEBUG("no conversion needed");
 		frameCapturedEvent(this, image);
 	}
+}
+
+bool WebcamDriver::isFormatForced() const {
+	return _flags & WEBCAM_FORCE_IMAGE_FORMAT;
 }
 
 void WebcamDriver::initializeConvImage() {

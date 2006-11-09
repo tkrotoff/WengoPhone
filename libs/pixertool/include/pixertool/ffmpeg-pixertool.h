@@ -58,7 +58,7 @@ OWPIXERTOOL_API int pix_ffmpeg_from_pix_osi(pixosi pix);
  * @param dst AVPicture to fill
  * @param src the piximage to convert
  */
-OWPIXERTOOL_API void pix_fill_avpicture(AVPicture *dst, piximage *src);
+OWPIXERTOOL_API void pix_fill_avpicture(AVPicture * dst, piximage * src);
 
 /**
  * Converts an AVPicture to an img_dst.
@@ -74,7 +74,7 @@ OWPIXERTOOL_API void pix_fill_avpicture(AVPicture *dst, piximage *src);
  * @param src_fmt format of the AVPicture
  * @return the converted image. NULL if format is not supported
  */
-OWPIXERTOOL_API pixerrorcode pix_convert_avpicture(int flags, piximage *img_dst, AVPicture *img_src, pixosi src_fmt);
+OWPIXERTOOL_API pixerrorcode pix_convert_avpicture(int flags, piximage * img_dst, AVPicture * img_src, pixosi src_fmt);
 
 #ifdef __cplusplus
 }

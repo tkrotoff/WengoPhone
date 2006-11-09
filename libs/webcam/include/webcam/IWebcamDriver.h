@@ -20,7 +20,6 @@
 #ifndef OWIWEBCAMDRIVER_H
 #define OWIWEBCAMDRIVER_H
 
-#include <webcam/owwebcamdll.h>
 #include <webcam/webcam.h>
 
 #include <pixertool/pixertool.h>
@@ -37,7 +36,7 @@
  *
  * @author Philippe Bernery
  */
-class OWWEBCAM_API IWebcamDriver : NonCopyable, public Trackable {
+class IWebcamDriver : NonCopyable, public Trackable {
 public:
 
 	/**
@@ -101,7 +100,7 @@ public:
 	 * @param deviceName name of the device to use, if name == "" then use the default device
 	 * @return WEBCAM_OK if no error; WEBCAM_NOK otherwise
 	 */
-	virtual webcamerrorcode setDevice(const std::string & deviceName) = 0;
+	virtual WebcamErrorCode setDevice(const std::string & deviceName) = 0;
 
 	/**
 	 * @return true webcam if is opened
@@ -128,7 +127,7 @@ public:
 	 *
 	 * @param palette palette to use
 	 */
-	virtual webcamerrorcode setPalette(pixosi palette) = 0;
+	virtual WebcamErrorCode setPalette(pixosi palette) = 0;
 
 	/**
 	 * Gets palette.
@@ -142,7 +141,7 @@ public:
 	 *
 	 * @param fps desired frame per seconds
 	 */
-	virtual webcamerrorcode setFPS(unsigned fps) = 0;
+	virtual WebcamErrorCode setFPS(unsigned fps) = 0;
 
 	/**
 	 * Gets capture rate.
@@ -157,7 +156,7 @@ public:
 	 * @param width desired width
 	 * @param height desired height
 	 */
-	virtual webcamerrorcode setResolution(unsigned width, unsigned height) = 0;
+	virtual WebcamErrorCode setResolution(unsigned width, unsigned height) = 0;
 
 	/**
 	 * Gets captured frame width.

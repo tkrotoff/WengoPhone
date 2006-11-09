@@ -23,7 +23,7 @@
 #include <QtGui/QComboBox>
 
 /**
- * Upgraded QComboBox
+ * QComboBox that sends a signal when the combobox menu is clicked.
  *
  * @see QComboBox
  * @author Xavier Desjardins
@@ -34,12 +34,14 @@ public:
 
 	UpQComboBox(QWidget * parent);
 
+	void showPopup();
+
 Q_SIGNALS:
 
-	void popUpDisplayed();
-
-public:
-	void showPopup();
+	/**
+	 * Emitted when the popup combobox menu is being displayed.
+	 */
+	void popupDisplayed();
 };
 
 #endif	//OWUPQCOMBOBOX_H

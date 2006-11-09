@@ -79,7 +79,7 @@ string V4LWebcamDriver::getDefaultDevice() {
 	return defaultDeviceName;
 }
 
-webcamerrorcode V4LWebcamDriver::setDevice(const std::string & deviceName) {
+WebcamErrorCode V4LWebcamDriver::setDevice(const std::string & deviceName) {
 	//TODO: test if a webcam is already open
 
 	if (deviceName.empty()) {
@@ -135,7 +135,7 @@ void V4LWebcamDriver::stopCapture() {
 	terminate();
 }
 
-webcamerrorcode V4LWebcamDriver::setPalette(pixosi palette) {
+WebcamErrorCode V4LWebcamDriver::setPalette(pixosi palette) {
 	int depth;
 	int v4l_palette = pix_v4l_from_pix_osi(palette);
 
@@ -179,7 +179,7 @@ pixosi V4LWebcamDriver::getPalette() const {
 	return pix_v4l_to_pix_osi(_vPic.palette);
 }
 
-webcamerrorcode V4LWebcamDriver::setFPS(unsigned fps) {
+WebcamErrorCode V4LWebcamDriver::setFPS(unsigned fps) {
 	_fps = fps;
 
 	return WEBCAM_OK;
@@ -189,7 +189,7 @@ unsigned V4LWebcamDriver::getFPS() const {
 	return _fps;
 }
 
-webcamerrorcode V4LWebcamDriver::setResolution(unsigned width, unsigned height) {
+WebcamErrorCode V4LWebcamDriver::setResolution(unsigned width, unsigned height) {
 	memset(&_vWin, 0, sizeof(struct video_window));
 	_vWin.width = width;
 	_vWin.height = height;

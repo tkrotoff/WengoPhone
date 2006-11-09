@@ -60,7 +60,7 @@ public:
 	 */
 	std::string getDefaultDevice();
 
-	webcamerrorcode setDevice(const std::string & deviceName);
+	WebcamErrorCode setDevice(const std::string & deviceName);
 
 	bool isOpen() const;
 
@@ -68,13 +68,13 @@ public:
 	void pauseCapture();
 	void stopCapture();
 
-	webcamerrorcode setPalette(pixosi palette);
+	WebcamErrorCode setPalette(pixosi palette);
 	pixosi getPalette() const;
 
-	webcamerrorcode setFPS(unsigned fps);
+	WebcamErrorCode setFPS(unsigned fps);
 	unsigned getFPS() const;
 
-	webcamerrorcode setResolution(unsigned width, unsigned height);
+	WebcamErrorCode setResolution(unsigned width, unsigned height);
 	unsigned getWidth() const;
 	unsigned getHeight() const;
 

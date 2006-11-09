@@ -19,14 +19,11 @@
 
 #include <qtutil/UpQComboBox.h>
 
-
 UpQComboBox::UpQComboBox(QWidget * parent)
 	: QComboBox(parent) {
 }
 
 void UpQComboBox::showPopup() {
-
-	popUpDisplayed();
-
+	popupDisplayed();
 	QComboBox::showPopup();
 }

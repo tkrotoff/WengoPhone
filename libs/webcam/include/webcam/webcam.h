@@ -43,12 +43,12 @@ extern "C"
 typedef enum {
 	WEBCAM_NOK,
 	WEBCAM_OK
-} webcamerrorcode;
+} WebcamErrorCode;
 
 typedef struct {
 	unsigned count;
 	const char ** name;
-} webcamdevicelist;
+} WebcamDeviceList;
 
 /**
  * Name returned by get_default_device when there is no webcam.
@@ -79,14 +79,14 @@ typedef void (webcamcallback)(webcam * sender, piximage * image, void * userData
 /**
  * @see IWebcamDriver::getDeviceList()
  */
-OWWEBCAM_API webcamdevicelist * webcam_get_device_list(webcam *);
+OWWEBCAM_API WebcamDeviceList * webcam_get_device_list(webcam *);
 
 /**
- * Release memory used by a webcamdevicelist.
+ * Release memory used by a WebcamDeviceList.
  *
  * @param devlist list to release
  */
-OWWEBCAM_API void webcam_release_webcamdevicelist(webcamdevicelist * devlist);
+OWWEBCAM_API void webcam_release_WebcamDeviceList(WebcamDeviceList * devlist);
 
 /**
  * @see IWebcamDriver::getDefaultDevice()
@@ -126,7 +126,7 @@ OWWEBCAM_API void webcam_release(webcam * wc);
 /**
  * @see IWebcamDriver::setDevice()
  */
-OWWEBCAM_API webcamerrorcode webcam_set_device(webcam * wc, const char * device_name);
+OWWEBCAM_API WebcamErrorCode webcam_set_device(webcam * wc, const char * device_name);
 
 /**
  * Adds a callback.
@@ -178,7 +178,7 @@ OWWEBCAM_API pixosi webcam_get_palette(webcam * wc);
 /**
  * @see IWebcamDriver::setPalette()
  */
-OWWEBCAM_API webcamerrorcode webcam_set_palette(webcam * wc, pixosi palette);
+OWWEBCAM_API WebcamErrorCode webcam_set_palette(webcam * wc, pixosi palette);
 
 /**
  * @see IWebcamDriver::isOpen()
@@ -188,7 +188,7 @@ OWWEBCAM_API int webcam_is_open(webcam * wc);
 /**
  * @see IWebcamDriver::setFPS()
  */
-OWWEBCAM_API webcamerrorcode webcam_set_fps(webcam * wc, unsigned fps);
+OWWEBCAM_API WebcamErrorCode webcam_set_fps(webcam * wc, unsigned fps);
 
 /**
  * @see IWebcamDriver::getFPS()

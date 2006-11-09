@@ -1,11 +1,5 @@
 ow_create_project(owpixertool)
 
-if (WIN32)
-	find_package(FFMPEGInternal REQUIRED)
-else (WIN32)
-	find_package(FFMPEG REQUIRED)
-endif (WIN32)
-
 ow_use_public_libraries(
 	owcutil
 	FFMPEG

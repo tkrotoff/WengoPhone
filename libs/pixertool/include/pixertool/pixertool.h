@@ -86,7 +86,7 @@ typedef enum {
 
 /** Image. */
 typedef struct _piximage {
-	uint8_t *data;
+	uint8_t * data;
 	unsigned width;
 	unsigned height;
 	pixosi palette;
