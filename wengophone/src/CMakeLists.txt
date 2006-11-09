@@ -19,6 +19,8 @@ ow_use_public_libraries(
 ow_use_private_libraries(
 	owwebcam
 	netlib
+	tinyxml
+	owphapiwrapper
 )
 
 ow_add_public_include_dirs(

@@ -3,7 +3,7 @@ option(WITH_SPEEXWB_REPLACES_AMRNB "" OFF)
 option(WITH_SPEEXWB_REPLACES_G726WB "" ON)
 
 #include(CMakeLists-phamrplugin.txt)
-include(CMakeLists-phspeexplugin.txt)
+#include(CMakeLists-phspeexplugin.txt)
 
 ow_create_project(phapi)
 
@@ -54,8 +54,17 @@ ow_add_private_definitions(
 	-DPH_VIDEO_USELOCK=1
 	-DUSE_SPXEC=1
 	-DPH_FORCE_16KHZ=1
-	-DWENGOPHONE_UA='"wengo/v1/wengophoneng/wengo/rev${SVN_REVISION}/trunk/"'
 )
+
+if (MSVC)
+	ow_add_private_definitions(
+		-DWENGOPHONE_UA="""wengo/v1/wengophoneng/wengo/rev${SVN_REVISION}/trunk/"""
+	)
+else (MSVC)
+	ow_add_private_definitions(
+		-DWENGOPHONE_UA='"wengo/v1/wengophoneng/wengo/rev${SVN_REVISION}/trunk/"'
+	)
+endif (MSVC)
 
 if (WITH_BUILDID)
 	ow_add_private_definitions(
