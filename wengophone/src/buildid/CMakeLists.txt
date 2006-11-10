@@ -7,8 +7,13 @@ ow_use_private_libraries(
 	owcurl
 	FFMPEG
 	owutil
-	portaudio
 )
+
+if (NOT APPLE)
+	ow_use_private_libaries(
+		portaudio
+	)
+endif (NOT APPLE)
 
 if (MSVC)
 	if (WITH_BUILDID)

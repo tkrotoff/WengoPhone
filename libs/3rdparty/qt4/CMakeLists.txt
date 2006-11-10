@@ -4,14 +4,27 @@ ow_add_public_include_dirs(
 	${QT_INCLUDE_DIR}
 )
 
+ow_add_public_library_dirs(
+	${QT_LIBRARY_DIR}
+)
+
 if (CMAKE_BUILD_TYPE MATCHES Debug)
 	ow_add_public_libraries(
 		${QT_QTCORE_LIBRARY_DEBUG}
 		${QT_QTGUI_LIBRARY_DEBUG}
 		${QT_QTXML_LIBRARY_DEBUG}
 		${QT_QTSVG_LIBRARY_DEBUG}
-		QtUiToolsd
 	)
+	
+	if (APPLE)
+		ow_add_public_libraries(
+			QtUiTools_debug
+		)
+	else (APPLE)
+		ow_add_public_libraries(
+			QtUiToolsd
+		)
+	endif (APPLE)
 else (CMAKE_BUILD_TYPE MATCHES Debug)
 	ow_add_public_libraries(
 		${QT_QTCORE_LIBRARY_RELEASE}

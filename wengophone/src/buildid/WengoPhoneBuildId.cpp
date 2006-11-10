@@ -22,7 +22,9 @@
 #include <util/String.h>
 
 #include <curl/curl.h>
+#ifndef OS_MACOSX
 #include <portaudio.h>
+#endif
 #include <boost/version.hpp>
 #include <avcodec.h>
 #include <tinyxml.h>
@@ -38,7 +40,9 @@ const char * WengoPhoneBuildId::SOFTPHONE_NAME = DD_SOFTPHONE_NAME;
 const char * WengoPhoneBuildId::LIBBOOST_VERSION = BOOST_LIB_VERSION;
 const char * WengoPhoneBuildId::GAIM_VERSION = gaim_core_get_version();
 const char * WengoPhoneBuildId::CURL_VERSION = curl_version();
+#ifndef OS_MACOSX
 const char * WengoPhoneBuildId::PORTAUDIO_VERSION = Pa_GetVersionText();
+#endif
 const char * WengoPhoneBuildId::AVCODEC_VERSION = String::fromNumber(avcodec_version()).c_str();
 const char * WengoPhoneBuildId::TINYXML_VERSION = std::string(
 			String::fromNumber(TIXML_MAJOR_VERSION) + "." +

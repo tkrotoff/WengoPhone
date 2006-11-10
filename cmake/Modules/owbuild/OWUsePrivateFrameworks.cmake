@@ -30,7 +30,7 @@ if (APPLE)
 			)
 
 			ow_add_private_link_flags(
-				'"-framework ${fwk}"'
+				"-framework ${fwk}"
 			)
 		endforeach (fwk ${ARGN})
 

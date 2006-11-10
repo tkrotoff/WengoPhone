@@ -17,6 +17,8 @@ ow_use_private_libraries(
 	owtrayicon
 	owbrowser
 	owsoftupdater
+
+	owphapiwrapper
 )
 
 ow_add_public_include_dirs(
