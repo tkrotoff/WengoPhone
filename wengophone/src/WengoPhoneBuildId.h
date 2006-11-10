@@ -75,7 +75,11 @@ public:
 	 */
 	static const char * SOFTPHONE_NAME;
 
-	/** Boost version number. */
+	/**
+	 * Boost version number.
+	 *
+	 * Cannot be named BOOST_VERSION because of a define inside Boost.
+	 */
 	static const char * LIBBOOST_VERSION;
 
 	/** LibGaim version number. */

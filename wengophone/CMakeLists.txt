@@ -3,6 +3,7 @@
 subdirs(
 	pics
 	sounds
+	src/buildid
 	src
 	#test
 )

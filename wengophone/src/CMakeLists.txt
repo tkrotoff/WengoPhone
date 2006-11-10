@@ -1,5 +1,3 @@
-include(CMakeLists-buildid.txt)
-
 ow_create_project(owphone)
 
 ow_use_public_libraries(
@@ -21,6 +19,7 @@ ow_use_private_libraries(
 	netlib
 	tinyxml
 	owphapiwrapper
+	owbuildid
 )
 
 ow_add_public_include_dirs(

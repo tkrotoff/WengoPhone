@@ -6,13 +6,9 @@ ow_use_private_libraries(
 	tinyxml
 	owcurl
 	FFMPEG
+	owutil
+	portaudio
 )
-
-if (NOT APPLE)
-	ow_use_private_libraries(
-		portaudio
-	)
-endif (NOT APPLE)
 
 if (WITH_BUILDID)
 	ow_add_private_definitions(
