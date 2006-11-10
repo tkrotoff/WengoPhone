@@ -42,6 +42,12 @@ macro (OW_USE_PRIVATE_LIBRARIES)
 				${${loop}_DEFINITIONS}
 			)
 		endif (${loop}_DEFINITIONS)
+		
+		if (${loop}_PUBLIC_LINK_FLAGS)
+			ow_add_private_link_flags(
+				${${loop}_PUBLIC_LINK_FLAGS}
+			)
+		endif (${loop}_PUBLIC_LINK_FLAGS)
 	endforeach (loop)
 
 endmacro (OW_USE_PRIVATE_LIBRARIES)

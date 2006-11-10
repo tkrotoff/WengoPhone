@@ -294,7 +294,7 @@ if (NOT APPLE)
 endif (NOT APPLE)
 
 if (APPLE)
-	ow_use_private_frameworks(
+	ow_use_public_frameworks(
 		AudioUnit
 		CoreAudio
 		AudioToolbox

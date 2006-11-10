@@ -37,6 +37,7 @@ macro (OW_CREATE_PROJECT name)
 	set(${PROJECT_NAME}_PRIVATE_COMPILE_FLAGS "")
 
 	# Resets link flags
+	set(${PROJECT_NAME}_PUBLIC_LINK_FLAGS "")
 	set(${PROJECT_NAME}_PRIVATE_LINK_FLAGS "")
 
 	# Resets build version and API version

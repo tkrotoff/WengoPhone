@@ -22,10 +22,12 @@ if (WIN32)
 	)
 else (WIN32)
 	if (UNIX)
-		ow_add_private_libraries(
-			pthread
-			rt
-		)
+		if (NOT APPLE)
+			ow_add_private_libraries(
+				pthread
+				rt
+			)
+		endif (NOT APPLE)
 	endif (UNIX)
 
 	ow_add_private_definitions(

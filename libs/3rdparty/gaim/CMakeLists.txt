@@ -81,6 +81,7 @@ ow_add_sources(
 	src/libgaim/whiteboard.c
 	src/libgaim/xmlnode.c
 	src/libgaim/plugins/ssl/ssl.c
+	src/libgaim/plugins/ssl/ssl-gnutls.c
 	src/libgaim/protocols/jabber/auth.c
 	src/libgaim/protocols/jabber/buddy.c
 	src/libgaim/protocols/jabber/chat.c

@@ -46,9 +46,9 @@ if (UNIX AND NOT WIN32)
 			src/mac/AudioDeviceManager.cpp
 			src/mac/CoreAudioUtilities.cpp
 			src/mac/MacAudioDevice.cpp
-			src/mac/MacSound.mm
+			src/mac/MacSound.cpp
 			src/mac/MacVolumeControl.cpp
-			src/mac/Sound.mm
+			src/mac/Sound.cpp
 		)
 	else (APPLE)
 		ow_add_private_libraries(
@@ -82,10 +82,19 @@ else (WITH_PORTAUDIO AND WIN32)
 endif (WITH_PORTAUDIO AND WIN32)
 
 if (APPLE)
-	ow_use_private_frameworks(
+	ow_use_public_frameworks(
+		AudioToolBox
+		AudioUnit
 		CoreAudio
 		Cocoa
 	)
 endif (APPLE)
 
 ow_create_static_library()
+
+if (APPLE)
+	set_target_properties(${PROJECT_NAME}
+		PROPERTIES
+			COMPILE_FLAGS "-x objective-c++"
+	)
+endif (APPLE)

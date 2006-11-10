@@ -5,6 +5,7 @@
 #  GLIB2_INCLUDE_DIRS - the GLIB2 include directory
 #  GLIB2_LIBRARIES - Link these to use GLIB2
 #  GLIB2_DEFINITIONS - Compiler switches required for using GLIB2
+#  GLIB2_LINK_FLAGS - Link flags
 #
 #  Copyright (c) 2006 Andreas Schneider <mail@cynapses.org>
 #  Copyright (c) 2006 Philippe Bernery <philippe.bernery@gmail.com>
@@ -15,15 +16,17 @@
 #
 
 
-if (GLIB2_LIBRARIES AND GLIB2_INCLUDE_DIRS)
+if (GLIB2_LIBRARIES AND GLIB2_INCLUDE_DIRS AND GLIB2_PUBLIC_LINK_FLAGS)
   # in cache already
   set(GLIB2_FOUND TRUE)
-else (GLIB2_LIBRARIES AND GLIB2_INCLUDE_DIRS)
+else (GLIB2_LIBRARIES AND GLIB2_INCLUDE_DIRS AND GLIB2_PUBLIC_LINK_FLAGS)
   # use pkg-config to get the directories and then use these values
   # in the FIND_PATH() and FIND_LIBRARY() calls
   include(UsePkgConfig)
 
-  ## GLibConfig
+  ## Glib
+  pkgconfig(glib-2.0 _GLIB2IncDir _GLIB2LinkDir _GLIB2LinkFlags _GLIB2Cflags)
+
   find_path(GLIBCONFIG_INCLUDE_DIR
     NAMES
       glibconfig.h
@@ -36,10 +39,6 @@ else (GLIB2_LIBRARIES AND GLIB2_INCLUDE_DIRS)
       /usr/lib/glib-2.0/include
       /sw/lib/glib-2.0/include
   )
-  ##
-
-  ## Glib
-  pkgconfig(glib-2.0 _GLIB2IncDir _GLIB2LinkDir _GLIB2LinkFlags _GLIB2Cflags)
 
   set(GLIB2_DEFINITIONS ${_GLIB2Cflags})
 
@@ -204,6 +203,10 @@ else (GLIB2_LIBRARIES AND GLIB2_INCLUDE_DIRS)
     ${GLIB_LIBRARY}
   )
 
+  set(GLIB2_PUBLIC_LINK_FLAGS
+    ${_GLIB2LinkFlags} ${_GMODULE2LinkFlags} ${_GTHREAD2LinkFlags}
+  )
+
   if (GMODULE2_FOUND)
     set(GLIB2_LIBRARIES ${GLIB2_LIBRARIES} ${GMODULE2_LIBRARY})
     set(GLIB2_INCLUDE_DIRS ${GLIB2_INCLUDE_DIRS} ${GMODULE2_INCLUDE_DIR})
@@ -239,6 +242,6 @@ else (GLIB2_LIBRARIES AND GLIB2_INCLUDE_DIRS)
   endif (GLIB2_FOUND)
 
   # show the GLIB2_INCLUDE_DIRS and GLIB2_LIBRARIES variables only in the advanced view
-  mark_as_advanced(GLIB2_INCLUDE_DIRS GLIB2_LIBRARIES)
+  mark_as_advanced(GLIB2_INCLUDE_DIRS GLIB2_LIBRARIES GLIB2_PUBLIC_LINK_FLAGS)
 
-endif (GLIB2_LIBRARIES AND GLIB2_INCLUDE_DIRS)
+endif (GLIB2_LIBRARIES AND GLIB2_INCLUDE_DIRS AND GLIB2_PUBLIC_LINK_FLAGS)

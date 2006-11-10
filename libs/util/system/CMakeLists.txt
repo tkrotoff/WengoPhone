@@ -34,7 +34,7 @@ if (UNIX)
 	if (APPLE)
 		ow_add_sources(
 			src/null/Processes.cpp
-			src/mac/Startup.mm
+			src/mac/Startup.cpp
 		)
 	else (APPLE)
 		ow_add_sources(
@@ -45,3 +45,10 @@ if (UNIX)
 endif (UNIX)
 
 ow_create_static_library()
+
+if (APPLE)
+	set_target_properties(${PROJECT_NAME}
+		PROPERTIES
+			COMPILE_FLAGS "-x objective-c++"
+	)
+endif (APPLE)

@@ -36,7 +36,7 @@ endif (MSVC)
 
 if (UNIX AND NOT WIN32)
 	if (APPLE)
-		ow_use_private_frameworks(
+		ow_use_public_frameworks(
 			Carbon
 			CoreFoundation
 			CoreServices

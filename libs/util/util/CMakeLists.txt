@@ -59,8 +59,8 @@ if (UNIX AND NOT WIN32)
 endif (UNIX AND NOT WIN32)
 
 if (APPLE)
-	ow_add_private_link_flags(
-		-framework CoreFoundation
+	ow_use_private_frameworks(
+		CoreFoundation
 	)
 endif (APPLE)
 

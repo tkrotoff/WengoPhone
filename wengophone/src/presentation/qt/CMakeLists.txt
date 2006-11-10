@@ -19,6 +19,7 @@ ow_use_private_libraries(
 	owsoftupdater
 
 	owphapiwrapper
+	GLIB2
 )
 
 ow_add_public_include_dirs(
@@ -179,6 +180,10 @@ ow_add_sources(
 	QtUserProfilePresenceMenu.cpp
 	QtWengoStyle.cpp
 	QtBrowserWidget.cpp
+	QtFactory.cpp
+	QtSystray.cpp
+
+	phoneline/QtPhoneLine.cpp
 
 	phonecall/QtPhoneCall.cpp
 	phonecall/QtVideo.cpp
@@ -303,32 +308,19 @@ ow_add_sources(
 	#endif (MSVC)
 #endif (WIN32)
 
-# For Objective-c++ files
-if (NOT APPLE)
-	ow_add_sources(
-		QtFactory.cpp
-		QtSystray.cpp
-		phoneline/QtPhoneLine.cpp
-	)
-else (NOT APPLE)
-	ow_add_sources(
-		QtFactory.mm
-		QtSystray.mm
-		macosx/QtMacApplication.mm
-		phoneline/QtPhoneLine.mm
-	)
-endif (NOT APPLE)
-##
-
 if (UNIX AND NOT WIN32)
 	if (APPLE)
-		qt4_wrap_cpp(
+		qt4_wrap_cpp(qtwengophone_SRCS
 			chat/QtCloseChatTabWidget.h
 			macosx/QtMacApplication.h
 		)
 
 		ow_add_sources(
+			QtFactory.cpp
+			QtSystray.cpp
 			chat/QtCloseChatTabWidget.cpp
+			macosx/QtMacApplication.cpp
+			phoneline/QtPhoneLine.cpp
 		)
 	else (APPLE)
 		ow_use_private_libraries(
@@ -448,12 +440,16 @@ macro_generate_qt_qm_files(
 
 if (APPLE)
 	ow_use_private_frameworks(
-		CoreAudio
-		AudioToolbox
-		AudioUnit
 		Cocoa
 		Carbon
 	)
 endif (APPLE)
 
 ow_create_executable()
+
+if (APPLE)
+	set_target_properties(${PROJECT_NAME}
+		PROPERTIES
+			COMPILE_FLAGS "-x objective-c++"
+	)
+endif (APPLE)
