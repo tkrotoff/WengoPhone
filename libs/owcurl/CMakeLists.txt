@@ -1,4 +1,4 @@
-ow_create_project(owcurl)
+ow_create_shared_library(owcurl)
 
 ow_use_private_libraries(
 	OPENSSL
@@ -98,4 +98,4 @@ ow_add_sources(
 	lib/version.c
 )
 
-ow_create_shared_library()
+ow_create_binary()

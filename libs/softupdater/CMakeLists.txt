@@ -1,4 +1,4 @@
-ow_create_project(owsoftupdater)
+ow_create_static_library(owsoftupdater)
 
 ow_use_public_libraries(
 	owhttp
@@ -12,4 +12,4 @@ ow_add_sources(
 	src/SoftUpdater.cpp
 )
 
-ow_create_static_library()
+ow_create_binary()

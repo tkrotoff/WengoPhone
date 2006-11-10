@@ -1,4 +1,4 @@
-ow_create_project(yealinkwenbox)
+ow_create_plugin_library(yealinkwenbox)
 
 # find precompiled ylusbtel
 find_library(YLUSBTEL_LIBRARIES
@@ -29,4 +29,4 @@ ow_add_sources(
 	YealinkWenbox.cpp
 )
 
-ow_create_plugin_library()
+ow_create_binary()

@@ -1,4 +1,4 @@
-ow_create_project(httptunnel)
+ow_create_static_library(httptunnel)
 
 ow_use_public_libraries(
 	OPENSSL
@@ -26,4 +26,4 @@ ow_add_sources(
 	httptunnel.c
 )
 
-ow_create_static_library()
+ow_create_binary()

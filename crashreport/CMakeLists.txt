@@ -1,4 +1,4 @@
-ow_create_project(owcrashreport)
+ow_create_executable(owcrashreport)
 
 ow_use_public_libraries(
 	owutil
@@ -27,4 +27,4 @@ qt4_wrap_ui(owcrashreport_SRCS
 	CrashReport.ui
 )
 
-ow_create_executable()
+ow_create_binary()

@@ -1,4 +1,4 @@
-ow_create_project(gsm)
+ow_create_static_library(gsm)
 
 ow_add_public_include_dirs(
 	${CMAKE_CURRENT_SOURCE_DIR}
@@ -25,4 +25,4 @@ ow_add_sources(
 	table.c
 )
 
-ow_create_static_library()
+ow_create_binary()

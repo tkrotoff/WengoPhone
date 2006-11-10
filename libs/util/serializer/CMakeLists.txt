@@ -1,4 +1,4 @@
-ow_create_project(owserializer)
+ow_create_static_library(owserializer)
 
 ow_use_public_libraries(
 	owserialization
@@ -26,4 +26,4 @@ ow_add_sources(
 	src/TimeXMLSerializer.cpp
 )
 
-ow_create_static_library()
+ow_create_binary()

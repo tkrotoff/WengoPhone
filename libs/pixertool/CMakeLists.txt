@@ -1,4 +1,4 @@
-ow_create_project(owpixertool)
+ow_create_static_library(owpixertool)
 
 ow_use_public_libraries(
 	owcutil
@@ -47,4 +47,4 @@ if (UNIX AND NOT WIN32)
 	endif(APPLE)
 endif (UNIX AND NOT WIN32)
 
-ow_create_static_library()
+ow_create_binary()

@@ -1,4 +1,17 @@
-ow_create_project(owwebcam)
+if (APPLE)
+	ow_create_static_library(owwebcam)
+else (APPLE)
+	ow_create_shared_library(owwebcam)
+
+	ow_add_public_definitions(
+		-DOWWEBCAM_DLL
+	)
+
+	ow_add_private_definitions(
+		-DOWWEBCAM_DLL
+		-DBUILD_OWWEBCAM_DLL
+	)
+endif (APPLE)
 
 ow_use_public_libraries(
 	owutil
@@ -53,17 +66,4 @@ if (UNIX AND NOT WIN32)
 	endif (APPLE)
 endif (UNIX AND NOT WIN32)
 
-if (APPLE)
-	ow_create_static_library()
-else (APPLE)
-	ow_add_public_definitions(
-		-DOWWEBCAM_DLL
-	)
-
-	ow_add_private_definitions(
-		-DOWWEBCAM_DLL
-		-DBUILD_OWWEBCAM_DLL
-	)
-
-	ow_create_shared_library()
-endif (APPLE)
+ow_create_binary()

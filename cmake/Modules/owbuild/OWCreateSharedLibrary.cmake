@@ -1,5 +1,5 @@
-# - OW_CREATE_SHARED_LIBRARY()
-# Creates a shared library (.dll, .dylib, .so) using the current project
+# - OW_CREATE_SHARED_LIBRARY(name)
+# Creates a shared library (.dll, .dylib, .so)
 #
 # Copyright (C) 2006  Wengo
 #
@@ -7,12 +7,13 @@
 # For details see the accompanying COPYING file.
 
 
-macro (OW_CREATE_SHARED_LIBRARY)
+macro (OW_CREATE_SHARED_LIBRARY name)
 
-	ow_prepare_binary()
+	ow_create_project(${name})
 
-	add_library(${PROJECT_NAME} SHARED ${${PROJECT_NAME}_SRCS})
-
-	ow_finish_binary()
+	set(${PROJECT_NAME}_PROJECT_TYPE
+		Shared
+		CACHE STRING "${PROJECT_NAME} project type (Static, Shared, Plugin, Executable)"
+	)
 
 endmacro (OW_CREATE_SHARED_LIBRARY)

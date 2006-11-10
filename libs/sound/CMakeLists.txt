@@ -1,4 +1,4 @@
-ow_create_project(owsound)
+ow_create_static_library(owsound)
 
 ow_use_public_libraries(
 	owthread
@@ -90,7 +90,7 @@ if (APPLE)
 	)
 endif (APPLE)
 
-ow_create_static_library()
+ow_create_binary()
 
 if (APPLE)
 	set_target_properties(${PROJECT_NAME}

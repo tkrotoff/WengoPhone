@@ -1,4 +1,4 @@
-ow_create_project(phapi-util)
+ow_create_static_library(phapi-util)
 
 ow_add_public_include_dirs(
 	${CMAKE_CURRENT_SOURCE_DIR}/include
@@ -29,4 +29,4 @@ if (WIN32)
 	)
 endif (WIN32)
 
-ow_create_static_library()
+ow_create_binary()

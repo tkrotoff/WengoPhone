@@ -1,4 +1,4 @@
-ow_create_project(owhttp)
+ow_create_static_library(owhttp)
 
 ow_use_public_libraries(
 	owthread
@@ -43,4 +43,4 @@ if (APPLE)
 	)
 endif (APPLE)
 
-ow_create_static_library()
+ow_create_binary()

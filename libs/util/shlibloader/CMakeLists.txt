@@ -1,4 +1,4 @@
-ow_create_project(owshlibloader)
+ow_create_static_library(owshlibloader)
 
 ow_use_public_libraries(
 	owutil
@@ -33,4 +33,4 @@ if (UNIX)
 	)
 endif (UNIX)
 
-ow_create_static_library()
+ow_create_binary()

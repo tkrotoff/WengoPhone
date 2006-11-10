@@ -1,4 +1,4 @@
-ow_create_project(owcutil)
+ow_create_static_library(owcutil)
 
 ow_add_public_include_dirs(
 	${CMAKE_CURRENT_SOURCE_DIR}/include
@@ -31,4 +31,4 @@ if (MSVC)
 	)
 endif (MSVC)
 
-ow_create_static_library()
+ow_create_binary()

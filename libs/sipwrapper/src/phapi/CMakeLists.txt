@@ -1,4 +1,4 @@
-ow_create_project(owphapiwrapper)
+ow_create_static_library(owphapiwrapper)
 
 ow_use_public_libraries(
 	owthread
@@ -49,7 +49,7 @@ ow_add_private_definitions(
 	-DPHAPI_DLL
 )
 
-ow_create_static_library()
+ow_create_binary()
 
 if (APPLE)
 	ow_use_private_frameworks(

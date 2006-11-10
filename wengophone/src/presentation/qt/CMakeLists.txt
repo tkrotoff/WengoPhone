@@ -1,4 +1,4 @@
-ow_create_project(qtwengophone)
+ow_create_executable(qtwengophone)
 
 subdirs(
 	pics/emoticons
@@ -450,7 +450,7 @@ if (APPLE)
 	)
 endif (APPLE)
 
-ow_create_executable()
+ow_create_binary()
 
 if (APPLE)
 	set_target_properties(${PROJECT_NAME}

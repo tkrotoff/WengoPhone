@@ -1,4 +1,4 @@
-ow_create_project(owsipwrapper)
+ow_create_static_library(owsipwrapper)
 
 #subdirs(
 	#src/phapi
@@ -22,4 +22,4 @@ ow_add_sources(
 	src/CodecList.cpp
 )
 
-ow_create_static_library()
+ow_create_binary()

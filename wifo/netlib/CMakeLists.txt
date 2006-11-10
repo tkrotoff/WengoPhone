@@ -1,4 +1,4 @@
-ow_create_project(netlib)
+ow_create_static_library(netlib)
 
 ow_use_private_libraries(
 	owcutil
@@ -29,4 +29,4 @@ ow_add_sources(
 	src/bugfix.cpp
 )
 
-ow_create_static_library()
+ow_create_binary()

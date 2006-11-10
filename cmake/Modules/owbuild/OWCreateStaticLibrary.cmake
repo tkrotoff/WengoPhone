@@ -1,5 +1,5 @@
-# - OW_CREATE_STATIC_LIBRARY()
-# Creates a static library (.lib, .a) using the current project
+# - OW_CREATE_STATIC_LIBRARY(name)
+# Creates a static library (.lib, .a)
 #
 # Copyright (C) 2006  Wengo
 #
@@ -7,12 +7,13 @@
 # For details see the accompanying COPYING file.
 
 
-macro (OW_CREATE_STATIC_LIBRARY)
+macro (OW_CREATE_STATIC_LIBRARY name)
 
-	ow_prepare_binary()
+	ow_create_project(${name})
 
-	add_library(${PROJECT_NAME} STATIC ${${PROJECT_NAME}_SRCS})
-
-	ow_finish_binary()
+	set(${PROJECT_NAME}_PROJECT_TYPE
+		Static
+		CACHE STRING "${PROJECT_NAME} project type (Static, Shared, Plugin, Executable)"
+	)
 
 endmacro (OW_CREATE_STATIC_LIBRARY)

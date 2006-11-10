@@ -5,7 +5,15 @@ option(WITH_SPEEXWB_REPLACES_G726WB "" ON)
 #include(CMakeLists-phamrplugin.txt)
 #include(CMakeLists-phspeexplugin.txt)
 
-ow_create_project(phapi)
+if (WITH_SHARED_PHAPI)
+	ow_create_shared_library(phapi)
+
+	ow_add_private_definitions(
+		-DBUILD_PHAPI_DLL
+	)
+else (WITH_SHARED_PHAPI)
+	ow_create_static_library(phapi)
+endif (WITH_SHARED_PHAPI)
 
 ow_use_private_libraries(
 	osip2
@@ -304,12 +312,4 @@ endif (APPLE)
 
 ow_set_library_version(0.2.0 0)
 
-if (WITH_SHARED_PHAPI)
-	ow_add_private_definitions(
-		-DBUILD_PHAPI_DLL
-	)
-
-	ow_create_shared_library()
-else (WITH_SHARED_PHAPI)
-	ow_create_static_library()
-endif (WITH_SHARED_PHAPI)
+ow_create_binary()

@@ -1,4 +1,8 @@
-ow_create_project(sfp-plugin)
+if (APPLE)
+	ow_create_static_library(sfp-plugin)
+else (APPLE)
+	ow_create_shared_library(sfp-plugin)
+endif (APPLE)
 
 ow_use_public_libraries(
 	phapi-util
@@ -27,8 +31,4 @@ ow_add_sources(
 	src/sfp-transfer.c
 )
 
-if (APPLE)
-	ow_create_static_library()
-else (APPLE)
-	ow_create_shared_library()
-endif (APPLE)
+ow_create_binary()

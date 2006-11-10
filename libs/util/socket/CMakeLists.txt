@@ -1,4 +1,4 @@
-ow_create_project(owsocket)
+ow_create_static_library(owsocket)
 
 ow_use_public_libraries(
 	owthread
@@ -28,4 +28,4 @@ if (WIN32)
 	)
 endif (WIN32)
 
-ow_create_static_library()
+ow_create_binary()

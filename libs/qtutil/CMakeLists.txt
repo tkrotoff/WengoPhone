@@ -1,4 +1,4 @@
-ow_create_project(owqtutil)
+ow_create_static_library(owqtutil)
 
 ow_use_public_libraries(
 	owthread
@@ -78,4 +78,4 @@ qt4_wrap_ui(owqtutil_SRCS
 	src/Wizard.ui
 )
 
-ow_create_static_library()
+ow_create_binary()

@@ -12,6 +12,8 @@ macro (OW_CREATE_PROJECT name)
 	# Creates the variable ${PROJECT_NAME} containing the project name
 	project(${name})
 
+	#set(${PROJECT_NAME}_PROJECT_TYPE "" CACHE STRING "${PROJECT_NAME} project type (Static, Shared, Plugin, Executable)")
+
 	set(${PROJECT_NAME}_SRCS "")
 
 	# Resets the include directories

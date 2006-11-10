@@ -1,4 +1,4 @@
-ow_create_project(owsystem)
+ow_create_static_library(owsystem)
 
 ow_use_public_libraries(
 	owutil
@@ -44,7 +44,7 @@ if (UNIX)
 	endif (APPLE)
 endif (UNIX)
 
-ow_create_static_library()
+ow_create_binary()
 
 if (APPLE)
 	set_target_properties(${PROJECT_NAME}

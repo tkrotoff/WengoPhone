@@ -1,4 +1,4 @@
-ow_create_project(owmemorydump)
+ow_create_static_library(owmemorydump)
 
 ow_use_public_libraries(
 	owutil
@@ -27,4 +27,4 @@ ow_add_sources(
 	src/win32/MemoryDump.cpp
 )
 
-ow_create_static_library()
+ow_create_binary()

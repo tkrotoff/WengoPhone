@@ -1,4 +1,4 @@
-ow_create_project(owbrowser)
+ow_create_static_library(owbrowser)
 
 ow_use_public_libraries(
 	owutil
@@ -19,4 +19,4 @@ ow_add_sources(
 
 qt4_automoc(${owbrowser_SRCS})
 
-ow_create_static_library()
+ow_create_binary()

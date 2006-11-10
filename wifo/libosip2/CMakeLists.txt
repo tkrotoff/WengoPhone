@@ -1,4 +1,4 @@
-ow_create_project(osip2)
+ow_create_static_library(osip2)
 
 ow_add_public_include_dirs(
 	${CMAKE_CURRENT_SOURCE_DIR}/include
@@ -100,4 +100,4 @@ ow_add_sources(
 	src/osip2/port_thread.c
 )
 
-ow_create_static_library()
+ow_create_binary()

@@ -1,4 +1,4 @@
-ow_create_project(owutil)
+ow_create_static_library(owutil)
 
 ow_use_public_libraries(
 	owcutil
@@ -64,4 +64,4 @@ if (APPLE)
 	)
 endif (APPLE)
 
-ow_create_static_library()
+ow_create_binary()

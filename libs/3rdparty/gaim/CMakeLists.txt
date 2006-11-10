@@ -1,4 +1,4 @@
-ow_create_project(GAIM)
+ow_create_static_library(GAIM)
 
 ow_use_public_libraries(
 	GLIB2
@@ -173,4 +173,4 @@ ow_add_sources(
 	src/libgaim/protocols/yahoo/ycht.c
 )
 
-ow_create_static_library()
+ow_create_binary()

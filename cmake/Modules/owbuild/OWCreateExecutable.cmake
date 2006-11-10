@@ -1,5 +1,5 @@
-# - OW_CREATE_EXECUTABLE()
-# Creates an executable (.exe) using the current project
+# - OW_CREATE_EXECUTABLE(name)
+# Creates an executable (.exe)
 #
 # Copyright (C) 2006  Wengo
 #
@@ -7,18 +7,13 @@
 # For details see the accompanying COPYING file.
 
 
-macro (OW_CREATE_EXECUTABLE)
+macro (OW_CREATE_EXECUTABLE name)
 
-	ow_prepare_binary()
+	ow_create_project(${name})
 
-	list(REMOVE_ITEM ${PROJECT_NAME}_LIBRARIES ${PROJECT_NAME})
-	set(${PROJECT_NAME}_LIBRARIES
-		${${PROJECT_NAME}_LIBRARIES}
-		CACHE INTERNAL "${PROJECT_NAME} public libraries"
+	set(${PROJECT_NAME}_PROJECT_TYPE
+		Executable
+		CACHE STRING "${PROJECT_NAME} project type (Static, Shared, Plugin, Executable)"
 	)
-
-	add_executable(${PROJECT_NAME} ${${PROJECT_NAME}_SRCS})
-
-	ow_finish_binary()
 
 endmacro (OW_CREATE_EXECUTABLE)

@@ -1,4 +1,4 @@
-ow_create_project(speexec)
+ow_create_static_library(speexec)
 
 ow_add_public_include_dirs(
 	${CMAKE_CURRENT_SOURCE_DIR}/include
@@ -10,4 +10,4 @@ ow_add_sources(
 	src/spxecfftwrap.c
 )
 
-ow_create_static_library()
+ow_create_binary()

@@ -1,4 +1,4 @@
-ow_create_project(ilbc)
+ow_create_static_library(ilbc)
 
 ow_add_public_include_dirs(
 	${CMAKE_CURRENT_SOURCE_DIR}
@@ -34,4 +34,4 @@ ow_add_private_compile_flags(
 	${PHAPI_OPTIMIZATION_FLAGS}
 )
 
-ow_create_static_library()
+ow_create_binary()

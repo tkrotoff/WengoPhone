@@ -1,4 +1,4 @@
-ow_create_project(exosip)
+ow_create_static_library(exosip)
 
 ow_use_public_libraries(
 	svoip
@@ -40,4 +40,4 @@ ow_add_sources(
 	src/udp.c
 )
 
-ow_create_static_library()
+ow_create_binary()

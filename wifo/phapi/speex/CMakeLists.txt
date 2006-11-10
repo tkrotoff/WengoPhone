@@ -1,4 +1,4 @@
-ow_create_project(speex)
+ow_create_static_library(speex)
 
 ow_add_public_include_dirs(
 	${CMAKE_CURRENT_SOURCE_DIR}/include
@@ -56,4 +56,4 @@ ow_add_sources(
 	libspeex/window.c
 )
 
-ow_create_static_library()
+ow_create_binary()

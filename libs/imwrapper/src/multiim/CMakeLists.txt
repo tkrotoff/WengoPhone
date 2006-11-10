@@ -1,4 +1,4 @@
-ow_create_project(owmultiimwrapper)
+ow_create_static_library(owmultiimwrapper)
 
 ow_use_private_libraries(
 	owgaimwrapper
@@ -13,4 +13,4 @@ ow_add_sources(
 	MultiIMFactory.cpp
 )
 
-ow_create_static_library()
+ow_create_binary()

@@ -1,4 +1,4 @@
-ow_create_project(ortp)
+ow_create_static_library(ortp)
 
 ow_add_public_include_dirs(
 	${CMAKE_CURRENT_SOURCE_DIR}/src
@@ -45,4 +45,4 @@ ow_add_sources(
 	src/rtcp.c
 )
 
-ow_create_static_library()
+ow_create_binary()

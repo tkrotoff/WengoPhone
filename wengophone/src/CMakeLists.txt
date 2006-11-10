@@ -1,4 +1,4 @@
-ow_create_project(owphone)
+ow_create_static_library(owphone)
 
 ow_use_public_libraries(
 	owsettings
@@ -182,7 +182,7 @@ if (UNIX AND NOT WIN32)
 	endif (WITH_RESOURCEDIR)
 endif (UNIX AND NOT WIN32)
 
-ow_create_static_library()
+ow_create_binary()
 
 # TODO: test, xpcom, gtk?
 subdirs(

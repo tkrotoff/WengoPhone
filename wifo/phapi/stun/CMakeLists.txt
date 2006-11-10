@@ -1,4 +1,4 @@
-ow_create_project(stun)
+ow_create_static_library(stun)
 
 ow_add_public_include_dirs(
 	${CMAKE_CURRENT_SOURCE_DIR}
@@ -15,4 +15,4 @@ ow_add_sources(
 	stun.c
 )
 
-ow_create_static_library()
+ow_create_binary()

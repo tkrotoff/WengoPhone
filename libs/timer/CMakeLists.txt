@@ -1,4 +1,4 @@
-ow_create_project(wtimer)
+ow_create_static_library(wtimer)
 
 ow_add_public_include_dirs(
 	${CMAKE_CURRENT_SOURCE_DIR}/include
@@ -39,4 +39,4 @@ else (WIN32)
 	)
 endif (WIN32)
 
-ow_create_static_library()
+ow_create_binary()

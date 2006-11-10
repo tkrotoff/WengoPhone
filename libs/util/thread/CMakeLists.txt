@@ -1,4 +1,4 @@
-ow_create_project(owthread)
+ow_create_static_library(owthread)
 
 ow_use_public_libraries(
 	owutil
@@ -22,4 +22,4 @@ ow_add_sources(
 	src/Thread.cpp
 )
 
-ow_create_static_library()
+ow_create_binary()

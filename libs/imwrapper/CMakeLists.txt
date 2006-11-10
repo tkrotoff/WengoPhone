@@ -1,4 +1,4 @@
-ow_create_project(owimwrapper)
+ow_create_static_library(owimwrapper)
 
 # TODO: test
 #subdirs(
@@ -37,4 +37,4 @@ ow_add_sources(
 	src/IMWrapperFactory.cpp
 )
 
-ow_create_static_library()
+ow_create_binary()

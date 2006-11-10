@@ -1,4 +1,4 @@
-ow_create_project(owwenbox)
+ow_create_static_library(owwenbox)
 
 if (WIN32)
 	subdirs(src/yealink)
@@ -20,4 +20,4 @@ ow_add_sources(
 	src/Wenbox.cpp
 )
 
-ow_create_static_library()
+ow_create_binary()

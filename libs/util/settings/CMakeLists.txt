@@ -1,4 +1,4 @@
-ow_create_project(owsettings)
+ow_create_static_library(owsettings)
 
 ow_use_public_libraries(
 	owserialization
@@ -29,4 +29,4 @@ ow_add_sources(
 	src/SettingsXMLSerializer.cpp
 )
 
-ow_create_static_library()
+ow_create_binary()

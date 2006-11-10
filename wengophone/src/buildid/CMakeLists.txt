@@ -1,4 +1,4 @@
-ow_create_project(owbuildid)
+ow_create_static_library(owbuildid)
 
 ow_use_private_libraries(
 	GLIB2
@@ -57,4 +57,4 @@ ow_add_sources(
 	WengoPhoneBuildId.cpp
 )
 
-ow_create_static_library()
+ow_create_binary()

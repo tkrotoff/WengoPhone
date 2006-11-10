@@ -4,6 +4,9 @@ ow_add_public_include_dirs(
 	${QT_INCLUDE_DIR}
 )
 
+# see http://www.cmake.org/pipermail/cmake/2005-August/007149.html
+string(REGEX REPLACE "\\\\" "/" QT_LIBRARY_DIR ${QT_LIBRARY_DIR})
+
 ow_add_public_library_dirs(
 	${QT_LIBRARY_DIR}
 )

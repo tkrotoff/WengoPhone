@@ -1,5 +1,5 @@
-# - OW_CREATE_PLUGIN_LIBRARY()
-# Creates a plugin library (e.g a shared library) using the current project
+# - OW_CREATE_PLUGIN_LIBRARY(name)
+# Creates a plugin library (e.g a shared library)
 #
 # Copyright (C) 2006  Wengo
 #
@@ -7,18 +7,13 @@
 # For details see the accompanying COPYING file.
 
 
-macro (OW_CREATE_PLUGIN_LIBRARY)
+macro (OW_CREATE_PLUGIN_LIBRARY name)
 
-	ow_prepare_binary()
+	ow_create_project(${name})
 
-	list(REMOVE_ITEM ${PROJECT_NAME}_LIBRARIES ${PROJECT_NAME})
-	set(${PROJECT_NAME}_LIBRARIES
-		${${PROJECT_NAME}_LIBRARIES}
-		CACHE INTERNAL "${PROJECT_NAME} public libraries"
+	set(${PROJECT_NAME}_PROJECT_TYPE
+		Plugin
+		CACHE STRING "${PROJECT_NAME} project type (Static, Shared, Plugin, Executable)"
 	)
-
-	add_library(${PROJECT_NAME} MODULE ${${PROJECT_NAME}_SRCS})
-
-	ow_finish_binary()
 
 endmacro (OW_CREATE_PLUGIN_LIBRARY)

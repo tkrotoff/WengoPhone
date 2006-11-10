@@ -1,4 +1,4 @@
-ow_create_project(owidle)
+ow_create_static_library(owidle)
 
 ow_use_public_libraries(
 	owutil
@@ -21,4 +21,4 @@ ow_add_sources(
 	src/Idle.cpp
 )
 
-ow_create_static_library()
+ow_create_binary()

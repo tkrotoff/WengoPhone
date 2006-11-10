@@ -1,4 +1,4 @@
-ow_create_project(owgaimwrapper)
+ow_create_static_library(owgaimwrapper)
 
 ow_use_public_libraries(
 	owimwrapper
@@ -35,4 +35,4 @@ ow_add_sources(
 	GaimEnumIMProtocol.cpp
 )
 
-ow_create_static_library()
+ow_create_binary()

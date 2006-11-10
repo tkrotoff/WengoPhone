@@ -1,4 +1,4 @@
-ow_create_project(owtrayicon)
+ow_create_static_library(owtrayicon)
 
 ow_use_public_libraries(
 	qt4
@@ -34,4 +34,4 @@ if (UNIX AND NOT WIN32)
 	endif (APPLE)
 endif (UNIX AND NOT WIN32)
 
-ow_create_static_library()
+ow_create_binary()

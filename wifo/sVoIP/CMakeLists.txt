@@ -1,4 +1,4 @@
-ow_create_project(svoip)
+ow_create_static_library(svoip)
 
 ow_use_private_libraries(
 	srtp
@@ -32,4 +32,4 @@ if (WIN32)
 	)
 endif (WIN32)
 
-ow_create_static_library()
+ow_create_binary()
