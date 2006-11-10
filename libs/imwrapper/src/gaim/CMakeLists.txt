@@ -7,6 +7,7 @@ ow_use_public_libraries(
 
 ow_use_private_libraries(
 	owcutil
+	GLIB2
 )
 
 ow_add_public_include_dirs(

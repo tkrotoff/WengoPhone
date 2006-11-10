@@ -15,16 +15,16 @@ if (CMAKE_BUILD_TYPE MATCHES Debug)
 		${QT_QTXML_LIBRARY_DEBUG}
 		${QT_QTSVG_LIBRARY_DEBUG}
 	)
-	
-	if (APPLE)
+
+	if (UNIX)
 		ow_add_public_libraries(
 			QtUiTools_debug
 		)
-	else (APPLE)
+	else (UNIX)
 		ow_add_public_libraries(
 			QtUiToolsd
 		)
-	endif (APPLE)
+	endif (UNIX)
 else (CMAKE_BUILD_TYPE MATCHES Debug)
 	ow_add_public_libraries(
 		${QT_QTCORE_LIBRARY_RELEASE}

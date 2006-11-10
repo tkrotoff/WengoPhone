@@ -17,10 +17,15 @@ ow_use_private_libraries(
 	owtrayicon
 	owbrowser
 	owsoftupdater
-
 	owphapiwrapper
 	GLIB2
 )
+
+if (MSVC)
+	ow_use_private_libraries(
+		owmemorydump
+	)
+endif (MSVC)
 
 ow_add_public_include_dirs(
 	${CMAKE_CURRENT_BINARY_DIR}
