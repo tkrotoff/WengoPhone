@@ -23,21 +23,11 @@
 #include <util/NonCopyable.h>
 
 #include <QtGui/QWidget>
-#include <QtSvg/QtSvg>
 
-//QRgb -> #AARRGGBB
-#define COLOR_0		0xFF000000
-#define COLOR_1		0xFFFF0000
-#define COLOR_2		0xFF00FF00
-#define COLOR_3		0xFFFFFF00
-#define COLOR_4		0xFF0000FF
-#define COLOR_5		0xFFFF00FF
-#define COLOR_6		0xFF00FFFF
-#define COLOR_7		0xFF990000
-#define COLOR_8		0xFF99FF00
-#define COLOR_9		0xFF9900FF
-#define COLOR_POUND	0xFF99FFFF
-#define COLOR_STAR	0xFF999999
+#include <string>
+
+class QSvgRenderer;
+class QImage;
 
 /**
  * SVG Dialpad widget
@@ -45,16 +35,14 @@
  * @author Xavier Desjardins
  */
 class QtSVGDialpad : public QWidget, NonCopyable {
-
 	Q_OBJECT
-
 public:
 
 	QtSVGDialpad();
 
 	~QtSVGDialpad();
 
-	void setNewTheme(const std::string themeRepertory);
+	void setNewTheme(const std::string & themeRepertory);
 
 Q_SIGNALS:
 
@@ -76,7 +64,7 @@ Q_SIGNALS:
 
 	void keyEightSelected();
 
-	void keyNineSelected();	
+	void keyNineSelected();
 
 	void keyStarSelected();
 
@@ -84,15 +72,15 @@ Q_SIGNALS:
 
 private:
 
-	inline void changeLayerFile( const std::string newLayerFile );
+	inline void changeLayerFile(const std::string & newLayerFile);
 
-	void paintEvent(QPaintEvent *event);
+	void paintEvent(QPaintEvent * event);
 
-	void mouseReleaseEvent(QMouseEvent *event);
+	void mouseReleaseEvent(QMouseEvent * event);
 
-	void mouseMoveEvent(QMouseEvent *event);
+	void mouseMoveEvent(QMouseEvent * event);
 
-	QImage *_mask;
+	QImage * _mask;
 
 	QSvgRenderer * _svgMask;
 
@@ -103,8 +91,6 @@ private:
 	std::string _repertory;
 
 	std::string _layerFile;
-
-
 };
 
 #endif	//OWQTSVGDIALPAD_H

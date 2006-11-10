@@ -26,9 +26,25 @@
 #include <util/Logger.h>
 #include <util/SafeDelete.h>
 #include <util/File.h>
+
 #include <qtutil/SafeConnect.h>
 
 #include <QtGui/QtGui>
+#include <QtSvg/QtSvg>
+
+//QRgb -> #AARRGGBB
+static const unsigned COLOR_0 = 0xFF000000;
+static const unsigned COLOR_1 = 0xFFFF0000;
+static const unsigned COLOR_2 = 0xFF00FF00;
+static const unsigned COLOR_3 = 0xFFFFFF00;
+static const unsigned COLOR_4 = 0xFF0000FF;
+static const unsigned COLOR_5 = 0xFFFF00FF;
+static const unsigned COLOR_6 = 0xFF00FFFF;
+static const unsigned COLOR_7 = 0xFF990000;
+static const unsigned COLOR_8 = 0xFF99FF00;
+static const unsigned COLOR_9 = 0xFF9900FF;
+static const unsigned COLOR_POUND = 0xFF99FFFF;
+static const unsigned COLOR_STAR = 0xFF999999;
 
 QtSVGDialpad::QtSVGDialpad()
 	: QWidget(NULL) {
@@ -38,14 +54,13 @@ QtSVGDialpad::QtSVGDialpad()
 
 	_svgimage = new QSvgRenderer();
 
-	_repertory = _layerFile = "";
 	_svgLayer = new QSvgRenderer();
-	SAFE_CONNECT(_svgimage, SIGNAL(repaintNeeded()),SLOT(update()));
+	SAFE_CONNECT(_svgimage, SIGNAL(repaintNeeded()), SLOT(update()));
 
-	 setMouseTracking(true);
+	setMouseTracking(true);
 }
 
-void QtSVGDialpad::setNewTheme(const std::string themeRepertory) {
+void QtSVGDialpad::setNewTheme(const std::string & themeRepertory) {
 
 	//destroy old theme
 	OWSAFE_DELETE(_svgMask);
@@ -53,19 +68,18 @@ void QtSVGDialpad::setNewTheme(const std::string themeRepertory) {
 	OWSAFE_DELETE(_svgLayer);
 	OWSAFE_DELETE(_mask);
 
-	// new repertory
+	//new repertory
 	_repertory = themeRepertory;
 
 	//new mask
-	_svgMask = new QSvgRenderer(QString::fromStdString( _repertory + "dialpad_mask.svg" ), this);
+	_svgMask = new QSvgRenderer(QString::fromStdString(_repertory + "dialpad_mask.svg"), this);
 	_mask = new QImage();
 
 	//new image
-	_svgimage = new QSvgRenderer(QString::fromStdString( _repertory + "dialpad_image.svg" ), this);
+	_svgimage = new QSvgRenderer(QString::fromStdString(_repertory + "dialpad_image.svg"), this);
 
 	//reinitialize layer
 	_svgLayer = new QSvgRenderer();
-	_layerFile = "";
 }
 
 QtSVGDialpad::~QtSVGDialpad() {
@@ -75,16 +89,16 @@ QtSVGDialpad::~QtSVGDialpad() {
 	OWSAFE_DELETE(_mask);
 }
 
-void QtSVGDialpad::changeLayerFile( const std::string newLayerFile ) {
+void QtSVGDialpad::changeLayerFile(const std::string & newLayerFile) {
 
-	if( newLayerFile != _layerFile ) {
-		
+	if (newLayerFile != _layerFile) {
+
 		//delete old layer
 		OWSAFE_DELETE(_svgLayer);
 
 		//construct new layer
-		_svgLayer = new QSvgRenderer(QString::fromStdString( _repertory + newLayerFile ), this);
-		SAFE_CONNECT(_svgLayer, SIGNAL(repaintNeeded()),SLOT(update()));
+		_svgLayer = new QSvgRenderer(QString::fromStdString(_repertory + newLayerFile), this);
+		SAFE_CONNECT(_svgLayer, SIGNAL(repaintNeeded()), SLOT(update()));
 
 		//save _layerFile
 		_layerFile = newLayerFile;
@@ -99,50 +113,50 @@ void QtSVGDialpad::mouseMoveEvent(QMouseEvent *event) {
 	QPoint pos = event->pos();
 
 	//get pixel color
-	unsigned int color = _mask->pixel(pos.x(), pos.y());
+	unsigned color = _mask->pixel(pos.x(), pos.y());
 
-	if( color == COLOR_0 ) {
-		changeLayerFile( "layer_0.svg" );
+	if (color == COLOR_0) {
+		changeLayerFile("layer_0.svg");
 	}
-	else if( color == COLOR_1 ) {
-		changeLayerFile( "layer_1.svg" );
+	else if (color == COLOR_1) {
+		changeLayerFile("layer_1.svg");
 	}
-	else if( color == COLOR_2 ) {
-		changeLayerFile( "layer_2.svg" );
+	else if (color == COLOR_2) {
+		changeLayerFile("layer_2.svg");
 	}
-	else if( color == COLOR_3 ) {
-		changeLayerFile( "layer_3.svg" );
+	else if (color == COLOR_3) {
+		changeLayerFile("layer_3.svg");
 	}
-	else if( color == COLOR_4 ) {
-		changeLayerFile( "layer_4.svg" );
+	else if (color == COLOR_4) {
+		changeLayerFile("layer_4.svg");
 	}
-	else if( color == COLOR_5 ) {
-		changeLayerFile( "layer_5.svg" );
+	else if (color == COLOR_5) {
+		changeLayerFile("layer_5.svg");
 	}
-	else if( color == COLOR_6 ) {
-		changeLayerFile( "layer_6.svg" );
+	else if (color == COLOR_6) {
+		changeLayerFile("layer_6.svg");
 	}
-	else if( color == COLOR_7 ) {
-		changeLayerFile( "layer_7.svg" );
+	else if (color == COLOR_7) {
+		changeLayerFile("layer_7.svg");
 	}
-	else if( color == COLOR_8 ) {
-		changeLayerFile( "layer_8.svg" );
+	else if (color == COLOR_8) {
+		changeLayerFile("layer_8.svg");
 	}
-	else if( color == COLOR_9 ) {
-		changeLayerFile( "layer_9.svg" );
+	else if (color == COLOR_9) {
+		changeLayerFile("layer_9.svg");
 	}
-	else if( color == COLOR_POUND ) {
-		changeLayerFile( "layer_pound.svg" );
+	else if (color == COLOR_POUND) {
+		changeLayerFile("layer_pound.svg");
 	}
-	else if( color == COLOR_STAR ) {
-		changeLayerFile( "layer_star.svg" );
+	else if (color == COLOR_STAR) {
+		changeLayerFile("layer_star.svg");
 	}
 	else {
-		changeLayerFile( "" );
+		changeLayerFile("");
 	}
 }
 
-void QtSVGDialpad::mouseReleaseEvent(QMouseEvent *event) {
+void QtSVGDialpad::mouseReleaseEvent(QMouseEvent * event) {
 
 	if (event->button() == Qt::LeftButton) {
 
@@ -150,43 +164,43 @@ void QtSVGDialpad::mouseReleaseEvent(QMouseEvent *event) {
 		QPoint pos = event->pos();
 
 		//get pixel color
-		unsigned int color = _mask->pixel(pos.x(), pos.y());
+		unsigned color = _mask->pixel(pos.x(), pos.y());
 
-		if( color == COLOR_0 ) {
-			 keyZeroSelected();
+		if (color == COLOR_0) {
+			keyZeroSelected();
 		}
-		else if( color == COLOR_1 ) {
-			 keyOneSelected();
+		else if (color == COLOR_1) {
+			keyOneSelected();
 		}
-		else if( color == COLOR_2 ) {
-			 keyTwoSelected();
+		else if (color == COLOR_2) {
+			keyTwoSelected();
 		}
-		else if( color == COLOR_3 ) {
-			 keyThreeSelected();
+		else if (color == COLOR_3) {
+			keyThreeSelected();
 		}
-		else if( color == COLOR_4 ) {
-			 keyFourSelected();
+		else if (color == COLOR_4) {
+			keyFourSelected();
 		}
-		else if( color == COLOR_5 ) {
-			 keyFiveSelected();
+		else if (color == COLOR_5) {
+			keyFiveSelected();
 		}
-		else if( color == COLOR_6 ) {
-			 keySixSelected();
+		else if (color == COLOR_6) {
+			keySixSelected();
 		}
-		else if( color == COLOR_7 ) {
-			 keySevenSelected();
+		else if (color == COLOR_7) {
+			keySevenSelected();
 		}
-		else if( color == COLOR_8 ) {
-			 keyEightSelected();
+		else if (color == COLOR_8) {
+			keyEightSelected();
 		}
-		else if( color == COLOR_9 ) {
-			 keyNineSelected();
+		else if (color == COLOR_9) {
+			keyNineSelected();
 		}
-		else if( color == COLOR_POUND ) {
-			 keyPoundSelected();
+		else if (color == COLOR_POUND) {
+			keyPoundSelected();
 		}
-		else if( color == COLOR_STAR ) {
-			 keyStarSelected();
+		else if (color == COLOR_STAR) {
+			keyStarSelected();
 		}
 	}
 }
@@ -194,7 +208,7 @@ void QtSVGDialpad::mouseReleaseEvent(QMouseEvent *event) {
 void QtSVGDialpad::paintEvent(QPaintEvent *) {
 
 	//mask
-	if( _svgMask->isValid() ) {
+	if (_svgMask->isValid()) {
 		if (_mask->size() != size()) {
 			OWSAFE_DELETE(_mask);
 			_mask = new QImage(size(), QImage::Format_ARGB32_Premultiplied);
@@ -209,12 +223,12 @@ void QtSVGDialpad::paintEvent(QPaintEvent *) {
 	pi.setViewport(0, 0, width(), height());
 
 	//image
-	if( _svgimage->isValid() ) {
+	if (_svgimage->isValid()) {
 		_svgimage->render(&pi);
 	}
 
 	//layer
-	if( _svgLayer->isValid() ) {
+	if (_svgLayer->isValid()) {
 		_svgLayer->render(&pi);
 	}
 }

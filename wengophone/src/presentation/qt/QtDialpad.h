@@ -73,7 +73,7 @@ private Q_SLOTS:
 
 	void poundButtonClicked();
 
-	void audioSmileysComboBoxThemeChanged(QString newThemeName);
+	void audioSmileysComboBoxThemeChanged(const QString & newThemeName);
 
 	void refreshComboBox();
 

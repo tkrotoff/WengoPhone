@@ -18,10 +18,10 @@
  */
 
 #include "QtDialpad.h"
-#include "QtSVGDialpad.h"
 
 #include "ui_DialpadWidget.h"
 
+#include "QtSVGDialpad.h"
 #include "QtWengoPhone.h"
 
 #include <model/config/ConfigManager.h>
@@ -65,16 +65,16 @@ QtDialpad::QtDialpad(CDtmfThemeManager & cDtmfThemeManager, QtWengoPhone * qtWen
 	SAFE_CONNECT(_ui->nineButton, SIGNAL(clicked()), SLOT(nineButtonClicked()));
 	SAFE_CONNECT(_ui->starButton, SIGNAL(clicked()), SLOT(starButtonClicked()));
 	SAFE_CONNECT(_ui->poundButton, SIGNAL(clicked()), SLOT(poundButtonClicked()));
-	
+
 	//add UpComboBox
 	_audioSmileysComboBox = new UpQComboBox(_ui->frameUpQComboBox);
-	_audioSmileysComboBox->setMinimumWidth( 150 );
-	SAFE_CONNECT(_audioSmileysComboBox, SIGNAL(activated(QString)), SLOT(audioSmileysComboBoxThemeChanged(QString)));
-	SAFE_CONNECT(_audioSmileysComboBox, SIGNAL(popUpDisplayed()), SLOT(refreshComboBox()));
+	_audioSmileysComboBox->setMinimumWidth(150);
+	SAFE_CONNECT(_audioSmileysComboBox, SIGNAL(activated(const QString &)), SLOT(audioSmileysComboBoxThemeChanged(const QString &)));
+	SAFE_CONNECT(_audioSmileysComboBox, SIGNAL(popupDisplayed()), SLOT(refreshComboBox()));
 
 	//add svg viewer
 	_qtSVGDialpad = new QtSVGDialpad();
-	_ui->stackedWidget->addWidget( _qtSVGDialpad );
+	_ui->stackedWidget->addWidget(_qtSVGDialpad);
 
 	SAFE_CONNECT(_qtSVGDialpad, SIGNAL(keyZeroSelected()), SLOT(zeroButtonClicked()));
 	SAFE_CONNECT(_qtSVGDialpad, SIGNAL(keyOneSelected()), SLOT(oneButtonClicked()));
@@ -96,8 +96,8 @@ QtDialpad::QtDialpad(CDtmfThemeManager & cDtmfThemeManager, QtWengoPhone * qtWen
 }
 
 QtDialpad::~QtDialpad() {
-	OWSAFE_DELETE( _qtSVGDialpad );
-	OWSAFE_DELETE( _audioSmileysComboBox );
+	OWSAFE_DELETE(_qtSVGDialpad);
+	OWSAFE_DELETE(_audioSmileysComboBox);
 	OWSAFE_DELETE(_ui);
 }
 
@@ -108,12 +108,12 @@ void QtDialpad::fillComboBox() {
 	for (std::list<std::string>::const_iterator it = themeList.begin(); it != themeList.end(); ++it) {
 		std::string theme = *it;
 		std::string icon = _cDtmfThemeManager.getDtmfTheme(theme)->getRepertory() + _cDtmfThemeManager.getDtmfTheme(theme)->getImageFile();
-		_audioSmileysComboBox->addItem( QIcon( QString::fromStdString(icon) ), QString::fromStdString(theme), QVariant());
+		_audioSmileysComboBox->addItem(QIcon(QString::fromStdString(icon)), QString::fromStdString(theme), QVariant());
 	}
 }
 
 void QtDialpad::refreshComboBox(){
-	if ( _cDtmfThemeManager.refreshDtmfThemes() ) {
+	if (_cDtmfThemeManager.refreshDtmfThemes()) {
 
 		//save current text
 		QString selectOne = _audioSmileysComboBox->currentText();
@@ -122,9 +122,9 @@ void QtDialpad::refreshComboBox(){
 		_audioSmileysComboBox->clear();
 		fillComboBox();
 
-		//load current text with is new position ( if possible )
+		//load current text with is new position (if possible)
 		int pos = _audioSmileysComboBox->findText(selectOne);
-		if( pos != -1 ) {
+		if (pos != -1) {
 			_audioSmileysComboBox->setCurrentIndex(pos);
 		}
 	}
@@ -193,13 +193,13 @@ void QtDialpad::poundButtonClicked() {
 	playTone("#");
 }
 
-void QtDialpad::audioSmileysComboBoxThemeChanged(QString newThemeName) {
+void QtDialpad::audioSmileysComboBoxThemeChanged(const QString & newThemeName) {
 
-	LOG_DEBUG( newThemeName.toStdString() );
+	LOG_DEBUG(newThemeName.toStdString());
 
 	const DtmfTheme * newTheme = _cDtmfThemeManager.getDtmfTheme(newThemeName.toStdString());
 
-	if( newTheme->getDialpadMode() == DtmfTheme::svg ) {
+	if (newTheme->getDialpadMode() == DtmfTheme::svg) {
 
 		//change theme
 		_qtSVGDialpad->setNewTheme(newTheme->getRepertory());
