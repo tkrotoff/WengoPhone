@@ -75,6 +75,24 @@ public:
 	 */
 	static const char * SOFTPHONE_NAME;
 
+	/** Boost version number. */
+	static const char * LIBBOOST_VERSION;
+
+	/** LibGaim version number. */
+	static const char * GAIM_VERSION;
+
+	/** cURL version number. */
+	static const char * CURL_VERSION;
+
+	/** PortAudio version number. */
+	static const char * PORTAUDIO_VERSION;
+
+	/** FFmpeg' libavcodec version number. */
+	static const char * AVCODEC_VERSION;
+
+	/** TinyXML version number. */
+	static const char * TINYXML_VERSION;
+
 private:
 
 	/** Avoid copying of this object. */

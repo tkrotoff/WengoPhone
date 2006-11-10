@@ -28,18 +28,6 @@
 
 #include <QtGui/QtGui>
 
-#include <curl/curl.h>
-#ifndef OS_MACOSX
-	#include <portaudio.h>
-#endif
-#include <boost/version.hpp>
-#include <avcodec.h>
-#include <tinyxml.h>
-extern "C" {
-#include <glib.h>
-#include <gaim/core.h>
-}
-
 QtAbout::QtAbout(QWidget * parent) {
 	_aboutDialog = new QDialog(parent);
 
@@ -62,13 +50,13 @@ QtAbout::QtAbout(QWidget * parent) {
 
 	QString eol = QString::fromStdString(String::EOL);
 	_ui->versionLabel->setText("Qt: " + QString(qVersion()) + eol +
-				"Boost: " + QString(BOOST_LIB_VERSION) + eol +
-				"Gaim: " + QString(gaim_core_get_version()) + eol +
-				"cURL: " + QString(curl_version()) + eol +
-				"TinyXML: " + QString::number(TIXML_MAJOR_VERSION) + "." + QString::number(TIXML_MINOR_VERSION) + "." + QString::number(TIXML_PATCH_VERSION) + eol +
-				"FFmpeg's libavcodec: " + QString::number(avcodec_version())
+				"Boost: " + QString(WengoPhoneBuildId::LIBBOOST_VERSION) + eol +
+				"LibGaim: " + QString(WengoPhoneBuildId::GAIM_VERSION) + eol +
+				"cURL: " + QString(WengoPhoneBuildId::CURL_VERSION) + eol +
+				"TinyXML: " + QString(WengoPhoneBuildId::TINYXML_VERSION) + eol +
+				"FFmpeg's libavcodec: " + QString(WengoPhoneBuildId::AVCODEC_VERSION)
 #ifndef OS_MACOSX
-				+ eol + "PortAudio: " + QString(Pa_GetVersionText())
+				+ eol + "PortAudio: " + QString(WengoPhoneBuildId::PORTAUDIO_VERSION)
 #endif
 				);
 }

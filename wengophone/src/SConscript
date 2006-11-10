@@ -1,13 +1,51 @@
-env = WengoGetEnvironment()
+envBuildId = WengoGetEnvironment()
 
 WengoPhoneBuildId = {
 	'buildId': WengoGetCurrentDateTime(),
-	'version': '2.0',
-	'revision': WengoGetSubversionRevision(),
-	'sofphoneName': 'wengo',
+	'version': '"""2.0"""',
+	'revision': '"""' + str(WengoGetSubversionRevision()) + '"""',
+	'sofphoneName': '"""wengo"""',
 }
 
 WengoSetVariable('WengoPhoneBuildId', WengoPhoneBuildId)
+
+if WengoGetConsoleArgument('nobuildid'):
+	envBuildId.Append(
+		CPPDEFINES = {
+			'DD_BUILDID': '0LL',
+			'DD_VERSION': '0',
+			'DD_REVISION': 0,
+			'DD_SOFTPHONE_NAME': 'wengo'
+		}
+	)
+else:
+	envBuildId.Append(
+		CPPDEFINES = {
+			'DD_BUILDID': str(WengoPhoneBuildId['buildId']) + 'LL',
+			'DD_VERSION': WengoPhoneBuildId['version'],
+			'DD_REVISION': WengoPhoneBuildId['revision'],
+			'DD_SOFTPHONE_NAME': WengoPhoneBuildId['sofphoneName']
+		}
+	)
+
+sources = [
+	'WengoPhoneBuildId.cpp'
+]
+
+libsBuildId = [
+	'gaim',
+	'portaudio',
+	'avcodec',
+	'owcurl',
+	'owutil',
+	'tinyxml',
+]
+
+envBuildId.WengoUseLibraries(libsBuildId)
+
+envBuildId.WengoStaticLibrary('buildId', sources)
+
+env = WengoGetEnvironment()
 
 libs = [
 	'owsettings',
@@ -42,30 +80,6 @@ include_path = [
 defines = {}
 
 headers = []
-
-envBuildId = WengoGetEnvironment()
-if WengoGetConsoleArgument('nobuildid'):
-	envBuildId.Append(
-		CPPDEFINES = {
-			'DD_BUILDID': '0LL',
-			'DD_VERSION': '0',
-			'DD_REVISION': 0,
-			'DD_SOFTPHONE_NAME': 'wengo'
-		}
-	)
-else:
-	envBuildId.Append(
-		CPPDEFINES = {
-			'DD_BUILDID': str(WengoPhoneBuildId['buildId']) + 'LL',
-			'DD_VERSION': WengoPhoneBuildId['version'],
-			'DD_REVISION': WengoPhoneBuildId['revision'],
-			'DD_SOFTPHONE_NAME': WengoPhoneBuildId['sofphoneName']
-		}
-	)
-
-buildId = envBuildId.Object(source = 'WengoPhoneBuildId.cpp')
-
-envBuildId.WengoStaticLibrary('buildId', buildId)
 
 sources = [
 	'model/WengoPhone.cpp',
