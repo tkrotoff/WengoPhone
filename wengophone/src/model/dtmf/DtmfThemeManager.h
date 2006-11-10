@@ -17,11 +17,15 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#ifndef OWDTMFTHEMEMANAGER_H
+#define OWDTMFTHEMEMANAGER_H
+
 #include "DtmfTheme.h"
+
+#include <util/StringList.h>
 
 #include <string>
 #include <map>
-#include <list>
 
 class WengoPhone;
 
@@ -32,15 +36,15 @@ class WengoPhone;
  * @author Mathieu Stute
  */
 class DtmfThemeManager {
-
 public:
 
-	DtmfThemeManager(WengoPhone & wengoPhone, std::string dtmfDirPath);
+	DtmfThemeManager(WengoPhone & wengoPhone, const std::string & dtmfDirPath);
+
 	~DtmfThemeManager();
 
-	std::list<std::string> getThemeList() const;
+	StringList getThemeList() const;
 
-	const DtmfTheme * getDtmfTheme(std::string themeName) const;
+	const DtmfTheme * getDtmfTheme(const std::string & themeName) const;
 
 	bool refreshDtmfThemes();
 
@@ -58,3 +62,5 @@ private:
 
 	WengoPhone & _wengoPhone;
 };
+
+#endif	//OWDTMFTHEMEMANAGER_H

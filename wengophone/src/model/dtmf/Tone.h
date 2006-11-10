@@ -17,6 +17,9 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#ifndef OWTONE_H
+#define OWTONE_H
+
 #include <string>
 
 /**
@@ -42,13 +45,13 @@ public:
 
 	~Tone();
 
-	const std::string & getKey() const;
+	std::string getKey() const;
 
-	const std::string & getSoundFile() const;
+	std::string getSoundFile() const;
 
-	const std::string & getText() const;
+	std::string getText() const;
 
-	const std::string & getImageFile() const;
+	std::string getImageFile() const;
 
 	Tone::Action getLocalAction() const;
 
@@ -58,8 +61,8 @@ public:
 
 private:
 
-	Tone(std::string key, std::string soundFile, std::string text = "",
-		std::string imageFile = "", Tone::Action localAction = Tone::Play,
+	Tone(const std::string & key, const std::string & soundFile, const std::string & text = "",
+		const std::string & imageFile = "", Tone::Action localAction = Tone::Play,
 		Tone::Action remoteAction = Tone::Play, Tone::AudioFormat audioFormat = Tone::Raw);
 
 	/* action for local */
@@ -83,3 +86,5 @@ private:
 	/* the code of the key associated with this Tone. */
 	std::string _key;
 };
+
+#endif	//OWTONE_H

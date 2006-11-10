@@ -25,18 +25,18 @@
 #include <model/phoneline/IPhoneLine.h>
 
 #include <util/File.h>
+#include <util/Logger.h>
+
 #include <sound/Sound.h>
 #include <sound/AudioDevice.h>
 
 #include <tinyxml.h>
-#include <util/Logger.h>
 
-DtmfTheme::DtmfTheme(WengoPhone & wengoPhone, std::string repertory, std::string xmlDescriptor)
-	: _wengoPhone(wengoPhone), _repertory(repertory) {
+DtmfTheme::DtmfTheme(WengoPhone & wengoPhone, const std::string & repertory, const std::string & xmlDescriptor)
+	: _wengoPhone(wengoPhone),
+	_repertory(repertory) {
 
 	_dialpadMode = plain;
-	_name = "";
-	_imageFile = "";
 
 	_xmlDescriptor = _repertory + xmlDescriptor;
 	TiXmlDocument doc;
@@ -46,59 +46,58 @@ DtmfTheme::DtmfTheme(WengoPhone & wengoPhone, std::string repertory, std::string
 
 	//extract info from the dialpad element
 	TiXmlElement * dialpadElt = docHandle.FirstChild("dialpad").Element();
-	if( dialpadElt ) {
+	if (dialpadElt) {
 
 		const char * attr = dialpadElt->Attribute("mode");
-		if(attr) {
-			if( std::string(attr) == "plain") {
+		if (attr) {
+			if (std::string(attr) == "plain") {
 				_dialpadMode = plain;
-			} else if( std::string(attr) == "iconified") {
+			} else if (std::string(attr) == "iconified") {
 				_dialpadMode = iconified;
-			} else if( std::string(attr) == "svg") {
+			} else if (std::string(attr) == "svg") {
 				_dialpadMode = svg;
-			}
-			else {
+			} else {
 				_dialpadMode = unknown;
 			}
 		}
 
 		attr = dialpadElt->Attribute("name");
-		if(attr) {
+		if (attr) {
 			_name = std::string(attr);
 		}
 
 		attr = dialpadElt->Attribute("pixmap");
-		if(attr) {
+		if (attr) {
 			_imageFile = std::string(attr);
 		}
 	}
 
 	TiXmlElement * tonesNode = dialpadElt->FirstChildElement("tones");
-	if( tonesNode ) {
+	if (tonesNode) {
 
 		//iterate over <tone>
 		TiXmlElement * toneElt = tonesNode->FirstChildElement("tone");
-		while(toneElt) {
+		while (toneElt) {
 
-			std::string key = "";
-			std::string soundFile = "";
-			std::string text = "";
-			std::string imageFile = "";
+			std::string key;
+			std::string soundFile;
+			std::string text;
+			std::string imageFile;
 			Tone::Action localAction = Tone::Play;
 			Tone::Action remoteAction = Tone::Play;
 			Tone::AudioFormat audioFormat = Tone::Raw;
 
 			//extract the attribut key, sound_file & audioformat
 			const char * attr = toneElt->Attribute("key");
-			if(attr) {
+			if (attr) {
 				key = std::string(attr);
 			}
 
 			attr = toneElt->Attribute("format");
-			if(attr) {
-				if( std::string(attr) == "raw") {
+			if (attr) {
+				if (std::string(attr) == "raw") {
 					audioFormat = Tone::Raw;
-				} else if( std::string(attr) == "wav") {
+				} else if (std::string(attr) == "wav") {
 					audioFormat = Tone::Wav;
 				} else {
 					audioFormat = Tone::Unknown;
@@ -109,8 +108,8 @@ DtmfTheme::DtmfTheme(WengoPhone & wengoPhone, std::string repertory, std::string
 
 			//local, remote, ...
 			attr = toneElt->Attribute("local");
-			if(attr) {
-				if( std::string(attr) == "play") {
+			if (attr) {
+				if (std::string(attr) == "play") {
 					localAction = Tone::Play;
 				} else {
 					localAction = Tone::None;
@@ -118,8 +117,8 @@ DtmfTheme::DtmfTheme(WengoPhone & wengoPhone, std::string repertory, std::string
 			}
 
 			attr = toneElt->Attribute("remote");
-			if(attr) {
-				if( std::string(attr) == "play") {
+			if (attr) {
+				if (std::string(attr) == "play") {
 					remoteAction = Tone::Play;
 				} else {
 					remoteAction = Tone::None;
@@ -127,17 +126,17 @@ DtmfTheme::DtmfTheme(WengoPhone & wengoPhone, std::string repertory, std::string
 			}
 
 			attr = toneElt->Attribute("image_file");
-			if(attr) {
+			if (attr) {
 				imageFile = std::string(attr);
 			}
 
 			attr = toneElt->Attribute("text");
-			if(attr) {
+			if (attr) {
 				text = std::string(attr);
 			}
 
 			//the minimum to have a valid Tone
-			if( ( key != "") || ( audioFormat == Tone::Unknown ) ){
+			if ((!key.empty()) || (audioFormat == Tone::Unknown)) {
 				Tone * tone = new Tone(key, soundFile, text, imageFile, localAction, remoteAction, audioFormat);
 				_toneList[key] = tone;
 			}
@@ -161,23 +160,23 @@ void DtmfTheme::playTone(const std::string & key) const {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	std::string soundfile = _repertory + tone->getSoundFile();
 
-	if( tone->getLocalAction() == Tone::Play ) {
+	if (tone->getLocalAction() == Tone::Play) {
 		Sound::play(File::convertPathSeparators(soundfile), config.getAudioRingerDeviceId());
 	}
 
-	if( tone->getRemoteAction() == Tone::Play ) {
+	if (tone->getRemoteAction() == Tone::Play) {
 		//TODO: sendsoundfile
 		//int cid = _wengoPhone.getCurrentUserProfile().getActivePhoneLine().getActivePhoneCall();
 		//_wengoPhone.getCurrentUserProfile().getActivePhoneLine().playSoundFile(tone->getSoundFile());
 	}
 }
 
-std::list<std::string> DtmfTheme::getToneList() const {
+StringList DtmfTheme::getToneList() const {
 
-	std::list<std::string> toReturn;
+	StringList toReturn;
 
 	DtmfTheme::ToneList::const_iterator it;
-	for(it = _toneList.begin(); it != _toneList.end(); it++) {
+	for (it = _toneList.begin(); it != _toneList.end(); it++) {
 		toReturn.push_back((*it).first);
 	}
 
@@ -187,15 +186,14 @@ std::list<std::string> DtmfTheme::getToneList() const {
 const Tone * DtmfTheme::getTone(const std::string & key) const {
 
 	DtmfTheme::ToneList::const_iterator it;
-	for(it = _toneList.begin(); it != _toneList.end(); it++) {
+	for (it = _toneList.begin(); it != _toneList.end(); it++) {
 
-		if( (*it).first == key ) {
+		if ((*it).first == key) {
 			return (*it).second;
 		}
 	}
 	return NULL;
 }
-
 
 std::string DtmfTheme::getImageFile() const {
 	return _imageFile;

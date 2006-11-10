@@ -21,8 +21,6 @@
 #include <model/dtmf/DtmfThemeManager.h>
 
 #include <presentation/PFactory.h>
-//#include <presentation/PHistory.h>
-#include <presentation/qt/QtDialpad.h>
 
 #include <control/CWengoPhone.h>
 
@@ -49,7 +47,7 @@ void CDtmfThemeManager::initPresentationThreadSafe() {
 }
 
 Presentation * CDtmfThemeManager::getPresentation() const {
-	return 0;//_qtDialpad;
+	return 0;
 }
 
 CWengoPhone & CDtmfThemeManager::getCWengoPhone() const {
@@ -65,11 +63,11 @@ void CDtmfThemeManager::playTone(const std::string & themeName, const std::strin
 	theme->playTone(key);
 }
 
-std::list<std::string> CDtmfThemeManager::getThemeList() const {
+StringList CDtmfThemeManager::getThemeList() const {
 	return _dtmfThemeManager.getThemeList();
 }
 
-const DtmfTheme * CDtmfThemeManager::getDtmfTheme(std::string themeName) const {
+const DtmfTheme * CDtmfThemeManager::getDtmfTheme(const std::string & themeName) const {
 	return _dtmfThemeManager.getDtmfTheme(themeName);
 }
 

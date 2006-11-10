@@ -17,10 +17,15 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#ifndef OWDTMFTHEME_H
+#define OWDTMFTHEME_H
+
 #include "Tone.h"
+
+#include <util/StringList.h>
+
 #include <string>
 #include <map>
-#include <list>
 
 class WengoPhone;
 
@@ -32,10 +37,9 @@ class WengoPhone;
  */
 class DtmfTheme {
 	friend class DtmfThemeManager;
-
 	typedef std::map<std::string, const Tone *> ToneList;
-
 public:
+
 	enum DialpadMode {
 		plain,
 		iconified,
@@ -47,7 +51,7 @@ public:
 
 	std::string getName() const;
 
-	std::list<std::string> getToneList() const;
+	StringList getToneList() const;
 
 	const Tone * getTone(const std::string & key) const;
 
@@ -61,7 +65,7 @@ public:
 
 private:
 
-	DtmfTheme(WengoPhone & wengoPhone, std::string repertory, std::string xmlDescriptor);
+	DtmfTheme(WengoPhone & wengoPhone, const std::string & repertory, const std::string & xmlDescriptor);
 
 	std::string _repertory;
 
@@ -77,3 +81,5 @@ private:
 
 	WengoPhone & _wengoPhone;
 };
+
+#endif	//OWDTMFTHEME_H

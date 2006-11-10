@@ -22,10 +22,10 @@
 
 #include <control/Control.h>
 
+#include <util/StringList.h>
+
 class Presentation;
 class CWengoPhone;
-//class PDialpad ?;
-class QtDialpad;
 class DtmfThemeManager;
 class DtmfTheme;
 
@@ -53,10 +53,10 @@ public:
 	void playTone(const std::string & themeName, const std::string & key) const;
 
 	//get theme list
-	std::list<std::string> getThemeList() const;
+	StringList getThemeList() const;
 
 	//get a theme
-	const DtmfTheme * getDtmfTheme(std::string themeName) const;
+	const DtmfTheme * getDtmfTheme(const std::string & themeName) const;
 
 	//refresh DTMFThemes
 	bool refreshDtmfThemes();
@@ -72,10 +72,6 @@ private:
 	CWengoPhone & _cWengoPhone;
 
 	/** Link to the presentation via an interface. */
-	//PHistory * _pHistory;
-
-	/** Link to Qt */
-	QtDialpad* _qtDialpad;
 };
 
 #endif	//OWCDTMFTHEMEMANAGER_H

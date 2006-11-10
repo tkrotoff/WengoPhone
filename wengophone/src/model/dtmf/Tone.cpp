@@ -18,30 +18,36 @@
  */
 
 #include "Tone.h"
+
 #include <util/Logger.h>
 
-Tone::Tone(std::string key, std::string soundFile, std::string text, std::string imageFile,
+Tone::Tone(const std::string & key, const std::string & soundFile, const std::string & text, const std::string & imageFile,
 	Tone::Action localAction, Tone::Action remoteAction, Tone::AudioFormat audioFormat) :
-	_key(key), _soundFile(soundFile), _text(text), _imageFile(imageFile),
-	_localAction(localAction), _remoteAction(remoteAction), _audioFormat(audioFormat) {
+	_key(key),
+	_soundFile(soundFile),
+	_text(text),
+	_imageFile(imageFile),
+	_localAction(localAction),
+	_remoteAction(remoteAction),
+	_audioFormat(audioFormat) {
 }
 
 Tone::~Tone() {
 }
 
-const std::string & Tone::getImageFile() const {
+std::string Tone::getImageFile() const {
 	return _imageFile;
 }
 
-const std::string & Tone::getSoundFile() const {
+std::string Tone::getSoundFile() const {
 	return _soundFile;
 }
 
-const std::string & Tone::getText() const {
+std::string Tone::getText() const {
 	return _text;
 }
 
-const std::string & Tone::getKey() const {
+std::string Tone::getKey() const {
 	return _key;
 }
 
