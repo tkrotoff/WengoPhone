@@ -20,15 +20,6 @@ if (WIN32)
 	)
 endif (WIN32)
 
-#ow_add_public_definitions(
-#	-DOWHTTP_DLL
-#)
-
-#ow_add_private_definitions(
-#	-DOWHTTP_DLL
-#	-DBUILD_OWHTTP_DLL
-#)
-
 ow_add_sources(
 	src/HttpRequest.cpp
 	src/HttpRequestManager.cpp

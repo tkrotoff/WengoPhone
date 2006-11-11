@@ -9,15 +9,6 @@ ow_add_public_include_dirs(
 	${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
-#ow_add_public_definitions(
-#	-DOWUTIL_DLL
-#)
-
-#ow_add_private_definitions(
-#	-DOWUTIL_DLL
-#	-DBUILD_OWUTIL_DLL
-#)
-
 ow_add_sources(
 	src/exception/Exception.cpp
 	src/Base64.cpp

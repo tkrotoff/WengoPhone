@@ -8,15 +8,6 @@ ow_add_public_include_dirs(
 	${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
-#ow_add_public_definitions(
-#	-DOWSOCKET_DLL
-#)
-
-#ow_add_private_definitions(
-#	-DOWSOCKET_DLL
-#	-DBUILD_OWSOCKET_DLL
-#)
-
 ow_add_sources(
 	src/ServerSocket.cpp
 	src/ClientSocket.cpp

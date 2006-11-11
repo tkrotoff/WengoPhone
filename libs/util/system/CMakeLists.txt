@@ -8,15 +8,6 @@ ow_add_public_include_dirs(
 	${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
-#ow_add_public_definitions(
-#	-DOWSYSTEM_DLL
-#)
-
-#ow_add_private_definitions(
-#	-DOWSYSTEM_DLL
-#	-DBUILD_OWSYSTEM_DLL
-#)
-
 ow_add_sources(
 	src/RegisterProtocol.cpp
 )

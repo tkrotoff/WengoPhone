@@ -13,15 +13,6 @@ ow_add_public_include_dirs(
 	${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
-#ow_add_public_definitions(
-#	-DOWSETTINGS_DLL
-#)
-
-#ow_add_private_definitions(
-#	-DOWSETTINGS_DLL
-#	-DBUILD_OWSETTINGS_DLL
-#)
-
 ow_add_sources(
 	src/Settings.cpp
 	src/AutomaticSettings.cpp

@@ -9,15 +9,6 @@ ow_add_public_include_dirs(
 	${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
-#ow_add_public_definitions(
-#	-DOWPIXERTOOL_DLL
-#)
-
-ow_add_private_definitions(
-	-DOWPIXERTOOL_DLL
-	-DBUILD_OWPIXERTOOL_DLL
-)
-
 ow_add_sources(
 	src/pixertool.cpp
 	src/ffmpeg/ffmpeg-pixertool.c

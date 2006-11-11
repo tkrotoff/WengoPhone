@@ -9,15 +9,6 @@ ow_add_public_include_dirs(
 	${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
-#ow_add_public_definitions(
-#	-DOWQTUTIL_DLL
-#)
-
-#ow_add_private_definitions(
-#	-DOWQTUTIL_DLL
-#	-DBUILD_OWQTUTIL_DLL
-#)
-
 qt4_wrap_cpp(owqtutil_SRCS
 	include/qtutil/EventFilter.h
 	include/qtutil/KeyEventFilter.h

@@ -10,15 +10,6 @@ ow_add_sources(
 	src/strlcpy.c
 )
 
-#ow_add_public_definitions(
-#	-DOWCUTIL_DLL
-#)
-
-#ow_add_private_definitions(
-#	-DOWCUTIL_DLL
-#	-DBUILD_OWCUTIL_DLL
-#)
-
 if (MSVC)
 	ow_add_public_include_dirs(
 		${CMAKE_CURRENT_SOURCE_DIR}/include/cutil/msvc

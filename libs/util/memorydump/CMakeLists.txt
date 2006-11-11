@@ -14,15 +14,6 @@ if (MSVC)
 	)
 endif (MSVC)
 
-#ow_add_public_definitions(
-#	-DOWMEMORYDUMP_DLL
-#)
-
-#ow_add_private_definitions(
-#	-DOWMEMORYDUMP_DLL
-#	-DBUILD_OWMEMORYDUMP_DLL
-#)
-
 ow_add_sources(
 	src/win32/MemoryDump.cpp
 )

@@ -8,15 +8,6 @@ ow_add_public_include_dirs(
 	${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
-#ow_add_public_definitions(
-#	-DOWSHLIBLOADER_DLL
-#)
-
-#ow_add_private_definitions(
-#	-DOWSHLIBLOADER_DLL
-#	-DBUILD_OWSHLIBLOADER_DLL
-#)
-
 ow_add_sources(
 	src/SharedLibLoader.cpp
 )

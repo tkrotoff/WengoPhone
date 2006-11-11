@@ -8,15 +8,6 @@ ow_add_public_include_dirs(
 	${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
-#ow_add_public_definitions(
-#	-DOWSOUND_DLL
-#)
-
-#ow_add_private_definitions(
-#	-DOWSOUND_DLL
-#	-DBUILD_OWSOUND_DLL
-#)
-
 ow_add_sources(
 	src/AudioDevice.cpp
 	src/VolumeControl.cpp

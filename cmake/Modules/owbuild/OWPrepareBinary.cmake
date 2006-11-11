@@ -17,6 +17,10 @@ macro (OW_PREPARE_BINARY)
 
 	ow_add_public_libraries(${PROJECT_NAME})
 
+	if (${PROJECT_NAME}_PROJECT_TYPE MATCHES Shared OR ${PROJECT_NAME}_PROJECT_TYPE MATCHES Plugin)
+		ow_add_shared_library_definitions()
+	endif (${PROJECT_NAME}_PROJECT_TYPE MATCHES Shared OR ${PROJECT_NAME}_PROJECT_TYPE MATCHES Plugin)
+
 	ow_unique(unique ${${PROJECT_NAME}_DEFINITIONS} ${${PROJECT_NAME}_PRIVATE_DEFINITIONS})
 	add_definitions(${unique})
 

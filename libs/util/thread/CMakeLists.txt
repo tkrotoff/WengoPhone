@@ -8,15 +8,6 @@ ow_add_public_include_dirs(
 	${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
-#ow_add_public_definitions(
-#	-DOWTHREAD_DLL
-#)
-
-#ow_add_private_definitions(
-#	-DOWTHREAD_DLL
-#	-DBUILD_OWTHREAD_DLL
-#)
-
 ow_add_sources(
 	src/Timer.cpp
 	src/Thread.cpp
