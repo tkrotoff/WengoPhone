@@ -321,11 +321,8 @@ if (UNIX AND NOT WIN32)
 		)
 
 		ow_add_sources(
-			QtFactory.cpp
-			QtSystray.cpp
 			chat/QtCloseChatTabWidget.cpp
 			macosx/QtMacApplication.cpp
-			phoneline/QtPhoneLine.cpp
 		)
 	else (APPLE)
 		ow_use_private_libraries(

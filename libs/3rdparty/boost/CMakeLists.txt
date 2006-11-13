@@ -1,8 +1,14 @@
 ow_create_project(boost)
 
-ow_use_public_libraries(
-	Boost
-)
+if (APPLE)
+	ow_use_public_libraries(
+		BOOST
+	)
+else (APPLE)
+	ow_use_public_libraries(
+		Boost
+	)
+endif (APPLE)
 
 ow_add_public_definitions(
 	-DBOOST_ALL_DYN_LINK
