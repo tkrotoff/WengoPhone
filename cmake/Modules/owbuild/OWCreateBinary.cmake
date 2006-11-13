@@ -19,7 +19,7 @@ macro (OW_CREATE_BINARY)
 		else (WIN32)
 
 		if (UNIX)
-			ow_post_build_copy_file(${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.a ${PROJECT_NAME}.a)
+			ow_post_build_copy_file(${CMAKE_CURRENT_BINARY_DIR}/lib${PROJECT_NAME}.a lib${PROJECT_NAME}.a)
 		endif (UNIX)
 
 		endif (WIN32)
@@ -35,11 +35,11 @@ macro (OW_CREATE_BINARY)
 		else (WIN32)
 
 		if (APPLE)
-			ow_post_build_copy_file(${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.dylib ${PROJECT_NAME}.dylib)
+			ow_post_build_copy_file(${CMAKE_CURRENT_BINARY_DIR}/lib${PROJECT_NAME}.dylib lib${PROJECT_NAME}.dylib)
 		else (APPLE)
 
 		if (UNIX)
-			ow_post_build_copy_file(${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.so ${PROJECT_NAME}.so)
+			ow_post_build_copy_file(${CMAKE_CURRENT_BINARY_DIR}/lib${PROJECT_NAME}.so lib${PROJECT_NAME}.so)
 		endif (UNIX)
 
 		endif (WIN32)
@@ -61,11 +61,11 @@ macro (OW_CREATE_BINARY)
 		else (WIN32)
 
 		if (APPLE)
-			ow_post_build_copy_file(${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.dylib ${PROJECT_NAME}.dylib)
+			ow_post_build_copy_file(${CMAKE_CURRENT_BINARY_DIR}/lib${PROJECT_NAME}.dylib lib${PROJECT_NAME}.dylib)
 		else (APPLE)
 
 		if (UNIX)
-			ow_post_build_copy_file(${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.so ${PROJECT_NAME}.so)
+			ow_post_build_copy_file(${CMAKE_CURRENT_BINARY_DIR}/lib${PROJECT_NAME}.so lib${PROJECT_NAME}.so)
 		endif (UNIX)
 
 		endif (WIN32)
