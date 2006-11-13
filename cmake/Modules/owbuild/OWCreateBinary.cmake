@@ -90,9 +90,9 @@ macro (OW_CREATE_BINARY)
 			ow_post_build_copy_file(${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.pdb ${PROJECT_NAME}.pdb)
 		else (WIN32)
 
-		if (UNIX)
+		if (UNIX AND NOT APPLE)
 			ow_post_build_copy_file(${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME} ${PROJECT_NAME})
-		endif (UNIX)
+		endif (UNIX AND NOT APPLE)
 
 		endif (WIN32)
 	endif (${PROJECT_NAME}_PROJECT_TYPE MATCHES Executable)
