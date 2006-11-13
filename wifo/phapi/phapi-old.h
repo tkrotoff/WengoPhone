@@ -1,47 +1,48 @@
-#ifndef __PHAPI_H__
-#define __PHAPI_H__ 1
 /*
   The phapi module implements simple interface for eXosip stack
   Copyright (C) 2004  Vadim Lebedev  <vadim@mbdsys.com>
-  
+
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
   License as published by the Free Software Foundation; either
   version 2.1 of the License, or (at your option) any later version.
-  
+
   This library is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
   Lesser General Public License for more details.
-  
+
   You should have received a copy of the GNU Lesser General Public
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
+
+#ifndef __PHAPI_H__
+#define __PHAPI_H__ 1
 
 /**
  * @file phoneapi.h
  * @brief softphone  API
  *
  * phoneapi is a library providing simplified api to create VOIP sessions
- * using eXosip library oSIP stack and oRTP stack 
+ * using eXosip library oSIP stack and oRTP stack
  * <P>
  */
 
 /**
  * @defgroup phAPI  Phone API
  * @{
- *  
+ *
  *  From the perspecitve of the phApi client the call can be in the following states:
- *   
+ *
  *   [INCOMING], [ACCEPTING], [OUTGOING], [ESTABLISHED], [ONHOLD], [CLOSED]
  *
- *                
+ *
  *                                              V
  *                           +--(INCALL)--------+----(phPlaceCall)-------------------+
  *                           |                                                       |
  *                           |                                                       |
- *                           v                                                       v           
+ *                           v                                                       v
  *  +--(phRejectCall)--<-[INCOMING]<----<------- +                               [OUTGOING]--(DIALING/RINGING)-->-+
  *  |                        v                   ^                                v   v  ^                        |
  *  |                        |                   |                                |   |  |                        |
@@ -76,7 +77,7 @@
  *     phBlindTransferCall(cidA, "P");
  *   this will cause following sequence of events:
  *     1. B  will receive a CALLHELD event
- *     2. B  will receive a XFERREQ  event for cidB containingg "P" as remoteUri and newcid field will 
+ *     2. B  will receive a XFERREQ  event for cidB containingg "P" as remoteUri and newcid field will
  *           contain a callid for an automatically generated call to the new destination
  *   A will receive a XFERPROGRESS event
  *   P will receive a INCALL event
@@ -88,8 +89,8 @@
  *   B will get CALLCLOSED  for cidB
  *
  *  In case of failure transfer for whatever reason A will receive an
- *   XFERFAIL event with status field containing SIP status code 
- * 
+ *   XFERFAIL event with status field containing SIP status code
+ *
  *   the file ../miniua/minua.c contains the code demonstrating the usage of blind transfer
  *
  *
@@ -109,38 +110,37 @@
  *   P gets CALLHELD event
  *   A does
  *     phTransferCall(cidA, newcid)
- *   B  will receive a XFERREQ  event for cidB containing "P" as remoteUri and newcid field will 
+ *   B  will receive a XFERREQ  event for cidB containing "P" as remoteUri and newcid field will
  *      contain a callid for an automatically generated call to the new destination
  *   A gets XFERPROGRESS events
  *   P will get CALLREPLACED for cidP0 with newcid cidP1
  *   A gets XFEROK event
  *   A will get CALLCLOSED for cidA
  *   B will get CALLCLOSED for cidB
- *   P will get CALLCLOSED for cidP0  
- *        
+ *   P will get CALLCLOSED for cidP0
+ *
  */
 
 #include <phcall.h>
 
-
 #ifdef WIN32
-#if defined(BUILD_PHAPI_DLL)
-#define MY_DLLEXPORT __declspec(dllexport) 
-#elif defined(PHAPI_DLL)
-#define MY_DLLEXPORT __declspec(dllimport) 
-#endif
+	#if defined(BUILD_PHAPI_DLL)
+		#define MY_DLLEXPORT __declspec(dllexport)
+	#elif defined(PHAPI_DLL)
+		#define MY_DLLEXPORT __declspec(dllimport)
+	#endif
 #endif
 
 #ifndef MY_DLLEXPORT
-#define MY_DLLEXPORT 
+	#define MY_DLLEXPORT
 #endif
 
 
-#ifndef PHAPI_VERSION 
+#ifndef PHAPI_VERSION
 #define PHAPI_VERSION "0.2.0"
 #endif
 
-/************************************** 
+/**************************************
  MINH: Added in order to implement new APIs
  **************************************/
 int getNextCallId();
@@ -194,28 +194,28 @@ enum phErrors {
 
 /**
  * Add virtual line
- * The virtual line corresponds to identity/server/proxy triplet 
+ * The virtual line corresponds to identity/server/proxy triplet
  *
- * @param  displayname display name component of the SIP identity "displayname" <sip:username@host> 
- * @param  username    username    
+ * @param  displayname display name component of the SIP identity "displayname" <sip:username@host>
+ * @param  username    username
  * @param  host        the host component of SIP identity username@host corresponding to this virtual line
  *                     if regTimeout != 0 'host' will designate the REGISTRAR server, in this case it may have form of host:port
  *                     otherwise it should be set to IP address or hostname of the local machine
  * @param  proxy       outgoing proxy URI  (all calls using this virtual line will be routed
- *                     through this proxy) 
+ *                     through this proxy)
  * @param  regTimeout  registration timeout  (when 0 will NOT use registrations)
  *                     to unergister one should do phDelVline (or phUnregister -- depreciated)
  * @return             -1 in case of error vlid  in case of success
  */
 MY_DLLEXPORT int phAddVline(const char* username, const char *host, const char*  proxy,  int regTimeout);
 MY_DLLEXPORT int phAddVline2(const char* displayname, const char* username, const char *host, const char*  proxy, int regTimeout);
- 
+
 /**
- * Delete virtual line 
+ * Delete virtual line
  *  This will cause REGISTER request with timeout=0 to be sent to server if needed
  *
  * @param  vlid        Virual line id to remove
- * @param  regTimeout  0: no unregister has to be done, -1: timeout unchanged, or new unregister timeout 
+ * @param  regTimeout  0: no unregister has to be done, -1: timeout unchanged, or new unregister timeout
  * @return             0 in case of success
  */
 MY_DLLEXPORT int phDelVline(int vlid, int regTimeout);
@@ -226,7 +226,7 @@ MY_DLLEXPORT int phDelVline(int vlid, int regTimeout);
  * @param vlid         virtual line id to use for the call
  * @param uri          call destination address
  * @param userData     application specific data
- * @param rcid         call id of the original call (MUST BE ZERO) 
+ * @param rcid         call id of the original call (MUST BE ZERO)
  * @return             if positive the call id else error indication
  */
 MY_DLLEXPORT int phLinePlaceCall(int vlid, const char *uri, void *userData, int rcid);
@@ -263,7 +263,7 @@ MY_DLLEXPORT int phRingingCall(int cid);
 
 /**
  * Terminate a call.
- * 
+ *
  * @param cid          call id of call.
  * @return             0 in case of success
  */
@@ -304,7 +304,7 @@ MY_DLLEXPORT int phResumeCall(int cid);
 MY_DLLEXPORT int phHoldCall(int cid);
 
 /**
- * Configure follow me address  for a virtual line. 
+ * Configure follow me address  for a virtual line.
  * All incoming calls on this line  will be redirected to this address
  *
  * @param uri          destination of the forwarding
@@ -334,10 +334,10 @@ MY_DLLEXPORT int phLineSetBusy(int vlid, int busyFlag);
  * @param mime	message mime type
  * @return  if positive msgid
 */
-MY_DLLEXPORT int phLineSendMessage(int vlid, const char *uri, 
+MY_DLLEXPORT int phLineSendMessage(int vlid, const char *uri,
 								   const char *buff, const char *mime);
 
-/* 
+/*
    winfo = 0 -> subscribe with event = presence
    winfo = 1 -> subscribe with event = presence.winfo
 */
@@ -372,16 +372,16 @@ MY_DLLEXPORT int phLinePublish(int vlid, const char *to, const int winfo, const 
  * Send a DTMF to remote party
  *
  * @param cid          call id of call.
- * @param dtmfChar     DTMF event to send 
+ * @param dtmfChar     DTMF event to send
  *                     ('0','1','2','3','4','5','6','7','8','9','0','#','A','B','C','D','!')
- * @mode               bitmask specifying DTMF geneartion mode 
+ * @mode               bitmask specifying DTMF geneartion mode
  *                     INBAND - the DTMF signal is mixed in the outgoing
- *                     RTPPAYLOAD - the DTMF signal will be sent using telephone_event RTP payload 
+ *                     RTPPAYLOAD - the DTMF signal will be sent using telephone_event RTP payload
  * @return             0 in case of success
  */
 #define PH_DTMF_MODE_INBAND 1
 #define PH_DTMF_MODE_RTPPAYLOAD 2
-#define PH_DTMF_MODE_ALL 3  
+#define PH_DTMF_MODE_ALL 3
 MY_DLLEXPORT int phSendDtmf(int cid, int dtmfChar, int mode);
 
 /**
@@ -405,14 +405,14 @@ MY_DLLEXPORT int phStopSoundFile( void );
  * Mix a sound file into the outgoing network audio stream
  *
  * @param cid          call id
- * @param fileName     file to play - for the moment only 
- *                      RAW audio files containing 16Bit signed PCM sampled at 16KHZ are supported 
+ * @param fileName     file to play - for the moment only
+ *                      RAW audio files containing 16Bit signed PCM sampled at 16KHZ are supported
  * @return             0 in case of success
  */
 MY_DLLEXPORT int phSendSoundFile(int cid, const char *fileName);
 
 /**
- * Set speaker volume  
+ * Set speaker volume
  *
  * @param      cid       call id (-1 for general volume, -2 for playing sounds)
  * @param      volume    0 - 100
@@ -421,7 +421,7 @@ MY_DLLEXPORT int phSendSoundFile(int cid, const char *fileName);
 MY_DLLEXPORT int phSetSpeakerVolume(int cid,  int volume);
 
 /**
- * Set recording level  
+ * Set recording level
  *
  * @param      cid - call id (-1 for general recording level)
  * @param      level    0 - 100
@@ -436,7 +436,7 @@ MY_DLLEXPORT int phSetRecLevel(int cid,  int level);
  *
  * @param  devstr    the same value as in phcfg.audio_dev
  * @return           0 on success, or error code
- * 
+ *
  */
 MY_DLLEXPORT int phChangeAudioDevices(const char *devstr);
 
@@ -519,7 +519,7 @@ MY_DLLEXPORT int phConfClose(int cfid);
  * @param    cid2 second call id to mix
  * @return   0 or error code
  *
- */ 
+ */
 MY_DLLEXPORT int phConf(int cid1, int cid2);
 
 /**
@@ -529,7 +529,7 @@ MY_DLLEXPORT int phConf(int cid1, int cid2);
  * @param    cid2 second call id to mix
  * @return   0 or error code
  *
- */ 
+ */
 MY_DLLEXPORT int phStopConf(int cid1, int cid2);
 
 
@@ -544,7 +544,7 @@ MY_DLLEXPORT int phStopConf(int cid1, int cid2);
  * @param    uri value of the "Contact:" header
  * @return   0 or error code
  *
- */ 
+ */
 MY_DLLEXPORT  int phSetContact(int vlid, const char *uri);
 
 
@@ -559,9 +559,9 @@ MY_DLLEXPORT  int phSetContact(int vlid, const char *uri);
 MY_DLLEXPORT int phLineGetSipAddress(int vlid, char buf[], int bufsize);
 
 /**
- * Send an OPTIONS packet send OPTIONS packet using given destination over given 
+ * Send an OPTIONS packet send OPTIONS packet using given destination over given
  * virtual line
- *  
+ *
  * @param vlid  --  vlid
  * @param to    --  uri to put in the To: header
 */
@@ -593,12 +593,12 @@ MY_DLLEXPORT int phGetNatInfo(char *natType, int ntlen, char *fwip, int fwiplen)
  *
  */
 
-MY_DLLEXPORT int phCallGetCodecs(int cid, char *audioCodecBuf, int aBufLen, char *videoCodecBuf, int vBufLen); 
+MY_DLLEXPORT int phCallGetCodecs(int cid, char *audioCodecBuf, int aBufLen, char *videoCodecBuf, int vBufLen);
 
 
 
 /**
- * @brief Try to crash the application 
+ * @brief Try to crash the application
 */
 MY_DLLEXPORT int phCrash();
 
@@ -609,7 +609,7 @@ MY_DLLEXPORT int phCrash();
  * @enum phCallStateEvent
  * @brief call progress events.
  *
- */ 
+ */
 enum  phCallStateEvent {
 	phDIALING, phRINGING, phNOANSWER, phCALLBUSY,
 	phCALLREDIRECTED, phCALLOK,	phCALLHELD,
@@ -623,7 +623,7 @@ enum  phCallStateEvent {
  */
 struct phCallStateInfo {
   enum phCallStateEvent event;
-  void *userData;              /*!< used to match placeCall with callbacks */ 
+  void *userData;              /*!< used to match placeCall with callbacks */
   const char *localUri;        /*!< valid for all events execpt CALLCLOSED and DTMF */
   int   newcid;                /*!< valid for CALLREPLACED and XFERREQ */
   int   vlid;                  /*! virtual line id */
@@ -631,7 +631,7 @@ struct phCallStateInfo {
   union {
     const char  *remoteUri;    /*!< valid for all events execpt CALLCLOSED, DTMF and CALLERROR */
     int   errorCode;           /*!< valid for CALLERROR */
-    int   dtmfDigit;           /*!< valid for DTMF */  
+    int   dtmfDigit;           /*!< valid for DTMF */
   } u;
 };
 typedef struct phCallStateInfo phCallStateInfo_t;
@@ -693,7 +693,7 @@ enum phConfEvent {
   phCONFCREATED,   /* conference is created */
   phCONFJOINED,    /* memeber joined a the conferences */
   phCONFLEFT,      /* member left a conference */
-  phCONFCLOSED,     /* coneference closed       */ 
+  phCONFCLOSED,     /* coneference closed       */
   phCONFJOINERROR,   /* error joining a member to a conference */
   phCONFERROR       /* generic error */
 };
@@ -777,7 +777,7 @@ typedef struct phCallbacks phCallbacks_t;
 /**
  * @var phcb
  * @brief pointer to callback structure
- * 
+ *
  */
 MY_DLLEXPORT extern phCallbacks_t *phcb;
 
@@ -806,10 +806,10 @@ MY_DLLEXPORT void phTerminate( void );
 
 /**
  * Add authentication info
- * the given info will be to send as authentication information 
+ * the given info will be to send as authentication information
  * when server request it.
  *
- * @param  username    username which will figure in the From: headers 
+ * @param  username    username which will figure in the From: headers
  *                     (usually the same as userid)
  * @param  userid      userid field value
  * @param  realm       authentication realm
@@ -821,7 +821,7 @@ MY_DLLEXPORT int phAddAuthInfo(const char *username, const char *userid,
 	      const char *realm);
 
 /**
- * Configure tunnel parameters:		This funtion should be call just before phInit, when the global variable phcfg 
+ * Configure tunnel parameters:		This funtion should be call just before phInit, when the global variable phcfg
  *									is properly set up.
  *
  * @param http_proxy			    IP address of http proxy in local network, set to 0 if there is no local proxy
@@ -831,16 +831,16 @@ MY_DLLEXPORT int phAddAuthInfo(const char *username, const char *userid,
  * @param proxy_user				User name used for authentication purpose
  * @param proxy_passwd				Password for proxy
  * @param use_ssl					If this is set to 1, SSL will be used to create the http tunnel
- * @param autoconf	                If this is set to 1, this funtion will try to detect network configuration when it can't 
+ * @param autoconf	                If this is set to 1, this funtion will try to detect network configuration when it can't
  *									setup a tunnel with given parameters.
 */
 MY_DLLEXPORT int phTunnelConfig(const char* http_proxy, const int http_proxy_port,
-								const char* httpt_server, const int httpt_server_port, 
+								const char* httpt_server, const int httpt_server_port,
 								const char *proxy_user, const char* proxy_passwd,
 								int use_ssl, int autotoconf);
 
 /**
-  @var phIsInitialize 
+  @var phIsInitialize
   @brief 1 : if phInit has been called and phTerminate has not been called
 	 	 0 : Otherwise
 */
@@ -1093,7 +1093,7 @@ struct phConfig {
   char local_rtcp_port[16]; /*!< port number used for RTCP data */
   char sipport[16];         /*!< sip port number */
   char identity[256];       /*!< DEPRECIATED! Use Virtual Lines instead.  my sip address (this field is temporary hack) */
-  char proxy[256];          /*!< DEPRECIATED! User Virtual Lines instead. proxy address (this field is temporary hack)  */ 
+  char proxy[256];          /*!< DEPRECIATED! User Virtual Lines instead. proxy address (this field is temporary hack)  */
   char nattype[16];         /*!< nat type (auto,none,fcone,rcone,prcone,sym)  */
   char audio_codecs[128];         /*!< comma separate list of codecs in order of priority */
   char video_codecs[128];         /*!< comma separate list of codecs in order of priority */
@@ -1108,9 +1108,9 @@ struct phConfig {
   unsigned int vad;         /* if bit31=1  DTX/VAD features activated and bits0-30 contains the power threshold */
   int cng;                  /* if 1,  CNG feature will be negotiated */
   int nat_refresh_time;       /* timeout for sip address/port refresh (when 0 no-refresh) */
-  int jitterdepth;           /* jitter buffer depth in miliseconds (if 0 default of 60 msecs is used) */ 
+  int jitterdepth;           /* jitter buffer depth in miliseconds (if 0 default of 60 msecs is used) */
   int nodefaultline;         /* temporary hack for implementing backward compatibility... Don't touch it */
-  int autoredir;            /*!< when NONZERO the redirect requests will be automatically executed by phApi 
+  int autoredir;            /*!< when NONZERO the redirect requests will be automatically executed by phApi
 			      the new CID will be deliverd in newcid field  in the CALLREDIRECTED event */
   char stunserver[128];      /*!< stun server address:port or name:port */
 
@@ -1126,19 +1126,19 @@ struct phConfig {
   char http_proxy_passwd[128];
 
  char video_codecs[128];         /*!< comma separate list of codecs in order of priority */
- char local_video_rtp_port[16]; /*!< port number used for video RTP data */ 
- char local_video_rtcp_port[16]; /*!< port number used for video RTCP data */ 
+ char local_video_rtp_port[16]; /*!< port number used for video RTP data */
+ char local_video_rtcp_port[16]; /*!< port number used for video RTCP data */
 };
 #else
 struct phConfig {
-  char local_rtp_port[16]; /*!< port number used for RTP data */ 
+  char local_rtp_port[16]; /*!< port number used for RTP data */
   char local_audio_rtcp_port[16]; /*!< port number used for RTCP data */
-  char local_video_rtp_port[16]; /*!< port number used for video RTP data */ 
-  char local_video_rtcp_port[16]; /*!< port number used for video RTCP data */ 
+  char local_video_rtp_port[16]; /*!< port number used for video RTP data */
+  char local_video_rtcp_port[16]; /*!< port number used for video RTCP data */
 
   char sipport[16];              /*!< sip port number */
   char identity[256];       /*!< DEPRECIATED! Use Virtual Lines instead.  my sip address (this field is temporary hack) */
-  char proxy[256];          /*!< DEPRECIATED! User Virtual Lines instead. proxy address (this field is temporary hack)  */ 
+  char proxy[256];          /*!< DEPRECIATED! User Virtual Lines instead. proxy address (this field is temporary hack)  */
   char nattype[16];         /*!< nat type (auto,none,fcone,rcone,prcone,sym)  */
   char audio_codecs[128];         /*!< comma separate list of codecs in order of priority */
   char video_codecs[128];         /*!< comma separate list of codecs in order of priority */
@@ -1153,14 +1153,14 @@ struct phConfig {
   int noaec;				/* when non-zero - disable aec */
   unsigned int vad;         /* if bit31=1  DTX/VAD features activated and bits0-30 contains the power threshold */
   int cng;                  /* if 1,  CNG feature will be negotiated */
-  
+
   // SPIKE_HDX: setting of hdxmode in phconfig
-  int hdxmode;              /* if 0, half duplex mode is desactivated. otherwise check enum PH_HDX_MODES */ 
-  
+  int hdxmode;              /* if 0, half duplex mode is desactivated. otherwise check enum PH_HDX_MODES */
+
   int nat_refresh_time;       /* timeout for sip address/port refresh (when 0 no-refresh) */
   int jitterdepth;           /* jitter buffer depth in miliseconds (if 0 default of 60 msecs is used) */
   int nodefaultline;         /* temporary hack for implementing backward compatibility... Don't touch it */
-  int autoredir;            /*!< when NONZERO the redirect requests will be automatically executed by phApi 
+  int autoredir;            /*!< when NONZERO the redirect requests will be automatically executed by phApi
 			      the new CID will be deliverd in newcid field  in the CALLREDIRECTED event */
   char stunserver[128]; /*!< stun server address:port or name:port */
 

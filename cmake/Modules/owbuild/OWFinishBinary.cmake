@@ -40,7 +40,4 @@ macro (OW_FINISH_BINARY)
 
 	ow_project_log()
 
-	# install target
-	install(TARGETS ${PROJECT_NAME} DESTINATION ${CMAKE_BUILD_TYPE})
-
 endmacro (OW_FINISH_BINARY)

@@ -5,15 +5,11 @@ option(WITH_SPEEXWB_REPLACES_G726WB "" ON)
 #include(CMakeLists-phamrplugin.txt)
 #include(CMakeLists-phspeexplugin.txt)
 
-if (WITH_SHARED_PHAPI)
-	ow_create_shared_library(phapi)
-
-	ow_add_private_definitions(
-		-DBUILD_PHAPI_DLL
-	)
-else (WITH_SHARED_PHAPI)
+if (APPLE)
 	ow_create_static_library(phapi)
-endif (WITH_SHARED_PHAPI)
+else (APPLE)
+	ow_create_shared_library(phapi)
+endif (APPLE)
 
 ow_use_private_libraries(
 	osip2
@@ -52,7 +48,6 @@ ow_add_private_definitions(
 	-DDO_ECHO_CAN=1
 	-DENABLE_AMR_WB=1
 	-DENABLE_AMR=1
-	-DMY_DLLEXPORTS=1
 	-DUSE_WAVEIN_CBK=1
 	-DPSEUDO_AEC=0
 	-DNO_ECHO__SUPPRESSOR=1
@@ -132,8 +127,6 @@ if (WITH_EMBEDDED_PHAPI)
 	)
 endif (WITH_EMBEDDED_PHAPI)
 
-option(WITH_SHARED_PHAPI "Build phapi as shared library" ON)
-
 option(WITH_QOS_DEBUG "Build with QOS debug support" OFF)
 if (WITH_QOS_DEBUG)
 	ow_add_private_definitions(
@@ -208,8 +201,6 @@ endif (WIN32)
 
 if (UNIX AND NOT WIN32)
 	if (APPLE)
-		set(WITH_SHARED_PHAPI OFF)
-
 		ow_add_sources(
 			phmedia-coreaudio.c
 		)

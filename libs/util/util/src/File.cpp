@@ -184,20 +184,20 @@ bool File::copy(const std::string & path) {
 
 	result = copyFile(path, _filename);
 
-	return result;	
+	return result;
 }
 
 bool File::copyFile(const std::string & dst, const std::string & src) {
 	bool result = true;
 
 	createPath(dst);
-	
+
 	std::string destination;
 	if (isDirectory(dst)) {
 		File srcFile(src);
 		destination = dst + srcFile.getFileName();
 	} else {
-		destination = dst;	
+		destination = dst;
 	}
 
 	ifstream ifile(src.c_str(), ios::binary);
@@ -217,9 +217,9 @@ bool File::copyFile(const std::string & dst, const std::string & src) {
 		ifile.read(buffer, BUFFER_SIZE);
 		if (ifile.bad()) {
 			LOG_ERROR("error while reading data");
-			return false;	
+			return false;
 		}
-		ofile.write(buffer, ifile.gcount()); 
+		ofile.write(buffer, ifile.gcount());
 	}
 
 	ifile.close();
