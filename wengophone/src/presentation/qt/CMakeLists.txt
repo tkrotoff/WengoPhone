@@ -1,4 +1,8 @@
-ow_create_executable(qtwengophone)
+if (APPLE)
+	ow_create_executable(WengoPhone)
+else (APPLE)
+	ow_create_executable(qtwengophone)
+endif (APPLE)
 
 subdirs(
 	pics/emoticons
@@ -36,7 +40,7 @@ ow_add_private_definitions(
 	-DMULTIIMWRAPPER
 )
 
-qt4_wrap_cpp(qtwengophone_SRCS
+qt4_wrap_cpp(${PROJECT_NAME}_SRCS
 	QtWengoPhone.h
 	QtConfigPanel.h
 	QtDialpad.h
@@ -306,7 +310,7 @@ ow_add_sources(
 
 #if (WIN32)
 	#if (MSVC)
-		#qt4_add_resources(qtwengophone_SRCS
+		#qt4_add_resources(${PROJECT_NAME}_SRCS
 		#win32/wengophone.rc
 	#)
 	#else (MSVC)
@@ -315,7 +319,7 @@ ow_add_sources(
 
 if (UNIX AND NOT WIN32)
 	if (APPLE)
-		qt4_wrap_cpp(qtwengophone_SRCS
+		qt4_wrap_cpp(${PROJECT_NAME}_SRCS
 			chat/QtCloseChatTabWidget.h
 			macosx/QtMacApplication.h
 		)
@@ -340,7 +344,7 @@ if (UNIX AND NOT WIN32)
 					-DXV_HWACCEL
 				)
 
-				qt4_wrap_cpp(qtwengophone_SRCS
+				qt4_wrap_cpp(${PROJECT_NAME}_SRCS
 					phonecall/XVWindow.h
 					phonecall/QtVideoXV.h
 				)
@@ -354,7 +358,7 @@ if (UNIX AND NOT WIN32)
 	endif (APPLE)
 endif (UNIX AND NOT WIN32)
 
-qt4_wrap_ui(qtwengophone_SRCS
+qt4_wrap_ui(${PROJECT_NAME}_SRCS
 	WengoPhoneWindow.ui
 	WengoPhoneWindowConfigPanel.ui
 	AboutWindow.ui
@@ -430,13 +434,13 @@ qt4_wrap_ui(qtwengophone_SRCS
 	statusbar/StatusBarWidget.ui
 )
 
-qt4_add_resources(qtwengophone_SRCS
+qt4_add_resources(${PROJECT_NAME}_SRCS
 	wengophone.qrc
 )
 
 macro_generate_qt_qm_files(
 	${CMAKE_CURRENT_SOURCE_DIR}/lang
-	qtwengophone_SRCS
+	${PROJECT_NAME}_SRCS
 	${DATA_INSTALL_DIR}/lang
 )
 
@@ -453,5 +457,11 @@ if (APPLE)
 	set_target_properties(${PROJECT_NAME}
 		PROPERTIES
 			COMPILE_FLAGS "-x objective-c++"
+
+			MACOSX_BUNDLE_INFO_STRING "WengoPhone"
+			MACOSX_BUNDLE_ICON_FILE "wengophone.icns"
+			MACOSX_BUNDLE_BUNDLE_NAME "${PROJECT_NAME}"
+			MACOSX_BUNDLE_BUNDLE_VERSION "2.0"
+			MACOSX_BUNDLE_COPYRIGHT "(c) 2006 Wengo"
 	)
 endif (APPLE)
