@@ -13,10 +13,37 @@ macro (OW_CREATE_BINARY)
 
 	if (${PROJECT_NAME}_PROJECT_TYPE MATCHES Static)
 		add_library(${PROJECT_NAME} STATIC ${${PROJECT_NAME}_SRCS})
+
+		if (WIN32)
+			ow_post_build_copy_file(${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.lib ${PROJECT_NAME}.lib)
+		else (WIN32)
+
+		if (UNIX)
+			ow_post_build_copy_file(${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.a ${PROJECT_NAME}.a)
+		endif (UNIX)
+
+		endif (WIN32)
 	else (${PROJECT_NAME}_PROJECT_TYPE MATCHES Static)
 
 	if (${PROJECT_NAME}_PROJECT_TYPE MATCHES Shared)
 		add_library(${PROJECT_NAME} SHARED ${${PROJECT_NAME}_SRCS})
+
+		if (WIN32)
+			ow_post_build_copy_file(${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.lib ${PROJECT_NAME}.lib)
+			ow_post_build_copy_file(${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.dll ${PROJECT_NAME}.dll)
+			ow_post_build_copy_file(${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.pdb ${PROJECT_NAME}.pdb)
+		else (WIN32)
+
+		if (APPLE)
+			ow_post_build_copy_file(${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.dylib ${PROJECT_NAME}.dylib)
+		else (APPLE)
+
+		if (UNIX)
+			ow_post_build_copy_file(${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.so ${PROJECT_NAME}.so)
+		endif (UNIX)
+
+		endif (WIN32)
+		endif (APPLE)
 	else (${PROJECT_NAME}_PROJECT_TYPE MATCHES Shared)
 
 	if (${PROJECT_NAME}_PROJECT_TYPE MATCHES Plugin)
@@ -27,6 +54,22 @@ macro (OW_CREATE_BINARY)
 		)
 
 		add_library(${PROJECT_NAME} MODULE ${${PROJECT_NAME}_SRCS})
+
+		if (WIN32)
+			ow_post_build_copy_file(${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.dll ${PROJECT_NAME}.dll)
+			ow_post_build_copy_file(${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.pdb ${PROJECT_NAME}.pdb)
+		else (WIN32)
+
+		if (APPLE)
+			ow_post_build_copy_file(${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.dylib ${PROJECT_NAME}.dylib)
+		else (APPLE)
+
+		if (UNIX)
+			ow_post_build_copy_file(${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.so ${PROJECT_NAME}.so)
+		endif (UNIX)
+
+		endif (WIN32)
+		endif (APPLE)
 	else (${PROJECT_NAME}_PROJECT_TYPE MATCHES Plugin)
 
 	if (${PROJECT_NAME}_PROJECT_TYPE MATCHES Executable)
@@ -37,6 +80,17 @@ macro (OW_CREATE_BINARY)
 		)
 
 		add_executable(${PROJECT_NAME} ${${PROJECT_NAME}_SRCS})
+
+		if (WIN32)
+			ow_post_build_copy_file(${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.exe ${PROJECT_NAME}.exe)
+			ow_post_build_copy_file(${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.pdb ${PROJECT_NAME}.pdb)
+		else (WIN32)
+
+		if (UNIX)
+			ow_post_build_copy_file(${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME} ${PROJECT_NAME})
+		endif (UNIX)
+
+		endif (WIN32)
 	endif (${PROJECT_NAME}_PROJECT_TYPE MATCHES Executable)
 
 	endif (${PROJECT_NAME}_PROJECT_TYPE MATCHES Plugin)
