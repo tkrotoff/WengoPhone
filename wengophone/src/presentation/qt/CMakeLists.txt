@@ -462,7 +462,7 @@ if (APPLE)
 	## INSTALL for MAC OS X
 	# The WengoPhone.app with executable
 	install(TARGETS ${PROJECT_NAME}
-		RUNTIME DESTINATION "."
+		RUNTIME DESTINATION "${INSTALL_PREFIX}"
 	)
 
 	## Copy the WengoPhone icon
@@ -472,8 +472,11 @@ if (APPLE)
 	####
 
 	# Call external command to generate the bundle
+	install(CODE "SET(INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX})")
+	install(CODE "SET(SOURCE_DIR ${CMAKE_SOURCE_DIR})")
 	install(CODE "SET(DATA_INSTALL_DIR ${DATA_INSTALL_DIR})")
 	install(CODE "SET(APPLICATION_VERSION ${APPLICATION_VERSION})")
+
 	install(SCRIPT CMakeLists-install-macosx.txt)
 	####
 
