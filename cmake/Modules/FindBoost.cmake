@@ -1,9 +1,10 @@
 # - Try to find Boost
 # Once done this will define
 #
-#  BOOST_FOUND - system has Boost
-#  BOOST_INCLUDE_DIRS - the Boost include directory
+#  BOOST_FOUND - System has Boost
+#  BOOST_INCLUDE_DIRS - Boost include directory
 #  BOOST_LIBRARIES - Link these to use Boost
+#  BOOST_LIBRARY_DIRS - The path to where the Boost library files are.
 #  BOOST_DEFINITIONS - Compiler switches required for using Boost
 #
 #  Copyright (c) 2006 Andreas Schneider <mail@cynapses.org>
@@ -45,11 +46,13 @@ else (BOOST_LIBRARIES AND BOOST_INCLUDE_DIRS)
 
     set(BOOST_SEARCH_DIRS
       C:/boost/include
-      D:/boost/include
+      # D: is very often the cdrom drive, if you don't have a
+      # cdrom inserted it will popup a very annoying dialog
+      #D:/boost/include
       $ENV{BOOST_ROOT}/include
       $ENV{BOOSTINCLUDEDIR}
+
       C:/boost/lib
-      D:/boost/lib
       $ENV{BOOST_ROOT}/lib
       $ENV{BOOSTLIBDIR}
     )
@@ -349,29 +352,27 @@ else (BOOST_LIBRARIES AND BOOST_INCLUDE_DIRS)
     endif (Boost_FIND_REQUIRED)
   endif (BOOST_FOUND)
 
-  if (MSVC)
-    set(BOOST_LIBRARIES
-      ""
-    )
-    set(BOOST_PROGRAM_OPTIONS_LIBRARY
-      ""
-    )
-    set(BOOST_REGEX_LIBRARY
-      ""
-    )
-    set(BOOST_SIGNALS_LIBRARY
-      ""
-    )
-    set(BOOST_THREAD_LIBRARY
-      ""
-    )
-    set(BOOST_SERIALIZATION_LIBRARY
-      ""
-    )
-  endif (MSVC)
+  get_filename_component(BOOST_LIBRARY_DIRS ${BOOST_DATE_TIME_LIBRARY} PATH)
+
+  # Under Windows, automatic linking is performed, so no need specify the libraries.
+  if (WIN32)
+    set(BOOST_LIBRARIES "")
+    set(BOOST_DATE_TIME_LIBRARY "")
+    set(BOOST_FILESYSTEM_LIBRARY "")
+    set(BOOST_IOSTREAMS_LIBRARY "")
+    set(BOOST_PRG_EXEC_MONITOR_LIBRARY "")
+    set(BOOST_PROGRAM_OPTIONS_LIBRARY "")
+    set(BOOST_PYTHON_LIBRARY "")
+    set(BOOST_REGEX_LIBRARY "")
+    set(BOOST_SERIALIZATION_LIBRARY "")
+    set(BOOST_SIGNALS_LIBRARY "")
+    set(BOOST_TEST_EXEC_MONITOR_LIBRARY "")
+    set(BOOST_THREAD_LIBRARY "")
+    set(BOOST_UNIT_TEST_FRAMEWORK_LIBRARY "")
+    set(BOOST_WSERIALIZATION_LIBRARY "")
+  endif (WIN32)
 
   # show the BOOST_INCLUDE_DIRS and BOOST_LIBRARIES variables only in the advanced view
-  mark_as_advanced(BOOST_INCLUDE_DIRS BOOST_LIBRARIES)
+  mark_as_advanced(BOOST_INCLUDE_DIRS BOOST_LIBRARIES BOOST_LIBRARY_DIRS)
 
 endif (BOOST_LIBRARIES AND BOOST_INCLUDE_DIRS)
-

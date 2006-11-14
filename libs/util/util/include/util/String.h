@@ -78,6 +78,7 @@ public:
 	 */
 	OWUTIL_API static const std::string SYSTEM_EOL;
 
+
 	OWUTIL_API String() : std::string() { }
 
 	OWUTIL_API String(const char * str) : std::string(str) { }
@@ -147,7 +148,7 @@ public:
 	 * @param str the string to test
 	 * @return true if String ends with str
 	 */
-	bool endsWith(const String & str) const;
+	OWUTIL_API bool endsWith(const String & str) const;
 
 	/**
 	 * Gets the number of occurences of the string str inside this string.
