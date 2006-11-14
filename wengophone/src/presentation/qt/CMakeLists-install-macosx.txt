@@ -1,0 +1,51 @@
+## Create the locale directories to have the Application translated by Mac OS X
+file(GLOB_RECURSE _qmFiles ${DATA_INSTALL_DIR}/lang/*.qm)
+
+if (_qmFiles)
+	foreach (_qm ${_qmFiles})
+		STRING(REGEX REPLACE ".*_([^\\.]*)\\.qm" "\\1"
+			lang ${_qm})
+		make_directory(${DATA_INSTALL_DIR}/${lang}.lproj)
+	endforeach (_qm ${_qmFiles})
+endif (_qmFiles)
+####
+
+## Create the Info.plist file
+file(WRITE "WengoPhone.app/Contents/Info.plist"
+"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+"<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">\n"
+"<plist version=\"1.0\">\n"
+"<dict>\n"
+"	<key>CFBundleDevelopmentRegion</key>\n"
+"	<string>English</string>\n"
+"	<key>CFBundleExecutable</key>\n"
+"	<string>WengoPhone</string>\n"
+"	<key>CFBundleIconFile</key>\n"
+"	<string>wengophone.icns</string>\n"
+"	<key>CFBundleIdentifier</key>\n"
+"	<string>com.openwengo.WengoPhone</string>\n"
+"	<key>CFBundleInfoDictionaryVersion</key>\n"
+"	<string>6.0</string>\n"
+"	<key>CFBundlePackageType</key>\n"
+"	<string>APPL</string>\n"
+"	<key>CFBundleSignature</key>\n"
+"	<string>WNGP</string>\n"
+"	<key>CFBundleURLTypes</key>\n"
+"	<array>\n"
+"		<dict>\n"
+"			<key>CFBundleTypeRole</key>\n"
+"			<string>Viewer</string>\n"
+"			<key>CFBundleURLName</key>\n"
+"			<string>Wengo Me URL</string>\n"
+"			<key>CFBundleURLSchemes</key>\n"
+"			<array>\n"
+"				<string>wengo</string>\n"
+"			</array>\n"
+"		</dict>\n"
+"	</array>\n"
+"	<key>CFBundleVersion</key>\n"
+"	<string>${APPLICATION_VERSION}</string>\n"
+"</dict>\n"
+"</plist>\n"
+)
+####

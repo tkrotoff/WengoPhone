@@ -1,7 +1,11 @@
 project(wengophone)
 
 # Global needed variables
-set(APPLICATION_NAME ${PROJECT_NAME})
+if (NOT APPLE)
+	set(APPLICATION_NAME ${PROJECT_NAME})
+else (NOT APPLE)
+	set(APPLICATION_NAME WengoPhone)
+endif (NOT APPLE)
 set(APPLICATION_VERSION "2.0")
 
 # Where to look first for cmake modules, before ${CMAKE_ROOT}/Modules/ is checked
@@ -19,6 +23,7 @@ set(CMAKE_INSTALL_PREFIX
 include(DefineWengoDefaults)
 include(DefineCompilerFlags)
 include(DefineWengoOptions)
+include(DefineInstallationPaths)
 
 # Add macros
 include(MacroEnsureOutOfSourceBuild)

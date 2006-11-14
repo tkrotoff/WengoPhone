@@ -457,11 +457,25 @@ if (APPLE)
 	set_target_properties(${PROJECT_NAME}
 		PROPERTIES
 			COMPILE_FLAGS "-x objective-c++"
-
-			MACOSX_BUNDLE_INFO_STRING "WengoPhone"
-			MACOSX_BUNDLE_ICON_FILE "wengophone.icns"
-			MACOSX_BUNDLE_BUNDLE_NAME "${PROJECT_NAME}"
-			MACOSX_BUNDLE_BUNDLE_VERSION "2.0"
-			MACOSX_BUNDLE_COPYRIGHT "(c) 2006 Wengo"
 	)
+
+	## INSTALL for MAC OS X
+	# The WengoPhone.app with executable
+	install(TARGETS ${PROJECT_NAME}
+		RUNTIME DESTINATION "."
+	)
+
+	## Copy the WengoPhone icon
+	install(FILES "macosx/template.app/Contents/Resources/wengophone.icns"
+		DESTINATION "WengoPhone.app/Contents/Resources"
+	)
+	####
+
+	# Call external command to generate the bundle
+	install(CODE "SET(DATA_INSTALL_DIR ${DATA_INSTALL_DIR})")
+	install(CODE "SET(APPLICATION_VERSION ${APPLICATION_VERSION})")
+	install(SCRIPT CMakeLists-install-macosx.txt)
+	####
+
 endif (APPLE)
+
