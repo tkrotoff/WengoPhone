@@ -24,7 +24,7 @@
  * OS and compilers detection via defines (preprocessor).
  *
  * Most of this defines are from Qt (Trolltech).
- * In each category (OS_ and CC_) one define exludes the others.
+ * In each category (OS_ and CC_) one define exludes the others from the same level.
  * Warning: if you want to add a define to this file, the order is very important.
  *
  * Operating systems:
@@ -35,6 +35,7 @@
  *   - OS_WINCE_SMARTPHONE (Windows CE for smartphone)
  * - OS_POSIX
  *   - OS_MACOSX
+ *   - OS_CYGWIN
  *   - OS_LINUX
  *   - OS_HURD
  *   - OS_BSD
@@ -69,6 +70,8 @@
 //OS
 #if defined(__APPLE__) && (defined(__GNUC__) || defined(__xlC__) || defined(__xlc__))
 	#define OS_MACOSX
+#elif defined(__CYGWIN__)
+	#define OS_CYGWIN
 #elif defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 	#define OS_WIN32
 #elif defined(WIN64) || defined(_WIN64) || defined(__WIN64__)
@@ -99,7 +102,7 @@
 	#define OS_BSD
 #endif
 
-#if defined(OS_MACOSX) || defined(OS_LINUX) || defined(OS_HURD) || defined(OS_BSD)
+#if defined(OS_MACOSX) || defined (OS_CYGWIN) || defined(OS_LINUX) || defined(OS_HURD) || defined(OS_BSD)
 	#define OS_POSIX
 #endif
 
