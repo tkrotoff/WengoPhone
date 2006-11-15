@@ -79,11 +79,7 @@ macro (OW_CREATE_BINARY)
 			CACHE INTERNAL "${PROJECT_NAME} public libraries"
 		)
 
-		if (APPLE)
-			add_executable(${PROJECT_NAME} MACOSX_BUNDLE ${${PROJECT_NAME}_SRCS})		
-		else (APPLE)
-			add_executable(${PROJECT_NAME} ${${PROJECT_NAME}_SRCS})
-		endif (APPLE)
+		add_executable(${PROJECT_NAME} ${${PROJECT_NAME}_SRCS})
 
 		if (WIN32)
 			ow_post_build_copy_file(${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.exe ${PROJECT_NAME}.exe)

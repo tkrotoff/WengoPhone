@@ -31,91 +31,13 @@ if (MSVC)
 	)
 endif (MSVC)
 
-# Because of UIC and MOC
-ow_add_private_include_dirs(
+ow_add_public_include_dirs(
 	${CMAKE_CURRENT_BINARY_DIR}
-	${CMAKE_CURRENT_SOURCE_DIR}
 )
 
 ow_add_private_definitions(
 	-DPHAPIWRAPPER
 	-DMULTIIMWRAPPER
-)
-
-qt4_wrap_ui(${PROJECT_NAME}_SRCS
-	WengoPhoneWindow.ui
-	WengoPhoneWindowConfigPanel.ui
-	AboutWindow.ui
-	HttpProxyLoginWindow.ui
-	DialpadWidget.ui
-
-	login/LoginWindow.ui
-
-	imaccount/IMAccountTemplate.ui
-	imaccount/AIMSettings.ui
-	imaccount/GoogleTalkSettings.ui
-	imaccount/IMAccountManager.ui
-	imaccount/SimpleIMAccountManager.ui
-	imaccount/JabberSettings.ui
-	imaccount/MSNSettings.ui
-	imaccount/YahooSettings.ui
-
-	profile/ProfileDetails.ui
-
-	imcontact/IMContactManager.ui
-	imcontact/AddIMContact.ui
-	imcontact/SimpleIMContactManager.ui
-
-	webservices/directory/WsDirectory.ui
-	webservices/directory/WsDirectoryContact.ui
-	webservices/sms/SmsWindow.ui
-	webservices/softupdate/SoftUpdateWindow.ui
-	webservices/softupdate/BrowserSoftUpdateWindow.ui
-
-	conference/ConferenceCallWidget.ui
-
-	config/AccountSettings.ui
-	config/AdvancedConfigWindow.ui
-	config/GeneralSettings.ui
-	config/AdvancedSettings.ui
-	config/AudioSettings.ui
-	config/CallForwardSettings.ui
-	config/LanguagesSettings.ui
-	config/ManageBlockedUsersSettings.ui
-	config/NotificationSettings.ui
-	config/PrivacySettings.ui
-	config/VideoSettings.ui
-	config/WengoConfigDialog.ui
-
-	chat/ChatMainWindow.ui
-	chat/CloseChatTabWidget.ui
-	chat/ChatWidget.ui
-	chat/UserFrame.ui
-	chat/AvatarFrame.ui
-	chat/AvatarWidget.ui
-
-	contactlist/RenameGroupDialog.ui
-	contactlist/ContactWidget.ui
-	contactlist/ContactList.ui
-
-	profilebar/CreditWidget.ui
-	profilebar/EventWidget.ui
-	profilebar/IMProfileWidget.ui
-
-	toaster/QtChatToaster.ui
-	toaster/QtCallToaster.ui
-
-	phonecall/PhoneCallWidget.ui
-	phonecall/VideoWindow.ui
-
-	filetransfer/AcceptDialog.ui
-	filetransfer/FileTransferWidget.ui
-	filetransfer/FileTransferItem.ui
-	filetransfer/UpgradeDialog.ui
-
-	history/HistoryWidget.ui
-
-	statusbar/StatusBarWidget.ui
 )
 
 qt4_wrap_cpp(${PROJECT_NAME}_SRCS
@@ -436,6 +358,82 @@ if (UNIX AND NOT WIN32)
 	endif (APPLE)
 endif (UNIX AND NOT WIN32)
 
+qt4_wrap_ui(${PROJECT_NAME}_SRCS
+	WengoPhoneWindow.ui
+	WengoPhoneWindowConfigPanel.ui
+	AboutWindow.ui
+	HttpProxyLoginWindow.ui
+	DialpadWidget.ui
+
+	login/LoginWindow.ui
+
+	imaccount/IMAccountTemplate.ui
+	imaccount/AIMSettings.ui
+	imaccount/GoogleTalkSettings.ui
+	imaccount/IMAccountManager.ui
+	imaccount/SimpleIMAccountManager.ui
+	imaccount/JabberSettings.ui
+	imaccount/MSNSettings.ui
+	imaccount/YahooSettings.ui
+
+	profile/ProfileDetails.ui
+
+	imcontact/IMContactManager.ui
+	imcontact/AddIMContact.ui
+	imcontact/SimpleIMContactManager.ui
+
+	webservices/directory/WsDirectory.ui
+	webservices/directory/WsDirectoryContact.ui
+	webservices/sms/SmsWindow.ui
+	webservices/softupdate/SoftUpdateWindow.ui
+	webservices/softupdate/BrowserSoftUpdateWindow.ui
+
+	conference/ConferenceCallWidget.ui
+
+	config/AccountSettings.ui
+	config/AdvancedConfigWindow.ui
+	config/GeneralSettings.ui
+	config/AdvancedSettings.ui
+	config/AudioSettings.ui
+	config/CallForwardSettings.ui
+	config/LanguagesSettings.ui
+	config/ManageBlockedUsersSettings.ui
+	config/NotificationSettings.ui
+	config/PrivacySettings.ui
+	config/VideoSettings.ui
+	config/WengoConfigDialog.ui
+
+	chat/ChatMainWindow.ui
+	chat/CloseChatTabWidget.ui
+	chat/ChatWidget.ui
+	chat/UserFrame.ui
+	chat/AvatarFrame.ui
+	chat/AvatarWidget.ui
+
+	contactlist/RenameGroupDialog.ui
+	contactlist/ContactWidget.ui
+	contactlist/ContactList.ui
+
+	profilebar/CreditWidget.ui
+	profilebar/EventWidget.ui
+	profilebar/IMProfileWidget.ui
+
+	toaster/QtChatToaster.ui
+	toaster/QtCallToaster.ui
+
+	phonecall/PhoneCallWidget.ui
+	phonecall/VideoWindow.ui
+
+	filetransfer/AcceptDialog.ui
+	filetransfer/FileTransferWidget.ui
+	filetransfer/FileTransferItem.ui
+	filetransfer/UpgradeDialog.ui
+
+	history/HistoryWidget.ui
+
+	statusbar/StatusBarWidget.ui
+)
+
 qt4_add_resources(${PROJECT_NAME}_SRCS
 	wengophone.qrc
 )
@@ -453,22 +451,24 @@ if (APPLE)
 	)
 endif (APPLE)
 
+ow_create_binary()
+
 if (APPLE)
-	ow_add_private_compile_flags(
-		"-x objective-c++"
+	set_target_properties(${PROJECT_NAME}
+		PROPERTIES
+			COMPILE_FLAGS "-x objective-c++"
 	)
 
 	## INSTALL for MAC OS X
 	# The WengoPhone.app with executable
 	install(TARGETS ${PROJECT_NAME}
-		RUNTIME DESTINATION "${INSTALL_PREFIX}"
+		RUNTIME DESTINATION "WengoPhone.app/Contents/MacOS"
 	)
 
-	## Copy the WengoPhone icon
+	# Copy the WengoPhone icon
 	install(FILES "macosx/template.app/Contents/Resources/wengophone.icns"
 		DESTINATION "WengoPhone.app/Contents/Resources"
 	)
-	####
 
 	## Copy needed libraries and frameworks
 	set(FRAMEWORK_DIR "WengoPhone.app/Contents/Frameworks")
@@ -528,6 +528,6 @@ if (APPLE)
 
 	install(SCRIPT CMakeLists-install-macosx.txt)
 	####
+
 endif (APPLE)
 
-ow_create_binary()
