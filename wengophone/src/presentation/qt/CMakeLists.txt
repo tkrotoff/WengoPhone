@@ -508,6 +508,7 @@ if (APPLE)
 	
 		libintl.3.dylib
 		libintl.1.dylib
+		libiconv.2.dylib
 		libgmodule-2.0.0.dylib
 		libglib-2.0.0.dylib
 		libgthread-2.0.0.dylib
