@@ -76,6 +76,15 @@ ow_change_install_name($ENV{QTDIR}/lib/QtGui.framework/Versions/4.0/QtGui @execu
 ow_change_install_name(/sw/lib/libssl.0.9.7.dylib /usr/lib/libssl.dylib ${WENGO_EXE})
 ow_change_install_name(/sw/lib/libcrypto.0.9.7.dylib /usr/lib/libcrypto.dylib ${WENGO_EXE})
 ow_change_install_name(/sw/lib/libxml2.2.dylib /usr/lib/libxml2.dylib ${WENGO_EXE})
+ow_change_install_name(/sw/lib/libiconv.2.dylib /usr/lib/libiconv.2.dylib ${WENGO_EXE})
+
+ow_change_install_name(/sw/lib/libintl.3.dylib @executable_path/../libintl.3.dylib ${WENGO_EXE})
+ow_change_install_name(/sw/lib/libglib-2.0.0.dylib @executable_path/../libglib-2.0.0.dylib ${WENGO_EXE})
+ow_change_install_name(/sw/lib/libgmodule-2.0.0.dylib @executable_path/../libgmodule-2.0.0.dylib ${WENGO_EXE})
+ow_change_install_name(/sw/lib/libgthread-2.0.0.dylib @executable_path/../libgtread-2.0.0.dylib ${WENGO_EXE})
+ow_change_install_name(/sw/lib/libgnutls.12.dylib @executable_path/../libgnutls.12.dylib ${WENGO_EXE})
+
+ow_change_install_name(libowcurl.dylib @executable_path/../Frameworks/libowcurl.dylib ${WENGO_EXE})
 
 ow_change_install_name(/sw/lib/libglib-2.0.0.dylib @executable_path/../Frameworks/libglib-2.0.0.dylib ${FRAMEWORK_DIR}/libgmodule-2.0.0.dylib)
 ow_change_install_name(/sw/lib/libglib-2.0.0.dylib @executable_path/../Frameworks/libglib-2.0.0.dylib ${FRAMEWORK_DIR}/libgthread-2.0.0.dylib)
