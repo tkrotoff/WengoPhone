@@ -26,6 +26,7 @@ ow_use_private_libraries(
 )
 
 ow_use_public_libraries(
+	# Should be private but phapi-old.h includes phcall.h that includes eXosip.h
 	exosip
 )
 
@@ -280,7 +281,7 @@ endif (UNIX AND NOT WIN32)
 
 if (NOT APPLE)
 	ow_use_private_libraries(
-		portaudio
+		PORTAUDIO
 	)
 
 	ow_add_private_definitions(

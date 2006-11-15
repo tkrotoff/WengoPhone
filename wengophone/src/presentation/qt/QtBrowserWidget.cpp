@@ -118,7 +118,7 @@ void QtBrowserWidget::loadAccountURL() {
 			std::string data = "login=" + wengoAccount.getWengoLogin() +
 				"&password=" + wengoAccount.getWengoPassword() +
 				"&lang=" + config.getLanguage() +
-				"&wl=" + std::string(WengoPhoneBuildId::SOFTPHONE_NAME) +
+				"&wl=" + std::string(WengoPhoneBuildId::getSoftphoneName()) +
 				"&page=softphoneng-web";
 
 			NetworkProxy::ProxyAuthType proxyAuthType = NetworkProxyDiscovery::getInstance().getNetworkProxy().getProxyAuthType();

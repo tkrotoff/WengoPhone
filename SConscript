@@ -16,7 +16,6 @@ projects = [
 	'libs/util',
 	'libs/3rdparty/gaim',
 	'libs/imwrapper',
-	'libs/shlibloader',
 	'libs/trayicon',
 	'libs/qtutil',
 	'libs/idle',

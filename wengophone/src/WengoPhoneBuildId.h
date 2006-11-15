@@ -37,7 +37,7 @@ public:
 	 *
 	 * Do not modify this to a string, keep it as a number!
 	 */
-	static const unsigned long long BUILDID;
+	static const unsigned long long getBuildId();
 
 	/**
 	 * Version name (e.g "1.2.1")
@@ -45,7 +45,7 @@ public:
 	 *
 	 * This is a unique string for each release.
 	 */
-	static const char * VERSION;
+	static const char * getVersion();
 
 	/**
 	 * Revision number (subversion revision).
@@ -67,35 +67,35 @@ public:
 	 * exported directory say, the program will output 'exported'.
 	 * </pre>
 	 */
-	static const char * REVISION;
+	static const char * getSvnRevision();
 
 	/**
 	 * Softphone name when connecting on the Wengo platform.
 	 * WL_TAG
 	 */
-	static const char * SOFTPHONE_NAME;
+	static const char * getSoftphoneName();
 
 	/**
 	 * Boost version number.
 	 *
 	 * Cannot be named BOOST_VERSION because of a define inside Boost.
 	 */
-	static const char * LIBBOOST_VERSION;
+	static const char * getBoostVersion();
 
 	/** LibGaim version number. */
-	static const char * GAIM_VERSION;
+	static const char * getGaimVersion();
 
 	/** cURL version number. */
-	static const char * CURL_VERSION;
+	static const char * getCurlVersion();
 
 	/** PortAudio version number. */
-	static const char * PORTAUDIO_VERSION;
+	static const char * getPortaudioVersion();
 
 	/** FFmpeg' libavcodec version number. */
-	static const char * AVCODEC_VERSION;
+	static const char * getAvcodecVersion();
 
 	/** TinyXML version number. */
-	static const char * TINYXML_VERSION;
+	static const char * getTinyXmlVersion();
 
 private:
 

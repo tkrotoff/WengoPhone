@@ -4,10 +4,6 @@ ow_use_public_libraries(
 	owutil
 )
 
-ow_add_public_include_dirs(
-	${CMAKE_CURRENT_SOURCE_DIR}/include
-)
-
 if (MSVC)
 	ow_add_private_libraries(
 		shlwapi

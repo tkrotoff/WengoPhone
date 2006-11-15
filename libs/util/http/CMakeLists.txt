@@ -9,10 +9,6 @@ ow_use_private_libraries(
 	owcurl
 )
 
-ow_add_public_include_dirs(
-	${CMAKE_CURRENT_SOURCE_DIR}/include
-)
-
 if (WIN32)
 	ow_add_private_libraries(
 		advapi32

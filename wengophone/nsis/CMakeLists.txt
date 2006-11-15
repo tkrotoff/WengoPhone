@@ -6,3 +6,12 @@
 set(PRODUCT_NAME "WengoPhone")
 set(QTDIR )
 
+if (CMAKE_BUILD_TYPE MATCHES Debug)
+	set(NSIS_DEFINES
+		${NSIS_DEFINES}
+		debug
+	)
+else (CMAKE_BUILD_TYPE MATCHES Debug)
+if (CMAKE_BUILD_TYPE MATCHES Debug)
+
+

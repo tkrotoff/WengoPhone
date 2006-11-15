@@ -1,4 +1,6 @@
-project(util)
+set(LIBUTIL_INCLUDE_DIRS
+	${CMAKE_CURRENT_SOURCE_DIR}
+)
 
 subdirs(
 	cutil

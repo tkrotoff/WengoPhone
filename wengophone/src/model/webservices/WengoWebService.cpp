@@ -82,7 +82,7 @@ int WengoWebService::call(WengoWebService * caller) {
 	std::string language = config.getLanguage();
 
 	std::string data = "lang=" + language;
-	data += "&wl=" + std::string(WengoPhoneBuildId::SOFTPHONE_NAME);
+	data += "&wl=" + std::string(WengoPhoneBuildId::getSoftphoneName());
 
 	//Add authentication parameters
 	if ((_auth) && (_wengoAccount)) {

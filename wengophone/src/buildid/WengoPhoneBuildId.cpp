@@ -33,18 +33,47 @@ extern "C" {
 #include <gaim/core.h>
 }
 
-const unsigned long long WengoPhoneBuildId::BUILDID = DD_BUILDID;
-const char * WengoPhoneBuildId::VERSION = DD_VERSION;
-const char * WengoPhoneBuildId::REVISION = DD_REVISION;
-const char * WengoPhoneBuildId::SOFTPHONE_NAME = DD_SOFTPHONE_NAME;
-const char * WengoPhoneBuildId::LIBBOOST_VERSION = BOOST_LIB_VERSION;
-const char * WengoPhoneBuildId::GAIM_VERSION = gaim_core_get_version();
-const char * WengoPhoneBuildId::CURL_VERSION = curl_version();
+const unsigned long long WengoPhoneBuildId::getBuildId() {
+	return DD_BUILDID;
+}
+
+const char * WengoPhoneBuildId::getVersion() {
+	return DD_VERSION;
+}
+
+const char * WengoPhoneBuildId::getSvnRevision() {
+	return DD_REVISION;
+}
+
+const char * WengoPhoneBuildId::getSoftphoneName() {
+	return DD_SOFTPHONE_NAME;
+}
+
+const char * WengoPhoneBuildId::getBoostVersion() {
+	return std::string(BOOST_LIB_VERSION).c_str();
+}
+
+const char * WengoPhoneBuildId::getGaimVersion() {
+	return gaim_core_get_version();
+}
+
+const char * WengoPhoneBuildId::getCurlVersion() {
+	return curl_version();
+}
+
+const char * WengoPhoneBuildId::getPortaudioVersion() {
 #ifndef OS_MACOSX
-const char * WengoPhoneBuildId::PORTAUDIO_VERSION = Pa_GetVersionText();
+	return Pa_GetVersionText();
 #endif
-const char * WengoPhoneBuildId::AVCODEC_VERSION = String::fromNumber(avcodec_version()).c_str();
-const char * WengoPhoneBuildId::TINYXML_VERSION = std::string(
-			String::fromNumber(TIXML_MAJOR_VERSION) + "." +
-			String::fromNumber(TIXML_MINOR_VERSION) + "." +
-			String::fromNumber(TIXML_PATCH_VERSION)).c_str();
+	return "";
+}
+
+const char * WengoPhoneBuildId::getAvcodecVersion() {
+	return String::fromNumber(avcodec_version()).c_str();
+}
+
+const char * WengoPhoneBuildId::getTinyXmlVersion() {
+	return std::string(String::fromNumber(TIXML_MAJOR_VERSION) + "." +
+		String::fromNumber(TIXML_MINOR_VERSION) + "." +
+		String::fromNumber(TIXML_PATCH_VERSION)).c_str();
+}

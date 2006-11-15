@@ -4,10 +4,6 @@ ow_use_public_libraries(
 	owthread
 )
 
-ow_add_public_include_dirs(
-	${CMAKE_CURRENT_SOURCE_DIR}/include
-)
-
 ow_add_sources(
 	src/ServerSocket.cpp
 	src/ClientSocket.cpp

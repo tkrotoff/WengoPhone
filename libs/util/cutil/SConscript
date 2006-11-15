@@ -3,18 +3,18 @@ env = WengoGetEnvironment()
 libs = []
 lib_path = []
 include_path = [
-	'include'
+	'..'
 ]
 
 headers = ['include/cutil/safe-strings.h']
 sources = [
 	'src/fake.c',
-	'src/strlcat.c',  
+	'src/strlcat.c',
 	'src/strlcpy.c',
 ]
 
 if WengoCCMSVC():
-	include_path += ['include/cutil/msvc']
+	include_path += ['msvc']
 	sources += [
 		'src/msvc/dirent.c',
 	]

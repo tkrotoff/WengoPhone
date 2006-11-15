@@ -4,10 +4,6 @@ ow_use_public_libraries(
 	owutil
 )
 
-ow_add_public_include_dirs(
-	${CMAKE_CURRENT_SOURCE_DIR}/include
-)
-
 ow_add_sources(
 	src/RegisterProtocol.cpp
 )

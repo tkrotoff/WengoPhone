@@ -9,10 +9,6 @@ ow_use_private_libraries(
 	tinyxml
 )
 
-ow_add_public_include_dirs(
-	${CMAKE_CURRENT_SOURCE_DIR}/include
-)
-
 ow_add_sources(
 	src/Settings.cpp
 	src/AutomaticSettings.cpp

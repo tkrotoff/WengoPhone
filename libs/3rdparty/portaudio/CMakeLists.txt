@@ -1,4 +1,4 @@
-ow_create_static_library(portaudio)
+ow_create_static_library(PORTAUDIO)
 
 ow_add_public_include_dirs(
 	${CMAKE_CURRENT_SOURCE_DIR}/pa_common

@@ -7,7 +7,7 @@ libs = [
 	'owthread',
 ]
 lib_path = []
-include_path = ['include']
+include_path = ['..']
 link_flags = []
 headers = [
 	#'src/qt/QtHttpRequest.h',

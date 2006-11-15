@@ -49,7 +49,7 @@
 struct ph_media_payload_s
 {
   int  number;       /* payload code for rtp packets*/
-  char string[32];   /* mime string (ex: ILBC/8000/1) */ 
+  char string[32];   /* mime string (ex: ILBC/8000/1) */
   int  rate;         /* sampling rate */
   int  chans;        /* number of channels */
   int  ptime;        /* media duration in one packet in msecs */
@@ -66,7 +66,7 @@ enum ph_media_types {
 };
 
 /* traffic type of a streamer */
-enum ph_mstream_traffic_type { 
+enum ph_mstream_traffic_type {
   PH_MSTREAM_TRAFFIC_NONE = 0,
   PH_MSTREAM_TRAFFIC_IN = 1, // 1<<0 = RX
   PH_MSTREAM_TRAFFIC_OUT = 2, // 1<<1 = TX
@@ -83,7 +83,7 @@ enum ph_mstream_flags {
   PH_MSTREAM_FLAG_SPKHDX = 16,  /* half duplex mode */
   PH_MSTREAM_FLAG_RUNNING = 32,
   PH_MSTREAM_FLAG_TUNNEL = 64,
-  
+
 };
 
 /**
@@ -101,7 +101,7 @@ struct ph_mstream_params_s
 	char remoteaddr[16];
 	int  remoteport;
 	int  vadthreshold;
-	int  videoconfig; 
+	int  videoconfig;
 	struct ph_media_payload_s ipayloads[16];
 	struct ph_media_payload_s opayloads[16];
 	/* structure dedicated to the underlying streamer engine (audio, video..)
@@ -129,7 +129,7 @@ enum ph_mession_conf_flags
 
 /**
  * @brief session englobes up to 2 audio and 2 video streams
- * allocation sequence : 
+ * allocation sequence :
  *   - fill with 0
  *   - g_mutex_new on the critsec_mstream_init
  */
@@ -164,7 +164,7 @@ struct ph_msession_s
 };
 
 
-typedef struct ph_msession_s ph_msession_t; 
+typedef struct ph_msession_s ph_msession_t;
 
 typedef struct ph_media_payload_s  ph_media_payload_t;
 
@@ -185,7 +185,7 @@ int ph_msession_start(struct ph_msession_s *s, const char *adeviceId);
  * @brief stop the necessary device/streaming engines of the session
  */
 void ph_msession_stop(struct ph_msession_s *s, const char *adeviceId);
-#define ph_msession_stopped(s)  (s->activestreams == 0)
+int ph_msession_stopped(struct ph_msession_s *s);
 #define ph_msession_stream_active(s, n)  (s->activestreams & (1 << n))
 int ph_msession_set_recvol(struct ph_msession_s *s,  int level);
 int ph_msession_set_playvol(struct ph_msession_s *s,  int level);

@@ -1,5 +1,5 @@
 # - OW_PREPARE_BINARY()
-# Prepares the creation of a binary file, used by OWCreateSharedLibrary(), OWCreateExecutable()...
+# Prepares the creation of a binary file, used by OWCreateBinary().
 #
 # Copyright (C) 2006  Wengo
 #

@@ -31,7 +31,8 @@
 
 #include <sstream>
 
-WsSoftUpdate::WsSoftUpdate(WengoAccount * wengoAccount) : WengoWebService(wengoAccount) {
+WsSoftUpdate::WsSoftUpdate(WengoAccount * wengoAccount)
+	: WengoWebService(wengoAccount) {
 
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
@@ -106,7 +107,7 @@ void WsSoftUpdate::answerReceived(const std::string & answer, int requestId) {
 	}
 
 
-	if ((WengoPhoneBuildId::BUILDID != 0) && (buildId > WengoPhoneBuildId::BUILDID)) {
+	if ((WengoPhoneBuildId::getBuildId() != 0) && (buildId > WengoPhoneBuildId::getBuildId())) {
 		//A new version of WengoPhone is available and we don't have a developer version with buildid=0
 		LOG_DEBUG("new WengoPhone version available=" + version + " buildid=" + String::fromUnsignedLongLong(buildId));
 

@@ -148,6 +148,11 @@ void ph_msession_stop(struct ph_msession_s *s, const char *adevid)
   g_mutex_unlock(s->critsec_mstream_init);
 }
 
+int ph_msession_stopped(struct ph_msession_s *s)
+{
+  return (s->activestreams == 0);
+}
+
 static PayloadType ilbc =
 {
   TYPE( PAYLOAD_AUDIO_PACKETIZED),
@@ -382,7 +387,7 @@ phcodec_t *ph_media_lookup_codec(int payload)
     return 0;
   }
 
-  if (!pt->mime_type) 
+  if (!pt->mime_type)
   {
     DBG_CODEC_LOOKUP("fatal error - NULL mime type for codec %d in ortp\n", payload);
     return 0;
@@ -539,8 +544,8 @@ rtptun_free(RtpTunnel *tn)
 
 // deprecated branch of code (before msession & conf addition)
 #if 0
-int ph_media_start(phcall_t *ca, int port, int videoport, 
-           void (*dtmfCallback)(phcall_t *ca, int event), 
+int ph_media_start(phcall_t *ca, int port, int videoport,
+           void (*dtmfCallback)(phcall_t *ca, int event),
            void (*endCallback)(phcall_t *ca, int event),
                phFrameDisplayCbk frameDisplay,
        const char * deviceId, unsigned vad, int cng, int jitter, int noaec)

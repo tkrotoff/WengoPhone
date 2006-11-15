@@ -11,7 +11,7 @@ ow_use_private_libraries(
 
 if (NOT APPLE)
 	ow_use_private_libraries(
-		portaudio
+		PORTAUDIO
 	)
 endif (NOT APPLE)
 

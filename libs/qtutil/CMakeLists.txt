@@ -9,7 +9,13 @@ ow_add_public_include_dirs(
 	${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
-qt4_wrap_cpp(owqtutil_SRCS
+# Because of UIC and MOC
+ow_add_private_include_dirs(
+	${CMAKE_CURRENT_BINARY_DIR}
+	${CMAKE_CURRENT_SOURCE_DIR}
+)
+
+qt4_wrap_cpp(${PROJECT_NAME}_SRCS
 	include/qtutil/EventFilter.h
 	include/qtutil/KeyEventFilter.h
 	include/qtutil/MouseEventFilter.h
@@ -38,6 +44,10 @@ qt4_wrap_cpp(owqtutil_SRCS
 	include/qtutil/UpQComboBox.h
 )
 
+qt4_wrap_ui(${PROJECT_NAME}_SRCS
+	src/Wizard.ui
+)
+
 ow_add_sources(
 	src/EventFilter.cpp
 	src/KeyEventFilter.cpp
@@ -63,10 +73,6 @@ ow_add_sources(
 	src/CloseEventFilter.cpp
 	src/AnimatedButton.cpp
 	src/UpQComboBox.cpp
-)
-
-qt4_wrap_ui(owqtutil_SRCS
-	src/Wizard.ui
 )
 
 ow_create_binary()

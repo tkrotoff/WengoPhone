@@ -1,7 +1,7 @@
 env = WengoGetEnvironment()
 
 libs = ['owutil']
-include_path = ['include']
+include_path = ['..']
 lib_path = []
 headers = []
 sources = []

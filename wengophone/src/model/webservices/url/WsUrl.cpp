@@ -49,7 +49,7 @@ std::string WsUrl::getUrlWithoutAuth(const std::string & url) {
 
 	//Tune the url for Wengo
 	std::string finalUrl = url;
-	finalUrl += "&wl=" + std::string(WengoPhoneBuildId::SOFTPHONE_NAME);
+	finalUrl += "&wl=" + std::string(WengoPhoneBuildId::getSoftphoneName());
 	finalUrl += "&lang=" + language;
 
 	LOG_DEBUG("url to open=" + finalUrl);
@@ -64,7 +64,7 @@ std::string WsUrl::getUrlWithAuth(const std::string & url) {
 		std::string language = config.getLanguage();
 
 		//Tune the url for Wengo, with authentication
-		finalUrl += "&wl=" + std::string(WengoPhoneBuildId::SOFTPHONE_NAME);
+		finalUrl += "&wl=" + std::string(WengoPhoneBuildId::getSoftphoneName());
 		finalUrl += "&lang=" + language;
 		finalUrl += "&login=" + _wengoAccount->getWengoLogin();
 		finalUrl += "&password=" + _wengoAccount->getWengoPassword();

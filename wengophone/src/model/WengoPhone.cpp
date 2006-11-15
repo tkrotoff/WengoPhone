@@ -50,13 +50,13 @@ WengoPhone::WengoPhone() {
 
 	//set HttpRequest User Agent
 	std::stringstream ss;
-	ss << WengoPhoneBuildId::SOFTPHONE_NAME;
+	ss << WengoPhoneBuildId::getSoftphoneName();
 	ss << "-";
-	ss << WengoPhoneBuildId::VERSION;
+	ss << WengoPhoneBuildId::getVersion();
 	ss << "-";
-	ss << WengoPhoneBuildId::BUILDID;
+	ss << WengoPhoneBuildId::getBuildId();
 	ss << "-";
-	ss << WengoPhoneBuildId::REVISION;
+	ss << WengoPhoneBuildId::getSvnRevision();
 	HttpRequest::setUserAgent(ss.str());
 	////
 
@@ -162,8 +162,8 @@ void WengoPhone::valueChangedEventHandler(Settings & sender, const std::string &
 }
 
 CoIpManager * WengoPhone::getCoIpManager() const {
-	CoIpManager *result = NULL;
-	UserProfile *userProfile = _userProfileHandler->getCurrentUserProfile();
+	CoIpManager * result = NULL;
+	UserProfile * userProfile = _userProfileHandler->getCurrentUserProfile();
 
 	if (userProfile) {
 		result = &userProfile->getCoIpManager();

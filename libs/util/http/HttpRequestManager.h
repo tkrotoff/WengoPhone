@@ -55,7 +55,7 @@ private:
 		const std::string & answer, IHttpRequest::Error error);
 
 	/**
-	 * Joins and deletes the HttpRequest.
+	 * Joins and deletes the HttpTequest.
 	 */
 	void joinAndDelete(IHttpRequest * httpRequest);
 

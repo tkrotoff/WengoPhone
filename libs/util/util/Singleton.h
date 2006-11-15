@@ -20,35 +20,39 @@
 #ifndef OWSINGLETON_H
 #define OWSINGLETON_H
 
-#include <util/NonCopyable.h>
 #include <util/SafeDelete.h>
 
 /**
- * Template class to create singleton class.
+ * Template class to do singleton class.
  *
  * @author Nicolas Couturier
  */
-template<typename T>
-class Singleton : NonCopyable {
+template <typename T>
+class Singleton {
+protected:
+
+	Singleton() { }
+	~Singleton() { }
+
 public:
 
 	static T & getInstance() {
-		if (!_instance) {
-			_instance = new T;
+		if (!_singleton) {
+			_singleton = new T;
 		}
-		return *_instance;
+		return *_singleton;
 	}
 
 	static void deleteInstance() {
-		OWSAFE_DELETE(_instance);
+		OWSAFE_DELETE(_singleton);
 	}
 
 private:
 
-	static T * _instance;
+	static T * _singleton;
 };
 
-template<typename T>
-T * Singleton<T>::_instance = NULL;
+template <typename T>
+T * Singleton<T>::_singleton = NULL;
 
 #endif	//OWSINGLETON_H

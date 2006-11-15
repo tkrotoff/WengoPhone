@@ -34,10 +34,10 @@ QtAbout::QtAbout(QWidget * parent) {
 	_ui = new Ui::AboutWindow();
 	_ui->setupUi(_aboutDialog);
 
-	_ui->wengoPhoneBuildIdStringLabel->setText(WengoPhoneBuildId::SOFTPHONE_NAME + QString(" ") +
-					WengoPhoneBuildId::VERSION +
-					QString(" rev") + WengoPhoneBuildId::REVISION +
-					QString("-") + QString::number(WengoPhoneBuildId::BUILDID));
+	_ui->wengoPhoneBuildIdStringLabel->setText(WengoPhoneBuildId::getSoftphoneName() + QString(" ") +
+					WengoPhoneBuildId::getVersion() +
+					QString(" rev") + WengoPhoneBuildId::getSvnRevision() +
+					QString("-") + QString::number(WengoPhoneBuildId::getBuildId()));
 
 	QFile file(":/data/AUTHORS");
 	if (file.open(QFile::ReadOnly)) {
@@ -50,13 +50,13 @@ QtAbout::QtAbout(QWidget * parent) {
 
 	QString eol = QString::fromStdString(String::EOL);
 	_ui->versionLabel->setText("Qt: " + QString(qVersion()) + eol +
-				"Boost: " + QString(WengoPhoneBuildId::LIBBOOST_VERSION) + eol +
-				"LibGaim: " + QString(WengoPhoneBuildId::GAIM_VERSION) + eol +
-				"cURL: " + QString(WengoPhoneBuildId::CURL_VERSION) + eol +
-				"TinyXML: " + QString(WengoPhoneBuildId::TINYXML_VERSION) + eol +
-				"FFmpeg's libavcodec: " + QString(WengoPhoneBuildId::AVCODEC_VERSION)
+				"Boost: " + QString(WengoPhoneBuildId::getBoostVersion()) + eol +
+				"LibGaim: " + QString(WengoPhoneBuildId::getGaimVersion()) + eol +
+				"cURL: " + QString(WengoPhoneBuildId::getCurlVersion()) + eol +
+				"TinyXML: " + QString(WengoPhoneBuildId::getTinyXmlVersion()) + eol +
+				"FFmpeg's libavcodec: " + QString(WengoPhoneBuildId::getAvcodecVersion())
 #ifndef OS_MACOSX
-				+ eol + "PortAudio: " + QString(WengoPhoneBuildId::PORTAUDIO_VERSION)
+				+ eol + "PortAudio: " + QString(WengoPhoneBuildId::getPortaudioVersion())
 #endif
 				);
 }
