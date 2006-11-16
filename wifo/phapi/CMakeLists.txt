@@ -207,7 +207,7 @@ if (UNIX AND NOT WIN32)
 		)
 	else (APPLE)
 		ow_use_private_libraries(
-			GLIB2
+			glib2
 		)
 
 		ow_add_private_libraries(

@@ -33,20 +33,23 @@ extern "C" {
 #include <gaim/core.h>
 }
 
+#define stringize2(x) #x
+#define stringize(x) stringize2(x)
+
 const unsigned long long WengoPhoneBuildId::getBuildId() {
 	return DD_BUILDID;
 }
 
 const char * WengoPhoneBuildId::getVersion() {
-	return DD_VERSION;
+	return stringize(DD_VERSION);
 }
 
 const char * WengoPhoneBuildId::getSvnRevision() {
-	return DD_REVISION;
+	return stringize(DD_REVISION);
 }
 
 const char * WengoPhoneBuildId::getSoftphoneName() {
-	return DD_SOFTPHONE_NAME;
+	return stringize(DD_SOFTPHONE_NAME);
 }
 
 const char * WengoPhoneBuildId::getBoostVersion() {

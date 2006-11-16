@@ -92,9 +92,12 @@ endif (UNIX)
 
 
 subdirs(
+	libs/3rdparty/ffmpeg
+	libs/3rdparty/gaim
 	libs/3rdparty/boost
 	libs/3rdparty/qt4
 	libs/3rdparty/tinyxml
+	libs/3rdparty/glib
 	libs/owcurl
 	libs/util
 	libs/wenbox

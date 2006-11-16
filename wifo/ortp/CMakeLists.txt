@@ -21,7 +21,7 @@ endif (WIN32)
 
 if (UNIX AND NOT WIN32)
 	ow_use_public_libraries(
-		GLIB2
+		glib2
 	)
 endif (UNIX AND NOT WIN32)
 

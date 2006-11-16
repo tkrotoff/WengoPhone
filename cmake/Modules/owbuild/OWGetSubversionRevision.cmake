@@ -7,8 +7,8 @@
 # For details see the accompanying COPYING file.
 
 
-macro (OW_GET_SUBVERSION_REVISION _revision)
-	find_program(_SVN_EXECUTEABLE
+macro (OW_GET_SUBVERSION_REVISION revision)
+	find_program(SVN_EXECUTEABLE
 		NAMES
 			svn
 		PATHS
@@ -16,14 +16,14 @@ macro (OW_GET_SUBVERSION_REVISION _revision)
 			/usr/local/bin
 	)
 
-	find_file(_SVN_DOT_DIR
+	find_file(SVN_DOT_DIR
 		NAMES
 			entries
 		PATHS
 			${CMAKE_SOURCE_DIR}/.svn
 	)
 
-	if (_SVN_EXECUTEABLE AND _SVN_DOT_DIR)
+	if (SVN_EXECUTEABLE AND SVN_DOT_DIR)
 		message(STATUS "Generating subversion revision")
 		execute_process(
 			COMMAND
@@ -43,10 +43,10 @@ macro (OW_GET_SUBVERSION_REVISION _revision)
 				0
 			)
 		endif (_SVN_REVISION_RESULT_VARIABLE EQUAL 0)
-	endif (_SVN_EXECUTEABLE AND _SVN_DOT_DIR)
+	endif (SVN_EXECUTEABLE AND SVN_DOT_DIR)
 
-	set(${_revision}
+	set(${revision}
 		${_SVN_REVISION}
 		CACHE INTERNAL "svn revison"
 	)
-endmacro (OW_GET_SUBVERSION_REVISION _revision)
+endmacro (OW_GET_SUBVERSION_REVISION revision)

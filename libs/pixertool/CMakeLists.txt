@@ -2,7 +2,7 @@ ow_create_static_library(owpixertool)
 
 ow_use_public_libraries(
 	owcutil
-	FFMPEG
+	ffmpeg
 )
 
 ow_add_public_include_dirs(

@@ -15,4 +15,6 @@ if (MSVC)
 		/wd4275
 		/wd4675
 	)
+
+	ow_copy_dir(${BOOST_LIBRARY_DIRS}/*.dll .)
 endif (MSVC)

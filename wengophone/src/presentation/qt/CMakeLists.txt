@@ -22,7 +22,7 @@ ow_use_private_libraries(
 	owbrowser
 	owsoftupdater
 	owphapiwrapper
-	GLIB2
+	glib2
 )
 
 if (MSVC)

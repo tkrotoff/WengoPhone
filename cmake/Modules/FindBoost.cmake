@@ -354,22 +354,9 @@ else (BOOST_LIBRARIES AND BOOST_INCLUDE_DIRS)
 
   get_filename_component(BOOST_LIBRARY_DIRS ${BOOST_DATE_TIME_LIBRARY} PATH)
 
-  # Under Windows, automatic linking is performed, so no need specify the libraries.
+  # Under Windows, automatic linking is performed, so no need to specify the libraries.
   if (WIN32)
     set(BOOST_LIBRARIES "")
-    set(BOOST_DATE_TIME_LIBRARY "")
-    set(BOOST_FILESYSTEM_LIBRARY "")
-    set(BOOST_IOSTREAMS_LIBRARY "")
-    set(BOOST_PRG_EXEC_MONITOR_LIBRARY "")
-    set(BOOST_PROGRAM_OPTIONS_LIBRARY "")
-    set(BOOST_PYTHON_LIBRARY "")
-    set(BOOST_REGEX_LIBRARY "")
-    set(BOOST_SERIALIZATION_LIBRARY "")
-    set(BOOST_SIGNALS_LIBRARY "")
-    set(BOOST_TEST_EXEC_MONITOR_LIBRARY "")
-    set(BOOST_THREAD_LIBRARY "")
-    set(BOOST_UNIT_TEST_FRAMEWORK_LIBRARY "")
-    set(BOOST_WSERIALIZATION_LIBRARY "")
   endif (WIN32)
 
   # show the BOOST_INCLUDE_DIRS and BOOST_LIBRARIES variables only in the advanced view

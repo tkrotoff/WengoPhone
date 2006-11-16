@@ -42,3 +42,7 @@ ow_add_public_definitions(
 	-DQT_DLL
 	-DQT_NO_KEYWORDS
 )
+
+if (MSVC)
+	ow_copy_dir(C:/Qt/4.1.4/bin/*.dll .)
+endif (MSVC)
