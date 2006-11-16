@@ -13,23 +13,12 @@ macro (OW_CREATE_BINARY)
 
 	if (${PROJECT_NAME}_PROJECT_TYPE MATCHES Static)
 		add_library(${PROJECT_NAME} STATIC ${${PROJECT_NAME}_SRCS})
-
-		if (WIN32)
-			ow_post_build_copy_file(${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.lib .)
-		else (WIN32)
-
-		if (UNIX)
-			ow_post_build_copy_file(${CMAKE_CURRENT_BINARY_DIR}/lib${PROJECT_NAME}.a .)
-		endif (UNIX)
-
-		endif (WIN32)
 	else (${PROJECT_NAME}_PROJECT_TYPE MATCHES Static)
 
 	if (${PROJECT_NAME}_PROJECT_TYPE MATCHES Shared)
 		add_library(${PROJECT_NAME} SHARED ${${PROJECT_NAME}_SRCS})
 
 		if (WIN32)
-			ow_post_build_copy_file(${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.lib .)
 			ow_post_build_copy_file(${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.dll .)
 			ow_post_build_copy_file(${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.pdb .)
 		else (WIN32)
