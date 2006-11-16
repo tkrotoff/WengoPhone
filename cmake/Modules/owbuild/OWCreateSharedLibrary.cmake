@@ -13,7 +13,7 @@ macro (OW_CREATE_SHARED_LIBRARY name)
 
 	set(${PROJECT_NAME}_PROJECT_TYPE
 		Shared
-		CACHE STRING "${PROJECT_NAME} project type (Static, Shared, Plugin, Executable, Custom)"
+		CACHE STRING "${PROJECT_NAME} project type (Static, Shared, Plugin, Executable)"
 	)
 
 endmacro (OW_CREATE_SHARED_LIBRARY)

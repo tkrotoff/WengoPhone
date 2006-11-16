@@ -13,7 +13,7 @@ macro (OW_CREATE_PLUGIN_LIBRARY name)
 
 	set(${PROJECT_NAME}_PROJECT_TYPE
 		Plugin
-		CACHE STRING "${PROJECT_NAME} project type (Static, Shared, Plugin, Executable, Custom)"
+		CACHE STRING "${PROJECT_NAME} project type (Static, Shared, Plugin, Executable)"
 	)
 
 endmacro (OW_CREATE_PLUGIN_LIBRARY)
