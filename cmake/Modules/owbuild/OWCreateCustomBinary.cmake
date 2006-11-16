@@ -1,5 +1,5 @@
-# - OW_CREATE_SHARED_LIBRARY(name)
-# Creates a shared library (.dll, .dylib, .so)
+# - OW_CREATE_CUSTOM_BINARY(name)
+# Creates a custom binary
 #
 # Copyright (C) 2006  Wengo
 #
@@ -7,13 +7,13 @@
 # For details see the accompanying COPYING file.
 
 
-macro (OW_CREATE_SHARED_LIBRARY name)
+macro (OW_CREATE_CUSTOM_BINARY name)
 
 	ow_create_project(${name})
 
 	set(${PROJECT_NAME}_PROJECT_TYPE
-		Shared
+		Custom
 		CACHE STRING "${PROJECT_NAME} project type (Static, Shared, Plugin, Executable, Custom)"
 	)
 
-endmacro (OW_CREATE_SHARED_LIBRARY)
+endmacro (OW_CREATE_CUSTOM_BINARY)

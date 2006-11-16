@@ -11,9 +11,11 @@ macro (OW_PREPARE_BINARY)
 
 	ow_check_project()
 
-	if (NOT ${PROJECT_NAME}_SRCS)
-		message(FATAL_ERROR "no sources")
-	endif (NOT ${PROJECT_NAME}_SRCS)
+	if (NOT ${PROJECT_NAME}_PROJECT_TYPE MATCHES Custom)
+		if (NOT ${PROJECT_NAME}_SRCS)
+			message(FATAL_ERROR "no sources")
+		endif (NOT ${PROJECT_NAME}_SRCS)
+	endif (NOT ${PROJECT_NAME}_PROJECT_TYPE MATCHES Custom)
 
 	ow_add_public_libraries(${PROJECT_NAME})
 

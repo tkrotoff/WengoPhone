@@ -13,7 +13,7 @@ macro (OW_CREATE_EXECUTABLE name)
 
 	set(${PROJECT_NAME}_PROJECT_TYPE
 		Executable
-		CACHE STRING "${PROJECT_NAME} project type (Static, Shared, Plugin, Executable)"
+		CACHE STRING "${PROJECT_NAME} project type (Static, Shared, Plugin, Executable, Custom)"
 	)
 
 endmacro (OW_CREATE_EXECUTABLE)
