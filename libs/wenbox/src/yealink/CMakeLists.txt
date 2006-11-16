@@ -1,16 +1,16 @@
 ow_create_plugin_library(yealinkwenbox)
 
-# find precompiled ylusbtel
-find_library(YLUSBTEL_LIBRARIES
+# Find precompiled YLTELBOX
+find_library(YLTELBOX_LIBRARIES
 	NAMES
-		YLUSBTEL
+		YLTELBOX
 	PATH
 		${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-# hack because the find_library does not work, why? no idea...
-set(YLUSBTEL_LIBRARIES
-	${CMAKE_CURRENT_SOURCE_DIR}/YLUSBTEL
+# Hack because the find_library does not work, why? no idea...
+set(YLTELBOX_LIBRARIES
+	${CMAKE_CURRENT_SOURCE_DIR}/YLTELBOX.lib
 )
 
 ow_use_public_libraries(
@@ -22,11 +22,13 @@ ow_add_public_include_dirs(
 )
 
 ow_add_private_libraries(
-	${YLUSBTEL_LIBRARIES}
+	${YLTELBOX_LIBRARIES}
 )
 
 ow_add_sources(
 	YealinkWenbox.cpp
 )
+
+ow_copy_file(${CMAKE_CURRENT_SOURCE_DIR}/YLTELBOX.dll .)
 
 ow_create_binary()

@@ -22,7 +22,7 @@
 #include <util/Logger.h>
 #include <util/StringList.h>
 
-#include "YLUSBTEL.h"
+#include "YLTELBOX.h"
 
 IWenbox * getInstance() {
 	YealinkWenbox * wenbox = new YealinkWenbox();

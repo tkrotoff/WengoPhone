@@ -1,16 +1,16 @@
-ylusbtel = WengoGetEnvironment()
+yltelbox = WengoGetEnvironment()
 files = [
-	'YLUSBTEL.lib',
+	'YLTELBOX.lib',
 	'YLTELBOX.dll'
 ]
-ylusbtel.WengoDeclareLibrary('ylusbtel', files)
+yltelbox.WengoDeclareLibrary('yltelbox', files)
 
 
 env = WengoGetEnvironment()
 
 libs = [
 	'wenbox',
-	'ylusbtel'
+	'yltelbox'
 ]
 lib_path = []
 include_path = []
