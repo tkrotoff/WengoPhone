@@ -33,7 +33,7 @@ IWenbox * getInstance() {
 
 Wenbox::Wenbox() {
 	//Plugin name hardcoded, there is only one Wenbox at a time
-	String wenboxDll = "wenboxplugin";
+	String wenboxDll = "yealinkwenbox";
 
 	_open = false;
 	_wenboxPrivate = NULL;
