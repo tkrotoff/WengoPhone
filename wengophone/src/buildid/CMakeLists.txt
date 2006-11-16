@@ -2,7 +2,7 @@ ow_create_static_library(owbuildid)
 
 ow_use_private_libraries(
 	glib2
-	GAIM
+	gaim
 	tinyxml
 	owcurl
 	ffmpeg

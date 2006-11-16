@@ -44,9 +44,9 @@ find_package(Boost REQUIRED)
 
 if (WIN32)
 	find_package(OpenSSLInternal REQUIRED)
-	find_package(GLIB2Internal REQUIRED)
 	find_package(GAIMInternal REQUIRED)
 	find_package(FFMPEGInternal REQUIRED)
+	find_package(GLIB2Internal REQUIRED)
 	#find_package(PortaudioInternal REQUIRED)
 else (WIN32)
 	if (APPLE)
@@ -76,12 +76,6 @@ if (WIN32)
 	)
 endif (WIN32)
 
-if (NOT MSVC)
-	subdirs(
-		libs/3rdparty/gaim
-	)
-endif (NOT MSVC)
-
 if (UNIX)
 	if (NOT APPLE)
 		subdirs(
@@ -92,12 +86,12 @@ endif (UNIX)
 
 
 subdirs(
+	libs/3rdparty/glib
 	libs/3rdparty/ffmpeg
 	libs/3rdparty/gaim
 	libs/3rdparty/boost
 	libs/3rdparty/qt4
 	libs/3rdparty/tinyxml
-	libs/3rdparty/glib
 	libs/owcurl
 	libs/util
 	libs/wenbox

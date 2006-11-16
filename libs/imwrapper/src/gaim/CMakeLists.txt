@@ -2,7 +2,7 @@ ow_create_static_library(owgaimwrapper)
 
 ow_use_public_libraries(
 	owimwrapper
-	GAIM
+	gaim
 )
 
 ow_use_private_libraries(
