@@ -45,8 +45,6 @@
 extern "C" {
 #endif
 
-typedef int OWPL_PUB;
-
 extern int owStaticCallId;
 
 
@@ -131,6 +129,9 @@ owplConfigAddAudioCodecByName(const char* szCodecName);
 
 MY_DLLEXPORT OWPL_RESULT
 owplConfigAddVideoCodecByName(const char* szCodecName);
+
+MY_DLLEXPORT OWPL_RESULT
+owplConfigSetAsynchronous(const unsigned int asyncronous);
 
 /**
  * Gets the local bound ip address.

@@ -230,6 +230,12 @@ owplConfigAddVideoCodecByName(const char* szCodecName)
 	return OWPL_RESULT_SUCCESS;
 }
 
+
+MY_DLLEXPORT OWPL_RESULT
+owplConfigSetAsynchronous(const unsigned int asyncronous) {
+	phcfg.asyncmode = asyncronous;
+}
+
 MY_DLLEXPORT OWPL_RESULT
 owplConfigGetBoundLocalAddr(char * szLocalAddr, size_t size) {
 	char ip[256]; // put a big buffer to prevent buffer overflow...
@@ -978,6 +984,17 @@ MY_DLLEXPORT OWPL_RESULT owplPresencePublish(OWPL_LINE  hLine,
 	char ProxyBuf[100];
 	int n = sizeof(UriBuf);
 	int i;
+	phVLine * vl = NULL;
+
+	// save infos for later user from a timer event
+	if((vl = ph_vlid2vline(hLine)) != NULL) {
+		vl->publishInfo.onlineState = Online;
+		vl->publishInfo.szStatus = strdup(szStatus);
+		vl->publishInfo.hPub = hPub;
+		// nine minutes timeout i.e. 540000ms
+		vl->publishInfo.publishTimeout = 540000;
+		vl->publishInfo.lastPublishTime = time(0);
+	}
 
 	owplLineGetUri(hLine, UriBuf, &n);
 	snprintf(MsgBodyBuf, sizeof(MsgBodyBuf), PUBLISH_MSG_TEMPLATE, UriBuf, Online ? "open" : "close", szStatus, UriBuf);
