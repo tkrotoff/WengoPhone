@@ -161,10 +161,11 @@ public:
 	typedef std::vector<IMChatMessage *> IMChatMessageList; // TODO NCOUTURIER rename?
 
 	/**
-	 * Gets the first message queued in IMChatSession. Delete it from the queue.
+	 * Gets the messages stored in IMChatSession from the provided index,
+	 * an keeps it stored.
 	 *
-	 * @return the first message of the queue. NULL if no message in the queue.
-	 * The returned IMChatMessage must be freed by the called.
+	 * @param	fromIndex	the index from which we want to get the messages.
+	 * @return the list of messages from the provided index
 	 */
 	const IMChatMessageList getReceivedMessage(unsigned int fromIndex);
 

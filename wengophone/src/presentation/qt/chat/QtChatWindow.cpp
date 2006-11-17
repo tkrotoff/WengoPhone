@@ -504,7 +504,6 @@ void QtChatWindow::messageReceivedSlot(IMChatSession * sender) {
 		showToaster(sender);
 	}
 
-	// TODO NCOUTURIER new way to get messages
 	IMChatSession::IMChatMessageList imChatMessageList = sender->getReceivedMessage(_lastReceivedMessageIndex[sender->getId()] + 1);
 	if (imChatMessageList.size() > 0) {
 		_lastReceivedMessageIndex[sender->getId()] += imChatMessageList.size();

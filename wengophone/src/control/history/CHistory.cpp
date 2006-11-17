@@ -44,7 +44,6 @@ CHistory::CHistory(History & history, CWengoPhone & cWengoPhone, CUserProfile & 
 	MyThreadEvent * event = new MyThreadEvent(boost::bind(&CHistory::initPresentationThreadSafe, this));
 	PFactory::postEvent(event);
 
-	// TODO NCOUTURIER bind handler
 	_cUserProfile.getUserProfile().getChatHandler().newIMChatSessionCreatedEvent += boost::bind(&CHistory::newIMChatSessionCreatedEventHandler, this, _1, _2);
 }
 
