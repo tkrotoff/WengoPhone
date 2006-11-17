@@ -249,7 +249,15 @@ void ph_refresh_vlines()
 				if (vl->server && vl->server[0] && vl->regTimeout > 0)
 				{
 					if ((now - vl->lastRegTime) > (vl->regTimeout - 5))
+					{
 						phvlRegister(ph_vline2vlid(vl));
+					}
+
+					if ((now - vl->publishInfo.lastPublishTime) > (vl->publishInfo.publishTimeout - 5))
+					{
+						owplPresencePublish(ph_vline2vlid(vl), vl->publishInfo.onlineState, vl->publishInfo.szStatus, vl->publishInfo.hPub);
+					}
+
 				}
 			}
 		}

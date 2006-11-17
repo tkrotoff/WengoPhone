@@ -1,7 +1,6 @@
 #ifndef __PHCALL_H__
 #define __PHCALL_H__ 1
 
-#include <eXosip/eXosip.h>
 
 #define PH_MAX_CALLS  32
 
@@ -10,10 +9,14 @@ extern "C"
 {
 #endif
 
+/**
+ * Forward declaration
+ */
 struct phConfig;
 struct ph_msession_s;
 struct eXosip_event;
 struct owpl_plugin;
+
 
 
 /**
@@ -84,7 +87,7 @@ typedef struct phcall phcall_t;
 
 phcall_t *ph_locate_call(struct eXosip_event *je, int creatit);
 phcall_t *ph_allocate_call(int cid);
-phcall_t *ph_locate_call_for_refer(eXosip_event_t *je);
+phcall_t *ph_locate_call_for_refer(struct eXosip_event *je);
 
 phcall_t *ph_locate_call_by_cid(int cid);
 phcall_t *ph_locate_call_by_rcid(int cid);

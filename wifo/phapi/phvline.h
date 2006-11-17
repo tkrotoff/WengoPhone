@@ -15,6 +15,15 @@ typedef enum VLineStateEnum_T
 	OWPL_LINE_STATE_DELETING /* The VLine is being removed*/
 } VLineStateEnum;
 
+typedef struct phVLinePublishInfo_T
+{
+	unsigned int	onlineState;
+	char *	szStatus;
+	OWPL_PUB *	hPub;
+	long	lastPublishTime;
+	long	publishTimeout;
+} phVLinePublishInfo;
+
 //This vline structure is moved to here from phapi.c
 typedef struct phVLine_T
 {
@@ -32,6 +41,7 @@ typedef struct phVLine_T
   VLineStateEnum LineState;
   int   busy;
   char  *followme;
+  phVLinePublishInfo publishInfo;
 } phVLine;
 
 #define PH_MAX_VLINES 16

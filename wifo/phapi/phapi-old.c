@@ -37,6 +37,7 @@
 #include <phrpc.h>
 #include <phmedia.h>
 #include <stun/stun.h>
+#include <phcall.h>
 
 #include <phlog.h>
 

@@ -4,6 +4,7 @@
 typedef int OWPL_CALL;
 typedef int OWPL_SUB;
 typedef int OWPL_LINE;
+typedef int OWPL_PUB;
 
 /*
  * OWPL_RESULT: The different results that can be returned from a function in phAPI.h

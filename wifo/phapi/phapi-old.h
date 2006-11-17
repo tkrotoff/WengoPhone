@@ -121,7 +121,12 @@
  *
  */
 
-#include <phcall.h>
+
+/**
+ * Forward declarations
+ */
+struct phcall;
+
 
 #ifdef WIN32
 	#if defined(BUILD_PHAPI_DLL)
@@ -231,7 +236,7 @@ MY_DLLEXPORT int phDelVline(int vlid, int regTimeout);
  */
 MY_DLLEXPORT int phLinePlaceCall(int vlid, const char *uri, void *userData, int rcid);
 MY_DLLEXPORT int phLinePlaceCall2(int vlid, const char *uri, void *userData, int rcid, int streams);
-int phLinePlaceCall_withCa(int vlid, const char *uri, void *userdata, int rcid, int streams, phcall_t *ca0);
+int phLinePlaceCall_withCa(int vlid, const char *uri, void *userdata, int rcid, int streams, struct phcall *ca0);
 
 /**
  * Accept an incoming a call.
