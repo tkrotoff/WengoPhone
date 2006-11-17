@@ -9,6 +9,8 @@
 ;!define BUILD_DIR "..\..\release-symbols\"
 ;!define INSTALLER_NAME "WengoPhone-setup-0.13.exe"
 ;!define QTDIR "C:\Qt\4.1.1\"
+;!define WITH_PDB
+
 
 !define PRODUCT_PUBLISHER "Wengo"
 !define PRODUCT_WEB_SITE "http://www.wengo.com"

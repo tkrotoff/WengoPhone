@@ -51,7 +51,7 @@ File "${BUILD_DIR}\owcurl.dll"
 File "${BUILD_DIR}\sfp-plugin.dll"
 
 /** Wenbox. */
-File "${BUILD_DIR}\wenboxplugin.dll"
+File "${BUILD_DIR}\yealinkwenbox.dll"
 File "${BUILD_DIR}\YLTELBOX.dll"
 
 /** FFmpeg. */
@@ -61,9 +61,9 @@ File "${BUILD_DIR}\avcodec.dll"
 File "dll\dbghelp.dll"
 File "${BUILD_DIR}\owcrashreport.exe"
 
-!ifndef WITHOUT_PDB
-    File "${BUILD_DIR}\qtwengophone.pdb"
-    File "${BUILD_DIR}\phapi.pdb"
+/** .pdb files. */
+!ifdef WITH_PDB
+	File "${BUILD_DIR}\*.pdb"
 !endif
 
 /** Gaim plugins. */

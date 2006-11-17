@@ -44,5 +44,7 @@ ow_add_public_definitions(
 )
 
 if (MSVC)
-	ow_copy_dir(C:/Qt/4.1.4/bin/*.dll .)
+	string(REGEX REPLACE "\\\\" "/" QTDIR $ENV{QTDIR})
+
+	ow_copy_dir(${QTDIR}/bin/*.dll .)
 endif (MSVC)
