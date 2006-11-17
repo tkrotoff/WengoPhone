@@ -23,10 +23,6 @@ ow_use_private_libraries(
 	speexec
 	wtimer
 	svoip
-)
-
-ow_use_public_libraries(
-	# Should be private but phapi-old.h includes phcall.h that includes eXosip.h
 	exosip
 )
 
@@ -120,7 +116,7 @@ else (WITH_SPEEXWB_REPLACES_G726WB)
 	endif (WITH_SPEEXWB_REPLACES_AMRNB)
 endif (WITH_SPEEXWB_REPLACES_G726WB)
 
-# embedded
+# Embedded
 option(WITH_EMBEDDED_PHAPI "" OFF)
 if (WITH_EMBEDDED_PHAPI)
 	ow_add_private_definitions(
@@ -166,7 +162,7 @@ endif (WITH_HTTPTUNNEL)
 	)
 #endif (WITH_VIDEO)
 
-# system specific phapi options
+# System specific phapi options
 
 if (WIN32)
 	ow_add_private_libraries(
