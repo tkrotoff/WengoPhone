@@ -68,6 +68,10 @@ else (BOOST_LIBRARIES AND BOOST_INCLUDE_DIRS)
     if (CYGWIN)
       set(BOOST_LIB_SUFFIX -gcc-mt)
     endif (CYGWIN)
+  else (WIN32)
+    if (UNIX AND NOT APPLE)
+      set(BOOST_LIB_SUFFIX -gcc-mt)
+    endif (UNIX AND NOT APPLE)
   endif (WIN32)
 
   find_path(BOOST_INCLUDE_DIR

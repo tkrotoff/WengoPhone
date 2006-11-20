@@ -39,18 +39,16 @@ else (FFMPEG_LIBRARIES AND FFMPEG_INCLUDE_DIRS)
       ffmpeg
   )
 
-  if (NOT APPLE)
-    find_library(AVUTIL_LIBRARY
-      NAMES
-        avutil
-      PATHS
-        ${_FFMPEGLinkDir}
-        /usr/lib
-        /usr/local/lib
-        /opt/local/lib
-        /sw/lib
-    )
-  endif (NOT APPLE)
+ find_library(AVUTIL_LIBRARY
+    NAMES
+      avutil
+    PATHS
+      ${_FFMPEGLinkDir}
+      /usr/lib
+      /usr/local/lib
+      /opt/local/lib
+      /sw/lib
+  )
 
   find_library(AVCODEC_LIBRARY
     NAMES
@@ -78,11 +76,28 @@ else (FFMPEG_LIBRARIES AND FFMPEG_INCLUDE_DIRS)
     ${FFMPEG_INCLUDE_DIR}
   )
  
-  set(FFMPEG_LIBRARIES
-    ${AVUTIL_LIBRARY}
-    ${AVCODEC_LIBRARY}
-    ${AVFORMAT_LIBRARY}
-  )
+  set(FFMPEG_LIBRARIES)
+
+  if (AVUTIL_LIBRARY)
+    set(FFMPEG_LIBRARIES
+      ${FFMPEG_LIBRARIES}
+      ${AVUTIL_LIBRARY}
+    )
+  endif (AVUTIL_LIBRARY)
+
+  if (AVCODEC_LIBRARY)
+    set(FFMPEG_LIBRARIES
+      ${FFMPEG_LIBRARIES}
+      ${AVCODEC_LIBRARY}
+    )
+  endif (AVCODEC_LIBRARY)
+
+  if (AVFORMAT_LIBRARY)
+    set(FFMPEG_LIBRARIES
+      ${FFMPEG_LIBRARIES}
+      ${AVFORMAT_LIBRARY}
+    )
+  endif (AVFORMAT_LIBRARY)
 
   if (FFMPEG_INCLUDE_DIRS AND FFMPEG_LIBRARIES)
      set(FFMPEG_FOUND TRUE)
