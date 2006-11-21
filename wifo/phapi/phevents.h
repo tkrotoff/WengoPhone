@@ -17,6 +17,9 @@
 #include <stdlib.h>
 #include <phapi-old.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif /*__cplusplus*/
 
 // HACK forward declaration in order not to include <owpl_plugin.h> (and so not <phapi.h>)
 struct owpl_plugin;
@@ -194,7 +197,7 @@ typedef enum OWPL_CALLSTATE_CAUSE
 
     CALLSTATE_AUDIO_START             = CALLSTATE_AUDIO_EVENT + 1,      /**< RTP session started */
     CALLSTATE_AUDIO_STOP              = CALLSTATE_AUDIO_START + 1,      /**< RTP session stopped */
-	CALLSTATE_AUDIO_DTMF			  = CALLSTATE_AUDIO_EVENT + 1,
+	CALLSTATE_AUDIO_DTMF			  = CALLSTATE_AUDIO_STOP + 1,
 
 	CALLSTATE_VIDEO_START			  = CALLSTATE_VIDEO_EVENT + 1,
 	CALLSTATE_VIDEO_STOP			  = CALLSTATE_VIDEO_START + 1,
@@ -226,7 +229,7 @@ typedef enum OWPL_CALLSTATE_CAUSE
 
 	CALLSTATE_REDIRECTED_NORMAL		= CALLSTATE_REDIRECTED + 1,			/**< The remote side has asked us to call to another uri*/
 
-	CALLSTATE_HOLD_STARTED			= CALLSTATE_HOLD + 1,				/**< The remote side has asked us to call to another uri*/
+	CALLSTATE_HOLD_STARTED			= CALLSTATE_HOLD + 1,
 	CALLSTATE_HOLD_RESUMED			= CALLSTATE_HOLD + 2,
 
     CALLSTATE_SECURITY_SELF_SIGNED_CERT = CALLSTATE_SECURITY_EVENT + 1, /**< A self-signed certificate is being used for S/MIME. */
@@ -326,6 +329,8 @@ typedef enum OWPL_LINESTATE_CAUSE
                                                                                                 authentication failure. */
     LINESTATE_REGISTER_FAILED_TIMEOUT                 = LINESTATE_REGISTER_FAILED + 3,     /**< Failed to register because of
                                                                                                 a timeout. */
+	LINESTATE_REGISTER_FAILED_NOT_FOUND               = LINESTATE_REGISTER_FAILED + 4,     /**< Failed to register because the 
+																								user name was not found */
     LINESTATE_UNREGISTER_FAILED_COULD_NOT_CONNECT     = LINESTATE_UNREGISTER_FAILED + 1,   /**< Failed to unregister because of
                                                                                                 a connectivity problem. */
     LINESTATE_UNREGISTER_FAILED_NOT_AUTHORIZED        = LINESTATE_UNREGISTER_FAILED + 2,   /**< Failed to unregister because of
@@ -515,6 +520,8 @@ owplFireCallEvent2Plugin(struct owpl_plugin * plugin,
 OWPL_RESULT
 owplReportLogMessage(const char* szLogMsg);
 
-
+#ifdef __cplusplus
+}
+#endif /*__cplusplus*/
 
 #endif
