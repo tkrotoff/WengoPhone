@@ -453,6 +453,19 @@ endif (APPLE)
 
 ow_create_binary()
 
+# Passes variables to the install script
+install(
+	CODE "
+	set(INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX})
+	set(SOURCE_DIR ${CMAKE_SOURCE_DIR})
+	set(DATA_INSTALL_DIR ${DATA_INSTALL_DIR})
+	set(APPLICATION_NAME ${APPLICATION_NAME})
+	set(APPLICATION_VERSION ${APPLICATION_VERSION})
+	set(BUILD_DIR \"${BUILD_DIR}\")
+	set(BUILD_TYPE ${CMAKE_BUILD_TYPE})
+	set(SVN_REVISION ${SVN_REVISION})"
+)
+
 if (APPLE)
 	set_target_properties(${PROJECT_NAME}
 		PROPERTIES
@@ -477,27 +490,27 @@ if (APPLE)
 	install(FILES $ENV{QTDIR}/lib/QtCore.framework/Versions/4.0/QtCore
 		DESTINATION ${FRAMEWORK_DIR}/QtCore.framework/Versions/4.0
 	)
-	
+
 	install(FILES $ENV{QTDIR}/lib/QtGui.framework/Versions/4.0/QtGui
 		DESTINATION ${FRAMEWORK_DIR}/QtGui.framework/Versions/4.0
 	)
-	
+
 	install(FILES $ENV{QTDIR}/lib/QtXml.framework/Versions/4.0/QtXml
 		DESTINATION ${FRAMEWORK_DIR}/QtXml.framework/Versions/4.0
 	)
-	
+
 	install(FILES $ENV{QTDIR}/lib/QtSvg.framework/Versions/4.0/QtSvg
 		DESTINATION ${FRAMEWORK_DIR}/QtSvg.framework/Versions/4.0
 	)
-	
+
 	# Copy libqmng (for MNG image support)
 	install(FILES $ENV{QTDIR}/plugins/imageformats/libqmng.dylib
 		DESTINATION ${FRAMEWORK_DIR}/qt-plugins/imageformats/libqmng.dylib
 	)
-	
+
 	# Copy PhApi plugins
 	# TODO
-	
+
 	# Copy glib2 and crypto libs
 	set(LIB_DEP
 		libgnutls.12.dylib
@@ -505,7 +518,7 @@ if (APPLE)
 		libtasn1.2.dylib
 		libpth.14.dylib
 		libgpg-error.0.dylib
-	
+
 		libintl.3.dylib
 		libintl.1.dylib
 		libiconv.2.dylib
@@ -513,7 +526,7 @@ if (APPLE)
 		libglib-2.0.0.dylib
 		libgthread-2.0.0.dylib
 	)
-	
+
 	foreach(lib ${LIB_DEP})
 		install(FILES /sw/lib/${lib}
 			DESTINATION ${FRAMEWORK_DIR}
@@ -521,14 +534,12 @@ if (APPLE)
 	endforeach(lib ${LIB_DEP})
 	####
 
-	# Call external command to finish the bundle
-	install(CODE "SET(INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX})")
-	install(CODE "SET(SOURCE_DIR ${CMAKE_SOURCE_DIR})")
-	install(CODE "SET(DATA_INSTALL_DIR ${DATA_INSTALL_DIR})")
-	install(CODE "SET(APPLICATION_VERSION ${APPLICATION_VERSION})")
-
 	install(SCRIPT CMakeLists-install-macosx.txt)
 	####
 
 endif (APPLE)
 
+if (WIN32)
+	# NSIS installer script
+	install(SCRIPT ../../../nsis/CMakeLists.txt)
+endif (WIN32)
