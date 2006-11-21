@@ -3707,7 +3707,9 @@ ph_call_redirected(eXosip_event_t *je)
 
 	ph_release_call(ca);
 
-	phcb->callProgress(je->cid, &info);
+	if(phcb->callProgress) {
+		phcb->callProgress(je->cid, &info);
+	}
 
 	owplFireCallEvent(je->cid, 
 		CALLSTATE_REDIRECTED, 
@@ -3736,7 +3738,9 @@ void ph_callStopRinging(eXosip_event_t *je)
 		info.u.remoteUri = je->remote_uri; 
 		info.vlid = ca->vlid;
 
-		phcb->callProgress(je->cid, &info);	 
+		if(phcb->callProgress) {
+			phcb->callProgress(je->cid, &info);
+		}
 
 		//TODO: Find an appropriate event to raise here for the new owpl API
 	}
@@ -3786,7 +3790,9 @@ ph_call_ringing(eXosip_event_t *je)
 
 	info.streams = ca->nego_mflags;
 
-	phcb->callProgress(je->cid, &info);
+	if(phcb->callProgress) {
+		phcb->callProgress(je->cid, &info);
+	}
 
 	owplFireCallEvent(je->cid, CALLSTATE_REMOTE_ALERTING, 
 									CALLSTATE_REMOTE_ALERTING_NORMAL, 
@@ -4356,7 +4362,9 @@ void ph_call_refer_status(eXosip_event_t *je)
 
 	txcid = ca->txcid;
 
-	phcb->callProgress(je->cid, &info);
+	if(phcb->callProgress) {
+		phcb->callProgress(je->cid, &info);
+	}
 
 	if (info.event == phXFEROK || info.event == phXFERFAIL)
 	{
