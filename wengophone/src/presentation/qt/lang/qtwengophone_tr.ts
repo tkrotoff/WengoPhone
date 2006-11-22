@@ -3,42 +3,46 @@
     <name>AIMSettings</name>
     <message>
         <source>AIM/ICQ Settings</source>
-        <translation>AIM/ICQ Ayarları</translation>
+        <translation type="unfinished">AIM/ICQ Ayarları</translation>
     </message>
     <message>
         <source>Password:</source>
-        <translation>Parola:</translation>
+        <translation type="unfinished">Parola:</translation>
     </message>
     <message>
         <source>Login:</source>
-        <translation>Kullanıcı Adı:</translation>
+        <translation type="unfinished">Kullanıcı Adı:</translation>
     </message>
     <message>
         <source>Forgot your AIM password?</source>
-        <translation>AIM parolanızı mı unuttunuz?</translation>
+        <translation type="unfinished">AIM parolanızı mı unuttunuz?</translation>
     </message>
     <message>
         <source>Get a new AIM Account</source>
-        <translation>Yeni bir AIM hesabı aç</translation>
+        <translation type="unfinished">Yeni bir AIM hesabı aç</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>AboutWindow</name>
     <message>
         <source>WengoPhone - About</source>
-        <translation>WengoPhone - Hakkında</translation>
+        <translation type="unfinished">WengoPhone - Hakkında</translation>
     </message>
     <message>
         <source>About</source>
-        <translation>Hakkında</translation>
+        <translation type="unfinished">Hakkında</translation>
     </message>
     <message>
         <source>WengoPhone, a voice over Internet phone</source>
-        <translation>WengoPhone, internet telefonu</translation>
+        <translation type="unfinished">WengoPhone, internet telefonu</translation>
     </message>
     <message>
         <source>Copyright (C) 2004-2006 Wengo  http://openwengo.com</source>
-        <translation>Telif hakkı (C) 2004-2006 Wengo http://openwengo.com</translation>
+        <translation type="unfinished">Telif hakkı (C) 2004-2006 Wengo http://openwengo.com</translation>
     </message>
     <message>
         <source>This program is free software; you can redistribute it and/ormodify it under 
@@ -52,11 +56,11 @@ Genel Kamu Lisansı&apos;nın ikinci ya da sonraki sürümlerine tabi olacaktır
     </message>
     <message>
         <source>Authors</source>
-        <translation>Yazarlar</translation>
+        <translation type="unfinished">Yazarlar</translation>
     </message>
     <message>
         <source>Close</source>
-        <translation>Kapat</translation>
+        <translation type="unfinished">Kapat</translation>
     </message>
     <message>
         <source>This program is free software; you can redistribute it and/or
@@ -70,15 +74,15 @@ of the License, or (at your option) any later version.</source>
     <name>AcceptDialog</name>
     <message>
         <source>File Transfer</source>
-        <translation>Dosya Transferi</translation>
+        <translation type="unfinished">Dosya Transferi</translation>
     </message>
     <message>
         <source>toto@wengo.fr</source>
-        <translation>toto@wengo.fr</translation>
+        <translation type="unfinished">toto@wengo.fr</translation>
     </message>
     <message>
         <source>test.bmp</source>
-        <translation>test.bmp</translation>
+        <translation type="unfinished">test.bmp</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
@@ -124,11 +128,11 @@ dosya&lt;/h1&gt;&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>&amp;Accept</source>
-        <translation>Kabul et</translation>
+        <translation type="unfinished">Kabul et</translation>
     </message>
     <message>
         <source>&amp;Cancel</source>
-        <translation>İptal</translation>
+        <translation type="unfinished">İptal</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Contact: &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
@@ -147,85 +151,85 @@ dosya&lt;/h1&gt;&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     <name>AddIMContact</name>
     <message>
         <source>WengoPhone - Add a Contact Account</source>
-        <translation>WengoPhone - Bağlantı Hesabı Ekle</translation>
+        <translation type="unfinished">WengoPhone - Bağlantı Hesabı Ekle</translation>
     </message>
     <message>
         <source>Contact Type (protocol):</source>
-        <translation>İletişim Tipi (protokol):</translation>
+        <translation type="unfinished">İletişim Tipi (protokol):</translation>
     </message>
     <message>
         <source>Contact ID:</source>
-        <translation>Bağlantı Kimliği:</translation>
+        <translation type="unfinished">Bağlantı Kimliği:</translation>
     </message>
     <message>
         <source>Account:</source>
-        <translation>Hesap:</translation>
+        <translation type="unfinished">Hesap:</translation>
     </message>
     <message>
         <source>Enable</source>
-        <translation>Etkinleştir</translation>
+        <translation type="unfinished">Etkinleştir</translation>
     </message>
     <message>
         <source>Login</source>
-        <translation>Kullanıcı Adı:</translation>
+        <translation type="unfinished">Kullanıcı Adı:</translation>
     </message>
     <message>
         <source>Add</source>
-        <translation>Ekle</translation>
+        <translation type="unfinished">Ekle</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>İptal</translation>
+        <translation type="unfinished">İptal</translation>
     </message>
 </context>
 <context>
     <name>AdvancedConfigWindow</name>
     <message>
         <source>Close</source>
-        <translation>Kapat</translation>
+        <translation type="unfinished">Kapat</translation>
     </message>
     <message>
         <source>WengoPhone - Advanced Configuration</source>
-        <translation>WengoPhone - Gelişmiş Yapılandırma</translation>
+        <translation type="unfinished">WengoPhone - Gelişmiş Yapılandırma</translation>
     </message>
     <message>
         <source>Preference Name</source>
-        <translation>Ayar Adı</translation>
+        <translation type="unfinished">Ayar Adı</translation>
     </message>
     <message>
         <source>Status</source>
-        <translation>Durum</translation>
+        <translation type="unfinished">Durum</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Tür</translation>
+        <translation type="unfinished">Tür</translation>
     </message>
     <message>
         <source>Value</source>
-        <translation>Değer</translation>
+        <translation type="unfinished">Değer</translation>
     </message>
     <message>
         <source>Default Value</source>
-        <translation>Öntanımlı Değer</translation>
+        <translation type="unfinished">Öntanımlı Değer</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation>Kaydet</translation>
+        <translation type="unfinished">Kaydet</translation>
     </message>
 </context>
 <context>
     <name>AdvancedSettings</name>
     <message>
         <source>Add</source>
-        <translation>Ekle</translation>
+        <translation type="unfinished">Ekle</translation>
     </message>
     <message>
         <source>Advanced Settings</source>
-        <translation>Gelişmiş Ayarlar</translation>
+        <translation type="unfinished">Gelişmiş Ayarlar</translation>
     </message>
     <message>
         <source>Advanced Configuration Window</source>
-        <translation>Gelişmiş Yapılandırma Penceresi</translation>
+        <translation type="unfinished">Gelişmiş Yapılandırma Penceresi</translation>
     </message>
     <message>
         <source>Warning, this part is for advanced users.&lt;br&gt;Any mistake can badly damage 
@@ -235,11 +239,11 @@ yazılımın çalışmamasına neden olabilir.</translation>
     </message>
     <message>
         <source>Automatically answer incoming calls from</source>
-        <translation>Şu kişiden gelen çağrıları otomatik cevaplandır</translation>
+        <translation type="unfinished">Şu kişiden gelen çağrıları otomatik cevaplandır</translation>
     </message>
     <message>
         <source>Remove</source>
-        <translation>Kaldır</translation>
+        <translation type="unfinished">Kaldır</translation>
     </message>
     <message>
         <source>Warning, this part is for advanced users.&lt;br&gt;Any mistake can badly damage the software.</source>
@@ -250,48 +254,56 @@ yazılımın çalışmamasına neden olabilir.</translation>
     <name>AudioSettings</name>
     <message>
         <source>Audio Settings</source>
-        <translation>Ses Ayarları</translation>
+        <translation type="unfinished">Ses Ayarları</translation>
     </message>
     <message>
         <source>Output device:</source>
-        <translation>Çıktı aygıtı:</translation>
+        <translation type="unfinished">Çıktı aygıtı:</translation>
     </message>
     <message>
         <source>Input device:</source>
-        <translation>Girdi aygıtı:</translation>
+        <translation type="unfinished">Girdi aygıtı:</translation>
     </message>
     <message>
         <source>Ringing device:</source>
-        <translation>Çalan aygıt:</translation>
+        <translation type="unfinished">Çalan aygıt:</translation>
     </message>
     <message>
         <source>Make a test call </source>
-        <translation>Deneme çağrısı yap </translation>
+        <translation type="unfinished">Deneme çağrısı yap </translation>
     </message>
 </context>
 <context>
     <name>AvatarFrame</name>
     <message>
         <source>Form</source>
-        <translation>Form</translation>
+        <translation type="unfinished">Form</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>AvatarWidget</name>
     <message>
         <source>Form</source>
-        <translation>Form</translation>
+        <translation type="unfinished">Form</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>BrowserSoftUpdateWindow</name>
     <message>
         <source>Close</source>
-        <translation>Kapat</translation>
+        <translation type="unfinished">Kapat</translation>
     </message>
     <message>
         <source>WengoPhone - Update available</source>
-        <translation>WengoPhone - Güncelleme mevcut</translation>
+        <translation type="unfinished">WengoPhone - Güncelleme mevcut</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;An update is available, click &lt;span style=&quot; text-
@@ -311,7 +323,7 @@ color:#0000ff;&quot;&gt;buraya&lt;/span&gt; tıklayınız. Sürüm bilgisi:&lt;b
     <name>CallForwardSettings</name>
     <message>
         <source>Call Forward Settings</source>
-        <translation>Çağrı Yönlendirme Ayarları</translation>
+        <translation type="unfinished">Çağrı Yönlendirme Ayarları</translation>
     </message>
     <message>
         <source>For example +3314500XXXX (+33 is the country code and 14500XXXX is the phone 
@@ -320,27 +332,27 @@ number)</source>
     </message>
     <message>
         <source>3rd:</source>
-        <translation>Üçüncü:</translation>
+        <translation type="unfinished">Üçüncü:</translation>
     </message>
     <message>
         <source>1st:</source>
-        <translation>Birinci:</translation>
+        <translation type="unfinished">Birinci:</translation>
     </message>
     <message>
         <source>2nd:</source>
-        <translation>İkinci:</translation>
+        <translation type="unfinished">İkinci:</translation>
     </message>
     <message>
         <source>(+ country code) phone number</source>
-        <translation>(+ ülke kodu) telefon numarası</translation>
+        <translation type="unfinished">(+ ülke kodu) telefon numarası</translation>
     </message>
     <message>
         <source>Forward all unanswered calls to message box</source>
-        <translation>Cevapsız çağrıları mesaj kutusuna yönlendir</translation>
+        <translation type="unfinished">Cevapsız çağrıları mesaj kutusuna yönlendir</translation>
     </message>
     <message>
         <source>Disable call forwarding</source>
-        <translation>Çağrı yönlendirmeyi devre dışı bırak</translation>
+        <translation type="unfinished">Çağrı yönlendirmeyi devre dışı bırak</translation>
     </message>
     <message>
         <source>Call forwarding is active if you&apos;re not connected to Wengo, when your line 
@@ -354,7 +366,7 @@ ya da sesli mesaj sisteminize (eğer varsa) yönelik yapılandırabilirsiniz.</t
     </message>
     <message>
         <source>Forward all unanswered calls to following phone numbers:</source>
-        <translation>Tüm cevaplandırılmamış çağrıları şu telefon numaralarına yönlendir:</translation>
+        <translation type="unfinished">Tüm cevaplandırılmamış çağrıları şu telefon numaralarına yönlendir:</translation>
     </message>
     <message>
         <source>For example +3314500XXXX (+33 is the country code and 14500XXXX is the phone number)</source>
@@ -369,110 +381,122 @@ ya da sesli mesaj sisteminize (eğer varsa) yönelik yapılandırabilirsiniz.</t
     <name>CallToaster</name>
     <message>
         <source>Incoming Call</source>
-        <translation>Gelen Çağrı</translation>
+        <translation type="unfinished">Gelen Çağrı</translation>
     </message>
     <message>
         <source>Message</source>
-        <translation>Mesaj</translation>
+        <translation type="unfinished">Mesaj</translation>
     </message>
 </context>
 <context>
     <name>ChatMainWindow</name>
     <message>
         <source>MainWindow</source>
-        <translation>Ana Pencere</translation>
+        <translation type="unfinished">Ana Pencere</translation>
     </message>
     <message>
         <source>&amp;Contact</source>
-        <translation>Bağlantı</translation>
+        <translation type="unfinished">Bağlantı</translation>
     </message>
     <message>
         <source>&amp;Wengo</source>
-        <translation>&amp;Wengo</translation>
+        <translation type="unfinished">&amp;Wengo</translation>
     </message>
     <message>
         <source>&amp;Tools</source>
-        <translation>&amp;Araçlar</translation>
+        <translation type="unfinished">&amp;Araçlar</translation>
     </message>
     <message>
         <source>&amp;Help</source>
-        <translation>&amp;Yardım</translation>
+        <translation type="unfinished">&amp;Yardım</translation>
     </message>
     <message>
         <source>&amp;Actions</source>
-        <translation>&amp;Eylemler</translation>
+        <translation type="unfinished">&amp;Eylemler</translation>
     </message>
     <message>
         <source>Main Toolbar</source>
-        <translation>Ana Araç Çubuğu</translation>
+        <translation type="unfinished">Ana Araç Çubuğu</translation>
     </message>
     <message>
         <source>Call Contact</source>
-        <translation>Bağlantıya Çağrı Yap</translation>
+        <translation type="unfinished">Bağlantıya Çağrı Yap</translation>
     </message>
     <message>
         <source>Send a File</source>
-        <translation>Dosya Gönder</translation>
+        <translation type="unfinished">Dosya Gönder</translation>
     </message>
     <message>
         <source>createChatConf</source>
-        <translation>createChatConf</translation>
+        <translation type="unfinished">createChatConf</translation>
     </message>
     <message>
         <source>Show Contact Info</source>
-        <translation>Bağlantı Bilgilerini Göster</translation>
+        <translation type="unfinished">Bağlantı Bilgilerini Göster</translation>
     </message>
     <message>
         <source>blockContact</source>
-        <translation>Bağlantıyı engelle</translation>
+        <translation type="unfinished">Bağlantıyı engelle</translation>
     </message>
     <message>
         <source>&amp;Save History As...</source>
-        <translation>Geçmişi farklı kaydet...</translation>
+        <translation type="unfinished">Geçmişi farklı kaydet...</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>ChatToaster</name>
     <message>
         <source>Message</source>
-        <translation>Mesaj</translation>
+        <translation type="unfinished">Mesaj</translation>
     </message>
     <message>
         <source>Incoming Chat</source>
-        <translation>Gelen Sohbet</translation>
+        <translation type="unfinished">Gelen Sohbet</translation>
     </message>
 </context>
 <context>
     <name>ChatWidget</name>
     <message>
         <source>Form</source>
-        <translation>Form</translation>
+        <translation type="unfinished">Form</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>CloseChatTabWidget</name>
     <message>
         <source>Form</source>
-        <translation>Form</translation>
+        <translation type="unfinished">Form</translation>
     </message>
     <message>
         <source>Close active tab</source>
-        <translation>Etkin sekmeyi kapat</translation>
+        <translation type="unfinished">Etkin sekmeyi kapat</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>ConferenceCallWidget</name>
     <message>
         <source>Cancel</source>
-        <translation>İptal</translation>
+        <translation type="unfinished">İptal</translation>
     </message>
     <message>
         <source>WengoPhone - Create a Conference</source>
-        <translation>WengoPhone - Bir konferans başlat</translation>
+        <translation type="unfinished">WengoPhone - Bir konferans başlat</translation>
     </message>
     <message>
         <source>Start</source>
-        <translation>Başlat</translation>
+        <translation type="unfinished">Başlat</translation>
     </message>
     <message>
         <source>&lt;span style=&quot; font-size:18pt;&quot;&gt;Conference&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;Please enter 
@@ -490,15 +514,19 @@ text-indent:0px;&quot;&gt;ya da Wengo bağlantı kimliğini girin.&lt;/p&gt;</tr
     </message>
     <message>
         <source>Phone number 2:</source>
-        <translation>Telefon numarası 2:</translation>
+        <translation type="unfinished">Telefon numarası 2:</translation>
     </message>
     <message>
         <source>Phone number 1:</source>
-        <translation>Telefon numarası 1:</translation>
+        <translation type="unfinished">Telefon numarası 1:</translation>
     </message>
     <message>
         <source>...</source>
-        <translation>...</translation>
+        <translation type="unfinished">...</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&lt;span style=&quot; font-size:18pt;&quot;&gt;Conference&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;Please enter two phone numbers &lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;or Wengo contact ID in order&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;to create a 3-way conference.&lt;/p&gt;</source>
@@ -509,7 +537,7 @@ text-indent:0px;&quot;&gt;ya da Wengo bağlantı kimliğini girin.&lt;/p&gt;</tr
     <name>ConferenceInviteWidget</name>
     <message>
         <source>Cancel</source>
-        <translation>İptal</translation>
+        <translation type="obsolete">İptal</translation>
     </message>
     <message>
         <source>&lt;span style=&quot; font-size:18pt;&quot;&gt;Conference&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;Please enter 
@@ -527,23 +555,19 @@ text-indent:0px;&quot;&gt;ya da Wengo bağlantı kimliğini girin.&lt;/p&gt;</tr
     </message>
     <message>
         <source>&amp;Add &gt;&gt;</source>
-        <translation>Ekle &gt;&gt;</translation>
+        <translation type="obsolete">Ekle &gt;&gt;</translation>
     </message>
     <message>
         <source>&lt;&lt; &amp;Remove</source>
-        <translation>&lt;&lt; Kaldır</translation>
+        <translation type="obsolete">&lt;&lt; Kaldır</translation>
     </message>
     <message>
         <source>Available Contacts</source>
-        <translation>Erişilebilir Bağlantılar</translation>
+        <translation type="obsolete">Erişilebilir Bağlantılar</translation>
     </message>
     <message>
         <source>&amp;Start</source>
-        <translation>&amp;Başlat</translation>
-    </message>
-    <message>
-        <source>&lt;span style=&quot; font-size:18pt;&quot;&gt;Conference&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;Please enter two phone numbers &lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;or Wengo contact ID in order&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;to create a 3-way conference.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">&amp;Başlat</translation>
     </message>
 </context>
 <context>
@@ -577,29 +601,33 @@ text-indent:0px;&quot;&gt;ya da Wengo bağlantı kimliğini girin.&lt;/p&gt;</tr
     <name>ContactList</name>
     <message>
         <source>Contact List</source>
-        <translation>Bağlantı Listesi</translation>
+        <translation type="unfinished">Bağlantı Listesi</translation>
     </message>
 </context>
 <context>
     <name>ContactWidget</name>
     <message>
         <source>No mobile phone number set</source>
-        <translation>Henüz bir cep telefonu numarası girilmedi</translation>
+        <translation type="unfinished">Henüz bir cep telefonu numarası girilmedi</translation>
     </message>
     <message>
         <source>No landline phone number set</source>
-        <translation>Henüz bir sabit telefon numarası girilmedi</translation>
+        <translation type="unfinished">Henüz bir sabit telefon numarası girilmedi</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>CrashReport</name>
     <message>
         <source>Cancel</source>
-        <translation>İptal</translation>
+        <translation type="obsolete">İptal</translation>
     </message>
     <message>
         <source>Program Failure</source>
-        <translation>Program Hatası</translation>
+        <translation type="obsolete">Program Hatası</translation>
     </message>
     <message>
         <source>The WengoPhone execution failed and has generated a diagnostic file.&lt;br&gt;This 
@@ -613,11 +641,11 @@ Takımı.</translation>
     </message>
     <message>
         <source>Send</source>
-        <translation>Gönder</translation>
+        <translation type="obsolete">Gönder</translation>
     </message>
     <message>
         <source>Optional Information</source>
-        <translation>Seçimlik Bilgiler</translation>
+        <translation type="obsolete">Seçimlik Bilgiler</translation>
     </message>
     <message>
         <source>In order to help the developers you can complete this report. This step is 
@@ -627,50 +655,42 @@ zorunlu değildir. &lt;br&gt; Hata Tanımı kısmını kullanınız:</translatio
     </message>
     <message>
         <source>Your Mail:</source>
-        <translation>E-posta adresiniz:</translation>
-    </message>
-    <message>
-        <source>The WengoPhone execution failed and has generated a diagnostic file.&lt;br&gt;This file contains usefull information to solve the problem you are encounting.&lt;br&gt;Thanks for your contribution.&lt;br&gt;&lt;br&gt;The WengoPhone Development Team.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>In order to help the developers you can complete this report. This step is optional.&lt;br&gt;Use Case Description:</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">E-posta adresiniz:</translation>
     </message>
 </context>
 <context>
     <name>CreditWidget</name>
     <message>
         <source>Your Wengo phone number</source>
-        <translation>Wengo telefo numaranız</translation>
+        <translation type="unfinished">Wengo telefo numaranız</translation>
     </message>
     <message>
         <source>Not Available</source>
-        <translation>Erişilebilir Değil</translation>
+        <translation type="unfinished">Erişilebilir Değil</translation>
     </message>
     <message>
         <source>Your phone number:</source>
-        <translation>Telefon numaranız:</translation>
+        <translation type="unfinished">Telefon numaranız:</translation>
     </message>
     <message>
         <source>Click here to change your call forward settings</source>
-        <translation>Çağrı yönlendirme ayarlarını değiştirmek için buraya tıklayınız.</translation>
+        <translation type="unfinished">Çağrı yönlendirme ayarlarını değiştirmek için buraya tıklayınız.</translation>
     </message>
     <message>
         <source>Call forward mode:</source>
-        <translation>Çağrı yönlendirme modu:</translation>
+        <translation type="unfinished">Çağrı yönlendirme modu:</translation>
     </message>
     <message>
         <source>Click here to buy Wengo&apos;s credits</source>
-        <translation>Wengo&apos;dan kontör satın almak için buraya tıklayın</translation>
+        <translation type="unfinished">Wengo&apos;dan kontör satın almak için buraya tıklayın</translation>
     </message>
     <message>
         <source>Purchase call out credits</source>
-        <translation>Kontör satın al</translation>
+        <translation type="unfinished">Kontör satın al</translation>
     </message>
     <message>
         <source>Call Forward Method</source>
-        <translation>Çağrı Yönlendirme Yöntemi</translation>
+        <translation type="unfinished">Çağrı Yönlendirme Yöntemi</translation>
     </message>
     <message>
         <source>Call Voice Mail</source>
@@ -681,41 +701,41 @@ zorunlu değildir. &lt;br&gt; Hata Tanımı kısmını kullanınız:</translatio
     <name>DialpadWidget</name>
     <message>
         <source>Audio Smileys</source>
-        <translation>Sesli fuygu simgeleri</translation>
+        <translation type="obsolete">Sesli fuygu simgeleri</translation>
     </message>
 </context>
 <context>
     <name>EventWidget</name>
     <message>
         <source>0</source>
-        <translation>0</translation>
+        <translation type="unfinished">0</translation>
     </message>
     <message>
         <source>Click here to call your voice mail</source>
-        <translation>Sesli mesaj sisteminiz için buraya tıklayın</translation>
+        <translation type="unfinished">Sesli mesaj sisteminiz için buraya tıklayın</translation>
     </message>
     <message>
         <source>New Voice Mail:</source>
-        <translation>Yeni Sesli Mesaj:</translation>
+        <translation type="unfinished">Yeni Sesli Mesaj:</translation>
     </message>
     <message>
         <source>Click here to see missed call(s)</source>
-        <translation>Cevapsız çağrıları görmek için buraya tıklayın</translation>
+        <translation type="unfinished">Cevapsız çağrıları görmek için buraya tıklayın</translation>
     </message>
     <message>
         <source>Missed Call(s):</source>
-        <translation>Cevapsız Arama(lar):</translation>
+        <translation type="unfinished">Cevapsız Arama(lar):</translation>
     </message>
 </context>
 <context>
     <name>FileTransferItem</name>
     <message>
         <source>Cancel</source>
-        <translation>İptal</translation>
+        <translation type="unfinished">İptal</translation>
     </message>
     <message>
         <source>Form</source>
-        <translation>Form</translation>
+        <translation type="unfinished">Form</translation>
     </message>
     <message>
         <source>From:</source>
@@ -723,7 +743,11 @@ zorunlu değildir. &lt;br&gt; Hata Tanımı kısmını kullanınız:</translatio
     </message>
     <message>
         <source>Pause</source>
-        <translation>Ara ver</translation>
+        <translation type="unfinished">Ara ver</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&lt;i&gt;From:&lt;/i&gt;</source>
@@ -734,11 +758,11 @@ zorunlu değildir. &lt;br&gt; Hata Tanımı kısmını kullanınız:</translatio
     <name>FileTransferWidget</name>
     <message>
         <source>...</source>
-        <translation>...</translation>
+        <translation type="unfinished">...</translation>
     </message>
     <message>
         <source>WengoPhone - File Transfer Manager</source>
-        <translation>WengoPhone - Dosya Transferi Yöneticisi</translation>
+        <translation type="unfinished">WengoPhone - Dosya Transferi Yöneticisi</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
@@ -756,15 +780,15 @@ buraya tıklayınız&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>Download folder:</source>
-        <translation>Dosya indirme dizini:</translation>
+        <translation type="unfinished">Dosya indirme dizini:</translation>
     </message>
     <message>
         <source>Download</source>
-        <translation>İndir</translation>
+        <translation type="unfinished">İndir</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Gönder</translation>
+        <translation type="unfinished">Gönder</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
@@ -780,7 +804,7 @@ indent:0; text-indent:0px;&quot;&gt;Listedeki tüm öğeleri temizle&lt;/p&gt;&l
     </message>
     <message>
         <source>&amp;Clean</source>
-        <translation>Temizle</translation>
+        <translation type="unfinished">Temizle</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Click here to change your download folder&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
@@ -795,11 +819,11 @@ indent:0; text-indent:0px;&quot;&gt;Listedeki tüm öğeleri temizle&lt;/p&gt;&l
     <name>Form</name>
     <message>
         <source>&amp;Start</source>
-        <translation>&amp;Başlat</translation>
+        <translation type="obsolete">&amp;Başlat</translation>
     </message>
     <message>
         <source>Chat room</source>
-        <translation>Sohbet odası</translation>
+        <translation type="obsolete">Sohbet odası</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
@@ -817,143 +841,143 @@ weight:600;&quot;&gt;Sohbet odası&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&
     </message>
     <message>
         <source>(Conference participants)</source>
-        <translation>(Konferans katılımcıları)</translation>
+        <translation type="obsolete">(Konferans katılımcıları)</translation>
     </message>
     <message>
         <source>&amp;Remove</source>
-        <translation>&amp;Kaldır</translation>
+        <translation type="obsolete">&amp;Kaldır</translation>
     </message>
     <message>
         <source>Group Name</source>
-        <translation>Drup Adı</translation>
+        <translation type="obsolete">Drup Adı</translation>
     </message>
     <message>
         <source>&amp;Add</source>
-        <translation>&amp;Ekle</translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;&gt;Chat room&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">&amp;Ekle</translation>
     </message>
 </context>
 <context>
     <name>GeneralSettings</name>
     <message>
         <source>General Settings</source>
-        <translation>Genel Ayarlar</translation>
+        <translation type="unfinished">Genel Ayarlar</translation>
     </message>
     <message>
         <source>When I double-click on a contact </source>
-        <translation>Bir bağlantıya çift tıkladığımda </translation>
+        <translation type="unfinished">Bir bağlantıya çift tıkladığımda </translation>
     </message>
     <message>
         <source>Start a free call if applicable</source>
-        <translation>Mümkünse PC&apos;den PC&apos;ye ücretsiz çağrı başlat</translation>
+        <translation type="unfinished">Mümkünse PC&apos;den PC&apos;ye ücretsiz çağrı başlat</translation>
     </message>
     <message>
         <source>Call cell phone or land line if contact not online</source>
-        <translation>Bağlantı çevrimiçi değilsecebinden ya da sabit numarasından ara</translation>
+        <translation type="unfinished">Bağlantı çevrimiçi değilsecebinden ya da sabit numarasından ara</translation>
     </message>
     <message>
         <source>Always start a chat</source>
-        <translation>Her zaman sohbet başlat</translation>
+        <translation type="unfinished">Her zaman sohbet başlat</translation>
     </message>
     <message>
         <source>Idle status</source>
-        <translation>Boşta</translation>
+        <translation type="unfinished">Boşta</translation>
     </message>
     <message>
         <source>minutes</source>
-        <translation>dakika</translation>
+        <translation type="unfinished">dakika</translation>
     </message>
     <message>
         <source>Show me as &quot;Away&quot; when I am inactive for:</source>
-        <translation>Şu süreden fazla bir süre aktif olmadığımda beni &quot;Uzakta&quot; işaretle:</translation>
+        <translation type="unfinished">Şu süreden fazla bir süre aktif olmadığımda beni &quot;Uzakta&quot; işaretle:</translation>
     </message>
     <message>
         <source>When I start my computer</source>
-        <translation>Bilgisayarımı açtığımda</translation>
+        <translation type="unfinished">Bilgisayarımı açtığımda</translation>
     </message>
     <message>
         <source>Automatically start WengoPhone</source>
-        <translation>WengoPhone&apos;u otomatik başlat</translation>
+        <translation type="unfinished">WengoPhone&apos;u otomatik başlat</translation>
     </message>
     <message>
         <source>&amp;Edit my profile</source>
-        <translation>&amp;Kişisel bilgilerimi düzenle</translation>
+        <translation type="unfinished">&amp;Kişisel bilgilerimi düzenle</translation>
     </message>
 </context>
 <context>
     <name>GoogleTalkSettings</name>
     <message>
         <source>Password:</source>
-        <translation>Parola:</translation>
+        <translation type="unfinished">Parola:</translation>
     </message>
     <message>
         <source>Login:</source>
-        <translation>Kullanıcı Adı:</translation>
+        <translation type="unfinished">Kullanıcı Adı:</translation>
     </message>
     <message>
         <source>GoogleTalk Settings</source>
-        <translation>GoogleTalk Ayarları</translation>
+        <translation type="unfinished">GoogleTalk Ayarları</translation>
     </message>
     <message>
         <source>Forgot your GoogleTalk password?</source>
-        <translation>GoogleTalk parolanızı mı unuttunuz?</translation>
+        <translation type="unfinished">GoogleTalk parolanızı mı unuttunuz?</translation>
     </message>
     <message>
         <source>Get a new GoogleTalk Account</source>
-        <translation>Yeni bir GoogleTalk Hesabı Aç</translation>
+        <translation type="unfinished">Yeni bir GoogleTalk Hesabı Aç</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>HistoryWidget</name>
     <message>
         <source>Type</source>
-        <translation>Tür</translation>
+        <translation type="unfinished">Tür</translation>
     </message>
     <message>
         <source>Name/ID</source>
-        <translation>İsim/Kimlik</translation>
+        <translation type="unfinished">İsim/Kimlik</translation>
     </message>
     <message>
         <source>Date</source>
-        <translation>Tarih</translation>
+        <translation type="unfinished">Tarih</translation>
     </message>
     <message>
         <source>Duration</source>
-        <translation>Süre</translation>
+        <translation type="unfinished">Süre</translation>
     </message>
 </context>
 <context>
     <name>HttpProxyLoginWindow</name>
     <message>
         <source>Cancel</source>
-        <translation>İptal</translation>
+        <translation type="unfinished">İptal</translation>
     </message>
     <message>
         <source>WengoPhone - Local HTTP Proxy</source>
-        <translation>WengoPhone - Yerel HTTP Vekil Sunucu</translation>
+        <translation type="unfinished">WengoPhone - Yerel HTTP Vekil Sunucu</translation>
     </message>
     <message>
         <source>HTTP Proxy Address:</source>
-        <translation>HTTP Vekil Sunucu Adresleri:</translation>
+        <translation type="unfinished">HTTP Vekil Sunucu Adresleri:</translation>
     </message>
     <message>
         <source>HTTP Proxy Port Number:</source>
-        <translation>HTTP Vekil Sunucu Portları:</translation>
+        <translation type="unfinished">HTTP Vekil Sunucu Portları:</translation>
     </message>
     <message>
         <source>HTTP Proxy Login:</source>
-        <translation>HTTP Vekil Sunucu Girişi:</translation>
+        <translation type="unfinished">HTTP Vekil Sunucu Girişi:</translation>
     </message>
     <message>
         <source>HTTP Proxy Password:</source>
-        <translation>HTTP Vekil Sunucu Parolası:</translation>
+        <translation type="unfinished">HTTP Vekil Sunucu Parolası:</translation>
     </message>
     <message>
         <source>OK</source>
-        <translation>Tamam</translation>
+        <translation type="unfinished">Tamam</translation>
     </message>
     <message>
         <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;HTTP Proxy Authentication&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;Your local HTTP proxy uses authentication&lt;br&gt;Please enter your login and password&lt;/span&gt;</source>
@@ -964,178 +988,178 @@ weight:600;&quot;&gt;Sohbet odası&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&
     <name>IMAccountManager</name>
     <message>
         <source>Close</source>
-        <translation>Kapat</translation>
+        <translation type="unfinished">Kapat</translation>
     </message>
     <message>
         <source>Login</source>
-        <translation>Kullanıcı Adı:</translation>
+        <translation type="unfinished">Kullanıcı Adı:</translation>
     </message>
     <message>
         <source>Add</source>
-        <translation>Ekle</translation>
+        <translation type="unfinished">Ekle</translation>
     </message>
     <message>
         <source>WengoPhone - My Instant Messaging Accounts (MSN, Jabber...)</source>
-        <translation>WengoPhone - Hızlı Mesajlaşma Hesaplarım (MSN, Jabber...)</translation>
+        <translation type="unfinished">WengoPhone - Hızlı Mesajlaşma Hesaplarım (MSN, Jabber...)</translation>
     </message>
     <message>
         <source>Protocol</source>
-        <translation>Protokol</translation>
+        <translation type="unfinished">Protokol</translation>
     </message>
     <message>
         <source>Enabled</source>
-        <translation>Etkintn
+        <translation type="unfinished">Etkintn
 Etkin</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation>Kaldır</translation>
+        <translation type="unfinished">Kaldır</translation>
     </message>
     <message>
         <source>Modify</source>
-        <translation>Değiştir</translation>
+        <translation type="unfinished">Değiştir</translation>
     </message>
 </context>
 <context>
     <name>IMAccountTemplate</name>
     <message>
         <source>Cancel</source>
-        <translation>İptal</translation>
+        <translation type="unfinished">İptal</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation>Kaydet</translation>
+        <translation type="unfinished">Kaydet</translation>
     </message>
     <message>
         <source>IM Account Settings</source>
-        <translation>Hızlı Mesajlaşma Hesabı Ayarları</translation>
+        <translation type="unfinished">Hızlı Mesajlaşma Hesabı Ayarları</translation>
     </message>
 </context>
 <context>
     <name>IMContactManager</name>
     <message>
         <source>Add</source>
-        <translation>Ekle</translation>
+        <translation type="unfinished">Ekle</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation>Kaldır</translation>
+        <translation type="unfinished">Kaldır</translation>
     </message>
     <message>
         <source>Contact ID</source>
-        <translation>Bağlantı Kimliği</translation>
+        <translation type="unfinished">Bağlantı Kimliği</translation>
     </message>
     <message>
         <source>Contact Type (protocol)</source>
-        <translation>İletişim Türü (protokol)</translation>
+        <translation type="unfinished">İletişim Türü (protokol)</translation>
     </message>
     <message>
         <source>Click on the add button below to add a new ID</source>
-        <translation>Yeni kimlik eklemek için &quot;Ekle&quot; tuşuna basınız</translation>
+        <translation type="unfinished">Yeni kimlik eklemek için &quot;Ekle&quot; tuşuna basınız</translation>
     </message>
 </context>
 <context>
     <name>IMProfileWidget</name>
     <message>
         <source>Edit My Profile</source>
-        <translation>Profilimi Düzenle</translation>
+        <translation type="unfinished">Profilimi Düzenle</translation>
     </message>
     <message>
         <source>AIM/ICQ</source>
-        <translation>AIM/ICQ</translation>
+        <translation type="unfinished">AIM/ICQ</translation>
     </message>
     <message>
         <source>Yahoo!</source>
-        <translation>Yahoo!</translation>
+        <translation type="unfinished">Yahoo!</translation>
     </message>
     <message>
         <source>Wengo</source>
-        <translation>Wengo</translation>
+        <translation type="unfinished">Wengo</translation>
     </message>
     <message>
         <source>Jabber/GoogleTalk</source>
-        <translation>Jabber/GoogleTalk</translation>
+        <translation type="unfinished">Jabber/GoogleTalk</translation>
     </message>
     <message>
         <source>MSN</source>
-        <translation>MSN</translation>
+        <translation type="unfinished">MSN</translation>
     </message>
     <message>
         <source>Enter your nickname here</source>
-        <translation>Takma adınızı buraya girin</translation>
+        <translation type="unfinished">Takma adınızı buraya girin</translation>
     </message>
 </context>
 <context>
     <name>JabberSettings</name>
     <message>
         <source>Password:</source>
-        <translation>Parola:</translation>
+        <translation type="unfinished">Parola:</translation>
     </message>
     <message>
         <source>Login:</source>
-        <translation>Kullanıcı Adı:</translation>
+        <translation type="unfinished">Kullanıcı Adı:</translation>
     </message>
     <message>
         <source>Jabber Settings</source>
-        <translation>Jabber Ayarları</translation>
+        <translation type="unfinished">Jabber Ayarları</translation>
     </message>
     <message>
         <source>Connect Server:</source>
-        <translation>Sunucuya Bağlan:</translation>
+        <translation type="unfinished">Sunucuya Bağlan:</translation>
     </message>
     <message>
         <source>&lt;u&gt;Advanced Options&lt;/u&gt;</source>
-        <translation>&lt;u&gt;Gelişmiş Ayarlar&lt;/u&gt;</translation>
+        <translation type="unfinished">&lt;u&gt;Gelişmiş Ayarlar&lt;/u&gt;</translation>
     </message>
     <message>
         <source>Require TLS</source>
-        <translation>TLS gerekiyor</translation>
+        <translation type="unfinished">TLS gerekiyor</translation>
     </message>
     <message>
         <source>Port:</source>
-        <translation>Port:</translation>
+        <translation type="unfinished">Port:</translation>
     </message>
     <message>
         <source>Use TLS if available</source>
-        <translation>Varsa TLS&apos;i kullan</translation>
+        <translation type="unfinished">Varsa TLS&apos;i kullan</translation>
     </message>
     <message>
         <source>Allow plaintext authentication over unencrypted streams</source>
-        <translation>Düz metin parola şifrelemesine izin ver</translation>
+        <translation type="unfinished">Düz metin parola şifrelemesine izin ver</translation>
     </message>
     <message>
         <source>5222</source>
-        <translation>5222</translation>
+        <translation type="unfinished">5222</translation>
     </message>
     <message>
         <source>Force old (port 5223) SSL</source>
-        <translation>Eski SSL portunu (port 5223) kullanmaya zorla</translation>
+        <translation type="unfinished">Eski SSL portunu (port 5223) kullanmaya zorla</translation>
     </message>
 </context>
 <context>
     <name>LanguagesSettings</name>
     <message>
         <source>Language</source>
-        <translation>Dil</translation>
+        <translation type="unfinished">Dil</translation>
     </message>
 </context>
 <context>
     <name>LoginWindow</name>
     <message>
         <source>Password:</source>
-        <translation>Parola:</translation>
+        <translation type="unfinished">Parola:</translation>
     </message>
     <message>
         <source>Login</source>
-        <translation>Kullanıcı Adı:</translation>
+        <translation type="unfinished">Kullanıcı Adı:</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>İptal</translation>
+        <translation type="unfinished">İptal</translation>
     </message>
     <message>
         <source>WengoPhone - Login</source>
-        <translation>WengoPhone - Giriş</translation>
+        <translation type="unfinished">WengoPhone - Giriş</translation>
     </message>
     <message>
         <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Login&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;Please enter your 
@@ -1145,19 +1169,23 @@ adresinizi ve &lt;br&gt;şifrenizi girin&lt;/span&gt;</translation>
     </message>
     <message>
         <source>Forgot your password?</source>
-        <translation>Parolanızı mı unuttunuz?</translation>
+        <translation type="unfinished">Parolanızı mı unuttunuz?</translation>
     </message>
     <message>
         <source>Need help?</source>
-        <translation>Yardıma ihtiyacınız var mı?</translation>
+        <translation type="unfinished">Yardıma ihtiyacınız var mı?</translation>
     </message>
     <message>
         <source>Email Address:</source>
-        <translation>E-posta Adresi:</translation>
+        <translation type="unfinished">E-posta Adresi:</translation>
     </message>
     <message>
         <source>Click here if you don&apos;t have a Wengo account</source>
-        <translation>Henüz bir WengoPhone hesabınız yoksa buraya tıklayın</translation>
+        <translation type="unfinished">Henüz bir WengoPhone hesabınız yoksa buraya tıklayın</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Login&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;Please enter your email address and&lt;br&gt;password&lt;/span&gt;</source>
@@ -1168,167 +1196,171 @@ adresinizi ve &lt;br&gt;şifrenizi girin&lt;/span&gt;</translation>
     <name>MSNSettings</name>
     <message>
         <source>Password:</source>
-        <translation>Parola:</translation>
+        <translation type="unfinished">Parola:</translation>
     </message>
     <message>
         <source>Login:</source>
-        <translation>Kullanıcı Adı:</translation>
+        <translation type="unfinished">Kullanıcı Adı:</translation>
     </message>
     <message>
         <source>MSN Settings</source>
-        <translation>MSN Ayarları</translation>
+        <translation type="unfinished">MSN Ayarları</translation>
     </message>
     <message>
         <source>Forgot your MSN password?</source>
-        <translation>MSN parolanızı mı unuttunuz?</translation>
+        <translation type="unfinished">MSN parolanızı mı unuttunuz?</translation>
     </message>
     <message>
         <source>Get a new MSN Account</source>
-        <translation>Yeni bir MSN hesabı aç</translation>
+        <translation type="unfinished">Yeni bir MSN hesabı aç</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>MainWindow</name>
     <message>
         <source>MainWindow</source>
-        <translation>Ana Pencere</translation>
+        <translation type="obsolete">Ana Pencere</translation>
     </message>
     <message>
         <source>Command::terminate()</source>
-        <translation>Command::terminate()</translation>
+        <translation type="obsolete">Command::terminate()</translation>
     </message>
     <message>
         <source>Command::start()</source>
-        <translation>Command::start()</translation>
+        <translation type="obsolete">Command::start()</translation>
     </message>
     <message>
         <source>Accept Call</source>
-        <translation>Çağrıyı Kabul Et</translation>
+        <translation type="obsolete">Çağrıyı Kabul Et</translation>
     </message>
     <message>
         <source>Send Chat Message</source>
-        <translation>Sohbet İletisi Gönder</translation>
+        <translation type="obsolete">Sohbet İletisi Gönder</translation>
     </message>
     <message>
         <source>Make Call</source>
-        <translation>Çağrı  Yap</translation>
+        <translation type="obsolete">Çağrı  Yap</translation>
     </message>
     <message>
         <source>Hang Up</source>
-        <translation>Kapat</translation>
+        <translation type="obsolete">Kapat</translation>
     </message>
 </context>
 <context>
     <name>ManageBlockedUsersSettings</name>
     <message>
         <source>Close</source>
-        <translation>Kapat</translation>
+        <translation type="unfinished">Kapat</translation>
     </message>
     <message>
         <source>WengoPhone - Manage blocked users</source>
-        <translation>WengoPhone - Engellenen kullanıcıları yönet</translation>
+        <translation type="unfinished">WengoPhone - Engellenen kullanıcıları yönet</translation>
     </message>
     <message>
         <source>Unblock User</source>
-        <translation>Kullanıcı üzerindeki engellemeyi kaldır</translation>
+        <translation type="unfinished">Kullanıcı üzerindeki engellemeyi kaldır</translation>
     </message>
     <message>
         <source>Manage blocked users</source>
-        <translation>Engellenmiş kullanıcıları yönet</translation>
+        <translation type="unfinished">Engellenmiş kullanıcıları yönet</translation>
     </message>
 </context>
 <context>
     <name>NotificationSettings</name>
     <message>
         <source>Standard Notifications</source>
-        <translation>Standart Uyarılar</translation>
+        <translation type="unfinished">Standart Uyarılar</translation>
     </message>
     <message>
         <source>Show pop-up window for incoming chats</source>
-        <translation>Sohbet başlangıcı için pop-up pencereyle uyar</translation>
+        <translation type="unfinished">Sohbet başlangıcı için pop-up pencereyle uyar</translation>
     </message>
     <message>
         <source>Show pop-up window when a contact is turning online</source>
-        <translation>Bağlantı çevrimiçi olduğunda pop-up pencere ile uyar</translation>
+        <translation type="unfinished">Bağlantı çevrimiçi olduğunda pop-up pencere ile uyar</translation>
     </message>
     <message>
         <source>Show pop-up window for incoming calls</source>
-        <translation>Gelen çağrılar için pop-up pencere göster</translation>
+        <translation type="unfinished">Gelen çağrılar için pop-up pencere göster</translation>
     </message>
     <message>
         <source>Advanced Notifications</source>
-        <translation>Gelişmiş Uyarılar</translation>
+        <translation type="unfinished">Gelişmiş Uyarılar</translation>
     </message>
     <message>
         <source>Do not show any pop-up window</source>
-        <translation>Herhangi bir pop-up pencere gösterme</translation>
+        <translation type="unfinished">Herhangi bir pop-up pencere gösterme</translation>
     </message>
     <message>
         <source>When switched to &quot;Away&quot;:</source>
-        <translation>&quot;Uzakta&quot; durumuna geçildiğinde:</translation>
+        <translation type="unfinished">&quot;Uzakta&quot; durumuna geçildiğinde:</translation>
     </message>
     <message>
         <source>When switched to &quot;Do Not Disturb&quot;:</source>
-        <translation>&quot;Rahatsız Etmeyin&quot; durumuna geçildiğinde:</translation>
+        <translation type="unfinished">&quot;Rahatsız Etmeyin&quot; durumuna geçildiğinde:</translation>
     </message>
     <message>
         <source>No audio notifications</source>
-        <translation>Sesli uyarılar olmasın</translation>
+        <translation type="unfinished">Sesli uyarılar olmasın</translation>
     </message>
     <message>
         <source>Activate sounds for/when</source>
-        <translation>Sesleri şu durumlarda etkinleştir</translation>
+        <translation type="unfinished">Sesleri şu durumlarda etkinleştir</translation>
     </message>
     <message>
         <source>No sound</source>
-        <translation>Sessiz</translation>
+        <translation type="unfinished">Sessiz</translation>
     </message>
     <message>
         <source>Sound file</source>
-        <translation>Ses dosyası</translation>
+        <translation type="unfinished">Ses dosyası</translation>
     </message>
     <message>
         <source>Play sound file</source>
-        <translation>Ses dosyasını oynat</translation>
+        <translation type="unfinished">Ses dosyasını oynat</translation>
     </message>
     <message>
         <source>Find a sound file</source>
-        <translation>Ses dosyası bul</translation>
+        <translation type="unfinished">Ses dosyası bul</translation>
     </message>
     <message>
         <source>Incoming call (ringtone)</source>
-        <translation>Gelen çağrı (zil sesi)</translation>
+        <translation type="unfinished">Gelen çağrı (zil sesi)</translation>
     </message>
     <message>
         <source>Call closed (hang up tone)</source>
-        <translation>Çağrı sona erdi (kapanma sinyali)</translation>
+        <translation type="unfinished">Çağrı sona erdi (kapanma sinyali)</translation>
     </message>
     <message>
         <source>Incoming chat</source>
-        <translation>Gelen sohbet çağrısı</translation>
+        <translation type="unfinished">Gelen sohbet çağrısı</translation>
     </message>
     <message>
         <source>IM account connected</source>
-        <translation>Hızlı mesajlaşma hesabına bağlanıldı</translation>
+        <translation type="unfinished">Hızlı mesajlaşma hesabına bağlanıldı</translation>
     </message>
     <message>
         <source>IM account disconnected</source>
-        <translation>Hızlı mesajlaşma hesabı bağlantısı kesildi</translation>
+        <translation type="unfinished">Hızlı mesajlaşma hesabı bağlantısı kesildi</translation>
     </message>
     <message>
         <source>Contact online</source>
-        <translation>Bağlantı çevrimiçi</translation>
+        <translation type="unfinished">Bağlantı çevrimiçi</translation>
     </message>
 </context>
 <context>
     <name>PhoneCallWidget</name>
     <message>
         <source>Status</source>
-        <translation>Durum</translation>
+        <translation type="unfinished">Durum</translation>
     </message>
     <message>
         <source>Duration</source>
-        <translation>Süre</translation>
+        <translation type="unfinished">Süre</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
@@ -1345,6 +1377,10 @@ indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-si
 font-weight:600;&quot;&gt;Takma ad ya da numara&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
+        <source></source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-size:13pt; font-weight:600;&quot;&gt;NickName or number&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1353,146 +1389,146 @@ font-weight:600;&quot;&gt;Takma ad ya da numara&lt;/span&gt;&lt;/p&gt;&lt;/body&
     <name>PrivacySettings</name>
     <message>
         <source>Manage blocked users</source>
-        <translation>Engellenmiş kullanıcıları yönet</translation>
+        <translation type="unfinished">Engellenmiş kullanıcıları yönet</translation>
     </message>
     <message>
         <source>Privacy Rules </source>
-        <translation>Gizlilik Kuralları </translation>
+        <translation type="unfinished">Gizlilik Kuralları </translation>
     </message>
     <message>
         <source>When I sign into Wengo</source>
-        <translation>Wengo&apos;ya bağlandığımda</translation>
+        <translation type="unfinished">Wengo&apos;ya bağlandığımda</translation>
     </message>
     <message>
         <source>Always sign in as &quot;Invisible&quot; (appear offline to all users)</source>
-        <translation>Herzaman &quot;Görünmez&quot; modda bağlan (diğer kullanıcılara çevrimdışı gözük)</translation>
+        <translation type="unfinished">Herzaman &quot;Görünmez&quot; modda bağlan (diğer kullanıcılara çevrimdışı gözük)</translation>
     </message>
     <message>
         <source>Allow chats from</source>
-        <translation>Şunlarla sohbete izin ver</translation>
+        <translation type="unfinished">Şunlarla sohbete izin ver</translation>
     </message>
     <message>
         <source>Anyone</source>
-        <translation>Herkes</translation>
+        <translation type="unfinished">Herkes</translation>
     </message>
     <message>
         <source>Only people from my contact list</source>
-        <translation>Sadece bağlantı listemdeki kişiler</translation>
+        <translation type="unfinished">Sadece bağlantı listemdeki kişiler</translation>
     </message>
     <message>
         <source>Allow calls from</source>
-        <translation>Şu kişiden çağrılara izin ver:</translation>
+        <translation type="unfinished">Şu kişiden çağrılara izin ver:</translation>
     </message>
 </context>
 <context>
     <name>ProfileDetails</name>
     <message>
         <source>Cancel</source>
-        <translation>İptal</translation>
+        <translation type="unfinished">İptal</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation>Kaydet</translation>
+        <translation type="unfinished">Kaydet</translation>
     </message>
     <message>
         <source>General</source>
-        <translation>Genel</translation>
+        <translation type="unfinished">Genel</translation>
     </message>
     <message>
         <source>Network IDs (MSN, Jabber...)</source>
-        <translation>Ağ kimlikleri (MSN, Jabber...)</translation>
+        <translation type="unfinished">Ağ kimlikleri (MSN, Jabber...)</translation>
     </message>
     <message>
         <source>Advanced &gt;&gt;</source>
-        <translation>Gelişmiş&gt;&gt;</translation>
-    </message>
-    <message>
-        <source>Fill in all your network Id to stay connected with your contacts</source>
-        <translation></translation>
+        <translation type="unfinished">Gelişmiş&gt;&gt;</translation>
     </message>
     <message>
         <source>Phone Numbers</source>
-        <translation>Telefon Numaraları</translation>
+        <translation type="unfinished">Telefon Numaraları</translation>
     </message>
     <message>
         <source>Home phone</source>
-        <translation>Ev telefonu</translation>
+        <translation type="unfinished">Ev telefonu</translation>
     </message>
     <message>
         <source>Mobile phone</source>
-        <translation>Cep telefonu</translation>
+        <translation type="unfinished">Cep telefonu</translation>
     </message>
     <message>
         <source>Contact</source>
-        <translation>Bağlantı</translation>
+        <translation type="unfinished">Bağlantı</translation>
     </message>
     <message>
         <source>Group:</source>
-        <translation>Grup:</translation>
+        <translation type="unfinished">Grup:</translation>
     </message>
     <message>
         <source>Last Name:</source>
-        <translation>Soyadı:</translation>
+        <translation type="unfinished">Soyadı:</translation>
     </message>
     <message>
         <source>First Name:</source>
-        <translation>Adı:</translation>
+        <translation type="unfinished">Adı:</translation>
     </message>
     <message>
         <source>Click to change avatar</source>
-        <translation>Küçük resmi değiştirmek için tıklayın</translation>
+        <translation type="unfinished">Küçük resmi değiştirmek için tıklayın</translation>
     </message>
     <message>
         <source>Details</source>
-        <translation>Ayrıntılar</translation>
+        <translation type="unfinished">Ayrıntılar</translation>
     </message>
     <message>
         <source>Web/blog:</source>
-        <translation>Web/Blog:</translation>
+        <translation type="unfinished">Web/Blog:</translation>
     </message>
     <message>
         <source>Country:</source>
-        <translation>Ülke:</translation>
+        <translation type="unfinished">Ülke:</translation>
     </message>
     <message>
         <source>State:</source>
-        <translation>İlçe:</translation>
+        <translation type="unfinished">İlçe:</translation>
     </message>
     <message>
         <source>City:</source>
-        <translation>İl:</translation>
+        <translation type="unfinished">İl:</translation>
     </message>
     <message>
         <source>Gender:</source>
-        <translation>Cinsiyet:</translation>
+        <translation type="unfinished">Cinsiyet:</translation>
     </message>
     <message>
         <source>Birth Date:</source>
-        <translation>Doğum Tarihi:</translation>
+        <translation type="unfinished">Doğum Tarihi:</translation>
     </message>
     <message>
         <source>Email:</source>
-        <translation>E-Posta:</translation>
+        <translation type="unfinished">E-Posta:</translation>
     </message>
     <message>
         <source>dd MMMM yyyy</source>
-        <translation>gg AAAA yyyy</translation>
+        <translation type="unfinished">gg AAAA yyyy</translation>
     </message>
     <message>
         <source>Unknown</source>
-        <translation>Bilinmiyor</translation>
+        <translation type="unfinished">Bilinmiyor</translation>
     </message>
     <message>
         <source>Male</source>
-        <translation>Bay</translation>
+        <translation type="unfinished">Bay</translation>
     </message>
     <message>
         <source>Female</source>
-        <translation>Bayan</translation>
+        <translation type="unfinished">Bayan</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation>Notlar</translation>
+        <translation type="unfinished">Notlar</translation>
+    </message>
+    <message>
+        <source>Fill in all your network Id to stay connected with your contacts</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1830,7 +1866,11 @@ font-weight:600;&quot;&gt;Takma ad ya da numara&lt;/span&gt;&lt;/p&gt;&lt;/body&
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt;font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px;margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;font-size:8pt;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;A contact is trying to send you a file:&lt;/span&gt; but his WengoPhone must be upgraded in order to receive it. Tell him to download the latest version.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt;font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px;margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;font-size:8pt;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> is trying to send you a file:&lt;/span&gt; but his WengoPhone must be upgraded in order to receive it. Tell him to download the latest version.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1910,6 +1950,10 @@ font-weight:600;&quot;&gt;Takma ad ya da numara&lt;/span&gt;&lt;/p&gt;&lt;/body&
     </message>
     <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg;font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px;margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;This may be caused by:&lt;/span&gt; &lt;br&gt;- Your WengoPhone is not up to date. Please download the latest version onwww.wengo.com&lt;br&gt;- The Wengo network may be temporarily unavailable. Please try later.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Not started yet</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2390,27 +2434,27 @@ This will send </source>
     <name>QtSubscribe</name>
     <message>
         <source>Confirm password does not matched password</source>
-        <translation>Onaylama parolası bir önceki parola ile aynı değil</translation>
+        <translation type="obsolete">Onaylama parolası bir önceki parola ile aynı değil</translation>
     </message>
     <message>
         <source>Unknown Error</source>
-        <translation>Bilinmeyen Hata</translation>
+        <translation type="obsolete">Bilinmeyen Hata</translation>
     </message>
     <message>
         <source>You cannot use this email address, already in use</source>
-        <translation>Bu e-posta adresini kullanamazsınız, zaten kullanımda</translation>
+        <translation type="obsolete">Bu e-posta adresini kullanamazsınız, zaten kullanımda</translation>
     </message>
     <message>
         <source>You cannot use this nickname, already in use</source>
-        <translation>Bu takma adı kullanamazsınız, zaten kullanımda</translation>
+        <translation type="obsolete">Bu takma adı kullanamazsınız, zaten kullanımda</translation>
     </message>
     <message>
         <source>Your password does not contain enough characters (6 minimum), try another one</source>
-        <translation>Parolanız yeterli sayıda karakteri (en az 6) barındırmıyor, lütfen değiştirin</translation>
+        <translation type="obsolete">Parolanız yeterli sayıda karakteri (en az 6) barındırmıyor, lütfen değiştirin</translation>
     </message>
     <message>
         <source>Subscription Failed</source>
-        <translation>Üyelik İşlemi Başarılamadı</translation>
+        <translation type="obsolete">Üyelik İşlemi Başarılamadı</translation>
     </message>
 </context>
 <context>
@@ -2539,10 +2583,17 @@ bağlantılarınızı içeri aktarmayı ister misiniz?</translation>
     </message>
     <message>
         <source>WengoPhone - Importing contacts and IM accounts</source>
-        <translation>WengoPhone - Bağlantıları ve hesapları içe aktarıyor</translation>
+        <translation type="obsolete">WengoPhone - Bağlantıları ve hesapları içe aktarıyor</translation>
     </message>
     <message>
-        <source>Would you like to import contacts and IM accounts previously created in the default profile to the profile named %1?</source>
+        <source>A problem occured while loading your profile.
+The last backuped profile has been loaded: 
+you may have lost last changes made</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Your profile could not be loaded.
+Choose another profile or create a new one.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2596,7 +2647,7 @@ bağlantılarınızı içeri aktarmayı ister misiniz?</translation>
     <name>QtWebDirectory</name>
     <message>
         <source>WengoPhone - Directory</source>
-        <translation>WengoPhone - Dizin</translation>
+        <translation type="obsolete">WengoPhone - Dizin</translation>
     </message>
 </context>
 <context>
@@ -2703,108 +2754,108 @@ bağlantılarınızı içeri aktarmayı ister misiniz?</translation>
     <name>RenameGroupDialog</name>
     <message>
         <source>Cancel</source>
-        <translation>İptal</translation>
+        <translation type="unfinished">İptal</translation>
     </message>
     <message>
         <source>OK</source>
-        <translation>Tamam</translation>
+        <translation type="unfinished">Tamam</translation>
     </message>
     <message>
         <source>WengoPhone - Rename Contact Group</source>
-        <translation>WengoPhone - Bağlantı Grubunu Yeniden Adlandır</translation>
+        <translation type="unfinished">WengoPhone - Bağlantı Grubunu Yeniden Adlandır</translation>
     </message>
     <message>
         <source>Enter the new group name:</source>
-        <translation>Yeni grup adını girin:</translation>
+        <translation type="unfinished">Yeni grup adını girin:</translation>
     </message>
 </context>
 <context>
     <name>SimpleIMAccountManager</name>
     <message>
         <source>Password:</source>
-        <translation>Parola:</translation>
+        <translation type="unfinished">Parola:</translation>
     </message>
     <message>
         <source>Login:</source>
-        <translation>Kullanıcı Adı:</translation>
+        <translation type="unfinished">Kullanıcı Adı:</translation>
     </message>
     <message>
         <source>AIM/ICQ</source>
-        <translation>AIM/ICQ</translation>
+        <translation type="unfinished">AIM/ICQ</translation>
     </message>
     <message>
         <source>Yahoo!</source>
-        <translation>Yahoo!</translation>
+        <translation type="unfinished">Yahoo!</translation>
     </message>
     <message>
         <source>Wengo</source>
-        <translation>Wengo</translation>
+        <translation type="unfinished">Wengo</translation>
     </message>
     <message>
         <source>MSN</source>
-        <translation>MSN</translation>
+        <translation type="unfinished">MSN</translation>
     </message>
     <message>
         <source>Jabber</source>
-        <translation>Jabber</translation>
+        <translation type="unfinished">Jabber</translation>
     </message>
     <message>
         <source>GoogleTalk</source>
-        <translation>GoogleTalk</translation>
+        <translation type="unfinished">GoogleTalk</translation>
     </message>
 </context>
 <context>
     <name>SimpleIMContactManager</name>
     <message>
         <source>Update your profile</source>
-        <translation>Profilinizi güncelleyin</translation>
+        <translation type="unfinished">Profilinizi güncelleyin</translation>
     </message>
     <message>
         <source>Yahoo! ID:</source>
-        <translation>Yahoo! Kimliği:</translation>
+        <translation type="unfinished">Yahoo! Kimliği:</translation>
     </message>
     <message>
         <source>AIM/ICQ ID:</source>
-        <translation>AIM/ICQ Kimliği:</translation>
+        <translation type="unfinished">AIM/ICQ Kimliği:</translation>
     </message>
     <message>
         <source>MSN ID:</source>
-        <translation>MSN Kimliği:</translation>
+        <translation type="unfinished">MSN Kimliği:</translation>
     </message>
     <message>
         <source>Wengo ID:</source>
-        <translation>Wengo Kimliği:</translation>
+        <translation type="unfinished">Wengo Kimliği:</translation>
     </message>
     <message>
         <source>Jabber/GoogleTalk ID:</source>
-        <translation>Jabber/GoogleTalk Kimliği:</translation>
+        <translation type="unfinished">Jabber/GoogleTalk Kimliği:</translation>
     </message>
 </context>
 <context>
     <name>SmsWindow</name>
     <message>
         <source>Send</source>
-        <translation>Gönder</translation>
+        <translation type="unfinished">Gönder</translation>
     </message>
     <message>
         <source>WengoPhone - SMS</source>
-        <translation>WengoPhone - SMS</translation>
+        <translation type="unfinished">WengoPhone - SMS</translation>
     </message>
     <message>
         <source>Click here to add a phone number</source>
-        <translation>Telefon numarası eklemek için buraya tıklayın</translation>
+        <translation type="unfinished">Telefon numarası eklemek için buraya tıklayın</translation>
     </message>
     <message>
         <source>0 /160</source>
-        <translation>0 /160</translation>
+        <translation type="unfinished">0 /160</translation>
     </message>
     <message>
         <source>Enter your signature here</source>
-        <translation>İmzanızı buraya girin</translation>
+        <translation type="unfinished">İmzanızı buraya girin</translation>
     </message>
     <message>
         <source>Signature:</source>
-        <translation>İmza:</translation>
+        <translation type="unfinished">İmza:</translation>
     </message>
     <message>
         <source>Phone number:</source>
@@ -2813,6 +2864,10 @@ bağlantılarınızı içeri aktarmayı ister misiniz?</translation>
     <message>
         <source>Enter the phone number here</source>
         <translation type="obsolete">Telefon numaranızı buraya girin</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Phone number(s):</source>
@@ -2827,11 +2882,11 @@ bağlantılarınızı içeri aktarmayı ister misiniz?</translation>
     <name>SoftUpdateWindow</name>
     <message>
         <source>Cancel</source>
-        <translation>İptal</translation>
+        <translation type="unfinished">İptal</translation>
     </message>
     <message>
         <source>WengoPhone - Downloading update</source>
-        <translation>WengoPhone - Güncelleme indiriliyor</translation>
+        <translation type="unfinished">WengoPhone - Güncelleme indiriliyor</translation>
     </message>
     <message>
         <source>Downloading WengoPhone update...Version:%1URL:%2File Size:%3 (MB)Speed:%4 
@@ -2853,59 +2908,59 @@ Speed:<byte value="x9"/>%4 (kB/s)</source>
     <name>StatusBarWidget</name>
     <message>
         <source>Audio Configuration Error</source>
-        <translation>Ses Yapılandırma Hatası</translation>
+        <translation type="unfinished">Ses Yapılandırma Hatası</translation>
     </message>
     <message>
         <source>Not Connected</source>
-        <translation>Bağlı değil</translation>
+        <translation type="unfinished">Bağlı değil</translation>
     </message>
 </context>
 <context>
     <name>SubscribeWengo1</name>
     <message>
         <source>Password:</source>
-        <translation>Parola:</translation>
+        <translation type="obsolete">Parola:</translation>
     </message>
     <message>
         <source>Email:</source>
-        <translation>E-Posta:</translation>
+        <translation type="obsolete">E-Posta:</translation>
     </message>
     <message>
         <source>WengoPhone - Wengo Account Creation (1/2)</source>
-        <translation>WengoPhone - Wengo Hesabı Oluşturma (1/2)</translation>
+        <translation type="obsolete">WengoPhone - Wengo Hesabı Oluşturma (1/2)</translation>
     </message>
     <message>
         <source>* &lt;i&gt;Required fields&lt;/i&gt;</source>
-        <translation>* &lt;i&gt;Doldurulması zorunlu alanlar&lt;/i&gt;</translation>
+        <translation type="obsolete">* &lt;i&gt;Doldurulması zorunlu alanlar&lt;/i&gt;</translation>
     </message>
     <message>
         <source>Subscribe</source>
-        <translation>Üye Ol</translation>
+        <translation type="obsolete">Üye Ol</translation>
     </message>
     <message>
         <source>Error message label</source>
-        <translation>Hata mesajı etiketi:</translation>
+        <translation type="obsolete">Hata mesajı etiketi:</translation>
     </message>
     <message>
         <source>Nickname:</source>
-        <translation>Takam Ad:</translation>
+        <translation type="obsolete">Takam Ad:</translation>
     </message>
     <message>
         <source>*</source>
-        <translation>*</translation>
+        <translation type="obsolete">*</translation>
     </message>
     <message>
         <source>Confirm password:</source>
-        <translation>Parolayı tekrarla:</translation>
+        <translation type="obsolete">Parolayı tekrarla:</translation>
     </message>
     <message>
         <source>&lt;i&gt;Please check your email and confirm the above details within 48 hours&lt;/i&gt;</source>
-        <translation>&lt;i&gt;Lütfen e-postanızı kontrol ederek size gelen mesajı 48 saat içinde 
+        <translation type="obsolete">&lt;i&gt;Lütfen e-postanızı kontrol ederek size gelen mesajı 48 saat içinde 
 onaylayınız&lt;/i&gt;</translation>
     </message>
     <message>
         <source>I read and accept the Terms of Service</source>
-        <translation>Kullanıcı sözleşmesini okudum ve kabul ediyorum</translation>
+        <translation type="obsolete">Kullanıcı sözleşmesini okudum ve kabul ediyorum</translation>
     </message>
     <message>
         <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Account Creation&lt;/span&gt;&lt;br /&gt;&lt;br 
@@ -2913,51 +2968,42 @@ onaylayınız&lt;/i&gt;</translation>
         <translation type="obsolete">&lt;span style=&quot;font-size:18pt;&quot;&gt;Hesap Yaratma&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;&lt;span&gt;Lütfen 
 aşağıda sizden istenen bilgileri doldurun&lt;/span&gt;</translation>
     </message>
-    <message>
-        <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Account Creation&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;&lt;span&gt;Please fill in the details below&lt;/span&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>SubscribeWengo2</name>
     <message>
         <source>Password:</source>
-        <translation>Parola:</translation>
+        <translation type="obsolete">Parola:</translation>
     </message>
     <message>
         <source>Email:</source>
-        <translation>E-Posta:</translation>
+        <translation type="obsolete">E-Posta:</translation>
     </message>
     <message>
         <source>Nickname:</source>
-        <translation>Takam Ad:</translation>
+        <translation type="obsolete">Takam Ad:</translation>
     </message>
     <message>
         <source>WengoPhone - Wengo Account Creation (2/2)</source>
-        <translation>WengoPhone - Wengo Hesabı Oluşturma (2/2)</translation>
+        <translation type="obsolete">WengoPhone - Wengo Hesabı Oluşturma (2/2)</translation>
     </message>
     <message>
         <source>Please note your details needed to access your account:</source>
-        <translation>Lütfen hesabınıza erişmek için gerekli olan detayları bir yere not edin:</translation>
+        <translation type="obsolete">Lütfen hesabınıza erişmek için gerekli olan detayları bir yere not edin:</translation>
     </message>
     <message>
         <source>Finish</source>
-        <translation>Bitti</translation>
+        <translation type="obsolete">Bitti</translation>
     </message>
     <message>
         <source>Add your IM Accounts to your Profile</source>
-        <translation>Hızlı mesajlaşma hesaplarınızı profilinize ekleyin</translation>
+        <translation type="obsolete">Hızlı mesajlaşma hesaplarınızı profilinize ekleyin</translation>
     </message>
     <message>
         <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Contratulations!&lt;/span&gt;&lt;br /&gt;&lt;br 
 /&gt;&lt;span&gt;Your account has been successfully created&lt;/span&gt;</source>
         <translation type="obsolete">&lt;span style=&quot;font-size:18pt;&quot;&gt;Tebrikler!&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;&lt;span&gt;Hesabınız 
 başarıyla yaratılmıştır&lt;/span&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Contratulations!&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;&lt;span&gt;Your account has been successfully created&lt;/span&gt;
-</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2983,98 +3029,102 @@ başarıyla yaratılmıştır&lt;/span&gt;</translation>
     <name>UserFrame</name>
     <message>
         <source>Form</source>
-        <translation>Form</translation>
+        <translation type="unfinished">Form</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>VideoSettings</name>
     <message>
         <source>Normal</source>
-        <translation>Normal</translation>
+        <translation type="unfinished">Normal</translation>
     </message>
     <message>
         <source>Good</source>
-        <translation>İyi</translation>
+        <translation type="unfinished">İyi</translation>
     </message>
     <message>
         <source>Very good</source>
-        <translation>Çok İyi</translation>
+        <translation type="unfinished">Çok İyi</translation>
     </message>
     <message>
         <source>Excellent</source>
-        <translation>Mükemmel</translation>
+        <translation type="unfinished">Mükemmel</translation>
     </message>
     <message>
         <source>Video Settings</source>
-        <translation>Video Ayarları</translation>
+        <translation type="unfinished">Video Ayarları</translation>
     </message>
     <message>
         <source>Enable video</source>
-        <translation>Video&apos;yu etkinleştir</translation>
+        <translation type="unfinished">Video&apos;yu etkinleştir</translation>
     </message>
     <message>
         <source>Webcam Selection</source>
-        <translation>Web Kamerası Seçimi</translation>
+        <translation type="unfinished">Web Kamerası Seçimi</translation>
     </message>
     <message>
         <source>Webcam device:</source>
-        <translation>Web kamerası aygıtı:</translation>
+        <translation type="unfinished">Web kamerası aygıtı:</translation>
     </message>
     <message>
         <source>Webcam Preview</source>
-        <translation>Web Kamerası Ön Gösterimi</translation>
+        <translation type="unfinished">Web Kamerası Ön Gösterimi</translation>
     </message>
     <message>
         <source>Connection Type</source>
-        <translation>Bağlantı Türü</translation>
+        <translation type="unfinished">Bağlantı Türü</translation>
     </message>
     <message>
         <source>Video quality</source>
-        <translation>Video kalitesi</translation>
+        <translation type="unfinished">Video kalitesi</translation>
     </message>
     <message>
         <source>Down (kbit/s)</source>
-        <translation>İndirme hızı (kbit/s)</translation>
+        <translation type="unfinished">İndirme hızı (kbit/s)</translation>
     </message>
     <message>
         <source>Up (kbit/s)</source>
-        <translation>Gönderme hızı (kbit/s)</translation>
+        <translation type="unfinished">Gönderme hızı (kbit/s)</translation>
     </message>
     <message>
         <source>0 to 512</source>
-        <translation>0-512 arası</translation>
+        <translation type="unfinished">0-512 arası</translation>
     </message>
     <message>
         <source>0 to 128</source>
-        <translation>0-128 arası</translation>
+        <translation type="unfinished">0-128 arası</translation>
     </message>
     <message>
         <source>512 to 2048</source>
-        <translation>512-2048 arası</translation>
+        <translation type="unfinished">512-2048 arası</translation>
     </message>
     <message>
         <source>128 to 256</source>
-        <translation>128-256 arası</translation>
+        <translation type="unfinished">128-256 arası</translation>
     </message>
     <message>
         <source>2048+</source>
-        <translation>2048 ve üstü</translation>
+        <translation type="unfinished">2048 ve üstü</translation>
     </message>
     <message>
         <source>256+</source>
-        <translation>256 ve üstü</translation>
+        <translation type="unfinished">256 ve üstü</translation>
     </message>
     <message>
         <source>8192+</source>
-        <translation>8192 ve üstü</translation>
+        <translation type="unfinished">8192 ve üstü</translation>
     </message>
     <message>
         <source>1024+</source>
-        <translation>1024 ve üstü</translation>
+        <translation type="unfinished">1024 ve üstü</translation>
     </message>
     <message>
         <source>Video quality depends on your Internet connection bandwidth</source>
-        <translation>Görüntü kalitesi internet bağlantınızın bant genişliği ile doğru orantılıdır</translation>
+        <translation type="unfinished">Görüntü kalitesi internet bağlantınızın bant genişliği ile doğru orantılıdır</translation>
     </message>
     <message>
         <source>&lt;b&gt;Warning!&lt;/b&gt; When used for the first time we recommend that you 
@@ -3088,7 +3138,7 @@ http://test.lvcm.com adresine giderek internet bant genişliğinizi test edin</t
     </message>
     <message>
         <source>Make a test video call</source>
-        <translation>Test amaçlı bir görüntülü çağrı başlat</translation>
+        <translation type="unfinished">Test amaçlı bir görüntülü çağrı başlat</translation>
     </message>
     <message>
         <source>&lt;b&gt;Warning!&lt;/b&gt; When used for the first time we recommend that you select&lt;br&gt;the normal video quality mode, then you can try different modes to find out&lt;br&gt;the most suitable one&lt;br&gt;&lt;br&gt;&lt;b&gt;Tips&lt;/b&gt;: Go to http://test.lvcm.com to determine your Internet connection bandwidth</source>
@@ -3099,318 +3149,326 @@ http://test.lvcm.com adresine giderek internet bant genişliğinizi test edin</t
     <name>VideoWindow</name>
     <message>
         <source>WengoPhone - Video</source>
-        <translation>WengoPhone - Video</translation>
+        <translation type="unfinished">WengoPhone - Video</translation>
     </message>
 </context>
 <context>
     <name>WengoConfigDialog</name>
     <message>
         <source>Cancel</source>
-        <translation>İptal</translation>
+        <translation type="unfinished">İptal</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation>Kaydet</translation>
+        <translation type="unfinished">Kaydet</translation>
     </message>
     <message>
         <source>Language</source>
-        <translation>Dil</translation>
+        <translation type="unfinished">Dil</translation>
     </message>
     <message>
         <source>General</source>
-        <translation>Genel</translation>
+        <translation type="unfinished">Genel</translation>
     </message>
     <message>
         <source>Accounts</source>
-        <translation>Hesaplar</translation>
+        <translation type="unfinished">Hesaplar</translation>
     </message>
     <message>
         <source>Advanced</source>
-        <translation>Gelişmiş</translation>
+        <translation type="unfinished">Gelişmiş</translation>
     </message>
     <message>
         <source>Audio</source>
-        <translation>Ses</translation>
+        <translation type="unfinished">Ses</translation>
     </message>
     <message>
         <source>Call Forward</source>
-        <translation>Çağrı Yönlendirme</translation>
+        <translation type="unfinished">Çağrı Yönlendirme</translation>
     </message>
     <message>
         <source>Notifications &amp; Sounds</source>
-        <translation>Uyarılar % Sesler</translation>
+        <translation type="unfinished">Uyarılar % Sesler</translation>
     </message>
     <message>
         <source>Video</source>
-        <translation>Video</translation>
+        <translation type="unfinished">Video</translation>
     </message>
     <message>
         <source>WengoPhone - Configuration</source>
-        <translation>WengoPhone - Yapılandırma</translation>
+        <translation type="unfinished">WengoPhone - Yapılandırma</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>WengoPhoneWindow</name>
     <message>
         <source>&amp;Accept</source>
-        <translation>Kabul et</translation>
+        <translation type="unfinished">Kabul et</translation>
     </message>
     <message>
         <source>&amp;Wengo</source>
-        <translation>&amp;Wengo</translation>
+        <translation type="unfinished">&amp;Wengo</translation>
     </message>
     <message>
         <source>&amp;Tools</source>
-        <translation>&amp;Araçlar</translation>
+        <translation type="unfinished">&amp;Araçlar</translation>
     </message>
     <message>
         <source>&amp;Help</source>
-        <translation>&amp;Yardım</translation>
+        <translation type="unfinished">&amp;Yardım</translation>
     </message>
     <message>
         <source>&amp;Actions</source>
-        <translation>&amp;Eylemler</translation>
+        <translation type="unfinished">&amp;Eylemler</translation>
     </message>
     <message>
         <source>WengoPhone</source>
-        <translation>WengoPhone</translation>
+        <translation type="unfinished">WengoPhone</translation>
     </message>
     <message>
         <source>Contacts</source>
-        <translation>Bağlantılar</translation>
+        <translation type="unfinished">Bağlantılar</translation>
     </message>
     <message>
         <source>History</source>
-        <translation>Geçmiş</translation>
+        <translation type="unfinished">Geçmiş</translation>
     </message>
     <message>
         <source>Dialpad</source>
-        <translation>Tuşlar</translation>
+        <translation type="unfinished">Tuşlar</translation>
     </message>
     <message>
         <source>&amp;Contacts</source>
-        <translation>&amp;Bağlantılar</translation>
+        <translation type="unfinished">&amp;Bağlantılar</translation>
     </message>
     <message>
         <source>Clear &amp;History</source>
-        <translation>Geçmişi &amp;Temizle</translation>
+        <translation type="unfinished">Geçmişi &amp;Temizle</translation>
     </message>
     <message>
         <source>Type Here</source>
-        <translation>Buraya Yazın</translation>
+        <translation type="unfinished">Buraya Yazın</translation>
     </message>
     <message>
         <source>ToolBar</source>
-        <translation>Araç Çubuğu</translation>
+        <translation type="unfinished">Araç Çubuğu</translation>
     </message>
     <message>
         <source>View My &amp;Wengo Account</source>
-        <translation>&amp;Wengo Hesabımı Görüntüle</translation>
+        <translation type="unfinished">&amp;Wengo Hesabımı Görüntüle</translation>
     </message>
     <message>
         <source>&amp;Close</source>
-        <translation>&amp;Kapat</translation>
+        <translation type="unfinished">&amp;Kapat</translation>
     </message>
     <message>
         <source>Wengo &amp;Forum</source>
-        <translation>Wengo Forum</translation>
+        <translation type="unfinished">Wengo Forum</translation>
     </message>
     <message>
         <source>&amp;About</source>
-        <translation>&amp;Hakkında</translation>
+        <translation type="unfinished">&amp;Hakkında</translation>
     </message>
     <message>
         <source>Add &amp;Contact</source>
-        <translation>Bağlantı Ekle</translation>
+        <translation type="unfinished">Bağlantı Ekle</translation>
     </message>
     <message>
         <source>&amp;Configuration</source>
-        <translation>&amp;Yapılandırma</translation>
+        <translation type="unfinished">&amp;Yapılandırma</translation>
     </message>
     <message>
         <source>Send a Short Text &amp;Message (SMS)</source>
-        <translation>Kısa Mesaj (SMS) Gönder</translation>
+        <translation type="unfinished">Kısa Mesaj (SMS) Gönder</translation>
     </message>
     <message>
         <source>Edit My &amp;Profile</source>
-        <translation>&amp;Profilimi Düzenle</translation>
+        <translation type="unfinished">&amp;Profilimi Düzenle</translation>
     </message>
     <message>
         <source>Create &amp;Conference Call</source>
-        <translation>Konferans Çağrı Başlat</translation>
+        <translation type="unfinished">Konferans Çağrı Başlat</translation>
     </message>
     <message>
         <source>Wengo &amp;Wiki/FAQ</source>
-        <translation>Wengo &amp; Wiki/SSS</translation>
+        <translation type="unfinished">Wengo &amp; Wiki/SSS</translation>
     </message>
     <message>
         <source>Learn more about &amp;Wengo Services</source>
-        <translation>Wengo Hizmetleri hakkında daha fazla bilgi</translation>
+        <translation type="unfinished">Wengo Hizmetleri hakkında daha fazla bilgi</translation>
     </message>
     <message>
         <source>Show/Hide Unavailable &amp;Contacts</source>
-        <translation>Erişilemeyen Bağlantıları Göster/Gizle</translation>
+        <translation type="unfinished">Erişilemeyen Bağlantıları Göster/Gizle</translation>
     </message>
     <message>
         <source>&amp;Instant Messaging Accounts</source>
-        <translation>Hızlı Mesajlaşma Hesapları</translation>
+        <translation type="unfinished">Hızlı Mesajlaşma Hesapları</translation>
     </message>
     <message>
         <source>Configure My Instant Messaging Accounts</source>
-        <translation>Hızlı Mesajlaşma Hesaplarımı Yapılandır</translation>
+        <translation type="unfinished">Hızlı Mesajlaşma Hesaplarımı Yapılandır</translation>
     </message>
     <message>
         <source>&amp;Chat Sessions</source>
-        <translation>Sohbet Oturumları</translation>
+        <translation type="unfinished">Sohbet Oturumları</translation>
     </message>
     <message>
         <source>&amp;All</source>
-        <translation>&amp;Hepsi</translation>
+        <translation type="unfinished">&amp;Hepsi</translation>
     </message>
     <message>
         <source>&amp;Search for Wengo Users</source>
-        <translation>Wengo Kullanıcılarını Ara</translation>
+        <translation type="unfinished">Wengo Kullanıcılarını Ara</translation>
     </message>
     <message>
         <source>&amp;HangUp</source>
-        <translation>Kapat</translation>
+        <translation type="unfinished">Kapat</translation>
     </message>
     <message>
         <source>&amp;Hold/Resume</source>
-        <translation>Ara ver/Devam et</translation>
+        <translation type="unfinished">Ara ver/Devam et</translation>
     </message>
     <message>
         <source>Show/Hide &amp;Groups</source>
-        <translation>Grupları Göster/Gizle</translation>
+        <translation type="unfinished">Grupları Göster/Gizle</translation>
     </message>
     <message>
         <source>Change &amp;Profile...</source>
-        <translation>Profili değiştir...</translation>
+        <translation type="unfinished">Profili değiştir...</translation>
     </message>
     <message>
         <source>Log &amp;Off/Log In</source>
-        <translation>Bağlantıyı kes/Bağlan</translation>
+        <translation type="unfinished">Bağlantıyı kes/Bağlan</translation>
     </message>
     <message>
         <source>Open &amp;Chat Window</source>
-        <translation>Sohbet Penceresini Aç</translation>
+        <translation type="unfinished">Sohbet Penceresini Aç</translation>
     </message>
     <message>
         <source>&amp;Outgoing Calls</source>
-        <translation>Giden Çağrılar</translation>
+        <translation type="unfinished">Giden Çağrılar</translation>
     </message>
     <message>
         <source>&amp;Incoming Calls</source>
-        <translation>Gelen Çağrılar</translation>
+        <translation type="unfinished">Gelen Çağrılar</translation>
     </message>
     <message>
         <source>&amp;Missed Calls</source>
-        <translation>Cevapsız Çağrılar</translation>
+        <translation type="unfinished">Cevapsız Çağrılar</translation>
     </message>
     <message>
         <source>Enable/Disable &amp;Video Calls</source>
-        <translation>Görüntülü Çağrıları Etkinleştir/Engelle</translation>
+        <translation type="unfinished">Görüntülü Çağrıları Etkinleştir/Engelle</translation>
     </message>
     <message>
         <source>Show &amp;Volume Panel</source>
-        <translation>Ses Ayarını Göster</translation>
+        <translation type="unfinished">Ses Ayarını Göster</translation>
     </message>
     <message>
         <source>Short Text &amp;Messages (SMS)</source>
-        <translation>Kısa Mesajları Göster</translation>
+        <translation type="unfinished">Kısa Mesajları Göster</translation>
     </message>
     <message>
         <source>Show File Transfer</source>
-        <translation>Dosya Transferini Göster</translation>
+        <translation type="unfinished">Dosya Transferini Göster</translation>
     </message>
     <message>
         <source>Rejected Calls</source>
-        <translation>Reddedilen Çağrılar</translation>
+        <translation type="unfinished">Reddedilen Çağrılar</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>WengoPhoneWindowConfigPanel</name>
     <message>
         <source>Audio Settings</source>
-        <translation>Ses Ayarları</translation>
+        <translation type="unfinished">Ses Ayarları</translation>
     </message>
     <message>
         <source>Video Settings</source>
-        <translation>Video Ayarları</translation>
+        <translation type="unfinished">Video Ayarları</translation>
     </message>
     <message>
         <source>Enable Wenbox usage</source>
-        <translation>Wenbox kullanımını etkinleştir</translation>
+        <translation type="unfinished">Wenbox kullanımını etkinleştir</translation>
     </message>
     <message>
         <source>Wenbox USB</source>
-        <translation>Wenbox USB</translation>
+        <translation type="unfinished">Wenbox USB</translation>
     </message>
     <message>
         <source>Enable half-duplex mode</source>
-        <translation>Yarı Çift Yönlü (half-duplex) modu etkinleştir</translation>
+        <translation type="unfinished">Yarı Çift Yönlü (half-duplex) modu etkinleştir</translation>
     </message>
     <message>
         <source>Loud Speakers</source>
-        <translation>Hoparlörler</translation>
+        <translation type="unfinished">Hoparlörler</translation>
     </message>
 </context>
 <context>
     <name>Wizard</name>
     <message>
         <source>Cancel</source>
-        <translation>İptal</translation>
+        <translation type="obsolete">İptal</translation>
     </message>
     <message>
         <source>Finish</source>
-        <translation>Bitti</translation>
+        <translation type="obsolete">Bitti</translation>
     </message>
     <message>
         <source>Next &gt;</source>
-        <translation>Sonraki &gt;</translation>
+        <translation type="obsolete">Sonraki &gt;</translation>
     </message>
     <message>
         <source>&lt; Back</source>
-        <translation>&lt; Önceki</translation>
+        <translation type="obsolete">&lt; Önceki</translation>
     </message>
     <message>
         <source>Simple Wizard - Step %1 of %2</source>
-        <translation>Hızlı Sihirbaz - %1/%2 adım</translation>
+        <translation type="obsolete">Hızlı Sihirbaz - %1/%2 adım</translation>
     </message>
 </context>
 <context>
     <name>WsDirectory</name>
     <message>
         <source>All</source>
-        <translation>Hepsi</translation>
+        <translation type="unfinished">Hepsi</translation>
     </message>
     <message>
         <source>WengoPhone - Search for Wengo contacts</source>
-        <translation>WengoPhone - Wengo bağlantısı için arama</translation>
+        <translation type="unfinished">WengoPhone - Wengo bağlantısı için arama</translation>
     </message>
     <message>
         <source>Nickname</source>
-        <translation>Takma Ad</translation>
+        <translation type="unfinished">Takma Ad</translation>
     </message>
     <message>
         <source>First Name</source>
-        <translation>Adı</translation>
+        <translation type="unfinished">Adı</translation>
     </message>
     <message>
         <source>Last Name</source>
-        <translation>Sayadı</translation>
+        <translation type="unfinished">Sayadı</translation>
     </message>
     <message>
         <source>City</source>
-        <translation>Şehir</translation>
+        <translation type="unfinished">Şehir</translation>
     </message>
     <message>
         <source>Country</source>
-        <translation>Ülke</translation>
+        <translation type="unfinished">Ülke</translation>
     </message>
     <message>
         <source>Search</source>
-        <translation>Ara</translation>
+        <translation type="unfinished">Ara</translation>
     </message>
     <message>
         <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Search for Wengo contacts&lt;/span&gt;&lt;br /&gt;&lt;br 
@@ -3422,7 +3480,7 @@ tıklayın&lt;/span&gt;</translation>
     </message>
     <message>
         <source>When entering a combined search, please separate words with a blank.</source>
-        <translation>Çapraz aramalarda, lütfen anahtar kelimeleri boşluk ile birbirinden ayırın.</translation>
+        <translation type="unfinished">Çapraz aramalarda, lütfen anahtar kelimeleri boşluk ile birbirinden ayırın.</translation>
     </message>
     <message>
         <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Search for Wengo contacts&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;&lt;span&gt;Enter name, nickname, city or email and click the search button&lt;/span&gt;</source>
@@ -3433,23 +3491,19 @@ tıklayın&lt;/span&gt;</translation>
     <name>WsDirectoryContact</name>
     <message>
         <source>City:</source>
-        <translation>İl:</translation>
+        <translation type="unfinished">İl:</translation>
     </message>
     <message>
         <source>Nickname:</source>
-        <translation>Takam Ad:</translation>
+        <translation type="unfinished">Takam Ad:</translation>
     </message>
     <message>
         <source>FirstName LastName</source>
-        <translation>Adı Soyadı</translation>
+        <translation type="unfinished">Adı Soyadı</translation>
     </message>
     <message>
         <source>Wengo number:</source>
-        <translation>Wengo numarası:</translation>
-    </message>
-    <message>
-        <source>SIP address:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wengo numarası:</translation>
     </message>
     <message>
         <source>Country:</source>
@@ -3467,13 +3521,13 @@ tıklayın&lt;/span&gt;</translation>
         <source>Add</source>
         <translation type="unfinished">Ekle</translation>
     </message>
+    <message>
+        <source>SIP address:</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>YahooSettings</name>
-    <message>
-        <source>Yahoo! Settings</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message>
         <source>Password:</source>
         <translation type="unfinished">Parola:</translation>
@@ -3485,6 +3539,14 @@ tıklayın&lt;/span&gt;</translation>
     <message>
         <source>&lt;u&gt;Advanced Options&lt;/u&gt;</source>
         <translation type="unfinished">&lt;u&gt;Gelişmiş Ayarlar&lt;/u&gt;</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Yahoo! Settings</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Use Yahoo! Japan server</source>
@@ -3500,93 +3562,18 @@ tıklayın&lt;/span&gt;</translation>
     </message>
 </context>
 <context>
-    <name>aboutWindow</name>
-    <message>
-        <source>Dialog</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>help</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>config...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>update</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>GroupBox</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#000000;&quot;&gt;This is a Qt demo application for a skin system.&lt;/span&gt;&lt;/p&gt;&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#000000;&quot;&gt;&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#000000;&quot;&gt;The skin system works as a Qt style plugin through the QStyle class.&lt;/p&gt;&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#000000;&quot;&gt;&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#000000;&quot;&gt;This example works using Qt version 4.0.0 &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>mainWindow</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Form</translation>
-    </message>
-    <message>
-        <source>Tab 1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>qwepowefklwenmlkwefweklfnwelfknwlfknweklfnwelfknwefwefopjiwelpkwmjvlkwneklwemflkwemdfklwemflwekmfwkled;qweef</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>wefwefweklfl;m,we;lf,;welcv,wel;wekfm;kf;pwecmlwkewl;efmwklegfhweklnqwekldhjl;dmjqwlekdfjqweklf</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>New Item</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>wef[pwoejfweopfjero&apos;wepofjkwepfm,weopfkweopfmkdfokweopf,wepofweopfkweopfkweopfkweopfkwef</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Tab 2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Exit</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Update</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Form</translation>
     </message>
     <message>
         <source>Search</source>
-        <translation type="unfinished">Ara</translation>
-    </message>
-    <message>
-        <source>Previous Track</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Next Track</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Ara</translation>
     </message>
     <message>
         <source>Pause</source>
-        <translation type="unfinished">Ara ver</translation>
-    </message>
-    <message>
-        <source>Stop</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Play</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Ara ver</translation>
     </message>
 </context>
 </TS>

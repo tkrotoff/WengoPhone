@@ -3,42 +3,46 @@
     <name>AIMSettings</name>
     <message>
         <source>AIM/ICQ Settings</source>
-        <translation>Inställningar för AIM/ICQ</translation>
+        <translation type="unfinished">Inställningar för AIM/ICQ</translation>
     </message>
     <message>
         <source>Password:</source>
-        <translation>Lösenord:</translation>
+        <translation type="unfinished">Lösenord:</translation>
     </message>
     <message>
         <source>Login:</source>
-        <translation>Inloggningsnamn:</translation>
+        <translation type="unfinished">Inloggningsnamn:</translation>
     </message>
     <message>
         <source>Forgot your AIM password?</source>
-        <translation>Glömt ditt AIM-lösenord?</translation>
+        <translation type="unfinished">Glömt ditt AIM-lösenord?</translation>
     </message>
     <message>
         <source>Get a new AIM Account</source>
-        <translation>Skaffa ett nytt AIM-konto</translation>
+        <translation type="unfinished">Skaffa ett nytt AIM-konto</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>AboutWindow</name>
     <message>
         <source>WengoPhone - About</source>
-        <translation>WengoPhone - Om</translation>
+        <translation type="unfinished">WengoPhone - Om</translation>
     </message>
     <message>
         <source>About</source>
-        <translation>Om</translation>
+        <translation type="unfinished">Om</translation>
     </message>
     <message>
         <source>WengoPhone, a voice over Internet phone</source>
-        <translation>WengoPhone, en telefon över Internet-klient</translation>
+        <translation type="unfinished">WengoPhone, en telefon över Internet-klient</translation>
     </message>
     <message>
         <source>Copyright (C) 2004-2006 Wengo  http://openwengo.com</source>
-        <translation>Copyright © 2004-2006 Wengo  http://openwengo.com</translation>
+        <translation type="unfinished">Copyright © 2004-2006 Wengo  http://openwengo.com</translation>
     </message>
     <message>
         <source>This program is free software; you can redistribute it and/ormodify it under 
@@ -52,11 +56,11 @@ version.</translation>
     </message>
     <message>
         <source>Authors</source>
-        <translation>Upphovsmän</translation>
+        <translation type="unfinished">Upphovsmän</translation>
     </message>
     <message>
         <source>Close</source>
-        <translation>Stäng</translation>
+        <translation type="unfinished">Stäng</translation>
     </message>
     <message>
         <source>This program is free software; you can redistribute it and/or
@@ -70,15 +74,15 @@ of the License, or (at your option) any later version.</source>
     <name>AcceptDialog</name>
     <message>
         <source>File Transfer</source>
-        <translation>Filöverföring</translation>
+        <translation type="unfinished">Filöverföring</translation>
     </message>
     <message>
         <source>toto@wengo.fr</source>
-        <translation>toto@wengo.fr</translation>
+        <translation type="unfinished">toto@wengo.fr</translation>
     </message>
     <message>
         <source>test.bmp</source>
-        <translation>test.bmp</translation>
+        <translation type="unfinished">test.bmp</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
@@ -124,11 +128,11 @@ weight:600;&quot;&gt;&lt;h1&gt;Inkommande fil&lt;/h1&gt;&lt;/span&gt;&lt;/p&gt;&
     </message>
     <message>
         <source>&amp;Accept</source>
-        <translation>&amp;Acceptera</translation>
+        <translation type="unfinished">&amp;Acceptera</translation>
     </message>
     <message>
         <source>&amp;Cancel</source>
-        <translation>&amp;Avbryt</translation>
+        <translation type="unfinished">&amp;Avbryt</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Contact: &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
@@ -147,85 +151,85 @@ weight:600;&quot;&gt;&lt;h1&gt;Inkommande fil&lt;/h1&gt;&lt;/span&gt;&lt;/p&gt;&
     <name>AddIMContact</name>
     <message>
         <source>WengoPhone - Add a Contact Account</source>
-        <translation>WengoPhone - Lägg till ett kontaktkonto</translation>
+        <translation type="unfinished">WengoPhone - Lägg till ett kontaktkonto</translation>
     </message>
     <message>
         <source>Contact Type (protocol):</source>
-        <translation>Kontakttyp (protokoll):</translation>
+        <translation type="unfinished">Kontakttyp (protokoll):</translation>
     </message>
     <message>
         <source>Contact ID:</source>
-        <translation>Kontakt-id:</translation>
+        <translation type="unfinished">Kontakt-id:</translation>
     </message>
     <message>
         <source>Account:</source>
-        <translation>Konto:</translation>
+        <translation type="unfinished">Konto:</translation>
     </message>
     <message>
         <source>Enable</source>
-        <translation>Aktivera</translation>
+        <translation type="unfinished">Aktivera</translation>
     </message>
     <message>
         <source>Login</source>
-        <translation>Logga in</translation>
+        <translation type="unfinished">Logga in</translation>
     </message>
     <message>
         <source>Add</source>
-        <translation>Lägg till</translation>
+        <translation type="unfinished">Lägg till</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Avbryt</translation>
+        <translation type="unfinished">Avbryt</translation>
     </message>
 </context>
 <context>
     <name>AdvancedConfigWindow</name>
     <message>
         <source>Close</source>
-        <translation>Stäng</translation>
+        <translation type="unfinished">Stäng</translation>
     </message>
     <message>
         <source>WengoPhone - Advanced Configuration</source>
-        <translation>WengoPhone - Avancerad konfiguration</translation>
+        <translation type="unfinished">WengoPhone - Avancerad konfiguration</translation>
     </message>
     <message>
         <source>Preference Name</source>
-        <translation>Inställningsnamn</translation>
+        <translation type="unfinished">Inställningsnamn</translation>
     </message>
     <message>
         <source>Status</source>
-        <translation>Status</translation>
+        <translation type="unfinished">Status</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Typ</translation>
+        <translation type="unfinished">Typ</translation>
     </message>
     <message>
         <source>Value</source>
-        <translation>Värde</translation>
+        <translation type="unfinished">Värde</translation>
     </message>
     <message>
         <source>Default Value</source>
-        <translation>Standardvärde</translation>
+        <translation type="unfinished">Standardvärde</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation>Spara</translation>
+        <translation type="unfinished">Spara</translation>
     </message>
 </context>
 <context>
     <name>AdvancedSettings</name>
     <message>
         <source>Add</source>
-        <translation>Lägg till</translation>
+        <translation type="unfinished">Lägg till</translation>
     </message>
     <message>
         <source>Advanced Settings</source>
-        <translation>Avancerade inställningar</translation>
+        <translation type="unfinished">Avancerade inställningar</translation>
     </message>
     <message>
         <source>Advanced Configuration Window</source>
-        <translation>Avancerad konfiguration</translation>
+        <translation type="unfinished">Avancerad konfiguration</translation>
     </message>
     <message>
         <source>Warning, this part is for advanced users.&lt;br&gt;Any mistake can badly damage 
@@ -235,11 +239,11 @@ misstag kan skada programvaran.</translation>
     </message>
     <message>
         <source>Automatically answer incoming calls from</source>
-        <translation>Svara automatiskt på inkommande samtal från</translation>
+        <translation type="unfinished">Svara automatiskt på inkommande samtal från</translation>
     </message>
     <message>
         <source>Remove</source>
-        <translation>Ta bort</translation>
+        <translation type="unfinished">Ta bort</translation>
     </message>
     <message>
         <source>Warning, this part is for advanced users.&lt;br&gt;Any mistake can badly damage the software.</source>
@@ -250,48 +254,56 @@ misstag kan skada programvaran.</translation>
     <name>AudioSettings</name>
     <message>
         <source>Audio Settings</source>
-        <translation>Ljudinställningar</translation>
+        <translation type="unfinished">Ljudinställningar</translation>
     </message>
     <message>
         <source>Output device:</source>
-        <translation>Utgångsenhet:</translation>
+        <translation type="unfinished">Utgångsenhet:</translation>
     </message>
     <message>
         <source>Input device:</source>
-        <translation>Ingångsenhet:</translation>
+        <translation type="unfinished">Ingångsenhet:</translation>
     </message>
     <message>
         <source>Ringing device:</source>
-        <translation>Ringenhet:</translation>
+        <translation type="unfinished">Ringenhet:</translation>
     </message>
     <message>
         <source>Make a test call </source>
-        <translation>Ring ett testsamtal </translation>
+        <translation type="unfinished">Ring ett testsamtal </translation>
     </message>
 </context>
 <context>
     <name>AvatarFrame</name>
     <message>
         <source>Form</source>
-        <translation>Formulär</translation>
+        <translation type="unfinished">Formulär</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>AvatarWidget</name>
     <message>
         <source>Form</source>
-        <translation>Formulär</translation>
+        <translation type="unfinished">Formulär</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>BrowserSoftUpdateWindow</name>
     <message>
         <source>Close</source>
-        <translation>Stäng</translation>
+        <translation type="unfinished">Stäng</translation>
     </message>
     <message>
         <source>WengoPhone - Update available</source>
-        <translation>WengoPhone - Uppdatering finns tillgänglig</translation>
+        <translation type="unfinished">WengoPhone - Uppdatering finns tillgänglig</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;An update is available, click &lt;span style=&quot; text-
@@ -311,7 +323,7 @@ hämta den nya versionen&lt;br /&gt;&lt;br /&gt;Version:%1&lt;br /&gt;Filstorlek
     <name>CallForwardSettings</name>
     <message>
         <source>Call Forward Settings</source>
-        <translation>Inställningar för vidarekoppling</translation>
+        <translation type="unfinished">Inställningar för vidarekoppling</translation>
     </message>
     <message>
         <source>For example +3314500XXXX (+33 is the country code and 14500XXXX is the phone 
@@ -320,27 +332,27 @@ number)</source>
     </message>
     <message>
         <source>3rd:</source>
-        <translation>Tredje:</translation>
+        <translation type="unfinished">Tredje:</translation>
     </message>
     <message>
         <source>1st:</source>
-        <translation>Första:</translation>
+        <translation type="unfinished">Första:</translation>
     </message>
     <message>
         <source>2nd:</source>
-        <translation>Andra:</translation>
+        <translation type="unfinished">Andra:</translation>
     </message>
     <message>
         <source>(+ country code) phone number</source>
-        <translation>(+landskod) telefonnummer</translation>
+        <translation type="unfinished">(+landskod) telefonnummer</translation>
     </message>
     <message>
         <source>Forward all unanswered calls to message box</source>
-        <translation>Vidarekoppla alla obesvarade samtal till röstbrevlåda</translation>
+        <translation type="unfinished">Vidarekoppla alla obesvarade samtal till röstbrevlåda</translation>
     </message>
     <message>
         <source>Disable call forwarding</source>
-        <translation>Inaktivera vidarekoppling</translation>
+        <translation type="unfinished">Inaktivera vidarekoppling</translation>
     </message>
     <message>
         <source>Call forwarding is active if you&apos;re not connected to Wengo, when your line 
@@ -354,7 +366,7 @@ mobiltelefoner eller röstmeddelande (om möjligt)</translation>
     </message>
     <message>
         <source>Forward all unanswered calls to following phone numbers:</source>
-        <translation>Vidarekoppla alla obesvarade samtal till följande telefonnummer:</translation>
+        <translation type="unfinished">Vidarekoppla alla obesvarade samtal till följande telefonnummer:</translation>
     </message>
     <message>
         <source>For example +3314500XXXX (+33 is the country code and 14500XXXX is the phone number)</source>
@@ -369,110 +381,122 @@ mobiltelefoner eller röstmeddelande (om möjligt)</translation>
     <name>CallToaster</name>
     <message>
         <source>Incoming Call</source>
-        <translation>Inkommande samtal</translation>
+        <translation type="unfinished">Inkommande samtal</translation>
     </message>
     <message>
         <source>Message</source>
-        <translation>Meddelande</translation>
+        <translation type="unfinished">Meddelande</translation>
     </message>
 </context>
 <context>
     <name>ChatMainWindow</name>
     <message>
         <source>MainWindow</source>
-        <translation>Huvudfönster</translation>
+        <translation type="unfinished">Huvudfönster</translation>
     </message>
     <message>
         <source>&amp;Contact</source>
-        <translation>&amp;Kontakt</translation>
+        <translation type="unfinished">&amp;Kontakt</translation>
     </message>
     <message>
         <source>&amp;Wengo</source>
-        <translation>&amp;Wengo</translation>
+        <translation type="unfinished">&amp;Wengo</translation>
     </message>
     <message>
         <source>&amp;Tools</source>
-        <translation>&amp;Verktyg</translation>
+        <translation type="unfinished">&amp;Verktyg</translation>
     </message>
     <message>
         <source>&amp;Help</source>
-        <translation>&amp;Hjälp</translation>
+        <translation type="unfinished">&amp;Hjälp</translation>
     </message>
     <message>
         <source>&amp;Actions</source>
-        <translation>&amp;Åtgärder</translation>
+        <translation type="unfinished">&amp;Åtgärder</translation>
     </message>
     <message>
         <source>Main Toolbar</source>
-        <translation>Huvudverktygsrad</translation>
+        <translation type="unfinished">Huvudverktygsrad</translation>
     </message>
     <message>
         <source>Call Contact</source>
-        <translation>Ring kontakt</translation>
+        <translation type="unfinished">Ring kontakt</translation>
     </message>
     <message>
         <source>Send a File</source>
-        <translation>Skicka en fil</translation>
+        <translation type="unfinished">Skicka en fil</translation>
     </message>
     <message>
         <source>createChatConf</source>
-        <translation>skapaChattKonf</translation>
+        <translation type="unfinished">skapaChattKonf</translation>
     </message>
     <message>
         <source>Show Contact Info</source>
-        <translation>Visa kontaktinfo</translation>
+        <translation type="unfinished">Visa kontaktinfo</translation>
     </message>
     <message>
         <source>blockContact</source>
-        <translation>blockeraKontakt</translation>
+        <translation type="unfinished">blockeraKontakt</translation>
     </message>
     <message>
         <source>&amp;Save History As...</source>
-        <translation>&amp;Spara historik som...</translation>
+        <translation type="unfinished">&amp;Spara historik som...</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>ChatToaster</name>
     <message>
         <source>Message</source>
-        <translation>Meddelande</translation>
+        <translation type="unfinished">Meddelande</translation>
     </message>
     <message>
         <source>Incoming Chat</source>
-        <translation>Inkommande chatt</translation>
+        <translation type="unfinished">Inkommande chatt</translation>
     </message>
 </context>
 <context>
     <name>ChatWidget</name>
     <message>
         <source>Form</source>
-        <translation>Formulär</translation>
+        <translation type="unfinished">Formulär</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>CloseChatTabWidget</name>
     <message>
         <source>Form</source>
-        <translation>Formulär</translation>
+        <translation type="unfinished">Formulär</translation>
     </message>
     <message>
         <source>Close active tab</source>
-        <translation>Stäng aktiv flik</translation>
+        <translation type="unfinished">Stäng aktiv flik</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>ConferenceCallWidget</name>
     <message>
         <source>Cancel</source>
-        <translation>Avbryt</translation>
+        <translation type="unfinished">Avbryt</translation>
     </message>
     <message>
         <source>WengoPhone - Create a Conference</source>
-        <translation>WengoPhone - Skapa en konferens</translation>
+        <translation type="unfinished">WengoPhone - Skapa en konferens</translation>
     </message>
     <message>
         <source>Start</source>
-        <translation>Starta</translation>
+        <translation type="unfinished">Starta</translation>
     </message>
     <message>
         <source>&lt;span style=&quot; font-size:18pt;&quot;&gt;Conference&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;Please enter 
@@ -490,15 +514,19 @@ indent:0px;&quot;&gt;skapa en trevägskonferens.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>Phone number 2:</source>
-        <translation>Telefonnummer 2:</translation>
+        <translation type="unfinished">Telefonnummer 2:</translation>
     </message>
     <message>
         <source>Phone number 1:</source>
-        <translation>Telefonnummer 1:</translation>
+        <translation type="unfinished">Telefonnummer 1:</translation>
     </message>
     <message>
         <source>...</source>
-        <translation>...</translation>
+        <translation type="unfinished">...</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&lt;span style=&quot; font-size:18pt;&quot;&gt;Conference&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;Please enter two phone numbers &lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;or Wengo contact ID in order&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;to create a 3-way conference.&lt;/p&gt;</source>
@@ -509,7 +537,7 @@ indent:0px;&quot;&gt;skapa en trevägskonferens.&lt;/p&gt;</translation>
     <name>ConferenceInviteWidget</name>
     <message>
         <source>Cancel</source>
-        <translation>Avbryt</translation>
+        <translation type="obsolete">Avbryt</translation>
     </message>
     <message>
         <source>&lt;span style=&quot; font-size:18pt;&quot;&gt;Conference&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;Please enter 
@@ -527,23 +555,19 @@ indent:0px;&quot;&gt;skapa en trevägskonferens.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&amp;Add &gt;&gt;</source>
-        <translation>&amp;Lägg till &gt;&gt;</translation>
+        <translation type="obsolete">&amp;Lägg till &gt;&gt;</translation>
     </message>
     <message>
         <source>&lt;&lt; &amp;Remove</source>
-        <translation>&lt;&lt; &amp;Ta bort</translation>
+        <translation type="obsolete">&lt;&lt; &amp;Ta bort</translation>
     </message>
     <message>
         <source>Available Contacts</source>
-        <translation>Tillgängliga kontakter</translation>
+        <translation type="obsolete">Tillgängliga kontakter</translation>
     </message>
     <message>
         <source>&amp;Start</source>
-        <translation>&amp;Starta</translation>
-    </message>
-    <message>
-        <source>&lt;span style=&quot; font-size:18pt;&quot;&gt;Conference&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;Please enter two phone numbers &lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;or Wengo contact ID in order&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;to create a 3-way conference.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">&amp;Starta</translation>
     </message>
 </context>
 <context>
@@ -577,29 +601,33 @@ indent:0px;&quot;&gt;skapa en trevägskonferens.&lt;/p&gt;</translation>
     <name>ContactList</name>
     <message>
         <source>Contact List</source>
-        <translation>Kontaktlista</translation>
+        <translation type="unfinished">Kontaktlista</translation>
     </message>
 </context>
 <context>
     <name>ContactWidget</name>
     <message>
         <source>No mobile phone number set</source>
-        <translation>Inget mobiltelefonnummer har ställts in</translation>
+        <translation type="unfinished">Inget mobiltelefonnummer har ställts in</translation>
     </message>
     <message>
         <source>No landline phone number set</source>
-        <translation>Inget fasttelefonnummer har ställts in</translation>
+        <translation type="unfinished">Inget fasttelefonnummer har ställts in</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>CrashReport</name>
     <message>
         <source>Cancel</source>
-        <translation>Avbryt</translation>
+        <translation type="obsolete">Avbryt</translation>
     </message>
     <message>
         <source>Program Failure</source>
-        <translation>Programfel</translation>
+        <translation type="obsolete">Programfel</translation>
     </message>
     <message>
         <source>The WengoPhone execution failed and has generated a diagnostic file.&lt;br&gt;This 
@@ -613,11 +641,11 @@ bidrag.&lt;br&gt;&lt;br&gt;Utvecklingsteamet bakom WengoPhone.</translation>
     </message>
     <message>
         <source>Send</source>
-        <translation>Skicka</translation>
+        <translation type="obsolete">Skicka</translation>
     </message>
     <message>
         <source>Optional Information</source>
-        <translation>Valfri information</translation>
+        <translation type="obsolete">Valfri information</translation>
     </message>
     <message>
         <source>In order to help the developers you can complete this report. This step is 
@@ -627,50 +655,42 @@ valfritt.&lt;br&gt;Beskrivning:</translation>
     </message>
     <message>
         <source>Your Mail:</source>
-        <translation>Din e-postadress:</translation>
-    </message>
-    <message>
-        <source>The WengoPhone execution failed and has generated a diagnostic file.&lt;br&gt;This file contains usefull information to solve the problem you are encounting.&lt;br&gt;Thanks for your contribution.&lt;br&gt;&lt;br&gt;The WengoPhone Development Team.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>In order to help the developers you can complete this report. This step is optional.&lt;br&gt;Use Case Description:</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Din e-postadress:</translation>
     </message>
 </context>
 <context>
     <name>CreditWidget</name>
     <message>
         <source>Your Wengo phone number</source>
-        <translation>Ditt Wengo-telefonnummer</translation>
+        <translation type="unfinished">Ditt Wengo-telefonnummer</translation>
     </message>
     <message>
         <source>Not Available</source>
-        <translation>Inte tillgänglig</translation>
+        <translation type="unfinished">Inte tillgänglig</translation>
     </message>
     <message>
         <source>Your phone number:</source>
-        <translation>Ditt telefonnummer:</translation>
+        <translation type="unfinished">Ditt telefonnummer:</translation>
     </message>
     <message>
         <source>Click here to change your call forward settings</source>
-        <translation>Klicka här för att ändra dina vidarekopplingsinställningar</translation>
+        <translation type="unfinished">Klicka här för att ändra dina vidarekopplingsinställningar</translation>
     </message>
     <message>
         <source>Call forward mode:</source>
-        <translation>Läge för vidarekoppling:</translation>
+        <translation type="unfinished">Läge för vidarekoppling:</translation>
     </message>
     <message>
         <source>Click here to buy Wengo&apos;s credits</source>
-        <translation>Klicka här för att fylla på Wengo-saldot</translation>
+        <translation type="unfinished">Klicka här för att fylla på Wengo-saldot</translation>
     </message>
     <message>
         <source>Purchase call out credits</source>
-        <translation>Fyll på saldo för att ringa ut</translation>
+        <translation type="unfinished">Fyll på saldo för att ringa ut</translation>
     </message>
     <message>
         <source>Call Forward Method</source>
-        <translation>Metod för vidarekoppling</translation>
+        <translation type="unfinished">Metod för vidarekoppling</translation>
     </message>
     <message>
         <source>Call Voice Mail</source>
@@ -681,41 +701,41 @@ valfritt.&lt;br&gt;Beskrivning:</translation>
     <name>DialpadWidget</name>
     <message>
         <source>Audio Smileys</source>
-        <translation>Ljudsmilisar</translation>
+        <translation type="obsolete">Ljudsmilisar</translation>
     </message>
 </context>
 <context>
     <name>EventWidget</name>
     <message>
         <source>0</source>
-        <translation>0</translation>
+        <translation type="unfinished">0</translation>
     </message>
     <message>
         <source>Click here to call your voice mail</source>
-        <translation>Klicka här för att ringa upp din röstbrevlåda</translation>
+        <translation type="unfinished">Klicka här för att ringa upp din röstbrevlåda</translation>
     </message>
     <message>
         <source>New Voice Mail:</source>
-        <translation>Nytt röstmeddelande:</translation>
+        <translation type="unfinished">Nytt röstmeddelande:</translation>
     </message>
     <message>
         <source>Click here to see missed call(s)</source>
-        <translation>Klicka här för att se dina missade samtal</translation>
+        <translation type="unfinished">Klicka här för att se dina missade samtal</translation>
     </message>
     <message>
         <source>Missed Call(s):</source>
-        <translation>Missade samtal:</translation>
+        <translation type="unfinished">Missade samtal:</translation>
     </message>
 </context>
 <context>
     <name>FileTransferItem</name>
     <message>
         <source>Cancel</source>
-        <translation>Avbryt</translation>
+        <translation type="unfinished">Avbryt</translation>
     </message>
     <message>
         <source>Form</source>
-        <translation>Formulär</translation>
+        <translation type="unfinished">Formulär</translation>
     </message>
     <message>
         <source>From:</source>
@@ -723,7 +743,11 @@ valfritt.&lt;br&gt;Beskrivning:</translation>
     </message>
     <message>
         <source>Pause</source>
-        <translation>Paus</translation>
+        <translation type="unfinished">Paus</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&lt;i&gt;From:&lt;/i&gt;</source>
@@ -734,11 +758,11 @@ valfritt.&lt;br&gt;Beskrivning:</translation>
     <name>FileTransferWidget</name>
     <message>
         <source>...</source>
-        <translation>...</translation>
+        <translation type="unfinished">...</translation>
     </message>
     <message>
         <source>WengoPhone - File Transfer Manager</source>
-        <translation>WengoPhone - Hantera filöverföringar</translation>
+        <translation type="unfinished">WengoPhone - Hantera filöverföringar</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
@@ -756,15 +780,15 @@ hämtningsmapp&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>Download folder:</source>
-        <translation>Mapp för hämtningar:</translation>
+        <translation type="unfinished">Mapp för hämtningar:</translation>
     </message>
     <message>
         <source>Download</source>
-        <translation>Hämta</translation>
+        <translation type="unfinished">Hämta</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Skicka upp</translation>
+        <translation type="unfinished">Skicka upp</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
@@ -780,7 +804,7 @@ indent:0; text-indent:0px;&quot;&gt;Töm alla objekt i listan&lt;/p&gt;&lt;/body
     </message>
     <message>
         <source>&amp;Clean</source>
-        <translation>&amp;Töm</translation>
+        <translation type="unfinished">&amp;Töm</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Click here to change your download folder&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
@@ -795,11 +819,11 @@ indent:0; text-indent:0px;&quot;&gt;Töm alla objekt i listan&lt;/p&gt;&lt;/body
     <name>Form</name>
     <message>
         <source>&amp;Start</source>
-        <translation>&amp;Starta</translation>
+        <translation type="obsolete">&amp;Starta</translation>
     </message>
     <message>
         <source>Chat room</source>
-        <translation>Chattrum</translation>
+        <translation type="obsolete">Chattrum</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
@@ -817,123 +841,123 @@ weight:600;&quot;&gt;Chattrum&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</
     </message>
     <message>
         <source>(Conference participants)</source>
-        <translation>(Konferensdeltagare)</translation>
+        <translation type="obsolete">(Konferensdeltagare)</translation>
     </message>
     <message>
         <source>&amp;Remove</source>
-        <translation>&amp;Ta bort</translation>
+        <translation type="obsolete">&amp;Ta bort</translation>
     </message>
     <message>
         <source>Group Name</source>
-        <translation>Gruppnamn</translation>
+        <translation type="obsolete">Gruppnamn</translation>
     </message>
     <message>
         <source>&amp;Add</source>
-        <translation>&amp;Lägg till</translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;&gt;Chat room&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">&amp;Lägg till</translation>
     </message>
 </context>
 <context>
     <name>GeneralSettings</name>
     <message>
         <source>General Settings</source>
-        <translation>Allmänna inställningar</translation>
+        <translation type="unfinished">Allmänna inställningar</translation>
     </message>
     <message>
         <source>When I double-click on a contact </source>
-        <translation>När jag dubbelklickar på en kontakt </translation>
+        <translation type="unfinished">När jag dubbelklickar på en kontakt </translation>
     </message>
     <message>
         <source>Start a free call if applicable</source>
-        <translation>Starta ett gratissamtal, om möjligt</translation>
+        <translation type="unfinished">Starta ett gratissamtal, om möjligt</translation>
     </message>
     <message>
         <source>Call cell phone or land line if contact not online</source>
-        <translation>Ring mobiltelefon eller hemtelefon om kontakten inte är ansluten</translation>
+        <translation type="unfinished">Ring mobiltelefon eller hemtelefon om kontakten inte är ansluten</translation>
     </message>
     <message>
         <source>Always start a chat</source>
-        <translation>Starta alltid en chatt</translation>
+        <translation type="unfinished">Starta alltid en chatt</translation>
     </message>
     <message>
         <source>Idle status</source>
-        <translation>Inaktivitetsstatus</translation>
+        <translation type="unfinished">Inaktivitetsstatus</translation>
     </message>
     <message>
         <source>minutes</source>
-        <translation>minuter</translation>
+        <translation type="unfinished">minuter</translation>
     </message>
     <message>
         <source>Show me as &quot;Away&quot; when I am inactive for:</source>
-        <translation>Visa mig som &quot;Frånvarande&quot; när jag är inaktiv i:</translation>
+        <translation type="unfinished">Visa mig som &quot;Frånvarande&quot; när jag är inaktiv i:</translation>
     </message>
     <message>
         <source>When I start my computer</source>
-        <translation>När jag startar min dator</translation>
+        <translation type="unfinished">När jag startar min dator</translation>
     </message>
     <message>
         <source>Automatically start WengoPhone</source>
-        <translation>Starta WengoPhone automatiskt</translation>
+        <translation type="unfinished">Starta WengoPhone automatiskt</translation>
     </message>
     <message>
         <source>&amp;Edit my profile</source>
-        <translation>R&amp;edigera min profil</translation>
+        <translation type="unfinished">R&amp;edigera min profil</translation>
     </message>
 </context>
 <context>
     <name>GoogleTalkSettings</name>
     <message>
         <source>Password:</source>
-        <translation>Lösenord:</translation>
+        <translation type="unfinished">Lösenord:</translation>
     </message>
     <message>
         <source>Login:</source>
-        <translation>Inloggningsnamn:</translation>
+        <translation type="unfinished">Inloggningsnamn:</translation>
     </message>
     <message>
         <source>GoogleTalk Settings</source>
-        <translation>Inställningar för GoogleTalk</translation>
+        <translation type="unfinished">Inställningar för GoogleTalk</translation>
     </message>
     <message>
         <source>Forgot your GoogleTalk password?</source>
-        <translation>Glömt ditt GoogleTalk-lösenord?</translation>
+        <translation type="unfinished">Glömt ditt GoogleTalk-lösenord?</translation>
     </message>
     <message>
         <source>Get a new GoogleTalk Account</source>
-        <translation>Skaffa ett nytt GoogleTalk-konto</translation>
+        <translation type="unfinished">Skaffa ett nytt GoogleTalk-konto</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>HistoryWidget</name>
     <message>
         <source>Type</source>
-        <translation>Typ</translation>
+        <translation type="unfinished">Typ</translation>
     </message>
     <message>
         <source>Name/ID</source>
-        <translation>Namn/ID</translation>
+        <translation type="unfinished">Namn/ID</translation>
     </message>
     <message>
         <source>Date</source>
-        <translation>Datum</translation>
+        <translation type="unfinished">Datum</translation>
     </message>
     <message>
         <source>Duration</source>
-        <translation>Längd</translation>
+        <translation type="unfinished">Längd</translation>
     </message>
 </context>
 <context>
     <name>HttpProxyLoginWindow</name>
     <message>
         <source>Cancel</source>
-        <translation>Avbryt</translation>
+        <translation type="unfinished">Avbryt</translation>
     </message>
     <message>
         <source>WengoPhone - Local HTTP Proxy</source>
-        <translation>WengoPhone - Lokal HTTP-proxy</translation>
+        <translation type="unfinished">WengoPhone - Lokal HTTP-proxy</translation>
     </message>
     <message>
         <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;HTTP Proxy 
@@ -945,23 +969,23 @@ autentisering&lt;br&gt;Ange ditt inloggningsnamn och lösenord&lt;/span&gt;</tra
     </message>
     <message>
         <source>HTTP Proxy Address:</source>
-        <translation>Adress för HTTP-proxy:</translation>
+        <translation type="unfinished">Adress för HTTP-proxy:</translation>
     </message>
     <message>
         <source>HTTP Proxy Port Number:</source>
-        <translation>Portnummer för HTTP-proxy:</translation>
+        <translation type="unfinished">Portnummer för HTTP-proxy:</translation>
     </message>
     <message>
         <source>HTTP Proxy Login:</source>
-        <translation>Inloggningsnamn för HTTP-proxy:</translation>
+        <translation type="unfinished">Inloggningsnamn för HTTP-proxy:</translation>
     </message>
     <message>
         <source>HTTP Proxy Password:</source>
-        <translation>Lösenord för HTTP-proxy:</translation>
+        <translation type="unfinished">Lösenord för HTTP-proxy:</translation>
     </message>
     <message>
         <source>OK</source>
-        <translation>OK</translation>
+        <translation type="unfinished">OK</translation>
     </message>
     <message>
         <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;HTTP Proxy Authentication&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;Your local HTTP proxy uses authentication&lt;br&gt;Please enter your login and password&lt;/span&gt;</source>
@@ -972,177 +996,177 @@ autentisering&lt;br&gt;Ange ditt inloggningsnamn och lösenord&lt;/span&gt;</tra
     <name>IMAccountManager</name>
     <message>
         <source>Close</source>
-        <translation>Stäng</translation>
+        <translation type="unfinished">Stäng</translation>
     </message>
     <message>
         <source>Login</source>
-        <translation>Logga in</translation>
+        <translation type="unfinished">Logga in</translation>
     </message>
     <message>
         <source>Add</source>
-        <translation>Lägg till</translation>
+        <translation type="unfinished">Lägg till</translation>
     </message>
     <message>
         <source>WengoPhone - My Instant Messaging Accounts (MSN, Jabber...)</source>
-        <translation>WengoPhone - Mina snabbmeddelandekonton (MSN, Jabber...)</translation>
+        <translation type="unfinished">WengoPhone - Mina snabbmeddelandekonton (MSN, Jabber...)</translation>
     </message>
     <message>
         <source>Protocol</source>
-        <translation>Protokoll</translation>
+        <translation type="unfinished">Protokoll</translation>
     </message>
     <message>
         <source>Enabled</source>
-        <translation>Aktiverad</translation>
+        <translation type="unfinished">Aktiverad</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation>Ta bort</translation>
+        <translation type="unfinished">Ta bort</translation>
     </message>
     <message>
         <source>Modify</source>
-        <translation>Ändra</translation>
+        <translation type="unfinished">Ändra</translation>
     </message>
 </context>
 <context>
     <name>IMAccountTemplate</name>
     <message>
         <source>Cancel</source>
-        <translation>Avbryt</translation>
+        <translation type="unfinished">Avbryt</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation>Spara</translation>
+        <translation type="unfinished">Spara</translation>
     </message>
     <message>
         <source>IM Account Settings</source>
-        <translation>Inställningar för IM-konto</translation>
+        <translation type="unfinished">Inställningar för IM-konto</translation>
     </message>
 </context>
 <context>
     <name>IMContactManager</name>
     <message>
         <source>Add</source>
-        <translation>Lägg till</translation>
+        <translation type="unfinished">Lägg till</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation>Ta bort</translation>
+        <translation type="unfinished">Ta bort</translation>
     </message>
     <message>
         <source>Contact ID</source>
-        <translation>Kontakt-id</translation>
+        <translation type="unfinished">Kontakt-id</translation>
     </message>
     <message>
         <source>Contact Type (protocol)</source>
-        <translation>Kontakttyp (protokoll)</translation>
+        <translation type="unfinished">Kontakttyp (protokoll)</translation>
     </message>
     <message>
         <source>Click on the add button below to add a new ID</source>
-        <translation>Klicka på Lägg till-knappen nedan för att lägga till ett nytt id</translation>
+        <translation type="unfinished">Klicka på Lägg till-knappen nedan för att lägga till ett nytt id</translation>
     </message>
 </context>
 <context>
     <name>IMProfileWidget</name>
     <message>
         <source>Edit My Profile</source>
-        <translation>Redigera min profil</translation>
+        <translation type="unfinished">Redigera min profil</translation>
     </message>
     <message>
         <source>AIM/ICQ</source>
-        <translation>AIM/ICQ</translation>
+        <translation type="unfinished">AIM/ICQ</translation>
     </message>
     <message>
         <source>Yahoo!</source>
-        <translation>Yahoo!</translation>
+        <translation type="unfinished">Yahoo!</translation>
     </message>
     <message>
         <source>Wengo</source>
-        <translation>Wengo</translation>
+        <translation type="unfinished">Wengo</translation>
     </message>
     <message>
         <source>Jabber/GoogleTalk</source>
-        <translation>Jabber/GoogleTalk</translation>
+        <translation type="unfinished">Jabber/GoogleTalk</translation>
     </message>
     <message>
         <source>MSN</source>
-        <translation>MSN</translation>
+        <translation type="unfinished">MSN</translation>
     </message>
     <message>
         <source>Enter your nickname here</source>
-        <translation>Ange ditt smeknamn här</translation>
+        <translation type="unfinished">Ange ditt smeknamn här</translation>
     </message>
 </context>
 <context>
     <name>JabberSettings</name>
     <message>
         <source>Password:</source>
-        <translation>Lösenord:</translation>
+        <translation type="unfinished">Lösenord:</translation>
     </message>
     <message>
         <source>Login:</source>
-        <translation>Inloggningsnamn:</translation>
+        <translation type="unfinished">Inloggningsnamn:</translation>
     </message>
     <message>
         <source>Jabber Settings</source>
-        <translation>Inställningar för Jabber</translation>
+        <translation type="unfinished">Inställningar för Jabber</translation>
     </message>
     <message>
         <source>Connect Server:</source>
-        <translation>Anslutningsserver:</translation>
+        <translation type="unfinished">Anslutningsserver:</translation>
     </message>
     <message>
         <source>&lt;u&gt;Advanced Options&lt;/u&gt;</source>
-        <translation>&lt;u&gt;Avancerade alternativ&lt;/u&gt;</translation>
+        <translation type="unfinished">&lt;u&gt;Avancerade alternativ&lt;/u&gt;</translation>
     </message>
     <message>
         <source>Require TLS</source>
-        <translation>Kräv TLS</translation>
+        <translation type="unfinished">Kräv TLS</translation>
     </message>
     <message>
         <source>Port:</source>
-        <translation>Port:</translation>
+        <translation type="unfinished">Port:</translation>
     </message>
     <message>
         <source>Use TLS if available</source>
-        <translation>Använd TLS om tillgängligt</translation>
+        <translation type="unfinished">Använd TLS om tillgängligt</translation>
     </message>
     <message>
         <source>Allow plaintext authentication over unencrypted streams</source>
-        <translation>Tillåt autentisering i klartext över okrypterade strömmar</translation>
+        <translation type="unfinished">Tillåt autentisering i klartext över okrypterade strömmar</translation>
     </message>
     <message>
         <source>5222</source>
-        <translation>5222</translation>
+        <translation type="unfinished">5222</translation>
     </message>
     <message>
         <source>Force old (port 5223) SSL</source>
-        <translation>Tvinga gammal (port 5223) SSL</translation>
+        <translation type="unfinished">Tvinga gammal (port 5223) SSL</translation>
     </message>
 </context>
 <context>
     <name>LanguagesSettings</name>
     <message>
         <source>Language</source>
-        <translation>Språk</translation>
+        <translation type="unfinished">Språk</translation>
     </message>
 </context>
 <context>
     <name>LoginWindow</name>
     <message>
         <source>Password:</source>
-        <translation>Lösenord:</translation>
+        <translation type="unfinished">Lösenord:</translation>
     </message>
     <message>
         <source>Login</source>
-        <translation>Logga in</translation>
+        <translation type="unfinished">Logga in</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Avbryt</translation>
+        <translation type="unfinished">Avbryt</translation>
     </message>
     <message>
         <source>WengoPhone - Login</source>
-        <translation>WengoPhone - Inloggning</translation>
+        <translation type="unfinished">WengoPhone - Inloggning</translation>
     </message>
     <message>
         <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Login&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;Please enter your 
@@ -1152,19 +1176,23 @@ postadress och&lt;br&gt;lösenord&lt;/span&gt;</translation>
     </message>
     <message>
         <source>Forgot your password?</source>
-        <translation>Glömt ditt lösenord?</translation>
+        <translation type="unfinished">Glömt ditt lösenord?</translation>
     </message>
     <message>
         <source>Need help?</source>
-        <translation>Behöver du hjälp?</translation>
+        <translation type="unfinished">Behöver du hjälp?</translation>
     </message>
     <message>
         <source>Email Address:</source>
-        <translation>E-postadress:</translation>
+        <translation type="unfinished">E-postadress:</translation>
     </message>
     <message>
         <source>Click here if you don&apos;t have a Wengo account</source>
-        <translation>Klicka här om du inte har ett Wengo-konto</translation>
+        <translation type="unfinished">Klicka här om du inte har ett Wengo-konto</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Login&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;Please enter your email address and&lt;br&gt;password&lt;/span&gt;</source>
@@ -1175,167 +1203,171 @@ postadress och&lt;br&gt;lösenord&lt;/span&gt;</translation>
     <name>MSNSettings</name>
     <message>
         <source>Password:</source>
-        <translation>Lösenord:</translation>
+        <translation type="unfinished">Lösenord:</translation>
     </message>
     <message>
         <source>Login:</source>
-        <translation>Inloggningsnamn:</translation>
+        <translation type="unfinished">Inloggningsnamn:</translation>
     </message>
     <message>
         <source>MSN Settings</source>
-        <translation>Inställningar för MSN</translation>
+        <translation type="unfinished">Inställningar för MSN</translation>
     </message>
     <message>
         <source>Forgot your MSN password?</source>
-        <translation>Glömt ditt MSN-lösenord?</translation>
+        <translation type="unfinished">Glömt ditt MSN-lösenord?</translation>
     </message>
     <message>
         <source>Get a new MSN Account</source>
-        <translation>Skaffa ett nytt MSN-konto</translation>
+        <translation type="unfinished">Skaffa ett nytt MSN-konto</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>MainWindow</name>
     <message>
         <source>MainWindow</source>
-        <translation>Huvudfönster</translation>
+        <translation type="obsolete">Huvudfönster</translation>
     </message>
     <message>
         <source>Command::terminate()</source>
-        <translation>Command::terminate()</translation>
+        <translation type="obsolete">Command::terminate()</translation>
     </message>
     <message>
         <source>Command::start()</source>
-        <translation>Command::start()</translation>
+        <translation type="obsolete">Command::start()</translation>
     </message>
     <message>
         <source>Accept Call</source>
-        <translation>Acceptera samtal</translation>
+        <translation type="obsolete">Acceptera samtal</translation>
     </message>
     <message>
         <source>Send Chat Message</source>
-        <translation>Skicka chattmeddelande</translation>
+        <translation type="obsolete">Skicka chattmeddelande</translation>
     </message>
     <message>
         <source>Make Call</source>
-        <translation>Ring samtal</translation>
+        <translation type="obsolete">Ring samtal</translation>
     </message>
     <message>
         <source>Hang Up</source>
-        <translation>Lägg på</translation>
+        <translation type="obsolete">Lägg på</translation>
     </message>
 </context>
 <context>
     <name>ManageBlockedUsersSettings</name>
     <message>
         <source>Close</source>
-        <translation>Stäng</translation>
+        <translation type="unfinished">Stäng</translation>
     </message>
     <message>
         <source>WengoPhone - Manage blocked users</source>
-        <translation>WengoPhone - Hantera blockerade användare</translation>
+        <translation type="unfinished">WengoPhone - Hantera blockerade användare</translation>
     </message>
     <message>
         <source>Unblock User</source>
-        <translation>Avblockera användare</translation>
+        <translation type="unfinished">Avblockera användare</translation>
     </message>
     <message>
         <source>Manage blocked users</source>
-        <translation>Hantera blockerade användare</translation>
+        <translation type="unfinished">Hantera blockerade användare</translation>
     </message>
 </context>
 <context>
     <name>NotificationSettings</name>
     <message>
         <source>Standard Notifications</source>
-        <translation>Standardnotifieringar</translation>
+        <translation type="unfinished">Standardnotifieringar</translation>
     </message>
     <message>
         <source>Show pop-up window for incoming chats</source>
-        <translation>Visa popuppfönster för inkommande chattar</translation>
+        <translation type="unfinished">Visa popuppfönster för inkommande chattar</translation>
     </message>
     <message>
         <source>Show pop-up window when a contact is turning online</source>
-        <translation>Visa popuppfönster när en kontakt har anslutit</translation>
+        <translation type="unfinished">Visa popuppfönster när en kontakt har anslutit</translation>
     </message>
     <message>
         <source>Show pop-up window for incoming calls</source>
-        <translation>Visa popuppfönster för inkommande samtal</translation>
+        <translation type="unfinished">Visa popuppfönster för inkommande samtal</translation>
     </message>
     <message>
         <source>Advanced Notifications</source>
-        <translation>Avancerade notifieringar</translation>
+        <translation type="unfinished">Avancerade notifieringar</translation>
     </message>
     <message>
         <source>Do not show any pop-up window</source>
-        <translation>Visa inga popuppfönster</translation>
+        <translation type="unfinished">Visa inga popuppfönster</translation>
     </message>
     <message>
         <source>When switched to &quot;Away&quot;:</source>
-        <translation>När växlad till &quot;Frånvarande&quot;:</translation>
+        <translation type="unfinished">När växlad till &quot;Frånvarande&quot;:</translation>
     </message>
     <message>
         <source>When switched to &quot;Do Not Disturb&quot;:</source>
-        <translation>När växlad till &quot;Stör inte&quot;:</translation>
+        <translation type="unfinished">När växlad till &quot;Stör inte&quot;:</translation>
     </message>
     <message>
         <source>No audio notifications</source>
-        <translation>Inga ljudnotifieringar</translation>
+        <translation type="unfinished">Inga ljudnotifieringar</translation>
     </message>
     <message>
         <source>Activate sounds for/when</source>
-        <translation>Aktivera ljud för/när</translation>
+        <translation type="unfinished">Aktivera ljud för/när</translation>
     </message>
     <message>
         <source>No sound</source>
-        <translation>Inget ljud</translation>
+        <translation type="unfinished">Inget ljud</translation>
     </message>
     <message>
         <source>Sound file</source>
-        <translation>Ljudfil</translation>
+        <translation type="unfinished">Ljudfil</translation>
     </message>
     <message>
         <source>Play sound file</source>
-        <translation>Spela upp ljudfil</translation>
+        <translation type="unfinished">Spela upp ljudfil</translation>
     </message>
     <message>
         <source>Find a sound file</source>
-        <translation>Hitta en ljudfil</translation>
+        <translation type="unfinished">Hitta en ljudfil</translation>
     </message>
     <message>
         <source>Incoming call (ringtone)</source>
-        <translation>Inkommande samtal (rington)</translation>
+        <translation type="unfinished">Inkommande samtal (rington)</translation>
     </message>
     <message>
         <source>Call closed (hang up tone)</source>
-        <translation>Samtal bröts (lägg på luren-ton)</translation>
+        <translation type="unfinished">Samtal bröts (lägg på luren-ton)</translation>
     </message>
     <message>
         <source>Incoming chat</source>
-        <translation>Inkommande chatt</translation>
+        <translation type="unfinished">Inkommande chatt</translation>
     </message>
     <message>
         <source>IM account connected</source>
-        <translation>IM-konto ansluten</translation>
+        <translation type="unfinished">IM-konto ansluten</translation>
     </message>
     <message>
         <source>IM account disconnected</source>
-        <translation>IM-konto kopplade från</translation>
+        <translation type="unfinished">IM-konto kopplade från</translation>
     </message>
     <message>
         <source>Contact online</source>
-        <translation>Kontakt ansluter</translation>
+        <translation type="unfinished">Kontakt ansluter</translation>
     </message>
 </context>
 <context>
     <name>PhoneCallWidget</name>
     <message>
         <source>Status</source>
-        <translation>Status</translation>
+        <translation type="unfinished">Status</translation>
     </message>
     <message>
         <source>Duration</source>
-        <translation>Längd</translation>
+        <translation type="unfinished">Längd</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
@@ -1352,6 +1384,10 @@ indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-si
 font-weight:600;&quot;&gt;Smeknamn eller nummer&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
+        <source></source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-size:13pt; font-weight:600;&quot;&gt;NickName or number&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1360,146 +1396,146 @@ font-weight:600;&quot;&gt;Smeknamn eller nummer&lt;/span&gt;&lt;/p&gt;&lt;/body&
     <name>PrivacySettings</name>
     <message>
         <source>Manage blocked users</source>
-        <translation>Hantera blockerade användare</translation>
+        <translation type="unfinished">Hantera blockerade användare</translation>
     </message>
     <message>
         <source>Privacy Rules </source>
-        <translation>Integritetsregler </translation>
+        <translation type="unfinished">Integritetsregler </translation>
     </message>
     <message>
         <source>When I sign into Wengo</source>
-        <translation>När jag loggar in på Wengo</translation>
+        <translation type="unfinished">När jag loggar in på Wengo</translation>
     </message>
     <message>
         <source>Always sign in as &quot;Invisible&quot; (appear offline to all users)</source>
-        <translation>Logga alltid in som &quot;Osynlig&quot; (ser ut att vara frånkopplad)</translation>
+        <translation type="unfinished">Logga alltid in som &quot;Osynlig&quot; (ser ut att vara frånkopplad)</translation>
     </message>
     <message>
         <source>Allow chats from</source>
-        <translation>Tillåt chattar från</translation>
+        <translation type="unfinished">Tillåt chattar från</translation>
     </message>
     <message>
         <source>Anyone</source>
-        <translation>Vem som helst</translation>
+        <translation type="unfinished">Vem som helst</translation>
     </message>
     <message>
         <source>Only people from my contact list</source>
-        <translation>Endast personer i min kontaktlista</translation>
+        <translation type="unfinished">Endast personer i min kontaktlista</translation>
     </message>
     <message>
         <source>Allow calls from</source>
-        <translation>Tillåt samtal från</translation>
+        <translation type="unfinished">Tillåt samtal från</translation>
     </message>
 </context>
 <context>
     <name>ProfileDetails</name>
     <message>
         <source>Cancel</source>
-        <translation>Avbryt</translation>
+        <translation type="unfinished">Avbryt</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation>Spara</translation>
+        <translation type="unfinished">Spara</translation>
     </message>
     <message>
         <source>General</source>
-        <translation>Allmänt</translation>
+        <translation type="unfinished">Allmänt</translation>
     </message>
     <message>
         <source>Network IDs (MSN, Jabber...)</source>
-        <translation>Nätverks-id (MSN, Jabber...)</translation>
+        <translation type="unfinished">Nätverks-id (MSN, Jabber...)</translation>
     </message>
     <message>
         <source>Advanced &gt;&gt;</source>
-        <translation>Avancerat &gt;&gt;</translation>
+        <translation type="unfinished">Avancerat &gt;&gt;</translation>
     </message>
     <message>
         <source>Fill in all your network Id to stay connected with your contacts</source>
-        <translation>Fyll i alla dina nätverks-id för att hålla kontakten med dina kontakter</translation>
+        <translation type="unfinished">Fyll i alla dina nätverks-id för att hålla kontakten med dina kontakter</translation>
     </message>
     <message>
         <source>Phone Numbers</source>
-        <translation>Telefonnummer</translation>
+        <translation type="unfinished">Telefonnummer</translation>
     </message>
     <message>
         <source>Home phone</source>
-        <translation>Hemtelefon</translation>
+        <translation type="unfinished">Hemtelefon</translation>
     </message>
     <message>
         <source>Mobile phone</source>
-        <translation>Mobiltelefon</translation>
+        <translation type="unfinished">Mobiltelefon</translation>
     </message>
     <message>
         <source>Contact</source>
-        <translation>Kontakt</translation>
+        <translation type="unfinished">Kontakt</translation>
     </message>
     <message>
         <source>Group:</source>
-        <translation>Grupp:</translation>
+        <translation type="unfinished">Grupp:</translation>
     </message>
     <message>
         <source>Last Name:</source>
-        <translation>Efternamn:</translation>
+        <translation type="unfinished">Efternamn:</translation>
     </message>
     <message>
         <source>First Name:</source>
-        <translation>Förnamn:</translation>
+        <translation type="unfinished">Förnamn:</translation>
     </message>
     <message>
         <source>Click to change avatar</source>
-        <translation>Klicka för att ändra avatar</translation>
+        <translation type="unfinished">Klicka för att ändra avatar</translation>
     </message>
     <message>
         <source>Details</source>
-        <translation>Detaljer</translation>
+        <translation type="unfinished">Detaljer</translation>
     </message>
     <message>
         <source>Web/blog:</source>
-        <translation>Webb/blogg:</translation>
+        <translation type="unfinished">Webb/blogg:</translation>
     </message>
     <message>
         <source>Country:</source>
-        <translation>Land:</translation>
+        <translation type="unfinished">Land:</translation>
     </message>
     <message>
         <source>State:</source>
-        <translation>Län/Region:</translation>
+        <translation type="unfinished">Län/Region:</translation>
     </message>
     <message>
         <source>City:</source>
-        <translation>Stad:</translation>
+        <translation type="unfinished">Stad:</translation>
     </message>
     <message>
         <source>Gender:</source>
-        <translation>Kön:</translation>
+        <translation type="unfinished">Kön:</translation>
     </message>
     <message>
         <source>Birth Date:</source>
-        <translation>Födelsedag:</translation>
+        <translation type="unfinished">Födelsedag:</translation>
     </message>
     <message>
         <source>Email:</source>
-        <translation>E-post:</translation>
+        <translation type="unfinished">E-post:</translation>
     </message>
     <message>
         <source>dd MMMM yyyy</source>
-        <translation>yyyy MMMM dd</translation>
+        <translation type="unfinished">yyyy MMMM dd</translation>
     </message>
     <message>
         <source>Unknown</source>
-        <translation>Okänd</translation>
+        <translation type="unfinished">Okänd</translation>
     </message>
     <message>
         <source>Male</source>
-        <translation>Man</translation>
+        <translation type="unfinished">Man</translation>
     </message>
     <message>
         <source>Female</source>
-        <translation>Kvinna</translation>
+        <translation type="unfinished">Kvinna</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation>Noteringar</translation>
+        <translation type="unfinished">Noteringar</translation>
     </message>
 </context>
 <context>
@@ -1837,7 +1873,11 @@ font-weight:600;&quot;&gt;Smeknamn eller nummer&lt;/span&gt;&lt;/p&gt;&lt;/body&
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt;font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px;margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;font-size:8pt;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;A contact is trying to send you a file:&lt;/span&gt; but his WengoPhone must be upgraded in order to receive it. Tell him to download the latest version.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt;font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px;margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;font-size:8pt;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> is trying to send you a file:&lt;/span&gt; but his WengoPhone must be upgraded in order to receive it. Tell him to download the latest version.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1917,6 +1957,10 @@ font-weight:600;&quot;&gt;Smeknamn eller nummer&lt;/span&gt;&lt;/p&gt;&lt;/body&
     </message>
     <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg;font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px;margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;This may be caused by:&lt;/span&gt; &lt;br&gt;- Your WengoPhone is not up to date. Please download the latest version onwww.wengo.com&lt;br&gt;- The Wengo network may be temporarily unavailable. Please try later.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Not started yet</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2402,28 +2446,28 @@ WengoPhone manuellt</translation>
     <name>QtSubscribe</name>
     <message>
         <source>Confirm password does not matched password</source>
-        <translation>Lösenordet för bekräftelse stämmer inte överens med lösenordet</translation>
+        <translation type="obsolete">Lösenordet för bekräftelse stämmer inte överens med lösenordet</translation>
     </message>
     <message>
         <source>Unknown Error</source>
-        <translation>Okänt fel</translation>
+        <translation type="obsolete">Okänt fel</translation>
     </message>
     <message>
         <source>You cannot use this email address, already in use</source>
-        <translation>Du kan inte använda denna e-postadress. Den används redan</translation>
+        <translation type="obsolete">Du kan inte använda denna e-postadress. Den används redan</translation>
     </message>
     <message>
         <source>You cannot use this nickname, already in use</source>
-        <translation>Du kan inte använda detta smeknamn. Det används redan</translation>
+        <translation type="obsolete">Du kan inte använda detta smeknamn. Det används redan</translation>
     </message>
     <message>
         <source>Your password does not contain enough characters (6 minimum), try another one</source>
-        <translation>Ditt lösenord innehåller inte tillräckligt många tecken (minimum 6 tecken). 
+        <translation type="obsolete">Ditt lösenord innehåller inte tillräckligt många tecken (minimum 6 tecken). 
 Försök igen</translation>
     </message>
     <message>
         <source>Subscription Failed</source>
-        <translation>Prenumerationen misslyckades</translation>
+        <translation type="obsolete">Prenumerationen misslyckades</translation>
     </message>
 </context>
 <context>
@@ -2552,10 +2596,17 @@ standardprofilen till profilen med namnet %1?</translation>
     </message>
     <message>
         <source>WengoPhone - Importing contacts and IM accounts</source>
-        <translation>WengoPhone - Importerar kontakter och IM-konton</translation>
+        <translation type="obsolete">WengoPhone - Importerar kontakter och IM-konton</translation>
     </message>
     <message>
-        <source>Would you like to import contacts and IM accounts previously created in the default profile to the profile named %1?</source>
+        <source>A problem occured while loading your profile.
+The last backuped profile has been loaded: 
+you may have lost last changes made</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Your profile could not be loaded.
+Choose another profile or create a new one.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2609,7 +2660,7 @@ standardprofilen till profilen med namnet %1?</translation>
     <name>QtWebDirectory</name>
     <message>
         <source>WengoPhone - Directory</source>
-        <translation>WengoPhone - Katalog</translation>
+        <translation type="obsolete">WengoPhone - Katalog</translation>
     </message>
 </context>
 <context>
@@ -2716,108 +2767,108 @@ standardprofilen till profilen med namnet %1?</translation>
     <name>RenameGroupDialog</name>
     <message>
         <source>Cancel</source>
-        <translation>Avbryt</translation>
+        <translation type="unfinished">Avbryt</translation>
     </message>
     <message>
         <source>OK</source>
-        <translation>OK</translation>
+        <translation type="unfinished">OK</translation>
     </message>
     <message>
         <source>WengoPhone - Rename Contact Group</source>
-        <translation>WengoPhone - Byt namn på kontaktgrupp</translation>
+        <translation type="unfinished">WengoPhone - Byt namn på kontaktgrupp</translation>
     </message>
     <message>
         <source>Enter the new group name:</source>
-        <translation>Ange det nya gruppnamnet:</translation>
+        <translation type="unfinished">Ange det nya gruppnamnet:</translation>
     </message>
 </context>
 <context>
     <name>SimpleIMAccountManager</name>
     <message>
         <source>Password:</source>
-        <translation>Lösenord:</translation>
+        <translation type="unfinished">Lösenord:</translation>
     </message>
     <message>
         <source>Login:</source>
-        <translation>Inloggningsnamn:</translation>
+        <translation type="unfinished">Inloggningsnamn:</translation>
     </message>
     <message>
         <source>AIM/ICQ</source>
-        <translation>AIM/ICQ</translation>
+        <translation type="unfinished">AIM/ICQ</translation>
     </message>
     <message>
         <source>Yahoo!</source>
-        <translation>Yahoo!</translation>
+        <translation type="unfinished">Yahoo!</translation>
     </message>
     <message>
         <source>Wengo</source>
-        <translation>Wengo</translation>
+        <translation type="unfinished">Wengo</translation>
     </message>
     <message>
         <source>MSN</source>
-        <translation>MSN</translation>
+        <translation type="unfinished">MSN</translation>
     </message>
     <message>
         <source>Jabber</source>
-        <translation>Jabber</translation>
+        <translation type="unfinished">Jabber</translation>
     </message>
     <message>
         <source>GoogleTalk</source>
-        <translation>GoogleTalk</translation>
+        <translation type="unfinished">GoogleTalk</translation>
     </message>
 </context>
 <context>
     <name>SimpleIMContactManager</name>
     <message>
         <source>Update your profile</source>
-        <translation>Uppdatera din profil</translation>
+        <translation type="unfinished">Uppdatera din profil</translation>
     </message>
     <message>
         <source>Yahoo! ID:</source>
-        <translation>Yahoo!-id:</translation>
+        <translation type="unfinished">Yahoo!-id:</translation>
     </message>
     <message>
         <source>AIM/ICQ ID:</source>
-        <translation>AIM/ICQ-id:</translation>
+        <translation type="unfinished">AIM/ICQ-id:</translation>
     </message>
     <message>
         <source>MSN ID:</source>
-        <translation>MSN-id:</translation>
+        <translation type="unfinished">MSN-id:</translation>
     </message>
     <message>
         <source>Wengo ID:</source>
-        <translation>Wengo-id:</translation>
+        <translation type="unfinished">Wengo-id:</translation>
     </message>
     <message>
         <source>Jabber/GoogleTalk ID:</source>
-        <translation>Jabber/GoogleTalk-id:</translation>
+        <translation type="unfinished">Jabber/GoogleTalk-id:</translation>
     </message>
 </context>
 <context>
     <name>SmsWindow</name>
     <message>
         <source>Send</source>
-        <translation>Skicka</translation>
+        <translation type="unfinished">Skicka</translation>
     </message>
     <message>
         <source>WengoPhone - SMS</source>
-        <translation>WengoPhone - SMS</translation>
+        <translation type="unfinished">WengoPhone - SMS</translation>
     </message>
     <message>
         <source>Click here to add a phone number</source>
-        <translation>Klicka här för att lägga till ett telefonnummer</translation>
+        <translation type="unfinished">Klicka här för att lägga till ett telefonnummer</translation>
     </message>
     <message>
         <source>0 /160</source>
-        <translation>0 /160</translation>
+        <translation type="unfinished">0 /160</translation>
     </message>
     <message>
         <source>Enter your signature here</source>
-        <translation>Ange din signatur här</translation>
+        <translation type="unfinished">Ange din signatur här</translation>
     </message>
     <message>
         <source>Signature:</source>
-        <translation>Signatur:</translation>
+        <translation type="unfinished">Signatur:</translation>
     </message>
     <message>
         <source>Phone number:</source>
@@ -2826,6 +2877,10 @@ standardprofilen till profilen med namnet %1?</translation>
     <message>
         <source>Enter the phone number here</source>
         <translation type="obsolete">Ange telefonnumret här</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Phone number(s):</source>
@@ -2840,11 +2895,11 @@ standardprofilen till profilen med namnet %1?</translation>
     <name>SoftUpdateWindow</name>
     <message>
         <source>Cancel</source>
-        <translation>Avbryt</translation>
+        <translation type="unfinished">Avbryt</translation>
     </message>
     <message>
         <source>WengoPhone - Downloading update</source>
-        <translation>WengoPhone - Hämtar uppdatering</translation>
+        <translation type="unfinished">WengoPhone - Hämtar uppdatering</translation>
     </message>
     <message>
         <source>Downloading WengoPhone update...Version:%1URL:%2File Size:%3 (MB)Speed:%4 
@@ -2866,59 +2921,59 @@ Speed:<byte value="x9"/>%4 (kB/s)</source>
     <name>StatusBarWidget</name>
     <message>
         <source>Audio Configuration Error</source>
-        <translation>Ljudkonfigurationsfel</translation>
+        <translation type="unfinished">Ljudkonfigurationsfel</translation>
     </message>
     <message>
         <source>Not Connected</source>
-        <translation>Inte ansluten</translation>
+        <translation type="unfinished">Inte ansluten</translation>
     </message>
 </context>
 <context>
     <name>SubscribeWengo1</name>
     <message>
         <source>Password:</source>
-        <translation>Lösenord:</translation>
+        <translation type="obsolete">Lösenord:</translation>
     </message>
     <message>
         <source>Email:</source>
-        <translation>E-post:</translation>
+        <translation type="obsolete">E-post:</translation>
     </message>
     <message>
         <source>WengoPhone - Wengo Account Creation (1/2)</source>
-        <translation>WengoPhone - Skapa Wengo-konto (1/2)</translation>
+        <translation type="obsolete">WengoPhone - Skapa Wengo-konto (1/2)</translation>
     </message>
     <message>
         <source>* &lt;i&gt;Required fields&lt;/i&gt;</source>
-        <translation>* &lt;i&gt;Nödvändiga fält&lt;/i&gt;</translation>
+        <translation type="obsolete">* &lt;i&gt;Nödvändiga fält&lt;/i&gt;</translation>
     </message>
     <message>
         <source>Subscribe</source>
-        <translation>Prenumerera</translation>
+        <translation type="obsolete">Prenumerera</translation>
     </message>
     <message>
         <source>Error message label</source>
-        <translation>Felmeddelandeetikett</translation>
+        <translation type="obsolete">Felmeddelandeetikett</translation>
     </message>
     <message>
         <source>Nickname:</source>
-        <translation>Smeknamn:</translation>
+        <translation type="obsolete">Smeknamn:</translation>
     </message>
     <message>
         <source>*</source>
-        <translation>*</translation>
+        <translation type="obsolete">*</translation>
     </message>
     <message>
         <source>Confirm password:</source>
-        <translation>Bekräfta lösenordet:</translation>
+        <translation type="obsolete">Bekräfta lösenordet:</translation>
     </message>
     <message>
         <source>&lt;i&gt;Please check your email and confirm the above details within 48 hours&lt;/i&gt;</source>
-        <translation>&lt;i&gt;Kontrollera din e-post och bekräfta ovanstående detaljer inom 48 
+        <translation type="obsolete">&lt;i&gt;Kontrollera din e-post och bekräfta ovanstående detaljer inom 48 
 timmar&lt;/i&gt;</translation>
     </message>
     <message>
         <source>I read and accept the Terms of Service</source>
-        <translation>Jag har läst och accepterar tjänstevillkoren</translation>
+        <translation type="obsolete">Jag har läst och accepterar tjänstevillkoren</translation>
     </message>
     <message>
         <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Account Creation&lt;/span&gt;&lt;br /&gt;&lt;br 
@@ -2926,51 +2981,42 @@ timmar&lt;/i&gt;</translation>
         <translation type="obsolete">&lt;span style=&quot;font-size:18pt;&quot;&gt;Skapa konto&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;&lt;span&gt;Fyll i 
 detaljerna nedan&lt;/span&gt;</translation>
     </message>
-    <message>
-        <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Account Creation&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;&lt;span&gt;Please fill in the details below&lt;/span&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>SubscribeWengo2</name>
     <message>
         <source>Password:</source>
-        <translation>Lösenord:</translation>
+        <translation type="obsolete">Lösenord:</translation>
     </message>
     <message>
         <source>Email:</source>
-        <translation>E-post:</translation>
+        <translation type="obsolete">E-post:</translation>
     </message>
     <message>
         <source>Nickname:</source>
-        <translation>Smeknamn:</translation>
+        <translation type="obsolete">Smeknamn:</translation>
     </message>
     <message>
         <source>WengoPhone - Wengo Account Creation (2/2)</source>
-        <translation>WengoPhone - Skapa Wengo-konto (2/2)</translation>
+        <translation type="obsolete">WengoPhone - Skapa Wengo-konto (2/2)</translation>
     </message>
     <message>
         <source>Please note your details needed to access your account:</source>
-        <translation>Anteckna din detaljer som behöver för att komma åt ditt konto:</translation>
+        <translation type="obsolete">Anteckna din detaljer som behöver för att komma åt ditt konto:</translation>
     </message>
     <message>
         <source>Finish</source>
-        <translation>Färdig</translation>
+        <translation type="obsolete">Färdig</translation>
     </message>
     <message>
         <source>Add your IM Accounts to your Profile</source>
-        <translation>Lägg till dina IM-konton till din profil</translation>
+        <translation type="obsolete">Lägg till dina IM-konton till din profil</translation>
     </message>
     <message>
         <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Contratulations!&lt;/span&gt;&lt;br /&gt;&lt;br 
 /&gt;&lt;span&gt;Your account has been successfully created&lt;/span&gt;</source>
         <translation type="obsolete">&lt;span style=&quot;font-size:18pt;&quot;&gt;Gratulerar!&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;&lt;span&gt;Ditt 
 konto har skapats&lt;/span&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Contratulations!&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;&lt;span&gt;Your account has been successfully created&lt;/span&gt;
-</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2996,98 +3042,102 @@ konto har skapats&lt;/span&gt;</translation>
     <name>UserFrame</name>
     <message>
         <source>Form</source>
-        <translation>Formulär</translation>
+        <translation type="unfinished">Formulär</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>VideoSettings</name>
     <message>
         <source>Normal</source>
-        <translation>Normal</translation>
+        <translation type="unfinished">Normal</translation>
     </message>
     <message>
         <source>Good</source>
-        <translation>Bra</translation>
+        <translation type="unfinished">Bra</translation>
     </message>
     <message>
         <source>Very good</source>
-        <translation>Mycket bra</translation>
+        <translation type="unfinished">Mycket bra</translation>
     </message>
     <message>
         <source>Excellent</source>
-        <translation>Otroligt bra</translation>
+        <translation type="unfinished">Otroligt bra</translation>
     </message>
     <message>
         <source>Video Settings</source>
-        <translation>Videoinställningar</translation>
+        <translation type="unfinished">Videoinställningar</translation>
     </message>
     <message>
         <source>Enable video</source>
-        <translation>Aktivera video</translation>
+        <translation type="unfinished">Aktivera video</translation>
     </message>
     <message>
         <source>Webcam Selection</source>
-        <translation>Val av webbkamera</translation>
+        <translation type="unfinished">Val av webbkamera</translation>
     </message>
     <message>
         <source>Webcam device:</source>
-        <translation>Webbkameraenhet:</translation>
+        <translation type="unfinished">Webbkameraenhet:</translation>
     </message>
     <message>
         <source>Webcam Preview</source>
-        <translation>Förhandsvisning webbkamera</translation>
+        <translation type="unfinished">Förhandsvisning webbkamera</translation>
     </message>
     <message>
         <source>Connection Type</source>
-        <translation>Anslutningstyp</translation>
+        <translation type="unfinished">Anslutningstyp</translation>
     </message>
     <message>
         <source>Video quality</source>
-        <translation>Videokvalitet</translation>
+        <translation type="unfinished">Videokvalitet</translation>
     </message>
     <message>
         <source>Down (kbit/s)</source>
-        <translation>Ner (kbit/s)</translation>
+        <translation type="unfinished">Ner (kbit/s)</translation>
     </message>
     <message>
         <source>Up (kbit/s)</source>
-        <translation>Upp (kbit/s)</translation>
+        <translation type="unfinished">Upp (kbit/s)</translation>
     </message>
     <message>
         <source>0 to 512</source>
-        <translation>0 till 512</translation>
+        <translation type="unfinished">0 till 512</translation>
     </message>
     <message>
         <source>0 to 128</source>
-        <translation>0 till 128</translation>
+        <translation type="unfinished">0 till 128</translation>
     </message>
     <message>
         <source>512 to 2048</source>
-        <translation>512 till 2048</translation>
+        <translation type="unfinished">512 till 2048</translation>
     </message>
     <message>
         <source>128 to 256</source>
-        <translation>128 till 256</translation>
+        <translation type="unfinished">128 till 256</translation>
     </message>
     <message>
         <source>2048+</source>
-        <translation>2048+</translation>
+        <translation type="unfinished">2048+</translation>
     </message>
     <message>
         <source>256+</source>
-        <translation>256+</translation>
+        <translation type="unfinished">256+</translation>
     </message>
     <message>
         <source>8192+</source>
-        <translation>8192+</translation>
+        <translation type="unfinished">8192+</translation>
     </message>
     <message>
         <source>1024+</source>
-        <translation>1024+</translation>
+        <translation type="unfinished">1024+</translation>
     </message>
     <message>
         <source>Video quality depends on your Internet connection bandwidth</source>
-        <translation>Videokvaliteten är beroende på bandbredden för din Internetanslutning</translation>
+        <translation type="unfinished">Videokvaliteten är beroende på bandbredden för din Internetanslutning</translation>
     </message>
     <message>
         <source>&lt;b&gt;Warning!&lt;/b&gt; When used for the first time we recommend that you 
@@ -3102,7 +3152,7 @@ Internetanslutning</translation>
     </message>
     <message>
         <source>Make a test video call</source>
-        <translation>Gör ett testvideosamtal</translation>
+        <translation type="unfinished">Gör ett testvideosamtal</translation>
     </message>
     <message>
         <source>&lt;b&gt;Warning!&lt;/b&gt; When used for the first time we recommend that you select&lt;br&gt;the normal video quality mode, then you can try different modes to find out&lt;br&gt;the most suitable one&lt;br&gt;&lt;br&gt;&lt;b&gt;Tips&lt;/b&gt;: Go to http://test.lvcm.com to determine your Internet connection bandwidth</source>
@@ -3113,318 +3163,326 @@ Internetanslutning</translation>
     <name>VideoWindow</name>
     <message>
         <source>WengoPhone - Video</source>
-        <translation>WengoPhone - Video</translation>
+        <translation type="unfinished">WengoPhone - Video</translation>
     </message>
 </context>
 <context>
     <name>WengoConfigDialog</name>
     <message>
         <source>Cancel</source>
-        <translation>Avbryt</translation>
+        <translation type="unfinished">Avbryt</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation>Spara</translation>
+        <translation type="unfinished">Spara</translation>
     </message>
     <message>
         <source>Language</source>
-        <translation>Språk</translation>
+        <translation type="unfinished">Språk</translation>
     </message>
     <message>
         <source>General</source>
-        <translation>Allmänt</translation>
+        <translation type="unfinished">Allmänt</translation>
     </message>
     <message>
         <source>Accounts</source>
-        <translation>Konton</translation>
+        <translation type="unfinished">Konton</translation>
     </message>
     <message>
         <source>Advanced</source>
-        <translation>Avancerat</translation>
+        <translation type="unfinished">Avancerat</translation>
     </message>
     <message>
         <source>Audio</source>
-        <translation>Ljud</translation>
+        <translation type="unfinished">Ljud</translation>
     </message>
     <message>
         <source>Call Forward</source>
-        <translation>Vidarekoppling</translation>
+        <translation type="unfinished">Vidarekoppling</translation>
     </message>
     <message>
         <source>Notifications &amp; Sounds</source>
-        <translation>Notifieringar och ljud</translation>
+        <translation type="unfinished">Notifieringar och ljud</translation>
     </message>
     <message>
         <source>Video</source>
-        <translation>Video</translation>
+        <translation type="unfinished">Video</translation>
     </message>
     <message>
         <source>WengoPhone - Configuration</source>
-        <translation>WengoPhone - Konfiguration</translation>
+        <translation type="unfinished">WengoPhone - Konfiguration</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>WengoPhoneWindow</name>
     <message>
         <source>&amp;Accept</source>
-        <translation>&amp;Acceptera</translation>
+        <translation type="unfinished">&amp;Acceptera</translation>
     </message>
     <message>
         <source>&amp;Wengo</source>
-        <translation>&amp;Wengo</translation>
+        <translation type="unfinished">&amp;Wengo</translation>
     </message>
     <message>
         <source>&amp;Tools</source>
-        <translation>&amp;Verktyg</translation>
+        <translation type="unfinished">&amp;Verktyg</translation>
     </message>
     <message>
         <source>&amp;Help</source>
-        <translation>&amp;Hjälp</translation>
+        <translation type="unfinished">&amp;Hjälp</translation>
     </message>
     <message>
         <source>&amp;Actions</source>
-        <translation>&amp;Åtgärder</translation>
+        <translation type="unfinished">&amp;Åtgärder</translation>
     </message>
     <message>
         <source>WengoPhone</source>
-        <translation>WengoPhone</translation>
+        <translation type="unfinished">WengoPhone</translation>
     </message>
     <message>
         <source>Contacts</source>
-        <translation>Kontakter</translation>
+        <translation type="unfinished">Kontakter</translation>
     </message>
     <message>
         <source>History</source>
-        <translation>Historik</translation>
+        <translation type="unfinished">Historik</translation>
     </message>
     <message>
         <source>Dialpad</source>
-        <translation>Knappsats</translation>
+        <translation type="unfinished">Knappsats</translation>
     </message>
     <message>
         <source>&amp;Contacts</source>
-        <translation>&amp;Kontakter</translation>
+        <translation type="unfinished">&amp;Kontakter</translation>
     </message>
     <message>
         <source>Clear &amp;History</source>
-        <translation>Töm &amp;historik</translation>
+        <translation type="unfinished">Töm &amp;historik</translation>
     </message>
     <message>
         <source>Type Here</source>
-        <translation>Skriv här</translation>
+        <translation type="unfinished">Skriv här</translation>
     </message>
     <message>
         <source>ToolBar</source>
-        <translation>Verktygsrad</translation>
+        <translation type="unfinished">Verktygsrad</translation>
     </message>
     <message>
         <source>View My &amp;Wengo Account</source>
-        <translation>Visa mitt &amp;Wengo-konto</translation>
+        <translation type="unfinished">Visa mitt &amp;Wengo-konto</translation>
     </message>
     <message>
         <source>&amp;Close</source>
-        <translation>&amp;Stäng</translation>
+        <translation type="unfinished">&amp;Stäng</translation>
     </message>
     <message>
         <source>Wengo &amp;Forum</source>
-        <translation>Wengo-&amp;forum</translation>
+        <translation type="unfinished">Wengo-&amp;forum</translation>
     </message>
     <message>
         <source>&amp;About</source>
-        <translation>&amp;Om</translation>
+        <translation type="unfinished">&amp;Om</translation>
     </message>
     <message>
         <source>Add &amp;Contact</source>
-        <translation>Lägg till &amp;kontakt</translation>
+        <translation type="unfinished">Lägg till &amp;kontakt</translation>
     </message>
     <message>
         <source>&amp;Configuration</source>
-        <translation>&amp;Konfiguration</translation>
+        <translation type="unfinished">&amp;Konfiguration</translation>
     </message>
     <message>
         <source>Send a Short Text &amp;Message (SMS)</source>
-        <translation>Skicka ett kort text&amp;meddelande (SMS)</translation>
+        <translation type="unfinished">Skicka ett kort text&amp;meddelande (SMS)</translation>
     </message>
     <message>
         <source>Edit My &amp;Profile</source>
-        <translation>Redigera min &amp;profil</translation>
+        <translation type="unfinished">Redigera min &amp;profil</translation>
     </message>
     <message>
         <source>Create &amp;Conference Call</source>
-        <translation>Skapa &amp;konferenssamtal</translation>
+        <translation type="unfinished">Skapa &amp;konferenssamtal</translation>
     </message>
     <message>
         <source>Wengo &amp;Wiki/FAQ</source>
-        <translation>Wengo &amp;Wiki/Vanliga frågor</translation>
+        <translation type="unfinished">Wengo &amp;Wiki/Vanliga frågor</translation>
     </message>
     <message>
         <source>Learn more about &amp;Wengo Services</source>
-        <translation>Lär dig mer om &amp;Wengo Services</translation>
+        <translation type="unfinished">Lär dig mer om &amp;Wengo Services</translation>
     </message>
     <message>
         <source>Show/Hide Unavailable &amp;Contacts</source>
-        <translation>Visa/Dölj otillgängliga &amp;kontakter</translation>
+        <translation type="unfinished">Visa/Dölj otillgängliga &amp;kontakter</translation>
     </message>
     <message>
         <source>&amp;Instant Messaging Accounts</source>
-        <translation>&amp;Snabbmeddelandekonton</translation>
+        <translation type="unfinished">&amp;Snabbmeddelandekonton</translation>
     </message>
     <message>
         <source>Configure My Instant Messaging Accounts</source>
-        <translation>Konfigurera mina snabbmeddelandekonton</translation>
+        <translation type="unfinished">Konfigurera mina snabbmeddelandekonton</translation>
     </message>
     <message>
         <source>&amp;Chat Sessions</source>
-        <translation>&amp;Chattsessioner</translation>
+        <translation type="unfinished">&amp;Chattsessioner</translation>
     </message>
     <message>
         <source>&amp;All</source>
-        <translation>&amp;Alla</translation>
+        <translation type="unfinished">&amp;Alla</translation>
     </message>
     <message>
         <source>&amp;Search for Wengo Users</source>
-        <translation>&amp;Sök efter Wengo-användare</translation>
+        <translation type="unfinished">&amp;Sök efter Wengo-användare</translation>
     </message>
     <message>
         <source>&amp;HangUp</source>
-        <translation>&amp;Lägg på</translation>
+        <translation type="unfinished">&amp;Lägg på</translation>
     </message>
     <message>
         <source>&amp;Hold/Resume</source>
-        <translation>&amp;Parkera/Återuppta</translation>
+        <translation type="unfinished">&amp;Parkera/Återuppta</translation>
     </message>
     <message>
         <source>Show/Hide &amp;Groups</source>
-        <translation>Visa/Dölj &amp;grupper</translation>
+        <translation type="unfinished">Visa/Dölj &amp;grupper</translation>
     </message>
     <message>
         <source>Change &amp;Profile...</source>
-        <translation>Ändra &amp;profil...</translation>
+        <translation type="unfinished">Ändra &amp;profil...</translation>
     </message>
     <message>
         <source>Log &amp;Off/Log In</source>
-        <translation>Logga &amp;av/Logga in</translation>
+        <translation type="unfinished">Logga &amp;av/Logga in</translation>
     </message>
     <message>
         <source>Open &amp;Chat Window</source>
-        <translation>Öppna &amp;chattfönster</translation>
+        <translation type="unfinished">Öppna &amp;chattfönster</translation>
     </message>
     <message>
         <source>&amp;Outgoing Calls</source>
-        <translation>&amp;Utgående samtal</translation>
+        <translation type="unfinished">&amp;Utgående samtal</translation>
     </message>
     <message>
         <source>&amp;Incoming Calls</source>
-        <translation>&amp;Inkommande samtal</translation>
+        <translation type="unfinished">&amp;Inkommande samtal</translation>
     </message>
     <message>
         <source>&amp;Missed Calls</source>
-        <translation>&amp;Missade samtal</translation>
+        <translation type="unfinished">&amp;Missade samtal</translation>
     </message>
     <message>
         <source>Enable/Disable &amp;Video Calls</source>
-        <translation>Aktivera/inaktivera &amp;videosamtal</translation>
+        <translation type="unfinished">Aktivera/inaktivera &amp;videosamtal</translation>
     </message>
     <message>
         <source>Show &amp;Volume Panel</source>
-        <translation>Visa &amp;volympanel</translation>
+        <translation type="unfinished">Visa &amp;volympanel</translation>
     </message>
     <message>
         <source>Short Text &amp;Messages (SMS)</source>
-        <translation>Korta text&amp;meddelanden (SMS)</translation>
+        <translation type="unfinished">Korta text&amp;meddelanden (SMS)</translation>
     </message>
     <message>
         <source>Show File Transfer</source>
-        <translation>Visa filöverföring</translation>
+        <translation type="unfinished">Visa filöverföring</translation>
     </message>
     <message>
         <source>Rejected Calls</source>
-        <translation>Vägrade samtal</translation>
+        <translation type="unfinished">Vägrade samtal</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>WengoPhoneWindowConfigPanel</name>
     <message>
         <source>Audio Settings</source>
-        <translation>Ljudinställningar</translation>
+        <translation type="unfinished">Ljudinställningar</translation>
     </message>
     <message>
         <source>Video Settings</source>
-        <translation>Videoinställningar</translation>
+        <translation type="unfinished">Videoinställningar</translation>
     </message>
     <message>
         <source>Enable Wenbox usage</source>
-        <translation>Aktivera användning av Wenbox</translation>
+        <translation type="unfinished">Aktivera användning av Wenbox</translation>
     </message>
     <message>
         <source>Wenbox USB</source>
-        <translation>Wenbox USB</translation>
+        <translation type="unfinished">Wenbox USB</translation>
     </message>
     <message>
         <source>Enable half-duplex mode</source>
-        <translation>Aktivera halvduplex</translation>
+        <translation type="unfinished">Aktivera halvduplex</translation>
     </message>
     <message>
         <source>Loud Speakers</source>
-        <translation>Högtalare</translation>
+        <translation type="unfinished">Högtalare</translation>
     </message>
 </context>
 <context>
     <name>Wizard</name>
     <message>
         <source>Cancel</source>
-        <translation>Avbryt</translation>
+        <translation type="obsolete">Avbryt</translation>
     </message>
     <message>
         <source>Finish</source>
-        <translation>Färdig</translation>
+        <translation type="obsolete">Färdig</translation>
     </message>
     <message>
         <source>Next &gt;</source>
-        <translation>Nästa &gt;</translation>
+        <translation type="obsolete">Nästa &gt;</translation>
     </message>
     <message>
         <source>&lt; Back</source>
-        <translation>&lt; Tillbaka</translation>
+        <translation type="obsolete">&lt; Tillbaka</translation>
     </message>
     <message>
         <source>Simple Wizard - Step %1 of %2</source>
-        <translation>Enkel guide - Steg %1 av %2</translation>
+        <translation type="obsolete">Enkel guide - Steg %1 av %2</translation>
     </message>
 </context>
 <context>
     <name>WsDirectory</name>
     <message>
         <source>All</source>
-        <translation>Alla</translation>
+        <translation type="unfinished">Alla</translation>
     </message>
     <message>
         <source>WengoPhone - Search for Wengo contacts</source>
-        <translation>WengoPhone - Sök efter Wengo-kontakter</translation>
+        <translation type="unfinished">WengoPhone - Sök efter Wengo-kontakter</translation>
     </message>
     <message>
         <source>Nickname</source>
-        <translation>Smeknamn</translation>
+        <translation type="unfinished">Smeknamn</translation>
     </message>
     <message>
         <source>First Name</source>
-        <translation>Förnamn</translation>
+        <translation type="unfinished">Förnamn</translation>
     </message>
     <message>
         <source>Last Name</source>
-        <translation>Efternamn</translation>
+        <translation type="unfinished">Efternamn</translation>
     </message>
     <message>
         <source>City</source>
-        <translation>Stad</translation>
+        <translation type="unfinished">Stad</translation>
     </message>
     <message>
         <source>Country</source>
-        <translation>Land</translation>
+        <translation type="unfinished">Land</translation>
     </message>
     <message>
         <source>Search</source>
-        <translation>Sök</translation>
+        <translation type="unfinished">Sök</translation>
     </message>
     <message>
         <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Search for Wengo contacts&lt;/span&gt;&lt;br /&gt;&lt;br 
@@ -3436,7 +3494,7 @@ sökknappen&lt;/span&gt;</translation>
     </message>
     <message>
         <source>When entering a combined search, please separate words with a blank.</source>
-        <translation>När en kombinerad sökning används, separera orden med ett blanksteg.</translation>
+        <translation type="unfinished">När en kombinerad sökning används, separera orden med ett blanksteg.</translation>
     </message>
     <message>
         <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Search for Wengo contacts&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;&lt;span&gt;Enter name, nickname, city or email and click the search button&lt;/span&gt;</source>
@@ -3447,23 +3505,19 @@ sökknappen&lt;/span&gt;</translation>
     <name>WsDirectoryContact</name>
     <message>
         <source>City:</source>
-        <translation>Stad:</translation>
+        <translation type="unfinished">Stad:</translation>
     </message>
     <message>
         <source>Nickname:</source>
-        <translation>Smeknamn:</translation>
+        <translation type="unfinished">Smeknamn:</translation>
     </message>
     <message>
         <source>FirstName LastName</source>
-        <translation>Förnamn Efternamn</translation>
+        <translation type="unfinished">Förnamn Efternamn</translation>
     </message>
     <message>
         <source>Wengo number:</source>
-        <translation>Wengo-nummer:</translation>
-    </message>
-    <message>
-        <source>SIP address:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wengo-nummer:</translation>
     </message>
     <message>
         <source>Country:</source>
@@ -3481,13 +3535,13 @@ sökknappen&lt;/span&gt;</translation>
         <source>Add</source>
         <translation type="unfinished">Lägg till</translation>
     </message>
+    <message>
+        <source>SIP address:</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>YahooSettings</name>
-    <message>
-        <source>Yahoo! Settings</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message>
         <source>Password:</source>
         <translation type="unfinished">Lösenord:</translation>
@@ -3499,6 +3553,14 @@ sökknappen&lt;/span&gt;</translation>
     <message>
         <source>&lt;u&gt;Advanced Options&lt;/u&gt;</source>
         <translation type="unfinished">&lt;u&gt;Avancerade alternativ&lt;/u&gt;</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Yahoo! Settings</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Use Yahoo! Japan server</source>
@@ -3514,93 +3576,18 @@ sökknappen&lt;/span&gt;</translation>
     </message>
 </context>
 <context>
-    <name>aboutWindow</name>
-    <message>
-        <source>Dialog</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>help</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>config...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>update</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>GroupBox</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#000000;&quot;&gt;This is a Qt demo application for a skin system.&lt;/span&gt;&lt;/p&gt;&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#000000;&quot;&gt;&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#000000;&quot;&gt;The skin system works as a Qt style plugin through the QStyle class.&lt;/p&gt;&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#000000;&quot;&gt;&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#000000;&quot;&gt;This example works using Qt version 4.0.0 &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>mainWindow</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Formulär</translation>
-    </message>
-    <message>
-        <source>Tab 1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>qwepowefklwenmlkwefweklfnwelfknwlfknweklfnwelfknwefwefopjiwelpkwmjvlkwneklwemflkwemdfklwemflwekmfwkled;qweef</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>wefwefweklfl;m,we;lf,;welcv,wel;wekfm;kf;pwecmlwkewl;efmwklegfhweklnqwekldhjl;dmjqwlekdfjqweklf</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>New Item</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>wef[pwoejfweopfjero&apos;wepofjkwepfm,weopfkweopfmkdfokweopf,wepofweopfkweopfkweopfkweopfkwef</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Tab 2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Exit</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Update</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Formulär</translation>
     </message>
     <message>
         <source>Search</source>
-        <translation type="unfinished">Sök</translation>
-    </message>
-    <message>
-        <source>Previous Track</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Next Track</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Sök</translation>
     </message>
     <message>
         <source>Pause</source>
-        <translation type="unfinished">Paus</translation>
-    </message>
-    <message>
-        <source>Stop</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Play</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Paus</translation>
     </message>
 </context>
 </TS>

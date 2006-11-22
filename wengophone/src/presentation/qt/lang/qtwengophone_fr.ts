@@ -3,57 +3,61 @@
     <name>AIMSettings</name>
     <message>
         <source>AIM/ICQ Settings</source>
-        <translation>Paramètres AIM/ICQ</translation>
+        <translation type="unfinished">Paramètres AIM/ICQ</translation>
     </message>
     <message>
         <source>Login:</source>
-        <translation>Identifiant :</translation>
+        <translation type="unfinished">Identifiant :</translation>
     </message>
     <message>
         <source>Forgot your AIM password?</source>
-        <translation>Mot de passe AIM oublié?</translation>
+        <translation type="unfinished">Mot de passe AIM oublié?</translation>
     </message>
     <message>
         <source>Get a new AIM Account</source>
-        <translation>Créez un nouveau compte AIM</translation>
+        <translation type="unfinished">Créez un nouveau compte AIM</translation>
     </message>
     <message>
         <source>Password:</source>
-        <translation>Mot de passe :</translation>
+        <translation type="unfinished">Mot de passe :</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>AboutWindow</name>
     <message>
         <source>WengoPhone - About</source>
-        <translation>WengoPhone - À propos</translation>
+        <translation type="unfinished">WengoPhone - À propos</translation>
     </message>
     <message>
         <source>About</source>
-        <translation>À propos</translation>
+        <translation type="unfinished">À propos</translation>
     </message>
     <message>
         <source>WengoPhone, a voice over Internet phone</source>
-        <translation>WengoPhone, une application de téléphonie sur Internet</translation>
+        <translation type="unfinished">WengoPhone, une application de téléphonie sur Internet</translation>
     </message>
     <message>
         <source>Copyright (C) 2004-2006 Wengo  http://openwengo.com</source>
-        <translation>Copyright (C) 2004-2006 Wengo  http://openwengo.com</translation>
+        <translation type="unfinished">Copyright (C) 2004-2006 Wengo  http://openwengo.com</translation>
     </message>
     <message>
         <source>Authors</source>
-        <translation>Auteurs</translation>
+        <translation type="unfinished">Auteurs</translation>
     </message>
     <message>
         <source>Close</source>
-        <translation>Fermer</translation>
+        <translation type="unfinished">Fermer</translation>
     </message>
     <message>
         <source>This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
 as published by the Free Software Foundation; either version 2
 of the License, or (at your option) any later version.</source>
-        <translation>This program is free software; you can redistribute it and/ormodify it under 
+        <translation type="unfinished">This program is free software; you can redistribute it and/ormodify it under 
 the terms of the GNU General Public Licenseas published by the Free Software 
 Foundation; either version 2of the License, or (at your option) any later 
 version.</translation>
@@ -63,245 +67,253 @@ version.</translation>
     <name>AcceptDialog</name>
     <message>
         <source>File Transfer</source>
-        <translation>Transfert de Fichiers</translation>
+        <translation type="unfinished">Transfert de Fichiers</translation>
     </message>
     <message>
         <source>toto@wengo.fr</source>
-        <translation>toto@wengo.fr</translation>
+        <translation type="unfinished">toto@wengo.fr</translation>
     </message>
     <message>
         <source>test.bmp</source>
-        <translation>test.bmp</translation>
+        <translation type="unfinished">test.bmp</translation>
     </message>
     <message>
         <source>&amp;Accept</source>
-        <translation>&amp;Accepter</translation>
+        <translation type="unfinished">&amp;Accepter</translation>
     </message>
     <message>
         <source>&amp;Cancel</source>
-        <translation>&amp;Annuler</translation>
+        <translation type="unfinished">&amp;Annuler</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Contact: &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Contact: &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation type="unfinished">&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Contact: &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Filename: &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Nom du fichier: &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation type="unfinished">&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Nom du fichier: &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;&lt;h1&gt;Incoming file&lt;/h1&gt;&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;&lt;h1&gt;Réception d&apos;un fichier&lt;/h1&gt;&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation type="unfinished">&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;&lt;h1&gt;Réception d&apos;un fichier&lt;/h1&gt;&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
 </context>
 <context>
     <name>AddIMContact</name>
     <message>
         <source>Contact Type (protocol):</source>
-        <translation>Type de contact (protocole):</translation>
+        <translation type="unfinished">Type de contact (protocole):</translation>
     </message>
     <message>
         <source>Contact ID:</source>
-        <translation>Identifiant:</translation>
+        <translation type="unfinished">Identifiant:</translation>
     </message>
     <message>
         <source>Account:</source>
-        <translation>Compte:</translation>
+        <translation type="unfinished">Compte:</translation>
     </message>
     <message>
         <source>Enable</source>
-        <translation>Activé</translation>
+        <translation type="unfinished">Activé</translation>
     </message>
     <message>
         <source>Login</source>
-        <translation>Identifiant</translation>
+        <translation type="unfinished">Identifiant</translation>
     </message>
     <message>
         <source>WengoPhone - Add a Contact Account</source>
-        <translation>WengoPhone - Ajouter le compte IM d&apos;un contact</translation>
+        <translation type="unfinished">WengoPhone - Ajouter le compte IM d&apos;un contact</translation>
     </message>
     <message>
         <source>Add</source>
-        <translation>Ajouter</translation>
+        <translation type="unfinished">Ajouter</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Annuler</translation>
+        <translation type="unfinished">Annuler</translation>
     </message>
 </context>
 <context>
     <name>AdvancedConfigWindow</name>
     <message>
         <source>Close</source>
-        <translation>Fermer</translation>
+        <translation type="unfinished">Fermer</translation>
     </message>
     <message>
         <source>WengoPhone - Advanced Configuration</source>
-        <translation>WengoPhone - Configuration avancée</translation>
+        <translation type="unfinished">WengoPhone - Configuration avancée</translation>
     </message>
     <message>
         <source>Preference Name</source>
-        <translation>Nom de l&apos;option</translation>
+        <translation type="unfinished">Nom de l&apos;option</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>Type</translation>
+        <translation type="unfinished">Type</translation>
     </message>
     <message>
         <source>Value</source>
-        <translation>Valeur</translation>
+        <translation type="unfinished">Valeur</translation>
     </message>
     <message>
         <source>Default Value</source>
-        <translation>Valeur par défaut</translation>
+        <translation type="unfinished">Valeur par défaut</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation>Enregistrer</translation>
+        <translation type="unfinished">Enregistrer</translation>
     </message>
     <message>
         <source>Status</source>
-        <translation>Statut</translation>
+        <translation type="unfinished">Statut</translation>
     </message>
 </context>
 <context>
     <name>AdvancedSettings</name>
     <message>
         <source>Advanced Settings</source>
-        <translation>Paramètres avancés</translation>
+        <translation type="unfinished">Paramètres avancés</translation>
     </message>
     <message>
         <source>Advanced Configuration Window</source>
-        <translation>Fenêtre de configuration avancée</translation>
+        <translation type="unfinished">Fenêtre de configuration avancée</translation>
     </message>
     <message>
         <source>Automatically answer incoming calls from</source>
-        <translation>Toujours accepter les appels de</translation>
+        <translation type="unfinished">Toujours accepter les appels de</translation>
     </message>
     <message>
         <source>Remove</source>
-        <translation>Supprimer</translation>
+        <translation type="unfinished">Supprimer</translation>
     </message>
     <message>
         <source>Warning, this part is for advanced users.&lt;br&gt;Any mistake can badly damage the software.</source>
-        <translation>Attention, cette section est réservée pour les utilisateurs avertis.&lt;br&gt;Toute modification peut altérer le bon fonctionnement du logiciel.</translation>
+        <translation type="unfinished">Attention, cette section est réservée pour les utilisateurs avertis.&lt;br&gt;Toute modification peut altérer le bon fonctionnement du logiciel.</translation>
     </message>
     <message>
         <source>Add</source>
-        <translation>Ajouter</translation>
+        <translation type="unfinished">Ajouter</translation>
     </message>
 </context>
 <context>
     <name>AudioSettings</name>
     <message>
         <source>Audio Settings</source>
-        <translation>Paramètres Audio</translation>
+        <translation type="unfinished">Paramètres Audio</translation>
     </message>
     <message>
         <source>Output device:</source>
-        <translation>Ecouteur:</translation>
+        <translation type="unfinished">Ecouteur:</translation>
     </message>
     <message>
         <source>Input device:</source>
-        <translation>Micro:</translation>
+        <translation type="unfinished">Micro:</translation>
     </message>
     <message>
         <source>Ringing device:</source>
-        <translation>Sonnerie:</translation>
+        <translation type="unfinished">Sonnerie:</translation>
     </message>
     <message>
         <source>Make a test call </source>
-        <translation>Effectuer un appel de test </translation>
+        <translation type="unfinished">Effectuer un appel de test </translation>
     </message>
 </context>
 <context>
     <name>AvatarFrame</name>
     <message>
         <source>Form</source>
-        <translation>Formulaire</translation>
+        <translation type="unfinished">Formulaire</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>AvatarWidget</name>
     <message>
         <source>Form</source>
-        <translation>Formulaire</translation>
+        <translation type="unfinished">Formulaire</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>BrowserSoftUpdateWindow</name>
     <message>
         <source>Close</source>
-        <translation>Fermer</translation>
+        <translation type="unfinished">Fermer</translation>
     </message>
     <message>
         <source>WengoPhone - Update available</source>
-        <translation>WengoPhone - Mise à jour disponible</translation>
+        <translation type="unfinished">WengoPhone - Mise à jour disponible</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;An update is available, click &lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;here&lt;/span&gt; to download the new version&lt;br /&gt;&lt;br /&gt;Version:<byte value="x9"/>%1&lt;br /&gt;File Size:<byte value="x9"/>%2 (MB)&lt;br /&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;Une mise-à-jour est disponible, cliquez &lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;ici&lt;/span&gt; pour télécharger la nouvelle version&lt;br /&gt;&lt;br /&gt;Version:<byte value="x9"/>%1&lt;br /&gt;Taille du fichier:<byte value="x9"/>%2 (MB)&lt;br /&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation type="unfinished">&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;Une mise-à-jour est disponible, cliquez &lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;ici&lt;/span&gt; pour télécharger la nouvelle version&lt;br /&gt;&lt;br /&gt;Version:<byte value="x9"/>%1&lt;br /&gt;Taille du fichier:<byte value="x9"/>%2 (MB)&lt;br /&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
 </context>
 <context>
     <name>CallForwardSettings</name>
     <message>
         <source>Call Forward Settings</source>
-        <translation>Paramètres du transfert d&apos;appel</translation>
+        <translation type="unfinished">Paramètres du transfert d&apos;appel</translation>
     </message>
     <message>
         <source>3rd:</source>
-        <translation>3ème:</translation>
+        <translation type="unfinished">3ème:</translation>
     </message>
     <message>
         <source>1st:</source>
-        <translation>1er:</translation>
+        <translation type="unfinished">1er:</translation>
     </message>
     <message>
         <source>2nd:</source>
-        <translation>2ème:</translation>
+        <translation type="unfinished">2ème:</translation>
     </message>
     <message>
         <source>(+ country code) phone number</source>
-        <translation>(+ indicatif pays) numéro de téléphone</translation>
+        <translation type="unfinished">(+ indicatif pays) numéro de téléphone</translation>
     </message>
     <message>
         <source>Forward all unanswered calls to message box</source>
-        <translation>Transférer tous vos appels non aboutis vers la messagerie vocale</translation>
+        <translation type="unfinished">Transférer tous vos appels non aboutis vers la messagerie vocale</translation>
     </message>
     <message>
         <source>Disable call forwarding</source>
-        <translation>Désactiver le transfert d&apos;appel</translation>
+        <translation type="unfinished">Désactiver le transfert d&apos;appel</translation>
     </message>
     <message>
         <source>Forward all unanswered calls to following phone numbers:</source>
-        <translation>Transférer tout les appels en absence vers les numéros suivants:</translation>
+        <translation type="unfinished">Transférer tout les appels en absence vers les numéros suivants:</translation>
     </message>
     <message>
         <source>For example +3314500XXXX (+33 is the country code and 14500XXXX is the phone number)</source>
-        <translation>Par exemple +3314500XXXX (+33 est l&apos;indicatif du pays et 14500XXXX le numéro de téléphone)</translation>
+        <translation type="unfinished">Par exemple +3314500XXXX (+33 est l&apos;indicatif du pays et 14500XXXX le numéro de téléphone)</translation>
     </message>
     <message>
         <source>Call forwarding is active if you&apos;re not connected to Wengo, when your line is busy or 20 seconds after you did not answer a call. You can configure up to three call forwards to landlines, mobile phones or voice mail (if applicable)</source>
-        <translation>Le transfert d&apos;appel est activé si vous n&apos;êtes pas connecté à Wengo, si votre ligne est occupée ou 20 secondes après ne pas avoir répondu à un appel. Vous pouvez mettre en place jusqu&apos;à trois transferts d&apos;appel vers les téléphones fixes, vers les mobiles ou vers la boite vocale (si disponible)</translation>
+        <translation type="unfinished">Le transfert d&apos;appel est activé si vous n&apos;êtes pas connecté à Wengo, si votre ligne est occupée ou 20 secondes après ne pas avoir répondu à un appel. Vous pouvez mettre en place jusqu&apos;à trois transferts d&apos;appel vers les téléphones fixes, vers les mobiles ou vers la boite vocale (si disponible)</translation>
     </message>
 </context>
 <context>
     <name>CallToaster</name>
     <message>
         <source>Incoming Call</source>
-        <translation>Réception d&apos;un appel</translation>
+        <translation type="unfinished">Réception d&apos;un appel</translation>
     </message>
     <message>
         <source>Message</source>
-        <translation>Message</translation>
+        <translation type="unfinished">Message</translation>
     </message>
 </context>
 <context>
     <name>ChatContactListItem</name>
     <message>
         <source>Form</source>
-        <translation>Formulaire</translation>
+        <translation type="obsolete">Formulaire</translation>
     </message>
     <message>
         <source></source>
@@ -312,62 +324,66 @@ version.</translation>
     <name>ChatMainWindow</name>
     <message>
         <source>MainWindow</source>
-        <translation>Fenêtre Principale</translation>
+        <translation type="unfinished">Fenêtre Principale</translation>
     </message>
     <message>
         <source>&amp;Contact</source>
-        <translation>&amp;Contact</translation>
+        <translation type="unfinished">&amp;Contact</translation>
     </message>
     <message>
         <source>&amp;Wengo</source>
-        <translation>&amp;Wengo</translation>
+        <translation type="unfinished">&amp;Wengo</translation>
     </message>
     <message>
         <source>&amp;Help</source>
-        <translation>&amp;Aide</translation>
+        <translation type="unfinished">&amp;Aide</translation>
     </message>
     <message>
         <source>Main Toolbar</source>
-        <translation>Barre d&apos;outils principale</translation>
+        <translation type="unfinished">Barre d&apos;outils principale</translation>
     </message>
     <message>
         <source>Call Contact</source>
-        <translation>Appeler le Contact</translation>
+        <translation type="unfinished">Appeler le Contact</translation>
     </message>
     <message>
         <source>Send a File</source>
-        <translation>Envoyer un fichier</translation>
+        <translation type="unfinished">Envoyer un fichier</translation>
     </message>
     <message>
         <source>createChatConf</source>
-        <translation>Créer une conférence</translation>
+        <translation type="unfinished">Créer une conférence</translation>
     </message>
     <message>
         <source>Show Contact Info</source>
-        <translation>Afficher le profil du contact</translation>
+        <translation type="unfinished">Afficher le profil du contact</translation>
     </message>
     <message>
         <source>blockContact</source>
-        <translation>Bloquer le contact</translation>
+        <translation type="unfinished">Bloquer le contact</translation>
     </message>
     <message>
         <source>&amp;Save History As...</source>
-        <translation>&amp;Enregistrer l&apos;historique sous...</translation>
+        <translation type="unfinished">&amp;Enregistrer l&apos;historique sous...</translation>
     </message>
     <message>
         <source>&amp;Tools</source>
-        <translation>&amp;Outils</translation>
+        <translation type="unfinished">&amp;Outils</translation>
     </message>
     <message>
         <source>&amp;Actions</source>
-        <translation>&amp;Actions</translation>
+        <translation type="unfinished">&amp;Actions</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>ChatRoomWidget</name>
     <message>
         <source>Form</source>
-        <translation>Formulaire</translation>
+        <translation type="obsolete">Formulaire</translation>
     </message>
     <message>
         <source></source>
@@ -378,87 +394,99 @@ version.</translation>
     <name>ChatToaster</name>
     <message>
         <source>Message</source>
-        <translation>Message</translation>
+        <translation type="unfinished">Message</translation>
     </message>
     <message>
         <source>Incoming Chat</source>
-        <translation>Réception d&apos;un chat</translation>
+        <translation type="unfinished">Réception d&apos;un chat</translation>
     </message>
 </context>
 <context>
     <name>ChatWidget</name>
     <message>
         <source>Form</source>
-        <translation>Formulaire</translation>
+        <translation type="unfinished">Formulaire</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>CloseChatTabWidget</name>
     <message>
         <source>Form</source>
-        <translation>Formulaire</translation>
+        <translation type="unfinished">Formulaire</translation>
     </message>
     <message>
         <source>Close active tab</source>
-        <translation>Fermer l&apos;onglet actuel</translation>
+        <translation type="unfinished">Fermer l&apos;onglet actuel</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>ConferenceCallWidget</name>
     <message>
         <source>WengoPhone - Create a Conference</source>
-        <translation>WengoPhone - Créer une conférence</translation>
+        <translation type="unfinished">WengoPhone - Créer une conférence</translation>
     </message>
     <message>
         <source>Start</source>
-        <translation>Appeler</translation>
+        <translation type="unfinished">Appeler</translation>
     </message>
     <message>
         <source>Phone number 2:</source>
-        <translation>Numéro 2:</translation>
+        <translation type="unfinished">Numéro 2:</translation>
     </message>
     <message>
         <source>Phone number 1:</source>
-        <translation>Numéro 1:</translation>
+        <translation type="unfinished">Numéro 1:</translation>
     </message>
     <message>
         <source>...</source>
-        <translation>...</translation>
+        <translation type="unfinished">...</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Annuler</translation>
+        <translation type="unfinished">Annuler</translation>
     </message>
     <message>
         <source>&lt;span style=&quot; font-size:18pt;&quot;&gt;Conference&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;Please enter two phone numbers &lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;or Wengo contact ID in order&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;to create a 3-way conference.&lt;/p&gt;</source>
-        <translation>&lt;span style=&quot; font-size:18pt;&quot;&gt;Conférence&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;Veuillez choisir deux numéros de téléphone &lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;ou deux pseudos Wengo afin&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;de démarrer une conférence à 3.&lt;/p&gt;</translation>
+        <translation type="unfinished">&lt;span style=&quot; font-size:18pt;&quot;&gt;Conférence&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;Veuillez choisir deux numéros de téléphone &lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;ou deux pseudos Wengo afin&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;de démarrer une conférence à 3.&lt;/p&gt;</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>ConferenceInviteWidget</name>
     <message>
         <source>&amp;Add &gt;&gt;</source>
-        <translation>&amp;Ajouter &gt;&gt;</translation>
+        <translation type="obsolete">&amp;Ajouter &gt;&gt;</translation>
     </message>
     <message>
         <source>&lt;&lt; &amp;Remove</source>
-        <translation>&lt;&lt; &amp;Supprimer</translation>
+        <translation type="obsolete">&lt;&lt; &amp;Supprimer</translation>
     </message>
     <message>
         <source>Available Contacts</source>
-        <translation>Contacts disponibles</translation>
+        <translation type="obsolete">Contacts disponibles</translation>
     </message>
     <message>
         <source>&amp;Start</source>
-        <translation>&amp;Commencer</translation>
+        <translation type="obsolete">&amp;Commencer</translation>
     </message>
     <message>
         <source>&lt;span style=&quot; font-size:18pt;&quot;&gt;Conference&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;Please enter two phone numbers &lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;or Wengo contact ID in order&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;to create a 3-way conference.&lt;/p&gt;</source>
-        <translation>&lt;span style=&quot; font-size:18pt;&quot;&gt;Conference&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;Veuillez choisir deux numéros de téléphone &lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;ou deux pseudos Wengo afin&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;de démarrer une conférence à 3.&lt;/p&gt;</translation>
+        <translation type="obsolete">&lt;span style=&quot; font-size:18pt;&quot;&gt;Conference&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;Veuillez choisir deux numéros de téléphone &lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;ou deux pseudos Wengo afin&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;de démarrer une conférence à 3.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Annuler</translation>
+        <translation type="obsolete">Annuler</translation>
     </message>
 </context>
 <context>
@@ -492,842 +520,870 @@ version.</translation>
     <name>ContactList</name>
     <message>
         <source>Contact List</source>
-        <translation>Liste de contacts</translation>
+        <translation type="unfinished">Liste de contacts</translation>
     </message>
 </context>
 <context>
     <name>ContactWidget</name>
     <message>
         <source>No mobile phone number set</source>
-        <translation>Pas de numéro de téléphone portable</translation>
+        <translation type="unfinished">Pas de numéro de téléphone portable</translation>
     </message>
     <message>
         <source>No landline phone number set</source>
-        <translation>Pas de numéro de téléphone fixe</translation>
+        <translation type="unfinished">Pas de numéro de téléphone fixe</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>CrashReport</name>
     <message>
         <source>Program Failure</source>
-        <translation>Echec du programme</translation>
+        <translation type="obsolete">Echec du programme</translation>
     </message>
     <message>
         <source>The WengoPhone execution failed and has generated a diagnostic file.&lt;br&gt;This file contains usefull information to solve the problem you are encounting.&lt;br&gt;Thanks for your contribution.&lt;br&gt;&lt;br&gt;The WengoPhone Development Team.</source>
-        <translation>Le WengoPhone a rencontré un bug et a généré un fichier de diagnostique.&lt;br&gt;Ce fichier contient des informations utiles à la résolution du problème que vous avez rencontré.&lt;br&gt;Merci pour votre contribution.&lt;br&gt;&lt;br&gt;L&apos;équipe de développement de Wengo.</translation>
+        <translation type="obsolete">Le WengoPhone a rencontré un bug et a généré un fichier de diagnostique.&lt;br&gt;Ce fichier contient des informations utiles à la résolution du problème que vous avez rencontré.&lt;br&gt;Merci pour votre contribution.&lt;br&gt;&lt;br&gt;L&apos;équipe de développement de Wengo.</translation>
     </message>
     <message>
         <source>Send</source>
-        <translation>Envoyer</translation>
+        <translation type="obsolete">Envoyer</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Annuler</translation>
+        <translation type="obsolete">Annuler</translation>
     </message>
     <message>
         <source>Optional Information</source>
-        <translation>Informations facultatives</translation>
+        <translation type="obsolete">Informations facultatives</translation>
     </message>
     <message>
         <source>In order to help the developers you can complete this report. This step is optional.&lt;br&gt;Use Case Description:</source>
-        <translation>Si vous voulez aider les développeurs, vous pouvez compléter le rapport. Cette étape est facultative.&lt;br&gt;Décrivez votre expérience:</translation>
+        <translation type="obsolete">Si vous voulez aider les développeurs, vous pouvez compléter le rapport. Cette étape est facultative.&lt;br&gt;Décrivez votre expérience:</translation>
     </message>
     <message>
         <source>Your Mail:</source>
-        <translation>Votre Email:</translation>
+        <translation type="obsolete">Votre Email:</translation>
     </message>
 </context>
 <context>
     <name>CreditWidget</name>
     <message>
         <source>Your Wengo phone number</source>
-        <translation>Votre numéro Wengo</translation>
+        <translation type="unfinished">Votre numéro Wengo</translation>
     </message>
     <message>
         <source>Not Available</source>
-        <translation>Non disponible</translation>
+        <translation type="unfinished">Non disponible</translation>
     </message>
     <message>
         <source>Your phone number:</source>
-        <translation>Votre numéro de téléphone:</translation>
+        <translation type="unfinished">Votre numéro de téléphone:</translation>
     </message>
     <message>
         <source>Click here to change your call forward settings</source>
-        <translation>Cliquez ici pour modifier le transfert d&apos;appel</translation>
+        <translation type="unfinished">Cliquez ici pour modifier le transfert d&apos;appel</translation>
     </message>
     <message>
         <source>Call forward mode:</source>
-        <translation>Mode de transfert d&apos;appel:</translation>
+        <translation type="unfinished">Mode de transfert d&apos;appel:</translation>
     </message>
     <message>
         <source>Purchase call out credits</source>
-        <translation>Acheter des crédits de communication</translation>
+        <translation type="unfinished">Acheter des crédits de communication</translation>
     </message>
     <message>
         <source>Call Forward Method</source>
-        <translation>Méthode du transfert d&apos;appel:</translation>
+        <translation type="unfinished">Méthode du transfert d&apos;appel:</translation>
     </message>
     <message>
         <source>Click here to buy Wengo&apos;s credits</source>
-        <translation>Cliquer ici pour acheter des crédits de communication</translation>
+        <translation type="unfinished">Cliquer ici pour acheter des crédits de communication</translation>
     </message>
     <message>
         <source>Call Voice Mail</source>
-        <translation>Appeler la boite vocale</translation>
+        <translation type="unfinished">Appeler la boite vocale</translation>
     </message>
 </context>
 <context>
     <name>DialpadWidget</name>
     <message>
         <source>Audio Smileys</source>
-        <translation>Smileys audios</translation>
+        <translation type="obsolete">Smileys audios</translation>
     </message>
 </context>
 <context>
     <name>EventWidget</name>
     <message>
         <source>0</source>
-        <translation>0</translation>
+        <translation type="unfinished">0</translation>
     </message>
     <message>
         <source>Click here to call your voice mail</source>
-        <translation>Cliquez ici pour appeler votre messagerie</translation>
+        <translation type="unfinished">Cliquez ici pour appeler votre messagerie</translation>
     </message>
     <message>
         <source>New Voice Mail:</source>
-        <translation>Nouveau Mail Vocal :</translation>
+        <translation type="unfinished">Nouveau Mail Vocal :</translation>
     </message>
     <message>
         <source>Click here to see missed call(s)</source>
-        <translation>Cliquez ici pour voir les appels en absence</translation>
+        <translation type="unfinished">Cliquez ici pour voir les appels en absence</translation>
     </message>
     <message>
         <source>Missed Call(s):</source>
-        <translation>Appel(s) manqué(s):</translation>
+        <translation type="unfinished">Appel(s) manqué(s):</translation>
     </message>
 </context>
 <context>
     <name>FileTransferItem</name>
     <message>
         <source>Form</source>
-        <translation>Formulaire</translation>
+        <translation type="unfinished">Formulaire</translation>
     </message>
     <message>
         <source>From:</source>
-        <translation>De:</translation>
+        <translation type="obsolete">De:</translation>
     </message>
     <message>
         <source>Pause</source>
-        <translation>Pause</translation>
+        <translation type="unfinished">Pause</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Annuler</translation>
+        <translation type="unfinished">Annuler</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;i&gt;From:&lt;/i&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>FileTransferWidget</name>
     <message>
         <source>...</source>
-        <translation>...</translation>
+        <translation type="unfinished">...</translation>
     </message>
     <message>
         <source>WengoPhone - File Transfer Manager</source>
-        <translation>WengoPhone - Gestionnaire du transfert de fichiers</translation>
+        <translation type="unfinished">WengoPhone - Gestionnaire du transfert de fichiers</translation>
     </message>
     <message>
         <source>Download folder:</source>
-        <translation>Dossier de téléchargement:</translation>
+        <translation type="unfinished">Dossier de téléchargement:</translation>
     </message>
     <message>
         <source>Download</source>
-        <translation>Réception</translation>
+        <translation type="unfinished">Réception</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>Envoi</translation>
+        <translation type="unfinished">Envoi</translation>
     </message>
     <message>
         <source>&amp;Clean</source>
-        <translation>&amp;Nettoyer</translation>
+        <translation type="unfinished">&amp;Nettoyer</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Click here to change your download folder&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Cliquer ici pour modifier votre dossier de téléchargement&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation type="unfinished">&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Cliquer ici pour modifier votre dossier de téléchargement&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Clean all items in the list&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Nettoyer tous les éléments de la liste&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation type="unfinished">&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Nettoyer tous les éléments de la liste&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
 </context>
 <context>
     <name>Form</name>
     <message>
         <source>&amp;Start</source>
-        <translation>&amp;Commencer</translation>
+        <translation type="obsolete">&amp;Commencer</translation>
     </message>
     <message>
         <source>Chat room</source>
-        <translation>Salon de discussion</translation>
+        <translation type="obsolete">Salon de discussion</translation>
     </message>
     <message>
         <source>(Conference participants)</source>
-        <translation>(Participants à la conférence)</translation>
+        <translation type="obsolete">(Participants à la conférence)</translation>
     </message>
     <message>
         <source>&amp;Remove</source>
-        <translation>&amp;Supprimer</translation>
+        <translation type="obsolete">&amp;Supprimer</translation>
     </message>
     <message>
         <source>Group Name</source>
-        <translation>Nom du groupe</translation>
+        <translation type="obsolete">Nom du groupe</translation>
     </message>
     <message>
         <source>&amp;Add</source>
-        <translation>&amp;Ajouter</translation>
+        <translation type="obsolete">&amp;Ajouter</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;&gt;Chat room&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;&gt;Salon chat&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation type="obsolete">&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;&gt;Salon chat&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
 </context>
 <context>
     <name>GeneralSettings</name>
     <message>
         <source>General Settings</source>
-        <translation>Configuration générale</translation>
+        <translation type="unfinished">Configuration générale</translation>
     </message>
     <message>
         <source>When I double-click on a contact </source>
-        <translation>Quand je double-clique sur un contact </translation>
+        <translation type="unfinished">Quand je double-clique sur un contact </translation>
     </message>
     <message>
         <source>Start a free call if applicable</source>
-        <translation>Passer un appel PC à PC si possible</translation>
+        <translation type="unfinished">Passer un appel PC à PC si possible</translation>
     </message>
     <message>
         <source>Call cell phone or land line if contact not online</source>
-        <translation>Appeler le mobile ou la ligne fixe si le contact n&apos;est pas disponible</translation>
+        <translation type="unfinished">Appeler le mobile ou la ligne fixe si le contact n&apos;est pas disponible</translation>
     </message>
     <message>
         <source>Always start a chat</source>
-        <translation>Toujours commencer un chat</translation>
+        <translation type="unfinished">Toujours commencer un chat</translation>
     </message>
     <message>
         <source>Idle status</source>
-        <translation>Inactivité</translation>
+        <translation type="unfinished">Inactivité</translation>
     </message>
     <message>
         <source>minutes</source>
-        <translation>minutes</translation>
+        <translation type="unfinished">minutes</translation>
     </message>
     <message>
         <source>Show me as &quot;Away&quot; when I am inactive for:</source>
-        <translation>Changer mon statut en &quot;absent&quot; après une période d&apos;inactivité de :</translation>
+        <translation type="unfinished">Changer mon statut en &quot;absent&quot; après une période d&apos;inactivité de :</translation>
     </message>
     <message>
         <source>When I start my computer</source>
-        <translation>Au démarrage du système</translation>
+        <translation type="unfinished">Au démarrage du système</translation>
     </message>
     <message>
         <source>Automatically start WengoPhone</source>
-        <translation>Démarrer le WengoPhone automatiquement</translation>
+        <translation type="unfinished">Démarrer le WengoPhone automatiquement</translation>
     </message>
     <message>
         <source>&amp;Edit my profile</source>
-        <translation>Editer mon &amp;Profil</translation>
+        <translation type="unfinished">Editer mon &amp;Profil</translation>
     </message>
 </context>
 <context>
     <name>GoogleTalkSettings</name>
     <message>
         <source>Login:</source>
-        <translation>Identifiant :</translation>
+        <translation type="unfinished">Identifiant :</translation>
     </message>
     <message>
         <source>GoogleTalk Settings</source>
-        <translation>Paramètres GoogleTalk</translation>
+        <translation type="unfinished">Paramètres GoogleTalk</translation>
     </message>
     <message>
         <source>Forgot your GoogleTalk password?</source>
-        <translation>Mot de passe GoogleTalk oublié?</translation>
+        <translation type="unfinished">Mot de passe GoogleTalk oublié?</translation>
     </message>
     <message>
         <source>Get a new GoogleTalk Account</source>
-        <translation>Créez un nouveau compte GoogleTalk</translation>
+        <translation type="unfinished">Créez un nouveau compte GoogleTalk</translation>
     </message>
     <message>
         <source>Password:</source>
-        <translation>Mot de passe :</translation>
+        <translation type="unfinished">Mot de passe :</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>HistoryWidget</name>
     <message>
         <source>Type</source>
-        <translation>Type</translation>
+        <translation type="unfinished">Type</translation>
     </message>
     <message>
         <source>Name/ID</source>
-        <translation>Nom/Numéro</translation>
+        <translation type="unfinished">Nom/Numéro</translation>
     </message>
     <message>
         <source>Date</source>
-        <translation>Date</translation>
+        <translation type="unfinished">Date</translation>
     </message>
     <message>
         <source>Duration</source>
-        <translation>Durée</translation>
+        <translation type="unfinished">Durée</translation>
     </message>
 </context>
 <context>
     <name>HttpProxyLoginWindow</name>
     <message>
         <source>WengoPhone - Local HTTP Proxy</source>
-        <translation>WengoPhone - Proxy HTTP local</translation>
+        <translation type="unfinished">WengoPhone - Proxy HTTP local</translation>
     </message>
     <message>
         <source>HTTP Proxy Address:</source>
-        <translation>Adresse du Proxy HTTP:</translation>
+        <translation type="unfinished">Adresse du Proxy HTTP:</translation>
     </message>
     <message>
         <source>HTTP Proxy Port Number:</source>
-        <translation>Port:</translation>
+        <translation type="unfinished">Port:</translation>
     </message>
     <message>
         <source>HTTP Proxy Login:</source>
-        <translation>Nom d&apos;utilisateur:</translation>
+        <translation type="unfinished">Nom d&apos;utilisateur:</translation>
     </message>
     <message>
         <source>HTTP Proxy Password:</source>
-        <translation>Mot de passe:</translation>
+        <translation type="unfinished">Mot de passe:</translation>
     </message>
     <message>
         <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;HTTP Proxy Authentication&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;Your local HTTP proxy uses authentication&lt;br&gt;Please enter your login and password&lt;/span&gt;</source>
-        <translation>&lt;span style=&quot;font-size:18pt;&quot;&gt;Autentification du proxy HTTP&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;Votre proxy HTTP local utilise une autentification&lt;br&gt;Veuillez renseinger votre identifiant et votre mot de passe&lt;/span&gt;</translation>
+        <translation type="unfinished">&lt;span style=&quot;font-size:18pt;&quot;&gt;Autentification du proxy HTTP&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;Votre proxy HTTP local utilise une autentification&lt;br&gt;Veuillez renseinger votre identifiant et votre mot de passe&lt;/span&gt;</translation>
     </message>
     <message>
         <source>OK</source>
-        <translation>OK</translation>
+        <translation type="unfinished">OK</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Annuler</translation>
+        <translation type="unfinished">Annuler</translation>
     </message>
 </context>
 <context>
     <name>IMAccountManager</name>
     <message>
         <source>Close</source>
-        <translation>Fermer</translation>
+        <translation type="unfinished">Fermer</translation>
     </message>
     <message>
         <source>Login</source>
-        <translation>Identifiant</translation>
+        <translation type="unfinished">Identifiant</translation>
     </message>
     <message>
         <source>WengoPhone - My Instant Messaging Accounts (MSN, Jabber...)</source>
-        <translation>WengoPhone - Mes comptes de Messagerie Instantannée (MSN, Jabber...)</translation>
+        <translation type="unfinished">WengoPhone - Mes comptes de Messagerie Instantannée (MSN, Jabber...)</translation>
     </message>
     <message>
         <source>Enabled</source>
-        <translation>Activé</translation>
+        <translation type="unfinished">Activé</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation>Supprimer</translation>
+        <translation type="unfinished">Supprimer</translation>
     </message>
     <message>
         <source>Modify</source>
-        <translation>Modifier</translation>
+        <translation type="unfinished">Modifier</translation>
     </message>
     <message>
         <source>Protocol</source>
-        <translation>Protocole</translation>
+        <translation type="unfinished">Protocole</translation>
     </message>
     <message>
         <source>Add</source>
-        <translation>Ajouter</translation>
+        <translation type="unfinished">Ajouter</translation>
     </message>
 </context>
 <context>
     <name>IMAccountTemplate</name>
     <message>
         <source>Save</source>
-        <translation>Enregistrer</translation>
+        <translation type="unfinished">Enregistrer</translation>
     </message>
     <message>
         <source>IM Account Settings</source>
-        <translation>Paramètres des comptes de Messagerie</translation>
+        <translation type="unfinished">Paramètres des comptes de Messagerie</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Annuler</translation>
+        <translation type="unfinished">Annuler</translation>
     </message>
 </context>
 <context>
     <name>IMContactManager</name>
     <message>
         <source>Delete</source>
-        <translation>Supprimer</translation>
+        <translation type="unfinished">Supprimer</translation>
     </message>
     <message>
         <source>Contact Type (protocol)</source>
-        <translation>Type de contact (protocole)</translation>
+        <translation type="unfinished">Type de contact (protocole)</translation>
     </message>
     <message>
         <source>Click on the add button below to add a new ID</source>
-        <translation>Ajouter des comptes de Messagerie Instantanée à votre contact</translation>
+        <translation type="unfinished">Ajouter des comptes de Messagerie Instantanée à votre contact</translation>
     </message>
     <message>
         <source>Add</source>
-        <translation>Ajouter</translation>
+        <translation type="unfinished">Ajouter</translation>
     </message>
     <message>
         <source>Contact ID</source>
-        <translation>Identifiant du contact</translation>
+        <translation type="unfinished">Identifiant du contact</translation>
     </message>
 </context>
 <context>
     <name>IMProfileWidget</name>
     <message>
         <source>Edit My Profile</source>
-        <translation>Editer mon profil</translation>
+        <translation type="unfinished">Editer mon profil</translation>
     </message>
     <message>
         <source>AIM/ICQ</source>
-        <translation>AIM/ICQ</translation>
+        <translation type="unfinished">AIM/ICQ</translation>
     </message>
     <message>
         <source>Yahoo!</source>
-        <translation>Yahoo!</translation>
+        <translation type="unfinished">Yahoo!</translation>
     </message>
     <message>
         <source>Wengo</source>
-        <translation>Wengo</translation>
+        <translation type="unfinished">Wengo</translation>
     </message>
     <message>
         <source>Jabber/GoogleTalk</source>
-        <translation>GoogleTalk/Jabber</translation>
+        <translation type="unfinished">GoogleTalk/Jabber</translation>
     </message>
     <message>
         <source>MSN</source>
-        <translation>MSN</translation>
+        <translation type="unfinished">MSN</translation>
     </message>
     <message>
         <source>Enter your nickname here</source>
-        <translation>Entrez votre pseudo ici</translation>
+        <translation type="unfinished">Entrez votre pseudo ici</translation>
     </message>
 </context>
 <context>
     <name>JabberSettings</name>
     <message>
         <source>Login:</source>
-        <translation>Identifiant :</translation>
+        <translation type="unfinished">Identifiant :</translation>
     </message>
     <message>
         <source>Jabber Settings</source>
-        <translation>Paramètres de Jabber</translation>
+        <translation type="unfinished">Paramètres de Jabber</translation>
     </message>
     <message>
         <source>Connect Server:</source>
-        <translation>Se connecter au serveur:</translation>
+        <translation type="unfinished">Se connecter au serveur:</translation>
     </message>
     <message>
         <source>&lt;u&gt;Advanced Options&lt;/u&gt;</source>
-        <translation>&lt;u&gt;Options avancées&lt;/u&gt;</translation>
+        <translation type="unfinished">&lt;u&gt;Options avancées&lt;/u&gt;</translation>
     </message>
     <message>
         <source>Require TLS</source>
-        <translation>Nécessite TLS</translation>
+        <translation type="unfinished">Nécessite TLS</translation>
     </message>
     <message>
         <source>Port:</source>
-        <translation>Port:</translation>
+        <translation type="unfinished">Port:</translation>
     </message>
     <message>
         <source>Use TLS if available</source>
-        <translation>Utiliser TLS, si possible</translation>
+        <translation type="unfinished">Utiliser TLS, si possible</translation>
     </message>
     <message>
         <source>Allow plaintext authentication over unencrypted streams</source>
-        <translation>Autoriser l&apos;identifcation en clair sur des connexions non cryptées</translation>
+        <translation type="unfinished">Autoriser l&apos;identifcation en clair sur des connexions non cryptées</translation>
     </message>
     <message>
         <source>5222</source>
-        <translation>5222</translation>
+        <translation type="unfinished">5222</translation>
     </message>
     <message>
         <source>Force old (port 5223) SSL</source>
-        <translation>Forcer SSL (5223)</translation>
+        <translation type="unfinished">Forcer SSL (5223)</translation>
     </message>
     <message>
         <source>Password:</source>
-        <translation>Mot de passe :</translation>
+        <translation type="unfinished">Mot de passe :</translation>
     </message>
 </context>
 <context>
     <name>LanguagesSettings</name>
     <message>
         <source>Language</source>
-        <translation>Langue</translation>
+        <translation type="unfinished">Langue</translation>
     </message>
 </context>
 <context>
     <name>LoginWindow</name>
     <message>
         <source>Login</source>
-        <translation>Se connecter</translation>
+        <translation type="unfinished">Se connecter</translation>
     </message>
     <message>
         <source>WengoPhone - Login</source>
-        <translation>WengoPhone - Connexion</translation>
+        <translation type="unfinished">WengoPhone - Connexion</translation>
     </message>
     <message>
         <source>Forgot your password?</source>
-        <translation>Mot de passe oublié?</translation>
+        <translation type="unfinished">Mot de passe oublié?</translation>
     </message>
     <message>
         <source>Need help?</source>
-        <translation>Vous avez besoin d&apos;aide?</translation>
+        <translation type="unfinished">Vous avez besoin d&apos;aide?</translation>
     </message>
     <message>
         <source>Email Address:</source>
-        <translation>Adresse email:</translation>
+        <translation type="unfinished">Adresse email:</translation>
     </message>
     <message>
         <source>Click here if you don&apos;t have a Wengo account</source>
-        <translation>Cliquez ici si vous n&apos;avez pas de compte Wengo</translation>
+        <translation type="unfinished">Cliquez ici si vous n&apos;avez pas de compte Wengo</translation>
     </message>
     <message>
         <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Login&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;Please enter your email address and&lt;br&gt;password&lt;/span&gt;</source>
-        <translation>&lt;span style=&quot;font-size:18pt;&quot;&gt;Login&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;Veuillez renseigner votre adresse mail et&lt;br&gt;votre mot de passe&lt;/span&gt;</translation>
+        <translation type="unfinished">&lt;span style=&quot;font-size:18pt;&quot;&gt;Login&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;Veuillez renseigner votre adresse mail et&lt;br&gt;votre mot de passe&lt;/span&gt;</translation>
     </message>
     <message>
         <source>Password:</source>
-        <translation>Mot de passe :</translation>
+        <translation type="unfinished">Mot de passe :</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Annuler</translation>
+        <translation type="unfinished">Annuler</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>MSNSettings</name>
     <message>
         <source>Login:</source>
-        <translation>Identifiant :</translation>
+        <translation type="unfinished">Identifiant :</translation>
     </message>
     <message>
         <source>MSN Settings</source>
-        <translation>Paramètres MSN</translation>
+        <translation type="unfinished">Paramètres MSN</translation>
     </message>
     <message>
         <source>Forgot your MSN password?</source>
-        <translation>Mot de passe MSN oublié?</translation>
+        <translation type="unfinished">Mot de passe MSN oublié?</translation>
     </message>
     <message>
         <source>Get a new MSN Account</source>
-        <translation>Créez un nouveau compte MSN</translation>
+        <translation type="unfinished">Créez un nouveau compte MSN</translation>
     </message>
     <message>
         <source>Password:</source>
-        <translation>Mot de passe :</translation>
+        <translation type="unfinished">Mot de passe :</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>MainWindow</name>
     <message>
         <source>MainWindow</source>
-        <translation>Fenêtre Principale</translation>
+        <translation type="obsolete">Fenêtre Principale</translation>
     </message>
     <message>
         <source>Command::terminate()</source>
-        <translation>Command::terminate()</translation>
+        <translation type="obsolete">Command::terminate()</translation>
     </message>
     <message>
         <source>Command::start()</source>
-        <translation>Command::start()</translation>
+        <translation type="obsolete">Command::start()</translation>
     </message>
     <message>
         <source>Accept Call</source>
-        <translation>Accepter l&apos;appel</translation>
+        <translation type="obsolete">Accepter l&apos;appel</translation>
     </message>
     <message>
         <source>Send Chat Message</source>
-        <translation>Ouvrir une fenêtre chat</translation>
+        <translation type="obsolete">Ouvrir une fenêtre chat</translation>
     </message>
     <message>
         <source>Make Call</source>
-        <translation>Effectuer un appel</translation>
+        <translation type="obsolete">Effectuer un appel</translation>
     </message>
     <message>
         <source>Hang Up</source>
-        <translation>Raccrocher</translation>
+        <translation type="obsolete">Raccrocher</translation>
     </message>
 </context>
 <context>
     <name>ManageBlockedUsersSettings</name>
     <message>
         <source>Close</source>
-        <translation>Fermer</translation>
+        <translation type="unfinished">Fermer</translation>
     </message>
     <message>
         <source>WengoPhone - Manage blocked users</source>
-        <translation>Wengophone - Gérer les contacts bloqués</translation>
+        <translation type="unfinished">Wengophone - Gérer les contacts bloqués</translation>
     </message>
     <message>
         <source>Unblock User</source>
-        <translation>Débloquer le contact</translation>
+        <translation type="unfinished">Débloquer le contact</translation>
     </message>
     <message>
         <source>Manage blocked users</source>
-        <translation>Gérer les contacts bloqués</translation>
+        <translation type="unfinished">Gérer les contacts bloqués</translation>
     </message>
 </context>
 <context>
     <name>NotificationSettings</name>
     <message>
         <source>Standard Notifications</source>
-        <translation>Notifications standards</translation>
+        <translation type="unfinished">Notifications standards</translation>
     </message>
     <message>
         <source>Show pop-up window for incoming chats</source>
-        <translation>Afficher une pop-up pour les chats entrants</translation>
+        <translation type="unfinished">Afficher une pop-up pour les chats entrants</translation>
     </message>
     <message>
         <source>Show pop-up window when a contact is turning online</source>
-        <translation>Afficher une pop-up quand un contact se connecte</translation>
+        <translation type="unfinished">Afficher une pop-up quand un contact se connecte</translation>
     </message>
     <message>
         <source>Show pop-up window for incoming calls</source>
-        <translation>Afficher un pop-up pour les appels entrants</translation>
+        <translation type="unfinished">Afficher un pop-up pour les appels entrants</translation>
     </message>
     <message>
         <source>Advanced Notifications</source>
-        <translation>Notifications avancées</translation>
+        <translation type="unfinished">Notifications avancées</translation>
     </message>
     <message>
         <source>Do not show any pop-up window</source>
-        <translation>Ne montrer aucune pop-up</translation>
+        <translation type="unfinished">Ne montrer aucune pop-up</translation>
     </message>
     <message>
         <source>When switched to &quot;Away&quot;:</source>
-        <translation>Quand l&apos;état change en &quot;Away&quot;:</translation>
+        <translation type="unfinished">Quand l&apos;état change en &quot;Away&quot;:</translation>
     </message>
     <message>
         <source>When switched to &quot;Do Not Disturb&quot;:</source>
-        <translation>Quand l&apos;état change en &quot;Ne pas déranger&quot;:</translation>
+        <translation type="unfinished">Quand l&apos;état change en &quot;Ne pas déranger&quot;:</translation>
     </message>
     <message>
         <source>No audio notifications</source>
-        <translation>Aucune notification</translation>
+        <translation type="unfinished">Aucune notification</translation>
     </message>
     <message>
         <source>Activate sounds for/when</source>
-        <translation>Activer le son pour/quand</translation>
+        <translation type="unfinished">Activer le son pour/quand</translation>
     </message>
     <message>
         <source>No sound</source>
-        <translation>Aucun son</translation>
+        <translation type="unfinished">Aucun son</translation>
     </message>
     <message>
         <source>Sound file</source>
-        <translation>Fichier</translation>
+        <translation type="unfinished">Fichier</translation>
     </message>
     <message>
         <source>Play sound file</source>
-        <translation>Jouer le son</translation>
+        <translation type="unfinished">Jouer le son</translation>
     </message>
     <message>
         <source>Find a sound file</source>
-        <translation>Parcourir</translation>
+        <translation type="unfinished">Parcourir</translation>
     </message>
     <message>
         <source>Incoming call (ringtone)</source>
-        <translation>Réception d&apos;un appel (sonnerie)</translation>
+        <translation type="unfinished">Réception d&apos;un appel (sonnerie)</translation>
     </message>
     <message>
         <source>Call closed (hang up tone)</source>
-        <translation>Raccrochage (tonalité)</translation>
+        <translation type="unfinished">Raccrochage (tonalité)</translation>
     </message>
     <message>
         <source>Incoming chat</source>
-        <translation>Réception d&apos;un chat</translation>
+        <translation type="unfinished">Réception d&apos;un chat</translation>
     </message>
     <message>
         <source>IM account connected</source>
-        <translation>Connexion d&apos;un compte de messagerie</translation>
+        <translation type="unfinished">Connexion d&apos;un compte de messagerie</translation>
     </message>
     <message>
         <source>IM account disconnected</source>
-        <translation>Déconnexion d&apos;un compte de messagerie</translation>
+        <translation type="unfinished">Déconnexion d&apos;un compte de messagerie</translation>
     </message>
     <message>
         <source>Contact online</source>
-        <translation>Contact en ligne</translation>
+        <translation type="unfinished">Contact en ligne</translation>
     </message>
 </context>
 <context>
     <name>PhoneCallWidget</name>
     <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-size:13pt; font-weight:600;&quot;&gt;NickName or number&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-size:13pt; font-weight:600;&quot;&gt;Pseudo ou numéro&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation type="unfinished">&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-size:13pt; font-weight:600;&quot;&gt;Pseudo ou numéro&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>Duration</source>
-        <translation>Durée</translation>
+        <translation type="unfinished">Durée</translation>
     </message>
     <message>
         <source>Status</source>
-        <translation>Statut</translation>
+        <translation type="unfinished">Statut</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>PrivacySettings</name>
     <message>
         <source>Manage blocked users</source>
-        <translation>Gérer les contacts bloqués</translation>
+        <translation type="unfinished">Gérer les contacts bloqués</translation>
     </message>
     <message>
         <source>Privacy Rules </source>
-        <translation>Confidentialité </translation>
+        <translation type="unfinished">Confidentialité </translation>
     </message>
     <message>
         <source>When I sign into Wengo</source>
-        <translation>Quand je me connecte sur Wengo</translation>
+        <translation type="unfinished">Quand je me connecte sur Wengo</translation>
     </message>
     <message>
         <source>Always sign in as &quot;Invisible&quot; (appear offline to all users)</source>
-        <translation>Toutjours se connecter en mode invisible (les autres utilisateurs ne vous 
+        <translation type="unfinished">Toutjours se connecter en mode invisible (les autres utilisateurs ne vous 
 voient pas)</translation>
     </message>
     <message>
         <source>Allow chats from</source>
-        <translation>Autorisez les chats provenant de</translation>
+        <translation type="unfinished">Autorisez les chats provenant de</translation>
     </message>
     <message>
         <source>Anyone</source>
-        <translation>Tout le monde</translation>
+        <translation type="unfinished">Tout le monde</translation>
     </message>
     <message>
         <source>Only people from my contact list</source>
-        <translation>Uniquement de mes contacts</translation>
+        <translation type="unfinished">Uniquement de mes contacts</translation>
     </message>
     <message>
         <source>Allow calls from</source>
-        <translation>Autoriser les appels provenant de</translation>
+        <translation type="unfinished">Autoriser les appels provenant de</translation>
     </message>
 </context>
 <context>
     <name>ProfileDetails</name>
     <message>
         <source>Save</source>
-        <translation>Enregistrer</translation>
+        <translation type="unfinished">Enregistrer</translation>
     </message>
     <message>
         <source>General</source>
-        <translation>Général</translation>
+        <translation type="unfinished">Général</translation>
     </message>
     <message>
         <source>Network IDs (MSN, Jabber...)</source>
-        <translation>Identifiants (MSN, Jabber...)</translation>
+        <translation type="unfinished">Identifiants (MSN, Jabber...)</translation>
     </message>
     <message>
         <source>Advanced &gt;&gt;</source>
-        <translation>Avancé &gt;&gt;</translation>
+        <translation type="unfinished">Avancé &gt;&gt;</translation>
     </message>
     <message>
         <source>Fill in all your network Id to stay connected with your contacts</source>
-        <translation>Veuillez renseigner tous vos identifiants pour rester connecté avec vos contacts</translation>
+        <translation type="unfinished">Veuillez renseigner tous vos identifiants pour rester connecté avec vos contacts</translation>
     </message>
     <message>
         <source>Contact</source>
-        <translation>Contact</translation>
+        <translation type="unfinished">Contact</translation>
     </message>
     <message>
         <source>Group:</source>
-        <translation>Groupe:</translation>
+        <translation type="unfinished">Groupe:</translation>
     </message>
     <message>
         <source>Last Name:</source>
-        <translation>Nom:</translation>
+        <translation type="unfinished">Nom:</translation>
     </message>
     <message>
         <source>First Name:</source>
-        <translation>Prénom:</translation>
+        <translation type="unfinished">Prénom:</translation>
     </message>
     <message>
         <source>Click to change avatar</source>
-        <translation>Cliquer pour changer d&apos;avatar</translation>
+        <translation type="unfinished">Cliquer pour changer d&apos;avatar</translation>
     </message>
     <message>
         <source>Details</source>
-        <translation>Détails</translation>
+        <translation type="unfinished">Détails</translation>
     </message>
     <message>
         <source>Web/blog:</source>
-        <translation>Web/blog:</translation>
+        <translation type="unfinished">Web/blog:</translation>
     </message>
     <message>
         <source>Country:</source>
-        <translation>Pays:</translation>
+        <translation type="unfinished">Pays:</translation>
     </message>
     <message>
         <source>State:</source>
-        <translation>Région:</translation>
+        <translation type="unfinished">Région:</translation>
     </message>
     <message>
         <source>City:</source>
-        <translation>Ville:</translation>
+        <translation type="unfinished">Ville:</translation>
     </message>
     <message>
         <source>Gender:</source>
-        <translation>Sexe:</translation>
+        <translation type="unfinished">Sexe:</translation>
     </message>
     <message>
         <source>Birth Date:</source>
-        <translation>Date de naissance:</translation>
+        <translation type="unfinished">Date de naissance:</translation>
     </message>
     <message>
         <source>Email:</source>
-        <translation>Email:</translation>
+        <translation type="unfinished">Email:</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation>Notes</translation>
+        <translation type="unfinished">Notes</translation>
     </message>
     <message>
         <source>Phone Numbers</source>
-        <translation>Numéros de téléphone</translation>
+        <translation type="unfinished">Numéros de téléphone</translation>
     </message>
     <message>
         <source>Home phone</source>
-        <translation>Téléphone fixe</translation>
+        <translation type="unfinished">Téléphone fixe</translation>
     </message>
     <message>
         <source>Mobile phone</source>
-        <translation>Téléphone mobile</translation>
+        <translation type="unfinished">Téléphone mobile</translation>
     </message>
     <message>
         <source>dd MMMM yyyy</source>
-        <translation>dd MMMM yyyy</translation>
+        <translation type="unfinished">dd MMMM yyyy</translation>
     </message>
     <message>
         <source>Unknown</source>
-        <translation>Inconnu</translation>
+        <translation type="unfinished">Inconnu</translation>
     </message>
     <message>
         <source>Male</source>
-        <translation>Homme</translation>
+        <translation type="unfinished">Homme</translation>
     </message>
     <message>
         <source>Female</source>
-        <translation>Femme</translation>
+        <translation type="unfinished">Femme</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Annuler</translation>
+        <translation type="unfinished">Annuler</translation>
     </message>
 </context>
 <context>
@@ -1663,7 +1719,15 @@ Wengo.</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt;font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px;margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;font-size:8pt;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;A contact is trying to send you a file:&lt;/span&gt; but his WengoPhone must be upgraded in order to receive it. Tell him to download the latest version.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt;font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px;margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;font-size:8pt;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Un contact souhaite vous envoyer un fichier:&lt;/span&gt; mais son WengoPhone doit être mis-à-jour pour le recevoir. Dites lui de télécharger la dernière version.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation type="obsolete">&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt;font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px;margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;font-size:8pt;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Un contact souhaite vous envoyer un fichier:&lt;/span&gt; mais son WengoPhone doit être mis-à-jour pour le recevoir. Dites lui de télécharger la dernière version.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt;font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px;margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;font-size:8pt;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> is trying to send you a file:&lt;/span&gt; but his WengoPhone must be upgraded in order to receive it. Tell him to download the latest version.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1742,7 +1806,15 @@ Wengo.</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt;font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px;margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;font-size:8pt;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;This may be caused by:&lt;/span&gt; &lt;br&gt;- Your WengoPhone is not up to date. Please download the latest version onwww.wengo.com&lt;br&gt;- The Wengo network may be temporarily unavailable. Please try later.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt;font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px;margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;font-size:8pt;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Cela peut être dû à:&lt;/span&gt; &lt;br&gt;- Votre WengoPhone n&apos;est pas mis-à-jour. Veuillez télécharger la dernière version sur www.wengo.com&lt;br&gt;- Le réseau Wengo peut être temporairement indisponible. Veuillez essayer plus tard.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation type="obsolete">&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt;font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px;margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;font-size:8pt;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Cela peut être dû à:&lt;/span&gt; &lt;br&gt;- Votre WengoPhone n&apos;est pas mis-à-jour. Veuillez télécharger la dernière version sur www.wengo.com&lt;br&gt;- Le réseau Wengo peut être temporairement indisponible. Veuillez essayer plus tard.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <source>Not started yet</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg;font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px;margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;This may be caused by:&lt;/span&gt; &lt;br&gt;- Your WengoPhone is not up to date. Please download the latest version onwww.wengo.com&lt;br&gt;- The Wengo network may be temporarily unavailable. Please try later.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2210,29 +2282,29 @@ le WengoPhone manuellement</translation>
     <name>QtSubscribe</name>
     <message>
         <source>Confirm password does not matched password</source>
-        <translation>Le mot de passe de confirmation est invalide</translation>
+        <translation type="obsolete">Le mot de passe de confirmation est invalide</translation>
     </message>
     <message>
         <source>Unknown Error</source>
-        <translation>Erreur inconnue</translation>
+        <translation type="obsolete">Erreur inconnue</translation>
     </message>
     <message>
         <source>You cannot use this email address, already in use</source>
-        <translation>Vous ne pouvez pas utiliser cette adresse, elle est déjà utilisée avec un 
+        <translation type="obsolete">Vous ne pouvez pas utiliser cette adresse, elle est déjà utilisée avec un 
 autre compte</translation>
     </message>
     <message>
         <source>You cannot use this nickname, already in use</source>
-        <translation>Ce pseudo est déja pris</translation>
+        <translation type="obsolete">Ce pseudo est déja pris</translation>
     </message>
     <message>
         <source>Your password does not contain enough characters (6 minimum), try another one</source>
-        <translation>Votre mot de passe est trop court (6 caracères minimum), choissisez un autre 
+        <translation type="obsolete">Votre mot de passe est trop court (6 caracères minimum), choissisez un autre 
 mot de passe</translation>
     </message>
     <message>
         <source>Subscription Failed</source>
-        <translation>votre inscription a échoué</translation>
+        <translation type="obsolete">votre inscription a échoué</translation>
     </message>
 </context>
 <context>
@@ -2355,11 +2427,22 @@ mot de passe</translation>
     <name>QtUserProfileHandler</name>
     <message>
         <source>WengoPhone - Importing contacts and IM accounts</source>
-        <translation>WengoPhone - Importation des contacts et des comptes IM</translation>
+        <translation type="obsolete">WengoPhone - Importation des contacts et des comptes IM</translation>
     </message>
     <message>
         <source>Would you like to import contacts and IM accounts previously created in the default profile to the profile named %1?</source>
-        <translation>Voulez-vous importer les contacts et les comptes IM créés avec le profil par défaut pour le profil %1?</translation>
+        <translation type="obsolete">Voulez-vous importer les contacts et les comptes IM créés avec le profil par défaut pour le profil %1?</translation>
+    </message>
+    <message>
+        <source>A problem occured while loading your profile.
+The last backuped profile has been loaded: 
+you may have lost last changes made</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Your profile could not be loaded.
+Choose another profile or create a new one.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2409,14 +2492,14 @@ mot de passe</translation>
     </message>
     <message>
         <source>Normale</source>
-        <translation>Normale</translation>
+        <translation type="obsolete">Normale</translation>
     </message>
 </context>
 <context>
     <name>QtWebDirectory</name>
     <message>
         <source>WengoPhone - Directory</source>
-        <translation>WengoPhone - Annuaire</translation>
+        <translation type="obsolete">WengoPhone - Annuaire</translation>
     </message>
 </context>
 <context>
@@ -2459,7 +2542,7 @@ mot de passe</translation>
     </message>
     <message>
         <source>Languages</source>
-        <translation>Langues</translation>
+        <translation type="obsolete">Langues</translation>
     </message>
 </context>
 <context>
@@ -2528,123 +2611,127 @@ appel</translation>
     <name>RenameGroupDialog</name>
     <message>
         <source>WengoPhone - Rename Contact Group</source>
-        <translation>WengoPhone - Renommer un groupe de contacts</translation>
+        <translation type="unfinished">WengoPhone - Renommer un groupe de contacts</translation>
     </message>
     <message>
         <source>Enter the new group name:</source>
-        <translation>Saisissez un nouveau nom de groupe :</translation>
+        <translation type="unfinished">Saisissez un nouveau nom de groupe :</translation>
     </message>
     <message>
         <source>OK</source>
-        <translation>OK</translation>
+        <translation type="unfinished">OK</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Annuler</translation>
+        <translation type="unfinished">Annuler</translation>
     </message>
 </context>
 <context>
     <name>SimpleIMAccountManager</name>
     <message>
         <source>Login:</source>
-        <translation>Identifiant :</translation>
+        <translation type="unfinished">Identifiant :</translation>
     </message>
     <message>
         <source>AIM/ICQ</source>
-        <translation>AIM/ICQ</translation>
+        <translation type="unfinished">AIM/ICQ</translation>
     </message>
     <message>
         <source>Yahoo!</source>
-        <translation>Yahoo!</translation>
+        <translation type="unfinished">Yahoo!</translation>
     </message>
     <message>
         <source>Wengo</source>
-        <translation>Wengo</translation>
+        <translation type="unfinished">Wengo</translation>
     </message>
     <message>
         <source>MSN</source>
-        <translation>MSN</translation>
+        <translation type="unfinished">MSN</translation>
     </message>
     <message>
         <source>Jabber</source>
-        <translation>Jabber</translation>
+        <translation type="unfinished">Jabber</translation>
     </message>
     <message>
         <source>GoogleTalk</source>
-        <translation>GoogleTalk</translation>
+        <translation type="unfinished">GoogleTalk</translation>
     </message>
     <message>
         <source>Password:</source>
-        <translation>Mot de passe :</translation>
+        <translation type="unfinished">Mot de passe :</translation>
     </message>
 </context>
 <context>
     <name>SimpleIMContactManager</name>
     <message>
         <source>Update your profile</source>
-        <translation>Compléter votre profil</translation>
+        <translation type="unfinished">Compléter votre profil</translation>
     </message>
     <message>
         <source>Yahoo! ID:</source>
-        <translation>Yahoo! Identifiant:</translation>
+        <translation type="unfinished">Yahoo! Identifiant:</translation>
     </message>
     <message>
         <source>AIM/ICQ ID:</source>
-        <translation>AIM/ICQ Identifiant:</translation>
+        <translation type="unfinished">AIM/ICQ Identifiant:</translation>
     </message>
     <message>
         <source>MSN ID:</source>
-        <translation>MSN Identifiant:</translation>
+        <translation type="unfinished">MSN Identifiant:</translation>
     </message>
     <message>
         <source>Wengo ID:</source>
-        <translation>Wengo Identifiant:</translation>
+        <translation type="unfinished">Wengo Identifiant:</translation>
     </message>
     <message>
         <source>Jabber/GoogleTalk ID:</source>
-        <translation>Jabber/GoogleTalk Identifiant:</translation>
+        <translation type="unfinished">Jabber/GoogleTalk Identifiant:</translation>
     </message>
 </context>
 <context>
     <name>SmsWindow</name>
     <message>
         <source>WengoPhone - SMS</source>
-        <translation>WengoPhone - SMS</translation>
+        <translation type="unfinished">WengoPhone - SMS</translation>
     </message>
     <message>
         <source>Click here to add a phone number</source>
-        <translation>Cliquer ici pour ajouter un numéro de téléphone</translation>
+        <translation type="unfinished">Cliquer ici pour ajouter un numéro de téléphone</translation>
     </message>
     <message>
         <source>0 /160</source>
-        <translation>0 /160</translation>
+        <translation type="unfinished">0 /160</translation>
     </message>
     <message>
         <source>Enter your signature here</source>
-        <translation>Entrer votre signature ici</translation>
+        <translation type="unfinished">Entrer votre signature ici</translation>
     </message>
     <message>
         <source>Signature:</source>
-        <translation>Signature:</translation>
+        <translation type="unfinished">Signature:</translation>
     </message>
     <message>
         <source>Send</source>
-        <translation>Envoyer</translation>
+        <translation type="unfinished">Envoyer</translation>
     </message>
     <message>
         <source>Phone number(s):</source>
-        <translation>Numéro(s) de téléphone:</translation>
+        <translation type="unfinished">Numéro(s) de téléphone:</translation>
     </message>
     <message>
         <source>Enter phone number(s) here&lt;br&gt;They must be separated by &amp; or ; or ,</source>
-        <translation>Saisissez vos numéros de téléphone ici&lt;br&gt;Ils doivent être séparés par &amp; ou ; ou ,</translation>
+        <translation type="unfinished">Saisissez vos numéros de téléphone ici&lt;br&gt;Ils doivent être séparés par &amp; ou ; ou ,</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>SoftUpdateWindow</name>
     <message>
         <source>WengoPhone - Downloading update</source>
-        <translation>WengoPhone - Mise-à-jour</translation>
+        <translation type="unfinished">WengoPhone - Mise-à-jour</translation>
     </message>
     <message>
         <source>Downloading WengoPhone update...
@@ -2653,7 +2740,7 @@ Version:<byte value="x9"/>%1
 URL:<byte value="x9"/>%2
 File Size:<byte value="x9"/>%3 (MB)
 Speed:<byte value="x9"/>%4 (kB/s)</source>
-        <translation>Réception de la mise-à-jour du WengoPhone...
+        <translation type="unfinished">Réception de la mise-à-jour du WengoPhone...
 
 Version:<byte value="x9"/>%1
 Lien:<byte value="x9"/>%2
@@ -2662,107 +2749,107 @@ Vitesse:<byte value="x9"/>%4 (kB/s)</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Annuler</translation>
+        <translation type="unfinished">Annuler</translation>
     </message>
 </context>
 <context>
     <name>StatusBarWidget</name>
     <message>
         <source>Audio Configuration Error</source>
-        <translation>Erreur de configuration audio</translation>
+        <translation type="unfinished">Erreur de configuration audio</translation>
     </message>
     <message>
         <source>Not Connected</source>
-        <translation>Déconnecté</translation>
+        <translation type="unfinished">Déconnecté</translation>
     </message>
 </context>
 <context>
     <name>SubscribeWengo1</name>
     <message>
         <source>Email:</source>
-        <translation>Email:</translation>
+        <translation type="obsolete">Email:</translation>
     </message>
     <message>
         <source>WengoPhone - Wengo Account Creation (1/2)</source>
-        <translation>WengoPhone - Création de votre compte Wengo (1/2)</translation>
+        <translation type="obsolete">WengoPhone - Création de votre compte Wengo (1/2)</translation>
     </message>
     <message>
         <source>* &lt;i&gt;Required fields&lt;/i&gt;</source>
-        <translation>* &lt;i&gt;Champs obligatoires&lt;/i&gt;</translation>
+        <translation type="obsolete">* &lt;i&gt;Champs obligatoires&lt;/i&gt;</translation>
     </message>
     <message>
         <source>Subscribe</source>
-        <translation>S&apos;inscrire</translation>
+        <translation type="obsolete">S&apos;inscrire</translation>
     </message>
     <message>
         <source>Error message label</source>
-        <translation>Message d&apos;erreur</translation>
+        <translation type="obsolete">Message d&apos;erreur</translation>
     </message>
     <message>
         <source>Nickname:</source>
-        <translation>Pseudo:</translation>
+        <translation type="obsolete">Pseudo:</translation>
     </message>
     <message>
         <source>*</source>
-        <translation>*</translation>
+        <translation type="obsolete">*</translation>
     </message>
     <message>
         <source>Confirm password:</source>
-        <translation>Confirmez votre mot de passe:</translation>
+        <translation type="obsolete">Confirmez votre mot de passe:</translation>
     </message>
     <message>
         <source>&lt;i&gt;Please check your email and confirm the above details within 48 hours&lt;/i&gt;</source>
-        <translation>&lt;i&gt;Veuillez vérifier votre boîte aux lettres, et confirmer les informations 
+        <translation type="obsolete">&lt;i&gt;Veuillez vérifier votre boîte aux lettres, et confirmer les informations 
 ci-dessus sous 48 heures&lt;/i&gt;</translation>
     </message>
     <message>
         <source>I read and accept the Terms of Service</source>
-        <translation>J&apos;ai lu et j&apos;accepte les conditions générales d&apos;utilisation</translation>
+        <translation type="obsolete">J&apos;ai lu et j&apos;accepte les conditions générales d&apos;utilisation</translation>
     </message>
     <message>
         <source>Password:</source>
-        <translation>Mot de passe:</translation>
+        <translation type="obsolete">Mot de passe:</translation>
     </message>
     <message>
         <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Account Creation&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;&lt;span&gt;Please fill in the details below&lt;/span&gt;</source>
-        <translation>&lt;span style=&quot;font-size:18pt;&quot;&gt;Account Creation&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;&lt;span&gt;Veuillez renseigner les informations ci-dessous&lt;/span&gt;</translation>
+        <translation type="obsolete">&lt;span style=&quot;font-size:18pt;&quot;&gt;Account Creation&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;&lt;span&gt;Veuillez renseigner les informations ci-dessous&lt;/span&gt;</translation>
     </message>
 </context>
 <context>
     <name>SubscribeWengo2</name>
     <message>
         <source>Email:</source>
-        <translation>Email:</translation>
+        <translation type="obsolete">Email:</translation>
     </message>
     <message>
         <source>Nickname:</source>
-        <translation>Pseudo:</translation>
+        <translation type="obsolete">Pseudo:</translation>
     </message>
     <message>
         <source>WengoPhone - Wengo Account Creation (2/2)</source>
-        <translation>WengoPhone - Création de votre compte Wengo (2/2)</translation>
+        <translation type="obsolete">WengoPhone - Création de votre compte Wengo (2/2)</translation>
     </message>
     <message>
         <source>Please note your details needed to access your account:</source>
-        <translation>Mémoriser bien ces informations, elles sont nécessaire pour utiliser votre 
+        <translation type="obsolete">Mémoriser bien ces informations, elles sont nécessaire pour utiliser votre 
 compte:</translation>
     </message>
     <message>
         <source>Finish</source>
-        <translation>Terminer</translation>
+        <translation type="obsolete">Terminer</translation>
     </message>
     <message>
         <source>Add your IM Accounts to your Profile</source>
-        <translation>Ajouter un compte IM à votre profil</translation>
+        <translation type="obsolete">Ajouter un compte IM à votre profil</translation>
     </message>
     <message>
         <source>Password:</source>
-        <translation>Mot de passe:</translation>
+        <translation type="obsolete">Mot de passe:</translation>
     </message>
     <message>
         <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Contratulations!&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;&lt;span&gt;Your account has been successfully created&lt;/span&gt;
 </source>
-        <translation>&lt;span style=&quot;font-size:18pt;&quot;&gt;Félicitations!&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;&lt;span&gt;Votre compte a bien été créé&lt;/span&gt;
+        <translation type="obsolete">&lt;span style=&quot;font-size:18pt;&quot;&gt;Félicitations!&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;&lt;span&gt;Votre compte a bien été créé&lt;/span&gt;
 </translation>
     </message>
 </context>
@@ -2770,626 +2857,646 @@ compte:</translation>
     <name>UpgradeDialog</name>
     <message>
         <source>File Transfer</source>
-        <translation>Transfert de fichiers</translation>
+        <translation type="unfinished">Transfert de fichiers</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:18pt; font-weight:600; color:#ffffff;&quot;&gt;upgrade&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:18pt; font-weight:600; color:#ffffff;&quot;&gt;mis-à-jour&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation type="unfinished">&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:18pt; font-weight:600; color:#ffffff;&quot;&gt;mis-à-jour&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Status:&lt;/span&gt; blah blah blah&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Statut:&lt;/span&gt; blah blah blah&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation type="obsolete">&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Statut:&lt;/span&gt; blah blah blah&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>&amp;Ok</source>
-        <translation>&amp;Ok</translation>
+        <translation type="unfinished">&amp;Ok</translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Status:&lt;/span&gt; blah blah blah&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>UserFrame</name>
     <message>
         <source>Form</source>
-        <translation>Formulaire</translation>
+        <translation type="unfinished">Formulaire</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>UserWidget</name>
     <message>
         <source>Avatar</source>
-        <translation>Avatar</translation>
+        <translation type="obsolete">Avatar</translation>
     </message>
     <message>
         <source>No cell phone number set</source>
-        <translation>Pas de numéro de téléphone portable</translation>
+        <translation type="obsolete">Pas de numéro de téléphone portable</translation>
     </message>
     <message>
         <source>No phone number set</source>
-        <translation>Pas de numéro de téléphone fixe </translation>
+        <translation type="obsolete">Pas de numéro de téléphone fixe </translation>
     </message>
 </context>
 <context>
     <name>VideoSettings</name>
     <message>
         <source>Normal</source>
-        <translation>Normale</translation>
+        <translation type="unfinished">Normale</translation>
     </message>
     <message>
         <source>Good</source>
-        <translation>Bonne</translation>
+        <translation type="unfinished">Bonne</translation>
     </message>
     <message>
         <source>Very good</source>
-        <translation>Très bonne</translation>
+        <translation type="unfinished">Très bonne</translation>
     </message>
     <message>
         <source>Excellent</source>
-        <translation>Excellente</translation>
+        <translation type="unfinished">Excellente</translation>
     </message>
     <message>
         <source>Video Settings</source>
-        <translation>Paramètres vidéo</translation>
+        <translation type="unfinished">Paramètres vidéo</translation>
     </message>
     <message>
         <source>Enable video</source>
-        <translation>Activer la vidéo</translation>
+        <translation type="unfinished">Activer la vidéo</translation>
     </message>
     <message>
         <source>Webcam Selection</source>
-        <translation>Sélection de la webcam</translation>
+        <translation type="unfinished">Sélection de la webcam</translation>
     </message>
     <message>
         <source>Webcam device:</source>
-        <translation>Webcam:</translation>
+        <translation type="unfinished">Webcam:</translation>
     </message>
     <message>
         <source>Webcam Preview</source>
-        <translation>Aperçu de votre image</translation>
+        <translation type="unfinished">Aperçu de votre image</translation>
     </message>
     <message>
         <source>Connection Type</source>
-        <translation>Type de connexion</translation>
+        <translation type="unfinished">Type de connexion</translation>
     </message>
     <message>
         <source>Video quality</source>
-        <translation>Qualité vidéo</translation>
+        <translation type="unfinished">Qualité vidéo</translation>
     </message>
     <message>
         <source>Down (kbit/s)</source>
-        <translation>Réception (kbit/s)</translation>
+        <translation type="unfinished">Réception (kbit/s)</translation>
     </message>
     <message>
         <source>Up (kbit/s)</source>
-        <translation>Envoi (kbit/s)</translation>
+        <translation type="unfinished">Envoi (kbit/s)</translation>
     </message>
     <message>
         <source>0 to 512</source>
-        <translation>0 à 512</translation>
+        <translation type="unfinished">0 à 512</translation>
     </message>
     <message>
         <source>0 to 128</source>
-        <translation>0 à 128</translation>
+        <translation type="unfinished">0 à 128</translation>
     </message>
     <message>
         <source>512 to 2048</source>
-        <translation>512 à 2048</translation>
+        <translation type="unfinished">512 à 2048</translation>
     </message>
     <message>
         <source>128 to 256</source>
-        <translation>128 à 256</translation>
+        <translation type="unfinished">128 à 256</translation>
     </message>
     <message>
         <source>2048+</source>
-        <translation>2048+</translation>
+        <translation type="unfinished">2048+</translation>
     </message>
     <message>
         <source>256+</source>
-        <translation>256+</translation>
+        <translation type="unfinished">256+</translation>
     </message>
     <message>
         <source>8192+</source>
-        <translation>8192+</translation>
+        <translation type="unfinished">8192+</translation>
     </message>
     <message>
         <source>1024+</source>
-        <translation>1024+</translation>
+        <translation type="unfinished">1024+</translation>
     </message>
     <message>
         <source>Video quality depends on your Internet connection bandwidth</source>
-        <translation>La qualité de la vidéo dépend de la vitesse de votre connexion Internet</translation>
+        <translation type="unfinished">La qualité de la vidéo dépend de la vitesse de votre connexion Internet</translation>
     </message>
     <message>
         <source>Make a test video call</source>
-        <translation>Effectuer un appel vidéo de test</translation>
+        <translation type="unfinished">Effectuer un appel vidéo de test</translation>
     </message>
     <message>
         <source>&lt;b&gt;Warning!&lt;/b&gt; When used for the first time we recommend that you select&lt;br&gt;the normal video quality mode, then you can try different modes to find out&lt;br&gt;the most suitable one&lt;br&gt;&lt;br&gt;&lt;b&gt;Tips&lt;/b&gt;: Go to http://test.lvcm.com to determine your Internet connection bandwidth</source>
-        <translation>&lt;b&gt;Attention!&lt;/b&gt; Pour une première expérience, nous vous recommandons le niveau normal.&lt;br&gt;Par la suite, testez les autres niveaux pour déterminer la configuration optimale&lt;br&gt;&lt;br&gt;&lt;b&gt;Astuce&lt;/b&gt;: Rendez vous sur http://test.lvcm.com pour déterminer la vitesse de votre connexion Internet</translation>
+        <translation type="unfinished">&lt;b&gt;Attention!&lt;/b&gt; Pour une première expérience, nous vous recommandons le niveau normal.&lt;br&gt;Par la suite, testez les autres niveaux pour déterminer la configuration optimale&lt;br&gt;&lt;br&gt;&lt;b&gt;Astuce&lt;/b&gt;: Rendez vous sur http://test.lvcm.com pour déterminer la vitesse de votre connexion Internet</translation>
     </message>
 </context>
 <context>
     <name>VideoWindow</name>
     <message>
         <source>WengoPhone - Video</source>
-        <translation>WengoPhone - Vidéo</translation>
+        <translation type="unfinished">WengoPhone - Vidéo</translation>
     </message>
 </context>
 <context>
     <name>WengoConfigDialog</name>
     <message>
         <source>Save</source>
-        <translation>Enregistrer</translation>
+        <translation type="unfinished">Enregistrer</translation>
     </message>
     <message>
         <source>Language</source>
-        <translation>Langue</translation>
+        <translation type="unfinished">Langue</translation>
     </message>
     <message>
         <source>General</source>
-        <translation>Général</translation>
+        <translation type="unfinished">Général</translation>
     </message>
     <message>
         <source>Accounts</source>
-        <translation>Comptes</translation>
+        <translation type="unfinished">Comptes</translation>
     </message>
     <message>
         <source>Advanced</source>
-        <translation>Avancé</translation>
+        <translation type="unfinished">Avancé</translation>
     </message>
     <message>
         <source>Audio</source>
-        <translation>Audio</translation>
+        <translation type="unfinished">Audio</translation>
     </message>
     <message>
         <source>Call Forward</source>
-        <translation>Transfert d&apos;appel</translation>
+        <translation type="unfinished">Transfert d&apos;appel</translation>
     </message>
     <message>
         <source>Notifications &amp; Sounds</source>
-        <translation>Alertes &amp; Sons</translation>
+        <translation type="unfinished">Alertes &amp; Sons</translation>
     </message>
     <message>
         <source>Video</source>
-        <translation>Vidéo</translation>
+        <translation type="unfinished">Vidéo</translation>
     </message>
     <message>
         <source>WengoPhone - Configuration</source>
-        <translation>WengoPhone - Configuration</translation>
+        <translation type="unfinished">WengoPhone - Configuration</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Annuler</translation>
+        <translation type="unfinished">Annuler</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>WengoPhoneWindow</name>
     <message>
         <source>&amp;Accept</source>
-        <translation>&amp;Accepter</translation>
+        <translation type="unfinished">&amp;Accepter</translation>
     </message>
     <message>
         <source>&amp;Wengo</source>
-        <translation>&amp;Wengo</translation>
+        <translation type="unfinished">&amp;Wengo</translation>
     </message>
     <message>
         <source>&amp;Help</source>
-        <translation>&amp;Aide</translation>
+        <translation type="unfinished">&amp;Aide</translation>
     </message>
     <message>
         <source>WengoPhone</source>
-        <translation>WengoPhone</translation>
+        <translation type="unfinished">WengoPhone</translation>
     </message>
     <message>
         <source>Contacts</source>
-        <translation>Contacts</translation>
+        <translation type="unfinished">Contacts</translation>
     </message>
     <message>
         <source>History</source>
-        <translation>Historique</translation>
+        <translation type="unfinished">Historique</translation>
     </message>
     <message>
         <source>Dialpad</source>
-        <translation>Composer</translation>
+        <translation type="unfinished">Composer</translation>
     </message>
     <message>
         <source>Clear &amp;History</source>
-        <translation>Effacer l&apos;&amp;Historique</translation>
+        <translation type="unfinished">Effacer l&apos;&amp;Historique</translation>
     </message>
     <message>
         <source>Type Here</source>
-        <translation>Tapez ici</translation>
+        <translation type="unfinished">Tapez ici</translation>
     </message>
     <message>
         <source>ToolBar</source>
-        <translation>Barre d&apos;outils</translation>
+        <translation type="unfinished">Barre d&apos;outils</translation>
     </message>
     <message>
         <source>View My &amp;Wengo Account</source>
-        <translation>Consulter mon &amp;espace perso</translation>
+        <translation type="unfinished">Consulter mon &amp;espace perso</translation>
     </message>
     <message>
         <source>Wengo &amp;Forum</source>
-        <translation>Wengo &amp;Forum</translation>
+        <translation type="unfinished">Wengo &amp;Forum</translation>
     </message>
     <message>
         <source>Add &amp;Contact</source>
-        <translation>&amp;Ajouter un Contact</translation>
+        <translation type="unfinished">&amp;Ajouter un Contact</translation>
     </message>
     <message>
         <source>&amp;Configuration</source>
-        <translation>&amp;Panneau de Configuration</translation>
+        <translation type="unfinished">&amp;Panneau de Configuration</translation>
     </message>
     <message>
         <source>Send a Short Text &amp;Message (SMS)</source>
-        <translation>Envoyer un SMS</translation>
+        <translation type="unfinished">Envoyer un SMS</translation>
     </message>
     <message>
         <source>Edit My &amp;Profile</source>
-        <translation>Editer mon &amp;Profil</translation>
+        <translation type="unfinished">Editer mon &amp;Profil</translation>
     </message>
     <message>
         <source>Create &amp;Conference Call</source>
-        <translation>Créer une &amp;Conférence</translation>
+        <translation type="unfinished">Créer une &amp;Conférence</translation>
     </message>
     <message>
         <source>Wengo &amp;Wiki/FAQ</source>
-        <translation>Wengo &amp;Wiki/FAQ</translation>
+        <translation type="unfinished">Wengo &amp;Wiki/FAQ</translation>
     </message>
     <message>
         <source>Learn more about &amp;Wengo Services</source>
-        <translation>Pour en savoir plus sur les services &amp;Wengo</translation>
+        <translation type="unfinished">Pour en savoir plus sur les services &amp;Wengo</translation>
     </message>
     <message>
         <source>Show/Hide Unavailable &amp;Contacts</source>
-        <translation>Afficher/Cacher les contacts &amp;indisponibles</translation>
+        <translation type="unfinished">Afficher/Cacher les contacts &amp;indisponibles</translation>
     </message>
     <message>
         <source>&amp;Instant Messaging Accounts</source>
-        <translation>&amp;Comptes de Messagerie Instantanée</translation>
+        <translation type="unfinished">&amp;Comptes de Messagerie Instantanée</translation>
     </message>
     <message>
         <source>Configure My Instant Messaging Accounts</source>
-        <translation>Configurer mes comptes de Messagerie Instantanée</translation>
+        <translation type="unfinished">Configurer mes comptes de Messagerie Instantanée</translation>
     </message>
     <message>
         <source>&amp;Chat Sessions</source>
-        <translation>&amp;Conversation</translation>
+        <translation type="unfinished">&amp;Conversation</translation>
     </message>
     <message>
         <source>&amp;All</source>
-        <translation>&amp;Tous</translation>
+        <translation type="unfinished">&amp;Tous</translation>
     </message>
     <message>
         <source>&amp;Search for Wengo Users</source>
-        <translation>&amp;Rechercher un Contact</translation>
+        <translation type="unfinished">&amp;Rechercher un Contact</translation>
     </message>
     <message>
         <source>&amp;HangUp</source>
-        <translation>&amp;Raccrocher</translation>
+        <translation type="unfinished">&amp;Raccrocher</translation>
     </message>
     <message>
         <source>&amp;Hold/Resume</source>
-        <translation>&amp;Pause/Reprise</translation>
+        <translation type="unfinished">&amp;Pause/Reprise</translation>
     </message>
     <message>
         <source>Show/Hide &amp;Groups</source>
-        <translation>Afficher/Cacher les &amp;groupes</translation>
+        <translation type="unfinished">Afficher/Cacher les &amp;groupes</translation>
     </message>
     <message>
         <source>Change &amp;Profile...</source>
-        <translation>Changer de &amp;Profil...</translation>
+        <translation type="unfinished">Changer de &amp;Profil...</translation>
     </message>
     <message>
         <source>Log &amp;Off/Log In</source>
-        <translation>Se déconnecter/Se connecter</translation>
+        <translation type="unfinished">Se déconnecter/Se connecter</translation>
     </message>
     <message>
         <source>Open &amp;Chat Window</source>
-        <translation>Ouvrir une fenêtre &amp;Chat</translation>
+        <translation type="unfinished">Ouvrir une fenêtre &amp;Chat</translation>
     </message>
     <message>
         <source>&amp;Outgoing Calls</source>
-        <translation>Appels &amp;émis</translation>
+        <translation type="unfinished">Appels &amp;émis</translation>
     </message>
     <message>
         <source>&amp;Incoming Calls</source>
-        <translation>Appels &amp;reçus</translation>
+        <translation type="unfinished">Appels &amp;reçus</translation>
     </message>
     <message>
         <source>&amp;Missed Calls</source>
-        <translation>&amp;Appels en absence</translation>
+        <translation type="unfinished">&amp;Appels en absence</translation>
     </message>
     <message>
         <source>Enable/Disable &amp;Video Calls</source>
-        <translation>Activer/Désactiver appels &amp;videos</translation>
+        <translation type="unfinished">Activer/Désactiver appels &amp;videos</translation>
     </message>
     <message>
         <source>Show &amp;Volume Panel</source>
-        <translation>Afficher le Panneau &amp;Volume</translation>
+        <translation type="unfinished">Afficher le Panneau &amp;Volume</translation>
     </message>
     <message>
         <source>Short Text &amp;Messages (SMS)</source>
-        <translation>SMS</translation>
+        <translation type="unfinished">SMS</translation>
     </message>
     <message>
         <source>Show File Transfer</source>
-        <translation>Afficher le Transfert de &amp;Fichiers</translation>
+        <translation type="unfinished">Afficher le Transfert de &amp;Fichiers</translation>
     </message>
     <message>
         <source>Rejected Calls</source>
-        <translation>Appels refusés</translation>
+        <translation type="unfinished">Appels refusés</translation>
     </message>
     <message>
         <source>&amp;Contacts</source>
-        <translation>&amp;Contacts</translation>
+        <translation type="unfinished">&amp;Contacts</translation>
     </message>
     <message>
         <source>&amp;Actions</source>
-        <translation>&amp;Actions</translation>
+        <translation type="unfinished">&amp;Actions</translation>
     </message>
     <message>
         <source>&amp;Tools</source>
-        <translation>&amp;Outils</translation>
+        <translation type="unfinished">&amp;Outils</translation>
     </message>
     <message>
         <source>&amp;Close</source>
-        <translation>&amp;Fermer</translation>
+        <translation type="unfinished">&amp;Fermer</translation>
     </message>
     <message>
         <source>&amp;About</source>
-        <translation>&amp;À propos</translation>
+        <translation type="unfinished">&amp;À propos</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>WengoPhoneWindowConfigPanel</name>
     <message>
         <source>Audio Settings</source>
-        <translation>Paramètres Audio</translation>
+        <translation type="unfinished">Paramètres Audio</translation>
     </message>
     <message>
         <source>Video Settings</source>
-        <translation>Paramètres vidéo</translation>
+        <translation type="unfinished">Paramètres vidéo</translation>
     </message>
     <message>
         <source>Enable Wenbox usage</source>
-        <translation>Activer la Wenbo USB</translation>
+        <translation type="unfinished">Activer la Wenbo USB</translation>
     </message>
     <message>
         <source>Wenbox USB</source>
-        <translation>Wenbox USB</translation>
+        <translation type="unfinished">Wenbox USB</translation>
     </message>
     <message>
         <source>Enable half-duplex mode</source>
-        <translation>Activer le mode half-duplex</translation>
+        <translation type="unfinished">Activer le mode half-duplex</translation>
     </message>
     <message>
         <source>Loud Speakers</source>
-        <translation>Mode haut-parleurs</translation>
+        <translation type="unfinished">Mode haut-parleurs</translation>
     </message>
 </context>
 <context>
     <name>Wizard</name>
     <message>
         <source>Finish</source>
-        <translation>Terminer</translation>
+        <translation type="obsolete">Terminer</translation>
     </message>
     <message>
         <source>Next &gt;</source>
-        <translation>Suivant &gt;</translation>
+        <translation type="obsolete">Suivant &gt;</translation>
     </message>
     <message>
         <source>&lt; Back</source>
-        <translation>&lt; Précédent</translation>
+        <translation type="obsolete">&lt; Précédent</translation>
     </message>
     <message>
         <source>Simple Wizard - Step %1 of %2</source>
-        <translation>Assistant - étape %1 sur %2</translation>
+        <translation type="obsolete">Assistant - étape %1 sur %2</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Annuler</translation>
+        <translation type="obsolete">Annuler</translation>
     </message>
 </context>
 <context>
     <name>WsDirectory</name>
     <message>
         <source>WengoPhone - Search for Wengo contacts</source>
-        <translation>Wengophone - Rechercher un contact Wengo</translation>
+        <translation type="unfinished">Wengophone - Rechercher un contact Wengo</translation>
     </message>
     <message>
         <source>Nickname</source>
-        <translation>Pseudo</translation>
+        <translation type="unfinished">Pseudo</translation>
     </message>
     <message>
         <source>First Name</source>
-        <translation>Prénom</translation>
+        <translation type="unfinished">Prénom</translation>
     </message>
     <message>
         <source>Last Name</source>
-        <translation>Nom</translation>
+        <translation type="unfinished">Nom</translation>
     </message>
     <message>
         <source>Country</source>
-        <translation>Pays</translation>
+        <translation type="unfinished">Pays</translation>
     </message>
     <message>
         <source>Search</source>
-        <translation>Rechercher</translation>
+        <translation type="unfinished">Rechercher</translation>
     </message>
     <message>
         <source>When entering a combined search, please separate words with a blank.</source>
-        <translation>Si vous utilisez plusieurs critères, veuillez les séparer par des espaces.</translation>
+        <translation type="unfinished">Si vous utilisez plusieurs critères, veuillez les séparer par des espaces.</translation>
     </message>
     <message>
         <source>All</source>
-        <translation>Tout</translation>
+        <translation type="unfinished">Tout</translation>
     </message>
     <message>
         <source>City</source>
-        <translation>Ville</translation>
+        <translation type="unfinished">Ville</translation>
     </message>
     <message>
         <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Search for Wengo contacts&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;&lt;span&gt;Enter name, nickname, city or email and click the search button&lt;/span&gt;</source>
-        <translation>&lt;span style=&quot;font-size:18pt;&quot;&gt;Rechercher un contact Wengo&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;&lt;span&gt;Saisissez un nom, un pseudo, une ville ou un email et cliquez sur Rechercher&lt;/span&gt;</translation>
+        <translation type="unfinished">&lt;span style=&quot;font-size:18pt;&quot;&gt;Rechercher un contact Wengo&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;&lt;span&gt;Saisissez un nom, un pseudo, une ville ou un email et cliquez sur Rechercher&lt;/span&gt;</translation>
     </message>
 </context>
 <context>
     <name>WsDirectoryContact</name>
     <message>
         <source>City:</source>
-        <translation>Ville:</translation>
+        <translation type="unfinished">Ville:</translation>
     </message>
     <message>
         <source>Nickname:</source>
-        <translation>Pseudo:</translation>
+        <translation type="unfinished">Pseudo:</translation>
     </message>
     <message>
         <source>FirstName LastName</source>
-        <translation>Prénom Nom</translation>
+        <translation type="unfinished">Prénom Nom</translation>
     </message>
     <message>
         <source>Wengo number:</source>
-        <translation>Numéro Wengo:</translation>
+        <translation type="unfinished">Numéro Wengo:</translation>
     </message>
     <message>
         <source>SIP address:</source>
-        <translation>Adresse SIP:</translation>
+        <translation type="unfinished">Adresse SIP:</translation>
     </message>
     <message>
         <source>Country:</source>
-        <translation>Pays:</translation>
+        <translation type="unfinished">Pays:</translation>
     </message>
     <message>
         <source>Status</source>
-        <translation>Statut</translation>
+        <translation type="unfinished">Statut</translation>
     </message>
     <message>
         <source>Call</source>
-        <translation>Appel</translation>
+        <translation type="unfinished">Appel</translation>
     </message>
     <message>
         <source>Add</source>
-        <translation>Ajouter</translation>
+        <translation type="unfinished">Ajouter</translation>
     </message>
 </context>
 <context>
     <name>YahooSettings</name>
     <message>
         <source>Yahoo! Settings</source>
-        <translation>Paramètres Yahoo</translation>
+        <translation type="unfinished">Paramètres Yahoo</translation>
     </message>
     <message>
         <source>Password:</source>
-        <translation>Mot de passe :</translation>
+        <translation type="unfinished">Mot de passe :</translation>
     </message>
     <message>
         <source>Login:</source>
-        <translation>Identifiant :</translation>
+        <translation type="unfinished">Identifiant :</translation>
     </message>
     <message>
         <source>&lt;u&gt;Advanced Options&lt;/u&gt;</source>
-        <translation>&lt;u&gt;Options avancées&lt;/u&gt;</translation>
+        <translation type="unfinished">&lt;u&gt;Options avancées&lt;/u&gt;</translation>
     </message>
     <message>
         <source>Use Yahoo! Japan server</source>
-        <translation>Choisir le serveur Yahoo Japon</translation>
+        <translation type="unfinished">Choisir le serveur Yahoo Japon</translation>
     </message>
     <message>
         <source>Forgot your Yahoo! password?</source>
-        <translation>Mot de passe Yahoo oublié?</translation>
+        <translation type="unfinished">Mot de passe Yahoo oublié?</translation>
     </message>
     <message>
         <source>Get a new Yahoo! Account</source>
-        <translation>Créer un nouveau compte Yahoo</translation>
+        <translation type="unfinished">Créer un nouveau compte Yahoo</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>aboutWindow</name>
     <message>
         <source>Dialog</source>
-        <translation>Dialogue</translation>
+        <translation type="obsolete">Dialogue</translation>
     </message>
     <message>
         <source>help</source>
-        <translation>Aide</translation>
+        <translation type="obsolete">Aide</translation>
     </message>
     <message>
         <source>config...</source>
-        <translation>Configurer...</translation>
+        <translation type="obsolete">Configurer...</translation>
     </message>
     <message>
         <source>update</source>
-        <translation>Mise-à-jour</translation>
+        <translation type="obsolete">Mise-à-jour</translation>
     </message>
     <message>
         <source>GroupBox</source>
-        <translation>Bloc de groupes</translation>
+        <translation type="obsolete">Bloc de groupes</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#000000;&quot;&gt;This is a Qt demo application for a skin system.&lt;/span&gt;&lt;/p&gt;&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#000000;&quot;&gt;&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#000000;&quot;&gt;The skin system works as a Qt style plugin through the QStyle class.&lt;/p&gt;&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#000000;&quot;&gt;&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#000000;&quot;&gt;This example works using Qt version 4.0.0 &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#000000;&quot;&gt;This is a Qt demo application for a skin system.&lt;/span&gt;&lt;/p&gt;&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#000000;&quot;&gt;&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#000000;&quot;&gt;The skin system works as a Qt style plugin through the QStyle class.&lt;/p&gt;&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#000000;&quot;&gt;&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#000000;&quot;&gt;This example works using Qt version 4.0.0 &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation type="obsolete">&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#000000;&quot;&gt;This is a Qt demo application for a skin system.&lt;/span&gt;&lt;/p&gt;&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#000000;&quot;&gt;&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#000000;&quot;&gt;The skin system works as a Qt style plugin through the QStyle class.&lt;/p&gt;&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#000000;&quot;&gt;&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#000000;&quot;&gt;This example works using Qt version 4.0.0 &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
 </context>
 <context>
     <name>mainWindow</name>
     <message>
         <source>Form</source>
-        <translation>Formulaire</translation>
+        <translation type="obsolete">Formulaire</translation>
     </message>
     <message>
         <source>Tab 1</source>
-        <translation>Onglet 1</translation>
+        <translation type="obsolete">Onglet 1</translation>
     </message>
     <message>
         <source>qwepowefklwenmlkwefweklfnwelfknwlfknweklfnwelfknwefwefopjiwelpkwmjvlkwneklwemflkwemdfklwemflwekmfwkled;qweef</source>
-        <translation>qwepowefklwenmlkwefweklfnwelfknwlfknweklfnwelfknwefwefopjiwelpkwmjvlkwneklwemflkwemdfklwemflwekmfwkled;qweef</translation>
+        <translation type="obsolete">qwepowefklwenmlkwefweklfnwelfknwlfknweklfnwelfknwefwefopjiwelpkwmjvlkwneklwemflkwemdfklwemflwekmfwkled;qweef</translation>
     </message>
     <message>
         <source>wefwefweklfl;m,we;lf,;welcv,wel;wekfm;kf;pwecmlwkewl;efmwklegfhweklnqwekldhjl;dmjqwlekdfjqweklf</source>
-        <translation>wefwefweklfl;m,we;lf,;welcv,wel;wekfm;kf;pwecmlwkewl;efmwklegfhweklnqwekldhjl;dmjqwlekdfjqweklf</translation>
+        <translation type="obsolete">wefwefweklfl;m,we;lf,;welcv,wel;wekfm;kf;pwecmlwkewl;efmwklegfhweklnqwekldhjl;dmjqwlekdfjqweklf</translation>
     </message>
     <message>
         <source>New Item</source>
-        <translation>Nouvel élément</translation>
+        <translation type="obsolete">Nouvel élément</translation>
     </message>
     <message>
         <source>wef[pwoejfweopfjero&apos;wepofjkwepfm,weopfkweopfmkdfokweopf,wepofweopfkweopfkweopfkweopfkwef</source>
-        <translation>wef[pwoejfweopfjero&apos;wepofjkwepfm,weopfkweopfmkdfokweopf,wepofweopfkweopfkweopfkweopfkwef</translation>
+        <translation type="obsolete">wef[pwoejfweopfjero&apos;wepofjkwepfm,weopfkweopfmkdfokweopf,wepofweopfkweopfkweopfkweopfkwef</translation>
     </message>
     <message>
         <source>Tab 2</source>
-        <translation>Onglet 2</translation>
+        <translation type="obsolete">Onglet 2</translation>
     </message>
     <message>
         <source>Exit</source>
-        <translation>Quitter</translation>
+        <translation type="obsolete">Quitter</translation>
     </message>
     <message>
         <source>Update</source>
-        <translation>Mettre-à-jour</translation>
+        <translation type="obsolete">Mettre-à-jour</translation>
     </message>
     <message>
         <source>Search</source>
-        <translation>Rechercher</translation>
+        <translation type="obsolete">Rechercher</translation>
     </message>
     <message>
         <source>Previous Track</source>
-        <translation>Piste précédente</translation>
+        <translation type="obsolete">Piste précédente</translation>
     </message>
     <message>
         <source>Next Track</source>
-        <translation>Piste suivante</translation>
+        <translation type="obsolete">Piste suivante</translation>
     </message>
     <message>
         <source>Pause</source>
-        <translation>Pause</translation>
+        <translation type="obsolete">Pause</translation>
     </message>
     <message>
         <source>Stop</source>
-        <translation>Stop</translation>
+        <translation type="obsolete">Stop</translation>
     </message>
     <message>
         <source>Play</source>
-        <translation>Lecture</translation>
+        <translation type="obsolete">Lecture</translation>
     </message>
 </context>
 </TS>

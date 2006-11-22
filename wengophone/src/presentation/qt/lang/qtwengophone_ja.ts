@@ -3,42 +3,46 @@
     <name>AIMSettings</name>
     <message>
         <source>AIM/ICQ Settings</source>
-        <translation>AIM/ICQの設定</translation>
+        <translation type="unfinished">AIM/ICQの設定</translation>
     </message>
     <message>
         <source>Password:</source>
-        <translation>パスワード：</translation>
+        <translation type="unfinished">パスワード：</translation>
     </message>
     <message>
         <source>Login:</source>
-        <translation>ログイン：</translation>
+        <translation type="unfinished">ログイン：</translation>
     </message>
     <message>
         <source>Forgot your AIM password?</source>
-        <translation>AIMのパスワードを忘れた</translation>
+        <translation type="unfinished">AIMのパスワードを忘れた</translation>
     </message>
     <message>
         <source>Get a new AIM Account</source>
-        <translation>新規にAIMアカウントを入手</translation>
+        <translation type="unfinished">新規にAIMアカウントを入手</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>AboutWindow</name>
     <message>
         <source>WengoPhone - About</source>
-        <translation>Wengophone - 情報</translation>
+        <translation type="unfinished">Wengophone - 情報</translation>
     </message>
     <message>
         <source>About</source>
-        <translation>情報</translation>
+        <translation type="unfinished">情報</translation>
     </message>
     <message>
         <source>WengoPhone, a voice over Internet phone</source>
-        <translation>WengoPhone，インターネット電話の代弁者</translation>
+        <translation type="unfinished">WengoPhone，インターネット電話の代弁者</translation>
     </message>
     <message>
         <source>Copyright (C) 2004-2006 Wengo  http://openwengo.com</source>
-        <translation>Copyright (C) 2004-2006 Wengon
+        <translation type="unfinished">Copyright (C) 2004-2006 Wengon
 http://openwengo.com</translation>
     </message>
     <message>
@@ -50,11 +54,11 @@ version.</source>
     </message>
     <message>
         <source>Authors</source>
-        <translation>製作者</translation>
+        <translation type="unfinished">製作者</translation>
     </message>
     <message>
         <source>Close</source>
-        <translation>閉じる</translation>
+        <translation type="unfinished">閉じる</translation>
     </message>
     <message>
         <source>This program is free software; you can redistribute it and/or
@@ -68,15 +72,15 @@ of the License, or (at your option) any later version.</source>
     <name>AcceptDialog</name>
     <message>
         <source>File Transfer</source>
-        <translation>ファイルの転送</translation>
+        <translation type="unfinished">ファイルの転送</translation>
     </message>
     <message>
         <source>toto@wengo.fr</source>
-        <translation>toto@wengo.fr</translation>
+        <translation type="unfinished">toto@wengo.fr</translation>
     </message>
     <message>
         <source>test.bmp</source>
-        <translation>test.bmp</translation>
+        <translation type="unfinished">test.bmp</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
@@ -122,11 +126,11 @@ weight:600;&quot;&gt;&lt;h1&gt;受信ファイル&lt;/h1&gt;&lt;/span&gt;&lt;/p&
     </message>
     <message>
         <source>&amp;Accept</source>
-        <translation>承認（&amp;A）</translation>
+        <translation type="unfinished">承認（&amp;A）</translation>
     </message>
     <message>
         <source>&amp;Cancel</source>
-        <translation>キャンセル（&amp;C）</translation>
+        <translation type="unfinished">キャンセル（&amp;C）</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Contact: &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
@@ -145,85 +149,85 @@ weight:600;&quot;&gt;&lt;h1&gt;受信ファイル&lt;/h1&gt;&lt;/span&gt;&lt;/p&
     <name>AddIMContact</name>
     <message>
         <source>WengoPhone - Add a Contact Account</source>
-        <translation>WengoPhone - コンタクトの追加</translation>
+        <translation type="unfinished">WengoPhone - コンタクトの追加</translation>
     </message>
     <message>
         <source>Contact Type (protocol):</source>
-        <translation>コンタクトのプロトコル：</translation>
+        <translation type="unfinished">コンタクトのプロトコル：</translation>
     </message>
     <message>
         <source>Contact ID:</source>
-        <translation>コンタクトID：</translation>
+        <translation type="unfinished">コンタクトID：</translation>
     </message>
     <message>
         <source>Account:</source>
-        <translation>アカウント：</translation>
+        <translation type="unfinished">アカウント：</translation>
     </message>
     <message>
         <source>Enable</source>
-        <translation>有効</translation>
+        <translation type="unfinished">有効</translation>
     </message>
     <message>
         <source>Login</source>
-        <translation>ログイン</translation>
+        <translation type="unfinished">ログイン</translation>
     </message>
     <message>
         <source>Add</source>
-        <translation>追加</translation>
+        <translation type="unfinished">追加</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>キャンセル</translation>
+        <translation type="unfinished">キャンセル</translation>
     </message>
 </context>
 <context>
     <name>AdvancedConfigWindow</name>
     <message>
         <source>Close</source>
-        <translation>閉じる</translation>
+        <translation type="unfinished">閉じる</translation>
     </message>
     <message>
         <source>WengoPhone - Advanced Configuration</source>
-        <translation>WengoPhone - 高度な設定</translation>
+        <translation type="unfinished">WengoPhone - 高度な設定</translation>
     </message>
     <message>
         <source>Preference Name</source>
-        <translation>Preference Name</translation>
+        <translation type="unfinished">Preference Name</translation>
     </message>
     <message>
         <source>Status</source>
-        <translation>状態</translation>
+        <translation type="unfinished">状態</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation>タイプ</translation>
+        <translation type="unfinished">タイプ</translation>
     </message>
     <message>
         <source>Value</source>
-        <translation>変数</translation>
+        <translation type="unfinished">変数</translation>
     </message>
     <message>
         <source>Default Value</source>
-        <translation>既定値</translation>
+        <translation type="unfinished">既定値</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation>保存</translation>
+        <translation type="unfinished">保存</translation>
     </message>
 </context>
 <context>
     <name>AdvancedSettings</name>
     <message>
         <source>Add</source>
-        <translation>追加</translation>
+        <translation type="unfinished">追加</translation>
     </message>
     <message>
         <source>Advanced Settings</source>
-        <translation>高度な設定</translation>
+        <translation type="unfinished">高度な設定</translation>
     </message>
     <message>
         <source>Advanced Configuration Window</source>
-        <translation>高度な設定ウィンド</translation>
+        <translation type="unfinished">高度な設定ウィンド</translation>
     </message>
     <message>
         <source>Warning, this part is for advanced users.&lt;br&gt;Any mistake can badly damage 
@@ -232,11 +236,11 @@ the software.</source>
     </message>
     <message>
         <source>Automatically answer incoming calls from</source>
-        <translation>からの着信に自動応答する。</translation>
+        <translation type="unfinished">からの着信に自動応答する。</translation>
     </message>
     <message>
         <source>Remove</source>
-        <translation>削除</translation>
+        <translation type="unfinished">削除</translation>
     </message>
     <message>
         <source>Warning, this part is for advanced users.&lt;br&gt;Any mistake can badly damage the software.</source>
@@ -247,48 +251,56 @@ the software.</source>
     <name>AudioSettings</name>
     <message>
         <source>Audio Settings</source>
-        <translation>オーディオ設定</translation>
+        <translation type="unfinished">オーディオ設定</translation>
     </message>
     <message>
         <source>Output device:</source>
-        <translation>出力デバイス</translation>
+        <translation type="unfinished">出力デバイス</translation>
     </message>
     <message>
         <source>Input device:</source>
-        <translation>入力デバイス</translation>
+        <translation type="unfinished">入力デバイス</translation>
     </message>
     <message>
         <source>Ringing device:</source>
-        <translation>呼び出し音のデバイス：</translation>
+        <translation type="unfinished">呼び出し音のデバイス：</translation>
     </message>
     <message>
         <source>Make a test call </source>
-        <translation>テストコールをする </translation>
+        <translation type="unfinished">テストコールをする </translation>
     </message>
 </context>
 <context>
     <name>AvatarFrame</name>
     <message>
         <source>Form</source>
-        <translation>フォーム</translation>
+        <translation type="unfinished">フォーム</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>AvatarWidget</name>
     <message>
         <source>Form</source>
-        <translation>フォーム</translation>
+        <translation type="unfinished">フォーム</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>BrowserSoftUpdateWindow</name>
     <message>
         <source>Close</source>
-        <translation>閉じる</translation>
+        <translation type="unfinished">閉じる</translation>
     </message>
     <message>
         <source>WengoPhone - Update available</source>
-        <translation>Wengophone - アップデートがあります。</translation>
+        <translation type="unfinished">Wengophone - アップデートがあります。</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;An update is available, click &lt;span style=&quot; text-
@@ -307,7 +319,7 @@ decoration: underline; color:#0000ff;&quot;&gt;ここ&lt;/span&gt;から新し�
     <name>CallForwardSettings</name>
     <message>
         <source>Call Forward Settings</source>
-        <translation>以前の設定に戻す</translation>
+        <translation type="unfinished">以前の設定に戻す</translation>
     </message>
     <message>
         <source>For example +3314500XXXX (+33 is the country code and 14500XXXX is the phone 
@@ -316,27 +328,27 @@ number)</source>
     </message>
     <message>
         <source>3rd:</source>
-        <translation>3番目：</translation>
+        <translation type="unfinished">3番目：</translation>
     </message>
     <message>
         <source>1st:</source>
-        <translation>1番目：</translation>
+        <translation type="unfinished">1番目：</translation>
     </message>
     <message>
         <source>2nd:</source>
-        <translation>2番目：</translation>
+        <translation type="unfinished">2番目：</translation>
     </message>
     <message>
         <source>(+ country code) phone number</source>
-        <translation>(+ 国別コード) 電話番号</translation>
+        <translation type="unfinished">(+ 国別コード) 電話番号</translation>
     </message>
     <message>
         <source>Forward all unanswered calls to message box</source>
-        <translation>すべての不在着信をメッセージボックスに送る</translation>
+        <translation type="unfinished">すべての不在着信をメッセージボックスに送る</translation>
     </message>
     <message>
         <source>Disable call forwarding</source>
-        <translation>着信転送を利用しない</translation>
+        <translation type="unfinished">着信転送を利用しない</translation>
     </message>
     <message>
         <source>Call forwarding is active if you&apos;re not connected to Wengo, when your line 
@@ -349,7 +361,7 @@ applicable)</source>
     </message>
     <message>
         <source>Forward all unanswered calls to following phone numbers:</source>
-        <translation>すべての不在着信を以下の電話番号に転送する：</translation>
+        <translation type="unfinished">すべての不在着信を以下の電話番号に転送する：</translation>
     </message>
     <message>
         <source>For example +3314500XXXX (+33 is the country code and 14500XXXX is the phone number)</source>
@@ -364,50 +376,50 @@ applicable)</source>
     <name>CallToaster</name>
     <message>
         <source>Incoming Call</source>
-        <translation>着信</translation>
+        <translation type="unfinished">着信</translation>
     </message>
     <message>
         <source>Message</source>
-        <translation>メッセージ</translation>
+        <translation type="unfinished">メッセージ</translation>
     </message>
 </context>
 <context>
     <name>ChatMainWindow</name>
     <message>
         <source>MainWindow</source>
-        <translation>メインウィンドウ</translation>
+        <translation type="unfinished">メインウィンドウ</translation>
     </message>
     <message>
         <source>&amp;Contact</source>
-        <translation>コンタクト(&amp;C)</translation>
+        <translation type="unfinished">コンタクト(&amp;C)</translation>
     </message>
     <message>
         <source>&amp;Wengo</source>
-        <translation>Wengo(&amp;W)</translation>
+        <translation type="unfinished">Wengo(&amp;W)</translation>
     </message>
     <message>
         <source>&amp;Tools</source>
-        <translation>ツール(&amp;T)</translation>
+        <translation type="unfinished">ツール(&amp;T)</translation>
     </message>
     <message>
         <source>&amp;Help</source>
-        <translation>ヘルプ(&amp;H)</translation>
+        <translation type="unfinished">ヘルプ(&amp;H)</translation>
     </message>
     <message>
         <source>&amp;Actions</source>
-        <translation>アクション(&amp;A)</translation>
+        <translation type="unfinished">アクション(&amp;A)</translation>
     </message>
     <message>
         <source>Main Toolbar</source>
-        <translation>メインツールバー</translation>
+        <translation type="unfinished">メインツールバー</translation>
     </message>
     <message>
         <source>Call Contact</source>
-        <translation>コールする</translation>
+        <translation type="unfinished">コールする</translation>
     </message>
     <message>
         <source>Send a File</source>
-        <translation>ファイル転送</translation>
+        <translation type="unfinished">ファイル転送</translation>
     </message>
     <message>
         <source>createChatConf</source>
@@ -415,7 +427,7 @@ applicable)</source>
     </message>
     <message>
         <source>Show Contact Info</source>
-        <translation>コンタクト情報を見る</translation>
+        <translation type="unfinished">コンタクト情報を見る</translation>
     </message>
     <message>
         <source>blockContact</source>
@@ -423,51 +435,63 @@ applicable)</source>
     </message>
     <message>
         <source>&amp;Save History As...</source>
-        <translation>履歴を保存(&amp;S)</translation>
+        <translation type="unfinished">履歴を保存(&amp;S)</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>ChatToaster</name>
     <message>
         <source>Message</source>
-        <translation>メッセージ</translation>
+        <translation type="unfinished">メッセージ</translation>
     </message>
     <message>
         <source>Incoming Chat</source>
-        <translation>チャットを受信</translation>
+        <translation type="unfinished">チャットを受信</translation>
     </message>
 </context>
 <context>
     <name>ChatWidget</name>
     <message>
         <source>Form</source>
-        <translation>フォーム</translation>
+        <translation type="unfinished">フォーム</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>CloseChatTabWidget</name>
     <message>
         <source>Form</source>
-        <translation>フォーム</translation>
+        <translation type="unfinished">フォーム</translation>
     </message>
     <message>
         <source>Close active tab</source>
-        <translation>このタブを閉じる</translation>
+        <translation type="unfinished">このタブを閉じる</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>ConferenceCallWidget</name>
     <message>
         <source>Cancel</source>
-        <translation>キャンセル</translation>
+        <translation type="unfinished">キャンセル</translation>
     </message>
     <message>
         <source>WengoPhone - Create a Conference</source>
-        <translation>WengoPhone - 会議室の作成</translation>
+        <translation type="unfinished">WengoPhone - 会議室の作成</translation>
     </message>
     <message>
         <source>Start</source>
-        <translation>開始</translation>
+        <translation type="unfinished">開始</translation>
     </message>
     <message>
         <source>&lt;span style=&quot; font-size:18pt;&quot;&gt;Conference&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;Please enter 
@@ -484,15 +508,19 @@ block-indent:0; text-indent:0px;&quot;&gt;または、WengoコンタクトIDを�
     </message>
     <message>
         <source>Phone number 2:</source>
-        <translation>電話番号2：</translation>
+        <translation type="unfinished">電話番号2：</translation>
     </message>
     <message>
         <source>Phone number 1:</source>
-        <translation>電話番号1：</translation>
+        <translation type="unfinished">電話番号1：</translation>
     </message>
     <message>
         <source>...</source>
-        <translation>...</translation>
+        <translation type="unfinished">...</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&lt;span style=&quot; font-size:18pt;&quot;&gt;Conference&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;Please enter two phone numbers &lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;or Wengo contact ID in order&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;to create a 3-way conference.&lt;/p&gt;</source>
@@ -503,7 +531,7 @@ block-indent:0; text-indent:0px;&quot;&gt;または、WengoコンタクトIDを�
     <name>ConferenceInviteWidget</name>
     <message>
         <source>Cancel</source>
-        <translation>キャンセル</translation>
+        <translation type="obsolete">キャンセル</translation>
     </message>
     <message>
         <source>&lt;span style=&quot; font-size:18pt;&quot;&gt;Conference&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;Please enter 
@@ -520,23 +548,19 @@ block-indent:0; text-indent:0px;&quot;&gt;または、WengoコンタクトIDを�
     </message>
     <message>
         <source>&amp;Add &gt;&gt;</source>
-        <translation>追加(%A) &gt;&gt;</translation>
+        <translation type="obsolete">追加(%A) &gt;&gt;</translation>
     </message>
     <message>
         <source>&lt;&lt; &amp;Remove</source>
-        <translation>&lt;&lt; 削除(&amp;R)</translation>
+        <translation type="obsolete">&lt;&lt; 削除(&amp;R)</translation>
     </message>
     <message>
         <source>Available Contacts</source>
-        <translation>コンタクトを有効にする</translation>
+        <translation type="obsolete">コンタクトを有効にする</translation>
     </message>
     <message>
         <source>&amp;Start</source>
-        <translation>開始(&amp;S)</translation>
-    </message>
-    <message>
-        <source>&lt;span style=&quot; font-size:18pt;&quot;&gt;Conference&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;Please enter two phone numbers &lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;or Wengo contact ID in order&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;to create a 3-way conference.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">開始(&amp;S)</translation>
     </message>
 </context>
 <context>
@@ -570,29 +594,33 @@ block-indent:0; text-indent:0px;&quot;&gt;または、WengoコンタクトIDを�
     <name>ContactList</name>
     <message>
         <source>Contact List</source>
-        <translation>コンタクトリスト</translation>
+        <translation type="unfinished">コンタクトリスト</translation>
     </message>
 </context>
 <context>
     <name>ContactWidget</name>
     <message>
         <source>No mobile phone number set</source>
-        <translation>携帯電話ではない</translation>
+        <translation type="unfinished">携帯電話ではない</translation>
     </message>
     <message>
         <source>No landline phone number set</source>
-        <translation>固定電話ではない</translation>
+        <translation type="unfinished">固定電話ではない</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>CrashReport</name>
     <message>
         <source>Cancel</source>
-        <translation>キャンセル</translation>
+        <translation type="obsolete">キャンセル</translation>
     </message>
     <message>
         <source>Program Failure</source>
-        <translation>プログラムの不具合</translation>
+        <translation type="obsolete">プログラムの不具合</translation>
     </message>
     <message>
         <source>The WengoPhone execution failed and has generated a diagnostic file.&lt;br&gt;This 
@@ -605,11 +633,11 @@ WengoPhoneは実行に失敗し、診断ファイルを作成しました。&lt;
     </message>
     <message>
         <source>Send</source>
-        <translation>送信</translation>
+        <translation type="obsolete">送信</translation>
     </message>
     <message>
         <source>Optional Information</source>
-        <translation>追加情報</translation>
+        <translation type="obsolete">追加情報</translation>
     </message>
     <message>
         <source>In order to help the developers you can complete this report. This step is 
@@ -618,50 +646,42 @@ optional.&lt;br&gt;Use Case Description:</source>
     </message>
     <message>
         <source>Your Mail:</source>
-        <translation>メールアドレス：</translation>
-    </message>
-    <message>
-        <source>The WengoPhone execution failed and has generated a diagnostic file.&lt;br&gt;This file contains usefull information to solve the problem you are encounting.&lt;br&gt;Thanks for your contribution.&lt;br&gt;&lt;br&gt;The WengoPhone Development Team.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>In order to help the developers you can complete this report. This step is optional.&lt;br&gt;Use Case Description:</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">メールアドレス：</translation>
     </message>
 </context>
 <context>
     <name>CreditWidget</name>
     <message>
         <source>Your Wengo phone number</source>
-        <translation>あなたのWengoPhoneナンバー</translation>
+        <translation type="unfinished">あなたのWengoPhoneナンバー</translation>
     </message>
     <message>
         <source>Not Available</source>
-        <translation>利用できません</translation>
+        <translation type="unfinished">利用できません</translation>
     </message>
     <message>
         <source>Your phone number:</source>
-        <translation>あなたの電話番号</translation>
+        <translation type="unfinished">あなたの電話番号</translation>
     </message>
     <message>
         <source>Click here to change your call forward settings</source>
-        <translation>ここをクリックして着信転送設定を変更する</translation>
+        <translation type="unfinished">ここをクリックして着信転送設定を変更する</translation>
     </message>
     <message>
         <source>Call forward mode:</source>
-        <translation>着信転送モード</translation>
+        <translation type="unfinished">着信転送モード</translation>
     </message>
     <message>
         <source>Click here to buy Wengo&apos;s credits</source>
-        <translation>ここをクリックしてWengoのクレジットを購入する</translation>
+        <translation type="unfinished">ここをクリックしてWengoのクレジットを購入する</translation>
     </message>
     <message>
         <source>Purchase call out credits</source>
-        <translation>コールアウトクレジットの購入</translation>
+        <translation type="unfinished">コールアウトクレジットの購入</translation>
     </message>
     <message>
         <source>Call Forward Method</source>
-        <translation>着信転送方法</translation>
+        <translation type="unfinished">着信転送方法</translation>
     </message>
     <message>
         <source>Call Voice Mail</source>
@@ -672,41 +692,41 @@ optional.&lt;br&gt;Use Case Description:</source>
     <name>DialpadWidget</name>
     <message>
         <source>Audio Smileys</source>
-        <translation>オーディオスマイリー</translation>
+        <translation type="obsolete">オーディオスマイリー</translation>
     </message>
 </context>
 <context>
     <name>EventWidget</name>
     <message>
         <source>0</source>
-        <translation>0</translation>
+        <translation type="unfinished">0</translation>
     </message>
     <message>
         <source>Click here to call your voice mail</source>
-        <translation>ここをクリックしてボイスメールにコールする</translation>
+        <translation type="unfinished">ここをクリックしてボイスメールにコールする</translation>
     </message>
     <message>
         <source>New Voice Mail:</source>
-        <translation>新規のボイスメール：</translation>
+        <translation type="unfinished">新規のボイスメール：</translation>
     </message>
     <message>
         <source>Click here to see missed call(s)</source>
-        <translation>ここをクリックして失敗した通話を見る</translation>
+        <translation type="unfinished">ここをクリックして失敗した通話を見る</translation>
     </message>
     <message>
         <source>Missed Call(s):</source>
-        <translation>失敗した通話</translation>
+        <translation type="unfinished">失敗した通話</translation>
     </message>
 </context>
 <context>
     <name>FileTransferItem</name>
     <message>
         <source>Cancel</source>
-        <translation>キャンセル</translation>
+        <translation type="unfinished">キャンセル</translation>
     </message>
     <message>
         <source>Form</source>
-        <translation>フォーム</translation>
+        <translation type="unfinished">フォーム</translation>
     </message>
     <message>
         <source>From:</source>
@@ -714,7 +734,11 @@ optional.&lt;br&gt;Use Case Description:</source>
     </message>
     <message>
         <source>Pause</source>
-        <translation>一時停止</translation>
+        <translation type="unfinished">一時停止</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&lt;i&gt;From:&lt;/i&gt;</source>
@@ -725,11 +749,11 @@ optional.&lt;br&gt;Use Case Description:</source>
     <name>FileTransferWidget</name>
     <message>
         <source>...</source>
-        <translation>...</translation>
+        <translation type="unfinished">...</translation>
     </message>
     <message>
         <source>WengoPhone - File Transfer Manager</source>
-        <translation>WengoPhone - ファイル転送マネージャー</translation>
+        <translation type="unfinished">WengoPhone - ファイル転送マネージャー</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
@@ -746,15 +770,15 @@ indent:0; text-indent:0px;&quot;&gt;ここをクリックしてダウンロー�
     </message>
     <message>
         <source>Download folder:</source>
-        <translation>ダウンロードフォルダ</translation>
+        <translation type="unfinished">ダウンロードフォルダ</translation>
     </message>
     <message>
         <source>Download</source>
-        <translation>ダウンロード</translation>
+        <translation type="unfinished">ダウンロード</translation>
     </message>
     <message>
         <source>Upload</source>
-        <translation>アップロード</translation>
+        <translation type="unfinished">アップロード</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
@@ -770,7 +794,7 @@ indent:0; text-indent:0px;&quot;&gt;リストにある全てのアイテムを�
     </message>
     <message>
         <source>&amp;Clean</source>
-        <translation>クリア(&amp;C)</translation>
+        <translation type="unfinished">クリア(&amp;C)</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Click here to change your download folder&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
@@ -785,11 +809,11 @@ indent:0; text-indent:0px;&quot;&gt;リストにある全てのアイテムを�
     <name>Form</name>
     <message>
         <source>&amp;Start</source>
-        <translation>開始(&amp;S)</translation>
+        <translation type="obsolete">開始(&amp;S)</translation>
     </message>
     <message>
         <source>Chat room</source>
-        <translation>チャットルーム</translation>
+        <translation type="obsolete">チャットルーム</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
@@ -807,123 +831,123 @@ weight:600;&quot;&gt;チャットルーム&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&l
     </message>
     <message>
         <source>(Conference participants)</source>
-        <translation>（会議参加者）</translation>
+        <translation type="obsolete">（会議参加者）</translation>
     </message>
     <message>
         <source>&amp;Remove</source>
-        <translation>削除(&amp;R)</translation>
+        <translation type="obsolete">削除(&amp;R)</translation>
     </message>
     <message>
         <source>Group Name</source>
-        <translation>グループ名</translation>
+        <translation type="obsolete">グループ名</translation>
     </message>
     <message>
         <source>&amp;Add</source>
-        <translation>追加(&amp;A)</translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt; font-weight:600;&quot;&gt;Chat room&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">追加(&amp;A)</translation>
     </message>
 </context>
 <context>
     <name>GeneralSettings</name>
     <message>
         <source>General Settings</source>
-        <translation>一般的な設定</translation>
+        <translation type="unfinished">一般的な設定</translation>
     </message>
     <message>
         <source>When I double-click on a contact </source>
-        <translation>ダブルクリック時 </translation>
+        <translation type="unfinished">ダブルクリック時 </translation>
     </message>
     <message>
         <source>Start a free call if applicable</source>
-        <translation>可能であればフリーコールを開始する</translation>
+        <translation type="unfinished">可能であればフリーコールを開始する</translation>
     </message>
     <message>
         <source>Call cell phone or land line if contact not online</source>
-        <translation>コンタクトがオフラインならば携帯か固定電話にコールする</translation>
+        <translation type="unfinished">コンタクトがオフラインならば携帯か固定電話にコールする</translation>
     </message>
     <message>
         <source>Always start a chat</source>
-        <translation>常にチャットを開始する</translation>
+        <translation type="unfinished">常にチャットを開始する</translation>
     </message>
     <message>
         <source>Idle status</source>
-        <translation>アイドル状態</translation>
+        <translation type="unfinished">アイドル状態</translation>
     </message>
     <message>
         <source>minutes</source>
-        <translation>分後</translation>
+        <translation type="unfinished">分後</translation>
     </message>
     <message>
         <source>Show me as &quot;Away&quot; when I am inactive for:</source>
-        <translation>次を使用していない時は&quot;退席中&quot;と表示する</translation>
+        <translation type="unfinished">次を使用していない時は&quot;退席中&quot;と表示する</translation>
     </message>
     <message>
         <source>When I start my computer</source>
-        <translation>コンピュータを起動した時</translation>
+        <translation type="unfinished">コンピュータを起動した時</translation>
     </message>
     <message>
         <source>Automatically start WengoPhone</source>
-        <translation>Wengophoneを自動的に開始する</translation>
+        <translation type="unfinished">Wengophoneを自動的に開始する</translation>
     </message>
     <message>
         <source>&amp;Edit my profile</source>
-        <translation>プロフィールの編集(&amp;E)</translation>
+        <translation type="unfinished">プロフィールの編集(&amp;E)</translation>
     </message>
 </context>
 <context>
     <name>GoogleTalkSettings</name>
     <message>
         <source>Password:</source>
-        <translation>パスワード：</translation>
+        <translation type="unfinished">パスワード：</translation>
     </message>
     <message>
         <source>Login:</source>
-        <translation>ログイン：</translation>
+        <translation type="unfinished">ログイン：</translation>
     </message>
     <message>
         <source>GoogleTalk Settings</source>
-        <translation>Google Talkの設定</translation>
+        <translation type="unfinished">Google Talkの設定</translation>
     </message>
     <message>
         <source>Forgot your GoogleTalk password?</source>
-        <translation>Google Talkのパスワードを忘れた</translation>
+        <translation type="unfinished">Google Talkのパスワードを忘れた</translation>
     </message>
     <message>
         <source>Get a new GoogleTalk Account</source>
-        <translation>新規にGoogleTalkアカウントを入手</translation>
+        <translation type="unfinished">新規にGoogleTalkアカウントを入手</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>HistoryWidget</name>
     <message>
         <source>Type</source>
-        <translation>タイプ</translation>
+        <translation type="unfinished">タイプ</translation>
     </message>
     <message>
         <source>Name/ID</source>
-        <translation>名前/ID</translation>
+        <translation type="unfinished">名前/ID</translation>
     </message>
     <message>
         <source>Date</source>
-        <translation>日付</translation>
+        <translation type="unfinished">日付</translation>
     </message>
     <message>
         <source>Duration</source>
-        <translation>通話時間</translation>
+        <translation type="unfinished">通話時間</translation>
     </message>
 </context>
 <context>
     <name>HttpProxyLoginWindow</name>
     <message>
         <source>Cancel</source>
-        <translation>キャンセル</translation>
+        <translation type="unfinished">キャンセル</translation>
     </message>
     <message>
         <source>WengoPhone - Local HTTP Proxy</source>
-        <translation>WengoPhone - ローカルHTTPプロキシ</translation>
+        <translation type="unfinished">WengoPhone - ローカルHTTPプロキシ</translation>
     </message>
     <message>
         <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;HTTP Proxy 
@@ -935,23 +959,23 @@ size:18pt;&quot;&gt;HTTPプロキシ認証&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;s
     </message>
     <message>
         <source>HTTP Proxy Address:</source>
-        <translation>アドレス：</translation>
+        <translation type="unfinished">アドレス：</translation>
     </message>
     <message>
         <source>HTTP Proxy Port Number:</source>
-        <translation>ポート番号</translation>
+        <translation type="unfinished">ポート番号</translation>
     </message>
     <message>
         <source>HTTP Proxy Login:</source>
-        <translation>ログイン：</translation>
+        <translation type="unfinished">ログイン：</translation>
     </message>
     <message>
         <source>HTTP Proxy Password:</source>
-        <translation>パスワード：</translation>
+        <translation type="unfinished">パスワード：</translation>
     </message>
     <message>
         <source>OK</source>
-        <translation>OK</translation>
+        <translation type="unfinished">OK</translation>
     </message>
     <message>
         <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;HTTP Proxy Authentication&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;Your local HTTP proxy uses authentication&lt;br&gt;Please enter your login and password&lt;/span&gt;</source>
@@ -962,177 +986,177 @@ size:18pt;&quot;&gt;HTTPプロキシ認証&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;s
     <name>IMAccountManager</name>
     <message>
         <source>Close</source>
-        <translation>閉じる</translation>
+        <translation type="unfinished">閉じる</translation>
     </message>
     <message>
         <source>Login</source>
-        <translation>ログイン</translation>
+        <translation type="unfinished">ログイン</translation>
     </message>
     <message>
         <source>Add</source>
-        <translation>追加</translation>
+        <translation type="unfinished">追加</translation>
     </message>
     <message>
         <source>WengoPhone - My Instant Messaging Accounts (MSN, Jabber...)</source>
-        <translation>WengoPhone - IMアカウント(MSN, Jabber...)</translation>
+        <translation type="unfinished">WengoPhone - IMアカウント(MSN, Jabber...)</translation>
     </message>
     <message>
         <source>Protocol</source>
-        <translation>プロトコル</translation>
+        <translation type="unfinished">プロトコル</translation>
     </message>
     <message>
         <source>Enabled</source>
-        <translation>有効</translation>
+        <translation type="unfinished">有効</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation>削除</translation>
+        <translation type="unfinished">削除</translation>
     </message>
     <message>
         <source>Modify</source>
-        <translation>変更</translation>
+        <translation type="unfinished">変更</translation>
     </message>
 </context>
 <context>
     <name>IMAccountTemplate</name>
     <message>
         <source>Cancel</source>
-        <translation>キャンセル</translation>
+        <translation type="unfinished">キャンセル</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation>保存</translation>
+        <translation type="unfinished">保存</translation>
     </message>
     <message>
         <source>IM Account Settings</source>
-        <translation>IMアカウントセッティング</translation>
+        <translation type="unfinished">IMアカウントセッティング</translation>
     </message>
 </context>
 <context>
     <name>IMContactManager</name>
     <message>
         <source>Add</source>
-        <translation>追加</translation>
+        <translation type="unfinished">追加</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation>削除</translation>
+        <translation type="unfinished">削除</translation>
     </message>
     <message>
         <source>Contact ID</source>
-        <translation>コンタクトID</translation>
+        <translation type="unfinished">コンタクトID</translation>
     </message>
     <message>
         <source>Contact Type (protocol)</source>
-        <translation>コンタクトタイプ（プロトコル）</translation>
+        <translation type="unfinished">コンタクトタイプ（プロトコル）</translation>
     </message>
     <message>
         <source>Click on the add button below to add a new ID</source>
-        <translation>追加ボタンをクリックしてこのIDを登録する</translation>
+        <translation type="unfinished">追加ボタンをクリックしてこのIDを登録する</translation>
     </message>
 </context>
 <context>
     <name>IMProfileWidget</name>
     <message>
         <source>Edit My Profile</source>
-        <translation>プロフィールの編集</translation>
+        <translation type="unfinished">プロフィールの編集</translation>
     </message>
     <message>
         <source>AIM/ICQ</source>
-        <translation>AIM/ICQ</translation>
+        <translation type="unfinished">AIM/ICQ</translation>
     </message>
     <message>
         <source>Yahoo!</source>
-        <translation>Yahoo!</translation>
+        <translation type="unfinished">Yahoo!</translation>
     </message>
     <message>
         <source>Wengo</source>
-        <translation>Wengo</translation>
+        <translation type="unfinished">Wengo</translation>
     </message>
     <message>
         <source>Jabber/GoogleTalk</source>
-        <translation>Jabber/GoogleTalk</translation>
+        <translation type="unfinished">Jabber/GoogleTalk</translation>
     </message>
     <message>
         <source>MSN</source>
-        <translation>MSN</translation>
+        <translation type="unfinished">MSN</translation>
     </message>
     <message>
         <source>Enter your nickname here</source>
-        <translation>ここにニックネームを入力してください</translation>
+        <translation type="unfinished">ここにニックネームを入力してください</translation>
     </message>
 </context>
 <context>
     <name>JabberSettings</name>
     <message>
         <source>Password:</source>
-        <translation>パスワード：</translation>
+        <translation type="unfinished">パスワード：</translation>
     </message>
     <message>
         <source>Login:</source>
-        <translation>ログイン：</translation>
+        <translation type="unfinished">ログイン：</translation>
     </message>
     <message>
         <source>Jabber Settings</source>
-        <translation>Jabberの設定</translation>
+        <translation type="unfinished">Jabberの設定</translation>
     </message>
     <message>
         <source>Connect Server:</source>
-        <translation>接続サーバ：</translation>
+        <translation type="unfinished">接続サーバ：</translation>
     </message>
     <message>
         <source>&lt;u&gt;Advanced Options&lt;/u&gt;</source>
-        <translation>&lt;u&gt;詳細なオプション&lt;/u&gt;</translation>
+        <translation type="unfinished">&lt;u&gt;詳細なオプション&lt;/u&gt;</translation>
     </message>
     <message>
         <source>Require TLS</source>
-        <translation>TLSは必須</translation>
+        <translation type="unfinished">TLSは必須</translation>
     </message>
     <message>
         <source>Port:</source>
-        <translation>ポート：</translation>
+        <translation type="unfinished">ポート：</translation>
     </message>
     <message>
         <source>Use TLS if available</source>
-        <translation>可能ならばTLSを使用する</translation>
+        <translation type="unfinished">可能ならばTLSを使用する</translation>
     </message>
     <message>
         <source>Allow plaintext authentication over unencrypted streams</source>
-        <translation>非暗号化通信でのプレーンテキスト認証を許可する</translation>
+        <translation type="unfinished">非暗号化通信でのプレーンテキスト認証を許可する</translation>
     </message>
     <message>
         <source>5222</source>
-        <translation>5222</translation>
+        <translation type="unfinished">5222</translation>
     </message>
     <message>
         <source>Force old (port 5223) SSL</source>
-        <translation>古い SSL (ポート番号:5223) を強制的に使用する</translation>
+        <translation type="unfinished">古い SSL (ポート番号:5223) を強制的に使用する</translation>
     </message>
 </context>
 <context>
     <name>LanguagesSettings</name>
     <message>
         <source>Language</source>
-        <translation>言語</translation>
+        <translation type="unfinished">言語</translation>
     </message>
 </context>
 <context>
     <name>LoginWindow</name>
     <message>
         <source>Password:</source>
-        <translation>パスワード：</translation>
+        <translation type="unfinished">パスワード：</translation>
     </message>
     <message>
         <source>Login</source>
-        <translation>ログイン</translation>
+        <translation type="unfinished">ログイン</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation>キャンセル</translation>
+        <translation type="unfinished">キャンセル</translation>
     </message>
     <message>
         <source>WengoPhone - Login</source>
-        <translation>WengoPhone - ログイン</translation>
+        <translation type="unfinished">WengoPhone - ログイン</translation>
     </message>
     <message>
         <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Login&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;Please enter your 
@@ -1142,19 +1166,23 @@ size:18pt;&quot;&gt;ログイン&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;E�
     </message>
     <message>
         <source>Forgot your password?</source>
-        <translation>パスワードを忘れた</translation>
+        <translation type="unfinished">パスワードを忘れた</translation>
     </message>
     <message>
         <source>Need help?</source>
-        <translation>ヘルプ</translation>
+        <translation type="unfinished">ヘルプ</translation>
     </message>
     <message>
         <source>Email Address:</source>
-        <translation>Eメールアドレス：</translation>
+        <translation type="unfinished">Eメールアドレス：</translation>
     </message>
     <message>
         <source>Click here if you don&apos;t have a Wengo account</source>
-        <translation>もしWengoのアカウントを持っていなければここをクリック！</translation>
+        <translation type="unfinished">もしWengoのアカウントを持っていなければここをクリック！</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Login&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;Please enter your email address and&lt;br&gt;password&lt;/span&gt;</source>
@@ -1165,167 +1193,171 @@ size:18pt;&quot;&gt;ログイン&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;E�
     <name>MSNSettings</name>
     <message>
         <source>Password:</source>
-        <translation>パスワード：</translation>
+        <translation type="unfinished">パスワード：</translation>
     </message>
     <message>
         <source>Login:</source>
-        <translation>ログイン：</translation>
+        <translation type="unfinished">ログイン：</translation>
     </message>
     <message>
         <source>MSN Settings</source>
-        <translation>MSNの設定</translation>
+        <translation type="unfinished">MSNの設定</translation>
     </message>
     <message>
         <source>Forgot your MSN password?</source>
-        <translation>MSNのパスワードを忘れた</translation>
+        <translation type="unfinished">MSNのパスワードを忘れた</translation>
     </message>
     <message>
         <source>Get a new MSN Account</source>
-        <translation>新規にMSNアカウントを入手する</translation>
+        <translation type="unfinished">新規にMSNアカウントを入手する</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>MainWindow</name>
     <message>
         <source>MainWindow</source>
-        <translation>メインウィンドウ</translation>
+        <translation type="obsolete">メインウィンドウ</translation>
     </message>
     <message>
         <source>Command::terminate()</source>
-        <translation type="unfinished">Command::terminate()</translation>
+        <translation type="obsolete">Command::terminate()</translation>
     </message>
     <message>
         <source>Command::start()</source>
-        <translation type="unfinished">Command::start()</translation>
+        <translation type="obsolete">Command::start()</translation>
     </message>
     <message>
         <source>Accept Call</source>
-        <translation>応答</translation>
+        <translation type="obsolete">応答</translation>
     </message>
     <message>
         <source>Send Chat Message</source>
-        <translation>チャットメッセージの送信</translation>
+        <translation type="obsolete">チャットメッセージの送信</translation>
     </message>
     <message>
         <source>Make Call</source>
-        <translation>発信</translation>
+        <translation type="obsolete">発信</translation>
     </message>
     <message>
         <source>Hang Up</source>
-        <translation>切断</translation>
+        <translation type="obsolete">切断</translation>
     </message>
 </context>
 <context>
     <name>ManageBlockedUsersSettings</name>
     <message>
         <source>Close</source>
-        <translation>閉じる</translation>
+        <translation type="unfinished">閉じる</translation>
     </message>
     <message>
         <source>WengoPhone - Manage blocked users</source>
-        <translation>WengoPhone - メッセージ拒否ユーザ</translation>
+        <translation type="unfinished">WengoPhone - メッセージ拒否ユーザ</translation>
     </message>
     <message>
         <source>Unblock User</source>
-        <translation>拒否されていないユーザ</translation>
+        <translation type="unfinished">拒否されていないユーザ</translation>
     </message>
     <message>
         <source>Manage blocked users</source>
-        <translation>メッセージ拒否ユーザ</translation>
+        <translation type="unfinished">メッセージ拒否ユーザ</translation>
     </message>
 </context>
 <context>
     <name>NotificationSettings</name>
     <message>
         <source>Standard Notifications</source>
-        <translation>標準の通知</translation>
+        <translation type="unfinished">標準の通知</translation>
     </message>
     <message>
         <source>Show pop-up window for incoming chats</source>
-        <translation>チャットを受信したらポップアップウィンドウを表示する</translation>
+        <translation type="unfinished">チャットを受信したらポップアップウィンドウを表示する</translation>
     </message>
     <message>
         <source>Show pop-up window when a contact is turning online</source>
-        <translation>コンタクトがオンラインになったらポップアップウィンドウを表示する</translation>
+        <translation type="unfinished">コンタクトがオンラインになったらポップアップウィンドウを表示する</translation>
     </message>
     <message>
         <source>Show pop-up window for incoming calls</source>
-        <translation>通話を受信したらポップアップウィンドウを表示する</translation>
+        <translation type="unfinished">通話を受信したらポップアップウィンドウを表示する</translation>
     </message>
     <message>
         <source>Advanced Notifications</source>
-        <translation>高度な通知</translation>
+        <translation type="unfinished">高度な通知</translation>
     </message>
     <message>
         <source>Do not show any pop-up window</source>
-        <translation>どんなポップアップウィンドウも表示しない</translation>
+        <translation type="unfinished">どんなポップアップウィンドウも表示しない</translation>
     </message>
     <message>
         <source>When switched to &quot;Away&quot;:</source>
-        <translation>&quot;退席中&quot;の時：</translation>
+        <translation type="unfinished">&quot;退席中&quot;の時：</translation>
     </message>
     <message>
         <source>When switched to &quot;Do Not Disturb&quot;:</source>
-        <translation>&quot;取り込み中&quot;の時：</translation>
+        <translation type="unfinished">&quot;取り込み中&quot;の時：</translation>
     </message>
     <message>
         <source>No audio notifications</source>
-        <translation>無音通知</translation>
+        <translation type="unfinished">無音通知</translation>
     </message>
     <message>
         <source>Activate sounds for/when</source>
-        <translation>次の場合サウンドを有効にする</translation>
+        <translation type="unfinished">次の場合サウンドを有効にする</translation>
     </message>
     <message>
         <source>No sound</source>
-        <translation>サウンドなし</translation>
+        <translation type="unfinished">サウンドなし</translation>
     </message>
     <message>
         <source>Sound file</source>
-        <translation>サウンドファイル</translation>
+        <translation type="unfinished">サウンドファイル</translation>
     </message>
     <message>
         <source>Play sound file</source>
-        <translation>サウンドの再生</translation>
+        <translation type="unfinished">サウンドの再生</translation>
     </message>
     <message>
         <source>Find a sound file</source>
-        <translation>サウンドファイルを検出する</translation>
+        <translation type="unfinished">サウンドファイルを検出する</translation>
     </message>
     <message>
         <source>Incoming call (ringtone)</source>
-        <translation>通話着信時</translation>
+        <translation type="unfinished">通話着信時</translation>
     </message>
     <message>
         <source>Call closed (hang up tone)</source>
-        <translation>通話切断時</translation>
+        <translation type="unfinished">通話切断時</translation>
     </message>
     <message>
         <source>Incoming chat</source>
-        <translation>チャット着信時</translation>
+        <translation type="unfinished">チャット着信時</translation>
     </message>
     <message>
         <source>IM account connected</source>
-        <translation>IMアカウント接続時</translation>
+        <translation type="unfinished">IMアカウント接続時</translation>
     </message>
     <message>
         <source>IM account disconnected</source>
-        <translation>IMアカウント切断時</translation>
+        <translation type="unfinished">IMアカウント切断時</translation>
     </message>
     <message>
         <source>Contact online</source>
-        <translation>コンタクトオンライン時</translation>
+        <translation type="unfinished">コンタクトオンライン時</translation>
     </message>
 </context>
 <context>
     <name>PhoneCallWidget</name>
     <message>
         <source>Status</source>
-        <translation>状態</translation>
+        <translation type="unfinished">状態</translation>
     </message>
     <message>
         <source>Duration</source>
-        <translation>通話時間</translation>
+        <translation type="unfinished">通話時間</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
@@ -1342,6 +1374,10 @@ indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-si
 font-weight:600;&quot;&gt;ニックネームまたはナンバー&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
+        <source></source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-size:13pt; font-weight:600;&quot;&gt;NickName or number&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1350,146 +1386,146 @@ font-weight:600;&quot;&gt;ニックネームまたはナンバー&lt;/span&gt;&l
     <name>PrivacySettings</name>
     <message>
         <source>Manage blocked users</source>
-        <translation>メッセージ拒否ユーザ</translation>
+        <translation type="unfinished">メッセージ拒否ユーザ</translation>
     </message>
     <message>
         <source>Privacy Rules </source>
-        <translation>プライバシールール </translation>
+        <translation type="unfinished">プライバシールール </translation>
     </message>
     <message>
         <source>When I sign into Wengo</source>
-        <translation>Wengoにサインイン時</translation>
+        <translation type="unfinished">Wengoにサインイン時</translation>
     </message>
     <message>
         <source>Always sign in as &quot;Invisible&quot; (appear offline to all users)</source>
-        <translation>常に&quot;不可視&quot;でサインインする（すべてのユーザにオフライン）</translation>
+        <translation type="unfinished">常に&quot;不可視&quot;でサインインする（すべてのユーザにオフライン）</translation>
     </message>
     <message>
         <source>Allow chats from</source>
-        <translation>次のコンタクトからチャットを許可する</translation>
+        <translation type="unfinished">次のコンタクトからチャットを許可する</translation>
     </message>
     <message>
         <source>Anyone</source>
-        <translation>だれでも</translation>
+        <translation type="unfinished">だれでも</translation>
     </message>
     <message>
         <source>Only people from my contact list</source>
-        <translation>コンタクトリストに登録されている者に限る</translation>
+        <translation type="unfinished">コンタクトリストに登録されている者に限る</translation>
     </message>
     <message>
         <source>Allow calls from</source>
-        <translation>次のコンタクトからの通話を許可する</translation>
+        <translation type="unfinished">次のコンタクトからの通話を許可する</translation>
     </message>
 </context>
 <context>
     <name>ProfileDetails</name>
     <message>
         <source>Cancel</source>
-        <translation>キャンセル</translation>
+        <translation type="unfinished">キャンセル</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation>保存</translation>
+        <translation type="unfinished">保存</translation>
     </message>
     <message>
         <source>General</source>
-        <translation>全般</translation>
+        <translation type="unfinished">全般</translation>
     </message>
     <message>
         <source>Network IDs (MSN, Jabber...)</source>
-        <translation>ネットワークID(MSN, Jabber...)</translation>
+        <translation type="unfinished">ネットワークID(MSN, Jabber...)</translation>
     </message>
     <message>
         <source>Advanced &gt;&gt;</source>
-        <translation>高度 &gt;&gt;</translation>
+        <translation type="unfinished">高度 &gt;&gt;</translation>
     </message>
     <message>
         <source>Fill in all your network Id to stay connected with your contacts</source>
-        <translation>コンタクトに接続中の全てのネットワークIDを表示する</translation>
+        <translation type="unfinished">コンタクトに接続中の全てのネットワークIDを表示する</translation>
     </message>
     <message>
         <source>Phone Numbers</source>
-        <translation>電話番号</translation>
+        <translation type="unfinished">電話番号</translation>
     </message>
     <message>
         <source>Home phone</source>
-        <translation>自宅の電話</translation>
+        <translation type="unfinished">自宅の電話</translation>
     </message>
     <message>
         <source>Mobile phone</source>
-        <translation>携帯電話</translation>
+        <translation type="unfinished">携帯電話</translation>
     </message>
     <message>
         <source>Contact</source>
-        <translation>コンタクト</translation>
+        <translation type="unfinished">コンタクト</translation>
     </message>
     <message>
         <source>Group:</source>
-        <translation>グループ：</translation>
+        <translation type="unfinished">グループ：</translation>
     </message>
     <message>
         <source>Last Name:</source>
-        <translation>姓：</translation>
+        <translation type="unfinished">姓：</translation>
     </message>
     <message>
         <source>First Name:</source>
-        <translation>名：</translation>
+        <translation type="unfinished">名：</translation>
     </message>
     <message>
         <source>Click to change avatar</source>
-        <translation>アバターの変更</translation>
+        <translation type="unfinished">アバターの変更</translation>
     </message>
     <message>
         <source>Details</source>
-        <translation>詳細</translation>
+        <translation type="unfinished">詳細</translation>
     </message>
     <message>
         <source>Web/blog:</source>
-        <translation>Web/blog：</translation>
+        <translation type="unfinished">Web/blog：</translation>
     </message>
     <message>
         <source>Country:</source>
-        <translation>国：</translation>
+        <translation type="unfinished">国：</translation>
     </message>
     <message>
         <source>State:</source>
-        <translation>都道府県：</translation>
+        <translation type="unfinished">都道府県：</translation>
     </message>
     <message>
         <source>City:</source>
-        <translation>都市：</translation>
+        <translation type="unfinished">都市：</translation>
     </message>
     <message>
         <source>Gender:</source>
-        <translation>性別：</translation>
+        <translation type="unfinished">性別：</translation>
     </message>
     <message>
         <source>Birth Date:</source>
-        <translation>誕生日：</translation>
+        <translation type="unfinished">誕生日：</translation>
     </message>
     <message>
         <source>Email:</source>
-        <translation>Eメール：</translation>
+        <translation type="unfinished">Eメール：</translation>
     </message>
     <message>
         <source>dd MMMM yyyy</source>
-        <translation>dd MMMM yyyy</translation>
+        <translation type="unfinished">dd MMMM yyyy</translation>
     </message>
     <message>
         <source>Unknown</source>
-        <translation>不明</translation>
+        <translation type="unfinished">不明</translation>
     </message>
     <message>
         <source>Male</source>
-        <translation>男性</translation>
+        <translation type="unfinished">男性</translation>
     </message>
     <message>
         <source>Female</source>
-        <translation>女性</translation>
+        <translation type="unfinished">女性</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation>備考</translation>
+        <translation type="unfinished">備考</translation>
     </message>
 </context>
 <context>
@@ -1827,7 +1863,11 @@ font-weight:600;&quot;&gt;ニックネームまたはナンバー&lt;/span&gt;&l
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt;font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px;margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;font-size:8pt;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;A contact is trying to send you a file:&lt;/span&gt; but his WengoPhone must be upgraded in order to receive it. Tell him to download the latest version.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt;font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px;margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;font-size:8pt;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> is trying to send you a file:&lt;/span&gt; but his WengoPhone must be upgraded in order to receive it. Tell him to download the latest version.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1907,6 +1947,10 @@ font-weight:600;&quot;&gt;ニックネームまたはナンバー&lt;/span&gt;&l
     </message>
     <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg;font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px;margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;This may be caused by:&lt;/span&gt; &lt;br&gt;- Your WengoPhone is not up to date. Please download the latest version onwww.wengo.com&lt;br&gt;- The Wengo network may be temporarily unavailable. Please try later.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Not started yet</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2390,27 +2434,27 @@ This will send </source>
     <name>QtSubscribe</name>
     <message>
         <source>Confirm password does not matched password</source>
-        <translation>パスワードが一致しません</translation>
+        <translation type="obsolete">パスワードが一致しません</translation>
     </message>
     <message>
         <source>Unknown Error</source>
-        <translation>未知のエラー</translation>
+        <translation type="obsolete">未知のエラー</translation>
     </message>
     <message>
         <source>You cannot use this email address, already in use</source>
-        <translation>このメールアドレスは使用できません。既に使われています</translation>
+        <translation type="obsolete">このメールアドレスは使用できません。既に使われています</translation>
     </message>
     <message>
         <source>You cannot use this nickname, already in use</source>
-        <translation>このニックネームは使用できません。既に使われています。</translation>
+        <translation type="obsolete">このニックネームは使用できません。既に使われています。</translation>
     </message>
     <message>
         <source>Your password does not contain enough characters (6 minimum), try another one</source>
-        <translation>パスワードが短すぎます（半角英数6文字以上）。他のものを試してください</translation>
+        <translation type="obsolete">パスワードが短すぎます（半角英数6文字以上）。他のものを試してください</translation>
     </message>
     <message>
         <source>Subscription Failed</source>
-        <translation>登録失敗</translation>
+        <translation type="obsolete">登録失敗</translation>
     </message>
 </context>
 <context>
@@ -2533,10 +2577,17 @@ This will send </source>
     <name>QtUserProfileHandler</name>
     <message>
         <source>WengoPhone - Importing contacts and IM accounts</source>
-        <translation>WengoPhone - コンタクトとIMアカウントのインポート</translation>
+        <translation type="obsolete">WengoPhone - コンタクトとIMアカウントのインポート</translation>
     </message>
     <message>
-        <source>Would you like to import contacts and IM accounts previously created in the default profile to the profile named %1?</source>
+        <source>A problem occured while loading your profile.
+The last backuped profile has been loaded: 
+you may have lost last changes made</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Your profile could not be loaded.
+Choose another profile or create a new one.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2590,7 +2641,7 @@ This will send </source>
     <name>QtWebDirectory</name>
     <message>
         <source>WengoPhone - Directory</source>
-        <translation>WengoPhone - ディレクトリ</translation>
+        <translation type="obsolete">WengoPhone - ディレクトリ</translation>
     </message>
 </context>
 <context>
@@ -2697,108 +2748,108 @@ This will send </source>
     <name>RenameGroupDialog</name>
     <message>
         <source>Cancel</source>
-        <translation>キャンセル</translation>
+        <translation type="unfinished">キャンセル</translation>
     </message>
     <message>
         <source>OK</source>
-        <translation>OK</translation>
+        <translation type="unfinished">OK</translation>
     </message>
     <message>
         <source>WengoPhone - Rename Contact Group</source>
-        <translation>WengoPhone - コンタクトグループの名称変更</translation>
+        <translation type="unfinished">WengoPhone - コンタクトグループの名称変更</translation>
     </message>
     <message>
         <source>Enter the new group name:</source>
-        <translation>新規グループ名：</translation>
+        <translation type="unfinished">新規グループ名：</translation>
     </message>
 </context>
 <context>
     <name>SimpleIMAccountManager</name>
     <message>
         <source>Password:</source>
-        <translation>パスワード：</translation>
+        <translation type="unfinished">パスワード：</translation>
     </message>
     <message>
         <source>Login:</source>
-        <translation>ログイン：</translation>
+        <translation type="unfinished">ログイン：</translation>
     </message>
     <message>
         <source>AIM/ICQ</source>
-        <translation>AIM/ICQ</translation>
+        <translation type="unfinished">AIM/ICQ</translation>
     </message>
     <message>
         <source>Yahoo!</source>
-        <translation>Yahoo!</translation>
+        <translation type="unfinished">Yahoo!</translation>
     </message>
     <message>
         <source>Wengo</source>
-        <translation>Wengo</translation>
+        <translation type="unfinished">Wengo</translation>
     </message>
     <message>
         <source>MSN</source>
-        <translation>MSN</translation>
+        <translation type="unfinished">MSN</translation>
     </message>
     <message>
         <source>Jabber</source>
-        <translation>Jabber</translation>
+        <translation type="unfinished">Jabber</translation>
     </message>
     <message>
         <source>GoogleTalk</source>
-        <translation>GoogleTalk</translation>
+        <translation type="unfinished">GoogleTalk</translation>
     </message>
 </context>
 <context>
     <name>SimpleIMContactManager</name>
     <message>
         <source>Update your profile</source>
-        <translation>プロフィールを更新する</translation>
+        <translation type="unfinished">プロフィールを更新する</translation>
     </message>
     <message>
         <source>Yahoo! ID:</source>
-        <translation>Yahoo! ID:</translation>
+        <translation type="unfinished">Yahoo! ID:</translation>
     </message>
     <message>
         <source>AIM/ICQ ID:</source>
-        <translation>AIM/ICQ ID:</translation>
+        <translation type="unfinished">AIM/ICQ ID:</translation>
     </message>
     <message>
         <source>MSN ID:</source>
-        <translation>MSN ID:</translation>
+        <translation type="unfinished">MSN ID:</translation>
     </message>
     <message>
         <source>Wengo ID:</source>
-        <translation>Wengo ID:</translation>
+        <translation type="unfinished">Wengo ID:</translation>
     </message>
     <message>
         <source>Jabber/GoogleTalk ID:</source>
-        <translation>Jabber/GoogleTalk ID:</translation>
+        <translation type="unfinished">Jabber/GoogleTalk ID:</translation>
     </message>
 </context>
 <context>
     <name>SmsWindow</name>
     <message>
         <source>Send</source>
-        <translation>送信</translation>
+        <translation type="unfinished">送信</translation>
     </message>
     <message>
         <source>WengoPhone - SMS</source>
-        <translation>WengoPhone - SMS</translation>
+        <translation type="unfinished">WengoPhone - SMS</translation>
     </message>
     <message>
         <source>Click here to add a phone number</source>
-        <translation>ここをクリックして電話番号を追加する</translation>
+        <translation type="unfinished">ここをクリックして電話番号を追加する</translation>
     </message>
     <message>
         <source>0 /160</source>
-        <translation>0 /160</translation>
+        <translation type="unfinished">0 /160</translation>
     </message>
     <message>
         <source>Enter your signature here</source>
-        <translation>ここに署名を入力してください</translation>
+        <translation type="unfinished">ここに署名を入力してください</translation>
     </message>
     <message>
         <source>Signature:</source>
-        <translation>署名：</translation>
+        <translation type="unfinished">署名：</translation>
     </message>
     <message>
         <source>Phone number:</source>
@@ -2807,6 +2858,10 @@ This will send </source>
     <message>
         <source>Enter the phone number here</source>
         <translation type="obsolete">ここに電話番号を入力してください</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Phone number(s):</source>
@@ -2821,11 +2876,11 @@ This will send </source>
     <name>SoftUpdateWindow</name>
     <message>
         <source>Cancel</source>
-        <translation>キャンセル</translation>
+        <translation type="unfinished">キャンセル</translation>
     </message>
     <message>
         <source>WengoPhone - Downloading update</source>
-        <translation>WengoPhone - アップデートのダウンロード中</translation>
+        <translation type="unfinished">WengoPhone - アップデートのダウンロード中</translation>
     </message>
     <message>
         <source>Downloading WengoPhone update...Version:%1URL:%2File Size:%3 (MB)Speed:%4 
@@ -2846,58 +2901,58 @@ Speed:<byte value="x9"/>%4 (kB/s)</source>
     <name>StatusBarWidget</name>
     <message>
         <source>Audio Configuration Error</source>
-        <translation>オーディオ設定エラー</translation>
+        <translation type="unfinished">オーディオ設定エラー</translation>
     </message>
     <message>
         <source>Not Connected</source>
-        <translation>未接続</translation>
+        <translation type="unfinished">未接続</translation>
     </message>
 </context>
 <context>
     <name>SubscribeWengo1</name>
     <message>
         <source>Password:</source>
-        <translation>パスワード：</translation>
+        <translation type="obsolete">パスワード：</translation>
     </message>
     <message>
         <source>Email:</source>
-        <translation>Eメール：</translation>
+        <translation type="obsolete">Eメール：</translation>
     </message>
     <message>
         <source>WengoPhone - Wengo Account Creation (1/2)</source>
-        <translation>WengoPhone - Wengoアカウント作成（1/2）</translation>
+        <translation type="obsolete">WengoPhone - Wengoアカウント作成（1/2）</translation>
     </message>
     <message>
         <source>* &lt;i&gt;Required fields&lt;/i&gt;</source>
-        <translation>* &lt;i&gt;必須項目&lt;/i&gt;</translation>
+        <translation type="obsolete">* &lt;i&gt;必須項目&lt;/i&gt;</translation>
     </message>
     <message>
         <source>Subscribe</source>
-        <translation>同意する</translation>
+        <translation type="obsolete">同意する</translation>
     </message>
     <message>
         <source>Error message label</source>
-        <translation>エラーメッセージラベル</translation>
+        <translation type="obsolete">エラーメッセージラベル</translation>
     </message>
     <message>
         <source>Nickname:</source>
-        <translation>ニックネーム：</translation>
+        <translation type="obsolete">ニックネーム：</translation>
     </message>
     <message>
         <source>*</source>
-        <translation>*</translation>
+        <translation type="obsolete">*</translation>
     </message>
     <message>
         <source>Confirm password:</source>
-        <translation>パスワード確認</translation>
+        <translation type="obsolete">パスワード確認</translation>
     </message>
     <message>
         <source>&lt;i&gt;Please check your email and confirm the above details within 48 hours&lt;/i&gt;</source>
-        <translation>&lt;i&gt;48時間以内にメールを確認し、上記の詳細を確認してください&lt;/i&gt;</translation>
+        <translation type="obsolete">&lt;i&gt;48時間以内にメールを確認し、上記の詳細を確認してください&lt;/i&gt;</translation>
     </message>
     <message>
         <source>I read and accept the Terms of Service</source>
-        <translation>私は本サービスの規約を理解し、同意します</translation>
+        <translation type="obsolete">私は本サービスの規約を理解し、同意します</translation>
     </message>
     <message>
         <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Account Creation&lt;/span&gt;&lt;br /&gt;&lt;br 
@@ -2905,51 +2960,42 @@ Speed:<byte value="x9"/>%4 (kB/s)</source>
         <translation type="obsolete">&lt;span style=&quot;font-size:18pt;&quot;&gt;アカウントの作成&lt;/span&gt;&lt;br /&gt;&lt;br 
 /&gt;&lt;span&gt;以下の項目を記入してください&lt;/span&gt;</translation>
     </message>
-    <message>
-        <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Account Creation&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;&lt;span&gt;Please fill in the details below&lt;/span&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>SubscribeWengo2</name>
     <message>
         <source>Password:</source>
-        <translation>パスワード：</translation>
+        <translation type="obsolete">パスワード：</translation>
     </message>
     <message>
         <source>Email:</source>
-        <translation>Eメール：</translation>
+        <translation type="obsolete">Eメール：</translation>
     </message>
     <message>
         <source>Nickname:</source>
-        <translation>ニックネーム：</translation>
+        <translation type="obsolete">ニックネーム：</translation>
     </message>
     <message>
         <source>WengoPhone - Wengo Account Creation (2/2)</source>
-        <translation>WengoPhone - Wengoアカウント作成(2/2)</translation>
+        <translation type="obsolete">WengoPhone - Wengoアカウント作成(2/2)</translation>
     </message>
     <message>
         <source>Please note your details needed to access your account:</source>
-        <translation>あなたのアカウントに接続するために必要な詳細をメモしてください。</translation>
+        <translation type="obsolete">あなたのアカウントに接続するために必要な詳細をメモしてください。</translation>
     </message>
     <message>
         <source>Finish</source>
-        <translation>完了</translation>
+        <translation type="obsolete">完了</translation>
     </message>
     <message>
         <source>Add your IM Accounts to your Profile</source>
-        <translation>プロフィールにIMアカウントを追加する</translation>
+        <translation type="obsolete">プロフィールにIMアカウントを追加する</translation>
     </message>
     <message>
         <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Contratulations!&lt;/span&gt;&lt;br /&gt;&lt;br 
 /&gt;&lt;span&gt;Your account has been successfully created&lt;/span&gt;</source>
         <translation type="obsolete">&lt;span style=&quot;font-size:18pt;&quot;&gt;おめでとうございます！&lt;/span&gt;&lt;br /&gt;&lt;br 
 /&gt;&lt;span&gt;アカウントの作成に成功しました&lt;/span&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Contratulations!&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;&lt;span&gt;Your account has been successfully created&lt;/span&gt;
-</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2975,98 +3021,102 @@ Speed:<byte value="x9"/>%4 (kB/s)</source>
     <name>UserFrame</name>
     <message>
         <source>Form</source>
-        <translation>フォーム</translation>
+        <translation type="unfinished">フォーム</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>VideoSettings</name>
     <message>
         <source>Normal</source>
-        <translation>普通</translation>
+        <translation type="unfinished">普通</translation>
     </message>
     <message>
         <source>Good</source>
-        <translation>良い</translation>
+        <translation type="unfinished">良い</translation>
     </message>
     <message>
         <source>Very good</source>
-        <translation>非常に良い</translation>
+        <translation type="unfinished">非常に良い</translation>
     </message>
     <message>
         <source>Excellent</source>
-        <translation>素晴らしい</translation>
+        <translation type="unfinished">素晴らしい</translation>
     </message>
     <message>
         <source>Video Settings</source>
-        <translation>ビデオセッティング</translation>
+        <translation type="unfinished">ビデオセッティング</translation>
     </message>
     <message>
         <source>Enable video</source>
-        <translation>ビデオを有効にする</translation>
+        <translation type="unfinished">ビデオを有効にする</translation>
     </message>
     <message>
         <source>Webcam Selection</source>
-        <translation>ウェブカム選択</translation>
+        <translation type="unfinished">ウェブカム選択</translation>
     </message>
     <message>
         <source>Webcam device:</source>
-        <translation>Webcamデバイス：</translation>
+        <translation type="unfinished">Webcamデバイス：</translation>
     </message>
     <message>
         <source>Webcam Preview</source>
-        <translation>プレビュー</translation>
+        <translation type="unfinished">プレビュー</translation>
     </message>
     <message>
         <source>Connection Type</source>
-        <translation>接続タイプ</translation>
+        <translation type="unfinished">接続タイプ</translation>
     </message>
     <message>
         <source>Video quality</source>
-        <translation>品質</translation>
+        <translation type="unfinished">品質</translation>
     </message>
     <message>
         <source>Down (kbit/s)</source>
-        <translation>Down (kbit/s)</translation>
+        <translation type="unfinished">Down (kbit/s)</translation>
     </message>
     <message>
         <source>Up (kbit/s)</source>
-        <translation>Up (kbit/s)</translation>
+        <translation type="unfinished">Up (kbit/s)</translation>
     </message>
     <message>
         <source>0 to 512</source>
-        <translation>0 to 512</translation>
+        <translation type="unfinished">0 to 512</translation>
     </message>
     <message>
         <source>0 to 128</source>
-        <translation>0 to 128</translation>
+        <translation type="unfinished">0 to 128</translation>
     </message>
     <message>
         <source>512 to 2048</source>
-        <translation>512 to 2048</translation>
+        <translation type="unfinished">512 to 2048</translation>
     </message>
     <message>
         <source>128 to 256</source>
-        <translation>128 to 256</translation>
+        <translation type="unfinished">128 to 256</translation>
     </message>
     <message>
         <source>2048+</source>
-        <translation>2048+</translation>
+        <translation type="unfinished">2048+</translation>
     </message>
     <message>
         <source>256+</source>
-        <translation>256+</translation>
+        <translation type="unfinished">256+</translation>
     </message>
     <message>
         <source>8192+</source>
-        <translation>8192+</translation>
+        <translation type="unfinished">8192+</translation>
     </message>
     <message>
         <source>1024+</source>
-        <translation>1024+</translation>
+        <translation type="unfinished">1024+</translation>
     </message>
     <message>
         <source>Video quality depends on your Internet connection bandwidth</source>
-        <translation>ビデオの品質はインターネット接続帯域に依存します</translation>
+        <translation type="unfinished">ビデオの品質はインターネット接続帯域に依存します</translation>
     </message>
     <message>
         <source>&lt;b&gt;Warning!&lt;/b&gt; When used for the first time we recommend that you 
@@ -3079,7 +3129,7 @@ http://test.lvcm.comであなたのインターネット接続帯域を測定で
     </message>
     <message>
         <source>Make a test video call</source>
-        <translation>ビデオコールのテスト</translation>
+        <translation type="unfinished">ビデオコールのテスト</translation>
     </message>
     <message>
         <source>&lt;b&gt;Warning!&lt;/b&gt; When used for the first time we recommend that you select&lt;br&gt;the normal video quality mode, then you can try different modes to find out&lt;br&gt;the most suitable one&lt;br&gt;&lt;br&gt;&lt;b&gt;Tips&lt;/b&gt;: Go to http://test.lvcm.com to determine your Internet connection bandwidth</source>
@@ -3090,318 +3140,326 @@ http://test.lvcm.comであなたのインターネット接続帯域を測定で
     <name>VideoWindow</name>
     <message>
         <source>WengoPhone - Video</source>
-        <translation>WengoPhone - ビデオ</translation>
+        <translation type="unfinished">WengoPhone - ビデオ</translation>
     </message>
 </context>
 <context>
     <name>WengoConfigDialog</name>
     <message>
         <source>Cancel</source>
-        <translation>キャンセル</translation>
+        <translation type="unfinished">キャンセル</translation>
     </message>
     <message>
         <source>Save</source>
-        <translation>保存</translation>
+        <translation type="unfinished">保存</translation>
     </message>
     <message>
         <source>Language</source>
-        <translation>言語</translation>
+        <translation type="unfinished">言語</translation>
     </message>
     <message>
         <source>General</source>
-        <translation>全般</translation>
+        <translation type="unfinished">全般</translation>
     </message>
     <message>
         <source>Accounts</source>
-        <translation>アカウント</translation>
+        <translation type="unfinished">アカウント</translation>
     </message>
     <message>
         <source>Advanced</source>
-        <translation>詳細</translation>
+        <translation type="unfinished">詳細</translation>
     </message>
     <message>
         <source>Audio</source>
-        <translation>オーディオ</translation>
+        <translation type="unfinished">オーディオ</translation>
     </message>
     <message>
         <source>Call Forward</source>
-        <translation>着信転送</translation>
+        <translation type="unfinished">着信転送</translation>
     </message>
     <message>
         <source>Notifications &amp; Sounds</source>
-        <translation>通知サウンド(&amp;S)</translation>
+        <translation type="unfinished">通知サウンド(&amp;S)</translation>
     </message>
     <message>
         <source>Video</source>
-        <translation>ビデオ</translation>
+        <translation type="unfinished">ビデオ</translation>
     </message>
     <message>
         <source>WengoPhone - Configuration</source>
-        <translation>WengoPhone - 設定</translation>
+        <translation type="unfinished">WengoPhone - 設定</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>WengoPhoneWindow</name>
     <message>
         <source>&amp;Accept</source>
-        <translation>承認（&amp;A）</translation>
+        <translation type="unfinished">承認（&amp;A）</translation>
     </message>
     <message>
         <source>&amp;Wengo</source>
-        <translation>Wengo(&amp;W)</translation>
+        <translation type="unfinished">Wengo(&amp;W)</translation>
     </message>
     <message>
         <source>&amp;Tools</source>
-        <translation>ツール(&amp;T)</translation>
+        <translation type="unfinished">ツール(&amp;T)</translation>
     </message>
     <message>
         <source>&amp;Help</source>
-        <translation>ヘルプ(&amp;H)</translation>
+        <translation type="unfinished">ヘルプ(&amp;H)</translation>
     </message>
     <message>
         <source>&amp;Actions</source>
-        <translation>アクション(&amp;A)</translation>
+        <translation type="unfinished">アクション(&amp;A)</translation>
     </message>
     <message>
         <source>WengoPhone</source>
-        <translation>WengoPhone</translation>
+        <translation type="unfinished">WengoPhone</translation>
     </message>
     <message>
         <source>Contacts</source>
-        <translation>コンタクト</translation>
+        <translation type="unfinished">コンタクト</translation>
     </message>
     <message>
         <source>History</source>
-        <translation>履歴</translation>
+        <translation type="unfinished">履歴</translation>
     </message>
     <message>
         <source>Dialpad</source>
-        <translation>ダイヤルパッド</translation>
+        <translation type="unfinished">ダイヤルパッド</translation>
     </message>
     <message>
         <source>&amp;Contacts</source>
-        <translation>コンタクト(&amp;C)</translation>
+        <translation type="unfinished">コンタクト(&amp;C)</translation>
     </message>
     <message>
         <source>Clear &amp;History</source>
-        <translation>履歴のクリア(&amp;H)</translation>
+        <translation type="unfinished">履歴のクリア(&amp;H)</translation>
     </message>
     <message>
         <source>Type Here</source>
-        <translation>ここに入力</translation>
+        <translation type="unfinished">ここに入力</translation>
     </message>
     <message>
         <source>ToolBar</source>
-        <translation>ツールバー</translation>
+        <translation type="unfinished">ツールバー</translation>
     </message>
     <message>
         <source>View My &amp;Wengo Account</source>
-        <translation>My Wengoアカウントを見る(&amp;W)</translation>
+        <translation type="unfinished">My Wengoアカウントを見る(&amp;W)</translation>
     </message>
     <message>
         <source>&amp;Close</source>
-        <translation>閉じる(&amp;C)</translation>
+        <translation type="unfinished">閉じる(&amp;C)</translation>
     </message>
     <message>
         <source>Wengo &amp;Forum</source>
-        <translation>Wengoフォーラム(&amp;F)</translation>
+        <translation type="unfinished">Wengoフォーラム(&amp;F)</translation>
     </message>
     <message>
         <source>&amp;About</source>
-        <translation>Wengoについて(&amp;A)</translation>
+        <translation type="unfinished">Wengoについて(&amp;A)</translation>
     </message>
     <message>
         <source>Add &amp;Contact</source>
-        <translation>コンタクトの追加(&amp;C)</translation>
+        <translation type="unfinished">コンタクトの追加(&amp;C)</translation>
     </message>
     <message>
         <source>&amp;Configuration</source>
-        <translation>設定(&amp;C)</translation>
+        <translation type="unfinished">設定(&amp;C)</translation>
     </message>
     <message>
         <source>Send a Short Text &amp;Message (SMS)</source>
-        <translation>ショートテキストメッセージ(SMS)を送信する(&amp;M)</translation>
+        <translation type="unfinished">ショートテキストメッセージ(SMS)を送信する(&amp;M)</translation>
     </message>
     <message>
         <source>Edit My &amp;Profile</source>
-        <translation>プロフィールの編集(&amp;P)</translation>
+        <translation type="unfinished">プロフィールの編集(&amp;P)</translation>
     </message>
     <message>
         <source>Create &amp;Conference Call</source>
-        <translation>会議コールの作成(&amp;C)</translation>
+        <translation type="unfinished">会議コールの作成(&amp;C)</translation>
     </message>
     <message>
         <source>Wengo &amp;Wiki/FAQ</source>
-        <translation>Wengo Wiki/FAQ(&amp;W)</translation>
+        <translation type="unfinished">Wengo Wiki/FAQ(&amp;W)</translation>
     </message>
     <message>
         <source>Learn more about &amp;Wengo Services</source>
-        <translation>Wengoサービスの詳細(&amp;W)</translation>
+        <translation type="unfinished">Wengoサービスの詳細(&amp;W)</translation>
     </message>
     <message>
         <source>Show/Hide Unavailable &amp;Contacts</source>
-        <translation>活動していないコンタクトの表示/非表示</translation>
+        <translation type="unfinished">活動していないコンタクトの表示/非表示</translation>
     </message>
     <message>
         <source>&amp;Instant Messaging Accounts</source>
-        <translation>インスタントメッセージアカウント(&amp;I)</translation>
+        <translation type="unfinished">インスタントメッセージアカウント(&amp;I)</translation>
     </message>
     <message>
         <source>Configure My Instant Messaging Accounts</source>
-        <translation>インスタントメッセージアカウントの設定</translation>
+        <translation type="unfinished">インスタントメッセージアカウントの設定</translation>
     </message>
     <message>
         <source>&amp;Chat Sessions</source>
-        <translation>チャットセッション(&amp;C)</translation>
+        <translation type="unfinished">チャットセッション(&amp;C)</translation>
     </message>
     <message>
         <source>&amp;All</source>
-        <translation>全て(&amp;A)</translation>
+        <translation type="unfinished">全て(&amp;A)</translation>
     </message>
     <message>
         <source>&amp;Search for Wengo Users</source>
-        <translation>Wengoユーザの検索(&amp;S)</translation>
+        <translation type="unfinished">Wengoユーザの検索(&amp;S)</translation>
     </message>
     <message>
         <source>&amp;HangUp</source>
-        <translation>切断(&amp;H)</translation>
+        <translation type="unfinished">切断(&amp;H)</translation>
     </message>
     <message>
         <source>&amp;Hold/Resume</source>
-        <translation>保留/再開(&amp;H)</translation>
+        <translation type="unfinished">保留/再開(&amp;H)</translation>
     </message>
     <message>
         <source>Show/Hide &amp;Groups</source>
-        <translation>グループの表示/非表示(&amp;G)</translation>
+        <translation type="unfinished">グループの表示/非表示(&amp;G)</translation>
     </message>
     <message>
         <source>Change &amp;Profile...</source>
-        <translation>プロフィールの変更(&amp;P)</translation>
+        <translation type="unfinished">プロフィールの変更(&amp;P)</translation>
     </message>
     <message>
         <source>Log &amp;Off/Log In</source>
-        <translation>ログオフ/ログイン(&amp;O)</translation>
+        <translation type="unfinished">ログオフ/ログイン(&amp;O)</translation>
     </message>
     <message>
         <source>Open &amp;Chat Window</source>
-        <translation>チャットウィンドウを開く(&amp;C)</translation>
+        <translation type="unfinished">チャットウィンドウを開く(&amp;C)</translation>
     </message>
     <message>
         <source>&amp;Outgoing Calls</source>
-        <translation>発信中のコール(&amp;O)</translation>
+        <translation type="unfinished">発信中のコール(&amp;O)</translation>
     </message>
     <message>
         <source>&amp;Incoming Calls</source>
-        <translation>応答中のコール(&amp;I)</translation>
+        <translation type="unfinished">応答中のコール(&amp;I)</translation>
     </message>
     <message>
         <source>&amp;Missed Calls</source>
-        <translation>失敗したコール(&amp;M)</translation>
+        <translation type="unfinished">失敗したコール(&amp;M)</translation>
     </message>
     <message>
         <source>Enable/Disable &amp;Video Calls</source>
-        <translation>ビデオコールを有効/無効(&amp;V)</translation>
+        <translation type="unfinished">ビデオコールを有効/無効(&amp;V)</translation>
     </message>
     <message>
         <source>Show &amp;Volume Panel</source>
-        <translation>ボリュームパネルの表示(&amp;V)</translation>
+        <translation type="unfinished">ボリュームパネルの表示(&amp;V)</translation>
     </message>
     <message>
         <source>Short Text &amp;Messages (SMS)</source>
-        <translation>ショートテキストメッセージ(SMS)</translation>
+        <translation type="unfinished">ショートテキストメッセージ(SMS)</translation>
     </message>
     <message>
         <source>Show File Transfer</source>
-        <translation>ファイル転送の表示</translation>
+        <translation type="unfinished">ファイル転送の表示</translation>
     </message>
     <message>
         <source>Rejected Calls</source>
-        <translation>コールの削除</translation>
+        <translation type="unfinished">コールの削除</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>WengoPhoneWindowConfigPanel</name>
     <message>
         <source>Audio Settings</source>
-        <translation>オーディオ設定</translation>
+        <translation type="unfinished">オーディオ設定</translation>
     </message>
     <message>
         <source>Video Settings</source>
-        <translation>ビデオセッティング</translation>
+        <translation type="unfinished">ビデオセッティング</translation>
     </message>
     <message>
         <source>Enable Wenbox usage</source>
-        <translation>Wenboxを有効にする</translation>
+        <translation type="unfinished">Wenboxを有効にする</translation>
     </message>
     <message>
         <source>Wenbox USB</source>
-        <translation>Wenbox USB</translation>
+        <translation type="unfinished">Wenbox USB</translation>
     </message>
     <message>
         <source>Enable half-duplex mode</source>
-        <translation>半二重モードを有効にする</translation>
+        <translation type="unfinished">半二重モードを有効にする</translation>
     </message>
     <message>
         <source>Loud Speakers</source>
-        <translation>大きなスピーカー</translation>
+        <translation type="unfinished">大きなスピーカー</translation>
     </message>
 </context>
 <context>
     <name>Wizard</name>
     <message>
         <source>Cancel</source>
-        <translation>キャンセル</translation>
+        <translation type="obsolete">キャンセル</translation>
     </message>
     <message>
         <source>Finish</source>
-        <translation>完了</translation>
+        <translation type="obsolete">完了</translation>
     </message>
     <message>
         <source>Next &gt;</source>
-        <translation>次へ &gt;</translation>
+        <translation type="obsolete">次へ &gt;</translation>
     </message>
     <message>
         <source>&lt; Back</source>
-        <translation>&lt; 戻る</translation>
+        <translation type="obsolete">&lt; 戻る</translation>
     </message>
     <message>
         <source>Simple Wizard - Step %1 of %2</source>
-        <translation>簡易設定 - ステップ %1 / %2</translation>
+        <translation type="obsolete">簡易設定 - ステップ %1 / %2</translation>
     </message>
 </context>
 <context>
     <name>WsDirectory</name>
     <message>
         <source>All</source>
-        <translation>全て</translation>
+        <translation type="unfinished">全て</translation>
     </message>
     <message>
         <source>WengoPhone - Search for Wengo contacts</source>
-        <translation>WengoPhone - Wengoコンタクトの検索</translation>
+        <translation type="unfinished">WengoPhone - Wengoコンタクトの検索</translation>
     </message>
     <message>
         <source>Nickname</source>
-        <translation>ニックネーム</translation>
+        <translation type="unfinished">ニックネーム</translation>
     </message>
     <message>
         <source>First Name</source>
-        <translation>姓</translation>
+        <translation type="unfinished">姓</translation>
     </message>
     <message>
         <source>Last Name</source>
-        <translation>名</translation>
+        <translation type="unfinished">名</translation>
     </message>
     <message>
         <source>City</source>
-        <translation>都市</translation>
+        <translation type="unfinished">都市</translation>
     </message>
     <message>
         <source>Country</source>
-        <translation>国</translation>
+        <translation type="unfinished">国</translation>
     </message>
     <message>
         <source>Search</source>
-        <translation>検索</translation>
+        <translation type="unfinished">検索</translation>
     </message>
     <message>
         <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Search for Wengo contacts&lt;/span&gt;&lt;br /&gt;&lt;br 
@@ -3412,7 +3470,7 @@ button&lt;/span&gt;</source>
     </message>
     <message>
         <source>When entering a combined search, please separate words with a blank.</source>
-        <translation>複数語検索を行う場合は単語をスペースで区切ってください。</translation>
+        <translation type="unfinished">複数語検索を行う場合は単語をスペースで区切ってください。</translation>
     </message>
     <message>
         <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Search for Wengo contacts&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;&lt;span&gt;Enter name, nickname, city or email and click the search button&lt;/span&gt;</source>
@@ -3423,23 +3481,19 @@ button&lt;/span&gt;</source>
     <name>WsDirectoryContact</name>
     <message>
         <source>City:</source>
-        <translation>都市：</translation>
+        <translation type="unfinished">都市：</translation>
     </message>
     <message>
         <source>Nickname:</source>
-        <translation>ニックネーム：</translation>
+        <translation type="unfinished">ニックネーム：</translation>
     </message>
     <message>
         <source>FirstName LastName</source>
-        <translation>名，姓</translation>
+        <translation type="unfinished">名，姓</translation>
     </message>
     <message>
         <source>Wengo number:</source>
-        <translation>Wengoナンバー：</translation>
-    </message>
-    <message>
-        <source>SIP address:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Wengoナンバー：</translation>
     </message>
     <message>
         <source>Country:</source>
@@ -3457,13 +3511,13 @@ button&lt;/span&gt;</source>
         <source>Add</source>
         <translation type="unfinished">追加</translation>
     </message>
+    <message>
+        <source>SIP address:</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>YahooSettings</name>
-    <message>
-        <source>Yahoo! Settings</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message>
         <source>Password:</source>
         <translation type="unfinished">パスワード：</translation>
@@ -3475,6 +3529,14 @@ button&lt;/span&gt;</source>
     <message>
         <source>&lt;u&gt;Advanced Options&lt;/u&gt;</source>
         <translation type="unfinished">&lt;u&gt;詳細なオプション&lt;/u&gt;</translation>
+    </message>
+    <message>
+        <source></source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Yahoo! Settings</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Use Yahoo! Japan server</source>
@@ -3490,93 +3552,18 @@ button&lt;/span&gt;</source>
     </message>
 </context>
 <context>
-    <name>aboutWindow</name>
-    <message>
-        <source>Dialog</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>help</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>config...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>update</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>GroupBox</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; color:#000000;&quot;&gt;This is a Qt demo application for a skin system.&lt;/span&gt;&lt;/p&gt;&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#000000;&quot;&gt;&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#000000;&quot;&gt;The skin system works as a Qt style plugin through the QStyle class.&lt;/p&gt;&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#000000;&quot;&gt;&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; color:#000000;&quot;&gt;This example works using Qt version 4.0.0 &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>mainWindow</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished">フォーム</translation>
-    </message>
-    <message>
-        <source>Tab 1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>qwepowefklwenmlkwefweklfnwelfknwlfknweklfnwelfknwefwefopjiwelpkwmjvlkwneklwemflkwemdfklwemflwekmfwkled;qweef</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>wefwefweklfl;m,we;lf,;welcv,wel;wekfm;kf;pwecmlwkewl;efmwklegfhweklnqwekldhjl;dmjqwlekdfjqweklf</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>New Item</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>wef[pwoejfweopfjero&apos;wepofjkwepfm,weopfkweopfmkdfokweopf,wepofweopfkweopfkweopfkweopfkwef</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Tab 2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Exit</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Update</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">フォーム</translation>
     </message>
     <message>
         <source>Search</source>
-        <translation type="unfinished">検索</translation>
-    </message>
-    <message>
-        <source>Previous Track</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Next Track</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">検索</translation>
     </message>
     <message>
         <source>Pause</source>
-        <translation type="unfinished">一時停止</translation>
-    </message>
-    <message>
-        <source>Stop</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Play</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">一時停止</translation>
     </message>
 </context>
 </TS>
