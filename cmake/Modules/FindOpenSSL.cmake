@@ -24,8 +24,6 @@ else (OPENSSL_LIBRARIES AND OPENSSL_INCLUDE_DIRS)
 
   pkgconfig(openssl _OpenSSLIncDir _OpenSSLLinkDir _OpenSSLLinkFlags _OpenSSLCflags)
 
-  set(OPENSSL_DEFINITIONS ${_OpenSSLCflags})
-
   find_path(OPENSSL_INCLUDE_DIR
     NAMES
       openssl/ssl.h
