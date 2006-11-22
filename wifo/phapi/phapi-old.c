@@ -4437,6 +4437,8 @@ void ph_subscription_progress(eXosip_event_t *je)
 		{
 			phcb->subscriptionProgress (je->sid, &info);
 		}
+
+		owplFireSubscriptionEvent(je->sid, OWPL_SUBSCRIPTION_ACTIVE, SUBSCRIPTION_CAUSE_NORMAL, je->remote_uri);
 	}
 	else if (je->type == EXOSIP_SUBSCRIPTION_REQUESTFAILURE)
 	{
@@ -4451,6 +4453,8 @@ void ph_subscription_progress(eXosip_event_t *je)
 		{
 			phcb->subscriptionProgress (je->sid, &info);
 		}
+
+		owplFireSubscriptionEvent(je->sid, OWPL_SUBSCRIPTION_FAILED, SUBSCRIPTION_CAUSE_UNKNOWN, je->remote_uri);
 	}
 }
 

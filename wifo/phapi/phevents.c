@@ -193,6 +193,22 @@ owplFireErrorEvent(OWPL_ERROR_EVENT event,
 	return owplFireEvent(EVENT_CATEGORY_ERROR, &eInfo);
 }
 
+OWPL_RESULT
+owplFireSubscriptionEvent(OWPL_SUB hSub,
+						  OWPL_SUBSCRIPTION_STATE state,
+						  OWPL_SUBSCRIPTION_CAUSE cause,
+						  const char* szRemoteIdentity)
+{
+	OWPL_SUBSTATUS_INFO sInfo;
+	memset(&sInfo, 0, sizeof(OWPL_SUBSTATUS_INFO));
+	sInfo.nSize = sizeof(OWPL_SUBSTATUS_INFO);
+	sInfo.hSub = hSub;
+	sInfo.state = state;
+	sInfo.cause = cause;
+	sInfo.szRemoteIdentity = szRemoteIdentity;
+	return owplFireEvent(EVENT_CATEGORY_SUB_STATUS, &sInfo);
+}
+
 /************************************************/
 /*     PLUGIN handling routines                 */
 /************************************************/

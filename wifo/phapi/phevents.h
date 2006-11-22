@@ -408,6 +408,7 @@ typedef struct
                                              state of the subscription. */
     OWPL_SUBSCRIPTION_CAUSE cause;      /**< Enum cause for the state change in this
                                              event. */
+	const char* szRemoteIdentity;
 } OWPL_SUBSTATUS_INFO;
 
 /**
@@ -497,6 +498,19 @@ owplFireLineEvent(OWPL_LINE hLine,
 OWPL_RESULT
 owplFireErrorEvent(OWPL_ERROR_EVENT event,
 						void * Data);
+/**
+ * Creates a subscription state structure and sends it to all subscribers
+ *
+ * @param	hSub	a subscription handle
+ * @param	state	the subscription state
+ * @param	cause	the cause of this event
+ * @return	an OWPL_RESULT...
+ */
+OWPL_RESULT
+owplFireSubscriptionEvent(OWPL_SUB hSub,
+						  OWPL_SUBSCRIPTION_STATE state,
+						  OWPL_SUBSCRIPTION_CAUSE cause,
+						  const char* szRemoteIdentity);
 
 
 //typedef struct owpl_plugin;
