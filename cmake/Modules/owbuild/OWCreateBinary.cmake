@@ -1,5 +1,5 @@
 # - OW_CREATE_BINARY()
-# Creates a binary (static/shared/plugin library or a executable) using the current project
+# Internal function, creates a binary (static/shared/plugin library or a executable) using the current project
 #
 # Copyright (C) 2006  Wengo
 #

@@ -1,6 +1,6 @@
 project(wengophone)
 
-# Global needed variables
+# Global variables
 set(APPLICATION_NAME WengoPhone)
 set(APPLICATION_VERSION "2.0")
 string(TOLOWER ${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE} BUILD_DIR)
@@ -32,6 +32,9 @@ macro_ensure_out_of_source_build("WengoPhone requires an out of source build. Pl
 
 # Get svn revision
 ow_get_subversion_revision(SVN_REVISION)
+# Bugfix with svn revision number that can integrate a : and
+# this does not work under Windows for the installer name, replace it by #
+string(REPLACE ":" "#" SVN_REVISION ${SVN_REVISION})
 
 # Global requirements
 set(QT_MIN_VERSION 4.1.2)

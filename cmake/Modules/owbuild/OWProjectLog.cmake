@@ -1,5 +1,5 @@
 # - OW_PROJECT_LOG()
-# Shows debug informations about the current project
+# Internal function, shows debug informations about the current project
 #
 # Copyright (C) 2006  Wengo
 #

@@ -2,6 +2,7 @@
 # Gets the current subversion revision number
 #
 # Copyright (C) 2006  Andreas Schneider <mail@cynapses.org>
+# Copyright (C) 2006  Wengo
 #
 # Redistribution and use is allowed according to the terms of the BSD license.
 # For details see the accompanying COPYING file.
@@ -24,29 +25,29 @@ macro (OW_GET_SUBVERSION_REVISION revision)
 	)
 
 	if (SVN_EXECUTEABLE AND SVN_DOT_DIR)
-		message(STATUS "Generating subversion revision")
 		execute_process(
 			COMMAND
 				svnversion -n ${CMAKE_SOURCE_DIR}/cmake
 			RESULT_VARIABLE
-				_SVN_REVISION_RESULT_VARIABLE
+				SVN_REVISION_RESULT_VARIABLE
 			OUTPUT_VARIABLE
-				_SVN_REVISION_OUTPUT_VARIABLE
+				SVN_REVISION_OUTPUT_VARIABLE
 		)
 
-		if (_SVN_REVISION_RESULT_VARIABLE EQUAL 0)
-			set(_SVN_REVISION
-				${_SVN_REVISION_OUTPUT_VARIABLE}
+		if (SVN_REVISION_RESULT_VARIABLE EQUAL 0)
+			set(SVN_REVISION
+				${SVN_REVISION_OUTPUT_VARIABLE}
 			)
-		else (_SVN_REVISION_RESULT_VARIABLE EQUAL 0)
-			set(_SVN_REVISION
+		else (SVN_REVISION_RESULT_VARIABLE EQUAL 0)
+			set(SVN_REVISION
 				0
 			)
-		endif (_SVN_REVISION_RESULT_VARIABLE EQUAL 0)
+		endif (SVN_REVISION_RESULT_VARIABLE EQUAL 0)
+		message(STATUS "svn revision: " ${SVN_REVISION})
 	endif (SVN_EXECUTEABLE AND SVN_DOT_DIR)
 
 	set(${revision}
-		${_SVN_REVISION}
-		CACHE INTERNAL "svn revison"
+		${SVN_REVISION}
+		CACHE INTERNAL "svn revision"
 	)
 endmacro (OW_GET_SUBVERSION_REVISION revision)

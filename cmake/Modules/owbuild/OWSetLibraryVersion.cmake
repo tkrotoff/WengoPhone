@@ -7,16 +7,16 @@
 # For details see the accompanying COPYING file.
 
 
-macro (OW_SET_LIBRARY_VERSION _build_version _api_version)
+macro (OW_SET_LIBRARY_VERSION buildVersion apiVersion)
 
 	ow_check_project()
 
 	set(${PROJECT_NAME}_BUILD_VERSION
-		${_build_version}
+		${buildVersion}
 	)
 
 	set(${PROJECT_NAME}_API_VERSION
-		${_api_version}
+		${apiVersion}
 	)
 
 endmacro (OW_SET_LIBRARY_VERSION)

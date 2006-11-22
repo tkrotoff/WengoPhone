@@ -1,5 +1,5 @@
 # - OW_ADD_SHARED_LIBRARY_DEFINITIONS()
-# Adds shared library definitions declspec(dllimport) et declspec(dllexport)
+# Internal function, adds shared library definitions declspec(dllimport) and declspec(dllexport)
 #
 # Copyright (C) 2006  Wengo
 #

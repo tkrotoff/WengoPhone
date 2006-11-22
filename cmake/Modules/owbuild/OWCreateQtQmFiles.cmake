@@ -10,6 +10,7 @@
 
 macro (OW_CREATE_QT_QM_FILES qmFiles)
 
+	# No double check for Qt4
 	if (NOT QT4_FOUND)
 		find_package(Qt4 REQUIRED)
 	endif (NOT QT4_FOUND)

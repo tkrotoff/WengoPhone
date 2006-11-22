@@ -1,5 +1,5 @@
 # - OW_FINISH_BINARY()
-# Finishes the creation of a binary file, used by OWCreateSharedLibrary(), OWCreateExecutable()...
+# Internal function, finishes the creation of a binary file, used by OWCreateSharedLibrary(), OWCreateExecutable()...
 #
 # Copyright (C) 2006  Wengo
 #

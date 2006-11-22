@@ -1,5 +1,5 @@
 # - OW_PREPARE_BINARY()
-# Prepares the creation of a binary file, used by OWCreateBinary().
+# Internal function, prepares the creation of a binary file, used by OWCreateBinary()
 #
 # Copyright (C) 2006  Wengo
 #
@@ -12,7 +12,7 @@ macro (OW_PREPARE_BINARY)
 	ow_check_project()
 
 	if (NOT ${PROJECT_NAME}_SRCS)
-		message(FATAL_ERROR "no sources")
+		message(FATAL_ERROR "No sources added, use ow_add_sources()")
 	endif (NOT ${PROJECT_NAME}_SRCS)
 
 	ow_add_public_libraries(${PROJECT_NAME})

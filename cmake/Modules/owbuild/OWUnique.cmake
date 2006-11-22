@@ -1,5 +1,5 @@
 # - OW_UNIQUE(unique_list list)
-# Makes the given list have only one instance of each unique element
+# Internal function, makes the given list have only one instance of each unique element
 # See http://voxel.jouy.inra.fr/darcs/contrib-itk/WrapITK-unstable/CMakeUtilityFunctions.cmake
 #
 # Copyright (C) 2006  Wengo

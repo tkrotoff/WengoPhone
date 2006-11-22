@@ -1,3 +1,8 @@
+# Bugfix, spaces don't work with install target
+string(REPLACE "CMAKEBUGWITHSPACES" " " BUILD_DIR ${BUILD_DIR})
+string(REPLACE "CMAKEBUGWITHSPACES" " " SOURCE_DIR ${SOURCE_DIR})
+
+
 set(NSIS_PROGRAM
 	"C:/Program Files/NSIS/makensis.exe"
 )
@@ -41,6 +46,6 @@ set(NSIS_ARGS
 )
 
 execute_process(
-	COMMAND ${NSIS_PROGRAM} ${NSIS_ARGS} \"${SOURCE_DIR}/wengophone/nsis/installer.nsi\"
+	COMMAND ${NSIS_PROGRAM} ${NSIS_ARGS} ${SOURCE_DIR}/wengophone/nsis/installer.nsi
 	WORKING_DIRECTORY ${BUILD_DIR}
 )

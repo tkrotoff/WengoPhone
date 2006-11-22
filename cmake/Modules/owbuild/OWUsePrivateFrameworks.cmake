@@ -18,7 +18,7 @@ if (APPLE)
 		foreach (fwk ${ARGN})
 			cmake_find_frameworks(${fwk})
 
-			set (first ${${fwk}_FRAMEWORKS})
+			set(first ${${fwk}_FRAMEWORKS})
 
 			ow_add_private_link_flags(
 				"-framework ${fwk}"
