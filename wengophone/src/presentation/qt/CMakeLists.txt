@@ -438,12 +438,6 @@ qt4_add_resources(${PROJECT_NAME}_SRCS
 	wengophone.qrc
 )
 
-macro_generate_qt_qm_files(
-	${CMAKE_CURRENT_SOURCE_DIR}/lang
-	${PROJECT_NAME}_SRCS
-	${DATA_INSTALL_DIR}/lang
-)
-
 if (APPLE)
 	ow_use_private_frameworks(
 		Cocoa
@@ -453,6 +447,15 @@ endif (APPLE)
 
 ow_create_binary()
 
+
+file(GLOB tsFiles ${CMAKE_CURRENT_SOURCE_DIR}/lang/*.ts)
+ow_create_qt_qm_files(qmFiles ${tsFiles})
+foreach(qmFile ${qmFiles})
+	ow_copy_file(${qmFile} lang/.)
+endforeach(qmFile ${qmFiles})
+
+ow_copy_dir_recursive(${CMAKE_CURRENT_SOURCE_DIR}/webpages/* webpages/.)
+
 # Passes variables to the install script
 install(
 	CODE "
@@ -461,7 +464,7 @@ install(
 	set(DATA_INSTALL_DIR ${DATA_INSTALL_DIR})
 	set(APPLICATION_NAME ${APPLICATION_NAME})
 	set(APPLICATION_VERSION ${APPLICATION_VERSION})
-	set(BUILD_DIR \"${BUILD_DIR}\")
+	set(BUILD_DIR ${BUILD_DIR})
 	set(BUILD_TYPE ${CMAKE_BUILD_TYPE})
 	set(SVN_REVISION ${SVN_REVISION})"
 )

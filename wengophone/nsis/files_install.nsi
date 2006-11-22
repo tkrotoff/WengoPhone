@@ -61,9 +61,12 @@ File "${BUILD_DIR}\avcodec-51.dll"
 File "${BUILD_DIR}\avformat-50.dll"
 File "${BUILD_DIR}\avutil-49.dll"
 
-/** MemoryDump. */
+/** owcrashreport + owmemorydump. */
 File "dll\dbghelp.dll"
 File "${BUILD_DIR}\owcrashreport.exe"
+
+/** owwebcam. */
+File "${BUILD_DIR}\owwebcam.dll"
 
 /** .pdb files. */
 !ifdef WITH_PDB
@@ -81,29 +84,22 @@ File "${BUILD_DIR}\plugins\ssl-nss.dll"
 
 
 /** Sounds. */
-/*
 SetOutPath "$INSTDIR\sounds\"
 File "${BUILD_DIR}\sounds\*"
 SetOutPath "$INSTDIR\sounds\tones\"
 File "${BUILD_DIR}\sounds\tones\*"
 SetOutPath "$INSTDIR\sounds\tones\jungle\"
 File "${BUILD_DIR}\sounds\tones\jungle\*"
-*/
 
 /** Icons. */
-/*
 SetOutPath "$INSTDIR\emoticons\*"
 File "${BUILD_DIR}\emoticons\*"
-/*
 
 /** Avatars. */
-/*
 SetOutPath "$INSTDIR\pics\avatars\*"
 File "${BUILD_DIR}\pics\avatars\*"
-*/
 
 /* Translations */
-/*
 SetOutPath "$INSTDIR\lang\"
 File "${BUILD_DIR}\wengophone\src\presentation\qt\lang\qtwengophone_fr.qm"
 File "${BUILD_DIR}\wengophone\src\presentation\qt\lang\qtwengophone_en.qm"
@@ -115,13 +111,10 @@ File "${BUILD_DIR}\wengophone\src\presentation\qt\lang\qtwengophone_zh.qm"
 File "${BUILD_DIR}\wengophone\src\presentation\qt\lang\qtwengophone_es.qm"
 File "${BUILD_DIR}\wengophone\src\presentation\qt\lang\qtwengophone_tr.qm"
 File "${BUILD_DIR}\wengophone\src\presentation\qt\lang\qtwengophone_ja.qm"
-*/
 
 /** Web pages. */
-/*
 SetOutPath "$INSTDIR\webpages\windows\"
 File "${BUILD_DIR}\webpages\windows\*"
-*/
 
 /**
  * So that we can execute wengophone.exe

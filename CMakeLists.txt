@@ -24,7 +24,6 @@ include(DefineInstallationPaths)
 
 # Add macros
 include(MacroEnsureOutOfSourceBuild)
-include(MacroGenerateQtQmFiles)
 
 include(cmake/Modules/owbuild/CMakeLists.txt)
 

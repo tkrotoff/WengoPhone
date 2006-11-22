@@ -12,11 +12,15 @@ macro (OW_COPY_FILE src dst)
 
 	string(TOLOWER ${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE} dir)
 
-	message(STATUS "Copy file from ${src} to ${dir}/${dst}")
+	# Removes all path containing .svn or CVS or CMakeLists.txt during the copy
+	if (NOT ${src} MATCHES ".*\\.svn|CVS|CMakeLists\\.txt.*")
 
-	exec_program(${CMAKE_COMMAND}
-		ARGS
-			"-E copy_if_different \"${src}\" \"${dir}/${dst}\""
-	)
+		message(STATUS "Copy file from ${src} to ${dir}/${dst}")
+
+		exec_program(${CMAKE_COMMAND}
+			ARGS
+				"-E copy_if_different \"${src}\" \"${dir}/${dst}\""
+		)
+	endif (NOT ${src} MATCHES ".*\\.svn|CVS|CMakeLists\\.txt.*")
 
 endmacro (OW_COPY_FILE)
