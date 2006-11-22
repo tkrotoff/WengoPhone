@@ -8,6 +8,7 @@
 
 include(CheckIncludeFiles)
 include(CheckIncludeFileCXX)
+include(CheckLibraryExists)
 
 # Already done by toplevel
 #check_include_files(sys/soundcard.h HAVE_SYS_SOUNDCARD_H)

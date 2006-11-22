@@ -329,13 +329,14 @@ if (UNIX AND NOT WIN32)
 			macosx/QtMacApplication.cpp
 		)
 	else (APPLE)
-		ow_use_private_libraries(
-			X11
-		)
-
 		option(WITH_HW_ACCEL "Build with Xv hardware acceleration support" ON)
 		if (WITH_HW_ACCEL)
 			if (X11_XV_FOUND)
+				find_package(X11)
+				ow_use_private_libraries(
+					X11
+				)
+
 				ow_add_private_libraries(
 					${X11_Xv_LIB}
 				)

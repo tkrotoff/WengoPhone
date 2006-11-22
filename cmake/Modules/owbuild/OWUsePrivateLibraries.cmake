@@ -14,7 +14,7 @@ macro (OW_USE_PRIVATE_LIBRARIES)
 	foreach (loop ${ARGN})
 		if (NOT ${loop}_INCLUDE_DIRS)
 			if (NOT ${loop}_INCLUDE_DIR)
-				message(FATAL_ERROR "${loop}_INCLUDE_DIRS and ${loop}_INCLUDE_DIR empty")
+				message(FATAL_ERROR "${PROJECT_NAME}: ${loop}_INCLUDE_DIRS and ${loop}_INCLUDE_DIR empty")
 			endif (NOT ${loop}_INCLUDE_DIR)
 		endif (NOT ${loop}_INCLUDE_DIRS)
 		ow_add_private_include_dirs(
