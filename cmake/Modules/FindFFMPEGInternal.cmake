@@ -46,7 +46,7 @@ if (WIN32)
   )
   find_library(AVFORMAT_LIBRARY
     NAMES
-      avformat-50
+      avformat-51
     PATHS
       ${CMAKE_SOURCE_DIR}/libs/3rdparty/ffmpeg/binary-lib/msvc
   )

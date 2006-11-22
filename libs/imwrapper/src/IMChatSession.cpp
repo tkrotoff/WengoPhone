@@ -199,12 +199,12 @@ bool IMChatSession::canDoMultiChat() const {
 	}
 }
 
-const IMChatSession::IMChatMessageList IMChatSession::getReceivedMessage(unsigned int fromIndex) {
+const IMChatSession::IMChatMessageList IMChatSession::getReceivedMessage(unsigned fromIndex) {
 	IMChatSession::IMChatMessageList result;
 
 	if (_receivedIMChatMessageList.size() > 0) {
 		if (fromIndex >= 0 && fromIndex < _receivedIMChatMessageList.size()) {
-			for(unsigned int i = fromIndex; i < _receivedIMChatMessageList.size(); i++) {
+			for (unsigned i = fromIndex; i < _receivedIMChatMessageList.size(); i++) {
 				result.push_back(_receivedIMChatMessageList.at(i));
 			}
 		}
@@ -217,7 +217,7 @@ bool IMChatSession::isContactInSession(const IMContact & imContact) const {
 	IMContactSet::const_iterator it;
 
 	for (it = _imContactSet.begin(); it != _imContactSet.end(); it++) {
-		
+
 		if (imContact == (*it)) {
 			return true;
 		}

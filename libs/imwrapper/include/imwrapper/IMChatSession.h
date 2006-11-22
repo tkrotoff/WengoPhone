@@ -164,10 +164,10 @@ public:
 	 * Gets the messages stored in IMChatSession from the provided index,
 	 * an keeps it stored.
 	 *
-	 * @param	fromIndex	the index from which we want to get the messages.
+	 * @param fromIndex the index from which we want to get the messages.
 	 * @return the list of messages from the provided index
 	 */
-	const IMChatMessageList getReceivedMessage(unsigned int fromIndex);
+	const IMChatMessageList getReceivedMessage(unsigned fromIndex);
 
 	/**
 	 * Constructs a chat session given a IMChat.
