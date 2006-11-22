@@ -4197,9 +4197,18 @@ void ph_reg_progress(eXosip_event_t *je)
 
 void ph_notify_handler(eXosip_event_t *je)
 {
+	// TODO REFACTOR REMOVE
 	if (phcb->onNotify) 
 	{
 		phcb->onNotify(je->sip_event, je->remote_uri, je->msg_body);
+	}
+
+	if(strcmp(je->sip_event, "presence") == 0) {
+		owplFireNotificationEvent(NOTIFICATION_PRESENCE, je->msg_body, je->remote_uri);
+	}else if(strcmp(je->sip_event, "presence.winfo") == 0) {
+		owplFireNotificationEvent(NOTIFICATION_WATCHER, je->msg_body, je->remote_uri);
+	} else {
+		owplFireNotificationEvent(NOTIFICATION_UNKNOWN, je->msg_body, je->remote_uri);
 	}
 }
 

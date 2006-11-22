@@ -401,15 +401,41 @@ typedef enum
  */
 typedef struct 
 {
-    int                 nSize ;     /**< the size of this structure in bytes */
-    OWPL_SUB			hSub;		/**< a handle to the subscription to which
-                                         this state change occurred. */
-    OWPL_SUBSCRIPTION_STATE state;     /**< Enum state value indicating the current
-                                             state of the subscription. */
-    OWPL_SUBSCRIPTION_CAUSE cause;      /**< Enum cause for the state change in this
-                                             event. */
-	const char* szRemoteIdentity;
+	int                 nSize ;     /**< the size of this structure in bytes */
+	OWPL_SUB			hSub;		/**< a handle to the subscription to which
+									this state change occurred. */
+	OWPL_SUBSCRIPTION_STATE state;	/**< Enum state value indicating the current
+									state of the subscription. */
+	OWPL_SUBSCRIPTION_CAUSE cause;	/**< Enum cause for the state change in this
+									event. */
+	const char * szRemoteIdentity;	/**< The identity of the remote party of this subscription. */
 } OWPL_SUBSTATUS_INFO;
+
+typedef enum {
+	NOTIFICATION_UNKNOWN = 0,		/**< Unknown notify event */
+	NOTIFICATION_PRESENCE = 1000,	/**< Notification of peer presence */
+	NOTIFICATION_WATCHER = 2000		/**< Presence watcher event */
+} OWPL_NOTIFICATION_EVENT;
+
+typedef struct {
+	size_t    nSize ;               /**< The size of this structure. */
+	OWPL_NOTIFICATION_EVENT	event;	/**< Subscription event enum code.
+                                         Identifies the subsciption event. */
+	const char * szXmlContent;		/**< The notify XML content */
+	const char * szRemoteIdentity;	/**< The identity of the remote party of this notification. */
+} OWPL_NOTIFICATION_INFO;
+
+typedef enum {
+	MESSAGE_UNKNOWN = 0,	/**< Unknown message event */
+	MESSAGE_NEW = 1000,		/**< A new message has been received */
+	MESSAGE_SUCCESS = 2000,	/**< The sent message reached its destination */
+	MESSAGE_FAILURE = 3000	/**< The sent message could not be delivered */
+} OWPL_MESSAGE_EVENT;
+
+typedef enum {
+	MESSAGE_SUCCESS_NORMAL = MESSAGE_SUCCESS+1,
+	MESSAGE_FAILURE_UNKNOWN = MESSAGE_FAILURE+1
+} OWPL_MESSAGE_CAUSE;
 
 /**
  * Signature for event callback/observer.  Application developers should
@@ -504,6 +530,7 @@ owplFireErrorEvent(OWPL_ERROR_EVENT event,
  * @param	hSub	a subscription handle
  * @param	state	the subscription state
  * @param	cause	the cause of this event
+ * @param	szRemoteIdentity	the identity of the remote party of this notification
  * @return	an OWPL_RESULT...
  */
 OWPL_RESULT
@@ -511,6 +538,22 @@ owplFireSubscriptionEvent(OWPL_SUB hSub,
 						  OWPL_SUBSCRIPTION_STATE state,
 						  OWPL_SUBSCRIPTION_CAUSE cause,
 						  const char* szRemoteIdentity);
+
+/**
+ * Creates a notification state structure and sends it to all subscribers
+ *
+ * @param	event	the notification event type
+ * @param	szXmlContent	the notify XML content 
+ * @param	szRemoteIdentity	the identity of the remote party of this notification
+ * @return	an OWPL_RESULT...
+ */
+OWPL_RESULT
+owplFireNotificationEvent(OWPL_NOTIFICATION_EVENT event,
+						  const char* szXmlContent,
+						  const char* szRemoteIdentity);
+
+OWPL_RESULT
+owplFireMessageEvent(OWPL_MESSAGE_EVENT event);
 
 
 //typedef struct owpl_plugin;

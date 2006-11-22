@@ -209,6 +209,20 @@ owplFireSubscriptionEvent(OWPL_SUB hSub,
 	return owplFireEvent(EVENT_CATEGORY_SUB_STATUS, &sInfo);
 }
 
+OWPL_RESULT
+owplFireNotificationEvent(OWPL_NOTIFICATION_EVENT event,
+						  const char* szXmlContent,
+						  const char* szRemoteIdentity)
+{
+	OWPL_NOTIFICATION_INFO nInfo;
+	memset(&nInfo, 0, sizeof(OWPL_NOTIFICATION_INFO));
+	nInfo.nSize = sizeof(OWPL_NOTIFICATION_INFO);
+	nInfo.event = event;
+	nInfo.szXmlContent = szXmlContent;
+	nInfo.szRemoteIdentity = szRemoteIdentity;
+	return owplFireEvent(EVENT_CATEGORY_NOTIFY, &nInfo);
+}
+
 /************************************************/
 /*     PLUGIN handling routines                 */
 /************************************************/
