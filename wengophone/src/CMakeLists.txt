@@ -173,14 +173,14 @@ if (WIN32)
 	)
 endif (WIN32)
 
-if (UNIX AND NOT WIN32)
+if (UNIX AND NOT WIN32 AND NOT APPLE)
 	option(WITH_RESOURCEDIR "Use ${DATA_INSTALL_DIR} as hardcoded resouce path" ON)
 	if (WITH_RESOURCEDIR)
 		ow_add_private_definitions(
-			-DOW_RESOURCEDIR="\\"${DATA_INSTALL_DIR}\\""
+			-DOW_RESOURCEDIR='"${DATA_INSTALL_DIR}"'
 		)
 	endif (WITH_RESOURCEDIR)
-endif (UNIX AND NOT WIN32)
+endif (UNIX AND NOT WIN32 AND NOT APPLE)
 
 ow_create_binary()
 
