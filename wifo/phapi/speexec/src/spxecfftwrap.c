@@ -41,6 +41,7 @@
 
 
 //#include "misc.h"
+#include <stdlib.h>
 
 #define spxec_alloc(s) calloc(s, 1)
 #define spxec_free(m)  free(m)
