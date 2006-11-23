@@ -43,10 +43,8 @@ File "${BUILD_DIR}\libgthread-2.0-0.dll"
 
 /** PhApi. */
 File "${BUILD_DIR}\phapi.dll"
-/*
 File "${BUILD_DIR}\phspeexplugin.dll"
 File "${BUILD_DIR}\phamrplugin.dll"
-*/
 File "${BUILD_DIR}\owcurl.dll"
 
 /** File Transfer **/
@@ -82,7 +80,6 @@ File "${BUILD_DIR}\plugins\libyahoo.dll"
 File "${BUILD_DIR}\plugins\ssl.dll"
 File "${BUILD_DIR}\plugins\ssl-nss.dll"
 
-
 /** Sounds. */
 SetOutPath "$INSTDIR\sounds\"
 File "${BUILD_DIR}\sounds\*"
@@ -92,7 +89,6 @@ SetOutPath "$INSTDIR\sounds\tones\jungle\"
 File "${BUILD_DIR}\sounds\tones\jungle\*"
 SetOutPath "$INSTDIR\sounds\tones\jungle_svg\"
 File "${BUILD_DIR}\sounds\tones\jungle_svg\*"
-
 
 /** Icons. */
 SetOutPath "$INSTDIR\emoticons\*"
