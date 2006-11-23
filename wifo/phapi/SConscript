@@ -5,7 +5,7 @@ speex_defines = {}
 defines = {}
 
 if WengoGetConsoleArgument('speexwb-replaces-amrwb') and \
-     WengoGetConsoleArgument('speexwb-replaces-amrnb') and WengoGetConsoleArgument('speexwb-replaces-g726wb'):
+	WengoGetConsoleArgument('speexwb-replaces-amrnb') and WengoGetConsoleArgument('speexwb-replaces-g726wb'):
 	print "******* Please Select ONLY ONE of: [ speexwb-replaces-amrwb  speexwb-replaces-amrnb or speexwb-replaces-g726wb]"
 	Exit(1)
 
@@ -49,15 +49,15 @@ speex = speex_env.WengoPlugin('phspeexplugin', ['phcodec-speex.c'])
 if WengoGetConsoleArgument('enable-ipp'):
 	IPPROOT = False
 	IPPSAMPLEROOT = False
-	
+
 	if os.environ.has_key('IPPROOT'):
 		IPPROOT = os.environ['IPPROOT']
-	
+
 	if os.environ.has_key('IPPSAMPLEROOT'):
 		IPPSAMPLEROOT = os.environ['IPPSAMPLEROOT']
-	
+
 	if IPPROOT and IPPSAMPLEROOT:
-	
+
 		print "building ipp plugin"
 		ipp_env = WengoGetEnvironment()
 		ipp_libs = [
@@ -65,21 +65,21 @@ if WengoGetConsoleArgument('enable-ipp'):
 			#   'guide',
 			'usc'
 			]
-	
+
 		ipp_includes = [
 			IPPROOT + "/include", IPPSAMPLEROOT + "/codec/include"
 			]
-	
+
 		if WengoOSWindows():
 			ipp_libpath = [
 				IPPROOT + "/lib", IPPROOT + "/stublib",
 				IPPSAMPLEROOT + "/bin/ia32/lib"
 			]
-	
+
 			ipp_env.Append( LINKFLAGS = '/NODEFAULTLIB:MSVCRT')
 		else:
 			ipp_libpath = [
-	
+
 			IPPROOT + "/sharedlib", IPPROOT + "/sharedlib/linux32",
 			IPPSAMPLEROOT + "/bin/ia32/lib"
 			]
@@ -131,7 +131,7 @@ defines = {
 if WengoGetConsoleArgument("enable-ilbc"):
    defines['ENABLE_ILBC'] = 1
    libs += ["ilbc"]
- 
+
 # To activate FORCED 16 KHZ SAMPLING
 defines['PH_FORCE_16KHZ'] = 1
 
@@ -267,7 +267,7 @@ if WengoOSWindows():
 		libs += [
 			'gdi32',
 		]
-	
+
 	if WengoCCMSVC():
 		libs += [
 			'comsupp',

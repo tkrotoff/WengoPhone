@@ -1,10 +1,6 @@
-ow_create_project(phspeexplugin)
+ow_create_plugin_library(phspeexplugin)
 
-if (UNIX AND NOT APPLE)
-	find_package(Speex REQUIRED)
-endif (UNIX AND NOT APPLE)
-
-ow_use_public_libraries(
+ow_use_private_libraries(
 	speex
 )
 
@@ -13,7 +9,7 @@ ow_add_private_compile_flags(
 )
 
 ow_add_sources(
-	phcodec-speex.c
+	../phcodec-speex.c
 )
 
 if (WITH_SPEEXWB_REPLACES_G726WB)
@@ -34,8 +30,4 @@ else (WITH_SPEEXWB_REPLACES_G726WB)
 	endif (WITH_SPEEXWB_REPLACES_AMRNB)
 endif (WITH_SPEEXWB_REPLACES_G726WB)
 
-ow_create_plugin_library()
-
-install(TARGETS ${PROJECT_NAME}
-	DESTINATION ${PHAPI_PLUGIN_INSTALL_DIR}
-)
+ow_create_binary()

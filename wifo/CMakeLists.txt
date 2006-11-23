@@ -44,9 +44,13 @@ subdirs(
 	phapi-util
 	phapi/fidlib
 	phapi/gsm
+	phapi/amrnb
+	phapi/amrwb
 	phapi/ilbc
 	phapi/speexec
 	phapi/stun
+	phapi/phamrplugin
+	phapi/phspeexplugin
 	phapi
 	#miniua
 	wifo-plugins

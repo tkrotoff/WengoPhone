@@ -6,13 +6,13 @@ ow_add_public_include_dirs(
 
 if (WIN32)
 	ow_add_private_include_dirs(
-		${speex_SOURCE_DIR}/win32
+		${CMAKE_CURRENT_SOURCE_DIR}/win32
 	)
 endif (WIN32)
 
 if (APPLE)
 	ow_add_private_include_dirs(
-		${speex_SOURCE_DIR}/macosx
+		${CMAKE_CURRENT_SOURCE_DIR}/macosx
 	)
 endif (APPLE)
 

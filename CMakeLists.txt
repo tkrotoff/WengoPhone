@@ -48,26 +48,23 @@ if (WIN32)
 	find_package(GLIB2Internal REQUIRED)
 	#find_package(PortaudioInternal REQUIRED)
 else (WIN32)
+	find_package(OpenSSL REQUIRED)
+	find_package(GLIB2 REQUIRED)
+
 	if (APPLE)
 		find_package(FFMPEGInternal REQUIRED)
 	else (APPLE)
 		find_package(FFMPEG REQUIRED)
+		find_package(UUID REQUIRED)
+		find_package(Portaudio REQUIRED)
+		find_package(Speex REQUIRED)
 	endif (APPLE)
-	find_package(OpenSSL REQUIRED)
-	find_package(GLIB2 REQUIRED)
 endif (WIN32)
 
 if (NOT MSVC)
 	find_package(XML2 REQUIRED)
 endif (NOT MSVC)
 
-if (NOT APPLE AND NOT WIN32)
-	find_package(Portaudio REQUIRED)
-endif (NOT APPLE AND NOT WIN32)
-
-if (UNIX AND NOT WIN32 AND NOT APPLE)
-	find_package(UUID REQUIRED)
-endif (UNIX AND NOT WIN32 AND NOT APPLE)
 
 if (WIN32)
 	subdirs(

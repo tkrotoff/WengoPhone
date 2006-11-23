@@ -2,8 +2,6 @@ option(WITH_SPEEXWB_REPLACES_AMRWB "" OFF)
 option(WITH_SPEEXWB_REPLACES_AMRNB "" OFF)
 option(WITH_SPEEXWB_REPLACES_G726WB "" ON)
 
-#include(CMakeLists-phamrplugin.txt)
-#include(CMakeLists-phspeexplugin.txt)
 
 if (APPLE)
 	ow_create_static_library(phapi)
