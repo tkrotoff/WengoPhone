@@ -64,9 +64,10 @@ typedef enum OWPL_EVENT_CATEGORY
                                          For example, when requesting STUN support, a 
                                          notification is sent with the STUN outcome (either
                                          SUCCESS or FAILURE) */
-	EVENT_CATEGORY_ERROR           /**< ERROR events signify error in the engine.
+	EVENT_CATEGORY_ERROR,           /**< ERROR events signify error in the engine.
                                          For example, an error happen when trying to open audio 
 										 device for a call*/
+	EVENT_CATEGORY_MESSAGE			/**< Message events */
 } OWPL_EVENT_CATEGORY;
 
 
@@ -433,9 +434,30 @@ typedef enum {
 } OWPL_MESSAGE_EVENT;
 
 typedef enum {
+	MESSAGE_NEW_NORMAL = MESSAGE_NEW+1,
+	MESSAGE_NEW_BUDDY_ICON = MESSAGE_NEW+2,
+	MESSAGE_NEW_TYPING = MESSAGE_NEW+3,
+	MESSAGE_NEW_STOP_TYPING = MESSAGE_NEW+4,
+	MESSAGE_NEW_NOT_TYPING = MESSAGE_NEW+5,
+
 	MESSAGE_SUCCESS_NORMAL = MESSAGE_SUCCESS+1,
-	MESSAGE_FAILURE_UNKNOWN = MESSAGE_FAILURE+1
+
+	MESSAGE_FAILURE_UNKNOWN = MESSAGE_FAILURE+1,
+	MESSAGE_FAILURE_COULD_NOT_SEND = MESSAGE_FAILURE+2
 } OWPL_MESSAGE_CAUSE;
+
+typedef struct {
+	size_t    nSize ;               /**< The size of this structure. */
+	OWPL_MESSAGE_EVENT event;		/**< Message event enum code.
+                                         Identifies the subsciption event. */
+	OWPL_MESSAGE_CAUSE cause;		/**< Subscription cause enum code.
+                                         Identifies the subsciption event. */
+	const char * szContent;
+	const char * szLocalIdentity;	/**< The identity of the local party of this message. */
+	const char * szRemoteIdentity;	/**< The identity of the remote party of this message. */
+	const char * szContentType;
+	const char * szSubContentType;
+} OWPL_MESSAGE_INFO;
 
 /**
  * Signature for event callback/observer.  Application developers should
@@ -552,8 +574,25 @@ owplFireNotificationEvent(OWPL_NOTIFICATION_EVENT event,
 						  const char* szXmlContent,
 						  const char* szRemoteIdentity);
 
+/**
+ * Creates a notification state structure and sends it to all subscribers
+ *
+ * @param	event	the notification event type
+ * @param	cause	the cause of this event
+ * @param	szMessage	the message string itself
+ * @param	szLocalIdentity	the identity of the local party of this message
+ * @param	szRemoteIdentity	the identity of the remote party of this message
+ * @param	szBuddyIcon	used for the buddy icon message
+ * @return	an OWPL_RESULT...
+ */
 OWPL_RESULT
-owplFireMessageEvent(OWPL_MESSAGE_EVENT event);
+owplFireMessageEvent(OWPL_MESSAGE_EVENT event,
+					 OWPL_MESSAGE_CAUSE cause,
+					 const char * szContent,
+					 const char * szLocalIdentity,
+					 const char * szRemoteIdentity,
+					 const char * szContentType,
+					 const char * szSubContentType);
 
 
 //typedef struct owpl_plugin;

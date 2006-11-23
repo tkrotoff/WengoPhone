@@ -3536,6 +3536,8 @@ ph_call_answered(eXosip_event_t *je)
 		rca = ph_locate_call_by_cid(ca->rcid);
 	}
 
+	ca->did = je->did;
+
 	if (!ca->localhold)
 	{
 		ph_call_retrieve_payloads(ca, je, -1);
@@ -4392,42 +4394,171 @@ void ph_message_progress(eXosip_event_t *je)
 {
 	phMsgStateInfo_t info;
 
-	memset(&info, 0, sizeof(info));
+	if(je != NULL) {
+		memset(&info, 0, sizeof(info));
 
-	if (je->type == EXOSIP_MESSAGE_NEW) 
-	{
-		info.event = phMsgNew;
-		info.content = je->msg_body;
-		info.ctype = je->i_ctt->type;
-		info.subtype = je->i_ctt->subtype;
-		info.to = je->local_uri;
-		info.from = je->remote_uri;
-		if (phcb->msgProgress != NULL)
+		if (je->type == EXOSIP_MESSAGE_NEW) 
 		{
-			phcb->msgProgress(0, &info);
+			info.event = phMsgNew;
+			info.content = je->msg_body;
+			info.ctype = je->i_ctt->type;
+			info.subtype = je->i_ctt->subtype;
+			info.to = je->local_uri;
+			info.from = je->remote_uri;
+			if (phcb->msgProgress != NULL)
+			{
+				phcb->msgProgress(0, &info);
+			}
+			owplFireMessageEvent(MESSAGE_NEW,
+				MESSAGE_NEW_NORMAL,
+				je->msg_body,
+				je->local_uri,
+				je->remote_uri,
+				(je->i_ctt != NULL) ? je->i_ctt->type : NULL,
+				(je->i_ctt != NULL) ? je->i_ctt->subtype : NULL);
 		}
-	}
-	else if (je->type == EXOSIP_MESSAGE_SUCCESS)
-	{
-		info.event = phMsgOk;
-		info.to = je->local_uri;
-		info.from = je->remote_uri;
-		if (phcb->msgProgress != NULL)
+		else if (je->type == EXOSIP_MESSAGE_SUCCESS)
 		{
-			phcb->msgProgress(je->mid, &info);
+			info.event = phMsgOk;
+			info.to = je->local_uri;
+			info.from = je->remote_uri;
+			if (phcb->msgProgress != NULL)
+			{
+				phcb->msgProgress(je->mid, &info);
+			}
+			owplFireMessageEvent(MESSAGE_SUCCESS,
+				MESSAGE_SUCCESS_NORMAL,
+				je->msg_body,
+				je->local_uri,
+				je->remote_uri,
+				(je->i_ctt != NULL) ? je->i_ctt->type : NULL,
+				(je->i_ctt != NULL) ? je->i_ctt->subtype : NULL);
 		}
-	}
-	else if (je->type == EXOSIP_MESSAGE_FAILURE)
-	{
-		info.to = je->local_uri;
-		info.from = je->remote_uri;
-		info.event = phMsgError;
-		if (phcb->msgProgress != NULL)
+		else if (je->type == EXOSIP_MESSAGE_FAILURE)
 		{
-			phcb->msgProgress(je->mid, &info);
+			info.to = je->local_uri;
+			info.from = je->remote_uri;
+			info.event = phMsgError;
+			if (phcb->msgProgress != NULL)
+			{
+				phcb->msgProgress(je->mid, &info);
+			}
+			owplFireMessageEvent(MESSAGE_FAILURE,
+				MESSAGE_FAILURE_UNKNOWN,
+				je->msg_body,
+				je->local_uri,
+				je->remote_uri,
+				(je->i_ctt != NULL) ? je->i_ctt->type : NULL,
+				(je->i_ctt != NULL) ? je->i_ctt->subtype : NULL);
 		}
 	}
 }
+
+/*
+TODO for future use ?
+void ph_message_progress(eXosip_event_t *je)
+{
+	phMsgStateInfo_t info;
+
+	if(je != NULL) {
+		memset(&info, 0, sizeof(info));
+
+		if (je->type == EXOSIP_MESSAGE_NEW) 
+		{
+			info.event = phMsgNew;
+			info.content = je->msg_body;
+			info.ctype = je->i_ctt->type;
+			info.subtype = je->i_ctt->subtype;
+			info.to = je->local_uri;
+			info.from = je->remote_uri;
+			if (phcb->msgProgress != NULL)
+			{
+				phcb->msgProgress(0, &info);
+			}
+
+			if(je->i_ctt != NULL && strcmp(je->i_ctt->type, "typingstate") == 0) {
+				if(strcmp(je->i_ctt->subtype, "typing") == 0) {
+					owplFireMessageEvent(MESSAGE_NEW,
+						MESSAGE_NEW_TYPING,
+						je->msg_body,
+						je->local_uri,
+						je->remote_uri,
+						(je->i_ctt != NULL) ? je->i_ctt->type : NULL,
+						(je->i_ctt != NULL) ? je->i_ctt->subtype : NULL);
+				} else if(strcmp(je->i_ctt->subtype, "stoptyping") == 0) {
+					owplFireMessageEvent(MESSAGE_NEW,
+						MESSAGE_NEW_STOP_TYPING,
+						je->msg_body,
+						je->local_uri,
+						je->remote_uri,
+						(je->i_ctt != NULL) ? je->i_ctt->type : NULL,
+						(je->i_ctt != NULL) ? je->i_ctt->subtype : NULL);
+				} else {
+					owplFireMessageEvent(MESSAGE_NEW,
+						MESSAGE_NEW_NOT_TYPING,
+						je->msg_body,
+						je->local_uri,
+						je->remote_uri,
+						(je->i_ctt != NULL) ? je->i_ctt->type : NULL,
+						(je->i_ctt != NULL) ? je->i_ctt->subtype : NULL);
+				}
+			} else if(je->i_ctt != NULL && strcmp(je->i_ctt->type, "buddyicon") == 0) {
+				owplFireMessageEvent(MESSAGE_NEW,
+					MESSAGE_NEW_BUDDY_ICON,
+					je->msg_body,
+					je->local_uri,
+					je->remote_uri,
+					(je->i_ctt != NULL) ? je->i_ctt->type : NULL,
+					(je->i_ctt != NULL) ? je->i_ctt->subtype : NULL);
+			} else {
+				owplFireMessageEvent(MESSAGE_NEW,
+					MESSAGE_NEW_NORMAL,
+					je->msg_body,
+					je->local_uri,
+					je->remote_uri,
+					(je->i_ctt != NULL) ? je->i_ctt->type : NULL,
+					(je->i_ctt != NULL) ? je->i_ctt->subtype : NULL);
+			}
+		}
+		else if (je->type == EXOSIP_MESSAGE_SUCCESS)
+		{
+			info.event = phMsgOk;
+			info.to = je->local_uri;
+			info.from = je->remote_uri;
+			if (phcb->msgProgress != NULL)
+			{
+				phcb->msgProgress(je->mid, &info);
+			}
+
+			owplFireMessageEvent(MESSAGE_SUCCESS,
+				MESSAGE_SUCCESS_NORMAL,
+				NULL,
+				je->local_uri,
+				je->remote_uri,
+				(je->i_ctt != NULL) ? je->i_ctt->type : NULL,
+				(je->i_ctt != NULL) ? je->i_ctt->subtype : NULL);
+		}
+		else if (je->type == EXOSIP_MESSAGE_FAILURE)
+		{
+			info.to = je->local_uri;
+			info.from = je->remote_uri;
+			info.event = phMsgError;
+			if (phcb->msgProgress != NULL)
+			{
+				phcb->msgProgress(je->mid, &info);
+			}
+
+			owplFireMessageEvent(MESSAGE_FAILURE,
+				MESSAGE_FAILURE_COULD_NOT_SEND,
+				NULL,
+				je->local_uri,
+				je->remote_uri,
+				(je->i_ctt != NULL) ? je->i_ctt->type : NULL,
+				(je->i_ctt != NULL) ? je->i_ctt->subtype : NULL);
+		}
+	}
+}
+*/
 
 
 void ph_subscription_progress(eXosip_event_t *je)

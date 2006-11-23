@@ -223,6 +223,28 @@ owplFireNotificationEvent(OWPL_NOTIFICATION_EVENT event,
 	return owplFireEvent(EVENT_CATEGORY_NOTIFY, &nInfo);
 }
 
+OWPL_RESULT
+owplFireMessageEvent(OWPL_MESSAGE_EVENT event,
+					 OWPL_MESSAGE_CAUSE cause,
+					 const char * szContent,
+					 const char * szLocalIdentity,
+					 const char * szRemoteIdentity,
+					 const char * szContentType,
+					 const char * szSubContentType)
+{
+	OWPL_MESSAGE_INFO mInfo;
+	memset(&mInfo, 0, sizeof(OWPL_MESSAGE_INFO));
+	mInfo.nSize = sizeof(OWPL_MESSAGE_INFO);
+	mInfo.event = event;
+	mInfo.cause = cause;
+	mInfo.szContent = szContent;
+	mInfo.szLocalIdentity = szLocalIdentity;
+	mInfo.szRemoteIdentity = szRemoteIdentity;
+	mInfo.szContentType = szContentType;
+	mInfo.szSubContentType = szSubContentType;
+	return owplFireEvent(EVENT_CATEGORY_MESSAGE, &mInfo);
+}
+
 /************************************************/
 /*     PLUGIN handling routines                 */
 /************************************************/
