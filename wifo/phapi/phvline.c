@@ -255,7 +255,8 @@ void ph_refresh_vlines()
 
 					if ((now - vl->publishInfo.lastPublishTime) > (vl->publishInfo.publishTimeout - 5))
 					{
-						owplPresencePublish(ph_vline2vlid(vl), vl->publishInfo.onlineState, vl->publishInfo.szStatus, vl->publishInfo.hPub);
+						// TODO REFACTOR uncomment when PhApiWrapper is up to use the new PhApi
+						//owplPresencePublish(ph_vline2vlid(vl), vl->publishInfo.onlineState, vl->publishInfo.szStatus, vl->publishInfo.hPub);
 					}
 
 				}
