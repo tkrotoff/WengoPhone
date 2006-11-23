@@ -117,16 +117,19 @@ else (BOOST_LIBRARIES AND BOOST_INCLUDE_DIRS)
       /opt/local/lib
       /sw/lib
   )
-  find_library(BOOST_PRG_EXEC_MONITOR_LIBRARY
-    NAMES
-      boost_prg_exec_monitor${BOOST_LIB_SUFFIX}
-    PATHS
-      ${BOOST_SEARCH_DIRS}
-      /usr/lib
-      /usr/local/lib
-      /opt/local/lib
-      /sw/lib
-  )
+# This list is not used currently by WengoPhone and
+# if produce compilation error on Linux when included
+#
+#  find_library(BOOST_PRG_EXEC_MONITOR_LIBRARY
+#    NAMES
+#      boost_prg_exec_monitor${BOOST_LIB_SUFFIX}
+#    PATHS
+#      ${BOOST_SEARCH_DIRS}
+#      /usr/lib
+#      /usr/local/lib
+#      /opt/local/lib
+#      /sw/lib
+#  )
   find_library(BOOST_PROGRAM_OPTIONS_LIBRARY
     NAMES
       boost_program_options${BOOST_LIB_SUFFIX}
