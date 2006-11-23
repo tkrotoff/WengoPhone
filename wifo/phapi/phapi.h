@@ -36,6 +36,7 @@
 #include <owpl_plugin.h>
 #include <owpl.h>
 #include <phvline.h>
+#include <stdio.h>
 
 #define OWPL_STREAM_AUDIO		PH_STREAM_AUDIO
 #define OWPL_STREAM_VIDEO_RX	PH_STREAM_VIDEO_RX
