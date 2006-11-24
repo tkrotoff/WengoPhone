@@ -42,7 +42,7 @@ public:
 	 */
 	OWHTTP_API void addAndStart(IHttpRequest * httpRequest);
 
-	OWHTTP_API HttpRequestManager & getInstance();
+	OWHTTP_API static HttpRequestManager & getInstance();
 
 private:
 
