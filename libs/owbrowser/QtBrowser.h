@@ -53,8 +53,12 @@ public:
 	 * Browser mode enum
 	 */
 	enum BrowserMode {
-		QTMODE,
-		IEMODE
+
+		/** Qt browser mode. */
+		BrowserModeQt,
+
+		/** Internet Explorer (via ActiveX) browser mode. */
+		BrowserModeIE
 	};
 
 	/**
@@ -63,7 +67,7 @@ public:
 	 * @param parent the parent widget
 	 * @param mode browser mode to use (IE or Qt)
 	 */
-	QtBrowser(QWidget * parent, BrowserMode mode = IEMODE);
+	QtBrowser(QWidget * parent, BrowserMode mode = BrowserModeIE);
 
 	void setUrl(const std::string & url, const std::string & data = "", bool postMethod = true);
 

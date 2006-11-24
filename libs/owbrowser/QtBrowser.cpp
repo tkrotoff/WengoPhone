@@ -58,7 +58,7 @@ QtBrowser::QtBrowser(QWidget * parent, BrowserMode mode)
 
 void QtBrowser::setUrl(const std::string & url, const std::string & data, bool postMethod) {
 	_url = QString::fromStdString(url);
-	if (_mode == IEMODE) {
+	if (_mode == BrowserModeIE) {
 #if (defined OS_WINDOWS) && (defined QT_COMMERCIAL)
 		if (!postMethod || data.empty()) {
 			if (data.empty()) {
@@ -104,10 +104,10 @@ void QtBrowser::beforeNavigate(const QString & url, int, const QString &, const 
 }
 
 bool QtBrowser::setMode(BrowserMode mode) {
-	//IEMODE is only available on Windows & Qt commercial
+	//BrowserModeIE is only available on Windows & Qt commercial
 #if (defined OS_WINDOWS) && (!defined QT_COMMERCIAL)
-	if (mode == IEMODE) {
-		_mode = QTMODE;
+	if (mode == BrowserModeIE) {
+		_mode = BrowserModeQt;
 		initBrowser();
 		return false;
 	}
@@ -119,12 +119,12 @@ bool QtBrowser::setMode(BrowserMode mode) {
 
 void QtBrowser::initBrowser() {
 #if (defined OS_WINDOWS) && (!defined QT_COMMERCIAL)
-	if (_mode == IEMODE) {
-		LOG_WARN("IEMODE not allowed");
+	if (_mode == BrowserModeIE) {
+		LOG_WARN("BrowserModeIE not allowed");
 	}
 #endif
 
-	if (_mode == QTMODE) {
+	if (_mode == BrowserModeQt) {
 #if (defined OS_WINDOWS) && (defined QT_COMMERCIAL)
 		//Clean ie browser
 		if (_ieBrowser) {
