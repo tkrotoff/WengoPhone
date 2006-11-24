@@ -1,4 +1,4 @@
-ow_create_static_library(speex)
+ow_create_static_library(SPEEX)
 
 ow_add_public_include_dirs(
 	${CMAKE_CURRENT_SOURCE_DIR}/include
