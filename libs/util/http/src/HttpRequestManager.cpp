@@ -30,6 +30,10 @@ HttpRequestManager::HttpRequestManager() {
 HttpRequestManager::~HttpRequestManager() {
 }
 
+HttpRequestManager & HttpRequestManager::getInstance() {
+	return Singleton<HttpRequestManager>::getInstance();
+}
+
 void HttpRequestManager::addAndStart(IHttpRequest *httpRequest) {
 	httpRequest->answerReceivedEvent +=
 		boost::bind(&HttpRequestManager::answerReceivedEventHandler, this, _1, _2, _3, _4);
