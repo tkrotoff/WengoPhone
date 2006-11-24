@@ -27,10 +27,10 @@
  *
  * @author Tanguy Krotoff
  */
-class CloseEventFilter : public EventFilter {
+class OWQTUTIL_API CloseEventFilter : public EventFilter {
 public:
 
-	OWQTUTIL_API CloseEventFilter(QObject * receiver, const char * member);
+	CloseEventFilter(QObject * receiver, const char * member);
 
 private:
 

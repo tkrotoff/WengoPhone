@@ -32,7 +32,7 @@
  *
  * @author Tanguy Krotoff
  */
-class WengoStyleLabel : public QLabel {
+class OWQTUTIL_API WengoStyleLabel : public QLabel {
 	Q_OBJECT
 public:
 
@@ -41,11 +41,11 @@ public:
 		Toggled,
 	};
 
-	OWQTUTIL_API WengoStyleLabel(QWidget * parent, Mode = Normal, Qt::AlignmentFlag hAlign = Qt::AlignHCenter);
+	WengoStyleLabel(QWidget * parent, Mode = Normal, Qt::AlignmentFlag hAlign = Qt::AlignHCenter);
 
-	OWQTUTIL_API ~WengoStyleLabel();
+	~WengoStyleLabel();
 
-	OWQTUTIL_API void setPixmaps(const QPixmap & normalLeftPixmap,
+	void setPixmaps(const QPixmap & normalLeftPixmap,
 			const QPixmap & normalRightPixmap,
 			const QPixmap & normalFillPixmap,
 			const QPixmap & pressedLeftPixmap,
@@ -56,25 +56,25 @@ public:
 
 	void setRightPixmaps(const QPixmap & normalRightPixmap, const QPixmap & pressedRightPixmap);*/
 
-	OWQTUTIL_API void setTextColor(const QColor & color);
+	void setTextColor(const QColor & color);
 
 	//void setBackgroundColor(const QColor & color);
 
-	OWQTUTIL_API void setTextAlignment(int alignment) {
+	void setTextAlignment(int alignment) {
 		_alignment = alignment;
 	}
 
-	OWQTUTIL_API void setSelected(bool value) {
+	void setSelected(bool value) {
 		_selected = value;
 	}
 
 public Q_SLOTS:
 
-	OWQTUTIL_API void setText(const QString & text);
+	void setText(const QString & text);
 
 Q_SIGNALS:
 
-	OWQTUTIL_API void clicked();
+	void clicked();
 
 private:
 

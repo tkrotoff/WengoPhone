@@ -31,11 +31,11 @@ class QEvent;
  *
  * @author Tanguy Krotoff
  */
-class ThreadEventFilter : public QObject {
+class OWQTUTIL_API ThreadEventFilter : public QObject {
 	Q_OBJECT
 public:
 
-	OWQTUTIL_API ThreadEventFilter();
+	ThreadEventFilter();
 
 private:
 

@@ -27,10 +27,10 @@
  *
  * @author Tanguy Krotoff
  */
-class EnabledChangeEventFilter : public EventFilter {
+class OWQTUTIL_API EnabledChangeEventFilter : public EventFilter {
 public:
 
-	OWQTUTIL_API EnabledChangeEventFilter(QObject * receiver, const char * member);
+	EnabledChangeEventFilter(QObject * receiver, const char * member);
 
 private:
 

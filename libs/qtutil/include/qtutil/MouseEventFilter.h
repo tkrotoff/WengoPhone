@@ -27,10 +27,10 @@
  *
  * @author Tanguy Krotoff
  */
-class MouseMoveEventFilter : public EventFilter {
+class OWQTUTIL_API MouseMoveEventFilter : public EventFilter {
 public:
 
-	OWQTUTIL_API MouseMoveEventFilter(QObject * receiver, const char * member);
+	MouseMoveEventFilter(QObject * receiver, const char * member);
 
 private:
 
@@ -43,10 +43,10 @@ private:
  *
  * @author Tanguy Krotoff
  */
-class MousePressEventFilter : public EventFilter {
+class OWQTUTIL_API MousePressEventFilter : public EventFilter {
 public:
 
-	OWQTUTIL_API MousePressEventFilter(QObject * receiver, const char * member, Qt::MouseButton button = Qt::NoButton);
+	MousePressEventFilter(QObject * receiver, const char * member, Qt::MouseButton button = Qt::NoButton);
 
 private:
 
@@ -61,10 +61,10 @@ private:
  *
  * @author Tanguy Krotoff
  */
-class MouseReleaseEventFilter : public EventFilter {
+class OWQTUTIL_API MouseReleaseEventFilter : public EventFilter {
 public:
 
-	OWQTUTIL_API MouseReleaseEventFilter(QObject * receiver, const char * member, Qt::MouseButton button = Qt::NoButton);
+	MouseReleaseEventFilter(QObject * receiver, const char * member, Qt::MouseButton button = Qt::NoButton);
 
 private:
 
@@ -79,10 +79,10 @@ private:
  *
  * @author Tanguy Krotoff
  */
-class MouseHoverEnterEventFilter : public EventFilter {
+class OWQTUTIL_API MouseHoverEnterEventFilter : public EventFilter {
 public:
 
-	OWQTUTIL_API MouseHoverEnterEventFilter(QObject * receiver, const char * member);
+	MouseHoverEnterEventFilter(QObject * receiver, const char * member);
 
 private:
 
@@ -95,10 +95,10 @@ private:
  *
  * @author Tanguy Krotoff
  */
-class MouseHoverLeaveEventFilter : public EventFilter {
+class OWQTUTIL_API MouseHoverLeaveEventFilter : public EventFilter {
 public:
 
-	OWQTUTIL_API MouseHoverLeaveEventFilter(QObject * receiver, const char * member);
+	MouseHoverLeaveEventFilter(QObject * receiver, const char * member);
 
 private:
 

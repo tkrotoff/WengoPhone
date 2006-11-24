@@ -30,10 +30,10 @@ watched->installEventFilter(new LanguageChangeEventFilter(this, SLOT(languageCha
  *
  * @author Tanguy Krotoff
  */
-class LanguageChangeEventFilter : public EventFilter {
+class OWQTUTIL_API LanguageChangeEventFilter : public EventFilter {
 public:
 
-	OWQTUTIL_API LanguageChangeEventFilter(QObject * receiver, const char * member);
+	LanguageChangeEventFilter(QObject * receiver, const char * member);
 
 private:
 

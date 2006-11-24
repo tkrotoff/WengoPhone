@@ -43,7 +43,7 @@ class QEvent;
  *
  * @author Tanguy Krotoff
  */
-class EventFilter : public QObject, NonCopyable {
+class OWQTUTIL_API EventFilter : public QObject, NonCopyable {
 	Q_OBJECT
 public:
 

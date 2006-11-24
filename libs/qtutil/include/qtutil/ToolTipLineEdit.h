@@ -37,25 +37,25 @@ class QEvent;
  * @see QLineEdit
  * @author Tanguy Krotoff
  */
-class ToolTipLineEdit : public QLineEdit {
+class OWQTUTIL_API ToolTipLineEdit : public QLineEdit {
 	Q_OBJECT
 public:
 
-	OWQTUTIL_API ToolTipLineEdit(QWidget * parent);
+	ToolTipLineEdit(QWidget * parent);
 
 	/**
 	 * @see QLineEdit::text()
 	 */
-	OWQTUTIL_API QString text() const;
+	QString text() const;
 
 public Q_SLOTS:
 
 	/**
 	 * @see QLineEdit::setText()
 	 */
-	OWQTUTIL_API void setText(const QString & text);
+	void setText(const QString & text);
 
-	OWQTUTIL_API void languageChanged();
+	void languageChanged();
 
 private:
 

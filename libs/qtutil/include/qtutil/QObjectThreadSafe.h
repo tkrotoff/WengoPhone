@@ -20,6 +20,7 @@
 #ifndef QOBJECTTHREADSAFE_H
 #define QOBJECTTHREADSAFE_H
 
+#include <qtutil/owqtutildll.h>
 #include <qtutil/PostEvent.h>
 
 #include <QtCore/QObject>
@@ -36,13 +37,13 @@
  * @see QCoreApplication::postEvent()
  * @author Tanguy Krotoff
  */
-class QObjectThreadSafe : public QObject {
+class OWQTUTIL_API QObjectThreadSafe : public QObject {
 	Q_OBJECT
 public:
 
-	OWQTUTIL_API QObjectThreadSafe(QObject * parent);
+	QObjectThreadSafe(QObject * parent);
 
-	OWQTUTIL_API virtual ~QObjectThreadSafe();
+	virtual ~QObjectThreadSafe();
 
 	/**
 	 * Initialization of the QObjectThreadSafe subclass object.
@@ -56,21 +57,21 @@ public:
 	 * </pre>
 	 * __SUBCLASS__ should be replaced by the QObjectThreadSafe subclass name.
 	 */
-	OWQTUTIL_API virtual void initThreadSafe() = 0;
+	virtual void initThreadSafe() = 0;
 
 	/**
 	 * Posts via QCoreApplication::postEvent() the specific QEvent.
 	 *
 	 * @param event PostEvent to post
 	 */
-	OWQTUTIL_API void postEvent(PostEvent * event);
+	void postEvent(PostEvent * event);
 
 	/**
 	 * Blocks/unblocks the reception of events send via postEvent().
 	 *
 	 * @param block true then block events; if false unblock events
 	 */
-	OWQTUTIL_API void blockEvents(bool block);
+	void blockEvents(bool block);
 
 private Q_SLOTS:
 

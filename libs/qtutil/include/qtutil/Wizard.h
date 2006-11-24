@@ -17,8 +17,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef WIZARD_H
-#define WIZARD_H
+#ifndef OWWIZARD_H
+#define OWWIZARD_H
 
 #include <qtutil/owqtutildll.h>
 
@@ -38,29 +38,29 @@ namespace Ui { class Wizard; }
  * @see http://doc.trolltech.com/3.3/qwizard.html
  * @author Tanguy Krotoff
  */
-class Wizard : public QObject, NonCopyable {
+class OWQTUTIL_API Wizard : public QObject, NonCopyable {
 	Q_OBJECT
 public:
 
-	OWQTUTIL_API Wizard(QWidget * parent);
+	Wizard(QWidget * parent);
 
-	OWQTUTIL_API ~Wizard();
+	~Wizard();
 
-	OWQTUTIL_API void show();
+	void show();
 
-	OWQTUTIL_API void addPage(QWidget * page);
+	void addPage(QWidget * page);
 
 Q_SIGNALS:
 
-	OWQTUTIL_API void finished();
+	void finished();
 
 private Q_SLOTS:
 
-	OWQTUTIL_API void backButtonClicked();
+	void backButtonClicked();
 
-	OWQTUTIL_API void nextButtonClicked();
+	void nextButtonClicked();
 
-	OWQTUTIL_API void finishedButtonClicked();
+	void finishedButtonClicked();
 
 private:
 
@@ -73,4 +73,4 @@ private:
 	QList<QWidget *> _history;
 };
 
-#endif	//WIZARD_H
+#endif	//OWWIZARD_H

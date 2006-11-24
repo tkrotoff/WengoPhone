@@ -34,19 +34,19 @@ class QMouseEvent;
  * @author Tanguy Krotoff
  * @author Mathieu Stute
  */
-class ClickableLabel : public QLabel {
+class OWQTUTIL_API ClickableLabel : public QLabel {
 	Q_OBJECT
 public:
 
-	OWQTUTIL_API ClickableLabel(QWidget * parent);
+	ClickableLabel(QWidget * parent);
 
 Q_SIGNALS:
 
 	/** Left click signal. */
-	OWQTUTIL_API void clicked();
+	void clicked();
 
 	/** Right click signal. */
-	OWQTUTIL_API void rightClicked();
+	void rightClicked();
 
 private:
 

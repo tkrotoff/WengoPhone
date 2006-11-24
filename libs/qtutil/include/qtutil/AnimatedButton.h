@@ -20,6 +20,8 @@
 #ifndef OWANIMATEDBUTTON_H
 #define OWANIMATEDBUTTON_H
 
+#include <qtutil/owqtutildll.h>
+
 #include <util/NonCopyable.h>
 
 #include <QtCore/QObject>
@@ -35,7 +37,7 @@ class QString;
  *
  * @author Tanguy Krotoff
  */
-class AnimatedButton : public QObject, NonCopyable {
+class OWQTUTIL_API AnimatedButton : public QObject, NonCopyable {
 	Q_OBJECT
 public:
 

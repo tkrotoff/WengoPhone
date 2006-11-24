@@ -27,10 +27,10 @@
  *
  * @author Tanguy Krotoff
  */
-class ResizeEventFilter : public EventFilter {
+class OWQTUTIL_API ResizeEventFilter : public EventFilter {
 public:
 
-	OWQTUTIL_API ResizeEventFilter(QObject * receiver, const char * member);
+	ResizeEventFilter(QObject * receiver, const char * member);
 
 private:
 

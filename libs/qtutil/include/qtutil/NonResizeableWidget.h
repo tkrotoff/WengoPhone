@@ -31,11 +31,11 @@ class QWidget;
  *
  * @author Tanguy Krotoff
  */
-class NonResizeableWidget : public QObject {
+class OWQTUTIL_API NonResizeableWidget : public QObject {
 	Q_OBJECT
 public:
 
-	OWQTUTIL_API NonResizeableWidget(QWidget * widget);
+	NonResizeableWidget(QWidget * widget);
 
 private Q_SLOTS:
 

@@ -27,10 +27,10 @@
  *
  * @author Tanguy Krotoff
  */
-class PaintEventFilter : public EventFilter {
+class OWQTUTIL_API PaintEventFilter : public EventFilter {
 public:
 
-	OWQTUTIL_API PaintEventFilter(QObject * receiver, const char * member);
+	PaintEventFilter(QObject * receiver, const char * member);
 
 private:
 

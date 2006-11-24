@@ -20,6 +20,8 @@
 #ifndef OWUPQCOMBOBOX_H
 #define OWUPQCOMBOBOX_H
 
+#include <qtutil/owqtutildll.h>
+
 #include <QtGui/QComboBox>
 
 /**
@@ -28,7 +30,7 @@
  * @see QComboBox
  * @author Xavier Desjardins
  */
-class UpQComboBox : public QComboBox {
+class OWQTUTIL_API UpQComboBox : public QComboBox {
 	Q_OBJECT
 public:
 
