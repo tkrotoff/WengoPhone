@@ -17,37 +17,19 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef OWQTWEBDIRECTORY_H
-#define OWQTWEBDIRECTORY_H
+#ifndef OWBROWSERDLL_H
+#define OWBROWSERDLL_H
 
-#include <string>
+#include <cutil/dllexport.h>
 
-#include <owbrowser/QtBrowser.h>
+#ifdef OWBROWSER_DLL
+	#ifdef BUILD_OWBROWSER_DLL
+		#define OWBROWSER_API DLLEXPORT
+	#else
+		#define OWBROWSER_API DLLIMPORT
+	#endif
+#else
+	#define OWBROWSER_API
+#endif
 
-/**
- * Embedded HTML browser widget for the web directory.
- *
- * @author Mathieu Stute
- */
-class QtWebDirectory : public QtBrowser {
-	Q_OBJECT
-public:
-
-	QtWebDirectory(QWidget * parent);
-
-	~QtWebDirectory();
-
-	void raise();
-
-private Q_SLOTS:
-
-	void CloseEventFilterSlot();
-
-	void languageChanged();
-
-private:
-
-	void init();
-};
-
-#endif	//OWQTBROWSERWIDGET_H
+#endif	//OWBROWSERDLL_H

@@ -26,6 +26,7 @@ if (CMAKE_BUILD_TYPE MATCHES Debug)
 	else (UNIX)
 		ow_add_public_libraries(
 			QtUiToolsd
+			QAxContainerd
 		)
 	endif (UNIX)
 else (CMAKE_BUILD_TYPE MATCHES Debug)
@@ -35,6 +36,7 @@ else (CMAKE_BUILD_TYPE MATCHES Debug)
 		${QT_QTXML_LIBRARY_RELEASE}
 		${QT_QTSVG_LIBRARY_RELEASE}
 		QtUiTools
+		QAxContainer
 	)
 endif (CMAKE_BUILD_TYPE MATCHES Debug)
 

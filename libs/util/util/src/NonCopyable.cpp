@@ -17,37 +17,10 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#ifndef OWQTWEBDIRECTORY_H
-#define OWQTWEBDIRECTORY_H
+#include <util/NonCopyable.h>
 
-#include <string>
+NonCopyable::NonCopyable() {
+}
 
-#include <owbrowser/QtBrowser.h>
-
-/**
- * Embedded HTML browser widget for the web directory.
- *
- * @author Mathieu Stute
- */
-class QtWebDirectory : public QtBrowser {
-	Q_OBJECT
-public:
-
-	QtWebDirectory(QWidget * parent);
-
-	~QtWebDirectory();
-
-	void raise();
-
-private Q_SLOTS:
-
-	void CloseEventFilterSlot();
-
-	void languageChanged();
-
-private:
-
-	void init();
-};
-
-#endif	//OWQTBROWSERWIDGET_H
+NonCopyable::~NonCopyable() {
+}

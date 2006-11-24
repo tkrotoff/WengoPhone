@@ -171,6 +171,8 @@ qt4_wrap_cpp(${PROJECT_NAME}_SRCS
 	filetransfer/QtFileTransferDownloadItem.h
 	filetransfer/QtFileTransferUploadItem.h
 	filetransfer/QtFileTransferUpgradeDialog.h
+
+	webdirectory/QtWebDirectory.h
 )
 
 ow_add_sources(
@@ -306,6 +308,8 @@ ow_add_sources(
 	filetransfer/QtFileTransferDownloadItem.cpp
 	filetransfer/QtFileTransferUploadItem.cpp
 	filetransfer/QtFileTransferUpgradeDialog.cpp
+
+	webdirectory/QtWebDirectory.cpp
 )
 
 #if (WIN32)

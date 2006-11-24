@@ -48,7 +48,7 @@
 #include "webservices/directory/QtWsDirectory.h"
 #include "webservices/sms/QtSms.h"
 
-#if (defined OS_WINDOWS) && (defined QT_COMMERCIAL)
+#if (defined OS_WINDOWS) && (QT_EDITION == QT_EDITION_DESKTOP)
 	#include "webdirectory/QtWebDirectory.h"
 #endif
 
@@ -173,7 +173,7 @@ void QtWengoPhone::initThreadSafe() {
 	//QtStatusBar
 	_qtStatusBar = new QtStatusBar(_cWengoPhone, _ui->statusBar, _qtToolBar);
 
-#if (defined OS_WINDOWS) && (defined QT_COMMERCIAL)
+#if (defined OS_WINDOWS) && (QT_EDITION == QT_EDITION_DESKTOP)
 	_qtWebDirectory = new QtWebDirectory(0);
 #endif
 
@@ -181,7 +181,7 @@ void QtWengoPhone::initThreadSafe() {
 
 	//QtBrowserWidget
 	_qtBrowserWidget = new QtBrowserWidget(*this);
-#if (defined OS_WINDOWS) && (defined QT_COMMERCIAL)
+#if (defined OS_WINDOWS) && (QT_EDITION == QT_EDITION_DESKTOP)
 	if (config.getIEActiveXEnable()) {
 		_ui->tabWidget->insertTab(_ui->tabWidget->count(), _qtBrowserWidget->getWidget(), tr("Home"));
 		_ui->tabWidget->setCurrentWidget(_qtBrowserWidget->getWidget());
@@ -235,7 +235,7 @@ QtSms * QtWengoPhone::getQtSms() const {
 	return _qtSms;
 }
 
-#if (defined OS_WINDOWS) && (defined QT_COMMERCIAL)
+#if (defined OS_WINDOWS) && (QT_EDITION == QT_EDITION_DESKTOP)
 QtWebDirectory * QtWengoPhone::getQtWebDirectory() const {
 	return _qtWebDirectory;
 }

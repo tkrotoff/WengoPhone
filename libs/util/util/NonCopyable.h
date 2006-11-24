@@ -20,6 +20,8 @@
 #ifndef OWNONCOPYABLE_H
 #define OWNONCOPYABLE_H
 
+#include <util/owutildll.h>
+
 /**
  * Ensures derived classes have private copy constructor and copy assignment.
  *
@@ -39,9 +41,9 @@
 class NonCopyable {
 protected:
 
-	NonCopyable() { }
+	OWUTIL_API NonCopyable();
 
-	~NonCopyable() { }
+	OWUTIL_API ~NonCopyable();
 
 private:
 

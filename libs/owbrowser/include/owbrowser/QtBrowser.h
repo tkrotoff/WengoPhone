@@ -20,7 +20,8 @@
 #ifndef OWQTBROWSER_H
 #define OWQTBROWSER_H
 
-#include <OWBrowser.h>
+#include <owbrowser/owbrowserdll.h>
+#include <owbrowser/OWBrowser.h>
 
 #include <util/Event.h>
 #include <cutil/global.h>
@@ -32,7 +33,7 @@ class QTextBrowser;
 class QVBoxLayout;
 class QUrl;
 
-#if (defined OS_WINDOWS) && (defined QT_COMMERCIAL)
+#if (defined OS_WINDOWS) && (QT_EDITION == QT_EDITION_DESKTOP)
 	class QAxWidget;
 #endif
 
@@ -45,12 +46,12 @@ class QUrl;
  *
  * @author Mathieu Stute
  */
-class QtBrowser : public QObject, public OWBrowser {
+class OWBROWSER_API QtBrowser : public QObject, public OWBrowser {
 	Q_OBJECT
 public:
 
 	/**
-	 * Browser mode enum
+	 * Browser mode.
 	 */
 	enum BrowserMode {
 
@@ -119,7 +120,7 @@ private:
 	 */
 	QWidget * _browserWidget;
 
-#if (defined OS_WINDOWS) && (defined QT_COMMERCIAL)
+#if (defined OS_WINDOWS) && (QT_EDITION == QT_EDITION_DESKTOP)
 	/**
 	 * Microsoft Web Browser ActiveX.
 	 */

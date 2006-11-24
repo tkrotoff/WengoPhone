@@ -19,6 +19,7 @@ ow_add_sources(
 	src/Time.cpp
 	src/Uuid.cpp
 	src/WebBrowser.cpp
+	src/NonCopyable.cpp
 )
 
 if (WIN32)

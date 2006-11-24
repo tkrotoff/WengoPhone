@@ -10,13 +10,15 @@ ow_use_private_libraries(
 )
 
 ow_add_public_include_dirs(
-	${CMAKE_CURRENT_SOURCE_DIR}
+	${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
 ow_add_sources(
-	QtBrowser.cpp
+	src/QtBrowser.cpp
 )
 
-qt4_automoc(${owbrowser_SRCS})
+qt4_wrap_cpp(${PROJECT_NAME}_SRCS
+	include/owbrowser/QtBrowser.h
+)
 
 ow_create_binary()

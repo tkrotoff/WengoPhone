@@ -17,7 +17,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "QtBrowser.h"
+#include <owbrowser/QtBrowser.h>
 
 #include <util/Logger.h>
 #include <util/SafeDelete.h>
@@ -26,7 +26,7 @@
 
 #include <QtGui/QtGui>
 
-#if (defined OS_WINDOWS) && (defined QT_COMMERCIAL)
+#if (defined OS_WINDOWS) && (QT_EDITION == QT_EDITION_DESKTOP)
 	#include <ActiveQt/QAxWidget>
 
 	#include <windows.h>
@@ -44,7 +44,7 @@ QtBrowser::QtBrowser(QWidget * parent, BrowserMode mode)
 
 	_browserWidget = new QWidget(parent);
 
-#if (defined OS_WINDOWS) && (defined QT_COMMERCIAL)
+#if (defined OS_WINDOWS) && (QT_EDITION == QT_EDITION_DESKTOP)
 	_ieBrowser = NULL;
 #endif
 	_qtBrowser = NULL;
@@ -59,7 +59,7 @@ QtBrowser::QtBrowser(QWidget * parent, BrowserMode mode)
 void QtBrowser::setUrl(const std::string & url, const std::string & data, bool postMethod) {
 	_url = QString::fromStdString(url);
 	if (_mode == BrowserModeIE) {
-#if (defined OS_WINDOWS) && (defined QT_COMMERCIAL)
+#if (defined OS_WINDOWS) && (QT_EDITION == QT_EDITION_DESKTOP)
 		if (!postMethod || data.empty()) {
 			if (data.empty()) {
 				_ieBrowser->dynamicCall("Navigate(const QString&)", _url);
@@ -105,7 +105,7 @@ void QtBrowser::beforeNavigate(const QString & url, int, const QString &, const 
 
 bool QtBrowser::setMode(BrowserMode mode) {
 	//BrowserModeIE is only available on Windows & Qt commercial
-#if (defined OS_WINDOWS) && (!defined QT_COMMERCIAL)
+#if (defined OS_WINDOWS) && (QT_EDITION == QT_EDITION_DESKTOP)
 	if (mode == BrowserModeIE) {
 		_mode = BrowserModeQt;
 		initBrowser();
@@ -118,14 +118,14 @@ bool QtBrowser::setMode(BrowserMode mode) {
 }
 
 void QtBrowser::initBrowser() {
-#if (defined OS_WINDOWS) && (!defined QT_COMMERCIAL)
+#if (defined OS_WINDOWS) && (QT_EDITION == QT_EDITION_DESKTOP)
 	if (_mode == BrowserModeIE) {
 		LOG_WARN("BrowserModeIE not allowed");
 	}
 #endif
 
 	if (_mode == BrowserModeQt) {
-#if (defined OS_WINDOWS) && (defined QT_COMMERCIAL)
+#if (defined OS_WINDOWS) && (QT_EDITION == QT_EDITION_DESKTOP)
 		//Clean ie browser
 		if (_ieBrowser) {
 			_layout->removeWidget(_ieBrowser);
@@ -138,7 +138,7 @@ void QtBrowser::initBrowser() {
 				SLOT(beforeNavigate(const QUrl &)));
 		_layout->addWidget(_qtBrowser);
 	} else {
-#if (defined OS_WINDOWS) && (defined QT_COMMERCIAL)
+#if (defined OS_WINDOWS) && (QT_EDITION == QT_EDITION_DESKTOP)
 		//Clean qt browser
 		if (_qtBrowser) {
 			_layout->removeWidget(_qtBrowser);
@@ -157,7 +157,7 @@ void QtBrowser::initBrowser() {
 	}
 }
 
-#if (defined OS_WINDOWS) && (defined QT_COMMERCIAL)
+#if (defined OS_WINDOWS) && (QT_EDITION == QT_EDITION_DESKTOP)
 bool initPostData(LPVARIANT pvPostData, const std::string & postData) {
 	LPCTSTR cszPostData = (LPCTSTR) postData.c_str();
 	UINT cElems = lstrlen(cszPostData);
@@ -183,7 +183,7 @@ bool initPostData(LPVARIANT pvPostData, const std::string & postData) {
 #endif
 
 void QtBrowser::setPost(const std::string & url, const std::string & postData) {
-#if (defined OS_WINDOWS) && (defined QT_COMMERCIAL)
+#if (defined OS_WINDOWS) && (QT_EDITION == QT_EDITION_DESKTOP)
 	VARIANT vFlags = {0};
 	VARIANT vPostData = {0};
 	VARIANT vHeaders = {0};
@@ -207,7 +207,7 @@ void QtBrowser::setPost(const std::string & url, const std::string & postData) {
 		goto finalize;
 	}
 	IWebBrowser * webBrowser = 0;
-	_ieBrowser->queryInterface( IID_IWebBrowser, (void**) &webBrowser );
+	_ieBrowser->queryInterface(IID_IWebBrowser, (void**) &webBrowser);
 	if (webBrowser) {
 		//use POST method
 		webBrowser->Navigate(bstrURL, &vFlags, NULL, &vPostData, &vHeaders);

@@ -62,7 +62,7 @@ class QtWsDirectory;
 class QtBrowserWidget;
 class QtDialpad;
 class UserProfile;
-#if (defined OS_WINDOWS) && (defined QT_COMMERCIAL)
+#if (defined OS_WINDOWS) && (QT_EDITION == QT_EDITION_DESKTOP)
 class QtWebDirectory;
 #endif
 
@@ -129,7 +129,7 @@ public:
 
 	CWengoPhone & getCWengoPhone() const;
 
-#if (defined OS_WINDOWS) && (defined QT_COMMERCIAL)
+#if (defined OS_WINDOWS) && (QT_EDITION == QT_EDITION_DESKTOP)
 	QtWebDirectory * getQtWebDirectory() const;
 #endif
 
@@ -246,7 +246,7 @@ private:
 
 	QWidget * _activeTabBeforeCall;
 
-#if (defined OS_WINDOWS) && (defined QT_COMMERCIAL)
+#if (defined OS_WINDOWS) && (QT_EDITION == QT_EDITION_DESKTOP)
 	QtWebDirectory * _qtWebDirectory;
 #endif
 };

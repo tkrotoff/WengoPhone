@@ -38,7 +38,7 @@
 
 #include <qtutil/SafeConnect.h>
 
-#include <QtBrowser.h>
+#include <owbrowser/QtBrowser.h>
 
 #include <QtGui/QtGui>
 
@@ -55,8 +55,7 @@ QtBrowserWidget::QtBrowserWidget(QtWengoPhone & qtWengoPhone)
 	: _qtWengoPhone(qtWengoPhone) {
 	_qtBrowser = NULL;
 
-
-#if (defined OS_WINDOWS) && (defined QT_COMMERCIAL)
+#if (defined OS_WINDOWS) && (QT_EDITION == QT_EDITION_DESKTOP)
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	if (config.getIEActiveXEnable()) {
 		//Embedded Browser
