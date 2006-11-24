@@ -3919,3 +3919,20 @@ void eXosip_reset_idle_time()
 {
 	eXosip.last_srv_active_time = 0;
 }
+
+int eXosip_get_subscribe_id(const char * remote_uri, int * sid)
+{
+	eXosip_subscribe_t * js;
+
+	if(remote_uri == NULL || strlen(remote_uri) <= 0 || sid == NULL) {
+		return -1;
+	}
+
+	for(js = eXosip.j_subscribes; js != NULL; js = js->next) {
+		if(strcmp(js->s_uri, remote_uri) == 0) {
+			*sid = js->s_id;
+			return 0;
+		}
+	}
+	return -1;
+}

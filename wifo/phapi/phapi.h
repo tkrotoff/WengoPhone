@@ -42,13 +42,31 @@
 #define OWPL_STREAM_VIDEO_RX	PH_STREAM_VIDEO_RX
 #define OWPL_STREAM_VIDEO_TX	PH_STREAM_VIDEO_TX
 
+#define OWPL_TUNNEL_NOT_USED	0
+#define OWPL_TUNNEL_USE			PH_TUNNEL_USE // 1
+#define	OWPL_TUNNEL_SSL			PH_TUNNEL_SSL // 1 << 2
+#define OWPL_TUNEL_AUTOCONF		PH_TUNNEL_AUTOCONF // 1 << 1
+
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 extern int owStaticCallId;
 
+typedef enum {
+	OWPL_NAT_TYPE_NONE,
+	OWPL_NAT_TYPE_AUTO,
+	OWPL_NAT_TYPE_FCONE,
+	OWPL_NAT_TYPE_RCONE,
+	OWPL_NAT_TYPE_PRCONE,
+	OWPL_NAT_TYPE_SYMETRIC
+} OWPL_NAT_TYPE;
 
+typedef enum {
+	OWPL_TYPING_STATE_TYPING,
+	OWPL_TYPING_STATE_STOP_TYPING,
+	OWPL_TYPING_STATE_NOT_TYPING
+} OWPL_TYPING_STATE;
 
 typedef enum OWPL_CALL_REFUSED_REASON_
 {
@@ -113,17 +131,53 @@ owplInit(	const int udpPort,
  *								Phone CONFIG related functions								*
  ********************************************************************************************/
 
+/**
+ * Sets the local HTTP proxy parameters.
+ *
+ * @param	szLocalProxyAddr	the local HTTP proxy ip address
+ * @param	LocalProxyPort	the local HTTP proxy port
+ * @param	szLocalProxyUserName	the username for the local HTTP proxy
+ * @param	szLocalProxyPasswd	the password for the local HTTP proxy
+ * @return	an OWPL_RESULT
+ */
 MY_DLLEXPORT OWPL_RESULT
 owplConfigSetLocalHttpProxy(const char* szLocalProxyAddr,
 					 const int LocalProxyPort,
 					 const char* szLocalProxyUserName,
 					 const char* szLocalProxyPasswd);
 
-
+/**
+ * Sets the parameters for tunnel use.
+ *
+ * @param	szTunnelSeverAddr	the server ip address
+ * @param	TunnelServerPort	the server port
+ * @param	TunnelMode	a mask of OWPL_TUNNEL_NOT_USED or OWPL_TUNNEL_USE | OWPL_TUNNEL_SSL | OWPL_TUNNEL_AUTOCONF
+ * @return	an OWPL_RESULT
+ */
 MY_DLLEXPORT OWPL_RESULT
 owplConfigSetTunnel(const char* szTunnelSeverAddr,
 					 const int TunnelServerPort,
 					 const int TunnelMode);
+/**
+ * Sets the NAT configuration
+ *
+ * @param	eNatType	the nat type
+ * @param	natRefreshTime	the nat refresh time in ms
+ * @return	an OWPL_RESULT
+ */
+MY_DLLEXPORT OWPL_RESULT
+owplConfigSetNat(const OWPL_NAT_TYPE eNatType,
+				 const int natRefreshTime);
+
+/**
+ * DEPRECATED
+ * WARNING this function must be called before owplInit if http tunnel is used
+ *
+ * @param the outbound sip proxy address "ip:port"
+ * @return	an OWPL_RESULT
+ */
+MY_DLLEXPORT OWPL_RESULT
+owplConfigSetOutboundProxy(const char * szProxyAddr);
 
 MY_DLLEXPORT OWPL_RESULT
 owplConfigAddAudioCodecByName(const char* szCodecName);
@@ -664,6 +718,15 @@ MY_DLLEXPORT OWPL_RESULT owplPresenceSubscribe(OWPL_LINE  hLine,
 										  OWPL_SUB *hSub);
 
 /**
+ * Unsubscribes to presence of the SUBSCRIBE of id hSub
+ *
+ * @param	hSub	the SIP URI from which we want to unsubscribe
+ * @return	an OWPL_RESULT
+ */
+MY_DLLEXPORT OWPL_RESULT
+owplPresenceUnsubscribe(const char * szRemoteUri);
+
+/**
  * Sends a PUBLISH message to change the presence of the current user.
  *
  * @param hLine			The handle to the line.
@@ -676,6 +739,72 @@ MY_DLLEXPORT OWPL_RESULT owplPresencePublish(OWPL_LINE  hLine,
                                           const int Online,
                                           const char * szStatus,
 										  OWPL_PUB *hPub);
+
+/********************************************************************************************
+ *								Message related functions								*
+ ********************************************************************************************/
+
+/**
+ * Sends a custom message
+ *
+ * @param	hLine	a virtual line handle
+ * @param	szRemoteUri	a remote uri "sip:user@domain"
+ * @param	szContent	the content of the message
+ * @param	szMIME	the MIME type "content_type/sub_content_type"
+ * @param	messageId	a buffer receiving the id of the sent message
+ * @return	an OWPL_RESULT
+ */
+MY_DLLEXPORT OWPL_RESULT
+owplMessageSend(OWPL_LINE hLine,
+				const char * szRemoteUri,
+				const char * szContent,
+				const char * szMIME, 
+				int * messageId);
+
+/**
+ * Sends a plain text message (chat purpose)
+ *
+ * @param	hLine	a virtual line handle
+ * @param	szRemoteUri	a remote uri "sip:user@domain"
+ * @param	szContent	the content of the message
+ * @param	messageId	a buffer receiving the id of the sent message
+ * @return	an OWPL_RESULT
+ */
+MY_DLLEXPORT OWPL_RESULT
+owplMessageSendPlainText(OWPL_LINE hLine,
+				const char * szRemoteUri,
+				const char * szContent, 
+				int * messageId);
+
+/**
+ * Sends a message to inform the other party of the typing state
+ *
+ * @param	hLine	a virtual line handle
+ * @param	szRemoteUri	a remote uri "sip:user@domain"
+ * @param	state	the typing state
+ * @param	messageId	a buffer receiving the id of the sent message
+ * @return	an OWPL_RESULT
+ */
+MY_DLLEXPORT OWPL_RESULT
+owplMessageSendTypingState(OWPL_LINE hLine,
+				const char * szRemoteUri,
+				OWPL_TYPING_STATE state, 
+				int * messageId);
+
+/**
+ * Sends a message to inform the other party that the user changed his icon
+ *
+ * @param	hLine	a virtual line handle
+ * @param	szRemoteUri	a remote uri "sip:user@domain"
+ * @param	szIconFileName	the icon file name
+ * @param	messageId	a buffer receiving the id of the sent message
+ * @return	an OWPL_RESULT
+ */
+MY_DLLEXPORT OWPL_RESULT
+owplMessageSendIcon(OWPL_LINE hLine,
+				const char * szRemoteUri,
+				const char * szIconFileName, 
+				int * messageId);
 
 
 #ifdef __cplusplus

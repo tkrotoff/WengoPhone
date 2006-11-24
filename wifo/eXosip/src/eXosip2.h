@@ -548,7 +548,7 @@ int eXosip_is_public_address(const char *addr);
 
 sdp_message_t *eXosip_get_sdp_body(osip_message_t *message);
 
-// <ncouturier>
+
 /**
  * Finds the eXosip_reg_t associated with a local contact of form <sip:username@ip:port>
  *
@@ -556,7 +556,15 @@ sdp_message_t *eXosip_get_sdp_body(osip_message_t *message);
  * @return	the eXosip_reg_t associated with a local contact
  */
 eXosip_reg_t * eXosip_reg_find_by_local_contact(const char * local_contact);
-// </ncouturier>
+
+/**
+ * Finds the subscription id associated to a remote uri
+ *
+ * @param	remote_uri	a remote uri "sip:user@domain"
+ * @param	sid	a buffer receiving the subscription id
+ * @return	0 if succeeds; -1 else
+ */
+int eXosip_get_subscribe_id(const char * remote_uri, int * sid);
 
 
 #ifdef __cplusplus

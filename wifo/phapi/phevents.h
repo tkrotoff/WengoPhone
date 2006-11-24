@@ -381,8 +381,11 @@ typedef struct
 typedef enum 
 {
     OWPL_SUBSCRIPTION_PENDING,      /**< THe subscription is being set up, but not yet active. */
+	OWPL_SUBSCRIPTION_CLOSING,
     OWPL_SUBSCRIPTION_ACTIVE ,      /**< The subscription is currently active. */
+	OWPL_SUBSCRIPTION_CLOSED,
     OWPL_SUBSCRIPTION_FAILED ,      /**< The subscription is not active due to a failure.*/
+	OWPL_SUBSCRIPTION_CLOSE_FAILED,
     OWPL_SUBSCRIPTION_EXPIRED ,     /**< The subscription's lifetime has expired. */
     // TBD
 } OWPL_SUBSCRIPTION_STATE;

@@ -173,10 +173,22 @@ owplConfigSetLocalHttpProxy(const char* szLocalProxyAddr,
 					 const char* szLocalProxyUserName,
 					 const char* szLocalProxyPasswd)
 {
-	strncpy(phcfg.http_proxy, szLocalProxyAddr, sizeof (phcfg.http_proxy));
+	if(szLocalProxyAddr != NULL) {
+		strncpy(phcfg.http_proxy, szLocalProxyAddr, sizeof (phcfg.http_proxy));
+	} else {
+		phcfg.http_proxy[0] = 0;
+	}
 	phcfg.http_proxy_port = LocalProxyPort;
-	strncpy(phcfg.http_proxy_user, szLocalProxyUserName, sizeof (phcfg.http_proxy_user));
-	strncpy(phcfg.http_proxy_passwd, szLocalProxyPasswd, sizeof (phcfg.http_proxy_passwd));
+	if(szLocalProxyUserName != NULL) {
+		strncpy(phcfg.http_proxy_user, szLocalProxyUserName, sizeof (phcfg.http_proxy_user));
+	} else {
+		phcfg.http_proxy_user[0] = 0;
+	}
+	if(szLocalProxyPasswd != NULL) {
+		strncpy(phcfg.http_proxy_passwd, szLocalProxyPasswd, sizeof (phcfg.http_proxy_passwd));
+	} else {
+		phcfg.http_proxy_passwd[0] = 0;
+	}
 
 	return OWPL_RESULT_SUCCESS;
 }
@@ -186,13 +198,55 @@ owplConfigSetTunnel(const char* szTunnelSeverAddr,
 					 const int TunnelServerPort,
 					 const int TunnelMode)
 {
-	strncpy(phcfg.httpt_server, szTunnelSeverAddr, sizeof (phcfg.httpt_server));
+	if(szTunnelSeverAddr != NULL) {
+		strncpy(phcfg.httpt_server, szTunnelSeverAddr, sizeof (phcfg.httpt_server));
+	} else {
+		phcfg.httpt_server[0] = 0;
+	}
 	phcfg.httpt_server_port = TunnelServerPort;
 	phcfg.use_tunnel = TunnelMode;
 
 	return OWPL_RESULT_SUCCESS;
 }
 
+MY_DLLEXPORT OWPL_RESULT
+owplConfigSetNat(const OWPL_NAT_TYPE eNatType,
+				 const int natRefreshTime)
+{
+	switch(eNatType) {
+		case OWPL_NAT_TYPE_NONE :
+			strncpy(phcfg.nattype, "none", sizeof(phcfg.nattype));
+			break;
+		case OWPL_NAT_TYPE_AUTO:
+			strncpy(phcfg.nattype, "auto", sizeof(phcfg.nattype));
+			break;
+		case OWPL_NAT_TYPE_FCONE :
+			strncpy(phcfg.nattype, "fcone", sizeof(phcfg.nattype));
+			break;
+		case OWPL_NAT_TYPE_RCONE :
+			strncpy(phcfg.nattype, "rcone", sizeof(phcfg.nattype));
+			break;
+		case OWPL_NAT_TYPE_PRCONE :
+			strncpy(phcfg.nattype, "prcone", sizeof(phcfg.nattype));
+			break;
+		case OWPL_NAT_TYPE_SYMETRIC :
+			strncpy(phcfg.nattype, "sym", sizeof(phcfg.nattype));
+			break;
+		default :
+			break;
+	}
+	phcfg.nat_refresh_time = natRefreshTime;
+}
+
+MY_DLLEXPORT OWPL_RESULT
+owplConfigSetOutboundProxy(const char * szProxyAddr)
+{
+	if(szProxyAddr != NULL) {
+		strncpy(phcfg.proxy, szProxyAddr, sizeof(phcfg.proxy));
+	} else {
+		phcfg.proxy[0] = 0;
+	}
+}
 
 MY_DLLEXPORT OWPL_RESULT 
 owplConfigAddAudioCodecByName(const char* szCodecName)
@@ -883,9 +937,10 @@ owplCallUnhold(const OWPL_CALL hCall) {
 
 MY_DLLEXPORT OWPL_RESULT
 owplCallUnholdWithBody(const OWPL_CALL hCall, 
-		       const char * szContentType, 
-		       const char * szBody, 
-		       int BodySize) {
+					   const char * szContentType, 
+					   const char * szBody, 
+					   int BodySize) 
+{
 	phcall_t *ca = ph_locate_call_by_cid(hCall);
 	int i;
 
@@ -951,6 +1006,35 @@ MY_DLLEXPORT OWPL_RESULT owplPresenceSubscribe(OWPL_LINE  hLine,
 	return OWPL_RESULT_SUCCESS;
 }
 
+MY_DLLEXPORT OWPL_RESULT
+owplPresenceUnsubscribe(const char * szRemoteUri) {
+	OWPL_SUB hSub;
+	int i = 0;
+
+	if(szRemoteUri == NULL || strlen(szRemoteUri) <= 0) {
+		return OWPL_RESULT_INVALID_ARGS;
+	}
+
+	eXosip_lock();
+	i = eXosip_get_subscribe_id(szRemoteUri, &hSub);
+	if(i == 0) {
+		i = eXosip_subscribe_close(hSub);
+	}
+	eXosip_unlock();
+	if(i != 0) {
+		owplFireSubscriptionEvent(hSub,
+			OWPL_SUBSCRIPTION_CLOSE_FAILED,
+			SUBSCRIPTION_CAUSE_UNKNOWN,
+			szRemoteUri);
+	} else {
+		owplFireSubscriptionEvent(hSub,
+			OWPL_SUBSCRIPTION_CLOSED,
+			SUBSCRIPTION_CAUSE_NORMAL,
+			szRemoteUri);
+	}
+	return OWPL_RESULT_SUCCESS;
+}
+
 /**
  * Sends a PUBLISH message to change the presence of the current user.
  * 
@@ -1010,4 +1094,91 @@ MY_DLLEXPORT OWPL_RESULT owplPresencePublish(OWPL_LINE  hLine,
 		return OWPL_RESULT_FAILURE;
 	}
 	return OWPL_RESULT_SUCCESS;
+}
+
+/********************************************************************************************
+ *								Message related functions								*
+ ********************************************************************************************/
+
+MY_DLLEXPORT OWPL_RESULT
+owplMessageSend(OWPL_LINE hLine,
+				const char * szRemoteUri,
+				const char * szContent,
+				const char * szMIME,
+				int * messageId)
+{
+	int i;
+	phVLine *vl;
+	char from[512];
+
+	if(hLine <= 0 
+		|| szRemoteUri == NULL
+		|| strlen(szRemoteUri) <= 0
+		|| szMIME == NULL
+		|| strlen(szMIME) <= 0
+		|| szContent == NULL
+		|| strlen(szContent) <= 0
+		|| messageId == NULL)
+	{
+		return OWPL_RESULT_INVALID_ARGS;
+	}
+
+	vl = ph_valid_vlid(hLine);
+	if(!vl) {
+		return OWPL_RESULT_INVALID_ARGS;
+	}
+
+	ph_vline_get_from(from, sizeof(from), vl);
+
+	eXosip_lock();
+	*messageId = eXosip_message((char *)szRemoteUri, from, vl->proxy, szContent, szMIME);
+	eXosip_unlock();
+
+	return OWPL_RESULT_SUCCESS;
+}
+
+MY_DLLEXPORT OWPL_RESULT
+owplMessageSendPlainText(OWPL_LINE hLine,
+				const char * szRemoteUri,
+				const char * szContent,
+				int * messageId)
+{
+	return owplMessageSend(hLine, szRemoteUri, szContent, "text/plain", messageId);
+}
+
+
+
+MY_DLLEXPORT OWPL_RESULT
+owplMessageSendTypingState(OWPL_LINE hLine,
+				const char * szRemoteUri,
+				OWPL_TYPING_STATE state,
+				int * messageId)
+{
+	switch(state) {
+		case OWPL_TYPING_STATE_TYPING :
+			return owplMessageSend(hLine, szRemoteUri, "is typing", "typingstate/typing", messageId);
+
+		case OWPL_TYPING_STATE_STOP_TYPING :
+			return owplMessageSend(hLine, szRemoteUri, "stops typing", "typingstate/stoptyping", messageId);
+
+		case OWPL_TYPING_STATE_NOT_TYPING :
+			return owplMessageSend(hLine, szRemoteUri, "is not typing", "typingstate/nottyping", messageId);
+
+		default :
+			break;
+	}
+	return OWPL_RESULT_FAILURE;
+}
+
+MY_DLLEXPORT OWPL_RESULT
+owplMessageSendIcon(OWPL_LINE hLine,
+				const char * szRemoteUri,
+				const char * szIconFileName, 
+				int * messageId)
+{
+	char szMime[1024] = "buddyicon/";
+
+	strncat(szMime, szIconFileName, sizeof(szMime));
+
+	return owplMessageSend(hLine, szRemoteUri, "has changed his icon", szMime, messageId);
 }

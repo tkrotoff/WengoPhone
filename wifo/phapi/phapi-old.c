@@ -2420,6 +2420,13 @@ ph_tunnel_init()
 		return 0;
 	}
 
+	if(!phcfg.httpt_server_port) {
+		if(!phcfg.http_proxy) {
+			phcfg.httpt_server_port = 80;
+		} else {
+			phcfg.httpt_server_port = 443;
+		}
+	}
 	http_tunnel_init_host(phcfg.httpt_server, phcfg.httpt_server_port, phcfg.use_tunnel & PH_TUNNEL_SSL);
 	http_tunnel_init_proxy(phcfg.http_proxy,phcfg.http_proxy_port, 
 		phcfg.http_proxy_user, phcfg.http_proxy_passwd);
@@ -4920,6 +4927,19 @@ static int ph_event_get(){
 				case EXOSIP_SUBSCRIPTION_NOTIFY:
 					ph_notify_handler(je);
 					break;
+
+				case EXOSIP_OPTIONS_NOANSWER:
+					return -2;
+
+				case EXOSIP_ENGINE_STOPPED:
+#ifdef USE_HTTP_TUNNEL
+					if(phcfg.use_tunnel && phTunnel && phTunnel->h_tunnel) {
+						http_tunnel_close(phTunnel->h_tunnel);
+						phTunnel->h_tunnel = NULL;
+						eXosip_quit();
+					}
+#endif
+					return -2;
 
 				default:
 					if(phDebugLevel > 0) {
