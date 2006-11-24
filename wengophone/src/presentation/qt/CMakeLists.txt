@@ -314,8 +314,8 @@ ow_add_sources(
 
 #if (WIN32)
 	#if (MSVC)
-		#qt4_add_resources(${PROJECT_NAME}_SRCS
-		#win32/wengophone.rc
+		#ow_add_windows_resources(${PROJECT_NAME}_SRCS
+			#win32/wengophone.rc
 	#)
 	#else (MSVC)
 	#endif (MSVC)
