@@ -22,7 +22,7 @@
 
 #include <cutil/dllexport.h>
 
-#ifdef OWTHREAD_DLL
+#ifdef OWSOUND_DLL
 	#ifdef BUILD_OWSOUND_DLL
 		#define OWSOUND_API DLLEXPORT
 	#else
