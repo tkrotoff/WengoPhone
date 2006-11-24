@@ -105,7 +105,7 @@ void QtBrowser::beforeNavigate(const QString & url, int, const QString &, const 
 
 bool QtBrowser::setMode(BrowserMode mode) {
 	//BrowserModeIE is only available on Windows & Qt commercial
-#if (defined OS_WINDOWS) && (QT_EDITION == QT_EDITION_DESKTOP)
+#if (defined OS_WINDOWS) && (QT_EDITION != QT_EDITION_DESKTOP)
 	if (mode == BrowserModeIE) {
 		_mode = BrowserModeQt;
 		initBrowser();
@@ -118,7 +118,7 @@ bool QtBrowser::setMode(BrowserMode mode) {
 }
 
 void QtBrowser::initBrowser() {
-#if (defined OS_WINDOWS) && (QT_EDITION == QT_EDITION_DESKTOP)
+#if (defined OS_WINDOWS) && (QT_EDITION != QT_EDITION_DESKTOP)
 	if (_mode == BrowserModeIE) {
 		LOG_WARN("BrowserModeIE not allowed");
 	}
