@@ -1,7 +1,7 @@
 ow_create_plugin_library(phspeexplugin)
 
 ow_use_private_libraries(
-	speex
+	SPEEX
 )
 
 ow_add_private_compile_flags(
