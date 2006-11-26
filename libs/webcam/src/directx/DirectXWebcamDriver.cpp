@@ -198,17 +198,17 @@ WebcamErrorCode DirectXWebcamDriver::setDevice(const std::string & deviceName) {
 	//TODO: refactor the COM initialization phase to avoid
 	//multiple initalisations and better handle unitialization
 	//cf trac ticket #1008
-	CoInitialize(NULL);
-
-	_pBuild.CoCreateInstance(CLSID_CaptureGraphBuilder2);
-	if (!_pBuild) {
-		LOG_ERROR("failed to create Capture Graph builder");
-		return WEBCAM_NOK;
-	}
+	//CoInitialize(NULL);
 
 	_pGraph.CoCreateInstance(CLSID_FilterGraph);
 	if (!_pGraph) {
 		LOG_ERROR("failed to create Graph builder");
+		return WEBCAM_NOK;
+	}
+
+	_pBuild.CoCreateInstance(CLSID_CaptureGraphBuilder2);
+	if (!_pBuild) {
+		LOG_ERROR("failed to create Capture Graph builder");
 		return WEBCAM_NOK;
 	}
 
