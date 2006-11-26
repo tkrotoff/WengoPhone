@@ -33,6 +33,14 @@ public:
 
 	typedef scoped_lock ScopedLock;
 
+	void lock() {
+		boost::detail::thread::lock_ops<boost::recursive_mutex>::lock(*this);
+	}
+
+	void unlock() {
+		boost::detail::thread::lock_ops<boost::recursive_mutex>::unlock(*this);
+	}
+
 };
 
 #endif	//OWRECURSIVEMUTEX_H

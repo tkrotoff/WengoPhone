@@ -44,6 +44,8 @@ UserProfileHandler::UserProfileHandler() {
 UserProfileHandler::~UserProfileHandler() {
 	OWSAFE_DELETE(_desiredUserProfile);
 
+	_saveTimer.stop();
+
 	if (_currentUserProfile) {
 		saveUserProfile(*_currentUserProfile);
 		setLastUsedUserProfile(*_currentUserProfile);
@@ -228,10 +230,11 @@ void UserProfileHandler::profileChangedEventHandler() {
 }
 
 void UserProfileHandler::saveTimerLastTimeoutEventHandler(Timer & sender) {
-	RecursiveMutex::ScopedLock lock(_mutex);
-
 	saveUserProfile(*_currentUserProfile);
+
+	_mutex.lock();
 	_saveTimerRunning = false;
+	_mutex.unlock();
 }
 
 void UserProfileHandler::wengoAccountValidityEventHandler(UserProfile & sender, bool valid) {

@@ -34,8 +34,7 @@ using namespace std;
 
 ContactList::ContactList(UserProfile & userProfile)
 	: _userProfile(userProfile),
-	_imContactListHandler(userProfile.getIMContactListHandler()),
-	_lock(_mutex, false) {
+	_imContactListHandler(userProfile.getIMContactListHandler()) {
 
 	_imContactListHandler.newIMContactAddedEvent +=
 		boost::bind(&ContactList::newIMContactAddedEventHandler, this, _1, _2, _3);
@@ -503,11 +502,11 @@ void ContactList::contactChangedEventHandler(Contact & sender) {
 }
 
 void ContactList::lock() {
-	_lock.lock();
+	_mutex.lock();
 }
 
 void ContactList::unlock() {
-	_lock.unlock();
+	_mutex.unlock();
 }
 
 std::string ContactList::getContactGroupIdFromName(const std::string & groupName) const {

@@ -381,8 +381,6 @@ private:
 	IMContactListHandler & _imContactListHandler;
 
 	mutable RecursiveMutex _mutex;
-
-	RecursiveMutex::ScopedLock _lock;
 };
 
 #endif	//OWCONTACTLIST_H
