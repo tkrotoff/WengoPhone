@@ -61,7 +61,12 @@ std::string UserProfileFileStorage::getBackupProfilePath(const std::string & pro
 }
 
 bool UserProfileFileStorage::load(const std::string & profileName) {
-	Mutex::ScopedLock lock(_mutex);
+	RecursiveMutex::ScopedLock lock(_mutex);
+
+	if (profileName.empty()) {
+		LOG_DEBUG("empty profileName given");
+		return false;
+	}
 
 	bool result = false;
 
@@ -77,6 +82,7 @@ bool UserProfileFileStorage::load(const std::string & profileName) {
 			backupDir.remove();
 		} else {
 			LOG_INFO("backup recovery successful");
+			save(profileName);
 			profileLoadedFromBackupsEvent(*this, profileName);
 			result = true;
 		}
@@ -122,7 +128,12 @@ bool UserProfileFileStorage::loadFromDir(const std::string & path) {
 }
 
 bool UserProfileFileStorage::save(const std::string & profileName) {
-	Mutex::ScopedLock lock(_mutex);
+	RecursiveMutex::ScopedLock lock(_mutex);
+
+	if (profileName.empty()) {
+		LOG_DEBUG("empty profileName given");
+		return false;
+	}
 
 	std::string path = getProfilePath(profileName);
 	std::string newPath = getTempProfilePath(profileName);

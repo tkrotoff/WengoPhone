@@ -22,7 +22,7 @@
 
 #include "UserProfileStorage.h"
 
-#include <thread/Mutex.h>
+#include <thread/RecursiveMutex.h>
 #include <util/Event.h>
 
 class UserProfileStorage;
@@ -110,7 +110,7 @@ private:
 	bool saveProfile(const std::string & url);
 
 	/** For thread-safe operations. */
-	Mutex _mutex;
+	RecursiveMutex _mutex;
 
 };
 
