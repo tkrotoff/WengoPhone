@@ -214,13 +214,15 @@ void PhApiCallbacks::registerProgress(int lineId, int status) {
 
 	//Register ok
 	case 0:
-		p->setRegistered(true);
-		p->phoneLineStateChangedEvent(*p, lineId, EnumPhoneLineState::PhoneLineStateOk);
-		p->connectedEvent(*p);
-		for (std::set<std::string>::const_iterator it = _subscribedContacts.begin();
-			it != _subscribedContacts.end();
-			++it) {
-			p->subscribeToPresenceOf(*it);
+		if (!p->isRegistered()) {
+			p->setRegistered(true);
+			p->phoneLineStateChangedEvent(*p, lineId, EnumPhoneLineState::PhoneLineStateOk);
+			p->connectedEvent(*p);
+			for (std::set<std::string>::const_iterator it = _subscribedContacts.begin();
+				it != _subscribedContacts.end();
+				++it) {
+					p->subscribeToPresenceOf(*it);
+			}
 		}
 		break;
 
