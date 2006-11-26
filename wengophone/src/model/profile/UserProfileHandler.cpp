@@ -36,6 +36,7 @@ UserProfileHandler::UserProfileHandler() {
 
 	cleanupUserProfileDirectories();
 
+	_saveTimerRunning = false;
 	_saveTimer.lastTimeoutEvent +=
 		boost::bind(&UserProfileHandler::saveTimerLastTimeoutEventHandler, this, _1);
 }
@@ -82,7 +83,7 @@ UserProfile * UserProfileHandler::getUserProfile(const std::string & name) {
 }
 
 void UserProfileHandler::createAndSetUserProfile(const WengoAccount & wengoAccount) {
-	Mutex::ScopedLock lock(_mutex);
+	RecursiveMutex::ScopedLock lock(_mutex);
 
 	UserProfile * userProfile = NULL;
 	std::string profileName = wengoAccount.getWengoLogin();
@@ -114,7 +115,7 @@ bool UserProfileHandler::userProfileExists(const std::string & name) {
 void UserProfileHandler::setCurrentUserProfile(const std::string & name,
 	const WengoAccount & wengoAccount) {
 
-	Mutex::ScopedLock lock(_mutex);
+	RecursiveMutex::ScopedLock lock(_mutex);
 
 	UserProfile * result = getUserProfile(name);
 
@@ -218,7 +219,7 @@ void UserProfileHandler::saveUserProfile(UserProfile & userProfile) {
 }
 
 void UserProfileHandler::profileChangedEventHandler() {
-	Mutex::ScopedLock lock(_mutex);
+	RecursiveMutex::ScopedLock lock(_mutex);
 	
 	if (!_saveTimerRunning) {
 		_saveTimerRunning = true;
@@ -227,7 +228,7 @@ void UserProfileHandler::profileChangedEventHandler() {
 }
 
 void UserProfileHandler::saveTimerLastTimeoutEventHandler(Timer & sender) {
-	Mutex::ScopedLock lock(_mutex);
+	RecursiveMutex::ScopedLock lock(_mutex);
 
 	saveUserProfile(*_currentUserProfile);
 	_saveTimerRunning = false;
@@ -270,7 +271,7 @@ void UserProfileHandler::cleanupUserProfileDirectories() {
 	StringList::iterator it;
 	for (it = userProfiles.begin(); it != userProfiles.end(); it++) {
 
-		if (String(*it).endsWith(".new")) {
+		if (String(*it).endsWith(".new") || String(*it).endsWith(".old")) {
 			Config & config = ConfigManager::getInstance().getCurrentConfig();
 			File profileDirectory(File::convertPathSeparators(config.getConfigDir() + "profiles/") + (*it));
 			profileDirectory.remove();

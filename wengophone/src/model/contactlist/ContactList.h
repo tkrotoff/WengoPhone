@@ -382,7 +382,7 @@ private:
 
 	mutable RecursiveMutex _mutex;
 
-	RecursiveMutex::ScopedLock * _scopedLock;
+	RecursiveMutex::ScopedLock _lock;
 };
 
 #endif	//OWCONTACTLIST_H

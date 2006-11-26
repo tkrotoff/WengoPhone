@@ -20,7 +20,7 @@
 #ifndef OWUSERPROFILEHANDLER_H
 #define OWUSERPROFILEHANDLER_H
 
-#include <thread/Mutex.h>
+#include <thread/RecursiveMutex.h>
 #include <thread/Timer.h>
 #include <util/Event.h>
 #include <util/StringList.h>
@@ -209,7 +209,7 @@ private:
 	 */
 	void cleanupUserProfileDirectories();
 
-	Mutex _mutex;
+	RecursiveMutex _mutex;
 
 	UserProfile * _currentUserProfile;
 

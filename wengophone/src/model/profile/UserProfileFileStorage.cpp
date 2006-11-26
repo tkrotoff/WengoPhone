@@ -55,6 +55,11 @@ std::string UserProfileFileStorage::getTempProfilePath(const std::string & profi
 	return File::convertPathSeparators(config.getConfigDir() + PROFILES_DIR + profileName + ".new/");
 }
 
+std::string UserProfileFileStorage::getOldProfilePath(const std::string & profileName) {
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+	return File::convertPathSeparators(config.getConfigDir() + PROFILES_DIR + profileName + ".old/");
+}
+
 std::string UserProfileFileStorage::getBackupProfilePath(const std::string & profileName) {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	return File::convertPathSeparators(config.getConfigDir() + BACKUPS_DIR + profileName + "/");
@@ -137,18 +142,24 @@ bool UserProfileFileStorage::save(const std::string & profileName) {
 
 	std::string path = getProfilePath(profileName);
 	std::string newPath = getTempProfilePath(profileName);
+	std::string oldPath = getOldProfilePath(profileName);
 
-	// Backuping the last save
+	// Backuping the last saved profile
 	if (File::exists(path)) {
-		File file(path);
-		file.move(getBackupProfilePath(profileName), true);
+		// Copying the profile in a .old folder
+		File curProfDir(path);
+		curProfDir.copy(oldPath);
+
+		// Moving the copy in backups/
+		File oldProfFile(oldPath);
+		oldProfFile.move(getBackupProfilePath(profileName), true);
 	}
 	////
 
-	// Removing a possible .new dir
+	// Removing a possible .new dir in profiles/
 	if (File::exists(newPath)) {
-		File file(newPath);
-		file.remove();
+		File newProfDir(newPath);
+		newProfDir.remove();
 	}
 	////
 
@@ -174,9 +185,9 @@ bool UserProfileFileStorage::save(const std::string & profileName) {
 	}
 	////
 
-	// If successful move the 'dir.new' to 'dir'
-	File file(newPath);
-	file.move(getProfilePath(profileName));
+	// If successful, move the 'dir.new' to 'dir' (overwrite it if exists) 
+	File newProfDir(newPath);
+	newProfDir.move(path, true);
 	////
 	
 	return true;

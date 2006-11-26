@@ -59,12 +59,10 @@ string ContactXMLSerializer::serialize() {
 	////
 
 	//Serializing group
-	_contactList.lock();
 	ContactGroup * contactGroup = _contactList.getContactGroup(_contact.getGroupId());
 	if (contactGroup) {
 		result += "<group><![CDATA[" + contactGroup->getName() + "]]></group>\n";
 	}
-	_contactList.unlock();
 	////
 
 	result += "</wgcard>\n";

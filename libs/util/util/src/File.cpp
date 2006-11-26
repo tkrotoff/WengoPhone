@@ -171,25 +171,23 @@ bool File::copy(const std::string & path) {
 		for (StringList::const_iterator it = dirList.begin();
 			it != dirList.end(); ++it) {
 			File subDir(_filename + getPathSeparator() + (*it));
-			subDir.copy(path + getPathSeparator() + (*it));
+			result = subDir.copy(path + getPathSeparator() + (*it));
 		}
 
 		StringList fileList = getFileList();
 		for (StringList::const_iterator it = fileList.begin();
 			it != fileList.end(); ++it) {
 			File subFile(_filename + getPathSeparator() + (*it));
-			subFile.copy(path + getPathSeparator() + (*it));
+			result = subFile.copy(path + getPathSeparator() + (*it));
 		}
+	} else {
+		result = copyFile(path, _filename);
 	}
-
-	result = copyFile(path, _filename);
 
 	return result;
 }
 
 bool File::copyFile(const std::string & dst, const std::string & src) {
-	bool result = true;
-
 	createPath(dst);
 
 	std::string destination;
@@ -205,10 +203,12 @@ bool File::copyFile(const std::string & dst, const std::string & src) {
 
 	if (ifile.fail()) {
 		LOG_ERROR(src + " does not exist");
+		return false;
 	}
 
 	if (ofile.fail()) {
 		LOG_ERROR("cannot open " + dst + " for writing");
+		return false;
 	}
 
 	static const unsigned BUFFER_SIZE = 1024;
@@ -225,7 +225,7 @@ bool File::copyFile(const std::string & dst, const std::string & src) {
 	ifile.close();
 	ofile.close();
 
-	return result;
+	return true;
 }
 
 std::string File::getPath() const {

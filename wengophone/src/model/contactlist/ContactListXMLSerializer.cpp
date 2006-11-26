@@ -35,6 +35,8 @@ ContactListXMLSerializer::ContactListXMLSerializer(ContactList & contactList, IM
 string ContactListXMLSerializer::serialize() {
 	string result;
 
+	_contactList.lock();
+
 	result += "<contactlist>\n";
 
 	for (ContactList::Contacts::const_iterator it = _contactList._contacts.begin();
@@ -46,6 +48,8 @@ string ContactListXMLSerializer::serialize() {
 	}
 
 	result += "</contactlist>\n";
+
+	_contactList.unlock();
 
 	return result;
 }

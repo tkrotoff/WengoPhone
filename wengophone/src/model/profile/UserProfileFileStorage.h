@@ -70,6 +70,11 @@ private:
 	static std::string getTempProfilePath(const std::string & profileName);
 
 	/**
+	 * Gets the old profile save dir.
+	 */
+	static std::string getOldProfilePath(const std::string & profileName);
+
+	/**
 	 * Gets the full path to the backup profile named 'profileName'.
 	 */
 	static std::string getBackupProfilePath(const std::string & profileName);
