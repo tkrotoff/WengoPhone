@@ -220,7 +220,7 @@ void ServerSocket::run() {
 	socklen_t fromlen = sizeof(from);
 	fd_set rfds;
 	//struct timeval to;
-	char buff[256];
+	char buff[512];
 
 	serverStatusEvent(*this, NoError);
 
