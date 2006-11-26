@@ -5,6 +5,7 @@ ow_use_public_libraries(
 	owthread
 	owsystem
 	owcurl
+	qt4
 	owqtutil
 )
 
@@ -12,19 +13,25 @@ ow_add_public_include_dirs(
 	${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-qt4_wrap_cpp(owcrashreport_SRCS
+# Because of UIC and MOC
+ow_add_private_include_dirs(
+	${CMAKE_CURRENT_BINARY_DIR}
+	${CMAKE_CURRENT_SOURCE_DIR}
+)
+
+qt4_wrap_cpp(${PROJECT_NAME}_SRCS
 	FtpUpload.h
 	QtCrashReport.h
+)
+
+qt4_wrap_ui(${PROJECT_NAME}_SRCS
+	CrashReport.ui
 )
 
 ow_add_sources(
 	main.cpp
 	FtpUpload.cpp
 	QtCrashReport.cpp
-)
-
-qt4_wrap_ui(owcrashreport_SRCS
-	CrashReport.ui
 )
 
 ow_create_binary()
