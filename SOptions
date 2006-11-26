@@ -37,6 +37,8 @@ args = {
 
 	'enable-ipp' : 0,
 	'enable-ilbc' : 1,
+
+	'enable-webcam-dll' : 1,
 }
 
 if not WengoOSMacOSX():

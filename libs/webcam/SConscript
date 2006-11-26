@@ -1,7 +1,8 @@
 env = WengoGetEnvironment()
 
+defines = {}
 libs = [
-    'owthread',
+	'owthread',
 	'owutil',
 	'pixertool',
 ]
@@ -60,10 +61,12 @@ if WengoOSMacOSX():
 		'/System/Library/Frameworks/Quicktime.framework/Headers'
 	]
 
+if WengoGetConsoleArgument('enable-webcam-dll'):
+	defines['WEBCAM_DLL'] = '1'
+	defines['WEBCAM_BUILDING_DLL'] = '1'
 
 env.WengoAddIncludePath(include_path)
 env.WengoUseLibraries(libs)
-
-env.WengoStaticLibrary('webcam', sources, headers)
-
+env.WengoAddDefines(defines)
+env.WengoSharedLibrary('webcam', sources, headers)
 env.SConscript('tests/SConscript')

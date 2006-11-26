@@ -198,7 +198,12 @@ WebcamErrorCode DirectXWebcamDriver::setDevice(const std::string & deviceName) {
 	//TODO: refactor the COM initialization phase to avoid
 	//multiple initalisations and better handle unitialization
 	//cf trac ticket #1008
-	//CoInitialize(NULL);
+
+	// We really need to refactor that point
+	// I leave this line here just because the phapi thread
+	// must call this function (one time). We must move this elsewhere ...
+	CoInitialize(NULL);
+	////
 
 	_pGraph.CoCreateInstance(CLSID_FilterGraph);
 	if (!_pGraph) {
@@ -313,6 +318,7 @@ void DirectXWebcamDriver::pauseCapture() {
 
 void DirectXWebcamDriver::stopCapture() {
 	if (!_pGraph) {
+		LOG_WARN("_pGraph is NULL");
 		return;
 	}
 
