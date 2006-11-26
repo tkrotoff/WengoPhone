@@ -132,10 +132,18 @@
            </widget>
           </item>
           <item row="0" column="3" >
-           <widget class="QLineEdit" name="homePhoneLineEdit" />
+           <widget class="QLineEdit" name="homePhoneLineEdit" >
+            <property name="maxLength" >
+             <number>255</number>
+            </property>
+           </widget>
           </item>
           <item row="0" column="1" >
-           <widget class="QLineEdit" name="mobilePhoneLineEdit" />
+           <widget class="QLineEdit" name="mobilePhoneLineEdit" >
+            <property name="maxLength" >
+             <number>255</number>
+            </property>
+           </widget>
           </item>
           <item row="0" column="0" >
            <widget class="QLabel" name="label_15" >
@@ -191,14 +199,14 @@
             <item row="2" column="1" >
              <widget class="QLineEdit" name="lastNameLineEdit" >
               <property name="maxLength" >
-               <number>20</number>
+               <number>255</number>
               </property>
              </widget>
             </item>
             <item row="1" column="1" >
              <widget class="QLineEdit" name="firstNameLineEdit" >
               <property name="maxLength" >
-               <number>20</number>
+               <number>255</number>
               </property>
              </widget>
             </item>
@@ -241,6 +249,9 @@
               </property>
               <property name="editable" >
                <bool>true</bool>
+              </property>
+              <property name="maxVisibleItems" >
+               <number>25</number>
               </property>
              </widget>
             </item>
@@ -397,19 +408,23 @@
         <widget class="QLineEdit" name="webLineEdit" />
        </item>
        <item row="0" column="1" >
-        <widget class="QLineEdit" name="emailLineEdit" />
+        <widget class="QLineEdit" name="emailLineEdit" >
+         <property name="maxLength" >
+          <number>255</number>
+         </property>
+        </widget>
        </item>
        <item row="4" column="1" >
         <widget class="QLineEdit" name="stateLineEdit" >
          <property name="maxLength" >
-          <number>20</number>
+          <number>255</number>
          </property>
         </widget>
        </item>
        <item row="5" column="1" >
         <widget class="QLineEdit" name="cityLineEdit" >
          <property name="maxLength" >
-          <number>20</number>
+          <number>255</number>
          </property>
         </widget>
        </item>
