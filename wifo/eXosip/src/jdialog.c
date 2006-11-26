@@ -106,13 +106,21 @@ int eXosip_subscribe_dialog_find(int sid, eXosip_subscribe_t **js, eXosip_dialog
 
 int eXosip_dialog_set_200ok(eXosip_dialog_t *jd, osip_message_t *_200Ok)
 {
-  int i;
-  if (jd==NULL) return -1;
-  i = osip_message_clone(_200Ok, &(jd->d_200Ok));
-  if (i!=0) {
-    return -1;
-  }
-  return 0;
+	int i;
+
+	if (jd==NULL) 
+		return -1;
+	
+	if (jd->d_200Ok!=NULL)
+		osip_message_free(jd->d_200Ok);
+	jd->d_timer = time (NULL) + 2;
+	jd->d_count = 0;
+	i = osip_message_clone(_200Ok, &(jd->d_200Ok));
+	
+	if (i!=0) {
+		return -1;
+	}
+	return 0;
 }
 
 static char *
@@ -157,6 +165,7 @@ int eXosip_dialog_init_as_uac(eXosip_dialog_t **_jd, osip_message_t *_200Ok)
   jd->media_lines = (osip_list_t*) osip_malloc(sizeof(osip_list_t));
   osip_list_init(jd->media_lines);
 
+  jd->d_count = 0;
   jd->d_timer = time(NULL);
   jd->d_200Ok = NULL;
   jd->d_ack   = NULL;
@@ -192,6 +201,7 @@ int eXosip_dialog_init_as_uas(eXosip_dialog_t **_jd, osip_message_t *_invite, os
   jd->media_lines = (osip_list_t*) osip_malloc(sizeof(osip_list_t));
   osip_list_init(jd->media_lines);
 
+  jd->d_count = 0;
   jd->d_timer = time(NULL);
   jd->d_200Ok = NULL;
   jd->d_ack   = NULL;

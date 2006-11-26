@@ -942,6 +942,10 @@ eXosip_event_wait(int tv_s, int tv_ms)
       je = (eXosip_event_t *) osip_fifo_tryget(eXosip.j_events);
       if (je!=NULL) return je;
 
+	  eXosip_lock();
+	  eXosip_retransmit_lost200ok();
+	  eXosip_unlock();
+
       if (tv_s==0 && tv_ms==0)
 		return NULL;
 

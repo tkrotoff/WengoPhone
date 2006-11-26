@@ -89,7 +89,8 @@ struct eXosip_dialog_t {
   int              d_STATE;
   osip_dialog_t   *d_dialog;      /* active dialog */
 
-  int              d_timer;
+  int             d_timer;
+  int			  d_count;
   osip_message_t  *d_200Ok;
   osip_message_t  *d_ack;
   osip_list_t     *media_lines;
@@ -377,6 +378,9 @@ sdp_message_t *eXosip_get_remote_sdp(osip_transaction_t *transaction);
 
 
 int    eXosip_set_callbacks(osip_t *osip);
+int cb_snd_message (osip_transaction_t * tr, osip_message_t * sip, char *host,
+					int port, int out_socket);
+
 char  *osip_call_id_new_random(void);
 char  *osip_to_tag_new_random(void);
 char  *osip_from_tag_new_random(void);
@@ -545,6 +549,8 @@ void eXosip_report_call_event_with_status(int evt, eXosip_call_t *jc, eXosip_dia
 int eXosip_sdp_negotiate(osip_negotiation_ctx_t *ctx, sdp_message_t *remote_sdp);
 
 int eXosip_is_public_address(const char *addr);
+
+void eXosip_retransmit_lost200ok(void);
 
 sdp_message_t *eXosip_get_sdp_body(osip_message_t *message);
 

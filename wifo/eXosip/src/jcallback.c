@@ -132,6 +132,87 @@ _send_udp(const void *buf, int len, int flags, const struct sockaddr *to, int to
 	return 0;
 } // _send_udp
 
+int cb_snd_message (osip_transaction_t * tr, osip_message_t * sip, char *host,
+                int port, int out_socket)
+{
+	int i;
+	osip_via_t *via;
+
+	via = (osip_via_t *) osip_list_get (sip->vias, 0);
+	if (via == NULL || via->protocol == NULL)
+		return -1;
+
+	if (host == NULL)
+	{
+		if (MSG_IS_REQUEST(sip))
+		{
+			osip_route_t *route;
+
+			osip_message_get_route (sip, 0, &route);
+			if (route != NULL)
+			{
+				osip_uri_param_t *lr_param = NULL;
+
+				osip_uri_uparam_get_byname (route->url, "lr", &lr_param);
+				if (lr_param == NULL)
+					route = NULL;
+			}
+
+			if (route != NULL)
+			{
+				port = 5060;
+				if (route->url->port != NULL)
+					port = osip_atoi (route->url->port);
+				host = route->url->host;
+			}
+			else
+			{
+				port = 5060;
+				if (sip->req_uri->port != NULL)
+					port = osip_atoi (sip->req_uri->port);
+				host = sip->req_uri->host;
+			}
+
+		}
+		else
+		{
+			osip_generic_param_t *maddr;
+			osip_generic_param_t *received;
+			osip_generic_param_t *rport;
+
+			osip_via_param_get_byname (via, "maddr", &maddr);
+			osip_via_param_get_byname (via, "received", &received);
+			osip_via_param_get_byname (via, "rport", &rport);
+			if (maddr != NULL)
+				host = maddr->gvalue;
+			else if (received != NULL)
+				host = received->gvalue;
+			else
+				host = via->host;
+
+			if (rport == NULL || rport->gvalue == NULL)
+			{
+				if (via->port != NULL)
+					port = osip_atoi (via->port);
+				else
+					port = 5060;
+			} else
+				port = osip_atoi (rport->gvalue);
+		}
+	}
+
+	i = -1;
+
+	i = cb_udp_snd_message (tr, sip, host, port, out_socket);
+
+	if (i != 0)
+	{
+		return -1;
+	}
+
+	return 0;
+}
+
 int cb_udp_snd_message(osip_transaction_t *tr, osip_message_t *sip, char *host,
 		       int port, int out_socket)
 {
