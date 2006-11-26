@@ -494,8 +494,18 @@ ist_snd_2xx (osip_transaction_t * ist, osip_event_t * evt)
     {
       __osip_message_callback (OSIP_IST_STATUS_2XX_SENT, ist,
 			       ist->last_response);
-      __osip_transaction_set_state (ist, IST_TERMINATED);
-      __osip_kill_transaction_callback (OSIP_IST_KILL_TRANSACTION, ist);
+
+//@HACK: TO AUTOMATICALLY RESEND '200 OK' MESSAGE, WE NEED TO PASS BY IST_COMPLETED STATE
+
+		gettimeofday (&ist->ist_context->timer_g_start, NULL);
+		add_gettimeofday (&ist->ist_context->timer_g_start,
+			ist->ist_context->timer_g_length);
+		gettimeofday (&ist->ist_context->timer_h_start, NULL);
+		add_gettimeofday (&ist->ist_context->timer_h_start,
+			ist->ist_context->timer_h_length);
+//      __osip_transaction_set_state (ist, IST_TERMINATED);
+		__osip_transaction_set_state (ist, IST_COMPLETED);
+//      __osip_kill_transaction_callback (OSIP_IST_KILL_TRANSACTION, ist);
     }
   return;
 }
