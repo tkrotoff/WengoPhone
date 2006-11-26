@@ -46,16 +46,16 @@ const std::string CommandServer::_querySms = "1|o|sms/";
 const std::string CommandServer::_queryChat = "1|o|chat/";
 const std::string CommandServer::_queryAddContact = "1|o|addc/";
 
-const std::string NICKNAME_STR = "pseudo=";
-const std::string SIP_STR = "sip=";
-const std::string FIRSTNAME_STR = "firstname=";
-const std::string LASTNAME_STR = "lastname=";
-const std::string COUNTRY_STR = "country=";
-const std::string CITY_STR = "city=";
-const std::string STATE_STR = "state=";
-const std::string GROUP_STR = "group=";
-const std::string WDEALSERVICETITLE_STR = "title=";
-const std::string URL_STR = "url=";
+const std::string NICKNAME_STR = "pseudo";
+const std::string SIP_STR = "sip";
+const std::string FIRSTNAME_STR = "firstname";
+const std::string LASTNAME_STR = "lastname";
+const std::string COUNTRY_STR = "country";
+const std::string CITY_STR = "city";
+const std::string STATE_STR = "state";
+const std::string GROUP_STR = "group";
+const std::string WDEALSERVICETITLE_STR = "title";
+const std::string URL_STR = "url";
 
 CommandServer::CommandServer(WengoPhone & wengoPhone)
 	: _wengoPhone(wengoPhone) {
@@ -95,6 +95,7 @@ void CommandServer::connectionEventHandler(ServerSocket & sender, const std::str
 void CommandServer::incomingRequestEventHandler(ServerSocket & sender, const std::string & connectionId, const std::string & data) {
 	LOG_DEBUG("incoming request connectionId=" + connectionId + " data=" + data);
 	String query = String(data);
+
 	if (query == _queryStatus) {
 
 		//Find the phoneline status and answer
@@ -108,7 +109,7 @@ void CommandServer::incomingRequestEventHandler(ServerSocket & sender, const std
 			}
 		}
 
-	} else if (query.contains(_queryCall)) {
+	} else if (query.beginsWith(_queryCall)) {
 
 		//Extract the number from query & place the call
 		StringList l = query.split("/");
@@ -126,7 +127,7 @@ void CommandServer::incomingRequestEventHandler(ServerSocket & sender, const std
 		}
 		_serverSocket->writeToClient(connectionId, data + "|0");
 
-	} else if (query.contains(_querySms)) {
+	} else if (query.beginsWith(_querySms)) {
 
 		LOG_WARN("not yet implemented");
 
@@ -167,72 +168,54 @@ void CommandServer::incomingRequestEventHandler(ServerSocket & sender, const std
 		// failed
 		_serverSocket->writeToClient(connectionId, _queryChat + "|0");
 
-	} else if (query.contains(_queryAddContact)) {
+	} else if (query.beginsWith(_queryAddContact)) {
 
 		UserProfile * userProfile = _wengoPhone.getUserProfileHandler().getCurrentUserProfile();
 		if (userProfile) {
 
 			ContactInfo contactInfo;
-			boost::cmatch what;
+			String tmp = query.substr(_queryAddContact.size(), query.size() - 1);
 
-			boost::regex expression(NICKNAME_STR + "([^&]*)");
-			if (boost::regex_search(query.c_str(), what, expression)) {
-				std::string match(what[1].first, what[1].second);
-				contactInfo.wengoName = match;
-			}
+			StringList args = tmp.split("&");
+			for (int i = 0; i < args.size(); i++) {
 
-			expression = SIP_STR + "([^&]*)";
-			if (boost::regex_search(query.c_str(), what, expression)) {
-				std::string match(what[1].first, what[1].second);
-				contactInfo.sip = match;
-			}
+				String tmp = args[i];
+				if (!tmp.size()) {
+					continue;
+				}
 
-			expression = FIRSTNAME_STR + "([^&]*)";
-			if (boost::regex_search(query.c_str(), what, expression)) {
-				std::string match(what[1].first, what[1].second);
-				contactInfo.firstname = match;
-			}
+				StringList list = tmp.split("=");
+				if ((!list.size() == 2) || list[0].empty()) {
+					continue;
+				}
 
-			expression = LASTNAME_STR + "([^&]*)";
-			if (boost::regex_search(query.c_str(), what, expression)) {
-				std::string match(what[1].first, what[1].second);
-				contactInfo.lastname = match;
-			}
+				// remove the first and the last quote if any
+				String value = list[1];
 
-			expression = COUNTRY_STR + "([^&]*)";
-			if (boost::regex_search(query.c_str(), what, expression)) {
-				std::string match(what[1].first, what[1].second);
-				contactInfo.country = match;
-			}
-
-			expression = CITY_STR + "([^&]*)";
-			if (boost::regex_search(query.c_str(), what, expression)) {
-				std::string match(what[1].first, what[1].second);
-				contactInfo.city = match;
-			}
-
-			expression = STATE_STR + "([^&]*)";
-			if (boost::regex_search(query.c_str(), what, expression)) {
-				std::string match(what[1].first, what[1].second);
-				contactInfo.state = match;
-			}
-
-			expression = GROUP_STR + "([^&]*)";
-			if (boost::regex_search(query.c_str(), what, expression)) {
-				std::string match(what[1].first, what[1].second);
-				contactInfo.group = match;
-			}
-
-			expression = WDEALSERVICETITLE_STR + "([^&]*)";
-			if (boost::regex_search(query.c_str(), what, expression)) {
-				std::string match(what[1].first, what[1].second);
-				contactInfo.wdealServiceTitle = match;
-			}
-
-			expression = URL_STR + "\"([^\"]*)";
-			if (boost::regex_search(query.c_str(), what, expression)) {
-				std::string match(what[1].first, what[1].second);
-				contactInfo.website = match;
+				if (list[0] == NICKNAME_STR) {
+					contactInfo.wengoName = value;
+				} else if (list[0] == SIP_STR) {
+					contactInfo.sip = value;
+				} else if (list[0] == FIRSTNAME_STR) {
+					contactInfo.firstname = value;
+				} else if (list[0] == LASTNAME_STR) {
+					contactInfo.lastname = value;
+				} else if (list[0] == COUNTRY_STR) {
+					contactInfo.country = value;
+				} else if (list[0] == CITY_STR) {
+					contactInfo.city = value;
+				} else if (list[0] == STATE_STR) {
+					contactInfo.state = value;
+				} else if (list[0] == GROUP_STR) {
+					contactInfo.group = value;
+				} else if (list[0] == WDEALSERVICETITLE_STR) {
+					contactInfo.wdealServiceTitle = value;
+				} else if (list[0] == URL_STR) {
+					if (value.beginsWith("\"")) {
+						value = value.substr(1, value.size() - 2);
+					}
+					contactInfo.website = value;
+				}
 			}
 
 			showAddContactEvent(contactInfo);

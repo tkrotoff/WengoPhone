@@ -729,24 +729,24 @@ void QtWengoPhone::showAddContact(ContactInfo contactInfo) {
 
 		//FIXME to remove when wdeal will be able to handle SIP presence
 		if (contactInfo.group == "WDeal") {
-			qtProfileDetails.setHomePhone(QString::fromUtf8(contactInfo.sip.c_str()));
+			qtProfileDetails.setHomePhone(QUrl::fromPercentEncoding(QByteArray(contactInfo.sip.c_str())));
 		} else {
-			qtProfileDetails.setWengoName(QString::fromUtf8(contactInfo.wengoName.c_str()));
+			qtProfileDetails.setWengoName(QUrl::fromPercentEncoding(QByteArray(contactInfo.wengoName.c_str())));
 		}
 		///
 
 		if (contactInfo.group == "WDeal") {
-			qtProfileDetails.setFirstName(QString::fromUtf8(contactInfo.wdealServiceTitle.c_str()));
+			qtProfileDetails.setFirstName(QUrl::fromPercentEncoding(QByteArray(contactInfo.wdealServiceTitle.c_str())));
 		} else {
-			qtProfileDetails.setFirstName(QString::fromUtf8(contactInfo.firstname.c_str()));
+			qtProfileDetails.setFirstName(QUrl::fromPercentEncoding(QByteArray(contactInfo.firstname.c_str())));
 		}
 
-		qtProfileDetails.setLastName(QString::fromUtf8(contactInfo.lastname.c_str()));
-		qtProfileDetails.setCountry(QString::fromUtf8(contactInfo.country.c_str()));
-		qtProfileDetails.setCity(QString::fromUtf8(contactInfo.city.c_str()));
-		qtProfileDetails.setState(QString::fromUtf8(contactInfo.state.c_str()));
-		qtProfileDetails.setGroup(QString::fromUtf8(contactInfo.group.c_str()));
-		qtProfileDetails.setWebsite(QString::fromUtf8(contactInfo.website.c_str()));
+		qtProfileDetails.setLastName(QUrl::fromPercentEncoding(QByteArray(contactInfo.lastname.c_str())));
+		qtProfileDetails.setCountry(QUrl::fromPercentEncoding(QByteArray(contactInfo.country.c_str())));
+		qtProfileDetails.setCity(QUrl::fromPercentEncoding(QByteArray(contactInfo.city.c_str())));
+		qtProfileDetails.setState(QUrl::fromPercentEncoding(QByteArray(contactInfo.state.c_str())));
+		qtProfileDetails.setGroup(QUrl::fromPercentEncoding(QByteArray(contactInfo.group.c_str())));
+		qtProfileDetails.setWebsite(QUrl::fromPercentEncoding(QByteArray(contactInfo.website.c_str())));
 
 		if (qtProfileDetails.show()) {
 			_cWengoPhone.getCUserProfileHandler().getCUserProfile()->getCContactList().addContact(contactProfile);
