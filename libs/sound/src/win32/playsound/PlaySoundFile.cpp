@@ -102,14 +102,16 @@ bool openWaveOutDevice(HWAVEOUT * hWaveOut, const char * deviceName, WAVEFORMATE
 	return true;
 }
 
+static HWAVEOUT _hWaveOut = NULL;
+
 PlaySoundFile::PlaySoundFile() {
 	stop();
+	_hWaveOut = NULL;
 }
 
 PlaySoundFile::~PlaySoundFile() {
+	_hWaveOut = NULL;
 }
-
-static HWAVEOUT _hWaveOut = NULL;
 
 bool PlaySoundFile::play(const std::string & filename) {
 	SoundFile * soundFile;
