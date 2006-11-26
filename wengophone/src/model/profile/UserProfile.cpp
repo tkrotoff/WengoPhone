@@ -441,7 +441,7 @@ void UserProfile::setIcon(const OWPicture & icon, IMAccount * imAccount) {
 }
 
 void UserProfile::connectedEventHandler(ConnectHandler & sender, IMAccount & imAccount) {
-//	_presenceState = imAccount.getPresenceState();
+	_presenceState = imAccount.getPresenceState();
 //	_presenceHandler.changeMyPresenceState(imAccount.getPresenceState(), String::null, &imAccount);
 	_presenceHandler.changeMyAlias(_alias, NULL);
 	_presenceHandler.changeMyIcon(_icon, NULL);
