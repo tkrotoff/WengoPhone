@@ -182,6 +182,7 @@ else (NOT MSVC)
 	ow_create_project(gaim)
 
 	ow_use_public_libraries(
+		glib2
 		GAIM
 	)
 
