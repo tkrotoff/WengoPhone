@@ -69,21 +69,25 @@ bool QtJabberSettings::isValid() const {
 void QtJabberSettings::save() {
 	std::string login = _ui->loginLineEdit->text().toStdString();
 	std::string password = _ui->passwordLineEdit->text().toStdString();
-
+	bool newAccount = false;
+	
 	if (!_imAccount) {
+		// new account because no pre-existing account is found
 		_imAccount = new IMAccount(login, password, EnumIMProtocol::IMProtocolJabber);
+		newAccount = true;
+	} else if (_imAccount->getLogin() != login) {
+		// new account because the user changed the login
+		_userProfile.removeIMAccount(*_imAccount);
+		_imAccount = new IMAccount(login, password, EnumIMProtocol::IMProtocolJabber);
+		newAccount = true;
 	} else {
-		//Check if the same account is not present already
-		if (_imAccount->getLogin() == login &&
-			_imAccount->getPassword() == password) {
-			return;
-		}
+		// pre-existing account, but password may have been modified
+		_imAccount->setPassword(password);
 	}
+
 
 	IMAccountParameters & params = _imAccount->getIMAccountParameters();
 
-	_imAccount->setLogin(login);
-	_imAccount->setPassword(password);
 	params.set(IMAccountParameters::JABBER_USE_TLS_KEY, _ui->useTLSCheckBox->isChecked());
 	params.set(IMAccountParameters::JABBER_REQUIRE_TLS_KEY, _ui->requireTLSCheckBox->isChecked());
 	params.set(IMAccountParameters::JABBER_USE_OLD_SSL_KEY, _ui->forceOldSSLCheckBox->isChecked());
@@ -91,6 +95,9 @@ void QtJabberSettings::save() {
 	params.set(IMAccountParameters::JABBER_CONNECTION_SERVER_KEY, _ui->connectServerLineEdit->text().toStdString());
 	params.set(IMAccountParameters::JABBER_PORT_KEY, _ui->portLineEdit->text().toInt());
 
-	_userProfile.addIMAccount(*_imAccount);
+	if (newAccount) {
+		_userProfile.addIMAccount(*_imAccount);
+	}
+
 	_userProfile.getConnectHandler().connect(*_imAccount);
 }
