@@ -5,7 +5,6 @@ ow_use_public_libraries(
 	owthread
 	owsystem
 	owcurl
-	qt4
 	owqtutil
 )
 

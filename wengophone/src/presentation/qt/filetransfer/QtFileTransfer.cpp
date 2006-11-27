@@ -145,7 +145,7 @@ void QtFileTransfer::newReceiveFileSessionCreatedEventHandlerSlot(ReceiveFileSes
 
 void QtFileTransfer::createSendFileSession(IMContactSet imContactSet, const QString & filename, CContactList & cContactList) {
 
-	File file(std::string(filename.toUtf8().constData()), File::UTF8);
+	File file(std::string(filename.toUtf8().constData()), File::EncodingUTF8);
 
 	// check the file size
 	if (file.getSize() < INT_MAX) {

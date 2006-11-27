@@ -8,12 +8,9 @@ subdirs(
 	pics/emoticons
 )
 
-# needed include directories to build qtwengophone
-# saves the variable in internal cache for later use
 ow_use_private_libraries(
 	owphone
 	owbuildid
-	qt4
 	owqtutil
 	owpixertool
 	owwebcam
@@ -22,7 +19,6 @@ ow_use_private_libraries(
 	owbrowser
 	owsoftupdater
 	owphapiwrapper
-	glib2
 )
 
 if (MSVC)
@@ -312,14 +308,11 @@ ow_add_sources(
 	webdirectory/QtWebDirectory.cpp
 )
 
-#if (WIN32)
-	#if (MSVC)
-		#ow_add_windows_resources(${PROJECT_NAME}_SRCS
-			#win32/wengophone.rc
-	#)
-	#else (MSVC)
-	#endif (MSVC)
-#endif (WIN32)
+if (WIN32)
+	ow_add_sources(
+		win32/wengophone.rc
+	)
+endif (WIN32)
 
 if (UNIX AND NOT WIN32)
 	if (APPLE)

@@ -49,9 +49,9 @@ using namespace std;
 	#include <direct.h>
 #endif
 
-File::File(const std::string & filename, File::Encoding enc)
+File::File(const std::string & filename, Encoding encoding)
 	: _filename(filename),
-	_encoding(enc) {
+	_encoding(encoding) {
 }
 
 File::File(const File & file)
@@ -321,7 +321,7 @@ unsigned File::getSize() const {
 	wchar_t filename4win[4096];
 	struct _stat sb4win;
 
-	if (_encoding == File::UTF8) {
+	if (_encoding == EncodingUTF8) {
 		MultiByteToWideChar(CP_UTF8, MB_ERR_INVALID_CHARS, (LPCSTR) _filename.c_str(), -1, (LPWSTR) &filename4win, sizeof(filename4win));
 		if (_wstat(filename4win, &sb4win) == 0) {
 			return sb4win.st_size;
@@ -330,7 +330,7 @@ unsigned File::getSize() const {
 	}
 #endif
 
-	if (_encoding == File::DEFAULT || _encoding == File::UTF8) {
+	if (_encoding == EncodingDefault || _encoding == EncodingUTF8) {
 		if (stat(_filename.c_str(), &sb) == 0) {
 			return sb.st_size;
 		}

@@ -45,11 +45,11 @@ public:
 	 * Filename encoding.
 	 */
 	enum Encoding {
-		DEFAULT,
-		UTF8
+		EncodingDefault,
+		EncodingUTF8
 	};
 
-	OWUTIL_API File(const std::string & filename, File::Encoding enc = File::DEFAULT);
+	OWUTIL_API File(const std::string & filename, Encoding encoding = File::EncodingDefault);
 
 	OWUTIL_API File(const File & file);
 
@@ -84,20 +84,20 @@ public:
 
 	/**
 	 * Copies a file or a directory recursively.
-	 * 
+	 *
 	 * @param dstPath destination path. Will be created if does not exist
 	 * @return true if operation successful
 	 */
-	bool copy(const std::string & path);
+	OWUTIL_API bool copy(const std::string & path);
 
 	/**
 	 * Copy a single file.
-	 * 
+	 *
 	 * @param dst destination path or file
 	 * @param src source
 	 * @return true if successful
 	 */
-	static bool copyFile(const std::string & dst, const std::string & src);
+	OWUTIL_API static bool copyFile(const std::string & dst, const std::string & src);
 
 	/**
 	 * Gets the path to the file.
