@@ -21,6 +21,9 @@
 #define PHAPICALLBACKS_H
 
 #include <phapi.h>
+#include <phevents.h>
+
+#include <util/Singleton.h>
 
 #include <string>
 #include <set>
@@ -32,28 +35,30 @@
  * @author Tanguy Krotoff
  * @author Mathieu Stute
  */
-class PhApiCallbacks {
+class PhApiCallbacks : public Singleton<PhApiCallbacks> {
+
+	friend class Singleton<PhApiCallbacks>;
+
 public:
+
+	void startListeningPhApiEvents();
+
+	void registerProgress(OWPL_LINESTATE_INFO * info);
+
+	void callProgress(OWPL_CALLSTATE_INFO * info);
+
+	void subscriptionProgress(OWPL_SUBSTATUS_INFO * info);
+
+	void onNotify(OWPL_NOTIFICATION_INFO * info);
+
+	void messageProgress(OWPL_MESSAGE_INFO * info);
+
+private:
 
 	PhApiCallbacks();
 
-	void callProgress(int callId, const phCallStateInfo_t * info);
+	~PhApiCallbacks();
 
-	void videoFrameReceived(int callId, phVideoFrameReceivedEvent_t * info);
-
-	void transferProgress(int callId, const phTransferStateInfo_t * info);
-
-	void conferenceProgress(int conferenceId, const phConfStateInfo_t * info);
-
-	void registerProgress(int lineId, int status);
-
-	void messageProgress(int messageId, const phMsgStateInfo_t * info);
-
-	void subscriptionProgress(int subscriptionId, const phSubscriptionStateInfo_t * info);
-
-	void onNotify(const char * event, const char * from, const char * content);
-
-private:
 
 	/**
 	 * Transforms a PhApi contacts (e.g: sip:joe@voip.wengo.fr)

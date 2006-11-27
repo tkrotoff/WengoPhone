@@ -86,9 +86,11 @@ public:
 	static const int PhApiResultNoError = 0;
 
 	static PhApiWrapper * getInstance() {
+		/* TODO REFACTOR REMOVE
 		static PhApiCallbacks phApiCallbacks;
 		static PhApiWrapper instance(phApiCallbacks);
-
+		*/
+		static PhApiWrapper instance(PhApiCallbacks::getInstance());
 		return &instance;
 	}
 
@@ -105,7 +107,7 @@ public:
 
 	int makeCall(int lineId, const std::string & sipAddress, bool enableVideo);
 
-	void sendRingingNotification(int callId);
+	void sendRingingNotification(int callId, bool enableVideo);
 
 	void acceptCall(int callId, bool enableVideo);
 
@@ -172,6 +174,8 @@ public:
 
 	void init();
 
+	/*
+	TODO REFACTOR REMOVE
 	static void callProgress(int callId, const phCallStateInfo_t * info);
 
 	static void registerProgress(int lineId, int status);
@@ -183,6 +187,7 @@ public:
 	static void subscriptionProgress(int subscriptionId, const phSubscriptionStateInfo_t * info);
 
 	static void onNotify(const char * event, const char * from, const char * content);
+	*/
 
 	/** @} */
 
@@ -282,16 +287,14 @@ private:
 	 * @see publishOnline()
 	 * @see publishOffline()
 	 */
-	void publishPresence(const std::string & pidf, const std::string & note);
+	//void publishPresence(const std::string & pidf, const std::string & note);
+	void publishPresence(bool online, const std::string & note);
 
 	/** @see changeMyPresence() */
 	void publishOnline(const std::string & note);
 
 	/** @see changeMyPresence() */
 	void publishOffline(const std::string & note);
-
-	/** Timer timeout event handler for re-sending my presence. */
-	void renewPublishEventHandler();
 
 	/** Changes audio devices inside PhApi. */
 	bool setAudioDevices();
@@ -300,7 +303,7 @@ private:
 	void phoneCallStateChangedEventHandler(SipWrapper & sender, int callId,
 		EnumPhoneCallState::PhoneCallState state, const std::string & from);
 
-	static PhApiCallbacks * _callbacks;
+	PhApiCallbacks * _callbacks;
 
 	/** Checks if phApi has been initialized: if phInit() has been called. */
 	bool _isInitialized;
@@ -313,12 +316,6 @@ private:
 
 	/** Realm for the Wengo SIP service. */
 	std::string _wengoRealm;
-
-	/** Last pidf for my presence. */
-	std::string _lastPidf;
-
-	/** Last note for my presence. */
-	std::string _lastNote;
 
 	/** Playback audio device. */
 	AudioDevice _outputAudioDevice;
@@ -357,8 +354,6 @@ private:
 	std::string _pluginPath;
 
 	Mutex _mutex;
-
-	Timer _publishTimer;
 
 	bool _registered;
 

@@ -189,7 +189,7 @@ public:
 	 *
 	 * @param callId id of the phone call to make ringing
 	 */
-	virtual void sendRingingNotification(int callId) = 0;
+	virtual void sendRingingNotification(int callId, bool enableVideo) = 0;
 
 	/**
 	 * Accepts a given phone call.

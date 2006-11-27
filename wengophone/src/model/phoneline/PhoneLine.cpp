@@ -332,7 +332,7 @@ void PhoneLine::setPhoneCallState(int callId, EnumPhoneCallState::PhoneCallState
 	case EnumPhoneCallState::PhoneCallStateIncoming: {
 		//Sends SIP code 180
 		//TODO automatically??
-		_sipWrapper->sendRingingNotification(callId);
+		_sipWrapper->sendRingingNotification(callId, ConfigManager::getInstance().getCurrentConfig().getVideoEnable());
 
 		PhoneCall * phoneCall = new PhoneCall(*this, sipAddress);
 		phoneCall->setCallId(callId);

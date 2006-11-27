@@ -40,262 +40,499 @@
 
 using namespace std;
 
-PhApiCallbacks::PhApiCallbacks() {
-}
+extern "C" {
 
-void PhApiCallbacks::callProgress(int callId, const phCallStateInfo_t * info) {
-	int status = info->event;
-	std::string from;
+	static int phApiEventsHandler(OWPL_EVENT_CATEGORY category, void* pInfo, void* pUserData) {
+		switch(category) {
+			case EVENT_CATEGORY_CALLSTATE :
+				PhApiCallbacks::getInstance().callProgress((OWPL_CALLSTATE_INFO *)pInfo);
+				break;
 
-	PhApiWrapper * p = PhApiWrapper::PhApiWrapperHack;
-	LOG_DEBUG(p->phapiCallStateToString(info->event));
+			case EVENT_CATEGORY_LINESTATE : 
+				PhApiCallbacks::getInstance().registerProgress((OWPL_LINESTATE_INFO *)pInfo);
+				break;
 
-	switch (status) {
-	case phDIALING:
-		from = info->u.remoteUri;
-		p->phoneCallStateChangedEvent(*p, callId, EnumPhoneCallState::PhoneCallStateDialing, from);
-		break;
+			case EVENT_CATEGORY_MESSAGE : 
+				PhApiCallbacks::getInstance().messageProgress((OWPL_MESSAGE_INFO *)pInfo);
+				break;
 
-	case phRINGING:
-		from = info->u.remoteUri;
-		p->phoneCallStateChangedEvent(*p, callId, EnumPhoneCallState::PhoneCallStateRinging, from);
-		break;
+			case EVENT_CATEGORY_SUB_STATUS : 
+				PhApiCallbacks::getInstance().subscriptionProgress((OWPL_SUBSTATUS_INFO *)pInfo);
+				break;
 
-	case phNOANSWER:
-		from = info->u.remoteUri;
-		p->phoneCallStateChangedEvent(*p, callId, EnumPhoneCallState::PhoneCallStateMissed, from);
-		break;
+			case EVENT_CATEGORY_NOTIFY : 
+				PhApiCallbacks::getInstance().onNotify((OWPL_NOTIFICATION_INFO *)pInfo);
+				break;
 
-	case phCALLBUSY:
-		break;
+			default :
+				break;
+		}
 
-	case phCALLREDIRECTED:
-		from = info->u.remoteUri;
-		p->phoneCallStateChangedEvent(*p, callId, EnumPhoneCallState::PhoneCallStateRedirected, from);
-		break;
-
-	case phCALLOK:
-		from = info->u.remoteUri;
-		p->phoneCallStateChangedEvent(*p, callId, EnumPhoneCallState::PhoneCallStateTalking, from);
-		break;
-
-	case phCALLHELD:
-		LOG_DEBUG("phCALLHELD");
-		break;
-
-	case phCALLRESUMED:
-		LOG_DEBUG("phCALLRESUMED");
-		break;
-
-	case phHOLDOK:
-		from = info->u.remoteUri;
-		p->phoneCallStateChangedEvent(*p, callId, EnumPhoneCallState::PhoneCallStateHold, from);
-		break;
-
-	case phRESUMEOK:
-		from = info->u.remoteUri;
-		p->phoneCallStateChangedEvent(*p, callId, EnumPhoneCallState::PhoneCallStateResumed, from);
-		break;
-
-	case phINCALL:
-		from = info->u.remoteUri;
-		p->phoneCallStateChangedEvent(*p, callId, EnumPhoneCallState::PhoneCallStateIncoming, from);
-		break;
-
-	case phCALLCLOSED:
-		p->phoneCallStateChangedEvent(*p, callId, EnumPhoneCallState::PhoneCallStateClosed, from);
-		break;
-
-	case phCALLERROR:
-		p->phoneCallStateChangedEvent(*p, callId, EnumPhoneCallState::PhoneCallStateError, from);
-		break;
-
-	case phDTMF:
-		break;
-
-	//Transfer progress
-	case phXFERPROGRESS:
-		break;
-
-	//Transfer OK
-	case phXFEROK:
-		break;
-
-	//Transfer failed
-	case phXFERFAIL:
-		break;
-
-	//Transfer request
-	case phXFERREQ:
-		break;
-
-	case phCALLREPLACED:
-		break;
-
-	// begin ringing
-	case phRINGandSTART:
-		from = info->u.remoteUri;
-		p->phoneCallStateChangedEvent(*p, callId, EnumPhoneCallState::PhoneCallStateRinging, from);
-		break;
-
-	// stop ringing
-	case phRINGandSTOP:
-		break;
-
-	case phCALLCLOSEDandSTOPRING:
-		break;
-
-	default:
-		LOG_FATAL("unknown phApi event=" + String::fromNumber(status));
+		return 0;
 	}
+
 }
 
-void PhApiCallbacks::videoFrameReceived(int callId, phVideoFrameReceivedEvent_t * info) {
-	//LOG_DEBUG("video frame from call=" + String::fromNumber(callId));
-	PhApiWrapper * p = PhApiWrapper::PhApiWrapperHack;
+PhApiCallbacks::PhApiCallbacks() {}
+
+PhApiCallbacks::~PhApiCallbacks() {}
+
+void PhApiCallbacks::startListeningPhApiEvents() {
+	owplEventListenerAdd(phApiEventsHandler, NULL);
+}
+
+void PhApiCallbacks::callProgress(OWPL_CALLSTATE_INFO * info) {
+	if(info != NULL) {
+		PhApiWrapper * p = PhApiWrapper::PhApiWrapperHack;
+		std::string from;
+		phVideoFrameReceivedEvent_t * video_data = NULL;
+		switch(info->event) {
+			case CALLSTATE_UNKNOWN :			
+				break;
+
+			case CALLSTATE_NEWCALL :
+				switch(info->cause) {
+					case CALLSTATE_NEW_CALL_NORMAL :
+						break;
+
+					case CALLSTATE_NEW_CALL_TRANSFERRED :
+						break;
+
+					case CALLSTATE_NEW_CALL_TRANSFER :
+						break;
+
+					default :
+						break;
+				}
+				break;
+
+			case CALLSTATE_REMOTE_OFFERING :
+				switch(info->cause) {
+					case CALLSTATE_REMOTE_OFFERING_NORMAL :
+						from = info->szRemoteIdentity;
+						p->phoneCallStateChangedEvent(*p, info->hCall, EnumPhoneCallState::PhoneCallStateDialing, from);
+						break;
+
+					default :
+						break;
+				}
+				break;
+
+			case CALLSTATE_REMOTE_ALERTING :
+				switch(info->cause) {
+					case CALLSTATE_REMOTE_ALERTING_NORMAL :
+						from = info->szRemoteIdentity;
+						p->phoneCallStateChangedEvent(*p, info->hCall, EnumPhoneCallState::PhoneCallStateRinging, from);
+						break;
+
+					case CALLSTATE_REMOTE_ALERTING_MEDIA :
+						break;
+
+					default :
+						break;
+				}
+				break;
+
+			case CALLSTATE_CONNECTED :
+				switch(info->cause) {
+					case CALLSTATE_CONNECTED_ACTIVE :
+						from = info->szRemoteIdentity;
+						p->phoneCallStateChangedEvent(*p, info->hCall, EnumPhoneCallState::PhoneCallStateTalking, from);
+						break;
+
+					case CALLSTATE_CONNECTED_ACTIVE_HELD :
+						break;
+
+					case CALLSTATE_CONNECTED_INACTIVE :
+						break;
+
+					default :
+						break;
+				}
+				break;
+
+			case CALLSTATE_DISCONNECTED :
+				switch(info->cause) {
+					case CALLSTATE_DISCONNECTED_BADADDRESS :
+						break;
+
+					case CALLSTATE_DISCONNECTED_BUSY :
+						// TODO nothing?
+						LOG_DEBUG("CALLSTATE_DISCONNECTED_BUSY");
+						break;
+
+					case CALLSTATE_DISCONNECTED_NORMAL :
+						p->phoneCallStateChangedEvent(*p, info->hCall, EnumPhoneCallState::PhoneCallStateClosed, from);
+						break;
+
+					case CALLSTATE_DISCONNECTED_RESOURCES :
+						break;
+
+					case CALLSTATE_DISCONNECTED_NETWORK :
+						p->phoneCallStateChangedEvent(*p, info->hCall, EnumPhoneCallState::PhoneCallStateError, from);
+						break;
+
+					case CALLSTATE_DISCONNECTED_REDIRECTED :
+						break;
+
+					case CALLSTATE_DISCONNECTED_NO_RESPONSE :
+						from = info->szRemoteIdentity;
+						p->phoneCallStateChangedEvent(*p, info->hCall, EnumPhoneCallState::PhoneCallStateMissed, from);
+						break;
+
+					case CALLSTATE_DISCONNECTED_AUTH :
+						break;
+
+					case CALLSTATE_DISCONNECTED_UNKNOWN :
+						p->phoneCallStateChangedEvent(*p, info->hCall, EnumPhoneCallState::PhoneCallStateError, from);
+						break;
+
+					default :
+						break;
+				}
+				break;
+
+			case CALLSTATE_OFFERING :
+				switch(info->cause) {
+					case CALLSTATE_OFFERING_ACTIVE :
+						from = info->szRemoteIdentity;
+						p->phoneCallStateChangedEvent(*p, info->hCall, EnumPhoneCallState::PhoneCallStateIncoming, from);
+						break;
+
+					default :
+						break;
+				}
+				break;
+				
+			case CALLSTATE_ALERTING :
+				switch(info->cause) {
+					case CALLSTATE_ALERTING_NORMAL :
+						break;
+
+					default :
+						break;
+				}
+				break;
+				
+			case CALLSTATE_DESTROYED :
+				switch(info->cause) {
+					case CALLSTATE_DESTROYED_NORMAL :
+						break;
+
+					default :
+						break;
+				}
+				break;
+				
+			case CALLSTATE_AUDIO_EVENT :
+				switch(info->cause) {
+					case CALLSTATE_AUDIO_START :
+						break;
+
+					case CALLSTATE_AUDIO_STOP :
+						break;
+
+					case CALLSTATE_AUDIO_DTMF :
+						break;
+
+					default :
+						break;
+				}
+				break;
+				
+			case CALLSTATE_VIDEO_EVENT :
+				switch(info->cause) {
+					case CALLSTATE_VIDEO_START :
+						break;
+
+					case CALLSTATE_VIDEO_STOP :
+						break;
+
+					case CALLSTATE_VIDEO_FRAME_RCV :
+						if(info->pData != NULL) {
+							video_data = (phVideoFrameReceivedEvent_t *) info->pData;
 #ifdef ENABLE_VIDEO
-	p->videoFrameReceivedEvent(*p, callId, info->frame_remote, info->frame_local);
+							if(video_data != NULL) {
+								p->videoFrameReceivedEvent(*p, info->hCall, video_data->frame_remote, video_data->frame_local);
+							}
 #endif
-}
+						}
+						break;
 
-void PhApiCallbacks::transferProgress(int /*callId*/, const phTransferStateInfo_t * /*info*/) { }
+					default :
+						break;
+				}
+				break;
+				
+			case CALLSTATE_TRANSFER :
+				switch(info->cause) {
+					case CALLSTATE_TRANSFER_INITIATED :					
+						break;
 
-void PhApiCallbacks::conferenceProgress(int /*conferenceId*/, const phConfStateInfo_t * /*info*/) { }
+					case CALLSTATE_TRANSFER_ACCEPTED :
+						break;
 
-void PhApiCallbacks::registerProgress(int lineId, int status) {
-	LOG_DEBUG("registerProgress status=" + String::fromNumber(status));
+					case CALLSTATE_TRANSFER_TRYING :
+						break;
 
-	PhApiWrapper * p = PhApiWrapper::PhApiWrapperHack;
+					case CALLSTATE_TRANSFER_RINGING :
+						break;
 
-	switch(status) {
+					case CALLSTATE_TRANSFER_SUCCESS :
+						break;
 
-	//401 Unauthorized
-	case 401:
-		p->setRegistered(false);
-		p->phoneLineStateChangedEvent(*p, lineId, EnumPhoneLineState::PhoneLineStateServerError);
-		break;
+					case CALLSTATE_TRANSFER_FAILURE :
+						break;
 
-	//404 Not Found
-	case 404:
-		p->setRegistered(false);
-		p->phoneLineStateChangedEvent(*p, lineId, EnumPhoneLineState::PhoneLineStateServerError);
-		break;
+					default :
+						break;
+				}
+				break;
+				
+			case CALLSTATE_REDIRECTED :
+				switch(info->cause) {
+					case CALLSTATE_REDIRECTED_NORMAL :
+						from = info->szRemoteIdentity;
+						p->phoneCallStateChangedEvent(*p, info->hCall, EnumPhoneCallState::PhoneCallStateRedirected, from);
+						break;
 
-	//407 Proxy Authentication Required
-	case 407:
-		p->setRegistered(false);
-		p->phoneLineStateChangedEvent(*p, lineId, EnumPhoneLineState::PhoneLineStateServerError);
-		break;
+					default :
+						break;
+				}
+				break;
+				
+			case CALLSTATE_HOLD :
+				switch(info->cause) {
+					case CALLSTATE_HOLD_STARTED :
+						from = info->szRemoteIdentity;
+						p->phoneCallStateChangedEvent(*p, info->hCall, EnumPhoneCallState::PhoneCallStateHold, from);
+						break;
 
-	//408 Request Timeout
-	case 408:
-		p->setRegistered(false);
-		p->phoneLineStateChangedEvent(*p, lineId, EnumPhoneLineState::PhoneLineStateTimeout);
-		break;
+					case CALLSTATE_HOLD_RESUMED :
+						from = info->szRemoteIdentity;
+						p->phoneCallStateChangedEvent(*p, info->hCall, EnumPhoneCallState::PhoneCallStateResumed, from);
+						break;
 
-	case -1:
-		if (p->isRegistered()) {
-			p->setRegistered(false);
-			p->phoneLineStateChangedEvent(*p, lineId, EnumPhoneLineState::PhoneLineStateTimeout);
-			//p->removeVirtualLine(p->getActiveVline(), 0);
-			for (std::set<std::string>::const_iterator it = _subscribedContacts.begin();
-				it != _subscribedContacts.end();
-				++it) {
-				p->presenceStateChangedEvent(*p, EnumPresenceState::PresenceStateUnknown, "", *it);
-			}
-			p->disconnectedEvent(*p, true, "No response from server");
+					default :
+						break;
+				}
+				break;
+				
+			case CALLSTATE_SECURITY_EVENT :
+				switch(info->cause) {
+					case CALLSTATE_SECURITY_SELF_SIGNED_CERT :
+						break;
+
+					case CALLSTATE_SECURITY_SESSION_NOT_SECURED :
+						break;
+
+					case CALLSTATE_SECURITY_REMOTE_SMIME_UNSUPPORTED :
+						break;
+
+					default :
+						break;
+				}
+				break;
+				
+			case CALLSTATE_IDENTITY_CHANGE :
+				switch(info->cause) {
+					case CALLSTATE_IDENTITY_CHANGE_UNKNOWN :
+						break;
+
+					default :
+						break;
+				}
+				break;
+
+			default :
+				break;
 		}
-		break;
-
-	case -2:
-		p->setRegistered(false);
-		p->phoneLineStateChangedEvent(*p, lineId, EnumPhoneLineState::PhoneLineStateUnknown);
-		break;
-
-	//Register ok
-	case 0:
-		if (!p->isRegistered()) {
-			p->setRegistered(true);
-			p->phoneLineStateChangedEvent(*p, lineId, EnumPhoneLineState::PhoneLineStateOk);
-			p->connectedEvent(*p);
-			for (std::set<std::string>::const_iterator it = _subscribedContacts.begin();
-				it != _subscribedContacts.end();
-				++it) {
-					p->subscribeToPresenceOf(*it);
-			}
-		}
-		break;
-
-	//Unregister ok
-	case 32768:
-		p->setRegistered(false);
-		p->phoneLineStateChangedEvent(*p, lineId, EnumPhoneLineState::PhoneLineStateClosed);
-		for (std::set<std::string>::const_iterator it = _subscribedContacts.begin();
-			it != _subscribedContacts.end();
-			++it) {
-			p->presenceStateChangedEvent(*p, EnumPresenceState::PresenceStateUnknown, "", *it);
-		}
-		break;
-
-	//500 Server Internal Error
-	case 500:
-		p->setRegistered(false);
-		p->phoneLineStateChangedEvent(*p, lineId, EnumPhoneLineState::PhoneLineStateServerError);
-		break;
-
-	default:
-		p->setRegistered(false);
-		LOG_ERROR("unknown phApi event=" + String::fromNumber(status));
-		p->phoneLineStateChangedEvent(*p, lineId, EnumPhoneLineState::PhoneLineStateServerError);
 	}
 }
 
-void PhApiCallbacks::messageProgress(int messageId, const phMsgStateInfo_t * info) {
+void PhApiCallbacks::registerProgress(OWPL_LINESTATE_INFO * info) {
+	PhApiWrapper * p = PhApiWrapper::PhApiWrapperHack;
+	switch(info->event) {
+		case LINESTATE_UNKNOWN :
+			p->setRegistered(false);
+			p->phoneLineStateChangedEvent(*p, info->hLine, EnumPhoneLineState::PhoneLineStateUnknown);
+			break;
+
+		case LINESTATE_REGISTERING :
+			switch(info->cause) {
+				case LINESTATE_REGISTERING_NORMAL :
+					break;
+
+				default :
+					break;
+			}
+			break;
+
+		case LINESTATE_REGISTERED :
+			switch(info->cause) {
+				case LINESTATE_REGISTERED_NORMAL :
+				if(!p->isRegistered()) {
+					p->setRegistered(true);
+					p->phoneLineStateChangedEvent(*p, info->hLine, EnumPhoneLineState::PhoneLineStateOk);
+					p->connectedEvent(*p);
+					for (std::set<std::string>::const_iterator it = _subscribedContacts.begin();
+						it != _subscribedContacts.end();
+						++it) {
+							p->subscribeToPresenceOf(*it);
+					}
+				}
+				break;
+
+				default :
+				break;
+			}
+			break;
+
+		case LINESTATE_UNREGISTERING :
+			switch(info->cause) {
+				case LINESTATE_UNREGISTERING_NORMAL :
+					break;
+
+				default :
+					break;
+			}
+			break;
+
+		case LINESTATE_UNREGISTERED :
+			switch(info->cause) {
+				case LINESTATE_UNREGISTERED_NORMAL :
+					p->setRegistered(false);
+					p->phoneLineStateChangedEvent(*p, info->hLine, EnumPhoneLineState::PhoneLineStateClosed);
+					for (std::set<std::string>::const_iterator it = _subscribedContacts.begin();
+						it != _subscribedContacts.end();
+						++it) {
+							p->presenceStateChangedEvent(*p, EnumPresenceState::PresenceStateUnknown, "", *it);
+					}
+					break;
+
+				default :
+					break;
+			}
+			break;
+
+		case LINESTATE_REGISTER_FAILED :
+			switch(info->cause) {
+				case LINESTATE_REGISTER_FAILED_COULD_NOT_CONNECT :
+					if (p->isRegistered()) {
+						p->setRegistered(false);
+						p->phoneLineStateChangedEvent(*p, info->hLine, EnumPhoneLineState::PhoneLineStateTimeout);
+						//p->removeVirtualLine(p->getActiveVline(), 0);
+						for (std::set<std::string>::const_iterator it = _subscribedContacts.begin();
+							it != _subscribedContacts.end();
+							++it) {
+								p->presenceStateChangedEvent(*p, EnumPresenceState::PresenceStateUnknown, "", *it);
+						}
+						p->disconnectedEvent(*p, true, "No response from server");
+					}
+					break;
+
+				case LINESTATE_REGISTER_FAILED_NOT_AUTHORIZED :
+					p->setRegistered(false);
+					p->phoneLineStateChangedEvent(*p, info->hLine, EnumPhoneLineState::PhoneLineStateServerError);
+					break;
+
+				case LINESTATE_REGISTER_FAILED_TIMEOUT :
+					p->setRegistered(false);
+					p->phoneLineStateChangedEvent(*p, info->hLine, EnumPhoneLineState::PhoneLineStateTimeout);
+					break;
+
+				case LINESTATE_REGISTER_FAILED_NOT_FOUND :
+					p->setRegistered(false);
+					p->phoneLineStateChangedEvent(*p, info->hLine, EnumPhoneLineState::PhoneLineStateServerError);
+					break;
+
+				default :
+					p->setRegistered(false);
+					LOG_ERROR("unknown phApi event");
+					p->phoneLineStateChangedEvent(*p, info->hLine, EnumPhoneLineState::PhoneLineStateServerError);
+					break;
+			}
+			break;
+
+		case LINESTATE_UNREGISTER_FAILED :
+			switch(info->cause) {
+				case LINESTATE_UNREGISTER_FAILED_COULD_NOT_CONNECT :
+					break;
+
+				case LINESTATE_UNREGISTER_FAILED_NOT_AUTHORIZED :
+					break;
+
+				case LINESTATE_UNREGISTER_FAILED_TIMEOUT :
+					break;
+
+				default :
+					break;
+			}
+			break;
+
+		case LINESTATE_PROVISIONED :
+			switch(info->cause) {
+				case LINESTATE_PROVISIONED_NORMAL :
+					break;
+
+				default :
+					break;
+			}
+			break;
+
+		default :
+			p->setRegistered(false);
+			LOG_ERROR("unknown phApi event");
+			p->phoneLineStateChangedEvent(*p, info->hLine, EnumPhoneLineState::PhoneLineStateServerError);
+			break;
+	}
+}
+
+void PhApiCallbacks::messageProgress(OWPL_MESSAGE_INFO * info) {
 	PhApiWrapper * p = PhApiWrapper::PhApiWrapperHack;
 	IMChatSession * imChatSession;
 
-	if (info->event == phMsgOk) {
+	if(info->event == MESSAGE_SUCCESS && info->cause == MESSAGE_SUCCESS_NORMAL ) {
 		//We drop status message
 		return;
 	}
 
-	string content;
-	if (info->content) {
-		content = info->content;
+	std::string content;
+	if(info->szContent) {
+		content = info->szContent;
 	}
 
-	LOG_DEBUG("message received from=" + string(info->from) + " content=" + content);
+	LOG_DEBUG("message received from=" + std::string(info->szRemoteIdentity) + " content=" + content);
 
 	//Getting maps from PhApiWrapper
 	std::map<const std::string, IMChatSession *> & contactChatMap = p->getContactChatMap();
 
-	string from;
+	std::string from;
 	//<sip:robobob1535@voip.wengo.fr>;tag=b6e249633711def8c2dbe3c2d4f39996-e1d6
-	if (info->event != phMsgError) {
-		from = String(info->from).split(" ")[0];
+	if (info->event != MESSAGE_FAILURE) {
+		from = String(info->szRemoteIdentity).split(" ")[0];
 	} else {
-		int atPos = String(info->to).find("@");
-		from = String(info->to).substr(5, atPos - 5);
+		int atPos = String(info->szLocalIdentity).find("@");
+		from = String(info->szLocalIdentity).substr(5, atPos - 5);
 	}
 	//Finding associated session
 	std::map<const std::string, IMChatSession *>::const_iterator sessionIt = contactChatMap.find(from);
 
-	string ctype;
-	if (info->ctype) {
-		ctype = info->ctype;
+	std::string ctype;
+	if (info->szContentType) {
+		ctype = info->szContentType;
 	}
 
-	string subtype;
-	if (info->subtype) {
-		subtype = info->subtype;
+	std::string subtype;
+	if (info->szSubContentType) {
+		subtype = info->szSubContentType;
 	}
 
 	//Getting buddy icon
-	if ((info->event == phMsgNew) && (ctype == "buddyicon")) {
+	if ((info->event == MESSAGE_NEW) && (ctype == "buddyicon")) {
 		if (!subtype.empty()) {
 			p->contactIconChangedEvent(*p, from, subtype);
 		}
-
 		return;
 	}
 
@@ -316,7 +553,7 @@ void PhApiCallbacks::messageProgress(int messageId, const phMsgStateInfo_t * inf
 	}
 
 	switch(info->event) {
-	case phMsgNew: {
+	case MESSAGE_NEW : {
 
 		if (ctype == "typingstate") {
 			IMChat::TypingState state;
@@ -336,7 +573,7 @@ void PhApiCallbacks::messageProgress(int messageId, const phMsgStateInfo_t * inf
 		}
 
 		break;
-	case phMsgError:
+	case MESSAGE_FAILURE :
 		LOG_DEBUG("message could not be sent");
 		p->statusMessageReceivedEvent(*p, *imChatSession, PhApiIMChat::StatusMessageError, content);
 		break;
@@ -347,85 +584,278 @@ void PhApiCallbacks::messageProgress(int messageId, const phMsgStateInfo_t * inf
 	}
 }
 
-void PhApiCallbacks::subscriptionProgress(int subscriptionId, const phSubscriptionStateInfo_t * info) {
+/*
+TODO for future use ?
+void PhApiCallbacks::messageProgress(OWPL_MESSAGE_INFO * info) {
 	PhApiWrapper * p = PhApiWrapper::PhApiWrapperHack;
-	std::string from(info->from);
+	IMChatSession * imChatSession;
+	string from;
+	int atPos = 0;
+	std::string buddyIcon;
+	std::map<const std::string, IMChatSession *>::const_iterator sessionIt;
+	switch(info->event) {
+		case MESSAGE_UNKNOWN :
+			break;
+		
+		case MESSAGE_NEW :
+			switch(info->cause) {
+				case MESSAGE_NEW_NORMAL :
+					LOG_DEBUG("message received from=" + std::string(info->szRemoteIdentity) + " content=" + std::string(info->szContent));
+					from = String(info->szRemoteIdentity).split(" ")[0];
+					sessionIt = contactChatMap.find(from);
+					if (sessionIt != contactChatMap.end()) {
+						imChatSession = (*sessionIt).second;						
+					} else {
+						LOG_DEBUG("creating new IMChatSession");
+						imChatSession = new IMChatSession(*PhApiIMChat::PhApiIMChatHack);
+						contactChatMap[from] = imChatSession;
+						p->addContact(*imChatSession, from);
+						p->newIMChatSessionCreatedEvent(*p, *imChatSession);
+						p->sendMyIcon(from, p->_iconFilename);
+					}
+					p->messageReceivedEvent(*p, *imChatSession, from, std::string(info->szContent));
+					break;
 
-	if (info->event == phSubscriptionOk) {
-		p->subscribeStatusEvent(*p, from, IMPresence::SubscribeStatusOk);
-	} else {
-		p->subscribeStatusEvent(*p, from, IMPresence::SubscribeStatusError);
+				case MESSAGE_NEW_BUDDY_ICON :
+					LOG_DEBUG("message received from=" + std::string(info->szRemoteIdentity) + " content=" + std::string(info->szContent));
+					from = String(info->szRemoteIdentity).split(" ")[0];
+					buddyIcon = info->szSubContentType;
+					if(!buddyIcon.empty()) {
+						p->contactIconChangedEvent(*p, from, buddyIcon);
+					}
+					break;
+
+				case MESSAGE_NEW_TYPING :
+					LOG_DEBUG("message received from=" + std::string(info->szRemoteIdentity) + " content=" + std::string(info->szContent));
+					from = String(info->szRemoteIdentity).split(" ")[0];
+					sessionIt = contactChatMap.find(from);
+					if (sessionIt != contactChatMap.end()) {
+						imChatSession = (*sessionIt).second;
+						p->typingStateChangedEvent(*p, *imChatSession, from, IMChat::TypingStateTyping);
+					}
+					break;
+
+				case MESSAGE_NEW_STOP_TYPING :
+					LOG_DEBUG("message received from=" + std::string(info->szRemoteIdentity) + " content=" + std::string(info->szContent));
+					from = String(info->szRemoteIdentity).split(" ")[0];
+					sessionIt = contactChatMap.find(from);
+					if (sessionIt != contactChatMap.end()) {
+						imChatSession = (*sessionIt).second;
+						p->typingStateChangedEvent(*p, *imChatSession, from, IMChat::TypingStateStopTyping);
+					}
+					break;
+
+				case MESSAGE_NEW_NOT_TYPING :
+					LOG_DEBUG("message received from=" + std::string(info->szRemoteIdentity) + " content=" + std::string(info->szContent));
+					from = String(info->szRemoteIdentity).split(" ")[0];
+					sessionIt = contactChatMap.find(from);
+					if (sessionIt != contactChatMap.end()) {
+						imChatSession = (*sessionIt).second;
+						p->typingStateChangedEvent(*p, *imChatSession, from, IMChat::TypingStateNotTyping);
+					}
+					break;
+
+				default :
+					break;
+			}
+			break;
+		
+		case MESSAGE_SUCCESS :
+			switch(info->cause) {
+				case MESSAGE_SUCCESS_NORMAL :
+					// do nothing : drop the status message
+					break;
+
+				default :
+					break;
+			}
+			break;
+		
+		case MESSAGE_FAILURE :
+			switch(info->cause) {
+				case MESSAGE_FAILURE_UNKNOWN :
+					LOG_DEBUG("message received from=" + std::string(info->szRemoteIdentity) + " content=" + std::string(info->szContent));
+					atPos = String(info->szLocalIdentity).find("@");
+					from = String(info->szLocalIdentity).substr(5, atPos - 5);
+					sessionIt = contactChatMap.find(from);
+					if (sessionIt != contactChatMap.end()) {
+						imChatSession = (*sessionIt).second;						
+					} else {
+						LOG_DEBUG("creating new IMChatSession");
+						imChatSession = new IMChatSession(*PhApiIMChat::PhApiIMChatHack);
+						contactChatMap[from] = imChatSession;
+						p->addContact(*imChatSession, from);
+						p->newIMChatSessionCreatedEvent(*p, *imChatSession);
+						p->sendMyIcon(from, p->_iconFilename);
+					}
+					LOG_DEBUG("message could not be sent");
+					p->statusMessageReceivedEvent(*p, *imChatSession, PhApiIMChat::StatusMessageError, std::string(info->szContent));
+					break;
+
+				case MESSAGE_FAILURE_COULD_NOT_SEND :
+					LOG_DEBUG("message received from=" + std::string(info->szRemoteIdentity) + " content=" + std::string(info->szContent));
+					atPos = String(info->szLocalIdentity).find("@");
+					from = String(info->szLocalIdentity).substr(5, atPos - 5);
+					sessionIt = contactChatMap.find(from);
+					if (sessionIt != contactChatMap.end()) {
+						imChatSession = (*sessionIt).second;						
+					} else {
+						LOG_DEBUG("creating new IMChatSession");
+						imChatSession = new IMChatSession(*PhApiIMChat::PhApiIMChatHack);
+						contactChatMap[from] = imChatSession;
+						p->addContact(*imChatSession, from);
+						p->newIMChatSessionCreatedEvent(*p, *imChatSession);
+						p->sendMyIcon(from, p->_iconFilename);
+					}
+					LOG_DEBUG("message could not be sent");
+					p->statusMessageReceivedEvent(*p, *imChatSession, PhApiIMChat::StatusMessageError, std::string(info->szContent));
+					break;
+
+				default :
+					LOG_DEBUG("message received from=" + std::string(info->szRemoteIdentity) + " content=" + std::string(info->szContent));
+					LOG_DEBUG("message could not be sent : unknown failure cause=" + String::fromNumber(info->cause));
+					break;
+			}
+			break;
+
+		default :
+			LOG_DEBUG("message received from=" + std::string(info->szRemoteIdentity) + " content=" + std::string(info->szContent));
+			LOG_FATAL("unknown message event=" + String::fromNumber(info->event));
+			break;
+	}
+}
+*/
+
+void PhApiCallbacks::subscriptionProgress(OWPL_SUBSTATUS_INFO * info) {
+	PhApiWrapper * p = PhApiWrapper::PhApiWrapperHack;
+	std::string from(info->szRemoteIdentity);
+
+	switch(info->state) {
+
+		case OWPL_SUBSCRIPTION_PENDING :
+			switch(info->cause) {
+				case SUBSCRIPTION_CAUSE_NORMAL :
+					break;
+
+				default:
+					break;
+			}
+			break;
+
+		case OWPL_SUBSCRIPTION_ACTIVE :
+			switch(info->cause) {
+				case SUBSCRIPTION_CAUSE_NORMAL :
+					p->subscribeStatusEvent(*p, from, IMPresence::SubscribeStatusOk);
+					break;
+
+				default:
+					break;
+			}
+			break;
+
+		case OWPL_SUBSCRIPTION_FAILED :
+			switch(info->cause) {
+				case SUBSCRIPTION_CAUSE_UNKNOWN :
+					p->subscribeStatusEvent(*p, from, IMPresence::SubscribeStatusError);
+					break;
+
+				default:
+					break;
+			}
+			break;
+
+		case OWPL_SUBSCRIPTION_EXPIRED :
+			switch(info->cause) {
+				case SUBSCRIPTION_CAUSE_UNKNOWN :
+					break;
+
+				case SUBSCRIPTION_CAUSE_NORMAL :
+					break;
+
+				default:
+					break;
+			}
+			break;
+
+		default :
+			break;
 	}
 }
 
-void PhApiCallbacks::onNotify(const char * event, const char * from, const char * content) {
-	std::string tmp(event);
+void PhApiCallbacks::onNotify(OWPL_NOTIFICATION_INFO * info) {
 	PhApiWrapper * p = PhApiWrapper::PhApiWrapperHack;
-
-	std::string buddy = computeContactId(from);
+	std::string buddy = computeContactId(info->szRemoteIdentity);
 	_subscribedContacts.insert(computeContactId(buddy));
-
 	TiXmlDocument doc;
-	doc.Parse(content);
-
+	doc.Parse(info->szXmlContent);
 	TiXmlHandle docHandle(&doc);
+	TiXmlText * basicText = NULL;
+	TiXmlText * noteText = NULL;
+	TiXmlElement * watcherinfoElement = NULL;
+	TiXmlElement * watcherElement = NULL;
 
-	LOG_DEBUG("buddy=" + buddy + " notification=" + tmp + " content=" + std::string(content));
+	switch(info->event) {
+		//A buddy presence
+		case NOTIFICATION_PRESENCE :
+			LOG_DEBUG("buddy=" + buddy + " notification=presence content=" + std::string(info->szXmlContent));
 
-	//A buddy presence
-	if (tmp == "presence") {
+			basicText = docHandle.FirstChild("presence").FirstChild("tuple").FirstChild("status").FirstChild("basic").FirstChild().Text();
+			if (basicText) {
+				std::string basic = basicText->Value();
+				LOG_DEBUG("basic=" + basic);
 
-		TiXmlText * basicText = docHandle.FirstChild("presence").FirstChild("tuple").FirstChild("status").FirstChild("basic").FirstChild().Text();
-		if (basicText) {
-			std::string basic = basicText->Value();
-			LOG_DEBUG("basic=" + basic);
-
-			//buddy is offline
-			if (String(basic).toLowerCase() == "closed") {
-				p->presenceStateChangedEvent(*p,  EnumPresenceState::PresenceStateOffline, String::null, buddy);
-			}
-
-			//buddy is online
-			else if (String(basic).toLowerCase() == "open") {
-				TiXmlText * noteText = docHandle.FirstChild("presence").FirstChild("tuple").FirstChild("status").FirstChild("note").FirstChild().Text();
-				if (!noteText) {
-					noteText = docHandle.FirstChild("presence").FirstChild("tuple").FirstChild("status").FirstChild("value").FirstChild().Text();
+				//buddy is offline
+				if (String(basic).toLowerCase() == "closed") {
+					p->presenceStateChangedEvent(*p,  EnumPresenceState::PresenceStateOffline, String::null, buddy);
 				}
-				if (noteText) {
-					std::string note = noteText->Value();
-					LOG_DEBUG("note=" + note);
-					if (note == PhApiWrapper::PresenceStateOnline) {
-						p->presenceStateChangedEvent(*p, EnumPresenceState::PresenceStateOnline, note, buddy);
-					} else if (note == PhApiWrapper::PresenceStateAway) {
-						p->presenceStateChangedEvent(*p, EnumPresenceState::PresenceStateAway, note, buddy);
-					} else if (note == PhApiWrapper::PresenceStateDoNotDisturb) {
-						p->presenceStateChangedEvent(*p, EnumPresenceState::PresenceStateDoNotDisturb, note, buddy);
-					} else {
-						p->presenceStateChangedEvent(*p, EnumPresenceState::PresenceStateUserDefined, note, buddy);
+
+				//buddy is online
+				else if (String(basic).toLowerCase() == "open") {
+					noteText = docHandle.FirstChild("presence").FirstChild("tuple").FirstChild("status").FirstChild("note").FirstChild().Text();
+					if (!noteText) {
+						noteText = docHandle.FirstChild("presence").FirstChild("tuple").FirstChild("status").FirstChild("value").FirstChild().Text();
+					}
+					if (noteText) {
+						std::string note = noteText->Value();
+						LOG_DEBUG("note=" + note);
+						if (note == PhApiWrapper::PresenceStateOnline) {
+							p->presenceStateChangedEvent(*p, EnumPresenceState::PresenceStateOnline, note, buddy);
+						} else if (note == PhApiWrapper::PresenceStateAway) {
+							p->presenceStateChangedEvent(*p, EnumPresenceState::PresenceStateAway, note, buddy);
+						} else if (note == PhApiWrapper::PresenceStateDoNotDisturb) {
+							p->presenceStateChangedEvent(*p, EnumPresenceState::PresenceStateDoNotDisturb, note, buddy);
+						} else {
+							p->presenceStateChangedEvent(*p, EnumPresenceState::PresenceStateUserDefined, note, buddy);
+						}
 					}
 				}
 			}
-		}
+			break;
 
-	//watcher list
-	} else if (tmp == "presence.winfo") {
+		//watcher list
+		case NOTIFICATION_WATCHER :
+			LOG_DEBUG("buddy=" + buddy + " notification=presence.winfo content=" + std::string(info->szXmlContent));
+			watcherinfoElement = doc.FirstChildElement("watcherinfo");
+			if (watcherinfoElement) {
 
-		TiXmlElement * watcherinfoElement = doc.FirstChildElement("watcherinfo");
-		if (watcherinfoElement) {
+				watcherElement = watcherinfoElement->FirstChildElement("watcher");
+				while (watcherElement) {
 
-			TiXmlElement * watcherElement = watcherinfoElement->FirstChildElement("watcher");
-			while (watcherElement) {
+					std::string watcher(watcherElement->Value());
+					p->allowWatcher(watcher);
 
-				std::string watcher(watcherElement->Value());
-				p->allowWatcher(watcher);
-
-				watcherElement = watcherinfoElement->NextSiblingElement("watcher");
+					watcherElement = watcherinfoElement->NextSiblingElement("watcher");
+				}
 			}
-		}
+			break;
 
-	//unknown message event
-	} else {
-		LOG_FATAL("unknown message event=" + tmp);
+		case NOTIFICATION_UNKNOWN :
+			LOG_FATAL("unknown message event from="+ std::string(info->szRemoteIdentity) +" content=" + std::string(info->szXmlContent));
+			break;
+
+		default :
+			LOG_FATAL("unknown message event from="+ std::string(info->szRemoteIdentity) +" content=" + std::string(info->szXmlContent));
+			break;
 	}
 }
 

@@ -46,16 +46,21 @@ const std::string PhApiWrapper::PresenceStateDoNotDisturb = "Do Not Disturb";
 
 
 PhApiWrapper * PhApiWrapper::PhApiWrapperHack = NULL;
+/*
+TODO REFACTOR REMOVE
 PhApiCallbacks * PhApiWrapper::_callbacks = NULL;
+*/
 
 #ifdef ENABLE_VIDEO
-static const int VIDEO_FLAGS = PH_STREAM_AUDIO | PH_STREAM_VIDEO_RX | PH_STREAM_VIDEO_TX;
-static const int VIDEO_RX_ONLY_FLAGS = PH_STREAM_AUDIO | PH_STREAM_VIDEO_RX;
+static const int VIDEO_FLAGS = OWPL_STREAM_AUDIO | OWPL_STREAM_VIDEO_RX | OWPL_STREAM_VIDEO_TX;
+static const int VIDEO_RX_ONLY_FLAGS = OWPL_STREAM_AUDIO | OWPL_STREAM_VIDEO_RX;
 #else
-static const int VIDEO_FLAGS = PH_STREAM_AUDIO;
-static const int VIDEO_RX_ONLY_FLAGS = PH_STREAM_AUDIO;
+static const int VIDEO_FLAGS = OWPL_STREAM_AUDIO;
+static const int VIDEO_RX_ONLY_FLAGS = OWPL_STREAM_AUDIO;
 #endif
 
+/*
+TODO REFACTOR REMOVE
 extern "C" {
 
 static void callProgress(int callId, const phCallStateInfo_t * info) {
@@ -66,10 +71,10 @@ static void videoFrameReceived(int callId, phVideoFrameReceivedEvent_t * info) {
 	PhApiWrapper::videoFrameReceived(callId, info);
 }
 
-static void transferProgress(int /*callId*/, const phTransferStateInfo_t * /*info*/) {
+static void transferProgress(int callId, const phTransferStateInfo_t * info) {
 }
 
-static void conferenceProgress(int /*conferenceId*/, const phConfStateInfo_t * /*info*/) {
+static void conferenceProgress(int conferenceId, const phConfStateInfo_t * info) {
 }
 
 static void registerProgress(int registerId, int status) {
@@ -88,6 +93,7 @@ static void onNotify(const char * event, const char * from, const char * content
 	PhApiWrapper::onNotify(event, from, content);
 }
 
+
 phCallbacks_t phApiCallbacks = {
 	callProgress,
 	transferProgress,
@@ -99,7 +105,10 @@ phCallbacks_t phApiCallbacks = {
 	videoFrameReceived
 };
 
-}	//"C"
+
+} //"C"
+*/
+
 
 
 PhApiWrapper::PhApiWrapper(PhApiCallbacks & callbacks)
@@ -116,16 +125,12 @@ PhApiWrapper::PhApiWrapper(PhApiCallbacks & callbacks)
 	PhApiWrapperHack = this;
 	_registered = false;
 
-	_publishTimer.timeoutEvent += boost::bind(&PhApiWrapper::renewPublishEventHandler, this);
-
 	//FIXME ugly hack for conference
 	phoneCallStateChangedEvent +=
 		boost::bind(&PhApiWrapper::phoneCallStateChangedEventHandler, this, _1, _2, _3, _4);
 }
 
 PhApiWrapper::~PhApiWrapper() {
-	_publishTimer.stop();
-
 	terminate();
 }
 
@@ -138,34 +143,56 @@ void PhApiWrapper::terminate() {
 }
 
 void PhApiWrapper::setNetworkParameter() {
-	std::string natType = "auto";
+	//TODO REFACTOR REMOVE
+	//std::string natType = "auto";
 	int natRefreshTime = 25;
 
 	if (_tunnelNeeded) {
-		//TODO: activate SSL for HTTP tunnel
-		phTunnelConfig(_proxyServer.c_str(), _proxyPort, _tunnelServer.c_str(), _tunnelPort,
-			_proxyLogin.c_str(), _proxyPassword.c_str(), _tunnelSSL, 0);
+		//TODO REFACTOR REMOVE
+		/*phTunnelConfig(_proxyServer.c_str(), _proxyPort, _tunnelServer.c_str(), _tunnelPort,
+			_proxyLogin.c_str(), _proxyPassword.c_str(), _tunnelSSL, 0);*/
 
-		phcfg.use_tunnel = 1;
-		natType = "fcone";
+		if(owplConfigSetLocalHttpProxy(_proxyServer.c_str(), _proxyPort, _proxyLogin.c_str(), _proxyPassword.c_str()) != OWPL_RESULT_SUCCESS) {
+			// TODO what? throw an exception? exit?
+		}
+		// activate SSL for HTTP tunnel
+		int mask = OWPL_TUNNEL_USE;
+		if(_tunnelSSL) {
+			mask = mask | OWPL_TUNNEL_SSL;
+		}
+		if(owplConfigSetTunnel(_tunnelServer.c_str(), _tunnelPort, mask) != OWPL_RESULT_SUCCESS) {
+			// TODO what? throw an exception? exit?
+		}
+
+		//TODO REFACTOR REMOVE
+		//natType = "fcone";
+		owplConfigSetNat(OWPL_NAT_TYPE_FCONE, natRefreshTime);
 
 	} else {
 		switch(_natType) {
 		case EnumNatType::NatTypeOpen:
-			natType = "none";
-			natRefreshTime = 0;
+			// TODO REFACTOR REMOVE
+			//natType = "none";
+			//natRefreshTime = 0;
+			owplConfigSetNat(OWPL_NAT_TYPE_NONE, 0);
 			break;
 
 		case EnumNatType::NatTypeFullCone:
-			natType = "fcone";
+			//TODO REFACTOR REMOVE
+			//natType = "fcone";
+			owplConfigSetNat(OWPL_NAT_TYPE_FCONE, natRefreshTime);
 			break;
 
 		case EnumNatType::NatTypeRestrictedCone:
-			natType = "rcone";
+			//TODO REFACTOR REMOVE
+			//natType = "rcone";
+			owplConfigSetNat(OWPL_NAT_TYPE_RCONE, natRefreshTime);
 			break;
 
 		case EnumNatType::NatTypePortRestrictedCone:
-			natType = "prcone";
+			//TODO REFACTOR REMOVE
+			//natType = "prcone";
+			owplConfigSetNat(OWPL_NAT_TYPE_PRCONE, natRefreshTime);
 			break;
 
 		case EnumNatType::NatTypeSymmetric:
@@ -173,18 +200,23 @@ void PhApiWrapper::setNetworkParameter() {
 		case EnumNatType::NatTypeBlocked:
 		case EnumNatType::NatTypeFailure:
 		case EnumNatType::NatTypeUnknown:
-			natType = "sym";
+			//TODO REFACTOR REMOVE
+			//natType = "sym";
+			owplConfigSetNat(OWPL_NAT_TYPE_SYMETRIC, natRefreshTime);
 			break;
 
 		default:
+			owplConfigSetNat(OWPL_NAT_TYPE_AUTO, natRefreshTime);
 			LOG_FATAL("unknown NAT type");
 		}
 
-		phcfg.use_tunnel = 0;
+		// in case of change after first initialization
+		owplConfigSetTunnel(NULL, 0, OWPL_TUNNEL_NOT_USED);
 	}
 
-	strncpy(phcfg.nattype, natType.c_str(), sizeof(phcfg.nattype));
-	phcfg.nat_refresh_time = natRefreshTime;
+	//TODO REFACTOR REMOVE
+	//strncpy(phcfg.nattype, natType.c_str(), sizeof(phcfg.nattype));
+	//phcfg.nat_refresh_time = natRefreshTime;
 }
 
 int PhApiWrapper::addVirtualLine(const std::string & displayName,
@@ -196,23 +228,32 @@ int PhApiWrapper::addVirtualLine(const std::string & displayName,
 	const std::string & registerServer) {
 
 	static const int REGISTER_TIMEOUT = 49 * 60;
+	OWPL_LINE gVline = -1;
 
-	int ret = SipWrapper::VirtualLineIdError;
 	if (_isInitialized) {
 		phAddAuthInfo(username.c_str(), identity.c_str(), password.c_str(), String::null, realm.c_str());
 
 		std::string tmp = proxyServer;
 		tmp += ":" + String::fromNumber(_sipServerPort);
-		ret = phAddVline2(displayName.c_str(), identity.c_str(), registerServer.c_str(), tmp.c_str(), REGISTER_TIMEOUT);
 
-		phoneLineStateChangedEvent(*this, ret, EnumPhoneLineState::PhoneLineStateProgress);
+		// TODO REMOVE
+		//ret = phAddVline2(displayName.c_str(), identity.c_str(), registerServer.c_str(), tmp.c_str(), REGISTER_TIMEOUT);
+		
+		if(owplLineAdd(displayName.c_str(), identity.c_str(), registerServer.c_str(), tmp.c_str(), REGISTER_TIMEOUT, &gVline) != OWPL_RESULT_SUCCESS) {
+			return SipWrapper::VirtualLineIdError;
+		}
+		if(owplLineRegister(gVline, 1) != OWPL_RESULT_SUCCESS) {
+			return SipWrapper::VirtualLineIdError;
+		}
+
+		phoneLineStateChangedEvent(*this, gVline, EnumPhoneLineState::PhoneLineStateProgress);
 	}
 
-	_wengoVline = ret;
+	_wengoVline = gVline;
 	_wengoSipAddress = "sip:" + identity + "@" + realm;
 	_wengoRealm = realm;
 
-	return ret;
+	return gVline;
 }
 
 void PhApiWrapper::removeVirtualLine(int lineId, int regTimeout) {
@@ -227,16 +268,31 @@ void PhApiWrapper::removeVirtualLine(int lineId, int regTimeout) {
 }
 
 int PhApiWrapper::makeCall(int lineId, const std::string & sipAddress, bool enableVideo) {
+	OWPL_CALL hCall;
+
 	LOG_DEBUG("call=" + sipAddress);
 	int mediaFlags = VIDEO_RX_ONLY_FLAGS;
 	if (enableVideo) {
 		mediaFlags = VIDEO_FLAGS;
 	}
-	return phLinePlaceCall2(lineId, sipAddress.c_str(), NULL, 0, mediaFlags);
+
+	if(owplCallCreate(lineId, &hCall) != OWPL_RESULT_SUCCESS) {
+		return -1;
+	}
+	if(owplCallConnect(hCall, sipAddress.c_str(), mediaFlags) != OWPL_RESULT_SUCCESS) {
+		return -1;
+	}
+
+	return hCall;
 }
 
-void PhApiWrapper::sendRingingNotification(int callId) {
-	phRingingCall(callId);
+void PhApiWrapper::sendRingingNotification(int callId, bool enableVideo) {
+	int mediaFlags = VIDEO_RX_ONLY_FLAGS;
+	if (enableVideo) {
+		mediaFlags = VIDEO_FLAGS;
+	}
+
+	owplCallAccept(callId, mediaFlags);
 }
 
 void PhApiWrapper::acceptCall(int callId, bool enableVideo) {
@@ -244,27 +300,32 @@ void PhApiWrapper::acceptCall(int callId, bool enableVideo) {
 	if (enableVideo) {
 		mediaFlags = VIDEO_FLAGS;
 	}
-	phAcceptCall3(callId, 0, mediaFlags);
+
+	owplCallAnswer(callId, mediaFlags);
 }
 
 void PhApiWrapper::rejectCall(int callId) {
-	static const int busy = 486;
-
-	phRejectCall(callId, busy);
+	owplCallReject(callId, 486, NULL);
 }
 
 void PhApiWrapper::closeCall(int callId) {
-	phCloseCall(callId);
+	// TODO REFACTOR
+	owplCallDisconnect(callId);
+
+	// TODO REMOVE
+	//phCloseCall(callId);
 }
 
 void PhApiWrapper::holdCall(int callId) {
 	//Thread::sleep(3);
-	phHoldCall(callId);
+	
+	owplCallHold(callId);
+
 	//Thread::sleep(3);
 }
 
 void PhApiWrapper::resumeCall(int callId) {
-	phResumeCall(callId);
+	owplCallUnhold(callId);
 }
 
 void PhApiWrapper::blindTransfer(int callId, const std::string & sipAddress) {
@@ -430,6 +491,8 @@ CodecList::VideoCodec PhApiWrapper::getVideoCodecUsed(int callId) {
 	}
 }
 
+/*
+TODO REFACTOR REMOVE
 void PhApiWrapper::callProgress(int callId, const phCallStateInfo_t * info) {
 	_callbacks->callProgress(callId, info);
 }
@@ -441,6 +504,7 @@ void PhApiWrapper::registerProgress(int lineId, int status) {
 void PhApiWrapper::videoFrameReceived(int callId, phVideoFrameReceivedEvent_t * info) {
 	_callbacks->videoFrameReceived(callId, info);
 }
+*/
 
 bool PhApiWrapper::setCallInputAudioDevice(const AudioDevice & device) {
 	_inputAudioDevice = device;
@@ -522,39 +586,47 @@ void PhApiWrapper::sendMessage(IMChatSession & chatSession, const std::string & 
 	LOG_DEBUG("sending message: " + message);
 	const IMContactSet & buddies = chatSession.getIMContactSet();
 	IMContactSet::const_iterator it;
+	int messageId = -1;
+
 	for (it = buddies.begin(); it != buddies.end(); it++) {
 		std::string sipAddress = "sip:" + (*it).getContactId() + "@" + _wengoRealm;
-		int messageId = phLineSendMessage(_wengoVline, sipAddress.c_str(), message.c_str(), "text/plain");
-		//_messageIdChatSessionMap[messageId] = &chatSession;
+		owplMessageSendPlainText(_wengoVline,
+					sipAddress.c_str(),
+					message.c_str(),
+					&messageId);
 	}
 }
 
 void PhApiWrapper::changeTypingState(IMChatSession & chatSession, IMChat::TypingState state) {
-	const char * mime;
-	const char * message;
-
-	switch (state) {
-	case IMChat::TypingStateTyping:
-		mime = "typingstate/typing";
-		message = "is typing";
-		break;
-
-	case IMChat::TypingStateStopTyping:
-		mime = "typingstate/stoptyping";
-		message = "stops typing";
-		break;
-
-	default:
-		mime = "typingstate/nottyping";
-		message = "is not typing";
-		break;
-	}
-
 	const IMContactSet & buddies = chatSession.getIMContactSet();
 	IMContactSet::const_iterator it;
+	int messageId = -1;
+
 	for (it = buddies.begin(); it != buddies.end(); it++) {
 		std::string sipAddress = "sip:" + (*it).getContactId() + "@" + _wengoRealm;
-		int messageId = phLineSendMessage(_wengoVline, sipAddress.c_str(), message, mime);
+
+		switch (state) {
+			case IMChat::TypingStateTyping :
+				owplMessageSendTypingState(_wengoVline,
+					sipAddress.c_str(),
+					OWPL_TYPING_STATE_TYPING,
+					&messageId);
+				break;
+
+			case IMChat::TypingStateStopTyping :
+				owplMessageSendTypingState(_wengoVline,
+					sipAddress.c_str(),
+					OWPL_TYPING_STATE_STOP_TYPING,
+					&messageId);
+				break;
+
+			default :
+				owplMessageSendTypingState(_wengoVline,
+					sipAddress.c_str(),
+					OWPL_TYPING_STATE_NOT_TYPING,
+					&messageId);
+				break;
+		}
 	}
 }
 
@@ -638,91 +710,48 @@ void PhApiWrapper::changeMyPresence(EnumPresenceState::PresenceState state, cons
 }
 
 void PhApiWrapper::sendMyIcon(const std::string & contactId, const std::string & iconFilename) {
+	int messageId = -1;
+
 	if (iconFilename.empty()) {
 		return;
 	}
 
-	const std::string mime = "buddyicon/" + iconFilename;
-	const char * message = "has changed his icon";
-
 	std::string sipAddress = "sip:" + contactId + "@" + _wengoRealm;
-	int messageId = phLineSendMessage(_wengoVline, sipAddress.c_str(), message, mime.c_str());
+	owplMessageSendIcon(_wengoVline,
+		sipAddress.c_str(),
+		iconFilename.c_str(),
+		&messageId);
 }
 
 void PhApiWrapper::publishOnline(const std::string & note) {
 	if (_isInitialized) {
-		std::string pidfOnline = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-		pidfOnline += "<presence entity=\"";
-		pidfOnline += _wengoSipAddress;
-		pidfOnline += "\">\n";
-		pidfOnline += "<tuple id=\"azersdqre\">\n";
-		pidfOnline += "<status><basic>open</basic>";
-		pidfOnline += "<note>";
-		pidfOnline += note;
-		pidfOnline += "</note></status>\n";
-		pidfOnline += "<contact priority=\"1\">";
-		pidfOnline += _wengoSipAddress;
-		pidfOnline += "</contact>\n";
-		pidfOnline += "</tuple>\n";
-		pidfOnline += "</presence>\n";
-
-		publishPresence(pidfOnline, note);
+		publishPresence(true, note);
 	}
 }
 
 void PhApiWrapper::publishOffline(const std::string & note) {
 	if (_isInitialized) {
-		std::string pidfOffline = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-		pidfOffline += "<presence entity=\"";
-		pidfOffline += _wengoSipAddress;
-		pidfOffline += "\">\n";
-		pidfOffline += "<tuple id=\"azersdqre\">\n";
-		pidfOffline += "<status><basic>close</basic></status>\n";
-		pidfOffline += "<contact priority=\"1\">";
-		pidfOffline += _wengoSipAddress;
-		pidfOffline += "</contact>\n";
-		pidfOffline += "</tuple>\n";
-		pidfOffline += "</presence>\n";
-
-		publishPresence(pidfOffline, note);
+		publishPresence(false, note);
 	}
 }
 
-void PhApiWrapper::publishPresence(const std::string & pidf, const std::string & note) {
+void PhApiWrapper::publishPresence(bool online, const std::string & note) {
 	static const std::string contentType = "application/pidf+xml";
 
 	if (_isInitialized) {
-		int phError = phLinePublish(_wengoVline, _wengoSipAddress.c_str(), 0, contentType.c_str(), pidf.c_str());
-		if (phError != 0) {
+		if(owplPresencePublish(_wengoVline, (online)?1:0, note.c_str(), NULL) != OWPL_RESULT_SUCCESS) {
 			myPresenceStatusEvent(*this, EnumPresenceState::MyPresenceStatusError, note);
 		} else {
 			myPresenceStatusEvent(*this, EnumPresenceState::MyPresenceStatusOk, note);
 		}
 	}
-
-	/* Timer to renew publish presence */
-
-	//Renew presence every 9 minutes
-	static const unsigned PUBLISH_TIMEOUT = 9 * 60 * 1000;
-
-	if (_lastPidf.empty()) {
-		//Launches the timer only once
-		_publishTimer.start(PUBLISH_TIMEOUT, PUBLISH_TIMEOUT);
-	}
-
-	//Saves the pidf
-	_lastPidf = pidf;
-	_lastNote = note;
-}
-
-void PhApiWrapper::renewPublishEventHandler() {
-	publishPresence(_lastPidf, _lastNote);
 }
 
 void PhApiWrapper::subscribeToPresenceOf(const std::string & contactId) {
 	std::string sipAddress = "sip:" + contactId + "@" + _wengoRealm;
 
-	if (phLineSubscribe(_wengoVline, sipAddress.c_str(), 0) != 0) {
+	OWPL_SUB hSub;
+	if(owplPresenceSubscribe(_wengoVline, sipAddress.c_str(), 0, &hSub) != OWPL_RESULT_SUCCESS) {
 		subscribeStatusEvent(*this, sipAddress, IMPresence::SubscribeStatusError);
 	} else {
 		subscribeStatusEvent(*this, sipAddress, IMPresence::SubscribeStatusOk);
@@ -732,8 +761,11 @@ void PhApiWrapper::subscribeToPresenceOf(const std::string & contactId) {
 void PhApiWrapper::unsubscribeToPresenceOf(const std::string & contactId) {
 	std::string sipAddress = "sip:" + contactId + "@" + _wengoRealm;
 
+	owplPresenceUnsubscribe(sipAddress.c_str());
 }
 
+/*
+TODO REFACTOR REMOVE
 void PhApiWrapper::messageProgress(int messageId, const phMsgStateInfo_t * info) {
 	_callbacks->messageProgress(messageId, info);
 }
@@ -745,8 +777,10 @@ void PhApiWrapper::subscriptionProgress(int subscriptionId, const phSubscription
 void PhApiWrapper::onNotify(const char * event, const char * from, const char * content) {
 	_callbacks->onNotify(event, from, content);
 }
+*/
 
 void PhApiWrapper::allowWatcher(const std::string & watcher) {
+	/*
 	static const int winfo = 1;	//Publish with event = presence.winfo
 	static const std::string contentType = "application/watcherinfo+xml";
 
@@ -760,9 +794,13 @@ void PhApiWrapper::allowWatcher(const std::string & watcher) {
 	winfoAllow += "</watcherinfo>\n";
 
 	phLinePublish(_wengoVline, _wengoSipAddress.c_str(), winfo, contentType.c_str(), winfoAllow.c_str());
+	*/
+	// TODO REFACTOR
+	// owplPresencePublishAllowed(...);
 }
 
 void PhApiWrapper::forbidWatcher(const std::string & watcher) {
+	/*
 	static const int winfo = 1;	//Publish with event = presence.winfo
 	static const std::string contentType = "application/watcherinfo+xml";
 
@@ -776,6 +814,9 @@ void PhApiWrapper::forbidWatcher(const std::string & watcher) {
 	winfoForbid += "</watcherinfo>\n";
 
 	phLinePublish(_wengoVline, _wengoSipAddress.c_str(), winfo, contentType.c_str(), winfoForbid.c_str());
+	*/
+	// TODO REFACTOR
+	// owplPresencePublishAllowed(...);
 }
 
 void PhApiWrapper::blockContact(const std::string & contactId) {
@@ -922,43 +963,31 @@ void PhApiWrapper::init() {
 	//Plugin path
 	strncpy(phcfg.plugin_path, _pluginPath.c_str(), sizeof(phcfg.plugin_path));
 
-	std::string audioCodecList =
-		PhApiCodecList::AUDIO_CODEC_SPEEXWB + "," +
-		PhApiCodecList::AUDIO_CODEC_ILBC + "," +
-		PhApiCodecList::AUDIO_CODEC_AMRWB + "," +
-		PhApiCodecList::AUDIO_CODEC_PCMU + "," +
-		PhApiCodecList::AUDIO_CODEC_PCMA + "," +
-		PhApiCodecList::AUDIO_CODEC_AMRNB + "," +
-		PhApiCodecList::AUDIO_CODEC_GSM;
-
-	std::string videoCodecList =
-		PhApiCodecList::VIDEO_CODEC_H263;
-
 	//Codec list
-	strncpy(phcfg.audio_codecs, audioCodecList.c_str(), sizeof(phcfg.audio_codecs));
-	strncpy(phcfg.video_codecs, videoCodecList.c_str(), sizeof(phcfg.video_codecs));
-
-	std::string tmp = _sipServer;
-	tmp += ":" + String::fromNumber(_sipServerPort);
-	strncpy(phcfg.proxy, tmp.c_str(), sizeof(phcfg.proxy));
-
-	String localPort = String::fromNumber(_sipLocalPort);
-	strncpy(phcfg.sipport, localPort.c_str(), sizeof(phcfg.sipport));
+	owplConfigAddAudioCodecByName(PhApiCodecList::AUDIO_CODEC_SPEEXWB.c_str());
+	owplConfigAddAudioCodecByName(PhApiCodecList::AUDIO_CODEC_ILBC.c_str());
+	owplConfigAddAudioCodecByName(PhApiCodecList::AUDIO_CODEC_AMRWB.c_str());
+	owplConfigAddAudioCodecByName(PhApiCodecList::AUDIO_CODEC_PCMU.c_str());
+	owplConfigAddAudioCodecByName(PhApiCodecList::AUDIO_CODEC_PCMA.c_str());
+	owplConfigAddAudioCodecByName(PhApiCodecList::AUDIO_CODEC_AMRNB.c_str());
+	owplConfigAddAudioCodecByName(PhApiCodecList::AUDIO_CODEC_GSM.c_str());
+	owplConfigAddVideoCodecByName(PhApiCodecList::VIDEO_CODEC_H263.c_str());
 
 #ifdef ENABLE_VIDEO
     // default webcam capture size must be initialized to avoid a 0x0 size
 	phVideoControlSetWebcamCaptureResolution(320, 240);
 #endif
 
-	//Ignored since we are in direct link mode
-	static const std::string phApiServer = "127.0.0.1:5065";
+	//If asynchronous mode = 0 then we have to call phPoll()
+	owplConfigSetAsynchronous(1);
 
-	//If asynchronous mode = false then we have to call phPoll()
-	static const bool asynchronousMode = true;
+	_callbacks->startListeningPhApiEvents();
 
-	int ret = phInit(&phApiCallbacks, (char *) phApiServer.c_str(), asynchronousMode);
-	if (ret == PhApiResultNoError) {
+	std::string tmp = _sipServer;
+	tmp += ":" + String::fromNumber(_sipServerPort);
+	owplConfigSetOutboundProxy(tmp.c_str());
 
+	if(owplInit(5060, 0, 0, NULL, 0) == OWPL_RESULT_SUCCESS) {
 		_isInitialized = true;
 		LOG_DEBUG("phApi successfully initialized");
 	} else {
