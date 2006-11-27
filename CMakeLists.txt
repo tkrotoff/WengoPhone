@@ -58,6 +58,14 @@ else (WIN32)
 		find_package(UUID REQUIRED)
 		find_package(Portaudio REQUIRED)
 		find_package(Speex REQUIRED)
+
+		if (WITH_PHAPI_AUDIO_ALSA)
+			find_package(Alsa REQUIRED)
+		endif (WITH_PHAPI_AUDIO_ALSA)
+
+		if (WITH_PHAPI_AUDIO_ESD)
+			find_package(ESD REQUIRED)
+		endif (WITH_PHAPI_AUDIO_ESD)
 	endif (APPLE)
 endif (WIN32)
 

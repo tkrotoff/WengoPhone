@@ -1,8 +1,3 @@
-option(WITH_SPEEXWB_REPLACES_AMRWB "" OFF)
-option(WITH_SPEEXWB_REPLACES_AMRNB "" OFF)
-option(WITH_SPEEXWB_REPLACES_G726WB "" ON)
-
-
 if (APPLE)
 	ow_create_static_library(phapi)
 else (APPLE)
@@ -114,22 +109,18 @@ else (WITH_SPEEXWB_REPLACES_G726WB)
 	endif (WITH_SPEEXWB_REPLACES_AMRNB)
 endif (WITH_SPEEXWB_REPLACES_G726WB)
 
-# Embedded
-option(WITH_EMBEDDED_PHAPI "" OFF)
 if (WITH_EMBEDDED_PHAPI)
 	ow_add_private_definitions(
 		-DSCHEDULING_MODE
 	)
 endif (WITH_EMBEDDED_PHAPI)
 
-option(WITH_QOS_DEBUG "Build with QOS debug support" OFF)
 if (WITH_QOS_DEBUG)
 	ow_add_private_definitions(
 		-DPHAPI_QOS_DEBUG
 	)
 endif (WITH_QOS_DEBUG)
 
-option(WITH_HTTPTUNNEL "Build phapi with httptunnel support" ON)
 if (WITH_HTTPTUNNEL)
 	ow_use_private_libraries(
 		httptunnel
@@ -159,8 +150,6 @@ endif (WITH_HTTPTUNNEL)
 		phcodec-avcodec-wrapper.c
 	)
 #endif (WITH_VIDEO)
-
-# System specific phapi options
 
 if (WIN32)
 	ow_add_private_libraries(
@@ -209,7 +198,6 @@ if (UNIX AND NOT WIN32)
 			rt
 		)
 
-		option(WITH_SAMPLERATE "Build phapi with samplerate support" OFF)
 		if (WITH_SAMPLERATE)
 			ow_use_private_libraries(
 				samplerate
@@ -220,10 +208,7 @@ if (UNIX AND NOT WIN32)
 			)
 		endif (WITH_SAMPLERATE)
 
-		option(WITH_PHAPI_AUDIO_ALSA "Build phapi with alsa support" ON)
 		if (WITH_PHAPI_AUDIO_ALSA)
-			find_package(Alsa REQUIRED)
-
 			ow_add_private_libraries(
 				${ASOUND_LIBRARY}
 			)
@@ -237,10 +222,7 @@ if (UNIX AND NOT WIN32)
 			)
 		endif (WITH_PHAPI_AUDIO_ALSA)
 
-		option(WITH_PHAPI_AUDIO_ARTS "Build phapi with arts support" OFF)
 		if (WITH_PHAPI_AUDIO_ARTS)
-			find_package(ARTS REQUIRED)
-
 			ow_use_private_libraries(
 				ARTS
 			)
@@ -254,10 +236,7 @@ if (UNIX AND NOT WIN32)
 			)
 		endif (WITH_PHAPI_AUDIO_ARTS)
 
-		option(WITH_PHAPI_AUDIO_ESD "Build phapi with esd support" OFF)
 		if (WITH_PHAPI_AUDIO_ESD)
-			find_package(ESD REQUIRED)
-
 			ow_use_private_libraries(
 				ESD
 			)
