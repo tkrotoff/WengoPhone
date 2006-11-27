@@ -150,7 +150,7 @@ OWPL_PLUGIN_PARAM params[] = {
 
 OWPL_PLUGIN_CONTENT_TYPE content_type  = {"application/sfp", handleEvent };
 
-OWPL_PLUGIN_EXPORT exports = {
+OWPL_DECLARE_EXPORT OWPL_PLUGIN_EXPORT exports = {
 	"SFPPlugin",
 	OWPL_PLUGIN_VERSION,
 	&content_type,
