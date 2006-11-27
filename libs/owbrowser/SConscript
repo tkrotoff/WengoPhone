@@ -1,7 +1,7 @@
 env = WengoGetQt4Environment()
 
 lib_path = []
-include_path = ['.']
+include_path = ['include']
 
 libs = [
 	'owutil',
@@ -9,8 +9,8 @@ libs = [
 	'qt4',
 ]
 
-headers = ['QtBrowser.h']
-sources = ['QtBrowser.cpp']
+headers = ['include/owbrowser/QtBrowser.h']
+sources = ['src/QtBrowser.cpp']
 
 def moc(env, headers):
 	moced = []

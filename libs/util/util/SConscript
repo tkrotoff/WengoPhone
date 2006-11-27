@@ -21,6 +21,7 @@ sources = [
 	'src/File.cpp',
 	'src/Logger.cpp',
 	'src/Path.cpp',
+	'src/NonCopyable.cpp',
 	'src/OWPicture.cpp',
 	'src/String.cpp',
 	'src/StringList.cpp',
