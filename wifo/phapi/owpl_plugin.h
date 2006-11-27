@@ -1,7 +1,7 @@
 /* $Id: owpl_plugin.h,v 0.1 2006/10/12 14:47:00 $
  *
  * This plugin header file module is heavily based on the sr_plugin.h file of the SER project
- * 
+ *
  */
 
 #ifndef owpl_plugin_module_h
@@ -12,16 +12,6 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif
-
-#if defined(WIN32) || defined(WIN32_WCE)
-
-#define OWPL_DECLARE_EXPORT __declspec(dllexport)
-
-#else
-
-#define OWPL_DECLARE_EXPORT
-
 #endif
 
 //Define the version of OWPL plugin system
@@ -38,22 +28,22 @@ typedef  int (*owplPS_CommandProc0)();
 typedef  int (*owplPS_CommandProc1)(char * param1);
 typedef  int (*owplPS_CommandProc2)(char * param1, char * param2);
 typedef  int (*owplPS_CommandProc3)(char * param1, char * param2, char * param3);
-typedef  int (*owplPS_CommandProc4)(char * param1, char * param2, char * param3, 
+typedef  int (*owplPS_CommandProc4)(char * param1, char * param2, char * param3,
 									char * param4);
-typedef  int (*owplPS_CommandProc5)(char * param1, char * param2, char * param3, 
+typedef  int (*owplPS_CommandProc5)(char * param1, char * param2, char * param3,
 									char * param4, char * param5);
-typedef  int (*owplPS_CommandProc6)(char * param1, char * param2, char * param3, 
+typedef  int (*owplPS_CommandProc6)(char * param1, char * param2, char * param3,
 									char * param4, char * param5, char * param6);
-typedef  int (*owplPS_CommandProc7)(char * param1, char * param2, char * param3, 
+typedef  int (*owplPS_CommandProc7)(char * param1, char * param2, char * param3,
 									char * param4, char * param5, char * param6,
 									char * param7);
-typedef  int (*owplPS_CommandProc8)(char * param1, char * param2, char * param3, 
+typedef  int (*owplPS_CommandProc8)(char * param1, char * param2, char * param3,
 									char * param4, char * param5, char * param6,
 									char * param7, char * param8);
-typedef  int (*owplPS_CommandProc9)(char * param1, char * param2, char * param3, 
+typedef  int (*owplPS_CommandProc9)(char * param1, char * param2, char * param3,
 									char * param4, char * param5, char * param6,
 									char * param7, char * param8, char * param9);
-typedef  int (*owplPS_CommandProc10)(char * param1, char * param2, char * param3, 
+typedef  int (*owplPS_CommandProc10)(char * param1, char * param2, char * param3,
 									char * param4, char * param5, char * param6,
 									char * param7, char * param8, char * param9,
 									char * param10);
@@ -86,9 +76,9 @@ struct owplPS_ContentType_ {
 
 struct owplPS_param_ {
 	char* name;             /* null terminated param. name */
-	OWPL_PLUGIN_PARAM_TYPE type;        /* param. type */	
+	OWPL_PLUGIN_PARAM_TYPE type;        /* param. type */
 	void* param_pointer;    /* pointer to the param. memory location */
-	int size; /* param. size */	
+	int size; /* param. size */
 };
 
 typedef struct owplPS_cmd_ OWPL_PLUGIN_CMD;
@@ -102,15 +92,15 @@ typedef struct owplPS_plugin_exports{
 
 	const char* owpl_plugin_version;      /* The version of the owpl_plugin system that the plugin was compiled against */
 
-	OWPL_PLUGIN_CONTENT_TYPE * ct_info; /* The structure that describes what content type is handled 
+	OWPL_PLUGIN_CONTENT_TYPE * ct_info; /* The structure that describes what content type is handled
 											 by the plugin and the callback function to handle it*/
-	
+
 	OWPL_PLUGIN_CMD * cmds;             /* null terminated array of the exported commands */
 
 
 	OWPL_PLUGIN_CALLBACK * callbacks;             /* null terminated array of the callback functions*/
 
-	OWPL_PLUGIN_PARAM * params;         /* null terminated array of the exported module parameters */	
+	OWPL_PLUGIN_PARAM * params;         /* null terminated array of the exported module parameters */
 
 	owplPS_InitProc init_f;           /* Initialization function */
 

@@ -48,7 +48,7 @@ static int owplRegisterBuiltinModules()
 
 	ret=0;
 #ifdef STATIC_SDP
-	ret=owplRegisterPlugin(sdp_exports,"built-in", 0); 
+	ret=owplRegisterPlugin(sdp_exports,"built-in", 0);
 	if (ret<0) return ret;
 #endif
 	return ret;
@@ -60,7 +60,7 @@ static int owplRegisterPlugin(OWPL_PLUGIN_EXPORT * e, const char* path, void* ha
 {
 	int ret;
 	OWPL_PLUGIN * mod;
-	
+
 	ret=-1;
 
 	/* add module to the list */
@@ -86,20 +86,20 @@ error:
 #endif
 
 /* returns 0 on success , <0 on error */
-MY_DLLEXPORT int owplPluginLoad(const char* path)
+int owplPluginLoad(const char* path)
 {
 	void* handle;
 	char* error;
 	OWPL_PLUGIN_EXPORT * exp;
 	OWPL_PLUGIN * t;
-	
+
 	handle=dlopen(path, RTLD_NOW); /* resolve all symbols now */
 	if (handle==0){
 		LOG(L_ERR, "ERROR: load_module: could not open module <%s>: %s\n",
 					path, dlerror() );
 		goto error;
 	}
-	
+
 	for(t=owplPlugins;t; t=t->next){
 		if (t->handle==handle){
 			LOG(L_WARN, "WARNING: load_module: attempting to load the same"
@@ -124,10 +124,10 @@ MY_DLLEXPORT int owplPluginLoad(const char* path)
 	if (exp->init_f) {
 		exp->init_f();
 	}
-	// Register the module with the system 
+	// Register the module with the system
 	if (owplRegisterPlugin(exp, path, handle)<0) {
 		goto error1;
-	}	
+	}
 
 	return 0;
 
@@ -138,12 +138,12 @@ skip:
 	return -1;
 }
 
-/* 
+/*
  * owplIsPluginLoaded
  * Verify if a plugin with the specified name is loaded in memory
  */
 
-MY_DLLEXPORT int owplPluginIsLoaded(const char* name)
+int owplPluginIsLoaded(const char* name)
 {
 	OWPL_PLUGIN * t;
 
@@ -151,12 +151,12 @@ MY_DLLEXPORT int owplPluginIsLoaded(const char* name)
 	return t != 0;
 }
 
-/* 
+/*
  * owplIsPluginLoaded
  * Get the handle to the plugin with the specified name
  */
 
-MY_DLLEXPORT OWPL_PLUGIN * owplGetPlugin(const char* name)
+OWPL_PLUGIN * owplGetPlugin(const char* name)
 {
 	OWPL_PLUGIN * t;
 
@@ -170,7 +170,7 @@ MY_DLLEXPORT OWPL_PLUGIN * owplGetPlugin(const char* name)
 }
 
 /* searches the module list and returns pointer to the "name" function or
- * 0 if not found 
+ * 0 if not found
  * flags parameter is OR value of all flags that must match
  */
 static owplPS_CommandProc owplPluginFindCommand(char* module_name, char* name, int param_no, int flags)
@@ -185,7 +185,7 @@ static owplPS_CommandProc owplPluginFindCommand(char* module_name, char* name, i
 				if((strcmp(name, cmd->name)==0)&&
 				   (cmd->param_no==param_no) &&
 				   ((cmd->flags & flags) == flags)
-				  ){					
+				  ){
 					return cmd->function;
 				}
 			}
@@ -247,7 +247,7 @@ static void owplPluginDestroy()
 static int owplPluginInit(void)
 {
 	OWPL_PLUGIN * t;
-	
+
 	for(t = owplPlugins; t; t = t->next) {
 		if ((t->exports) && (t->exports->init_f))
 			if (t->exports->init_f() != 0) {
@@ -286,28 +286,28 @@ int CallCommandFunction(int * ret, void *func, int param_count, va_list ap)
 				*ret = ((owplPS_CommandProc4) func)(params[0], params[1], params[2], params[3]);
 				break;
 		case 5:
-				*ret = ((owplPS_CommandProc5) func)(params[0], params[1], params[2], params[3], 
+				*ret = ((owplPS_CommandProc5) func)(params[0], params[1], params[2], params[3],
 													params[4]);
 				break;
 		case 6:
-				*ret = ((owplPS_CommandProc6) func)(params[0], params[1], params[2], params[3], 
+				*ret = ((owplPS_CommandProc6) func)(params[0], params[1], params[2], params[3],
 													params[4], params[5]);
 				break;
 		case 7:
-				*ret = ((owplPS_CommandProc7) func)(params[0], params[1], params[2], params[3], 
+				*ret = ((owplPS_CommandProc7) func)(params[0], params[1], params[2], params[3],
 													params[4], params[5], params[6]);
 				break;
 		case 8:
-				*ret = ((owplPS_CommandProc8) func)(params[0], params[1], params[2], params[3], 
+				*ret = ((owplPS_CommandProc8) func)(params[0], params[1], params[2], params[3],
 													params[4], params[5], params[6], params[7]);
 				break;
 		case 9:
-				*ret = ((owplPS_CommandProc9) func)(params[0], params[1], params[2], params[3], 
+				*ret = ((owplPS_CommandProc9) func)(params[0], params[1], params[2], params[3],
 													params[4], params[5], params[6], params[7],
 													params[8]);
 				break;
 		case 10:
-				*ret = ((owplPS_CommandProc10) func)(params[0], params[1], params[2], params[3], 
+				*ret = ((owplPS_CommandProc10) func)(params[0], params[1], params[2], params[3],
 													 params[4], params[5], params[6], params[7],
 													 params[8], params[9]);
 				break;
@@ -319,7 +319,7 @@ int CallCommandFunction(int * ret, void *func, int param_count, va_list ap)
 	return 0;
 }
 
-MY_DLLEXPORT int owplPluginCallFunction(int *retValue, char * PluginName, char * FuncName, char * ArgFormat, ...)
+int owplPluginCallFunction(int *retValue, char * PluginName, char * FuncName, char * ArgFormat, ...)
 {
 	char *ch;
 	int n = 0;
@@ -359,7 +359,7 @@ static OWPL_PLUGIN_PARAM * GetPluginParam(const char * PluginName, const char * 
 	Plugin = owplGetPlugin(PluginName);
 	if (Plugin) {
 		for (param = Plugin->exports->params;  param && param->name; param++) {
-			if ((strcmp(ParamName, param->name) == 0)){				
+			if ((strcmp(ParamName, param->name) == 0)){
 				return param;
 			}
 		}
@@ -371,14 +371,14 @@ static OWPL_PLUGIN_PARAM * GetPluginParam2(OWPL_PLUGIN * Plugin, const char * Pa
 {
 	OWPL_PLUGIN_PARAM *param;
 	for (param = Plugin->exports->params;  param && param->name; param++) {
-		if ((strcmp(ParamName, param->name) == 0)){				
+		if ((strcmp(ParamName, param->name) == 0)){
 			return param;
 		}
 	}
 	return 0;
 }
 
-MY_DLLEXPORT int owplPluginGetParam(void *retValue, int retSize, const char * PluginName, const char * ParamName)
+int owplPluginGetParam(void *retValue, int retSize, const char * PluginName, const char * ParamName)
 {
 	OWPL_PLUGIN_PARAM *param;
 	OWPL_PLUGIN * p = owplGetPlugin(PluginName);
@@ -398,7 +398,7 @@ MY_DLLEXPORT int owplPluginGetParam(void *retValue, int retSize, const char * Pl
 	return -1;
 }
 
-MY_DLLEXPORT int owplPluginSetParam(const void *newValue, int valSize, const char * PluginName, const char * ParamName)
+int owplPluginSetParam(const void *newValue, int valSize, const char * PluginName, const char * ParamName)
 {
 	OWPL_PLUGIN_PARAM *param;
 	OWPL_PLUGIN * p = owplGetPlugin(PluginName);
@@ -411,14 +411,14 @@ MY_DLLEXPORT int owplPluginSetParam(const void *newValue, int valSize, const cha
 		{
 			param = GetPluginParam2(p, ParamName);
 			if (param) {
-				return __owplPluginCopyValue(param->param_pointer, param->size, newValue, valSize); 				
+				return __owplPluginCopyValue(param->param_pointer, param->size, newValue, valSize);
 			}
 		}
 	}
 	return -1;
 }
 
-MY_DLLEXPORT int owplPluginGetParamInt(int *retValue, const char * PluginName, const char * ParamName)
+int owplPluginGetParamInt(int *retValue, const char * PluginName, const char * ParamName)
 {
 	OWPL_PLUGIN_PARAM *param;
 	param = GetPluginParam(PluginName, ParamName);
@@ -429,7 +429,7 @@ MY_DLLEXPORT int owplPluginGetParamInt(int *retValue, const char * PluginName, c
 	return -1;
 }
 
-MY_DLLEXPORT int owplPluginSetParamInt(int newValue, const char * PluginName, const char * ParamName)
+int owplPluginSetParamInt(int newValue, const char * PluginName, const char * ParamName)
 {
 	OWPL_PLUGIN_PARAM *param;
 	param = GetPluginParam(PluginName, ParamName);
@@ -440,7 +440,7 @@ MY_DLLEXPORT int owplPluginSetParamInt(int newValue, const char * PluginName, co
 	return -1;
 }
 
-MY_DLLEXPORT int owplPluginGetParamString(char *retValue, int bufSize, const char * PluginName, const char * ParamName)
+int owplPluginGetParamString(char *retValue, int bufSize, const char * PluginName, const char * ParamName)
 {
 	OWPL_PLUGIN_PARAM *param;
 	param = GetPluginParam(PluginName, ParamName);
@@ -451,7 +451,7 @@ MY_DLLEXPORT int owplPluginGetParamString(char *retValue, int bufSize, const cha
 	return -1;
 }
 
-MY_DLLEXPORT int owplPluginSetParamString(const char * newValue, int valSize, const char * PluginName, const char * ParamName)
+int owplPluginSetParamString(const char * newValue, int valSize, const char * PluginName, const char * ParamName)
 {
 	OWPL_PLUGIN_PARAM *param;
 	param = GetPluginParam(PluginName, ParamName);
@@ -463,7 +463,7 @@ MY_DLLEXPORT int owplPluginSetParamString(const char * newValue, int valSize, co
 }
 
 
-MY_DLLEXPORT int __owplPluginCopyValue(void *dest, int destSize, const void *src, int srcSize)
+int __owplPluginCopyValue(void *dest, int destSize, const void *src, int srcSize)
 {
 	if (destSize >= srcSize)
 	{
@@ -485,7 +485,7 @@ OWPL_PLUGIN_CALLBACK * GetPluginCallback(const char * PluginName, const char * C
 	Plugin = owplGetPlugin(PluginName);
 	if (Plugin) {
 		for (cb = Plugin->exports->callbacks;  cb && cb->name; cb++) {
-			if ((strcmp(CallbackName, cb->name) == 0)){				
+			if ((strcmp(CallbackName, cb->name) == 0)){
 				return cb;
 			}
 		}
@@ -494,7 +494,7 @@ OWPL_PLUGIN_CALLBACK * GetPluginCallback(const char * PluginName, const char * C
 }
 
 
-MY_DLLEXPORT int owplPluginSetCallback(const char * PluginName, const char * CallbackName, owplPS_CommandProc CallbackProc)
+int owplPluginSetCallback(const char * PluginName, const char * CallbackName, owplPS_CommandProc CallbackProc)
 {
 	OWPL_PLUGIN_CALLBACK *cb = GetPluginCallback(PluginName, CallbackName);
 	if (cb)
@@ -512,7 +512,7 @@ MY_DLLEXPORT int owplPluginSetCallback(const char * PluginName, const char * Cal
 OWPL_PLUGIN * owplGetPlugin4ContentType(const char * ContentType)
 {
 	OWPL_PLUGIN * t;
-	
+
 	for(t = owplPlugins; t; t = t->next) {
 		if (strcmp(t->exports->ct_info->content_type, ContentType) == 0)
 			return t;
