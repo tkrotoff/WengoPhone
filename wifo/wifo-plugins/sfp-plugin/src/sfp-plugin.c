@@ -48,8 +48,8 @@
 
 /* ----- EVENTS ----- */
 
-int handleEvent(OWPL_EVENT_CATEGORY category, 
-		void* pInfo, 
+int handleEvent(OWPL_EVENT_CATEGORY category,
+		void* pInfo,
 		void* pUserData);
 
 
@@ -144,13 +144,13 @@ OWPL_PLUGIN_CALLBACK callbacks[] = {
 
 OWPL_PLUGIN_PARAM params[] = {
 	{"sfp_file_transfer_port",      OWPL_PARAM_STR, &sfp_file_transfer_port, sizeof(sfp_file_transfer_port)},
-	{"sfp_default_ip_protocol",       OWPL_PARAM_STR, &sfp_default_ip_protocol, sizeof(sfp_default_ip_protocol)},	
+	{"sfp_default_ip_protocol",       OWPL_PARAM_STR, &sfp_default_ip_protocol, sizeof(sfp_default_ip_protocol)},
 	{0, 0, 0}
 };
 
 OWPL_PLUGIN_CONTENT_TYPE content_type  = {"application/sfp", handleEvent };
 
-OWPL_DECLARE_EXPORT OWPL_PLUGIN_EXPORT exports = {
+OWPL_PLUGIN_EXPORT exports = {
 	"SFPPlugin",
 	OWPL_PLUGIN_VERSION,
 	&content_type,
@@ -330,7 +330,7 @@ int sfp_receive_file(int cid, const char * filename){
 		sfp_remove_session_info(cid);
 		return FALSE; // TODO notify GUI
 	}
-	
+
 	// make the sfp body to send
 	if((to_send_body = sfp_make_message_body_from_sfp_info(to_send_info)) == NULL){
 		m_log_error("Could not make the sfp body to send from the sfp body info","sfp_receive_file");
@@ -372,10 +372,10 @@ int sfp_receive_file(int cid, const char * filename){
 
 	// TODO notify GUI
 	return FALSE;
-}	
+}
 
 /**
-* Cancels a file transfer 
+* Cancels a file transfer
 * (sends a CANCEL if still in the INVITE phase and that we are the sender)
 * (sends a DECLINE if still in the INVITE phase and that we are the receiver)
 * (tells the transfer thread to stop if already transferring)
@@ -425,7 +425,7 @@ int sfp_cancel_transfer(int call_id){
 }
 
 /**
-* Pauses a file transfer 
+* Pauses a file transfer
 * (sends an INVITE containing "holdon")
 *
 * @param	[in]	call_id : the call id
@@ -453,7 +453,7 @@ int sfp_pause_transfer(int call_id){
 }
 
 /**
-* Resumes a file transfer 
+* Resumes a file transfer
 * (sends an INVITE containing "holdoff"))
 *
 * @param	[in]	call_id : the call id
@@ -500,9 +500,9 @@ static sfp_session_info_t * create_sfp_session_info(){
 	session->_state = SFP_SESSION_INITIATED;
 	session->progressionCallback = &sfp_progressionCallback;
 	session->sendBye = &owplCallDisconnect;
-	
+
 	session->local_socket = -1;
-	
+
 	owplConfigLocalHttpProxyGetAddr(session->http_proxy, sizeof(session->http_proxy));
 	owplConfigLocalHttpProxyGetPort(&(session->http_proxy_port));
 	owplConfigLocalHttpProxyGetUserName(session->http_proxy_user, sizeof(session->http_proxy_user));
@@ -708,7 +708,7 @@ static sfp_session_info_t * sfp_make_session_for_invite(const char * username, c
 	sfp_add_property(&(session->short_filename), short_filename);
 	sfp_add_property(&(session->file_type), file_type);
 	sfp_add_property(&(session->file_size), file_size);
-	
+
 	return session;
 }
 /**
@@ -730,7 +730,7 @@ static sfp_session_info_t * sfp_make_session_info_from_body_info(int call_id, sf
 	}else if( (call_id <= 0) || (call_id > 0 && (session = sfp_get_session_info(call_id)) == NULL) ){
 		// else create one
 		session = create_sfp_session_info();
-		
+
 		session->local_socket = -1;
 	}
 	// then if we have a session, fill it
@@ -831,7 +831,7 @@ static sfp_session_info_t * sfp_make_session_info_from_body_info(int call_id, sf
 		// CONNECTION_ID
 		if(strfilled(info->connection_id))
 			sfp_add_property(&(session->connection_id), info->connection_id);
-		
+
 
 		// TODO key and uri
 	}
@@ -883,7 +883,7 @@ static sfp_session_info_t * sfp_make_session_info_from_body_info(int call_id, sf
 
 		// CONNECTION_ID
 		if(strfilled(info->connection_id))
-			sfp_add_property(&(session->connection_id), info->connection_id);		
+			sfp_add_property(&(session->connection_id), info->connection_id);
 
 		// TODO key and uri
 	}
@@ -911,7 +911,7 @@ static sfp_info_t * sfp_make_body_info_from_session_info(sfp_session_info_t * se
 	if(strfilled(session->session_id) &&
 		strfilled(session->local_username) &&
 		strfilled(session->local_ip_address_type) &&
-		strfilled(session->local_ip) &&		
+		strfilled(session->local_ip) &&
 		strfilled(session->local_port) &&
 		strfilled(session->connection_id))
 		// TODO network type fixed for the moment
@@ -1194,7 +1194,7 @@ static void newIncomingFileTransferHandler(int hCall, const char * username, con
 		m_log_error("Could not parse sfp body","newIncomingFileTransferHandler");
 		return; // TODO notify GUI
 	}
-	
+
 	// create a new session
 	if((session = sfp_make_session(username, local_ip_address)) == NULL){
 		m_log_error("Could not create session","newIncomingFileTransferHandler");
@@ -1281,7 +1281,7 @@ static void transferAcceptedHandler(int hCall, const char * message){
 			if(owplCallDisconnect((OWPL_CALL)hCall) != OWPL_RESULT_SUCCESS) {
 				// TODO ERROR
 			}
-			
+
 			if(transferToPeerFailed) { transferToPeerFailed(hCall, session->remote_username, session->short_filename, session->file_type, session->file_size); }
 			sfp_remove_session_info(hCall);
 

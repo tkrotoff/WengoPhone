@@ -14,6 +14,12 @@
 extern "C" {
 #endif
 
+#if defined(WIN32) || defined(WIN32_WCE)
+	#define OWPL_DECLARE_EXPORT __declspec(dllexport)
+#else
+	#define OWPL_DECLARE_EXPORT
+#endif
+
 //Define the version of OWPL plugin system
 #define OWPL_PLUGIN_VERSION "0.1"
 
