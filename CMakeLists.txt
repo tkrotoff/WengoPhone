@@ -30,7 +30,8 @@ include(cmake/Modules/owbuild/CMakeLists.txt)
 # Disallow in-source build
 macro_ensure_out_of_source_build("WengoPhone requires an out of source build. Please create a separate build directory and run 'cmake path_to_wengophone [options]' there.")
 
-# Get svn revision
+# Gets svn revision
+set(SVN_REVISION "0")
 ow_get_subversion_revision(SVN_REVISION)
 # Bugfix with svn revision number that can integrate a : and
 # this does not work under Windows for the installer name, replace it by #
