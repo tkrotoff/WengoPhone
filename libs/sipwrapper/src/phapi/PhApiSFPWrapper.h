@@ -27,7 +27,7 @@
 #include <util/File.h>
 
 /**
- * TODO
+ * Class that wraps the calls to the SFP plugin
  *
  * @author Nicolas Couturier
  */

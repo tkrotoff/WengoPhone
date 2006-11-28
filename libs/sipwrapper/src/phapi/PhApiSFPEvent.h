@@ -26,7 +26,7 @@
 #include <util/String.h>
 
 /**
- * TODO
+ * Class implementing the SFP events
  *
  * @author Nicolas Couturier
  */

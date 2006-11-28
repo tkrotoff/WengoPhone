@@ -46,10 +46,7 @@ const std::string PhApiWrapper::PresenceStateDoNotDisturb = "Do Not Disturb";
 
 
 PhApiWrapper * PhApiWrapper::PhApiWrapperHack = NULL;
-/*
-TODO REFACTOR REMOVE
-PhApiCallbacks * PhApiWrapper::_callbacks = NULL;
-*/
+
 
 #ifdef ENABLE_VIDEO
 static const int VIDEO_FLAGS = OWPL_STREAM_AUDIO | OWPL_STREAM_VIDEO_RX | OWPL_STREAM_VIDEO_TX;
@@ -58,58 +55,6 @@ static const int VIDEO_RX_ONLY_FLAGS = OWPL_STREAM_AUDIO | OWPL_STREAM_VIDEO_RX;
 static const int VIDEO_FLAGS = OWPL_STREAM_AUDIO;
 static const int VIDEO_RX_ONLY_FLAGS = OWPL_STREAM_AUDIO;
 #endif
-
-/*
-TODO REFACTOR REMOVE
-extern "C" {
-
-static void callProgress(int callId, const phCallStateInfo_t * info) {
-	PhApiWrapper::callProgress(callId, info);
-}
-
-static void videoFrameReceived(int callId, phVideoFrameReceivedEvent_t * info) {
-	PhApiWrapper::videoFrameReceived(callId, info);
-}
-
-static void transferProgress(int callId, const phTransferStateInfo_t * info) {
-}
-
-static void conferenceProgress(int conferenceId, const phConfStateInfo_t * info) {
-}
-
-static void registerProgress(int registerId, int status) {
-	PhApiWrapper::registerProgress(registerId, status);
-}
-
-static void messageProgress(int messageId, const phMsgStateInfo_t * info) {
-	PhApiWrapper::messageProgress(messageId, info);
-}
-
-static void subscriptionProgress(int subscriptionId, const phSubscriptionStateInfo_t * info) {
-	PhApiWrapper::subscriptionProgress(subscriptionId, info);
-}
-
-static void onNotify(const char * event, const char * from, const char * content) {
-	PhApiWrapper::onNotify(event, from, content);
-}
-
-
-phCallbacks_t phApiCallbacks = {
-	callProgress,
-	transferProgress,
-	conferenceProgress,
-	registerProgress,
-	messageProgress,
-	onNotify,
-	subscriptionProgress,
-	videoFrameReceived
-};
-
-
-} //"C"
-*/
-
-
 
 PhApiWrapper::PhApiWrapper(PhApiCallbacks & callbacks)
 	: _phApiSFPWrapper(PhApiSFPWrapper::getInstance()) {
@@ -143,15 +88,9 @@ void PhApiWrapper::terminate() {
 }
 
 void PhApiWrapper::setNetworkParameter() {
-	//TODO REFACTOR REMOVE
-	//std::string natType = "auto";
 	int natRefreshTime = 25;
 
-	if (_tunnelNeeded) {
-		//TODO REFACTOR REMOVE
-		/*phTunnelConfig(_proxyServer.c_str(), _proxyPort, _tunnelServer.c_str(), _tunnelPort,
-			_proxyLogin.c_str(), _proxyPassword.c_str(), _tunnelSSL, 0);*/
-
+	if (_tunnelNeeded) {/
 		if(owplConfigSetLocalHttpProxy(_proxyServer.c_str(), _proxyPort, _proxyLogin.c_str(), _proxyPassword.c_str()) != OWPL_RESULT_SUCCESS) {
 			// TODO what? throw an exception? exit?
 		}
@@ -164,34 +103,23 @@ void PhApiWrapper::setNetworkParameter() {
 			// TODO what? throw an exception? exit?
 		}
 
-		//TODO REFACTOR REMOVE
-		//natType = "fcone";
 		owplConfigSetNat(OWPL_NAT_TYPE_FCONE, natRefreshTime);
 
 	} else {
 		switch(_natType) {
 		case EnumNatType::NatTypeOpen:
-			// TODO REFACTOR REMOVE
-			//natType = "none";
-			//natRefreshTime = 0;
 			owplConfigSetNat(OWPL_NAT_TYPE_NONE, 0);
 			break;
 
 		case EnumNatType::NatTypeFullCone:
-			//TODO REFACTOR REMOVE
-			//natType = "fcone";
 			owplConfigSetNat(OWPL_NAT_TYPE_FCONE, natRefreshTime);
 			break;
 
 		case EnumNatType::NatTypeRestrictedCone:
-			//TODO REFACTOR REMOVE
-			//natType = "rcone";
 			owplConfigSetNat(OWPL_NAT_TYPE_RCONE, natRefreshTime);
 			break;
 
 		case EnumNatType::NatTypePortRestrictedCone:
-			//TODO REFACTOR REMOVE
-			//natType = "prcone";
 			owplConfigSetNat(OWPL_NAT_TYPE_PRCONE, natRefreshTime);
 			break;
 
@@ -200,8 +128,6 @@ void PhApiWrapper::setNetworkParameter() {
 		case EnumNatType::NatTypeBlocked:
 		case EnumNatType::NatTypeFailure:
 		case EnumNatType::NatTypeUnknown:
-			//TODO REFACTOR REMOVE
-			//natType = "sym";
 			owplConfigSetNat(OWPL_NAT_TYPE_SYMETRIC, natRefreshTime);
 			break;
 
@@ -214,9 +140,6 @@ void PhApiWrapper::setNetworkParameter() {
 		owplConfigSetTunnel(NULL, 0, OWPL_TUNNEL_NOT_USED);
 	}
 
-	//TODO REFACTOR REMOVE
-	//strncpy(phcfg.nattype, natType.c_str(), sizeof(phcfg.nattype));
-	//phcfg.nat_refresh_time = natRefreshTime;
 }
 
 int PhApiWrapper::addVirtualLine(const std::string & displayName,
@@ -235,9 +158,6 @@ int PhApiWrapper::addVirtualLine(const std::string & displayName,
 
 		std::string tmp = proxyServer;
 		tmp += ":" + String::fromNumber(_sipServerPort);
-
-		// TODO REMOVE
-		//ret = phAddVline2(displayName.c_str(), identity.c_str(), registerServer.c_str(), tmp.c_str(), REGISTER_TIMEOUT);
 		
 		if(owplLineAdd(displayName.c_str(), identity.c_str(), registerServer.c_str(), tmp.c_str(), REGISTER_TIMEOUT, &gVline) != OWPL_RESULT_SUCCESS) {
 			return SipWrapper::VirtualLineIdError;
@@ -309,11 +229,7 @@ void PhApiWrapper::rejectCall(int callId) {
 }
 
 void PhApiWrapper::closeCall(int callId) {
-	// TODO REFACTOR
 	owplCallDisconnect(callId);
-
-	// TODO REMOVE
-	//phCloseCall(callId);
 }
 
 void PhApiWrapper::holdCall(int callId) {
@@ -490,21 +406,6 @@ CodecList::VideoCodec PhApiWrapper::getVideoCodecUsed(int callId) {
 		return CodecList::VideoCodecError;
 	}
 }
-
-/*
-TODO REFACTOR REMOVE
-void PhApiWrapper::callProgress(int callId, const phCallStateInfo_t * info) {
-	_callbacks->callProgress(callId, info);
-}
-
-void PhApiWrapper::registerProgress(int lineId, int status) {
-	_callbacks->registerProgress(lineId, status);
-}
-
-void PhApiWrapper::videoFrameReceived(int callId, phVideoFrameReceivedEvent_t * info) {
-	_callbacks->videoFrameReceived(callId, info);
-}
-*/
 
 bool PhApiWrapper::setCallInputAudioDevice(const AudioDevice & device) {
 	_inputAudioDevice = device;
@@ -763,21 +664,6 @@ void PhApiWrapper::unsubscribeToPresenceOf(const std::string & contactId) {
 
 	owplPresenceUnsubscribe(sipAddress.c_str());
 }
-
-/*
-TODO REFACTOR REMOVE
-void PhApiWrapper::messageProgress(int messageId, const phMsgStateInfo_t * info) {
-	_callbacks->messageProgress(messageId, info);
-}
-
-void PhApiWrapper::subscriptionProgress(int subscriptionId, const phSubscriptionStateInfo_t * info) {
-	_callbacks->subscriptionProgress(subscriptionId, info);
-}
-
-void PhApiWrapper::onNotify(const char * event, const char * from, const char * content) {
-	_callbacks->onNotify(event, from, content);
-}
-*/
 
 void PhApiWrapper::allowWatcher(const std::string & watcher) {
 	/*

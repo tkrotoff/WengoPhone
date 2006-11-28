@@ -23,7 +23,7 @@
 #include <string>
 
 /**
-* TODO
+* Class implementing the callbacks for the SFP plugin and throwing the corresponding events
 *
 * @author Nicolas Couturier
 */

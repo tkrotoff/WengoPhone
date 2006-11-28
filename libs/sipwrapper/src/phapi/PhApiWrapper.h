@@ -86,10 +86,6 @@ public:
 	static const int PhApiResultNoError = 0;
 
 	static PhApiWrapper * getInstance() {
-		/* TODO REFACTOR REMOVE
-		static PhApiCallbacks phApiCallbacks;
-		static PhApiWrapper instance(phApiCallbacks);
-		*/
 		static PhApiWrapper instance(PhApiCallbacks::getInstance());
 		return &instance;
 	}
@@ -173,21 +169,6 @@ public:
 	 */
 
 	void init();
-
-	/*
-	TODO REFACTOR REMOVE
-	static void callProgress(int callId, const phCallStateInfo_t * info);
-
-	static void registerProgress(int lineId, int status);
-
-	static void videoFrameReceived(int callId, phVideoFrameReceivedEvent_t * info);
-
-	static void messageProgress(int messageId, const phMsgStateInfo_t * info);
-
-	static void subscriptionProgress(int subscriptionId, const phSubscriptionStateInfo_t * info);
-
-	static void onNotify(const char * event, const char * from, const char * content);
-	*/
 
 	/** @} */
 
