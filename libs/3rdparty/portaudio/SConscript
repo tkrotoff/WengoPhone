@@ -25,36 +25,13 @@ sources_common = [
 	'pa_common/pa_trace.c',
 ]
 
-headers_common = [
-	'pa_common/pa_allocation.h',
-	'pa_common/pa_converters.h',
-	'pa_common/pa_cpuload.h',
-	'pa_common/pa_dither.h',
-	'pa_common/pa_endianness.h',
-	'pa_common/pa_hostapi.h',
-	'pa_common/pa_process.h',
-	'pa_common/pa_stream.h',
-	'pa_common/pa_trace.h',
-	'pa_common/pa_types.h',
-	'pa_common/pa_util.h',
-	'pa_common/portaudio.h'
-]
-
 sources_alsa = [
 	'pa_linux_alsa/pa_linux_alsa.c',
-]
-
-headers_alsa = [
-	'pa_linux_alsa/pa_linux_alsa.h',
 ]
 
 sources_linux = [
 	'pa_unix/pa_unix_util.c',
 	'pa_unix/pa_unix_hostapis.c'
-]
-
-headers_linux = [
-	'pa_unix/pa_unix_util.h',
 ]
 
 sources_oss = [
@@ -66,10 +43,6 @@ sources_win = [
 	'pa_win/pa_win_hostapis.c',
 ]
 
-headers_win = [
-	'pa_win/pa_x86_plain_converters.h',
-]
-
 source_msvc = [
 	'pa_win/pa_x86_plain_converters.c',
 ]
@@ -78,27 +51,15 @@ sources_wmme = [
 	'pa_win_wmme/pa_win_wmme.c'
 ]
 
-headers_wmme = [
-	'pa_win_wmme/pa_win_wmme.h'
-]
-
 source_dsound = [
     'pa_win_ds/dsound_wrapper.c',
     'pa_win_ds/pa_win_ds.c'
-]
-
-headers_dsound = [
-    'pa_win_ds/dsound_wrapper.h'
 ]
 
 sources_mac = [
 	'pa_mac/pa_mac_hostapis.c',
 	'pa_unix/pa_unix_util.c',
 	'pa_mac_core/pa_mac_core.c'
-]
-
-headers_mac = [
-	'pa_unix/pa_unix_util.h',
 ]
 
 defines = {
@@ -113,14 +74,12 @@ if WengoDebugMode():
 	defines['DEBUG'] = 1
 
 sources = sources_common
-headers = headers_common
 
 if WengoOSLinux() or WengoOSBSD():
 	defines['PA_LITTLE_ENDIAN'] = 1
 	defines['HAVE_LIBPTHREAD'] = 1
 	libs += ['pthread', 'm']
 	sources += sources_linux
-	headers += headers_linux
 
 	if WengoGetConsoleArgument('portaudio-oss') == 1:
 		defines['PA_USE_OSS'] = 1
@@ -129,7 +88,6 @@ if WengoOSLinux() or WengoOSBSD():
 		defines['PA_USE_ALSA'] = 1
 		libs += ['asound']
 		sources += sources_alsa
-		headers += headers_alsa
 	elif WengoGetConsoleArgument('portaudio-oss') == 0:
 		print "ERROR in portaudio: you have to enable at least oss or alsa support"
 		print "Please see SOptions and enable portaudio-alsa or/and portaudio-oss"
@@ -141,22 +99,18 @@ elif WengoOSMacOSX():
 	defines['PA_USE_COREAUDIO'] = 1
 	lib_flags += ['-framework CoreAudio', '-framework AudioToolBox']
 	sources += sources_mac
-	headers += headers_mac
 
 elif WengoOSWindows():
 	defines['PA_LITTLE_ENDIAN'] = 1
 	defines['PA_NO_ASIO'] = 1
 	defines['PA_NO_WDMKS'] = 1
 	sources += sources_win
-	headers += headers_win
 
 	if WengoGetConsoleArgument('portaudio-dsound') == 1:
 		sources += source_dsound
-		headers += headers_dsound
 		defines['PA_NO_WMME'] = 1
 	else:
 		sources += sources_wmme
-		headers += headers_wmme
 		defines['PA_NO_DS'] = 1
 	if not WengoCCGCC():
 		sources += source_msvc
@@ -170,7 +124,7 @@ env.WengoAddLibPath(lib_path)
 env.WengoUseLibraries(libs)
 env.WengoAddDefines(defines)
 env.WengoAddIncludePath(include_path)
-env.WengoStaticLibrary('portaudio', sources, headers)
+env.WengoStaticLibrary('portaudio', sources)
 
 if WengoOSLinux():
 	test_env = WengoGetEnvironment()

@@ -45,6 +45,7 @@ endif (NOT WIN32)
 
 if (UNIX)
 	if (NOT APPLE)
+		find_package(Alsa REQUIRED)
 		subdirs(
 			libs/3rdparty/samplerate
 		)

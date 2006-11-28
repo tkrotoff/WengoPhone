@@ -1,15 +1,18 @@
 option(PORTAUDIO_INTERNAL "Use internal PortAudio" ON)
-option(FFMPEG_INTERNAL "Use internal FFmpeg" OFF)
+option(FFMPEG_INTERNAL "Use internal FFmpeg" ON)
 option(SPEEX_INTERNAL "Use internal Speex" ON)
-
-# Not yet implemented
 #option(SAMPLERATE_INTERNAL "Use internal Samplerate" ON)
+
+option(BUILDID_SUPPORT "Build WengoPhone/phApi with buildId (builds faster without)" OFF)
 
 option(WENGOPHONE_RESOURCEDIR_PATH "WengoPhone: use ${DATA_INSTALL_DIR} as hardcoded resource path" ON)
 option(WENGOPHONE_XV_SUPPORT "Build WengoPhone with XV hardware acceleration support" ON)
+
 option(PORTAUDIO_DIRECTSOUND_SUPPORT "Build PortAudio with DirectSound support" OFF)
+option(PORTAUDIO_OSS_SUPPORT "Build PortAudio with OSS support" ON)
+option(PORTAUDIO_ALSA_SUPPORT "Build PortAudio with ALSA support" OFF)
+
 option(PHAPI_VIDEO_SUPPORT "Build phApi with video support" ON)
-option(BUILDID_SUPPORT "Build WengoPhone/phApi with buildId (builds faster without)" OFF)
 option(PHAPI_SAMPLERATE_SUPPORT "Build phApi with Samplerate support" OFF)
 option(PHAPI_AUDIO_ALSA_SUPPORT "Build phApi with ASLA support" ON)
 option(PHAPI_AUDIO_ARTS_SUPPORT "Build phApi with aRts support" OFF)

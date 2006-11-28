@@ -27,12 +27,6 @@ if (WIN32)
 	endif (MSVC)
 endif (WIN32)
 
-if (WIN32 OR APPLE)
-	subdirs(
-		phapi/speex
-	)
-endif (WIN32 OR APPLE)
-
 subdirs(
 	httptunnel
 	netlib
@@ -47,6 +41,7 @@ subdirs(
 	phapi/amrnb
 	phapi/amrwb
 	phapi/ilbc
+	phapi/speex
 	phapi/speexec
 	phapi/stun
 	phapi/phamrplugin

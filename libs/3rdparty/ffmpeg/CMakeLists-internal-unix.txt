@@ -6,7 +6,7 @@ ow_add_public_libraries(
 )
 
 ow_add_public_include_dirs(
-	${CMAKE_CURRENT_SOURCE_DIR}/include
+	${CMAKE_CURRENT_SOURCE_DIR}/include/ffmpeg
 )
 
 ow_autoconf("./configure" "make")
