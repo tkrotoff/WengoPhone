@@ -252,6 +252,9 @@ void PhApiWrapper::blindTransfer(int callId, const std::string & sipAddress) {
 
 void PhApiWrapper::playTone(int callId, EnumTone::Tone tone) {
 	static const int INBAND_DTMF = 1;
+	static const int RTPPAYLOAD_DTMF = 2;
+	static const int ALL_DTMF = 3;
+
 
 	LOG_DEBUG("callId=" + String::fromNumber(callId) + " tone=" + String::fromNumber(tone));
 
@@ -340,7 +343,7 @@ void PhApiWrapper::playTone(int callId, EnumTone::Tone tone) {
 		LOG_FATAL("unknown tone");
 	}
 
-	phSendDtmf(callId, dtmf, INBAND_DTMF);
+	phSendDtmf(callId, dtmf, ALL_DTMF);
 }
 
 void PhApiWrapper::playSoundFile(int callId, const std::string & soundFile) {
