@@ -28,7 +28,7 @@
 #include <util/WebBrowser.h>
 #include <util/Logger.h>
 
-static const std::string URL_WENGO_ACCOUNTCREATION = "https://www.wengo.fr/public/public.php?page=subscribe_wengos";
+static const std::string URL_WENGO_ACCOUNTCREATION = "http://www.wengo.fr/public/public.php?page=subscribe_wengos";
 static const std::string URL_WENGO_FORUM = "http://www.wengo.fr/public/public.php?page=forum";
 static const std::string URL_WENGO_CALLOUT = "http://www.wengo.fr/public/public.php?page=product_callout";
 static const std::string URL_WENGO_SMS = "http://www.wengo.fr/public/public.php?page=product_sms";
@@ -40,6 +40,9 @@ static const std::string URL_WENGO_ACCOUNT = "https://www.wengo.fr/auth/auth.php
 static const std::string URL_WENGO_BUYWENGOS = "https://www.wengo.fr/auth/auth.php?page=reload";
 static const std::string URL_WENGO_DOWNLOAD = "http://www.wengo.fr/public/public.php?page=download";
 static const std::string URL_WENGO_PHONENUMBER = "https://www.wengo.fr/auth/auth.php?page=display_account";
+static const std::string URL_WENGO_WIKI = "http://www.wengo.fr/public/public.php?page=wiki";
+static const std::string URL_WENGO_LOSTPASSWORD = "http://www.wengo.fr/public/public.php?page=lostpassword";
+
 
 WengoAccount * WsUrl::_wengoAccount = NULL;
 
@@ -130,4 +133,12 @@ void WsUrl::showWengoDownload() {
 
 void WsUrl::showWengoPhoneNumber() {
 	openWengoUrlWithAuth(URL_WENGO_PHONENUMBER);
+}
+
+void WsUrl::showWikiPage() {
+	openWengoUrlWithoutAuth(URL_WENGO_WIKI);
+}
+
+void WsUrl::showLostPasswordPage() {
+	openWengoUrlWithoutAuth(URL_WENGO_LOSTPASSWORD);
 }

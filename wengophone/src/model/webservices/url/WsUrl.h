@@ -99,6 +99,17 @@ public:
 	static void showWengoPhoneNumber();
 
 	/**
+	 * Opens a web browser and shows the Wengo wiki page.
+	 */
+	static void showWikiPage();
+
+	/**
+	 * Opens a web browser and shows the lost password page.
+	 */
+	static void showLostPasswordPage();
+
+
+	/**
 	 * Gets the Wengo directory url.
 	 *
 	 * @return Wengo directory url
