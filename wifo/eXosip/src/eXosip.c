@@ -3426,7 +3426,8 @@ int eXosip_subscribe    (char *to, char *from, char *route, const int winfo)
   ADD_ELEMENT(eXosip.j_subscribes, js);
   eXosip_update(); /* fixed? */
   __eXosip_wakeup();
-  return js->s_id;
+  //return js->s_id;
+  return 0;
 }
 
 int eXosip_subscribe_refresh  (int sid, const char *expires)
@@ -3946,7 +3947,7 @@ eXosip_retransmit_lost200ok()
 						jd->d_count=0;
 						osip_message_free(jd->d_200Ok);
 						jd->d_200Ok=NULL;
-						eXosip_terminate_call(jc->c_id, jd->d_id);
+						//eXosip_terminate_call(jc->c_id, jd->d_id);
 					}
 					else if (jd->d_timer<now)
 					{
