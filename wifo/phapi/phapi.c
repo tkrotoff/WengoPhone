@@ -635,7 +635,23 @@ owplLineAddCredential(const OWPL_LINE hLine,
 						const char* szPasswd,
 						const char* szRealm)
 {
-	return OWPL_RESULT_FAILURE;
+	int ret;
+
+	if (!szUserID
+		|| !szPasswd
+		|| !szRealm)
+	{
+		return -OWPL_RESULT_INVALID_ARGS;
+	}
+
+	eXosip_lock();
+	ret = eXosip_add_authentication_info("unknown", szUserID, szPasswd, "", szRealm);
+	eXosip_unlock();
+
+	if(ret != 0) {
+		return OWPL_RESULT_FAILURE;
+	}
+	return OWPL_RESULT_SUCCESS;
 }
 
 /********************************************************************************************

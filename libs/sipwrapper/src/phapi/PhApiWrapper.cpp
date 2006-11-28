@@ -151,29 +151,31 @@ int PhApiWrapper::addVirtualLine(const std::string & displayName,
 	const std::string & registerServer) {
 
 	static const int REGISTER_TIMEOUT = 49 * 60;
-	OWPL_LINE gVline = -1;
+	OWPL_LINE hLine = -1;
 
 	if (_isInitialized) {
-		phAddAuthInfo(username.c_str(), identity.c_str(), password.c_str(), String::null, realm.c_str());
+		if(owplLineAddCredential(hLine, identity.c_str(), password.c_str(), realm.c_str()) != OWPL_RESULT_SUCCESS) {
+			return -1; // TODO ?
+		}
 
 		std::string tmp = proxyServer;
 		tmp += ":" + String::fromNumber(_sipServerPort);
 		
-		if(owplLineAdd(displayName.c_str(), identity.c_str(), registerServer.c_str(), tmp.c_str(), REGISTER_TIMEOUT, &gVline) != OWPL_RESULT_SUCCESS) {
+		if(owplLineAdd(displayName.c_str(), identity.c_str(), registerServer.c_str(), tmp.c_str(), REGISTER_TIMEOUT, &hLine) != OWPL_RESULT_SUCCESS) {
 			return SipWrapper::VirtualLineIdError;
 		}
-		if(owplLineRegister(gVline, 1) != OWPL_RESULT_SUCCESS) {
+		if(owplLineRegister(hLine, 1) != OWPL_RESULT_SUCCESS) {
 			return SipWrapper::VirtualLineIdError;
 		}
 
-		phoneLineStateChangedEvent(*this, gVline, EnumPhoneLineState::PhoneLineStateProgress);
+		phoneLineStateChangedEvent(*this, hLine, EnumPhoneLineState::PhoneLineStateProgress);
 	}
 
-	_wengoVline = gVline;
+	_wengoVline = hLine;
 	_wengoSipAddress = "sip:" + identity + "@" + realm;
 	_wengoRealm = realm;
 
-	return gVline;
+	return hLine;
 }
 
 void PhApiWrapper::removeVirtualLine(int lineId, int regTimeout) {
