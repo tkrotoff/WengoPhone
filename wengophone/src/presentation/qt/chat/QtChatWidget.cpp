@@ -233,7 +233,7 @@ void QtChatWidget::contactAddedEventSlot(const IMContact & imContact) {
 	pixmap.loadFromData((uchar *)data.c_str(), data.size());
 	_avatarFrame->addRemoteContact(
 		QString::fromStdString(contactId),
-		QString::fromStdString(profile.getDisplayName()),
+		QString::fromUtf8(profile.getDisplayName().c_str()),
 		QString::fromStdString(imContact.getContactId()),
 		pixmap
 	);
@@ -487,7 +487,7 @@ void QtChatWidget::updateAvatarFrame() {
 		pixmap.loadFromData((uchar *)data.c_str(), data.size());
 		_avatarFrame->addRemoteContact(
 			QString::fromStdString(contactId),
-			QString::fromStdString(profile.getDisplayName()),
+			QString::fromUtf8(profile.getDisplayName().c_str()),
 			QString::fromStdString((*it).getContactId()),
 			pixmap
 		);
