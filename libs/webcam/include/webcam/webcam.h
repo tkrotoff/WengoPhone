@@ -62,7 +62,6 @@ typedef struct {
  */
 #define WEBCAM_FORCE_IMAGE_FORMAT 1
 
-
 /** Contains access to C++ code */
 struct opaquewebcam;
 typedef struct opaquewebcam webcam;
@@ -75,6 +74,17 @@ typedef struct opaquewebcam webcam;
  * @param userData user data
  */
 typedef void (webcamcallback)(webcam * sender, piximage * image, void * userData);
+
+
+/**
+ * @see IWebcamDriver::apiInitialize()
+ */
+OWWEBCAM_API void webcam_api_initialize();
+
+/**
+ * @see IWebcamDriver::apiUninitialize()
+ */
+OWWEBCAM_API void webcam_api_uninitialize();
 
 /**
  * @see IWebcamDriver::getDeviceList()

@@ -83,6 +83,7 @@
 #include <thread/Thread.h>
 #include <util/Logger.h>
 #include <util/SafeDelete.h>
+#include <webcam/WebcamDriver.h>
 
 #include <QtGui/QtGui>
 
@@ -129,6 +130,10 @@ void QtWengoPhone::initThreadSafe() {
 	QApplication::setQuitOnLastWindowClosed(false);
 
 	qRegisterMetaType<QVariant>("QVariant");
+
+	//Initialize libwebcam for the Qt thread.
+	WebcamDriver::apiInitialize();
+	////
 
 	_wengoPhoneWindow = new QMainWindow(NULL);
 

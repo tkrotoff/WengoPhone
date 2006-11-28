@@ -43,9 +43,24 @@ class WebcamDriverFactory;
  *
  * @see IWebcamDriver
  * @author Philippe Bernery
+ * @author Mathieu Stute
  */
 class WebcamDriver : public IWebcamDriver {
 public:
+
+	/**
+	 * Initialize the api.
+	 * Under Windows any thread accessing this api must call
+	 * this function in order to use it.
+	 */
+	OWWEBCAM_API static void apiInitialize();
+
+	/**
+	 * Uninitialize the api.
+	 * Under Windows any thread that has called apiInitialize 
+	 * must call this function.
+	 */
+	OWWEBCAM_API static void apiUninitialize();
 
 	/**
 	 * Sets current factory

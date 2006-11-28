@@ -42,6 +42,7 @@
 #include <util/Logger.h>
 #include <util/Path.h>
 #include <util/SafeDelete.h>
+#include <webcam/WebcamDriver.h>
 
 #include <sstream>
 
@@ -72,6 +73,10 @@ WengoPhone::WengoPhone() {
 	NetworkProxyDiscovery::getInstance();
 	////
 
+	//Initialize libwebcam for the model thread.
+	WebcamDriver::apiInitialize();
+	////
+
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
 	//Binding events
@@ -80,7 +85,7 @@ WengoPhone::WengoPhone() {
 
 	//Creating the UserProfileHandler instance
 	_userProfileHandler = new UserProfileHandler();
-		////
+	////
 
 	RegisterProtocol registerProtocol("wengo");
 	std::string executableFullName = Path::getApplicationDirPath() + config.getExecutableName();

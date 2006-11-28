@@ -33,9 +33,12 @@ using namespace std;
 DirectXWebcamDriver::DirectXWebcamDriver(WebcamDriver * driver, int flags)
 	: IWebcamDriver(flags) {
 
+	// no more needed since apiInitialize() was introduced.
 	//FIXME does not work because of Qt4.1.2
 	//CoInitializeEx(NULL, COINIT_MULTITHREADED);
-	CoInitialize(NULL);
+	////
+	//CoInitialize(NULL);
+	////
 
 	_webcamDriver = driver;
 	_pGrabberF = NULL;
@@ -49,7 +52,9 @@ DirectXWebcamDriver::DirectXWebcamDriver(WebcamDriver * driver, int flags)
 
 DirectXWebcamDriver::~DirectXWebcamDriver() {
 	stopCapture();
-	CoUninitialize();
+	// no more needed since apiUninitialize() was introduced.
+	//CoUninitialize();
+	////
 }
 
 void DirectXWebcamDriver::cleanup() {

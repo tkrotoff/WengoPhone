@@ -124,6 +124,8 @@ WebcamErrorCode ph_media_video_initialize_webcam(phvstream_t *vstream) {
 	phConfig_t *cfg = phGetConfig();
 	WebcamErrorCode err;
 
+	webcam_api_initialize();
+
     DBG_MEDIA_ENGINE_VIDEO("webcam init: trying to set video device (%s)...\n...", cfg->video_config.video_device);
 	err = webcam_set_device(vstream->wt, cfg->video_config.video_device);
 
@@ -992,7 +994,6 @@ void ph_msession_video_stop(struct ph_msession_s *s)
 
   s->activestreams &= ~(1 << PH_MSTREAM_VIDEO1);
 
-
   if (!stream)
   {
     return;
@@ -1036,8 +1037,7 @@ void ph_msession_video_stop(struct ph_msession_s *s)
   }
 
   ph_media_video_free_processing_buffers(stream);
-
-
+  webcam_api_uninitialize();
 
   ortp_set_debug_file("oRTP", stdout);
   ortp_session_stats_display(stream->ms.rtp_session);

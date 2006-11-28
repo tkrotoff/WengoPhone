@@ -239,3 +239,11 @@ void webcam_set_contrast(webcam * wc, int contrast) {
 int webcam_get_contrast(webcam * wc) {
 	return wc->driver->getContrast();
 }
+
+void webcam_api_initialize() {
+	WebcamDriver::apiInitialize();
+}
+
+void webcam_api_uninitialize() {
+	WebcamDriver::apiUninitialize();
+}
