@@ -4,7 +4,7 @@ ow_use_private_libraries(
 	srtp
 	osip2
 	ortp
-	OPENSSL
+	openssl
 )
 
 ow_add_public_include_dirs(

@@ -1,9 +1,13 @@
-ow_create_project(ffmpeg)
-
-ow_use_public_libraries(
-	FFMPEG
-)
-
-if (MSVC)
-	ow_copy_dir(${CMAKE_CURRENT_SOURCE_DIR}/binary-lib/msvc/*.dll .)
-endif (MSVC)
+if (WIN32)
+	include(CMakeLists-internal-msvc.txt)
+else (WIN32)
+	if (APPLE)
+		include(CMakeLists-internal-macosx.txt)
+	else (APPLE)
+		if (FFMPEG_INTERNAL)
+			include(CMakeLists-internal-unix.txt)
+		else (FFMPEG_INTERNAL)
+			include(CMakeLists-external.txt)
+		endif (FFMPEG_INTERNAL)
+	endif (APPLE)
+endif (WIN32)

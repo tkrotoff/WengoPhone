@@ -174,12 +174,11 @@ if (WIN32)
 endif (WIN32)
 
 if (UNIX AND NOT WIN32 AND NOT APPLE)
-	option(WITH_RESOURCEDIR "Use ${DATA_INSTALL_DIR} as hardcoded resouce path" ON)
-	if (WITH_RESOURCEDIR)
+	if (WENGOPHONE_RESOURCEDIR_PATH)
 		ow_add_private_definitions(
 			-DOW_RESOURCEDIR='"${DATA_INSTALL_DIR}"'
 		)
-	endif (WITH_RESOURCEDIR)
+	endif (WENGOPHONE_RESOURCEDIR_PATH)
 endif (UNIX AND NOT WIN32 AND NOT APPLE)
 
 ow_create_binary()

@@ -1,0 +1,14 @@
+ow_create_project(glib2)
+
+ow_add_public_libraries(
+	${CMAKE_CURRENT_SOURCE_DIR}/binary-lib/msvc/glib-2.0.lib
+	${CMAKE_CURRENT_SOURCE_DIR}/binary-lib/msvc/gmodule-2.0.lib
+	${CMAKE_CURRENT_SOURCE_DIR}/binary-lib/msvc/gobject-2.0.lib
+	${CMAKE_CURRENT_SOURCE_DIR}/binary-lib/msvc/gthread-2.0.lib
+)
+
+ow_add_public_include_dirs(
+	${CMAKE_CURRENT_SOURCE_DIR}/include
+)
+
+ow_copy_dir(${CMAKE_CURRENT_SOURCE_DIR}/binary-lib/msvc/*.dll .)

@@ -1,3 +1,9 @@
+set(QT_MIN_VERSION 4.1.2)
+
+if (NOT QT4_FOUND)
+	find_package(Qt4 REQUIRED)
+endif (NOT QT4_FOUND)
+
 ow_create_project(qt4)
 
 ow_add_public_include_dirs(

@@ -1,7 +1,7 @@
 ow_create_static_library(httptunnel)
 
 ow_use_public_libraries(
-	OPENSSL
+	openssl
 )
 
 ow_use_private_libraries(

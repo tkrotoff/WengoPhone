@@ -1,7 +1,7 @@
 ow_create_shared_library(owcurl)
 
 ow_use_private_libraries(
-	OPENSSL
+	openssl
 )
 
 ow_add_public_include_dirs(

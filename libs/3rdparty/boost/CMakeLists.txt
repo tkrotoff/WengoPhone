@@ -1,3 +1,7 @@
+if (NOT BOOST_FOUND)
+	find_package(Boost REQUIRED)
+endif (NOT BOOST_FOUND)
+
 ow_create_project(boost)
 
 ow_use_public_libraries(

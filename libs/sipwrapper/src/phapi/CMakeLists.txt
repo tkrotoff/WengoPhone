@@ -36,14 +36,14 @@ ow_add_sources(
 	PhApiSFPEvent.cpp
 )
 
-if (WITH_VIDEO)
+if (PHAPI_VIDEO_SUPPORT)
 	ow_use_public_libraries(
 		owpixertool
 	)
 	ow_add_private_definitions(
 		-DENABLE_VIDEO
 	)
-endif (WITH_VIDEO)
+endif (PHAPI_VIDEO_SUPPORT)
 
 ow_add_private_definitions(
 	-DPHAPI_DLL

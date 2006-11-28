@@ -1,7 +1,7 @@
 ow_create_plugin_library(phspeexplugin)
 
 ow_use_private_libraries(
-	SPEEX
+	speex
 )
 
 ow_add_private_compile_flags(
@@ -12,22 +12,22 @@ ow_add_sources(
 	../phcodec-speex.c
 )
 
-if (WITH_SPEEXWB_REPLACES_G726WB)
+if (PHAPI_SPEEXWB_REPLACES_G726WB_HACK)
 	ow_add_private_definitions(
 		-DPH_SPEEXWB_REPLACES_G726WB
 	)
-else (WITH_SPEEXWB_REPLACES_G726WB)
-	if (WITH_SPEEXWB_REPLACES_AMRNB)
+else (PHAPI_SPEEXWB_REPLACES_G726WB_HACK)
+	if (PHAPI_SPEEXWB_REPLACES_AMRNB_HACK)
 		ow_add_private_definitions(
 			-DPH_SPEEXWB_REPLACES_AMRNB
 		)
-	else (WITH_SPEEXWB_REPLACES_AMRNB)
-		if (WITH_SPEEXWB_REPLACES_AMRWB)
+	else (PHAPI_SPEEXWB_REPLACES_AMRNB_HACK)
+		if (PHAPI_SPEEXWB_REPLACES_AMRWB_HACK)
 			ow_add_private_definitions(
 				-DPH_SPEEXWB_REPLACES_AMRWB
 			)
-		endif (WITH_SPEEXWB_REPLACES_AMRWB)
-	endif (WITH_SPEEXWB_REPLACES_AMRNB)
-endif (WITH_SPEEXWB_REPLACES_G726WB)
+		endif (PHAPI_SPEEXWB_REPLACES_AMRWB_HACK)
+	endif (PHAPI_SPEEXWB_REPLACES_AMRNB_HACK)
+endif (PHAPI_SPEEXWB_REPLACES_G726WB_HACK)
 
 ow_create_binary()

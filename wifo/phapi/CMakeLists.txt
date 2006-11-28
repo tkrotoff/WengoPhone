@@ -59,11 +59,11 @@ else (MSVC)
 	)
 endif (MSVC)
 
-if (WITH_BUILDID)
+if (BUILDID_SUPPORT)
 	ow_add_private_definitions(
 		-DSUBVERSION_REVISION="${SVN_REVISION}"
 	)
-endif (WITH_BUILDID)
+endif (BUILDID_SUPPORT)
 
 # PH_FORCE_16KHZ : activate FORCED 16 KHZ SAMPLING
 # SUBVERSION_REVISION : grab the svn revision number
@@ -91,37 +91,37 @@ ow_add_sources(
 	wav.c
 )
 
-if (WITH_SPEEXWB_REPLACES_G726WB)
+if (PHAPI_SPEEXWB_REPLACES_G726WB_HACK)
 	ow_add_private_definitions(
 		-DPH_SPEEXWB_REPLACES_G726WB
 	)
-else (WITH_SPEEXWB_REPLACES_G726WB)
-	if (WITH_SPEEXWB_REPLACES_AMRNB)
+else (PHAPI_SPEEXWB_REPLACES_G726WB_HACK)
+	if (PHAPI_SPEEXWB_REPLACES_AMRNB_HACK)
 		ow_add_private_definitions(
 			-DPH_SPEEXWB_REPLACES_AMRNB
 		)
-	else (WITH_SPEEXWB_REPLACES_AMRNB)
-		if (WITH_SPEEXWB_REPLACES_AMRWB)
+	else (PHAPI_SPEEXWB_REPLACES_AMRNB_HACK)
+		if (PHAPI_SPEEXWB_REPLACES_AMRWB_HACK)
 			ow_add_private_definitions(
 				-DPH_SPEEXWB_REPLACES_AMRWB
 			)
-		endif (WITH_SPEEXWB_REPLACES_AMRWB)
-	endif (WITH_SPEEXWB_REPLACES_AMRNB)
-endif (WITH_SPEEXWB_REPLACES_G726WB)
+		endif (PHAPI_SPEEXWB_REPLACES_AMRWB_HACK)
+	endif (PHAPI_SPEEXWB_REPLACES_AMRNB_HACK)
+endif (PHAPI_SPEEXWB_REPLACES_G726WB_HACK)
 
-if (WITH_EMBEDDED_PHAPI)
+if (PHAPI_EMBEDDED_SUPPORT)
 	ow_add_private_definitions(
 		-DSCHEDULING_MODE
 	)
-endif (WITH_EMBEDDED_PHAPI)
+endif (PHAPI_EMBEDDED_SUPPORT)
 
-if (WITH_QOS_DEBUG)
+if (PHAPI_QOS_DEBUG_SUPPORT)
 	ow_add_private_definitions(
 		-DPHAPI_QOS_DEBUG
 	)
-endif (WITH_QOS_DEBUG)
+endif (PHAPI_QOS_DEBUG_SUPPORT)
 
-if (WITH_HTTPTUNNEL)
+if (PHAPI_HTTPTUNNEL_SUPPORT)
 	ow_use_private_libraries(
 		httptunnel
 	)
@@ -129,9 +129,9 @@ if (WITH_HTTPTUNNEL)
 	ow_add_private_definitions(
 		-DUSE_HTTP_TUNNEL
 	)
-endif (WITH_HTTPTUNNEL)
+endif (PHAPI_HTTPTUNNEL_SUPPORT)
 
-#if (WITH_VIDEO)
+#if (PHAPI_VIDEO_SUPPORT)
 	ow_use_private_libraries(
 		owwebcam
 	)
@@ -149,7 +149,7 @@ endif (WITH_HTTPTUNNEL)
 		phmedia-video-bwcontrol.c
 		phcodec-avcodec-wrapper.c
 	)
-#endif (WITH_VIDEO)
+#endif (PHAPI_VIDEO_SUPPORT)
 
 if (WIN32)
 	ow_add_private_libraries(
@@ -198,7 +198,7 @@ if (UNIX AND NOT WIN32)
 			rt
 		)
 
-		if (WITH_SAMPLERATE)
+		if (PHAPI_SAMPLERATE_SUPPORT)
 			ow_use_private_libraries(
 				samplerate
 			)
@@ -206,9 +206,9 @@ if (UNIX AND NOT WIN32)
 			ow_add_private_definitions(
 				-DPH_USE_RESAMPLE
 			)
-		endif (WITH_SAMPLERATE)
+		endif (PHAPI_SAMPLERATE_SUPPORT)
 
-		if (WITH_PHAPI_AUDIO_ALSA)
+		if (PHAPI_AUDIO_ALSA_SUPPORT)
 			ow_add_private_libraries(
 				${ASOUND_LIBRARY}
 			)
@@ -220,9 +220,9 @@ if (UNIX AND NOT WIN32)
 			ow_add_sources(
 				phmedia-alsa.c
 			)
-		endif (WITH_PHAPI_AUDIO_ALSA)
+		endif (PHAPI_AUDIO_ALSA_SUPPORT)
 
-		if (WITH_PHAPI_AUDIO_ARTS)
+		if (PHAPI_AUDIO_ARTS_SUPPORT)
 			ow_use_private_libraries(
 				ARTS
 			)
@@ -234,9 +234,9 @@ if (UNIX AND NOT WIN32)
 			ow_add_sources(
 				phmedia-audio-arts.c
 			)
-		endif (WITH_PHAPI_AUDIO_ARTS)
+		endif (PHAPI_AUDIO_ARTS_SUPPORT)
 
-		if (WITH_PHAPI_AUDIO_ESD)
+		if (PHAPI_AUDIO_ESD_SUPPORT)
 			ow_use_private_libraries(
 				ESD
 			)
@@ -248,13 +248,13 @@ if (UNIX AND NOT WIN32)
 			ow_add_sources(
 				phmedia-audio-esd.c
 			)
-		endif (WITH_PHAPI_AUDIO_ESD)
+		endif (PHAPI_AUDIO_ESD_SUPPORT)
 	endif (APPLE)
 endif (UNIX AND NOT WIN32)
 
 if (NOT APPLE)
 	ow_use_private_libraries(
-		PORTAUDIO
+		portaudio
 	)
 
 	ow_add_private_definitions(

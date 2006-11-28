@@ -42,8 +42,8 @@ if (UNIX AND NOT WIN32)
 			src/mac/Sound.cpp
 		)
 	else (APPLE)
-		ow_add_private_libraries(
-			${PORTAUDIO_LIBRARIES}
+		ow_use_private_libraries(
+			portaudio
 		)
 
 		ow_add_sources(
@@ -62,8 +62,8 @@ if (WITH_PORTAUDIO AND WIN32)
 	)
 else (WITH_PORTAUDIO AND WIN32)
 	if (WIN32)
-		ow_add_private_libraries(
-			${PORTAUDIO_LIBRARIES}
+		ow_use_private_libraries(
+			portaudio
 		)
 
 		ow_add_sources(

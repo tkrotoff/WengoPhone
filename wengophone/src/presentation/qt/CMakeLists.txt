@@ -326,8 +326,7 @@ if (UNIX AND NOT WIN32)
 			macosx/QtMacApplication.cpp
 		)
 	else (APPLE)
-		option(WITH_HW_ACCEL "Build with Xv hardware acceleration support" ON)
-		if (WITH_HW_ACCEL)
+		if (WENGOPHONE_XV_SUPPORT)
 			if (X11_XV_FOUND)
 				find_package(X11)
 				ow_use_private_libraries(
@@ -352,7 +351,7 @@ if (UNIX AND NOT WIN32)
 					phonecall/QtVideoXV.cpp
 				)
 			endif (X11_XV_FOUND)
-		endif (WITH_HW_ACCEL)
+		endif (WENGOPHONE_XV_SUPPORT)
 	endif (APPLE)
 endif (UNIX AND NOT WIN32)
 
