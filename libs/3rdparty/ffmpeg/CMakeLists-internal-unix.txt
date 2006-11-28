@@ -1,0 +1,12 @@
+ow_create_project(ffmpeg)
+
+ow_add_public_libraries(
+	${CMAKE_CURRENT_SOURCE_DIR}/libavcodec/libavcodec.a
+	${CMAKE_CURRENT_SOURCE_DIR}/libavutil/libavutil.a
+)
+
+ow_add_public_include_dirs(
+	${CMAKE_CURRENT_SOURCE_DIR}/include
+)
+
+ow_autoconf("./configure" "make")
