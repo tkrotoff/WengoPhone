@@ -53,6 +53,8 @@ public:
 
 	void messageProgress(OWPL_MESSAGE_INFO * info);
 
+	void errorNotify(OWPL_ERROR_INFO * info);
+
 private:
 
 	PhApiCallbacks();

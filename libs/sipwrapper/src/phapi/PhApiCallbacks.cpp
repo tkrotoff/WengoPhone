@@ -64,6 +64,10 @@ extern "C" {
 				PhApiCallbacks::getInstance().onNotify((OWPL_NOTIFICATION_INFO *)pInfo);
 				break;
 
+			case EVENT_CATEGORY_ERROR :
+				PhApiCallbacks::getInstance().errorNotify((OWPL_ERROR_INFO *)pInfo);
+				break;
+
 			default :
 				break;
 		}
@@ -855,6 +859,19 @@ void PhApiCallbacks::onNotify(OWPL_NOTIFICATION_INFO * info) {
 
 		default :
 			LOG_FATAL("unknown message event from="+ std::string(info->szRemoteIdentity) +" content=" + std::string(info->szXmlContent));
+			break;
+	}
+}
+
+void PhApiCallbacks::errorNotify(OWPL_ERROR_INFO * info) {
+	switch(info->event) {
+		case OWPL_ERROR :
+			break;
+
+		case OWPL_ERROR_NO_AUDIO_DEVICE :
+			break;
+
+		default :
 			break;
 	}
 }
