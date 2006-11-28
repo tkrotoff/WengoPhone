@@ -15,7 +15,7 @@ ow_add_private_include_dirs(
 )
 
 ow_use_private_libraries(
-	XML2
+	libxml
 )
 
 ow_add_private_libraries(

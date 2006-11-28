@@ -38,7 +38,7 @@ if (UNIX AND NOT WIN32)
 		)
 	else (APPLE)
 		ow_use_public_libraries(
-			UUID
+			uuid
 		)
 		ow_add_sources(
 			src/unix/UuidUnix.cpp

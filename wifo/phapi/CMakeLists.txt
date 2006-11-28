@@ -209,8 +209,8 @@ if (UNIX AND NOT WIN32)
 		endif (PHAPI_SAMPLERATE_SUPPORT)
 
 		if (PHAPI_AUDIO_ALSA_SUPPORT)
-			ow_add_private_libraries(
-				${ASOUND_LIBRARY}
+			ow_use_private_libraries(
+				alsa
 			)
 
 			ow_add_private_definitions(
@@ -224,7 +224,7 @@ if (UNIX AND NOT WIN32)
 
 		if (PHAPI_AUDIO_ARTS_SUPPORT)
 			ow_use_private_libraries(
-				ARTS
+				arts
 			)
 
 			ow_add_private_definitions(
@@ -238,7 +238,7 @@ if (UNIX AND NOT WIN32)
 
 		if (PHAPI_AUDIO_ESD_SUPPORT)
 			ow_use_private_libraries(
-				ESD
+				esd
 			)
 
 			ow_add_private_definitions(

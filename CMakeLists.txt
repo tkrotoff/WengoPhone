@@ -37,15 +37,8 @@ ow_get_subversion_revision(SVN_REVISION)
 # this does not work under Windows for the installer name, replace it by #
 string(REPLACE ":" "#" SVN_REVISION ${SVN_REVISION})
 
-
-if (NOT WIN32)
-	find_package(UUID REQUIRED)
-	find_package(XML2 REQUIRED)
-endif (NOT WIN32)
-
 if (UNIX)
 	if (NOT APPLE)
-		find_package(Alsa REQUIRED)
 		subdirs(
 			libs/3rdparty/samplerate
 		)
@@ -57,10 +50,16 @@ subdirs(
 	libs/3rdparty/qt4
 	libs/3rdparty/glib
 	libs/3rdparty/openssl
+	libs/3rdparty/alsa
+	libs/3rdparty/arts
+	libs/3rdparty/esd
 	libs/3rdparty/portaudio
 	libs/3rdparty/ffmpeg
 	libs/3rdparty/tinyxml
+	libs/3rdparty/libxml
 	libs/3rdparty/gaim
+	libs/3rdparty/uuid
+	libs/3rdparty/x11
 	#libs/3rdparty/samplerate
 
 	libs/owcurl
