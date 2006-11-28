@@ -31,4 +31,3 @@
 
 /* Define to 1 if you have the <sys/asoundlib.h> header file. */
 #cmakedefine HAVE_SYS_ASOUNDLIB_H 1
-
