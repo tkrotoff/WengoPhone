@@ -148,7 +148,7 @@ void QtFileTransfer::createSendFileSession(IMContactSet imContactSet, const QStr
 	File file(std::string(filename.toUtf8().constData()), File::EncodingUTF8);
 
 	// check the file size
-	if (file.getSize() < INT_MAX) {
+	if (file.getSize() > 0 && file.getSize() < INT_MAX) {
 
 		SendFileSession * fileSession = _coIpManager->getFileSessionManager().createSendFileSession();
 		fileSession->addFile(file);
@@ -166,7 +166,7 @@ void QtFileTransfer::createSendFileSession(IMContactSet imContactSet, const QStr
 	} else {
 
 		QMessageBox::warning(_qtFileTransferWidget, tr("File size error"),
-			tr("%1 exceeds the maximum authorized size.").arg(QString::fromStdString(file.getFileName())),
+			tr("%1 exceeds the maximum authorized size or has size 0.").arg(QString::fromStdString(file.getFileName())),
 			QMessageBox::Ok, 0, 0
 		);
 	}

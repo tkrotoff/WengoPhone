@@ -245,39 +245,41 @@ int sfp_send_file(const OWPL_LINE hLine, char * uri, char * filename, char * sho
 			return FALSE;
 	}
 
+if(strcmp(file_size, "0") != 0) {
+
 	if((session = sfp_make_session_for_invite(szLocalUserName, szLocalBoundAddr, filename, short_filename, file_type, file_size, SFP_REQUIRED_BANDWIDTH_DEFAULT)) == NULL){ // TODO bouchon pour la bandwidth a virer
-		m_log_error("Could not create session","sfp_send_file");
-		return FALSE;
-	}
+			m_log_error("Could not create session","sfp_send_file");
+			return FALSE;
+		}
 
-	// get an available file transfer port
-	if(!strfilled(session->http_proxy) && sfp_transfer_get_free_port(session) != SUCCESS){
-		m_log_error("Could not find a free transfer port","sfp_send_file");
-		free_sfp_session_info(&session);
-		return FALSE;
-	}
+		// get an available file transfer port
+		if(!strfilled(session->http_proxy) && sfp_transfer_get_free_port(session) != SUCCESS){
+			m_log_error("Could not find a free transfer port","sfp_send_file");
+			free_sfp_session_info(&session);
+			return FALSE;
+		}
 
-	if((body_info = sfp_make_body_info_from_session_info(session)) == NULL){
-		m_log_error("Could not create sfp body info from session","sfp_send_file");
-		// free the session
-		free_sfp_session_info(&session);
-		return FALSE;
-	}
+		if((body_info = sfp_make_body_info_from_session_info(session)) == NULL){
+			m_log_error("Could not create sfp body info from session","sfp_send_file");
+			// free the session
+			free_sfp_session_info(&session);
+			return FALSE;
+		}
 
-	body = sfp_make_message_body_from_sfp_info(body_info);
-	if(!strfilled(body)){
-		m_log_error("Could not create sfp body from sfp info","sfp_send_file");
-		// free the body info
+		body = sfp_make_message_body_from_sfp_info(body_info);
+		if(!strfilled(body)){
+			m_log_error("Could not create sfp body from sfp info","sfp_send_file");
+			// free the body info
+			sfp_free_sfp_info(&body_info);
+			// free the session
+			free_sfp_session_info(&session);
+			return FALSE;
+		}
+
+		// we can now free the sent infos
 		sfp_free_sfp_info(&body_info);
-		// free the session
-		free_sfp_session_info(&session);
-		return FALSE;
-	}
 
-	// we can now free the sent infos
-	sfp_free_sfp_info(&body_info);
-
-	// send the INVITE message
+		// send the INVITE message
 	if(owplCallCreate(hLine, (OWPL_CALL *)&call_id) != OWPL_RESULT_SUCCESS) {
 		// TODO ERROR
 		return FALSE;
@@ -291,18 +293,21 @@ int sfp_send_file(const OWPL_LINE hLine, char * uri, char * filename, char * sho
 		return FALSE;
 	}
 
-	// we can now free the body
-	free(body);
+		// we can now free the body
+		free(body);
 
-	// set the call_id
-	session->call_id = call_id;
+		// set the call_id
+		session->call_id = call_id;
 
-	sfp_add_session_info(call_id, session);
+		sfp_add_session_info(call_id, session);
 
-	// notify GUI
+		// notify GUI
 	if(inviteToTransfer) { inviteToTransfer(call_id, uri, short_filename, file_type, file_size); }
 
-	return call_id;
+		return call_id;
+	}
+
+	return -1;
 }
 
 /**
