@@ -33,7 +33,7 @@ WebcamDriver * WebcamDriver::instance = NULL;
 
 void WebcamDriver::setFactory(WebcamDriverFactory * factory) {
 	_factory = factory;
-
+}
 
 void WebcamDriver::apiInitialize() {
 #if defined(OS_WIN32)
