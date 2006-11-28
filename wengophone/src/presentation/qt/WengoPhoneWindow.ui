@@ -129,7 +129,7 @@
      <x>0</x>
      <y>0</y>
      <width>310</width>
-     <height>19</height>
+     <height>29</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuHelp" >
@@ -163,37 +163,6 @@
     <addaction name="actionHangUpCall" />
     <addaction name="actionHoldResumeCall" />
    </widget>
-   <widget class="QMenu" name="menuTools" >
-    <property name="title" >
-     <string>&amp;Tools</string>
-    </property>
-    <widget class="QMenu" name="menuClearHistory" >
-     <property name="title" >
-      <string>Clear &amp;History</string>
-     </property>
-     <property name="icon" >
-      <iconset/>
-     </property>
-     <addaction name="actionClearOutgoingCalls" />
-     <addaction name="actionClearIncomingCalls" />
-     <addaction name="actionClearMissedCalls" />
-     <addaction name="actionClearRejectedCalls" />
-     <addaction name="actionClearChatSessions" />
-     <addaction name="actionClearSMS" />
-     <addaction name="separator" />
-     <addaction name="actionClearAll" />
-    </widget>
-    <widget class="QMenu" name="menuType_Here" >
-     <property name="title" >
-      <string>Type Here</string>
-     </property>
-    </widget>
-    <addaction name="actionShowVolumePanel" />
-    <addaction name="actionShowFileTransfer" />
-    <addaction name="actionShowConfig" />
-    <addaction name="separator" />
-    <addaction name="menuClearHistory" />
-   </widget>
    <widget class="QMenu" name="menuWengo" >
     <property name="title" >
      <string>&amp;Wengo</string>
@@ -208,13 +177,52 @@
     <addaction name="separator" />
     <addaction name="actionClose" />
    </widget>
+   <widget class="QMenu" name="menuTools" >
+    <property name="title" >
+     <string>&amp;Tools</string>
+    </property>
+    <widget class="QMenu" name="menuType_Here" >
+     <property name="title" >
+      <string>Type Here</string>
+     </property>
+    </widget>
+    <widget class="QMenu" name="menuClearHistory" >
+     <property name="title" >
+      <string>Clear &amp;History</string>
+     </property>
+     <property name="icon" >
+      <iconset/>
+     </property>
+     <addaction name="actionClearOutgoingCalls" />
+     <addaction name="actionClearIncomingCalls" />
+     <addaction name="actionClearMissedCalls" />
+     <addaction name="actionClearRejectedCalls" />
+     <addaction name="actionClearSMS" />
+     <addaction name="separator" />
+     <addaction name="actionClearAll" />
+    </widget>
+    <addaction name="actionShowVolumePanel" />
+    <addaction name="actionShowFileTransfer" />
+    <addaction name="actionShowConfig" />
+    <addaction name="separator" />
+    <addaction name="menuClearHistory" />
+   </widget>
    <addaction name="menuWengo" />
    <addaction name="menuContacts" />
    <addaction name="menuActions" />
    <addaction name="menuTools" />
    <addaction name="menuHelp" />
   </widget>
-  <widget class="QStatusBar" name="statusBar" />
+  <widget class="QStatusBar" name="statusBar" >
+   <property name="geometry" >
+    <rect>
+     <x>0</x>
+     <y>495</y>
+     <width>310</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
   <widget class="QToolBar" name="toolBar" >
    <property name="windowTitle" >
     <string>ToolBar</string>
