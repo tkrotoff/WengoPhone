@@ -91,29 +91,41 @@ bool Settings::contains(const std::string & key) const {
 void Settings::set(const std::string & key, const std::string & value) {
 	RecursiveMutex::ScopedLock scopedLock(_mutex);
 
-	_keyMap[key] = value;
-	valueChangedEvent(*this, key);
+	if ((_keyMap.find(key) == _keyMap.end()) ||
+		((boost::any_cast<std::string>(_keyMap[key]) != value))) {
+		_keyMap[key] = value;
+		valueChangedEvent(*this, key);
+	}
 }
 
 void Settings::set(const std::string & key, const StringList & value) {
 	RecursiveMutex::ScopedLock scopedLock(_mutex);
-
-	_keyMap[key] = value;
-	valueChangedEvent(*this, key);
+	
+	if ((_keyMap.find(key) == _keyMap.end()) ||
+		((boost::any_cast<StringList>(_keyMap[key]) != value))) {
+		_keyMap[key] = value;
+		valueChangedEvent(*this, key);
+	}
 }
 
 void Settings::set(const std::string & key, bool value) {
 	RecursiveMutex::ScopedLock scopedLock(_mutex);
 
-	_keyMap[key] = value;
-	valueChangedEvent(*this, key);
+	if ((_keyMap.find(key) == _keyMap.end()) ||
+		((boost::any_cast<bool>(_keyMap[key]) != value))) {
+		_keyMap[key] = value;
+		valueChangedEvent(*this, key);
+	}
 }
 
 void Settings::set(const std::string & key, int value) {
 	RecursiveMutex::ScopedLock scopedLock(_mutex);
 
-	_keyMap[key] = value;
-	valueChangedEvent(*this, key);
+	if ((_keyMap.find(key) == _keyMap.end()) ||
+		((boost::any_cast<int>(_keyMap[key]) != value))) {
+		_keyMap[key] = value;
+		valueChangedEvent(*this, key);
+	}
 }
 
 void Settings::set(const std::string & key, boost::any value) {
