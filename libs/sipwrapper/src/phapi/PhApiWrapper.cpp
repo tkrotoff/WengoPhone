@@ -90,7 +90,7 @@ void PhApiWrapper::terminate() {
 void PhApiWrapper::setNetworkParameter() {
 	int natRefreshTime = 25;
 
-	if (_tunnelNeeded) {/
+	if (_tunnelNeeded) {
 		if(owplConfigSetLocalHttpProxy(_proxyServer.c_str(), _proxyPort, _proxyLogin.c_str(), _proxyPassword.c_str()) != OWPL_RESULT_SUCCESS) {
 			// TODO what? throw an exception? exit?
 		}
