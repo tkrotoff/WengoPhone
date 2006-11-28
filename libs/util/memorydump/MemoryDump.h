@@ -78,7 +78,7 @@ public:
 	 *
 	 * @param applicationName name of the application (e.g WengoPhone)
 	 */
-	OWMEMORYDUMP_API MemoryDump(const char * applicationName, const char * revision);
+	OWMEMORYDUMP_API MemoryDump(const std::string & applicationName, const std::string & revision);
 
 	OWMEMORYDUMP_API ~MemoryDump();
 
@@ -87,16 +87,16 @@ public:
 	 *
 	 * @param styleName name of the style to use
 	 */
-	OWMEMORYDUMP_API void setStyle(const char * styleName);
+	OWMEMORYDUMP_API void setStyle(const std::string & styleName);
 
 	/**
 	 * Sets the language for translating MemoryDump.
 	 *
 	 * @param languageFilename path to the Qt translation file (.qm)
 	 */
-	OWMEMORYDUMP_API void setLanguage(const char * languageFilename);
+	OWMEMORYDUMP_API void setLanguage(const std::string & languageFilename);
 
-	OWMEMORYDUMP_API static void SetGetAdditionnalInfo(std::string (*proc)());
+	OWMEMORYDUMP_API static void setGetAdditionnalInfo(std::string (*proc)());
 
 	OWMEMORYDUMP_API static std::string (*getAdditionnalInfo)();
 
@@ -105,22 +105,22 @@ private:
 	/**
 	 * Name of the application that uses MemoryDump.
 	 */
-	static char * _applicationName;
+	static std::string _applicationName;
 
 	/**
 	 * Qt widgets style name.
 	 */
-	static char * _styleName;
+	static std::string _styleName;
 
 	/**
 	 * Path to the translation file.
 	 */
-	static char * _languageFilename;
+	static std::string _languageFilename;
 
 	/**
 	 * Name of the application that uses MemoryDump.
 	 */
-	static char * _revision;
+	static std::string _revision;
 
 	/**
 	 * win32 API stuff.
@@ -144,14 +144,14 @@ private:
 	 *
 	 * @param commandLine executable path + parameters
 	 */
-	static BOOL executeProcess(char * commandLine);
+	static BOOL executeProcess(const std::string & commandLine);
 
 	/**
 	 * Gets the current date time as a 14 characters string: 20050211234613
 	 *
 	 * @return the current date time as a string
 	 */
-	static char * getCurrentDateTime();
+	static std::string getCurrentDateTime();
 };
 
 #endif	//OWMEMORYDUMP_H

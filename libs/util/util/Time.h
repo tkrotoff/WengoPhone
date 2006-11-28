@@ -88,7 +88,7 @@ public:
 	OWUTIL_API void setSecond(unsigned second);
 
 	/**
-	 * @return a string representing the time. (e.g: "hh/mm/ss")
+	 * @return a string representing the time. (e.g: "hh:mm:ss")
 	 */
 	OWUTIL_API std::string toString() const;
 

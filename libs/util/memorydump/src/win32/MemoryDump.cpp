@@ -24,6 +24,9 @@
 #include <memorydump/MemoryDump.h>
 
 #include <util/Logger.h>
+#include <util/Date.h>
+#include <util/Time.h>
+#include <util/Path.h>
 
 #include <shlwapi.h>
 
@@ -31,61 +34,51 @@
 #include <ctime>
 #include <cstdio>
 #include <iostream>
-using namespace std;
 
-char * MemoryDump::_applicationName = NULL;
-char * MemoryDump::_styleName = NULL;
-char * MemoryDump::_languageFilename = NULL;
-char * MemoryDump::_revision = NULL;
+std::string MemoryDump::_applicationName;
+std::string MemoryDump::_styleName;
+std::string MemoryDump::_languageFilename;
+std::string MemoryDump::_revision;
 std::string (*MemoryDump::getAdditionnalInfo)();
 
-static const char * DBGHELP_DLL = "dbghelp.dll";
+static const std::string DBGHELP_DLL = "dbghelp.dll";
 
-MemoryDump::MemoryDump(const char * applicationName, const char * revision) {
+MemoryDump::MemoryDump(const std::string & applicationName, const std::string & revision) {
 	//If this assert fires then you have two instances of MemoryDump
 	//which is not allowed
-	if (_applicationName) {
+	if (!_applicationName.empty()) {
 		LOG_FATAL("two instances of MemoryDump are not allowed");
 	}
 
-	_applicationName = strdup(applicationName);
-	_revision = strdup(revision);
+	_applicationName = applicationName;
+	_revision = revision;
 
-	::SetUnhandledExceptionFilter(topLevelFilter);
+	SetUnhandledExceptionFilter(topLevelFilter);
 }
 
 MemoryDump::~MemoryDump() {
-	//FIXME why this crashes under Visual C++ 2003
-	/*free(_applicationName);
-	free(_styleName);
-	free(_languageFilename);*/
-	_applicationName = NULL;
-	_styleName = NULL;
-	_languageFilename = NULL;
 }
 
 HMODULE MemoryDump::loadDebugHelpLibrary() {
 	//Firstly see if dbghelp.dll is around and has the function we need
 	//look next to the .exe first, as the one in the system32 directory
 	//might be old (e.g. Windows 2000)
-	HMODULE hDll = NULL;
-	char dbghelpPath[_MAX_PATH];
 
-	if (GetModuleFileNameA(NULL, dbghelpPath, _MAX_PATH)) {
-		char * pSlash = strrchr(dbghelpPath, '\\');
-		if (pSlash) {
-			strcpy(pSlash + 1, DBGHELP_DLL);
-			hDll = ::LoadLibraryA(dbghelpPath);
-		}
-	}
-
-	if (hDll == NULL) {
-		//Load any version we can
-		hDll = ::LoadLibraryA(DBGHELP_DLL);
+	std::string dbghelpPath = Path::getApplicationDirPath();
+	dbghelpPath += DBGHELP_DLL;
+	HMODULE hDll = LoadLibraryA(dbghelpPath.c_str());
+	if (hDll) {
+		LOG_DEBUG(DBGHELP_DLL + " loaded from current directory");
 	}
 
 	if (!hDll) {
-		LOG_ERROR(String(DBGHELP_DLL) + " not found");
+		//Load any version we can
+		hDll = LoadLibraryA(DBGHELP_DLL.c_str());
+		LOG_DEBUG(DBGHELP_DLL + " loaded from the system");
+	}
+
+	if (!hDll) {
+		LOG_ERROR(DBGHELP_DLL + " not found");
 	}
 
 	return hDll;
@@ -95,21 +88,21 @@ MINIDUMPWRITEDUMP MemoryDump::loadMiniDumpWriteDumpFunction() {
 	MINIDUMPWRITEDUMP pDump = NULL;
 	HMODULE hDll = loadDebugHelpLibrary();
 	if (hDll) {
-		pDump = (MINIDUMPWRITEDUMP)::GetProcAddress(hDll, "MiniDumpWriteDump");
+		pDump = (MINIDUMPWRITEDUMP) GetProcAddress(hDll, "MiniDumpWriteDump");
 		if (!pDump) {
-			LOG_ERROR(String(DBGHELP_DLL) + " too old");
+			LOG_ERROR(DBGHELP_DLL + " too old");
 		}
 	}
 
 	return pDump;
 }
 
-void MemoryDump::setStyle(const char * styleName) {
-	_styleName = strdup(styleName);
+void MemoryDump::setStyle(const std::string & styleName) {
+	_styleName = styleName;
 }
 
-void MemoryDump::setLanguage(const char * languageFilename) {
-	_languageFilename = strdup(languageFilename);
+void MemoryDump::setLanguage(const std::string & languageFilename) {
+	_languageFilename = languageFilename;
 }
 
 long MemoryDump::topLevelFilter(struct _EXCEPTION_POINTERS * pExceptionInfo) {
@@ -122,72 +115,67 @@ long MemoryDump::topLevelFilter(struct _EXCEPTION_POINTERS * pExceptionInfo) {
 
 		//Name of the memory dump
 		//Use current path
-		char memoryDumpName[_MAX_PATH];
-		strcpy(memoryDumpName, _applicationName);
-		strcat(memoryDumpName, "-");
-		strcat(memoryDumpName, getCurrentDateTime());
-		strcat(memoryDumpName, "-revision-");
-		strcat(memoryDumpName, _revision);
-		strcat(memoryDumpName, ".dmp");
+		std::string memoryDumpName;
+		memoryDumpName += _applicationName;
+		memoryDumpName += "-rev";
+		memoryDumpName += _revision;
+		memoryDumpName += "-";
+		memoryDumpName += getCurrentDateTime();
+		memoryDumpName += ".dmp";
 
 		//GetModuleFileName retrieves the path of the executable file of the current process.
-		char memoryDumpFile[_MAX_PATH];
-		GetModuleFileNameA(NULL, memoryDumpFile, sizeof(memoryDumpFile));
-		PathRemoveFileSpecA(memoryDumpFile);
-		PathAddBackslashA(memoryDumpFile);
-		strcat(memoryDumpFile, memoryDumpName);
+		std::string memoryDumpFile(Path::getApplicationDirPath());
+		memoryDumpFile += memoryDumpName;
 
 		//Creates the file
-		HANDLE hFile = ::CreateFileA(memoryDumpFile, GENERIC_WRITE, FILE_SHARE_WRITE, NULL, CREATE_ALWAYS,
+		HANDLE hFile = CreateFileA(memoryDumpFile.c_str(), GENERIC_WRITE, FILE_SHARE_WRITE, NULL, CREATE_ALWAYS,
 						FILE_ATTRIBUTE_NORMAL, NULL);
 
 		if (hFile != INVALID_HANDLE_VALUE) {
 			_MINIDUMP_EXCEPTION_INFORMATION ExInfo;
 
-			ExInfo.ThreadId = ::GetCurrentThreadId();
+			ExInfo.ThreadId = GetCurrentThreadId();
 			ExInfo.ExceptionPointers = pExceptionInfo;
 			ExInfo.ClientPointers = NULL;
 
 			//Writes the dump
 			BOOL ok = pDump(GetCurrentProcess(), GetCurrentProcessId(), hFile, MiniDumpNormal, &ExInfo, NULL, NULL);
 			if (ok) {
-				LOG_DEBUG("dump file saved to: " + String(memoryDumpName));
+				LOG_DEBUG("dump file saved to: " + memoryDumpName);
 				ret = EXCEPTION_EXECUTE_HANDLER;
 			} else {
-				LOG_ERROR("failed to save dump file to: " + String(memoryDumpName) + " " + String::fromNumber(GetLastError()));
+				LOG_ERROR("failed to save dump file to: " + memoryDumpName + " " + String::fromNumber(GetLastError()));
 			}
-			::CloseHandle(hFile);
+			CloseHandle(hFile);
 		} else {
-			LOG_ERROR("failed to create dump file: " + String(memoryDumpName) + " " + String::fromNumber(GetLastError()));
+			LOG_ERROR("failed to create dump file: " + memoryDumpName + " " + String::fromNumber(GetLastError()));
 		}
 
 		//Launches crashreport.exe
-		char commandLine[_MAX_PATH];
-		strcpy(commandLine, "owcrashreport");
-		if (_styleName != NULL) {
-			strcat(commandLine, " -style=");
-			strcat(commandLine, _styleName);
+		std::string commandLine = "owcrashreport";
+		if (!_styleName.empty()) {
+			commandLine += " -style=";
+			commandLine += _styleName;
 		}
-		strcat(commandLine, " -d ");
-		strcat(commandLine, "\"");
-		strcat(commandLine, memoryDumpFile);
-		strcat(commandLine, "\"");
-		strcat(commandLine, " -n ");
-		strcat(commandLine, "\"");
-		strcat(commandLine, _applicationName);
-		strcat(commandLine, "\"");
-		if (_languageFilename != NULL) {
-			strcat(commandLine, " -l ");
-			strcat(commandLine, "\"");
-			strcat(commandLine, _languageFilename);
-			strcat(commandLine, "\"");
+		commandLine += " -d ";
+		commandLine += "\"";
+		commandLine += memoryDumpFile;
+		commandLine += "\"";
+		commandLine += " -n ";
+		commandLine += "\"";
+		commandLine += _applicationName;
+		commandLine += "\"";
+		if (!_languageFilename.empty()) {
+			commandLine += " -l ";
+			commandLine += "\"";
+			commandLine += _languageFilename;
+			commandLine += "\"";
 		}
-
 		if (getAdditionnalInfo) {
-			strcat(commandLine, " -i ");
-			strcat(commandLine, "\"");
-			strcat(commandLine, getAdditionnalInfo().c_str());
-			strcat(commandLine, "\"");
+			commandLine += " -i ";
+			commandLine += "\"";
+			commandLine += getAdditionnalInfo();
+			commandLine += "\"";
 		}
 
 		//Flushes the logger file
@@ -199,13 +187,13 @@ long MemoryDump::topLevelFilter(struct _EXCEPTION_POINTERS * pExceptionInfo) {
 	return ret;
 }
 
-BOOL MemoryDump::executeProcess(char * commandLine) {
+BOOL MemoryDump::executeProcess(const std::string & commandLine) {
 	STARTUPINFOA si;
 	PROCESS_INFORMATION pi;
 	GetStartupInfoA(&si);
 
-	BOOL success = ::CreateProcessA(NULL,
-		commandLine,	//Name of app to launch
+	BOOL success = CreateProcessA(NULL,
+		(char *) commandLine.c_str(),	//Name of app to launch
 		NULL,	//Default process security attributes
 		NULL,	//Default thread security attributes
 		FALSE,	//Don't inherit handles from the parent
@@ -218,61 +206,16 @@ BOOL MemoryDump::executeProcess(char * commandLine) {
 	return success;
 }
 
-char * MemoryDump::getCurrentDateTime() {
-	time_t rawtime;
-	time(&rawtime);
-	struct tm * timeinfo = localtime(&rawtime);
+std::string MemoryDump::getCurrentDateTime() {
+	String date = Date().toString();
+	date.replace("-", "");
 
-	//Example: 02/11 23:46:13
-	//0211234613
-	int length = 14;
-	char * dateTime = (char *) malloc(length * sizeof(char));
+	String time = Time().toString();
+	time.replace(":", "");
 
-	int month = timeinfo->tm_mon + 1;
-	char monthStr[2];
-	if (month < 10) {
-		sprintf(monthStr, "0%d", month);
-	} else {
-		sprintf(monthStr, "%d", month);
-	}
-
-	int day = timeinfo->tm_mday;
-	char dayStr[2];
-	if (day < 10) {
-		sprintf(dayStr, "0%d", day);
-	} else {
-		sprintf(dayStr, "%d", day);
-	}
-
-	int hour = timeinfo->tm_hour;
-	char hourStr[2];
-	if (hour < 10) {
-		sprintf(hourStr, "0%d", hour);
-	} else {
-		sprintf(hourStr, "%d", hour);
-	}
-
-	int minutes = timeinfo->tm_min;
-	char minutesStr[2];
-	if (minutes < 10) {
-		sprintf(minutesStr, "0%d", minutes);
-	} else {
-		sprintf(minutesStr, "%d", minutes);
-	}
-
-	int seconds = timeinfo->tm_sec;
-	char secondsStr[2];
-	if (seconds < 10) {
-		sprintf(secondsStr, "0%d", seconds);
-	} else {
-		sprintf(secondsStr, "%d", seconds);
-	}
-
-	sprintf(dateTime, "%s%s%s%s%s", monthStr, dayStr, hourStr, minutesStr, secondsStr);
-
-	return dateTime;
+	return date + time;
 }
 
-void MemoryDump::SetGetAdditionnalInfo(std::string (*proc)()) {
+void MemoryDump::setGetAdditionnalInfo(std::string (*proc)()) {
 	getAdditionnalInfo = proc;
 }

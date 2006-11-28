@@ -39,8 +39,8 @@ string Path::getApplicationDirPath() {
 
 #if defined(OS_WINDOWS)
 
-	char moduleName[256];
-	GetModuleFileNameA(0, moduleName, sizeof(moduleName));
+	char moduleName[MAX_PATH];
+	GetModuleFileNameA(NULL, moduleName, sizeof(moduleName));
 
 	File file(moduleName);
 	result = file.getPath();
@@ -53,9 +53,9 @@ string Path::getApplicationDirPath() {
 		CFURLRef execUrl = CFBundleCopyExecutableURL(mainBundle);
 		CFURLRef url = CFURLCreateCopyDeletingLastPathComponent(kCFAllocatorDefault, execUrl);
 
-		char applicationPath[1024];
+		char applicationPath[MAX_PATH];
 
-		if (CFURLGetFileSystemRepresentation(url, true, (UInt8 *)applicationPath, sizeof(applicationPath))) {
+		if (CFURLGetFileSystemRepresentation(url, true, (UInt8 *) applicationPath, sizeof(applicationPath))) {
 			result = (string(applicationPath) + File::getPathSeparator());
 		}
 
@@ -66,19 +66,15 @@ string Path::getApplicationDirPath() {
 #elif defined(OS_LINUX)
 
 	char procname[128];
-	pid_t pid;
-	int ret;
-	char buff[1024];
-
-	memset(buff, 0, sizeof(buff));
 	memset(procname, 0, sizeof(procname));
-	pid = getpid();
-
+	pid_t pid = getpid();
 	if (snprintf(procname, sizeof(procname), "/proc/%i/exe", pid) < 0) {
 		return String::null;
 	}
 
-	ret = readlink(procname, buff, sizeof(buff));
+	char buff[MAX_PATH];
+	memset(buff, 0, sizeof(buff));
+	int ret = readlink(procname, buff, sizeof(buff));
 
 	if (ret == -1 || ret >= sizeof(buff)) {
 		return String::null;
@@ -158,7 +154,7 @@ std::string Path::getApplicationBundlePath() {
 
 	if (mainBundle) {
 		CFURLRef url = CFBundleCopyBundleURL(mainBundle);
-		char bundlePath[1024];
+		char bundlePath[MAX_PATH];
 
 		if (CFURLGetFileSystemRepresentation(url, true, (UInt8 *) bundlePath, sizeof(bundlePath))) {
 			result = (std::string(bundlePath) + File::getPathSeparator());
@@ -176,7 +172,7 @@ std::string Path::getApplicationPrivateFrameworksDirPath() {
 
 	if (mainBundle) {
 		CFURLRef url = CFBundleCopyPrivateFrameworksURL(mainBundle);
-		char frameworkPath[1024];
+		char frameworkPath[MAX_PATH];
 
 		if (CFURLGetFileSystemRepresentation(url, true, (UInt8 *) frameworkPath, sizeof(frameworkPath))) {
 			result = (std::string(frameworkPath) + File::getPathSeparator());
@@ -194,7 +190,7 @@ std::string Path::getApplicationResourcesDirPath() {
 
 	if (mainBundle) {
 		CFURLRef url = CFBundleCopyResourcesDirectoryURL(mainBundle);
-		char resPath[1024];
+		char resPath[MAX_PATH];
 
 		if (CFURLGetFileSystemRepresentation(url, true, (UInt8 *) resPath, sizeof(resPath))) {
 			result = (std::string(resPath) + File::getPathSeparator());

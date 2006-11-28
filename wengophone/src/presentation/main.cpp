@@ -109,10 +109,10 @@ int main(int argc, char * argv[]) {
 	LOG_DEBUG(String::EOL + getAddionnalInfo());
 
 #ifdef CC_MSVC
-	MemoryDump * memoryDump = new MemoryDump("WengoPhoneNG", WengoPhoneBuildId::getSvnRevision());
+	MemoryDump * memoryDump = new MemoryDump("WengoPhone", WengoPhoneBuildId::getSvnRevision());
 
-	memoryDump->setLanguage(config.getLanguage().c_str());
-	memoryDump->SetGetAdditionnalInfo(getAddionnalInfo);
+	memoryDump->setLanguage(config.getLanguage());
+	memoryDump->setGetAdditionnalInfo(getAddionnalInfo);
 #endif
 
 	//Graphical interface implementation

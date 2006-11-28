@@ -94,7 +94,7 @@ public:
 	OWUTIL_API void setYear(unsigned year);
 
 	/**
-	 * @return a string representing the date. (e.g: "dd/mm/yyyy")
+	 * @return a string representing the date. (e.g: "yyyy-mm-dd")
 	 */
 	OWUTIL_API std::string toString() const;
 
