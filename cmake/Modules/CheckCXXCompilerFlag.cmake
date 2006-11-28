@@ -1,16 +1,15 @@
-# - Check whether the compiler supports a given flag.
-# CHECK_CXX_COMPILER_FLAG(FLAG VARIABLE)
+# - CHECK_CXX_COMPILER_FLAG(flag result)
+# Check whether the compiler supports a given flag
 #
-#  FLAG - the compiler flag
-#  VARIABLE - variable to store the result
-#
+# Redistribution and use is allowed according to the terms of the BSD license.
+# For details see the accompanying COPYING file.
 
-INCLUDE(CheckCXXSourceCompiles)
 
-MACRO (CHECK_CXX_COMPILER_FLAG _FLAG _RESULT)
-	SET(SAFE_CMAKE_REQUIRED_DEFINITIONS "${CMAKE_REQUIRED_DEFINITIONS}")
-	SET(CMAKE_REQUIRED_DEFINITIONS "${_FLAG}")
-	CHECK_CXX_SOURCE_COMPILES("int main() { return 0;}" ${_RESULT})
-	SET (CMAKE_REQUIRED_DEFINITIONS "${SAFE_CMAKE_REQUIRED_DEFINITIONS}")
-ENDMACRO (CHECK_CXX_COMPILER_FLAG)
+include(CheckCXXSourceCompiles)
 
+macro (CHECK_CXX_COMPILER_FLAG flag result)
+	set(SAFE_CMAKE_REQUIRED_DEFINITIONS "${CMAKE_REQUIRED_DEFINITIONS}")
+	set(CMAKE_REQUIRED_DEFINITIONS "${flag}")
+	CHECK_CXX_SOURCE_COMPILES("int main(){return 0;}" ${result})
+	set(CMAKE_REQUIRED_DEFINITIONS "${SAFE_CMAKE_REQUIRED_DEFINITIONS}")
+endmacro (CHECK_CXX_COMPILER_FLAG)

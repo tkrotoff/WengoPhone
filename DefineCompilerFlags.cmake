@@ -27,7 +27,5 @@ if (CMAKE_BUILD_TYPE MATCHES Debug)
 	endif (MSVC)
 
 	# Defines DEBUG when in debug mode
-	add_definitions(
-		-DDEBUG
-	)
+	add_definitions(-DDEBUG)
 endif (CMAKE_BUILD_TYPE MATCHES Debug)

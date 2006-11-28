@@ -16,11 +16,11 @@ set(CMAKE_INSTALL_PREFIX
 	${CMAKE_SOURCE_DIR}/build
 )
 
-# Add definitions
-include(DefineWengoDefaults)
-include(DefineCompilerFlags)
-include(DefineWengoOptions)
-include(DefineInstallationPaths)
+# Add definitions/options/default values...
+include(DefineWengoDefaults.cmake)
+include(DefineCompilerFlags.cmake)
+include(DefineWengoOptions.cmake)
+include(DefineInstallationPaths.cmake)
 
 # Add macros
 include(MacroEnsureOutOfSourceBuild)

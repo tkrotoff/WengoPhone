@@ -9,6 +9,7 @@
 
 
 macro (OW_GET_SUBVERSION_REVISION revision)
+
 	find_program(SVN_EXECUTEABLE
 		NAMES
 			svn
@@ -35,19 +36,11 @@ macro (OW_GET_SUBVERSION_REVISION revision)
 		)
 
 		if (SVN_REVISION_RESULT_VARIABLE EQUAL 0)
-			set(SVN_REVISION
-				${SVN_REVISION_OUTPUT_VARIABLE}
-			)
+			set(${revision} ${SVN_REVISION_OUTPUT_VARIABLE})
 		else (SVN_REVISION_RESULT_VARIABLE EQUAL 0)
-			set(SVN_REVISION
-				0
-			)
+			set(${revision} 0)
 		endif (SVN_REVISION_RESULT_VARIABLE EQUAL 0)
-		message(STATUS "svn revision: " ${SVN_REVISION})
+		message(STATUS "svn revision: " ${${revision}})
 	endif (SVN_EXECUTEABLE AND SVN_DOT_DIR)
 
-	set(${revision}
-		${SVN_REVISION}
-		CACHE INTERNAL "svn revision"
-	)
 endmacro (OW_GET_SUBVERSION_REVISION revision)
