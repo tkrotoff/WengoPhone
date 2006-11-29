@@ -1061,11 +1061,15 @@ eXosip_report_call_event_with_status(int evt, eXosip_call_t *jc, eXosip_dialog_t
 	je = eXosip_event_init_for_call(evt, jc, jd);
 
 	// <ncouturier>
-	if(jd != NULL && jd->d_200Ok != NULL && jd->d_200Ok->bodies != NULL){
-		if(!osip_list_eol(jd->d_200Ok->bodies, 0)){
-			body = (osip_body_t *)osip_list_get(jd->d_200Ok->bodies, 0);
+	//if(jd != null && jd->d_200ok != null && jd->d_200ok->bodies != null){
+	//	if(!osip_list_eol(jd->d_200ok->bodies, 0)){
+	//		body = (osip_body_t *)osip_list_get(jd->d_200ok->bodies, 0);
+	if (sip->status_code == 200) {
+		if (!osip_list_eol(sip->bodies, 0)) {
+			body = (osip_body_t *)osip_list_get(sip->bodies, 0);
 
-			if (je->msg_body) osip_free(je->msg_body);
+			if (je->msg_body) 
+				osip_free(je->msg_body);
 
 			je->msg_body = osip_strdup(body->body);
 			if (!je->msg_body){
@@ -1328,7 +1332,7 @@ static void cb_rcv2xx_4invite(osip_transaction_t *tr,osip_message_t *sip)
 
   jd->d_STATE = JD_ESTABLISHED;
 
-  eXosip_dialog_set_200ok(jd, sip);
+  //eXosip_dialog_set_200ok(jd, sip);
   check_for_answer_with_sdp(jc, sip);
 
 
