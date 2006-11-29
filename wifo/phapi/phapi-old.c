@@ -4418,6 +4418,7 @@ void ph_message_progress(eXosip_event_t *je)
 			}
 			owplFireMessageEvent(MESSAGE_NEW,
 				MESSAGE_NEW_NORMAL,
+				je->mid,
 				je->msg_body,
 				je->local_uri,
 				je->remote_uri,
@@ -4435,6 +4436,7 @@ void ph_message_progress(eXosip_event_t *je)
 			}
 			owplFireMessageEvent(MESSAGE_SUCCESS,
 				MESSAGE_SUCCESS_NORMAL,
+				je->mid,
 				je->msg_body,
 				je->local_uri,
 				je->remote_uri,
@@ -4452,6 +4454,7 @@ void ph_message_progress(eXosip_event_t *je)
 			}
 			owplFireMessageEvent(MESSAGE_FAILURE,
 				MESSAGE_FAILURE_UNKNOWN,
+				je->mid,
 				je->msg_body,
 				je->local_uri,
 				je->remote_uri,
@@ -4487,6 +4490,7 @@ void ph_message_progress(eXosip_event_t *je)
 				if(strcmp(je->i_ctt->subtype, "typing") == 0) {
 					owplFireMessageEvent(MESSAGE_NEW,
 						MESSAGE_NEW_TYPING,
+						je->mid,
 						je->msg_body,
 						je->local_uri,
 						je->remote_uri,
@@ -4495,6 +4499,7 @@ void ph_message_progress(eXosip_event_t *je)
 				} else if(strcmp(je->i_ctt->subtype, "stoptyping") == 0) {
 					owplFireMessageEvent(MESSAGE_NEW,
 						MESSAGE_NEW_STOP_TYPING,
+						je->mid,
 						je->msg_body,
 						je->local_uri,
 						je->remote_uri,
@@ -4503,6 +4508,7 @@ void ph_message_progress(eXosip_event_t *je)
 				} else {
 					owplFireMessageEvent(MESSAGE_NEW,
 						MESSAGE_NEW_NOT_TYPING,
+						je->mid,
 						je->msg_body,
 						je->local_uri,
 						je->remote_uri,
@@ -4512,6 +4518,7 @@ void ph_message_progress(eXosip_event_t *je)
 			} else if(je->i_ctt != NULL && strcmp(je->i_ctt->type, "buddyicon") == 0) {
 				owplFireMessageEvent(MESSAGE_NEW,
 					MESSAGE_NEW_BUDDY_ICON,
+					je->mid,
 					je->msg_body,
 					je->local_uri,
 					je->remote_uri,
@@ -4520,6 +4527,7 @@ void ph_message_progress(eXosip_event_t *je)
 			} else {
 				owplFireMessageEvent(MESSAGE_NEW,
 					MESSAGE_NEW_NORMAL,
+					je->mid,
 					je->msg_body,
 					je->local_uri,
 					je->remote_uri,
@@ -4540,6 +4548,7 @@ void ph_message_progress(eXosip_event_t *je)
 			owplFireMessageEvent(MESSAGE_SUCCESS,
 				MESSAGE_SUCCESS_NORMAL,
 				NULL,
+				je->mid,
 				je->local_uri,
 				je->remote_uri,
 				(je->i_ctt != NULL) ? je->i_ctt->type : NULL,
@@ -4558,6 +4567,7 @@ void ph_message_progress(eXosip_event_t *je)
 			owplFireMessageEvent(MESSAGE_FAILURE,
 				MESSAGE_FAILURE_COULD_NOT_SEND,
 				NULL,
+				je->mid,
 				je->local_uri,
 				je->remote_uri,
 				(je->i_ctt != NULL) ? je->i_ctt->type : NULL,

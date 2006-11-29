@@ -455,11 +455,12 @@ typedef struct {
                                          Identifies the subsciption event. */
 	OWPL_MESSAGE_CAUSE cause;		/**< Subscription cause enum code.
                                          Identifies the subsciption event. */
-	const char * szContent;
+	int messageId;					/**< The message identifier */
+	const char * szContent;			/**< The content of the message */
 	const char * szLocalIdentity;	/**< The identity of the local party of this message. */
 	const char * szRemoteIdentity;	/**< The identity of the remote party of this message. */
-	const char * szContentType;
-	const char * szSubContentType;
+	const char * szContentType;		/**< The content type of the message (first part of the MIME type) */
+	const char * szSubContentType;	/**< The sub content type of the message (second part of the MIME type) */
 } OWPL_MESSAGE_INFO;
 
 /**
@@ -591,6 +592,7 @@ owplFireNotificationEvent(OWPL_NOTIFICATION_EVENT event,
 OWPL_RESULT
 owplFireMessageEvent(OWPL_MESSAGE_EVENT event,
 					 OWPL_MESSAGE_CAUSE cause,
+					 const int messageId,
 					 const char * szContent,
 					 const char * szLocalIdentity,
 					 const char * szRemoteIdentity,

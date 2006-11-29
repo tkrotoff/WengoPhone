@@ -226,6 +226,7 @@ owplFireNotificationEvent(OWPL_NOTIFICATION_EVENT event,
 OWPL_RESULT
 owplFireMessageEvent(OWPL_MESSAGE_EVENT event,
 					 OWPL_MESSAGE_CAUSE cause,
+					 const int messageId,
 					 const char * szContent,
 					 const char * szLocalIdentity,
 					 const char * szRemoteIdentity,
@@ -237,6 +238,7 @@ owplFireMessageEvent(OWPL_MESSAGE_EVENT event,
 	mInfo.nSize = sizeof(OWPL_MESSAGE_INFO);
 	mInfo.event = event;
 	mInfo.cause = cause;
+	mInfo.messageId = messageId;
 	mInfo.szContent = szContent;
 	mInfo.szLocalIdentity = szLocalIdentity;
 	mInfo.szRemoteIdentity = szRemoteIdentity;
