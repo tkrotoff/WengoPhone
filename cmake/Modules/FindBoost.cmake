@@ -68,11 +68,6 @@ else (BOOST_LIBRARIES AND BOOST_INCLUDE_DIRS)
     if (CYGWIN)
       set(BOOST_LIB_SUFFIX -gcc-mt)
     endif (CYGWIN)
-  else (WIN32)
-    if (UNIX AND NOT APPLE)
-      set(BOOST_LIB_SUFFIX -gcc-mt)
-    endif (UNIX AND NOT APPLE)
-  endif (WIN32)
 
   find_path(BOOST_INCLUDE_DIR
     NAMES
@@ -97,6 +92,24 @@ else (BOOST_LIBRARIES AND BOOST_INCLUDE_DIRS)
       /opt/local/lib
       /sw/lib
   )
+  if (NOT BOOST_DATE_TIME_LIBRARY)
+    # Bugfix: sometimes under Linux Boost libs contain '-gcc-mt'
+    # so let's try with '-gcc-mt'
+    if (UNIX AND NOT APPLE)
+      set(BOOST_LIB_SUFFIX -gcc-mt)
+      find_library(BOOST_DATE_TIME_LIBRARY
+        NAMES
+          boost_date_time${BOOST_LIB_SUFFIX}
+        PATHS
+          ${BOOST_SEARCH_DIRS}
+          /usr/lib
+          /usr/local/lib
+          /opt/local/lib
+          /sw/lib
+      )
+    endif (UNIX AND NOT APPLE)
+  endif (NOT BOOST_DATE_TIME_LIBRARY)
+
   find_library(BOOST_FILESYSTEM_LIBRARY
     NAMES
       boost_filesystem${BOOST_LIB_SUFFIX}
