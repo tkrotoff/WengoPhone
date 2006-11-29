@@ -16,7 +16,6 @@ Delete "$INSTDIR\webpages\*"
 
 SetOutPath "$INSTDIR"
 File "${BUILD_DIR}\qtwengophone.exe"
-File "${BUILD_DIR}\webcam.dll"
 CreateDirectory "$SMPROGRAMS\${PRODUCT_NAME}"
 CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\${PRODUCT_NAME}.lnk" "$INSTDIR\qtwengophone.exe"
 CreateShortCut "$DESKTOP\${PRODUCT_NAME}.lnk" "$INSTDIR\qtwengophone.exe"
