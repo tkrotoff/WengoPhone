@@ -1,3 +1,5 @@
+if (PHAPI_SAMPLERATE_SUPPORT)
+
 ow_create_static_library(samplerate)
 
 ow_add_public_include_dirs(
@@ -12,3 +14,5 @@ ow_add_sources(
 )
 
 ow_create_binary()
+
+endif (PHAPI_SAMPLERATE_SUPPORT)

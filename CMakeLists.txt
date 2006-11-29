@@ -37,14 +37,6 @@ ow_get_subversion_revision(SVN_REVISION)
 # this does not work under Windows for the installer name, replace it by #
 string(REPLACE ":" "#" SVN_REVISION ${SVN_REVISION})
 
-if (UNIX)
-	if (NOT APPLE)
-		subdirs(
-			libs/3rdparty/samplerate
-		)
-	endif (NOT APPLE)
-endif (UNIX)
-
 subdirs(
 	libs/3rdparty/boost
 	libs/3rdparty/qt4
@@ -60,7 +52,7 @@ subdirs(
 	libs/3rdparty/gaim
 	libs/3rdparty/uuid
 	libs/3rdparty/x11
-	#libs/3rdparty/samplerate
+	libs/3rdparty/samplerate
 
 	libs/owcurl
 	libs/util

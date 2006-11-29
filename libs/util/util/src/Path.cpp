@@ -32,6 +32,8 @@
 	#include <unistd.h>
 #endif
 
+static const int MAX_PATH = 256;
+
 using namespace std;
 
 string Path::getApplicationDirPath() {
