@@ -22,9 +22,11 @@ include_path = [
 link_flags = []
 
 if WengoOSMacOSX():
-	link_flags += [
-		'-framework CoreFoundation',
+	frameworks = [
+		'CoreFoundation',
 	]
+
+	env.WengoAddFrameworks(frameworks)
 
 if WengoGetConsoleArgument('enable-video'):
 	defines['ENABLE_VIDEO'] = 1

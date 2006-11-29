@@ -412,13 +412,15 @@ if WengoOSMacOSX():
 		'macosx/QtMacApplication.cpp',
 	]
 
-	link_flags += [
-		'-framework CoreAudio',
-		'-framework AudioToolbox',
-		'-framework AudioUnit',
-		'-framework Cocoa',
-		'-framework Carbon',
+	frameworks = [
+		'CoreAudio',
+		'AudioToolbox',
+		'AudioUnit',
+		'Cocoa',
+		'Carbon',
 	]
+	
+	env.WengoAddFrameworks(frameworks)
 
 	env.WengoDeclareMacOSXAppTemplate('./macosx/template.app')
 

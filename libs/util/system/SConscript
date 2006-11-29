@@ -27,7 +27,11 @@ elif WengoOSMacOSX():
 
 	cc_flags += ['-x objective-c++']
 
-	link_flags += ['-framework Cocoa']
+	frameworks = [
+		'Cocoa'
+	]
+	
+	env.WengoAddFrameworks(frameworks)
 
 elif WengoOSPosix():
 	sources += [

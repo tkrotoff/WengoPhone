@@ -48,10 +48,12 @@ elif WengoOSMacOSX():
 		'src/mac/Sound.cpp',
 	]
 
-	link_flags += [
-		'-framework CoreAudio',
-		'-framework Cocoa',
+	frameworks = [
+		'CoreAudio',
+		'Cocoa',
 	]
+	
+	env.WengoAddFrameworks(frameworks)
 
 	cc_flags += ['-x objective-c++']
 

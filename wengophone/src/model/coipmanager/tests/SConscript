@@ -13,13 +13,15 @@ sources = [
 link_flags = []
 
 if WengoOSMacOSX():
-	link_flags += [
-		'-framework AudioToolbox',
-		'-framework AudioUnit',
-		'-framework Cocoa',
-		'-framework CoreAudio',
-		'-framework Quicktime',
+	frameworks = [
+		'AudioToolbox',
+		'AudioUnit',
+		'Cocoa',
+		'CoreAudio',
+		'Quicktime',
 	]
+	
+	env.WengoAddFrameworks(frameworks);
 
 env.WengoUseLibraries(libs)
 env.WengoAddLinkFlags(link_flags)

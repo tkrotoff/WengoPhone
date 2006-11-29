@@ -38,9 +38,11 @@ if WengoOSWindows():
 	]
 
 elif WengoOSMacOSX():
-	link_flags += [
-		'-framework CoreFoundation',
+	frameworks = [
+		'CoreFoundation',
 	]
+
+	env.WengoAddFrameworks(frameworks)
 
 	sources += [
 		'src/mac/UuidMac.cpp',

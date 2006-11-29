@@ -17,7 +17,12 @@ sources = [
 link_flags = []
 
 if WengoOSMacOSX():
-	link_flags += ['-framework Quicktime']
+	frameworks = [
+		'Quicktime'
+	]
+	
+	env.WengoAddFrameworks(frameworks)
+	
 	headers += ['QuicktimeWebcamDriverTest.h']
 elif WengoOSLinux():
 	headers += ['V4LWebcamDriverTest.h']

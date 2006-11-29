@@ -17,7 +17,13 @@ defines = {
 }
 link_flags = []
 if WengoOSMacOSX():
-	link_flags += ['-framework CoreAudio', '-framework AudioUnit', '-framework AudioToolbox']
+	frameworks = [
+		'CoreAudio',
+		'AudioUnit',
+		'AudioToolbox'
+	]
+	
+	env.WengoAddFrameworks(frameworks)
 headers = []
 sources = [
 	'src/Command.cpp',

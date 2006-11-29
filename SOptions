@@ -23,6 +23,8 @@ args = {
 	'portaudio-alsa' : 1,
 	'enable-xv-hwaccel' : 0,
 
+	'enable-libsound-portaudio' : 1,
+
 	#if 0 wmme support
 	'portaudio-dsound' : 0,
 
@@ -41,8 +43,10 @@ args = {
 	'enable-webcam-dll' : 1,
 }
 
-if not WengoOSMacOSX():
-	args['enable-libsound-portaudio'] = 1
+if WengoOSMacOSX():
+	args['enable-libsound-portaudio'] = 0
+	args['enable-webcam-dll'] = 0
+	args['enable-shared-phapi'] = 0
 
 if WengoOSLinux() or WengoOSBSD():
 	args['enable-samplerate'] = 1

@@ -18,13 +18,15 @@ cc_flags = [
 ]
 
 if WengoOSMacOSX():
-   lib_flags = [
-	'-framework CoreAudio',
-	'-framework AudioToolbox',
-	'-framework AudioUnit',
-	'-framework Cocoa',
-	'-framework Quicktime',
-   ]	
+	frameworks = [
+		'CoreAudio',
+		'AudioToolbox',
+		'AudioUnit',
+		'Cocoa',
+		'Quicktime',
+	]
+
+	env.WengoAddFrameworks(frameworks)
 
 if WengoOSLinux():
    libs += ["z", "owcurl", "portaudio"]

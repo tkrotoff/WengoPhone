@@ -1346,6 +1346,41 @@ class WengoSConsEnvironment(SConsEnvironment):
 
 		self.IncludePath.addIncludePath(self, paths)
 
+	def __findFramework(self, fwk):
+		"""
+		Look for framework 'fwk' in common directories
+		and return the path to this framework
+		
+		@type fwk string
+		@param fwk the framework to find
+		"""
+		dir_list = [
+			'~/Library/Frameworks',
+			'/Library/Frameworks',
+			'/System/Library/Frameworks'
+		]
+		
+		for dir in dir_list:
+			path = os.path.join(dir, fwk + '.framework')
+			if (os.path.exists(path)):
+				return path
+		
+		return ''
+
+	def WengoAddFrameworks(self, frameworks):
+		"""
+		Adds Frameworks to the build process.
+		
+		@type frameworks stringlist
+		@param frameworks list of Frameworks to add
+		"""
+
+		for fwk in frameworks:
+			path = self.__findFramework(fwk)
+			if (len(path) > 0):
+				#self.WengoAddIncludePath([os.path.join(path, 'Headers')])
+				self.WengoAddLinkFlags(['-framework ' + fwk])
+
 	def __declareLibrary(self, projectName):
 		"""
 		Declares an internal library and add it to the dictionnary of libraries.
@@ -1875,6 +1910,14 @@ def WengoAddIncludePath(paths):
 
 	env = getGlobalEnvironment()
 	env.WengoAddIncludePath(paths)
+
+def WengoAddFrameworks(frameworks):
+	"""
+	@see WengoSConsEnvironment.WengoAddFrameworks()
+	"""
+
+	env = getGlobalEnvironment()
+	env.WengoAddFrameworks(frameworks)
 
 def WengoPrependLibPath(paths):
 	"""

@@ -5,12 +5,14 @@ includes = [
 ]
 env.WengoAddIncludePath(includes)
 
+configure_cmd = './configure --extra-cflags=-fno-common --extra-ldflags=-fno-common --disable-vhook'
+
 if WengoArchX86() and WengoOSMacOSX():
 	env.WengoAutoconf('avutil', ['libavutil/libavutil.a'],
-		'./configure --disable-mmx --enable-memalign-hack', 'cd	libavutil && make',
+		configure_cmd + '--disable-mmx --enable-memalign-hack', 'cd libavutil && make',
 		['configure'], ['config.mak'])
 else:
 	env.WengoAutoconf('avutil', ['libavutil/libavutil.a'],
-		'./configure', 'cd 	libavutil && make',
+		configure_cmd, 'cd libavutil && make',
 		['configure'], ['config.mak'])
 

@@ -1,6 +1,7 @@
 env = WengoGetEnvironment()
 
 defines = {}
+
 libs = [
 	'owthread',
 	'owutil',
@@ -35,10 +36,12 @@ if WengoCCMSVC():
 		'include/DirectXWebcamDriver.h',
 		'include/DirectXWebcamUtils.h'
 	]
+
 	sources += [
 		'src/directx/DirectXWebcamDriver.cpp',
 		'src/directx/DirectXWebcamUtils.cpp'
 	]
+
 	libs += ["winmm", "strmiids", "comsupp"]
 
 if WengoOSLinux():
@@ -46,6 +49,7 @@ if WengoOSLinux():
 		'include/V4LWebcamDriverFactory.h',
 		'src/v4l/V4LWebcamDriver.h'
 	]
+
 	sources += [
 		'src/v4l/V4LWebcamDriver.cpp'
 	]
@@ -55,15 +59,16 @@ if WengoOSMacOSX():
 		'include/QuicktimeWebcamDriverFactory.h',
 		'src/quicktime/QuicktimeWebcamDriver.h'
 	]
+
 	sources += [
 		'src/quicktime/QuicktimeWebcamDriver.cpp'
-	]
-	include_path += [
-		'/System/Library/Frameworks/Quicktime.framework/Headers'
 	]
 
 env.WengoAddIncludePath(include_path)
 env.WengoUseLibraries(libs)
+env.WengoAddDefines(defines)
+
+
 if WengoGetConsoleArgument('enable-webcam-dll'):
 	defines['WEBCAM_DLL'] = '1'
 	defines['WEBCAM_BUILDING_DLL'] = '1'
