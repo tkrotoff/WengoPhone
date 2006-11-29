@@ -40,6 +40,11 @@
 #include <windows.h>
 #include <shlwapi.h>
 
+#define MAX_URI_LENGTH	512
+#define MAX_IP_LENGTH	64
+#define MAX_PASSWORD_LENTGH	64
+#define MAX_USERNAME_LENGTH	64
+
 static void (*userNotify)(char *buf, int size);
 LONG unhandledExceptionFilter(struct _EXCEPTION_POINTERS * pExceptionInfo) {
     userNotify(NULL, NULL);
@@ -99,6 +104,10 @@ static PyObject * pyphapi(PyObject* self) {
 
     return Py_BuildValue("s","");
 }
+
+/*****************************************************************************
+ *                                   OLD API                                 *
+ *****************************************************************************/
 
 /**
  * @brief Wraps phInit()
@@ -446,9 +455,9 @@ static PyObject * PyPhCloseCall(PyObject *self, PyObject *params) {
 }
 
 /**
- * @brief Wraps phSendMessage()
+ * @brief Wraps phSendMessage() => replaced by PyPhLineSendMessage
  */
-static PyObject * PyPhSendMessage(PyObject *self, PyObject *params) {
+/*static PyObject * PyPhSendMessage(PyObject *self, PyObject *params) {
     const char *from;
     const char *uri;
     const char *buff;
@@ -459,12 +468,12 @@ static PyObject * PyPhSendMessage(PyObject *self, PyObject *params) {
     }
 
     return Py_BuildValue("i", ret);
-}
+}*/
 
 /**
- * @brief Wraps phSubscribe()
+ * @brief Wraps phSubscribe() => replaced by PyPhLineSubscribe
  */
-static PyObject * PyPhSubscribe(PyObject *self, PyObject *params) {
+/*static PyObject * PyPhSubscribe(PyObject *self, PyObject *params) {
     const char *from;
     const char *to;
     const int winfo;
@@ -475,12 +484,12 @@ static PyObject * PyPhSubscribe(PyObject *self, PyObject *params) {
     }
 
     return Py_BuildValue("i", ret);
-}
+}*/
 
 /**
- * @brief Wraps phPublish()
+ * @brief Wraps phPublish() => replaced by PyPhLinePublish
  */
-static PyObject * PyPhPublish(PyObject *self, PyObject *params) {
+/*static PyObject * PyPhPublish(PyObject *self, PyObject *params) {
     const char *from;
     const char *to;
     const char *content_type;
@@ -494,7 +503,7 @@ static PyObject * PyPhPublish(PyObject *self, PyObject *params) {
     }
 
     return Py_BuildValue("i", ret);
-}
+}*/
 
 /**
  * @brief Wraps phDelVline
@@ -863,6 +872,1578 @@ static void pyphapi_callback_frameDisplay(int cid, phVideoFrameReceivedEvent_t *
   pyphapi_lock_and_call(pyphapi_frameDisplay, frameReceivedEvent);
 }
 
+/*****************************************************************************
+ *                                   NEW API                                 *
+ *****************************************************************************/
+
+static PyObject *pyowpl_callProgress = NULL;
+static PyObject *pyowpl_registerProgress =  NULL;
+static PyObject *pyowpl_messageProgress =  NULL;
+static PyObject *pyowpl_subscriptionProgress =  NULL;
+static PyObject *pyowpl_onNotify = NULL;
+static PyObject *pyowpl_errorNotify = NULL;
+
+static int phApiEventsHandler(OWPL_EVENT_CATEGORY category, void* pInfo, void* pUserData);
+
+static void pyowpl_callback_callProgress(OWPL_CALLSTATE_INFO * info);
+static void pyowpl_callback_registerProgress(OWPL_LINESTATE_INFO * info);
+static void pyowpl_callback_messageProgress(OWPL_MESSAGE_INFO * info);
+static void pyowpl_callback_subscriptionProgress(OWPL_SUBSTATUS_INFO * info);
+static void pyowpl_callback_onNotify(OWPL_NOTIFICATION_INFO * info);
+static void pyowpl_callback_errorNotify(OWPL_ERROR_INFO * info);
+
+
+static int phApiEventsHandler(OWPL_EVENT_CATEGORY category, void* pInfo, void* pUserData) {
+	switch(category) {
+		case EVENT_CATEGORY_CALLSTATE :
+			pyowpl_callback_callProgress((OWPL_CALLSTATE_INFO *)pInfo);
+			break;
+
+		case EVENT_CATEGORY_LINESTATE : 
+			pyowpl_callback_registerProgress((OWPL_LINESTATE_INFO *)pInfo);
+			break;
+
+		case EVENT_CATEGORY_MESSAGE : 
+			pyowpl_callback_messageProgress((OWPL_MESSAGE_INFO *)pInfo);
+			break;
+
+		case EVENT_CATEGORY_SUB_STATUS : 
+			pyowpl_callback_subscriptionProgress((OWPL_SUBSTATUS_INFO *)pInfo);
+			break;
+
+		case EVENT_CATEGORY_NOTIFY : 
+			pyowpl_callback_onNotify((OWPL_NOTIFICATION_INFO *)pInfo);
+			break;
+
+		case EVENT_CATEGORY_ERROR :
+			pyowpl_callback_errorNotify((OWPL_ERROR_INFO *)pInfo);
+			break;
+
+		default :
+			break;
+	}
+	return 0;
+}
+
+static void pyowpl_callback_callProgress(OWPL_CALLSTATE_INFO * info) {
+	PyObject * cInfo;
+
+	cInfo = Py_BuildValue("(iiiis)",
+		info->event,
+		info->cause,
+		info->hLine,
+		info->hCall,
+		info->szRemoteIdentity);
+    pyphapi_lock_and_call(pyowpl_callProgress, cInfo);
+}
+
+static void pyowpl_callback_registerProgress(OWPL_LINESTATE_INFO * info) {
+	PyObject *reg_info;
+
+    reg_info = Py_BuildValue("(iii)",
+		info->event,
+		info->cause,
+		info->hLine);
+    pyphapi_lock_and_call(pyphapi_registerProgress, reg_info);
+}
+
+static void pyowpl_callback_messageProgress(OWPL_MESSAGE_INFO * info) {
+	PyObject * mInfo;
+
+    mInfo = Py_BuildValue("(iiisssss)",
+                    info->event,
+					info->cause,
+					info->messageId,
+					info->szContentType,
+					info->szSubContentType,
+					info->szLocalIdentity,
+					info->szRemoteIdentity,
+					info->szContent);
+
+    pyphapi_lock_and_call(pyowpl_messageProgress, mInfo);
+}
+
+static void pyowpl_callback_subscriptionProgress(OWPL_SUBSTATUS_INFO * info) {
+	PyObject *sInfo;
+
+    sInfo = Py_BuildValue("(iiis)",
+		info->state,
+		info->cause,
+		info->hSub,
+		info->szRemoteIdentity);
+    pyphapi_lock_and_call(pyphapi_subscriptionProgress, sInfo);
+}
+
+static void pyowpl_callback_onNotify(OWPL_NOTIFICATION_INFO * info) {
+	PyObject * nInfo;
+
+	nInfo = Py_BuildValue("(sss)",
+		info->event,
+		info->szRemoteIdentity,
+		info->szXmlContent);
+    pyphapi_lock_and_call(pyowpl_onNotify, nInfo);
+}
+
+static void pyowpl_callback_errorNotify(OWPL_ERROR_INFO * info) {
+	PyObject * eInfo;
+
+	eInfo = Py_BuildValue("(i)",
+		info->event);
+    pyphapi_lock_and_call(pyowpl_errorNotify, eInfo);
+}
+
+static PyObject * PyOwplEventListenerAdd(PyObject * self, PyObject * params) {
+    PyObject * callback_callProgress;
+    PyObject * callback_registerProgress;
+    PyObject * callback_messageProgress;
+    PyObject * callback_subscriptionProgress;
+    PyObject * callback_onNotify;
+    PyObject * callback_errorNotify;
+
+	int pycode;
+
+	pycode = PyArg_ParseTuple(params, "OOOOOO",
+		&callback_callProgress,
+		&callback_registerProgress,
+		&callback_messageProgress,
+		&callback_subscriptionProgress,
+		&callback_onNotify,
+		&callback_errorNotify);
+
+	if(!pycode) {
+		return Py_None;
+	}
+
+	if (!PyCallable_Check(callback_callProgress)) {
+		PyErr_SetString(PyExc_TypeError, "parameter must be callable");
+		return Py_None;
+	}
+
+	if (!PyCallable_Check(callback_registerProgress)) {
+		PyErr_SetString(PyExc_TypeError, "parameter must be callable");
+		return Py_None;
+	}
+
+	if (!PyCallable_Check(callback_messageProgress)) {
+		PyErr_SetString(PyExc_TypeError, "parameter must be callable");
+		return Py_None;
+	}
+
+	if (!PyCallable_Check(callback_subscriptionProgress)) {
+		PyErr_SetString(PyExc_TypeError, "parameter must be callable");
+		return Py_None;
+	}
+
+	if (!PyCallable_Check(callback_onNotify)) {
+		PyErr_SetString(PyExc_TypeError, "parameter must be callable");
+		return Py_None;
+	}
+
+	if (!PyCallable_Check(callback_errorNotify)) {
+		PyErr_SetString(PyExc_TypeError, "parameter must be callable");
+		return Py_None;
+	}
+
+	Py_XINCREF(callback_callProgress);
+	Py_XDECREF(pyowpl_callProgress);
+
+	Py_XINCREF(callback_registerProgress);
+	Py_XDECREF(pyowpl_registerProgress);
+
+	Py_XINCREF(callback_messageProgress);
+	Py_XDECREF(pyowpl_messageProgress);
+
+	Py_XINCREF(callback_subscriptionProgress);
+	Py_XDECREF(pyowpl_subscriptionProgress);
+
+	Py_XINCREF(callback_onNotify);
+	Py_XDECREF(pyowpl_onNotify);
+
+	Py_XINCREF(callback_errorNotify);
+	Py_XDECREF(pyowpl_errorNotify);
+
+	Py_INCREF(Py_None);
+
+	pyowpl_callProgress = callback_callProgress;
+	pyowpl_registerProgress = callback_registerProgress;
+	pyowpl_messageProgress = callback_messageProgress;
+	pyowpl_subscriptionProgress = callback_subscriptionProgress;
+	pyowpl_onNotify = callback_onNotify;
+	pyowpl_errorNotify = callback_errorNotify;
+
+	owplEventListenerAdd(phApiEventsHandler, NULL);
+
+	return Py_None;
+}
+
+/**
+ * @brief Wraps owplInit()
+ */
+static PyObject * PyOwplInit(PyObject * self, PyObject * params) {
+	const int udpPort;
+	const int tcpPort;
+	const int tlsPort;
+	const char* szBindToAddr;
+	const int bUserSequentialPorts;
+
+    int pycode, ret;
+
+    pycode = PyArg_ParseTuple(params,
+		"iiisi",
+		&udpPort,
+		&tcpPort,
+		&tlsPort,
+		&szBindToAddr,
+		&bUserSequentialPorts);
+
+	if(!pycode) {
+		return Py_None;
+    }
+
+	ret = owplInit(udpPort,
+		tcpPort,
+		tlsPort,
+		szBindToAddr,
+		bUserSequentialPorts);
+    return Py_BuildValue("i", ret);
+}
+/**
+ * @brief Wraps owplConfigSetLocalHttpProxy()
+ */
+static PyObject * PyOwplConfigSetLocalHttpProxy(PyObject *self, PyObject *params) {
+	const char* szLocalProxyAddr;
+	const int LocalProxyPort;
+	const char* szLocalProxyUserName;
+	const char* szLocalProxyPasswd;
+
+    int pycode, ret;
+
+    pycode = PyArg_ParseTuple(params,
+		"siss",
+		&szLocalProxyAddr,
+		&LocalProxyPort,
+		&szLocalProxyUserName,
+		&szLocalProxyPasswd);
+
+    if (!pycode) {
+        return Py_None;
+    }
+
+    ret = owplConfigSetLocalHttpProxy(szLocalProxyAddr,
+		LocalProxyPort,
+		szLocalProxyUserName,
+		szLocalProxyPasswd);
+    return Py_BuildValue("i", ret);
+}
+
+/**
+ * @brief Wraps owplConfigSetTunnel
+ */
+static PyObject * PyOwplConfigSetTunnel(PyObject *self, PyObject *params) {
+	const char* szTunnelSeverAddr;
+	const int TunnelServerPort;
+	const int TunnelMode;
+
+    int pycode, ret;
+
+    pycode = PyArg_ParseTuple(params,
+		"sii",
+		&szTunnelSeverAddr,
+		&TunnelServerPort,
+		&TunnelMode);
+
+    if (!pycode) {
+        return Py_None;
+    }
+
+    ret = owplConfigSetTunnel(szTunnelSeverAddr,
+		TunnelServerPort,
+		TunnelMode);
+    return Py_BuildValue("i", ret);
+}
+
+/**
+ * @brief Wraps owplConfigSetNat
+ */
+static PyObject * PyOwplConfigSetNat(PyObject *self, PyObject *params) {
+	const OWPL_NAT_TYPE eNatType;
+	const int natRefreshTime;
+
+    int pycode, ret;
+
+    pycode = PyArg_ParseTuple(params,
+		"ii",
+		&eNatType,
+		&natRefreshTime);
+
+    if (!pycode) {
+        return Py_None;
+    }
+
+    ret = owplConfigSetNat(eNatType,
+		natRefreshTime);
+    return Py_BuildValue("i", ret);
+}
+
+/**
+ * @brief Wraps owplConfigSetOutboundProxy
+ */
+static PyObject * PyOwplConfigSetOutboundProxy(PyObject *self, PyObject *params) {
+	const char * szProxyAddr;
+
+    int pycode, ret;
+
+    pycode = PyArg_ParseTuple(params,
+		"s",
+		&szProxyAddr);
+
+    if (!pycode) {
+        return Py_None;
+    }
+
+    ret = owplConfigSetOutboundProxy(szProxyAddr);
+    return Py_BuildValue("i", ret);
+}
+
+/**
+ * @brief Wraps owplConfigAddAudioCodecByName
+ */
+static PyObject * PyOwplConfigAddAudioCodecByName(PyObject *self, PyObject *params) {
+	const char* szCodecName;
+
+    int pycode, ret;
+
+    pycode = PyArg_ParseTuple(params,
+		"s",
+		&szCodecName);
+
+    if (!pycode) {
+        return Py_None;
+    }
+
+    ret = owplConfigAddAudioCodecByName(szCodecName);
+    return Py_BuildValue("i", ret);
+}
+
+/**
+ * @brief Wraps owplConfigAddVideoCodecByName
+ */
+static PyObject * PyOwplConfigAddVideoCodecByName(PyObject *self, PyObject *params) {
+	const char* szCodecName;
+
+    int pycode, ret;
+
+    pycode = PyArg_ParseTuple(params,
+		"s",
+		&szCodecName);
+
+    if (!pycode) {
+        return Py_None;
+    }
+
+    ret = owplConfigAddVideoCodecByName(szCodecName);
+    return Py_BuildValue("i", ret);
+}
+
+/**
+ * @brief Wraps owplConfigSetAsynchronous
+ */
+static PyObject * PyOwplConfigSetAsynchronous(PyObject *self, PyObject *params) {
+	const unsigned int asyncronous;
+
+    int pycode, ret;
+
+    pycode = PyArg_ParseTuple(params,
+		"i",
+		&asyncronous);
+
+    if (!pycode) {
+        return Py_None;
+    }
+
+    ret = owplConfigSetAsynchronous(asyncronous);
+    return Py_BuildValue("i", ret);
+}
+
+/**
+ * @brief Wraps owplConfigGetBoundLocalAddr
+ */
+static PyObject * PyOwplConfigGetBoundLocalAddr(PyObject *self, PyObject *params) {
+	char szLocalAddr[MAX_URI_LENGTH]; // not to be passed by Python
+
+    int ret;
+
+    ret = owplConfigGetBoundLocalAddr(szLocalAddr,
+		sizeof(szLocalAddr));
+
+	if(ret == OWPL_RESULT_SUCCESS) {
+		return Py_BuildValue("s", szLocalAddr);
+	}
+
+    return Py_None;
+}
+
+/**
+ * @brief Wraps owplConfigLocalHttpProxyGetAddr
+ */
+static PyObject * PyOwplConfigLocalHttpProxyGetAddr(PyObject *self, PyObject *params) {
+	char szLocalProxyAddr[MAX_IP_LENGTH]; // not to be passed by Python
+
+    int ret;
+
+    ret = owplConfigGetBoundLocalAddr(szLocalProxyAddr,
+		sizeof(szLocalProxyAddr));
+
+	if(ret == OWPL_RESULT_SUCCESS) {
+		return Py_BuildValue("s", szLocalProxyAddr);
+	}
+
+    return Py_None;
+}
+
+/**
+ * @brief Wraps owplConfigLocalHttpProxyGetPasswd
+ */
+static PyObject * PyOwplConfigLocalHttpProxyGetPasswd(PyObject *self, PyObject *params) {
+	char szLocalProxyPasswd[MAX_PASSWORD_LENTGH]; // not to be passed by Python
+
+    int ret;
+
+    ret = owplConfigGetBoundLocalAddr(szLocalProxyPasswd,
+		sizeof(szLocalProxyPasswd));
+
+	if(ret == OWPL_RESULT_SUCCESS) {
+		return Py_BuildValue("s", szLocalProxyPasswd);
+	}
+
+    return Py_None;
+}
+
+/**
+ * @brief Wraps owplConfigLocalHttpProxyGetPort
+ */
+static PyObject * PyOwplConfigLocalHttpProxyGetPort(PyObject *self, PyObject *params) {
+	int LocalProxyPort; // not to be passed by Python
+
+    int pycode, ret;
+
+    pycode = PyArg_ParseTuple(params,
+		"i",
+		&LocalProxyPort);
+
+    if (!pycode) {
+        return Py_None;
+    }
+
+    ret = owplConfigLocalHttpProxyGetPort(&LocalProxyPort);
+
+	if(ret == OWPL_RESULT_SUCCESS) {
+		return Py_BuildValue("i", LocalProxyPort);
+	}
+
+    return Py_None;
+}
+
+/**
+ * @brief Wraps owplConfigLocalHttpProxyGetUserName
+ */
+static PyObject * PyOwplConfigLocalHttpProxyGetUserName(PyObject *self, PyObject *params) {
+	char szLocalProxyUserName[MAX_USERNAME_LENGTH]; // not to be passed by Python
+
+    int ret;
+
+    ret = owplConfigLocalHttpProxyGetUserName(szLocalProxyUserName,
+		sizeof(szLocalProxyUserName));
+
+	if(ret == OWPL_RESULT_SUCCESS) {
+		return Py_BuildValue("s", szLocalProxyUserName);
+	}
+
+    return Py_None;
+}
+
+/**
+ * @brief Wraps owplAudioSetConfigString
+ */
+static PyObject * PyOwplAudioSetConfigString(PyObject *self, PyObject *params) {
+	const char* szAudioConfig;
+
+    int pycode, ret;
+
+    pycode = PyArg_ParseTuple(params,
+		"s",
+		&szAudioConfig);
+
+    if (!pycode) {
+        return Py_None;
+    }
+
+    ret = owplAudioSetConfigString(szAudioConfig);
+    return Py_BuildValue("i", ret);
+}
+
+/**
+ * @brief Wraps owplLineAdd
+ */
+static PyObject * PyOwplLineAdd(PyObject *self, PyObject *params) {
+	const char* displayname;
+	const char* username;
+	const char *server;
+	const char*  proxy;
+	int regTimeout;
+	OWPL_LINE hLine; // not to be passed by Python
+
+    int pycode, ret;
+
+    pycode = PyArg_ParseTuple(params,
+		"ssssi",
+		&displayname,
+		&username,
+		&server,
+		&proxy,
+		&regTimeout);
+
+    if (!pycode) {
+        return Py_None;
+    }
+
+    ret = owplLineAdd(displayname,
+		username,
+		server,
+		proxy,
+		regTimeout,
+		&hLine);
+
+	if(ret == OWPL_RESULT_SUCCESS) {
+		return Py_BuildValue("i", hLine);
+	}
+
+    return Py_None;
+}
+
+/**
+ * @brief Wraps owplLineGetProxy
+ */
+static PyObject * PyOwplLineGetProxy(PyObject *self, PyObject *params) {
+	const OWPL_LINE hLine;
+	char szBuffer[MAX_IP_LENGTH]; // not to be passed by Python
+	int nBuffer; // not to be passed by Python
+
+    int pycode, ret;
+
+    pycode = PyArg_ParseTuple(params,
+		"i",
+		&hLine);
+
+    if (!pycode) {
+        return Py_None;
+    }
+
+    ret = owplLineGetProxy(hLine,
+		szBuffer,
+		&nBuffer);
+
+	if(ret == OWPL_RESULT_SUCCESS) {
+		return Py_BuildValue("s", szBuffer);	
+	}
+
+    return Py_None;
+}
+
+/**
+ * @brief Wraps owplLineGetLocalUserName
+ */
+static PyObject * PyOwplLineGetLocalUserName(PyObject *self, PyObject *params) {
+	const OWPL_LINE hLine;
+	char szLocalUserName[MAX_USERNAME_LENGTH]; // not to be passed by Python
+	int nBuffer = sizeof(szLocalUserName); // not to be passed by Python
+
+    int pycode, ret;
+
+    pycode = PyArg_ParseTuple(params,
+		"i",
+		&hLine);
+
+    if (!pycode) {
+        return Py_None;
+    }
+
+    ret = owplLineGetLocalUserName(hLine,
+		szLocalUserName,
+		&nBuffer);
+
+	if(ret == OWPL_RESULT_SUCCESS) {
+		return Py_BuildValue("s", szLocalUserName);
+	}
+    return Py_None;
+}
+
+/**
+ * @brief Wraps owplLineRegister
+ */
+static PyObject * PyOwplLineRegister(PyObject *self, PyObject *params) {
+	const OWPL_LINE hLine;
+	const int bRegister;
+
+    int pycode, ret;
+
+    pycode = PyArg_ParseTuple(params,
+		"ii",
+		&hLine,
+		&bRegister);
+
+    if (!pycode) {
+        return Py_None;
+    }
+
+    ret = owplLineRegister(hLine,
+		bRegister);
+    return Py_BuildValue("i", ret);
+}
+
+/**
+ * @brief Wraps owplLineSetOpts
+ */
+static PyObject * PyOwplLineSetOpts(PyObject *self, PyObject *params) {
+	const OWPL_LINE hLine;
+	LineOptEnum Opt;
+	const void *Data;
+
+    int pycode, ret;
+
+    pycode = PyArg_ParseTuple(params,
+		"iiO",
+		&hLine,
+		&Opt,
+		&Data);
+
+    if (!pycode) {
+        return Py_None;
+    }
+
+    ret = owplLineSetOpts(hLine,
+		Opt,
+		Data);
+    return Py_BuildValue("i", ret);
+}
+
+/**
+ * @brief Wraps owplLineGetOpts (not yet implemented)
+ */
+/*
+static PyObject * PyOwplLineGetOpts(PyObject *self, PyObject *params) {
+	const OWPL_LINE hLine;
+	LineOptEnum Opt;
+	const void *OutBuff = NULL; // not to be passed by Python
+	const int BuffSize;
+
+    int pycode, ret;
+
+    pycode = PyArg_ParseTuple(params,
+		"iii",
+		&hLine,
+		&Opt,
+		&BuffSize);
+
+    if (!pycode) {
+        return Py_None;
+    }
+
+    ret = owplLineGetOpts(hLine,
+		Opt,
+		OutBuff,
+		BuffSize);
+
+	if(ret == OWPL_RESULT_SUCCESS) {
+		return Py_BuildValue("O", OutBuff);
+	}
+    return Py_None;
+}
+*/
+
+/**
+ * @brief Wraps owplLineGetUri
+ */
+static PyObject * PyOwplLineGetUri(PyObject *self, PyObject *params) {
+	const OWPL_LINE hLine;
+	char szBuffer[MAX_URI_LENGTH]; // not to be passed by Python
+	int nBuffer = sizeof(szBuffer); // not to be passed by Python
+
+    int pycode, ret;
+
+    pycode = PyArg_ParseTuple(params,
+		"i",
+		&hLine);
+
+    if (!pycode) {
+        return Py_None;
+    }
+
+    ret = owplLineGetUri(hLine,
+		szBuffer,
+		&nBuffer);
+
+	if(ret == OWPL_RESULT_SUCCESS) {
+		return Py_BuildValue("s", szBuffer);
+	}
+    return Py_None;
+}
+
+/**
+ * @brief Wraps owplLineAddCredential()
+ */
+static PyObject * PyOwplLineAddCredential(PyObject *self, PyObject *params) {
+	const OWPL_LINE hLine;
+	const char* szUserID;
+	const char* szPasswd;
+	const char* szRealm;
+
+    int pycode, ret;
+
+    pycode = PyArg_ParseTuple(params,
+		"isss",
+		&hLine,
+		&szUserID,
+		&szPasswd,
+		&szRealm);
+
+    if (!pycode) {
+        return Py_None;
+    }
+
+    ret = owplLineAddCredential(hLine,
+		szUserID,
+		szPasswd,
+		szRealm);
+    return Py_BuildValue("i", ret);
+}
+
+/**
+ * @brief Wraps owplCallCreate
+ */
+static PyObject * PyOwplCallCreate(PyObject *self, PyObject *params) {
+	const OWPL_LINE hLine;
+	OWPL_CALL hCall; // not to be passed by Python
+
+    int pycode, ret;
+
+    pycode = PyArg_ParseTuple(params,
+		"i",
+		&hLine);
+
+    if (!pycode) {
+        return Py_None;
+    }
+
+    ret = owplCallCreate(hLine,
+		&hCall);
+
+	if(ret == OWPL_RESULT_SUCCESS) {
+		return Py_BuildValue("i", hCall);
+	}
+    return Py_None;
+}
+
+/**
+ * @brief Wraps owplCallConnect
+ */
+static PyObject * PyOwplCallConnect(PyObject *self, PyObject *params) {
+	const OWPL_CALL hCall;
+	const char* szAddress;
+	int mediaStreams;
+
+    int pycode, ret;
+
+    pycode = PyArg_ParseTuple(params,
+		"isi",
+		&hCall,
+		&szAddress,
+		&mediaStreams);
+
+    if (!pycode) {
+        return Py_None;
+    }
+
+    ret = owplCallConnect(hCall,
+		szAddress,
+		mediaStreams);
+    return Py_BuildValue("i", ret);
+}
+
+/**
+ * @brief Wraps owplCallConnectWithBody
+ */
+static PyObject * PyOwplCallConnectWithBody(PyObject *self, PyObject *params) {
+	const OWPL_CALL hCall;
+	const char* szAddress;
+	const char* szContentType;
+	const char* szBody;
+	int BodySize;
+
+    int pycode, ret;
+
+    pycode = PyArg_ParseTuple(params,
+		"isssi",
+		&hCall,
+		&szAddress,
+		&szContentType,
+		&szBody,
+		&BodySize);
+
+    if (!pycode) {
+        return Py_None;
+    }
+
+    ret = owplCallConnectWithBody(hCall,
+		szAddress,
+		szContentType,
+		szBody,
+		BodySize);
+    return Py_BuildValue("i", ret);
+}
+
+/**
+ * @brief Wraps owplCallAccept
+ */
+static PyObject * PyOwplCallAccept(PyObject *self, PyObject *params) {
+	const OWPL_CALL hCall;
+	int mediaStreams;
+
+    int pycode, ret;
+
+    pycode = PyArg_ParseTuple(params,
+		"ii",
+		&hCall,
+		&mediaStreams);
+
+    if (!pycode) {
+        return Py_None;
+    }
+
+    ret = owplCallAccept(hCall,
+		mediaStreams);
+    return Py_BuildValue("i", ret);
+}
+
+/**
+ * @brief Wraps owplCallAnswer
+ */
+static PyObject * PyOwplCallAnswer(PyObject *self, PyObject *params) {
+	const OWPL_CALL hCall;
+	int mediaStreams;
+
+    int pycode, ret;
+
+    pycode = PyArg_ParseTuple(params,
+		"ii",
+		&hCall,
+		&mediaStreams);
+
+    if (!pycode) {
+        return Py_None;
+    }
+
+    ret = owplCallAnswer(hCall,
+		mediaStreams);
+    return Py_BuildValue("i", ret);
+}
+
+/**
+ * @brief Wraps owplCallAnswerWithBody
+ */
+static PyObject * PyOwplCallAnswerWithBody(PyObject *self, PyObject *params) {
+	const OWPL_CALL hCall;
+	const char* szContentType;
+	const char* szBody;
+	int BodySize;
+
+    int pycode, ret;
+
+    pycode = PyArg_ParseTuple(params,
+		"issi",
+		&hCall,
+		&szContentType,
+		&szBody,
+		&BodySize);
+
+    if (!pycode) {
+        return Py_None;
+    }
+
+    ret = owplCallAnswerWithBody(hCall,
+		szContentType,
+		szBody,
+		BodySize);
+    return Py_BuildValue("i", ret);
+}
+
+/**
+ * @brief Wraps owplCallReject
+ */
+static PyObject * PyOwplCallReject(PyObject *self, PyObject *params) {
+	const OWPL_CALL hCall;
+	const int errorCode;
+	const char* szErrorText;
+
+    int pycode, ret;
+
+    pycode = PyArg_ParseTuple(params,
+		"iis",
+		&hCall,
+		&errorCode,
+		&szErrorText);
+
+    if (!pycode) {
+        return Py_None;
+    }
+
+    ret = owplCallReject(hCall,
+		errorCode,
+		szErrorText);
+    return Py_BuildValue("i", ret);
+}
+
+/**
+ * @brief Wraps owplCallRejectWithPredefinedReason
+ */
+static PyObject * PyOwplCallRejectWithPredefinedReason(PyObject *self, PyObject *params) {
+	const OWPL_CALL hCall;
+	OWPL_CALL_REFUSED_REASON Reason;
+
+    int pycode, ret;
+
+    pycode = PyArg_ParseTuple(params,
+		"ii",
+		&hCall,
+		&Reason);
+
+    if (!pycode) {
+        return Py_None;
+    }
+
+    ret = owplCallRejectWithPredefinedReason(hCall,
+		Reason);
+    return Py_BuildValue("i", ret);
+}
+
+/**
+ * @brief Wraps owplCallHold
+ */
+static PyObject * PyOwplCallHold(PyObject *self, PyObject *params) {
+	const OWPL_CALL hCall;
+
+    int pycode, ret;
+
+    pycode = PyArg_ParseTuple(params,
+		"i",
+		&hCall);
+
+    if (!pycode) {
+        return Py_None;
+    }
+
+    ret = owplCallHold(hCall);
+    return Py_BuildValue("i", ret);
+}
+
+/**
+ * @brief Wraps owplCallHoldWithBody
+ */
+static PyObject * PyOwplCallHoldWithBody(PyObject *self, PyObject *params) {
+	const OWPL_CALL hCall;
+	const char* szContentType;
+	const char* szBody;
+	int BodySize;
+
+    int pycode, ret;
+
+    pycode = PyArg_ParseTuple(params,
+		"issi",
+		&hCall,
+		&szContentType,
+		&szBody,
+		&BodySize);
+
+    if (!pycode) {
+        return Py_None;
+    }
+
+    ret = owplCallHoldWithBody(hCall,
+		szContentType,
+		szBody,
+		BodySize);
+    return Py_BuildValue("i", ret);
+}
+
+/**
+ * @brief Wraps owplCallUnhold
+ */
+static PyObject * PyOwplCallUnhold(PyObject *self, PyObject *params) {
+	const OWPL_CALL hCall;
+
+    int pycode, ret;
+
+    pycode = PyArg_ParseTuple(params,
+		"i",
+		&hCall);
+
+    if (!pycode) {
+        return Py_None;
+    }
+
+    ret = owplCallUnhold(hCall);
+    return Py_BuildValue("i", ret);
+}
+
+/**
+ * @brief Wraps owplCallUnholdWithBody
+ */
+static PyObject * PyOwplCallUnholdWithBody(PyObject *self, PyObject *params) {
+	const OWPL_CALL hCall;
+	const char* szContentType;
+	const char* szBody;
+	int BodySize;
+
+    int pycode, ret;
+
+    pycode = PyArg_ParseTuple(params,
+		"issi",
+		&hCall,
+		&szContentType,
+		&szBody,
+		&BodySize);
+
+    if (!pycode) {
+        return Py_None;
+    }
+
+    ret = owplCallUnholdWithBody(hCall,
+		szContentType,
+		szBody,
+		BodySize);
+    return Py_BuildValue("i", ret);
+}
+
+/**
+ * @brief Wraps owplCallDisconnect
+ */
+static PyObject * PyOwplCallDisconnect(PyObject *self, PyObject *params) {
+	const OWPL_CALL hCall;
+
+    int pycode, ret;
+
+    pycode = PyArg_ParseTuple(params,
+		"i",
+		&hCall);
+
+    if (!pycode) {
+        return Py_None;
+    }
+
+    ret = owplCallDisconnect(hCall);
+    return Py_BuildValue("i", ret);
+}
+
+/**
+ * @brief Wraps owplCallGetLocalID (not yet implemented)
+ */
+/*
+static PyObject * PyOwplCallGetLocalID(PyObject *self, PyObject *params) {
+	const OWPL_CALL hCall;
+	char szId[MAX_URI_LENGTH]; // not to be passed by Python
+
+    int pycode, ret;
+
+    pycode = PyArg_ParseTuple(params,
+		"i",
+		&hCall);
+
+    if (!pycode) {
+        return Py_None;
+    }
+
+    ret = owplCallGetLocalID(hCall,
+		szId,
+		sizeof(szId));
+
+	if(ret == OWPL_RESULT_SUCCESS) {
+		return Py_BuildValue("s", szId);
+	}
+    return Py_None;
+}
+*/
+
+/**
+ * @brief Wraps owplCallGetRemoteID (not yet implemented)
+ */
+/*
+static PyObject * PyOwplCallGetRemoteID(PyObject *self, PyObject *params) {
+	const OWPL_CALL hCall;
+	char szId[MAX_URI_LENGTH]; // not to be passed by Python
+
+    int pycode, ret;
+
+    pycode = PyArg_ParseTuple(params,
+		"i",
+		&hCall);
+
+    if (!pycode) {
+        return Py_None;
+    }
+
+    ret = owplCallGetRemoteID(hCall,
+		szId,
+		sizeof(szId));
+
+	if(ret == OWPL_RESULT_SUCCESS) {
+		return Py_BuildValue("s", szId);
+	}
+    return Py_None;
+}
+*/
+
+/**
+ * @brief Wraps owplCallSetAssertedId (not yet implemented)
+ */
+/*
+static PyObject * PyOwplCallSetAssertedId(PyObject *self, PyObject *params) {
+	const OWPL_CALL hCall;
+	const char* szPAssertedId;
+	const int bSignalNow;
+
+    int pycode, ret;
+
+    pycode = PyArg_ParseTuple(params,
+		"isi",
+		&hCall,
+		&szPAssertedId,
+		&bSignalNow);
+
+    if (!pycode) {
+        return Py_None;
+    }
+
+    ret = owplCallSetAssertedId(hCall,
+		szPAssertedId,
+		bSignalNow);
+    return Py_BuildValue("i", ret);
+}
+*/
+
+/**
+ * @brief Wraps owplCallGetRemoteContact (not yet implemented)
+ */
+/*
+static PyObject * PyOwplCallGetRemoteContact(PyObject *self, PyObject *params) {
+	const OWPL_CALL hCall;
+	char szContact[MAX_USERNAME_LENGTH]; // not to be passed by Python
+
+    int pycode, ret;
+
+    pycode = PyArg_ParseTuple(params,
+		"i",
+		&hCall);
+
+    if (!pycode) {
+        return Py_None;
+    }
+
+    ret = owplCallGetRemoteContact(hCall,
+		szContact,
+		sizeof(szContact));
+
+
+    if(ret == OWPL_RESULT_SUCCESS) {
+		return Py_BuildValue("s", szContact);
+	}
+    return Py_None;
+}
+*/
+
+/**
+ * @brief Wraps owplCallToneStart (not yet implemented)
+ */
+/*
+static PyObject * PyOwplCallToneStart(PyObject *self, PyObject *params) {
+	const OWPL_CALL hCall;
+	const OWPL_TONE_ID toneId;
+	const int bLocal;
+	const int bRemote;
+
+    int pycode, ret;
+
+    pycode = PyArg_ParseTuple(params,
+		"iiii",
+		&hCall,
+		&toneId,
+		&bLocal,
+		&bRemote);
+
+    if (!pycode) {
+        return Py_None;
+    }
+
+    ret = owplCallToneStart(hCall,
+		toneId,
+		bLocal,
+		bRemote);
+    return Py_BuildValue("i", ret);
+}
+*/
+
+/**
+ * @brief Wraps owplCallToneStop (not yet implemented)
+ */
+/*
+static PyObject * PyOwplCallToneStop(PyObject *self, PyObject *params) {
+	const OWPL_CALL hCall;
+
+    int pycode, ret;
+
+    pycode = PyArg_ParseTuple(params,
+		"i",
+		&hCall);
+
+    if (!pycode) {
+        return Py_None;
+    }
+
+    ret = owplCallToneStop(hCall);
+    return Py_BuildValue("i", ret);
+}
+*/
+
+/**
+ * @brief Wraps owplCallTonePlay (not yet implemented)
+ */
+/*
+static PyObject * PyOwplCallTonePlay(PyObject *self, PyObject *params) {
+	const OWPL_CALL hCall;
+	unsigned long Miliseconds;
+
+    int pycode, ret;
+
+    pycode = PyArg_ParseTuple(params,
+		"ik",
+		&hCall,
+		&Miliseconds);
+
+    if (!pycode) {
+        return Py_None;
+    }
+
+    ret = owplCallTonePlay(hCall,
+		Miliseconds);
+    return Py_BuildValue("i", ret);
+}
+*/
+
+/**
+ * @brief Wraps owplCallAudioPlayFileStart (not yet implemented)
+ */
+/*
+static PyObject * PyOwplCallAudioPlayFileStart(PyObject *self, PyObject *params) {
+	const OWPL_CALL hCall;
+	const char* szFile;
+	const int bRepeat;
+	const int bLocal;
+	const int bRemote;
+
+    int pycode, ret;
+
+    pycode = PyArg_ParseTuple(params,
+		"isiii",
+		&hCall,
+		&szFile,
+		&bRepeat,
+		&bLocal,
+		&bRemote);
+
+    if (!pycode) {
+        return Py_None;
+    }
+
+    ret = owplCallAudioPlayFileStart(hCall,
+		szFile,
+		bRepeat,
+		bLocal,
+		bRemote);
+    return Py_BuildValue("i", ret);
+}
+*/
+
+/**
+ * @brief Wraps owplCallAudioPlayFileStop (not yet implemented)
+ */
+/*
+static PyObject * PyOwplCallAudioPlayFileStop(PyObject *self, PyObject *params) {
+	const OWPL_CALL hCall;
+
+    int pycode, ret;
+
+    pycode = PyArg_ParseTuple(params,
+		"i",
+		&hCall);
+
+    if (!pycode) {
+        return Py_None;
+    }
+
+    ret = owplCallAudioPlayFileStop(hCall);
+    return Py_BuildValue("i", ret);
+}
+*/
+
+/**
+ * @brief Wraps owplCallSendInfo  (not yet implemented)
+ */
+/*
+static PyObject * PyOwplCallSendInfo(PyObject *self, PyObject *params) {
+	const OWPL_CALL hCall;
+	const char* szContentType;
+	const char* szContent;
+	const int nContentLength;
+
+    int pycode, ret;
+
+    pycode = PyArg_ParseTuple(params,
+		"issi",
+		&hCall,
+		&szContentType,
+		&szContent,
+		&nContentLength);
+
+    if (!pycode) {
+        return Py_None;
+    }
+
+    ret = owplCallSendInfo(hCall,
+		szContentType,
+		szContent,
+		nContentLength);
+    return Py_BuildValue("i", ret);
+}
+*/
+
+/**
+ * @brief Wraps owplPresenceSubscribe
+ */
+static PyObject * PyOwplPresenceSubscribe(PyObject *self, PyObject *params) {
+	OWPL_LINE  hLine;
+	const char* szUri;
+	const int winfo;
+	OWPL_SUB hSub; // not to be passed by Python
+
+    int pycode, ret;
+
+    pycode = PyArg_ParseTuple(params,
+		"isi",
+		&hLine,
+		&szUri,
+		&winfo);
+
+    if (!pycode) {
+        return Py_None;
+    }
+
+    ret = owplPresenceSubscribe(hLine,
+		szUri,
+		winfo,
+		&hSub);
+    
+	if(ret == OWPL_RESULT_SUCCESS) {
+		return Py_BuildValue("i", hSub);
+	}
+    return Py_None;
+}
+
+/**
+ * @brief Wraps owplPresenceUnsubscribe
+ */
+static PyObject * PyOwplPresenceUnsubscribe(PyObject *self, PyObject *params) {
+	const char* szRemoteUri;
+
+    int pycode, ret;
+
+    pycode = PyArg_ParseTuple(params,
+		"s",
+		&szRemoteUri);
+
+    if (!pycode) {
+        return Py_None;
+    }
+
+    ret = owplPresenceUnsubscribe(szRemoteUri);
+    return Py_BuildValue("i", ret);
+}
+
+/**
+ * @brief Wraps owplPresencePublish
+ */
+static PyObject * PyOwplPresencePublish(PyObject *self, PyObject *params) {
+	OWPL_LINE  hLine;
+	const int Online;
+	const char * szStatus;
+	OWPL_PUB hPub; // not to be passed by Python
+
+    int pycode, ret;
+
+    pycode = PyArg_ParseTuple(params,
+		"iis",
+		&hLine,
+		&Online,
+		&szStatus);
+
+    if (!pycode) {
+        return Py_None;
+    }
+
+    ret = owplPresencePublish(hLine,
+		Online,
+		szStatus,
+		&hPub);
+    
+	if(ret == OWPL_RESULT_SUCCESS) {
+		return Py_BuildValue("i", hPub);
+	}
+    return Py_None;
+}
+
+/**
+ * @brief Wraps owplMessageSend
+ */
+static PyObject * PyOwplMessageSend(PyObject *self, PyObject *params) {
+	OWPL_LINE hLine;
+	const char * szRemoteUri;
+	const char * szContent;
+	const char * szMIME;
+	int messageId; // not to be passed by Python
+
+    int pycode, ret;
+
+    pycode = PyArg_ParseTuple(params,
+		"isss",
+		&hLine,
+		&szRemoteUri,
+		&szContent,
+		&szMIME);
+
+    if (!pycode) {
+        return Py_None;
+    }
+
+    ret = owplMessageSend(hLine,
+		szRemoteUri,
+		szContent,
+		szMIME,
+		&messageId);
+
+    if(ret == OWPL_RESULT_SUCCESS) {
+		return Py_BuildValue("i", messageId);
+	}
+    return Py_None;
+}
+
+/**
+ * @brief Wraps owplMessageSendPlainText
+ */
+static PyObject * PyOwplMessageSendPlainText(PyObject *self, PyObject *params) {
+	OWPL_LINE hLine;
+	const char * szRemoteUri;
+	const char * szContent;
+	int messageId; // not to be passed by Python
+
+    int pycode, ret;
+
+    pycode = PyArg_ParseTuple(params,
+		"iss",
+		&hLine,
+		&szRemoteUri,
+		&szContent);
+
+    if (!pycode) {
+        return Py_None;
+    }
+
+    ret = owplMessageSendPlainText(hLine,
+		szRemoteUri,
+		szContent,
+		&messageId);
+    
+	if(ret == OWPL_RESULT_SUCCESS) {
+		return Py_BuildValue("i", messageId);
+	}
+    return Py_None;
+}
+
+/**
+ * @brief Wraps owplMessageSendTypingState
+ */
+static PyObject * PyOwplMessageSendTypingState(PyObject *self, PyObject *params) {
+	OWPL_LINE hLine;
+	const char * szRemoteUri;
+	OWPL_TYPING_STATE state;
+	int messageId; // not to be passed by Python
+
+    int pycode, ret;
+
+    pycode = PyArg_ParseTuple(params,
+		"isi",
+		&hLine,
+		&szRemoteUri,
+		&state);
+
+    if (!pycode) {
+        return Py_None;
+    }
+
+    ret = owplMessageSendTypingState(hLine,
+		szRemoteUri,
+		state,
+		&messageId);
+    
+	if(ret == OWPL_RESULT_SUCCESS) {
+		return Py_BuildValue("i", messageId);
+	}
+    return Py_None;
+}
+
+/**
+ * @brief Wraps owplMessageSendIcon
+ */
+static PyObject * PyOwplMessageSendIcon(PyObject *self, PyObject *params) {
+	OWPL_LINE hLine;
+	const char * szRemoteUri;
+	const char * szIconFileName;
+	int messageId;
+
+    int pycode, ret;
+
+    pycode = PyArg_ParseTuple(params,
+		"iss",
+		&hLine,
+		&szRemoteUri,
+		&szIconFileName);
+
+    if (!pycode) {
+        return Py_None;
+    }
+
+    ret = owplMessageSendIcon(hLine,
+		szRemoteUri,
+		szIconFileName,
+		&messageId);
+    
+	if(ret == OWPL_RESULT_SUCCESS) {
+		return Py_BuildValue("i", messageId);
+	}
+    return Py_None;
+}
+
+/*****************************************************************************
+ *                                   HELPERS                                 *
+ *****************************************************************************/
+
 /**
  * @brief wrap access to phcfg
  */
@@ -923,6 +2504,9 @@ static PyObject * PyPhCfgSetI(PyObject *self, PyObject *params) {
     return Py_None;
 }
 
+/*****************************************************************************
+ *                         PYTHON MODULE DECLARATION                         *
+ *****************************************************************************/
 
 /*
  * Convenient define to declare a function with variable arguments in
@@ -962,9 +2546,12 @@ static PyMethodDef pyphapi_funcs[] = {
     PY_PHAPI_FUNCTION_DECL("phRejectCall",          PyPhRejectCall),
     PY_PHAPI_FUNCTION_DECL("phCloseCall",           PyPhCloseCall),
     PY_PHAPI_FUNCTION_DECL("phRingingCall",         PyPhRingingCall),
-    PY_PHAPI_FUNCTION_DECL("phSendMessage",         PyPhSendMessage),
+
+	/* Do not exist anymore */
+    /*PY_PHAPI_FUNCTION_DECL("phSendMessage",         PyPhSendMessage),
     PY_PHAPI_FUNCTION_DECL("phSubscribe",           PyPhSubscribe),
-    PY_PHAPI_FUNCTION_DECL("phPublish",             PyPhPublish),
+    PY_PHAPI_FUNCTION_DECL("phPublish",             PyPhPublish),*/
+
     PY_PHAPI_FUNCTION_DECL("phDelVline",            PyPhDelVline),
     PY_PHAPI_FUNCTION_DECL("phTransferCall",        PyPhTransferCall),
     PY_PHAPI_FUNCTION_DECL("phBlindTransferCall",   PyPhBlindTransferCall),
@@ -978,6 +2565,59 @@ static PyMethodDef pyphapi_funcs[] = {
     PY_PHAPI_FUNCTION_DECL("phSetDebugLevel",       PyPhSetDebugLevel),
     PY_PHAPI_FUNCTION_DECL("phGetNatInfo",          PyPhGetNatInfo),
     PY_PHAPI_FUNCTION_DECL("phConf",                PyPhConf),
+
+	PY_PHAPI_FUNCTION_DECL("owplInit",								PyOwplInit),
+	PY_PHAPI_FUNCTION_DECL("owplConfigSetLocalHttpProxy",           PyOwplConfigSetLocalHttpProxy),
+	PY_PHAPI_FUNCTION_DECL("owplConfigSetTunnel",					PyOwplConfigSetTunnel),
+	PY_PHAPI_FUNCTION_DECL("owplConfigSetNat",						PyOwplConfigSetNat),
+	PY_PHAPI_FUNCTION_DECL("owplConfigSetOutboundProxy",            PyOwplConfigSetOutboundProxy),
+	PY_PHAPI_FUNCTION_DECL("owplConfigAddAudioCodecByName",         PyOwplConfigAddAudioCodecByName),
+	PY_PHAPI_FUNCTION_DECL("owplConfigAddVideoCodecByName",         PyOwplConfigAddVideoCodecByName),
+	PY_PHAPI_FUNCTION_DECL("owplConfigSetAsynchronous",             PyOwplConfigSetAsynchronous),
+	PY_PHAPI_FUNCTION_DECL("owplConfigGetBoundLocalAddr",			PyOwplConfigGetBoundLocalAddr),
+	PY_PHAPI_FUNCTION_DECL("owplConfigLocalHttpProxyGetAddr",       PyOwplConfigLocalHttpProxyGetAddr),
+	PY_PHAPI_FUNCTION_DECL("owplConfigLocalHttpProxyGetPasswd",     PyOwplConfigLocalHttpProxyGetPasswd),
+	PY_PHAPI_FUNCTION_DECL("owplConfigLocalHttpProxyGetPort",       PyOwplConfigLocalHttpProxyGetPort),
+	PY_PHAPI_FUNCTION_DECL("owplConfigLocalHttpProxyGetUserName",   PyOwplConfigLocalHttpProxyGetUserName),
+	PY_PHAPI_FUNCTION_DECL("owplAudioSetConfigString",              PyOwplAudioSetConfigString),
+	PY_PHAPI_FUNCTION_DECL("owplLineAdd",							PyOwplLineAdd),
+	PY_PHAPI_FUNCTION_DECL("owplLineGetProxy",						PyOwplLineGetProxy),
+	PY_PHAPI_FUNCTION_DECL("owplLineGetLocalUserName",              PyOwplLineGetLocalUserName),
+	PY_PHAPI_FUNCTION_DECL("owplLineRegister",						PyOwplLineRegister),
+	PY_PHAPI_FUNCTION_DECL("owplLineSetOpts",						PyOwplLineSetOpts),
+	/*PY_PHAPI_FUNCTION_DECL("owplLineGetOpts",						PyOwplLineGetOpts), // not yet implemented */
+	PY_PHAPI_FUNCTION_DECL("owplLineGetUri",						PyOwplLineGetUri),
+	PY_PHAPI_FUNCTION_DECL("owplLineAddCredential",					PyOwplLineAddCredential),
+	PY_PHAPI_FUNCTION_DECL("owplCallCreate",						PyOwplCallCreate),
+	PY_PHAPI_FUNCTION_DECL("owplCallConnect",						PyOwplCallConnect),
+	PY_PHAPI_FUNCTION_DECL("owplCallConnectWithBody",               PyOwplCallConnectWithBody),
+	PY_PHAPI_FUNCTION_DECL("owplCallAccept",						PyOwplCallAccept),
+	PY_PHAPI_FUNCTION_DECL("owplCallAnswer",						PyOwplCallAnswer),
+	PY_PHAPI_FUNCTION_DECL("owplCallAnswerWithBody",                PyOwplCallAnswerWithBody),
+	PY_PHAPI_FUNCTION_DECL("owplCallReject",						PyOwplCallReject),
+	PY_PHAPI_FUNCTION_DECL("owplCallRejectWithPredefinedReason",    PyOwplCallRejectWithPredefinedReason),
+	PY_PHAPI_FUNCTION_DECL("owplCallHold",							PyOwplCallHold),
+	PY_PHAPI_FUNCTION_DECL("owplCallHoldWithBody",					PyOwplCallHoldWithBody),
+	PY_PHAPI_FUNCTION_DECL("owplCallUnhold",						PyOwplCallUnhold),
+	PY_PHAPI_FUNCTION_DECL("owplCallUnholdWithBody",                PyOwplCallUnholdWithBody),
+	PY_PHAPI_FUNCTION_DECL("owplCallDisconnect",					PyOwplCallDisconnect),
+	/*PY_PHAPI_FUNCTION_DECL("owplCallGetLocalID",					PyOwplCallGetLocalID), // not yet implemented */
+	/*PY_PHAPI_FUNCTION_DECL("owplCallGetRemoteID",					PyOwplCallGetRemoteID), // not yet implemented */
+	/*PY_PHAPI_FUNCTION_DECL("owplCallSetAssertedId",					PyOwplCallSetAssertedId), // not yet implemented */
+	/*PY_PHAPI_FUNCTION_DECL("owplCallGetRemoteContact",              PyOwplCallGetRemoteContact), // not yet implemented */
+	/*PY_PHAPI_FUNCTION_DECL("owplCallToneStart",						PyOwplCallToneStart), // not yet implemented */
+	/*PY_PHAPI_FUNCTION_DECL("owplCallToneStop",						PyOwplCallToneStop), // not yet implemented */
+	/*PY_PHAPI_FUNCTION_DECL("owplCallTonePlay",						PyOwplCallTonePlay), // not yet implemented */
+	/*PY_PHAPI_FUNCTION_DECL("owplCallAudioPlayFileStart",            PyOwplCallAudioPlayFileStart), // not yet implemented */
+	/*PY_PHAPI_FUNCTION_DECL("owplCallAudioPlayFileStop",             PyOwplCallAudioPlayFileStop), // not yet implemented */
+	/*PY_PHAPI_FUNCTION_DECL("owplCallSendInfo",						PyOwplCallSendInfo), // not yet implemented */
+	PY_PHAPI_FUNCTION_DECL("owplPresenceSubscribe",					PyOwplPresenceSubscribe),
+	PY_PHAPI_FUNCTION_DECL("owplPresenceUnsubscribe",               PyOwplPresenceUnsubscribe),
+	PY_PHAPI_FUNCTION_DECL("owplPresencePublish",					PyOwplPresencePublish),
+	PY_PHAPI_FUNCTION_DECL("owplMessageSend",						PyOwplMessageSend),
+	PY_PHAPI_FUNCTION_DECL("owplMessageSendPlainText",              PyOwplMessageSendPlainText),
+	PY_PHAPI_FUNCTION_DECL("owplMessageSendTypingState",            PyOwplMessageSendTypingState),
+	PY_PHAPI_FUNCTION_DECL("owplMessageSendIcon",					PyOwplMessageSendIcon),
 
     PY_PHAPI_FUNCTION_DECL_NULL,
 };
