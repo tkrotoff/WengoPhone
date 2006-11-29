@@ -68,6 +68,7 @@ else (BOOST_LIBRARIES AND BOOST_INCLUDE_DIRS)
     if (CYGWIN)
       set(BOOST_LIB_SUFFIX -gcc-mt)
     endif (CYGWIN)
+  endif (WIN32)
 
   find_path(BOOST_INCLUDE_DIR
     NAMES
