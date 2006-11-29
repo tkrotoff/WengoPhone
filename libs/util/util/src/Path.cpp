@@ -32,7 +32,9 @@
 	#include <unistd.h>
 #endif
 
-static const int MAX_PATH = 256;
+#if !defined(OS_WINDOWS)
+	static const int MAX_PATH = 256;
+#endif
 
 using namespace std;
 
@@ -67,7 +69,7 @@ string Path::getApplicationDirPath() {
 
 #elif defined(OS_LINUX)
 
-	char procname[128];
+	char procname[MAX_PATH];
 	memset(procname, 0, sizeof(procname));
 	pid_t pid = getpid();
 	if (snprintf(procname, sizeof(procname), "/proc/%i/exe", pid) < 0) {
@@ -96,17 +98,11 @@ string Path::getConfigurationDirPath() {
 	string result;
 
 #if defined(OS_WINDOWS)
-
 	result = getHomeDirPath() + File::convertPathSeparators("Application Data/");
-
 #elif defined(OS_MACOSX)
-
 	result = getHomeDirPath() + File::convertPathSeparators("Library/Application Support/");
-
 #elif defined(OS_POSIX)
-
 	result = getHomeDirPath();
-
 #endif
 
 	return result;
@@ -120,29 +116,17 @@ string Path::getHomeDirPath() {
 	string result;
 
 #if defined(OS_WINDOWS)
-
 	char * homeDrive = getenv("HOMEDRIVE");
 	char * homeDir = getenv("HOMEPATH");
 	if (homeDrive && homeDir) {
 		result = string(homeDrive) + File::getPathSeparator() + string(homeDir);
 	}
-
-#elif defined(OS_MACOSX)
-
-	char * homeDir = getenv("HOME");
-	if (homeDir) {
-		result = homeDir;
-	}
-
 #elif defined(OS_POSIX)
-
 	char * homeDir = getenv("HOME");
 	if (homeDir) {
 		result = homeDir;
 	}
-
 #endif
-
 	result += File::getPathSeparator();
 
 	return result;

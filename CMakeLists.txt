@@ -34,8 +34,8 @@ macro_ensure_out_of_source_build("WengoPhone requires an out of source build. Pl
 set(SVN_REVISION "0")
 ow_get_subversion_revision(SVN_REVISION)
 # Bugfix with svn revision number that can integrate a : and
-# this does not work under Windows for the installer name, replace it by #
-string(REPLACE ":" "#" SVN_REVISION ${SVN_REVISION})
+# this does not work under Windows for the installer name, replace it by -
+string(REPLACE ":" "-" SVN_REVISION ${SVN_REVISION})
 
 subdirs(
 	libs/3rdparty/boost
