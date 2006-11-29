@@ -55,6 +55,7 @@
 
 #ifdef PHAPI_VIDEO_SUPPORT
 #include <avcodec.h>
+#include <webcam/webcam.h>
 #endif
 
 #include <osip2/osip_mt.h>
@@ -1344,6 +1345,7 @@ phRejectCall(int cid, int reason)
 
 	i = ph_answer_request(ca->did, reason, ph_get_call_contact(ca));
 
+	DBG_SIP_NEGO("release calls");
 	ph_release_call(ca);
 
 	clear(info);
@@ -1416,6 +1418,7 @@ phCloseCall(int cid)
 	did = ca->did;
 	extern_cid = ca->extern_cid;
 
+	DBG_SIP_NEGO("release calls");
 	ph_release_call(ca);
 
 	eXosip_lock();
@@ -2139,6 +2142,7 @@ ph_scan_calls()
 			info.vlid = ca->vlid;
 			info.event = phCALLCLOSED;
 
+			DBG_SIP_NEGO("release calls");
 			ph_release_call(ca);
 
 			if (phcb->callProgress) {
@@ -2935,6 +2939,7 @@ phTerminate()
 	for(i = 0; i < PH_MAX_CALLS; i++)
 		if (ph_calls[i].cid != -1)
 		{
+			DBG_SIP_NEGO("release calls");
 			ph_release_call(&ph_calls[i]);
 		}
 
@@ -3714,6 +3719,7 @@ ph_call_redirected(eXosip_event_t *je)
 		info.newcid = phLinePlaceCall_withCa(info.vlid, je->remote_contact, 0, 0, ca->user_mflags, newca);
 	}
 
+	DBG_SIP_NEGO("release calls");
 	ph_release_call(ca);
 
 	if(phcb->callProgress) {
@@ -3832,6 +3838,7 @@ ph_call_requestfailure(eXosip_event_t *je)
 
 	rca = ph_locate_call_by_cid(ca->rcid);
 	info.vlid = ca->vlid;
+	DBG_SIP_NEGO("release calls");
 	ph_release_call(ca);
 
 
@@ -3878,6 +3885,7 @@ ph_call_serverfailure(eXosip_event_t *je)
 	{
 		rca = ph_locate_call_by_cid(ca->rcid);
 		info.vlid = ca->vlid;
+		DBG_SIP_NEGO("release calls");
 		ph_release_call(ca);
 	}
 
@@ -3914,6 +3922,7 @@ ph_call_globalfailure(eXosip_event_t *je)
 	{
 		rca = ph_locate_call_by_cid(ca->rcid);
 		info.vlid = ca->vlid;
+		DBG_SIP_NEGO("release calls");
 		ph_release_call(ca);
 	}
 
@@ -3963,6 +3972,7 @@ ph_call_noanswer(eXosip_event_t *je)
 	{
 		rca = ph_locate_call_by_cid(ca->rcid);
 		info.vlid = ca->vlid;
+		DBG_SIP_NEGO("release calls");
 		ph_release_call(ca);
 	}
 
@@ -4000,6 +4010,7 @@ ph_call_closed(eXosip_event_t *je)
 	{
 		rca = ph_locate_call_by_cid(ca->rcid);
 		info.vlid = ca->vlid;
+		DBG_SIP_NEGO("release calls");
 		ph_release_call(ca);
 
 		info.userData = je->external_reference;
@@ -4802,6 +4813,7 @@ static void ph_update_callstate_by_event(eXosip_event_t * je)
 				break;
 
 			case EXOSIP_CALL_REQUESTFAILURE:
+				DBG_SIP_NEGO("release calls");
 				ph_release_call(ca);
 				if(rca) {
 					ph_refer_notify(rca->rdid, je->status_code, je->status_code == 486 ? "Busy" : "Request failure", 1);
@@ -4809,6 +4821,7 @@ static void ph_update_callstate_by_event(eXosip_event_t * je)
 				break;
 
 			case EXOSIP_CALL_SERVERFAILURE:
+				DBG_SIP_NEGO("release calls");
 				ph_release_call(ca);
 				if(rca) {
 					ph_refer_notify(rca->rdid, je->status_code, "Server failure", 1);
@@ -4816,6 +4829,7 @@ static void ph_update_callstate_by_event(eXosip_event_t * je)
 				break;
 
 			case EXOSIP_CALL_GLOBALFAILURE:
+				DBG_SIP_NEGO("release calls");
 				ph_release_call(ca);
 				if(rca) {
 					ph_refer_notify(rca->rdid, je->status_code, "Global failure", 1);
@@ -4823,6 +4837,7 @@ static void ph_update_callstate_by_event(eXosip_event_t * je)
 				break;
 
 			case EXOSIP_CALL_NOANSWER:
+				DBG_SIP_NEGO("release calls");
 				ph_release_call(ca);
 				if(rca) {
 					ph_refer_notify(rca->rdid, je->status_code, "No answer", 1);
@@ -4830,6 +4845,7 @@ static void ph_update_callstate_by_event(eXosip_event_t * je)
 				break;
 
 			case EXOSIP_CALL_CLOSED:
+				DBG_SIP_NEGO("release calls");
 				ph_release_call(ca);
 				if(rca) {
 					ph_refer_notify(rca->rdid, je->status_code, "Closed", 1);
@@ -5007,6 +5023,10 @@ ph_api_thread(void *arg)
 	t1 = 0;
 	phIsInitialized = 1;
 
+#ifdef PHAPI_VIDEO_SUPPORT
+	webcam_api_initialize();
+#endif
+
 	time(&t1);
 	while(1)
 	{
@@ -5030,6 +5050,10 @@ ph_api_thread(void *arg)
 			break;
 		}
 	}
+
+#ifdef PHAPI_VIDEO_SUPPORT
+	webcam_api_uninitialize();
+#endif
 
 	return 0;
 }
@@ -5309,6 +5333,7 @@ int phReject(int cid) {
 	i = eXosip_answer_call(ca->did, 486, 0, ph_get_call_contact(ca), 0, 0, 0);
 	eXosip_unlock();
 
+	DBG_SIP_NEGO("release calls");
 	ph_release_call(ca);
 
 	return i;
@@ -5493,6 +5518,7 @@ int phEndCall(int call_id, int status_code){
 	if(ca)
 	{
 		rca = ph_locate_call_by_cid(ca->rcid);
+		DBG_SIP_NEGO("release calls");
 		ph_release_call(ca);
 	}
 	else
@@ -5524,6 +5550,7 @@ int phRequestFailure(int call_id, int status_code){
 	}
 
 	rca = ph_locate_call_by_cid(ca->rcid);
+	DBG_SIP_NEGO("release calls");
 	ph_release_call(ca);
 
 	if (rca)
@@ -5548,6 +5575,7 @@ int phServerFailure(int call_id, int status_code){
 	if(ca)
 	{
 		rca = ph_locate_call_by_cid(ca->rcid);
+		DBG_SIP_NEGO("release calls");
 		ph_release_call(ca);
 	}
 	else
@@ -5577,6 +5605,7 @@ int phGlobalFailure(int call_id, int status_code){
 	if(ca)
 	{
 		rca = ph_locate_call_by_cid(ca->rcid);
+		DBG_SIP_NEGO("release calls");
 		ph_release_call(ca);
 	}
 	else
@@ -5606,6 +5635,7 @@ int phNoAnswer(int call_id, int status_code){
 	if (ca)
 	{
 		rca = ph_locate_call_by_cid(ca->rcid);
+		DBG_SIP_NEGO("release calls");
 		ph_release_call(ca);
 	}
 
