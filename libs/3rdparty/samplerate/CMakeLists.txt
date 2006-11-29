@@ -1,18 +1,7 @@
 if (PHAPI_SAMPLERATE_SUPPORT)
-
-ow_create_static_library(samplerate)
-
-ow_add_public_include_dirs(
-	${CMAKE_CURRENT_SOURCE_DIR}
-)
-
-ow_add_sources(
-	src/samplerate.c
-	src/src_linear.c
-	src/src_sinc.c
-	src/src_zoh.c
-)
-
-ow_create_binary()
-
+	if (SAMPLERATE_INTERNAL)
+		include(CMakeLists-internal.txt)
+	else (SAMPLERATE_INTERNAL)
+		include(CMakeLists-external.txt)
+	endif (SAMPLERATE_INTERNAL)
 endif (PHAPI_SAMPLERATE_SUPPORT)
