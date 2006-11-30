@@ -46,8 +46,9 @@ GQuark g_markup_error_quark (void);
 
 typedef enum
 {
-  G_MARKUP_DO_NOT_USE_THIS_UNSUPPORTED_FLAG = 1 << 0,
-  G_MARKUP_TREAT_CDATA_AS_TEXT              = 1 << 1  
+  /* Hmm, can't think of any at the moment */
+  G_MARKUP_DO_NOT_USE_THIS_UNSUPPORTED_FLAG = 1 << 0
+  
 } GMarkupParseFlags;
 
 typedef struct _GMarkupParseContext GMarkupParseContext;

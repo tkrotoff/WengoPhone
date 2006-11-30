@@ -28,7 +28,9 @@
 #include	<gobject/gvalue.h>
 
 
-G_BEGIN_DECLS
+#ifdef __cplusplus
+extern "C" {
+#endif /* __cplusplus */
 
 
 /* --- typedefs & structs --- */
@@ -65,6 +67,9 @@ GValueArray*	g_value_array_sort_with_data (GValueArray	*value_array,
 					      gpointer		 user_data);
 
 
-G_END_DECLS
+
+#ifdef __cplusplus
+}
+#endif /* __cplusplus */
 
 #endif /* __G_VALUE_ARRAY_H__ */

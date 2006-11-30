@@ -33,6 +33,10 @@ gint                  g_fprintf   (FILE        *file,
 gint                  g_sprintf   (gchar       *string,
 				   gchar const *format,
 				   ...) G_GNUC_PRINTF (2, 3);
+gint                  g_snprintf  (gchar       *string,
+				   gulong       n,
+				   gchar const *format,
+				   ...) G_GNUC_PRINTF (3, 4);
 
 gint                  g_vprintf   (gchar const *format,
                                    va_list      args);            
@@ -40,6 +44,10 @@ gint                  g_vfprintf  (FILE        *file,
 				   gchar const *format,
 				   va_list      args);
 gint                  g_vsprintf  (gchar       *string,
+				   gchar const *format,
+				   va_list      args);
+gint                  g_vsnprintf (gchar       *string,
+				   gulong       n,
 				   gchar const *format,
 				   va_list      args);
 gint                  g_vasprintf (gchar      **string,
