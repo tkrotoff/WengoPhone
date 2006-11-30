@@ -47,7 +47,7 @@ subdirs(
 	phapi/phamrplugin
 	phapi/phspeexplugin
 	phapi
-	#miniua
 	wifo-plugins
+	#miniua
 	#tests/WifoPluginsConsole
 )

@@ -7,4 +7,3 @@
 
 
 string(TOLOWER ${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE} BUILD_DIR)
-message(STATUS "Build directory: " ${BUILD_DIR})

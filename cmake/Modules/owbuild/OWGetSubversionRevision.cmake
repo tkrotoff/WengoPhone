@@ -40,7 +40,6 @@ macro (OW_GET_SUBVERSION_REVISION revision)
 		else (SVN_REVISION_RESULT_VARIABLE EQUAL 0)
 			set(${revision} 0)
 		endif (SVN_REVISION_RESULT_VARIABLE EQUAL 0)
-		message(STATUS "svn revision: " ${${revision}})
 	endif (SVN_EXECUTEABLE AND SVN_DOT_DIR)
 
 endmacro (OW_GET_SUBVERSION_REVISION revision)

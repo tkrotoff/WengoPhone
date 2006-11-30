@@ -36,6 +36,8 @@ ow_get_subversion_revision(SVN_REVISION)
 # this does not work under Windows for the installer name, replace it by -
 string(REPLACE ":" "-" SVN_REVISION ${SVN_REVISION})
 
+include(cmake/Modules/owbuild/OWInitializationInfo.cmake)
+
 subdirs(
 	libs/3rdparty/boost
 	libs/3rdparty/qt4

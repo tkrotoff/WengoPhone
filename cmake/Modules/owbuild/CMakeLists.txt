@@ -1,5 +1,6 @@
-# Should always be first
+# Order matters
 include(OWGlobalVariables)
+
 
 include(OWAddPrivateCompileFlags)
 include(OWAddPrivateDefinitions)
@@ -14,6 +15,7 @@ include(OWAddPublicLibraryDirs)
 include(OWAddPublicLinkFlags)
 include(OWAddSharedLibraryDefinitions)
 include(OWAddSources)
+include(OWAutoconf)
 include(OWChangeInstallName)
 include(OWCheckProject)
 include(OWCopyDir)
@@ -37,4 +39,3 @@ include(OWUsePrivateFrameworks)
 include(OWUsePrivateLibraries)
 include(OWUsePublicFrameworks)
 include(OWUsePublicLibraries)
-include(OWAutoconf)
