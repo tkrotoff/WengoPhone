@@ -22,10 +22,9 @@
 #include <filesessionmanager/ReceiveFileSession.h>
 #include <imwrapper/IMContact.h>
 
+#include <qtutil/SafeConnect.h>
 #include <util/Logger.h>
 #include <util/SafeDelete.h>
-
-#include <qtutil/SafeConnect.h>
 
 #include <QtGui/QtGui>
 
@@ -42,7 +41,6 @@ QtFileTransferDownloadItem::QtFileTransferDownloadItem(QWidget * parent, Receive
 		boost::bind(&QtFileTransferDownloadItem::fileTransferProgressionEventHandler, this, _1, _2, _3, _4);
 	_receiveFileSession->fileTransferEvent +=
 		boost::bind(&QtFileTransferDownloadItem::fileTransferEventHandler, this, _1, _2, _3, _4);
-
 	_receiveFileSession->moduleFinishedEvent +=
 		boost::bind(&QtFileTransferDownloadItem::moduleFinishedEventHandler, this, _1);
 	////
@@ -82,5 +80,15 @@ void QtFileTransferDownloadItem::fileTransferEventHandler(ReceiveFileSession & s
 
 void QtFileTransferDownloadItem::moduleFinishedEventHandler(CoIpModule & sender) {
 	LOG_DEBUG("module receiveFileSession has finished, delete it");
+
+	// unbind to fileSession events
+	_receiveFileSession->fileTransferProgressionEvent -=
+		boost::bind(&QtFileTransferDownloadItem::fileTransferProgressionEventHandler, this, _1, _2, _3, _4);
+	_receiveFileSession->fileTransferEvent -=
+		boost::bind(&QtFileTransferDownloadItem::fileTransferEventHandler, this, _1, _2, _3, _4);
+	_receiveFileSession->moduleFinishedEvent -=
+		boost::bind(&QtFileTransferDownloadItem::moduleFinishedEventHandler, this, _1);
+	////
+
 	OWSAFE_DELETE(_receiveFileSession);
 }

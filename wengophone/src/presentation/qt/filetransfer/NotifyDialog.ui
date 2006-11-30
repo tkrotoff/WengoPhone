@@ -353,6 +353,9 @@
      <property name="alignment" >
       <set>Qt::AlignCenter</set>
      </property>
+     <property name="wordWrap" >
+      <bool>true</bool>
+     </property>
      <property name="indent" >
       <number>100</number>
      </property>

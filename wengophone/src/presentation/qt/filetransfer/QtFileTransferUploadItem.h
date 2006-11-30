@@ -70,13 +70,13 @@ private Q_SLOTS:
 private:
 
 	/**
-	 * @see SendFileSession::fileTransferProgressionEvent
+	 * @see SendFileSession::fileTransferProgressionEvent.
 	 */
 	void fileTransferProgressionEventHandler(SendFileSession & sender, IMContact imContact,
 		File sentFile, int percentage);
 
 	/**
-	 * @see SendFileSession::fileTransferEvent
+	 * @see SendFileSession::fileTransferEvent.
 	 */
 	void fileTransferEventHandler(SendFileSession & sender, IFileSession::IFileSessionEvent event,
 		IMContact imContact, File sentFile);

@@ -42,7 +42,7 @@ QtFileTransferItem::QtFileTransferItem(QWidget * parent, Type type)
 	
 	// configure initial state
 	if (_type == Download) {
-		setState(tr("Downloading"));
+		setState(tr("Downloading..."));
 	} else {
 		setState(tr("Waiting for peer..."));
 	}
@@ -169,15 +169,14 @@ void QtFileTransferItem::updateState(int e) {
 	case IFileSession::IFileSessionEventFileTransferFailed:
 		stateChangeEvent(tr("Failed"));
 		updateButtonsFinished();
-		//TODO: find a cleaner way to do this
-		//
-		
 		qtFileTransferNotifyDialog = new QtFileTransferNotifyDialog(this);
-		qtFileTransferNotifyDialog->setTitle(tr("An error<br> occured during<br>the file transfer"));
-		qtFileTransferNotifyDialog->setMessage(tr("This may be caused by:<br>"
-			"- Your WengoPhone is not up to date. Please download the latest version onwww.wengo.com<br>"
-			"- The Wengo network may be temporarily unavailable. Please try later."));
-		////
+		qtFileTransferNotifyDialog->setTitle(tr("An error occured during the file transfer"));
+		qtFileTransferNotifyDialog->setMessage(tr("This may be caused by :") + "<br>" +
+			"<ul>" +
+			"<li>" + tr("Your WengoPhone is not up to date. Please download the latest version on") +
+			" www.wengo.com"+ "<br>" +
+			"<li>" + tr("The Wengo network may be temporarily unavailable. Please try later.") +
+			"</ul>");
 		qtFileTransferNotifyDialog->exec();
 		OWSAFE_DELETE(qtFileTransferNotifyDialog);
 		break;

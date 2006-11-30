@@ -18,12 +18,10 @@
  */
 
 #include "QtFileTransferAcceptDialog.h"
-
 #include "ui_AcceptDialog.h"
 
-#include <util/SafeDelete.h>
-
 #include <qtutil/WidgetBackgroundImage.h>
+#include <util/SafeDelete.h>
 
 QtFileTransferAcceptDialog::QtFileTransferAcceptDialog(QWidget * parent)
 	: QDialog(parent) {

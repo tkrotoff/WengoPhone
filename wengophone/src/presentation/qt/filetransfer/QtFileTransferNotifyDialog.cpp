@@ -18,7 +18,6 @@
  */
 
 #include "QtFileTransferNotifyDialog.h"
-
 #include "ui_NotifyDialog.h"
 
 #include <qtutil/WidgetBackgroundImage.h>

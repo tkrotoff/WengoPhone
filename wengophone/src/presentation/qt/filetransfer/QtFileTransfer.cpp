@@ -18,7 +18,6 @@
  */
 
 #include "QtFileTransfer.h"
-
 #include "QtFileTransferAcceptDialog.h"
 #include "QtFileTransferNotifyDialog.h"
 #include "QtFileTransferWidget.h"
@@ -207,11 +206,11 @@ void QtFileTransfer::needUpgradeEventHandlerSlot() {
 
 void QtFileTransfer::peerNeedsUpgradeEventHandlerSlot(const QString & contactID) {
 
-	QString message = contactID + " " + QString(tr("is trying to send you a file:"
-		"but his WengoPhone must be upgraded in order to receive it."
-		"Tell him to download the latest version."));
 	QtFileTransferNotifyDialog qtFileTransferNotifyDialog(_qtFileTransferWidget);
 	qtFileTransferNotifyDialog.setTitle(tr("Tell your contact<br> to upgrade<br> his WengoPhone"));
+	QString message = contactID + " " + QString(tr("is trying to send you a file "
+		"but his WengoPhone must be upgraded in order to receive it."
+		"Tell him to download the latest version."));
 	qtFileTransferNotifyDialog.setMessage(message);
 
 	qtFileTransferNotifyDialog.exec();

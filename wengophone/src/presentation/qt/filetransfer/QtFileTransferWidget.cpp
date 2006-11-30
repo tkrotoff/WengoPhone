@@ -18,11 +18,9 @@
  */
 
 #include "QtFileTransferWidget.h"
-
-#include "ui_FileTransferWidget.h"
-
 #include "QtFileTransferDownloadItem.h"
 #include "QtFileTransferUploadItem.h"
+#include "ui_FileTransferWidget.h"
 
 #include <filesessionmanager/ReceiveFileSession.h>
 #include <filesessionmanager/SendFileSession.h>
@@ -31,10 +29,9 @@
 #include <model/config/ConfigManager.h>
 #include <model/profile/AvatarList.h>
 
+#include <qtutil/SafeConnect.h>
 #include <util/Logger.h>
 #include <util/SafeDelete.h>
-
-#include <qtutil/SafeConnect.h>
 
 #include <QtGui/QtGui>
 
@@ -76,7 +73,9 @@ void QtFileTransferWidget::clean(bool cleanButton) {
 
 	if (_ui->tabWidget->currentIndex() == DOWNLOAD_TAB_INDEX) {
 
-		for (int i = 0; i < _ui->downloadTransferListWidget->count(); i++) {
+		int count = _ui->downloadTransferListWidget->count();
+		for (int i = count - 1; i >= 0; i--) {
+
 			QListWidgetItem * item = _ui->downloadTransferListWidget->item(i);
 			QtFileTransferDownloadItem * widgetItem = (QtFileTransferDownloadItem*)_ui->downloadTransferListWidget->itemWidget(item);
 
@@ -141,7 +140,7 @@ void QtFileTransferWidget::addSendItem(SendFileSession * fileSession,
 	const std::string & filename, const std::string & contact) {
 
 	QtFileTransferUploadItem * fileTransferItem = new QtFileTransferUploadItem(this, fileSession,
-			QString::fromStdString(filename), contact);
+		QString::fromStdString(filename), contact);
 	SAFE_CONNECT(fileTransferItem, SIGNAL(removeClicked()), SLOT(itemRemoveClicked()));
 	QListWidgetItem * item = new QListWidgetItem(/*_ui->uploadTransferListWidget*/);
 	item->setSizeHint(fileTransferItem->minimumSizeHint());
