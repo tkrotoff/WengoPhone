@@ -39,55 +39,41 @@ macro (OW_CREATE_QT_QM_FILES qmFiles)
 
 	foreach(tsFile ${ARGN})
 
-		message(STATUS "lupdate " ${tsFile})
-
-		#add_custom_command(
-		#	OUTPUT
-		#		${tsFile}
-		#	COMMAND
-		#		${QT_LUPDATE_EXECUTABLE}
-		#		${${PROJECT_NAME}_SRCS}
-		#		-ts ${tsFile}
-		#)
-
-		execute_process(
+		add_custom_command(
+			OUTPUT
+				${tsFile}
 			COMMAND
 				${QT_LUPDATE_EXECUTABLE}
 				${${PROJECT_NAME}_SRCS}
 				-ts ${tsFile}
+				-noobsolete
+				-verbose
+			DEPENDS
+				${${PROJECT_NAME}_SRCS}
 			WORKING_DIRECTORY
 				${CMAKE_CURRENT_SOURCE_DIR}
-			OUTPUT_VARIABLE
-				${tsFile}
 		)
 
 		get_filename_component(basename ${tsFile} NAME_WE)
 
 		get_filename_component(qmFile
-			${CMAKE_CURRENT_BINARY_DIR}/${basename}.qm
+			${BUILD_DIR}/${basename}.qm
 			ABSOLUTE
 		)
 
-		message(STATUS "lrelease " ${qmFile})
-
-		#add_custom_command(
-		#	OUTPUT
-		#		${qmFile}
-		#	COMMAND
-		#		${QT_LRELEASE_EXECUTABLE}
-		#		${tsFile}
-		#		-qm ${qmFile}
-		#)
-
-		execute_process(
+		add_custom_command(
+			OUTPUT
+				${qmFile}
 			COMMAND
 				${QT_LRELEASE_EXECUTABLE}
 				${tsFile}
 				-qm ${qmFile}
+				-nounfinished
+				-verbose
+			DEPENDS
+				${tsFile}
 			WORKING_DIRECTORY
 				${CMAKE_CURRENT_SOURCE_DIR}
-			OUTPUT_VARIABLE
-				${qmFile}
 		)
 
 		set(${qmFiles} ${${qmFiles}} ${qmFile})

@@ -439,12 +439,14 @@ endif (APPLE)
 
 ow_create_binary()
 
-
 file(GLOB tsFiles ${CMAKE_CURRENT_SOURCE_DIR}/lang/*.ts)
-ow_create_qt_qm_files(qmFiles ${tsFiles})
-foreach(qmFile ${qmFiles})
-	ow_copy_file(${qmFile} lang/.)
-endforeach(qmFile ${qmFiles})
+ow_create_qt_qm_files(qmFiles
+	${tsFiles}
+)
+add_custom_target(lupdate
+	DEPENDS
+		${qmFiles}
+)
 
 ow_copy_dir_recursive(${CMAKE_CURRENT_SOURCE_DIR}/webpages/* webpages/.)
 

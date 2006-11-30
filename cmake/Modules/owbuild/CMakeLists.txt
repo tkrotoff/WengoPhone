@@ -1,3 +1,6 @@
+# Should always be first
+include(OWGlobalVariables)
+
 include(OWAddPrivateCompileFlags)
 include(OWAddPrivateDefinitions)
 include(OWAddPrivateIncludeDirs)

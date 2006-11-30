@@ -3,7 +3,6 @@ project(wengophone)
 # Global variables
 set(APPLICATION_NAME WengoPhone)
 set(APPLICATION_VERSION "2.0")
-string(TOLOWER ${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE} BUILD_DIR)
 
 # Where to look first for cmake modules, before ${CMAKE_ROOT}/Modules/ is checked
 set(CMAKE_MODULE_PATH

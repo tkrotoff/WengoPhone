@@ -11,12 +11,10 @@ macro (OW_POST_BUILD_COPY_FILE src dst)
 
 	ow_check_project()
 
-	string(TOLOWER ${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE} dir)
-
 	add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 		COMMAND ${CMAKE_COMMAND} -E copy_if_different
 			\"${src}\"
-			\"${dir}/${dst}\"
+			\"${BUILD_DIR}/${dst}\"
 	)
 
 endmacro (OW_POST_BUILD_COPY_FILE)
