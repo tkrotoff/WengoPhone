@@ -41,18 +41,39 @@ public:
 
 	/**
 	 * Default constructor.
+	 * @param parent the parent widget
 	 */
 	QtFileTransferWidget(QWidget * parent);
 
+	/**
+	 * Destructor.
+	 */
 	~QtFileTransferWidget();
 
+	/**
+	 * Set (graphically and in Config) the download folder.
+	 * @param folder the path to the download folder.
+	 */
 	void setDownloadFolder(const QString & folder);
 
+	/**
+	 * Add a download item in the widget.
+	 * @param fileSession the fileSession
+	 */
 	void addReceiveItem(ReceiveFileSession * fileSession);
 
+	/**
+	 * Add an upload item in the widget
+	 * @param fileSession the file session
+	 * @param filename the filename
+	 * @param contact the contact
+	 */
 	void addSendItem(SendFileSession * fileSession, const std::string & filename,
-		const std::string & contactId, const std::string & contact);
+		const std::string & contact);
 
+	/**
+	 * Show and raise the widget.
+	 */
 	void showAndRaise();
 
 private Q_SLOTS:
@@ -76,10 +97,17 @@ private:
 
 	void clean(bool cleanButton);
 
+	/**
+	 * Set the upload tab active.
+	 */
 	void showUploadTab();
 
+	/**
+	 * Set the download tab active.
+	 */
 	void showDownloadTab();
 
+	/** a cache for the path to the download folder */
 	QString _downloadFolder;
 
 	Ui::FileTransferWidget * _ui;

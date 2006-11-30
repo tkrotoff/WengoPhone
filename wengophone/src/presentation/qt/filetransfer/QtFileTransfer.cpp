@@ -20,22 +20,18 @@
 #include "QtFileTransfer.h"
 
 #include "QtFileTransferAcceptDialog.h"
-#include "QtFileTransferUpgradeDialog.h"
+#include "QtFileTransferNotifyDialog.h"
 #include "QtFileTransferWidget.h"
 
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
-
+#include <coipmanager/CoIpManager.h>
 #include <control/contactlist/CContactList.h>
 
-#include <coipmanager/CoIpManager.h>
-
 #include <imwrapper/IMContactSet.h>
-
+#include <qtutil/SafeConnect.h>
 #include <util/Logger.h>
 #include <util/SafeDelete.h>
-
-#include <qtutil/SafeConnect.h>
 
 #include <QtGui/QtGui>
 
@@ -148,27 +144,30 @@ void QtFileTransfer::createSendFileSession(IMContactSet imContactSet, const QStr
 	File file(std::string(filename.toUtf8().constData()), File::EncodingUTF8);
 
 	// check the file size
-	if (file.getSize() > 0 && file.getSize() < INT_MAX) {
+	if (file.getSize() > INT_MAX) {
+		QMessageBox::warning(_qtFileTransferWidget, tr("File size error"),
+			tr("%1 exceeds the maximum authorized size.").arg(QString::fromStdString(file.getFileName())),
+			QMessageBox::Ok, 0, 0
+		);
+	} else if (file.getSize() <= 0) {
+		QMessageBox::warning(_qtFileTransferWidget, tr("File size error"),
+			tr("%1 has size 0.").arg(QString::fromStdString(file.getFileName())),
+			QMessageBox::Ok, 0, 0
+		);
+	} else {
 
 		SendFileSession * fileSession = _coIpManager->getFileSessionManager().createSendFileSession();
 		fileSession->addFile(file);
-
+	
 		for (IMContactSet::const_iterator it = imContactSet.begin(); it != imContactSet.end(); ++it) {
+	
 			std::string contactId = cContactList.findContactThatOwns(*it);
 			fileSession->addContact(contactId);
-
-			_qtFileTransferWidget->addSendItem(fileSession, filename.toStdString(), contactId, (*it).getContactId());
+			_qtFileTransferWidget->addSendItem(fileSession, filename.toStdString(), (*it).getContactId());
 		}
-
+	
 		// HACK : Unique file transfer hack
 		_coIpManager->getFileSessionManager().queueSession(fileSession);
-
-	} else {
-
-		QMessageBox::warning(_qtFileTransferWidget, tr("File size error"),
-			tr("%1 exceeds the maximum authorized size or has size 0.").arg(QString::fromStdString(file.getFileName())),
-			QMessageBox::Ok, 0, 0
-		);
 	}
 }
 
@@ -197,51 +196,25 @@ void QtFileTransfer::peerNeedsUpgradeEventHandler(FileSessionManager & sender, c
 }
 
 void QtFileTransfer::needUpgradeEventHandlerSlot() {
-	QtFileTransferUpgradeDialog qtFileTransferUpgradeDialog(_qtFileTransferWidget);
-	qtFileTransferUpgradeDialog.setHeader(tr("<html><head><meta name=\"qrichtext\" content=\"1\" />"
-		"</head><body style=\" white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt;"
-		"font-weight:400; font-style:normal; text-decoration:none;\"><p style=\" margin-top:0px;"
-		"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">"
-		"<span style=\" font-size:18pt; font-weight:600; color:#ffffff;\">Please upgrade<br> your"
-		"WengoPhone</span></p></body></html>"));
-	qtFileTransferUpgradeDialog.setStatus(tr("<html><head><meta name=\"qrichtext\" content=\"1\" />"
-		"</head><body style=\" white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt;"
-		"font-weight:400; font-style:normal; text-decoration:none;\"><p style=\" margin-top:0px;"
-		"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"
-		"font-size:8pt;\"><span style=\" font-weight:600;\">The file cannot be received:"
-		"</span> you must upgrade your WengoPhone in order to receive it.</p></body></html>"));
 
-	if (qtFileTransferUpgradeDialog.exec() == QDialog::Accepted) {
+	QtFileTransferNotifyDialog qtFileTransferNotifyDialog(_qtFileTransferWidget);
+	qtFileTransferNotifyDialog.setTitle(tr("Please upgrade<br> your WengoPhone"));
+	qtFileTransferNotifyDialog.setMessage(tr("The file cannot be received:"
+		"you must upgrade your WengoPhone in order to receive it."));
 
-	} else {
-
-	}
+	qtFileTransferNotifyDialog.exec();
 }
 
 void QtFileTransfer::peerNeedsUpgradeEventHandlerSlot(const QString & contactID) {
-	QString status = QString(tr("<html><head><meta name=\"qrichtext\" content=\"1\" />"
-		"</head><body style=\" white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt;"
-		"font-weight:400; font-style:normal; text-decoration:none;\"><p style=\" margin-top:0px;"
-		"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"
-		"font-size:8pt;\"><span style=\" font-weight:600;\">"))
-		+ contactID
-		+ QString(tr(" is trying to send you a file:"
-		"</span> but his WengoPhone must be upgraded in order to receive it. Tell him to download the latest version.</p></body></html>"));
-	QtFileTransferUpgradeDialog qtFileTransferUpgradeDialog(_qtFileTransferWidget);
-	qtFileTransferUpgradeDialog.setHeader(tr("<html><head><meta name=\"qrichtext\" content=\"1\" />"
-		"</head><body style=\" white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt;"
-		"font-weight:400; font-style:normal; text-decoration:none;\"><p style=\" margin-top:0px;"
-		"margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">"
-		"<span style=\" font-size:18pt; font-weight:600; color:#ffffff;\">Tell your contact<br> to"
-		"upgrade<br> his WengoPhone</span></p></body></html>"));
-	qtFileTransferUpgradeDialog.setStatus(status);
 
+	QString message = contactID + " " + QString(tr("is trying to send you a file:"
+		"but his WengoPhone must be upgraded in order to receive it."
+		"Tell him to download the latest version."));
+	QtFileTransferNotifyDialog qtFileTransferNotifyDialog(_qtFileTransferWidget);
+	qtFileTransferNotifyDialog.setTitle(tr("Tell your contact<br> to upgrade<br> his WengoPhone"));
+	qtFileTransferNotifyDialog.setMessage(message);
 
-	if (qtFileTransferUpgradeDialog.exec() == QDialog::Accepted) {
-
-	} else {
-
-	}
+	qtFileTransferNotifyDialog.exec();
 }
 
 const QString QtFileTransfer::getChosenFile() const {
@@ -257,4 +230,3 @@ const QString QtFileTransfer::getChosenFile() const {
 	);
 	return filename;
 }
-

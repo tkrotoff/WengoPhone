@@ -138,10 +138,10 @@ void QtFileTransferWidget::addReceiveItem(ReceiveFileSession * fileSession) {
 }
 
 void QtFileTransferWidget::addSendItem(SendFileSession * fileSession,
-	const std::string & filename, const std::string & contactId, const std::string & contact) {
+	const std::string & filename, const std::string & contact) {
 
 	QtFileTransferUploadItem * fileTransferItem = new QtFileTransferUploadItem(this, fileSession,
-			QString::fromStdString(filename), contactId, contact);
+			QString::fromStdString(filename), contact);
 	SAFE_CONNECT(fileTransferItem, SIGNAL(removeClicked()), SLOT(itemRemoveClicked()));
 	QListWidgetItem * item = new QListWidgetItem(/*_ui->uploadTransferListWidget*/);
 	item->setSizeHint(fileTransferItem->minimumSizeHint());

@@ -34,8 +34,6 @@ namespace Ui { class FileTransferItem; }
  * Represents graphically one file transfer.
  * Auto adapt its appearance to its state.
  *
- * TODO: delete file Session objects
- *
  * @author Mathieu Stute
  */
 class QtFileTransferItem : public QWidget, public Trackable {
@@ -51,10 +49,15 @@ public:
 	};
 
 	/**
-	 * Default constructor.
+	 * Constructor.
+	 * @param parent the parent widget
+	 * @param type type of QtFileTransferItem (Download or Upload)
 	 */
 	QtFileTransferItem(QWidget * parent, Type type);
 
+	/**
+	 * Destructor.
+	 */
 	~QtFileTransferItem();
 
 	/**
@@ -63,19 +66,33 @@ public:
 	 */
 	virtual bool isRunning() const = 0;
 
+	/**
+	 * @return true if the remove button has been clicked.
+	 */
 	bool removeHasBeenClicked() {
 		return _removeClicked;
 	}
 
 Q_SIGNALS:
 
+	/**
+	 * The state has changed.
+	 * @param state the new state.
+	 */
 	void stateChangeEvent(const QString & state);
 
+	/**
+	 * Progression change (thread safe)
+	 * @param progress total progress.
+	 */
 	void progressChangeEvent(int progress);
 
 	// the int is a IFileSession::IFileSessionEvent
 	void updateStateEvent(int event);
 
+	/**
+	 * Remove has been clicked.
+	 */
 	void removeClicked();
 
 private Q_SLOTS:
@@ -183,6 +200,10 @@ protected:
 	/** complete filename */
 	QString _filename;
 
+	/** the peer contact */
+	QString _contact;
+
+	/** remove button clicked handler */
 	bool _removeClicked;
 
 	Ui::FileTransferItem * _ui;

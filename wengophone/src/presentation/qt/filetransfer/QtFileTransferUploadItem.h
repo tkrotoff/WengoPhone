@@ -30,7 +30,7 @@ class IMContact;
 class CoIpModule;
 
 /**
- *
+ * A QtFileTransferItem dedicate to upload.
  * @author Mathieu Stute
  */
 class QtFileTransferUploadItem : public QtFileTransferItem {
@@ -38,10 +38,10 @@ class QtFileTransferUploadItem : public QtFileTransferItem {
 public:
 
 	/**
-	 * Default constructor.
+	 * Constructor.
 	 */
 	QtFileTransferUploadItem(QWidget * parent, SendFileSession * fileSession, 
-		const QString & filename, const std::string & contactId, const std::string & contact);
+		const QString & filename, const std::string & contact);
 
 	/**
 	 * @see QtFileTransferItem::isRunning().
@@ -69,17 +69,28 @@ private Q_SLOTS:
 
 private:
 
+	/**
+	 * @see SendFileSession::fileTransferProgressionEvent
+	 */
 	void fileTransferProgressionEventHandler(SendFileSession & sender, IMContact imContact,
 		File sentFile, int percentage);
 
+	/**
+	 * @see SendFileSession::fileTransferEvent
+	 */
 	void fileTransferEventHandler(SendFileSession & sender, IFileSession::IFileSessionEvent event,
 		IMContact imContact, File sentFile);
 
+	/**
+	 * The module has finished its job, it can be released.
+	 * @see CoIpModule::moduleFinishedEvent
+	 */
 	void moduleFinishedEventHandler(CoIpModule & sender);
 
+	/**
+	 * Direct link to SendFileSession.
+	 */
 	SendFileSession * _sendFileSession;
-
-	std::string _contactId;
 };
 
 #endif	//OWQTFILETRANSFERUPLOADITEM_H

@@ -30,10 +30,9 @@
 #include <QtGui/QtGui>
 
 QtFileTransferUploadItem::QtFileTransferUploadItem(QWidget * parent, SendFileSession * fileSession,
-	const QString & filename, const std::string & contactId, const std::string & contact)
+	const QString & filename, const std::string & contact)
 	: QtFileTransferItem(parent, QtFileTransferItem::Upload),
-	_sendFileSession(fileSession),
-	_contactId(contactId) {
+	_sendFileSession(fileSession) {
 
 	_filename = filename;
 
@@ -66,7 +65,7 @@ void QtFileTransferUploadItem::stop() {
 void QtFileTransferUploadItem::fileTransferProgressionEventHandler(
 	SendFileSession & sender, IMContact imContact, File sentFile, int percentage) {
 
-	LOG_DEBUG("fileTransferProgressionEventHandler: " + String::fromNumber(percentage));
+	LOG_DEBUG("fileTransferProgressionEventHandler: " + String::fromNumber(percentage) + "%");
 	progressChangeEvent(percentage);
 }
 

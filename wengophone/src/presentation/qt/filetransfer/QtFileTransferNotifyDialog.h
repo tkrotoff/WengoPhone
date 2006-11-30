@@ -17,33 +17,49 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "QtFileTransferUpgradeDialog.h"
+#ifndef OWQTFILETRANSFERNOTIFYDIALOG_H
+#define OWQTFILETRANSFERNOTIFYDIALOG_H
 
-#include "ui_UpgradeDialog.h"
+#include <QtGui/QDialog>
 
-#include <util/SafeDelete.h>
+#include <string>
 
-#include <qtutil/WidgetBackgroundImage.h>
+namespace Ui {class NotifyDialog;}
 
-QtFileTransferUpgradeDialog::QtFileTransferUpgradeDialog(QWidget * parent)
-	: QDialog(parent) {
+/**
+ * Qt file transfer upgrade dialog.
+ *
+ * @author Nicolas Couturier
+ * @author Mathieu Stute
+ */
+class QtFileTransferNotifyDialog : public QDialog {
+	Q_OBJECT
+public:
 
-	_ui = new Ui::UpgradeDialog();
-	_ui->setupUi(this);
+	/**
+	 * Constructor.
+	 * @param parent the parent widget
+	 */
+	QtFileTransferNotifyDialog(QWidget * parent);
 
-	//install header image
-	WidgetBackgroundImage::setBackgroundImage(_ui->headerLabel, ":pics/headers/file-tranfer.png", true);
-	////
-}
+	/**
+	 * Destructor.
+	 */
+	~QtFileTransferNotifyDialog();
 
-QtFileTransferUpgradeDialog::~QtFileTransferUpgradeDialog() {
-	OWSAFE_DELETE(_ui);
-}
+	/**
+	 * Sets the header label.
+	 */
+	void setTitle(const QString & title);
 
-void QtFileTransferUpgradeDialog::setHeader(const QString & header) {
-	_ui->headerLabel->setText(header);
-}
+	/**
+	 * Sets the status label.
+	 */
+	void setMessage(const QString & message);
 
-void QtFileTransferUpgradeDialog::setStatus(const QString & status) {
-	_ui->statusLabel->setText(status);
-}
+private:
+
+	Ui::NotifyDialog * _ui;
+};
+
+#endif	//OWQTFILETRANSFERNOTIFYDIALOG_H

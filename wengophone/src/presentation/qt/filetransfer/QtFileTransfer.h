@@ -26,7 +26,6 @@
 #include <filesessionmanager/SendFileSession.h>
 
 #include <util/Trackable.h>
-
 #include <util/List.h>
 
 class CoIpManager;
@@ -82,8 +81,14 @@ Q_SIGNALS:
 	 */
 	void newReceiveFileSessionCreatedEventHandlerSignal(ReceiveFileSession * fileSession);
 
+	/**
+	 * @brief Thread safe code
+	 */
 	void needUpgradeEventHandlerSignal();
 
+	/**
+	 * @brief Thread safe code
+	 */
 	void peerNeedsUpgradeEventHandlerSignal(const QString & contactID);
 
 private Q_SLOTS:
@@ -93,8 +98,14 @@ private Q_SLOTS:
 	 */
 	void newReceiveFileSessionCreatedEventHandlerSlot(ReceiveFileSession * fileSession);
 
+	/**
+	 * @brief Thread safe code
+	 */
 	void needUpgradeEventHandlerSlot();
 
+	/**
+	 * @brief Thread safe code
+	 */
 	void peerNeedsUpgradeEventHandlerSlot(const QString & contactID);
 
 private:
@@ -104,8 +115,14 @@ private:
 	 */
 	void newReceiveFileSessionCreatedEventHandler(FileSessionManager & sender, ReceiveFileSession fileSession);
 
+	/**
+	 * @see FileSessionManager::needUpgradeEvent
+	 */
 	void needUpgradeEventHandler(FileSessionManager & sender);
 
+	/**
+	 * @see FileSessionManager::peerNeedsUpgradeEvent
+	 */
 	void peerNeedsUpgradeEventHandler(FileSessionManager & sender, const std::string contactID);
 
 	/**
@@ -118,8 +135,14 @@ private:
 	 */
 	bool isFileInDir(const QString & dir, const QString & filename);
 
+	/**
+	 * Direct link to the transfer widget.
+	 */
 	QtFileTransferWidget * _qtFileTransferWidget;
 
+	/**
+	 * Direct link to CoIpManager.
+	 */
 	CoIpManager * _coIpManager;
 };
 

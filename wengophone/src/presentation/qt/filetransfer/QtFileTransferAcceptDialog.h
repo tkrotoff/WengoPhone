@@ -36,8 +36,15 @@ class QtFileTransferAcceptDialog : public QDialog {
 	Q_OBJECT
 public:
 
+	/**
+	 * Constructor.
+	 * @param parent the parent widget
+	 */
 	QtFileTransferAcceptDialog(QWidget * parent);
 
+	/**
+	 * Destructor.
+	 */
 	~QtFileTransferAcceptDialog();
 
 	/**

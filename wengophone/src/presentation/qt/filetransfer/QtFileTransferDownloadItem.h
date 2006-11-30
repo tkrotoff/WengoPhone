@@ -31,7 +31,7 @@ class IMContact;
 class CoIpModule;
 
 /**
- *
+ * A QtFileTransferItem dedicate to upload.
  * @author Mathieu Stute
  */
 class QtFileTransferDownloadItem : public QtFileTransferItem {
@@ -69,14 +69,27 @@ private Q_SLOTS:
 
 private:
 
+	/**
+	 * @see ReceiveFileSession::fileTransferProgressionEvent
+	 */
 	void fileTransferProgressionEventHandler(ReceiveFileSession & sender,
 		IMContact imContact, File sentFile, int percentage);
 
+	/**
+	 * @see ReceiveFileSession::fileTransferEvent
+	 */
 	void fileTransferEventHandler(ReceiveFileSession & sender,
 		IFileSession::IFileSessionEvent event, IMContact imContact, File sentFile);
 
+	/**
+	 * The module has finished its job, it can be released.
+	 * @see CoIpModule::moduleFinishedEvent
+	 */
 	void moduleFinishedEventHandler(CoIpModule & sender);
 
+	/**
+	 * Direct link to the ReceiveFileSession.
+	 */
 	ReceiveFileSession * _receiveFileSession;
 };
 
