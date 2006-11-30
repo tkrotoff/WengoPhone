@@ -45,16 +45,6 @@
         <translation type="unfinished">Copyright (C) 2004-2006 Wengo http://openwengo.com</translation>
     </message>
     <message>
-        <source>This program is free software; you can redistribute it and/ormodify it under 
-the terms of the GNU General Public Licenseas published by the Free Software 
-Foundation; either version 2of the License, or (at your option) any later 
-version.</source>
-        <translation type="obsolete">Dieses Programm ist freie Software. Du kannst es weiter verteilen und/oder 
-modifizieren, vorrausgesetzt die Bedingungen der GNU General Public License 
-Version 2 oder spätere werden so eingehalten, wie sie von der Free Software 
-Foundation veröffentlicht wurden.</translation>
-    </message>
-    <message>
         <source>Authors</source>
         <translation type="unfinished">Entwickler</translation>
     </message>
@@ -83,48 +73,6 @@ of the License, or (at your option) any later version.</source>
     <message>
         <source>test.bmp</source>
         <translation type="unfinished">test.bmp</translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
-white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-
-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Contact: 
-&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="obsolete">&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
-white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-
-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Kontakt: 
-&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
-white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-
-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Filename: 
-&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="obsolete">&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
-white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-
-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Dateiname: 
-&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
-white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-
-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;&lt;h1&gt;Incoming 
-file&lt;/h1&gt;&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="obsolete">&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
-white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-
-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-
-weight:600;&quot;&gt;&lt;h1&gt;Eingehende Datei&lt;/h1&gt;&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>&amp;Accept</source>
@@ -232,12 +180,6 @@ weight:600;&quot;&gt;&lt;h1&gt;Eingehende Datei&lt;/h1&gt;&lt;/span&gt;&lt;/p&gt
         <translation type="unfinished">Erweiterte Einstellungen öffnen</translation>
     </message>
     <message>
-        <source>Warning, this part is for advanced users.&lt;br&gt;Any mistake can badly damage 
-the software.</source>
-        <translation type="obsolete">Achtung, dieser Abschnitt ist für erfahrene Anwender.&lt;br /&gt;Falsche 
-Einstellungen könnten die Software schwer beschädigen.</translation>
-    </message>
-    <message>
         <source>Automatically answer incoming calls from</source>
         <translation type="unfinished">Beantworte automatisch eingehende Anrufe von</translation>
     </message>
@@ -306,15 +248,6 @@ Einstellungen könnten die Software schwer beschädigen.</translation>
         <translation type="unfinished">WengoPhone - Update verfügbar</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;An update is available, click &lt;span style=&quot; text-
-decoration: underline; color:#0000ff;&quot;&gt;here&lt;/span&gt; to download the new 
-version&lt;br /&gt;&lt;br /&gt;Version:%1&lt;br /&gt;File Size:%2 (MB)&lt;br /&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="obsolete">&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;Ein Update ist verfügbar, klicke&lt;span style=&quot; text-
-decoration: underline; color:#0000ff;&quot;&gt;hier&lt;/span&gt;, um die neue Version 
-herunterzuladen&lt;br /&gt;&lt;br /&gt;Version:%1&lt;br /&gt;Dateigröße:%2 (MB)&lt;br 
-/&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;An update is available, click &lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;here&lt;/span&gt; to download the new version&lt;br /&gt;&lt;br /&gt;Version:<byte value="x9"/>%1&lt;br /&gt;File Size:<byte value="x9"/>%2 (MB)&lt;br /&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -324,12 +257,6 @@ herunterzuladen&lt;br /&gt;&lt;br /&gt;Version:%1&lt;br /&gt;Dateigröße:%2 (MB
     <message>
         <source>Call Forward Settings</source>
         <translation type="unfinished">Anrufweiterleitungen</translation>
-    </message>
-    <message>
-        <source>For example +3314500XXXX (+33 is the country code and 14500XXXX is the phone 
-number)</source>
-        <translation type="obsolete">Zum Beispiel +3314500XXXX (+33 ist der Ländercode und 14500XXXX ist die 
-Telefonnummer)</translation>
     </message>
     <message>
         <source>3rd:</source>
@@ -354,16 +281,6 @@ Telefonnummer)</translation>
     <message>
         <source>Disable call forwarding</source>
         <translation type="unfinished">Anrufweiterleitung ausschalten</translation>
-    </message>
-    <message>
-        <source>Call forwarding is active if you&apos;re not connected to Wengo, when your line 
-is busy or 20 seconds after you did not answer a call. You can configure up 
-to three call forwards to landlines, mobile phones or voice mail (if 
-applicable)</source>
-        <translation type="obsolete">Die Anrufweiterleitung ist aktiv, wenn keine Verbindung mit Wengo besteht, 
-wenn die Leitung besetzt ist oder nach 20 Sekunden bei nicht Annahme eines 
-Anrufes. Du kannst bis zu drei Anrufweiterleitungen zu Festnetzanschlüssen, 
-Mobiltelefonen oder einem Voicemailsystem (sofern Verfügbar) festlegen.</translation>
     </message>
     <message>
         <source>Forward all unanswered calls to following phone numbers:</source>
@@ -500,20 +417,6 @@ Mobiltelefonen oder einem Voicemailsystem (sofern Verfügbar) festlegen.</transl
         <translation type="unfinished">Starten</translation>
     </message>
     <message>
-        <source>&lt;span style=&quot; font-size:18pt;&quot;&gt;Conference&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;Please enter 
-two phone numbers &lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-
-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;or Wengo 
-contact ID in order&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-
-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;to create 
-a 3-way conference.&lt;/p&gt;</source>
-        <translation type="obsolete">&lt;span style=&quot; font-size:18pt;&quot;&gt;Konferenz&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;Bitte gib zwei 
-Telefonnummern &lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-
-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;oder 
-Wengo-Kontakt-IDs ein, um&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; 
-margin-left:0px; margin-right:0px; -qt-block-indent:0; text-
-indent:0px;&quot;&gt;eine Dreierkonferenz zu starten.&lt;/p&gt;</translation>
-    </message>
-    <message>
         <source>Phone number 2:</source>
         <translation type="unfinished">Telefonnummer 2:</translation>
     </message>
@@ -532,43 +435,6 @@ indent:0px;&quot;&gt;eine Dreierkonferenz zu starten.&lt;/p&gt;</translation>
     <message>
         <source>&lt;span style=&quot; font-size:18pt;&quot;&gt;Conference&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;Please enter two phone numbers &lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;or Wengo contact ID in order&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;to create a 3-way conference.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>ConferenceInviteWidget</name>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Abbrechen</translation>
-    </message>
-    <message>
-        <source>&lt;span style=&quot; font-size:18pt;&quot;&gt;Conference&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;Please enter 
-two phone numbers &lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-
-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;or Wengo 
-contact ID in order&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-
-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;to create 
-a 3-way conference.&lt;/p&gt;</source>
-        <translation type="obsolete">&lt;span style=&quot; font-size:18pt;&quot;&gt;Konferenz&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;Bitte gib zwei 
-Telefonnummern &lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-
-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;oder 
-Wengo-Kontakt-IDs ein, um&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; 
-margin-left:0px; margin-right:0px; -qt-block-indent:0; text-
-indent:0px;&quot;&gt;eine Dreierkonferenz zu starten.&lt;/p&gt;</translation>
-    </message>
-    <message>
-        <source>&amp;Add &gt;&gt;</source>
-        <translation type="obsolete">&amp;Hinzufügen &gt;&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;&lt; &amp;Remove</source>
-        <translation type="obsolete">&lt;&lt; &amp;Entfernen</translation>
-    </message>
-    <message>
-        <source>Available Contacts</source>
-        <translation type="obsolete">Verfügbare Kontakte</translation>
-    </message>
-    <message>
-        <source>&amp;Start</source>
-        <translation type="obsolete">&amp;Starten</translation>
     </message>
 </context>
 <context>
@@ -621,45 +487,6 @@ indent:0px;&quot;&gt;eine Dreierkonferenz zu starten.&lt;/p&gt;</translation>
     </message>
 </context>
 <context>
-    <name>CrashReport</name>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Abbrechen</translation>
-    </message>
-    <message>
-        <source>Program Failure</source>
-        <translation type="obsolete">Programmfehler</translation>
-    </message>
-    <message>
-        <source>The WengoPhone execution failed and has generated a diagnostic file.&lt;br&gt;This 
-file contains usefull information to solve the problem you are 
-encounting.&lt;br&gt;Thanks for your contribution.&lt;br&gt;&lt;br&gt;The WengoPhone 
-Development Team.</source>
-        <translation type="obsolete">Bei der Ausführung von WengoPhone ist ein Fehler aufgetreten und eine 
-Diagnosedatei wurde erstellt.&lt;br /&gt;Diese Datei enthält hilfreiche 
-Informationen, um das aufgetretene Problem zu beheben.&lt;br /&gt;Danke für Deine 
-Mitwirkung.&lt;br  /&gt;&lt;br /&gt;Das WengoPhone Entwicklungsteam.</translation>
-    </message>
-    <message>
-        <source>Send</source>
-        <translation type="obsolete">Senden</translation>
-    </message>
-    <message>
-        <source>Optional Information</source>
-        <translation type="obsolete">Freiwillige Angaben:</translation>
-    </message>
-    <message>
-        <source>In order to help the developers you can complete this report. This step is 
-optional.&lt;br&gt;Use Case Description:</source>
-        <translation type="obsolete">Um den Entwicklern zu helfen, kannst Du diesen Report vervollständigen. 
-Dieser Schritt ist freiwillig.&lt;br /&gt;Fehlerbeschreibung:</translation>
-    </message>
-    <message>
-        <source>Your Mail:</source>
-        <translation type="obsolete">Deine E-Mail Adresse:</translation>
-    </message>
-</context>
-<context>
     <name>CreditWidget</name>
     <message>
         <source>Your Wengo phone number</source>
@@ -699,13 +526,6 @@ Dieser Schritt ist freiwillig.&lt;br /&gt;Fehlerbeschreibung:</translation>
     </message>
 </context>
 <context>
-    <name>DialpadWidget</name>
-    <message>
-        <source>Audio Smileys</source>
-        <translation type="obsolete">Audio-Smileys</translation>
-    </message>
-</context>
-<context>
     <name>EventWidget</name>
     <message>
         <source>0</source>
@@ -739,10 +559,6 @@ Dieser Schritt ist freiwillig.&lt;br /&gt;Fehlerbeschreibung:</translation>
         <translation type="unfinished">Eingabemaske</translation>
     </message>
     <message>
-        <source>From:</source>
-        <translation type="obsolete">Von:</translation>
-    </message>
-    <message>
         <source>Pause</source>
         <translation type="unfinished">Pause</translation>
     </message>
@@ -766,20 +582,6 @@ Dieser Schritt ist freiwillig.&lt;br /&gt;Fehlerbeschreibung:</translation>
         <translation type="unfinished">WengoPhone - Dateitransfer-Manager</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
-white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-
-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
-indent:0; text-indent:0px;&quot;&gt;Click here to change your download 
-folder&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="obsolete">&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
-white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-
-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
-indent:0; text-indent:0px;&quot;&gt;Klicke hier, um das Downloadverzeichnis zu 
-ändern&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
         <source>Download folder:</source>
         <translation type="unfinished">Downloadverzeichnis:</translation>
     </message>
@@ -792,70 +594,16 @@ indent:0; text-indent:0px;&quot;&gt;Klicke hier, um das Downloadverzeichnis zu
         <translation type="unfinished">Upload</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
-white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-
-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
-indent:0; text-indent:0px;&quot;&gt;Clean all items in the list&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="obsolete">&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
-white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-
-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
-indent:0; text-indent:0px;&quot;&gt;Alle Einträge aus der Liste 
-löschen&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
         <source>&amp;Clean</source>
         <translation type="unfinished">&amp;Aufräumen</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Click here to change your download folder&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <source>Click here to change your download folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Clean all items in the list&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <source>Clean all items in the list</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>Form</name>
-    <message>
-        <source>&amp;Start</source>
-        <translation type="obsolete">&amp;Starten</translation>
-    </message>
-    <message>
-        <source>Chat room</source>
-        <translation type="obsolete">Chatraum</translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
-white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-
-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt; font-
-weight:600;&quot;&gt;Chat room&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="obsolete">&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
-white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-
-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt; font-
-weight:600;&quot;&gt;Chatraum&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-        <source>(Conference participants)</source>
-        <translation type="obsolete">(Konferenzteilnehmer)</translation>
-    </message>
-    <message>
-        <source>&amp;Remove</source>
-        <translation type="obsolete">&amp;Entfernen</translation>
-    </message>
-    <message>
-        <source>Group Name</source>
-        <translation type="obsolete">Gruppenname</translation>
-    </message>
-    <message>
-        <source>&amp;Add</source>
-        <translation type="obsolete">&amp;Hinzufügen</translation>
     </message>
 </context>
 <context>
@@ -960,14 +708,6 @@ weight:600;&quot;&gt;Chatraum&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</
     <message>
         <source>WengoPhone - Local HTTP Proxy</source>
         <translation type="unfinished">WengoPhone - Lokaler HTTP Proxy</translation>
-    </message>
-    <message>
-        <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;HTTP Proxy 
-Authentication&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;Your local HTTP proxy uses 
-authentication&lt;br&gt;Please enter your login and password&lt;/span&gt;</source>
-        <translation type="obsolete">&lt;span style=&quot;font-size:18pt;&quot;&gt;HTTP Proxy Authentifizierung&lt;/span&gt;&lt;br /&gt;&lt;br 
-/&gt;&lt;span&gt;Dein lokaler HTTP proxy benötigt eine Authentifizierung&lt;br /&gt;Bitte 
-gib Deinen Benutzernamen und Dein Passwort ein&lt;/span&gt;</translation>
     </message>
     <message>
         <source>HTTP Proxy Address:</source>
@@ -1171,12 +911,6 @@ gib Deinen Benutzernamen und Dein Passwort ein&lt;/span&gt;</translation>
         <translation type="unfinished">WengoPhone - Anmeldung</translation>
     </message>
     <message>
-        <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Login&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;Please enter your 
-email address and&lt;br&gt;password&lt;/span&gt;</source>
-        <translation type="obsolete">&lt;span style=&quot;font-size:18pt;&quot;&gt;Anmeldung&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;Bitte gib 
-deine E-Mail-Adresse und dein&lt;br&gt;Passwort ein&lt;/span&gt;</translation>
-    </message>
-    <message>
         <source>Forgot your password?</source>
         <translation type="unfinished">Passwort vergessen?</translation>
     </message>
@@ -1226,37 +960,6 @@ deine E-Mail-Adresse und dein&lt;br&gt;Passwort ein&lt;/span&gt;</translation>
     <message>
         <source></source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>MainWindow</name>
-    <message>
-        <source>MainWindow</source>
-        <translation type="obsolete">Hauptfenster</translation>
-    </message>
-    <message>
-        <source>Command::terminate()</source>
-        <translation type="obsolete">Command::terminate()</translation>
-    </message>
-    <message>
-        <source>Command::start()</source>
-        <translation type="obsolete">Command::start()</translation>
-    </message>
-    <message>
-        <source>Accept Call</source>
-        <translation type="obsolete">Anruf annehmen</translation>
-    </message>
-    <message>
-        <source>Send Chat Message</source>
-        <translation type="obsolete">Chat-Nachricht senden</translation>
-    </message>
-    <message>
-        <source>Make Call</source>
-        <translation type="obsolete">Anrufen</translation>
-    </message>
-    <message>
-        <source>Hang Up</source>
-        <translation type="obsolete">Auflegen</translation>
     </message>
 </context>
 <context>
@@ -1370,20 +1073,6 @@ deine E-Mail-Adresse und dein&lt;br&gt;Passwort ein&lt;/span&gt;</translation>
     <message>
         <source>Duration</source>
         <translation type="unfinished">Dauer</translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
-white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-
-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-size:13pt; 
-font-weight:600;&quot;&gt;NickName or number&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="obsolete">&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
-white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-
-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-size:13pt; 
-font-weight:600;&quot;&gt;Spitzname oder Nummer&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source></source>
@@ -1769,10 +1458,6 @@ Dienst besteht.</translation>
         <translation>Kontakt blockieren</translation>
     </message>
     <message>
-        <source>Forward to Cell phone</source>
-        <translation type="obsolete">Weiterleiten zum Handy</translation>
-    </message>
-    <message>
         <source>Start chat</source>
         <translation>Chat starten</translation>
     </message>
@@ -1863,10 +1548,6 @@ werden?</translation>
         <translation>Fehlerhafte Dateigröße</translation>
     </message>
     <message>
-        <source>%1 exceeds the maximum authorized size.</source>
-        <translation>%1 hat die maximal erlaubte Größe überschritten.</translation>
-    </message>
-    <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt;font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px;margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:18pt; font-weight:600; color:#ffffff;&quot;&gt;Please upgrade&lt;br&gt; yourWengoPhone&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1884,6 +1565,10 @@ werden?</translation>
     </message>
     <message>
         <source> is trying to send you a file:&lt;/span&gt; but his WengoPhone must be upgraded in order to receive it. Tell him to download the latest version.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 exceeds the maximum authorized size or has size 0.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2086,10 +1771,6 @@ werden?</translation>
         <translation>Abbrechen</translation>
     </message>
     <message>
-        <source>Are sure you want to delete this account?</source>
-        <translation type="obsolete">Willst du diesen Zugang wirklich löschen?</translation>
-    </message>
-    <message>
         <source>&amp;Delete</source>
         <translation>&amp;Löschen</translation>
     </message>
@@ -2115,10 +1796,6 @@ werden?</translation>
     <message>
         <source>&amp;Delete</source>
         <translation>&amp;Löschen</translation>
-    </message>
-    <message>
-        <source>Are sure you want to delete this IM contact?</source>
-        <translation type="obsolete">Willst du diesen IM-Kontakt wirklich löschen?</translation>
     </message>
     <message>
         <source>Are sure you want to delete this IM contact?
@@ -2249,12 +1926,6 @@ werden?</translation>
         <translation>WengoPhone - Konferenz fortsetzen</translation>
     </message>
     <message>
-        <source>When you are ready to start the conference, click on the button belowPlease 
-wait for a few seconds...</source>
-        <translation type="obsolete">Wenn du bereit bist die Konferenz zu starten, dann klicke unten auf den 
-Button. Bitte warte ein paar Sekunden...</translation>
-    </message>
-    <message>
         <source>Dialing</source>
         <translation>Wähle</translation>
     </message>
@@ -2367,14 +2038,6 @@ Please wait for a few seconds...</source>
         <translation>Bitte gib eine Telefonnummer ein.</translation>
     </message>
     <message>
-        <source>Your message is too long.This will send </source>
-        <translation type="obsolete">Deine Nachricht ist zu lang. Gesendet wird </translation>
-    </message>
-    <message>
-        <source> SMS.</source>
-        <translation type="obsolete"> SMS.</translation>
-    </message>
-    <message>
         <source>Do you want to continue?</source>
         <translation>Willst du fortfahren?</translation>
     </message>
@@ -2446,33 +2109,6 @@ manuell zu aktualisieren</translation>
     <message>
         <source>Connecting</source>
         <translation>Verbindung wird hergestellt</translation>
-    </message>
-</context>
-<context>
-    <name>QtSubscribe</name>
-    <message>
-        <source>Confirm password does not matched password</source>
-        <translation type="obsolete">Die Passwörter stimmen nicht überein</translation>
-    </message>
-    <message>
-        <source>Unknown Error</source>
-        <translation type="obsolete">Unbekannter Fehler</translation>
-    </message>
-    <message>
-        <source>You cannot use this email address, already in use</source>
-        <translation type="obsolete">Diese E-Mail Adresse wird bereits genutzt</translation>
-    </message>
-    <message>
-        <source>You cannot use this nickname, already in use</source>
-        <translation type="obsolete">Dieser Spitzname wird bereits genutzt</translation>
-    </message>
-    <message>
-        <source>Your password does not contain enough characters (6 minimum), try another one</source>
-        <translation type="obsolete">Dein Passwort enthält nicht genügend Zeichen (min. 6), versuch ein anderes</translation>
-    </message>
-    <message>
-        <source>Subscription Failed</source>
-        <translation type="obsolete">Registrierung fehlgeschlagen</translation>
     </message>
 </context>
 <context>
@@ -2594,16 +2230,6 @@ manuell zu aktualisieren</translation>
 <context>
     <name>QtUserProfileHandler</name>
     <message>
-        <source>Would you like to import contacts and IM accounts previously created in the 
-default profile to the profile named %1?</source>
-        <translation type="obsolete">Möchtest du die zuvor im Standardprofil erstellten Kontakte und IM-Zugänge 
-in das Profil %1 importieren?</translation>
-    </message>
-    <message>
-        <source>WengoPhone - Importing contacts and IM accounts</source>
-        <translation type="obsolete">WengoPhone - Importiere Kontakte und IM-Zugänge</translation>
-    </message>
-    <message>
         <source>A problem occured while loading your profile.
 The last backuped profile has been loaded: 
 you may have lost last changes made</source>
@@ -2665,7 +2291,7 @@ Choose another profile or create a new one.</source>
     <name>QtWebDirectory</name>
     <message>
         <source>WengoPhone - Directory</source>
-        <translation type="obsolete">WengoPhone - Verzeichnis</translation>
+        <translation type="unfinished">WengoPhone - Verzeichnis</translation>
     </message>
 </context>
 <context>
@@ -2877,14 +2503,6 @@ wird</translation>
         <translation type="unfinished">Signatur:</translation>
     </message>
     <message>
-        <source>Phone number:</source>
-        <translation type="obsolete">Telefonnummer:</translation>
-    </message>
-    <message>
-        <source>Enter the phone number here</source>
-        <translation type="obsolete">Gib hier die Telefonnummer ein</translation>
-    </message>
-    <message>
         <source></source>
         <translation type="unfinished"></translation>
     </message>
@@ -2908,12 +2526,6 @@ wird</translation>
         <translation type="unfinished">WengoPhone - Update wird herunter geladen</translation>
     </message>
     <message>
-        <source>Downloading WengoPhone update...Version:%1URL:%2File Size:%3 (MB)Speed:%4 
-(kB/s)</source>
-        <translation type="obsolete">Lade das WengoPhone Update herunter...Version:%1URL:%2Dateigröße:%3 
-(MB)Geschwindigkeit:%4 (kB/s)</translation>
-    </message>
-    <message>
         <source>Downloading WengoPhone update...
 
 Version:<byte value="x9"/>%1
@@ -2932,98 +2544,6 @@ Speed:<byte value="x9"/>%4 (kB/s)</source>
     <message>
         <source>Not Connected</source>
         <translation type="unfinished">Nicht verbunden</translation>
-    </message>
-</context>
-<context>
-    <name>SubscribeWengo1</name>
-    <message>
-        <source>Password:</source>
-        <translation type="obsolete">Passwort:</translation>
-    </message>
-    <message>
-        <source>Email:</source>
-        <translation type="obsolete">E-Mail:</translation>
-    </message>
-    <message>
-        <source>WengoPhone - Wengo Account Creation (1/2)</source>
-        <translation type="obsolete">WengoPhone - Neueinrichtung eines Wengo-Zugangs (1/2)</translation>
-    </message>
-    <message>
-        <source>* &lt;i&gt;Required fields&lt;/i&gt;</source>
-        <translation type="obsolete">* &lt;i&gt;Pflichtfelder&lt;/i&gt;</translation>
-    </message>
-    <message>
-        <source>Subscribe</source>
-        <translation type="obsolete">Registrierung</translation>
-    </message>
-    <message>
-        <source>Error message label</source>
-        <translation type="obsolete">Name der Fehlermeldung</translation>
-    </message>
-    <message>
-        <source>Nickname:</source>
-        <translation type="obsolete">Spitzname:</translation>
-    </message>
-    <message>
-        <source>*</source>
-        <translation type="obsolete">*</translation>
-    </message>
-    <message>
-        <source>Confirm password:</source>
-        <translation type="obsolete">Passwort bestätigen:</translation>
-    </message>
-    <message>
-        <source>&lt;i&gt;Please check your email and confirm the above details within 48 hours&lt;/i&gt;</source>
-        <translation type="obsolete">&lt;i&gt;Bitte überprüfe deine E-Mails und bestätige die oben angegebenen Angaben 
-innerhalb von 48 Stunden&lt;/i&gt;</translation>
-    </message>
-    <message>
-        <source>I read and accept the Terms of Service</source>
-        <translation type="obsolete">Ich habe die Nutzungsbedingungen gelesen und akzeptiert</translation>
-    </message>
-    <message>
-        <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Account Creation&lt;/span&gt;&lt;br /&gt;&lt;br 
-/&gt;&lt;span&gt;Please fill in the details below&lt;/span&gt;</source>
-        <translation type="obsolete">&lt;span style=&quot;font-size:18pt;&quot;&gt;Zugangserstellung&lt;/span&gt;&lt;br /&gt;&lt;br 
-/&gt;&lt;span&gt;Bitte fülle die nachstehenden Angaben aus&lt;/span&gt;</translation>
-    </message>
-</context>
-<context>
-    <name>SubscribeWengo2</name>
-    <message>
-        <source>Password:</source>
-        <translation type="obsolete">Passwort:</translation>
-    </message>
-    <message>
-        <source>Email:</source>
-        <translation type="obsolete">E-Mail:</translation>
-    </message>
-    <message>
-        <source>Nickname:</source>
-        <translation type="obsolete">Spitzname:</translation>
-    </message>
-    <message>
-        <source>WengoPhone - Wengo Account Creation (2/2)</source>
-        <translation type="obsolete">WengoPhone - Erstellung eines Wengo-Zugangs (2/2)</translation>
-    </message>
-    <message>
-        <source>Please note your details needed to access your account:</source>
-        <translation type="obsolete">Bitte beachte deine Angaben, die benötigt werden, um Zugriff auf deinen 
-Zugang zu bekommen:</translation>
-    </message>
-    <message>
-        <source>Finish</source>
-        <translation type="obsolete">Fertig</translation>
-    </message>
-    <message>
-        <source>Add your IM Accounts to your Profile</source>
-        <translation type="obsolete">Füge deine IM-Zugänge zu deinem Profil hinzu</translation>
-    </message>
-    <message>
-        <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Contratulations!&lt;/span&gt;&lt;br /&gt;&lt;br 
-/&gt;&lt;span&gt;Your account has been successfully created&lt;/span&gt;</source>
-        <translation type="obsolete">&lt;span style=&quot;font-size:18pt;&quot;&gt;Gratulation!&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;&lt;span&gt;Dein 
-Zugang wurde erfolgreich erstellt&lt;/span&gt;</translation>
     </message>
 </context>
 <context>
@@ -3145,17 +2665,6 @@ Zugang wurde erfolgreich erstellt&lt;/span&gt;</translation>
     <message>
         <source>Video quality depends on your Internet connection bandwidth</source>
         <translation type="unfinished">Die Videoqualität hängt von der Bandbreite des Internetzugangs ab</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Warning!&lt;/b&gt; When used for the first time we recommend that you 
-select&lt;br&gt;the normal video quality mode, then you can try different modes to 
-find out&lt;br&gt;the most suitable one&lt;br&gt;&lt;br&gt;&lt;b&gt;Tips&lt;/b&gt;: Go to 
-http://test.lvcm.com to determine your Internet connection bandwidth</source>
-        <translation type="obsolete">&lt;b&gt;Warnung!&lt;/b&gt; Wenn du zum erstenmal ein Videotelefonat führst empfehlen 
-wir, dass du zunächst den Modus&lt;br /&gt;normale Videoqualität wählst. Danach 
-kannst du verschiedene Einstellungen ausprobieren, um den &lt;br /&gt;geeignetsten 
-Modus zu finden.&lt;br /&gt;&lt;b&gt;Tipp&lt;/b&gt;: Gehe zu http://www.speedmeter.de/ um 
-deine Internetgeschwidigkeit herauszufinden</translation>
     </message>
     <message>
         <source>Make a test video call</source>
@@ -3435,29 +2944,6 @@ deine Internetgeschwidigkeit herauszufinden</translation>
     </message>
 </context>
 <context>
-    <name>Wizard</name>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">Abbrechen</translation>
-    </message>
-    <message>
-        <source>Finish</source>
-        <translation type="obsolete">Fertig</translation>
-    </message>
-    <message>
-        <source>Next &gt;</source>
-        <translation type="obsolete">Nächster &gt;</translation>
-    </message>
-    <message>
-        <source>&lt; Back</source>
-        <translation type="obsolete">&lt; Zurück</translation>
-    </message>
-    <message>
-        <source>Simple Wizard - Step %1 of %2</source>
-        <translation type="obsolete">Einfacher Wizard - Stufe %1 von %2</translation>
-    </message>
-</context>
-<context>
     <name>WsDirectory</name>
     <message>
         <source>All</source>
@@ -3490,14 +2976,6 @@ deine Internetgeschwidigkeit herauszufinden</translation>
     <message>
         <source>Search</source>
         <translation type="unfinished">Suchen</translation>
-    </message>
-    <message>
-        <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Search for Wengo contacts&lt;/span&gt;&lt;br /&gt;&lt;br 
-/&gt;&lt;span&gt;Enter name, nickname, city or email and click the search 
-button&lt;/span&gt;</source>
-        <translation type="obsolete">&lt;span style=&quot;font-size:18pt;&quot;&gt;Nach Wengo-Kontakten suchen&lt;/span&gt;&lt;br /&gt;&lt;br 
-/&gt;&lt;span&gt;Gib Name, Spitzname, Stadt oder E-Mail ein und klick anschließend 
-auf den &quot;Suchen&quot;-Button&lt;/span&gt;</translation>
     </message>
     <message>
         <source>When entering a combined search, please separate words with a blank.</source>
@@ -3581,21 +3059,6 @@ mit einem Leerzeichen.</translation>
     <message>
         <source>Get a new Yahoo! Account</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>mainWindow</name>
-    <message>
-        <source>Form</source>
-        <translation type="obsolete">Eingabemaske</translation>
-    </message>
-    <message>
-        <source>Search</source>
-        <translation type="obsolete">Suchen</translation>
-    </message>
-    <message>
-        <source>Pause</source>
-        <translation type="obsolete">Pause</translation>
     </message>
 </context>
 </TS>

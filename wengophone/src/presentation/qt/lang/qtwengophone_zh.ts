@@ -45,13 +45,6 @@
         <translation type="unfinished">Copyright (C) 2004-2006 Wengo http://openwengo.com</translation>
     </message>
     <message>
-        <source>This program is free software; you can redistribute it and/ormodify it under 
-the terms of the GNU General Public Licenseas published by the Free Software 
-Foundation; either version 2of the License, or (at your option) any later 
-version.</source>
-        <translation type="obsolete">这个程序是开源软件;在遵守由开源软件组织发布的通用公共许可证（GPL）的情况下，你可以重新分配它或者修改它</translation>
-    </message>
-    <message>
         <source>Authors</source>
         <translation type="unfinished">作者</translation>
     </message>
@@ -80,34 +73,6 @@ of the License, or (at your option) any later version.</source>
     <message>
         <source>test.bmp</source>
         <translation type="unfinished">test.bmp</translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
-white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-
-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Filename: 
-&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="obsolete">&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
-white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-
-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;文件名称: 
-&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
-white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-
-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;&lt;h1&gt;Incoming 
-file&lt;/h1&gt;&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="obsolete">&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
-white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-
-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-
-weight:600;&quot;&gt;&lt;h1&gt;要接受的文件&lt;/h1&gt;&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>&amp;Accept</source>
@@ -215,11 +180,6 @@ weight:600;&quot;&gt;&lt;h1&gt;要接受的文件&lt;/h1&gt;&lt;/span&gt;&lt;/p&
         <translation type="unfinished">高级配置窗口</translation>
     </message>
     <message>
-        <source>Warning, this part is for advanced users.&lt;br&gt;Any mistake can badly damage 
-the software.</source>
-        <translation type="obsolete">警告，这部分只针对高级用户。&lt;br&gt;任何错误可以严重损坏软件</translation>
-    </message>
-    <message>
         <source>Automatically answer incoming calls from</source>
         <translation type="unfinished">自动接听来电，如果它来自</translation>
     </message>
@@ -288,14 +248,6 @@ the software.</source>
         <translation type="unfinished">WengoPhone- 可以更新</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;An update is available, click &lt;span style=&quot; text-
-decoration: underline; color:#0000ff;&quot;&gt;here&lt;/span&gt; to download the new 
-version&lt;br /&gt;&lt;br /&gt;Version:%1&lt;br /&gt;File Size:%2 (MB)&lt;br /&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="obsolete">&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;可以更新，点击 &lt;span style=&quot; text-decoration: underline; 
-color:#0000ff;&quot;&gt;here&lt;/span&gt; 下载最新版本&lt;br /&gt;&lt;br /&gt;Version:%1&lt;br /&gt;File Size:%2 
-(MB)&lt;br /&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;An update is available, click &lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;here&lt;/span&gt; to download the new version&lt;br /&gt;&lt;br /&gt;Version:<byte value="x9"/>%1&lt;br /&gt;File Size:<byte value="x9"/>%2 (MB)&lt;br /&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -305,11 +257,6 @@ color:#0000ff;&quot;&gt;here&lt;/span&gt; 下载最新版本&lt;br /&gt;&lt;br /
     <message>
         <source>Call Forward Settings</source>
         <translation type="unfinished">呼叫转移设置</translation>
-    </message>
-    <message>
-        <source>For example +3314500XXXX (+33 is the country code and 14500XXXX is the phone 
-number)</source>
-        <translation type="obsolete">例如+3314500XXXX （+33是国家码，14500XXXX是电话号码）</translation>
     </message>
     <message>
         <source>3rd:</source>
@@ -334,13 +281,6 @@ number)</source>
     <message>
         <source>Disable call forwarding</source>
         <translation type="unfinished">取消呼叫转移</translation>
-    </message>
-    <message>
-        <source>Call forwarding is active if you&apos;re not connected to Wengo, when your line 
-is busy or 20 seconds after you did not answer a call. You can configure up 
-to three call forwards to landlines, mobile phones or voice mail (if 
-applicable)</source>
-        <translation type="obsolete">当你没有连接到Wengo时，你的线路忙时或者在你没有回答一个来电20秒后，呼叫转移将被启用。你可以设定三个转移到座机，手机或者语音信箱（如果有）</translation>
     </message>
     <message>
         <source>Forward all unanswered calls to following phone numbers:</source>
@@ -477,19 +417,6 @@ applicable)</source>
         <translation type="unfinished">开始</translation>
     </message>
     <message>
-        <source>&lt;span style=&quot; font-size:18pt;&quot;&gt;Conference&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;Please enter 
-two phone numbers &lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-
-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;or Wengo 
-contact ID in order&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-
-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;to create 
-a 3-way conference.&lt;/p&gt;</source>
-        <translation type="obsolete">&lt;span style=&quot; font-size:18pt;&quot;&gt;会议&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;请输入两个电话号码&lt;/p&gt;&lt;p 
-style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-
-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;或者Wengo帐号以便&lt;/p&gt;&lt;p style=&quot; 
-margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-
-block-indent:0; text-indent:0px;&quot;&gt;创建一个三方会议。&lt;/p&gt;</translation>
-    </message>
-    <message>
         <source>Phone number 2:</source>
         <translation type="unfinished">电话号码2：</translation>
     </message>
@@ -508,42 +435,6 @@ block-indent:0; text-indent:0px;&quot;&gt;创建一个三方会议。&lt;/p&gt;<
     <message>
         <source>&lt;span style=&quot; font-size:18pt;&quot;&gt;Conference&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;Please enter two phone numbers &lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;or Wengo contact ID in order&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;to create a 3-way conference.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>ConferenceInviteWidget</name>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">取消</translation>
-    </message>
-    <message>
-        <source>&lt;span style=&quot; font-size:18pt;&quot;&gt;Conference&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;Please enter 
-two phone numbers &lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-
-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;or Wengo 
-contact ID in order&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-
-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;to create 
-a 3-way conference.&lt;/p&gt;</source>
-        <translation type="obsolete">&lt;span style=&quot; font-size:18pt;&quot;&gt;会议&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;请输入两个电话号码&lt;/p&gt;&lt;p 
-style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-
-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;或者Wengo帐号以便&lt;/p&gt;&lt;p style=&quot; 
-margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-
-block-indent:0; text-indent:0px;&quot;&gt;创建一个三方会议。&lt;/p&gt;</translation>
-    </message>
-    <message>
-        <source>&amp;Add &gt;&gt;</source>
-        <translation type="obsolete">&amp;添加&gt;&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;&lt; &amp;Remove</source>
-        <translation type="obsolete">&lt;&lt;&amp;移动</translation>
-    </message>
-    <message>
-        <source>Available Contacts</source>
-        <translation type="obsolete">有空的联系人</translation>
-    </message>
-    <message>
-        <source>&amp;Start</source>
-        <translation type="obsolete">&amp;开始</translation>
     </message>
 </context>
 <context>
@@ -596,43 +487,6 @@ block-indent:0; text-indent:0px;&quot;&gt;创建一个三方会议。&lt;/p&gt;<
     </message>
 </context>
 <context>
-    <name>CrashReport</name>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">取消</translation>
-    </message>
-    <message>
-        <source>Program Failure</source>
-        <translation type="obsolete">程序故障</translation>
-    </message>
-    <message>
-        <source>The WengoPhone execution failed and has generated a diagnostic file.&lt;br&gt;This 
-file contains usefull information to solve the problem you are 
-encounting.&lt;br&gt;Thanks for your contribution.&lt;br&gt;&lt;br&gt;The WengoPhone 
-Development Team.</source>
-        <translation type="obsolete">
-WengoPhone执行失败并生成一个诊断文件。&lt;br&gt;这个文件包含有用的信息来解决你所遇到的问题。&lt;br&gt;谢谢你的贡献。&lt;br&gt;&lt;br&gt;WengoPhon
-e技术组。</translation>
-    </message>
-    <message>
-        <source>Send</source>
-        <translation type="obsolete">发送</translation>
-    </message>
-    <message>
-        <source>Optional Information</source>
-        <translation type="obsolete">可选择信息</translation>
-    </message>
-    <message>
-        <source>In order to help the developers you can complete this report. This step is 
-optional.&lt;br&gt;Use Case Description:</source>
-        <translation type="obsolete">为了帮助技术人员你可以完成这份报告。这一步骤是可选择的。&lt;br&gt;使用案例描述：</translation>
-    </message>
-    <message>
-        <source>Your Mail:</source>
-        <translation type="obsolete">你的邮箱：</translation>
-    </message>
-</context>
-<context>
     <name>CreditWidget</name>
     <message>
         <source>Your Wengo phone number</source>
@@ -672,13 +526,6 @@ optional.&lt;br&gt;Use Case Description:</source>
     </message>
 </context>
 <context>
-    <name>DialpadWidget</name>
-    <message>
-        <source>Audio Smileys</source>
-        <translation type="obsolete">音频笑脸</translation>
-    </message>
-</context>
-<context>
     <name>EventWidget</name>
     <message>
         <source>0</source>
@@ -712,10 +559,6 @@ optional.&lt;br&gt;Use Case Description:</source>
         <translation type="unfinished">表格</translation>
     </message>
     <message>
-        <source>From:</source>
-        <translation type="obsolete">来自：</translation>
-    </message>
-    <message>
         <source>Pause</source>
         <translation type="unfinished">暂停</translation>
     </message>
@@ -739,19 +582,6 @@ optional.&lt;br&gt;Use Case Description:</source>
         <translation type="unfinished">WengoPhone-文件传输管理</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
-white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-
-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
-indent:0; text-indent:0px;&quot;&gt;Click here to change your download 
-folder&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="obsolete">&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
-white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-
-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
-indent:0; text-indent:0px;&quot;&gt;点击这里改变你的下载文件夹folder&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
         <source>Download folder:</source>
         <translation type="unfinished">下载文件夹：</translation>
     </message>
@@ -768,53 +598,12 @@ indent:0; text-indent:0px;&quot;&gt;点击这里改变你的下载文件夹folde
         <translation type="unfinished">清理</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Click here to change your download folder&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <source>Click here to change your download folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Clean all items in the list&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <source>Clean all items in the list</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>Form</name>
-    <message>
-        <source>&amp;Start</source>
-        <translation type="obsolete">&amp;开始</translation>
-    </message>
-    <message>
-        <source>Chat room</source>
-        <translation type="obsolete">聊天室</translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
-white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-
-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt; font-
-weight:600;&quot;&gt;Chat room&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="obsolete">&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
-white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-
-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt; font-
-weight:600;&quot;&gt;聊天室&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-        <source>(Conference participants)</source>
-        <translation type="obsolete">（会议参加者）</translation>
-    </message>
-    <message>
-        <source>&amp;Remove</source>
-        <translation type="obsolete">&amp;移动</translation>
-    </message>
-    <message>
-        <source>Group Name</source>
-        <translation type="obsolete">组名</translation>
-    </message>
-    <message>
-        <source>&amp;Add</source>
-        <translation type="obsolete">&amp;添加</translation>
     </message>
 </context>
 <context>
@@ -919,14 +708,6 @@ weight:600;&quot;&gt;聊天室&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;<
     <message>
         <source>WengoPhone - Local HTTP Proxy</source>
         <translation type="unfinished">WengoPhone- 本地HTTP代理</translation>
-    </message>
-    <message>
-        <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;HTTP Proxy 
-Authentication&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;Your local HTTP proxy uses 
-authentication&lt;br&gt;Please enter your login and password&lt;/span&gt;</source>
-        <translation type="obsolete">&lt;span style=&quot;font-
-size:18pt;&quot;&gt;HTTP代理鉴定&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;你的本地HTTP代理用户鉴定&lt;br
-&gt;请输入你的用户名和密码&lt;/span&gt;</translation>
     </message>
     <message>
         <source>HTTP Proxy Address:</source>
@@ -1130,12 +911,6 @@ size:18pt;&quot;&gt;HTTP代理鉴定&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt
         <translation type="unfinished">WengoPhone-登录</translation>
     </message>
     <message>
-        <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Login&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;Please enter your 
-email address and&lt;br&gt;password&lt;/span&gt;</source>
-        <translation type="obsolete">&lt;span style=&quot;font-
-size:18pt;&quot;&gt;登陆&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;请输入你的电邮地址和&lt;br&gt;密码&lt;/span&gt;</translation>
-    </message>
-    <message>
         <source>Forgot your password?</source>
         <translation type="unfinished">忘记了你的密码？</translation>
     </message>
@@ -1185,37 +960,6 @@ size:18pt;&quot;&gt;登陆&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;请输入
     <message>
         <source></source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>MainWindow</name>
-    <message>
-        <source>MainWindow</source>
-        <translation type="obsolete">主要窗口</translation>
-    </message>
-    <message>
-        <source>Command::terminate()</source>
-        <translation type="obsolete">指令：：终止（）</translation>
-    </message>
-    <message>
-        <source>Command::start()</source>
-        <translation type="obsolete">指令：：开始（）</translation>
-    </message>
-    <message>
-        <source>Accept Call</source>
-        <translation type="obsolete">接电话</translation>
-    </message>
-    <message>
-        <source>Send Chat Message</source>
-        <translation type="obsolete">发送信息</translation>
-    </message>
-    <message>
-        <source>Make Call</source>
-        <translation type="obsolete">打电话</translation>
-    </message>
-    <message>
-        <source>Hang Up</source>
-        <translation type="obsolete">挂断</translation>
     </message>
 </context>
 <context>
@@ -1329,20 +1073,6 @@ size:18pt;&quot;&gt;登陆&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;请输入
     <message>
         <source>Duration</source>
         <translation type="unfinished">持续时间</translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
-white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-
-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-size:13pt; 
-font-weight:600;&quot;&gt;NickName or number&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="obsolete">&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
-white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-
-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-size:13pt; 
-font-weight:600;&quot;&gt;昵称或号码&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source></source>
@@ -1725,10 +1455,6 @@ font-weight:600;&quot;&gt;昵称或号码&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt
         <translation>阻止联系人</translation>
     </message>
     <message>
-        <source>Forward to Cell phone</source>
-        <translation type="obsolete">转移到手机</translation>
-    </message>
-    <message>
         <source>Start chat</source>
         <translation>开始聊天</translation>
     </message>
@@ -1818,10 +1544,6 @@ font-weight:600;&quot;&gt;昵称或号码&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt
         <translation></translation>
     </message>
     <message>
-        <source>%1 exceeds the maximum authorized size.</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt;font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px;margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:18pt; font-weight:600; color:#ffffff;&quot;&gt;Please upgrade&lt;br&gt; yourWengoPhone&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1839,6 +1561,10 @@ font-weight:600;&quot;&gt;昵称或号码&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt
     </message>
     <message>
         <source> is trying to send you a file:&lt;/span&gt; but his WengoPhone must be upgraded in order to receive it. Tell him to download the latest version.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 exceeds the maximum authorized size or has size 0.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2041,10 +1767,6 @@ font-weight:600;&quot;&gt;昵称或号码&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt
         <translation>取消</translation>
     </message>
     <message>
-        <source>Are sure you want to delete this account?</source>
-        <translation type="obsolete">你确实想删除这个帐号吗？</translation>
-    </message>
-    <message>
         <source>&amp;Delete</source>
         <translation>&amp;删除</translation>
     </message>
@@ -2070,10 +1792,6 @@ font-weight:600;&quot;&gt;昵称或号码&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt
     <message>
         <source>&amp;Delete</source>
         <translation>&amp;删除</translation>
-    </message>
-    <message>
-        <source>Are sure you want to delete this IM contact?</source>
-        <translation type="obsolete">你确实想删除这个IM联系人吗？</translation>
     </message>
     <message>
         <source>Are sure you want to delete this IM contact?
@@ -2204,11 +1922,6 @@ font-weight:600;&quot;&gt;昵称或号码&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt
         <translation>WengoPhone-继续的会议</translation>
     </message>
     <message>
-        <source>When you are ready to start the conference, click on the button belowPlease 
-wait for a few seconds...</source>
-        <translation type="obsolete">当你准备好开始会议时，请点击以下的按钮并等待几秒钟...</translation>
-    </message>
-    <message>
         <source>Dialing</source>
         <translation>拨号中</translation>
     </message>
@@ -2321,14 +2034,6 @@ Please wait for a few seconds...</source>
         <translation>请填写一个电话号码</translation>
     </message>
     <message>
-        <source>Your message is too long.This will send </source>
-        <translation type="obsolete">你的消息太长。这将发送 </translation>
-    </message>
-    <message>
-        <source> SMS.</source>
-        <translation type="obsolete"> SMS。</translation>
-    </message>
-    <message>
         <source>Do you want to continue?</source>
         <translation>你希望继续吗？</translation>
     </message>
@@ -2399,33 +2104,6 @@ This will send </source>
     <message>
         <source>Connecting</source>
         <translation>连接中</translation>
-    </message>
-</context>
-<context>
-    <name>QtSubscribe</name>
-    <message>
-        <source>Confirm password does not matched password</source>
-        <translation type="obsolete">确定的密码不符</translation>
-    </message>
-    <message>
-        <source>Unknown Error</source>
-        <translation type="obsolete">未知错误</translation>
-    </message>
-    <message>
-        <source>You cannot use this email address, already in use</source>
-        <translation type="obsolete">你不能使用这个电邮地址，它已经被使用了</translation>
-    </message>
-    <message>
-        <source>You cannot use this nickname, already in use</source>
-        <translation type="obsolete">你不能使用这个昵称，它已经被使用了</translation>
-    </message>
-    <message>
-        <source>Your password does not contain enough characters (6 minimum), try another one</source>
-        <translation type="obsolete">你的密码长度不够（最少6个字符），请尝试另外一个</translation>
-    </message>
-    <message>
-        <source>Subscription Failed</source>
-        <translation type="obsolete">注册失败</translation>
     </message>
 </context>
 <context>
@@ -2547,15 +2225,6 @@ This will send </source>
 <context>
     <name>QtUserProfileHandler</name>
     <message>
-        <source>Would you like to import contacts and IM accounts previously created in the 
-default profile to the profile named %1?</source>
-        <translation type="obsolete">你是否想把之前在缺省资料里的联系人和IM帐号引入到被命名%1的资料？</translation>
-    </message>
-    <message>
-        <source>WengoPhone - Importing contacts and IM accounts</source>
-        <translation type="obsolete">WengoPhone-引入联系人和IM帐号</translation>
-    </message>
-    <message>
         <source>A problem occured while loading your profile.
 The last backuped profile has been loaded: 
 you may have lost last changes made</source>
@@ -2611,6 +2280,13 @@ Choose another profile or create a new one.</source>
     <message>
         <source>Excellent</source>
         <translation>非常好</translation>
+    </message>
+</context>
+<context>
+    <name>QtWebDirectory</name>
+    <message>
+        <source>WengoPhone - Directory</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2821,14 +2497,6 @@ Choose another profile or create a new one.</source>
         <translation type="unfinished">签名：</translation>
     </message>
     <message>
-        <source>Phone number:</source>
-        <translation type="obsolete">电话号吗：</translation>
-    </message>
-    <message>
-        <source>Enter the phone number here</source>
-        <translation type="obsolete">在这里输入你的电话号码</translation>
-    </message>
-    <message>
         <source></source>
         <translation type="unfinished"></translation>
     </message>
@@ -2852,11 +2520,6 @@ Choose another profile or create a new one.</source>
         <translation type="unfinished">WengoPhone-下载更新中</translation>
     </message>
     <message>
-        <source>Downloading WengoPhone update...Version:%1URL:%2File Size:%3 (MB)Speed:%4 
-(kB/s)</source>
-        <translation type="obsolete">下载WengoPhone更新中...版本：%1URL：%2文件大小：%3（MB）速度：%4（kB/s）</translation>
-    </message>
-    <message>
         <source>Downloading WengoPhone update...
 
 Version:<byte value="x9"/>%1
@@ -2875,94 +2538,6 @@ Speed:<byte value="x9"/>%4 (kB/s)</source>
     <message>
         <source>Not Connected</source>
         <translation type="unfinished">未连接</translation>
-    </message>
-</context>
-<context>
-    <name>SubscribeWengo1</name>
-    <message>
-        <source>Password:</source>
-        <translation type="obsolete">密码</translation>
-    </message>
-    <message>
-        <source>Email:</source>
-        <translation type="obsolete">电邮：</translation>
-    </message>
-    <message>
-        <source>WengoPhone - Wengo Account Creation (1/2)</source>
-        <translation type="obsolete">WengoPhone-创建Wengo帐户（1/2）</translation>
-    </message>
-    <message>
-        <source>* &lt;i&gt;Required fields&lt;/i&gt;</source>
-        <translation type="obsolete">* &lt;i&gt;必填&lt;/i&gt;</translation>
-    </message>
-    <message>
-        <source>Subscribe</source>
-        <translation type="obsolete">注册</translation>
-    </message>
-    <message>
-        <source>Error message label</source>
-        <translation type="obsolete">错误信息标签</translation>
-    </message>
-    <message>
-        <source>Nickname:</source>
-        <translation type="obsolete">昵称：</translation>
-    </message>
-    <message>
-        <source>*</source>
-        <translation type="obsolete">*</translation>
-    </message>
-    <message>
-        <source>Confirm password:</source>
-        <translation type="obsolete">确认密码：</translation>
-    </message>
-    <message>
-        <source>&lt;i&gt;Please check your email and confirm the above details within 48 hours&lt;/i&gt;</source>
-        <translation type="obsolete">&lt;i&gt;请在48小时内检查你的电邮并确认以上信息&lt;/i&gt;</translation>
-    </message>
-    <message>
-        <source>I read and accept the Terms of Service</source>
-        <translation type="obsolete">我已阅读并接受服务条例</translation>
-    </message>
-    <message>
-        <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Account Creation&lt;/span&gt;&lt;br /&gt;&lt;br 
-/&gt;&lt;span&gt;Please fill in the details below&lt;/span&gt;</source>
-        <translation type="obsolete">&lt;span style=&quot;font-size:18pt;&quot;&gt;创建帐户&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;&lt;span&gt;请填写以下的信息&lt;/span&gt;</translation>
-    </message>
-</context>
-<context>
-    <name>SubscribeWengo2</name>
-    <message>
-        <source>Password:</source>
-        <translation type="obsolete">密码</translation>
-    </message>
-    <message>
-        <source>Email:</source>
-        <translation type="obsolete">电邮：</translation>
-    </message>
-    <message>
-        <source>Nickname:</source>
-        <translation type="obsolete">昵称：</translation>
-    </message>
-    <message>
-        <source>WengoPhone - Wengo Account Creation (2/2)</source>
-        <translation type="obsolete">WengoPhone-创建Wengo帐户（2/2）</translation>
-    </message>
-    <message>
-        <source>Please note your details needed to access your account:</source>
-        <translation type="obsolete">请记录进入你的帐户所需的信息</translation>
-    </message>
-    <message>
-        <source>Finish</source>
-        <translation type="obsolete">完成</translation>
-    </message>
-    <message>
-        <source>Add your IM Accounts to your Profile</source>
-        <translation type="obsolete">添加你的IM帐号到你的个人资料</translation>
-    </message>
-    <message>
-        <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Contratulations!&lt;/span&gt;&lt;br /&gt;&lt;br 
-/&gt;&lt;span&gt;Your account has been successfully created&lt;/span&gt;</source>
-        <translation type="obsolete">&lt;span style=&quot;font-size:18pt;&quot;&gt;恭喜!&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;&lt;span&gt;你的帐户已成功创建&lt;/span&gt;</translation>
     </message>
 </context>
 <context>
@@ -3084,15 +2659,6 @@ Speed:<byte value="x9"/>%4 (kB/s)</source>
     <message>
         <source>Video quality depends on your Internet connection bandwidth</source>
         <translation type="unfinished">视频质量取决于你的网络带宽</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Warning!&lt;/b&gt; When used for the first time we recommend that you 
-select&lt;br&gt;the normal video quality mode, then you can try different modes to 
-find out&lt;br&gt;the most suitable one&lt;br&gt;&lt;br&gt;&lt;b&gt;Tips&lt;/b&gt;: Go to 
-http://test.lvcm.com to determine your Internet connection bandwidth</source>
-        <translation type="obsolete">
-&lt;b&gt;Warning!&lt;/b&gt;我们建议你第一次使用时选择&lt;br&gt;普通视频质量模式，然后你可以尝试其他模式已决定&lt;br&gt;最适合的一种&lt;br&gt;&lt;br&gt;&lt;b&gt;诀窍
-&lt;/b&gt;: 上http://test.lvcm.com来了解你的网络连接带宽</translation>
     </message>
     <message>
         <source>Make a test video call</source>
@@ -3372,29 +2938,6 @@ http://test.lvcm.com to determine your Internet connection bandwidth</source>
     </message>
 </context>
 <context>
-    <name>Wizard</name>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">取消</translation>
-    </message>
-    <message>
-        <source>Finish</source>
-        <translation type="obsolete">完成</translation>
-    </message>
-    <message>
-        <source>Next &gt;</source>
-        <translation type="obsolete">下一项&gt;</translation>
-    </message>
-    <message>
-        <source>&lt; Back</source>
-        <translation type="obsolete">&lt; 返回</translation>
-    </message>
-    <message>
-        <source>Simple Wizard - Step %1 of %2</source>
-        <translation type="obsolete">简单方法-步骤%1</translation>
-    </message>
-</context>
-<context>
     <name>WsDirectory</name>
     <message>
         <source>All</source>
@@ -3427,13 +2970,6 @@ http://test.lvcm.com to determine your Internet connection bandwidth</source>
     <message>
         <source>Search</source>
         <translation type="unfinished">搜索</translation>
-    </message>
-    <message>
-        <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Search for Wengo contacts&lt;/span&gt;&lt;br /&gt;&lt;br 
-/&gt;&lt;span&gt;Enter name, nickname, city or email and click the search 
-button&lt;/span&gt;</source>
-        <translation type="obsolete">&lt;span style=&quot;font-size:18pt;&quot;&gt;搜索Wengo用户&lt;/span&gt;&lt;br /&gt;&lt;br 
-/&gt;&lt;span&gt;输入名称，昵称，城市或电邮然后点击搜索按钮&lt;/span&gt;</translation>
     </message>
     <message>
         <source>When entering a combined search, please separate words with a blank.</source>
@@ -3516,21 +3052,6 @@ button&lt;/span&gt;</source>
     <message>
         <source>Get a new Yahoo! Account</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>mainWindow</name>
-    <message>
-        <source>Form</source>
-        <translation type="obsolete">表格</translation>
-    </message>
-    <message>
-        <source>Search</source>
-        <translation type="obsolete">搜索</translation>
-    </message>
-    <message>
-        <source>Pause</source>
-        <translation type="obsolete">暂停</translation>
     </message>
 </context>
 </TS>

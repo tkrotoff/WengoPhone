@@ -45,16 +45,6 @@
         <translation type="unfinished">Telif hakkı (C) 2004-2006 Wengo http://openwengo.com</translation>
     </message>
     <message>
-        <source>This program is free software; you can redistribute it and/ormodify it under 
-the terms of the GNU General Public Licenseas published by the Free Software 
-Foundation; either version 2of the License, or (at your option) any later 
-version.</source>
-        <translation type="obsolete">Bu program bir açık yazılımdır; Free Software Foundation tarafından 
-yayınlanan (GNU) Genel Kamu Lisansları&apos;nın kuralları çerçevesinde 
-değiştirebilir ve yeniden dağıtabilirsiniz. Bu yazılım ve tüm türevleri, 
-Genel Kamu Lisansı&apos;nın ikinci ya da sonraki sürümlerine tabi olacaktır.</translation>
-    </message>
-    <message>
         <source>Authors</source>
         <translation type="unfinished">Yazarlar</translation>
     </message>
@@ -83,48 +73,6 @@ of the License, or (at your option) any later version.</source>
     <message>
         <source>test.bmp</source>
         <translation type="unfinished">test.bmp</translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
-white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-
-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Contact: 
-&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="obsolete">&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
-white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-
-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Bağlantı: 
-&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
-white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-
-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Filename: 
-&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="obsolete">&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
-white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-
-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Dosya adı: 
-&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
-white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-
-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;&lt;h1&gt;Incoming 
-file&lt;/h1&gt;&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="obsolete">&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
-white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-
-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;&lt;h1&gt;Gelen 
-dosya&lt;/h1&gt;&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>&amp;Accept</source>
@@ -232,12 +180,6 @@ dosya&lt;/h1&gt;&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
         <translation type="unfinished">Gelişmiş Yapılandırma Penceresi</translation>
     </message>
     <message>
-        <source>Warning, this part is for advanced users.&lt;br&gt;Any mistake can badly damage 
-the software.</source>
-        <translation type="obsolete">Dikkat, bu bölüm deneyimli kullanıcılar içindir.&lt;br&gt; Yapılacak bir hata, 
-yazılımın çalışmamasına neden olabilir.</translation>
-    </message>
-    <message>
         <source>Automatically answer incoming calls from</source>
         <translation type="unfinished">Şu kişiden gelen çağrıları otomatik cevaplandır</translation>
     </message>
@@ -306,15 +248,6 @@ yazılımın çalışmamasına neden olabilir.</translation>
         <translation type="unfinished">WengoPhone - Güncelleme mevcut</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;An update is available, click &lt;span style=&quot; text-
-decoration: underline; color:#0000ff;&quot;&gt;here&lt;/span&gt; to download the new 
-version&lt;br /&gt;&lt;br /&gt;Version:%1&lt;br /&gt;File Size:%2 (MB)&lt;br /&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="obsolete">&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;Bir güncelleme mevcut, yeni sürümü indirmek için 
-lütfen&lt;span style=&quot; text-decoration: underline; 
-color:#0000ff;&quot;&gt;buraya&lt;/span&gt; tıklayınız. Sürüm bilgisi:&lt;br /&gt;&lt;br 
-/&gt;Version:%1&lt;br /&gt;Dosya boyutu:%2 (MB)&lt;br /&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;An update is available, click &lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;here&lt;/span&gt; to download the new version&lt;br /&gt;&lt;br /&gt;Version:<byte value="x9"/>%1&lt;br /&gt;File Size:<byte value="x9"/>%2 (MB)&lt;br /&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -324,11 +257,6 @@ color:#0000ff;&quot;&gt;buraya&lt;/span&gt; tıklayınız. Sürüm bilgisi:&lt;b
     <message>
         <source>Call Forward Settings</source>
         <translation type="unfinished">Çağrı Yönlendirme Ayarları</translation>
-    </message>
-    <message>
-        <source>For example +3314500XXXX (+33 is the country code and 14500XXXX is the phone 
-number)</source>
-        <translation type="obsolete">Örneğin +3314500XXXX (+33 ülke kodu, 14500XXXX ise telefon numarası)</translation>
     </message>
     <message>
         <source>3rd:</source>
@@ -353,16 +281,6 @@ number)</source>
     <message>
         <source>Disable call forwarding</source>
         <translation type="unfinished">Çağrı yönlendirmeyi devre dışı bırak</translation>
-    </message>
-    <message>
-        <source>Call forwarding is active if you&apos;re not connected to Wengo, when your line 
-is busy or 20 seconds after you did not answer a call. You can configure up 
-to three call forwards to landlines, mobile phones or voice mail (if 
-applicable)</source>
-        <translation type="obsolete">Wengo ağına bağlı olmadığınızda, hattınız meşgul olduğunda ya da bir çağrıya 
-20 saniyeden uzun bir süre cevap vermediğinizde çağrı yönlendirme 
-etkinleşir. Çağrı yönlendirmeyi sabit hatlı bir telefona, cep telefonunuza 
-ya da sesli mesaj sisteminize (eğer varsa) yönelik yapılandırabilirsiniz.</translation>
     </message>
     <message>
         <source>Forward all unanswered calls to following phone numbers:</source>
@@ -499,20 +417,6 @@ ya da sesli mesaj sisteminize (eğer varsa) yönelik yapılandırabilirsiniz.</t
         <translation type="unfinished">Başlat</translation>
     </message>
     <message>
-        <source>&lt;span style=&quot; font-size:18pt;&quot;&gt;Conference&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;Please enter 
-two phone numbers &lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-
-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;or Wengo 
-contact ID in order&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-
-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;to create 
-a 3-way conference.&lt;/p&gt;</source>
-        <translation type="obsolete">&lt;span style=&quot; font-size:18pt;&quot;&gt;Konferans&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;Üç kişilik bir 
-konferans oturumunu başlatmak için &lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-
-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-
-indent:0px;&quot;&gt;lütfen iki telefon numarasını &lt;/p&gt;&lt;p style=&quot; margin-top:0px; 
-margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; 
-text-indent:0px;&quot;&gt;ya da Wengo bağlantı kimliğini girin.&lt;/p&gt;</translation>
-    </message>
-    <message>
         <source>Phone number 2:</source>
         <translation type="unfinished">Telefon numarası 2:</translation>
     </message>
@@ -531,43 +435,6 @@ text-indent:0px;&quot;&gt;ya da Wengo bağlantı kimliğini girin.&lt;/p&gt;</tr
     <message>
         <source>&lt;span style=&quot; font-size:18pt;&quot;&gt;Conference&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;Please enter two phone numbers &lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;or Wengo contact ID in order&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;to create a 3-way conference.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>ConferenceInviteWidget</name>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">İptal</translation>
-    </message>
-    <message>
-        <source>&lt;span style=&quot; font-size:18pt;&quot;&gt;Conference&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;Please enter 
-two phone numbers &lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-
-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;or Wengo 
-contact ID in order&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-
-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;to create 
-a 3-way conference.&lt;/p&gt;</source>
-        <translation type="obsolete">&lt;span style=&quot; font-size:18pt;&quot;&gt;Konferans&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;Üç kişilik bir 
-konferans oturumunu başlatmak için &lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-
-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-
-indent:0px;&quot;&gt;lütfen iki telefon numarasını &lt;/p&gt;&lt;p style=&quot; margin-top:0px; 
-margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; 
-text-indent:0px;&quot;&gt;ya da Wengo bağlantı kimliğini girin.&lt;/p&gt;</translation>
-    </message>
-    <message>
-        <source>&amp;Add &gt;&gt;</source>
-        <translation type="obsolete">Ekle &gt;&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;&lt; &amp;Remove</source>
-        <translation type="obsolete">&lt;&lt; Kaldır</translation>
-    </message>
-    <message>
-        <source>Available Contacts</source>
-        <translation type="obsolete">Erişilebilir Bağlantılar</translation>
-    </message>
-    <message>
-        <source>&amp;Start</source>
-        <translation type="obsolete">&amp;Başlat</translation>
     </message>
 </context>
 <context>
@@ -620,45 +487,6 @@ text-indent:0px;&quot;&gt;ya da Wengo bağlantı kimliğini girin.&lt;/p&gt;</tr
     </message>
 </context>
 <context>
-    <name>CrashReport</name>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">İptal</translation>
-    </message>
-    <message>
-        <source>Program Failure</source>
-        <translation type="obsolete">Program Hatası</translation>
-    </message>
-    <message>
-        <source>The WengoPhone execution failed and has generated a diagnostic file.&lt;br&gt;This 
-file contains usefull information to solve the problem you are 
-encounting.&lt;br&gt;Thanks for your contribution.&lt;br&gt;&lt;br&gt;The WengoPhone 
-Development Team.</source>
-        <translation type="obsolete">WengoPhone bir hatayla harşılaştı ve bunun için bir hata raporu 
-hazırladı.&lt;br&gt;Bu rapor karşılaştığınız hatayı düzeltmemizde bize yardımcı 
-olacak.&lt;br&gt;İşbirliğiniz için teşekkür ederiz.&lt;br&gt;&lt;br&gt;WengoPhone Geliştirici 
-Takımı.</translation>
-    </message>
-    <message>
-        <source>Send</source>
-        <translation type="obsolete">Gönder</translation>
-    </message>
-    <message>
-        <source>Optional Information</source>
-        <translation type="obsolete">Seçimlik Bilgiler</translation>
-    </message>
-    <message>
-        <source>In order to help the developers you can complete this report. This step is 
-optional.&lt;br&gt;Use Case Description:</source>
-        <translation type="obsolete">Geliştiricilere yardımcı olmak için bu raporu doldurabilirsiniz. Bu adım 
-zorunlu değildir. &lt;br&gt; Hata Tanımı kısmını kullanınız:</translation>
-    </message>
-    <message>
-        <source>Your Mail:</source>
-        <translation type="obsolete">E-posta adresiniz:</translation>
-    </message>
-</context>
-<context>
     <name>CreditWidget</name>
     <message>
         <source>Your Wengo phone number</source>
@@ -698,13 +526,6 @@ zorunlu değildir. &lt;br&gt; Hata Tanımı kısmını kullanınız:</translatio
     </message>
 </context>
 <context>
-    <name>DialpadWidget</name>
-    <message>
-        <source>Audio Smileys</source>
-        <translation type="obsolete">Sesli fuygu simgeleri</translation>
-    </message>
-</context>
-<context>
     <name>EventWidget</name>
     <message>
         <source>0</source>
@@ -738,10 +559,6 @@ zorunlu değildir. &lt;br&gt; Hata Tanımı kısmını kullanınız:</translatio
         <translation type="unfinished">Form</translation>
     </message>
     <message>
-        <source>From:</source>
-        <translation type="obsolete">Arayan:</translation>
-    </message>
-    <message>
         <source>Pause</source>
         <translation type="unfinished">Ara ver</translation>
     </message>
@@ -765,20 +582,6 @@ zorunlu değildir. &lt;br&gt; Hata Tanımı kısmını kullanınız:</translatio
         <translation type="unfinished">WengoPhone - Dosya Transferi Yöneticisi</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
-white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-
-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
-indent:0; text-indent:0px;&quot;&gt;Click here to change your download 
-folder&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="obsolete">&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
-white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-
-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
-indent:0; text-indent:0px;&quot;&gt;Dosyaların indirileceği dizini değiştirmek için 
-buraya tıklayınız&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
         <source>Download folder:</source>
         <translation type="unfinished">Dosya indirme dizini:</translation>
     </message>
@@ -791,69 +594,16 @@ buraya tıklayınız&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
         <translation type="unfinished">Gönder</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
-white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-
-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
-indent:0; text-indent:0px;&quot;&gt;Clean all items in the list&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="obsolete">&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
-white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-
-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
-indent:0; text-indent:0px;&quot;&gt;Listedeki tüm öğeleri temizle&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
         <source>&amp;Clean</source>
         <translation type="unfinished">Temizle</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Click here to change your download folder&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <source>Click here to change your download folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Clean all items in the list&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <source>Clean all items in the list</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>Form</name>
-    <message>
-        <source>&amp;Start</source>
-        <translation type="obsolete">&amp;Başlat</translation>
-    </message>
-    <message>
-        <source>Chat room</source>
-        <translation type="obsolete">Sohbet odası</translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
-white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-
-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt; font-
-weight:600;&quot;&gt;Chat room&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="obsolete">&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
-white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-
-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt; font-
-weight:600;&quot;&gt;Sohbet odası&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-        <source>(Conference participants)</source>
-        <translation type="obsolete">(Konferans katılımcıları)</translation>
-    </message>
-    <message>
-        <source>&amp;Remove</source>
-        <translation type="obsolete">&amp;Kaldır</translation>
-    </message>
-    <message>
-        <source>Group Name</source>
-        <translation type="obsolete">Drup Adı</translation>
-    </message>
-    <message>
-        <source>&amp;Add</source>
-        <translation type="obsolete">&amp;Ekle</translation>
     </message>
 </context>
 <context>
@@ -1162,12 +912,6 @@ Etkin</translation>
         <translation type="unfinished">WengoPhone - Giriş</translation>
     </message>
     <message>
-        <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Login&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;Please enter your 
-email address and&lt;br&gt;password&lt;/span&gt;</source>
-        <translation type="obsolete">&lt;span style=&quot;font-size:18pt;&quot;&gt;Login&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;Lütfen e-posta 
-adresinizi ve &lt;br&gt;şifrenizi girin&lt;/span&gt;</translation>
-    </message>
-    <message>
         <source>Forgot your password?</source>
         <translation type="unfinished">Parolanızı mı unuttunuz?</translation>
     </message>
@@ -1217,37 +961,6 @@ adresinizi ve &lt;br&gt;şifrenizi girin&lt;/span&gt;</translation>
     <message>
         <source></source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>MainWindow</name>
-    <message>
-        <source>MainWindow</source>
-        <translation type="obsolete">Ana Pencere</translation>
-    </message>
-    <message>
-        <source>Command::terminate()</source>
-        <translation type="obsolete">Command::terminate()</translation>
-    </message>
-    <message>
-        <source>Command::start()</source>
-        <translation type="obsolete">Command::start()</translation>
-    </message>
-    <message>
-        <source>Accept Call</source>
-        <translation type="obsolete">Çağrıyı Kabul Et</translation>
-    </message>
-    <message>
-        <source>Send Chat Message</source>
-        <translation type="obsolete">Sohbet İletisi Gönder</translation>
-    </message>
-    <message>
-        <source>Make Call</source>
-        <translation type="obsolete">Çağrı  Yap</translation>
-    </message>
-    <message>
-        <source>Hang Up</source>
-        <translation type="obsolete">Kapat</translation>
     </message>
 </context>
 <context>
@@ -1361,20 +1074,6 @@ adresinizi ve &lt;br&gt;şifrenizi girin&lt;/span&gt;</translation>
     <message>
         <source>Duration</source>
         <translation type="unfinished">Süre</translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
-white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-
-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-size:13pt; 
-font-weight:600;&quot;&gt;NickName or number&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="obsolete">&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
-white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-
-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-size:13pt; 
-font-weight:600;&quot;&gt;Takma ad ya da numara&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source></source>
@@ -1757,10 +1456,6 @@ font-weight:600;&quot;&gt;Takma ad ya da numara&lt;/span&gt;&lt;/p&gt;&lt;/body&
         <translation>Bağlantıyı engelle</translation>
     </message>
     <message>
-        <source>Forward to Cell phone</source>
-        <translation type="obsolete">Cep telefonuna yönlendir</translation>
-    </message>
-    <message>
         <source>Start chat</source>
         <translation>Sohbet başlat</translation>
     </message>
@@ -1850,10 +1545,6 @@ font-weight:600;&quot;&gt;Takma ad ya da numara&lt;/span&gt;&lt;/p&gt;&lt;/body&
         <translation>Dosya boyutu hatası</translation>
     </message>
     <message>
-        <source>%1 exceeds the maximum authorized size.</source>
-        <translation>%1 izin verilen maksimum boyutu aşıyor.</translation>
-    </message>
-    <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt;font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px;margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:18pt; font-weight:600; color:#ffffff;&quot;&gt;Please upgrade&lt;br&gt; yourWengoPhone&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1871,6 +1562,10 @@ font-weight:600;&quot;&gt;Takma ad ya da numara&lt;/span&gt;&lt;/p&gt;&lt;/body&
     </message>
     <message>
         <source> is trying to send you a file:&lt;/span&gt; but his WengoPhone must be upgraded in order to receive it. Tell him to download the latest version.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 exceeds the maximum authorized size or has size 0.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2073,10 +1768,6 @@ font-weight:600;&quot;&gt;Takma ad ya da numara&lt;/span&gt;&lt;/p&gt;&lt;/body&
         <translation>İptal</translation>
     </message>
     <message>
-        <source>Are sure you want to delete this account?</source>
-        <translation type="obsolete">Bu hesabı silmek istediğinize emin misiniz?</translation>
-    </message>
-    <message>
         <source>&amp;Delete</source>
         <translation>&amp;Sil</translation>
     </message>
@@ -2102,10 +1793,6 @@ font-weight:600;&quot;&gt;Takma ad ya da numara&lt;/span&gt;&lt;/p&gt;&lt;/body&
     <message>
         <source>&amp;Delete</source>
         <translation>&amp;Sil</translation>
-    </message>
-    <message>
-        <source>Are sure you want to delete this IM contact?</source>
-        <translation type="obsolete">Bu bağlantıyı silmek istediğinize emin misiniz?</translation>
     </message>
     <message>
         <source>Are sure you want to delete this IM contact?
@@ -2236,12 +1923,6 @@ font-weight:600;&quot;&gt;Takma ad ya da numara&lt;/span&gt;&lt;/p&gt;&lt;/body&
         <translation>WengoPhone - Konferansa Devam Et</translation>
     </message>
     <message>
-        <source>When you are ready to start the conference, click on the button belowPlease 
-wait for a few seconds...</source>
-        <translation type="obsolete">Konferans görüşmeye hazır olduğunuzda, lütfen aşağıdaki düğmeye basın ve 
-birkaç saniye bekleyin...</translation>
-    </message>
-    <message>
         <source>Dialing</source>
         <translation>Arıyor</translation>
     </message>
@@ -2354,10 +2035,6 @@ Please wait for a few seconds...</source>
         <translation>Lütfen telefon numarasını girin</translation>
     </message>
     <message>
-        <source> SMS.</source>
-        <translation type="obsolete"> SMS</translation>
-    </message>
-    <message>
         <source>Do you want to continue?</source>
         <translation>Devam etmek istiyor musunuz?</translation>
     </message>
@@ -2428,33 +2105,6 @@ This will send </source>
     <message>
         <source>Connecting</source>
         <translation>Bağlanıyor</translation>
-    </message>
-</context>
-<context>
-    <name>QtSubscribe</name>
-    <message>
-        <source>Confirm password does not matched password</source>
-        <translation type="obsolete">Onaylama parolası bir önceki parola ile aynı değil</translation>
-    </message>
-    <message>
-        <source>Unknown Error</source>
-        <translation type="obsolete">Bilinmeyen Hata</translation>
-    </message>
-    <message>
-        <source>You cannot use this email address, already in use</source>
-        <translation type="obsolete">Bu e-posta adresini kullanamazsınız, zaten kullanımda</translation>
-    </message>
-    <message>
-        <source>You cannot use this nickname, already in use</source>
-        <translation type="obsolete">Bu takma adı kullanamazsınız, zaten kullanımda</translation>
-    </message>
-    <message>
-        <source>Your password does not contain enough characters (6 minimum), try another one</source>
-        <translation type="obsolete">Parolanız yeterli sayıda karakteri (en az 6) barındırmıyor, lütfen değiştirin</translation>
-    </message>
-    <message>
-        <source>Subscription Failed</source>
-        <translation type="obsolete">Üyelik İşlemi Başarılamadı</translation>
     </message>
 </context>
 <context>
@@ -2576,16 +2226,6 @@ This will send </source>
 <context>
     <name>QtUserProfileHandler</name>
     <message>
-        <source>Would you like to import contacts and IM accounts previously created in the 
-default profile to the profile named %1?</source>
-        <translation type="obsolete">Geçmişte %1 profili ile tanımlanmış hızlı mesajlaşma hesaplarınızı ve 
-bağlantılarınızı içeri aktarmayı ister misiniz?</translation>
-    </message>
-    <message>
-        <source>WengoPhone - Importing contacts and IM accounts</source>
-        <translation type="obsolete">WengoPhone - Bağlantıları ve hesapları içe aktarıyor</translation>
-    </message>
-    <message>
         <source>A problem occured while loading your profile.
 The last backuped profile has been loaded: 
 you may have lost last changes made</source>
@@ -2647,7 +2287,7 @@ Choose another profile or create a new one.</source>
     <name>QtWebDirectory</name>
     <message>
         <source>WengoPhone - Directory</source>
-        <translation type="obsolete">WengoPhone - Dizin</translation>
+        <translation type="unfinished">WengoPhone - Dizin</translation>
     </message>
 </context>
 <context>
@@ -2858,14 +2498,6 @@ Choose another profile or create a new one.</source>
         <translation type="unfinished">İmza:</translation>
     </message>
     <message>
-        <source>Phone number:</source>
-        <translation type="obsolete">Telefon numarası:</translation>
-    </message>
-    <message>
-        <source>Enter the phone number here</source>
-        <translation type="obsolete">Telefon numaranızı buraya girin</translation>
-    </message>
-    <message>
         <source></source>
         <translation type="unfinished"></translation>
     </message>
@@ -2889,12 +2521,6 @@ Choose another profile or create a new one.</source>
         <translation type="unfinished">WengoPhone - Güncelleme indiriliyor</translation>
     </message>
     <message>
-        <source>Downloading WengoPhone update...Version:%1URL:%2File Size:%3 (MB)Speed:%4 
-(kB/s)</source>
-        <translation type="obsolete">WengoPhone güncellemesi indiriliyor...Sürüm:%1URL:%2Dosya Boyutu:%3 
-(MB)Hız:%4 (kB/s)</translation>
-    </message>
-    <message>
         <source>Downloading WengoPhone update...
 
 Version:<byte value="x9"/>%1
@@ -2913,97 +2539,6 @@ Speed:<byte value="x9"/>%4 (kB/s)</source>
     <message>
         <source>Not Connected</source>
         <translation type="unfinished">Bağlı değil</translation>
-    </message>
-</context>
-<context>
-    <name>SubscribeWengo1</name>
-    <message>
-        <source>Password:</source>
-        <translation type="obsolete">Parola:</translation>
-    </message>
-    <message>
-        <source>Email:</source>
-        <translation type="obsolete">E-Posta:</translation>
-    </message>
-    <message>
-        <source>WengoPhone - Wengo Account Creation (1/2)</source>
-        <translation type="obsolete">WengoPhone - Wengo Hesabı Oluşturma (1/2)</translation>
-    </message>
-    <message>
-        <source>* &lt;i&gt;Required fields&lt;/i&gt;</source>
-        <translation type="obsolete">* &lt;i&gt;Doldurulması zorunlu alanlar&lt;/i&gt;</translation>
-    </message>
-    <message>
-        <source>Subscribe</source>
-        <translation type="obsolete">Üye Ol</translation>
-    </message>
-    <message>
-        <source>Error message label</source>
-        <translation type="obsolete">Hata mesajı etiketi:</translation>
-    </message>
-    <message>
-        <source>Nickname:</source>
-        <translation type="obsolete">Takam Ad:</translation>
-    </message>
-    <message>
-        <source>*</source>
-        <translation type="obsolete">*</translation>
-    </message>
-    <message>
-        <source>Confirm password:</source>
-        <translation type="obsolete">Parolayı tekrarla:</translation>
-    </message>
-    <message>
-        <source>&lt;i&gt;Please check your email and confirm the above details within 48 hours&lt;/i&gt;</source>
-        <translation type="obsolete">&lt;i&gt;Lütfen e-postanızı kontrol ederek size gelen mesajı 48 saat içinde 
-onaylayınız&lt;/i&gt;</translation>
-    </message>
-    <message>
-        <source>I read and accept the Terms of Service</source>
-        <translation type="obsolete">Kullanıcı sözleşmesini okudum ve kabul ediyorum</translation>
-    </message>
-    <message>
-        <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Account Creation&lt;/span&gt;&lt;br /&gt;&lt;br 
-/&gt;&lt;span&gt;Please fill in the details below&lt;/span&gt;</source>
-        <translation type="obsolete">&lt;span style=&quot;font-size:18pt;&quot;&gt;Hesap Yaratma&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;&lt;span&gt;Lütfen 
-aşağıda sizden istenen bilgileri doldurun&lt;/span&gt;</translation>
-    </message>
-</context>
-<context>
-    <name>SubscribeWengo2</name>
-    <message>
-        <source>Password:</source>
-        <translation type="obsolete">Parola:</translation>
-    </message>
-    <message>
-        <source>Email:</source>
-        <translation type="obsolete">E-Posta:</translation>
-    </message>
-    <message>
-        <source>Nickname:</source>
-        <translation type="obsolete">Takam Ad:</translation>
-    </message>
-    <message>
-        <source>WengoPhone - Wengo Account Creation (2/2)</source>
-        <translation type="obsolete">WengoPhone - Wengo Hesabı Oluşturma (2/2)</translation>
-    </message>
-    <message>
-        <source>Please note your details needed to access your account:</source>
-        <translation type="obsolete">Lütfen hesabınıza erişmek için gerekli olan detayları bir yere not edin:</translation>
-    </message>
-    <message>
-        <source>Finish</source>
-        <translation type="obsolete">Bitti</translation>
-    </message>
-    <message>
-        <source>Add your IM Accounts to your Profile</source>
-        <translation type="obsolete">Hızlı mesajlaşma hesaplarınızı profilinize ekleyin</translation>
-    </message>
-    <message>
-        <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Contratulations!&lt;/span&gt;&lt;br /&gt;&lt;br 
-/&gt;&lt;span&gt;Your account has been successfully created&lt;/span&gt;</source>
-        <translation type="obsolete">&lt;span style=&quot;font-size:18pt;&quot;&gt;Tebrikler!&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;&lt;span&gt;Hesabınız 
-başarıyla yaratılmıştır&lt;/span&gt;</translation>
     </message>
 </context>
 <context>
@@ -3125,16 +2660,6 @@ başarıyla yaratılmıştır&lt;/span&gt;</translation>
     <message>
         <source>Video quality depends on your Internet connection bandwidth</source>
         <translation type="unfinished">Görüntü kalitesi internet bağlantınızın bant genişliği ile doğru orantılıdır</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Warning!&lt;/b&gt; When used for the first time we recommend that you 
-select&lt;br&gt;the normal video quality mode, then you can try different modes to 
-find out&lt;br&gt;the most suitable one&lt;br&gt;&lt;br&gt;&lt;b&gt;Tips&lt;/b&gt;: Go to 
-http://test.lvcm.com to determine your Internet connection bandwidth</source>
-        <translation type="obsolete">&lt;b&gt;Dikkat!&lt;/b&gt; İlk kullanımda ayarlarda &lt;br&gt;normal görüntü kalitesini seçin, 
-sonraki denemelerde farklı bileşenleri seçerek&lt;br&gt;sisteminizin 
-kaldırabileceği en iyi ayarları bulun&lt;br&gt;&lt;br&gt;&lt;b&gt;İpucu&lt;/b&gt;: 
-http://test.lvcm.com adresine giderek internet bant genişliğinizi test edin</translation>
     </message>
     <message>
         <source>Make a test video call</source>
@@ -3414,29 +2939,6 @@ http://test.lvcm.com adresine giderek internet bant genişliğinizi test edin</t
     </message>
 </context>
 <context>
-    <name>Wizard</name>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">İptal</translation>
-    </message>
-    <message>
-        <source>Finish</source>
-        <translation type="obsolete">Bitti</translation>
-    </message>
-    <message>
-        <source>Next &gt;</source>
-        <translation type="obsolete">Sonraki &gt;</translation>
-    </message>
-    <message>
-        <source>&lt; Back</source>
-        <translation type="obsolete">&lt; Önceki</translation>
-    </message>
-    <message>
-        <source>Simple Wizard - Step %1 of %2</source>
-        <translation type="obsolete">Hızlı Sihirbaz - %1/%2 adım</translation>
-    </message>
-</context>
-<context>
     <name>WsDirectory</name>
     <message>
         <source>All</source>
@@ -3469,14 +2971,6 @@ http://test.lvcm.com adresine giderek internet bant genişliğinizi test edin</t
     <message>
         <source>Search</source>
         <translation type="unfinished">Ara</translation>
-    </message>
-    <message>
-        <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Search for Wengo contacts&lt;/span&gt;&lt;br /&gt;&lt;br 
-/&gt;&lt;span&gt;Enter name, nickname, city or email and click the search 
-button&lt;/span&gt;</source>
-        <translation type="obsolete">&lt;span style=&quot;font-size:18pt;&quot;&gt;Wengo bağlantılarını ara&lt;/span&gt;&lt;br /&gt;&lt;br 
-/&gt;&lt;span&gt;Ad, takma ad, şehir ya da e-posta adresini girin ve Ara tuşuna 
-tıklayın&lt;/span&gt;</translation>
     </message>
     <message>
         <source>When entering a combined search, please separate words with a blank.</source>
@@ -3559,21 +3053,6 @@ tıklayın&lt;/span&gt;</translation>
     <message>
         <source>Get a new Yahoo! Account</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>mainWindow</name>
-    <message>
-        <source>Form</source>
-        <translation type="obsolete">Form</translation>
-    </message>
-    <message>
-        <source>Search</source>
-        <translation type="obsolete">Ara</translation>
-    </message>
-    <message>
-        <source>Pause</source>
-        <translation type="obsolete">Ara ver</translation>
     </message>
 </context>
 </TS>

@@ -46,13 +46,6 @@
 http://openwengo.com</translation>
     </message>
     <message>
-        <source>This program is free software; you can redistribute it and/ormodify it under 
-the terms of the GNU General Public Licenseas published by the Free Software 
-Foundation; either version 2of the License, or (at your option) any later 
-version.</source>
-        <translation type="obsolete">このプログラムはフリーソフトです。あなたはGNUGPLバージョン2以降の下で再配布、あるいはまた、修正することができます。</translation>
-    </message>
-    <message>
         <source>Authors</source>
         <translation type="unfinished">製作者</translation>
     </message>
@@ -81,48 +74,6 @@ of the License, or (at your option) any later version.</source>
     <message>
         <source>test.bmp</source>
         <translation type="unfinished">test.bmp</translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
-white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-
-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Contact: 
-&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="obsolete">&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
-white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-
-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-
-weight:600;&quot;&gt;コンタクト：&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
-white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-
-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Filename: 
-&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="obsolete">&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
-white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-
-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-
-weight:600;&quot;&gt;ファイル名：&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
-white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-
-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;&lt;h1&gt;Incoming 
-file&lt;/h1&gt;&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="obsolete">&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
-white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-
-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-
-weight:600;&quot;&gt;&lt;h1&gt;受信ファイル&lt;/h1&gt;&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>&amp;Accept</source>
@@ -230,11 +181,6 @@ weight:600;&quot;&gt;&lt;h1&gt;受信ファイル&lt;/h1&gt;&lt;/span&gt;&lt;/p&
         <translation type="unfinished">高度な設定ウィンド</translation>
     </message>
     <message>
-        <source>Warning, this part is for advanced users.&lt;br&gt;Any mistake can badly damage 
-the software.</source>
-        <translation type="obsolete">警告！このページは上級ユーザ向けです。&lt;br&gt;もし設定を誤ると、ソフトウェアに深刻な影響を与えます。</translation>
-    </message>
-    <message>
         <source>Automatically answer incoming calls from</source>
         <translation type="unfinished">からの着信に自動応答する。</translation>
     </message>
@@ -303,14 +249,6 @@ the software.</source>
         <translation type="unfinished">Wengophone - アップデートがあります。</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;An update is available, click &lt;span style=&quot; text-
-decoration: underline; color:#0000ff;&quot;&gt;here&lt;/span&gt; to download the new 
-version&lt;br /&gt;&lt;br /&gt;Version:%1&lt;br /&gt;File Size:%2 (MB)&lt;br /&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="obsolete">&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;An update is available, click &lt;span style=&quot; text-
-decoration: underline; color:#0000ff;&quot;&gt;ここ&lt;/span&gt;から新しいバージョンをダウンロードする&lt;br 
-/&gt;&lt;br /&gt;バージョン：%1&lt;br /&gt;ファイルサイズ：%2 (MB)&lt;br /&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;/head&gt;&lt;body&gt;An update is available, click &lt;span style=&quot; text-decoration: underline; color:#0000ff;&quot;&gt;here&lt;/span&gt; to download the new version&lt;br /&gt;&lt;br /&gt;Version:<byte value="x9"/>%1&lt;br /&gt;File Size:<byte value="x9"/>%2 (MB)&lt;br /&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -320,11 +258,6 @@ decoration: underline; color:#0000ff;&quot;&gt;ここ&lt;/span&gt;から新し�
     <message>
         <source>Call Forward Settings</source>
         <translation type="unfinished">以前の設定に戻す</translation>
-    </message>
-    <message>
-        <source>For example +3314500XXXX (+33 is the country code and 14500XXXX is the phone 
-number)</source>
-        <translation type="obsolete">例）　+3314500XXXX (+33 は国別コード、14500XXXX は電話番号)</translation>
     </message>
     <message>
         <source>3rd:</source>
@@ -349,15 +282,6 @@ number)</source>
     <message>
         <source>Disable call forwarding</source>
         <translation type="unfinished">着信転送を利用しない</translation>
-    </message>
-    <message>
-        <source>Call forwarding is active if you&apos;re not connected to Wengo, when your line 
-is busy or 20 seconds after you did not answer a call. You can configure up 
-to three call forwards to landlines, mobile phones or voice mail (if 
-applicable)</source>
-        <translation type="obsolete">
-あなたのラインがビジー状態であるか、20秒間応答がない場合、あなたがWengoに接続していないものとして、着信転送を行います。あなたは固定電話あるいは携帯電
-話、ボイスメールなど着信転送に3つのラインを設定することができます。</translation>
     </message>
     <message>
         <source>Forward all unanswered calls to following phone numbers:</source>
@@ -494,19 +418,6 @@ applicable)</source>
         <translation type="unfinished">開始</translation>
     </message>
     <message>
-        <source>&lt;span style=&quot; font-size:18pt;&quot;&gt;Conference&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;Please enter 
-two phone numbers &lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-
-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;or Wengo 
-contact ID in order&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-
-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;to create 
-a 3-way conference.&lt;/p&gt;</source>
-        <translation type="obsolete">&lt;span style=&quot; font-size:18pt;&quot;&gt;会議室&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;3ウェイ会議のために&lt;/p&gt;&lt;p 
-style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-
-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;2つの電話番号、&lt;/p&gt;&lt;p style=&quot; 
-margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-
-block-indent:0; text-indent:0px;&quot;&gt;または、WengoコンタクトIDを入力してください。&lt;/p&gt;</translation>
-    </message>
-    <message>
         <source>Phone number 2:</source>
         <translation type="unfinished">電話番号2：</translation>
     </message>
@@ -525,42 +436,6 @@ block-indent:0; text-indent:0px;&quot;&gt;または、WengoコンタクトIDを�
     <message>
         <source>&lt;span style=&quot; font-size:18pt;&quot;&gt;Conference&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;Please enter two phone numbers &lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;or Wengo contact ID in order&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;to create a 3-way conference.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>ConferenceInviteWidget</name>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">キャンセル</translation>
-    </message>
-    <message>
-        <source>&lt;span style=&quot; font-size:18pt;&quot;&gt;Conference&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;Please enter 
-two phone numbers &lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-
-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;or Wengo 
-contact ID in order&lt;/p&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-
-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;to create 
-a 3-way conference.&lt;/p&gt;</source>
-        <translation type="obsolete">&lt;span style=&quot; font-size:18pt;&quot;&gt;会議室&lt;/span&gt;&lt;br /&gt;&lt;br /&gt;3ウェイ会議のために&lt;/p&gt;&lt;p 
-style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-
-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;2つの電話番号、&lt;/p&gt;&lt;p style=&quot; 
-margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-
-block-indent:0; text-indent:0px;&quot;&gt;または、WengoコンタクトIDを入力してください。&lt;/p&gt;</translation>
-    </message>
-    <message>
-        <source>&amp;Add &gt;&gt;</source>
-        <translation type="obsolete">追加(%A) &gt;&gt;</translation>
-    </message>
-    <message>
-        <source>&lt;&lt; &amp;Remove</source>
-        <translation type="obsolete">&lt;&lt; 削除(&amp;R)</translation>
-    </message>
-    <message>
-        <source>Available Contacts</source>
-        <translation type="obsolete">コンタクトを有効にする</translation>
-    </message>
-    <message>
-        <source>&amp;Start</source>
-        <translation type="obsolete">開始(&amp;S)</translation>
     </message>
 </context>
 <context>
@@ -613,43 +488,6 @@ block-indent:0; text-indent:0px;&quot;&gt;または、WengoコンタクトIDを�
     </message>
 </context>
 <context>
-    <name>CrashReport</name>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">キャンセル</translation>
-    </message>
-    <message>
-        <source>Program Failure</source>
-        <translation type="obsolete">プログラムの不具合</translation>
-    </message>
-    <message>
-        <source>The WengoPhone execution failed and has generated a diagnostic file.&lt;br&gt;This 
-file contains usefull information to solve the problem you are 
-encounting.&lt;br&gt;Thanks for your contribution.&lt;br&gt;&lt;br&gt;The WengoPhone 
-Development Team.</source>
-        <translation type="obsolete">
-WengoPhoneは実行に失敗し、診断ファイルを作成しました。&lt;br&gt;このファイルには発生した問題を解決するために有効な情報が含まれます。&lt;br&gt;あなたの
-貢献に感謝します。&lt;br&gt;&lt;br&gt;WengoPhone開発チーム一同</translation>
-    </message>
-    <message>
-        <source>Send</source>
-        <translation type="obsolete">送信</translation>
-    </message>
-    <message>
-        <source>Optional Information</source>
-        <translation type="obsolete">追加情報</translation>
-    </message>
-    <message>
-        <source>In order to help the developers you can complete this report. This step is 
-optional.&lt;br&gt;Use Case Description:</source>
-        <translation type="obsolete">開発者を助けるためにこのレポートを完成させてください。このステップはオプションです。&lt;br&gt;状況説明：</translation>
-    </message>
-    <message>
-        <source>Your Mail:</source>
-        <translation type="obsolete">メールアドレス：</translation>
-    </message>
-</context>
-<context>
     <name>CreditWidget</name>
     <message>
         <source>Your Wengo phone number</source>
@@ -689,13 +527,6 @@ optional.&lt;br&gt;Use Case Description:</source>
     </message>
 </context>
 <context>
-    <name>DialpadWidget</name>
-    <message>
-        <source>Audio Smileys</source>
-        <translation type="obsolete">オーディオスマイリー</translation>
-    </message>
-</context>
-<context>
     <name>EventWidget</name>
     <message>
         <source>0</source>
@@ -729,10 +560,6 @@ optional.&lt;br&gt;Use Case Description:</source>
         <translation type="unfinished">フォーム</translation>
     </message>
     <message>
-        <source>From:</source>
-        <translation type="obsolete">発信者：</translation>
-    </message>
-    <message>
         <source>Pause</source>
         <translation type="unfinished">一時停止</translation>
     </message>
@@ -756,19 +583,6 @@ optional.&lt;br&gt;Use Case Description:</source>
         <translation type="unfinished">WengoPhone - ファイル転送マネージャー</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
-white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-
-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
-indent:0; text-indent:0px;&quot;&gt;Click here to change your download 
-folder&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="obsolete">&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
-white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-
-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
-indent:0; text-indent:0px;&quot;&gt;ここをクリックしてダウンロードフォルダを変更する&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
         <source>Download folder:</source>
         <translation type="unfinished">ダウンロードフォルダ</translation>
     </message>
@@ -781,69 +595,16 @@ indent:0; text-indent:0px;&quot;&gt;ここをクリックしてダウンロー�
         <translation type="unfinished">アップロード</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
-white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-
-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
-indent:0; text-indent:0px;&quot;&gt;Clean all items in the list&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="obsolete">&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
-white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-
-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
-indent:0; text-indent:0px;&quot;&gt;リストにある全てのアイテムをクリアする&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
         <source>&amp;Clean</source>
         <translation type="unfinished">クリア(&amp;C)</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Click here to change your download folder&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <source>Click here to change your download folder</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Clean all items in the list&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <source>Clean all items in the list</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>Form</name>
-    <message>
-        <source>&amp;Start</source>
-        <translation type="obsolete">開始(&amp;S)</translation>
-    </message>
-    <message>
-        <source>Chat room</source>
-        <translation type="obsolete">チャットルーム</translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
-white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-
-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt; font-
-weight:600;&quot;&gt;Chat room&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="obsolete">&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
-white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-
-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:12pt; font-
-weight:600;&quot;&gt;チャットルーム&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-        <source>(Conference participants)</source>
-        <translation type="obsolete">（会議参加者）</translation>
-    </message>
-    <message>
-        <source>&amp;Remove</source>
-        <translation type="obsolete">削除(&amp;R)</translation>
-    </message>
-    <message>
-        <source>Group Name</source>
-        <translation type="obsolete">グループ名</translation>
-    </message>
-    <message>
-        <source>&amp;Add</source>
-        <translation type="obsolete">追加(&amp;A)</translation>
     </message>
 </context>
 <context>
@@ -948,14 +709,6 @@ weight:600;&quot;&gt;チャットルーム&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&l
     <message>
         <source>WengoPhone - Local HTTP Proxy</source>
         <translation type="unfinished">WengoPhone - ローカルHTTPプロキシ</translation>
-    </message>
-    <message>
-        <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;HTTP Proxy 
-Authentication&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;Your local HTTP proxy uses 
-authentication&lt;br&gt;Please enter your login and password&lt;/span&gt;</source>
-        <translation type="obsolete">&lt;span style=&quot;font-
-size:18pt;&quot;&gt;HTTPプロキシ認証&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;ローカルHTTPプロキシは認証
-を使用します&lt;br&gt;ログインIDとパスワードを入力してください&lt;/span&gt;</translation>
     </message>
     <message>
         <source>HTTP Proxy Address:</source>
@@ -1159,12 +912,6 @@ size:18pt;&quot;&gt;HTTPプロキシ認証&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;s
         <translation type="unfinished">WengoPhone - ログイン</translation>
     </message>
     <message>
-        <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Login&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;Please enter your 
-email address and&lt;br&gt;password&lt;/span&gt;</source>
-        <translation type="obsolete">&lt;span style=&quot;font-
-size:18pt;&quot;&gt;ログイン&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;Eメールアドレスとパスワードを&lt;br&gt;入力してください&lt;/span&gt;</translation>
-    </message>
-    <message>
         <source>Forgot your password?</source>
         <translation type="unfinished">パスワードを忘れた</translation>
     </message>
@@ -1214,37 +961,6 @@ size:18pt;&quot;&gt;ログイン&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;E�
     <message>
         <source></source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>MainWindow</name>
-    <message>
-        <source>MainWindow</source>
-        <translation type="obsolete">メインウィンドウ</translation>
-    </message>
-    <message>
-        <source>Command::terminate()</source>
-        <translation type="obsolete">Command::terminate()</translation>
-    </message>
-    <message>
-        <source>Command::start()</source>
-        <translation type="obsolete">Command::start()</translation>
-    </message>
-    <message>
-        <source>Accept Call</source>
-        <translation type="obsolete">応答</translation>
-    </message>
-    <message>
-        <source>Send Chat Message</source>
-        <translation type="obsolete">チャットメッセージの送信</translation>
-    </message>
-    <message>
-        <source>Make Call</source>
-        <translation type="obsolete">発信</translation>
-    </message>
-    <message>
-        <source>Hang Up</source>
-        <translation type="obsolete">切断</translation>
     </message>
 </context>
 <context>
@@ -1358,20 +1074,6 @@ size:18pt;&quot;&gt;ログイン&lt;/span&gt;&lt;br&gt;&lt;br&gt;&lt;span&gt;E�
     <message>
         <source>Duration</source>
         <translation type="unfinished">通話時間</translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
-white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-
-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-size:13pt; 
-font-weight:600;&quot;&gt;NickName or number&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="obsolete">&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; 
-white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt; font-
-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-
-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-
-indent:0; text-indent:0px; font-size:8pt;&quot;&gt;&lt;span style=&quot; font-size:13pt; 
-font-weight:600;&quot;&gt;ニックネームまたはナンバー&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source></source>
@@ -1754,10 +1456,6 @@ font-weight:600;&quot;&gt;ニックネームまたはナンバー&lt;/span&gt;&l
         <translation>コンタクトのブロック</translation>
     </message>
     <message>
-        <source>Forward to Cell phone</source>
-        <translation type="obsolete">携帯電話に転送</translation>
-    </message>
-    <message>
         <source>Start chat</source>
         <translation>チャットの開始</translation>
     </message>
@@ -1847,10 +1545,6 @@ font-weight:600;&quot;&gt;ニックネームまたはナンバー&lt;/span&gt;&l
         <translation>ファイルサイズエラー</translation>
     </message>
     <message>
-        <source>%1 exceeds the maximum authorized size.</source>
-        <translation>%1の容量は最大許可サイズを超えています。</translation>
-    </message>
-    <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:MS Shell Dlg; font-size:8.25pt;font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px;margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:18pt; font-weight:600; color:#ffffff;&quot;&gt;Please upgrade&lt;br&gt; yourWengoPhone&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1868,6 +1562,10 @@ font-weight:600;&quot;&gt;ニックネームまたはナンバー&lt;/span&gt;&l
     </message>
     <message>
         <source> is trying to send you a file:&lt;/span&gt; but his WengoPhone must be upgraded in order to receive it. Tell him to download the latest version.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 exceeds the maximum authorized size or has size 0.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2070,10 +1768,6 @@ font-weight:600;&quot;&gt;ニックネームまたはナンバー&lt;/span&gt;&l
         <translation>キャンセル</translation>
     </message>
     <message>
-        <source>Are sure you want to delete this account?</source>
-        <translation type="obsolete">このアカウントを削除しますか？</translation>
-    </message>
-    <message>
         <source>&amp;Delete</source>
         <translation>削除(&amp;D)</translation>
     </message>
@@ -2099,10 +1793,6 @@ font-weight:600;&quot;&gt;ニックネームまたはナンバー&lt;/span&gt;&l
     <message>
         <source>&amp;Delete</source>
         <translation>削除(&amp;D)</translation>
-    </message>
-    <message>
-        <source>Are sure you want to delete this IM contact?</source>
-        <translation type="obsolete">このIMアカウントを削除しますか？</translation>
     </message>
     <message>
         <source>Are sure you want to delete this IM contact?
@@ -2233,11 +1923,6 @@ font-weight:600;&quot;&gt;ニックネームまたはナンバー&lt;/span&gt;&l
         <translation>WengoPhone - 会議中</translation>
     </message>
     <message>
-        <source>When you are ready to start the conference, click on the button belowPlease 
-wait for a few seconds...</source>
-        <translation type="obsolete">会議を開始する準備が整ったら、下のボタンを押してしばらくお待ちください...</translation>
-    </message>
-    <message>
         <source>Dialing</source>
         <translation>ダイヤル中</translation>
     </message>
@@ -2350,14 +2035,6 @@ Please wait for a few seconds...</source>
         <translation>電話番号が不十分です</translation>
     </message>
     <message>
-        <source>Your message is too long.This will send </source>
-        <translation type="obsolete">メッセージが長すぎます。以下を送信します。 </translation>
-    </message>
-    <message>
-        <source> SMS.</source>
-        <translation type="obsolete"> SMS.</translation>
-    </message>
-    <message>
         <source>Do you want to continue?</source>
         <translation>続けますか？</translation>
     </message>
@@ -2428,33 +2105,6 @@ This will send </source>
     <message>
         <source>Connecting</source>
         <translation>接続中</translation>
-    </message>
-</context>
-<context>
-    <name>QtSubscribe</name>
-    <message>
-        <source>Confirm password does not matched password</source>
-        <translation type="obsolete">パスワードが一致しません</translation>
-    </message>
-    <message>
-        <source>Unknown Error</source>
-        <translation type="obsolete">未知のエラー</translation>
-    </message>
-    <message>
-        <source>You cannot use this email address, already in use</source>
-        <translation type="obsolete">このメールアドレスは使用できません。既に使われています</translation>
-    </message>
-    <message>
-        <source>You cannot use this nickname, already in use</source>
-        <translation type="obsolete">このニックネームは使用できません。既に使われています。</translation>
-    </message>
-    <message>
-        <source>Your password does not contain enough characters (6 minimum), try another one</source>
-        <translation type="obsolete">パスワードが短すぎます（半角英数6文字以上）。他のものを試してください</translation>
-    </message>
-    <message>
-        <source>Subscription Failed</source>
-        <translation type="obsolete">登録失敗</translation>
     </message>
 </context>
 <context>
@@ -2576,10 +2226,6 @@ This will send </source>
 <context>
     <name>QtUserProfileHandler</name>
     <message>
-        <source>WengoPhone - Importing contacts and IM accounts</source>
-        <translation type="obsolete">WengoPhone - コンタクトとIMアカウントのインポート</translation>
-    </message>
-    <message>
         <source>A problem occured while loading your profile.
 The last backuped profile has been loaded: 
 you may have lost last changes made</source>
@@ -2641,7 +2287,7 @@ Choose another profile or create a new one.</source>
     <name>QtWebDirectory</name>
     <message>
         <source>WengoPhone - Directory</source>
-        <translation type="obsolete">WengoPhone - ディレクトリ</translation>
+        <translation type="unfinished">WengoPhone - ディレクトリ</translation>
     </message>
 </context>
 <context>
@@ -2852,14 +2498,6 @@ Choose another profile or create a new one.</source>
         <translation type="unfinished">署名：</translation>
     </message>
     <message>
-        <source>Phone number:</source>
-        <translation type="obsolete">電話番号：</translation>
-    </message>
-    <message>
-        <source>Enter the phone number here</source>
-        <translation type="obsolete">ここに電話番号を入力してください</translation>
-    </message>
-    <message>
         <source></source>
         <translation type="unfinished"></translation>
     </message>
@@ -2883,11 +2521,6 @@ Choose another profile or create a new one.</source>
         <translation type="unfinished">WengoPhone - アップデートのダウンロード中</translation>
     </message>
     <message>
-        <source>Downloading WengoPhone update...Version:%1URL:%2File Size:%3 (MB)Speed:%4 
-(kB/s)</source>
-        <translation type="obsolete">WengoPhone アップデートのダウンロード中...バージョン：%1URL:%2ファイル サイズ：%3 (MB)速度：%4 (kB/s)</translation>
-    </message>
-    <message>
         <source>Downloading WengoPhone update...
 
 Version:<byte value="x9"/>%1
@@ -2906,96 +2539,6 @@ Speed:<byte value="x9"/>%4 (kB/s)</source>
     <message>
         <source>Not Connected</source>
         <translation type="unfinished">未接続</translation>
-    </message>
-</context>
-<context>
-    <name>SubscribeWengo1</name>
-    <message>
-        <source>Password:</source>
-        <translation type="obsolete">パスワード：</translation>
-    </message>
-    <message>
-        <source>Email:</source>
-        <translation type="obsolete">Eメール：</translation>
-    </message>
-    <message>
-        <source>WengoPhone - Wengo Account Creation (1/2)</source>
-        <translation type="obsolete">WengoPhone - Wengoアカウント作成（1/2）</translation>
-    </message>
-    <message>
-        <source>* &lt;i&gt;Required fields&lt;/i&gt;</source>
-        <translation type="obsolete">* &lt;i&gt;必須項目&lt;/i&gt;</translation>
-    </message>
-    <message>
-        <source>Subscribe</source>
-        <translation type="obsolete">同意する</translation>
-    </message>
-    <message>
-        <source>Error message label</source>
-        <translation type="obsolete">エラーメッセージラベル</translation>
-    </message>
-    <message>
-        <source>Nickname:</source>
-        <translation type="obsolete">ニックネーム：</translation>
-    </message>
-    <message>
-        <source>*</source>
-        <translation type="obsolete">*</translation>
-    </message>
-    <message>
-        <source>Confirm password:</source>
-        <translation type="obsolete">パスワード確認</translation>
-    </message>
-    <message>
-        <source>&lt;i&gt;Please check your email and confirm the above details within 48 hours&lt;/i&gt;</source>
-        <translation type="obsolete">&lt;i&gt;48時間以内にメールを確認し、上記の詳細を確認してください&lt;/i&gt;</translation>
-    </message>
-    <message>
-        <source>I read and accept the Terms of Service</source>
-        <translation type="obsolete">私は本サービスの規約を理解し、同意します</translation>
-    </message>
-    <message>
-        <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Account Creation&lt;/span&gt;&lt;br /&gt;&lt;br 
-/&gt;&lt;span&gt;Please fill in the details below&lt;/span&gt;</source>
-        <translation type="obsolete">&lt;span style=&quot;font-size:18pt;&quot;&gt;アカウントの作成&lt;/span&gt;&lt;br /&gt;&lt;br 
-/&gt;&lt;span&gt;以下の項目を記入してください&lt;/span&gt;</translation>
-    </message>
-</context>
-<context>
-    <name>SubscribeWengo2</name>
-    <message>
-        <source>Password:</source>
-        <translation type="obsolete">パスワード：</translation>
-    </message>
-    <message>
-        <source>Email:</source>
-        <translation type="obsolete">Eメール：</translation>
-    </message>
-    <message>
-        <source>Nickname:</source>
-        <translation type="obsolete">ニックネーム：</translation>
-    </message>
-    <message>
-        <source>WengoPhone - Wengo Account Creation (2/2)</source>
-        <translation type="obsolete">WengoPhone - Wengoアカウント作成(2/2)</translation>
-    </message>
-    <message>
-        <source>Please note your details needed to access your account:</source>
-        <translation type="obsolete">あなたのアカウントに接続するために必要な詳細をメモしてください。</translation>
-    </message>
-    <message>
-        <source>Finish</source>
-        <translation type="obsolete">完了</translation>
-    </message>
-    <message>
-        <source>Add your IM Accounts to your Profile</source>
-        <translation type="obsolete">プロフィールにIMアカウントを追加する</translation>
-    </message>
-    <message>
-        <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Contratulations!&lt;/span&gt;&lt;br /&gt;&lt;br 
-/&gt;&lt;span&gt;Your account has been successfully created&lt;/span&gt;</source>
-        <translation type="obsolete">&lt;span style=&quot;font-size:18pt;&quot;&gt;おめでとうございます！&lt;/span&gt;&lt;br /&gt;&lt;br 
-/&gt;&lt;span&gt;アカウントの作成に成功しました&lt;/span&gt;</translation>
     </message>
 </context>
 <context>
@@ -3117,15 +2660,6 @@ Speed:<byte value="x9"/>%4 (kB/s)</source>
     <message>
         <source>Video quality depends on your Internet connection bandwidth</source>
         <translation type="unfinished">ビデオの品質はインターネット接続帯域に依存します</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;Warning!&lt;/b&gt; When used for the first time we recommend that you 
-select&lt;br&gt;the normal video quality mode, then you can try different modes to 
-find out&lt;br&gt;the most suitable one&lt;br&gt;&lt;br&gt;&lt;b&gt;Tips&lt;/b&gt;: Go to 
-http://test.lvcm.com to determine your Internet connection bandwidth</source>
-        <translation type="obsolete">&lt;b&gt;警告!&lt;/b&gt; 
-初回起動時にはノーマルビデオモードを選択してください。&lt;br&gt;その後に最適なモードに調整してください。&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;b&gt;Tips&lt;/b&gt;: 
-http://test.lvcm.comであなたのインターネット接続帯域を測定できます。</translation>
     </message>
     <message>
         <source>Make a test video call</source>
@@ -3405,29 +2939,6 @@ http://test.lvcm.comであなたのインターネット接続帯域を測定で
     </message>
 </context>
 <context>
-    <name>Wizard</name>
-    <message>
-        <source>Cancel</source>
-        <translation type="obsolete">キャンセル</translation>
-    </message>
-    <message>
-        <source>Finish</source>
-        <translation type="obsolete">完了</translation>
-    </message>
-    <message>
-        <source>Next &gt;</source>
-        <translation type="obsolete">次へ &gt;</translation>
-    </message>
-    <message>
-        <source>&lt; Back</source>
-        <translation type="obsolete">&lt; 戻る</translation>
-    </message>
-    <message>
-        <source>Simple Wizard - Step %1 of %2</source>
-        <translation type="obsolete">簡易設定 - ステップ %1 / %2</translation>
-    </message>
-</context>
-<context>
     <name>WsDirectory</name>
     <message>
         <source>All</source>
@@ -3460,13 +2971,6 @@ http://test.lvcm.comであなたのインターネット接続帯域を測定で
     <message>
         <source>Search</source>
         <translation type="unfinished">検索</translation>
-    </message>
-    <message>
-        <source>&lt;span style=&quot;font-size:18pt;&quot;&gt;Search for Wengo contacts&lt;/span&gt;&lt;br /&gt;&lt;br 
-/&gt;&lt;span&gt;Enter name, nickname, city or email and click the search 
-button&lt;/span&gt;</source>
-        <translation type="obsolete">&lt;span style=&quot;font-size:18pt;&quot;&gt;Wengoコンタクトの検索&lt;/span&gt;&lt;br /&gt;&lt;br 
-/&gt;&lt;span&gt;名前、ニックネーム、都市またはEメールを入力し、&quot;サーチ&quot;ボタンをクリックしてください&lt;/span&gt;</translation>
     </message>
     <message>
         <source>When entering a combined search, please separate words with a blank.</source>
@@ -3549,21 +3053,6 @@ button&lt;/span&gt;</source>
     <message>
         <source>Get a new Yahoo! Account</source>
         <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>mainWindow</name>
-    <message>
-        <source>Form</source>
-        <translation type="obsolete">フォーム</translation>
-    </message>
-    <message>
-        <source>Search</source>
-        <translation type="obsolete">検索</translation>
-    </message>
-    <message>
-        <source>Pause</source>
-        <translation type="obsolete">一時停止</translation>
     </message>
 </context>
 </TS>
