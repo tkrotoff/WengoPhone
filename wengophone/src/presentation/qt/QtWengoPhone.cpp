@@ -203,13 +203,29 @@ void QtWengoPhone::initThreadSafe() {
 
 	updatePresentation();
 
-	//Main window size and position saved
-	_wengoPhoneWindow->resize(QSize(config.getProfileWidth(), config.getProfileHeight()));
-	_wengoPhoneWindow->move(QPoint(config.getProfilePosX(), config.getProfilePoxY()));
+	mainWindowGeometry(config);
 
 	if (!config.getCmdLineBackgroundModeEnable()) {
 		_wengoPhoneWindow->show();
 	}
+}
+
+void QtWengoPhone::mainWindowGeometry(Config & config) {
+	//default positon and size given by Qt
+	QPoint defaultPos = _wengoPhoneWindow->pos();
+	QSize defaultSize = _wengoPhoneWindow->size();
+
+	//Main window size and position saved
+	_wengoPhoneWindow->resize(QSize(config.getProfileWidth(), config.getProfileHeight()));
+	_wengoPhoneWindow->move(QPoint(config.getProfilePosX(), config.getProfilePoxY()));
+    
+    //tests if the Wengophone is visible, if not sends it back to its default position and size
+	QDesktopWidget* desktop = QApplication::desktop();
+	if (desktop->screenNumber(_wengoPhoneWindow) == -1) {
+		LOG_DEBUG("WengoPhone is NOT visible !!");
+		_wengoPhoneWindow->resize(defaultSize);
+	 	_wengoPhoneWindow->move(defaultPos);
+    }
 }
 
 QWidget * QtWengoPhone::getWidget() const {

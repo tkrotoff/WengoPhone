@@ -38,6 +38,7 @@
 #include <string>
 
 class CWengoPhone;
+class Config;
 class ContactInfo;
 class IMContact;
 class PPhoneLine;
@@ -182,6 +183,13 @@ Q_SIGNALS:
 private:
 
 	void initThreadSafe();
+
+	/**
+	 * Set the geometry of the mainwindow (position and size).
+	 *
+	 * Load last size and position. If the mainwindow is not visible use default values.
+	 */
+	void mainWindowGeometry(Config & config);
 
 	/**
 	 * Initializes pickup and hangup buttons inside the main window.
