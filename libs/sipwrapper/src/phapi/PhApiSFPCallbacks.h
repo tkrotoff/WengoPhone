@@ -69,6 +69,8 @@ public:
 
 	static void setCallbacks();
 
+	static std::string replaceOddCharacters(std::string str);
+
 };
 
 #endif	//OWPHAPISFPCALLBACKS_H

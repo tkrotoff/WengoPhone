@@ -8,9 +8,11 @@ ow_use_public_libraries(
 	phapi-util
 )
 
+# ortp only for GMutex in rtp-port.h
 ow_use_private_libraries(
 	phapi
 	exosip
+	ortp
 	owcurl
 )
 

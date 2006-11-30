@@ -24,6 +24,7 @@
 #include <owpl_plugin.h>
 #include <phapi-util/util.h>
 #include <util/String.h>
+#include <cutil/global.h>
 
 extern "C" {
 
@@ -156,7 +157,11 @@ void PhApiSFPCallbacks::inviteToTransfer(int callID, std::string uri, std::strin
 }
 
 void PhApiSFPCallbacks::newIncomingFile(int callID, std::string contactID, std::string fileName, std::string fileType, int fileSize){
+#ifdef OS_WINDOWS
+	PhApiSFPEvent::newIncomingFileEvent(PhApiSFPWrapper::getInstance(), callID, contactID, PhApiSFPCallbacks::replaceOddCharacters(fileName), fileType, fileSize);
+#else
 	PhApiSFPEvent::newIncomingFileEvent(PhApiSFPWrapper::getInstance(), callID, contactID, fileName, fileType, fileSize);
+#endif
 }
 
 void PhApiSFPCallbacks::waitingForAnswer(int callID, std::string uri){
@@ -246,4 +251,20 @@ void PhApiSFPCallbacks::setCallbacks() {
 	owplPluginSetCallback("SFPPlugin", "transferResumed", (owplPS_CommandProc)transferResumedHandler);
 	owplPluginSetCallback("SFPPlugin", "peerNeedUpgrade", (owplPS_CommandProc)peerNeedsUpgradeHandler);
 	owplPluginSetCallback("SFPPlugin", "needUpgrade", (owplPS_CommandProc)needUpgradeHandler);
+}
+
+std::string PhApiSFPCallbacks::replaceOddCharacters(std::string str) {
+	String newString(str);
+
+	newString.replace("\\", "_", true);
+	newString.replace("/", "_", true);
+	newString.replace(":", "_", true);
+	newString.replace("*", "_", true);
+	newString.replace("?", "_", true);
+	newString.replace("\"", "_", true);
+	newString.replace("<", "_", true);
+	newString.replace(">", "_", true);
+	newString.replace("|", "_", true);
+
+	return newString;
 }

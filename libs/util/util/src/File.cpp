@@ -248,7 +248,7 @@ std::string File::getFullPath() const {
 
 std::string File::getFileName() const {
 	String path = _filename;
-	path = convertPathSeparators(path);
+	//path = convertPathSeparators(path);
 
 	string::size_type pos = path.rfind(getPathSeparator());
 

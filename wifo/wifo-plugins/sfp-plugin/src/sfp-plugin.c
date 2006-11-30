@@ -23,6 +23,8 @@
 #include <sfp-plugin/sfp-parser.h>
 #include <sfp-plugin/sfp-transfer.h>
 
+#include <rtpport.h> // only for GMutex
+
 #include <phapi-util/util.h>
 #include <phapi-util/mappinglist.h>
 #include <phapi-util/mystdio.h>
@@ -176,6 +178,11 @@ OWPL_DECLARE_EXPORT OWPL_PLUGIN_EXPORT exports = {
 * A mapping list used to keep track of the file transfer sessions
 */
 mappinglist_t * sfp_sessions_by_call_ids = NULL;
+
+/**
+ * Mutex used to prevent from pause / resume deadlocks
+ */
+GMutex * pause_mutex = NULL;
 
 static void newIncomingFileTransferHandler(int hCall, const char * username, const char * local_ip_address, const char * message);
 static void transferAcceptedHandler(int hCall, const char * message);
@@ -446,14 +453,17 @@ int sfp_pause_transfer(int call_id){
 
 	// FIXME replace with no text, but hold in a header
 	// TODO ERROR
+	g_mutex_lock(pause_mutex);
 	if(owplCallHoldWithBody((OWPL_CALL)call_id, "application/sfp", "holdon", 6) == OWPL_RESULT_SUCCESS) {
 		session->updateState(session, SFP_ACTION_PAUSE);
 		if(session->isPaused(session)) {
 			if(transferPaused) { transferPaused(call_id, session->remote_username, session->short_filename, session->file_type, session->file_size); }
-			return TRUE;
+				g_mutex_unlock(pause_mutex);
+				return TRUE;
 		}
 	}
 
+	g_mutex_unlock(pause_mutex);
 	return FALSE;
 }
 
@@ -656,6 +666,10 @@ static sfp_session_info_t * sfp_make_session(const char * username, const char *
 	if((session = create_sfp_session_info()) == NULL){
 		m_log_error("Could not create sfp_session_info_t", "sfp_make_session");
 		return NULL;
+	}
+
+	if(!pause_mutex) {
+		pause_mutex = g_mutex_new();
 	}
 
 	sfp_add_property(&(session->local_username), username);
@@ -1387,7 +1401,10 @@ static void transferHoldHandler(int hCall){
 		return; // TODO notify GUI
 	}
 
+	g_mutex_lock(pause_mutex);
 	session->updateState(session, SFP_ACTION_HOLDON_RECEIVED);
+	g_mutex_lock(pause_mutex);
+
 	if(session->isPausedByPeer(session)) {
 		if(transferPausedByPeer) { transferPausedByPeer(hCall, session->remote_username, session->short_filename, session->file_type, session->file_size); }
 	}
