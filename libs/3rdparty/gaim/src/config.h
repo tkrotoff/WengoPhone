@@ -529,13 +529,13 @@
 #define PACKAGE_NAME "gaim"
 
 /* Define to the full name and version of this package. */
-#define PACKAGE_STRING "gaim 2.0.0beta4"
+#define PACKAGE_STRING "gaim 2.0.0beta5"
 
 /* Define to the one symbol short name of this package. */
 #define PACKAGE_TARNAME "gaim"
 
 /* Define to the version of this package. */
-#define PACKAGE_VERSION "2.0.0beta4"
+#define PACKAGE_VERSION "2.0.0beta5"
 
 /* Define if <inttypes.h> exists and defines unusable PRI* macros. */
 /* #undef PRI_MACROS_BROKEN */
@@ -592,7 +592,7 @@ static void static_proto_init() { \
 #define USE_SM 1
 
 /* Version number of package */
-#define VERSION "2.0.0beta4"
+#define VERSION "2.0.0beta5"
 
 /* Define to 1 if your processor stores words with the most significant byte
    first (like Motorola and SPARC, unlike Intel and VAX). */

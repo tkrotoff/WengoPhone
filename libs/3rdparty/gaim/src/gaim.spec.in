@@ -6,7 +6,7 @@
 # When not doing betas comment this out
 # NOTE: %defines in spec files are evaluated in comments so the correct
 #       way to comment it out is to replace the % with #
-%define beta 4
+%define beta 5
 
 %if 0%{?beta}
 %define gaimver %(echo "@VERSION@"|sed -e 's/dev//; s/beta.*//')
@@ -30,7 +30,7 @@ BuildRoot:  %{_tmppath}/%{name}-%{version}-root
 BuildRequires: libtool, pkgconfig, intltool, gettext, libxml2-devel
 %{?_with_avahi:BuildRequires: avahi-compat-howl-devel}
 %{?_with_dbus:BuildRequires: dbus-devel >= 0.35}
-%{!?_without_gstreamer:BuildRequires: gstreamer-devel}
+%{!?_without_gstreamer:BuildRequires: gstreamer-devel >= 0.10}
 %{!?_without_gtkspell:BuildRequires: gtkspell-devel}
 %{?_with_howl:BuildRequires: howl-devel}
 %{?_with_meanwhile:BuildRequires: meanwhile-devel}

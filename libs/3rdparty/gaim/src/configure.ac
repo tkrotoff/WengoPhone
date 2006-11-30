@@ -1,5 +1,5 @@
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT([gaim], [2.0.0beta4], [gaim-devel@lists.sourceforge.net])
+AC_INIT([gaim], [2.0.0beta5], [gaim-devel@lists.sourceforge.net])
 AC_CANONICAL_SYSTEM
 AM_CONFIG_HEADER(config.h)
 AM_INIT_AUTOMAKE(AC_PACKAGE_NAME, AC_PACKAGE_VERSION)
@@ -47,7 +47,7 @@ darwin*)
 	;;
 esac
 
-ALL_LINGUAS="am ar az bg bn bs ca ca@valencia cs da de el en_AU en_CA en_GB es et eu fa fi fr gl gu he hi hu it ja ka ko ku lt mk my_MM nb ne nl nn pa pl pt_BR pt ro ru sk sl sq sr sr@Latn sv ta te th tr uk vi xh zh_CN zh_TW"
+ALL_LINGUAS="am ar az bg bn bs ca ca@valencia cs da de el en_AU en_CA en_GB eo es et eu fa fi fr gl gu he hi hu it ja ka ko ku lt mk my_MM nb ne nl nn pa pl pt_BR pt ro ru sk sl sq sr sr@Latn sv ta te th tr uk vi xh zh_CN zh_TW"
 AM_GLIB_GNU_GETTEXT
 
 dnl we don't use autobreak on cygwin!!
@@ -186,27 +186,27 @@ dnl #######################################################################
 AC_ARG_ENABLE(screensaver,
 	[AC_HELP_STRING([--disable-screensaver],
 		[compile without X screensaver extension (used to detect idleness)])],
-	enable_screensaver="no", enable_screensaver="yes")
+	enable_screensaver="$enableval", enable_screensaver="yes")
 AC_ARG_ENABLE(sm,
 	[AC_HELP_STRING([--disable-sm],
 		[compile without X session management support])],
-	enable_sm="no", enable_sm="yes")
+	enable_sm="$enableval", enable_sm="yes")
 AC_ARG_ENABLE(startup-notification,
 	[AC_HELP_STRING([--disable-startup-notification],
 		[compile without startup notification support])],
-	enable_startup_notification="no", enable_startup_notification="yes")
+	enable_startup_notification="$enableval", enable_startup_notification="yes")
 AC_ARG_ENABLE(gtkspell,
 	[AC_HELP_STRING([--disable-gtkspell],
 		[compile without GtkSpell automatic spell checking])],
-	enable_gtkspell="no", enable_gtkspell="yes")
+	enable_gtkspell="$enableval", enable_gtkspell="yes")
 AC_ARG_ENABLE(gevolution,
 	[AC_HELP_STRING([--disable-gevolution],
 		[compile without the Gaim Evolution plugin])],
-	enable_gevolution="no", enable_gevolution="yes")
+	enable_gevolution="$enableval", enable_gevolution="yes")
 AC_ARG_ENABLE(cap,
 	[AC_HELP_STRING([--disable-cap],
 		[compile without Contact Availability Prediction plugin])],
-	enable_cap="no", enable_cap="yes")
+	enable_cap="$enableval", enable_cap="yes")
 
 
 AC_PATH_XTRA
@@ -455,7 +455,7 @@ dnl # Check for GStreamer
 dnl #######################################################################
 AC_ARG_ENABLE(gstreamer,
 	[AC_HELP_STRING([--disable-gstreamer], [compile without GStreamer audio support])],
-	enable_gst="no", enable_gst="yes")
+	enable_gst="$enableval", enable_gst="yes")
 PKG_CHECK_MODULES(GSTREAMER, [gstreamer-0.10], , [
 	AC_MSG_RESULT(no)
 	enable_gst="no"
@@ -605,7 +605,7 @@ else
 	gadu_manual_check="no"
 fi
 if test "x$gadu_manual_check" = "xno"; then
-	PKG_CHECK_MODULES(LIBGADU, libgadu, [
+	PKG_CHECK_MODULES(GADU, libgadu, [
 		gadu_includes="yes"
 		gadu_libs="yes"
 	], [
@@ -1564,7 +1564,7 @@ dnl #######################################################################
 dnl # Check for Tcl
 dnl #######################################################################
 AC_ARG_ENABLE(tcl, [AC_HELP_STRING([--disable-tcl],
-	[compile without Tcl scripting])], enable_tcl="no", enable_tcl="yes")
+	[compile without Tcl scripting])], enable_tcl="$enableval", enable_tcl="yes")
 AC_ARG_WITH(tclconfig, [AC_HELP_STRING([--with-tclconfig=DIR],
 	[directory containing tclConfig.sh])])
 
@@ -1633,7 +1633,7 @@ dnl #######################################################################
 dnl # Check for Tk
 dnl #######################################################################
 AC_ARG_ENABLE(tk, [AC_HELP_STRING([--disable-tk],
-	[compile without Tcl support for Tk])], enable_tk="no", enable_tk="yes")
+	[compile without Tcl support for Tk])], enable_tk="$enableval", enable_tk="yes")
 AC_ARG_WITH(tkconfig, [AC_HELP_STRING([--with-tkconfig=DIR],
 	[directory containing tkConfig.sh])])
 
@@ -1812,11 +1812,11 @@ dnl #######################################################################
 AC_ARG_ENABLE(doxygen,
 	[AC_HELP_STRING([--disable-doxygen],
 		[enable documentation with doxygen])],
-	enable_doxygen="no", enable_doxygen="yes")
+	enable_doxygen="$enableval", enable_doxygen="yes")
 AC_ARG_ENABLE(dot,
 	[AC_HELP_STRING([--enable-dot],
 		[enable graphs in doxygen via 'dot'])],
-	enable_dot="no", enable_dot="yes")
+	enable_dot="$enableval", enable_dot="yes")
 
 if test "x$enable_doxygen" = xyes; then
 	AC_CHECK_PROG(DOXYGEN, doxygen, true, false)
@@ -1874,7 +1874,6 @@ AC_OUTPUT([Makefile
 		   gtk/pixmaps/status/default/Makefile
 		   gtk/plugins/Makefile
 		   gtk/plugins/cap/Makefile
-		   gtk/plugins/docklet/Makefile
 		   gtk/plugins/gestures/Makefile
 		   gtk/plugins/gevolution/Makefile
 		   gtk/plugins/musicmessaging/Makefile
@@ -1930,7 +1929,7 @@ echo
 echo Build with GStreamer support.. : $enable_gst
 echo Build with DBUS support....... : $enable_dbus
 if test "x$enable_dbus" = "xyes" ; then
-	eval eval echo DBUS servies directory........ : $DBUS_SERVICES_DIR
+	eval eval echo DBUS services directory....... : $DBUS_SERVICES_DIR
 fi
 echo SSL Library/Libraries......... : $msg_ssl
 echo Build with Cyrus SASL support. : $enable_cyrus_sasl

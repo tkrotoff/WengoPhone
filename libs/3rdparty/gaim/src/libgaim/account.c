@@ -2186,8 +2186,13 @@ gaim_accounts_delete(GaimAccount *account)
 
 	g_return_if_fail(account != NULL);
 
-	if (gaim_account_is_connected(account))
-		gaim_account_disconnect(account);
+	/*
+	 * Disable the account before blowing it out of the water.
+	 * Conceptually it probably makes more sense to disable the
+	 * account for all UIs rather than the just the current UI,
+	 * but it doesn't really matter.
+	 */
+	gaim_account_set_enabled(account, gaim_core_get_ui(), FALSE);
 
 	gaim_notify_close_with_handle(account);
 	gaim_request_close_with_handle(account);

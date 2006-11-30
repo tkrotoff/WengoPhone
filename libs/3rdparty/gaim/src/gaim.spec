@@ -6,12 +6,12 @@
 # When not doing betas comment this out
 # NOTE: %defines in spec files are evaluated in comments so the correct
 #       way to comment it out is to replace the % with #
-%define beta 4
+%define beta 5
 
 %if 0%{?beta}
-%define gaimver %(echo "2.0.0beta4"|sed -e 's/dev//; s/beta.*//')
+%define gaimver %(echo "2.0.0beta5"|sed -e 's/dev//; s/beta.*//')
 %else
-%define gaimver 2.0.0beta4
+%define gaimver 2.0.0beta5
 %endif
 
 Summary:    A GTK+ based multiprotocol instant messaging client
@@ -23,14 +23,14 @@ License:    GPL
 Group:      Applications/Internet
 URL:        http://gaim.sourceforge.net/
 Packager:   %{packager}
-Source:     %{name}-2.0.0beta4.tar.bz2
+Source:     %{name}-2.0.0beta5.tar.bz2
 BuildRoot:  %{_tmppath}/%{name}-%{version}-root
 
 # Generic build requirements
 BuildRequires: libtool, pkgconfig, intltool, gettext, libxml2-devel
 %{?_with_avahi:BuildRequires: avahi-compat-howl-devel}
 %{?_with_dbus:BuildRequires: dbus-devel >= 0.35}
-%{!?_without_gstreamer:BuildRequires: gstreamer-devel}
+%{!?_without_gstreamer:BuildRequires: gstreamer-devel >= 0.10}
 %{!?_without_gtkspell:BuildRequires: gtkspell-devel}
 %{?_with_howl:BuildRequires: howl-devel}
 %{?_with_meanwhile:BuildRequires: meanwhile-devel}
@@ -168,7 +168,7 @@ use Gaim plugins written in the Tcl programming language.
 %endif
 
 %prep
-%setup -q -n %{name}-2.0.0beta4
+%setup -q -n %{name}-2.0.0beta5
 
 %build
 CFLAGS="$RPM_OPT_FLAGS" ./configure --prefix=%{_prefix} \

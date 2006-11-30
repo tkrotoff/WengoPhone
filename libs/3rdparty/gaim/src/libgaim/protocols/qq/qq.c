@@ -519,7 +519,7 @@ static void _qq_menu_show_login_info(GaimPluginAction *action)
 	g_string_append_printf(info, _("<b>My Public IP</b>: %s<br>\n"), qd->my_ip);
 
 	g_string_append(info, "<hr>\n");
-	g_string_append(info, "<i>Information below may not be accurate</i><br>\n");
+	g_string_append(info, _("<i>Information below may not be accurate</i><br>\n"));
 
 	g_string_append_printf(info, _("<b>Login Time</b>: %s<br>\n"), ctime(&qd->login_time));
 	g_string_append_printf(info, _("<b>Last Login IP</b>: %s<br>\n"), qd->last_login_ip);
@@ -1028,10 +1028,10 @@ static void init_plugin(GaimPlugin *plugin)
 	option = gaim_account_option_bool_new(_("Login Hidden"), "hidden", FALSE);
 	prpl_info.protocol_options = g_list_append(prpl_info.protocol_options, option);
 
-	option = gaim_account_option_string_new(_("QQ Server"), "server", NULL);
+	option = gaim_account_option_string_new(_("Server"), "server", NULL);
 	prpl_info.protocol_options = g_list_append(prpl_info.protocol_options, option);
 
-	option = gaim_account_option_string_new(_("QQ Port"), "port", NULL);
+	option = gaim_account_option_string_new(_("Port"), "port", NULL);
 	prpl_info.protocol_options = g_list_append(prpl_info.protocol_options, option);
 
 	my_protocol = plugin;

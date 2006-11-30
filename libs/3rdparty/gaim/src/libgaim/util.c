@@ -2376,7 +2376,7 @@ gaim_util_read_xml_from_file(const char *filename, const char *description)
 {
 	const char *user_dir = gaim_user_dir();
 	gchar *filename_full;
-	GError *error;
+	GError *error = NULL;
 	gchar *contents = NULL;
 	gsize length;
 	xmlnode *node = NULL;
@@ -3152,7 +3152,7 @@ parse_redirect(const char *data, size_t data_len, gint sock,
 		gaim_url_parse(new_url, &gfud->website.address, &gfud->website.port,
 					   &gfud->website.page, &gfud->website.user, &gfud->website.passwd);
 
-		gfud->connect_data = gaim_proxy_connect(NULL,
+		gfud->connect_data = gaim_proxy_connect(NULL, NULL,
 				gfud->website.address, gfud->website.port,
 				url_fetch_connect_cb, gfud);
 
@@ -3451,7 +3451,7 @@ gaim_util_fetch_url_request(const char *url, gboolean full,
 	gaim_url_parse(url, &gfud->website.address, &gfud->website.port,
 				   &gfud->website.page, &gfud->website.user, &gfud->website.passwd);
 
-	gfud->connect_data = gaim_proxy_connect(NULL,
+	gfud->connect_data = gaim_proxy_connect(NULL, NULL,
 			gfud->website.address, gfud->website.port,
 			url_fetch_connect_cb, gfud);
 

@@ -536,6 +536,12 @@ void irc_parse_msg(struct irc_conn *irc, char *input)
 	guint i;
 
 	irc->recv_time = time(NULL);
+
+	/*
+	 * The data passed to irc-receiving-text is the raw protocol data.
+	 * TODO: It should be passed as an array of bytes and a length
+	 * instead of a null terminated string.
+	 */
 	gaim_signal_emit(_irc_plugin, "irc-receiving-text", gaim_account_get_connection(irc->account), &input);
 	
 	if (!strncmp(input, "PING ", 5)) {

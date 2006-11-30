@@ -39,16 +39,16 @@ int wgaim_connect(int socket, struct sockaddr *addr, u_long length);
 //wgaim_connect( socket, addr, length )
 
 int wgaim_getsockopt(int socket, int level, int optname, void *optval, socklen_t *optlenptr);
-#define getsockopt(socket, level, optname, optval, optlenptr) \
-wgaim_getsockopt(socket, level, optname, optval, optlenptr)
+//#define getsockopt(socket, level, optname, optval, optlenptr) \
+//wgaim_getsockopt(socket, level, optname, optval, optlenptr)
 
 int wgaim_setsockopt(int socket, int level, int optname, const void *optval, socklen_t optlen);
-#define setsockopt(socket, level, optname, optval, optlen) \
-wgaim_setsockopt(socket, level, optname, optval, optlen)
+//#define setsockopt(socket, level, optname, optval, optlen) \
+//wgaim_setsockopt(socket, level, optname, optval, optlen)
 
 int wgaim_getsockname (int socket, struct sockaddr *addr, socklen_t *lenptr);
-#define getsockname( socket, addr, lenptr ) \
-wgaim_getsockname( socket, addr, lenptr )
+//#define getsockname( socket, addr, lenptr ) \
+//wgaim_getsockname( socket, addr, lenptr )
 
 int wgaim_bind(int socket, struct sockaddr *addr, socklen_t length);
 //#define bind( socket, addr, length ) \
@@ -59,27 +59,28 @@ int wgaim_listen(int socket, unsigned int n);
 //wgaim_listen( socket, n )
 
 int wgaim_sendto(int socket, const void *buf, size_t len, int flags, const struct sockaddr *to, socklen_t tolen);
-#define sendto(socket, buf, len, flags, to, tolen) \
-wgaim_sendto(socket, buf, len, flags, to, tolen)
+//#define sendto(socket, buf, len, flags, to, tolen) \
+//wgaim_sendto(socket, buf, len, flags, to, tolen)
 
 /* sys/ioctl.h */
 int wgaim_ioctl(int fd, int command, void* opt);
-#define ioctl( fd, command, val ) \
-wgaim_ioctl( fd, command, val )
+//#define ioctl( fd, command, val ) \
+//wgaim_ioctl( fd, command, val )
 
 /* fcntl.h */
 int wgaim_fcntl(int socket, int command, int val);
-#define fcntl( fd, command, val ) \
-wgaim_fcntl( fd, command, val )
-
-#if !GLIB_CHECK_VERSION(2,6,0)
-#	define open( args... ) _open( args )
-#endif
+//#define fcntl( fd, command, val ) \
+//wgaim_fcntl( fd, command, val )
 
 /* arpa/inet.h */
 int wgaim_inet_aton(const char *name, struct in_addr *addr);
 #define inet_aton( name, addr ) \
 wgaim_inet_aton( name, addr )
+
+const char *
+wgaim_inet_ntop (int af, const void *src, char *dst, socklen_t cnt);
+//#define inet_ntop( af, src, dst, cnt ) \
+//wgaim_inet_ntop( af, src, dst, cnt )
 
 /* netdb.h */
 struct hostent* wgaim_gethostbyname(const char *name);
@@ -120,6 +121,13 @@ int wgaim_close(int fd);
 //#define close( fd ) \
 //wgaim_close( fd )
 
+#if !GLIB_CHECK_VERSION(2,8,0)
+int wgaim_g_access(const gchar *filename, int mode);
+#undef g_access
+#define g_access( filename, mode) \
+wgaim_g_access( filename, mode )
+#endif
+
 #ifndef sleep
 #define sleep(x) Sleep((x)*1000)
 #endif
@@ -153,9 +161,6 @@ wgaim_rename(oldname, newname)
 
 /* sys/stat.h */
 
-#if !GLIB_CHECK_VERSION(2,6,0)
-#define mkdir(a,b) _mkdir((a))
-#endif
 #define fchmod(a,b)
 
 /* time.h */

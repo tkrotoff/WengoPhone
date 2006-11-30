@@ -1219,7 +1219,7 @@ static void yahoo_process_mail(GaimConnection *gc, struct yahoo_packet *pkt)
 	}
 }
 /* This is the y64 alphabet... it's like base64, but has a . and a _ */
-char base64digits[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789._";
+static const char base64digits[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789._";
 
 /* This is taken from Sylpheed by Hiroyuki Yamamoto.  We have our own tobase64 function
  * in util.c, but it has a bug I don't feel like finding right now ;) */
@@ -2508,7 +2508,7 @@ static void yahoo_web_pending(gpointer data, gint source, GaimInputCondition con
 	yd->rxqueue = NULL;
 	yd->rxlen = 0;
 	/* Now we have our cookies to login with.  I'll go get the milk. */
-	if (gaim_proxy_connect(account, "wcs2.msg.dcn.yahoo.com",
+	if (gaim_proxy_connect(gc, account, "wcs2.msg.dcn.yahoo.com",
 			       gaim_account_get_int(account, "port", YAHOO_PAGER_PORT),
 			       yahoo_got_web_connected, gc) == NULL) {
 		gaim_connection_error(gc, _("Connection problem"));
@@ -2682,7 +2682,7 @@ yahoo_login_page_cb(GaimUtilFetchUrlData *url_data, gpointer user_data,
 			      "Host: login.yahoo.com\r\n\r\n");
 	g_hash_table_destroy(hash);
 	yd->auth = g_string_free(url, FALSE);
-	if (gaim_proxy_connect(account, "login.yahoo.com", 80, yahoo_got_cookies, gc) == NULL) {
+	if (gaim_proxy_connect(gc, account, "login.yahoo.com", 80, yahoo_got_cookies, gc) == NULL) {
 		gaim_connection_error(gc, _("Connection problem"));
 		return;
 	}
@@ -2781,7 +2781,7 @@ static void yahoo_login(GaimAccount *account) {
 
 	if (gaim_account_get_bool(account, "yahoojp", FALSE)) {
 		yd->jp = TRUE;
-		if (gaim_proxy_connect(account,
+		if (gaim_proxy_connect(gc, account,
 		                       gaim_account_get_string(account, "serverjp",  YAHOOJP_PAGER_HOST),
 		                       gaim_account_get_int(account, "port", YAHOO_PAGER_PORT),
 		                       yahoo_got_connected, gc) == NULL)
@@ -2791,7 +2791,7 @@ static void yahoo_login(GaimAccount *account) {
 		}
 	} else {
 		yd->jp = FALSE;
-		if (gaim_proxy_connect(account,
+		if (gaim_proxy_connect(gc, account,
 		                       gaim_account_get_string(account, "server",  YAHOO_PAGER_HOST),
 		                       gaim_account_get_int(account, "port", YAHOO_PAGER_PORT),
 		                       yahoo_got_connected, gc) == NULL)
