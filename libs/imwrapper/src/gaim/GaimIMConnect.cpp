@@ -126,14 +126,11 @@ void *GaimIMConnect::CreateAccount()
 	GaimAccount *gAccount = NULL;
 	char *PrclId = (char *)GaimIMPrcl::GetPrclId(_imAccount.getProtocol());
 
-	if (!(gAccount = gaim_account_new(_imAccount.getLogin().c_str(), PrclId))) {
-		if (gAccount)
-		{
-			if (!_imAccount.getPassword().empty()) {
-				gaim_account_set_password(gAccount, _imAccount.getPassword().c_str());
-			}
-			gaim_accounts_add(gAccount);
+	if ((gAccount = gaim_account_new(_imAccount.getLogin().c_str(), PrclId))) {
+		if (!_imAccount.getPassword().empty()) {
+			gaim_account_set_password(gAccount, _imAccount.getPassword().c_str());
 		}
+		gaim_accounts_add(gAccount);
 	}
 
 	return gAccount;
