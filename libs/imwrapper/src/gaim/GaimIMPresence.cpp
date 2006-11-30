@@ -50,19 +50,18 @@ void GaimIMPresence::changeMyPresence(EnumPresenceState::PresenceState state,
 									  const std::string & note)
 {
 	GaimAccount *gAccount = gaim_accounts_find(_imAccount.getLogin().c_str(),
-											GaimIMPrcl::GetPrclId(_imAccount.getProtocol()));
+		GaimIMPrcl::GetPrclId(_imAccount.getProtocol()));
 
-	if (gAccount)
-	{
+	if (gAccount && gaim_account_is_connected(gAccount)) {
 		if (note.length() == 0)
 			gaim_account_set_status(gAccount, GaimPreState::GetStatusId(state, _imAccount.getProtocol()),
 									TRUE, NULL);
 		else
 			gaim_account_set_status(gAccount, GaimPreState::GetStatusId(state, _imAccount.getProtocol()),
 									TRUE, "message", note.c_str(), NULL);
-	}
 
-	IMPresence::changeMyPresence(state, note);
+		IMPresence::changeMyPresence(state, note);
+	}
 }
 
 void GaimIMPresence::changeMyAlias(const std::string & nickname)
@@ -82,13 +81,15 @@ void GaimIMPresence::changeMyAlias(const std::string & nickname)
 void GaimIMPresence::changeMyIcon(const OWPicture & picture)
 {
 	GaimAccount *gAccount = gaim_accounts_find(_imAccount.getLogin().c_str(),
-											GaimIMPrcl::GetPrclId(_imAccount.getProtocol()));
+		GaimIMPrcl::GetPrclId(_imAccount.getProtocol()));
 
-	FileWriter file(File::createTemporaryFile());
-	file.write(picture.getData());
-	file.close();
+	if (gAccount && gaim_account_is_connected(gAccount)) {
+		FileWriter file(File::createTemporaryFile());
+		file.write(picture.getData());
+		file.close();
 
-	gaim_account_set_buddy_icon(gAccount, file.getFullPath().c_str());
+		gaim_account_set_buddy_icon(gAccount, file.getFullPath().c_str());
+	}
 }
 
 void GaimIMPresence::subscribeToPresenceOf(const std::string & contactId) {

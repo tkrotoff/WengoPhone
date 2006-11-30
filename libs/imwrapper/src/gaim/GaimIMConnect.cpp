@@ -123,16 +123,17 @@ void GaimIMConnect::AddJabberAccountParams(void *gaimAccount, IMAccountParameter
 
 void *GaimIMConnect::CreateAccount()
 {
+	GaimAccount *gAccount = NULL;
 	char *PrclId = (char *)GaimIMPrcl::GetPrclId(_imAccount.getProtocol());
 
-	GaimAccount *gAccount = gaim_account_new(_imAccount.getLogin().c_str(), PrclId);
-
-	if (gAccount)
-	{
-		if (!_imAccount.getPassword().empty()) {
-			gaim_account_set_password(gAccount, _imAccount.getPassword().c_str());
+	if (!(gAccount = gaim_account_new(_imAccount.getLogin().c_str(), PrclId))) {
+		if (gAccount)
+		{
+			if (!_imAccount.getPassword().empty()) {
+				gaim_account_set_password(gAccount, _imAccount.getPassword().c_str());
+			}
+			gaim_accounts_add(gAccount);
 		}
-		gaim_accounts_add(gAccount);
 	}
 
 	return gAccount;
