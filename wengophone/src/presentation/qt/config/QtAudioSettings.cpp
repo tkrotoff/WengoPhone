@@ -32,27 +32,31 @@
 
 #include <sound/AudioDeviceManager.h>
 
+#include <util/SafeDelete.h>
+
 #include <qtutil/StringListConvert.h>
+#include <qtutil/SafeConnect.h>
 
 #include <QtGui/QtGui>
 
 static const char * AUDIO_TEST_CALL = "333";
 
 QtAudioSettings::QtAudioSettings(CWengoPhone & cWengoPhone, QWidget * parent)
-	: QObject(parent), _cWengoPhone(cWengoPhone) {
+	: QObject(parent),
+	_cWengoPhone(cWengoPhone) {
 
 	_audioSettingsWidget = new QWidget(NULL);
 
 	_ui = new Ui::AudioSettings();
 	_ui->setupUi(_audioSettingsWidget);
 
-	connect(_ui->makeTestCallButton, SIGNAL(pressed()), SLOT(makeTestCallClicked()));
+	SAFE_CONNECT(_ui->makeTestCallButton, SIGNAL(pressed()), SLOT(makeTestCallClicked()));
 
 	readConfig();
 }
 
 QtAudioSettings::~QtAudioSettings() {
-	delete _ui;
+	OWSAFE_DELETE(_ui);
 }
 
 QString QtAudioSettings::getName() const {

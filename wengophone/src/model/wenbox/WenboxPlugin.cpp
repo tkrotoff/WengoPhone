@@ -82,7 +82,6 @@ void WenboxPlugin::openWenbox() {
 
 void WenboxPlugin::closeWenbox() {
 	if (_wenbox->isOpen()) {
-		switchCurrentAudioDeviceToSoundCard();
 		_wenbox->close();
 	}
 }
@@ -207,7 +206,7 @@ StringList WenboxPlugin::getWenboxAudioDeviceId(bool outputAudioDeviceId) const 
 			audioDeviceList = AudioDeviceManager::getInputDeviceList();
 		}
 		for (std::list<AudioDevice>::const_iterator it = audioDeviceList.begin();
-			it  != audioDeviceList.end(); it++) {
+			it != audioDeviceList.end(); it++) {
 			StringList audioDevice = (*it).getData();
 
 			if (String(audioDevice[0]).contains(wenboxAudioDeviceName)) {
@@ -240,27 +239,13 @@ void WenboxPlugin::switchCurrentAudioDeviceToWenbox() {
 	StringList wenboxAudioDeviceId = getWenboxOutputAudioDeviceId();
 	if (!wenboxAudioDeviceId.empty()) {
 		//Changes audio settings
-		config.set(Config::AUDIO_OUTPUT_DEVICEID_KEY, wenboxAudioDeviceId);
-		config.set(Config::AUDIO_RINGER_DEVICEID_KEY, wenboxAudioDeviceId);
+		config.set(Config::WENBOX_AUDIO_OUTPUT_DEVICEID_KEY, wenboxAudioDeviceId);
+		config.set(Config::WENBOX_AUDIO_RINGER_DEVICEID_KEY, wenboxAudioDeviceId);
 	}
 
 	wenboxAudioDeviceId = getWenboxInputAudioDeviceId();
 	if (!wenboxAudioDeviceId.empty()) {
 		//Changes audio settings
-		config.set(Config::AUDIO_INPUT_DEVICEID_KEY, wenboxAudioDeviceId);
+		config.set(Config::WENBOX_AUDIO_INPUT_DEVICEID_KEY, wenboxAudioDeviceId);
 	}
-}
-
-void WenboxPlugin::switchCurrentAudioDeviceToSoundCard() {
-	//Back to the previous audio settings
-	Config & config = ConfigManager::getInstance().getCurrentConfig();
-
-	StringList tmp = boost::any_cast<StringList>(config.getDefaultValue(Config::AUDIO_OUTPUT_DEVICEID_KEY));
-	config.set(Config::AUDIO_OUTPUT_DEVICEID_KEY, tmp);
-
-	tmp = boost::any_cast<StringList>(config.getDefaultValue(Config::AUDIO_INPUT_DEVICEID_KEY));
-	config.set(Config::AUDIO_INPUT_DEVICEID_KEY, tmp);
-
-	tmp = boost::any_cast<StringList>(config.getDefaultValue(Config::AUDIO_RINGER_DEVICEID_KEY));
-	config.set(Config::AUDIO_RINGER_DEVICEID_KEY, tmp);
 }

@@ -85,8 +85,6 @@ private:
 
 	void switchCurrentAudioDeviceToWenbox();
 
-	void switchCurrentAudioDeviceToSoundCard();
-
 	Wenbox * _wenbox;
 
 	UserProfile & _userProfile;

@@ -449,6 +449,18 @@ public:
 	static const std::string WENBOX_ENABLE_KEY;
 	std::string getWenboxEnable() const;
 
+	/** Wenbox playback audio device name. */
+	static const std::string WENBOX_AUDIO_OUTPUT_DEVICEID_KEY;
+	StringList getWenboxAudioOutputDeviceId() const;
+
+	/** Wenbox record audio device name. */
+	static const std::string WENBOX_AUDIO_INPUT_DEVICEID_KEY;
+	StringList getWenboxAudioInputDeviceId() const;
+
+	/** Wenbox ringer audio device name. */
+	static const std::string WENBOX_AUDIO_RINGER_DEVICEID_KEY;
+	StringList getWenboxAudioRingerDeviceId() const;
+
 	/** @} */
 
 	/**

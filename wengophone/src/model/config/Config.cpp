@@ -130,6 +130,10 @@ const std::string Config::LAST_CHAT_HISTORY_SAVE_DIR_KEY = "last.chat.history.sa
 const std::string Config::RESOURCES_DIR_KEY = "resources.dir";
 
 const std::string Config::WENBOX_ENABLE_KEY = "wenbox.enable";
+const std::string Config::WENBOX_AUDIO_OUTPUT_DEVICEID_KEY = "wenbox.audio.output.deviceid";
+const std::string Config::WENBOX_AUDIO_INPUT_DEVICEID_KEY = "wenbox.audio.input.deviceid";
+const std::string Config::WENBOX_AUDIO_RINGER_DEVICEID_KEY = "wenbox.audio.ringer.deviceid";
+
 const std::string Config::IEACTIVEX_ENABLE_KEY = "ieactivex.enable";
 
 const std::string Config::CMDLINE_BACKGROUND_MODE_ENABLE_KEY = "cmdline.background.mode.enable";
@@ -266,6 +270,10 @@ Config::Config(const std::string & name)
 	_keyDefaultValueMap[WENGO_DIRECTORY_PATH_KEY] = std::string("/directory/index.php");
 
 	_keyDefaultValueMap[WENBOX_ENABLE_KEY] = EnumWenboxStatus::toString(EnumWenboxStatus::WenboxStatusNotConnected);
+	_keyDefaultValueMap[WENBOX_AUDIO_OUTPUT_DEVICEID_KEY] = AudioDeviceManager::getDefaultOutputDevice().getData();
+	_keyDefaultValueMap[WENBOX_AUDIO_INPUT_DEVICEID_KEY] = AudioDeviceManager::getDefaultInputDevice().getData();
+	_keyDefaultValueMap[WENBOX_AUDIO_RINGER_DEVICEID_KEY] = AudioDeviceManager::getDefaultOutputDevice().getData();
+
 	_keyDefaultValueMap[IEACTIVEX_ENABLE_KEY] = true;
 
 	_keyDefaultValueMap[CMDLINE_BACKGROUND_MODE_ENABLE_KEY] = false;
@@ -438,22 +446,37 @@ static StringList getProperAudioDeviceId(const StringList & deviceData,
 	return result;
 }
 
-StringList Config::getAudioRingerDeviceId() const {
-	return getProperAudioDeviceId(getStringListKeyValue(AUDIO_RINGER_DEVICEID_KEY),
-		AudioDeviceManager::getOutputDeviceList(),
-		AudioDeviceManager::getDefaultOutputDevice().getData());
+StringList Config::getAudioOutputDeviceId() const {
+	EnumWenboxStatus::WenboxStatus wenboxStatus = EnumWenboxStatus::toWenboxStatus(getWenboxEnable());
+	if (wenboxStatus == EnumWenboxStatus::WenboxStatusEnable) {
+		return getWenboxAudioOutputDeviceId();
+	} else {
+		return getProperAudioDeviceId(getStringListKeyValue(AUDIO_OUTPUT_DEVICEID_KEY),
+			AudioDeviceManager::getOutputDeviceList(),
+			AudioDeviceManager::getDefaultOutputDevice().getData());
+	}
 }
 
 StringList Config::getAudioInputDeviceId() const {
-	return getProperAudioDeviceId(getStringListKeyValue(AUDIO_INPUT_DEVICEID_KEY),
-		AudioDeviceManager::getInputDeviceList(),
-		AudioDeviceManager::getDefaultInputDevice().getData());
+	EnumWenboxStatus::WenboxStatus wenboxStatus = EnumWenboxStatus::toWenboxStatus(getWenboxEnable());
+	if (wenboxStatus == EnumWenboxStatus::WenboxStatusEnable) {
+		return getWenboxAudioInputDeviceId();
+	} else {
+		return getProperAudioDeviceId(getStringListKeyValue(AUDIO_INPUT_DEVICEID_KEY),
+			AudioDeviceManager::getInputDeviceList(),
+			AudioDeviceManager::getDefaultInputDevice().getData());
+	}
 }
 
-StringList Config::getAudioOutputDeviceId() const {
-	return getProperAudioDeviceId(getStringListKeyValue(AUDIO_OUTPUT_DEVICEID_KEY),
-		AudioDeviceManager::getOutputDeviceList(),
-		AudioDeviceManager::getDefaultOutputDevice().getData());
+StringList Config::getAudioRingerDeviceId() const {
+	EnumWenboxStatus::WenboxStatus wenboxStatus = EnumWenboxStatus::toWenboxStatus(getWenboxEnable());
+	if (wenboxStatus == EnumWenboxStatus::WenboxStatusEnable) {
+		return getWenboxAudioRingerDeviceId();
+	} else {
+		return getProperAudioDeviceId(getStringListKeyValue(AUDIO_RINGER_DEVICEID_KEY),
+			AudioDeviceManager::getOutputDeviceList(),
+			AudioDeviceManager::getDefaultOutputDevice().getData());
+	}
 }
 
 std::string Config::getWengoServerHostname() const {
@@ -653,6 +676,18 @@ bool Config::getVideoFlipEnable() const {
 
 std::string Config::getWenboxEnable() const {
 	return getStringKeyValue(WENBOX_ENABLE_KEY);
+}
+
+StringList Config::getWenboxAudioOutputDeviceId() const {
+	return getStringListKeyValue(WENBOX_AUDIO_OUTPUT_DEVICEID_KEY);
+}
+
+StringList Config::getWenboxAudioInputDeviceId() const {
+	return getStringListKeyValue(WENBOX_AUDIO_INPUT_DEVICEID_KEY);
+}
+
+StringList Config::getWenboxAudioRingerDeviceId() const {
+	return getStringListKeyValue(WENBOX_AUDIO_RINGER_DEVICEID_KEY);
 }
 
 bool Config::getIEActiveXEnable() const {
