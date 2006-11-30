@@ -46,6 +46,7 @@ DirectXWebcamDriver::DirectXWebcamDriver(WebcamDriver * driver, int flags)
 	_pNull = NULL;
 	_iam = NULL;
 	_pGraph = NULL;
+	_pControl = NULL;
 	_pCap = NULL;
 	_pBuild = NULL;
 }
@@ -68,6 +69,7 @@ void DirectXWebcamDriver::cleanup() {
 	SAFE_RELEASE_POINTER(_pGrabber);
 	SAFE_RELEASE_POINTER(_pNull);
 	SAFE_RELEASE_POINTER(_iam);
+	SAFE_RELEASE(_pControl);
 	SAFE_RELEASE(_pGraph);
 	SAFE_RELEASE(_pCap);
 	SAFE_RELEASE(_pBuild);
@@ -310,28 +312,44 @@ bool DirectXWebcamDriver::isOpen() const {
 }
 
 void DirectXWebcamDriver::startCapture() {
-	CComQIPtr< IMediaControl, &IID_IMediaControl > pControl = _pGraph;
-	HRESULT hr = pControl->Run();
+	
+	HRESULT hr;
+	hr = _pGraph->QueryInterface(IID_IMediaControl, (void **)&_pControl);
+	if (hr != S_OK) {
+		LOG_ERROR("Could not get _pControl MediaControl");
+	}
+	
+	hr = _pControl->Run();
 	if (hr != S_OK) {
 		LOG_ERROR("Could not run graph");
 		return;
 	}
+
+	SAFE_RELEASE(_pControl);
 }
 
 void DirectXWebcamDriver::pauseCapture() {
 }
 
 void DirectXWebcamDriver::stopCapture() {
+	HRESULT hr;
+	
 	if (!_pGraph) {
 		LOG_WARN("_pGraph is NULL");
 		return;
 	}
 
-	CComQIPtr< IMediaControl, &IID_IMediaControl > pControl = _pGraph;
-	HRESULT hr = pControl->Stop();
+	hr = _pGraph->QueryInterface(IID_IMediaControl, (void **)&_pControl);
+	if (hr != S_OK) {
+		LOG_ERROR("Could not get _pControl MediaControl");
+	}
+
+	hr = _pControl->StopWhenReady();
 	if (hr != S_OK) {
 		LOG_ERROR("Could not stop capture");
 	}
+
+	SAFE_RELEASE(_pControl);
 }
 
 WebcamErrorCode DirectXWebcamDriver::setPalette(pixosi palette) {

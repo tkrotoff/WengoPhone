@@ -322,7 +322,6 @@ void WebcamDriver::flipHorizontally(bool flip) {
 }
 
 void WebcamDriver::frameBufferAvailable(piximage *image) {
-	Mutex::ScopedLock lock(_mutex);
 
 	float now;
 	float fpsTimerInter = 1000 / (float)_forcedFPS;

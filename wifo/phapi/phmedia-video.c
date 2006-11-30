@@ -586,6 +586,7 @@ int ph_msession_video_start(struct ph_msession_s *s, const char *deviceid)
 
 		// start the engine
 		webcam_add_callback(video_stream->wt, webcam_frame_callback, (void *)video_stream);
+		DBG_MEDIA_ENGINE_VIDEO("call to webcam_start_capture\n");
 		webcam_start_capture(video_stream->wt);
 		video_stream->phmfs_webcam.state = 2;
 		//
@@ -1014,6 +1015,7 @@ void ph_msession_video_stop(struct ph_msession_s *s)
     osip_thread_join(stream->media_bw_control_thread);
   }
 
+  DBG_MEDIA_ENGINE_VIDEO("call to webcam_release\n");
   webcam_release(stream->wt);
   stream->phmfs_webcam.state = 0;
   stream->wt = 0;

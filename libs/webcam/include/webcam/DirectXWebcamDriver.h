@@ -113,6 +113,7 @@ private:
 	/** Pointer to main driver */
 	WebcamDriver * _webcamDriver;
 
+	CComPtr< IMediaControl > _pControl;
 	CComPtr< IGraphBuilder > _pGraph;
 	CComPtr< ICaptureGraphBuilder2 > _pBuild;
 	CComPtr< IBaseFilter > _pCap;

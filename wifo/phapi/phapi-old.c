@@ -3136,7 +3136,7 @@ ph_parse_payload_mime(struct ph_media_payload_s *pt, const char *mime, int rate,
 static int
 ph_call_media_stop(phcall_t *ca)
 {
-	DBG_SIP_NEGO("SIP_NEGO: ph_call_media_stop\n");
+	DBG_SIP_NEGO("ph_call_media_stop\n");
 
 	if (ca->mses)
 	{
