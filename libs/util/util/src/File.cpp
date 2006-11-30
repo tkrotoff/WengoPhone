@@ -248,7 +248,18 @@ std::string File::getFullPath() const {
 
 std::string File::getFileName() const {
 	String path = _filename;
-	//path = convertPathSeparators(path);
+
+	/*
+	 * Under windows Qt gives / as pasth separator which is not
+	 * homogeneous with getPathSeparator() that returns \. Therefore
+	 * we have to convert / into \ under Windows.
+	 * We can't call convertPathSeparators under Linux, because with
+	 * a filename like /home/user/tes\"t.txt, it would turn it into
+	 * /home/user/tes/t.txt which would result in incorrect t.txt filename.
+	 */
+#ifdef OS_WINDOWS
+	path = convertPathSeparators(path);
+#endif /* OS_WINDOWS */
 
 	string::size_type pos = path.rfind(getPathSeparator());
 

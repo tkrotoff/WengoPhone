@@ -371,7 +371,7 @@ int sfp_receive_file(int cid, const char * filename){
 		return FALSE;
 	}else{
 		// notify GUI of the begining of the send
-		if(receivingFileBegin) { receivingFileBegin(cid, session->remote_username, session->short_filename, session->file_type, session->file_size); }
+		if(receivingFileBegin) { receivingFileBegin(cid, session->remote_username, session->local_filename, session->file_type, session->file_size); }
 	}
 
 	// send the accept answer
@@ -427,7 +427,7 @@ int sfp_cancel_transfer(int call_id){
 			}
 
 			// notify the GUI
-			if(transferCancelled) { transferCancelled(call_id, session->short_filename, session->file_type, session->file_size); }
+			if(transferCancelled) { transferCancelled(call_id, session->local_filename, session->file_type, session->file_size); }
 
 			return TRUE;
 		}
@@ -457,7 +457,7 @@ int sfp_pause_transfer(int call_id){
 	if(owplCallHoldWithBody((OWPL_CALL)call_id, "application/sfp", "holdon", 6) == OWPL_RESULT_SUCCESS) {
 		session->updateState(session, SFP_ACTION_PAUSE);
 		if(session->isPaused(session)) {
-			if(transferPaused) { transferPaused(call_id, session->remote_username, session->short_filename, session->file_type, session->file_size); }
+			if(transferPaused) { transferPaused(call_id, session->remote_username, session->local_filename, session->file_type, session->file_size); }
 				g_mutex_unlock(pause_mutex);
 				return TRUE;
 		}
@@ -487,7 +487,7 @@ int sfp_resume_transfer(int call_id){
 	if(owplCallUnholdWithBody((OWPL_CALL)call_id, "application/sfp", "holdoff", 7) == OWPL_RESULT_SUCCESS) {
 		session->updateState(session, SFP_ACTION_RESUME);
 		if(session->isRunning(session)) {
-			if(transferResumed) { transferResumed(call_id, session->remote_username, session->short_filename, session->file_type, session->file_size); }
+			if(transferResumed) { transferResumed(call_id, session->remote_username, session->local_filename, session->file_type, session->file_size); }
 			return TRUE;
 		}
 	}
@@ -724,7 +724,8 @@ static sfp_session_info_t * sfp_make_session_for_invite(const char * username, c
 		sfp_add_property(&(session->required_bandwidth), SFP_REQUIRED_BANDWIDTH_DEFAULT);
 	}
 	sfp_add_property(&(session->filename), filename);
-	sfp_add_property(&(session->short_filename), short_filename);
+	sfp_add_property(&(session->local_filename), short_filename);
+	sfp_add_property(&(session->remote_filename), short_filename);
 	sfp_add_property(&(session->file_type), file_type);
 	sfp_add_property(&(session->file_size), file_size);
 
@@ -829,8 +830,15 @@ static sfp_session_info_t * sfp_make_session_info_from_body_info(int call_id, sf
 		}
 
 		// FILE CONCERNS
-		if(strfilled(info->filename) && !strfilled(session->short_filename))
-			sfp_add_property(&(session->short_filename), info->filename);
+		if(strfilled(info->filename) && !strfilled(session->remote_filename)) {
+			sfp_add_property(&(session->remote_filename), info->filename);
+		}
+		if(strfilled(info->filename) && !strfilled(session->local_filename)) {
+#ifdef WIN32
+			clean_filename_for_windows(info->filename, sizeof(info->filename));
+#endif /* WIN32 */
+			sfp_add_property(&(session->local_filename), info->filename);
+		}
 
 		if(strfilled(info->file_type) && !strfilled(session->file_type))
 			sfp_add_property(&(session->file_type), info->file_type);
@@ -891,8 +899,15 @@ static sfp_session_info_t * sfp_make_session_info_from_body_info(int call_id, sf
 		}
 
 		// FILE CONCERNS
-		if(strfilled(info->filename) && !strfilled(session->short_filename))
-			sfp_add_property(&(session->short_filename), info->filename);
+		if(strfilled(info->filename) && !strfilled(session->remote_filename)) {
+			sfp_add_property(&(session->remote_filename), info->filename);
+		}
+		if(strfilled(info->filename) && !strfilled(session->local_filename)) {
+#ifdef WIN32
+			clean_filename_for_windows(info->filename, sizeof(info->filename));
+#endif /* WIN32 */
+			sfp_add_property(&(session->local_filename), info->filename);
+		}
 
 		if(strfilled(info->file_type) && !strfilled(session->file_type))
 			sfp_add_property(&(session->file_type), info->file_type);
@@ -944,10 +959,10 @@ static sfp_info_t * sfp_make_body_info_from_session_info(sfp_session_info_t * se
 		strfilled(session->packet_size))
 		sfp_add_transfer_info(body_info, session->ip_protocol, session->required_bandwidth, session->packet_size);
 
-	if(strfilled(session->short_filename) &&
+	if(strfilled(session->remote_filename) &&
 		strfilled(session->file_type) &&
 		strfilled(session->file_size))
-		sfp_add_file_info(body_info, session->short_filename, session->file_type, session->file_size);
+		sfp_add_file_info(body_info, session->remote_filename, session->file_type, session->file_size);
 
 	return body_info;
 }
@@ -1026,20 +1041,20 @@ static void sfp_receive_terminaison(sfp_session_info_t * session, sfp_returncode
 	}
 
 	if(code != SUCCESS) {
-		if(transferFromPeerFailed) { transferFromPeerFailed(call_id, session->remote_username, session->short_filename, session->file_type, session->file_size); }
+		if(transferFromPeerFailed) { transferFromPeerFailed(call_id, session->remote_username, session->local_filename, session->file_type, session->file_size); }
 		// MAYBE send a BYE?
 		remove(session->filename);
 	} else if(code == SUCCESS) {
 		if(session->isCancelled(session)) {
-			if(transferCancelled) { transferCancelled(call_id, session->short_filename, session->file_type, session->file_size); }
+			if(transferCancelled) { transferCancelled(call_id, session->local_filename, session->file_type, session->file_size); }
 			remove(session->filename);
 		} else if(session->isCancelledByPeer(session)) {
-			if(transferCancelledByPeer) { transferCancelledByPeer(call_id, session->remote_username, session->short_filename, session->file_type, session->file_size); }
+			if(transferCancelledByPeer) { transferCancelledByPeer(call_id, session->remote_username, session->local_filename, session->file_type, session->file_size); }
 			remove(session->filename);
 		} else if(session->isFinished(session)) {
-			if(transferFromPeerFinished) { transferFromPeerFinished(call_id, session->remote_username, session->short_filename, session->file_type, session->file_size); }
+			if(transferFromPeerFinished) { transferFromPeerFinished(call_id, session->remote_username, session->local_filename, session->file_type, session->file_size); }
 		} else {
-			if(transferFromPeerFailed) { transferFromPeerFailed(call_id, session->remote_username, session->short_filename, session->file_type, session->file_size); }
+			if(transferFromPeerFailed) { transferFromPeerFailed(call_id, session->remote_username, session->local_filename, session->file_type, session->file_size); }
 			// MAYBE send a BYE?
 			remove(session->filename);
 		}
@@ -1066,19 +1081,19 @@ static void sfp_send_terminaison(sfp_session_info_t * session, sfp_returncode_t 
 	}
 
 	if(code != SUCCESS) {
-		if(transferToPeerFailed) { transferToPeerFailed(call_id, session->remote_username, session->short_filename, session->file_type, session->file_size); }
+		if(transferToPeerFailed) { transferToPeerFailed(call_id, session->remote_username, session->local_filename, session->file_type, session->file_size); }
 		if(owplCallDisconnect((OWPL_CALL)call_id) != OWPL_RESULT_SUCCESS) {
 			// TODO ERROR
 		}
 	} else if(code == SUCCESS) {
 		if(session->isCancelled(session)) {
-			if(transferCancelled) { transferCancelled(call_id, session->short_filename, session->file_type, session->file_size); }
+			if(transferCancelled) { transferCancelled(call_id, session->local_filename, session->file_type, session->file_size); }
 		} else if(session->isCancelledByPeer(session)) {
-			if(transferCancelledByPeer) { transferCancelledByPeer(call_id, session->remote_username, session->short_filename, session->file_type, session->file_size); }
+			if(transferCancelledByPeer) { transferCancelledByPeer(call_id, session->remote_username, session->local_filename, session->file_type, session->file_size); }
 		} else if(session->isFinished(session)) {
-			if(transferToPeerFinished) { transferToPeerFinished(call_id, session->remote_username, session->short_filename, session->file_type, session->file_size); }
+			if(transferToPeerFinished) { transferToPeerFinished(call_id, session->remote_username, session->local_filename, session->file_type, session->file_size); }
 		} else {
-			if(transferToPeerFailed) { transferToPeerFailed(call_id, session->remote_username, session->short_filename, session->file_type, session->file_size); }
+			if(transferToPeerFailed) { transferToPeerFailed(call_id, session->remote_username, session->local_filename, session->file_type, session->file_size); }
 			if(owplCallDisconnect((OWPL_CALL)call_id) != OWPL_RESULT_SUCCESS) {
 				// TODO ERROR
 			};
@@ -1247,7 +1262,7 @@ static void newIncomingFileTransferHandler(int hCall, const char * username, con
 	sfp_free_sfp_info(&received_info);
 
 	// TODO notify GUI
-	if(newIncomingFile) { newIncomingFile(hCall, session->remote_username, session->short_filename, session->file_type, session->file_size); }
+	if(newIncomingFile) { newIncomingFile(hCall, session->remote_username, session->local_filename, session->file_type, session->file_size); }
 }
 /**
  * Handler called when a file transfer has been accepted by peer
@@ -1301,12 +1316,12 @@ static void transferAcceptedHandler(int hCall, const char * message){
 				// TODO ERROR
 			}
 
-			if(transferToPeerFailed) { transferToPeerFailed(hCall, session->remote_username, session->short_filename, session->file_type, session->file_size); }
+			if(transferToPeerFailed) { transferToPeerFailed(hCall, session->remote_username, session->local_filename, session->file_type, session->file_size); }
 			sfp_remove_session_info(hCall);
 
 			return;
 		}else{
-			if(sendingFileBegin) { sendingFileBegin(hCall, session->remote_username, session->short_filename, session->file_type, session->file_size);	}
+			if(sendingFileBegin) { sendingFileBegin(hCall, session->remote_username, session->local_filename, session->file_type, session->file_size);	}
 		}
 	}
 }
@@ -1350,7 +1365,7 @@ static void transferFailureHandler(int hCall){
 		return; // TODO notify GUI
 	}
 
-	if(transferToPeerFailed) { transferToPeerFailed(hCall, "", session->short_filename, session->file_type, session->file_size); }
+	if(transferToPeerFailed) { transferToPeerFailed(hCall, "", session->local_filename, session->file_type, session->file_size); }
 
 	sfp_remove_session_info(hCall);
 }
@@ -1372,7 +1387,7 @@ static void transferClosedHandler(int hCall){ // BYE received
 	if(session->isInitiated(session)) {
 		session->updateState(session, SFP_ACTION_BYE_OR_CANCEL_RECEIVED);
 		if(session->isCancelledByPeer(session)) {
-			if(transferCancelledByPeer) { transferCancelledByPeer(hCall, session->remote_username, session->short_filename, session->file_type, session->file_size); }
+			if(transferCancelledByPeer) { transferCancelledByPeer(hCall, session->remote_username, session->local_filename, session->file_type, session->file_size); }
 			sfp_remove_session_info(hCall);
 			//owplCallDisconnect(hCall);
 		}
@@ -1380,7 +1395,7 @@ static void transferClosedHandler(int hCall){ // BYE received
 	} else if(session->isRunning(session)) {
 		session->updateState(session, SFP_ACTION_BYE_OR_CANCEL_RECEIVED);
 		/*if(session->isCancelledByPeer(session)) {
-			if(transferCancelledByPeer) { transferCancelledByPeer(hCall, session->remote_username, session->short_filename, session->file_type, session->file_size); }
+			if(transferCancelledByPeer) { transferCancelledByPeer(hCall, session->remote_username, session->local_filename, session->file_type, session->file_size); }
 			owplCallDisconnect(hCall);
 		}*/
 	} else {
@@ -1406,7 +1421,7 @@ static void transferHoldHandler(int hCall){
 	g_mutex_lock(pause_mutex);
 
 	if(session->isPausedByPeer(session)) {
-		if(transferPausedByPeer) { transferPausedByPeer(hCall, session->remote_username, session->short_filename, session->file_type, session->file_size); }
+		if(transferPausedByPeer) { transferPausedByPeer(hCall, session->remote_username, session->local_filename, session->file_type, session->file_size); }
 	}
 }
 
@@ -1426,7 +1441,7 @@ static void transferResumedHandler(int hCall){
 
 	session->updateState(session, SFP_ACTION_HOLDOFF_RECEIVED);
 	if(session->isRunning(session)) {
-		if(transferResumedByPeer) { transferResumedByPeer(hCall, session->remote_username, session->short_filename, session->file_type, session->file_size); }
+		if(transferResumedByPeer) { transferResumedByPeer(hCall, session->remote_username, session->local_filename, session->file_type, session->file_size); }
 	}
 
 }

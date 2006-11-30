@@ -233,6 +233,21 @@ extern "C" {
 	PHAPI_UTIL_EXPORTS int UTF8Toascii(unsigned char* out, int *outlen, const unsigned char* in, int *inlen);
 
 	char *ph_split_host_port(char *buf, int bufsize, const char *host, int *port);
+        /**
+         * Replace characters : / \ ? * " < > by a _. Useful for filenames under windows
+	 *
+	 * @param	filename	the filename to clean
+	 * @param	sizeof_filename	the size of the string filename
+	 */
+	PHAPI_UTIL_EXPORTS void clean_filename_for_windows(char * filename, size_t sizeof_filename);
+
+	/**
+	 * Replace characters : / \ ? * " < > by a _. Useful for filenames under windows
+	 *
+	 * @param	filename	the filename to clean
+	 * @param	sizeof_filename	the size of the string filename
+	 */
+	PHAPI_UTIL_EXPORTS void wclean_filename_for_windows(wchar_t * filename, size_t sizeof_filename);
 
 #ifdef __cplusplus
 }

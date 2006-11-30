@@ -795,3 +795,31 @@ ph_split_host_port(char *buf, int bufsize, const char *host, int *port)
 
 	return buf;
 }
+
+PHAPI_UTIL_EXPORTS void wclean_filename_for_windows(wchar_t * filename, size_t sizeof_filename) {
+	int i = 0;
+	int j = 0;
+	wchar_t retirer[] = {'\\', '/', ':', '*', '?', '"', '<', '>', '|'};
+	
+	for(i = 0; i < (int)sizeof_filename; i++) {
+		for(j=0; j < (int)sizeof(retirer)/2; j++) {
+			if(filename[i] == retirer[j]) {
+				filename[i] = '_';
+			}
+		}
+	}
+}
+
+PHAPI_UTIL_EXPORTS void clean_filename_for_windows(char * filename, size_t sizeof_filename) {
+	int i = 0;
+	int j = 0;
+	char retirer[] = {'\\', '/', ':', '*', '?', '"', '<', '>', '|'};
+	
+	for(i = 0; i < (int)sizeof_filename; i++) {
+		for(j=0; j < (int)sizeof(retirer); j++) {
+			if(filename[i] == retirer[j]) {
+				filename[i] = '_';
+			}
+		}
+	}
+}

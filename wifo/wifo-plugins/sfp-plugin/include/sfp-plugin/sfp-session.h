@@ -89,6 +89,8 @@ extern "C" {
 		char * key_info;
 		char * crypted_key;
 		char * filename;
+		char * remote_filename;
+		char * local_filename;
 		char * short_filename;
 		char * file_type;
 		char * file_size; /** bytes */
