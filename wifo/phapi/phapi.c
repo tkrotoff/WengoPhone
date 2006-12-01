@@ -47,6 +47,7 @@ MY_DLLEXPORT OWPL_RESULT
 owplLogListenerSet(OWPL_LOG_REPORT_PROC pLogReportProc)
 {
 	owplLogReportProc = pLogReportProc;
+	return OWPL_RESULT_SUCCESS;
 }
 
 MY_DLLEXPORT OWPL_RESULT
@@ -96,7 +97,7 @@ owplInit(	const int udpPort,
 
 	if (i)
 	{
-		return -1;
+		return return OWPL_RESULT_FAILURE;
 	}
 
 	{
@@ -149,7 +150,7 @@ owplInit(	const int udpPort,
 
 	DEBUGTRACE("PhInit finished\n");
 
-  return 0;
+  return OWPL_RESULT_SUCCESS;;
 }
 
 MY_DLLEXPORT OWPL_RESULT
@@ -236,6 +237,7 @@ owplConfigSetNat(const OWPL_NAT_TYPE eNatType,
 			break;
 	}
 	phcfg.nat_refresh_time = natRefreshTime;
+	return OWPL_RESULT_SUCCESS;
 }
 
 MY_DLLEXPORT OWPL_RESULT
@@ -246,6 +248,7 @@ owplConfigSetOutboundProxy(const char * szProxyAddr)
 	} else {
 		phcfg.proxy[0] = 0;
 	}
+	return OWPL_RESULT_SUCCESS;
 }
 
 MY_DLLEXPORT OWPL_RESULT 
