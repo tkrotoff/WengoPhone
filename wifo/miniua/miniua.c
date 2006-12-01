@@ -554,7 +554,7 @@ int main(int argc, const char *const *argv)
 	if(!noinit) {
 		owplConfigSetAsynchronous(1);
 		owplEventListenerAdd(phApiEventsHandler, 0);
-		if(owplInit(5061, 0, 0, NULL, 0) != OWPL_RESULT_SUCCESS)  {
+		if(owplInit(5060, 0, 0, NULL, 0) != OWPL_RESULT_SUCCESS)  {
 			fprintf (stderr, "miniua: could not initialize phoneapi\n");
 			exit(0);
 		}
