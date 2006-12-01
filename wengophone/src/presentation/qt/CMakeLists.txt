@@ -166,7 +166,7 @@ qt4_wrap_cpp(${PROJECT_NAME}_SRCS
 	filetransfer/QtFileTransferItem.h
 	filetransfer/QtFileTransferDownloadItem.h
 	filetransfer/QtFileTransferUploadItem.h
-	filetransfer/QtFileTransferUpgradeDialog.h
+	filetransfer/QtFileTransferNotifyDialog.h
 
 	webdirectory/QtWebDirectory.h
 )
@@ -303,7 +303,7 @@ ow_add_sources(
 	filetransfer/QtFileTransferItem.cpp
 	filetransfer/QtFileTransferDownloadItem.cpp
 	filetransfer/QtFileTransferUploadItem.cpp
-	filetransfer/QtFileTransferUpgradeDialog.cpp
+	filetransfer/QtFileTransferNotifyDialog.cpp
 
 	webdirectory/QtWebDirectory.cpp
 )
