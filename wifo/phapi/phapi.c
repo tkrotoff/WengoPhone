@@ -97,7 +97,7 @@ owplInit(	const int udpPort,
 
 	if (i)
 	{
-		return return OWPL_RESULT_FAILURE;
+		return OWPL_RESULT_FAILURE;
 	}
 
 	{
