@@ -419,7 +419,7 @@ qt4_wrap_ui(${PROJECT_NAME}_SRCS
 	filetransfer/AcceptDialog.ui
 	filetransfer/FileTransferWidget.ui
 	filetransfer/FileTransferItem.ui
-	filetransfer/UpgradeDialog.ui
+	filetransfer/NotifyDialog.ui
 
 	history/HistoryWidget.ui
 
