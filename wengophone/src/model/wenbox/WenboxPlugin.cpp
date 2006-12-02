@@ -52,6 +52,10 @@ WenboxPlugin::WenboxPlugin(UserProfile & userProfile)
 	config.valueChangedEvent += boost::bind(&WenboxPlugin::wenboxConfigChangedEventHandler, this, _1, _2);
 
 	config.set(Config::WENBOX_ENABLE_KEY, EnumWenboxStatus::toString(wenboxStatus));
+
+	//FIXME config.set() above does not always call wenboxConfigChangedEventHandler()
+	//why? no idea...
+	wenboxConfigChangedEventHandler(config, Config::WENBOX_ENABLE_KEY);
 }
 
 WenboxPlugin::~WenboxPlugin() {
