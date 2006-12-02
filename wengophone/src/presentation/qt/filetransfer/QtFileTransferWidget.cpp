@@ -94,7 +94,9 @@ void QtFileTransferWidget::clean(bool cleanButton) {
 
 	} else {
 
-		for (int i = 0; i < _ui->uploadTransferListWidget->count(); i++) {
+		int count = _ui->uploadTransferListWidget->count();
+		for (int i = count - 1; i >= 0; i--) {
+
 			QListWidgetItem * item = _ui->uploadTransferListWidget->item(i);
 			QtFileTransferUploadItem * widgetItem = (QtFileTransferUploadItem*)_ui->uploadTransferListWidget->itemWidget(item);
 
