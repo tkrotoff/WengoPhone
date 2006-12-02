@@ -3372,6 +3372,47 @@ int eXosip_subscribe    (char *to, char *from, char *route, const int winfo)
   osip_transaction_t *transaction;
   osip_event_t *sipevent;
   int i;
+
+  eXosip_reg_t * jreg;
+  osip_uri_t reg_uri, * from_uri;
+  osip_from_t parsed_from;
+  char * reg_username, * from_username;
+  int found_line = 0;
+
+  memset(&reg_uri, 0, sizeof(reg_uri));
+  memset(&parsed_from, 0, sizeof(parsed_from));
+  osip_from_parse(&parsed_from, from);
+  from_uri = osip_from_get_url(&parsed_from);
+  from_username = osip_uri_get_username(from_uri);
+
+  for (jreg=eXosip.j_reg; jreg!=NULL; jreg=jreg->next)
+  {
+	  osip_uri_parse(&reg_uri, jreg->r_aor);
+	  reg_username = osip_uri_get_username(&reg_uri);
+	  if (strcmp(from_username, reg_username) == 0)
+	  {
+		  found_line = 1;
+		  break;
+	  }
+  }
+  if (!found_line) 
+  {
+	  // If a subscribe is requested from an unknown uri, refuse it!
+	  OSIP_TRACE (osip_trace
+		  (__FILE__, __LINE__, OSIP_ERROR, NULL,
+		  "eXosip: cannot subscribe from a user that is not registered with eXosip // Minh "));
+	  return -1;
+  }
+
+  //MINHPQ:  Look for an existing subscribe to the same person
+  for (js=eXosip.j_subscribes; js!=NULL; js=js->next)
+  {
+	  if ((strcmp(js->s_uri, to) == 0) && (js->winfo == winfo))
+	  {
+		  return js->s_id;
+	  }
+  }
+
     
   i = generating_initial_subscribe(&subscribe, to, from, route);
 
