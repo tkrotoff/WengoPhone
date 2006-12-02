@@ -47,7 +47,7 @@ void QtChatHandler::newIMChatSessionCreatedEvent(IMChatSession & imChatSession) 
 	if (!_qtChatWindow) {
 		_qtChatWindow =  new QtChatWindow(0, _cChatHandler, imChatSession, _qtWengoPhone);
 	} else {
-		_qtChatWindow->addChatSession(&imChatSession);
+		_qtChatWindow->imChatSessionCreatedHandler(&imChatSession);
 	}
 }
 
@@ -63,7 +63,8 @@ void QtChatHandler::deletePresentation() {
 	// but it crashes in QtEmoticonsManager::getQtEmoticonList
 	/* delete(this); */
 	if (_qtChatWindow) {
-		_qtChatWindow->closeWindow();
+		//_qtChatWindow->closeWindow();
+		_qtChatWindow->close();
 		_qtWengoPhone.setChatWindow(NULL);
 	}
 }

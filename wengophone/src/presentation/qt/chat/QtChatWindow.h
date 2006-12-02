@@ -54,15 +54,7 @@ public:
 
 	~QtChatWindow();
 
-	//TODO: rename these methods
-	void addChat(IMChatSession * session, const IMContact & from);
-	void addChatSession(IMChatSession * imChatSession);
-
-	bool chatIsVisible() {
-		return (isVisible() && (!isMinimized()));
-	}
-
-	void imContactChangedEventHandler(IMContact & sender);
+	void imChatSessionCreatedHandler(IMChatSession * imChatSession);
 
 Q_SIGNALS:
 
@@ -71,8 +63,6 @@ Q_SIGNALS:
 	void typingStateChangedSignal(const IMChatSession * sender, const IMContact * imContact,const IMChat::TypingState * state);
 
 	void statusMessageReceivedSignal(IMChatSession * sender, int status, const QString & message);
-
-	void statusChangedSignal(IMContact * sender);
 
 public Q_SLOTS:
 
@@ -94,7 +84,8 @@ public Q_SLOTS:
 
 	void showActiveTabContactInfo();
 
-	void blockActiveTabContact();
+	//TODO
+	void blockActiveTabContact() {}
 
 	void closeActiveTab();
 
@@ -102,13 +93,9 @@ public Q_SLOTS:
 
 	void saveActiveTabChatHistory();
 
-	void closeWindow();
-
-private Q_SLOTS:
-
-	void statusMessageReceivedSlot(IMChatSession * sender, int status, const QString & message);
-
 private:
+
+	void addChatWidgetTab(IMChatSession * session, const IMContact & from);
 
 	void showToaster(IMChatSession * imChatSession);
 
@@ -125,8 +112,6 @@ private:
 	void updateToolBarActions();
 
 	void messageReceivedEventHandler(IMChatSession & sender);
-
-	void statusMessageReceivedEventHandler(IMChatSession & sender, IMChat::StatusMessage status, const std::string & message);
 
 	void typingStateChangedEventHandler(IMChatSession & sender, const IMContact & imContact, IMChat::TypingState state);
 
@@ -164,3 +149,4 @@ private:
 };
 
 #endif	//OWQTCHATWINDOW_H
+
