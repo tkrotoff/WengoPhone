@@ -159,6 +159,12 @@ flap_connection_close(OscarData *od, FlapConnection *conn)
 		}
 	}
 
+	if (conn->watcher_incoming != 0)
+	{
+		gaim_input_remove(conn->watcher_incoming);
+		conn->watcher_incoming = 0;
+	}
+
 	if (conn->fd != -1)
 	{
 		if (conn->type == SNAC_FAMILY_LOCATE)
@@ -166,12 +172,6 @@ flap_connection_close(OscarData *od, FlapConnection *conn)
 
 		close(conn->fd);
 		conn->fd = -1;
-	}
-
-	if (conn->watcher_incoming != 0)
-	{
-		gaim_input_remove(conn->watcher_incoming);
-		conn->watcher_incoming = 0;
 	}
 
 	if (conn->watcher_outgoing != 0)
@@ -807,7 +807,6 @@ flap_connection_send_byte_stream(ByteStream *bs, FlapConnection *conn, size_t co
 		conn->watcher_outgoing = gaim_input_add(conn->fd,
 				GAIM_INPUT_WRITE, send_cb, conn);
 		send_cb(conn, conn->fd, 0);
-
 	}
 }
 
