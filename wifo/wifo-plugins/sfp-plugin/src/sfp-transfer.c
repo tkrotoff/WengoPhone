@@ -734,7 +734,7 @@ static sfp_returncode_t sfp_transfer_receive_active(FILE * stream, SOCKET sckt, 
 		notify_progress(session, total_received, total_to_receive, &increase);
 
 		//sprintf(message, "Received %d char", received);
-		m_log(message,"sfp_transfer_receive_active");
+		//m_log(message,"sfp_transfer_receive_active");
 		// if the transfer has been cancelled stop sending
 		if(session->isCancelledByPeer(session)){
 			return SUCCESS;
