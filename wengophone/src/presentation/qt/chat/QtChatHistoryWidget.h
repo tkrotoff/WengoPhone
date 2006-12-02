@@ -29,8 +29,8 @@ class QWidget;
 /**
  * Implements the chat text zone with a custom context menu.
  *
- * TODO: verify that there is nothing left elsewhere that could be brought inhere (slots, ...)
  * @author Nicolas Couturier
+ * @author Mathieu Stute
  */
 class QtChatHistoryWidget : public QTextBrowser {
 	Q_OBJECT
@@ -39,8 +39,6 @@ public:
 	QtChatHistoryWidget(QWidget * parent);
 
 public Q_SLOTS:
-
-	void showContextMenuSlot(const QPoint & pos);
 
 	void saveHistoryAsHtmlSlot();
 
@@ -52,12 +50,6 @@ private Q_SLOTS:
 	 * @param link the clicked url
 	 */
 	void urlClicked(const QUrl & link);
-
-private:
-
-	void makeActions();
-
-	QAction * _saveAsAction;
 };
 
 #endif	//OWQTCHATHISTORYWIDGET_H

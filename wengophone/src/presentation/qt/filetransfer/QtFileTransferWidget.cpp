@@ -20,7 +20,7 @@
 #include "QtFileTransferWidget.h"
 #include "QtFileTransferDownloadItem.h"
 #include "QtFileTransferUploadItem.h"
-#include "ui_FileTransferWidget.h"
+#include "ui_FileTransferDialog.h"
 
 #include <filesessionmanager/ReceiveFileSession.h>
 #include <filesessionmanager/SendFileSession.h>
@@ -39,10 +39,10 @@ static int DOWNLOAD_TAB_INDEX = 0;
 static int UPLOAD_TAB_INDEX = 1;
 
 QtFileTransferWidget::QtFileTransferWidget(QWidget * parent)
-	: QWidget(parent) {
+	: QDialog(parent) {
 
 	//init main widget
-	_ui = new Ui::FileTransferWidget();
+	_ui = new Ui::FileTransferDialog();
 	_ui->setupUi(this);
 	////
 

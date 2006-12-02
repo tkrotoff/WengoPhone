@@ -17,7 +17,6 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-
 #include "QtChatHistoryWidget.h"
 
 #include <model/config/Config.h>
@@ -31,35 +30,27 @@
 QtChatHistoryWidget::QtChatHistoryWidget(QWidget * parent) : QTextBrowser(parent) {
 
 	setFrameStyle(QFrame::NoFrame | QFrame::Plain);
-	setContextMenuPolicy(Qt::CustomContextMenu);
 	setLineWrapMode(QTextEdit::WidgetWidth);
 	setWordWrapMode(QTextOption::WrapAnywhere);
-	makeActions();
-	connect(this, SIGNAL(customContextMenuRequested(const QPoint &)), SLOT(showContextMenuSlot(const QPoint &)));
 	connect (this, SIGNAL(anchorClicked(const QUrl &)), this, SLOT(urlClicked(const QUrl &)));
 	setHtml("<qt type=detail>");
-}
-
-void QtChatHistoryWidget::showContextMenuSlot(const QPoint & pos) {
-	QMenu menu(this);
-	menu.addAction(_saveAsAction);
-	menu.exec(viewport()->mapToGlobal(pos));
-}
-
-void QtChatHistoryWidget::makeActions() {
-	_saveAsAction = new QAction(tr("&Save As..."), this);
-	_saveAsAction->setStatusTip(tr("Save conversation to html"));
-	connect(_saveAsAction, SIGNAL(triggered()), SLOT(saveHistoryAsHtmlSlot()));
 }
 
 void QtChatHistoryWidget::saveHistoryAsHtmlSlot() {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 	QString contentToSave = toHtml();
-	QString filePath = QFileDialog::getSaveFileName(this, tr("Save As"), QString::fromStdString(config.getLastChatHistorySaveDir()), "HTML (*.htm *.html)");
-	if(filePath.length() > 0){
-		if(!filePath.endsWith(QString(".htm"), Qt::CaseInsensitive) && !filePath.endsWith(QString(".html"), Qt::CaseInsensitive)){
+
+	QString filePath = QFileDialog::getSaveFileName(this, tr("Save As"), 
+		QString::fromStdString(config.getLastChatHistorySaveDir()), "HTML (*.htm *.html)");
+
+	if(filePath.length() > 0) {
+
+		if(!filePath.endsWith(QString(".htm"), Qt::CaseInsensitive) && 
+			!filePath.endsWith(QString(".html"), Qt::CaseInsensitive)) {
+
 			filePath.append(QString(".html"));
 		}
+
 		QFile fileToSave(filePath);
 		config.set(Config::LAST_CHAT_HISTORY_SAVE_DIR_KEY, QFileInfo(fileToSave).absolutePath().toStdString());
 		fileToSave.open(QIODevice::WriteOnly);

@@ -417,7 +417,7 @@ qt4_wrap_ui(${PROJECT_NAME}_SRCS
 	phonecall/VideoWindow.ui
 
 	filetransfer/AcceptDialog.ui
-	filetransfer/FileTransferWidget.ui
+	filetransfer/FileTransferDialog.ui
 	filetransfer/FileTransferItem.ui
 	filetransfer/NotifyDialog.ui
 

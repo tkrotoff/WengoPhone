@@ -2,18 +2,21 @@
  <author></author>
  <comment></comment>
  <exportmacro></exportmacro>
- <class>FileTransferWidget</class>
- <widget class="QWidget" name="FileTransferWidget" >
+ <class>FileTransferDialog</class>
+ <widget class="QDialog" name="FileTransferDialog" >
   <property name="geometry" >
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>463</width>
-    <height>307</height>
+    <width>447</width>
+    <height>328</height>
    </rect>
   </property>
   <property name="windowTitle" >
    <string>WengoPhone - File Transfer Manager</string>
+  </property>
+  <property name="sizeGripEnabled" >
+   <bool>true</bool>
   </property>
   <layout class="QGridLayout" >
    <property name="margin" >
@@ -22,6 +25,74 @@
    <property name="spacing" >
     <number>6</number>
    </property>
+   <item row="0" column="0" colspan="4" >
+    <widget class="QTabWidget" name="tabWidget" >
+     <property name="focusPolicy" >
+      <enum>Qt::StrongFocus</enum>
+     </property>
+     <property name="tabPosition" >
+      <enum>QTabWidget::North</enum>
+     </property>
+     <property name="tabShape" >
+      <enum>QTabWidget::Rounded</enum>
+     </property>
+     <property name="currentIndex" >
+      <number>1</number>
+     </property>
+     <widget class="QWidget" name="DownloadTab" >
+      <attribute name="title" >
+       <string>Download</string>
+      </attribute>
+      <layout class="QGridLayout" >
+       <property name="margin" >
+        <number>9</number>
+       </property>
+       <property name="spacing" >
+        <number>6</number>
+       </property>
+       <item row="0" column="0" >
+        <widget class="QListWidget" name="downloadTransferListWidget" >
+         <property name="editTriggers" >
+          <set>QAbstractItemView::NoEditTriggers</set>
+         </property>
+         <property name="alternatingRowColors" >
+          <bool>true</bool>
+         </property>
+         <property name="selectionMode" >
+          <enum>QAbstractItemView::NoSelection</enum>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="UploadTab" >
+      <attribute name="title" >
+       <string>Upload</string>
+      </attribute>
+      <layout class="QGridLayout" >
+       <property name="margin" >
+        <number>9</number>
+       </property>
+       <property name="spacing" >
+        <number>6</number>
+       </property>
+       <item row="0" column="0" >
+        <widget class="QListWidget" name="uploadTransferListWidget" >
+         <property name="editTriggers" >
+          <set>QAbstractItemView::NoEditTriggers</set>
+         </property>
+         <property name="alternatingRowColors" >
+          <bool>true</bool>
+         </property>
+         <property name="selectionMode" >
+          <enum>QAbstractItemView::NoSelection</enum>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
    <item row="1" column="2" >
     <spacer>
      <property name="orientation" >
@@ -61,80 +132,6 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="0" colspan="4" >
-    <widget class="QTabWidget" name="tabWidget" >
-     <property name="focusPolicy" >
-      <enum>Qt::StrongFocus</enum>
-     </property>
-     <property name="tabPosition" >
-      <enum>QTabWidget::North</enum>
-     </property>
-     <property name="tabShape" >
-      <enum>QTabWidget::Rounded</enum>
-     </property>
-     <property name="currentIndex" >
-      <number>1</number>
-     </property>
-     <widget class="QWidget" name="DownloadTab" >
-      <attribute name="title" >
-       <string>Download</string>
-      </attribute>
-      <attribute name="icon" >
-       <iconset resource="..\wengophone.qrc" >:/pics/filetransfer/receive-file.png</iconset>
-      </attribute>
-      <layout class="QGridLayout" >
-       <property name="margin" >
-        <number>9</number>
-       </property>
-       <property name="spacing" >
-        <number>6</number>
-       </property>
-       <item row="0" column="0" >
-        <widget class="QListWidget" name="downloadTransferListWidget" >
-         <property name="editTriggers" >
-          <set>QAbstractItemView::NoEditTriggers</set>
-         </property>
-         <property name="alternatingRowColors" >
-          <bool>true</bool>
-         </property>
-         <property name="selectionMode" >
-          <enum>QAbstractItemView::NoSelection</enum>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="UploadTab" >
-      <attribute name="title" >
-       <string>Upload</string>
-      </attribute>
-      <attribute name="icon" >
-       <iconset resource="..\wengophone.qrc" >:/pics/actions/send_file.png</iconset>
-      </attribute>
-      <layout class="QGridLayout" >
-       <property name="margin" >
-        <number>9</number>
-       </property>
-       <property name="spacing" >
-        <number>6</number>
-       </property>
-       <item row="0" column="0" >
-        <widget class="QListWidget" name="uploadTransferListWidget" >
-         <property name="editTriggers" >
-          <set>QAbstractItemView::NoEditTriggers</set>
-         </property>
-         <property name="alternatingRowColors" >
-          <bool>true</bool>
-         </property>
-         <property name="selectionMode" >
-          <enum>QAbstractItemView::NoSelection</enum>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </widget>
-   </item>
    <item row="1" column="3" >
     <widget class="QPushButton" name="cleanButton" >
      <property name="toolTip" >
@@ -151,15 +148,6 @@
   </layout>
  </widget>
  <pixmapfunction></pixmapfunction>
- <tabstops>
-  <tabstop>tabWidget</tabstop>
-  <tabstop>downloadTransferListWidget</tabstop>
-  <tabstop>pathButton</tabstop>
-  <tabstop>cleanButton</tabstop>
-  <tabstop>uploadTransferListWidget</tabstop>
- </tabstops>
- <resources>
-  <include location="../wengophone.qrc" />
- </resources>
+ <resources/>
  <connections/>
 </ui>

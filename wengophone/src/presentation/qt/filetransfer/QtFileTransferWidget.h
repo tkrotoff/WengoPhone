@@ -20,7 +20,7 @@
 #ifndef OWQTFILETRANSFERWIDGET_H
 #define OWQTFILETRANSFERWIDGET_H
 
-#include <QtGui/QWidget>
+#include <QtGui/QDialog>
 #include <QtCore/QString>
 
 #include <string>
@@ -28,14 +28,14 @@
 class ReceiveFileSession;
 class SendFileSession;
 
-namespace Ui { class FileTransferWidget; }
+namespace Ui { class FileTransferDialog; }
 
 /**
  * Qt file transfer widget.
  *
  * @author Mathieu Stute
  */
-class QtFileTransferWidget : public QWidget {
+class QtFileTransferWidget : public QDialog {
 	Q_OBJECT
 public:
 
@@ -110,7 +110,7 @@ private:
 	/** a cache for the path to the download folder */
 	QString _downloadFolder;
 
-	Ui::FileTransferWidget * _ui;
+	Ui::FileTransferDialog * _ui;
 };
 
 #endif	//OWQTFILETRANSFERWIDGET_H
