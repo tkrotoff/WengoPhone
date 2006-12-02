@@ -462,6 +462,7 @@ void QtChatWindow::imChatSessionCreatedHandler(IMChatSession * imChatSession) {
 		QtChatWidget * widget = dynamic_cast<QtChatWidget *>(_tabWidget->widget(i));
 		if (widget->getSessionId() == imChatSession->getId()) {
 			_tabWidget->setCurrentIndex(i);
+			show();
 			return;
 		}
 	}
