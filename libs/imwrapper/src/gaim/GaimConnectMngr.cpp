@@ -17,12 +17,16 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+extern "C" {
+#include "glib.h"
+#include "gaim/core.h"
+}
+
 #include "GaimConnectMngr.h"
 
 #include "GaimEnumIMProtocol.h"
 
 #include <util/Logger.h>
-
 
 /* ***************** GAIM CALLBACK ***************** */
 static void C_ConnProgressCbk(GaimConnection *gc, const char *text,
@@ -143,17 +147,16 @@ void GaimConnectMngr::ConnDisconnectedCbk(GaimConnection *gc)
 	{
 		mIMConnect->setConnected(false);
 		mIMConnect->disconnectedEvent(*mIMConnect, false, String::null);
+
+		if (gc->wants_to_die)
+		{
+			gaim_account_set_enabled(gc->account, gaim_core_get_ui(), FALSE);
+		}
 	}
 }
 
 void GaimConnectMngr::ConnNoticeCbk(GaimConnection *gc, const char *text)
 {
-	//GaimIMConnect *mIMConnect = FindIMConnnectByGaimConnection(gc);
-
-	//if (mIMConnect)
-	//{
-	//	mIMConnect->connectionProgressEvent(*mIMConnect, 0, 0, text == NULL ? String::null : text);
-	//}
 }
 
 void GaimConnectMngr::ConnReportDisconnectCbk(GaimConnection *gc, const char *text)
