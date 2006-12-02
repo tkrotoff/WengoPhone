@@ -106,7 +106,7 @@ QtChatWindow::QtChatWindow(QWidget * parent, CChatHandler & cChatHandler, IMChat
 		show();
 	} else {
 		if (!isVisible()) {
-			showChatWindow();
+			showMinimized();
 		}
 		QCoreApplication::processEvents();
 		flashWindow();
@@ -196,6 +196,8 @@ void QtChatWindow::flashWindow() {
 }
 
 void QtChatWindow::showMinimized() {
+#if !defined(OS_MACOSX)
+
 #ifdef OS_WINDOWS
 	HWND topWindow = GetForegroundWindow();
 #endif
@@ -203,20 +205,13 @@ void QtChatWindow::showMinimized() {
 #ifdef OS_WINDOWS
 	SetForegroundWindow(topWindow);
 #endif
-}
 
-void QtChatWindow::showChatWindow() {
-#if !defined(OS_MACOSX)
-	showMinimized();
 #else
 	showNormal();
 #endif
 }
 
 void QtChatWindow::show() {
-	if (isMinimized()) {
-		closeWindow();
-	}
 	showNormal();
 	activateWindow();
 	raise();
@@ -282,10 +277,7 @@ void QtChatWindow::showActiveTabContactInfo() {
 		ContactProfile contactProfile =  getContactProfileFromContactId(contactId);
 		QtProfileDetails qtProfileDetails(
 			*_qtWengoPhone.getCWengoPhone().getCUserProfileHandler().getCUserProfile(),
-			contactProfile,
-			this,
-			tr("Edit Contact")
-		);
+			contactProfile, this, tr("Edit Contact"));
 		if (qtProfileDetails.show()) {
 			_qtWengoPhone.getCWengoPhone().getCUserProfileHandler().getCUserProfile()->getCContactList().updateContact(contactProfile);
 		}
@@ -316,17 +308,17 @@ void QtChatWindow::typingStateChangedThreadSafe(const IMChatSession * sender, co
 		if (widget->getSessionId() == sender->getId()) {
 			QString remoteName = QString::fromUtf8(from->getContactId().c_str());
 			switch (*state) {
-				case IMChat::TypingStateNotTyping:
-					statusBar()->showMessage(QString::null);
-					break;
-				case IMChat::TypingStateTyping:
-					statusBar()->showMessage(remoteName + tr(" is typing"));
-					break;
-				case IMChat::TypingStateStopTyping:
-					statusBar()->showMessage(QString::null);
-					break;
-				default:
-					break;
+			case IMChat::TypingStateNotTyping:
+				statusBar()->showMessage(QString::null);
+				break;
+			case IMChat::TypingStateTyping:
+				statusBar()->showMessage(remoteName + tr(" is typing"));
+				break;
+			case IMChat::TypingStateStopTyping:
+				statusBar()->showMessage(QString::null);
+				break;
+			default:
+				break;
 			}
 		}
 	}
@@ -500,7 +492,13 @@ void QtChatWindow::updateToolBarActions() {
 }
 
 void QtChatWindow::messageReceivedSlot(IMChatSession * sender) {
-	if (isHidden()) {
+	if (isVisible() && !isMinimized()) {
+		//window is visible and not minimized: just a simple flash inside the taskbar
+		flashWindow();
+	} else {
+		//window not visible: flash + toaster
+		showMinimized();
+		flashWindow();
 		showToaster(sender);
 	}
 
@@ -520,13 +518,6 @@ void QtChatWindow::messageReceivedSlot(IMChatSession * sender) {
 				QString senderDisplayName = getShortDisplayName(contactId, QString::fromStdString(from.getContactId()));
 				QString msg = QString::fromUtf8(message.c_str());
 
-			if (!isVisible()) {
-				showChatWindow();
-				flashWindow();
-			} else {
-				flashWindow();
-			}
-
 			int tabs = _tabWidget->count();
 			for (int i = 0; i < tabs; i++) {
 				QtChatWidget * widget = dynamic_cast<QtChatWidget *>(_tabWidget->widget(i));
@@ -540,9 +531,6 @@ void QtChatWindow::messageReceivedSlot(IMChatSession * sender) {
 							_tabWidget->setBlinkingTab(i);
 						}
 					}
-					if (isMinimized()) {
-						flashWindow();
-					}
 					return;
 				}
 			}
@@ -552,29 +540,20 @@ void QtChatWindow::messageReceivedSlot(IMChatSession * sender) {
 }
 
 void QtChatWindow::addChatSession(IMChatSession * imChatSession) {
+	if (imChatSession->isUserCreated()) {
+		show();
+	}
+
 	// If this chat session already exists, display the tab
 	int tabs = _tabWidget->count();
 	for (int i = 0; i < tabs; i++) {
 		QtChatWidget * widget = dynamic_cast<QtChatWidget *>(_tabWidget->widget(i));
 		if (widget->getSessionId() == imChatSession->getId()) {
 			_tabWidget->setCurrentIndex(i);
-			if (imChatSession->isUserCreated()) {
-				show();
-				return;
-			} else {
-				if (!isVisible()) {
-					showChatWindow();
-					flashWindow();
-					return;
-				}
-				if (isMinimized()) {
-						flashWindow();
-						return;
-				}
-			}
 			return;
 		}
 	}
+
 	imChatSession->messageReceivedEvent +=
 		boost::bind(&QtChatWindow::messageReceivedEventHandler, this, _1);
 
@@ -586,15 +565,7 @@ void QtChatWindow::addChatSession(IMChatSession * imChatSession) {
 
 	if (imChatSession->getIMContactSet().size() != 0 ) {
 		IMContact from = *imChatSession->getIMContactSet().begin();
-		addChat(imChatSession,from);
-		if (imChatSession->isUserCreated()) {
-			show();
-		} else {
-			if (!isVisible()) {
-				showChatWindow();
-			}
-			flashWindow();
-		}
+		addChat(imChatSession, from);
 	} else {
 		LOG_FATAL("New chat session is empty!");
 	}
@@ -708,7 +679,7 @@ void QtChatWindow::statusMessageReceivedEventHandler(
 	statusMessageReceivedSignal(&sender, (int)status, QString::fromStdString(message));
 }
 
-void QtChatWindow::statusMessageReceivedSLot(IMChatSession * sender, int status, const QString & message) {
+void QtChatWindow::statusMessageReceivedSlot(IMChatSession * sender, int status, const QString & message) {
 	int tabs = _tabWidget->count();
 	for (int i = 0; i < tabs; i++) {
 		QtChatWidget * widget = dynamic_cast<QtChatWidget *>(_tabWidget->widget(i));

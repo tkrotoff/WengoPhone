@@ -124,7 +124,7 @@ void QtConfigPanel::configChangedEventHandler(Settings & sender, const std::stri
 void QtConfigPanel::configChangedEventHandlerThreadSafe(Settings & sender, const std::string & key) {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 
-	if (key == Config::AUDIO_INPUT_DEVICEID_KEY) {
+	if (key == Config::AUDIO_INPUT_DEVICEID_KEY || key == Config::WENBOX_ENABLE_KEY) {
 		//inputSoundSlider
 		AudioDevice audioDevice(config.getAudioInputDeviceId());
 		VolumeControl inputVolumeControl(audioDevice);
@@ -132,7 +132,7 @@ void QtConfigPanel::configChangedEventHandlerThreadSafe(Settings & sender, const
 		_ui->inputSoundSlider->setValue(inputVolumeControl.getLevel());
 	}
 
-	if (key == Config::AUDIO_OUTPUT_DEVICEID_KEY) {
+	if (key == Config::AUDIO_OUTPUT_DEVICEID_KEY || key == Config::WENBOX_ENABLE_KEY) {
 		//outputSoundSlider
 		AudioDevice audioDevice(config.getAudioOutputDeviceId());
 		VolumeControl outputVolumeControl(audioDevice);

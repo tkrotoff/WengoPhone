@@ -98,6 +98,14 @@ void WenboxPlugin::wenboxConfigChangedEventHandler(Settings & sender, const std:
 }
 
 void WenboxPlugin::keyPressedEventHandler(IWenbox & sender, IWenbox::Key key) {
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+
+	//Check if Wenbox is enabled or not
+	if (EnumWenboxStatus::toWenboxStatus(config.getWenboxEnable()) != EnumWenboxStatus::WenboxStatusEnable) {
+		return;
+	}
+
+
 	PhoneCall * phoneCall = getActivePhoneCall();
 
 	switch (key) {
@@ -185,6 +193,13 @@ PhoneCall * WenboxPlugin::getActivePhoneCall() const {
 }
 
 void WenboxPlugin::setState(Wenbox::PhoneCallState state, const std::string & phoneNumber) {
+	Config & config = ConfigManager::getInstance().getCurrentConfig();
+
+	//Check if Wenbox is enabled or not
+	if (EnumWenboxStatus::toWenboxStatus(config.getWenboxEnable()) != EnumWenboxStatus::WenboxStatusEnable) {
+		return;
+	}
+
 	_wenbox->setState(state, phoneNumber);
 }
 

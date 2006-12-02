@@ -64,8 +64,6 @@ public:
 
 	void imContactChangedEventHandler(IMContact & sender);
 
-	void showToaster(IMChatSession * imChatSession);
-
 Q_SIGNALS:
 
 	void messageReceivedSignal(IMChatSession * sender);
@@ -108,9 +106,11 @@ public Q_SLOTS:
 
 private Q_SLOTS:
 
-	void statusMessageReceivedSLot(IMChatSession * sender, int status, const QString & message);
+	void statusMessageReceivedSlot(IMChatSession * sender, int status, const QString & message);
 
 private:
+
+	void showToaster(IMChatSession * imChatSession);
 
 	QtChatWidget * getActiveTabWidget();
 
@@ -135,8 +135,6 @@ private:
 	void flashWindow();
 
 	void showMinimized();
-
-	void showChatWindow();
 
 	/**
 	 * Finds an QAction and copies its properties to another QAction.

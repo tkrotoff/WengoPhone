@@ -46,7 +46,6 @@ QtChatHandler::~QtChatHandler() {
 void QtChatHandler::newIMChatSessionCreatedEvent(IMChatSession & imChatSession) {
 	if (!_qtChatWindow) {
 		_qtChatWindow =  new QtChatWindow(0, _cChatHandler, imChatSession, _qtWengoPhone);
-		_qtChatWindow->showToaster(&imChatSession);
 	} else {
 		_qtChatWindow->addChatSession(&imChatSession);
 	}
