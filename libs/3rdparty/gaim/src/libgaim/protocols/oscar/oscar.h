@@ -388,6 +388,10 @@ struct _FlapConnection
 	struct rateclass *rates;
 
 	void *internal; /* internal conn-specific libfaim data */
+
+	/* WENGO */
+	GMutex *mutex;
+	/* ***** */
 };
 
 struct _IcbmCookie

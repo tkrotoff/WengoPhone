@@ -124,6 +124,10 @@ flap_connection_new(OscarData *od, int type)
 	conn->subtype = -1;
 	conn->type = type;
 
+	/* WENGO */
+	conn->mutex = g_mutex_new();
+	/* ***** */
+
 	od->oscar_connections = g_slist_prepend(od->oscar_connections, conn);
 
 	return conn;
@@ -172,8 +176,8 @@ flap_connection_close(OscarData *od, FlapConnection *conn)
 
 	if (conn->watcher_outgoing != 0)
 	{
-		gaim_input_remove(conn->watcher_outgoing);
-		conn->watcher_outgoing = 0;
+		if (gaim_input_remove(conn->watcher_outgoing))
+			conn->watcher_outgoing = 0;
 	}
 
 	g_free(conn->buffer_incoming.data.data);
@@ -261,6 +265,10 @@ flap_connection_destroy_cb(gpointer data)
 
 	g_free(conn->error_message);
 	g_free(conn->cookie);
+
+	/* WENGO */
+	g_mutex_free(conn->mutex);
+	/* ***** */
 
 	/*
 	 * Free conn->internal, if necessary
@@ -740,12 +748,18 @@ send_cb(gpointer data, gint source, GaimInputCondition cond)
 	int writelen, ret;
 
 	conn = data;
+
+	g_mutex_lock(conn->mutex);
+
 	writelen = gaim_circ_buffer_get_max_read(conn->buffer_outgoing);
 
 	if (writelen == 0)
 	{
-		gaim_input_remove(conn->watcher_outgoing);
-		conn->watcher_outgoing = 0;
+		if (gaim_input_remove(conn->watcher_outgoing))
+			conn->watcher_outgoing = 0;
+
+		g_mutex_unlock(conn->mutex);
+
 		return;
 	}
 
@@ -753,16 +767,22 @@ send_cb(gpointer data, gint source, GaimInputCondition cond)
 	if (ret <= 0)
 	{
 		if ((errno == EAGAIN) || (errno == EWOULDBLOCK))
+		{
+			g_mutex_unlock(conn->mutex);
 			/* No worries */
 			return;
+		}
 
 		/* Error! */
 		flap_connection_schedule_destroy(conn,
 				OSCAR_DISCONNECT_LOST_CONNECTION, strerror(errno));
+
+		g_mutex_unlock(conn->mutex);
 		return;
 	}
 
 	gaim_circ_buffer_mark_read(conn->buffer_outgoing, ret);
+	g_mutex_unlock(conn->mutex);
 }
 
 static void
@@ -787,6 +807,7 @@ flap_connection_send_byte_stream(ByteStream *bs, FlapConnection *conn, size_t co
 		conn->watcher_outgoing = gaim_input_add(conn->fd,
 				GAIM_INPUT_WRITE, send_cb, conn);
 		send_cb(conn, conn->fd, 0);
+
 	}
 }
 
