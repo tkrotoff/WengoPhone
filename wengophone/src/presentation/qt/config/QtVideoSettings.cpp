@@ -157,7 +157,7 @@ void QtVideoSettings::frameCapturedEventHandler(IWebcamDriver * sender, piximage
 	if (_rgbImage) {
 		pix_free(_rgbImage);
 	}
-	_rgbImage = pix_alloc(PIX_OSI_RGB32, image->width, image->height);
+	_rgbImage = pix_alloc(PIX_OSI_RGB32, _ui->webcamPreviewLabel->width(), _ui->webcamPreviewLabel->height());
 
 	pix_convert(PIX_NO_FLAG, _rgbImage, image);
 
