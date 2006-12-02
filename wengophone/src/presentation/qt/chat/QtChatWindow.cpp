@@ -515,9 +515,6 @@ void QtChatWindow::addChatWidgetTab(IMChatSession * imChatSession, const IMConta
 
 		statusChangedSlot(QString::fromStdString(cContactList.findContactThatOwns(from)));
 
-		//FIXME: must be done in activeTabChanged (remove and test if it still work!
-		setWindowTitle(_tabWidget->tabText(tabNumber));
-		////
 		_chatWidget->setNickName(nickName);
 
 		// Adding probably missed message
