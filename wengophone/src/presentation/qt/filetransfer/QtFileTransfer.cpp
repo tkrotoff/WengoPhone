@@ -112,7 +112,8 @@ void QtFileTransfer::newReceiveFileSessionCreatedEventHandlerSlot(ReceiveFileSes
 
 		// here we're sure to have a download folder,
 		// but we must check if the file already exists.
-		if (isFileInDir(downloadFolder, filename)) {
+		QFile file(downloadFolder + QString(QDir::separator()) + filename);
+		if (file.exists() {
 
 			if (QMessageBox::question(_qtFileTransferWidget, tr("Overwrite File?"),
 					tr("A file called %1 already exists."
@@ -168,22 +169,6 @@ void QtFileTransfer::createSendFileSession(IMContactSet imContactSet, const QStr
 		// HACK : Unique file transfer hack
 		_coIpManager->getFileSessionManager().queueSession(fileSession);
 	}
-}
-
-bool QtFileTransfer::isFileInDir(const QString & dirname, const QString & filename) {
-
-	QDir dir(dirname);
-	if (dir.exists()) {
-
-		QStringList dirList = dir.entryList(QDir::Files);
-		for (int i = 0; i < dirList.size(); i++) {
-			LOG_DEBUG("filename: " + dirList[i].toStdString());
-			if (dirList[i] == filename) {
-				return true;
-			}
-		}
-	}
-	return false;
 }
 
 void QtFileTransfer::needUpgradeEventHandler(FileSessionManager & sender) {

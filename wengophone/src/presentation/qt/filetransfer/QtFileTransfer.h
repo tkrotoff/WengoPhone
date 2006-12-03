@@ -126,16 +126,6 @@ private:
 	void peerNeedsUpgradeEventHandler(FileSessionManager & sender, const std::string contactID);
 
 	/**
-	 * Test if a file is in a dir.
-	 * TODO: put this somewhere else.
-	 *
-	 * @param dir the dir
-	 * @param file the file
-	 * @return true if file is in dir otherwise false.
-	 */
-	bool isFileInDir(const QString & dir, const QString & filename);
-
-	/**
 	 * Direct link to the transfer widget.
 	 */
 	QtFileTransferWidget * _qtFileTransferWidget;
