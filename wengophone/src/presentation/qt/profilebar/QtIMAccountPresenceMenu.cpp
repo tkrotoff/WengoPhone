@@ -64,7 +64,6 @@ void QtIMAccountPresenceMenu::awayClicked() {
 }
 
 void QtIMAccountPresenceMenu::disconnectClicked() {
-	_cUserProfile.getUserProfile().setPresenceState(EnumPresenceState::PresenceStateOffline, &_imAccount);
 	_cUserProfile.getUserProfile().getConnectHandler().disconnect(_imAccount);
 }
 

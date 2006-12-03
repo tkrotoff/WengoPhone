@@ -943,7 +943,15 @@ static void jabber_close(GaimConnection *gc)
 #ifdef HAVE_OPENSSL
 		if (!gc->disconnect_timeout)
 #endif
+		{
+			/* WENGO */
+			if (js->gsc->inpa)
+			{
+				gaim_input_remove(js->gsc->inpa);
+			}
+			/* ***** */
 			gaim_ssl_close(js->gsc);
+		}
 	} else if (js->fd > 0) {
 		if(js->gc->inpa)
 			gaim_input_remove(js->gc->inpa);
