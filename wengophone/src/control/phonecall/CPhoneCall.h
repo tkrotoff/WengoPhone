@@ -135,6 +135,8 @@ public:
 
 private:
 
+	void unbindAndClose();
+
 	void initPresentationThreadSafe();
 
 	void stateChangedEventHandler(PhoneCall & sender, EnumPhoneCallState::PhoneCallState state);

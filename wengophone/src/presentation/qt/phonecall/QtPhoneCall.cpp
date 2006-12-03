@@ -71,6 +71,8 @@ QtPhoneCall::QtPhoneCall(CPhoneCall & cPhoneCall)
 	_hold = true;
 	_showVideo = false;
 
+	_mutex = new QMutex(QMutex::Recursive);
+
 	_phoneCallWidget = new QWidget(NULL);
 
 	_ui = new Ui::PhoneCallWidget();
@@ -163,6 +165,7 @@ QtPhoneCall::~QtPhoneCall() {
 		pix_free(_localVideoFrame);
 	}
 	OWSAFE_DELETE(_ui);
+	OWSAFE_DELETE(_mutex);
 }
 
 QString QtPhoneCall::getDisplayName(QString str) {
@@ -331,6 +334,14 @@ void QtPhoneCall::stateChangedEvent(EnumPhoneCallState::PhoneCallState state) {
 }
 
 void QtPhoneCall::videoFrameReceivedEvent(piximage * remoteVideoFrame, piximage * localVideoFrame) {
+
+	QMutexLocker locker(_mutex);
+
+	//FIXME hack to prevent a crash
+	if (_closed) {
+		return;
+	}
+
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
 #ifdef XV_HWACCEL
 	if (!_videoWindow) {

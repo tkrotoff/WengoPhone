@@ -86,9 +86,9 @@ void CPhoneCall::stateChangedEventHandlerThreadSafe(EnumPhoneCallState::PhoneCal
 	}
 
 	if (state == EnumPhoneCallState::PhoneCallStateClosed) {
-		_phoneCall.videoFrameReceivedEvent -= boost::bind(&CPhoneCall::videoFrameReceivedEventHandler, this, _1, _2, _3);
-		_pPhoneCall->close();
-		_pPhoneCall = NULL;
+		// the peer has closed the call
+		unbindAndClose();
+		////
 	} else {
 		_pPhoneCall->stateChangedEvent(state);
 	}
@@ -107,13 +107,15 @@ void CPhoneCall::videoFrameReceivedEventHandlerThreadSafe(piximage * remoteVideo
 }
 
 void CPhoneCall::hangUp() {
-	_phoneCall.videoFrameReceivedEvent -= boost::bind(&CPhoneCall::videoFrameReceivedEventHandler, this, _1, _2, _3);
-	_pPhoneCall->close();
-	_pPhoneCall = NULL;
+	// here we're called from the presentation thread
+	unbindAndClose();
+	////
 
+	// let's go to the model thread
 	typedef ThreadEvent0<void ()> MyThreadEvent;
 	MyThreadEvent * event = new MyThreadEvent(boost::bind(&CPhoneCall::hangUpThreadSafe, this));
 	WengoPhone::getInstance().postEvent(event);
+	////
 }
 
 void CPhoneCall::hangUpThreadSafe() {
@@ -172,4 +174,9 @@ EnumPhoneCallState::PhoneCallState CPhoneCall::getState() const {
 	return _phoneCall.getState();
 }
 
-
+void CPhoneCall::unbindAndClose() {
+	_phoneCall.videoFrameReceivedEvent -= boost::bind(&CPhoneCall::videoFrameReceivedEventHandler, this, _1, _2, _3);
+	_phoneCall.stateChangedEvent -= boost::bind(&CPhoneCall::stateChangedEventHandler, this, _1, _2);
+	_pPhoneCall->close();
+	_pPhoneCall = NULL;
+}

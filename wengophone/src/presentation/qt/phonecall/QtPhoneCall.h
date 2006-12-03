@@ -36,6 +36,7 @@ class QMenu;
 class QAction;
 class QTimer;
 class QWidget;
+class QMutex;
 namespace Ui { class PhoneCallWidget; }
 
 /**
@@ -161,6 +162,9 @@ private:
 
 	//FIXME hack in order to prevent a crash
 	bool _closed;
+
+	/** protect videoFrameReceivedEvent */
+	QMutex * _mutex;
 
 	QtCallToaster * _callToaster;
 };
