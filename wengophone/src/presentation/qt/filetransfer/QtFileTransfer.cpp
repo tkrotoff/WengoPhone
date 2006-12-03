@@ -113,7 +113,7 @@ void QtFileTransfer::newReceiveFileSessionCreatedEventHandlerSlot(ReceiveFileSes
 		// here we're sure to have a download folder,
 		// but we must check if the file already exists.
 		QFile file(downloadFolder + QString(QDir::separator()) + filename);
-		if (file.exists() {
+		if (file.exists()) {
 
 			if (QMessageBox::question(_qtFileTransferWidget, tr("Overwrite File?"),
 					tr("A file called %1 already exists."
