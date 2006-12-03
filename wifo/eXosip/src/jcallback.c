@@ -262,8 +262,20 @@ int cb_udp_snd_message(osip_transaction_t *tr, osip_message_t *sip, char *host,
   freeaddrinfo (addrinfo);
 
   if (o_proxy)
+  {
     osip_route_free(o_proxy);
+	o_proxy = 0;
+  }
 
+	/* Check if the first route header is the same as the destination address */
+	/* Remove it just before creating the SIP buffer to send, and then add it */
+	/* again to avoid non desired behavior in eXosip */
+	osip_message_get_route(sip, 0, &o_proxy);
+	if (o_proxy && o_proxy->url && (strcmp(o_proxy->url->host, host) == 0))
+	{
+  		osip_list_remove_element(sip->routes, o_proxy);
+	}
+  
   /* sVoIP integration */
   // SPIKE_SRTP: Check if a outgoing packet has to be processed by sVoIP
   if (tr)
@@ -297,6 +309,12 @@ int cb_udp_snd_message(osip_transaction_t *tr, osip_message_t *sip, char *host,
   /* sVoIP */
 
   i = osip_message_to_str(sip, &message, &length);
+
+	//JULIEN: re-add the previously removed route header
+	if (o_proxy)
+	{
+		osip_list_add(sip->routes, o_proxy, 0);
+	}
 
   if (i!=0 || length<=0) {
     return -1;

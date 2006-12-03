@@ -2338,7 +2338,7 @@ ph_avcodec_init()
 #ifdef PHAPI_VIDEO_SUPPORT
 	avcodec_init();
 	avcodec_register_all();
-	phcfg.video_config.video_line_configuration = PHAPI_VIDEO_LINE_128KBPS;
+	//phcfg.video_config.video_line_configuration = PHAPI_VIDEO_LINE_128KBPS;
 #endif
 }
 

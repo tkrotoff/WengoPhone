@@ -1912,7 +1912,8 @@ int eXosip_on_hold_call  (int jid)
   sdp_message_t *sdp;
   char *body;
   char *size;
-
+  char new_sess_version[64];
+	
   if (jid>0)
     {
       eXosip_call_dialog_find(jid, &jc, &jd);
@@ -1934,6 +1935,13 @@ int eXosip_on_hold_call  (int jid)
   sdp = eXosip_get_local_sdp_info(transaction);
   if (sdp==NULL)
     return -1;
+
+  // JULIEN : increment the sdp session id
+  memset(new_sess_version, 0, sizeof(new_sess_version));
+  snprintf(new_sess_version, sizeof(new_sess_version), "%i", atoi(sdp->o_sess_version) + 1);
+  osip_free(sdp->o_sess_version);
+  sdp->o_sess_version = osip_strdup(new_sess_version);
+
   i = osip_negotiation_sdp_message_put_on_hold(sdp);
   if (i!=0)
     {
@@ -2097,6 +2105,7 @@ int eXosip_off_hold_call (int jid, char *rtp_ip, int port)
   sdp_message_t *sdp;
   char *body;
   char *size;
+  char new_sess_version[64];
 
   if (jid>0)
     {
@@ -2119,6 +2128,13 @@ int eXosip_off_hold_call (int jid, char *rtp_ip, int port)
   sdp = eXosip_get_local_sdp_info(transaction);
   if (sdp==NULL)
     return -1;
+
+  // JULIEN : increment the sdp session id
+  memset(new_sess_version, 0, sizeof(new_sess_version));
+  snprintf(new_sess_version, sizeof(new_sess_version), "%i", atoi(sdp->o_sess_version) + 1);
+  osip_free(sdp->o_sess_version);
+  sdp->o_sess_version = osip_strdup(new_sess_version);
+
   i = osip_negotiation_sdp_message_put_off_hold(sdp);
   if (i!=0)
     {
@@ -2928,174 +2944,174 @@ eXosip_reg_find_by_local_contact(const char * local_contact) {
 
 int eXosip_register      (int rid, int registration_period)
 {
-  osip_transaction_t *transaction;
-  osip_event_t *sipevent;
-  osip_message_t *reg;
-  eXosip_reg_t *jr;
-  int i;
-  int prev_period;
+	osip_transaction_t *transaction;
+	osip_event_t *sipevent;
+	osip_message_t *reg;
+	eXosip_reg_t *jr;
+	int i;
+	int prev_period;
 
-  jr = eXosip_reg_find(rid);
-  if (jr==NULL)
-    {
-      /* fprintf(stderr, "eXosip: no registration info saved!\n"); */
-      return -1;
-    }
-
-  prev_period = jr->r_reg_period;
-
-  if (registration_period != -1)
-    jr->r_reg_period = registration_period;
-  if (jr->r_reg_period==0)
-    {} /* unregistration */
-  else if (jr->r_reg_period>3600)
-    jr->r_reg_period = 3600;
-  else if (jr->r_reg_period<200) /* too low */
-    jr->r_reg_period = 200;
-
-  /* */
-  reg = NULL;
-  if (jr->r_last_tr!=NULL)
-    {
-      if (jr->r_last_tr->state!=NICT_TERMINATED
-	  && jr->r_last_tr->state!=NICT_COMPLETED)
+	jr = eXosip_reg_find(rid);
+	if (jr==NULL)
 	{
-	  /* fprintf(stderr, "eXosip: a registration is already pending!\n"); */
-	  return -1;
-	}
-      else
-	{
-	  osip_message_t *last_response = 0;
-
-	  reg = jr->r_last_tr->orig_request;
-	  last_response = jr->r_last_tr->last_response;
-	  
-
-	  
-	  
-	  jr->r_last_tr->orig_request = NULL;
-	  jr->r_last_tr->last_response = NULL;
-
-	  eXosip_transaction_free(jr->r_last_tr);
-	  jr->r_last_tr = NULL;
-
-
-	  if (last_response == NULL || ((jr->r_last_status == 401 || jr->r_last_status == 407) && (jr->r_last_status == last_response->status_code)))
-	    {
-	      /* it seeems that we're not getting any answer or in infinite loop specifying wrong credentials */
-	      osip_message_free(reg);
-	      if (last_response!=NULL)
-		osip_message_free(last_response);
-	      return -1;
-	    }
-
-	  jr->r_last_status = last_response->status_code;
-
-
-	  /* modify the REGISTER request */
-	  {
-	    int osip_cseq_num = 0;
-	    int length = 0;
-
-	    osip_authorization_t *aut;
-	    osip_proxy_authorization_t *proxy_aut;
-	    
-	    
-	    if ( ! reg->cseq->number ) {
-	      fprintf(stderr, "%s,%d: reg->cseq->number is NULL", __FILE__, __LINE__);
-	      return -1;
-	    }
-
-	    osip_cseq_num = osip_atoi(reg->cseq->number);
-	    length   = strlen(reg->cseq->number);
-
-
-	    aut = (osip_authorization_t *)osip_list_get(reg->authorizations, 0);
-	    while (aut!=NULL)
-	      {
-		osip_list_remove(reg->authorizations, 0);
-		osip_authorization_free(aut);
-		aut = (osip_authorization_t *)osip_list_get(reg->authorizations, 0);
-	      }
-
-	    proxy_aut = (osip_proxy_authorization_t*)osip_list_get(reg->proxy_authorizations, 0);
-	    while (proxy_aut!=NULL)
-	      {
-		osip_list_remove(reg->proxy_authorizations, 0);
-		osip_proxy_authorization_free(proxy_aut);
-		proxy_aut = (osip_proxy_authorization_t*)osip_list_get(reg->proxy_authorizations, 0);
-	      }
-
-
-	    if (-1 == eXosip_update_top_via(reg))
-	      {
-		osip_message_free(reg);
+		/* fprintf(stderr, "eXosip: no registration info saved!\n"); */
 		return -1;
-	      }
-
-	    osip_cseq_num++;
-	    jr->r_seq = osip_cseq_num;
-	    osip_free(reg->cseq->number);
-	    reg->cseq->number = (char*)osip_malloc(length+2); /* +2 like for 9 to 10 */
-	    sprintf(reg->cseq->number, "%i", osip_cseq_num);
-
-	    {
-	      osip_header_t *exp;
-	      osip_message_header_get_byname(reg, "expires", 0, &exp);
-	      osip_free(exp->hvalue);
-	      exp->hvalue = (char*)osip_malloc(10);
-	      snprintf(exp->hvalue, 9, "%i", jr->r_reg_period);
-	    }
-
-	    osip_message_force_update(reg);
-	  }
-
-	  if (last_response!=NULL)
-	    {
-	      if (MSG_IS_STATUS_4XX(last_response))
-		{
-		  eXosip_add_authentication_information(reg, last_response);
-		}
-	      osip_message_free(last_response);
-	    }
 	}
-    }
-  if (reg==NULL)
-    {
-      i = generating_register(&reg, jr->r_aor, jr->r_registrar, jr->r_contact, jr->r_reg_period, jr->r_route, ++jr->r_seq);
-      if (i!=0)
+
+	prev_period = jr->r_reg_period;
+
+	if (registration_period != -1)
+		jr->r_reg_period = registration_period;
+	if (jr->r_reg_period==0)
+	{} /* unregistration */
+	else if (jr->r_reg_period>3600)
+		jr->r_reg_period = 3600;
+	else if (jr->r_reg_period<200) /* too low */
+		jr->r_reg_period = 200;
+
+	/* */
+	reg = NULL;
+	if (jr->r_last_tr!=NULL)
 	{
-	  /* fprintf(stderr, "eXosip: cannot register (cannot build REGISTER)! "); */
-	  return -2;
+		if (jr->r_last_tr->state!=NICT_TERMINATED
+			&& jr->r_last_tr->state!=NICT_COMPLETED)
+		{
+			/* fprintf(stderr, "eXosip: a registration is already pending!\n"); */
+			return -1;
+		}
+		else
+		{
+			osip_message_t *last_response = 0;
+
+			reg = jr->r_last_tr->orig_request;
+			last_response = jr->r_last_tr->last_response;
+
+			jr->r_last_tr->orig_request = NULL;
+			jr->r_last_tr->last_response = NULL;
+
+			eXosip_transaction_free(jr->r_last_tr);
+			jr->r_last_tr = NULL;
+
+
+			if (last_response == NULL || 
+				((jr->r_last_status == 401 || jr->r_last_status == 407) && (jr->r_last_status == last_response->status_code)))
+			{
+				/* it seeems that we're not getting any answer or in infinite loop specifying wrong credentials */
+				osip_message_free(reg);
+				if (last_response!=NULL)
+					osip_message_free(last_response);
+				return -1;
+			}
+
+			jr->r_last_status = last_response->status_code;
+
+			/* modify the REGISTER request */
+			{
+				int osip_cseq_num = 0;
+				int length = 0;
+
+				osip_authorization_t *aut;
+				osip_proxy_authorization_t *proxy_aut;
+
+
+				if ( ! reg->cseq->number ) {
+					fprintf(stderr, "%s,%d: reg->cseq->number is NULL", __FILE__, __LINE__);
+					return -1;
+				}
+
+				osip_cseq_num = osip_atoi(reg->cseq->number);
+				length   = strlen(reg->cseq->number);
+
+				aut = (osip_authorization_t *)osip_list_get(reg->authorizations, 0);
+				while (aut!=NULL)
+				{
+					osip_list_remove(reg->authorizations, 0);
+					osip_authorization_free(aut);
+					aut = (osip_authorization_t *)osip_list_get(reg->authorizations, 0);
+				}
+
+				proxy_aut = (osip_proxy_authorization_t*)osip_list_get(reg->proxy_authorizations, 0);
+				while (proxy_aut!=NULL)
+				{
+					osip_list_remove(reg->proxy_authorizations, 0);
+					osip_proxy_authorization_free(proxy_aut);
+					proxy_aut = (osip_proxy_authorization_t*)osip_list_get(reg->proxy_authorizations, 0);
+				}
+
+				if (-1 == eXosip_update_top_via(reg))
+				{
+					osip_message_free(reg);
+					return -1;
+				}
+
+				osip_cseq_num++;
+				jr->r_seq = osip_cseq_num;
+				osip_free(reg->cseq->number);
+				reg->cseq->number = (char*)osip_malloc(length+2); /* +2 like for 9 to 10 */
+				sprintf(reg->cseq->number, "%i", osip_cseq_num);
+
+				{
+					osip_header_t *exp;
+					osip_message_header_get_byname(reg, "expires", 0, &exp);
+					osip_free(exp->hvalue);
+					exp->hvalue = (char*)osip_malloc(10);
+					snprintf(exp->hvalue, 9, "%i", jr->r_reg_period);
+				}
+
+				osip_message_force_update(reg);
+			}
+
+			if (last_response!=NULL)
+			{
+				int ret = 0;
+
+				if (MSG_IS_STATUS_4XX(last_response))
+				{
+					ret = eXosip_add_authentication_information(reg, last_response);
+				}
+				osip_message_free(last_response);
+				if (ret < 0){
+					return -1;
+				}
+			}
+		}
 	}
-      
+	if (reg==NULL)
+	{
+		i = generating_register(&reg, jr->r_aor, jr->r_registrar, 
+			jr->r_contact, jr->r_reg_period, jr->r_route, ++jr->r_seq);
+		if (i!=0)
+		{
+			/* fprintf(stderr, "eXosip: cannot register (cannot build REGISTER)! "); */
+			return -2;
+		}
 
-      /* generate_request_out_of_dialog  don't set the callid number fro register request */
-      osip_call_id_set_number(reg->call_id, osip_strdup(jr->r_cid));
-    }
+		/* generate_request_out_of_dialog  don't set the callid number fro register request */
+		osip_call_id_set_number(reg->call_id, osip_strdup(jr->r_cid));
+	}
 
-  i = osip_transaction_init(&transaction,
-		       NICT,
-		       eXosip.j_osip,
-		       reg);
-  if (i!=0)
-    {
-      /* TODO: release the j_call.. */
+	i = osip_transaction_init(&transaction,
+		NICT,
+		eXosip.j_osip,
+		reg);
+	if (i!=0)
+	{
+		/* TODO: release the j_call.. */
 
-      osip_message_free(reg);
-      return -2;
-    }
+		osip_message_free(reg);
+		return -2;
+	}
 
-  jr->r_last_tr = transaction;
+	jr->r_last_tr = transaction;
 
-  /* send REGISTER */
-  sipevent = osip_new_outgoing_sipmessage(reg);
-  sipevent->transactionid =  transaction->transactionid;
-  osip_message_force_update(reg);
-  
-  osip_transaction_add_event(transaction, sipevent);
-  __eXosip_wakeup();
-  return 0;
+	/* send REGISTER */
+	sipevent = osip_new_outgoing_sipmessage(reg);
+	sipevent->transactionid =  transaction->transactionid;
+	osip_message_force_update(reg);
+
+	osip_transaction_add_event(transaction, sipevent);
+	__eXosip_wakeup();
+	return 0;
 }
 
 int
