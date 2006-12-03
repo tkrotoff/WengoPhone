@@ -117,7 +117,7 @@ void QtFileTransferItem::updateButtonsPausedByPeer() {
 	_ui->cancelOpenButton->setText(tr("Cancel"));
 	_ui->removePauseResumeButton->setText(tr("Pause"));
 	_ui->removePauseResumeButton->setEnabled(false);
-	_ui->cancelOpenButton->setEnabled(true);
+	_ui->cancelOpenButton->setEnabled(false);
 }
 
 void QtFileTransferItem::updateButtonsInProgress() {

@@ -801,12 +801,10 @@ void PhApiCallbacks::onNotify(OWPL_NOTIFICATION_INFO * info) {
 	switch(info->event) {
 		//A buddy presence
 		case NOTIFICATION_PRESENCE :
-			LOG_DEBUG("buddy=" + buddy + " notification=presence content=" + std::string(info->szXmlContent));
 
 			basicText = docHandle.FirstChild("presence").FirstChild("tuple").FirstChild("status").FirstChild("basic").FirstChild().Text();
 			if (basicText) {
 				std::string basic = basicText->Value();
-				LOG_DEBUG("basic=" + basic);
 
 				//buddy is offline
 				if (String(basic).toLowerCase() == "closed") {
@@ -821,7 +819,6 @@ void PhApiCallbacks::onNotify(OWPL_NOTIFICATION_INFO * info) {
 					}
 					if (noteText) {
 						std::string note = noteText->Value();
-						LOG_DEBUG("note=" + note);
 						if (note == PhApiWrapper::PresenceStateOnline) {
 							p->presenceStateChangedEvent(*p, EnumPresenceState::PresenceStateOnline, note, buddy);
 						} else if (note == PhApiWrapper::PresenceStateAway) {

@@ -446,7 +446,7 @@ void QtChatWindow::messageReceivedSlot(IMChatSession * sender) {
 							_tabWidget->setBlinkingTab(i);
 						}
 					}
-					return;
+					break;
 				}
 			}
 			imChatMessageListIterator++;

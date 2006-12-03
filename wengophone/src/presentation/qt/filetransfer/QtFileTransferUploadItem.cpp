@@ -78,6 +78,12 @@ void QtFileTransferUploadItem::fileTransferEventHandler(
 void QtFileTransferUploadItem::moduleFinishedEventHandler(CoIpModule & sender) {
 	LOG_DEBUG("module sendFileSession has finished, delete it");
 
+	// prevent multiple calls
+	if (!_sendFileSession) {
+		return;
+	}
+	////
+
 	// unbind to fileSession events
 	_sendFileSession->fileTransferProgressionEvent -=
 		boost::bind(&QtFileTransferUploadItem::fileTransferProgressionEventHandler, this, _1, _2, _3, _4);
