@@ -149,11 +149,6 @@ public:
 	void currentUserProfileReleased();
 
 	/**
-	 * Saves the last used UserProfile in Config.
-	 */
-	void save();
-
-	/**
 	 * Gets a UserProfile.
 	 *
 	 * Used by model and control. Must not be used by presentation

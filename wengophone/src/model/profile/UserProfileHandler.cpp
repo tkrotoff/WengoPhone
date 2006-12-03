@@ -22,6 +22,7 @@
 #include <model/account/wengo/WengoAccount.h>
 #include <model/config/ConfigManager.h>
 #include <model/config/Config.h>
+#include <model/contactlist/ContactList.h>
 #include <model/profile/UserProfile.h>
 #include <model/profile/UserProfileFileStorage.h>
 #include <model/webservices/url/WsUrl.h>
@@ -52,13 +53,6 @@ UserProfileHandler::~UserProfileHandler() {
 		WsUrl::setWengoAccount(NULL);
 
 		OWSAFE_DELETE(_currentUserProfile);
-	}
-}
-
-void UserProfileHandler::save() {
-	if (_currentUserProfile) {
-		saveUserProfile(*_currentUserProfile);
-		setLastUsedUserProfile(*_currentUserProfile);
 	}
 }
 
