@@ -41,8 +41,8 @@
 #include <cstdio>
 
 static const std::string LOG_FILE = "log-main.txt";
-static const std::string FTP_SERVER = "ftp.wengo.fr";
-static const std::string FTP_PATH = "wengophone_ng";
+static const std::string FTP_SERVER = "ftp.openwengo.com";
+static const std::string FTP_PATH = ".";
 
 QtCrashReport::QtCrashReport(const std::string & dumpfile, const std::string & applicationName,
 			const std::string & lang, const std::string & info)

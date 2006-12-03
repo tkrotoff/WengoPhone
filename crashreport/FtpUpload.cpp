@@ -25,7 +25,7 @@
 
 #include <sys/stat.h>
 
-#define WENGO_FTP "ftp.wengo.fr"
+#define WENGO_FTP "ftp.openwengo.com"
 #define WENGO_USER "wengophone"
 #define WENGO_PASSWD "coredump"
 
