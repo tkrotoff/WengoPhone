@@ -516,6 +516,13 @@ void QtChatWindow::addChatWidgetTab(IMChatSession * imChatSession, const IMConta
 
 		statusChangedSlot(QString::fromStdString(cContactList.findContactThatOwns(from)));
 
+#ifdef OS_WINDOWS
+		// work around a Qt bug under Windows:
+		// currentChanged is not emitted when removeTab is called
+		activeTabChanged(_tabWidget->currentIndex());
+		////
+#endif
+
 		_chatWidget->setNickName(nickName);
 
 		// Adding probably missed message
