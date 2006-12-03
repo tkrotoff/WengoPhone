@@ -76,7 +76,7 @@ void QtSoftUpdate::updateWengoPhoneEventHandler(const std::string & downloadUrl,
 	postEvent(event);
 }
 
-void QtSoftUpdate::updateWengoPhoneEventHandlerThreadSafe(const std::string & downloadUrl,
+void QtSoftUpdate::updateWengoPhoneEventHandlerThreadSafe(const std::string & downloadUrl,	
 				unsigned long long buildId,
 				const std::string & version,
 				unsigned fileSize) {
@@ -145,6 +145,7 @@ void QtSoftUpdate::downloadFinishedEventHandlerThreadSafe(HttpRequest::Error err
 
 		launchUpdateProcess();
 	} else {
+		disconnect(_softUpdateWindow, SIGNAL(rejected()), this, SLOT(abortDownload()));
 		_softUpdateWindow->reject();
 	}
 }
