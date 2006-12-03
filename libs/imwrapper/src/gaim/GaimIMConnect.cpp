@@ -199,6 +199,9 @@ void GaimIMConnect::connect()
 		gaim_account_set_password(gAccount, _imAccount.getPassword().c_str());
 	}
 
+	// FIXME: must publish chosen status before connecting
+	gaim_account_set_status(gAccount, "available", TRUE, NULL);
+
 	gaim_account_set_enabled(gAccount, gaim_core_get_ui(), TRUE);
 }
 
