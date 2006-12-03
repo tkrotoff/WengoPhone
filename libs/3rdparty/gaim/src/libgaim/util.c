@@ -791,6 +791,10 @@ gaim_str_to_time(const char *timestamp, gboolean utc,
 				 * if we know the UTC offset already. */
 				t->tm_isdst = 0;
 			}
+			else if (utc)
+			{
+				t->tm_isdst = 0;
+			}
 
 			if (rest != NULL && *c != '\0')
 			{
@@ -2577,7 +2581,7 @@ gaim_running_kde(void)
 #endif
 }
 
-inline gboolean
+gboolean
 gaim_running_osx(void)
 {
 #if defined(__APPLE__)	
@@ -3315,11 +3319,9 @@ url_fetch_recv_cb(gpointer url_data, gint source, GaimInputCondition cond)
 		}
 	}
 
-	if(len <= 0) {
+	if(len < 0) {
 		if(errno == EAGAIN) {
 			return;
-		} else if(errno != ETIMEDOUT) {
-			got_eof = TRUE;
 		} else {
 			gaim_util_fetch_url_error(gfud, _("Error reading from %s: %s"),
 					gfud->website.address, strerror(errno));
@@ -3327,7 +3329,7 @@ url_fetch_recv_cb(gpointer url_data, gint source, GaimInputCondition cond)
 		}
 	}
 
-	if(got_eof) {
+	if((len == 0) || got_eof) {
 		gfud->webdata = g_realloc(gfud->webdata, gfud->len + 1);
 		gfud->webdata[gfud->len] = '\0';
 
@@ -3378,7 +3380,7 @@ url_fetch_connect_cb(gpointer url_data, gint source, const gchar *error_message)
 	if (source == -1)
 	{
 		gaim_util_fetch_url_error(gfud, _("Unable to connect to %s: %s"),
-				gfud->website.address, error_message);
+				(gfud->website.address ? gfud->website.address : ""), error_message);
 		return;
 	}
 
@@ -3399,9 +3401,10 @@ url_fetch_connect_cb(gpointer url_data, gint source, const gchar *error_message)
 				"Accept: */*\r\n"
 				"Host: %s\r\n\r\n",
 				(gfud->full ? "" : "/"),
-				(gfud->full ? gfud->url : gfud->website.page),
+				(gfud->full ? (gfud->url ? gfud->url : "") : (gfud->website.page ? gfud->website.page : "")),
 				(gfud->http11 ? "1.1" : "1.0"),
-				gfud->user_agent, gfud->website.address);
+				(gfud->user_agent ? gfud->user_agent : ""),
+				(gfud->website.address ? gfud->website.address : ""));
 		} else {
 			gfud->request = g_strdup_printf(
 				"GET %s%s HTTP/%s\r\n"
@@ -3409,9 +3412,9 @@ url_fetch_connect_cb(gpointer url_data, gint source, const gchar *error_message)
 				"Accept: */*\r\n"
 				"Host: %s\r\n\r\n",
 				(gfud->full ? "" : "/"),
-				(gfud->full ? gfud->url : gfud->website.page),
+				(gfud->full ? (gfud->url ? gfud->url : "") : (gfud->website.page ? gfud->website.page : "")),
 				(gfud->http11 ? "1.1" : "1.0"),
-				gfud->website.address);
+				(gfud->website.address ? gfud->website.address : ""));
 		}
 	}
 
