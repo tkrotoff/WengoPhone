@@ -1,4 +1,4 @@
-ow_create_static_library(portaudio)
+ow_create_shared_library(portaudio)
 
 ow_add_public_include_dirs(
 	${CMAKE_CURRENT_SOURCE_DIR}/pa_common
@@ -29,6 +29,7 @@ if (WIN32)
 		pa_win/pa_win_util.c
 		pa_win/pa_win_hostapis.c
 		pa_win/pa_x86_plain_converters.c
+		portaudio.def
 	)
 
 	ow_add_private_definitions(
@@ -76,7 +77,7 @@ if (UNIX)
 		ow_add_private_definitions(
 			-DPA_USE_OSS
 		)
-	else (PORTAUDIO_OSS_SUPPORT)	
+	else (PORTAUDIO_OSS_SUPPORT)
 
 	if (PORTAUDIO_ALSA_SUPPORT)
 		ow_add_sources(
