@@ -23,12 +23,12 @@ macro (OW_CREATE_BINARY)
 			ow_post_build_copy_file(${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.pdb .)
 		else (WIN32)
 
-		if (APPLE)
-			ow_post_build_copy_file(${CMAKE_CURRENT_BINARY_DIR}/lib${PROJECT_NAME}.dylib .)
-		else (APPLE)
-
 		if (UNIX)
-			ow_post_build_copy_file(${CMAKE_CURRENT_BINARY_DIR}/lib${PROJECT_NAME}.so .)
+			if (APPLE)
+				ow_post_build_copy_file(${CMAKE_CURRENT_BINARY_DIR}/lib${PROJECT_NAME}.dylib .)
+			else (APPLE)
+				ow_post_build_copy_file(${CMAKE_CURRENT_BINARY_DIR}/lib${PROJECT_NAME}.so .)
+			endif (APPLE)
 		endif (UNIX)
 
 		endif (WIN32)
@@ -48,10 +48,6 @@ macro (OW_CREATE_BINARY)
 			ow_post_build_copy_file(${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.dll .)
 			ow_post_build_copy_file(${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}.pdb .)
 		else (WIN32)
-
-		if (APPLE)
-			ow_post_build_copy_file(${CMAKE_CURRENT_BINARY_DIR}/lib${PROJECT_NAME}.dylib .)
-		else (APPLE)
 
 		if (UNIX)
 			ow_post_build_copy_file(${CMAKE_CURRENT_BINARY_DIR}/lib${PROJECT_NAME}.so .)

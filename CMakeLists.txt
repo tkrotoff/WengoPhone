@@ -38,6 +38,12 @@ string(REPLACE ":" "-" SVN_REVISION ${SVN_REVISION})
 
 include(cmake/Modules/owbuild/OWInitializationInfo.cmake)
 
+if (NOT APPLE)
+	subdirs(
+		libs/3rdparty/portaudio
+	)
+endif (NOT APPLE)
+
 subdirs(
 	libs/3rdparty/boost
 	libs/3rdparty/qt4
@@ -46,7 +52,6 @@ subdirs(
 	libs/3rdparty/alsa
 	libs/3rdparty/arts
 	libs/3rdparty/esd
-	libs/3rdparty/portaudio
 	libs/3rdparty/ffmpeg
 	libs/3rdparty/tinyxml
 	libs/3rdparty/libxml

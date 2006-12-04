@@ -1,4 +1,4 @@
-if (UNIX AND NOT APPLE)
+if (UNIX)
 
 	if (NOT XML2_FOUND)
 		find_package(XML2 REQUIRED)
@@ -10,4 +10,4 @@ if (UNIX AND NOT APPLE)
 		XML2
 	)
 
-endif (UNIX AND NOT APPLE)
+endif (UNIX)
