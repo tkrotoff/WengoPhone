@@ -70,8 +70,8 @@ env.WengoAddDefines(defines)
 
 
 if WengoGetConsoleArgument('enable-webcam-dll'):
-	defines['WEBCAM_DLL'] = '1'
-	defines['WEBCAM_BUILDING_DLL'] = '1'
+	defines['OWWEBCAM_DLL'] = '1'
+	defines['BUILD_OWWEBCAM_DLL'] = '1'
 	env.WengoAddDefines(defines)
 	env.WengoSharedLibrary('webcam', sources, headers)
 else:
