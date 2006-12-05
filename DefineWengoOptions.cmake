@@ -13,6 +13,8 @@ option(PORTAUDIO_DIRECTSOUND_SUPPORT "Build PortAudio with DirectSound support" 
 option(PORTAUDIO_OSS_SUPPORT "Build PortAudio with OSS support" ON)
 option(PORTAUDIO_ALSA_SUPPORT "Build PortAudio with ALSA support" OFF)
 
+option(OWSOUND_PORTAUDIO_SUPPORT "Build owsound with PortAudio support" ON)
+
 option(PHAPI_VIDEO_SUPPORT "Build phApi with video support" ON)
 option(PHAPI_SAMPLERATE_SUPPORT "Build phApi with libsamplerate support" OFF)
 option(PHAPI_AUDIO_ALSA_SUPPORT "Build phApi with ALSA support" ON)

@@ -131,7 +131,7 @@ if (PHAPI_HTTPTUNNEL_SUPPORT)
 	)
 endif (PHAPI_HTTPTUNNEL_SUPPORT)
 
-#if (PHAPI_VIDEO_SUPPORT)
+if (PHAPI_VIDEO_SUPPORT)
 	ow_use_private_libraries(
 		owwebcam
 	)
@@ -149,7 +149,7 @@ endif (PHAPI_HTTPTUNNEL_SUPPORT)
 		phmedia-video-bwcontrol.c
 		phcodec-avcodec-wrapper.c
 	)
-#endif (PHAPI_VIDEO_SUPPORT)
+endif (PHAPI_VIDEO_SUPPORT)
 
 if (WIN32)
 	ow_add_private_libraries(

@@ -55,22 +55,21 @@ if (UNIX AND NOT WIN32)
 	endif (APPLE)
 endif (UNIX AND NOT WIN32)
 
-if (WITH_PORTAUDIO AND WIN32)
+if (OWSOUND_PORTAUDIO_SUPPORT AND WIN32)
 	ow_add_sources(
 		src/portaudio/AudioDeviceManager.cpp
 		src/portaudio/PAAudioDevice.cpp
 	)
-else (WITH_PORTAUDIO AND WIN32)
+	ow_use_private_libraries(
+		portaudio
+	)
+else (OWSOUND_PORTAUDIO_SUPPORT AND WIN32)
 	if (WIN32)
-		ow_use_private_libraries(
-			portaudio
-		)
-
 		ow_add_sources(
 			src/win32/AudioDeviceManager.cpp
 		)
 	endif (WIN32)
-endif (WITH_PORTAUDIO AND WIN32)
+endif (OWSOUND_PORTAUDIO_SUPPORT AND WIN32)
 
 if (APPLE)
 	ow_use_public_frameworks(
