@@ -435,6 +435,10 @@ if (APPLE)
 		Cocoa
 		Carbon
 	)
+
+	ow_use_private_libraries(
+		glib2 #comes from gaimimwrapper <- gaim
+	)
 endif (APPLE)
 
 ow_create_binary()
