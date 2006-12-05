@@ -1,2 +1,2 @@
 libavutil.a and libavcodec.a have been compiled using the XCode project.
-See ffmpeg.xcodeproj/COMPILE_UB_FFMPEG_FOR_MACOSX for more information.
+See COMPILE_UB_FFMPEG_FOR_MACOSX for more information.

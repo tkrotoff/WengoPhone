@@ -62,20 +62,20 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		820899C20B248B49005CE85B /* COMPILE_UB_FFMPEG_FOR_MACOSX */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = COMPILE_UB_FFMPEG_FOR_MACOSX; sourceTree = "<group>"; };
 		82D40AAD0ADFE3860016E4E8 /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
 		82D40B190AE002000016E4E8 /* config.mak */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = config.mak; sourceTree = "<group>"; };
 		82D40B610AE005670016E4E8 /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
 		82D40B620AE005670016E4E8 /* config.mak */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = config.mak; sourceTree = "<group>"; };
-		82D40BC90AE00B870016E4E8 /* COMPILE_FFMPEG */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = COMPILE_FFMPEG; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
 		82D408DD0ADFD8020016E4E8 = {
 			isa = PBXGroup;
 			children = (
+				820899C20B248B49005CE85B /* COMPILE_UB_FFMPEG_FOR_MACOSX */,
 				82D40A4C0ADFDB090016E4E8 /* config */,
 				82D40A140ADFD8ED0016E4E8 /* Products */,
-				82D40BC90AE00B870016E4E8 /* COMPILE_FFMPEG */,
 			);
 			sourceTree = "<group>";
 		};
@@ -151,7 +151,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "ARCH=ppc\nBUILD_ARCH=build/$ARCH\n\nmake clean\n\ncp $PROJECT_DIR/config/mac/$ARCH/{config.h,config.mak} $PROJECT_DIR/\n\nmake -C $PROJECT_DIR/libavutil \"SRC_PATH=$PROJECT_DIR\"\nmake -C $PROJECT_DIR/libavcodec \"SRC_PATH=$PROJECT_DIR\"\n\nmkdir -p $BUILD_ARCH\n\nmv $PROJECT_DIR/libavutil/libavutil.a $BUILD_ARCH\nmv $PROJECT_DIR/libavcodec/libavcodec.a $BUILD_ARCH\n\necho \"Done\"\nexit 0\n";
+			shellScript = "ARCH=ppc\nBUILD_ARCH=build/$ARCH\n\nmake clean\n\ncp $PROJECT_DIR/config/mac/$ARCH/config.{h,mak} $PROJECT_DIR/\n\nmake -C $PROJECT_DIR/libavutil \"SRC_PATH=$PROJECT_DIR\" \"CC=cc -arch $ARCH\"\nmake -C $PROJECT_DIR/libavcodec \"SRC_PATH=$PROJECT_DIR\" \"CC=cc -arch $ARCH\"\n\nmkdir -p $BUILD_ARCH\n\nmv $PROJECT_DIR/libavutil/libavutil.a $BUILD_ARCH\nmv $PROJECT_DIR/libavcodec/libavcodec.a $BUILD_ARCH\n\necho \"Done\"\nexit 0\n";
 		};
 		82D40AEE0ADFEFDB0016E4E8 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -164,7 +164,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "ARCH=i386\nBUILD_ARCH=build/$ARCH\n\nmake clean\n\ncp $PROJECT_DIR/config/mac/$ARCH/{config.h,config.mak} $PROJECT_DIR/\n\nmake -C $PROJECT_DIR/libavutil \"SRC_PATH=$PROJECT_DIR\"\nmake -C $PROJECT_DIR/libavcodec \"SRC_PATH=$PROJECT_DIR\"\n\nmkdir -p $BUILD_ARCH\n\nmv $PROJECT_DIR/libavutil/libavutil.a $BUILD_ARCH\nmv $PROJECT_DIR/libavcodec/libavcodec.a $BUILD_ARCH\n\necho libavutil.a > $PROJECT_DIR/libnames.tmp\necho libavcodec.a >> $PROJECT_DIR/libnames.tmp\n\necho \"Done\"\nexit 0\n";
+			shellScript = "ARCH=i386\nBUILD_ARCH=build/$ARCH\n\nmake clean\n\ncp $PROJECT_DIR/config/mac/$ARCH/config.{h,mak} $PROJECT_DIR/\n\nmake -C $PROJECT_DIR/libavutil \"SRC_PATH=$PROJECT_DIR\" \"CC=cc -arch $ARCH\"\nmake -C $PROJECT_DIR/libavcodec \"SRC_PATH=$PROJECT_DIR\" \"CC=cc -arch $ARCH\"\n\nmkdir -p $BUILD_ARCH\n\nmv $PROJECT_DIR/libavutil/libavutil.a $BUILD_ARCH\nmv $PROJECT_DIR/libavcodec/libavcodec.a $BUILD_ARCH\n\necho libavutil.a > $PROJECT_DIR/libnames.tmp\necho libavcodec.a >> $PROJECT_DIR/libnames.tmp\n\necho \"Done\"\nexit 0\n";
 		};
 		82D40B090ADFF0C10016E4E8 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
