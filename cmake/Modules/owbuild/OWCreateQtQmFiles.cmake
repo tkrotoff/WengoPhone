@@ -57,7 +57,7 @@ macro (OW_CREATE_QT_QM_FILES qmFiles)
 		get_filename_component(basename ${tsFile} NAME_WE)
 
 		get_filename_component(qmFile
-			${BUILD_DIR}/${basename}.qm
+			${LOCALE_INSTALL_DIR}/${basename}.qm
 			ABSOLUTE
 		)
 

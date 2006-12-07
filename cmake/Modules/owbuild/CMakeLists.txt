@@ -1,3 +1,5 @@
+include(OWGetSubversionRevision)
+
 # Order matters
 include(OWGlobalVariables)
 
@@ -28,7 +30,6 @@ include(OWCreateProject)
 include(OWCreateQtQmFiles)
 include(OWCreateSharedLibrary)
 include(OWCreateStaticLibrary)
-include(OWGetSubversionRevision)
 include(OWPostBuildCopyFile)
 include(OWPrepareBinary)
 include(OWFinishBinary)

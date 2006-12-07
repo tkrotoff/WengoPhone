@@ -461,7 +461,7 @@ string(REPLACE " " "CMAKEBUGWITHSPACES" TMP_SOURCE_DIR ${CMAKE_SOURCE_DIR})
 # Passes variables to the install script
 install(
 	CODE "
-	set(INSTALL_PREFIX ${CMAKE_INSTALL_PREFIX})
+	set(INSTALL_PREFIX ${BUILD_DIR})
 	set(SOURCE_DIR ${TMP_SOURCE_DIR})
 	set(DATA_INSTALL_DIR ${DATA_INSTALL_DIR})
 	set(APPLICATION_NAME ${APPLICATION_NAME})
@@ -477,7 +477,7 @@ if (APPLE)
 			COMPILE_FLAGS "-x objective-c++"
 	)
 
-	## INSTALL for MAC OS X
+	## INSTALL for MacOSX
 	# The WengoPhone.app with executable
 	install(TARGETS ${PROJECT_NAME}
 		RUNTIME DESTINATION "WengoPhone.app/Contents/MacOS"
@@ -488,29 +488,26 @@ if (APPLE)
 		DESTINATION "WengoPhone.app/Contents/Resources"
 	)
 
-	## Copy needed libraries and frameworks
-	set(FRAMEWORK_DIR "WengoPhone.app/Contents/Frameworks")
-
 	# Copy Qt Frameworks
 	install(FILES $ENV{QTDIR}/lib/QtCore.framework/Versions/4.0/QtCore
-		DESTINATION ${FRAMEWORK_DIR}/QtCore.framework/Versions/4.0
+		DESTINATION ${FRAMEWORK_INSTALL_DIR}/QtCore.framework/Versions/4.0
 	)
 
 	install(FILES $ENV{QTDIR}/lib/QtGui.framework/Versions/4.0/QtGui
-		DESTINATION ${FRAMEWORK_DIR}/QtGui.framework/Versions/4.0
+		DESTINATION ${FRAMEWORK_INSTALL_DIR}/QtGui.framework/Versions/4.0
 	)
 
 	install(FILES $ENV{QTDIR}/lib/QtXml.framework/Versions/4.0/QtXml
-		DESTINATION ${FRAMEWORK_DIR}/QtXml.framework/Versions/4.0
+		DESTINATION ${FRAMEWORK_INSTALL_DIR}/QtXml.framework/Versions/4.0
 	)
 
 	install(FILES $ENV{QTDIR}/lib/QtSvg.framework/Versions/4.0/QtSvg
-		DESTINATION ${FRAMEWORK_DIR}/QtSvg.framework/Versions/4.0
+		DESTINATION ${FRAMEWORK_INSTALL_DIR}/QtSvg.framework/Versions/4.0
 	)
 
 	# Copy libqmng (for MNG image support)
 	install(FILES $ENV{QTDIR}/plugins/imageformats/libqmng.dylib
-		DESTINATION ${FRAMEWORK_DIR}/qt-plugins/imageformats/libqmng.dylib
+		DESTINATION ${FRAMEWORK_INSTALL_DIR}/qt-plugins/imageformats/libqmng.dylib
 	)
 
 	# Copy PhApi plugins
@@ -534,7 +531,7 @@ if (APPLE)
 
 	foreach(lib ${LIB_DEP})
 		install(FILES /sw/lib/${lib}
-			DESTINATION ${FRAMEWORK_DIR}
+			DESTINATION ${FRAMEWORK_INSTALL_DIR}
 		)
 	endforeach(lib ${LIB_DEP})
 	####

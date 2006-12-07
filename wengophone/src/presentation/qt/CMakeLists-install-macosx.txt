@@ -2,8 +2,6 @@ set(CMAKE_MODULE_PATH
 	${SOURCE_DIR}/cmake/Modules/owbuild
 )
 
-include(OWChangeInstallName)
-
 ## Create the locale directories to have the Application translated by Mac OS X
 file(GLOB_RECURSE _qmFiles ${DATA_INSTALL_DIR}/lang/*.qm)
 
@@ -57,7 +55,6 @@ file(WRITE "${INSTALL_PREFIX}/WengoPhone.app/Contents/Info.plist"
 ####
 
 ## Change install names
-set(FRAMEWORK_DIR "${INSTALL_PREFIX}/WengoPhone.app/Contents/Frameworks")
 set(WENGO_EXE "${INSTALL_PREFIX}/WengoPhone.app/Contents/MacOS/WengoPhone")
 
 # Change install name for Qt Frameworks
@@ -66,11 +63,11 @@ ow_change_install_name($ENV{QTDIR}/lib/QtGui.framework/Versions/4.0/QtGui @execu
 ow_change_install_name($ENV{QTDIR}/lib/QtXml.framework/Versions/4.0/QtXml @executable_path/../Frameworks/QtXml.framework/Versions/4.0/QtXml ${WENGO_EXE})
 ow_change_install_name($ENV{QTDIR}/lib/QtSvg.framework/Versions/4.0/QtSvg @executable_path/../Frameworks/QtSvg.framework/Versions/4.0/QtSvg ${WENGO_EXE})
 
-ow_change_install_name($ENV{QTDIR}/lib/QtCore.framework/Versions/4.0/QtCore @executable_path/../Frameworks/QtCore.framework/Versions/4.0/QtCore ${FRAMEWORK_DIR}/QtGui.framework/Versions/4.0/QtGui)
-ow_change_install_name($ENV{QTDIR}/lib/QtCore.framework/Versions/4.0/QtCore @executable_path/../Frameworks/QtCore.framework/Versions/4.0/QtCore ${FRAMEWORK_DIR}/QtXml.framework/Versions/4.0/QtXml)
-ow_change_install_name($ENV{QTDIR}/lib/QtCore.framework/Versions/4.0/QtCore @executable_path/../Frameworks/QtCore.framework/Versions/4.0/QtCore ${FRAMEWORK_DIR}/QtSvg.framework/Versions/4.0/QtSvg)
-ow_change_install_name($ENV{QTDIR}/lib/QtXml.framework/Versions/4.0/QtXml @executable_path/../Frameworks/QtXml.framework/Versions/4.0/QtXml ${FRAMEWORK_DIR}/QtSvg.framework/Versions/4.0/QtSvg)
-ow_change_install_name($ENV{QTDIR}/lib/QtGui.framework/Versions/4.0/QtGui @executable_path/../Frameworks/QtGui.framework/Versions/4.0/QtGui ${FRAMEWORK_DIR}/QtSvg.framework/Versions/4.0/QtSvg)
+ow_change_install_name($ENV{QTDIR}/lib/QtCore.framework/Versions/4.0/QtCore @executable_path/../Frameworks/QtCore.framework/Versions/4.0/QtCore ${FRAMEWORK_INSTALL_DIR}/QtGui.framework/Versions/4.0/QtGui)
+ow_change_install_name($ENV{QTDIR}/lib/QtCore.framework/Versions/4.0/QtCore @executable_path/../Frameworks/QtCore.framework/Versions/4.0/QtCore ${FRAMEWORK_INSTALL_DIR}/QtXml.framework/Versions/4.0/QtXml)
+ow_change_install_name($ENV{QTDIR}/lib/QtCore.framework/Versions/4.0/QtCore @executable_path/../Frameworks/QtCore.framework/Versions/4.0/QtCore ${FRAMEWORK_INSTALL_DIR}/QtSvg.framework/Versions/4.0/QtSvg)
+ow_change_install_name($ENV{QTDIR}/lib/QtXml.framework/Versions/4.0/QtXml @executable_path/../Frameworks/QtXml.framework/Versions/4.0/QtXml ${FRAMEWORK_INSTALL_DIR}/QtSvg.framework/Versions/4.0/QtSvg)
+ow_change_install_name($ENV{QTDIR}/lib/QtGui.framework/Versions/4.0/QtGui @executable_path/../Frameworks/QtGui.framework/Versions/4.0/QtGui ${FRAMEWORK_INSTALL_DIR}/QtSvg.framework/Versions/4.0/QtSvg)
 
 # Change install name for other libs
 ow_change_install_name(/sw/lib/libssl.0.9.7.dylib /usr/lib/libssl.dylib ${WENGO_EXE})
@@ -86,35 +83,35 @@ ow_change_install_name(/sw/lib/libgnutls.12.dylib @executable_path/../Frameworks
 
 ow_change_install_name(libowcurl.dylib @executable_path/../Frameworks/libowcurl.dylib ${WENGO_EXE})
 
-ow_change_install_name(/sw/lib/libglib-2.0.0.dylib @executable_path/../Frameworks/libglib-2.0.0.dylib ${FRAMEWORK_DIR}/libgmodule-2.0.0.dylib)
-ow_change_install_name(/sw/lib/libglib-2.0.0.dylib @executable_path/../Frameworks/libglib-2.0.0.dylib ${FRAMEWORK_DIR}/libgthread-2.0.0.dylib)
+ow_change_install_name(/sw/lib/libglib-2.0.0.dylib @executable_path/../Frameworks/libglib-2.0.0.dylib ${FRAMEWORK_INSTALL_DIR}/libgmodule-2.0.0.dylib)
+ow_change_install_name(/sw/lib/libglib-2.0.0.dylib @executable_path/../Frameworks/libglib-2.0.0.dylib ${FRAMEWORK_INSTALL_DIR}/libgthread-2.0.0.dylib)
 
-ow_change_install_name(/sw/lib/libiconv.2.dylib @executable_path/../Frameworks/libiconv.2.dylib ${FRAMEWORK_DIR}/libgmodule-2.0.0.dylib)
-ow_change_install_name(/sw/lib/libiconv.2.dylib @executable_path/../Frameworks/libiconv.2.dylib ${FRAMEWORK_DIR}/libgthread-2.0.0.dylib)
-ow_change_install_name(/sw/lib/libiconv.2.dylib @executable_path/../Frameworks/libiconv.2.dylib ${FRAMEWORK_DIR}/libglib-2.0.0.dylib)
-ow_change_install_name(/sw/lib/libiconv.2.dylib @executable_path/../Frameworks/libiconv.2.dylib ${FRAMEWORK_DIR}/libintl.1.dylib)
-ow_change_install_name(/sw/lib/libiconv.2.dylib @executable_path/../Frameworks/libiconv.2.dylib ${FRAMEWORK_DIR}/libintl.3.dylib)
-ow_change_install_name(/sw/lib/libiconv.2.dylib @executable_path/../Frameworks/libiconv.2.dylib ${FRAMEWORK_DIR}/libgnutls.12.dylib)
-ow_change_install_name(/sw/lib/libiconv.2.dylib @executable_path/../Frameworks/libiconv.2.dylib ${FRAMEWORK_DIR}/libgcrypt.11.dylib)
-ow_change_install_name(/sw/lib/libiconv.2.dylib @executable_path/../Frameworks/libiconv.2.dylib ${FRAMEWORK_DIR}/libgpg-error.0.dylib)
+ow_change_install_name(/sw/lib/libiconv.2.dylib @executable_path/../Frameworks/libiconv.2.dylib ${FRAMEWORK_INSTALL_DIR}/libgmodule-2.0.0.dylib)
+ow_change_install_name(/sw/lib/libiconv.2.dylib @executable_path/../Frameworks/libiconv.2.dylib ${FRAMEWORK_INSTALL_DIR}/libgthread-2.0.0.dylib)
+ow_change_install_name(/sw/lib/libiconv.2.dylib @executable_path/../Frameworks/libiconv.2.dylib ${FRAMEWORK_INSTALL_DIR}/libglib-2.0.0.dylib)
+ow_change_install_name(/sw/lib/libiconv.2.dylib @executable_path/../Frameworks/libiconv.2.dylib ${FRAMEWORK_INSTALL_DIR}/libintl.1.dylib)
+ow_change_install_name(/sw/lib/libiconv.2.dylib @executable_path/../Frameworks/libiconv.2.dylib ${FRAMEWORK_INSTALL_DIR}/libintl.3.dylib)
+ow_change_install_name(/sw/lib/libiconv.2.dylib @executable_path/../Frameworks/libiconv.2.dylib ${FRAMEWORK_INSTALL_DIR}/libgnutls.12.dylib)
+ow_change_install_name(/sw/lib/libiconv.2.dylib @executable_path/../Frameworks/libiconv.2.dylib ${FRAMEWORK_INSTALL_DIR}/libgcrypt.11.dylib)
+ow_change_install_name(/sw/lib/libiconv.2.dylib @executable_path/../Frameworks/libiconv.2.dylib ${FRAMEWORK_INSTALL_DIR}/libgpg-error.0.dylib)
 
-ow_change_install_name(/sw/lib/libintl.3.dylib @executable_path/../Frameworks/libintl.3.dylib ${FRAMEWORK_DIR}/libgmodule-2.0.0.dylib)
-ow_change_install_name(/sw/lib/libintl.3.dylib @executable_path/../Frameworks/libintl.3.dylib ${FRAMEWORK_DIR}/libgthread-2.0.0.dylib)
-ow_change_install_name(/sw/lib/libintl.3.dylib @executable_path/../Frameworks/libintl.3.dylib ${FRAMEWORK_DIR}/libglib-2.0.0.dylib)
-ow_change_install_name(/sw/lib/libintl.3.dylib @executable_path/../Frameworks/libintl.3.dylib ${FRAMEWORK_DIR}/libgpg-error.0.dylib)
-ow_change_install_name(/sw/lib/libintl.3.dylib @executable_path/../Frameworks/libintl.3.dylib ${FRAMEWORK_DIR}/libgcrypt.11.dylib)
-ow_change_install_name(/sw/lib/libintl.3.dylib @executable_path/../Frameworks/libintl.3.dylib ${FRAMEWORK_DIR}/libgnutls.12.dylib)
+ow_change_install_name(/sw/lib/libintl.3.dylib @executable_path/../Frameworks/libintl.3.dylib ${FRAMEWORK_INSTALL_DIR}/libgmodule-2.0.0.dylib)
+ow_change_install_name(/sw/lib/libintl.3.dylib @executable_path/../Frameworks/libintl.3.dylib ${FRAMEWORK_INSTALL_DIR}/libgthread-2.0.0.dylib)
+ow_change_install_name(/sw/lib/libintl.3.dylib @executable_path/../Frameworks/libintl.3.dylib ${FRAMEWORK_INSTALL_DIR}/libglib-2.0.0.dylib)
+ow_change_install_name(/sw/lib/libintl.3.dylib @executable_path/../Frameworks/libintl.3.dylib ${FRAMEWORK_INSTALL_DIR}/libgpg-error.0.dylib)
+ow_change_install_name(/sw/lib/libintl.3.dylib @executable_path/../Frameworks/libintl.3.dylib ${FRAMEWORK_INSTALL_DIR}/libgcrypt.11.dylib)
+ow_change_install_name(/sw/lib/libintl.3.dylib @executable_path/../Frameworks/libintl.3.dylib ${FRAMEWORK_INSTALL_DIR}/libgnutls.12.dylib)
 
-ow_change_install_name(/sw/lib/libintl.1.dylib @executable_path/../Frameworks/libintl.1.dylib ${FRAMEWORK_DIR}/libgcrypt.11.dylib)
-ow_change_install_name(/sw/lib/libintl.1.dylib @executable_path/../Frameworks/libintl.1.dylib ${FRAMEWORK_DIR}/libgpg-error.0.dylib)
+ow_change_install_name(/sw/lib/libintl.1.dylib @executable_path/../Frameworks/libintl.1.dylib ${FRAMEWORK_INSTALL_DIR}/libgcrypt.11.dylib)
+ow_change_install_name(/sw/lib/libintl.1.dylib @executable_path/../Frameworks/libintl.1.dylib ${FRAMEWORK_INSTALL_DIR}/libgpg-error.0.dylib)
 
-ow_change_install_name(/sw/lib/libpth.14.dylib @executable_path/../Frameworks/libpth.14.dylib ${FRAMEWORK_DIR}/libgnutls.12.dylib)
-ow_change_install_name(/sw/lib/libpth.14.dylib @executable_path/../Frameworks/libpth.14.dylib ${FRAMEWORK_DIR}/libgcrypt.11.dylib)
+ow_change_install_name(/sw/lib/libpth.14.dylib @executable_path/../Frameworks/libpth.14.dylib ${FRAMEWORK_INSTALL_DIR}/libgnutls.12.dylib)
+ow_change_install_name(/sw/lib/libpth.14.dylib @executable_path/../Frameworks/libpth.14.dylib ${FRAMEWORK_INSTALL_DIR}/libgcrypt.11.dylib)
 
-ow_change_install_name(/sw/lib/libgpg-error.0.dylib @executable_path/../Frameworks/libgpg-error.0.dylib ${FRAMEWORK_DIR}/libgnutls.12.dylib)
-ow_change_install_name(/sw/lib/libgpg-error.0.dylib @executable_path/../Frameworks/libgpg-error.0.dylib ${FRAMEWORK_DIR}/libgcrypt.11.dylib)
+ow_change_install_name(/sw/lib/libgpg-error.0.dylib @executable_path/../Frameworks/libgpg-error.0.dylib ${FRAMEWORK_INSTALL_DIR}/libgnutls.12.dylib)
+ow_change_install_name(/sw/lib/libgpg-error.0.dylib @executable_path/../Frameworks/libgpg-error.0.dylib ${FRAMEWORK_INSTALL_DIR}/libgcrypt.11.dylib)
 
-ow_change_install_name(/sw/lib/libtasn1.2.dylib @executable_path/../Frameworks/libtasn1.2.dylib ${FRAMEWORK_DIR}/libgnutls.12.dylib)
+ow_change_install_name(/sw/lib/libtasn1.2.dylib @executable_path/../Frameworks/libtasn1.2.dylib ${FRAMEWORK_INSTALL_DIR}/libgnutls.12.dylib)
 
-ow_change_install_name(/sw/lib/libgcrypt.11.dylib @executable_path/../Frameworks/libgcrypt.11.dylib ${FRAMEWORK_DIR}/libgnutls.12.dylib)
+ow_change_install_name(/sw/lib/libgcrypt.11.dylib @executable_path/../Frameworks/libgcrypt.11.dylib ${FRAMEWORK_INSTALL_DIR}/libgnutls.12.dylib)
 ####

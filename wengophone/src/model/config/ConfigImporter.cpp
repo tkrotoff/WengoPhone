@@ -276,7 +276,7 @@ bool ConfigImporter::classicVcardParser(const string & vcardFile, void * structV
 			}
 
 			else if (!key.compare("TEL;TYPE=work")) {
-				mVcard->numbers.push_back	(createNewNodeNumber(WORK_NUMBER_KEY, value));
+				mVcard->numbers.push_back(createNewNodeNumber(WORK_NUMBER_KEY, value));
 			}
 
 			else if (!key.compare("TEL;TYPE=cell")) {
@@ -654,7 +654,7 @@ bool ConfigImporter::importConfigFromV1toV3() {
 		WengoAccount wAccount(lastUser->login, lastUser->password, true);
 		userProfile.setWengoAccount(wAccount); // Launch SSO request
 		_wengoAccountValidityCondition.wait(lock);
-	
+
 		if (_wengoAccountValidityResult) {
 			_wengoAccountValidityResult = false;
 			string sep = mDir.getPathSeparator();
