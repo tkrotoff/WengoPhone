@@ -15,6 +15,7 @@ macro (OW_POST_BUILD_COPY_FILE src dst)
 		COMMAND ${CMAKE_COMMAND} -E copy_if_different
 			\"${src}\"
 			\"${BUILD_DIR}/${dst}\"
+		COMMENT "Copying file ${dst}"
 	)
 
 endmacro (OW_POST_BUILD_COPY_FILE)
