@@ -61,6 +61,13 @@ const char * WengoPhoneBuildId::getGaimVersion() {
 	return gaim_core_get_version();
 }
 
+const char * WengoPhoneBuildId::getGLibVersion() {
+	static std::string version(String::fromNumber(GLIB_MAJOR_VERSION) + "." +
+		String::fromNumber(GLIB_MINOR_VERSION) + "." +
+		String::fromNumber(GLIB_MICRO_VERSION));
+	return version.c_str();
+}
+
 const char * WengoPhoneBuildId::getCurlVersion() {
 	return curl_version();
 }

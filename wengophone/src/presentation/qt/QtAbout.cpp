@@ -52,6 +52,7 @@ QtAbout::QtAbout(QWidget * parent) {
 	_ui->versionLabel->setText("Qt: " + QString(qVersion()) + eol +
 				"Boost: " + QString(WengoPhoneBuildId::getBoostVersion()) + eol +
 				"LibGaim: " + QString(WengoPhoneBuildId::getGaimVersion()) + eol +
+				"GLib: " + QString(WengoPhoneBuildId::getGLibVersion()) + eol +
 				"cURL: " + QString(WengoPhoneBuildId::getCurlVersion()) + eol +
 				"TinyXML: " + QString(WengoPhoneBuildId::getTinyXmlVersion()) + eol +
 				"FFmpeg's libavcodec: " + QString(WengoPhoneBuildId::getAvcodecVersion())

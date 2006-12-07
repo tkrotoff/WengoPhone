@@ -85,6 +85,9 @@ public:
 	/** LibGaim version number. */
 	static const char * getGaimVersion();
 
+	/** GLib version number. */
+	static const char * getGLibVersion();
+
 	/** cURL version number. */
 	static const char * getCurlVersion();
 
