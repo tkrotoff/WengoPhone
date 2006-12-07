@@ -287,14 +287,6 @@ GType g_type_register_static		(GType			     parent_type,
 					 const gchar		    *type_name,
 					 const GTypeInfo	    *info,
 					 GTypeFlags		     flags);
-GType g_type_register_static_simple     (GType                       parent_type,
-					 const gchar                *type_name,
-					 guint                       class_size,
-					 GClassInitFunc              class_init,
-					 guint                       instance_size,
-					 GInstanceInitFunc           instance_init,
-					 GTypeFlags	             flags);
-  
 GType g_type_register_dynamic		(GType			     parent_type,
 					 const gchar		    *type_name,
 					 GTypePlugin		    *plugin,
@@ -333,11 +325,10 @@ gpointer g_type_instance_get_private    (GTypeInstance              *instance,
  * example: G_DEFINE_TYPE_WITH_CODE (GtkGadget, gtk_gadget, GTK_TYPE_WIDGET,
  *                                   g_print ("GtkGadget-id: %lu\n", g_define_type_id));
  */
-#define G_DEFINE_TYPE(TN, t_n, T_P)			    G_DEFINE_TYPE_EXTENDED (TN, t_n, T_P, 0, {})
-#define G_DEFINE_TYPE_WITH_CODE(TN, t_n, T_P, _C_)	    _G_DEFINE_TYPE_EXTENDED_BEGIN (TN, t_n, T_P, 0) {_C_;} _G_DEFINE_TYPE_EXTENDED_END()
-#define G_DEFINE_ABSTRACT_TYPE(TN, t_n, T_P)		    G_DEFINE_TYPE_EXTENDED (TN, t_n, T_P, G_TYPE_FLAG_ABSTRACT, {})
-#define G_DEFINE_ABSTRACT_TYPE_WITH_CODE(TN, t_n, T_P, _C_) _G_DEFINE_TYPE_EXTENDED_BEGIN (TN, t_n, T_P, G_TYPE_FLAG_ABSTRACT) {_C_;} _G_DEFINE_TYPE_EXTENDED_END()
-#define G_DEFINE_TYPE_EXTENDED(TN, t_n, T_P, _f_, _C_)	    _G_DEFINE_TYPE_EXTENDED_BEGIN (TN, t_n, T_P, _f_) {_C_;} _G_DEFINE_TYPE_EXTENDED_END()
+#define G_DEFINE_TYPE(TN, t_n, T_P)                         G_DEFINE_TYPE_EXTENDED (TN, t_n, T_P, 0, {})
+#define G_DEFINE_TYPE_WITH_CODE(TN, t_n, T_P, _C_)          G_DEFINE_TYPE_EXTENDED (TN, t_n, T_P, 0, _C_)
+#define G_DEFINE_ABSTRACT_TYPE(TN, t_n, T_P)                G_DEFINE_TYPE_EXTENDED (TN, t_n, T_P, G_TYPE_FLAG_ABSTRACT, {})
+#define G_DEFINE_ABSTRACT_TYPE_WITH_CODE(TN, t_n, T_P, _C_) G_DEFINE_TYPE_EXTENDED (TN, t_n, T_P, G_TYPE_FLAG_ABSTRACT, _C_)
 
 /* convenience macro to ease interface addition in the CODE
  * section of G_DEFINE_TYPE_WITH_CODE() (this macro relies on
@@ -348,13 +339,13 @@ gpointer g_type_instance_get_private    (GTypeInstance              *instance,
  *                                                 gtk_tree_store_tree_model_init));
  */
 #define G_IMPLEMENT_INTERFACE(TYPE_IFACE, iface_init)       { \
-  const GInterfaceInfo g_implement_interface_info = { \
-    (GInterfaceInitFunc) iface_init, NULL, NULL \
+  static const GInterfaceInfo g_implement_interface_info = { \
+    (GInterfaceInitFunc) iface_init \
   }; \
   g_type_add_interface_static (g_define_type_id, TYPE_IFACE, &g_implement_interface_info); \
 }
 
-#define _G_DEFINE_TYPE_EXTENDED_BEGIN(TypeName, type_name, TYPE_PARENT, flags) \
+#define G_DEFINE_TYPE_EXTENDED(TypeName, type_name, TYPE_PARENT, flags, CODE) \
 \
 static void     type_name##_init              (TypeName        *self); \
 static void     type_name##_class_init        (TypeName##Class *klass); \
@@ -371,21 +362,23 @@ type_name##_get_type (void) \
   static GType g_define_type_id = 0; \
   if (G_UNLIKELY (g_define_type_id == 0)) \
     { \
-      g_define_type_id = \
-        g_type_register_static_simple (TYPE_PARENT, \
-                                       g_intern_static_string (#TypeName), \
-                                       sizeof (TypeName##Class), \
-                                       (GClassInitFunc)type_name##_class_intern_init, \
-                                       sizeof (TypeName), \
-                                       (GInstanceInitFunc)type_name##_init, \
-                                       (GTypeFlags) flags); \
-      { /* custom code follows */
-#define _G_DEFINE_TYPE_EXTENDED_END()	\
-        /* following custom code */	\
-      }					\
-    }					\
-  return g_define_type_id;		\
-} /* closes type_name##_get_type() */
+      static const GTypeInfo g_define_type_info = { \
+        sizeof (TypeName##Class), \
+        (GBaseInitFunc) NULL, \
+        (GBaseFinalizeFunc) NULL, \
+        (GClassInitFunc) type_name##_class_intern_init, \
+        (GClassFinalizeFunc) NULL, \
+        NULL,   /* class_data */ \
+        sizeof (TypeName), \
+        0,      /* n_preallocs */ \
+        (GInstanceInitFunc) type_name##_init, \
+        NULL    /* value_table */ \
+      }; \
+      g_define_type_id = g_type_register_static (TYPE_PARENT, #TypeName, &g_define_type_info, (GTypeFlags) flags); \
+      { CODE ; } \
+    } \
+  return g_define_type_id; \
+}
 
 
 /* --- protected (for fundamental type implementations) --- */
