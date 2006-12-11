@@ -5660,19 +5660,18 @@ int phHoldOn(int call_id, const char * bodytype){
 		return -PH_BADCID;
 	}
 
-	if (ca->localhold)
-	{
-		return -PH_HOLDERR;
-	}
-
-	ca->localhold = 1;
-
 	eXosip_lock();
 	i = eXosip_on_hold_call_with_body(ca->did, bodytype, "holdon");
 	eXosip_unlock();
 
 	if(i==0)
 	{
+		if (ca->localhold)
+		{
+			return -PH_HOLDERR;
+		}
+
+		ca->localhold = 1;
 		return TRUE;
 	}
 	return FALSE;
@@ -5689,19 +5688,18 @@ int phHoldOff(int call_id, const char * bodytype){
 		return -PH_BADCID;
 	}
 
-	if (ca->localhold != 1)
-	{
-		return -PH_HOLDERR;
-	}
-
-	ca->localhold = 0;
-
 	eXosip_lock();
 	i = eXosip_off_hold_call_with_body(ca->did, bodytype, "holdoff");
 	eXosip_unlock();
 
 	if(i==0)
 	{
+		if (ca->localhold != 1)
+		{
+			return -PH_HOLDERR;
+		}
+
+		ca->localhold = 0;
 		return TRUE;
 	}
 	return FALSE;

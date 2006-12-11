@@ -792,14 +792,23 @@ static void eXosip_process_invite_on_hold(eXosip_call_t *jc, eXosip_dialog_t *jd
 					  osip_event_t *evt, sdp_message_t *sdp)
 {
   osip_event_t *sipevent;
+	osip_message_t * tmp_msg = NULL;
+
   sipevent = eXosip_process_reinvite(jc, jd, transaction, evt, sdp);
   if (sipevent==NULL)
     return; /* ERROR */
+
+  if(jd != NULL && sipevent->sip!= NULL && sipevent->sip->status_code == 200) {
+	  osip_message_clone(sipevent->sip, &(tmp_msg));
+  }
 
   eXosip_report_call_event_with_status(EXOSIP_CALL_HOLD, jc, jd, evt->sip);
 
   osip_transaction_add_event(transaction, sipevent);
   __eXosip_wakeup();
+
+	jd->d_200Ok = tmp_msg;
+
 }
 
 static void eXosip_process_invite_off_hold(eXosip_call_t *jc, eXosip_dialog_t *jd,
@@ -807,13 +816,21 @@ static void eXosip_process_invite_off_hold(eXosip_call_t *jc, eXosip_dialog_t *j
 					   osip_event_t *evt, sdp_message_t *sdp)
 {
   osip_event_t *sipevent;
+	osip_message_t * tmp_msg = NULL;
+
   sipevent = eXosip_process_reinvite(jc, jd, transaction, evt, sdp);
   if (sipevent==NULL)
     return; /* ERROR */
 
+  if(jd != NULL && sipevent->sip!= NULL && sipevent->sip->status_code == 200) {
+	  osip_message_clone(sipevent->sip, &(tmp_msg));
+  }
+
   eXosip_report_call_event_with_status(EXOSIP_CALL_OFFHOLD, jc, jd, evt->sip);
   osip_transaction_add_event(transaction, sipevent);
   __eXosip_wakeup();
+  
+	jd->d_200Ok = tmp_msg;
 }
 
 static void eXosip_process_new_options(osip_transaction_t *transaction, osip_event_t *evt)
