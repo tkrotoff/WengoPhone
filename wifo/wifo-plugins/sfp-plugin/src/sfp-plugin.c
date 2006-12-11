@@ -1365,7 +1365,7 @@ static void transferFailureHandler(int hCall){
 		return; // TODO notify GUI
 	}
 
-	if(transferToPeerFailed) { transferToPeerFailed(hCall, "", session->local_filename, session->file_type, session->file_size); }
+	if(transferToPeerFailed) { transferToPeerFailed(hCall, session->remote_username, session->local_filename, session->file_type, session->file_size); }
 
 	sfp_remove_session_info(hCall);
 }
