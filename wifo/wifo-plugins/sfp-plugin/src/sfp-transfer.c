@@ -450,6 +450,7 @@ static sfp_returncode_t sfp_transfer_send_active(FILE * stream, SOCKET sckt, sfp
 	int wait_time = SFP_WAIT_TIME_BASE;
 	int retries = SFP_MAX_RETRIES;
 
+	notify_progress(session, total_sent, total_to_send, &increase);
 	memset(buffer, 0, sizeof(buffer));
 	while((read = fread(buffer, sizeof(char), READ_WRITE_BUFFER_SIZE, stream)) > 0){
 		// if the transfer has been paused, wait
@@ -604,6 +605,7 @@ static sfp_returncode_t sfp_transfer_send_passive(FILE * stream, SOCKET sckt, st
 		return CANT_ACCEPT_CONNECTION; // fail
 	}
 
+	notify_progress(session, total_sent, total_to_send, &increase);
 	memset(buffer, 0, sizeof(buffer));
 	while((read = fread(buffer, sizeof(char), READ_WRITE_BUFFER_SIZE, stream)) > 0){
 		// if the transfer has been paused, wait
@@ -720,6 +722,7 @@ static sfp_returncode_t sfp_transfer_receive_active(FILE * stream, SOCKET sckt, 
 		return CONNECTION_TIMED_OUT;
 	}
 
+	notify_progress(session, total_received, total_to_receive, &increase);
 	memset(buffer, 0, sizeof(buffer));
 	while((received = recv(sckt, buffer, READ_WRITE_BUFFER_SIZE, 0)) > 0){
 		total_received += (unsigned long)received;
@@ -852,29 +855,7 @@ static sfp_returncode_t sfp_transfer_receive_passive(FILE * stream, SOCKET sckt,
 		return CANT_ACCEPT_CONNECTION; // fail
 	}
 
-	// use select to do a timeout in order not to stay blocked if peer cannot send file
-	/*FD_ZERO(&sckts);
-	FD_SET(sckt, &sckts);
-	max_sckt = (int)sckt + 1;
-	if(select(max_sckt, NULL, &sckts, NULL, &timeout) <= 0){
-		// no connection received
-		FD_CLR(sckt, &sckts);
-		m_log_error("Connection timed out", "sfp_transfer_receive_passive");
-		return CONNECTION_TIMED_OUT; // fail
-	}
-	if(FD_ISSET(sckt, &sckts) == 0){
-		FD_CLR(sckt, &sckts);
-		m_log_error("Connection timed out", "sfp_transfer_receive_passive");
-		return CONNECTION_TIMED_OUT; // fail
-	}
-	FD_CLR(sckt, &sckts);
-
-	tmp = accept(sckt, (struct sockaddr *)&address, &addrlen);
-	if(tmp < 0){
-		m_log_error("Accept failed", "sfp_transfer_receive_passive");
-		return CANT_ACCEPT_CONNECTION; // fail
-	}*/
-
+	notify_progress(session, total_received, total_to_receive, &increase);
 	memset(buffer, 0, sizeof(buffer));
 	while((received = recv(tmp, buffer, READ_WRITE_BUFFER_SIZE, 0)) > 0){
 		total_received += (unsigned long)received;
