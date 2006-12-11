@@ -1435,7 +1435,7 @@ static void transferHoldHandler(int hCall){
 		}
 	}
 
-	g_mutex_lock(pause_mutex);
+	g_mutex_unlock(pause_mutex);
 }
 
 
