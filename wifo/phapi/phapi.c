@@ -1093,7 +1093,9 @@ MY_DLLEXPORT OWPL_RESULT owplPresencePublish(OWPL_LINE  hLine,
 	// save infos for later user from a timer event
 	if((vl = ph_vlid2vline(hLine)) != NULL) {
 		vl->publishInfo.onlineState = Online;
-		vl->publishInfo.szStatus = strdup(szStatus);
+		if(szStatus != NULL) {
+			vl->publishInfo.szStatus = strdup(szStatus);
+		}
 		vl->publishInfo.hPub = hPub;
 		// nine minutes timeout i.e. 540000ms
 		vl->publishInfo.publishTimeout = 540000;
