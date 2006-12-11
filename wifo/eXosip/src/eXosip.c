@@ -1949,6 +1949,10 @@ int eXosip_on_hold_call  (int jid)
       return -2;
     }
 
+	if(jd->d_dialog == NULL) {
+		return -1;
+	}
+
   i = _eXosip_build_request_within_dialog(&invite, "INVITE", jd->d_dialog, "UDP");
   if (i!=0) {
     sdp_message_free(sdp);
@@ -2039,6 +2043,10 @@ int eXosip_on_hold_call_with_body(int jid, const char * bodytype, const char * b
 		return -1;
 	}
 	if(transaction->state!=ICT_TERMINATED && transaction->state!=IST_TERMINATED){
+		return -1;
+	}
+
+	if(jd->d_dialog == NULL) {
 		return -1;
 	}
 
@@ -2141,6 +2149,10 @@ int eXosip_off_hold_call (int jid, char *rtp_ip, int port)
       sdp_message_free(sdp);
       return -2;
     }
+
+	if(jd->d_dialog == NULL) {
+		return -1;
+	}
 
   i = _eXosip_build_request_within_dialog(&invite, "INVITE", jd->d_dialog, "UDP");
   if (i!=0) {
@@ -2259,6 +2271,10 @@ int eXosip_off_hold_call_with_body(int jid, const char * bodytype, const char * 
 		return -1;
 	}
 	if (transaction->state!=ICT_TERMINATED && transaction->state!=IST_TERMINATED){
+		return -1;
+	}
+
+	if(jd->d_dialog == NULL) {
 		return -1;
 	}
 
