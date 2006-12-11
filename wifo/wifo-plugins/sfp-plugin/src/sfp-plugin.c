@@ -454,7 +454,7 @@ int sfp_pause_transfer(int call_id){
 	// FIXME replace with no text, but hold in a header
 	// TODO ERROR
 	g_mutex_lock(pause_mutex);
-	if(owplCallHoldWithBody((OWPL_CALL)call_id, "application/sfp", "holdon", 6) == OWPL_RESULT_SUCCESS) {
+	if(( !session->isPaused(session) || !session->isPausedByPeer(session) ) && owplCallHoldWithBody((OWPL_CALL)call_id, "application/sfp", "holdon", 6) == OWPL_RESULT_SUCCESS) {
 		session->updateState(session, SFP_ACTION_PAUSE);
 		if(session->isPaused(session)) {
 			if(transferPaused) { transferPaused(call_id, session->remote_username, session->local_filename, session->file_type, session->file_size); }
@@ -482,15 +482,17 @@ int sfp_resume_transfer(int call_id){
 		return FALSE;
 	}
 
+	g_mutex_lock(pause_mutex);
 	// FIXME replace with unhold that use header instead of a body
-	// TODO ERROR
-	if(owplCallUnholdWithBody((OWPL_CALL)call_id, "application/sfp", "holdoff", 7) == OWPL_RESULT_SUCCESS) {
+	if(session->isPaused(session) && owplCallUnholdWithBody((OWPL_CALL)call_id, "application/sfp", "holdoff", 7) == OWPL_RESULT_SUCCESS) {
 		session->updateState(session, SFP_ACTION_RESUME);
 		if(session->isRunning(session)) {
 			if(transferResumed) { transferResumed(call_id, session->remote_username, session->local_filename, session->file_type, session->file_size); }
+			g_mutex_unlock(pause_mutex);
 			return TRUE;
 		}
 	}
+	g_mutex_unlock(pause_mutex);
 
 	return FALSE;
 }
@@ -1417,12 +1419,20 @@ static void transferHoldHandler(int hCall){
 	}
 
 	g_mutex_lock(pause_mutex);
-	session->updateState(session, SFP_ACTION_HOLDON_RECEIVED);
-	g_mutex_lock(pause_mutex);
 
-	if(session->isPausedByPeer(session)) {
-		if(transferPausedByPeer) { transferPausedByPeer(hCall, session->remote_username, session->local_filename, session->file_type, session->file_size); }
+	if(!session->isPaused(session) || !session->isPausedByPeer(session)) {
+		session->updateState(session, SFP_ACTION_HOLDON_RECEIVED);
+		if(session->isPausedByPeer(session)) {
+			if(transferPausedByPeer) { transferPausedByPeer(hCall, session->remote_username, session->local_filename, session->file_type, session->file_size); }
+		}
+	} else if(session->isPaused(session)) {
+		session->updateState(session, SFP_ACTION_RESUME);
+		if(session->isRunning(session)) {
+			if(transferResumed) { transferResumed(hCall, session->remote_username, session->local_filename, session->file_type, session->file_size); }
+		}
 	}
+
+	g_mutex_lock(pause_mutex);
 }
 
 
@@ -1439,10 +1449,14 @@ static void transferResumedHandler(int hCall){
 		return; // TODO notify GUI
 	}
 
-	session->updateState(session, SFP_ACTION_HOLDOFF_RECEIVED);
-	if(session->isRunning(session)) {
-		if(transferResumedByPeer) { transferResumedByPeer(hCall, session->remote_username, session->local_filename, session->file_type, session->file_size); }
+	g_mutex_lock(pause_mutex);
+	if(session->isPausedByPeer(session)) {
+		session->updateState(session, SFP_ACTION_HOLDOFF_RECEIVED);
+		if(session->isRunning(session)) {
+			if(transferResumedByPeer) { transferResumedByPeer(hCall, session->remote_username, session->local_filename, session->file_type, session->file_size); }
+		}
 	}
+	g_mutex_unlock(pause_mutex);
 
 }
 
