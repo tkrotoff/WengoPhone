@@ -214,6 +214,7 @@ static void sfp_send_terminaison(sfp_session_info_t * session, sfp_returncode_t 
 static void sfp_progressionCallback(sfp_session_info_t * session, int percentage);
 static void sfp_session_updateState(sfp_session_info_t * session, sfp_action_t action);
 static unsigned int sfp_session_isInitiated(sfp_session_info_t * session);
+static unsigned int sfp_session_isTrying(sfp_session_info_t * session);
 static unsigned int sfp_session_isRunning(sfp_session_info_t * session);
 static unsigned int sfp_session_isCancelled(sfp_session_info_t * session);
 static unsigned int sfp_session_isCancelledByPeer(sfp_session_info_t * session);
@@ -299,16 +300,17 @@ if(strcmp(file_size, "0") != 0) {
 		// TODO ERROR
 		return FALSE;
 	}
+	sfp_session_updateState(session, SFP_ACTION_INVITE);
 
-		// we can now free the body
-		free(body);
+	// we can now free the body
+	free(body);
 
-		// set the call_id
-		session->call_id = call_id;
+	// set the call_id
+	session->call_id = call_id;
 
-		sfp_add_session_info(call_id, session);
+	sfp_add_session_info(call_id, session);
 
-		// notify GUI
+	// notify GUI
 	if(inviteToTransfer) { inviteToTransfer(call_id, uri, short_filename, file_type, file_size); }
 
 		return call_id;
@@ -407,7 +409,7 @@ int sfp_cancel_transfer(int call_id){
 	if(session->isInitiated(session)) {
 		session->updateState(session, SFP_ACTION_CANCEL);
 		if(session->isCancelled(session)) {
-			// send a BYE
+			// send a 486 Busy Here
 			if(owplCallReject((OWPL_CALL)call_id, 486, "Transfer rejected") != OWPL_RESULT_SUCCESS) {
 				return FALSE;
 				// TODO ERROR
@@ -417,10 +419,10 @@ int sfp_cancel_transfer(int call_id){
 			sfp_remove_session_info(call_id);
 			return TRUE;
 		}
-	}else if(session->isRunning(session)) {
+	}else if(session->isRunning(session) || session->isTrying(session)) {
 		session->updateState(session, SFP_ACTION_CANCEL);
 		if(session->isCancelled(session)) {
-			// send a BYE
+			// send a BYE or CANCEL
 			if(owplCallDisconnect((OWPL_CALL)call_id) != OWPL_RESULT_SUCCESS) {
 				return FALSE;
 				// TODO ERROR
@@ -527,6 +529,7 @@ static sfp_session_info_t * create_sfp_session_info(){
 
 	session->updateState = &sfp_session_updateState;
 	session->isInitiated = &sfp_session_isInitiated;
+	session->isTrying = & sfp_session_isTrying;
 	session->isRunning = &sfp_session_isRunning;
 	session->isCancelled = &sfp_session_isCancelled;
 	session->isCancelledByPeer = &sfp_session_isCancelledByPeer;
@@ -1282,7 +1285,7 @@ static void transferAcceptedHandler(int hCall, const char * message){
 		return;
 	}
 
-	if(session->isInitiated(session)){ // INVITE has been sent, waiting for a 200 OK to start the transfer
+	if(session->isTrying(session)){ // INVITE has been sent, waiting for a 200 OK to start the transfer
 
 		// get the body and parse it
 		if(!strfilled(message)){
@@ -1465,9 +1468,23 @@ static void transferResumedHandler(int hCall){
 
 static void sfp_session_updateState(sfp_session_info_t * session, sfp_action_t action) {
 	switch(action) {
+
+		case SFP_ACTION_INVITE :
+			switch(session->_state) {
+				case SFP_SESSION_INITIATED :
+					session->_state = SFP_SESSION_TRYING;
+					break;
+				default :
+					break;
+			}
+			break;
+
 		case SFP_ACTION_START :
 			switch(session->_state) {
 				case SFP_SESSION_INITIATED :
+					session->_state = SFP_SESSION_RUNNING;
+					break;
+				case SFP_SESSION_TRYING :
 					session->_state = SFP_SESSION_RUNNING;
 					break;
 				default :
@@ -1478,6 +1495,9 @@ static void sfp_session_updateState(sfp_session_info_t * session, sfp_action_t a
 		case SFP_ACTION_CANCEL :
 			switch(session->_state) {
 				case SFP_SESSION_INITIATED :
+					session->_state = SFP_SESSION_CANCELLED;
+					break;
+				case SFP_SESSION_TRYING :
 					session->_state = SFP_SESSION_CANCELLED;
 					break;
 				case SFP_SESSION_RUNNING :
@@ -1491,6 +1511,9 @@ static void sfp_session_updateState(sfp_session_info_t * session, sfp_action_t a
 		case SFP_ACTION_BYE_OR_CANCEL_RECEIVED :
 			switch(session->_state) {
 				case SFP_SESSION_INITIATED :
+					session->_state = SFP_SESSION_CANCELLED_BY_PEER;
+					break;
+				case SFP_SESSION_TRYING :
 					session->_state = SFP_SESSION_CANCELLED_BY_PEER;
 					break;
 				case SFP_SESSION_RUNNING :
@@ -1587,6 +1610,13 @@ static void sfp_session_updateState(sfp_session_info_t * session, sfp_action_t a
 
 static unsigned int sfp_session_isInitiated(sfp_session_info_t * session) {
 	if(session->_state == SFP_SESSION_INITIATED) {
+		return TRUE;
+	}
+	return FALSE;
+}
+
+static unsigned int sfp_session_isTrying(sfp_session_info_t * session) {
+	if(session->_state == SFP_SESSION_TRYING) {
 		return TRUE;
 	}
 	return FALSE;

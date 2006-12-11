@@ -37,6 +37,7 @@ extern "C" {
 	*/
 	typedef enum sfp_session_state {
 		SFP_SESSION_INITIATED,
+		SFP_SESSION_TRYING,
 		SFP_SESSION_RUNNING,
 		SFP_SESSION_CANCELLED,
 		SFP_SESSION_CANCELLED_BY_PEER,
@@ -57,6 +58,7 @@ extern "C" {
 
 	typedef enum sfp_action {
 		SFP_ACTION_START,
+		SFP_ACTION_INVITE,
 		SFP_ACTION_CANCEL,
 		SFP_ACTION_BYE_OR_CANCEL_RECEIVED,
 		SFP_ACTION_PAUSE,
@@ -106,6 +108,7 @@ extern "C" {
 		/* ----- functions to manipulate the states */
 		void (*updateState)(sfp_session_info_t * session, sfp_action_t action);
 		unsigned int (*isInitiated)(sfp_session_info_t * session);
+		unsigned int (*isTrying)(sfp_session_info_t * session);
 		unsigned int (*isRunning)(sfp_session_info_t * session);
 		unsigned int (*isCancelled)(sfp_session_info_t * session);
 		unsigned int (*isCancelledByPeer)(sfp_session_info_t * session);
