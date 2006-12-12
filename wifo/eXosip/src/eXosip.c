@@ -3499,8 +3499,7 @@ int eXosip_subscribe    (char *to, char *from, char *route, const int winfo)
   ADD_ELEMENT(eXosip.j_subscribes, js);
   eXosip_update(); /* fixed? */
   __eXosip_wakeup();
-  //return js->s_id;
-  return 0;
+  return js->s_id;
 }
 
 int eXosip_subscribe_refresh  (int sid, const char *expires)
