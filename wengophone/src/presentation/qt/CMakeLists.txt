@@ -31,6 +31,10 @@ ow_add_public_include_dirs(
 	${CMAKE_CURRENT_BINARY_DIR}
 )
 
+ow_add_private_include_dirs(
+  ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
 ow_add_private_definitions(
 	-DPHAPIWRAPPER
 	-DMULTIIMWRAPPER
