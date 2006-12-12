@@ -4,12 +4,19 @@ include(CheckCXXCompilerFlag)
 
 # With -fPIC
 if (UNIX AND NOT WIN32)
-	if (CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64")
+  execute_process(
+    COMMAND
+      uname -m
+    OUTPUT_VARIABLE MACHINE_TYPE
+    OUTPUT_QUIET
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+  )
+	if (MACHINE_TYPE MATCHES "x86_64")
 		check_cxx_compiler_flag("-fPIC" WITH_FPIC)
 		if (WITH_FPIC)
 			add_definitions(-fPIC)
 		endif (WITH_FPIC)
-	endif (CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64")
+	endif (MACHINE_TYPE MATCHES "x86_64")
 endif (UNIX AND NOT WIN32)
 
 if (CMAKE_BUILD_TYPE MATCHES Debug)
