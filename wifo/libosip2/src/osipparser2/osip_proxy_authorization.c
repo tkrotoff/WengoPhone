@@ -1,6 +1,6 @@
 /*
   The oSIP library implements the Session Initiation Protocol (SIP -rfc3261-)
-  Copyright (C) 2001,2002,2003  Aymeric MOIZARD jack@atosc.org
+  Copyright (C) 2001,2002,2003,2004,2005  Aymeric MOIZARD jack@atosc.org
   
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -32,8 +32,7 @@
 /* OUTPUT: osip_message_t *sip | structure to save results. */
 /* returns -1 on error. */
 int
-osip_message_set_proxy_authorization (osip_message_t * sip,
-				      const char *hvalue)
+osip_message_set_proxy_authorization (osip_message_t * sip, const char *hvalue)
 {
   osip_proxy_authorization_t *proxy_authorization;
   int i;
@@ -51,22 +50,21 @@ osip_message_set_proxy_authorization (osip_message_t * sip,
       return -1;
     }
   sip->message_property = 2;
-  osip_list_add (sip->proxy_authorizations, proxy_authorization, -1);
+  osip_list_add (&sip->proxy_authorizations, proxy_authorization, -1);
   return 0;
 }
 
 int
 osip_message_get_proxy_authorization (const osip_message_t * sip, int pos,
-				      osip_proxy_authorization_t ** dest)
+                                      osip_proxy_authorization_t ** dest)
 {
   osip_proxy_authorization_t *proxy_authorization;
 
   *dest = NULL;
-  if (osip_list_size (sip->proxy_authorizations) <= pos)
-    return -1;			/* does not exist */
+  if (osip_list_size (&sip->proxy_authorizations) <= pos)
+    return -1;                  /* does not exist */
   proxy_authorization =
-    (osip_proxy_authorization_t *) osip_list_get (sip->proxy_authorizations,
-						  pos);
+    (osip_proxy_authorization_t *) osip_list_get (&sip->proxy_authorizations, pos);
   *dest = proxy_authorization;
   return pos;
 }

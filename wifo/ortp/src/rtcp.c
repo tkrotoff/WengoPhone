@@ -21,7 +21,8 @@
 */
 
 #if defined (WIN32) || defined(_WIN32_WCE)
-#include "windows.h"
+#include <winsock2.h>
+#include <windows.h>
 #endif
 
 #include "ortp.h"

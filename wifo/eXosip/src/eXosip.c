@@ -344,10 +344,10 @@ void eXosip_quit(void)
 
   if (eXosip.j_osip)
     {
-      eXosip_kill_transaction (eXosip.j_osip->osip_ict_transactions);
-      eXosip_kill_transaction (eXosip.j_osip->osip_nict_transactions);
-      eXosip_kill_transaction (eXosip.j_osip->osip_ist_transactions);
-      eXosip_kill_transaction (eXosip.j_osip->osip_nist_transactions);
+      eXosip_kill_transaction (&eXosip.j_osip->osip_ict_transactions);
+      eXosip_kill_transaction (&eXosip.j_osip->osip_nict_transactions);
+      eXosip_kill_transaction (&eXosip.j_osip->osip_ist_transactions);
+      eXosip_kill_transaction (&eXosip.j_osip->osip_nist_transactions);
       osip_release (eXosip.j_osip);
       eXosip.j_osip = 0;
     }
@@ -2172,7 +2172,7 @@ int eXosip_off_hold_call (int jid, char *rtp_ip, int port)
 	  osip_free(conn->c_addr);
 	  conn->c_addr = osip_strdup(rtp_ip);
 	}
-      med = (sdp_media_t *) osip_list_get (sdp->m_medias, pos_media);
+      med = (sdp_media_t *) osip_list_get (&sdp->m_medias, pos_media);
       while (med != NULL)
 	{
 	  if (med->m_media!=NULL && 0==osip_strcasecmp(med->m_media, "audio"))
@@ -2183,7 +2183,7 @@ int eXosip_off_hold_call (int jid, char *rtp_ip, int port)
 	      break;
 	    }
 	  pos_media++;
-	  med = (sdp_media_t *) osip_list_get (sdp->m_medias, pos_media);
+	  med = (sdp_media_t *) osip_list_get (&sdp->m_medias, pos_media);
 	}
     }
 
@@ -2815,7 +2815,7 @@ eXosip_add_authentication_information(osip_message_t *req,
 
       if (aut != NULL)
 	{
-	  osip_list_add (req->authorizations, aut, -1);
+	  osip_list_add (&req->authorizations, aut, -1);
 	  osip_message_force_update(req);
 	}
 
@@ -2845,7 +2845,7 @@ eXosip_add_authentication_information(osip_message_t *req,
 
       if (proxy_aut != NULL)
 	{
-	  osip_list_add (req->proxy_authorizations, proxy_aut, -1);
+	  osip_list_add (&req->proxy_authorizations, proxy_aut, -1);
 	  osip_message_force_update(req);
 	}
 
@@ -2866,10 +2866,10 @@ eXosip_update_top_via(osip_message_t *sip)
   char locip[50];
 #endif
   char *tmp    = (char *)osip_malloc(256*sizeof(char));
-  osip_via_t *via   = (osip_via_t *) osip_list_get (sip->vias, 0);
+  osip_via_t *via   = (osip_via_t *) osip_list_get (&sip->vias, 0);
 
 
-  osip_list_remove(sip->vias, 0);
+  osip_list_remove(&sip->vias, 0);
   osip_via_free(via);
 #ifdef SM
   eXosip_get_localip_for(sip->req_uri->host,&locip);
@@ -2918,7 +2918,7 @@ eXosip_update_top_via(osip_message_t *sip)
 #endif
   osip_via_init(&via);
   osip_via_parse(via, tmp);
-  osip_list_add(sip->vias, via, 0);
+  osip_list_add(&sip->vias, via, 0);
   osip_free(tmp);
 
   return 0;
@@ -3038,20 +3038,20 @@ int eXosip_register      (int rid, int registration_period)
 				osip_cseq_num = osip_atoi(reg->cseq->number);
 				length   = strlen(reg->cseq->number);
 
-				aut = (osip_authorization_t *)osip_list_get(reg->authorizations, 0);
+				aut = (osip_authorization_t *)osip_list_get(&reg->authorizations, 0);
 				while (aut!=NULL)
 				{
-					osip_list_remove(reg->authorizations, 0);
+					osip_list_remove(&reg->authorizations, 0);
 					osip_authorization_free(aut);
-					aut = (osip_authorization_t *)osip_list_get(reg->authorizations, 0);
+					aut = (osip_authorization_t *)osip_list_get(&reg->authorizations, 0);
 				}
 
-				proxy_aut = (osip_proxy_authorization_t*)osip_list_get(reg->proxy_authorizations, 0);
+				proxy_aut = (osip_proxy_authorization_t*)osip_list_get(&reg->proxy_authorizations, 0);
 				while (proxy_aut!=NULL)
 				{
-					osip_list_remove(reg->proxy_authorizations, 0);
+					osip_list_remove(&reg->proxy_authorizations, 0);
 					osip_proxy_authorization_free(proxy_aut);
-					proxy_aut = (osip_proxy_authorization_t*)osip_list_get(reg->proxy_authorizations, 0);
+					proxy_aut = (osip_proxy_authorization_t*)osip_list_get(&reg->proxy_authorizations, 0);
 				}
 
 				if (-1 == eXosip_update_top_via(reg))
@@ -3184,8 +3184,8 @@ int eXosip_retry_with_auth_info(osip_transaction_t *tr,osip_message_t *response)
 
   org_request = tr->orig_request;
 
-  proxy_aut = (osip_proxy_authorization_t*)osip_list_get(org_request->proxy_authorizations, 0);
-  aut = (osip_authorization_t *)osip_list_get(org_request->authorizations, 0);
+  proxy_aut = (osip_proxy_authorization_t*)osip_list_get(&org_request->proxy_authorizations, 0);
+  aut = (osip_authorization_t *)osip_list_get(&org_request->authorizations, 0);
   if ((proxy_aut != 0 &&  response->status_code == 407) || (aut != 0 && response->status_code == 401))
     return -1; // Request contains already authentication info, this may result from a wrong password.
 

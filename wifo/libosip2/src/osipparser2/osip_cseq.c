@@ -1,6 +1,6 @@
 /*
   The oSIP library implements the Session Initiation Protocol (SIP -rfc3261-)
-  Copyright (C) 2001,2002,2003  Aymeric MOIZARD jack@atosc.org
+  Copyright (C) 2001,2002,2003,2004,2005  Aymeric MOIZARD jack@atosc.org
   
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -77,7 +77,7 @@ osip_cseq_parse (osip_cseq_t * cseq, const char *hvalue)
   cseq->number = NULL;
   cseq->method = NULL;
 
-  method = strchr (hvalue, ' ');	/* SEARCH FOR SPACE */
+  method = strchr (hvalue, ' ');        /* SEARCH FOR SPACE */
   end = hvalue + strlen (hvalue);
 
   if (method == NULL)
@@ -88,18 +88,16 @@ osip_cseq_parse (osip_cseq_t * cseq, const char *hvalue)
   cseq->number = (char *) osip_malloc (method - hvalue + 1);
   if (cseq->number == NULL)
     return -1;
-  osip_strncpy (cseq->number, hvalue, method - hvalue);
-  osip_clrspace (cseq->number);
+  osip_clrncpy (cseq->number, hvalue, method - hvalue);
 
   if (end - method + 1 < 2)
     return -1;
   cseq->method = (char *) osip_malloc (end - method + 1);
   if (cseq->method == NULL)
     return -1;
-  osip_strncpy (cseq->method, method + 1, end - method);
-  osip_clrspace (cseq->method);
+  osip_clrncpy (cseq->method, method + 1, end - method);
 
-  return 0;			/* ok */
+  return 0;                     /* ok */
 }
 
 /* returns the cseq header.            */
@@ -205,17 +203,16 @@ osip_cseq_match (osip_cseq_t * cseq1, osip_cseq_t * cseq2)
   if (0 == strcmp (cseq1->number, cseq2->number))
     {
       if (0 == strcmp (cseq2->method, "INVITE")
-	  || 0 == strcmp (cseq2->method, "ACK"))
-	{
-	  if (0 == strcmp (cseq1->method, "INVITE") ||
-	      0 == strcmp (cseq1->method, "ACK"))
-	    return 0;
-	}
-      else
-	{
-	  if (0 == strcmp (cseq1->method, cseq2->method))
-	    return 0;
-	}
+          || 0 == strcmp (cseq2->method, "ACK"))
+        {
+          if (0 == strcmp (cseq1->method, "INVITE") ||
+              0 == strcmp (cseq1->method, "ACK"))
+            return 0;
+      } else
+        {
+          if (0 == strcmp (cseq1->method, cseq2->method))
+            return 0;
+        }
     }
   return -1;
 }

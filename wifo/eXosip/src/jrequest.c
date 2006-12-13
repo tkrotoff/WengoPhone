@@ -129,106 +129,95 @@ generating_request_out_of_dialog2(osip_message_t **dest, char *method_name,
   doing_register = 0==strcmp("REGISTER", method_name);
 
   if (doing_register)
-    {
-      osip_uri_init(&(request->req_uri));
-      i = osip_uri_parse(request->req_uri, to);
-      if (i!=0)
-	{
-	  goto brood_error_1;
-	}
-      osip_message_set_to(request, from);
-      to = from;
-    }
+  {
+	  osip_uri_init(&(request->req_uri));
+	  i = osip_uri_parse(request->req_uri, to);
+	  if (i!=0)
+	  {
+		  goto brood_error_1;
+	  }
+	  osip_message_set_to(request, from);
+	  to = from;
+  }
   else
-    {
-      /* in any cases except REGISTER: */
-      osip_uri_param_t *replaces;
+  {
+	  /* in any cases except REGISTER: */
+	  i = osip_message_set_to(request, to);
 
-      i = osip_message_set_to(request, to);
+	  if (i!=0)
+	  {
+		  OSIP_TRACE (osip_trace
+			  (__FILE__, __LINE__, OSIP_ERROR, NULL,
+			  "ERROR: callee address does not seems to be a sipurl: %s\n", to));
+		  goto brood_error_1;
+	  }
+  }
 
+  if (proxy!=NULL && proxy[0] != 0)
+  {  
+	  osip_uri_param_t *lr_param;
+	  osip_route_t *o_proxy;
 
+	  // MINH [
+	  // Add this piece of code so that phcfg.proxy doesn't need to 
+	  // contain the full route header. Instead, it will contain just
+	  // the name or ip of the proxy
+	  char tmp[200];
+	  if (0 == strstr(proxy, "sip:"))
+	  {
+		  snprintf(tmp, sizeof(tmp), "<sip:%s;lr>", proxy);
+		  proxy = tmp;
+	  }		
+	  // ] MINH
 
-      if (i!=0)
-	{
-	  OSIP_TRACE (osip_trace
-		 (__FILE__, __LINE__, OSIP_ERROR, NULL,
-	     "ERROR: callee address does not seems to be a sipurl: %s\n", to));
-	  goto brood_error_1;
-	}
+	  /* equal to a pre-existing route set */
 
-      if (0 == osip_uri_uheader_get_byname(request->to->url, "Replaces", &replaces))
-	{
-	  osip_message_set_replaces(request, replaces->gvalue);
-	  osip_uri_uheader_remove_byname(request->to->url, "Replaces");
-	}
-    }
-
-
-	if (proxy!=NULL && proxy[0] != 0)
-    {  
-		osip_uri_param_t *lr_param;
-		osip_route_t *o_proxy;
-
-		// MINH [
-		// Add this piece of code so that phcfg.proxy doesn't need to 
-		// contain the full route header. Instead, it will contain just
-		// the name or ip of the proxy
-		char tmp[200];
-		if (0 == strstr(proxy, "sip:"))
-		{
-			snprintf(tmp, sizeof(tmp), "<sip:%s;lr>", proxy);
-			proxy = tmp;
-		}		
-		// ] MINH
-
-		/* equal to a pre-existing route set */
-
-		/* if the pre-existing route set contains a "lr" (compliance
-		  with bis-08) then the req_uri should contains the remote target
-		  URI */
+	  /* if the pre-existing route set contains a "lr" (compliance
+	  with bis-08) then the req_uri should contains the remote target
+	  URI */
 #ifndef __VXWORKS_OS__
-		osip_route_init(&o_proxy);
+	  osip_route_init(&o_proxy);
 #else
-		osip_route_init2(&o_proxy);
+	  osip_route_init2(&o_proxy);
 #endif
-      i = osip_route_parse(o_proxy, proxy);
-      if (i!=0) {
-	osip_route_free(o_proxy);
-	goto brood_error_1;
-      }
+	  i = osip_route_parse(o_proxy, proxy);
+	  if (i!=0) {
+		  osip_route_free(o_proxy);
+		  goto brood_error_1;
+	  }
 
-      osip_uri_uparam_get_byname(o_proxy->url, "lr", &lr_param);
-      if (lr_param!=NULL) /* to is the remote target URI in this case! */
-	{
-	  if (!doing_register)
-	    osip_uri_clone(request->to->url, &(request->req_uri));
-	  /* "[request] MUST includes a Route header field containing
-	     the route set values in order." */
-	  osip_list_add(request->routes, o_proxy, 0);
-	}
-      else if (!doing_register)
-	/* if the first URI of route set does not contain "lr", the req_uri
-	   is set to the first uri of route set */
-	{
-	  request->req_uri = o_proxy->url;
-	  o_proxy->url = NULL;
-	  osip_route_free(o_proxy);
-	  /* add the route set */
-	  /* "The UAC MUST add a route header field containing
-	     the remainder of the route set values in order.
-	     The UAC MUST then place the remote target URI into
-	     the route header field as the last value
-	  */
-	  osip_message_set_route(request, to);
-	}
-    }
+	  osip_uri_uparam_get_byname(o_proxy->url, "lr", &lr_param);
+	  if (lr_param!=NULL) /* to is the remote target URI in this case! */
+	  {
+		  if (!doing_register)
+			  osip_uri_clone(request->to->url, &(request->req_uri));
+		  /* "[request] MUST includes a Route header field containing
+		  the route set values in order." */
+		  osip_list_add(&request->routes, o_proxy, 0);
+	  }
+	  else if (!doing_register)
+		  /* if the first URI of route set does not contain "lr", the req_uri
+		  is set to the first uri of route set */
+	  {
+		  request->req_uri = o_proxy->url;
+		  o_proxy->url = NULL;
+		  osip_route_free(o_proxy);
+		  /* add the route set */
+		  /* "The UAC MUST add a route header field containing
+		  the remainder of the route set values in order.
+		  The UAC MUST then place the remote target URI into
+		  the route header field as the last value
+		  */
+		  osip_message_set_route(request, to);
+	  }
+  }
   else if (!doing_register)   
-    {
-      /* No route set (outbound proxy) is used */
-      /* The UAC must put the remote target URI (to field) in the req_uri */
-      i = osip_uri_clone(request->to->url, &(request->req_uri));
-      if (i!=0) goto brood_error_1;
-    }
+  {
+	  /* No route set (outbound proxy) is used */
+	  /* The UAC must put the remote target URI (to field) in the req_uri */
+	  i = osip_uri_clone(request->to->url, &(request->req_uri));
+	  if (i!=0) goto brood_error_1;
+  }
 
 
   /*guess the local ip since req uri is known */
@@ -241,40 +230,40 @@ generating_request_out_of_dialog2(osip_message_t **dest, char *method_name,
   osip_message_set_from(request, from);
   /* add a tag */
   osip_from_set_tag(request->from, osip_from_tag_new_random());
-  
+
   /* set the cseq and call_id header */
-    {
-      osip_call_id_t *callid;
-      osip_cseq_t *cseq;
-      char *num;
-      char  *cidrand;
-      char numbuf[8];
+  {
+	  osip_call_id_t *callid;
+	  osip_cseq_t *cseq;
+	  char *num;
+	  char  *cidrand;
+	  char numbuf[8];
 
-      snprintf(numbuf, 8, "%i", seqnum);
+	  snprintf(numbuf, 8, "%i", seqnum);
 
-      i = osip_call_id_init(&callid);
-      if (i!=0) goto brood_error_1;
+	  i = osip_call_id_init(&callid);
+	  if (i!=0) goto brood_error_1;
 
-      /* we don't set the calid.number for REGISTER requests to keep it always same for them */
-      /* it is positioned in eXosip_Register routine */
-      if (!doing_register)
-	{
-	  cidrand = osip_call_id_new_random();
-	  osip_call_id_set_number(callid, cidrand);
-	}
+	  /* we don't set the calid.number for REGISTER requests to keep it always same for them */
+	  /* it is positioned in eXosip_Register routine */
+	  if (!doing_register)
+	  {
+		  cidrand = osip_call_id_new_random();
+		  osip_call_id_set_number(callid, cidrand);
+	  }
 
 
-      osip_call_id_set_host(callid, osip_strdup(locip));
-      request->call_id = callid;
+	  osip_call_id_set_host(callid, osip_strdup(locip));
+	  request->call_id = callid;
 
-      i = osip_cseq_init(&cseq);
-      if (i!=0) goto brood_error_1;
-      num = osip_strdup(numbuf);
-      if (!num) goto brood_error_1;
-      osip_cseq_set_number(cseq, num);
-      osip_cseq_set_method(cseq, osip_strdup(method_name));
-      request->cseq = cseq;
-    }
+	  i = osip_cseq_init(&cseq);
+	  if (i!=0) goto brood_error_1;
+	  num = osip_strdup(numbuf);
+	  if (!num) goto brood_error_1;
+	  osip_cseq_set_number(cseq, num);
+	  osip_cseq_set_method(cseq, osip_strdup(method_name));
+	  request->cseq = cseq;
+  }
 
   /* always add the Max-Forward header */
   osip_message_set_max_forwards(request, "70"); /* a UA should start a request with 70 */
@@ -290,174 +279,174 @@ generating_request_out_of_dialog2(osip_message_t **dest, char *method_name,
 	  struct __eXosip_sockaddr addr;
 	  i = eXosip_get_addrinfo(&addrinfo, request->req_uri->host, 5060);
 	  if (i==0)
-		{
+	  {
 		  memcpy (&addr, addrinfo->ai_addr, addrinfo->ai_addrlen);
 		  freeaddrinfo (addrinfo);
 		  c_address = inet_ntoa (((struct sockaddr_in *) &addr)->sin_addr);
 		  OSIP_TRACE (osip_trace
 			  (__FILE__, __LINE__, OSIP_INFO1, NULL,
 			  "eXosip: here is the resolved destination host=%s\n", c_address));
-		}
+	  }
 
 	  if (eXosip_is_public_address(c_address))
-	    {
-	      char tmp[200];
-	      snprintf(tmp, 200, "SIP/2.0/%s %s:%s;branch=z9hG4bK%u", transport,
-		      eXosip.j_firewall_ip,
-		      eXosip.j_firewall_port,
-		      via_branch_new_random() );
-	      osip_message_set_via(request, tmp);
+	  {
+		  char tmp[200];
+		  snprintf(tmp, 200, "SIP/2.0/%s %s:%s;branch=z9hG4bK%u", transport,
+			  eXosip.j_firewall_ip,
+			  eXosip.j_firewall_port,
+			  via_branch_new_random() );
+		  osip_message_set_via(request, tmp);
 	  }
 	  else
 	  {
-	    char tmp[200];
-	    if (eXosip.ip_family==AF_INET6)
-	      snprintf(tmp, 200, "SIP/2.0/%s [%s]:%s;branch=z9hG4bK%u", transport,
-		      locip,
-		      eXosip.localport,
-		      via_branch_new_random() );
-	    else
-	      snprintf(tmp, 200, "SIP/2.0/%s %s:%s;rport;branch=z9hG4bK%u", transport,
-		      locip,
-		      eXosip.localport,
-		      via_branch_new_random() );
-	    osip_message_set_via(request, tmp);
+		  char tmp[200];
+		  if (eXosip.ip_family==AF_INET6)
+			  snprintf(tmp, 200, "SIP/2.0/%s [%s]:%s;branch=z9hG4bK%u", transport,
+			  locip,
+			  eXosip.localport,
+			  via_branch_new_random() );
+		  else
+			  snprintf(tmp, 200, "SIP/2.0/%s %s:%s;rport;branch=z9hG4bK%u", transport,
+			  locip,
+			  eXosip.localport,
+			  via_branch_new_random() );
+		  osip_message_set_via(request, tmp);
 	  }
   }
   else
   {
-    char tmp[200];
-    if (eXosip.ip_family==AF_INET6)
-      snprintf(tmp, 200, "SIP/2.0/%s [%s]:%s;branch=z9hG4bK%u", transport,
-	      locip,
-	      eXosip.localport,
-	      via_branch_new_random() );
-    else
-      snprintf(tmp, 200, "SIP/2.0/%s %s:%s;rport;branch=z9hG4bK%u", transport,
-	      locip,
-	      eXosip.localport,
-	      via_branch_new_random() );
-    osip_message_set_via(request, tmp);
+	  char tmp[200];
+	  if (eXosip.ip_family==AF_INET6)
+		  snprintf(tmp, 200, "SIP/2.0/%s [%s]:%s;branch=z9hG4bK%u", transport,
+		  locip,
+		  eXosip.localport,
+		  via_branch_new_random() );
+	  else
+		  snprintf(tmp, 200, "SIP/2.0/%s %s:%s;rport;branch=z9hG4bK%u", transport,
+		  locip,
+		  eXosip.localport,
+		  via_branch_new_random() );
+	  osip_message_set_via(request, tmp);
   }
 
 #else
   {
-    char tmp[200];
-    if (eXosip.ip_family==AF_INET6)
-      spnrintf(tmp, 200, "SIP/2.0/%s [%s]:%s;branch=z9hG4bK%u", transport,
-	      locip,
-	      eXosip.localport,
-	      via_branch_new_random() );
-    else
-      spnrintf(tmp, 200, "SIP/2.0/%s %s:%s;branch=z9hG4bK%u", transport,
-	      locip,
-	      eXosip.localport,
-	      via_branch_new_random() );
+	  char tmp[200];
+	  if (eXosip.ip_family==AF_INET6)
+		  spnrintf(tmp, 200, "SIP/2.0/%s [%s]:%s;branch=z9hG4bK%u", transport,
+		  locip,
+		  eXosip.localport,
+		  via_branch_new_random() );
+	  else
+		  spnrintf(tmp, 200, "SIP/2.0/%s %s:%s;branch=z9hG4bK%u", transport,
+		  locip,
+		  eXosip.localport,
+		  via_branch_new_random() );
 
-    osip_message_set_via(request, tmp);
+	  osip_message_set_via(request, tmp);
   }
 #endif
 
   /* add specific headers for each kind of request... */
 
   if (0==strcmp("INVITE", method_name) || 0==strcmp("SUBSCRIBE", method_name))
-    {
-      char *contact;
-      osip_from_t *a_from;
-      int i;
-      i = osip_from_init(&a_from);
-      if (i==0)
-	i = osip_from_parse(a_from, from);
+  {
+	  char *contact;
+	  osip_from_t *a_from;
+	  int i;
+	  i = osip_from_init(&a_from);
+	  if (i==0)
+		  i = osip_from_parse(a_from, from);
 
-      if (i==0 && a_from!=NULL
-	  && a_from->url!=NULL && a_from->url->username!=NULL )
-	{
-	  contact = (char *) osip_malloc(50+strlen(a_from->url->username));
+	  if (i==0 && a_from!=NULL
+		  && a_from->url!=NULL && a_from->url->username!=NULL )
+	  {
+		  contact = (char *) osip_malloc(50+strlen(a_from->url->username));
 
-	  if (eXosip.j_firewall_ip[0]!='\0')
-	    {
-	      char *c_address = request->req_uri->host;
+		  if (eXosip.j_firewall_ip[0]!='\0')
+		  {
+			  char *c_address = request->req_uri->host;
 
-		  struct addrinfo *addrinfo;
-		  struct __eXosip_sockaddr addr;
-		  i = eXosip_get_addrinfo(&addrinfo, request->req_uri->host, 5060);
-		  if (i==0)
-			{
-			  memcpy (&addr, addrinfo->ai_addr, addrinfo->ai_addrlen);
-			  freeaddrinfo (addrinfo);
-			  c_address = inet_ntoa (((struct sockaddr_in *) &addr)->sin_addr);
-			  OSIP_TRACE (osip_trace
-				  (__FILE__, __LINE__, OSIP_INFO1, NULL,
-				  "eXosip: here is the resolved destination host=%s\n", c_address));
-			}
+			  struct addrinfo *addrinfo;
+			  struct __eXosip_sockaddr addr;
+			  i = eXosip_get_addrinfo(&addrinfo, request->req_uri->host, 5060);
+			  if (i==0)
+			  {
+				  memcpy (&addr, addrinfo->ai_addr, addrinfo->ai_addrlen);
+				  freeaddrinfo (addrinfo);
+				  c_address = inet_ntoa (((struct sockaddr_in *) &addr)->sin_addr);
+				  OSIP_TRACE (osip_trace
+					  (__FILE__, __LINE__, OSIP_INFO1, NULL,
+					  "eXosip: here is the resolved destination host=%s\n", c_address));
+			  }
 
-	      if (eXosip_is_public_address(c_address))
-		{
-		  if (eXosip.localport==NULL)
-		    sprintf(contact, "<sip:%s@%s>", a_from->url->username,
-			    eXosip.j_firewall_ip);
+			  if (eXosip_is_public_address(c_address))
+			  {
+				  if (eXosip.localport==NULL)
+					  sprintf(contact, "<sip:%s@%s>", a_from->url->username,
+					  eXosip.j_firewall_ip);
+				  else
+					  sprintf(contact, "<sip:%s@%s:%s>", a_from->url->username,
+					  eXosip.j_firewall_ip,
+					  eXosip.j_firewall_port);
+			  }
+			  else
+			  {
+				  if (eXosip.localport==NULL)
+					  sprintf(contact, "<sip:%s@%s>", a_from->url->username,
+					  locip);
+				  else
+					  sprintf(contact, "<sip:%s@%s:%s>", a_from->url->username,
+					  locip,
+					  eXosip.localport);
+			  }
+		  }
 		  else
-		    sprintf(contact, "<sip:%s@%s:%s>", a_from->url->username,
-			    eXosip.j_firewall_ip,
-			    eXosip.j_firewall_port);
-		}
-	      else
-		{
-		  if (eXosip.localport==NULL)
-		    sprintf(contact, "<sip:%s@%s>", a_from->url->username,
-			    locip);
-		  else
-		    sprintf(contact, "<sip:%s@%s:%s>", a_from->url->username,
-			    locip,
-			    eXosip.localport);
-		}
-	    }
-	  else
-	    {
-	      if (eXosip.localport==NULL)
-		sprintf(contact, "<sip:%s@%s>", a_from->url->username,
-			locip);
-	      else
-		sprintf(contact, "<sip:%s@%s:%s>", a_from->url->username,
-			locip,
-			eXosip.localport);
-	    }
-	  osip_message_set_contact(request, contact);
-	  osip_free(contact);
-	}
-      osip_from_free(a_from);
+		  {
+			  if (eXosip.localport==NULL)
+				  sprintf(contact, "<sip:%s@%s>", a_from->url->username,
+				  locip);
+			  else
+				  sprintf(contact, "<sip:%s@%s:%s>", a_from->url->username,
+				  locip,
+				  eXosip.localport);
+		  }
+		  osip_message_set_contact(request, contact);
+		  osip_free(contact);
+	  }
+	  osip_from_free(a_from);
 
-      /* This is probably useless for other messages */
-      osip_message_set_allow(request, "INVITE");
-      osip_message_set_allow(request, "ACK");
-      osip_message_set_allow(request, "CANCEL");
-      osip_message_set_allow(request, "BYE");
-      osip_message_set_allow(request, "OPTIONS");
-      osip_message_set_allow(request, "REFER");
-      osip_message_set_allow(request, "SUBSCRIBE");
-      osip_message_set_allow(request, "NOTIFY");
-      osip_message_set_allow(request, "MESSAGE");
-    }
+	  /* This is probably useless for other messages */
+	  osip_message_set_allow(request, "INVITE");
+	  osip_message_set_allow(request, "ACK");
+	  osip_message_set_allow(request, "CANCEL");
+	  osip_message_set_allow(request, "BYE");
+	  osip_message_set_allow(request, "OPTIONS");
+	  osip_message_set_allow(request, "REFER");
+	  osip_message_set_allow(request, "SUBSCRIBE");
+	  osip_message_set_allow(request, "NOTIFY");
+	  osip_message_set_allow(request, "MESSAGE");
+  }
 
   if (0==strcmp("SUBSCRIBE", method_name))
-    {
-      osip_message_set_header(request, "Event", "presence");
+  {
+	  osip_message_set_header(request, "Event", "presence");
 #ifdef SUPPORT_MSN
-      osip_message_set_accept(request, "application/xpidf+xml");
+	  osip_message_set_accept(request, "application/xpidf+xml");
 #else
-      osip_message_set_accept(request, "application/pidf+xml");
+	  osip_message_set_accept(request, "application/pidf+xml");
 #endif
-    }
+  }
   else if (0==strcmp("REGISTER", method_name))
-    {
-    }
+  {
+  }
   else if (0==strcmp("INFO", method_name))
-    {
-    }
+  {
+  }
   else if (0==strcmp("OPTIONS", method_name))
-    {
-      osip_message_set_accept(request, "application/sdp");
-    }
+  {
+	  osip_message_set_accept(request, "application/sdp");
+  }
 
   osip_message_set_user_agent(request, eXosip.user_agent);
   /*  else if ... */
@@ -467,7 +456,7 @@ generating_request_out_of_dialog2(osip_message_t **dest, char *method_name,
 #endif
   return 0;
 
- brood_error_1:
+brood_error_1:
   osip_message_free(request);
   *dest = NULL;
 #ifdef SM
@@ -778,11 +767,11 @@ dialog_fill_route_set(osip_dialog_t *dialog, osip_message_t *request)
 
   if (dialog->type==CALLER)
     {
-      pos = osip_list_size(dialog->route_set)-1;
-      route = (osip_route_t*)osip_list_get(dialog->route_set, pos);
+      pos = osip_list_size(&dialog->route_set)-1;
+      route = (osip_route_t*)osip_list_get(&dialog->route_set, pos);
     }
   else
-    route = (osip_route_t*)osip_list_get(dialog->route_set, 0);
+    route = (osip_route_t*)osip_list_get(&dialog->route_set, 0);
     
   osip_uri_uparam_get_byname(route->url, "lr", &lr_param);
   if (lr_param!=NULL) /* the remote target URI is the req_uri! */
@@ -794,16 +783,16 @@ dialog_fill_route_set(osip_dialog_t *dialog, osip_message_t *request)
 	 the route set values in order." */
       /* AMD bug: fixed 17/06/2002 */
       pos=0; /* first element is at index 0 */
-      while (!osip_list_eol(dialog->route_set, pos))
+      while (!osip_list_eol(&dialog->route_set, pos))
 	{
 	  osip_route_t *route2;
-	  route = osip_list_get(dialog->route_set, pos);
+	  route = osip_list_get(&dialog->route_set, pos);
 	  i = osip_route_clone(route, &route2);
 	  if (i!=0) return -1;
 	  if (dialog->type==CALLER)
-	    osip_list_add(request->routes, route2, 0);
+	    osip_list_add(&request->routes, route2, 0);
 	  else
-	    osip_list_add(request->routes, route2, -1);
+	    osip_list_add(&request->routes, route2, -1);
 	  pos++;
 	}
       return 0;
@@ -820,23 +809,23 @@ dialog_fill_route_set(osip_dialog_t *dialog, osip_message_t *request)
      the remainder of the route set values in order. */
   pos=0; /* yes it is */
   
-  while (!osip_list_eol(dialog->route_set, pos)) /* not the first one in the list */
+  while (!osip_list_eol(&dialog->route_set, pos)) /* not the first one in the list */
     {
       osip_route_t *route2;
-      route = osip_list_get(dialog->route_set, pos);
+      route = osip_list_get(&dialog->route_set, pos);
       i = osip_route_clone(route, &route2);
       if (i!=0) return -1;
       if (dialog->type==CALLER)
 	{
-	  if (pos!=osip_list_size(dialog->route_set)-1)
-	    osip_list_add(request->routes, route2, 0);
+	  if (pos!=osip_list_size(&dialog->route_set)-1)
+	    osip_list_add(&request->routes, route2, 0);
 	  else
 	    osip_route_free(route2);
 	}
       else
 	{
-	  if (!osip_list_eol(dialog->route_set, pos+1))
-	    osip_list_add(request->routes, route2, -1);
+	  if (!osip_list_eol(&dialog->route_set, pos+1))
+	    osip_list_add(&request->routes, route2, -1);
 	  else
 	    osip_route_free(route2);
 	}
@@ -899,7 +888,7 @@ _eXosip_build_request_within_dialog2(osip_message_t **dest, char *method_name,
   request->reason_phrase = NULL;
 
   /* and the request uri???? */
-  if (osip_list_eol(dialog->route_set, 0))
+  if (osip_list_eol(&dialog->route_set, 0))
     {
       /* The UAC must put the remote target URI (to field) in the req_uri */
       i = osip_uri_clone(dialog->remote_contact_uri->url, &(request->req_uri));
@@ -1222,7 +1211,7 @@ generating_cancel(osip_message_t **dest, osip_message_t *request_cancelled)
     if (i!=0) goto gc_error_1;
     i = osip_via_clone(via, &via2);
     if (i!=0) goto gc_error_1;
-    osip_list_add(request->vias, via2, -1);
+    osip_list_add(&request->vias, via2, -1);
   }
 
   /* add the same route-set than in the previous request */
@@ -1230,12 +1219,12 @@ generating_cancel(osip_message_t **dest, osip_message_t *request_cancelled)
     int pos=0;
     osip_route_t *route;
     osip_route_t *route2;
-    while (!osip_list_eol(request_cancelled->routes, pos))
+    while (!osip_list_eol(&request_cancelled->routes, pos))
       {
-	route = (osip_route_t*) osip_list_get(request_cancelled->routes, pos);
+	route = (osip_route_t*) osip_list_get(&request_cancelled->routes, pos);
 	i = osip_route_clone(route, &route2);
 	if (i!=0) goto gc_error_1;
-	osip_list_add(request->routes, route2, -1);
+	osip_list_add(&request->routes, route2, -1);
 	pos++;
       }
   }

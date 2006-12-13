@@ -1,6 +1,6 @@
 /*
   The oSIP library implements the Session Initiation Protocol (SIP -rfc3261-)
-  Copyright (C) 2001,2002,2003  Aymeric MOIZARD jack@atosc.org
+  Copyright (C) 2001,2002,2003,2004,2005  Aymeric MOIZARD jack@atosc.org
   
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -101,7 +101,7 @@ osip_call_id_parse (osip_call_id_t * callid, const char *hvalue)
   callid->number = NULL;
   callid->host = NULL;
 
-  host = strchr (hvalue, '@');	/* SEARCH FOR '@' */
+  host = strchr (hvalue, '@');  /* SEARCH FOR '@' */
   end = hvalue + strlen (hvalue);
 
   if (host == NULL)
@@ -109,22 +109,20 @@ osip_call_id_parse (osip_call_id_t * callid, const char *hvalue)
   else
     {
       if (end - host + 1 < 2)
-	return -1;
+        return -1;
       callid->host = (char *) osip_malloc (end - host);
       if (callid->host == NULL)
-	return -1;
-      osip_strncpy (callid->host, host + 1, end - host - 1);
-      osip_clrspace (callid->host);
+        return -1;
+      osip_clrncpy (callid->host, host + 1, end - host - 1);
     }
   if (host - hvalue + 1 < 2)
     return -1;
   callid->number = (char *) osip_malloc (host - hvalue + 1);
   if (callid->number == NULL)
     return -1;
-  osip_strncpy (callid->number, hvalue, host - hvalue);
-  osip_clrspace (callid->number);
+  osip_clrncpy (callid->number, hvalue, host - hvalue);
 
-  return 0;			/* ok */
+  return 0;                     /* ok */
 }
 
 /* returns the call_id as a string.          */
@@ -141,16 +139,14 @@ osip_call_id_to_str (const osip_call_id_t * callid, char **dest)
     {
       *dest = (char *) osip_malloc (strlen (callid->number) + 1);
       if (*dest == NULL)
-	return -1;
+        return -1;
       sprintf (*dest, "%s", callid->number);
-    }
-  else
+  } else
     {
       *dest =
-	(char *) osip_malloc (strlen (callid->number) +
-			      strlen (callid->host) + 2);
+        (char *) osip_malloc (strlen (callid->number) + strlen (callid->host) + 2);
       if (*dest == NULL)
-	return -1;
+        return -1;
       sprintf (*dest, "%s@%s", callid->number, callid->host);
     }
   return 0;
@@ -197,7 +193,7 @@ osip_call_id_clone (const osip_call_id_t * callid, osip_call_id_t ** dest)
     return -1;
 
   i = osip_call_id_init (&ci);
-  if (i == -1)			/* allocation failed */
+  if (i == -1)                  /* allocation failed */
     return -1;
   ci->number = osip_strdup (callid->number);
   if (callid->host != NULL)

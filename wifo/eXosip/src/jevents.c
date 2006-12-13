@@ -277,10 +277,10 @@ eXosip_event_add_sdp_info(eXosip_event_t *je, osip_message_t *message)
 
   sdp = NULL;
   pos = 0;
-  while (!osip_list_eol(message->bodies, pos))
+  while (!osip_list_eol(&message->bodies, pos))
     {
       int i;
-      oldbody = (osip_body_t *)osip_list_get(message->bodies, pos);
+      oldbody = (osip_body_t *)osip_list_get(&message->bodies, pos);
       pos++;
       sdp_message_init(&sdp);
       i = sdp_message_parse(sdp,oldbody->body);
@@ -490,7 +490,7 @@ eXosip_event_init_for_reg(int type,
 
   if (sip)
     {
-      osip_contact_t *con = (osip_contact_t *) osip_list_get(sip->contacts, 0);
+      osip_contact_t *con = (osip_contact_t *) osip_list_get(&sip->contacts, 0);
 
       if (con)
 	osip_contact_param_get_byname(con, "expires",  &expires);

@@ -860,9 +860,9 @@ sdp_confirm_media (osip_negotiation_t * config,
 			  if (my_payload->c_nettype != NULL)
 			    {
 			      sdp_media_t *med =
-				osip_list_get ((*dest)->m_medias, i);
+				osip_list_get (&(*dest)->m_medias, i);
 
-			      if (osip_list_eol (med->c_connections, 0))
+			      if (osip_list_eol (&med->c_connections, 0))
 				sdp_message_c_connection_add (*dest, i,
 							      osip_strdup
 							      (my_payload->
@@ -945,9 +945,9 @@ sdp_confirm_media (osip_negotiation_t * config,
 			  if (my_payload->c_nettype != NULL)
 			    {
 			      sdp_media_t *med =
-				osip_list_get ((*dest)->m_medias, i);
+				osip_list_get (&(*dest)->m_medias, i);
 
-			      if (osip_list_eol (med->c_connections, 0))
+			      if (osip_list_eol (&med->c_connections, 0))
 				sdp_message_c_connection_add (*dest, i,
 							      osip_strdup
 							      (my_payload->
@@ -1003,9 +1003,9 @@ sdp_confirm_media (osip_negotiation_t * config,
 			  if (my_payload->c_nettype != NULL)
 			    {
 			      sdp_media_t *med =
-				osip_list_get ((*dest)->m_medias, i);
+				osip_list_get (&(*dest)->m_medias, i);
 
-			      if (osip_list_eol (med->c_connections, 0))
+			      if (osip_list_eol (&med->c_connections, 0))
 				sdp_message_c_connection_add (*dest, i,
 							      osip_strdup
 							      (my_payload->
@@ -1080,7 +1080,7 @@ osip_negotiation_ctx_execute_negotiation (osip_negotiation_t * config,
       /* this is to refuse each line with no codec that matches! */
       if (NULL == sdp_message_m_payload_get (local, i, 0))
 	{
-	  sdp_media_t *med = osip_list_get ((local)->m_medias, i);
+	  sdp_media_t *med = osip_list_get (&local->m_medias, i);
 	  char *str = sdp_message_m_payload_get (remote, i, 0);
 
 	  sdp_message_m_payload_add (local, i, osip_strdup (str));
@@ -1089,7 +1089,7 @@ osip_negotiation_ctx_execute_negotiation (osip_negotiation_t * config,
 	}
       else
 	{			/* number of "m" lines that match */
-	  sdp_media_t *med = osip_list_get (local->m_medias, i);
+	  sdp_media_t *med = osip_list_get (&local->m_medias, i);
 
 	  m_lines_that_match++;
 	  osip_free (med->m_port);

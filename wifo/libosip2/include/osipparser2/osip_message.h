@@ -1,6 +1,6 @@
 /*
-  The oSIP library implements the Session Initiation Protocol (SIP -rfc2543-)
-  Copyright (C) 2001  Aymeric MOIZARD jack@atosc.org
+  The oSIP library implements the Session Initiation Protocol (SIP -rfc3261-)
+  Copyright (C) 2001,2002,2003,2004  Aymeric MOIZARD jack@atosc.org
   
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -62,35 +62,35 @@ extern "C"
     int status_code;                  /**< Status Code (SIP answer only) */
     char *reason_phrase;              /**< Reason Phrase (SIP answer only) */
 
-    osip_list_t *accepts;             /**< Accept headers */
-    osip_list_t *accept_encodings;    /**< Accept-Encoding headers */
-    osip_list_t *accept_languages;    /**< Accept-Language headers */
-    osip_list_t *alert_infos;         /**< Alert-Info headers */
-    osip_list_t *allows;              /**< Allows headers */
-    osip_list_t *authorizations;      /**< Authorizations headers */
+    osip_list_t accepts;             /**< Accept headers */
+    osip_list_t accept_encodings;    /**< Accept-Encoding headers */
+    osip_list_t accept_languages;    /**< Accept-Language headers */
+    osip_list_t alert_infos;         /**< Alert-Info headers */
+    osip_list_t allows;              /**< Allows headers */
+    osip_list_t authentication_infos;/**< authentication_info headers */
+    osip_list_t authorizations;      /**< Authorizations headers */
     osip_call_id_t *call_id;          /**< Call-ID header */
-    osip_list_t *call_infos;          /**< Call-Infos header */
-    osip_list_t *contacts;            /**< Contacts headers */
-    osip_list_t *content_dispositions;/**< Content-Dispositions headers */
-    osip_list_t *content_encodings;   /**< Content-Encodings headers */
+    osip_list_t call_infos;          /**< Call-Infos header */
+    osip_list_t contacts;            /**< Contacts headers */
+    osip_list_t content_encodings;   /**< Content-Encodings headers */
     osip_content_length_t *content_length;   /**< Content-Length header */
     osip_content_type_t *content_type;       /**< Content-Type header */
     osip_cseq_t *cseq;                /**< CSeq header */
-    osip_list_t *error_infos;         /**< Error-Info headers */
+    osip_list_t error_infos;         /**< Error-Info headers */
     osip_from_t *from;                /**< From header */
     osip_mime_version_t *mime_version;/**< Mime-Version header */
-    osip_list_t *proxy_authenticates; /**< Proxy-Authenticate headers */
-    osip_list_t *proxy_authorizations;/**< Proxy-authorization headers */
-    osip_list_t *record_routes;       /**< Record-Route headers */
-    osip_list_t *routes;              /**< Route headers */
+    osip_list_t proxy_authenticates; /**< Proxy-Authenticate headers */
+    osip_list_t proxy_authentication_infos; /**< P-Authentication-Info headers */
+    osip_list_t proxy_authorizations;/**< Proxy-authorization headers */
+    osip_list_t record_routes;       /**< Record-Route headers */
+    osip_list_t routes;              /**< Route headers */
     osip_to_t *to;                    /**< To header */
-    osip_list_t *vias;                /**< Vias headers */
-    osip_list_t *www_authenticates;   /**< WWW-Authenticate headers */
-    osip_replaces_t *replaces;        /**< Replace header */
+    osip_list_t vias;                /**< Vias headers */
+    osip_list_t www_authenticates;   /**< WWW-Authenticate headers */
 
-    osip_list_t *headers;             /**< Other headers */
+    osip_list_t headers;             /**< Other headers */
 
-    osip_list_t *bodies;              /**< List of attachements */
+    osip_list_t bodies;              /**< List of attachements */
 
     /*
        1: structure and buffer "message" are identical.
@@ -99,6 +99,8 @@ extern "C"
     int message_property;             /**@internal */
     char *message;                    /**@internal */
     size_t message_length;            /**@internal */
+
+    void *application_data;           /**can be used by upper layer*/
   };
 
 #ifndef SIP_MESSAGE_MAX_LENGTH
@@ -112,7 +114,7 @@ extern "C"
 /**
  * You can define the maximum length for a body inside a SIP message.
  */
-#define BODY_MESSAGE_MAX_SIZE  1000
+#define BODY_MESSAGE_MAX_SIZE  4000
 #endif
 
 /**
@@ -133,12 +135,30 @@ extern "C"
  */
   int osip_message_parse (osip_message_t * sip, const char *buf, size_t length);
 /**
+ * Parse a message/sipfrag part and store it in an osip_message_t element.
+ * @param sip The resulting element.
+ * @param buf The buffer to parse.
+ * @param length The length of the buffer to parse.
+ */
+  int osip_message_parse_sipfrag (osip_message_t * sip, const char *buf,
+                                  size_t length);
+/**
  * Get a string representation of a osip_message_t element.
  * @param sip The element to work on.
  * @param dest new allocated buffer returned.
  * @param message_length The length of the returned buffer.
  */
-  int osip_message_to_str (osip_message_t * sip, char **dest, size_t *message_length);
+  int osip_message_to_str (osip_message_t * sip, char **dest,
+                           size_t * message_length);
+/**
+ * Get a string representation of a message/sipfrag part
+ * stored in an osip_message_t element.
+ * @param sip The element to work on.
+ * @param dest new allocated buffer returned.
+ * @param message_length The length of the returned buffer.
+ */
+  int osip_message_to_str_sipfrag (osip_message_t * sip, char **dest,
+                                   size_t * message_length);
 /**
  * Clone a osip_message_t element.
  * @param sip The element to clone.
@@ -222,74 +242,74 @@ extern "C"
  * @param msg the SIP message.
  */
 #define MSG_IS_INVITE(msg)   (MSG_IS_REQUEST(msg) && \
-			      0==strncmp((msg)->sip_method,"INVITE",6))
+			      0==strcmp((msg)->sip_method,"INVITE"))
 /**
  * Test if the message is an ACK REQUEST
  * @param msg the SIP message.
  */
 #define MSG_IS_ACK(msg)      (MSG_IS_REQUEST(msg) && \
-			      0==strncmp((msg)->sip_method,"ACK",3))
+			      0==strcmp((msg)->sip_method,"ACK"))
 /**
  * Test if the message is a REGISTER REQUEST
  * @param msg the SIP message.
  */
 #define MSG_IS_REGISTER(msg) (MSG_IS_REQUEST(msg) && \
-			      0==strncmp((msg)->sip_method,"REGISTER",8))
+			      0==strcmp((msg)->sip_method,"REGISTER"))
 /**
  * Test if the message is a BYE REQUEST
  * @param msg the SIP message.
  */
 #define MSG_IS_BYE(msg)      (MSG_IS_REQUEST(msg) && \
-			      0==strncmp((msg)->sip_method,"BYE",3))
+			      0==strcmp((msg)->sip_method,"BYE"))
 /**
  * Test if the message is an OPTIONS REQUEST
  * @param msg the SIP message.
  */
 #define MSG_IS_OPTIONS(msg)  (MSG_IS_REQUEST(msg) && \
-			      0==strncmp((msg)->sip_method,"OPTIONS",7))
+			      0==strcmp((msg)->sip_method,"OPTIONS"))
 /**
  * Test if the message is an INFO REQUEST
  * @param msg the SIP message.
  */
 #define MSG_IS_INFO(msg)     (MSG_IS_REQUEST(msg) && \
-			      0==strncmp((msg)->sip_method,"INFO",4))
+			      0==strcmp((msg)->sip_method,"INFO"))
 /**
  * Test if the message is a CANCEL REQUEST
  * @param msg the SIP message.
  */
 #define MSG_IS_CANCEL(msg)   (MSG_IS_REQUEST(msg) && \
-			      0==strncmp((msg)->sip_method,"CANCEL",6))
+			      0==strcmp((msg)->sip_method,"CANCEL"))
 /**
  * Test if the message is a REFER REQUEST
  * @param msg the SIP message.
  */
 #define MSG_IS_REFER(msg)   (MSG_IS_REQUEST(msg) && \
-			      0==strncmp((msg)->sip_method,"REFER",5))
+			      0==strcmp((msg)->sip_method,"REFER"))
 /**
  * Test if the message is a NOTIFY REQUEST
  * @param msg the SIP message.
  */
 #define MSG_IS_NOTIFY(msg)   (MSG_IS_REQUEST(msg) && \
-			      0==strncmp((msg)->sip_method,"NOTIFY",6))
+			      0==strcmp((msg)->sip_method,"NOTIFY"))
 /**
  * Test if the message is a SUBSCRIBE REQUEST
  * @def MSG_IS_SUBSCRIBE
  * @param msg the SIP message.
  */
 #define MSG_IS_SUBSCRIBE(msg)  (MSG_IS_REQUEST(msg) && \
-			      0==strncmp((msg)->sip_method,"SUBSCRIBE",9))
+			      0==strcmp((msg)->sip_method,"SUBSCRIBE"))
 /**
  * Test if the message is a MESSAGE REQUEST
  * @param msg the SIP message.
  */
 #define MSG_IS_MESSAGE(msg)  (MSG_IS_REQUEST(msg) && \
-			      0==strncmp((msg)->sip_method,"MESSAGE",7))
+			      0==strcmp((msg)->sip_method,"MESSAGE"))
 /**
  * Test if the message is a PRACK REQUEST  (!! PRACK IS NOT SUPPORTED by the fsm!!)
  * @param msg the SIP message.
  */
 #define MSG_IS_PRACK(msg)    (MSG_IS_REQUEST(msg) && \
-			      0==strncmp((msg)->sip_method,"PRACK",5))
+			      0==strcmp((msg)->sip_method,"PRACK"))
 
 
 /**
@@ -297,7 +317,14 @@ extern "C"
  * @param msg the SIP message.
  */
 #define MSG_IS_UPDATE(msg)    (MSG_IS_REQUEST(msg) && \
-			      0==strncmp((msg)->sip_method,"UPDATE",6))
+			      0==strcmp((msg)->sip_method,"UPDATE"))
+
+/**
+ * Test if the message is an UPDATE REQUEST
+ * @param msg the SIP message.
+ */
+#define MSG_IS_PUBLISH(msg)    (MSG_IS_REQUEST(msg) && \
+			      0==strcmp((msg)->sip_method,"PUBLISH"))
 
 
 /**
@@ -403,26 +430,24 @@ extern "C"
  * @param name the token name to set.
  */
   void osip_generic_param_set_name (osip_generic_param_t * generic_param,
-				    char *name);
+                                    char *name);
 /**
  * Get the name of a generic parameter element.
  * @param generic_param The element to work on.
  */
-  char *osip_generic_param_get_name (const osip_generic_param_t *
-				     generic_param);
+  char *osip_generic_param_get_name (const osip_generic_param_t * generic_param);
 /**
  * Set the value of a generic parameter element.
  * @param generic_param The element to work on.
  * @param value the token name to set.
  */
   void osip_generic_param_set_value (osip_generic_param_t * generic_param,
-				     char *value);
+                                     char *value);
 /**
  * Get the value of a generic parameter element.
  * @param generic_param The element to work on.
  */
-  char *osip_generic_param_get_value (const osip_generic_param_t *
-				      generic_param);
+  char *osip_generic_param_get_value (const osip_generic_param_t * generic_param);
 
 /** @} */
 

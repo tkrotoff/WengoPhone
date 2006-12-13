@@ -138,7 +138,7 @@ int cb_snd_message (osip_transaction_t * tr, osip_message_t * sip, char *host,
 	int i;
 	osip_via_t *via;
 
-	via = (osip_via_t *) osip_list_get (sip->vias, 0);
+	via = (osip_via_t *) osip_list_get (&sip->vias, 0);
 	if (via == NULL || via->protocol == NULL)
 		return -1;
 
@@ -273,7 +273,7 @@ int cb_udp_snd_message(osip_transaction_t *tr, osip_message_t *sip, char *host,
 	osip_message_get_route(sip, 0, &o_proxy);
 	if (o_proxy && o_proxy->url && (strcmp(o_proxy->url->host, host) == 0))
 	{
-  		osip_list_remove_element(sip->routes, o_proxy);
+  		osip_list_remove_element(&sip->routes, o_proxy);
 	}
   
   /* sVoIP integration */
@@ -313,7 +313,7 @@ int cb_udp_snd_message(osip_transaction_t *tr, osip_message_t *sip, char *host,
 	//JULIEN: re-add the previously removed route header
 	if (o_proxy)
 	{
-		osip_list_add(sip->routes, o_proxy, 0);
+		osip_list_add(&sip->routes, o_proxy, 0);
 	}
 
   if (i!=0 || length<=0) {
@@ -653,11 +653,11 @@ static void cb_rcvinfo    (int type, osip_transaction_t *tr,osip_message_t *sip)
 	  /* get list of bodies */
 	  je->i_bodies = (osip_list_t*) osip_malloc(sizeof(osip_list_t));
 	  osip_list_init(je->i_bodies);
-	  for (pos=0;!osip_list_eol(sip->bodies, pos);pos++)
+	  for (pos=0;!osip_list_eol(&sip->bodies, pos);pos++)
 	    {
 	      osip_body_t *body;
 	      osip_body_t *_body;
-	      body = (osip_body_t *)osip_list_get(sip->bodies, pos);
+	      body = (osip_body_t *)osip_list_get(&sip->bodies, pos);
 	      osip_body_clone(body, &_body);
 	      osip_list_add(je->i_bodies, _body, -1);
 	    }
@@ -1011,7 +1011,7 @@ sdp_message_t *eXosip_get_sdp_body(osip_message_t *message)
   int i, pos = 0;
 
   sdp=NULL;
-  body = (osip_body_t *)osip_list_get(message->bodies,0);
+  body = (osip_body_t *)osip_list_get(&message->bodies,0);
   while (body!=NULL)
     {
       i = sdp_message_init(&sdp);
@@ -1025,7 +1025,7 @@ sdp_message_t *eXosip_get_sdp_body(osip_message_t *message)
       sdp_message_free(sdp);
       sdp = NULL;
       pos++;
-      body = (osip_body_t *)osip_list_get(message->bodies,pos);
+      body = (osip_body_t *)osip_list_get(&message->bodies,pos);
     }
   return sdp;
 }
@@ -1083,8 +1083,8 @@ eXosip_report_call_event_with_status(int evt, eXosip_call_t *jc, eXosip_dialog_t
 	//	if(!osip_list_eol(jd->d_200ok->bodies, 0)){
 	//		body = (osip_body_t *)osip_list_get(jd->d_200ok->bodies, 0);
 	if (sip->status_code == 200) {
-		if (!osip_list_eol(sip->bodies, 0)) {
-			body = (osip_body_t *)osip_list_get(sip->bodies, 0);
+		if (!osip_list_eol(&sip->bodies, 0)) {
+			body = (osip_body_t *)osip_list_get(&sip->bodies, 0);
 
 			if (je->msg_body) 
 				osip_free(je->msg_body);

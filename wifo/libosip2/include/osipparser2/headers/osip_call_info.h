@@ -1,6 +1,6 @@
 /*
-  The oSIP library implements the Session Initiation Protocol (SIP -rfc2543-)
-  Copyright (C) 2001  Aymeric MOIZARD jack@atosc.org
+  The oSIP library implements the Session Initiation Protocol (SIP -rfc3261-)
+  Copyright (C) 2001,2002,2003,2004,2005  Aymeric MOIZARD jack@atosc.org
   
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -47,7 +47,7 @@
   struct osip_call_info
   {
     char *element;              /**< Call-Info main value */
-    osip_list_t *gen_params;    /**< Parameters for Call-Info header */
+    osip_list_t gen_params;     /**< Parameters for Call-Info header */
   };
 
 #ifdef __cplusplus

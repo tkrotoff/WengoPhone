@@ -17,8 +17,6 @@
   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-#include <stdlib.h>
-
 #include <osip2/internal.h>
 #include <osip2/osip.h>
 
@@ -28,10 +26,13 @@
 /* INPUT : char *buf | message as a string.            */
 /* return NULL  if message cannot be parsed            */
 osip_event_t *
-osip_parse (char *buf, size_t length)
+osip_parse (const char *buf, size_t length)
 {
-  osip_event_t *se = __osip_event_new (UNKNOWN_EVT, 0);
   int i;
+  osip_event_t *se = __osip_event_new (UNKNOWN_EVT, 0);
+
+  if (se == NULL)
+    return NULL;
 
 #ifdef TEST_PARSER_SPEED
   {
@@ -44,57 +45,59 @@ osip_parse (char *buf, size_t length)
     for (kk = 0; kk < 10000; kk++)
       {
 
-	i = osip_message_init (&(se->sip));
+        i = osip_message_init (&(se->sip));
 
-	if (osip_message_parse (se->sip, buf, length) == -1)
-	  {
-	    fprintf (stdout, "osip_message_parse retrun -1\n");
-	    osip_message_free (se->sip);
-	  }
-	else
-	  {			/* msg is parsed */
-	    osip_message_free (se->sip);
-	  }
+        if (osip_message_parse (se->sip, buf, length) == -1)
+          {
+            fprintf (stdout, "osip_message_parse retrun -1\n");
+            osip_message_free (se->sip);
+        } else
+          {                     /* msg is parsed */
+            osip_message_free (se->sip);
+          }
       }
     clock_get_time (CLOCK_REALTIME, &tv1);
     pstime1 = ((tv1.tv_sec * 1000) + (tv1.tv_nsec / 1000000));
     fprintf (stdout, "CPU clock ticks for 10000 messages - T1: %i - T2: %i\n",
-	     pstime1, pstime);
-    fprintf (stdout, "CPU time for 10000 messages - %d\n",
-	     (pstime1 - pstime));
+             pstime1, pstime);
+    fprintf (stdout, "CPU time for 10000 messages - %d\n", (pstime1 - pstime));
   }
   osip_free (se);
   return NULL;
 #endif
   /* parse message and set up an event */
   i = osip_message_init (&(se->sip));
-  if (osip_message_parse (se->sip, buf, length) == -1)
+  if (i != 0)
     {
-      OSIP_TRACE (osip_trace
-		  (__FILE__, __LINE__, OSIP_ERROR, NULL,
-		   "could not parse message\n"));
-      osip_message_free (se->sip);
       osip_free (se);
       return NULL;
     }
-  else
+  if (osip_message_parse (se->sip, buf, length) == -1)
+    {
+      OSIP_TRACE (osip_trace
+                  (__FILE__, __LINE__, OSIP_ERROR, NULL,
+                   "could not parse message\n"));
+      osip_message_free (se->sip);
+      osip_free (se);
+      return NULL;
+  } else
     {
       if (se->sip->call_id != NULL && se->sip->call_id->number != NULL)
-	{
-	  OSIP_TRACE (osip_trace
-		      (__FILE__, __LINE__, OSIP_INFO3, NULL,
-		       "MESSAGE REC. CALLID:%s\n", se->sip->call_id->number));
-	}
+        {
+          OSIP_TRACE (osip_trace
+                      (__FILE__, __LINE__, OSIP_INFO3, NULL,
+                       "MESSAGE REC. CALLID:%s\n", se->sip->call_id->number));
+        }
 
       if (MSG_IS_REQUEST (se->sip))
-	{
-	  if (se->sip->sip_method == NULL || se->sip->req_uri == NULL)
-	    {
-	      osip_message_free (se->sip);
-	      osip_free (se);
-	      return NULL;
-	    }
-	}
+        {
+          if (se->sip->sip_method == NULL || se->sip->req_uri == NULL)
+            {
+              osip_message_free (se->sip);
+              osip_free (se);
+              return NULL;
+            }
+        }
 
       se->type = evt_set_type_incoming_sipmessage (se->sip);
       return se;
@@ -135,9 +138,9 @@ osip_new_outgoing_sipmessage (osip_message_t * sip)
   if (MSG_IS_REQUEST (sip))
     {
       if (sip->sip_method == NULL)
-	return NULL;
+        return NULL;
       if (sip->req_uri == NULL)
-	return NULL;
+        return NULL;
     }
   sipevent = (osip_event_t *) osip_malloc (sizeof (osip_event_t));
   if (sipevent == NULL)
@@ -155,17 +158,16 @@ evt_set_type_incoming_sipmessage (osip_message_t * sip)
   if (MSG_IS_REQUEST (sip))
     {
       if (MSG_IS_INVITE (sip))
-	return RCV_REQINVITE;
+        return RCV_REQINVITE;
       else if (MSG_IS_ACK (sip))
-	return RCV_REQACK;
+        return RCV_REQACK;
       return RCV_REQUEST;
-    }
-  else
+  } else
     {
       if (MSG_IS_STATUS_1XX (sip))
-	return RCV_STATUS_1XX;
+        return RCV_STATUS_1XX;
       else if (MSG_IS_STATUS_2XX (sip))
-	return RCV_STATUS_2XX;
+        return RCV_STATUS_2XX;
       return RCV_STATUS_3456XX;
     }
 }
@@ -177,17 +179,16 @@ evt_set_type_outgoing_sipmessage (osip_message_t * sip)
   if (MSG_IS_REQUEST (sip))
     {
       if (MSG_IS_INVITE (sip))
-	return SND_REQINVITE;
+        return SND_REQINVITE;
       if (MSG_IS_ACK (sip))
-	return SND_REQACK;
+        return SND_REQACK;
       return SND_REQUEST;
-    }
-  else
+  } else
     {
       if (MSG_IS_STATUS_1XX (sip))
-	return SND_STATUS_1XX;
+        return SND_STATUS_1XX;
       else if (MSG_IS_STATUS_2XX (sip))
-	return SND_STATUS_2XX;
+        return SND_STATUS_2XX;
       return SND_STATUS_3456XX;
     }
 }

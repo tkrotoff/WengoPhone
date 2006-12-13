@@ -7,7 +7,8 @@
 #include <unistd.h>
 #include <dirent.h>
 #include <dlfcn.h>
-#elif defined(OS_WINDOWS) 
+#elif defined(OS_WINDOWS)
+#include <winsock2.h>
 #include <windows.h>
 #include <stdio.h>
 #include "msdirent.h"

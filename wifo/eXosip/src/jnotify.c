@@ -107,7 +107,7 @@ eXosip_notify_init(eXosip_notify_t **jn, osip_message_t *inc_subscribe)
       ||inc_subscribe->to==NULL
       ||inc_subscribe->to->url==NULL)
     return -1;
-  co = (osip_contact_t *) osip_list_get(inc_subscribe->contacts, 0);
+  co = (osip_contact_t *) osip_list_get(&inc_subscribe->contacts, 0);
   if (co==NULL || co->url==NULL)
     return -1;
 

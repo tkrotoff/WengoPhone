@@ -48,7 +48,7 @@ int eXosip_call_dialog_find(int jid, eXosip_call_t **jc, eXosip_dialog_t **jd)
   return -1;
 }
 
-
+/*
 int eXosip_find_replaced_dialog(osip_message_t *sip, eXosip_call_t **jc, eXosip_dialog_t **jd)
 {
  *jd = NULL;
@@ -67,6 +67,7 @@ int eXosip_find_replaced_dialog(osip_message_t *sip, eXosip_call_t **jc, eXosip_
     }
  return -1;
 }
+*/
 
 
 int eXosip_notify_dialog_find(int nid, eXosip_notify_t **jn, eXosip_dialog_t **jd)
@@ -126,7 +127,7 @@ int eXosip_dialog_set_200ok(eXosip_dialog_t *jd, osip_message_t *_200Ok)
 static char *
 get_contact_str(osip_message_t *sip)
 {
-  osip_contact_t *ct = (osip_contact_t *) osip_list_get(sip->contacts, 0);
+  osip_contact_t *ct = (osip_contact_t *) osip_list_get(&sip->contacts, 0);
   char *str;
 
   if (!ct)

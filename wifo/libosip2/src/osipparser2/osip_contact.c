@@ -1,6 +1,6 @@
 /*
   The oSIP library implements the Session Initiation Protocol (SIP -rfc3261-)
-  Copyright (C) 2001,2002,2003  Aymeric MOIZARD jack@atosc.org
+  Copyright (C) 2001,2002,2003,2004,2005  Aymeric MOIZARD jack@atosc.org
   
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -38,9 +38,9 @@ osip_message_clean_contacts (osip_message_t * sip)
   if (sip == NULL)
     return -1;
 
-  while(0 != (ct = (osip_contact_t *)osip_list_get (sip->contacts, 0)))
+  while(0 != (ct = (osip_contact_t *)osip_list_get (&sip->contacts, 0)))
     {
-      osip_list_remove(sip->contacts, 0);
+      osip_list_remove(&sip->contacts, 0);
       sip->message_property = 2;
       osip_contact_free(ct);
     }
@@ -73,8 +73,8 @@ osip_message_set_contact (osip_message_t * sip, const char *hvalue)
       return -1;
     }
   sip->message_property = 2;
-  osip_list_add (sip->contacts, contact, -1);
-  return 0;			/* ok */
+  osip_list_add (&sip->contacts, contact, -1);
+  return 0;                     /* ok */
 }
 
 /* parses a contact header.                                 */
@@ -107,18 +107,16 @@ osip_contact_init (osip_contact_t ** contact)
 /* returns -1 on error. */
 int
 osip_message_get_contact (const osip_message_t * sip, int pos,
-			  osip_contact_t ** dest)
+                          osip_contact_t ** dest)
 {
   *dest = NULL;
   if (sip == NULL)
     return -1;
-  if (osip_list_size (sip->contacts) <= pos)
-    return -1;			/* does not exist */
-  *dest = (osip_contact_t *) osip_list_get (sip->contacts, pos);
+  if (osip_list_size (&sip->contacts) <= pos)
+    return -1;                  /* does not exist */
+  *dest = (osip_contact_t *) osip_list_get (&sip->contacts, pos);
   return pos;
 }
-
-
 
 /* returns the contact header as a string.*/
 /* INPUT : osip_contact_t *contact | contact.  */
@@ -131,10 +129,10 @@ osip_contact_to_str (const osip_contact_t * contact, char **dest)
   if (contact->displayname != NULL)
     {
       if (strncmp (contact->displayname, "*", 1) == 0)
-	{
-	  *dest = osip_strdup ("*");
-	  return 0;
-	}
+        {
+          *dest = osip_strdup ("*");
+          return 0;
+        }
     }
   return osip_from_to_str ((osip_from_t *) contact, dest);
 }

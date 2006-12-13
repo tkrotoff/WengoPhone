@@ -267,10 +267,10 @@ eXosip_get_local_sdp_info(osip_transaction_t *invite_tr)
     }
   
   pos=0;
-  while (!osip_list_eol(message->bodies, pos))
+  while (!osip_list_eol(&message->bodies, pos))
     {
       int i;
-      oldbody = (osip_body_t *) osip_list_get(message->bodies, pos);
+      oldbody = (osip_body_t *) osip_list_get(&message->bodies, pos);
       pos++;
       sdp_message_init(&sdp);
       i = sdp_message_parse(sdp,oldbody->body);
@@ -320,10 +320,10 @@ eXosip_get_remote_sdp_info(osip_transaction_t *invite_tr)
     }
   
   pos=0;
-  while (!osip_list_eol(message->bodies, pos))
+  while (!osip_list_eol(&message->bodies, pos))
     {
       int i;
-      oldbody = (osip_body_t *) osip_list_get(message->bodies, pos);
+      oldbody = (osip_body_t *) osip_list_get(&message->bodies, pos);
       pos++;
       sdp_message_init(&sdp);
       i = sdp_message_parse(sdp,oldbody->body);
@@ -400,15 +400,15 @@ eXosip_retrieve_sdp_negotiation_specific_result(osip_negotiation_ctx_t *ctx, cha
 
   if (local_sdp != NULL)
     {
-      sdp_media_t *med = (sdp_media_t*) osip_list_get(local_sdp->m_medias, i++);
-      char *payload = (char *) osip_list_get (med->m_payloads, 0);
+      sdp_media_t *med = (sdp_media_t*) osip_list_get(&local_sdp->m_medias, i++);
+      char *payload = (char *) osip_list_get (&med->m_payloads, 0);
       while(payload)
 	{
 	  if(!strncmp(payload_name, payload, pnsize))
 	  {
 	    return 0;
 	  }
-	  payload = (char *) osip_list_get (med->m_payloads, i++);
+	  payload = (char *) osip_list_get (&med->m_payloads, i++);
 	}
     }
   return result;
@@ -429,7 +429,7 @@ int eXosip_get_sdp_media_info(sdp_message_t *sdp, const char *mtype, char *paylo
   
   for(n = 0; ; n++) 
     {
-      med = (sdp_media_t*) osip_list_get(sdp->m_medias, n);
+      med = (sdp_media_t*) osip_list_get(&sdp->m_medias, n);
       
       if (!med)
 	return payload_result;
@@ -440,17 +440,17 @@ int eXosip_get_sdp_media_info(sdp_message_t *sdp, const char *mtype, char *paylo
   
   /* check for inactive stream */
   for (pos_attr=0;
-	   !osip_list_eol(med->a_attributes, pos_attr);
+	   !osip_list_eol(&med->a_attributes, pos_attr);
 	       pos_attr++)
     {
 
       sdp_attribute_t *attr;
-	  attr = (sdp_attribute_t *)osip_list_get(med->a_attributes, pos_attr);
+	  attr = (sdp_attribute_t *)osip_list_get(&med->a_attributes, pos_attr);
 	  if (0==osip_strncasecmp(attr->a_att_field, "inactive", 8))
           return -1;
   }
             
-  payload = (char *) osip_list_get (med->m_payloads, 0);
+  payload = (char *) osip_list_get (&med->m_payloads, 0);
   
   if (payload!=NULL && payload_name!=NULL)
     {
@@ -458,11 +458,11 @@ int eXosip_get_sdp_media_info(sdp_message_t *sdp, const char *mtype, char *paylo
       
       /* copy payload name! */
       for (pos_attr=0;
-	   !osip_list_eol(med->a_attributes, pos_attr);
+	   !osip_list_eol(&med->a_attributes, pos_attr);
 	       pos_attr++)
 	{
 	  sdp_attribute_t *attr;
-	  attr = (sdp_attribute_t *)osip_list_get(med->a_attributes, pos_attr);
+	  attr = (sdp_attribute_t *)osip_list_get(&med->a_attributes, pos_attr);
 	  if (0==osip_strncasecmp(attr->a_att_field, "rtpmap", 6))
 	    {
 	      if ((payload_result <10 && 
@@ -481,7 +481,7 @@ int eXosip_get_sdp_media_info(sdp_message_t *sdp, const char *mtype, char *paylo
   
   if (ipaddr)
     {
-      sdp_connection_t *conn = (sdp_connection_t*) osip_list_get(med->c_connections, 0);
+      sdp_connection_t *conn = (sdp_connection_t*) osip_list_get(&med->c_connections, 0);
 
       ipaddr[0] = 0;
       if (conn == NULL)

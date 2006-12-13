@@ -533,7 +533,7 @@ int   eXosip_transfer_call(int jid, char *refer_to);
  * @param jid          dialog id of call.
  * @param tdid         dialog id of a transfer target call
  */
-int   eXosip_transfer_call_to(int jid, int tjid);
+// int   eXosip_transfer_call_to(int jid, int tjid);
 
 
 /**

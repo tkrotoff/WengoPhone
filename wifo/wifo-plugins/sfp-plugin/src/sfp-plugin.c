@@ -17,6 +17,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#include <owpl_plugin.h>
 
 #include <sfp-plugin/sfp-plugin.h>
 #include <sfp-plugin/sfp-error.h>
@@ -29,8 +30,6 @@
 #include <phapi-util/mappinglist.h>
 #include <phapi-util/mystdio.h>
 #include <phapi-util/mystring.h>
-
-#include <owpl_plugin.h>
 
 #include <eXosip/eXosip.h>
 

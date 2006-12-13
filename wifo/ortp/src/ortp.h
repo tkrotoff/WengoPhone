@@ -21,6 +21,10 @@
 #ifndef ORTP_H
 #define ORTP_H
 
+#ifdef WIN32
+#include <winsock2.h>
+#endif
+
 #include "rtpsession.h"
 
 #ifdef BUILD_SCHEDULER

@@ -1,6 +1,6 @@
 /*
-  The oSIP library implements the Session Initiation Protocol (SIP -rfc2543-)
-  Copyright (C) 2001  Aymeric MOIZARD jack@atosc.org
+  The oSIP library implements the Session Initiation Protocol (SIP -rfc3261-)
+  Copyright (C) 2001,2002,2003,2004,2005  Aymeric MOIZARD jack@atosc.org
   
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -67,28 +67,27 @@ extern "C"
  * @param header The element to work on.
  * @param dest A pointer on the new allocated string.
  */
-#define osip_accept_to_str(header, dest) osip_content_type_to_str(header, dest)
+  int osip_accept_to_str (const osip_accept_t * header, char **dest);
 /**
  * Clone an Accept element.
  * @param header The element to work on.
  * @param dest A pointer on the copy of the element.
  */
 #define osip_accept_clone(header, dest) osip_content_type_clone(header, dest)
-
 /**
  * Allocate and add a header parameter in an Accept element.
  * @param header The element to work on.
  * @param name The token name.
  * @param value The token value.
  */
-#define osip_accept_param_add(header,name,value)  osip_generic_param_add((header)->gen_params,name,value)
+#define osip_accept_param_add(header,name,value)  osip_generic_param_add((&(header)->gen_params),name,value)
 /**
  * Find a header parameter in an Accept element.
  * @param header The element to work on.
  * @param name The token name to search.
  * @param dest A pointer on the element found.
  */
-#define osip_accept_param_get_byname(header,name,dest) osip_generic_param_get_byname((header)->gen_params,name,dest)
+#define osip_accept_param_get_byname(header,name,dest) osip_generic_param_get_byname((&(header)->gen_params),name,dest)
 
 
 #ifdef __cplusplus

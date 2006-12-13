@@ -1,6 +1,6 @@
 /*
-  The oSIP library implements the Session Initiation Protocol (SIP -rfc2543-)
-  Copyright (C) 2001  Aymeric MOIZARD jack@atosc.org
+  The oSIP library implements the Session Initiation Protocol (SIP -rfc3261-)
+  Copyright (C) 2001,2002,2003,2004  Aymeric MOIZARD jack@atosc.org
   
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -32,6 +32,7 @@
 #include <osipparser2/headers/osip_accept_language.h>
 #include <osipparser2/headers/osip_alert_info.h>
 #include <osipparser2/headers/osip_allow.h>
+#include <osipparser2/headers/osip_authentication_info.h>
 #include <osipparser2/headers/osip_authorization.h>
 #include <osipparser2/headers/osip_call_id.h>
 #include <osipparser2/headers/osip_call_info.h>
@@ -45,14 +46,13 @@
 #include <osipparser2/headers/osip_from.h>
 #include <osipparser2/headers/osip_mime_version.h>
 #include <osipparser2/headers/osip_proxy_authenticate.h>
+#include <osipparser2/headers/osip_proxy_authentication_info.h>
 #include <osipparser2/headers/osip_proxy_authorization.h>
 #include <osipparser2/headers/osip_record_route.h>
 #include <osipparser2/headers/osip_route.h>
 #include <osipparser2/headers/osip_to.h>
 #include <osipparser2/headers/osip_via.h>
 #include <osipparser2/headers/osip_www_authenticate.h>
-#include <osipparser2/headers/osip_replaces.h>
-
 
 /**
  * @file osip_headers.h

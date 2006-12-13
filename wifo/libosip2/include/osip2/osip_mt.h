@@ -1,6 +1,6 @@
 /*
-  The oSIP library implements the Session Initiation Protocol (SIP -rfc2543-)
-  Copyright (C) 2001  Aymeric MOIZARD jack@atosc.org
+  The oSIP library implements the Session Initiation Protocol (SIP -rfc3261-)
+  Copyright (C) 2001,2002,2003,2004  Aymeric MOIZARD jack@atosc.org
   
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -27,7 +27,9 @@
 #endif
 
 #include <stdio.h>
+#ifndef _WIN32_WCE
 #include <errno.h>
+#endif
 
 /**
  * @file osip_mt.h
@@ -61,7 +63,7 @@ extern "C"
  * @param arg A pointer on the argument given to the method 'func'.
  */
   struct osip_thread *osip_thread_create (int stacksize,
-					  void *(*func) (void *), void *arg);
+                                          void *(*func) (void *), void *arg);
 
 /**
  * Join a thread.
@@ -139,7 +141,7 @@ extern "C"
 /** @} */
 
 /**
- * @defgroup oSIP_MUTEX oSIP semaphore definitions
+ * @defgroup oSIP_MUTEX oSIP mutex definitions
  * @ingroup osip2_port
  * @{
  */
@@ -150,13 +152,13 @@ extern "C"
 #endif
 
 /**
- * Structure for referencing a semaphore element.
+ * Structure for referencing a mutex element.
  * @struct osip_mutex
  */
   struct osip_mutex;
 
 /**
- * Allocate and Initialise a semaphore.
+ * Allocate and Initialise a mutex.
  */
   struct osip_mutex *osip_mutex_init (void);
 /**
@@ -181,6 +183,6 @@ extern "C"
 
 /** @} */
 
-#endif				/* OSIP_MT */
+#endif                          /* OSIP_MT */
 
-#endif				/* end of _THREAD_H_ */
+#endif                          /* end of _THREAD_H_ */

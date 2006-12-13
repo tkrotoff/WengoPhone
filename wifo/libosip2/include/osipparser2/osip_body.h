@@ -1,6 +1,6 @@
 /*
-  The oSIP library implements the Session Initiation Protocol (SIP -rfc2543-)
-  Copyright (C) 2001  Aymeric MOIZARD jack@atosc.org
+  The oSIP library implements the Session Initiation Protocol (SIP -rfc3261-)
+  Copyright (C) 2001,2002,2003,2004  Aymeric MOIZARD jack@atosc.org
   
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -48,7 +48,7 @@ typedef struct osip_body osip_body_t;
 struct osip_body
 {
   char *body;                        /**< buffer containing data */
-  size_t        length;              /**< length of data */
+  size_t length;                     /**< length of data */
   osip_list_t *headers;              /**< List of headers (when mime is used) */
   osip_content_type_t *content_type; /**< Content-Type (when mime is used) */
 };
@@ -95,7 +95,7 @@ extern "C"
  * @param dest The resulting buffer.
  * @param length The length of the returned buffer.
  */
-  int osip_body_to_str (const osip_body_t * body, char **dest, size_t *length);
+  int osip_body_to_str (const osip_body_t * body, char **dest, size_t * length);
 
 /**
  * Set the Content-Type header in the osip_body_t element.
@@ -111,7 +111,7 @@ extern "C"
  * @param hvalue The header string value.
  */
   int osip_body_set_header (osip_body_t * body, const char *hname,
-			    const char *hvalue);
+                            const char *hvalue);
 
 #ifdef __cplusplus
 }

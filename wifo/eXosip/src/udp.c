@@ -510,7 +510,7 @@ static int cancel_match_invite(osip_transaction_t *invite, osip_message_t *cance
   osip_generic_param_t *br2;
   osip_via_t *via;
   osip_via_param_get_byname (invite->topvia, "branch", &br);
-  via = osip_list_get(cancel->vias, 0);
+  via = osip_list_get(&cancel->vias, 0);
   if (via==NULL) return -1; /* request without via??? */
   osip_via_param_get_byname (via, "branch", &br2);
   if (br!=NULL && br2==NULL)
@@ -892,13 +892,6 @@ static void eXosip_process_new_invite(osip_transaction_t *transaction, osip_even
 
   ADD_ELEMENT(eXosip.j_calls, jc);
 
-
-  if (evt->sip->to && (0 == eXosip_find_replaced_dialog(evt->sip, &oldjc, &oldjd)))
-    {
-      oldcid = oldjc->c_id;
-    }
-
-
   i = _eXosip_build_response_default(&answer, NULL, 101, evt->sip);
   if (i!=0)
     {
@@ -1022,8 +1015,8 @@ static void eXosip_process_new_invite(osip_transaction_t *transaction, osip_even
 
 				// fill in the body; just get the first body
 				// TODO get all the bodies?
-				if(!osip_list_eol(transaction->orig_request->bodies, 0)){
-					body = (osip_body_t *)osip_list_get(transaction->orig_request->bodies, 0);
+				if(!osip_list_eol(&transaction->orig_request->bodies, 0)){
+					body = (osip_body_t *)osip_list_get(&transaction->orig_request->bodies, 0);
 
 					if (je->msg_body) osip_free(je->msg_body);
 
@@ -1064,8 +1057,8 @@ static void eXosip_process_invite_within_call(eXosip_call_t *jc, eXosip_dialog_t
 	sdp = NULL;
 	pos = 0;
 	i = 500;
-	while (!osip_list_eol(evt->sip->bodies,pos)){		
-		body = (osip_body_t *)osip_list_get(evt->sip->bodies,pos);
+	while (!osip_list_eol(&evt->sip->bodies,pos)){		
+		body = (osip_body_t *)osip_list_get(&evt->sip->bodies,pos);
 		pos++;
 
 		// <ncouturier>
@@ -1773,7 +1766,7 @@ eXosip_process_message_outside_of_dialog(osip_transaction_t *transaction,
 	  date_ts = time(NULL);
 	  
 	  /* Has the message expired ? */
-	  if (date_ts + expires_ul < now_ts)
+	  if ((date_ts + expires_ul) < now_ts)
 	    {
 	      /* discard old data. */
 	      return;
@@ -1811,9 +1804,9 @@ eXosip_process_message_outside_of_dialog(osip_transaction_t *transaction,
 	
 	eXosip_event_add_status(je, answer);
 	
-	while (!osip_list_eol(evt->sip->bodies, pos))
+	while (!osip_list_eol(&evt->sip->bodies, pos))
 	  {
-	    oldbody = (osip_body_t *)osip_list_get(evt->sip->bodies, pos);
+	    oldbody = (osip_body_t *)osip_list_get(&evt->sip->bodies, pos);
 	    pos++;
 	  
 	    if (je->msg_body)
@@ -2388,7 +2381,7 @@ static void eXosip_process_response_out_of_transaction (osip_event_t *evt)
 							"Error in credential from INVITE\n"));
 						break;
 					}
-					osip_list_add (ack->proxy_authorizations, pa2, -1);
+					osip_list_add (&ack->proxy_authorizations, pa2, -1);
 					pa = NULL;
 					pos++;
 					i = osip_message_get_proxy_authorization (last_tr->orig_request, pos, &pa);
@@ -2506,7 +2499,6 @@ int eXosip_read_message( int max_message_nb, int sec_max, int usec_max )
 			{
 				/* Message might not end with a "\0" but we know the number of */
 				/* char received! */
-				osip_transaction_t *transaction = NULL;
 				osip_event_t *sipevent;
 				osip_strncpy(buf+i,"\0",1);
 				OSIP_TRACE(osip_trace(__FILE__,__LINE__,OSIP_INFO1,NULL,
@@ -2520,14 +2512,12 @@ int eXosip_read_message( int max_message_nb, int sec_max, int usec_max )
 #endif
 		
 				sipevent = osip_parse(buf, i);
-				transaction = NULL;
 				if (sipevent!=NULL&&sipevent->sip!=NULL)
 				{
 					if (!eXosip.use_tunnel)
 						osip_message_fix_last_via_header(sipevent->sip, inet_ntoa (sa.sin_addr), ntohs (sa.sin_port));
 
-					transaction = osip_find_transaction_and_add_event(eXosip.j_osip, sipevent);
-					if (transaction == NULL)
+					if (osip_find_transaction_and_add_event(eXosip.j_osip, sipevent) == -1)
 					{
 						/* this event has no transaction, */
 						OSIP_TRACE(osip_trace(__FILE__,__LINE__,OSIP_INFO1,NULL,
@@ -2941,7 +2931,7 @@ osip_content_type_t * copy_content_type(osip_content_type_t * ctt_src){
 	osip_content_type_t * ctt_dst = (osip_content_type_t *)malloc(sizeof(osip_content_type_t));
 	ctt_dst->type = strdup(ctt_src->type);
 	ctt_dst->subtype = strdup(ctt_src->subtype);
-	ctt_dst->gen_params = NULL;
+	memset(&ctt_dst->gen_params, 0, sizeof(ctt_dst->gen_params));
 
 	return ctt_dst;
 }

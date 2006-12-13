@@ -441,7 +441,7 @@ char *generating_sdp_answer(osip_message_t *request, osip_negotiation_ctx_t *con
 int eXosip_call_dialog_find(int jid, eXosip_call_t **jc, eXosip_dialog_t **jd);
 int eXosip_notify_dialog_find(int nid, eXosip_notify_t **jn, eXosip_dialog_t **jd);
 int eXosip_subscribe_dialog_find(int nid, eXosip_subscribe_t **js, eXosip_dialog_t **jd);
-int eXosip_find_replaced_dialog(osip_message_t *sip,  eXosip_call_t **jc, eXosip_dialog_t **jd);
+//int eXosip_find_replaced_dialog(osip_message_t *sip,  eXosip_call_t **jc, eXosip_dialog_t **jd);
 
 int eXosip_call_find(int cid, eXosip_call_t **jc);
 int eXosip_dialog_set_200ok(eXosip_dialog_t *_jd, osip_message_t *_200Ok);

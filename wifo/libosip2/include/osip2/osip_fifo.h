@@ -1,6 +1,6 @@
 /*
-  The oSIP library implements the Session Initiation Protocol (SIP -rfc2543-)
-  Copyright (C) 2001  Aymeric MOIZARD jack@atosc.org
+  The oSIP library implements the Session Initiation Protocol (SIP -rfc3261-)
+  Copyright (C) 2001,2002,2003,2004  Aymeric MOIZARD jack@atosc.org
   
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -72,14 +72,18 @@ extern "C"
     struct osip_mutex *qislocked;  /**@internal */
     struct osip_sem *qisempty;     /**@internal */
 #endif
-    osip_list_t *queue;            /**< list of nodes containing elements */
+    osip_list_t queue;             /**< list of nodes containing elements */
     int nb_elt;                    /**< nb of elements */
     osip_fifo_state state;           /**@internal state of the fifo */
   };
 
 /**
  * Initialise a osip_fifo_t element.
- * NOTE: this element MUST be previously allocated.
+ * NOTE: this element MUST be previously allocated with
+ * osip_malloc(). The osip_free() call on the fifo is
+ * still automatically done by osip_fifo_free(). This
+ * also means you can't use a static osip_fifo_t variable
+ * if you want to use osip_fifo_free().
  * @param ff The element to initialise.
  */
   void osip_fifo_init (osip_fifo_t * ff);

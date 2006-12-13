@@ -12,7 +12,8 @@ include_path = [
 ]
 defines = {
 	'OSIP_MT' : 1,
-	'ENABLE_TRACE' : 1
+	'ENABLE_TRACE' : 1,
+	'HAVE_STRUCT_TIMEVAL' : 1
 }
 headers = []
 
@@ -23,6 +24,7 @@ osipparser_sources = [
 	'src/osipparser2/osip_alert_info.c',
 	'src/osipparser2/osip_allow.c',
 	'src/osipparser2/osip_authorization.c',
+	'src/osipparser2/osip_authentication_info.c',
 	'src/osipparser2/osip_body.c',
 	'src/osipparser2/osip_call_id.c',
 	'src/osipparser2/osip_call_info.c',
@@ -45,8 +47,9 @@ osipparser_sources = [
 	'src/osipparser2/osip_port.c',
 	'src/osipparser2/osip_proxy_authenticate.c',
 	'src/osipparser2/osip_proxy_authorization.c',
+	'src/osipparser2/osip_proxy_authentication_info.c',
 	'src/osipparser2/osip_record_route.c',
-	'src/osipparser2/osip_rfc3264.c',
+#	'src/osipparser2/osip_rfc3264.c',
 	'src/osipparser2/osip_route.c',
 	'src/osipparser2/osip_to.c',
 	'src/osipparser2/osip_uri.c',
@@ -54,7 +57,7 @@ osipparser_sources = [
 	'src/osipparser2/osip_www_authenticate.c',
 	'src/osipparser2/sdp_accessor.c',
 	'src/osipparser2/sdp_message.c',
-	'src/osipparser2/osip_replaces.c'
+#	'src/osipparser2/osip_replaces.c'
 ]
 
 osip_sources = [

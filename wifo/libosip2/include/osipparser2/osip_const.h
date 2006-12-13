@@ -1,6 +1,6 @@
 /*
-  The oSIP library implements the Session Initiation Protocol (SIP -rfc2543-)
-  Copyright (C) 2001  Aymeric MOIZARD jack@atosc.org
+  The oSIP library implements the Session Initiation Protocol (SIP -rfc3261-)
+  Copyright (C) 2001,2002,2003,2004  Aymeric MOIZARD jack@atosc.org
   
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -64,6 +64,7 @@
 #define ORGANIZATION		"organization"
 #define PRIORITY		"priority"
 #define PROXY_AUTHENTICATE	"proxy-authenticate"
+#define PROXY_AUTHENTICATION_INFO	"proxy-authentication-info"
 #define PROXY_AUTHORIZATION	"proxy-authorization"
 #define PROXY_REQUIRE		"proxy-require"
 #define RECORD_ROUTE		"record-route"
@@ -84,7 +85,6 @@
 #define VIA_SHORT		"v"
 #define WARNING			"warning"
 #define WWW_AUTHENTICATE	"www-authenticate"
-#define REPLACES	        "replaces"
 
 
 #define RESPONSE_CODES 51
@@ -127,6 +127,7 @@
 #define SIP_BUSY_HERE                     486
 #define SIP_REQUEST_TERMINATED            487
 #define SIP_NOT_ACCEPTABLE_HERE           488
+#define SIP_BAD_EVENT                     489
 #define SIP_REQUEST_PENDING               491
 #define SIP_UNDECIPHERABLE                493
 #define SIP_INTERNAL_SERVER_ERROR         500

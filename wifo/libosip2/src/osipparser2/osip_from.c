@@ -1,6 +1,6 @@
 /*
   The oSIP library implements the Session Initiation Protocol (SIP -rfc3261-)
-  Copyright (C) 2001,2002,2003  Aymeric MOIZARD jack@atosc.org
+  Copyright (C) 2001,2002,2003,2004,2005  Aymeric MOIZARD jack@atosc.org
   
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -81,13 +81,7 @@ osip_from_init (osip_from_t ** from)
   (*from)->displayname = NULL;
   (*from)->url = NULL;
 
-  (*from)->gen_params = (osip_list_t *) osip_malloc (sizeof (osip_list_t));
-  if ((*from)->gen_params == NULL)
-    {
-      osip_free (*from);
-      *from = NULL;
-    }
-  osip_list_init ((*from)->gen_params);
+  osip_list_init (&(*from)->gen_params);
 
   return 0;
 }
@@ -105,10 +99,10 @@ osip_from_free (osip_from_t * from)
     }
 
   if (from->displayname) {
-  osip_free (from->displayname);
+  	osip_free (from->displayname);
   }
 
-  osip_generic_param_freelist (from->gen_params);
+  osip_generic_param_freelist (&from->gen_params);
 
   osip_free (from);
 }
@@ -149,7 +143,7 @@ osip_from_parse (osip_from_t * from, const char *hvalue)
     {
       url_end = strchr (url, '>');
       if (url_end == NULL)
-	return -1;
+        return -1;
     }
 
   /* SIPit day2: this case was not supported
@@ -158,55 +152,57 @@ osip_from_parse (osip_from_t * from, const char *hvalue)
      if the fisrt quote is after '<' then
      this is not a quote for a displayname.
    */
-  if (displayname > url)
-    displayname = NULL;
+  if (displayname != NULL)
+    {
+      if (displayname > url)
+        displayname = NULL;
+    }
 
   if ((displayname == NULL) && (url != NULL))
-    {				/* displayname IS A '*token' (not a quoted-string) */
-      if (hvalue != url)	/* displayname exists */
-	{
-	  if (url - hvalue + 1 < 2)
-	    return -1;
-	  from->displayname = (char *) osip_malloc (url - hvalue + 1);
-	  if (from->displayname == NULL)
-	    return -1;
-	  osip_strncpy (from->displayname, hvalue, url - hvalue);
-	  osip_clrspace (from->displayname);
-	}
-      url++;			/* place pointer on the beginning of url */
-    }
-  else
+    {                           /* displayname IS A '*token' (not a quoted-string) */
+      if (hvalue != url)        /* displayname exists */
+        {
+          if (url - hvalue + 1 < 2)
+            return -1;
+          from->displayname = (char *) osip_malloc (url - hvalue + 1);
+          if (from->displayname == NULL)
+            return -1;
+          osip_clrncpy (from->displayname, hvalue, url - hvalue);
+        }
+      url++;                    /* place pointer on the beginning of url */
+  } else
     {
       if ((displayname != NULL) && (url != NULL))
-	{			/* displayname IS A quoted-string (not a '*token') */
-	  const char *first;
-	  const char *second;
+        {                       /* displayname IS A quoted-string (not a '*token') */
+          const char *first;
+          const char *second=NULL;
 
-	  /* search for quotes */
-	  first = __osip_quote_find (hvalue);
+          /* search for quotes */
+          first = __osip_quote_find (hvalue);
+          if (first == NULL)
+            return -1;          /* missing quote */
 	  second = __osip_quote_find (first + 1);
-	  if (second == NULL)
-	    return -1;		/* if there is only 1 quote: failure */
-	  if ((first > url))
-	    return -1;
+          if (second == NULL)
+            return -1;          /* missing quote */
+          if ((first > url))
+            return -1;
 
-	  if (second - first + 2 >= 2)
-	    {
-	      from->displayname = (char *) osip_malloc (second - first + 2);
-	      if (from->displayname == NULL)
-		return -1;
-	      osip_strncpy (from->displayname, first, second - first + 1);
-	      /* osip_clrspace(from->displayname); *//*should we do that? */
+          if (second - first + 2 >= 2)
+            {
+              from->displayname = (char *) osip_malloc (second - first + 2);
+              if (from->displayname == NULL)
+                return -1;
+              osip_strncpy (from->displayname, first, second - first + 1);
+              /* osip_clrspace(from->displayname); *//*should we do that? */
 
-	      /* special case: "<sip:joe@big.org>" <sip:joe@really.big.com> */
-	    }			/* else displayname is empty? */
-	  url = strchr (second + 1, '<');
-	  if (url == NULL)
-	    return -1;		/* '<' MUST exist */
-	  url++;
-	}
-      else
-	url = hvalue;		/* field does not contains '<' and '>' */
+              /* special case: "<sip:joe@big.org>" <sip:joe@really.big.com> */
+            }                   /* else displayname is empty? */
+          url = strchr (second + 1, '<');
+          if (url == NULL)
+            return -1;          /* '<' MUST exist */
+          url++;
+      } else
+        url = hvalue;           /* field does not contains '<' and '>' */
     }
 
   /* DISPLAY-NAME SET   */
@@ -214,29 +210,28 @@ osip_from_parse (osip_from_t * from, const char *hvalue)
 
   url_end = strchr (url, '>');
 
-  if (url_end == NULL)		/* sip:jack@atosc.org;tag=023 */
-    {				/* We are sure ';' is the delimiter for from-parameters */
+  if (url_end == NULL)          /* sip:jack@atosc.org;tag=023 */
+    {                           /* We are sure ';' is the delimiter for from-parameters */
       char *host = strchr (url, '@');
 
       if (host != NULL)
-	gen_params = strchr (host, ';');
+        gen_params = strchr (host, ';');
       else
-	gen_params = strchr (url, ';');
+        gen_params = strchr (url, ';');
       if (gen_params != NULL)
-	url_end = gen_params - 1;
+        url_end = gen_params - 1;
       else
-	url_end = url + strlen (url);
-    }
-  else				/* jack <sip:jack@atosc.org;user=phone>;tag=azer */
+        url_end = url + strlen (url);
+  } else                        /* jack <sip:jack@atosc.org;user=phone>;tag=azer */
     {
       gen_params = strchr (url_end, ';');
-      url_end--;		/* place pointer on the beginning of url */
+      url_end--;                /* place pointer on the beginning of url */
     }
 
-  if (gen_params != NULL)	/* now we are sure a param exist */
-    if (__osip_generic_param_parseall (from->gen_params, gen_params) == -1)
+  if (gen_params != NULL)       /* now we are sure a param exist */
+    if (__osip_generic_param_parseall (&from->gen_params, gen_params) == -1)
       {
-	return -1;
+        return -1;
       }
 
   /* set the url */
@@ -308,24 +303,23 @@ osip_from_to_str (const osip_from_t * from, char **dest)
     size_t plen;
     char *tmp;
 
-    while (!osip_list_eol (from->gen_params, pos))
+    while (!osip_list_eol (&from->gen_params, pos))
       {
-	u_param =
-	  (osip_generic_param_t *) osip_list_get (from->gen_params, pos);
+        u_param = (osip_generic_param_t *) osip_list_get (&from->gen_params, pos);
 
-	if (u_param->gvalue == NULL)
-	  plen = strlen (u_param->gname) + 2;
-	else
-	  plen = strlen (u_param->gname) + strlen (u_param->gvalue) + 3;
-	len = len + plen;
-	buf = (char *) osip_realloc (buf, len);
-	tmp = buf;
-	tmp = tmp + strlen (tmp);
-	if (u_param->gvalue == NULL)
-	  sprintf (tmp, ";%s", u_param->gname);
-	else
-	  sprintf (tmp, ";%s=%s", u_param->gname, u_param->gvalue);
-	pos++;
+        if (u_param->gvalue == NULL)
+          plen = strlen (u_param->gname) + 2;
+        else
+          plen = strlen (u_param->gname) + strlen (u_param->gvalue) + 3;
+        len = len + plen;
+        buf = (char *) osip_realloc (buf, len);
+        tmp = buf;
+        tmp = tmp + strlen (tmp);
+        if (u_param->gvalue == NULL)
+          sprintf (tmp, ";%s", u_param->gname);
+        else
+          sprintf (tmp, ";%s=%s", u_param->gname, u_param->gvalue);
+        pos++;
       }
   }
   *dest = buf;
@@ -361,15 +355,14 @@ osip_from_set_url (osip_from_t * from, osip_uri_t * url)
 }
 
 int
-osip_from_param_get (osip_from_t * from, int pos,
-		     osip_generic_param_t ** fparam)
+osip_from_param_get (osip_from_t * from, int pos, osip_generic_param_t ** fparam)
 {
   *fparam = NULL;
   if (from == NULL)
     return -1;
-  if (osip_list_size (from->gen_params) <= pos)
-    return -1;			/* does not exist */
-  *fparam = (osip_generic_param_t *) osip_list_get (from->gen_params, pos);
+  if (osip_list_size (&from->gen_params) <= pos)
+    return -1;                  /* does not exist */
+  *fparam = (osip_generic_param_t *) osip_list_get (&from->gen_params, pos);
   return pos;
 }
 
@@ -384,7 +377,7 @@ osip_from_clone (const osip_from_t * from, osip_from_t ** dest)
     return -1;
 
   i = osip_from_init (&fr);
-  if (i != 0)			/* allocation failed */
+  if (i != 0)                   /* allocation failed */
     return -1;
   if (from->displayname != NULL)
     fr->displayname = osip_strdup (from->displayname);
@@ -393,10 +386,10 @@ osip_from_clone (const osip_from_t * from, osip_from_t ** dest)
     {
       i = osip_uri_clone (from->url, &(fr->url));
       if (i != 0)
-	{
-	  osip_from_free (fr);
-	  return -1;
-	}
+        {
+          osip_from_free (fr);
+          return -1;
+        }
     }
 
   {
@@ -404,18 +397,17 @@ osip_from_clone (const osip_from_t * from, osip_from_t ** dest)
     osip_generic_param_t *u_param;
     osip_generic_param_t *dest_param;
 
-    while (!osip_list_eol (from->gen_params, pos))
+    while (!osip_list_eol (&from->gen_params, pos))
       {
-	u_param =
-	  (osip_generic_param_t *) osip_list_get (from->gen_params, pos);
-	i = osip_generic_param_clone (u_param, &dest_param);
-	if (i != 0)
-	  {
-	    osip_from_free (fr);
-	    return -1;
-	  }
-	osip_list_add (fr->gen_params, dest_param, -1);
-	pos++;
+        u_param = (osip_generic_param_t *) osip_list_get (&from->gen_params, pos);
+        i = osip_generic_param_clone (u_param, &dest_param);
+        if (i != 0)
+          {
+            osip_from_free (fr);
+            return -1;
+          }
+        osip_list_add (&fr->gen_params, dest_param, -1);
+        pos++;
       }
   }
   *dest = fr;
@@ -438,9 +430,9 @@ osip_from_compare (osip_from_t * from1, osip_from_t * from2)
   if (from1->url->host == NULL && from2->url->host == NULL)
     {
       if (from1->url->string == NULL || from2->url->string == NULL)
-	return -1;
+        return -1;
       if (0 == strcmp (from1->url->string, from2->url->string))
-	return 0;
+        return 0;
     }
   if (from1->url->host == NULL || from2->url->host == NULL)
     return -1;
@@ -458,32 +450,30 @@ osip_from_compare (osip_from_t * from1, osip_from_t * from2)
     int pos = 0;
     osip_generic_param_t *u_param;
 
-    while (!osip_list_eol (from1->gen_params, pos))
+    while (!osip_list_eol (&from1->gen_params, pos))
       {
-	u_param =
-	  (osip_generic_param_t *) osip_list_get (from1->gen_params, pos);
-	if (0 == strncmp (u_param->gname, "tag", 3))
-	  {
-	    tag1 = u_param->gvalue;
-	    break;
-	  }
-	pos++;
+        u_param = (osip_generic_param_t *) osip_list_get (&from1->gen_params, pos);
+        if (0 == strncmp (u_param->gname, "tag", 3))
+          {
+            tag1 = u_param->gvalue;
+            break;
+          }
+        pos++;
       }
   }
   {
     int pos = 0;
     osip_generic_param_t *u_param;
 
-    while (!osip_list_eol (from2->gen_params, pos))
+    while (!osip_list_eol (&from2->gen_params, pos))
       {
-	u_param =
-	  (osip_generic_param_t *) osip_list_get (from2->gen_params, pos);
-	if (0 == strncmp (u_param->gname, "tag", 3))
-	  {
-	    tag2 = u_param->gvalue;
-	    break;
-	  }
-	pos++;
+        u_param = (osip_generic_param_t *) osip_list_get (&from2->gen_params, pos);
+        if (0 == strncmp (u_param->gname, "tag", 3))
+          {
+            tag2 = u_param->gvalue;
+            break;
+          }
+        pos++;
       }
   }
 
@@ -502,7 +492,7 @@ osip_from_compare (osip_from_t * from1, osip_from_t * from2)
   /* We could return a special case, when */
   /* only one tag exists?? */
 
-  return 0;			/* return code changed to 0 from release 0.6.1 */
+  return 0;                     /* return code changed to 0 from release 0.6.1 */
 }
 
 int
@@ -524,41 +514,41 @@ __osip_generic_param_parseall (osip_list_t * gen_params, const char *params)
     {
 
       if (equal == NULL)
-	{
-	  equal = comma;
-	  pvalue = NULL;
-	}
-      else
-	{
-	  const char *tmp;
-	  /* check for NULL param with an '=' character */
-	  tmp = equal + 1;
-	  for (; *tmp == '\t' || *tmp == ' '; tmp++)
-	    {
-	    }
-	  pvalue = NULL;
-	  if (*tmp != ',' && *tmp != '\0')
-	    {
-	      if (comma - equal < 2)
-		return -1;
-	      pvalue = (char *) osip_malloc (comma - equal);
-	      if (pvalue == NULL)
-		return -1;
-	      osip_strncpy (pvalue, equal + 1, comma - equal - 1);
-	    }
-	}
+        {
+          equal = comma;
+          pvalue = NULL;
+      } else
+        {
+          const char *tmp;
+
+          /* check for NULL param with an '=' character */
+          tmp = equal + 1;
+          for (; *tmp == '\t' || *tmp == ' '; tmp++)
+            {
+            }
+          pvalue = NULL;
+          if (*tmp != ',' && *tmp != '\0')
+            {
+              if (comma - equal < 2)
+                return -1;
+              pvalue = (char *) osip_malloc (comma - equal);
+              if (pvalue == NULL)
+                return -1;
+              osip_strncpy (pvalue, equal + 1, comma - equal - 1);
+            }
+        }
 
       if (equal - params < 2)
-	{
-	  osip_free (pvalue);
-	  return -1;
-	}
+        {
+          osip_free (pvalue);
+          return -1;
+        }
       pname = (char *) osip_malloc (equal - params);
       if (pname == NULL)
-	{
-	  osip_free (pvalue);
-	  return -1;
-	}
+        {
+          osip_free (pvalue);
+          return -1;
+        }
       osip_strncpy (pname, params + 1, equal - params - 1);
 
       osip_generic_param_add (gen_params, pname, pvalue);
@@ -573,27 +563,27 @@ __osip_generic_param_parseall (osip_list_t * gen_params, const char *params)
 
   if (equal == NULL)
     {
-      equal = comma;		/* at the end */
+      equal = comma;            /* at the end */
       pvalue = NULL;
-    }
-  else
+  } else
     {
       const char *tmp;
+
       /* check for NULL param with an '=' character */
       tmp = equal + 1;
       for (; *tmp == '\t' || *tmp == ' '; tmp++)
-	{
-	}
+        {
+        }
       pvalue = NULL;
       if (*tmp != ',' && *tmp != '\0')
-	{
-	  if (comma - equal < 2)
-	    return -1;
-	  pvalue = (char *) osip_malloc (comma - equal);
-	  if (pvalue == NULL)
-	    return -1;
-	  osip_strncpy (pvalue, equal + 1, comma - equal - 1);
-	}
+        {
+          if (comma - equal < 2)
+            return -1;
+          pvalue = (char *) osip_malloc (comma - equal);
+          if (pvalue == NULL)
+            return -1;
+          osip_strncpy (pvalue, equal + 1, comma - equal - 1);
+        }
     }
 
   if (equal - params < 2)
@@ -603,7 +593,10 @@ __osip_generic_param_parseall (osip_list_t * gen_params, const char *params)
     }
   pname = (char *) osip_malloc (equal - params);
   if (pname == NULL)
-    return -1;
+    {
+      osip_free (pvalue);
+      return -1;
+    }
   osip_strncpy (pname, params + 1, equal - params - 1);
 
   osip_generic_param_add (gen_params, pname, pvalue);
@@ -638,7 +631,7 @@ osip_generic_param_get_value (const osip_generic_param_t * fparam)
   if (fparam == NULL)
     return NULL;
   if (fparam->gname == NULL)
-    return NULL;		/* name is mandatory */
+    return NULL;                /* name is mandatory */
   return fparam->gvalue;
 }
 

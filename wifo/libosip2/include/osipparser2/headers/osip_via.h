@@ -1,6 +1,6 @@
 /*
-  The oSIP library implements the Session Initiation Protocol (SIP -rfc2543-)
-  Copyright (C) 2001  Aymeric MOIZARD jack@atosc.org
+  The oSIP library implements the Session Initiation Protocol (SIP -rfc3261-)
+  Copyright (C) 2001,2002,2003,2004,2005  Aymeric MOIZARD jack@atosc.org
   
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -51,7 +51,7 @@
     char *host;                 /**< Host where to send answers */
     char *port;                 /**< Port where to send answers */
     char *comment;              /**< Comments about SIP Agent */
-    osip_list_t *via_params;    /**< Via parameters */
+    osip_list_t via_params;     /**< Via parameters */
   };
 
 #ifdef __cplusplus
@@ -92,86 +92,96 @@ extern "C"
  * @param header The element to work on.
  * @param value The value of the element.
  */
+#define osip_via_set_version via_set_version
   void via_set_version (osip_via_t * header, char *value);
 /**
  * Get the SIP version from a Via header.
  * @param header The element to work on.
  */
+#define osip_via_get_version via_get_version
   char *via_get_version (osip_via_t * header);
 /**
  * Set the protocol in the Via element.
  * @param header The element to work on.
  * @param value The value of the element.
  */
+#define osip_via_set_protocol via_set_protocol
   void via_set_protocol (osip_via_t * header, char *value);
 /**
  * Get the protocol from a Via header.
  * @param header The element to work on.
  */
+#define osip_via_get_protocol via_get_protocol
   char *via_get_protocol (osip_via_t * header);
 /**
  * Set the host in the Via element.
  * @param header The element to work on.
  * @param value The value of the element.
  */
+#define osip_via_set_host via_set_host
   void via_set_host (osip_via_t * header, char *value);
 /**
  * Get the host from a Via header.
  * @param header The element to work on.
  */
+#define osip_via_get_host via_get_host
   char *via_get_host (osip_via_t * header);
 /**
  * Set the port in the Via element.
  * @param header The element to work on.
  * @param value The value of the element.
  */
+#define osip_via_set_port via_set_port
   void via_set_port (osip_via_t * header, char *value);
 /**
  * Get the port from a Via header.
  * @param header The element to work on.
  */
+#define osip_via_get_port via_get_port
   char *via_get_port (osip_via_t * header);
 /**
  * Set the comment in the Via element.
  * @param header The element to work on.
  * @param value The value of the element.
  */
+#define osip_via_set_comment via_set_comment
   void via_set_comment (osip_via_t * header, char *value);
 /**
  * Get the comment from a Via header.
  * @param header The element to work on.
  */
+#define osip_via_get_comment via_get_comment
   char *via_get_comment (osip_via_t * header);
 
 /**
  * Allocate and add a hidden parameter element in a list.
  * @param header The element to work on.
  */
-#define osip_via_set_hidden(header)    osip_generic_param_add((header)->via_params,osip_strdup("hidden"),NULL)
+#define osip_via_set_hidden(header)    osip_generic_param_add((&(header)->via_params),osip_strdup("hidden"),NULL)
 /**
  * Allocate and add a ttl parameter element in a list.
  * @param header The element to work on.
  * @param value The token value.
  */
-#define osip_via_set_ttl(header,value)   osip_generic_param_add((header)->via_params,osip_strdup("ttl"),value)
+#define osip_via_set_ttl(header,value)   osip_generic_param_add((&(header)->via_params),osip_strdup("ttl"),value)
 /**
  * Allocate and add a maddr parameter element in a list.
  * @param header The element to work on.
  * @param value The token value.
  */
-#define osip_via_set_maddr(header,value)   osip_generic_param_add((header)->via_params,osip_strdup("maddr"),value)
+#define osip_via_set_maddr(header,value)   osip_generic_param_add((&(header)->via_params),osip_strdup("maddr"),value)
 /**
  * Allocate and add a received parameter element in a list.
  * @param header The element to work on.
  * @param value The token value.
  */
-#define osip_via_set_received(header,value) osip_generic_param_add((header)->via_params,osip_strdup("received"),value)
+#define osip_via_set_received(header,value) osip_generic_param_add((&(header)->via_params),osip_strdup("received"),value)
 /**
  * Allocate and add a branch parameter element in a list.
  * @param header The element to work on.
  * @param value The token value.
  */
-#define osip_via_set_branch(header,value)  osip_generic_param_add((header)->via_params,osip_strdup("branch"),value)
+#define osip_via_set_branch(header,value)  osip_generic_param_add((&(header)->via_params),osip_strdup("branch"),value)
 
 /**
  * Allocate and add a generic parameter element in a list.
@@ -179,14 +189,14 @@ extern "C"
  * @param name The token name.
  * @param value The token value.
  */
-#define osip_via_param_add(header,name,value)      osip_generic_param_add((header)->via_params,name,value)
+#define osip_via_param_add(header,name,value)      osip_generic_param_add((&(header)->via_params),name,value)
 /**
  * Find a header parameter in a Via element.
  * @param header The element to work on.
  * @param name The token name to search.
  * @param dest A pointer on the element found.
  */
-#define osip_via_param_get_byname(header,name,dest) osip_generic_param_get_byname((header)->via_params,name,dest)
+#define osip_via_param_get_byname(header,name,dest) osip_generic_param_get_byname((&(header)->via_params),name,dest)
 
 /**
  * Check if the Via headers match.

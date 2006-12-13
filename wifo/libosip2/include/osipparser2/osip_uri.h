@@ -1,6 +1,6 @@
 /*
-  The oSIP library implements the Session Initiation Protocol (SIP -rfc2543-)
-  Copyright (C) 2001  Aymeric MOIZARD jack@atosc.org
+  The oSIP library implements the Session Initiation Protocol (SIP -rfc3261-)
+  Copyright (C) 2001,2002,2003,2004  Aymeric MOIZARD jack@atosc.org
   
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -81,15 +81,14 @@ extern "C"
  * @param name The token name.
  * @param value The token value.
  */
-  int osip_uri_param_set (osip_uri_param_t * url_param, char *name,
-			  char *value);
+  int osip_uri_param_set (osip_uri_param_t * url_param, char *name, char *value);
 /**
  * Clone a url parameter element.
  * @param url_param The element to work on.
  * @param dest The resulting new allocated element.
  */
   int osip_uri_param_clone (const osip_uri_param_t * url_param,
-			    osip_uri_param_t ** dest);
+                            osip_uri_param_t ** dest);
 #ifndef DOXYGEN
 /*
  * Free a list of a url parameter element.
@@ -111,7 +110,7 @@ extern "C"
  * @param dest A pointer on the element found.
  */
   int osip_uri_param_get_byname (osip_list_t * url_params, char *name,
-				 osip_uri_param_t ** dest);
+                                 osip_uri_param_t ** dest);
 
 
 /**
@@ -192,8 +191,8 @@ extern "C"
     char *password;            /**< Password */
     char *host;                /**< Domain */
     char *port;                /**< Port number */
-    osip_list_t *url_params;   /**< Uri parameters */
-    osip_list_t *url_headers;  /**< Uri headers */
+    osip_list_t url_params;    /**< Uri parameters */
+    osip_list_t url_headers;   /**< Uri headers */
 
     char *string;  /**< Space for other url schemes. (http, mailto...) */
   };
@@ -310,87 +309,87 @@ extern "C"
  * Set the transport parameter to UDP in a url element.
  * @param url The element to work on.
  */
-#define osip_uri_set_transport_udp(url)   osip_uri_param_add((url)->url_params, osip_strdup("transport"), osip_strdup("udp"))
+#define osip_uri_set_transport_udp(url)   osip_uri_param_add((&(url)->url_params), osip_strdup("transport"), osip_strdup("udp"))
 /**
  * Set the transport parameter to TCP in a url element.
  * @param url The element to work on.
  */
-#define osip_uri_set_transport_tcp(url)   osip_uri_param_add((url)->url_params, osip_strdup("transport"), osip_strdup("tcp"))
+#define osip_uri_set_transport_tcp(url)   osip_uri_param_add((&(url)->url_params), osip_strdup("transport"), osip_strdup("tcp"))
 /**
  * Set the transport parameter to SCTP in a url element.
  * @param url The element to work on.
  */
-#define osip_uri_set_transport_sctp(url)  osip_uri_param_add((url)->url_params, osip_strdup("transport"), osip_strdup("sctp"))
+#define osip_uri_set_transport_sctp(url)  osip_uri_param_add((&(url)->url_params), osip_strdup("transport"), osip_strdup("sctp"))
 /**
  * Set the transport parameter to TLS in a url element.
  * @param url The element to work on.
  */
-#define osip_uri_set_transport_tls(url)   osip_uri_param_add((url)->url_params, osip_strdup("transport"), osip_strdup("tls"))
+#define osip_uri_set_transport_tls(url)   osip_uri_param_add((&(url)->url_params), osip_strdup("transport"), osip_strdup("tls"))
 /**
  * Set the transport parameter to TLS in a url element.
  * @param url The element to work on.
  * @param value The value describing the transport protocol.
  */
-#define osip_uri_set_transport(url,value) osip_uri_param_add((url)->url_params, osip_strdup("transport"), value)
+#define osip_uri_set_transport(url,value) osip_uri_param_add((&(url)->url_params), osip_strdup("transport"), value)
 
 /**
  * Set the user parameter to PHONE in a url element.
  * @param url The element to work on.
  */
-#define osip_uri_set_user_phone(url)   osip_uri_param_add((url)->url_params, osip_strdup("user"), osip_strdup("phone"))
+#define osip_uri_set_user_phone(url)   osip_uri_param_add((&(url)->url_params), osip_strdup("user"), osip_strdup("phone"))
 /**
  * Set the user parameter to IP in a url element.
  * @param url The element to work on.
  */
-#define osip_uri_set_user_ip(url)      osip_uri_param_add((url)->url_params, osip_strdup("user"), osip_strdup("ip"))
+#define osip_uri_set_user_ip(url)      osip_uri_param_add((&(url)->url_params), osip_strdup("user"), osip_strdup("ip"))
 /**
  * Set a method parameter to INVITE in a url element.
  * @param url The element to work on.
  */
-#define osip_uri_set_method_invite(url)  osip_uri_param_add((url)->url_params, osip_strdup("method"), osip_strdup("INVITE"))
+#define osip_uri_set_method_invite(url)  osip_uri_param_add((&(url)->url_params), osip_strdup("method"), osip_strdup("INVITE"))
 /**
  * Set a method parameter to ACK in a url element.
  * @param url The element to work on.
  */
-#define osip_uri_set_method_ack(url)     osip_uri_param_add((url)->url_params, osip_strdup("method"), osip_strdup("ACK"))
+#define osip_uri_set_method_ack(url)     osip_uri_param_add((&(url)->url_params), osip_strdup("method"), osip_strdup("ACK"))
 /**
  * Set a method parameter to OPTIONS in a url element.
  * @param url The element to work on.
  */
-#define osip_uri_set_method_options(url) osip_uri_param_add((url)->url_params, osip_strdup("method"), osip_strdup("OPTIONS"))
+#define osip_uri_set_method_options(url) osip_uri_param_add((&(url)->url_params), osip_strdup("method"), osip_strdup("OPTIONS"))
 /**
  * Set a method parameter to BYE in a url element.
  * @param url The element to work on.
  */
-#define osip_uri_set_method_bye(url)     osip_uri_param_add((url)->url_params, osip_strdup("method"), osip_strdup("BYE"))
+#define osip_uri_set_method_bye(url)     osip_uri_param_add((&(url)->url_params), osip_strdup("method"), osip_strdup("BYE"))
 /**
  * Set a method parameter to CANCEL in a url element.
  * @param url The element to work on.
  */
-#define osip_uri_set_method_cancel(url)  osip_uri_param_add((url)->url_params, osip_strdup("method"), osip_strdup("CANCEL"))
+#define osip_uri_set_method_cancel(url)  osip_uri_param_add((&(url)->url_params), osip_strdup("method"), osip_strdup("CANCEL"))
 /**
  * Set a method parameter to REGISTER in a url element.
  * @param url The element to work on.
  */
-#define osip_uri_set_method_register(url) osip_uri_param_add((url)->url_params,osip_strdup("method"), osip_strdup("REGISTER"))
+#define osip_uri_set_method_register(url) osip_uri_param_add((&(url)->url_params),osip_strdup("method"), osip_strdup("REGISTER"))
 /**
  * Set a method parameter in a url element.
  * @param url The element to work on.
  * @param value The value for the method parameter.
  */
-#define osip_uri_set_method(url, value) osip_uri_param_add((url)->url_params, osip_strdup("method"), value)
+#define osip_uri_set_method(url, value) osip_uri_param_add((&(url)->url_params), osip_strdup("method"), value)
 /**
  * Set a ttl parameter in a url element.
  * @param url The element to work on.
  * @param value The value for the ttl parameter.
  */
-#define osip_uri_set_ttl(url, value)    osip_uri_param_add((url)->url_params, osip_strdup("ttl"), value)
+#define osip_uri_set_ttl(url, value)    osip_uri_param_add((&(url)->url_params), osip_strdup("ttl"), value)
 /**
  * Set a maddr parameter in a url element.
  * @param url The element to work on.
  * @param value The value for the maddr parameter.
  */
-#define osip_uri_set_maddr(url, value)  osip_uri_param_add((url)->url_params, osip_strdup("maddr"), value)
+#define osip_uri_set_maddr(url, value)  osip_uri_param_add((&(url)->url_params), osip_strdup("maddr"), value)
 
 /**
  * Allocate and add a url parameter element in a url element.
@@ -398,14 +397,14 @@ extern "C"
  * @param name The token name.
  * @param value The token value.
  */
-#define osip_uri_uparam_add(url,name,value) osip_uri_param_add((url)->url_params,name,value)
+#define osip_uri_uparam_add(url,name,value) osip_uri_param_add((&(url)->url_params),name,value)
 /**
  * Find in a url parameter element in a url element.
  * @param url The element to work on.
  * @param name The name of the url parameter element to find.
  * @param dest A pointer on the element found.
  */
-#define osip_uri_uparam_get_byname(url,name,dest)  osip_uri_param_get_byname((url)->url_params,name,dest)
+#define osip_uri_uparam_get_byname(url,name,dest)  osip_uri_param_get_byname((&(url)->url_params),name,dest)
 
 /**
  * Allocate and add a url header element in a url element.
@@ -413,15 +412,14 @@ extern "C"
  * @param name The token name.
  * @param value The token value.
  */
-#define osip_uri_uheader_add(url,name,value)    osip_uri_header_add(url->url_headers,name,value)
-
+#define osip_uri_uheader_add(url,name,value)    osip_uri_header_add((&(url)->url_headers),name,value)
 /**
  * Find in a url header element in a url element.
  * @param url The element to work on.
  * @param name The name of the url header element to find.
  * @param dest A pointer on the element found.
  */
-#define osip_uri_uheader_get_byname(url,name,dest) osip_uri_header_get_byname(url->url_headers,name,dest)
+#define osip_uri_uheader_get_byname(url,name,dest) osip_uri_header_get_byname((&(url)->url_headers),name,dest)
 
 
 /**
@@ -435,10 +433,10 @@ extern "C"
 #ifndef DOXYGEN
 /* internal method */
   char *next_separator (const char *ch, int separator_osip_to_find,
-			int before_separator);
+                        int before_separator);
 
   char *__osip_uri_escape_nonascii_and_nondef (const char *string,
-					       const char *def);
+                                               const char *def);
   char *__osip_uri_escape_userinfo (const char *string);
   char *__osip_uri_escape_password (const char *string);
   char *__osip_uri_escape_uri_param (char *string);
@@ -453,4 +451,4 @@ extern "C"
 }
 #endif
 
-#endif				/*  _URLS_H_ */
+#endif                          /*  _URLS_H_ */

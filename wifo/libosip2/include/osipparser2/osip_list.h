@@ -1,6 +1,6 @@
 /*
-  The oSIP library implements the Session Initiation Protocol (SIP -rfc2543-)
-  Copyright (C) 2001  Aymeric MOIZARD jack@atosc.org
+  The oSIP library implements the Session Initiation Protocol (SIP -rfc3261-)
+  Copyright (C) 2001,2002,2003,2004  Aymeric MOIZARD jack@atosc.org
   
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -59,7 +59,7 @@ extern "C"
  */
   struct __node
   {
-    void *next;			/**< next __node_t containing element */
+    void *next;                 /**< next __node_t containing element */
     void *element;              /**< element in Current node */
   };
 #endif
@@ -69,6 +69,15 @@ extern "C"
  * @var osip_list_t
  */
   typedef struct osip_list osip_list_t;
+
+/* added by bennewit@cs.tu-berlin.de */
+  typedef struct
+  {
+    __node_t *actual;
+    __node_t **prev;
+    osip_list_t *li;
+    int pos;
+  } osip_list_iterator_t;
 
 /**
  * Structure for referencing a list of elements.
@@ -82,9 +91,16 @@ extern "C"
 
   };
 
+/* added by bennewit@cs.tu-berlin.de */
+#define osip_list_iterator_has_elem( it ) ( 0 != (it).actual && (it).pos < (it).li->nb_elt )
+
 /**
  * Initialise a osip_list_t element.
- * NOTE: this element MUST be previously allocated.
+ * NOTE: this element MUST be previously allocated with
+ * osip_malloc(). The osip_free() call on the list is
+ * still automatically done by osip_list_free(). This
+ * also means you can't use a static osip_list_t variable
+ * if you want to use osip_list_free().
  * @param li The element to initialise.
  */
   int osip_list_init (osip_list_t * li);
@@ -131,7 +147,12 @@ extern "C"
  */
   int osip_list_remove (osip_list_t * li, int pos);
 
-int osip_list_get_first_index (osip_list_t * li, void *el);
+/* added by bennewit@cs.tu-berlin.de */
+  void *osip_list_get_first (osip_list_t * li, osip_list_iterator_t * it);
+/* added by bennewit@cs.tu-berlin.de */
+  void *osip_list_get_next (osip_list_iterator_t * it);
+/* added by bennewit@cs.tu-berlin.de */
+  void *osip_list_iterator_remove (osip_list_iterator_t * it);
 
 int osip_list_add_nodup(osip_list_t * li, void *el, int pos);
 

@@ -1,6 +1,6 @@
 /*
   The oSIP library implements the Session Initiation Protocol (SIP -rfc3261-)
-  Copyright (C) 2001  Aymeric MOIZARD jack@atosc.org
+  Copyright (C) 2001,2002,2003,2004,2005  Aymeric MOIZARD jack@atosc.org
   
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Lesser General Public
@@ -46,8 +46,8 @@
  */
   struct osip_accept_encoding
   {
-    char *element;  /**< accept encoding main value */
-    osip_list_t *gen_params;  /**< accept encoding parameters */
+    char *element;           /**< accept encoding main value */
+    osip_list_t gen_params;  /**< accept encoding parameters */
   };
 
 
@@ -104,14 +104,14 @@ extern "C"
  * @param name The token name for the new parameter.
  * @param value The token value for the new parameter.
  */
-#define osip_accept_encoding_param_add(header,name,value)  osip_generic_param_add((header)->gen_params,name,value)
+#define osip_accept_encoding_param_add(header,name,value)  osip_generic_param_add((&(header)->gen_params),name,value)
 /**
  * Find a header parameter in an Accept-Encoding element.
  * @param header The element to work on.
  * @param name The token name to search.
  * @param dest A pointer on the element found.
  */
-#define osip_accept_encoding_param_get_byname(header,name,dest) osip_generic_param_get_byname((header)->gen_params,name,dest)
+#define osip_accept_encoding_param_get_byname(header,name,dest) osip_generic_param_get_byname((&(header)->gen_params),name,dest)
 
 
 #ifdef __cplusplus

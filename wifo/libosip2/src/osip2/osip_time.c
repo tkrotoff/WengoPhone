@@ -18,17 +18,23 @@
 */
 
 #include <osip2/internal.h>
-#include <osip2/osip.h>
-
-#include "fsm.h"
+#include <osip2/osip_time.h>
 
 void
 add_gettimeofday (struct timeval *atv, int ms)
 {
   int m;
-  atv->tv_usec += ms * 1000;
-  m = atv->tv_usec / 1000000;
-  atv->tv_usec = atv->tv_usec % 1000000;
+
+  if (ms >= 1000000)
+    {
+      atv->tv_usec = 0;
+      m = ms / 1000;
+  } else
+    {
+      atv->tv_usec += ms * 1000;
+      m = atv->tv_usec / 1000000;
+      atv->tv_usec = atv->tv_usec % 1000000;
+    }
   atv->tv_sec += m;
 }
 
@@ -37,7 +43,7 @@ min_timercmp (struct timeval *tv1, struct timeval *tv2)
 {
   if (tv2->tv_sec == -1)
     return;
-  if (timercmp (tv1, tv2, >))
+  if (osip_timercmp (tv1, tv2, >))
     {
       /* replace tv1 with tv2 info */
       tv1->tv_sec = tv2->tv_sec;
@@ -45,18 +51,43 @@ min_timercmp (struct timeval *tv1, struct timeval *tv2)
     }
 }
 
-#if defined(_WIN32_WCE) || defined(WIN32)
+#if !defined(__PALMOS__) && defined(_WIN32_WCE)
+
+#include <time.h>
+
+int
+osip_gettimeofday (struct timeval *tp, void *tz)
+{
+  DWORD timemillis = GetTickCount();
+  tp->tv_sec  = timemillis/1000;
+  tp->tv_usec = (timemillis - (tp->tv_sec*1000)) * 1000;
+  return 0;
+}
+
+time_t
+time (time_t *t)
+{
+    DWORD timemillis = GetTickCount();
+	if (timemillis>0)
+	{
+		if (t!=NULL)
+			*t = timemillis/1000;
+	}
+	return timemillis/1000;
+}
+
+#elif !defined(__PALMOS__) && defined(WIN32)
 
 #include <time.h>
 #include <sys/timeb.h>
 
 int
-gettimeofday (struct timeval *tp, void *tz)
+osip_gettimeofday (struct timeval *tp, void *tz)
 {
   struct _timeb timebuffer;
 
   _ftime (&timebuffer);
-  tp->tv_sec = timebuffer.time;
+  tp->tv_sec = (long) timebuffer.time;
   tp->tv_usec = timebuffer.millitm * 1000;
   return 0;
 }

@@ -25,51 +25,55 @@
 #include <osipparser2/osip_message.h>
 #include <osipparser2/osip_parser.h>
 
-/* fills the proxy-authenticate header of message.               */
+/* fills the proxy-authentication_info header of message.               */
 /* INPUT :  char *hvalue | value of header.   */
 /* OUTPUT: osip_message_t *sip | structure to save results. */
 /* returns -1 on error. */
 int
-osip_message_set_proxy_authenticate (osip_message_t * sip, const char *hvalue)
+osip_message_set_proxy_authentication_info (osip_message_t * sip,
+                                            const char *hvalue)
 {
-  osip_proxy_authenticate_t *proxy_authenticate;
+  osip_proxy_authentication_info_t *proxy_authentication_info;
   int i;
 
   if (hvalue == NULL || hvalue[0] == '\0')
     return 0;
 
-  i = osip_proxy_authenticate_init (&(proxy_authenticate));
+  i = osip_proxy_authentication_info_init (&(proxy_authentication_info));
   if (i != 0)
     return -1;
-  i = osip_proxy_authenticate_parse (proxy_authenticate, hvalue);
+  i = osip_proxy_authentication_info_parse (proxy_authentication_info, hvalue);
   if (i != 0)
     {
-      osip_proxy_authenticate_free (proxy_authenticate);
+      osip_proxy_authentication_info_free (proxy_authentication_info);
       return -1;
     }
   sip->message_property = 2;
-  osip_list_add (&sip->proxy_authenticates, proxy_authenticate, -1);
+
+  osip_list_add (&sip->proxy_authentication_infos, proxy_authentication_info, -1);
   return 0;
 }
 
 
 
-/* returns the proxy_authenticate header.            */
+/* returns the proxy_authentication_info header.            */
 /* INPUT : osip_message_t *sip | sip message.   */
 /* returns null on error. */
 int
-osip_message_get_proxy_authenticate (const osip_message_t * sip, int pos,
-                                     osip_proxy_authenticate_t ** dest)
+osip_message_get_proxy_authentication_info (const osip_message_t * sip,
+                                            int pos,
+                                            osip_proxy_authentication_info_t
+                                            ** dest)
 {
-  osip_proxy_authenticate_t *proxy_authenticate;
+  osip_proxy_authentication_info_t *proxy_authentication_info;
 
   *dest = NULL;
-  if (osip_list_size (&sip->proxy_authenticates) <= pos)
+  if (osip_list_size (&sip->proxy_authentication_infos) <= pos)
     return -1;                  /* does not exist */
 
-  proxy_authenticate = (osip_proxy_authenticate_t *)
-    osip_list_get (&sip->proxy_authenticates, pos);
+  proxy_authentication_info = (osip_proxy_authentication_info_t *)
+    osip_list_get (&sip->proxy_authentication_infos, pos);
 
-  *dest = proxy_authenticate;
+  *dest = proxy_authentication_info;
   return pos;
 }
