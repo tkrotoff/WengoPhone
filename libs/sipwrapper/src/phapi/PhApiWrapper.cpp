@@ -495,7 +495,8 @@ void PhApiWrapper::sendMessage(IMChatSession & chatSession, const std::string & 
 	int messageId = -1;
 
 	for (it = buddies.begin(); it != buddies.end(); it++) {
-		std::string sipAddress = "sip:" + (*it).getContactId() + "@" + _wengoRealm;
+		std::string sipAddress = makeSipAddress((*it).getContactId());
+
 		owplMessageSendPlainText(_wengoVline,
 					sipAddress.c_str(),
 					message.c_str(),
@@ -509,7 +510,7 @@ void PhApiWrapper::changeTypingState(IMChatSession & chatSession, IMChat::Typing
 	int messageId = -1;
 
 	for (it = buddies.begin(); it != buddies.end(); it++) {
-		std::string sipAddress = "sip:" + (*it).getContactId() + "@" + _wengoRealm;
+		std::string sipAddress = makeSipAddress((*it).getContactId());
 
 		switch (state) {
 			case IMChat::TypingStateTyping :
@@ -622,7 +623,7 @@ void PhApiWrapper::sendMyIcon(const std::string & contactId, const std::string &
 		return;
 	}
 
-	std::string sipAddress = "sip:" + contactId + "@" + _wengoRealm;
+	std::string sipAddress = makeSipAddress(contactId);
 	owplMessageSendIcon(_wengoVline,
 		sipAddress.c_str(),
 		iconFilename.c_str(),
@@ -654,9 +655,9 @@ void PhApiWrapper::publishPresence(bool online, const std::string & note) {
 }
 
 void PhApiWrapper::subscribeToPresenceOf(const std::string & contactId) {
-	std::string sipAddress = "sip:" + contactId + "@" + _wengoRealm;
-
 	OWPL_SUB hSub;
+	std::string sipAddress = makeSipAddress(contactId);
+
 	if(owplPresenceSubscribe(_wengoVline, sipAddress.c_str(), 0, &hSub) != OWPL_RESULT_SUCCESS) {
 		subscribeStatusEvent(*this, sipAddress, IMPresence::SubscribeStatusError);
 	} else {
@@ -665,7 +666,7 @@ void PhApiWrapper::subscribeToPresenceOf(const std::string & contactId) {
 }
 
 void PhApiWrapper::unsubscribeToPresenceOf(const std::string & contactId) {
-	std::string sipAddress = "sip:" + contactId + "@" + _wengoRealm;
+	std::string sipAddress = makeSipAddress(contactId);
 
 	owplPresenceUnsubscribe(sipAddress.c_str());
 }
@@ -711,12 +712,12 @@ void PhApiWrapper::forbidWatcher(const std::string & watcher) {
 }
 
 void PhApiWrapper::blockContact(const std::string & contactId) {
-	std::string sipAddress = "sip:" + contactId + "@" + _wengoRealm;
+	std::string sipAddress = makeSipAddress(contactId);
 	allowWatcher(sipAddress);
 }
 
 void PhApiWrapper::unblockContact(const std::string & contactId) {
-	std::string sipAddress = "sip:" + contactId + "@" + _wengoRealm;
+	std::string sipAddress = makeSipAddress(contactId);
 	allowWatcher(sipAddress);
 }
 
@@ -972,4 +973,14 @@ void PhApiWrapper::setVideoDevice(const std::string & deviceName) {
 
 void PhApiWrapper::flipVideoImage(bool flip) {
 	phVideoControlSetCameraFlip((int)flip);
+}
+
+std::string PhApiWrapper::makeSipAddress(const std::string & contactId) {
+	std::string sipAddress = "sip:" + contactId;
+	
+	if (contactId.find('@') == std::string.npos) {
+		sipAddress += "@" + _wengoRealm;
+	}
+	
+	return sipAddress;
 }

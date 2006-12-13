@@ -789,7 +789,12 @@ void PhApiCallbacks::subscriptionProgress(OWPL_SUBSTATUS_INFO * info) {
 void PhApiCallbacks::onNotify(OWPL_NOTIFICATION_INFO * info) {
 	PhApiWrapper * p = PhApiWrapper::PhApiWrapperHack;
 	std::string buddy = computeContactId(info->szRemoteIdentity);
-	_subscribedContacts.insert(computeContactId(buddy));
+	
+	if (buddy.empty()) {
+		return;
+	}
+	_subscribedContacts.insert(buddy);
+	
 	TiXmlDocument doc;
 	doc.Parse(info->szXmlContent);
 	TiXmlHandle docHandle(&doc);
@@ -915,5 +920,16 @@ std::string PhApiCallbacks::computeContactId(const std::string & contactFromPhAp
 	std::string buddyTmp(contactFromPhApi);
 	unsigned colonIndex = buddyTmp.find(':', 0);
 	unsigned atIndex = buddyTmp.find('@', 0);
-	return buddyTmp.substr(colonIndex + 1, atIndex - colonIndex - 1);
+	unsigned greaterIndex = buddyTmp.find('>');
+
+	if (colonIndex != std::string.npos && atIndex != std::string.npos) {
+		std::string wengoRealm = PhApiWrapper::PhApiWrapperHack->getWengoRealm();
+		if (!buddyTmp.substr(atIndex + 1, greaterIndex - atIndex - 1).compare(wengoRealm)) {
+			return buddyTmp.substr(colonIndex + 1, atIndex - colonIndex - 1);
+		} else {
+			return buddyTmp.substr(colonIndex + 1, greaterIndex - colonIndex - 1);
+		}
+	}
+
+	return "";
 }

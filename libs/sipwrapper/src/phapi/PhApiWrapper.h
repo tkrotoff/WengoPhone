@@ -253,6 +253,10 @@ public:
 
 	void flipVideoImage(bool flip);
 
+	std::string getWengoRealm() {
+		return _wengoRealm;
+	};
+
 private:
 
 	/**
@@ -279,6 +283,10 @@ private:
 
 	/** Changes audio devices inside PhApi. */
 	bool setAudioDevices();
+
+	/** Makes a SIP uri from a contact id. */
+	/* (checks if a domain is set, otherwise adds the default one) */
+	std::string makeSipAddress(const std::string & contactId);
 
 	//FIXME ugly for call conference
 	void phoneCallStateChangedEventHandler(SipWrapper & sender, int callId,
