@@ -181,13 +181,18 @@ int main(int argc, char * argv[]) {
 	pFactory->exec();
 
 	WengoPhone::deleteInstance();
+#ifdef SIPXWRAPPER
 	OWSAFE_DELETE(sipFactory);
 	OWSAFE_DELETE(imFactory);
+#elif defined(PHAPIWRAPPER)
+	OWSAFE_DELETE(phApiFactory);
+#elif defined(MULTIIMWRAPPER)
+	OWSAFE_DELETE(phApiFactory);
+	OWSAFE_DELETE(gaimIMFactory);
+	OWSAFE_DELETE(imFactory);
+#endif
 
 	LOG_DEBUG("WengoPhone ended");
 
 	return EXIT_SUCCESS;
 }
-
-
-
