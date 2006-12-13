@@ -27,6 +27,13 @@ if (WIN32)
 endif (WIN32)
 
 if (UNIX AND NOT WIN32)
+	
+	ow_add_public_definitions(
+			-DHAVE_FCNTL_H
+			-DHAVE_SYS_TIME_H
+			-DHAVE_SYS_TYPES_H
+	)
+
 	if (APPLE)
 		ow_add_private_definitions(
 			-DHAVE_PTHREAD
