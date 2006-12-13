@@ -296,6 +296,18 @@ owplLineAdd(const char* displayname,
 			 OWPL_LINE * phLine);
 
 /**
+ * Removes a virtual line
+ *
+ * @param	hLine	a virtual line handle
+ * @param	skipUnregister	a boolean, if 1 skip the unregister and force
+							the vline deletion, if 0 does the unregister
+							as normal
+ * @return	an OWPL_RESULT code
+ */
+MY_DLLEXPORT OWPL_RESULT
+owplLineDelete(OWPL_LINE hLine, unsigned short skipUnregister);
+
+/**
  * owplLineGetProxy
  *
  * Get the proxy address of the line

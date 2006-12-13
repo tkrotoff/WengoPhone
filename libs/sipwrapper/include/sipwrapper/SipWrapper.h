@@ -157,10 +157,11 @@ public:
 	/**
 	 * Removes a given virtual phone line.
 	 *
-	 * @param lineId id of the virtual phone line to remove
-	 * @param regTimeout unregister timeout (-1 = unchanged)
+	 * @param	lineId id of the virtual phone line to remove
+	 * @param	now	if true, forces the removal without waiting for the unregister
+				if false, removal is not forced
 	 */
-	virtual void removeVirtualLine(int lineId, int regTimeout = -1) = 0;
+	virtual void removeVirtualLine(int lineId, bool now = false) = 0;
 
 	/** @} */
 

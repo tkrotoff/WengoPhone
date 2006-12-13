@@ -178,11 +178,11 @@ int PhApiWrapper::addVirtualLine(const std::string & displayName,
 	return hLine;
 }
 
-void PhApiWrapper::removeVirtualLine(int lineId, int regTimeout) {
+void PhApiWrapper::removeVirtualLine(int lineId, bool now) {
 	if (_isInitialized) {
 		publishOffline(String::null);
-		phDelVline(lineId, regTimeout);
-		if (regTimeout == 0) {
+		owplLineDelete(lineId, now);
+		if (now) {
 			setRegistered(false);
 			phoneLineStateChangedEvent(*this, lineId, EnumPhoneLineState::PhoneLineStateClosed);
 		}

@@ -190,7 +190,7 @@ void PhoneLine::connect() {
 void PhoneLine::disconnect(bool now) {
 	if (_lineId != SipWrapper::VirtualLineIdError) {
 		_sipAccount.setConnected(false);
-		_sipWrapper->removeVirtualLine(_lineId, now ? 0 : -1);
+		_sipWrapper->removeVirtualLine(_lineId, now);
 	}
 }
 

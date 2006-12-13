@@ -427,6 +427,23 @@ owplLineAdd(const char* displayname,
 	return OWPL_RESULT_SUCCESS;
 }
 
+MY_DLLEXPORT OWPL_RESULT
+owplLineDelete(OWPL_LINE hLine, unsigned short skipUnregister) {
+	if(skipUnregister) {
+		if(phDelVline(hLine, 0) == 0) {
+			return OWPL_RESULT_SUCCESS;
+		} else {
+			return OWPL_RESULT_FAILURE;
+		}
+	}
+
+	if(phDelVline(hLine, -1) == 0) {
+		return OWPL_RESULT_SUCCESS;
+	} else {
+		return OWPL_RESULT_FAILURE;
+	}
+}
+
 /**
  * owplLineRegister
  *
