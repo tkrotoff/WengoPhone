@@ -211,16 +211,145 @@ owplFireSubscriptionEvent(OWPL_SUB hSub,
 
 OWPL_RESULT
 owplFireNotificationEvent(OWPL_NOTIFICATION_EVENT event,
+						  OWPL_NOTIFICATION_CAUSE cause,
 						  const char* szXmlContent,
 						  const char* szRemoteIdentity)
 {
 	OWPL_NOTIFICATION_INFO nInfo;
+	OWPL_NOTIFICATION_STATUS_INFO statusInfo;
+	char szStatusNote[512];
+
+
 	memset(&nInfo, 0, sizeof(OWPL_NOTIFICATION_INFO));
 	nInfo.nSize = sizeof(OWPL_NOTIFICATION_INFO);
 	nInfo.event = event;
+	nInfo.cause = cause;
 	nInfo.szXmlContent = szXmlContent;
 	nInfo.szRemoteIdentity = szRemoteIdentity;
+
+	if(event == NOTIFICATION_PRESENCE && cause == NOTIFICATION_PRESENCE_ONLINE) {
+		owplNotificationPresenceGetNote(szXmlContent, szStatusNote, sizeof(szStatusNote));
+		memset(&statusInfo, 0, sizeof(OWPL_NOTIFICATION_STATUS_INFO));
+		statusInfo.nSize = sizeof(OWPL_NOTIFICATION_STATUS_INFO);
+		statusInfo.szStatusNote = szStatusNote;
+		nInfo.Data.StatusInfo = &statusInfo;
+	}
+
 	return owplFireEvent(EVENT_CATEGORY_NOTIFY, &nInfo);
+}
+
+OWPL_RESULT
+owplNotificationPresenceGetIdentity(const char * notify, char * buffer, size_t size) {
+	char * entity_string;
+	char * first_dbquote;
+	char * second_dbquote;
+	size_t length = 0;
+
+	if(notify == NULL
+		|| strlen(notify) == 0
+		|| buffer == NULL
+		|| size == 0)
+	{
+		return OWPL_RESULT_INVALID_ARGS;
+	}
+
+	memset(buffer, 0, size);
+
+	if((entity_string = strstr(notify, "entity")) == NULL) {
+		return OWPL_RESULT_FAILURE;
+	}
+
+	if((first_dbquote = strchr(entity_string, '"')) == NULL) {
+		return OWPL_RESULT_FAILURE;
+	}
+
+	if((second_dbquote = strchr(++first_dbquote, '"')) == NULL) {
+		return OWPL_RESULT_FAILURE;
+	}
+
+	if((length = strlen(first_dbquote) - strlen(second_dbquote)) == 0 || length >= size) {
+		return OWPL_RESULT_FAILURE;
+	}
+
+	if(strlen(strncpy(buffer, first_dbquote, length)) == 0) {
+		return OWPL_RESULT_FAILURE;
+	}
+
+	return OWPL_RESULT_SUCCESS;
+}
+
+OWPL_RESULT
+owplNotificationPresenceGetStatus(const char * notify, char * buffer, size_t size) {
+	char * basic_start_tag;
+	char * basic_end_tag;
+	size_t length = 0;
+
+	if(notify == NULL
+		|| strlen(notify) == 0
+		|| buffer == NULL
+		|| size == 0)
+	{
+		return OWPL_RESULT_INVALID_ARGS;
+	}
+
+	memset(buffer, 0, size);
+
+	if((basic_start_tag = strstr(notify, "<basic>")) == NULL) {
+		return OWPL_RESULT_FAILURE;
+	}
+
+	if((basic_end_tag = strstr(basic_start_tag, "</basic>")) == NULL) {
+		return OWPL_RESULT_FAILURE;
+	}
+
+	basic_start_tag += 7;
+
+	if((length = strlen(basic_start_tag) - strlen(basic_end_tag)) == 0 || length >= size) {
+		return OWPL_RESULT_FAILURE;
+	}
+
+	if(strlen(strncpy(buffer, basic_start_tag, length)) == 0) {
+		return OWPL_RESULT_FAILURE;
+	}
+
+	return OWPL_RESULT_SUCCESS;
+}
+
+OWPL_RESULT
+owplNotificationPresenceGetNote(const char * notify, char * buffer, size_t size) {
+	char * note_start_tag;
+	char * note_end_tag;
+	size_t length = 0;
+
+	if(notify == NULL
+		|| strlen(notify) == 0
+		|| buffer == NULL
+		|| size == 0)
+	{
+		return OWPL_RESULT_INVALID_ARGS;
+	}
+
+	memset(buffer, 0, size);
+
+	if((note_start_tag = strstr(notify, "<note>")) == NULL) {
+		return OWPL_RESULT_FAILURE;
+	}
+
+	if((note_end_tag = strstr(note_start_tag, "</note>")) == NULL) {
+		return OWPL_RESULT_FAILURE;
+	}
+
+	note_start_tag += 6;
+
+	if((length = strlen(note_start_tag) - strlen(note_end_tag)) == 0 || length >= size) {
+		return OWPL_RESULT_FAILURE;
+	}
+
+	if(strlen(strncpy(buffer, note_start_tag, length)) == 0) {
+		return OWPL_RESULT_FAILURE;
+	}
+
+	return OWPL_RESULT_SUCCESS;
 }
 
 OWPL_RESULT

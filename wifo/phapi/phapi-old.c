@@ -4217,6 +4217,8 @@ void ph_reg_progress(eXosip_event_t *je)
 
 void ph_notify_handler(eXosip_event_t *je)
 {
+	char status[16];
+
 	// TODO REFACTOR REMOVE
 	if (phcb->onNotify)
 	{
@@ -4224,11 +4226,19 @@ void ph_notify_handler(eXosip_event_t *je)
 	}
 
 	if(strcmp(je->sip_event, "presence") == 0) {
-		owplFireNotificationEvent(NOTIFICATION_PRESENCE, je->msg_body, je->remote_uri);
+		if(owplNotificationPresenceGetStatus(je->msg_body, status, sizeof(status)) == OWPL_RESULT_SUCCESS) {
+			if(strcmp(status, "open") == 0) {
+				owplFireNotificationEvent(NOTIFICATION_PRESENCE, NOTIFICATION_PRESENCE_ONLINE, je->msg_body, je->remote_uri);
+			} else if(strcmp(status, "closed") == 0){
+				owplFireNotificationEvent(NOTIFICATION_PRESENCE, NOTIFICATION_PRESENCE_OFFLINE, je->msg_body, je->remote_uri);
+			} else {
+				owplFireNotificationEvent(NOTIFICATION_UNKNOWN, NOTIFICATION_PARSE_ERROR, je->msg_body, je->remote_uri);
+			}
+		}
 	}else if(strcmp(je->sip_event, "presence.winfo") == 0) {
-		owplFireNotificationEvent(NOTIFICATION_WATCHER, je->msg_body, je->remote_uri);
+		owplFireNotificationEvent(NOTIFICATION_PRESENCE, NOTIFICATION_PRESENCE_WATCHER, je->msg_body, je->remote_uri);
 	} else {
-		owplFireNotificationEvent(NOTIFICATION_UNKNOWN, je->msg_body, je->remote_uri);
+		owplFireNotificationEvent(NOTIFICATION_UNKNOWN, NOTIFICATION_CAUSE_UNKNOWN, je->msg_body, je->remote_uri);
 	}
 }
 

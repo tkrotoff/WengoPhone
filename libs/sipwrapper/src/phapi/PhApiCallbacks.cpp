@@ -797,44 +797,82 @@ void PhApiCallbacks::onNotify(OWPL_NOTIFICATION_INFO * info) {
 	TiXmlText * noteText = NULL;
 	TiXmlElement * watcherinfoElement = NULL;
 	TiXmlElement * watcherElement = NULL;
+	std::string note;
 
 	switch(info->event) {
 		//A buddy presence
 		case NOTIFICATION_PRESENCE :
-
-			basicText = docHandle.FirstChild("presence").FirstChild("tuple").FirstChild("status").FirstChild("basic").FirstChild().Text();
-			if (basicText) {
-				std::string basic = basicText->Value();
-
-				//buddy is offline
-				if (String(basic).toLowerCase() == "closed") {
-					p->presenceStateChangedEvent(*p,  EnumPresenceState::PresenceStateOffline, String::null, buddy);
-				}
-
-				//buddy is online
-				else if (String(basic).toLowerCase() == "open") {
-					noteText = docHandle.FirstChild("presence").FirstChild("tuple").FirstChild("status").FirstChild("note").FirstChild().Text();
-					if (!noteText) {
-						noteText = docHandle.FirstChild("presence").FirstChild("tuple").FirstChild("status").FirstChild("value").FirstChild().Text();
+			switch(info->cause) {
+				case NOTIFICATION_PRESENCE_ONLINE :
+					note = std::string(info->Data.StatusInfo->szStatusNote);
+					if (note == PhApiWrapper::PresenceStateOnline) {
+						p->presenceStateChangedEvent(*p, EnumPresenceState::PresenceStateOnline, note, buddy);
+					} else if (note == PhApiWrapper::PresenceStateAway) {
+						p->presenceStateChangedEvent(*p, EnumPresenceState::PresenceStateAway, note, buddy);
+					} else if (note == PhApiWrapper::PresenceStateDoNotDisturb) {
+						p->presenceStateChangedEvent(*p, EnumPresenceState::PresenceStateDoNotDisturb, note, buddy);
+					} else {
+						p->presenceStateChangedEvent(*p, EnumPresenceState::PresenceStateUserDefined, note, buddy);
 					}
-					if (noteText) {
-						std::string note = noteText->Value();
-						if (note == PhApiWrapper::PresenceStateOnline) {
-							p->presenceStateChangedEvent(*p, EnumPresenceState::PresenceStateOnline, note, buddy);
-						} else if (note == PhApiWrapper::PresenceStateAway) {
-							p->presenceStateChangedEvent(*p, EnumPresenceState::PresenceStateAway, note, buddy);
-						} else if (note == PhApiWrapper::PresenceStateDoNotDisturb) {
-							p->presenceStateChangedEvent(*p, EnumPresenceState::PresenceStateDoNotDisturb, note, buddy);
-						} else {
-							p->presenceStateChangedEvent(*p, EnumPresenceState::PresenceStateUserDefined, note, buddy);
+					break;
+
+				case NOTIFICATION_PRESENCE_OFFLINE :
+					p->presenceStateChangedEvent(*p,  EnumPresenceState::PresenceStateOffline, String::null, buddy);
+					break;
+
+				case NOTIFICATION_PRESENCE_WATCHER :
+					LOG_DEBUG("buddy=" + buddy + " notification=presence.winfo content=" + std::string(info->szXmlContent));
+					watcherinfoElement = doc.FirstChildElement("watcherinfo");
+					if (watcherinfoElement) {
+
+						watcherElement = watcherinfoElement->FirstChildElement("watcher");
+						while (watcherElement) {
+
+							std::string watcher(watcherElement->Value());
+							p->allowWatcher(watcher);
+
+							watcherElement = watcherinfoElement->NextSiblingElement("watcher");
 						}
 					}
-				}
+					break;
+
+				default :
+					break;
 			}
+			
+			//basicText = docHandle.FirstChild("presence").FirstChild("tuple").FirstChild("status").FirstChild("basic").FirstChild().Text();
+			//if (basicText) {
+			//	std::string basic = basicText->Value();
+
+			//	//buddy is offline
+			//	if (String(basic).toLowerCase() == "closed") {
+			//		p->presenceStateChangedEvent(*p,  EnumPresenceState::PresenceStateOffline, String::null, buddy);
+			//	}
+
+			//	//buddy is online
+			//	else if (String(basic).toLowerCase() == "open") {
+			//		noteText = docHandle.FirstChild("presence").FirstChild("tuple").FirstChild("status").FirstChild("note").FirstChild().Text();
+			//		if (!noteText) {
+			//			noteText = docHandle.FirstChild("presence").FirstChild("tuple").FirstChild("status").FirstChild("value").FirstChild().Text();
+			//		}
+			//		if (noteText) {
+			//			std::string note = noteText->Value();
+			//			if (note == PhApiWrapper::PresenceStateOnline) {
+			//				p->presenceStateChangedEvent(*p, EnumPresenceState::PresenceStateOnline, note, buddy);
+			//			} else if (note == PhApiWrapper::PresenceStateAway) {
+			//				p->presenceStateChangedEvent(*p, EnumPresenceState::PresenceStateAway, note, buddy);
+			//			} else if (note == PhApiWrapper::PresenceStateDoNotDisturb) {
+			//				p->presenceStateChangedEvent(*p, EnumPresenceState::PresenceStateDoNotDisturb, note, buddy);
+			//			} else {
+			//				p->presenceStateChangedEvent(*p, EnumPresenceState::PresenceStateUserDefined, note, buddy);
+			//			}
+			//		}
+			//	}
+			//}
 			break;
 
 		//watcher list
-		case NOTIFICATION_WATCHER :
+		/*case NOTIFICATION_WATCHER :
 			LOG_DEBUG("buddy=" + buddy + " notification=presence.winfo content=" + std::string(info->szXmlContent));
 			watcherinfoElement = doc.FirstChildElement("watcherinfo");
 			if (watcherinfoElement) {
@@ -848,7 +886,7 @@ void PhApiCallbacks::onNotify(OWPL_NOTIFICATION_INFO * info) {
 					watcherElement = watcherinfoElement->NextSiblingElement("watcher");
 				}
 			}
-			break;
+			break;*/
 
 		case NOTIFICATION_UNKNOWN :
 			LOG_FATAL("unknown message event from="+ std::string(info->szRemoteIdentity) +" content=" + std::string(info->szXmlContent));

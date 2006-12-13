@@ -418,16 +418,45 @@ typedef struct
 typedef enum {
 	NOTIFICATION_UNKNOWN = 0,		/**< Unknown notify event */
 	NOTIFICATION_PRESENCE = 1000,	/**< Notification of peer presence */
-	NOTIFICATION_WATCHER = 2000		/**< Presence watcher event */
+	NOTIFICATION_MWI = 2000			/**< Presence watcher event */
 } OWPL_NOTIFICATION_EVENT;
+
+typedef enum {
+	NOTIFICATION_CAUSE_UNKNOWN = NOTIFICATION_UNKNOWN +1 ,
+	NOTIFICATION_PARSE_ERROR = NOTIFICATION_UNKNOWN + 2,
+	NOTIFICATION_PRESENCE_ONLINE = NOTIFICATION_PRESENCE + 1,	/**< Peer is on line */
+	NOTIFICATION_PRESENCE_OFFLINE = NOTIFICATION_PRESENCE + 2,	/**< Peer is off line */
+	NOTIFICATION_PRESENCE_WATCHER = NOTIFICATION_PRESENCE + 3			/**< Presence watcher */
+} OWPL_NOTIFICATION_CAUSE;
+
+typedef struct {
+	size_t    nSize ;               /**< The size of this structure. */
+	const char * szStatusNote;		/**< The note specifying a more accurate status. */
+} OWPL_NOTIFICATION_STATUS_INFO;
+
+typedef struct {
+	size_t    nSize ;               /**< The size of this structure. */
+} OWPL_NOTIFICATION_WATCHER_INFO;
+
+typedef struct {
+	size_t    nSize ;               /**< The size of this structure. */
+} OWPL_NOTIFICATION_MWI_INFO;
 
 typedef struct {
 	size_t    nSize ;               /**< The size of this structure. */
 	OWPL_NOTIFICATION_EVENT	event;	/**< Subscription event enum code.
                                          Identifies the subsciption event. */
+	OWPL_NOTIFICATION_CAUSE cause;	/**< Notification cause enum code.
+										 Identifies the cause of the notification event */
 	const char * szXmlContent;		/**< The notify XML content */
 	const char * szRemoteIdentity;	/**< The identity of the remote party of this notification. */
+	union {
+		OWPL_NOTIFICATION_STATUS_INFO * StatusInfo;
+		OWPL_NOTIFICATION_WATCHER_INFO * WatcherInfo;
+		OWPL_NOTIFICATION_MWI_INFO * MWI;
+	} Data;
 } OWPL_NOTIFICATION_INFO;
+
 
 typedef enum {
 	MESSAGE_UNKNOWN = 0,	/**< Unknown message event */
@@ -575,8 +604,18 @@ owplFireSubscriptionEvent(OWPL_SUB hSub,
  */
 OWPL_RESULT
 owplFireNotificationEvent(OWPL_NOTIFICATION_EVENT event,
+						  OWPL_NOTIFICATION_CAUSE cause,
 						  const char* szXmlContent,
 						  const char* szRemoteIdentity);
+
+OWPL_RESULT
+owplNotificationPresenceGetIdentity(const char * notify, char * buffer, size_t size);
+
+OWPL_RESULT
+owplNotificationPresenceGetStatus(const char * notify, char * buffer, size_t size);
+
+OWPL_RESULT
+owplNotificationPresenceGetNote(const char * notify, char * buffer, size_t size);
 
 /**
  * Creates a notification state structure and sends it to all subscribers
