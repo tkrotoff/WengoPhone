@@ -45,6 +45,7 @@ ow_add_sources(
 	src/osipparser2/osip_accept_language.c
 	src/osipparser2/osip_alert_info.c
 	src/osipparser2/osip_allow.c
+	src/osipparser2/osip_authentication_info.c
 	src/osipparser2/osip_authorization.c
 	src/osipparser2/osip_body.c
 	src/osipparser2/osip_call_id.c
@@ -67,9 +68,9 @@ ow_add_sources(
 	src/osipparser2/osip_parser_cfg.c
 	src/osipparser2/osip_port.c
 	src/osipparser2/osip_proxy_authenticate.c
+	src/osipparser2/osip_proxy_authentication_info.c
 	src/osipparser2/osip_proxy_authorization.c
 	src/osipparser2/osip_record_route.c
-	src/osipparser2/osip_rfc3264.c
 	src/osipparser2/osip_route.c
 	src/osipparser2/osip_to.c
 	src/osipparser2/osip_uri.c
@@ -77,7 +78,6 @@ ow_add_sources(
 	src/osipparser2/osip_www_authenticate.c
 	src/osipparser2/sdp_accessor.c
 	src/osipparser2/sdp_message.c
-	src/osipparser2/osip_replaces.c
 
 	src/osip2/fsm_misc.c
 	src/osip2/ict.c
