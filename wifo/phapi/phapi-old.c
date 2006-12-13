@@ -1241,7 +1241,7 @@ phAcceptCall3(int cid, void *userData, int streams)
 		}
 
 		eXosip_lock();
-	DBG_SIP_NEGO("STUN ports (a.local=%s, a.public=%s) (v.local=%s, v.public=%s)\n",local_voice_port,public_voice_port,local_video_port,public_video_port);
+		DBG_SIP_NEGO("STUN ports (a.local=%s, a.public=%s) (v.local=%s, v.public=%s)\n",local_voice_port,public_voice_port,local_video_port,public_video_port);
 		i = eXosip_answer_call(ca->did, 200, local_voice_port, ph_get_call_contact(ca), optional(local_video_port) , optional(public_voice_port) , optional(public_video_port));
 	}
 	else
@@ -1252,11 +1252,6 @@ phAcceptCall3(int cid, void *userData, int streams)
     eXosip_lock();
     DBG_SIP_NEGO("NO STUN ports (a.local=%s, a.public=%s) (v.local=%s, v.public=%s)\n",local_voice_port,0,local_video_port,0);
     i = eXosip_answer_call(ca->did, 200, local_voice_port, ph_get_call_contact(ca), optional(local_video_port), 0, 0);
-
-
-		eXosip_lock();
-		DBG_SIP_NEGO("NO STUN ports (a.local=%s, a.public=%s) (v.local=%s, v.public=%s)\n",local_voice_port,0,local_video_port);
-		i = eXosip_answer_call(ca->did, 200, local_voice_port, ph_get_call_contact(ca), optional(local_video_port), 0, 0);
 
 
 #ifdef STUN_ENABLE
@@ -1620,6 +1615,12 @@ phResumeCall(int cid)
 	i = eXosip_off_hold_call(ca->did, 0, 0);
 	eXosip_unlock();
 
+	// if eXosip failed to put the call off hold, revert the changes on the call
+	if(i != 0) {
+		ca->localhold = 1;
+		ca->localresume = 0;
+	}
+
 	return i;
 }
 
@@ -1651,6 +1652,11 @@ phHoldCall(int cid)
 	eXosip_lock();
 	i = eXosip_on_hold_call(ca->did);
 	eXosip_unlock();
+
+	// if eXosip failed to put the call on hold, revert the change on the call
+	if(i != 0) {
+		ca->localhold = 0;
+	}
 
 	return i;
 
