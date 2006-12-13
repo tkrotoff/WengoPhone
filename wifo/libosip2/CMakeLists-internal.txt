@@ -13,6 +13,7 @@ ow_add_private_include_dirs(
 ow_add_private_definitions(
 	-DOSIP_MT
 	-DENABLE_TRACE
+	-DHAVE_STRUCT_TIMEVAL
 )
 
 if (WIN32)
