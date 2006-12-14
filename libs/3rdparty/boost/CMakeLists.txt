@@ -31,5 +31,5 @@ if (MSVC)
 		/wd4675
 	)
 
-	ow_copy_dir(${BOOST_LIBRARY_DIRS}/*.dll .)
+	ow_copy_dir(${BOOST_LIBRARY_DIRS}/*.dll ${BUILD_DIR})
 endif (MSVC)

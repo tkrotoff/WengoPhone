@@ -1,6 +1,5 @@
 # - OW_COPY_DIR_RECURSIVE(src dst)
-# Copies recursively a directory to ${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE}/${dst}
-# only if src is different (newer) than dst
+# Copies recursively a directory to ${dst} only if src is different (newer) than dst
 # See OWCopyDir(src dst)
 # See OWCopyFile(src dst)
 #

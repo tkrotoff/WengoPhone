@@ -1,6 +1,5 @@
 # - OW_COPY_DIR(src dst)
-# Copies a directory to ${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE}/${dst}
-# only if src is different (newer) than dst
+# Copies a directory to ${dst} only if src is different (newer) than dst
 # See OWCopyFile(src dst)
 #
 # Copyright (C) 2006  Wengo

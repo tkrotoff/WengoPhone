@@ -29,6 +29,6 @@ ow_add_sources(
 	YealinkWenbox.cpp
 )
 
-ow_copy_file(${CMAKE_CURRENT_SOURCE_DIR}/YLTELBOX.dll .)
+ow_copy_file(${CMAKE_CURRENT_SOURCE_DIR}/YLTELBOX.dll ${BUILD_DIR})
 
 ow_create_binary()

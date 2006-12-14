@@ -10,4 +10,4 @@ ow_add_public_include_dirs(
 	${CMAKE_CURRENT_SOURCE_DIR}/include/ffmpeg
 )
 
-ow_copy_dir(${CMAKE_CURRENT_SOURCE_DIR}/binary-lib/msvc/*.dll .)
+ow_copy_dir(${CMAKE_CURRENT_SOURCE_DIR}/binary-lib/msvc/*.dll ${BUILD_DIR})

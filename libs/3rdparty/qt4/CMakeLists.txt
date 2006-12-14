@@ -54,5 +54,5 @@ ow_add_public_definitions(
 if (MSVC)
 	string(REGEX REPLACE "\\\\" "/" QTDIR $ENV{QTDIR})
 
-	ow_copy_dir(${QTDIR}/bin/*.dll .)
+	ow_copy_dir(${QTDIR}/bin/*.dll ${BUILD_DIR})
 endif (MSVC)

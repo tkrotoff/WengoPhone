@@ -1,6 +1,5 @@
 # - OW_COPY_FILE(src dst)
-# Copies a file to ${CMAKE_BINARY_DIR}/${CMAKE_BUILD_TYPE}/${dst}
-# only if src is different (newer) than dst
+# Copies a file to ${dst} only if src is different (newer) than dst
 #
 # Copyright (C) 2006  Wengo
 #
@@ -13,11 +12,11 @@ macro (OW_COPY_FILE src dst)
 	# Removes all path containing .svn or CVS or CMakeLists.txt during the copy
 	if (NOT ${src} MATCHES ".*\\.svn|CVS|CMakeLists\\.txt.*")
 
-		message(STATUS "Copy file from ${src} to ${BUILD_DIR}/${dst}")
+		message(STATUS "Copy file from ${src} to ${dst}")
 
 		exec_program(${CMAKE_COMMAND}
 			ARGS
-				"-E copy_if_different \"${src}\" \"${BUILD_DIR}/${dst}\""
+				"-E copy_if_different \"${src}\" \"${dst}\""
 		)
 	endif (NOT ${src} MATCHES ".*\\.svn|CVS|CMakeLists\\.txt.*")
 

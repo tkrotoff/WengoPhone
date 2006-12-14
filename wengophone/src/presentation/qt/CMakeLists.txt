@@ -477,7 +477,7 @@ add_custom_target(lupdate
 		${qmFiles}
 )
 
-ow_copy_dir_recursive(${CMAKE_CURRENT_SOURCE_DIR}/webpages/* webpages/.)
+ow_copy_dir_recursive(${CMAKE_CURRENT_SOURCE_DIR}/webpages/* ${BUILD_DIR}/webpages/.)
 
 # Bugfix, spaces don't work with install target
 string(REPLACE " " "CMAKEBUGWITHSPACES" TMP_BUILD_DIR ${BUILD_DIR})
@@ -565,6 +565,10 @@ if (APPLE)
 	####
 
 endif (APPLE)
+
+if (UNIX AND NOT APPLE)
+	install(SCRIPT CMakeLists-install-linux.txt)
+endif (UNIX AND NOT APPLE)
 
 if (WIN32)
 	# NSIS installer script
