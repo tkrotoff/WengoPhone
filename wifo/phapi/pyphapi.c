@@ -34,6 +34,7 @@
 #include "phglobal.h"
 
 #ifdef OS_WINDOWS
+#include <winsock2.h>
 #undef DEBUG
 #undef _DEBUG
 
@@ -1107,6 +1108,16 @@ static PyObject * PyOwplInit(PyObject * self, PyObject * params) {
 		bUserSequentialPorts);
     return Py_BuildValue("i", ret);
 }
+
+/**
+ * @brief Wraps owplShutdown()
+ */
+static PyObject * PyOwplShutdown(PyObject * self, PyObject * params) {
+	int ret;
+	ret = owplShutdown();
+    return Py_BuildValue("i", ret);
+}
+
 /**
  * @brief Wraps owplConfigSetLocalHttpProxy()
  */
@@ -1246,9 +1257,9 @@ static PyObject * PyOwplConfigAddVideoCodecByName(PyObject *self, PyObject *para
 }
 
 /**
- * @brief Wraps owplConfigSetAsynchronous
+ * @brief Wraps owplConfigSetAsyncCallbackMode
  */
-static PyObject * PyOwplConfigSetAsynchronous(PyObject *self, PyObject *params) {
+static PyObject * PyOwplConfigSetAsyncCallbackMode(PyObject *self, PyObject *params) {
 	const unsigned int asyncronous;
 
     int pycode, ret;
@@ -1261,7 +1272,7 @@ static PyObject * PyOwplConfigSetAsynchronous(PyObject *self, PyObject *params) 
         return Py_None;
     }
 
-    ret = owplConfigSetAsynchronous(asyncronous);
+    ret = owplConfigSetAsyncCallbackMode(asyncronous);
     return Py_BuildValue("i", ret);
 }
 
@@ -1419,6 +1430,28 @@ static PyObject * PyOwplLineAdd(PyObject *self, PyObject *params) {
 	}
 
     return Py_None;
+}
+
+/**
+ * @brief Wraps owplLineDelete
+ */
+static PyObject * PyOwplLineDelete(PyObject *self, PyObject *params) {
+	const OWPL_LINE hLine;
+	const unsigned short skipUnregister;
+
+	int pycode, ret;
+
+	pycode = PyArg_ParseTuple(params,
+		"ii",
+		&hLine,
+		&skipUnregister);
+
+    if (!pycode) {
+        return Py_None;
+    }
+
+    ret = owplLineDelete(hLine, skipUnregister);
+    return Py_BuildValue("i", ret);
 }
 
 /**
@@ -1616,6 +1649,50 @@ static PyObject * PyOwplLineAddCredential(PyObject *self, PyObject *params) {
 		szPasswd,
 		szRealm);
     return Py_BuildValue("i", ret);
+}
+
+/**
+ * @brief Wraps owplLineSetBusy()
+ */
+static PyObject * PyOwplLineSetBusy(PyObject *self, PyObject *params) {
+	const OWPL_LINE hLine;
+	const unsigned short bBusy;
+
+    int pycode, ret;
+
+    pycode = PyArg_ParseTuple(params,
+		"ii",
+		&hLine,
+		&bBusy);
+
+    if (!pycode) {
+        return Py_None;
+    }
+
+    ret = owplLineSetBusy(hLine,
+		bBusy);
+    return Py_BuildValue("i", ret);
+}
+
+/**
+ * @brief Wraps owplLineIsBusy()
+ */
+static PyObject * PyOwplLineIsBusy(PyObject *self, PyObject *params) {
+	const OWPL_LINE hLine;
+	unsigned short bBusy;
+
+    int pycode, ret;
+
+	pycode = PyArg_ParseTuple(params,
+		"i",
+		&hLine);
+
+    ret = owplLineIsBusy(hLine, &bBusy);
+
+    if(ret == OWPL_RESULT_SUCCESS) {
+		return Py_BuildValue("i", bBusy);
+	}
+    return Py_None;
 }
 
 /**
@@ -2567,13 +2644,14 @@ static PyMethodDef pyphapi_funcs[] = {
     PY_PHAPI_FUNCTION_DECL("phConf",                PyPhConf),
 
 	PY_PHAPI_FUNCTION_DECL("owplInit",								PyOwplInit),
+	PY_PHAPI_FUNCTION_DECL("owplShutdown",							PyOwplShutdown),
 	PY_PHAPI_FUNCTION_DECL("owplConfigSetLocalHttpProxy",           PyOwplConfigSetLocalHttpProxy),
 	PY_PHAPI_FUNCTION_DECL("owplConfigSetTunnel",					PyOwplConfigSetTunnel),
 	PY_PHAPI_FUNCTION_DECL("owplConfigSetNat",						PyOwplConfigSetNat),
 	PY_PHAPI_FUNCTION_DECL("owplConfigSetOutboundProxy",            PyOwplConfigSetOutboundProxy),
 	PY_PHAPI_FUNCTION_DECL("owplConfigAddAudioCodecByName",         PyOwplConfigAddAudioCodecByName),
 	PY_PHAPI_FUNCTION_DECL("owplConfigAddVideoCodecByName",         PyOwplConfigAddVideoCodecByName),
-	PY_PHAPI_FUNCTION_DECL("owplConfigSetAsynchronous",             PyOwplConfigSetAsynchronous),
+	PY_PHAPI_FUNCTION_DECL("owplConfigSetAsyncCallbackMode",        PyOwplConfigSetAsyncCallbackMode),
 	PY_PHAPI_FUNCTION_DECL("owplConfigGetBoundLocalAddr",			PyOwplConfigGetBoundLocalAddr),
 	PY_PHAPI_FUNCTION_DECL("owplConfigLocalHttpProxyGetAddr",       PyOwplConfigLocalHttpProxyGetAddr),
 	PY_PHAPI_FUNCTION_DECL("owplConfigLocalHttpProxyGetPasswd",     PyOwplConfigLocalHttpProxyGetPasswd),
@@ -2581,6 +2659,7 @@ static PyMethodDef pyphapi_funcs[] = {
 	PY_PHAPI_FUNCTION_DECL("owplConfigLocalHttpProxyGetUserName",   PyOwplConfigLocalHttpProxyGetUserName),
 	PY_PHAPI_FUNCTION_DECL("owplAudioSetConfigString",              PyOwplAudioSetConfigString),
 	PY_PHAPI_FUNCTION_DECL("owplLineAdd",							PyOwplLineAdd),
+	PY_PHAPI_FUNCTION_DECL("owplLineDelete",						PyOwplLineDelete),
 	PY_PHAPI_FUNCTION_DECL("owplLineGetProxy",						PyOwplLineGetProxy),
 	PY_PHAPI_FUNCTION_DECL("owplLineGetLocalUserName",              PyOwplLineGetLocalUserName),
 	PY_PHAPI_FUNCTION_DECL("owplLineRegister",						PyOwplLineRegister),
@@ -2588,6 +2667,8 @@ static PyMethodDef pyphapi_funcs[] = {
 	/*PY_PHAPI_FUNCTION_DECL("owplLineGetOpts",						PyOwplLineGetOpts), // not yet implemented */
 	PY_PHAPI_FUNCTION_DECL("owplLineGetUri",						PyOwplLineGetUri),
 	PY_PHAPI_FUNCTION_DECL("owplLineAddCredential",					PyOwplLineAddCredential),
+	PY_PHAPI_FUNCTION_DECL("owplLineSetBusy",						PyOwplLineSetBusy),
+	PY_PHAPI_FUNCTION_DECL("owplLineIsBusy",						PyOwplLineIsBusy),
 	PY_PHAPI_FUNCTION_DECL("owplCallCreate",						PyOwplCallCreate),
 	PY_PHAPI_FUNCTION_DECL("owplCallConnect",						PyOwplCallConnect),
 	PY_PHAPI_FUNCTION_DECL("owplCallConnectWithBody",               PyOwplCallConnectWithBody),
