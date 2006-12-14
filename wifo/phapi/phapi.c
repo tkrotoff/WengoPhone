@@ -668,7 +668,7 @@ owplLineAddCredential(const OWPL_LINE hLine,
 		|| !szPasswd
 		|| !szRealm)
 	{
-		return -OWPL_RESULT_INVALID_ARGS;
+		return OWPL_RESULT_INVALID_ARGS;
 	}
 
 	eXosip_lock();
