@@ -978,7 +978,7 @@ void PhApiWrapper::flipVideoImage(bool flip) {
 std::string PhApiWrapper::makeSipAddress(const std::string & contactId) {
 	std::string sipAddress = "sip:" + contactId;
 	
-	if (contactId.find('@') == std::string.npos) {
+	if (contactId.find('@') == std::string::npos) {
 		sipAddress += "@" + _wengoRealm;
 	}
 	

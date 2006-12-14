@@ -922,7 +922,7 @@ std::string PhApiCallbacks::computeContactId(const std::string & contactFromPhAp
 	unsigned atIndex = buddyTmp.find('@', 0);
 	unsigned greaterIndex = buddyTmp.find('>');
 
-	if (colonIndex != std::string.npos && atIndex != std::string.npos) {
+	if (colonIndex != std::string::npos && atIndex != std::string::npos) {
 		std::string wengoRealm = PhApiWrapper::PhApiWrapperHack->getWengoRealm();
 		if (!buddyTmp.substr(atIndex + 1, greaterIndex - atIndex - 1).compare(wengoRealm)) {
 			return buddyTmp.substr(colonIndex + 1, atIndex - colonIndex - 1);
