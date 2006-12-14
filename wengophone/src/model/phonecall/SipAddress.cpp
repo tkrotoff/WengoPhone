@@ -123,6 +123,8 @@ SipAddress SipAddress::fromString(const std::string & str, const std::string & r
 	if (!sipUri.contains("@")) {
 		//Not a SIP URI
 		sipUri = "sip:" + sipUri + "@" + realm;
+	} else if (!sipUri.beginsWith("sip:")) {
+		sipUri = "sip:" + sipUri;
 	}
 
 	return SipAddress(sipUri);
