@@ -871,7 +871,7 @@ void PhApiWrapper::init() {
 #endif
 
 	//If asynchronous mode = 0 then we have to call phPoll()
-	owplConfigSetAsynchronous(1);
+	owplConfigSetAsyncCallbackMode (1);
 
 	_callbacks->startListeningPhApiEvents();
 

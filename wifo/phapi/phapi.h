@@ -189,7 +189,7 @@ MY_DLLEXPORT OWPL_RESULT
 owplConfigAddVideoCodecByName(const char* szCodecName);
 
 MY_DLLEXPORT OWPL_RESULT
-owplConfigSetAsynchronous(const unsigned int asyncronous);
+owplConfigSetAsyncCallbackMode (const unsigned int asyncronous);
 
 /**
  * Gets the local bound ip address.

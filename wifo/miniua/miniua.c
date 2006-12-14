@@ -552,7 +552,7 @@ int main(int argc, const char *const *argv)
 #endif
 
 	if(!noinit) {
-		owplConfigSetAsynchronous(1);
+		owplConfigSetAsyncCallbackMode (1);
 		owplEventListenerAdd(phApiEventsHandler, 0);
 		if(owplInit(5060, 0, 0, NULL, 0) != OWPL_RESULT_SUCCESS)  {
 			fprintf (stderr, "miniua: could not initialize phoneapi\n");
@@ -1723,7 +1723,7 @@ static int cmdloop(const char* userid, const char *regserver, FILE *file, int do
 
 			ret = owplEventListenerAdd(phApiEventsHandler, 0);
 			if(ret == OWPL_RESULT_SUCCESS) {
-				ret = owplConfigSetAsynchronous(1);
+				ret = owplConfigSetAsyncCallbackMode (1);
 			}
 			if(ret == OWPL_RESULT_SUCCESS) {
 				ret = owplInit(5060, 0, 0, NULL, 0);

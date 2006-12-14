@@ -295,7 +295,7 @@ owplConfigAddVideoCodecByName(const char* szCodecName)
 
 
 MY_DLLEXPORT OWPL_RESULT
-owplConfigSetAsynchronous(const unsigned int asyncronous) {
+owplConfigSetAsyncCallbackMode (const unsigned int asyncronous) {
 	phcfg.asyncmode = asyncronous;
 	return OWPL_RESULT_SUCCESS;
 }
