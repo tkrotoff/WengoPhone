@@ -48,7 +48,7 @@ subdirs(
 	phapi/phspeexplugin
 	phapi
 	wifo-plugins
-	#phapi/pyphapi
+	phapi/pyphapi
 	#miniua
 	#tests/WifoPluginsConsole
 )
