@@ -4,13 +4,14 @@ include(CheckCXXCompilerFlag)
 
 # With -fPIC
 if (UNIX AND NOT WIN32)
-  execute_process(
-    COMMAND
-      uname -m
-    OUTPUT_VARIABLE MACHINE_TYPE
-    OUTPUT_QUIET
-    OUTPUT_STRIP_TRAILING_WHITESPACE
-  )
+	execute_process(
+		COMMAND
+			uname -m
+		OUTPUT_VARIABLE MACHINE_TYPE
+		OUTPUT_QUIET
+		OUTPUT_STRIP_TRAILING_WHITESPACE
+	)
+
 	if (MACHINE_TYPE MATCHES "x86_64")
 		check_cxx_compiler_flag("-fPIC" WITH_FPIC)
 		if (WITH_FPIC)

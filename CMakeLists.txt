@@ -46,6 +46,7 @@ subdirs(
 	libs/3rdparty/gaim
 	libs/3rdparty/uuid
 	libs/3rdparty/x11
+	libs/3rdparty/python
 	libs/3rdparty/samplerate
 
 	libs/owcurl
