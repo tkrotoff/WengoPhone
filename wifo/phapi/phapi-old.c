@@ -191,7 +191,7 @@ static char ph_follow_me_addr[256];
 unsigned short phCallBackPort = PH_CALLBACK_PORT;
  unsigned short phServerPort = PH_SERVER_PORT;
 
-int ph_busyFlag;
+static int ph_busyFlag;
 
 static FILE *ph_log_file;
 

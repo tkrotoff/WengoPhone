@@ -589,7 +589,7 @@ int main(int argc, const char *const *argv)
 	fflush(stdout);
 
 	cmdloop(userid, regserver, stdin, 0);
-	phTerminate();
+	owplShutdown();
 	exit(0);
 	return(0);
 }
@@ -1333,7 +1333,6 @@ static int cmdloop(const char* userid, const char *regserver, FILE *file, int do
 
 		case CMD_BUSY:
 			{
-				/* FIXME DISABLED because phSetBusy can't be accessed
 				char *tok;
 
 				vlid = atoi(args);
@@ -1344,10 +1343,8 @@ static int cmdloop(const char* userid, const char *regserver, FILE *file, int do
 					ret = phSetBusy(atoi(tok));
 				} else {
 					tok = strstr(NULL, " ");
-					// TODO REFACTOR
-					ret = phLineSetBusy(vlid, atoi(tok));
+					ret = owplLineSetBusy(vlid, atoi(tok));
 				}
-				*/
 				break;
 			}
 
@@ -1502,11 +1499,8 @@ static int cmdloop(const char* userid, const char *regserver, FILE *file, int do
 			}
 
 		case CMD_VLDEL:
-			/* TODO REFACTOR DISABLED
 			vlid = atoi(args);
-			// TODO REFACTOR
-			ret = phDelVline(vlid, -1);
-			*/
+			ret = owplLineDelete(vlid, 0);
 			break;
 
 		case CMD_VLADD:

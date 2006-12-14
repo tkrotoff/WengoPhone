@@ -195,8 +195,6 @@ enum phErrors {
 #define PH_STREAM_VIDEO_RX (1 << 1)
 #define PH_STREAM_VIDEO_TX (1 << 2)
 
-extern int ph_busyFlag;
-
 /********************TELEPHONY*********************/
 
 /**

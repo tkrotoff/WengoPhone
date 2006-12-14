@@ -399,7 +399,8 @@ owplLineAddCredential(const OWPL_LINE hLine,
  * @return	an OWPL_RESULT code
  */
 MY_DLLEXPORT OWPL_RESULT
-owplLineSetBusy(unsigned short bBusy);
+owplLineSetBusy(OWPL_LINE hLine,
+				unsigned short bBusy);
 
 /**
  * Sets the line as busy or not.
@@ -408,7 +409,8 @@ owplLineSetBusy(unsigned short bBusy);
  * @return	an OWPL_RESULT code
  */
 MY_DLLEXPORT OWPL_RESULT
-owplLineIsBusy(unsigned short * bBusy);
+owplLineIsBusy(OWPL_LINE hLine,
+			   unsigned short * bBusy);
 
 /********************************************************************************************
  *								Phone CALL related functions								*

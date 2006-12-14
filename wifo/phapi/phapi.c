@@ -682,16 +682,24 @@ owplLineAddCredential(const OWPL_LINE hLine,
 }
 
 MY_DLLEXPORT OWPL_RESULT
-owplLineSetBusy(unsigned short bBusy) {
-	if(phSetBusy(bBusy) != 0) {
+owplLineSetBusy(OWPL_LINE hLine,
+				unsigned short bBusy) {
+	if(phLineSetBusy(hLine, bBusy) != 0) {
 		return OWPL_RESULT_FAILURE;
 	}
 	return OWPL_RESULT_SUCCESS;
 }
 
 MY_DLLEXPORT OWPL_RESULT
-owplLineIsBusy(unsigned short * bBusy) {
-	*bBusy = ph_busyFlag;
+owplLineIsBusy(OWPL_LINE hLine,
+			   unsigned short * bBusy) {
+	phVLine *vl = ph_valid_vlid(hLine);
+
+	if(!vl) {
+		return OWPL_RESULT_FAILURE;
+	}
+
+	*bBusy = vl->busy;
 	return OWPL_RESULT_SUCCESS;
 }
 
