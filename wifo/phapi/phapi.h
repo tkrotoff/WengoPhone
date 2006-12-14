@@ -127,6 +127,9 @@ owplInit(	const int udpPort,
 			const char* szBindToAddr,
 			const int bUserSequentialPorts);
 
+MY_DLLEXPORT OWPL_RESULT
+owplShutdown();
+
 /********************************************************************************************
  *								Phone CONFIG related functions								*
  ********************************************************************************************/
@@ -388,6 +391,24 @@ owplLineAddCredential(const OWPL_LINE hLine,
 						const char* szUserID,
 						const char* szPasswd,
 						const char* szRealm);
+
+/**
+ * Sets the line as busy or not.
+ *
+ * @param	bBusy	boolean indicating the mode busy or not
+ * @return	an OWPL_RESULT code
+ */
+MY_DLLEXPORT OWPL_RESULT
+owplLineSetBusy(unsigned short bBusy);
+
+/**
+ * Sets the line as busy or not.
+ *
+ * @param	bBusy	pointer to a boolean indicating the mode busy or not
+ * @return	an OWPL_RESULT code
+ */
+MY_DLLEXPORT OWPL_RESULT
+owplLineIsBusy(unsigned short * bBusy);
 
 /********************************************************************************************
  *								Phone CALL related functions								*

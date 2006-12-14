@@ -150,7 +150,13 @@ owplInit(	const int udpPort,
 
 	DEBUGTRACE("PhInit finished\n");
 
-  return OWPL_RESULT_SUCCESS;;
+  return OWPL_RESULT_SUCCESS;
+}
+
+MY_DLLEXPORT OWPL_RESULT
+owplShutdown() {
+	phTerminate();
+	return OWPL_RESULT_SUCCESS;
 }
 
 MY_DLLEXPORT OWPL_RESULT
@@ -675,6 +681,20 @@ owplLineAddCredential(const OWPL_LINE hLine,
 	return OWPL_RESULT_SUCCESS;
 }
 
+MY_DLLEXPORT OWPL_RESULT
+owplLineSetBusy(unsigned short bBusy) {
+	if(phSetBusy(bBusy) != 0) {
+		return OWPL_RESULT_FAILURE;
+	}
+	return OWPL_RESULT_SUCCESS;
+}
+
+MY_DLLEXPORT OWPL_RESULT
+owplLineIsBusy(unsigned short * bBusy) {
+	*bBusy = ph_busyFlag;
+	return OWPL_RESULT_SUCCESS;
+}
+
 /********************************************************************************************
  *								Phone CALL related functions								*
  ********************************************************************************************/
@@ -936,7 +956,10 @@ owplCallRejectWithPredefinedReason(const OWPL_CALL hCall,
 
 MY_DLLEXPORT OWPL_RESULT 
 owplCallHold(const OWPL_CALL hCall) {
-	return OWPL_RESULT_NOT_IMPLEMENTED;
+	if(phHoldCall(hCall) == 0) {
+		return OWPL_RESULT_SUCCESS;
+	}
+	return OWPL_RESULT_FAILURE;
 }
 
 MY_DLLEXPORT OWPL_RESULT 
@@ -969,7 +992,10 @@ owplCallHoldWithBody(const OWPL_CALL hCall,
 
 MY_DLLEXPORT OWPL_RESULT
 owplCallUnhold(const OWPL_CALL hCall) {
-	return OWPL_RESULT_NOT_IMPLEMENTED;
+	if(phResumeCall(hCall) == 0) {
+		return OWPL_RESULT_SUCCESS;
+	}
+	return OWPL_RESULT_FAILURE;
 }
 
 MY_DLLEXPORT OWPL_RESULT

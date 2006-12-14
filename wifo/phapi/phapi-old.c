@@ -191,7 +191,7 @@ static char ph_follow_me_addr[256];
 unsigned short phCallBackPort = PH_CALLBACK_PORT;
  unsigned short phServerPort = PH_SERVER_PORT;
 
-static int ph_busyFlag;
+int ph_busyFlag;
 
 static FILE *ph_log_file;
 
@@ -2943,7 +2943,7 @@ phTerminate()
 
 
 	for(i = 0; i < PH_MAX_CALLS; i++)
-		if (ph_calls[i].cid != -1)
+		if (ph_calls[i].cid != -1 && ph_calls[i].extern_cid != -1)
 		{
 			DBG_SIP_NEGO("release calls");
 			ph_release_call(&ph_calls[i]);
