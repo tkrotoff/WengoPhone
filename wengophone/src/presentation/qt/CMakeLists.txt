@@ -18,7 +18,6 @@ ow_use_private_libraries(
 	owtrayicon
 	owbrowser
 	owsoftupdater
-	owphapiwrapper
 )
 
 if (MSVC)
@@ -27,17 +26,39 @@ if (MSVC)
 	)
 endif (MSVC)
 
-ow_add_public_include_dirs(
-	${CMAKE_CURRENT_BINARY_DIR}
-)
+if (SIPWRAPPER_BACKEND_SIPX)
+	ow_add_private_definitions(
+		-DSIPXWRAPPER
+	)
+
+	ow_use_private_libraries(
+		sipxwrapper
+	)
+else (SIPWRAPPER_BACKEND_SIPX)
+if (SIPWRAPPER_BACKEND_PHAPI)
+	ow_add_private_definitions(
+		-DPHAPIWRAPPER
+	)
+
+	ow_use_private_libraries(
+		owphapiwrapper
+	)
+else (SIPWRAPPER_BACKEND_PHAPI)
+if (IMWRAPPER_BACKEND_MULTI)
+	ow_add_private_definitions(
+		-DMULTIIMWRAPPER
+	)
+
+	ow_use_private_libraries(
+		owmultiimwrapper
+	)
+endif (IMWRAPPER_BACKEND_MULTI)
+endif (SIPWRAPPER_BACKEND_PHAPI)
+endif (SIPWRAPPER_BACKEND_SIPX)
 
 ow_add_private_include_dirs(
-  ${CMAKE_CURRENT_SOURCE_DIR}
-)
-
-ow_add_private_definitions(
-	-DPHAPIWRAPPER
-	-DMULTIIMWRAPPER
+	${CMAKE_CURRENT_BINARY_DIR}
+	${CMAKE_CURRENT_SOURCE_DIR}
 )
 
 qt4_wrap_cpp(${PROJECT_NAME}_SRCS

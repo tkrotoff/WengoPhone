@@ -9,6 +9,10 @@ option(BUILDID_SUPPORT "Build WengoPhone/phApi with buildId (builds faster witho
 option(WENGOPHONE_RESOURCEDIR_PATH "WengoPhone: use ${DATA_INSTALL_DIR} as hardcoded resource path" ON)
 option(WENGOPHONE_XV_SUPPORT "Build WengoPhone with XV hardware acceleration support" OFF)
 
+option(SIPWRAPPER_BACKEND_SIPX "SipX backend for SipWrapper" OFF)
+option(SIPWRAPPER_BACKEND_PHAPI "PhApi backend for SipWrapper" OFF)
+option(IMWRAPPER_BACKEND_MULTI "PhApi and Gaim backend for IMWrapper" ON)
+
 option(PORTAUDIO_DIRECTSOUND_SUPPORT "Build PortAudio with DirectSound support" OFF)
 option(PORTAUDIO_OSS_SUPPORT "Build PortAudio with OSS support" ON)
 option(PORTAUDIO_ALSA_SUPPORT "Build PortAudio with ALSA support" OFF)

@@ -1,12 +1,12 @@
 ow_create_static_library(owmultiimwrapper)
 
-ow_use_private_libraries(
+ow_use_public_libraries(
 	owgaimwrapper
 	owphapiwrapper
 )
 
 ow_add_public_include_dirs(
-	${CMAKE_CURRENT_SOURCE_DIR}/multiim
+	${CMAKE_CURRENT_SOURCE_DIR}/../multiim
 )
 
 ow_add_sources(
