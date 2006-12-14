@@ -49,9 +49,6 @@ std::list<AudioDevice> AudioDeviceManager::getInputDeviceList() {
 	Pa_Initialize();
 
 	int nbDevices = getNbDevices();
-	if (nbDevices < 0) {
-		return deviceList;
-	}
 
 	//Iterates over devices
 	for (int i = 0; i < nbDevices; i++) {
@@ -90,9 +87,6 @@ std::list<AudioDevice> AudioDeviceManager::getOutputDeviceList() {
 	Pa_Initialize();
 
 	int nbDevices = getNbDevices();
-	if (nbDevices < 0) {
-		return deviceList;
-	}
 
 	//Iterates over devices
 	for (int i = 0; i < nbDevices; i++) {
