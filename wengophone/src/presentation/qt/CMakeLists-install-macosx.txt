@@ -2,6 +2,8 @@ set(CMAKE_MODULE_PATH
 	${SOURCE_DIR}/cmake/Modules/owbuild
 )
 
+include(OWChangeInstallName)
+
 ## Create the locale directories to have the Application translated by Mac OS X
 file(GLOB_RECURSE _qmFiles ${DATA_INSTALL_DIR}/lang/*.qm)
 

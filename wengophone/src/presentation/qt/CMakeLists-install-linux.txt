@@ -1,1 +1,7 @@
-#ow_copy(${BUILD_DIR}/qtwengophone.exe "C:\Program Files\WengoPhone\qtwengophone2.exe")
+set(CMAKE_MODULE_PATH
+	${SOURCE_DIR}/cmake/Modules/owbuild
+)
+
+include(OWCopyFile)
+
+ow_copy_file(${BUILD_DIR}/qtwengophone "/home/jgilli/qtwengophone")
