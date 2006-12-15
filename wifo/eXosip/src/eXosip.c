@@ -1913,6 +1913,8 @@ int eXosip_on_hold_call  (int jid)
   char *body;
   char *size;
   char new_sess_version[64];
+  const char *addr_null = "0.0.0.0";
+  char *addr_bak;
 	
   if (jid>0)
     {
@@ -1959,7 +1961,19 @@ int eXosip_on_hold_call  (int jid)
     return -2;
   }
 
+  if (sdp->c_connection && sdp->c_connection->c_addr)
+  {
+		addr_bak = sdp->c_connection->c_addr;
+		sdp->c_connection->c_addr = addr_null;
+  }
+
   i = sdp_message_to_str(sdp, &body);
+
+  if (sdp->c_connection && sdp->c_connection->c_addr)
+  {
+		sdp->c_connection->c_addr = addr_bak;
+  }
+
   if (body!=NULL)
     {
       size= (char *)osip_malloc(7*sizeof(char));
@@ -2137,6 +2151,11 @@ int eXosip_off_hold_call (int jid, char *rtp_ip, int port)
   if (sdp==NULL)
     return -1;
 
+  if (sdp->c_connection && sdp->c_connection->c_addr)
+  {
+	osip_free(sdp->c_connection->c_addr);
+	sdp->c_connection->c_addr = osip_strdup(sdp->o_addr);
+  }
   // JULIEN : increment the sdp session id
   memset(new_sess_version, 0, sizeof(new_sess_version));
   snprintf(new_sess_version, sizeof(new_sess_version), "%i", atoi(sdp->o_sess_version) + 1);
