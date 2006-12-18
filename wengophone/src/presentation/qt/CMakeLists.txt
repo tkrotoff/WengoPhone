@@ -483,6 +483,14 @@ ow_copy_dir_recursive(${CMAKE_CURRENT_SOURCE_DIR}/webpages/* ${BUILD_DIR}/webpag
 string(REPLACE " " "CMAKEBUGWITHSPACES" TMP_BUILD_DIR ${BUILD_DIR})
 string(REPLACE " " "CMAKEBUGWITHSPACES" TMP_SOURCE_DIR ${CMAKE_SOURCE_DIR})
 
+	set(DATA_INSTALL_DIR "/usr/share/wengophone"
+		CACHE PATH "Data/resources installation path")
+	set(APPLICATION_BIN_INSTALL_DIR "/usr/bin"
+		CACHE PATH "Application binary installation path")
+	set(LIBRARIES_INSTALL_DIR "/usr/lib/wengophone"
+		CACHE PATH "Libraries installation path")
+
+
 # Passes variables to the install script
 install(
 	CODE "
@@ -490,6 +498,8 @@ install(
 	set(SOURCE_DIR ${TMP_SOURCE_DIR})
 	set(DATA_INSTALL_DIR ${DATA_INSTALL_DIR})
 	set(APPLICATION_NAME ${APPLICATION_NAME})
+	set(APPLICATION_BIN_INSTALL_DIR ${APPLICATION_BIN_INSTALL_DIR})
+	set(LIBRARIES_INSTALL_DIR ${LIBRARIES_INSTALL_DIR})
 	set(APPLICATION_VERSION ${APPLICATION_VERSION})
 	set(BUILD_DIR ${TMP_BUILD_DIR})
 	set(BUILD_TYPE ${CMAKE_BUILD_TYPE})

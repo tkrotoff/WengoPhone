@@ -3,5 +3,16 @@ set(CMAKE_MODULE_PATH
 )
 
 include(OWCopyFile)
+include(OWCopyDir)
+include(OWCopyDirRecursive)
 
-ow_copy_file(${BUILD_DIR}/qtwengophone "/home/jgilli/qtwengophone")
+ow_copy_file(${BUILD_DIR}/qtwengophone "${APPLICATION_BIN_INSTALL_DIR}/.")
+
+ow_copy_dir(${BUILD_DIR}/*.so "${LIBRARIES_INSTALL_DIR}/.")
+
+ow_copy_dir_recursive(${BUILD_DIR}/sounds/* ${DATA_INSTALL_DIR}/sounds)
+ow_copy_dir_recursive(${BUILD_DIR}/emoticons/* ${DATA_INSTALL_DIR}/emoticons)
+ow_copy_dir_recursive(${BUILD_DIR}/pics/* ${DATA_INSTALL_DIR}/pics)
+ow_copy_dir_recursive(${BUILD_DIR}/webpages/* ${DATA_INSTALL_DIR}/webpages)
+ow_copy_dir_recursive(${BUILD_DIR}/lang/* ${DATA_INSTALL_DIR}/lang)
+ow_copy_file(${BUILD_DIR}/COPYING "${DATA_INSTALL_DIR}/.")
