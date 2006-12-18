@@ -214,7 +214,7 @@ else (BOOST_LIBRARIES AND BOOST_INCLUDE_DIRS)
   )
   find_library(BOOST_UNIT_TEST_FRAMEWORK_LIBRARY
     NAMES
-      boost_unit_test_framework${BOOST_LIB_SUFFIX}
+      libboost_unit_test_framework${BOOST_LIB_SUFFIX}
     PATHS
       ${BOOST_SEARCH_DIRS}
       /usr/lib
