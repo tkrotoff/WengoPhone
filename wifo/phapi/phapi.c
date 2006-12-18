@@ -313,6 +313,7 @@ owplConfigGetBoundLocalAddr(char * szLocalAddr, size_t size) {
 	if(strlen(ip) > size-1) {
 		return OWPL_RESULT_FAILURE;
 	}
+	memset(szLocalAddr, 0, size);
 	strncpy(szLocalAddr, ip, size-1);
 	return OWPL_RESULT_SUCCESS;
 }
@@ -326,6 +327,7 @@ owplConfigLocalHttpProxyGetAddr(char * szLocalProxyAddr, size_t size) {
 	if(sourceSize <= 0 || sourceSize > size-1 ) {
 		return OWPL_RESULT_FAILURE;
 	}
+	memset(szLocalProxyAddr, 0, size);
 	strncpy(szLocalProxyAddr, phcfg.http_proxy, size-1);
 	return OWPL_RESULT_SUCCESS;
 }
@@ -339,6 +341,7 @@ owplConfigLocalHttpProxyGetPasswd(char * szLocalProxyPasswd, size_t size) {
 	if(sourceSize <= 0 || sourceSize > size-1 ) {
 		return OWPL_RESULT_FAILURE;
 	}
+	memset(szLocalProxyPasswd, 0, size);
 	strncpy(szLocalProxyPasswd, phcfg.http_proxy_passwd, size-1);
 	return OWPL_RESULT_SUCCESS;
 }
@@ -364,6 +367,7 @@ owplConfigLocalHttpProxyGetUserName(char * szLocalProxyUserName, size_t size) {
 	if(sourceSize <= 0 || sourceSize > size-1 ) {
 		return OWPL_RESULT_FAILURE;
 	}
+	memset(szLocalProxyUserName, 0, size);
 	strncpy(szLocalProxyUserName, phcfg.http_proxy_user, size-1);
 	return OWPL_RESULT_SUCCESS;
 }
