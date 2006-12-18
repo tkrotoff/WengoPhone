@@ -42,8 +42,13 @@ else (CMAKE_BUILD_TYPE MATCHES Debug)
 		${QT_QTXML_LIBRARY_RELEASE}
 		${QT_QTSVG_LIBRARY_RELEASE}
 		QtUiTools
-		QAxContainer
 	)
+
+	if (WIN32)
+		ow_add_public_libraries(
+			QAxContainer
+		)
+	endif (WIN32)
 endif (CMAKE_BUILD_TYPE MATCHES Debug)
 
 ow_add_public_definitions(
