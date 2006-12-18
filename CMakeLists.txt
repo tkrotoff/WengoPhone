@@ -34,6 +34,7 @@ endif (NOT APPLE)
 
 subdirs(
 	libs/3rdparty/boost
+	libs/3rdparty/boost-test
 	libs/3rdparty/qt4
 	libs/3rdparty/glib
 	libs/3rdparty/openssl
