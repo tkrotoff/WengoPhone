@@ -1,6 +1,10 @@
 ow_create_static_library(srtp)
 
+include(ConfigureChecks.cmake)
+configure_file(config.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config.h)
+
 ow_add_public_include_dirs(
+	${CMAKE_CURRENT_BINARY_DIR}
 	${CMAKE_CURRENT_SOURCE_DIR}/include
 	${CMAKE_CURRENT_SOURCE_DIR}/crypto/include
 )
