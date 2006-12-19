@@ -18,34 +18,29 @@ ow_add_public_library_dirs(
 )
 
 if (CMAKE_BUILD_TYPE MATCHES Debug)
-  if (QT_QTCORE_LIBRARY_DEBUG)
+  ow_add_public_libraries(
+    ${QT_QTCORE_LIBRARY_DEBUG}
+    ${QT_QTGUI_LIBRARY_DEBUG}
+    ${QT_QTXML_LIBRARY_DEBUG}
+    ${QT_QTSVG_LIBRARY_DEBUG}
+  )
+  if (UNIX)
+    if (QT_QTUITOOLS_LIBRARY_DEBUG)
     ow_add_public_libraries(
-      ${QT_QTCORE_LIBRARY_DEBUG}
-      ${QT_QTGUI_LIBRARY_DEBUG}
-      ${QT_QTXML_LIBRARY_DEBUG}
-      ${QT_QTSVG_LIBRARY_DEBUG}
+      ${QT_QTUITOOLS_LIBRARY_DEBUG}
     )
-    if (UNIX)
-      ow_add_public_libraries(
-        QtUiTools_debug
-      )
-    else (UNIX)
-      ow_add_public_libraries(
-        QtUiToolsd
-        QAxContainerd
-      )
-    endif (UNIX)
-  else (QT_QTCORE_LIBRARY_DEBUG)
+    else (QT_QTUITOOLS_LIBRARY_DEBUG)
     ow_add_public_libraries(
-      ${QT_QTCORE_LIBRARY_RELEASE}
-      ${QT_QTGUI_LIBRARY_RELEASE}
-      ${QT_QTXML_LIBRARY_RELEASE}
-      ${QT_QTSVG_LIBRARY_RELEASE}
-      QtUiTools
+      ${QT_QTUITOOLS_LIBRARY_RELEASE}
     )
-  endif (QT_QTCORE_LIBRARY_DEBUG)
+    endif (QT_QTUITOOLS_LIBRARY_DEBUG)
 
-
+  else (UNIX)
+    ow_add_public_libraries(
+      QtUiToolsd
+      QAxContainerd
+    )
+  endif (UNIX)
 else (CMAKE_BUILD_TYPE MATCHES Debug)
   ow_add_public_libraries(
     ${QT_QTCORE_LIBRARY_RELEASE}
