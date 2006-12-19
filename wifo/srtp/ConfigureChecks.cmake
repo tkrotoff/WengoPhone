@@ -1,4 +1,4 @@
-include(CheckIncludeFile)
+include(CheckIncludeFiles)
 include(CheckSymbolExists)
 include(CheckFunctionExists)
 
@@ -37,7 +37,7 @@ set(ENABLE_DEBUGGING 1)
 set(SRTP_GDOI 0)
 
 # if /dev/random is available, then DEV_RANDOM == 1
-# 
+#
 # /dev/random is a (true) random number generator which is
 # implemented in many modern operating systems
 if (EXISTS /dev/random)
