@@ -91,15 +91,15 @@ void PhApiWrapper::setNetworkParameter() {
 	int natRefreshTime = 25;
 
 	if (_tunnelNeeded) {
-		if(owplConfigSetLocalHttpProxy(_proxyServer.c_str(), _proxyPort, _proxyLogin.c_str(), _proxyPassword.c_str()) != OWPL_RESULT_SUCCESS) {
+		if (owplConfigSetLocalHttpProxy(_proxyServer.c_str(), _proxyPort, _proxyLogin.c_str(), _proxyPassword.c_str()) != OWPL_RESULT_SUCCESS) {
 			// TODO what? throw an exception? exit?
 		}
 		// activate SSL for HTTP tunnel
 		int mask = OWPL_TUNNEL_USE;
-		if(_tunnelSSL) {
+		if (_tunnelSSL) {
 			mask = mask | OWPL_TUNNEL_SSL;
 		}
-		if(owplConfigSetTunnel(_tunnelServer.c_str(), _tunnelPort, mask) != OWPL_RESULT_SUCCESS) {
+		if (owplConfigSetTunnel(_tunnelServer.c_str(), _tunnelPort, mask) != OWPL_RESULT_SUCCESS) {
 			// TODO what? throw an exception? exit?
 		}
 
@@ -161,7 +161,7 @@ int PhApiWrapper::addVirtualLine(const std::string & displayName,
 
 		std::string tmp = proxyServer;
 		tmp += ":" + String::fromNumber(_sipServerPort);
-		
+
 		if (owplLineAdd(displayName.c_str(), identity.c_str(), registerServer.c_str(), tmp.c_str(), REGISTER_TIMEOUT, &hLine) != OWPL_RESULT_SUCCESS) {
 			break;
 		}
@@ -178,7 +178,7 @@ int PhApiWrapper::addVirtualLine(const std::string & displayName,
 	} else {
 		phoneLineStateChangedEvent(*this, hLine, EnumPhoneLineState::PhoneLineStateServerError);
 	}
-	
+
 	_wengoVline = hLine;
 	_wengoSipAddress = "sip:" + identity + "@" + realm;
 	_wengoRealm = realm;
@@ -206,10 +206,10 @@ int PhApiWrapper::makeCall(int lineId, const std::string & sipAddress, bool enab
 		mediaFlags = VIDEO_FLAGS;
 	}
 
-	if(owplCallCreate(lineId, &hCall) != OWPL_RESULT_SUCCESS) {
+	if (owplCallCreate(lineId, &hCall) != OWPL_RESULT_SUCCESS) {
 		return -1;
 	}
-	if(owplCallConnect(hCall, sipAddress.c_str(), mediaFlags) != OWPL_RESULT_SUCCESS) {
+	if (owplCallConnect(hCall, sipAddress.c_str(), mediaFlags) != OWPL_RESULT_SUCCESS) {
 		return -1;
 	}
 
@@ -244,7 +244,7 @@ void PhApiWrapper::closeCall(int callId) {
 
 void PhApiWrapper::holdCall(int callId) {
 	//Thread::sleep(3);
-	
+
 	owplCallHold(callId);
 
 	//Thread::sleep(3);
@@ -654,7 +654,7 @@ void PhApiWrapper::publishPresence(bool online, const std::string & note) {
 	static const std::string contentType = "application/pidf+xml";
 
 	if (_isInitialized) {
-		if(owplPresencePublish(_wengoVline, (online)?1:0, note.c_str(), NULL) != OWPL_RESULT_SUCCESS) {
+		if (owplPresencePublish(_wengoVline, (online)?1:0, note.c_str(), NULL) != OWPL_RESULT_SUCCESS) {
 			myPresenceStatusEvent(*this, EnumPresenceState::MyPresenceStatusError, note);
 		} else {
 			myPresenceStatusEvent(*this, EnumPresenceState::MyPresenceStatusOk, note);
@@ -666,7 +666,7 @@ void PhApiWrapper::subscribeToPresenceOf(const std::string & contactId) {
 	OWPL_SUB hSub;
 	std::string sipAddress = makeSipAddress(contactId);
 
-	if(owplPresenceSubscribe(_wengoVline, sipAddress.c_str(), 0, &hSub) != OWPL_RESULT_SUCCESS) {
+	if (owplPresenceSubscribe(_wengoVline, sipAddress.c_str(), 0, &hSub) != OWPL_RESULT_SUCCESS) {
 		subscribeStatusEvent(*this, sipAddress, IMPresence::SubscribeStatusError);
 	} else {
 		subscribeStatusEvent(*this, sipAddress, IMPresence::SubscribeStatusOk);
@@ -887,7 +887,7 @@ void PhApiWrapper::init() {
 	tmp += ":" + String::fromNumber(_sipServerPort);
 	owplConfigSetOutboundProxy(tmp.c_str());
 
-	if(owplInit(5060, 0, 0, NULL, 0) == OWPL_RESULT_SUCCESS) {
+	if (owplInit(5060, 0, 0, NULL, 0) == OWPL_RESULT_SUCCESS) {
 		_isInitialized = true;
 		LOG_DEBUG("phApi successfully initialized");
 	} else {
@@ -985,10 +985,10 @@ void PhApiWrapper::flipVideoImage(bool flip) {
 
 std::string PhApiWrapper::makeSipAddress(const std::string & contactId) {
 	std::string sipAddress = "sip:" + contactId;
-	
+
 	if (contactId.find('@') == std::string::npos) {
 		sipAddress += "@" + _wengoRealm;
 	}
-	
+
 	return sipAddress;
 }
