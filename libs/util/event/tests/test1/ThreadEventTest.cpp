@@ -36,6 +36,8 @@ public:
 
 	Event<void (const Message * message)> messageSentEvent3;
 
+	Event<void ()> destroyPresentationEvent;
+
 	Model() {
 	}
 
@@ -53,7 +55,8 @@ public:
 			msleep(300);
 			i++;
 		}
-		delete _presentation;
+		destroyPresentationEvent();
+		msleep(300);
 	}
 
 private:
@@ -87,8 +90,9 @@ Presentation::Presentation(Model & model)
 
 	QtPostEvent * postEvent = new QtPostEvent(this);
 	model.messageSentEvent.connect(this, boost::bind(&Presentation::messageSentEventHandler, this), postEvent);
-	/*model.messageSentEvent2.connect(boost::bind(&Presentation::messageSentEventHandler2, this, _1), postEvent);
-	model.messageSentEvent3.connect(boost::bind(&Presentation::messageSentEventHandler3, this, _1), postEvent);
+	//model.destroyPresentationEvent.connect(this, boost::bind(&Presentation::destroyEventHandler, this), postEvent);
+	model.messageSentEvent2.connect(this, boost::bind(&Presentation::messageSentEventHandler2, this, _1), postEvent);
+	/*model.messageSentEvent3.connect(boost::bind(&Presentation::messageSentEventHandler3, this, _1), postEvent);
 	model.messageSentEvent3.connect(boost::bind(&Presentation::messageSentEventHandler3, this, _1), postEvent);
 	model.messageSentEvent3.connect(boost::bind(&Presentation::messageSentEventHandler3, this, _1), postEvent);
 	model.messageSentEvent3.connect(boost::bind(&Presentation::messageSentEventHandler3, this, _1), postEvent);*/
@@ -109,6 +113,11 @@ void Presentation::messageSentEventHandler2(const std::string & message) const {
 
 void Presentation::messageSentEventHandler3(const Message * message) const {
 	LOG_DEBUG(message->toString());
+}
+
+void Presentation::destroyEventHandler() {
+	LOG_DEBUG("QObject::deleteLater()");
+	deleteLater();
 }
 
 int main(int argc, char * argv[]) {

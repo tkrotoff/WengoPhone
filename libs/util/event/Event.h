@@ -30,7 +30,6 @@
 #include <boost/bind.hpp>
 
 #include <list>
-#include <string>
 #include <iostream>
 
 /**
@@ -65,12 +64,13 @@ public:
 	 * @param slot callback function that will observe this object
 	 * @return slot ID
 	 */
-	std::string connect(Trackable * trackable, const boost::function<Signature> & slot, IPostEvent * postEvent) {
+	template<typename T>
+	int connect(Trackable * trackable, const T & slot, IPostEvent * postEvent) {
 		disconnect(trackable, slot, postEvent);
 		return connect(Slot<Signature>(trackable, slot, postEvent));
 	}
 
-	std::string connect(const Slot<Signature> & slot) {
+	int connect(const Slot<Signature> & slot) {
 		_slotList.push_back(slot);
 		if (slot.trackable) {
 			slot.trackable->addEvent(this);
@@ -97,28 +97,27 @@ public:
 	}
 
 	bool disconnect(Trackable * trackable) {
+		bool ret = false;
 		if (trackable) {
 			for (typename SlotList::iterator it = _slotList.begin();
 				it != _slotList.end(); ++it) {
 
 				if (it->trackable == trackable) {
 					_slotList.erase(it);
-					return true;
+					ret = true;
 				}
 			}
 		}
-		return false;
+		return ret;
 	}
 
-	bool disconnect(const std::string & slotId) {
-		if (!slotId.empty()) {
-			for (typename SlotList::iterator it = _slotList.begin();
-				it != _slotList.end(); ++it) {
+	bool disconnect(int slotId) {
+		for (typename SlotList::iterator it = _slotList.begin();
+			it != _slotList.end(); ++it) {
 
-				if (it->id == slotId) {
-					_slotList.erase(it);
-					return true;
-				}
+			if (it->id == slotId) {
+				_slotList.erase(it);
+				return true;
 			}
 		}
 		return false;

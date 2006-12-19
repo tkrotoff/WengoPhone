@@ -23,11 +23,8 @@
 #include <util/NonCopyable.h>
 
 #include <util/Logger.h>
-#include <util/Uuid.h>
 
 #include <boost/function.hpp>
-
-#include <string>
 
 class IPostEvent;
 class Trackable;
@@ -52,9 +49,9 @@ public:
 		this->trackable = trackable;
 		this->slot = slot;
 		this->postEvent = postEvent;
-		id = Uuid::generateString();
+		id++;
 
-		//LOG_DEBUG("slot created=" + id);
+		LOG_DEBUG("slot created=" + String::fromNumber(id));
 	}
 
 	Slot(const Slot<Signature> & slot) {
@@ -63,7 +60,7 @@ public:
 		this->postEvent = slot.postEvent;
 		this->id = slot.id;
 
-		//LOG_DEBUG("slot copied=" + id);
+		LOG_DEBUG("slot copied=" + id);
 	}
 
 	Slot<Signature> & operator=(const Slot<Signature> & slot) {
@@ -72,13 +69,13 @@ public:
 		this->postEvent = slot.postEvent;
 		this->id = slot.id;
 
-		//LOG_DEBUG("slot copied=" + id);
+		LOG_DEBUG("slot copied=" + String::fromNumber(id));
 
 		return *this;
 	}
 
 	~Slot() {
-		//LOG_DEBUG("slot destroyed=" + id);
+		LOG_DEBUG("slot destroyed=" + String::fromNumber(id));
 	}
 
 public:
@@ -93,7 +90,9 @@ public:
 	IPostEvent * postEvent;
 
 	/** Unique ID. */
-	std::string id;
+	static int id;
 };
+
+template<typename Signature> int Slot<Signature>::id = 0;
 
 #endif	//OWSLOT_H

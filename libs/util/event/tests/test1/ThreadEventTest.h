@@ -18,4 +18,6 @@ public:
 	void messageSentEventHandler2(const std::string & message) const;
 
 	void messageSentEventHandler3(const Message * message) const;
+
+	void destroyEventHandler();
 };
