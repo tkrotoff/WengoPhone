@@ -32,6 +32,26 @@ endif (NOT APPLE)
 
 subdirs(
 	libs/3rdparty
+
+	libs/owcurl
+	libs/util
+	libs/wenbox
+	libs/qtutil
+	libs/idle
+	libs/owbrowser
+	libs/trayicon
+	libs/softupdater
+	libs/pixertool
+	libs/webcam
+	libs/sound
+	libs/timer
+	wifo
+	libs/imwrapper
+	libs/imwrapper/src/gaim
+	libs/sipwrapper
+	libs/sipwrapper/src/phapi
+	libs/imwrapper/src/multiim
+	wengophone
 )
 
 if (WIN32)
