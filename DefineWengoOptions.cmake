@@ -20,7 +20,13 @@ option(PORTAUDIO_ALSA_SUPPORT "Build PortAudio with ALSA support" OFF)
 option(OWSOUND_PORTAUDIO_SUPPORT "Build owsound with PortAudio support" ON)
 
 option(PHAPI_VIDEO_SUPPORT "Build phApi with video support" ON)
-option(PHAPI_SAMPLERATE_SUPPORT "Build phApi with libsamplerate support" OFF)
+
+if (UNIX AND NOT APPLE)
+	option(PHAPI_SAMPLERATE_SUPPORT "Build phApi with libsamplerate support" ON)
+else (UNIX AND NOT APPLE)
+	option(PHAPI_SAMPLERATE_SUPPORT "Build phApi with libsamplerate support" OFF)
+endif (UNIX AND NOT APPLE)
+
 option(PHAPI_AUDIO_ALSA_SUPPORT "Build phApi with ALSA support" ON)
 option(PHAPI_AUDIO_ARTS_SUPPORT "Build phApi with aRts support" OFF)
 option(PHAPI_AUDIO_ESD_SUPPORT "Build phApi with ESD support" OFF)

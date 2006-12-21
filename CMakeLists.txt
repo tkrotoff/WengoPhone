@@ -31,42 +31,7 @@ if (NOT APPLE)
 endif (NOT APPLE)
 
 subdirs(
-	libs/3rdparty/boost
-	libs/3rdparty/boost-test
-	libs/3rdparty/qt4
-	libs/3rdparty/glib
-	libs/3rdparty/openssl
-	libs/3rdparty/alsa
-	libs/3rdparty/arts
-	libs/3rdparty/esd
-	libs/3rdparty/ffmpeg
-	libs/3rdparty/tinyxml
-	libs/3rdparty/libxml
-	libs/3rdparty/gaim
-	libs/3rdparty/uuid
-	libs/3rdparty/x11
-	libs/3rdparty/python
-	libs/3rdparty/samplerate
-
-	libs/owcurl
-	libs/util
-	libs/wenbox
-	libs/qtutil
-	libs/idle
-	libs/owbrowser
-	libs/trayicon
-	libs/softupdater
-	libs/pixertool
-	libs/webcam
-	libs/sound
-	libs/timer
-	wifo
-	libs/imwrapper
-	libs/imwrapper/src/gaim
-	libs/sipwrapper
-	libs/sipwrapper/src/phapi
-	libs/imwrapper/src/multiim
-	wengophone
+	libs/3rdparty
 )
 
 if (WIN32)
