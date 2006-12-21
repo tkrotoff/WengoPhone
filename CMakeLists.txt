@@ -6,8 +6,8 @@ set(APPLICATION_VERSION "2.0")
 
 # Where to look first for cmake modules, before ${CMAKE_ROOT}/Modules/ is checked
 set(CMAKE_MODULE_PATH
-	${CMAKE_SOURCE_DIR}/cmake/Modules
-	${CMAKE_SOURCE_DIR}/cmake/Modules/owbuild
+	${CMAKE_SOURCE_DIR}/owbuild
+	${CMAKE_SOURCE_DIR}/owbuild/owbuild
 )
 
 # Add definitions/options/default values...
@@ -17,14 +17,12 @@ include(DefineWengoOptions.cmake)
 include(DefineInstallationPaths.cmake)
 
 # Add macros
-include(MacroEnsureOutOfSourceBuild)
-
-include(cmake/Modules/owbuild/CMakeLists.txt)
+include(owbuild/owbuild/CMakeLists.txt)
 
 # Disallow in-source build
-macro_ensure_out_of_source_build("WengoPhone requires an out of source build. Please create a separate build directory and run 'cmake path_to_wengophone [options]' there.")
+ow_ensure_out_of_source_build()
 
-include(cmake/Modules/owbuild/OWInitializationInfo.cmake)
+include(owbuild/owbuild/OWInitializationInfo.cmake)
 
 if (NOT APPLE)
 	subdirs(
