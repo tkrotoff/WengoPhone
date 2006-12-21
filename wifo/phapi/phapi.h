@@ -145,7 +145,7 @@ owplShutdown();
  */
 MY_DLLEXPORT OWPL_RESULT
 owplConfigSetLocalHttpProxy(const char* szLocalProxyAddr,
-					 const int LocalProxyPort,
+					 const unsigned int LocalProxyPort,
 					 const char* szLocalProxyUserName,
 					 const char* szLocalProxyPasswd);
 
@@ -159,8 +159,8 @@ owplConfigSetLocalHttpProxy(const char* szLocalProxyAddr,
  */
 MY_DLLEXPORT OWPL_RESULT
 owplConfigSetTunnel(const char* szTunnelSeverAddr,
-					 const int TunnelServerPort,
-					 const int TunnelMode);
+					 const unsigned int TunnelServerPort,
+					 const unsigned int TunnelMode);
 /**
  * Sets the NAT configuration
  *
@@ -170,7 +170,7 @@ owplConfigSetTunnel(const char* szTunnelSeverAddr,
  */
 MY_DLLEXPORT OWPL_RESULT
 owplConfigSetNat(const OWPL_NAT_TYPE eNatType,
-				 const int natRefreshTime);
+				 const unsigned int natRefreshTime);
 
 /**
  * DEPRECATED
@@ -185,11 +185,57 @@ owplConfigSetOutboundProxy(const char * szProxyAddr);
 MY_DLLEXPORT OWPL_RESULT
 owplConfigAddAudioCodecByName(const char* szCodecName);
 
+/**
+ * Replaces any previous codec list by the one given in argument.
+ * If NULL or empty string is given, resets the codec list.
+ * Codec list must be less long than phcfg.audio_codecs.
+ * Codec list is lost if return value is a failure.
+ *
+ * @param	szCodecs	a list of codecs separated by comas
+ * @return	an OWPL_RESULT enum code
+ */
+MY_DLLEXPORT OWPL_RESULT
+owplConfigSetAudioCodecs(const char * szCodecs);
+
+/**
+ * Gets the whole codecs comas separated 0 terminated string.
+ * Buffer should be at least the size of phcfg.audio_codecs
+ *
+ * @param	szCodecs	a buffer receiving the whole codecs comas separated string
+ * @param	size	the size of the buffer (typically sizeof(buffer))
+ * @return	an OWPL_RESULT enum code
+ */
+MY_DLLEXPORT OWPL_RESULT
+owplConfigGetAudioCodecs(const char * szCodecs, size_t size);
+
 MY_DLLEXPORT OWPL_RESULT
 owplConfigAddVideoCodecByName(const char* szCodecName);
 
+/**
+ * Replaces any previous codec list by the one given in argument.
+ * If NULL or empty string is given, resets the codec list.
+ * Codec list must be less long than phcfg.video_codecs
+ * Codec list is lost if return value is a failure.
+ *
+ * @param	szCodecs	a list of codecs separated by comas
+ * @return	an OWPL_RESULT enum code
+ */
 MY_DLLEXPORT OWPL_RESULT
-owplConfigSetAsyncCallbackMode (const unsigned int asyncronous);
+owplConfigSetVideoCodecs(const char * szCodecs);
+
+/**
+ * Gets the whole codecs comas separated 0 terminated string.
+ * Buffer should be at least the size of phcfg.video_codecs
+ *
+ * @param	szCodecs	a buffer receiving the whole codecs comas separated string
+ * @param	size	the size of the buffer (typically sizeof(buffer))
+ * @return	an OWPL_RESULT enum code
+ */
+MY_DLLEXPORT OWPL_RESULT
+owplConfigGetVideoCodecs(const char * szCodecs, size_t size);
+
+MY_DLLEXPORT OWPL_RESULT
+owplConfigSetAsyncCallbackMode (const unsigned short asyncronous);
 
 /**
  * Gets the local bound ip address.

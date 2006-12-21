@@ -176,7 +176,7 @@ owplUseHttpTunnel(int Use)
 
 MY_DLLEXPORT OWPL_RESULT 
 owplConfigSetLocalHttpProxy(const char* szLocalProxyAddr, 
-					 const int LocalProxyPort,
+					 const unsigned int LocalProxyPort,
 					 const char* szLocalProxyUserName,
 					 const char* szLocalProxyPasswd)
 {
@@ -202,8 +202,8 @@ owplConfigSetLocalHttpProxy(const char* szLocalProxyAddr,
 
 MY_DLLEXPORT OWPL_RESULT 
 owplConfigSetTunnel(const char* szTunnelSeverAddr, 
-					 const int TunnelServerPort,
-					 const int TunnelMode)
+					 const unsigned int TunnelServerPort,
+					 const unsigned int TunnelMode)
 {
 	if(szTunnelSeverAddr != NULL) {
 		strncpy(phcfg.httpt_server, szTunnelSeverAddr, sizeof (phcfg.httpt_server));
@@ -218,7 +218,7 @@ owplConfigSetTunnel(const char* szTunnelSeverAddr,
 
 MY_DLLEXPORT OWPL_RESULT
 owplConfigSetNat(const OWPL_NAT_TYPE eNatType,
-				 const int natRefreshTime)
+				 const unsigned int natRefreshTime)
 {
 	switch(eNatType) {
 		case OWPL_NAT_TYPE_NONE :
@@ -262,6 +262,9 @@ owplConfigAddAudioCodecByName(const char* szCodecName)
 {
 	/* TODO */
 	/* Verify that the code name is supported before adding to the list */
+	if(szCodecName == NULL || strlen(szCodecName) == 0) {
+		return OWPL_RESULT_INVALID_ARGS;
+	}
 
 	if (strlen(phcfg.audio_codecs) <= 0)
 	{
@@ -275,11 +278,46 @@ owplConfigAddAudioCodecByName(const char* szCodecName)
 	return OWPL_RESULT_SUCCESS;
 }
 
+
+MY_DLLEXPORT OWPL_RESULT
+owplConfigSetAudioCodecs(const char * szCodecs) {
+	if(szCodecs == NULL || strlen(szCodecs) == 0) {
+		phcfg.audio_codecs[0] = 0;
+		return OWPL_RESULT_SUCCESS;
+	}
+	if(strlen(szCodecs) >= sizeof(phcfg.audio_codecs)) {
+		return OWPL_RESULT_INVALID_ARGS;
+	}
+	memset(phcfg.audio_codecs, 0, sizeof(phcfg.audio_codecs));
+	if(strlen(strncpy(phcfg.audio_codecs, szCodecs, sizeof(phcfg.audio_codecs))) == 0) {
+		return OWPL_RESULT_FAILURE;
+	}
+	return OWPL_RESULT_SUCCESS;
+}
+
+MY_DLLEXPORT OWPL_RESULT
+owplConfigGetAudioCodecs(const char * szCodecs, size_t size) {
+	if(szCodecs == NULL) {
+		return OWPL_RESULT_INVALID_ARGS;
+	}
+	memset(szCodecs, 0, size);
+	if(size < sizeof(phcfg.audio_codecs)) {
+		return OWPL_RESULT_INSUFFICIENT_BUFFER;
+	}
+	if(strlen(strncpy(szCodecs, phcfg.audio_codecs, size)) == 0) {
+		return OWPL_RESULT_FAILURE;
+	}
+	return OWPL_RESULT_SUCCESS;
+}
+
 MY_DLLEXPORT OWPL_RESULT 
 owplConfigAddVideoCodecByName(const char* szCodecName)
 {
 	/* TODO */
 	/* Verify that the code name is supported before adding to the list */
+	if(szCodecName == NULL || strlen(szCodecName) == 0) {
+		return OWPL_RESULT_INVALID_ARGS;
+	}
 
 	if (strlen(phcfg.video_codecs) <= 0)
 	{
@@ -293,9 +331,42 @@ owplConfigAddVideoCodecByName(const char* szCodecName)
 	return OWPL_RESULT_SUCCESS;
 }
 
+MY_DLLEXPORT OWPL_RESULT
+owplConfigSetVideoCodecs(const char * szCodecs) {
+	if(szCodecs == NULL || strlen(szCodecs) == 0) {
+		phcfg.video_codecs[0] = 0;
+		return OWPL_RESULT_SUCCESS;
+	}
+	if(strlen(szCodecs) >= sizeof(phcfg.video_codecs)) {
+		return OWPL_RESULT_INVALID_ARGS;
+	}
+	memset(phcfg.video_codecs, 0, sizeof(phcfg.video_codecs));
+	if(strlen(strncpy(phcfg.video_codecs, szCodecs, sizeof(phcfg.video_codecs))) == 0) {
+		return OWPL_RESULT_FAILURE;
+	}
+	return OWPL_RESULT_SUCCESS;
+}
 
 MY_DLLEXPORT OWPL_RESULT
-owplConfigSetAsyncCallbackMode (const unsigned int asyncronous) {
+owplConfigGetVideoCodecs(const char * szCodecs, size_t size) {
+	if(szCodecs == NULL) {
+		return OWPL_RESULT_INVALID_ARGS;
+	}
+	memset(szCodecs, 0, size);
+	if(size < sizeof(phcfg.video_codecs)) {
+		return OWPL_RESULT_INSUFFICIENT_BUFFER;
+	}
+	if(strlen(strncpy(szCodecs, phcfg.video_codecs, size)) == 0) {
+		return OWPL_RESULT_FAILURE;
+	}
+	return OWPL_RESULT_SUCCESS;
+}
+
+MY_DLLEXPORT OWPL_RESULT
+owplConfigSetAsyncCallbackMode (const unsigned short asyncronous) {
+	if(asyncronous != 0 && asyncronous != 1) {
+		return OWPL_RESULT_INVALID_ARGS;
+	}
 	phcfg.asyncmode = asyncronous;
 	return OWPL_RESULT_SUCCESS;
 }
@@ -303,17 +374,23 @@ owplConfigSetAsyncCallbackMode (const unsigned int asyncronous) {
 MY_DLLEXPORT OWPL_RESULT
 owplConfigGetBoundLocalAddr(char * szLocalAddr, size_t size) {
 	char ip[256]; // put a big buffer to prevent buffer overflow...
-	if(szLocalAddr == NULL || size <= 0) {
+
+	if(szLocalAddr == NULL) {
 		return OWPL_RESULT_INVALID_ARGS;
+	}
+
+	memset(szLocalAddr, 0, size);
+
+	if(size <= 0) {
+		return OWPL_RESULT_INSUFFICIENT_BUFFER;
 	}
 	memset(ip, 0, sizeof(ip));
 	// HACK : eXosip_get_localip should get the size of the buffer to prevent buffer overflow
 	eXosip_get_localip(ip);
 	ip[sizeof(ip)-1] = '\0'; // be sure to have a zero terminated string
 	if(strlen(ip) > size-1) {
-		return OWPL_RESULT_FAILURE;
+		return OWPL_RESULT_INSUFFICIENT_BUFFER;
 	}
-	memset(szLocalAddr, 0, size);
 	strncpy(szLocalAddr, ip, size-1);
 	return OWPL_RESULT_SUCCESS;
 }
@@ -321,13 +398,19 @@ owplConfigGetBoundLocalAddr(char * szLocalAddr, size_t size) {
 MY_DLLEXPORT OWPL_RESULT
 owplConfigLocalHttpProxyGetAddr(char * szLocalProxyAddr, size_t size) {
 	size_t sourceSize = strlen(phcfg.http_proxy);
-	if(szLocalProxyAddr == NULL || size <= 0) {
+
+	if(szLocalProxyAddr == NULL) {
 		return OWPL_RESULT_INVALID_ARGS;
 	}
-	if(sourceSize <= 0 || sourceSize > size-1 ) {
+
+	memset(szLocalProxyAddr, 0, size);
+
+	if(size <= 0 || sourceSize > size-1) {
+		return OWPL_RESULT_INSUFFICIENT_BUFFER;
+	}
+	if(sourceSize <= 0 ) {
 		return OWPL_RESULT_FAILURE;
 	}
-	memset(szLocalProxyAddr, 0, size);
 	strncpy(szLocalProxyAddr, phcfg.http_proxy, size-1);
 	return OWPL_RESULT_SUCCESS;
 }
@@ -335,13 +418,19 @@ owplConfigLocalHttpProxyGetAddr(char * szLocalProxyAddr, size_t size) {
 MY_DLLEXPORT OWPL_RESULT
 owplConfigLocalHttpProxyGetPasswd(char * szLocalProxyPasswd, size_t size) {
 	size_t sourceSize = strlen(phcfg.http_proxy_passwd);
-	if(szLocalProxyPasswd == NULL || size <= 0) {
+
+	if(szLocalProxyPasswd == NULL) {
 		return OWPL_RESULT_INVALID_ARGS;
 	}
-	if(sourceSize <= 0 || sourceSize > size-1 ) {
+
+	memset(szLocalProxyPasswd, 0, size);
+
+	if(size <= 0 || sourceSize > size-1) {
+		return OWPL_RESULT_INSUFFICIENT_BUFFER;
+	}
+	if(sourceSize <= 0 ) {
 		return OWPL_RESULT_FAILURE;
 	}
-	memset(szLocalProxyPasswd, 0, size);
 	strncpy(szLocalProxyPasswd, phcfg.http_proxy_passwd, size-1);
 	return OWPL_RESULT_SUCCESS;
 }
@@ -351,6 +440,9 @@ owplConfigLocalHttpProxyGetPort(int * LocalProxyPort) {
 	if(LocalProxyPort == NULL) {
 		return OWPL_RESULT_INVALID_ARGS;
 	}
+
+	*LocalProxyPort = 0;
+
 	if(phcfg.http_proxy_port <= 0) {
 		return OWPL_RESULT_FAILURE;
 	}
@@ -361,13 +453,19 @@ owplConfigLocalHttpProxyGetPort(int * LocalProxyPort) {
 MY_DLLEXPORT OWPL_RESULT
 owplConfigLocalHttpProxyGetUserName(char * szLocalProxyUserName, size_t size) {
 	size_t sourceSize = strlen(phcfg.http_proxy_user);
-	if(szLocalProxyUserName == NULL || size <= 0) {
+
+	if(szLocalProxyUserName == NULL) {
 		return OWPL_RESULT_INVALID_ARGS;
 	}
-	if(sourceSize <= 0 || sourceSize > size-1 ) {
+
+	memset(szLocalProxyUserName, 0, size);
+
+	if(size <= 0 || sourceSize > size-1) {
+		return OWPL_RESULT_INSUFFICIENT_BUFFER;
+	}
+	if(sourceSize <= 0) {
 		return OWPL_RESULT_FAILURE;
 	}
-	memset(szLocalProxyUserName, 0, size);
 	strncpy(szLocalProxyUserName, phcfg.http_proxy_user, size-1);
 	return OWPL_RESULT_SUCCESS;
 }
@@ -382,6 +480,10 @@ owplConfigLocalHttpProxyGetUserName(char * szLocalProxyUserName, size_t size) {
  */
 MY_DLLEXPORT OWPL_RESULT owplAudioSetConfigString(const char* szAudioConfig)
 {
+	if(szAudioConfig == NULL || strlen(szAudioConfig) == 0) {
+		phcfg.audio_dev[0] = 0;
+		return OWPL_RESULT_SUCCESS;
+	}
 	if (strlen(szAudioConfig) >= sizeof(phcfg.audio_dev)) {
 		return OWPL_RESULT_INVALID_ARGS;
 	}
