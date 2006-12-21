@@ -1,5 +1,0 @@
-if (NOT MSVC)
-	include(CMakeLists-internal-unix.txt)
-else (NOT MSVC)
-	include(CMakeLists-internal-msvc.txt)
-endif (NOT MSVC)

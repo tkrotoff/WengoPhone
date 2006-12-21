@@ -1,9 +1,0 @@
-if (NOT SAMPLERATE_FOUND)
-	find_package(Samplerate REQUIRED)
-endif (NOT SAMPLERATE_FOUND)
-
-ow_create_project(samplerate)
-
-ow_use_public_libraries(
-	SAMPLERATE
-)
