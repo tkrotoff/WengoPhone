@@ -54,6 +54,7 @@ if (WIN32)
 			-DPA_NO_DS
 		)
 	endif (PORTAUDIO_DIRECTSOUND_SUPPORT)
+
 endif (WIN32)
 
 if (UNIX)
@@ -70,6 +71,10 @@ if (UNIX)
 		m
 	)
 
+	if (NOT PORTAUDIO_OSS_SUPPORT AND NOT PORTAUDIO_ALSA_SUPPORT)
+		MESSAGE (FATAL_ERROR "Choose at least on of these options: PORTAUDIO_OSS_SUPPORT / PORTAUDIO_ALSA_SUPPORT" )
+	endif (NOT PORTAUDIO_OSS_SUPPORT AND NOT PORTAUDIO_ALSA_SUPPORT)
+
 	if (PORTAUDIO_OSS_SUPPORT)
 		ow_add_sources(
 			pa_unix_oss/pa_unix_oss.c
@@ -77,20 +82,20 @@ if (UNIX)
 		ow_add_private_definitions(
 			-DPA_USE_OSS
 		)
-	else (PORTAUDIO_OSS_SUPPORT)
+	endif (PORTAUDIO_OSS_SUPPORT)
 
 	if (PORTAUDIO_ALSA_SUPPORT)
 		ow_add_sources(
-			pa_unix_oss/pa_unix_oss.c
+			pa_linux_alsa/pa_linux_alsa.c
 		)
 		ow_add_private_definitions(
 			-DPA_USE_ALSA
 		)
-	else (PORTAUDIO_ALSA_SUPPORT)
-		message(FATAL_ERROR "PortAudio backend error: you have to choose between ALSA and OSS support")
+		ow_use_private_libraries(
+			alsa
+		)
 	endif (PORTAUDIO_ALSA_SUPPORT)
 
-	endif (PORTAUDIO_OSS_SUPPORT)
 endif (UNIX)
 
 if (APPLE)
