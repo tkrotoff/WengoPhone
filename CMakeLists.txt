@@ -10,14 +10,14 @@ set(CMAKE_MODULE_PATH
 	${CMAKE_SOURCE_DIR}/owbuild/owbuild
 )
 
+# Add macros
+include(owbuild/owbuild/CMakeLists.txt)
+
 # Add definitions/options/default values...
 include(DefineWengoDefaults.cmake)
 include(DefineCompilerFlags.cmake)
 include(DefineWengoOptions.cmake)
 include(DefineInstallationPaths.cmake)
-
-# Add macros
-include(owbuild/owbuild/CMakeLists.txt)
 
 # Disallow in-source build
 ow_ensure_out_of_source_build()
