@@ -1,9 +1,3 @@
-string(TOLOWER ${CMAKE_BUILD_TYPE} BUILD_DIR)
-set(BUILD_DIR
-	${CMAKE_BINARY_DIR}/${BUILD_DIR}
-	CACHE PATH "Build directory, depends on build type" FORCE
-)
-
 if (WIN32)
 	set(DATA_COPY_DIR ${BUILD_DIR}
 		CACHE PATH "Data/resources (sounds, translations...) copy path")
