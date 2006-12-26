@@ -99,9 +99,3 @@ ow_add_sources(
 )
 
 ow_create_binary()
-
-if (APPLE)
-	install(TARGETS ${PROJECT_NAME}
-		DESTINATION "WengoPhone.app/Contents/Frameworks"
-	)
-endif (APPLE)

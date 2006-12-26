@@ -24,6 +24,15 @@ if (CMAKE_BUILD_TYPE MATCHES Debug)
 		)
 	endif (MSVC)
 
+	if (APPLE)
+		set(CMAKE_C_FLAGS
+			"${CMAKE_C_FLAGS} -gdwarf-2"
+		)
+		set(CMAKE_CXX_FLAGS
+			"${CMAKE_CXX_FLAGS} -gdwarf-2"
+		)
+	endif (APPLE)
+
 	# Defines DEBUG when in debug mode
 	add_definitions(-DDEBUG)
 endif (CMAKE_BUILD_TYPE MATCHES Debug)

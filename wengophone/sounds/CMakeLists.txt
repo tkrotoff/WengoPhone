@@ -1,1 +1,1 @@
-ow_copy_dir_recursive(${CMAKE_CURRENT_SOURCE_DIR}/* ${BUILD_DIR}/sounds)
+ow_copy_dir_recursive(${CMAKE_CURRENT_SOURCE_DIR}/* ${DATA_INSTALL_DIR}/sounds)

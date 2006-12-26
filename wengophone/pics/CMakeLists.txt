@@ -1,1 +1,1 @@
-ow_copy_dir(${CMAKE_CURRENT_SOURCE_DIR}/avatars/*.png ${BUILD_DIR}/pics/avatars/.)
+ow_copy_dir(${CMAKE_CURRENT_SOURCE_DIR}/avatars/*.png ${DATA_INSTALL_DIR}/pics/avatars/.)

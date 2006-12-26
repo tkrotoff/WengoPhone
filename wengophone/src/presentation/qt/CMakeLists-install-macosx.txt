@@ -2,15 +2,23 @@ set(CMAKE_MODULE_PATH
 	${SOURCE_DIR}/owbuild/owbuild
 )
 
+set(FRAMEWORK_INSTALL_DIR
+	${INSTALL_PREFIX}/WengoPhone.app/Contents/Frameworks
+)
+
+set(DATA_INSTALL_DIR
+	${INSTALL_PREFIX}/WengoPhone.app/Contents/Resources
+)
+
 include(OWChangeInstallName)
+include(OWCopyFile)
 
 ## Create the locale directories to have the Application translated by Mac OS X
-file(GLOB_RECURSE _qmFiles ${DATA_INSTALL_DIR}/lang/*.qm)
+file(GLOB_RECURSE _qmFiles ${BUILD_DIR}/lang/*.qm)
 
 if (_qmFiles)
 	foreach (_qm ${_qmFiles})
-		STRING(REGEX REPLACE ".*_([^\\.]*)\\.qm" "\\1"
-			lang ${_qm})
+		STRING(REGEX REPLACE ".*_([^\\.]*)\\.qm" "\\1" lang ${_qm})
 		make_directory(${DATA_INSTALL_DIR}/${lang}.lproj)
 	endforeach (_qm ${_qmFiles})
 endif (_qmFiles)
@@ -54,6 +62,72 @@ file(WRITE "${INSTALL_PREFIX}/WengoPhone.app/Contents/Info.plist"
 "</dict>\n"
 "</plist>\n"
 )
+####
+
+## Copying resources
+# WengoPhone icon
+ow_copy_file(${SOURCE_DIR}/wengophone/src/presentation/qt/macosx/template.app/Contents/Resources/wengophone.icns
+	${INSTALL_PREFIX}/WengoPhone.app/Contents/Resources/wengophone.icns
+)
+####
+
+## Copying binaries
+# exe
+ow_copy_file(${CMAKE_BINARY_DIR}/wengophone/src/presentation/qt/WengoPhone
+	${INSTALL_PREFIX}/WengoPhone.app/Contents/MacOS/WengoPhone
+)
+
+# Copy Qt Frameworks
+ow_copy_file($ENV{QTDIR}/lib/QtCore.framework/Versions/4.0/QtCore
+	${FRAMEWORK_INSTALL_DIR}/QtCore.framework/Versions/4.0/QtCore
+)
+
+ow_copy_file($ENV{QTDIR}/lib/QtGui.framework/Versions/4.0/QtGui
+	${FRAMEWORK_INSTALL_DIR}/QtGui.framework/Versions/4.0/QtGui
+)
+
+ow_copy_file($ENV{QTDIR}/lib/QtXml.framework/Versions/4.0/QtXml
+	${FRAMEWORK_INSTALL_DIR}/QtXml.framework/Versions/4.0/QtXml
+)
+
+ow_copy_file($ENV{QTDIR}/lib/QtSvg.framework/Versions/4.0/QtSvg
+	${FRAMEWORK_INSTALL_DIR}/QtSvg.framework/Versions/4.0/QtSvg
+)
+
+# Copy libqmng (for MNG image support)
+ow_copy_file($ENV{QTDIR}/plugins/imageformats/libqmng.dylib
+	${FRAMEWORK_INSTALL_DIR}/qt-plugins/imageformats/libqmng.dylib
+)
+
+# owcurl
+ow_copy_file(${CMAKE_BINARY_DIR}/libs/owcurl/libowcurl.dylib
+	${FRAMEWORK_INSTALL_DIR}
+)
+
+# Copy PhApi plugins
+# TODO
+
+# Copy glib2 and crypto libs
+set(LIB_DEP
+	libgnutls.12.dylib
+	libgcrypt.11.dylib
+	libtasn1.2.dylib
+	libpth.14.dylib
+	libgpg-error.0.dylib
+
+	libintl.3.dylib
+	libintl.1.dylib
+	libiconv.2.dylib
+	libgmodule-2.0.0.dylib
+	libglib-2.0.0.dylib
+	libgthread-2.0.0.dylib
+)
+
+foreach(lib ${LIB_DEP})
+	ow_copy_file(/sw/lib/${lib}
+		${FRAMEWORK_INSTALL_DIR}
+	)
+endforeach(lib ${LIB_DEP})
 ####
 
 ## Change install names

@@ -466,7 +466,11 @@ if (APPLE)
 	)
 endif (APPLE)
 
-ow_create_binary()
+if (APPLE)
+	ow_create_binary(MACOSX_BUNDLE)
+else (APPLE)
+	ow_create_binary()
+endif (APPLE)
 
 file(GLOB tsFiles ${CMAKE_CURRENT_SOURCE_DIR}/lang/*.ts)
 ow_create_qt_qm_files(qmFiles
@@ -477,19 +481,13 @@ add_custom_target(lupdate
 		${qmFiles}
 )
 
-ow_copy_dir_recursive(${CMAKE_CURRENT_SOURCE_DIR}/webpages/* ${BUILD_DIR}/webpages/.)
+if (WIN32)
+	ow_copy_dir_recursive(${CMAKE_CURRENT_SOURCE_DIR}/webpages/* ${BUILD_DIR}/webpages/.)
+endif (WIN32)
 
 # Bugfix, spaces don't work with install target
 string(REPLACE " " "CMAKEBUGWITHSPACES" TMP_BUILD_DIR ${BUILD_DIR})
 string(REPLACE " " "CMAKEBUGWITHSPACES" TMP_SOURCE_DIR ${CMAKE_SOURCE_DIR})
-
-	set(DATA_INSTALL_DIR "/usr/share/wengophone"
-		CACHE PATH "Data/resources installation path")
-	set(APPLICATION_BIN_INSTALL_DIR "/usr/bin"
-		CACHE PATH "Application binary installation path")
-	set(LIBRARIES_INSTALL_DIR "/usr/lib/wengophone"
-		CACHE PATH "Libraries installation path")
-
 
 # Passes variables to the install script
 install(
@@ -497,6 +495,7 @@ install(
 	set(INSTALL_PREFIX ${BUILD_DIR})
 	set(SOURCE_DIR ${TMP_SOURCE_DIR})
 	set(DATA_INSTALL_DIR ${DATA_INSTALL_DIR})
+	set(FRAMEWORK_INSTALL_DIR ${FRAMEWORK_INSTALL_DIR})
 	set(APPLICATION_NAME ${APPLICATION_NAME})
 	set(APPLICATION_BIN_INSTALL_DIR ${APPLICATION_BIN_INSTALL_DIR})
 	set(LIBRARIES_INSTALL_DIR ${LIBRARIES_INSTALL_DIR})
@@ -506,79 +505,18 @@ install(
 	set(SVN_REVISION ${SVN_REVISION})"
 )
 
-if (APPLE)
-	set_target_properties(${PROJECT_NAME}
-		PROPERTIES
-			COMPILE_FLAGS "-x objective-c++"
-	)
-
-	## INSTALL for MacOSX
-	# The WengoPhone.app with executable
-	install(TARGETS ${PROJECT_NAME}
-		RUNTIME DESTINATION "WengoPhone.app/Contents/MacOS"
-	)
-
-	# Copy the WengoPhone icon
-	install(FILES "macosx/template.app/Contents/Resources/wengophone.icns"
-		DESTINATION "WengoPhone.app/Contents/Resources"
-	)
-
-	# Copy Qt Frameworks
-	install(FILES $ENV{QTDIR}/lib/QtCore.framework/Versions/4.0/QtCore
-		DESTINATION ${FRAMEWORK_INSTALL_DIR}/QtCore.framework/Versions/4.0
-	)
-
-	install(FILES $ENV{QTDIR}/lib/QtGui.framework/Versions/4.0/QtGui
-		DESTINATION ${FRAMEWORK_INSTALL_DIR}/QtGui.framework/Versions/4.0
-	)
-
-	install(FILES $ENV{QTDIR}/lib/QtXml.framework/Versions/4.0/QtXml
-		DESTINATION ${FRAMEWORK_INSTALL_DIR}/QtXml.framework/Versions/4.0
-	)
-
-	install(FILES $ENV{QTDIR}/lib/QtSvg.framework/Versions/4.0/QtSvg
-		DESTINATION ${FRAMEWORK_INSTALL_DIR}/QtSvg.framework/Versions/4.0
-	)
-
-	# Copy libqmng (for MNG image support)
-	install(FILES $ENV{QTDIR}/plugins/imageformats/libqmng.dylib
-		DESTINATION ${FRAMEWORK_INSTALL_DIR}/qt-plugins/imageformats/libqmng.dylib
-	)
-
-	# Copy PhApi plugins
-	# TODO
-
-	# Copy glib2 and crypto libs
-	set(LIB_DEP
-		libgnutls.12.dylib
-		libgcrypt.11.dylib
-		libtasn1.2.dylib
-		libpth.14.dylib
-		libgpg-error.0.dylib
-
-		libintl.3.dylib
-		libintl.1.dylib
-		libiconv.2.dylib
-		libgmodule-2.0.0.dylib
-		libglib-2.0.0.dylib
-		libgthread-2.0.0.dylib
-	)
-
-	foreach(lib ${LIB_DEP})
-		install(FILES /sw/lib/${lib}
-			DESTINATION ${FRAMEWORK_INSTALL_DIR}
+if (UNIX)
+	if (APPLE)
+		set_target_properties(${PROJECT_NAME}
+			PROPERTIES
+				COMPILE_FLAGS "-x objective-c++"
 		)
-	endforeach(lib ${LIB_DEP})
-	####
 
-	install(SCRIPT CMakeLists-install-macosx.txt)
-	####
-
-endif (APPLE)
-
-if (UNIX AND NOT APPLE)
-	install(SCRIPT CMakeLists-install-linux.txt)
-endif (UNIX AND NOT APPLE)
+		install(SCRIPT CMakeLists-install-macosx.txt)
+	else (APPLE)
+		install(SCRIPT CMakeLists-install-linux.txt)
+	endif (APPLE)
+endif (UNIX)
 
 if (WIN32)
 	# NSIS installer script

@@ -1,8 +1,16 @@
-if (APPLE)
-	set(FRAMEWORK_INSTALL_DIR ${APPLICATION_NAME}.app/Contents/Frameworks
-		CACHE PATH "Framework installation path (MacOSX only)")
+string(TOLOWER ${CMAKE_BUILD_TYPE} BUILD_DIR)
+set(BUILD_DIR
+	${CMAKE_BINARY_DIR}/${BUILD_DIR}
+	CACHE PATH "Build directory, depends on build type" FORCE
+)
 
-	set(DATA_INSTALL_DIR ${APPLICATION_NAME}.app/Contents/Resources
+if (WIN32)
+	set(DATA_INSTALL_DIR ${BUILD_DIR}
+		CACHE PATH "Data/resources (sounds, translations...) installation path")
+endif (WIN32)
+
+if (APPLE)
+	set(DATA_INSTALL_DIR ${BUILD_DIR}/${APPLICATION_NAME}.app/Contents/Resources
 		CACHE PATH "Data/resources (sounds, translations...) installation path")
 endif (APPLE)
 
