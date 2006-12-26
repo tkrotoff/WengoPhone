@@ -5,16 +5,19 @@ set(BUILD_DIR
 )
 
 if (WIN32)
-	set(DATA_INSTALL_DIR ${BUILD_DIR}
-		CACHE PATH "Data/resources (sounds, translations...) installation path")
+	set(DATA_COPY_DIR ${BUILD_DIR}
+		CACHE PATH "Data/resources (sounds, translations...) copy path")
 endif (WIN32)
 
 if (APPLE)
-	set(DATA_INSTALL_DIR ${BUILD_DIR}/${APPLICATION_NAME}.app/Contents/Resources
-		CACHE PATH "Data/resources (sounds, translations...) installation path")
+	set(DATA_COPY_DIR ${BUILD_DIR}/${APPLICATION_NAME}.app/Contents/Resources
+		CACHE PATH "Data/resources (sounds, translations...) copy path")
 endif (APPLE)
 
 if (UNIX AND NOT APPLE)
+	set(DATA_COPY_DIR ${BUILD_DIR}
+		CACHE PATH "Data/resources (sounds, translations...) copy path")
+
 	set(DATA_INSTALL_DIR "/usr/share/wengophone"
 		CACHE PATH "Data/resources (sounds, translations...) installation path")
 	set(APPLICATION_BIN_INSTALL_DIR "/usr/bin"

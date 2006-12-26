@@ -8,4 +8,4 @@ subdirs(
 	#test
 )
 
-ow_copy_file(${CMAKE_CURRENT_SOURCE_DIR}/COPYING ${BUILD_DIR})
+ow_copy_file(${CMAKE_CURRENT_SOURCE_DIR}/COPYING ${BUILD_DIR}/)
