@@ -1,6 +1,7 @@
 option(PORTAUDIO_INTERNAL "Use internal PortAudio" ON)
 option(FFMPEG_INTERNAL "Use internal FFmpeg" ON)
 option(SPEEX_INTERNAL "Use internal Speex" ON)
+option(IAXCLIENT_INTERNAL "Use internal iaxclient" ON)
 option(SAMPLERATE_INTERNAL "Use internal libsamplerate" ON)
 option(OSIP2_INTERNAL "Use internal oSIP" ON)
 
