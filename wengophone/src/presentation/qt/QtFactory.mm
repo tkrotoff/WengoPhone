@@ -1,1 +1,0 @@
-QtFactory.cpp

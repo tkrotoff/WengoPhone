@@ -1,1 +1,0 @@
-QtSystray.cpp
