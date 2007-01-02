@@ -31,7 +31,8 @@ BUILDDIR=$(dirname ${SCRIPT})
 
 cd ${BUILDDIR}
 
-OPTIONS="-DCMAKE_INSTALL_PREFIX=/usr --graphviz=${BUILDDIR}/wengophone.dot"
+OWCFLAGS="-Wall -W -Wmissing-prototypes -Wstrict-aliasing -D_FORTIFY_SOURCE=2 -fmessage-length=0"
+OPTIONS="-DCMAKE_INSTALL_PREFIX=/usr -DPORTAUDIO_INTERNAL:BOOL=OFF -DFFMPEG_INTERNAL:BOOL=OFF -DSPEEX_INTERNAL:BOOL=OFF --graphviz=${BUILDDIR}/wengophone.dot"
 
 if [ "$(uname -m)" == "x86_64" ]; then
 	OPTIONS="${OPTIONS} -DLIB_SUFFIX=64"
@@ -57,12 +58,14 @@ case $1 in
 	debug)
 		shift
 		OPTIONS="${OPTIONS} -DCMAKE_BUILD_TYPE=Debug -DCMAKE_VERBOSE_MAKEFILE=0"
+		OPTIONS="${OPTIONS} -DCMAKE_C_FLAGS=${OWCFLAGS} -DCMAKE_CXX_FLAGS=${OWCFLAGS}"
 		configure ${OPTIONS} "$@"
 		compile
 	;;
 	verbose)
 		shift
 		OPTIONS="${OPTIONS} -DCMAKE_BUILD_TYPE=Debug -DCMAKE_VERBOSE_MAKEFILE=1"
+		OPTIONS="${OPTIONS} -DCMAKE_C_FLAGS=${OWCFLAGS} -DCMAKE_CXX_FLAGS=${OWCFLAGS}"
 		configure ${OPTIONS} "$@"
 		compile VERBOSE=1
 	;;
