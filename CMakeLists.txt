@@ -34,15 +34,15 @@ subdirs(
 	libs/3rdparty
 
 	libs/owcurl
-	libs/util
+	libs/owutil
 	libs/wenbox
 	libs/qtutil
 	libs/idle
 	libs/owbrowser
 	libs/trayicon
 	libs/softupdater
-	libs/pixertool
-	libs/webcam
+	libs/owpixertool
+	libs/owwebcam
 	libs/sound
 	libs/timer
 	wifo

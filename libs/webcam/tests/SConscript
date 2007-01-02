@@ -1,5 +1,0 @@
-env = WengoGetEnvironment()
-
-env.SConscript('unit/SConscript')
-env.SConscript('visu/SConscript')
-env.SConscript('visu-c/SConscript')
