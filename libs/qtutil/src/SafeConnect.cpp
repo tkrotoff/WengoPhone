@@ -26,17 +26,17 @@
 void SafeConnect::connect(const QObject * sender, const char * signal, const QObject * receiver, const char * method, Qt::ConnectionType type) {
 	if (!QObject::connect(sender, signal, receiver, method, type)) {
 		LOG_FATAL("couldn't connect sender=" + sender->objectName().toStdString() +
-				" signal=" + String(signal) +
+				" signal=" + std::string(signal) +
 				" receiver=" + receiver->objectName().toStdString() +
-				" method=" + String(method));
+				" method=" + std::string(method));
 	}
 }
 
 void SafeConnect::disconnect(const QObject * sender, const char * signal, const QObject * receiver, const char * method) {
 	if (!QObject::disconnect(sender, signal, receiver, method)) {
 		LOG_FATAL("couldn't disconnect sender=" + sender->objectName().toStdString() +
-				" signal=" + String(signal) +
+				" signal=" + std::string(signal) +
 				" receiver=" + receiver->objectName().toStdString() +
-				" method=" + String(method));
+				" method=" + std::string(method));
 	}
 }
