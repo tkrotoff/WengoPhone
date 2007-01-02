@@ -13,9 +13,7 @@ set(CMAKE_MODULE_PATH
 # Add macros
 include(owbuild/owbuild/CMakeLists.txt)
 
-# Add definitions/options/default values...
-include(DefineWengoDefaults.cmake)
-include(DefineCompilerFlags.cmake)
+# Add options values
 include(DefineWengoOptions.cmake)
 include(DefineInstallationPaths.cmake)
 
@@ -23,6 +21,7 @@ include(DefineInstallationPaths.cmake)
 ow_ensure_out_of_source_build()
 
 include(owbuild/owbuild/OWInitializationInfo.cmake)
+
 
 if (NOT APPLE)
 	subdirs(
