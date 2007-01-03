@@ -1,26 +1,14 @@
+include(CMakeLists-owbuild.txt)
+
 project(wengophone)
 
 # Global variables
 set(APPLICATION_NAME WengoPhone)
 set(APPLICATION_VERSION "2.0")
 
-# Where to look first for cmake modules, before ${CMAKE_ROOT}/Modules/ is checked
-set(CMAKE_MODULE_PATH
-	${CMAKE_SOURCE_DIR}/owbuild
-	${CMAKE_SOURCE_DIR}/owbuild/owbuild
-)
-
-# Add macros
-include(owbuild/owbuild/CMakeLists.txt)
-
 # Add options values
 include(DefineWengoOptions.cmake)
 include(DefineInstallationPaths.cmake)
-
-# Disallow in-source build
-ow_ensure_out_of_source_build()
-
-include(owbuild/owbuild/OWInitializationInfo.cmake)
 
 subdirs(
 	libs/3rdparty
