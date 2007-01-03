@@ -1,3 +1,7 @@
+# Always create a project first, otherwise some CMake variables are defined
+# do not know why
+project(owbuild)
+
 if (NOT OWBUILD_INCLUDED)
 	# Where to look first for cmake modules, before ${CMAKE_ROOT}/Modules/ is checked
 	set(CMAKE_MODULE_PATH
