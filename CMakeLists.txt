@@ -22,13 +22,6 @@ ow_ensure_out_of_source_build()
 
 include(owbuild/owbuild/OWInitializationInfo.cmake)
 
-
-if (NOT APPLE)
-	subdirs(
-		libs/3rdparty/portaudio
-	)
-endif (NOT APPLE)
-
 subdirs(
 	libs/3rdparty
 
