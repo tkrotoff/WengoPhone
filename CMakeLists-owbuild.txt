@@ -1,5 +1,5 @@
-# Always create a project first, otherwise some CMake variables are defined
-# do not know why
+# Always create a project first, otherwise some CMake variables are not defined
+# do not know why, so owbuild is a kind of stub project
 project(owbuild)
 
 if (NOT OWBUILD_INCLUDED)
