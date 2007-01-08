@@ -91,6 +91,17 @@ ow_add_sources(
 	wav.c
 )
 
+ow_add_sources(
+	owpl.h
+	owpl_plugin.h
+	phapi.h
+	phapi-old.h
+	phcall.h
+	phevents.h
+	phglobal.h
+	phvline.h
+)
+
 if (PHAPI_SPEEXWB_REPLACES_G726WB_HACK)
 	ow_add_private_definitions(
 		-DPH_SPEEXWB_REPLACES_G726WB
