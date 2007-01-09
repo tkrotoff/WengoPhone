@@ -10,9 +10,12 @@ ow_add_private_include_dirs(
 	${CMAKE_CURRENT_SOURCE_DIR}/src/osipparser2
 )
 
-ow_add_private_definitions(
+ow_add_public_definitions(
 	-DOSIP_MT
 	-DENABLE_TRACE
+)
+
+ow_add_private_definitions(
 	-DHAVE_STRUCT_TIMEVAL
 )
 
