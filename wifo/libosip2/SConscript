@@ -13,7 +13,7 @@ include_path = [
 defines = {
 	'OSIP_MT' : 1,
 	'ENABLE_TRACE' : 1,
-	'HAVE_STRUCT_TIMEVAL' : 1
+	'HAVE_STRUCT_TIMEVAL' : 1,
 }
 headers = []
 
@@ -89,13 +89,19 @@ if WengoOSWindows():
 if WengoOSLinux() or WengoOSBSD():
 	defines.update({
 		'HAVE_PTHREAD' : 1,
-		'HAVE_SEMAPHORE_H' : 1
+		'HAVE_SEMAPHORE_H' : 1,
+		'HAVE_FCNTL_H' : 1,
+		'HAVE_SYS_TIME_H' : 1,
+		'HAVE_SYS_TYPES_H' : 1,
 	})
 
 if WengoOSMacOSX():
 	defines.update({
 		'HAVE_PTHREAD' : 1,
-		'HAVE_SYS_SEM_H' : 1
+		'HAVE_SYS_SEM_H' : 1,
+		'HAVE_FCNTL_H' : 1,
+		'HAVE_SYS_TIME_H' : 1,
+		'HAVE_SYS_TYPES_H' : 1,
 	})
 
 env.WengoUseLibraries(libs)

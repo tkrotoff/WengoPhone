@@ -166,6 +166,10 @@ sources = [
 if WengoOSLinux() or WengoOSBSD():
 	sources += ['phmedia-oss.c']
 
+	defines['HAVE_FCNTL_H'] = 1
+	defines['HAVE_SYS_TIME_H'] = 1
+	defines['HAVE_SYS_TYPES_H'] = 1
+
 	if WengoGetConsoleArgument('enable-phapi-audio-arts'):
 		defines['ENABLE_ARTS'] = 1
 		sources += ['phmedia-audio-arts.c']
@@ -281,6 +285,10 @@ if WengoOSMacOSX():
 		'AudioToolbox',
 		'CoreServices',
 	]
+
+	defines['HAVE_FCNTL_H'] = 1
+	defines['HAVE_SYS_TIME_H'] = 1
+	defines['HAVE_SYS_TYPES_H'] = 1
 	
 	env.WengoAddFrameworks(frameworks)
 
