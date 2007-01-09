@@ -39,6 +39,10 @@ if WengoOSWindows():
 	defines['WIN32'] = 1
 
 if WengoOSLinux() or WengoOSMacOSX():
+	defines['HAVE_FCNTL_H'] = 1
+	defines['HAVE_SYS_TIME_H'] = 1
+	defines['HAVE_SYS_TYPES_H'] = 1
+
 	env.ParseConfig('pkg-config --cflags --libs gthread-2.0')
 
 env.WengoAddIncludePath(include_path)

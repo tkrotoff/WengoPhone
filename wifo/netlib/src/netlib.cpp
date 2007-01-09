@@ -38,8 +38,7 @@
 #define snprintf _snprintf
 #endif
 
-#ifndef VS2005
-
+#ifndef CC_MSVC8
 typedef struct {
 	BOOL(* IsResolvable) (LPSTR lpszHost);
 	DWORD(* GetIPAddress) (LPSTR lpszIPAddress, LPDWORD lpdwIPAddressSize);
@@ -57,7 +56,6 @@ typedef struct {
 	DWORD dwScriptBufferSize;
 } AUTO_PROXY_SCRIPT_BUFFER;
 
-#endif
 
 typedef BOOL(CALLBACK * pfnInternetInitializeAutoProxyDll) (
 	DWORD dwVersion,
@@ -80,6 +78,7 @@ typedef BOOL(CALLBACK * pfnInternetGetProxyInfo) (
 
 #define PROXY_AUTO_DETECT_TYPE_DNS_A 2
 #define PROXY_AUTO_DETECT_TYPE_DHCP 1
+#endif
 
 inline int strncasecmp(const char *str1, const char *str2, int size) {return strnicmp(str1, str2, size);}
 
