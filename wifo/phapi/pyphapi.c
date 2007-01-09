@@ -41,10 +41,6 @@
 #include <windows.h>
 #include <shlwapi.h>
 
-#define MAX_URI_LENGTH	512
-#define MAX_IP_LENGTH	64
-#define MAX_PASSWORD_LENTGH	64
-#define MAX_USERNAME_LENGTH	64
 
 static void (*userNotify)(char *buf, int size);
 LONG unhandledExceptionFilter(struct _EXCEPTION_POINTERS * pExceptionInfo) {
@@ -53,6 +49,13 @@ LONG unhandledExceptionFilter(struct _EXCEPTION_POINTERS * pExceptionInfo) {
 }
 
 #endif
+
+
+#define MAX_URI_LENGTH	512
+#define MAX_IP_LENGTH	64
+#define MAX_PASSWORD_LENGTH	64
+#define MAX_USERNAME_LENGTH	64
+
 
 #include <Python.h>
 #include <phapi.h>
@@ -1316,7 +1319,7 @@ static PyObject * PyOwplConfigLocalHttpProxyGetAddr(PyObject *self, PyObject *pa
  * @brief Wraps owplConfigLocalHttpProxyGetPasswd
  */
 static PyObject * PyOwplConfigLocalHttpProxyGetPasswd(PyObject *self, PyObject *params) {
-	char szLocalProxyPasswd[MAX_PASSWORD_LENTGH]; // not to be passed by Python
+	char szLocalProxyPasswd[MAX_PASSWORD_LENGTH]; // not to be passed by Python
 
     int ret;
 
