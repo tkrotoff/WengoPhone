@@ -77,7 +77,7 @@ short initDecode(                   /* (o) Number of decoded
     memset(iLBCdec_inst->old_syntdenum, 0,  
         ((LPC_FILTERORDER + 1)*NSUB_MAX)*sizeof(float)); 
     for (i=0; i<NSUB_MAX; i++) 
-        iLBCdec_inst->old_syntdenum[i*(LPC_FILTERORDER+1)]=1.0; 
+        iLBCdec_inst->old_syntdenum[i*(LPC_FILTERORDER+1)]=(float)1.0; 
  
     iLBCdec_inst->last_lag = 20; 
  
