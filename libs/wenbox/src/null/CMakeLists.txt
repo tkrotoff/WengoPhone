@@ -8,7 +8,7 @@ set(NULLWENBOX_INCLUDE_DIRS
 )
 
 set(NULLWENBOX_LIBRARY
-  wenboxplugin
+  yealinkwenbox
 )
 
 # nullwenbox lib and dependencies

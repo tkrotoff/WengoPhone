@@ -15,8 +15,8 @@ libs = [
 lib_path = []
 include_path = []
 defines = {
-	'WENBOX_DLL' : 1,
-	'BUILD_WENBOX_DLL' : 1
+	'OWWENBOX_DLL' : 1,
+	'BUILD_OWWENBOX_DLL' : 1
 }
 headers = []
 sources = [
@@ -28,4 +28,4 @@ env.WengoAddDefines(defines)
 env.WengoAddLibPath(lib_path)
 env.WengoUseLibraries(libs)
 
-env.WengoSharedLibrary('wenboxplugin', sources)
+env.WengoSharedLibrary('yealinkwenbox', sources)
