@@ -214,160 +214,166 @@ int cb_snd_message (osip_transaction_t * tr, osip_message_t * sip, char *host,
 }
 
 int cb_udp_snd_message(osip_transaction_t *tr, osip_message_t *sip, char *host,
-		       int port, int out_socket)
+		int port, int out_socket)
 {
-  int len = 0;
-  size_t length = 0;
-  static int num = 0;
-  struct addrinfo *addrinfo;
-  struct __eXosip_sockaddr addr;
-  char *message;
-  int i;
-  osip_route_t *o_proxy = 0;
-  jinfo_t *jinfo = NULL;
+	int len = 0;
+	size_t length = 0;
+	static int num = 0;
+	struct addrinfo *addrinfo;
+	struct __eXosip_sockaddr addr;
+	char *message;
+	int i;
+	int remove = 0;
+	osip_route_t *o_proxy = 0;
+	jinfo_t *jinfo = 0;
 
-  if (eXosip.j_socket==0 && !eXosip.use_tunnel)
-	  return -1;
 
-  if (eXosip.forced_proxy[0])
-    {
+	if (eXosip.j_socket==0 && !eXosip.use_tunnel)
+		return -1;
+
+	if (eXosip.forced_proxy[0])
+	{
 #ifndef __VXWORKS_OS__
-	  osip_route_init(&o_proxy);
+		osip_route_init(&o_proxy);
 #else
-	  osip_route_init2(&o_proxy);
+		osip_route_init2(&o_proxy);
 #endif
-	  osip_route_parse(o_proxy, eXosip.forced_proxy);
+		osip_route_parse(o_proxy, eXosip.forced_proxy);
 
-	  host = o_proxy->url->host;
-	  port =  (o_proxy->url->port) ? atoi(o_proxy->url->port) : 5060;
-    }
-
-  if (host==NULL)
-    {
-      host = sip->req_uri->host;
-      if (sip->req_uri->port!=NULL)
-	port = osip_atoi(sip->req_uri->port);
-      else
-	port = 5060;
-    }
-
-  i = eXosip_get_addrinfo(&addrinfo, host, port);
-  if (i!=0)
-    {
-      return -1;
-    }
-  memcpy (&addr, addrinfo->ai_addr, addrinfo->ai_addrlen);
-  len = addrinfo->ai_addrlen;
-
-  freeaddrinfo (addrinfo);
-
-  if (o_proxy)
-  {
-    osip_route_free(o_proxy);
-	o_proxy = 0;
-  }
-
-	/* Check if the first route header is the same as the destination address */
-	/* Remove it just before creating the SIP buffer to send, and then add it */
-	/* again to avoid non desired behavior in eXosip */
-	osip_message_get_route(sip, 0, &o_proxy);
-	if (o_proxy && o_proxy->url && (strcmp(o_proxy->url->host, host) == 0))
-	{
-  		osip_list_remove_element(&sip->routes, o_proxy);
+		host = o_proxy->url->host;
+		port = (o_proxy->url->port) ? atoi(o_proxy->url->port) : 5060;
 	}
-  
-  /* sVoIP integration */
-  // SPIKE_SRTP: Check if a outgoing packet has to be processed by sVoIP
-  if (tr)
-    {
-      int cid = -1;
-      jinfo = osip_transaction_get_your_instance(tr);
-      /* Check that the jcall structure is available and 
-	 has enabled crypting */
-      if (jinfo && jinfo->jc/* && jinfo->jc->iscrypted*/)
-	{
-	  /* Get the CID from the jcall structure */
-	  cid = jinfo->jc->c_id;  
-	}       
-      if (cid >= 0)
-	{
-	  /* The connection is crypted */
-	  if (MSG_IS_RESPONSE_FOR(sip, "INVITE") && sip->status_code == 200)
-	    sVoIP_phapi_handle_ok_out(cid, sip); // 200OK augmented here
-	  else
-	    /*	  if (MSG_IS_RESPONSE_FOR(sip, "INVITE") && sip->status_code == 180)
-	    sVoIP_phapi_handle_hanging_out(cid, sip); // 180 Hanging augmented here
-	    else*/
-	  if (MSG_IS_INVITE(sip))
-	    sVoIP_phapi_handle_invite_out(cid, sip); // INVITE augmented here
-	  else
-	  if (MSG_IS_BYE(sip))
-	    sVoIP_phapi_handle_bye_out(cid, sip); // Close crypted session here
-	  jinfo->jc->iscrypted = sVoIP_phapi_isCrypted(cid);
-	}
-    }
-  /* sVoIP */
 
-  i = osip_message_to_str(sip, &message, &length);
+	if (host==NULL)
+	{
+		host = sip->req_uri->host;
+		if (sip->req_uri->port!=NULL)
+			port = osip_atoi(sip->req_uri->port);
+		else
+			port = 5060;
+	}
+
+	i = eXosip_get_addrinfo(&addrinfo, host, port);
+	if (i!=0)
+	{
+		return -1;
+	}
+	memcpy (&addr, addrinfo->ai_addr, addrinfo->ai_addrlen);
+	len = addrinfo->ai_addrlen;
+
+	freeaddrinfo (addrinfo);
+
+	if (o_proxy)
+	{
+		osip_route_free(o_proxy);
+		o_proxy = 0;
+	}
+
+	if ((jinfo = (jinfo_t *) osip_transaction_get_your_instance(tr)))
+	{
+		/* Check if the first route header is the same as the destination address */
+		/* Remove it just before creating the SIP buffer to send, and then add it */
+		/* again to avoid non desired behavior in eXosip */
+		osip_message_get_route(sip, 0, &o_proxy);
+		if (!jinfo->jd && o_proxy && o_proxy->url && (strcmp(o_proxy->url->host, host) == 0))
+		{
+			osip_list_remove_element(&sip->routes, o_proxy);
+			remove = 1;
+		}
+	}
+
+	/* sVoIP integration */
+	// SPIKE_SRTP: Check if a outgoing packet has to be processed by sVoIP
+	if (tr)
+	{
+		int cid = -1;
+		jinfo = osip_transaction_get_your_instance(tr);
+		/* Check that the jcall structure is available and 
+		has enabled crypting */
+		if (jinfo && jinfo->jc/* && jinfo->jc->iscrypted*/)
+		{
+			/* Get the CID from the jcall structure */
+			cid = jinfo->jc->c_id;  
+		}
+		if (cid >= 0)
+		{
+			/* The connection is crypted */
+			if (MSG_IS_RESPONSE_FOR(sip, "INVITE") && sip->status_code == 200)
+				sVoIP_phapi_handle_ok_out(cid, sip); // 200OK augmented here
+			else
+			/*	  if (MSG_IS_RESPONSE_FOR(sip, "INVITE") && sip->status_code == 180)
+				sVoIP_phapi_handle_hanging_out(cid, sip); // 180 Hanging augmented here
+			else*/
+				if (MSG_IS_INVITE(sip))
+					sVoIP_phapi_handle_invite_out(cid, sip); // INVITE augmented here
+			else
+				if (MSG_IS_BYE(sip))
+					sVoIP_phapi_handle_bye_out(cid, sip); // Close crypted session here
+			jinfo->jc->iscrypted = sVoIP_phapi_isCrypted(cid);
+		}
+	}
+	/* sVoIP */
+
+	i = osip_message_to_str(sip, &message, &length);
 
 	//JULIEN: re-add the previously removed route header
-	if (o_proxy)
+	if (remove)
 	{
 		osip_list_add(&sip->routes, o_proxy, 0);
 	}
 
-  if (i!=0 || length<=0) {
-    return -1;
-  }
+	if (i!=0 || length<=0) 
+	{
+		return -1;
+	}
 
-  OSIP_TRACE(osip_trace(__FILE__,__LINE__,OSIP_INFO1,NULL,
-			"Message sent: \n%s (len=%i sizeof(addr)=%i %i)\n",
-			message, len, sizeof(addr), sizeof(struct sockaddr_in6)));
+	OSIP_TRACE(osip_trace(__FILE__,__LINE__,OSIP_INFO1,NULL,
+		"Message sent: \n%s (len=%i sizeof(addr)=%i %i)\n",
+		message, len, sizeof(addr), sizeof(struct sockaddr_in6)));
 
-  // Really send the packet over network
-  i = _send_udp((const void*) message, length, 0, (struct sockaddr *) &addr, len);
+	// Really send the packet over network
+	i = _send_udp((const void*) message, length, 0, (struct sockaddr *) &addr, len);
 
-  if (i < 0)
-    {
+	if (i < 0)
+	{
 #if defined(_WIN32_WCE) || defined(WIN32)
-      if (WSAECONNREFUSED==WSAGetLastError())
+		if (WSAECONNREFUSED==WSAGetLastError())
 #else
-	if (ECONNREFUSED==errno)
+		if (ECONNREFUSED==errno)
 #endif
-	  {
-	    /* This can be considered as an error, but for the moment,
-	       I prefer that the application continue to try sending
-	       message again and again... so we are not in a error case.
-	       Nevertheless, this error should be announced!
-	       ALSO, UAS may not have any other options than retry always
-	       on the same port.
-	    */
-	    osip_free(message);
-	    return 1;
-	  }
-	else
-	  {
-	    /* SIP_NETWORK_ERROR; */
-	    osip_free(message);
-	    return -1;
-	  }
-    }
-  if (strncmp(message, "INVITE", 7)==0)
-    {
-      num++;
-      OSIP_TRACE(osip_trace(__FILE__,__LINE__,OSIP_INFO4,NULL,"number of message sent: %i\n", num));
-    }
+		{
+			/* This can be considered as an error, but for the moment,
+			I prefer that the application continue to try sending
+			message again and again... so we are not in a error case.
+			Nevertheless, this error should be announced!
+			ALSO, UAS may not have any other options than retry always
+			on the same port.
+			*/
+			osip_free(message);
+			return 1;
+		}
+		else
+		{
+			/* SIP_NETWORK_ERROR; */
+			osip_free(message);
+			return -1;
+		}
+	}
+	if (strncmp(message, "INVITE", 7)==0)
+	{
+		num++;
+		OSIP_TRACE(osip_trace(__FILE__,__LINE__,OSIP_INFO4,NULL,"number of message sent: %i\n", num));
+	}
 
-  osip_free(message);
-  //<MINHPQ>
-  /*
-  if (tr->ctx_type == NIST && MSG_IS_RESPONSE(sip)) {
+	osip_free(message);
+	//<MINHPQ>
+	/*
+	if (tr->ctx_type == NIST && MSG_IS_RESPONSE(sip)) {
 	__osip_transaction_set_state(tr,NIST_COMPLETED);
-  }
-  */
-  //</MINHPQ>
-  return 0;
-
+	}
+	*/
+	//</MINHPQ>
+	return 0;
 }
 
 static void cb_ict_kill_transaction(int type, osip_transaction_t *tr)
