@@ -81,24 +81,20 @@ void phmedia_video_rtpsend_callback (void *ctx, void *data, int size,
 {
 	phvstream_t *video_stream = (phvstream_t *) ctx;
 	mblk_t *m1 ;
-	static char h323header[] = {0x00, 0x40, 0x00, 0x19 };
-
-	video_stream->txtstamp = ts;
+	static char h323header[] = {0x00, 0x40, 0x00, 0x19};
 
 	m1 = rtp_session_create_packet (video_stream->ms.rtp_session,
-			RTP_FIXED_HEADER_SIZE+sizeof(h323header), (char *)data, size);
+		RTP_FIXED_HEADER_SIZE + sizeof(h323header), (char *)data, size);
 	if (!m1)
 		return;
 
-	memcpy(m1->b_rptr+RTP_FIXED_HEADER_SIZE, h323header, sizeof(h323header));
+	memcpy(m1->b_wptr+RTP_FIXED_HEADER_SIZE, h323header, sizeof(h323header));
 
 	if (eof) {
 		rtp_set_markbit(m1, 1);
 	}
 
-	rtp_session_sendm_with_ts(video_stream->ms.rtp_session, m1,
-			ts);
-
+	rtp_session_sendm_with_ts(video_stream->ms.rtp_session, m1, ts);
 }
 
 /**
