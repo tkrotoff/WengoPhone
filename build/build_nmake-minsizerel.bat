@@ -1,0 +1,1 @@
+cmake .. -DCMAKE_BUILD_TYPE=MinSizeRel -DCMAKE_VERBOSE_MAKEFILE=1 -G "NMake Makefiles"
