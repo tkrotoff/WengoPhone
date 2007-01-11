@@ -3,7 +3,7 @@ include(CMakeLists-owbuild.txt)
 project(wengophone)
 
 if (GCC41)
-	message(FATAL "WengoPhone does not work with GCC 4.1.x, please use a previous version"
+	message(FATAL "WengoPhone does not work with GCC 4.1.x, please use a previous version")
 endif (GCC41)
 
 # Global variables
