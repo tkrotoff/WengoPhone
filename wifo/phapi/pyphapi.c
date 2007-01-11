@@ -932,68 +932,80 @@ static int phApiEventsHandler(OWPL_EVENT_CATEGORY category, void* pInfo, void* p
 static void pyowpl_callback_callProgress(OWPL_CALLSTATE_INFO * info) {
 	PyObject * cInfo;
 
-	cInfo = Py_BuildValue("(iiiis)",
-		info->event,
-		info->cause,
-		info->hLine,
-		info->hCall,
-		info->szRemoteIdentity);
-    pyphapi_lock_and_call(pyowpl_callProgress, cInfo);
+	if(info) {
+		cInfo = Py_BuildValue("(iiiis)",
+			info->event,
+			info->cause,
+			info->hLine,
+			info->hCall,
+			info->szRemoteIdentity);
+		pyphapi_lock_and_call(pyowpl_callProgress, cInfo);
+	}
 }
 
 static void pyowpl_callback_registerProgress(OWPL_LINESTATE_INFO * info) {
 	PyObject *reg_info;
 
-    reg_info = Py_BuildValue("(iii)",
-		info->event,
-		info->cause,
-		info->hLine);
-    pyphapi_lock_and_call(pyphapi_registerProgress, reg_info);
+	if(info) {
+		reg_info = Py_BuildValue("(iii)",
+			info->event,
+			info->cause,
+			info->hLine);
+		pyphapi_lock_and_call(pyphapi_registerProgress, reg_info);
+	}
 }
 
 static void pyowpl_callback_messageProgress(OWPL_MESSAGE_INFO * info) {
 	PyObject * mInfo;
 
-    mInfo = Py_BuildValue("(iiisssss)",
-                    info->event,
-					info->cause,
-					info->messageId,
-					info->szContentType,
-					info->szSubContentType,
-					info->szLocalIdentity,
-					info->szRemoteIdentity,
-					info->szContent);
+	if(info) {
+		mInfo = Py_BuildValue("(iiisssss)",
+			info->event,
+			info->cause,
+			info->messageId,
+			info->szContentType,
+			info->szSubContentType,
+			info->szLocalIdentity,
+			info->szRemoteIdentity,
+			info->szContent);
 
-    pyphapi_lock_and_call(pyowpl_messageProgress, mInfo);
+		pyphapi_lock_and_call(pyowpl_messageProgress, mInfo);
+	}
 }
 
 static void pyowpl_callback_subscriptionProgress(OWPL_SUBSTATUS_INFO * info) {
 	PyObject *sInfo;
 
-    sInfo = Py_BuildValue("(iiis)",
-		info->state,
-		info->cause,
-		info->hSub,
-		info->szRemoteIdentity);
-    pyphapi_lock_and_call(pyphapi_subscriptionProgress, sInfo);
+	if(info) {
+		sInfo = Py_BuildValue("(iiis)",
+			info->state,
+			info->cause,
+			info->hSub,
+			info->szRemoteIdentity);
+		pyphapi_lock_and_call(pyphapi_subscriptionProgress, sInfo);
+	}
 }
 
 static void pyowpl_callback_onNotify(OWPL_NOTIFICATION_INFO * info) {
 	PyObject * nInfo;
 
-	nInfo = Py_BuildValue("(sss)",
-		info->event,
-		info->szRemoteIdentity,
-		info->szXmlContent);
-    pyphapi_lock_and_call(pyowpl_onNotify, nInfo);
+	if(info) {
+		nInfo = Py_BuildValue("(sss)",
+			info->event,
+			info->szRemoteIdentity,
+			info->szXmlContent);
+		pyphapi_lock_and_call(pyowpl_onNotify, nInfo);
+	}
 }
 
 static void pyowpl_callback_errorNotify(OWPL_ERROR_INFO * info) {
 	PyObject * eInfo;
 
-	eInfo = Py_BuildValue("(i)",
-		info->event);
-    pyphapi_lock_and_call(pyowpl_errorNotify, eInfo);
+	if(info) {
+		eInfo = Py_BuildValue("(i)",
+			info->event);
+		pyphapi_lock_and_call(pyowpl_errorNotify, eInfo);
+	}
 }
 
 static PyObject * PyOwplEventListenerAdd(PyObject * self, PyObject * params) {
@@ -2646,6 +2658,7 @@ static PyMethodDef pyphapi_funcs[] = {
     PY_PHAPI_FUNCTION_DECL("phGetNatInfo",          PyPhGetNatInfo),
     PY_PHAPI_FUNCTION_DECL("phConf",                PyPhConf),
 
+	PY_PHAPI_FUNCTION_DECL("owplEventListenerAdd",					PyOwplEventListenerAdd),
 	PY_PHAPI_FUNCTION_DECL("owplInit",								PyOwplInit),
 	PY_PHAPI_FUNCTION_DECL("owplShutdown",							PyOwplShutdown),
 	PY_PHAPI_FUNCTION_DECL("owplConfigSetLocalHttpProxy",           PyOwplConfigSetLocalHttpProxy),
