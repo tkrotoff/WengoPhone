@@ -38,3 +38,5 @@ option(PHAPI_SPEEXWB_REPLACES_AMRWB_HACK "Build phApi with Speex-WB/AMR-WB hack"
 option(PHAPI_SPEEXWB_REPLACES_AMRNB_HACK "Build phApi with Speex-WB/AMR-NB hack" OFF)
 option(PHAPI_SPEEXWB_REPLACES_G726WB_HACK "Build phApi with Speex-WB/G726-WB hack" ON)
 option(PHAPI_PYTHON_WRAPPER "Python wrapper for PhApi, used for unit testing" OFF)
+
+option(INSTALLER_WITH_PDB "Create NSIS installer under Windows including .pdb files" ON)

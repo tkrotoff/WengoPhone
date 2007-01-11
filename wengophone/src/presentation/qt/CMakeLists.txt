@@ -502,21 +502,23 @@ install(
 	set(APPLICATION_VERSION ${APPLICATION_VERSION})
 	set(BUILD_DIR ${TMP_BUILD_DIR})
 	set(BUILD_TYPE ${CMAKE_BUILD_TYPE})
-	set(SVN_REVISION ${SVN_REVISION})"
+	set(SVN_REVISION ${SVN_REVISION})
+	set(INSTALLER_WITH_PDB ${INSTALLER_WITH_PDB})
+	"
 )
 
-if (UNIX)
-	if (APPLE)
-		set_target_properties(${PROJECT_NAME}
-			PROPERTIES
-				COMPILE_FLAGS "-x objective-c++"
-		)
+if (APPLE)
+	set_target_properties(${PROJECT_NAME}
+		PROPERTIES
+			COMPILE_FLAGS "-x objective-c++"
+	)
 
-		install(SCRIPT CMakeLists-install-macosx.txt)
-	else (APPLE)
-		install(SCRIPT CMakeLists-install-linux.txt)
-	endif (APPLE)
-endif (UNIX)
+	install(SCRIPT CMakeLists-install-macosx.txt)
+endif (APPLE)
+
+if (LINUX)
+	install(SCRIPT CMakeLists-install-linux.txt)
+endif (LINUX)
 
 if (WIN32)
 	# NSIS installer script
