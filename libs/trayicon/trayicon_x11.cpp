@@ -174,6 +174,8 @@ void TrayIcon::TrayIconPrivate::setPixmap(const QPixmap &pm)
 		// draw the old pixmap in the center
 		pixPainter.drawPixmap((width() - pm.width())/2,
 					(height() - pm.height())/2, pm);
+		pixPainter.end();
+
 		newPix.setMask(mask);
 		pix = newPix;
 	}
