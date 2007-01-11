@@ -2,6 +2,10 @@ include(CMakeLists-owbuild.txt)
 
 project(wengophone)
 
+if (GCC41)
+	message(FATAL "WengoPhone does not work with GCC 4.1.x, please use a previous version"
+endif (GCC41)
+
 # Global variables
 set(APPLICATION_NAME WengoPhone)
 set(APPLICATION_VERSION "2.0")
