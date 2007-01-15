@@ -21,14 +21,12 @@ if (WIN32)
 		winmm
 	)
 else (WIN32)
-	if (UNIX)
-		if (NOT APPLE)
-			ow_add_private_libraries(
-				pthread
-				rt
-			)
-		endif (NOT APPLE)
-	endif (UNIX)
+	if (LINUX)
+		ow_add_private_libraries(
+			pthread
+			rt
+		)
+	endif (LINUX)
 
 	ow_add_private_definitions(
 		-DTIMER_ENABLE_CLOCK_GETTIME_IMPL

@@ -173,13 +173,13 @@ if (WIN32)
 	)
 endif (WIN32)
 
-if (UNIX AND NOT WIN32 AND NOT APPLE)
+if (LINUX)
 	if (WENGOPHONE_RESOURCEDIR_PATH)
 		ow_add_private_definitions(
 			-DOW_RESOURCEDIR='"${DATA_INSTALL_DIR}"'
 		)
 	endif (WENGOPHONE_RESOURCEDIR_PATH)
-endif (UNIX AND NOT WIN32 AND NOT APPLE)
+endif (LINUX)
 
 ow_create_binary()
 
