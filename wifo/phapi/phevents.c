@@ -217,7 +217,9 @@ owplFireNotificationEvent(OWPL_NOTIFICATION_EVENT event,
 {
 	OWPL_NOTIFICATION_INFO nInfo;
 	OWPL_NOTIFICATION_STATUS_INFO statusInfo;
+	OWPL_NOTIFICATION_MWI_INFO mwiInfo;
 	char szStatusNote[512];
+	char szMessageAccount[256];
 
 
 	memset(&nInfo, 0, sizeof(OWPL_NOTIFICATION_INFO));
@@ -225,14 +227,28 @@ owplFireNotificationEvent(OWPL_NOTIFICATION_EVENT event,
 	nInfo.event = event;
 	nInfo.cause = cause;
 	nInfo.szXmlContent = szXmlContent;
-	nInfo.szRemoteIdentity = szRemoteIdentity;
 
-	if(event == NOTIFICATION_PRESENCE && cause == NOTIFICATION_PRESENCE_ONLINE) {
-		owplNotificationPresenceGetNote(szXmlContent, szStatusNote, sizeof(szStatusNote));
+	if (event == NOTIFICATION_PRESENCE) {
 		memset(&statusInfo, 0, sizeof(OWPL_NOTIFICATION_STATUS_INFO));
-		statusInfo.nSize = sizeof(OWPL_NOTIFICATION_STATUS_INFO);
-		statusInfo.szStatusNote = szStatusNote;
+		statusInfo.szRemoteIdentity = szRemoteIdentity;
+
+		if (cause == NOTIFICATION_PRESENCE_ONLINE) {
+			owplNotificationPresenceGetNote(szXmlContent, szStatusNote, sizeof(szStatusNote));
+			statusInfo.nSize = sizeof(OWPL_NOTIFICATION_STATUS_INFO);
+			statusInfo.szStatusNote = szStatusNote;
+		}
+
 		nInfo.Data.StatusInfo = &statusInfo;
+	}
+	else if (event == NOTIFICATION_MWI) {
+		memset(&mwiInfo, 0, sizeof(OWPL_NOTIFICATION_MWI_INFO));
+		mwiInfo.nSize = sizeof(OWPL_NOTIFICATION_MWI_INFO);
+		owplNotificationMWIGetInfos(szXmlContent, 
+			szMessageAccount, sizeof(szMessageAccount), 
+			&mwiInfo.nUnreadMessageCount, &mwiInfo.nReadMessageCount,
+			&mwiInfo.nImpUnreadMessageCount, &mwiInfo.nImpReadMessageCount);
+		mwiInfo.szMessageAccount = szMessageAccount;
+		nInfo.Data.MWI = &mwiInfo;
 	}
 
 	return owplFireEvent(EVENT_CATEGORY_NOTIFY, &nInfo);
@@ -347,6 +363,65 @@ owplNotificationPresenceGetNote(const char * notify, char * buffer, size_t size)
 
 	if(strlen(strncpy(buffer, note_start_tag, length)) == 0) {
 		return OWPL_RESULT_FAILURE;
+	}
+
+	return OWPL_RESULT_SUCCESS;
+}
+
+#define MSG_ACC_HDR		"Message-Account:"
+#define VOICE_MSG_HDR	"Voice-Message:"
+
+OWPL_RESULT
+owplNotificationMWIGetInfos(const char * szContent, 
+							char * szMessAccBuff, size_t szMessAccBuffSize, 
+							int * unreadMessageCount, int * readMessageCount,
+							int * impUnreadMessageCount, int * impReadMessageCount)
+{
+	char * hdr_string;
+	char * value_begin;
+	char * value_end;
+	size_t length = 0;
+
+	if (szContent == NULL
+		|| strlen(szContent) == 0
+		|| szMessAccBuff == 0
+		|| szMessAccBuffSize == 0)
+	{
+		return OWPL_RESULT_INVALID_ARGS;
+	}
+
+	memset(szMessAccBuff, 0, szMessAccBuffSize);
+
+	if ((hdr_string = strstr(szContent, MSG_ACC_HDR)) == NULL) {
+		return OWPL_RESULT_FAILURE;
+	}
+	else {
+		for (value_begin = (hdr_string + strlen(MSG_ACC_HDR));
+			*value_begin && (*value_begin == ' ' ||  *value_begin == '\t');
+			value_begin++);
+
+		if ((value_end = strstr(value_begin, "\r\n")) == NULL) {
+			return OWPL_RESULT_FAILURE;
+		}
+	
+		strncpy(szMessAccBuff, value_begin, value_end - value_begin);
+	}
+
+	if ((hdr_string = strstr(szContent, VOICE_MSG_HDR)) == NULL) {
+		return OWPL_RESULT_FAILURE;
+	}
+	else {
+		for (value_begin = (hdr_string + strlen(VOICE_MSG_HDR));
+			*value_begin && (*value_begin == ' ' ||  *value_begin == '\t');
+			value_begin++);
+	
+		sscanf(value_begin, "%d/%d", unreadMessageCount, readMessageCount);
+		
+		if ((value_begin = strchr(value_begin, '(')) == NULL) {
+			return OWPL_RESULT_FAILURE;
+		}
+
+		sscanf(value_begin, "(%d/%d)", impUnreadMessageCount, impReadMessageCount);
 	}
 
 	return OWPL_RESULT_SUCCESS;

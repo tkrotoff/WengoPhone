@@ -432,6 +432,7 @@ typedef enum {
 typedef struct {
 	size_t    nSize ;               /**< The size of this structure. */
 	const char * szStatusNote;		/**< The note specifying a more accurate status. */
+	const char * szRemoteIdentity;	/**< The identity of the remote party of this notification. */
 } OWPL_NOTIFICATION_STATUS_INFO;
 
 typedef struct {
@@ -440,6 +441,11 @@ typedef struct {
 
 typedef struct {
 	size_t    nSize ;               /**< The size of this structure. */
+	int nUnreadMessageCount;		/**< The number of unread message. */
+	int nReadMessageCount;			/**< The number of read message. */
+	int nImpUnreadMessageCount;		/**< The number of important unread message. */
+	int nImpReadMessageCount;		/**< The number of important read message. */
+	const char * szMessageAccount;	/**< The account that these previous infos provided from */
 } OWPL_NOTIFICATION_MWI_INFO;
 
 typedef struct {
@@ -447,9 +453,9 @@ typedef struct {
 	OWPL_NOTIFICATION_EVENT	event;	/**< Subscription event enum code.
                                          Identifies the subsciption event. */
 	OWPL_NOTIFICATION_CAUSE cause;	/**< Notification cause enum code.
-										 Identifies the cause of the notification event */
+										 Identifies the cause of the notification event */	
 	const char * szXmlContent;		/**< The notify XML content */
-	const char * szRemoteIdentity;	/**< The identity of the remote party of this notification. */
+
 	union {
 		OWPL_NOTIFICATION_STATUS_INFO * StatusInfo;
 		OWPL_NOTIFICATION_WATCHER_INFO * WatcherInfo;
@@ -616,6 +622,12 @@ owplNotificationPresenceGetStatus(const char * notify, char * buffer, size_t siz
 
 OWPL_RESULT
 owplNotificationPresenceGetNote(const char * notify, char * buffer, size_t size);
+
+OWPL_RESULT
+owplNotificationMWIGetInfos(const char * szContent, 
+							char * szMessAccBuff, size_t szMessAccBuffSize, 
+							int * unreadMessageCount, int * readMessageCount,
+							int * impUnreadMessageCount, int * impReadMessageCount);
 
 /**
  * Creates a notification state structure and sends it to all subscribers

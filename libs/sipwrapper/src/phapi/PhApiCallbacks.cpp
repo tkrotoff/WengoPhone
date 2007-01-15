@@ -788,13 +788,6 @@ void PhApiCallbacks::subscriptionProgress(OWPL_SUBSTATUS_INFO * info) {
 
 void PhApiCallbacks::onNotify(OWPL_NOTIFICATION_INFO * info) {
 	PhApiWrapper * p = PhApiWrapper::PhApiWrapperHack;
-	std::string buddy = computeContactId(info->szRemoteIdentity);
-	
-	if (buddy.empty()) {
-		return;
-	}
-	_subscribedContacts.insert(buddy);
-	
 	TiXmlDocument doc;
 	doc.Parse(info->szXmlContent);
 	TiXmlHandle docHandle(&doc);
@@ -803,10 +796,17 @@ void PhApiCallbacks::onNotify(OWPL_NOTIFICATION_INFO * info) {
 	TiXmlElement * watcherinfoElement = NULL;
 	TiXmlElement * watcherElement = NULL;
 	std::string note;
+	std::string buddy;
 
 	switch(info->event) {
 		//A buddy presence
 		case NOTIFICATION_PRESENCE :
+			buddy = computeContactId(info->Data.StatusInfo->szRemoteIdentity);
+
+			if (buddy.empty()) {
+				return;
+			}
+			_subscribedContacts.insert(buddy);
 			switch(info->cause) {
 				case NOTIFICATION_PRESENCE_ONLINE :
 					note = std::string(info->Data.StatusInfo->szStatusNote);
@@ -893,12 +893,16 @@ void PhApiCallbacks::onNotify(OWPL_NOTIFICATION_INFO * info) {
 			}
 			break;*/
 
+		// TODO: To complete
+		case NOTIFICATION_MWI :
+			break;
+
 		case NOTIFICATION_UNKNOWN :
-			LOG_FATAL("unknown message event from="+ std::string(info->szRemoteIdentity) +" content=" + std::string(info->szXmlContent));
+			LOG_FATAL("unknown message event with content=" + std::string(info->szXmlContent));
 			break;
 
 		default :
-			LOG_FATAL("unknown message event from="+ std::string(info->szRemoteIdentity) +" content=" + std::string(info->szXmlContent));
+			LOG_FATAL("unknown message event with content=" + std::string(info->szXmlContent));
 			break;
 	}
 }
