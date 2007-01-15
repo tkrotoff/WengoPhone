@@ -29,8 +29,7 @@ if (WIN32)
 	)
 endif (WIN32)
 
-if (UNIX AND NOT WIN32)
-	
+if (UNIX)
 	ow_add_public_definitions(
 			-DHAVE_FCNTL_H
 			-DHAVE_SYS_TIME_H
@@ -42,13 +41,15 @@ if (UNIX AND NOT WIN32)
 			-DHAVE_PTHREAD
 			-DHAVE_SYS_SEM_H
 		)
-	else (APPLE)
+	endif (APPLE)
+
+	if (LINUX)
 		ow_add_private_definitions(
 			-DHAVE_PTHREAD
 			-DHAVE_SEMAPHORE_H
 		)
-	endif (APPLE)
-endif (UNIX AND NOT WIN32)
+	endif (LINUX)
+endif (UNIX)
 
 ow_add_sources(
 	src/osipparser2/osip_accept.c

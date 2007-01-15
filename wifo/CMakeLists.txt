@@ -1,31 +1,32 @@
 # opt flags for phapi and plugins
 if (MSVC)
+	# TODO this has to be reworked
+	# with comments explaining each flag
 	set(PHAPI_OPTIMIZATION_FLAGS
 		#/Ox
 		#/Ob2
 		/Oi
 		/Ot
 		/Oy
-		/G7
-		/GX-
+		#/G7 unknow option under Visual C++ 2005
+		#/GX- deprecated
+		/EHs-c-
 		/GR-
 		/arch:SSE
 	)
 else (MSVC)
-	# TODO: we need a flag on other platforms
+	# TODO we need a flag on other platforms
 	# maybe unroll-loops is nice to have ;)
 	set(PHAPI_OPTIMIZATION_FLAGS
 		-funroll-loops
 	)
 endif (MSVC)
 
-if (WIN32)
-	if (MSVC)
-		subdirs(
-			phapi/msdirent
-		)
-	endif (MSVC)
-endif (WIN32)
+if (MSVC)
+	subdirs(
+		phapi/msdirent
+	)
+endif (MSVC)
 
 subdirs(
 	httptunnel

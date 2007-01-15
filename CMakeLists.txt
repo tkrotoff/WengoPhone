@@ -14,6 +14,16 @@ set(APPLICATION_VERSION "2.0")
 include(DefineWengoOptions.cmake)
 include(DefineInstallationPaths.cmake)
 
+if (MSVC80)
+	# Disable secure CRT warnings under Visual C++ 2005
+	# See http://msdn.microsoft.com/vstudio/tour/vs2005_guided_tour/VS2005pro/Framework/CPlusSafeLibraries.htm
+	# Disable deprecated POSIX-compliant functions warnings under Visual C++ 2005
+	add_definitions(
+		-D_CRT_SECURE_NO_DEPRECATE
+		-D_CRT_NONSTDC_NO_DEPRECATE
+	)
+endif (MSVC80)
+
 subdirs(
 	libs/3rdparty
 
