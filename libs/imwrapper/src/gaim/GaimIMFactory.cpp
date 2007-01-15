@@ -24,8 +24,8 @@
 	#include <windows.h>
 #endif
 
-extern "C" {
 #include "glib.h"
+
 #include "gaim/internal.h"
 #include "gaim/core.h"
 #include "gaim/eventloop.h"
@@ -36,7 +36,7 @@ extern "C" {
 #include "gaim/conversation.h"
 #include "gaim/account.h"
 #include "gaim/privacy.h"
-}
+
 
 #include "GaimIMFactory.h"
 
