@@ -765,12 +765,12 @@ dialog_fill_route_set(osip_dialog_t *dialog, osip_message_t *request)
   char *last_route;
   /* AMD bug: fixed 17/06/2002 */
 
-  if (dialog->type==CALLER)
+/*  if (dialog->type==CALLER)
     {
       pos = osip_list_size(&dialog->route_set)-1;
       route = (osip_route_t*)osip_list_get(&dialog->route_set, pos);
     }
-  else
+  else*/
     route = (osip_route_t*)osip_list_get(&dialog->route_set, 0);
     
   osip_uri_uparam_get_byname(route->url, "lr", &lr_param);
@@ -789,9 +789,9 @@ dialog_fill_route_set(osip_dialog_t *dialog, osip_message_t *request)
 	  route = osip_list_get(&dialog->route_set, pos);
 	  i = osip_route_clone(route, &route2);
 	  if (i!=0) return -1;
-	  if (dialog->type==CALLER)
+/*	  if (dialog->type==CALLER)
 	    osip_list_add(&request->routes, route2, 0);
-	  else
+	  else*/
 	    osip_list_add(&request->routes, route2, -1);
 	  pos++;
 	}
