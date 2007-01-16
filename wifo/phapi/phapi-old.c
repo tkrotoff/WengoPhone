@@ -4158,7 +4158,7 @@ void ph_reg_progress(eXosip_event_t *je)
 		}
 
 		if(mask & PH_UNREG_MASK) {
-			owplFireLineEvent(vlid, LINESTATE_REGISTERED, LINESTATE_UNREGISTERED_NORMAL, 0);
+			owplFireLineEvent(vlid, LINESTATE_UNREGISTERED, LINESTATE_UNREGISTERED_NORMAL, 0);
 		} else {
 			owplFireLineEvent(vlid, LINESTATE_REGISTERED, LINESTATE_REGISTERED_NORMAL, 0);
 		}
