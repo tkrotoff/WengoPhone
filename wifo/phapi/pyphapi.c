@@ -41,7 +41,6 @@
 #include <windows.h>
 #include <shlwapi.h>
 
-
 static void (*userNotify)(char *buf, int size);
 LONG unhandledExceptionFilter(struct _EXCEPTION_POINTERS * pExceptionInfo) {
     userNotify(NULL, NULL);
@@ -50,12 +49,10 @@ LONG unhandledExceptionFilter(struct _EXCEPTION_POINTERS * pExceptionInfo) {
 
 #endif
 
-
 #define MAX_URI_LENGTH	512
 #define MAX_IP_LENGTH	64
 #define MAX_PASSWORD_LENGTH	64
 #define MAX_USERNAME_LENGTH	64
-
 
 #include <Python.h>
 #include <phapi.h>
@@ -105,8 +102,8 @@ static PyObject *pyphapi_frameDisplay = NULL;
  */
 static PyObject * pyphapi(PyObject* self) {
     PyEval_InitThreads();
-
-    return Py_BuildValue("s","");
+   
+    return Py_BuildValue("s","Hello");
 }
 
 /*****************************************************************************
@@ -764,12 +761,14 @@ static PyObject * PyPhSetCallbacks(PyObject *self, PyObject *args) {
  */
 void pyphapi_lock_and_call(PyObject *callback, PyObject *args) {
     PyGILState_STATE gstate;
-
+    
     if (callback) {
         gstate = PyGILState_Ensure();
         PyEval_CallObject(callback, args);
+
         Py_DECREF(args);
-        PyGILState_Release(gstate);
+	PyGILState_Release(gstate);
+	
     }
 }
 
@@ -1012,6 +1011,7 @@ static void pyowpl_callback_errorNotify(OWPL_ERROR_INFO * info) {
 }
 
 static PyObject * PyOwplEventListenerAdd(PyObject * self, PyObject * params) {
+    PyObject *result = NULL;
     PyObject * callback_callProgress;
     PyObject * callback_registerProgress;
     PyObject * callback_messageProgress;
@@ -1030,37 +1030,37 @@ static PyObject * PyOwplEventListenerAdd(PyObject * self, PyObject * params) {
 		&callback_errorNotify);
 
 	if(!pycode) {
-		return Py_None;
+		return NULL;
 	}
 
 	if (!PyCallable_Check(callback_callProgress)) {
 		PyErr_SetString(PyExc_TypeError, "parameter must be callable");
-		return Py_None;
+		return NULL;
 	}
 
 	if (!PyCallable_Check(callback_registerProgress)) {
 		PyErr_SetString(PyExc_TypeError, "parameter must be callable");
-		return Py_None;
+		return NULL;
 	}
 
 	if (!PyCallable_Check(callback_messageProgress)) {
 		PyErr_SetString(PyExc_TypeError, "parameter must be callable");
-		return Py_None;
+		return NULL;
 	}
 
 	if (!PyCallable_Check(callback_subscriptionProgress)) {
 		PyErr_SetString(PyExc_TypeError, "parameter must be callable");
-		return Py_None;
+		return NULL;
 	}
 
 	if (!PyCallable_Check(callback_onNotify)) {
 		PyErr_SetString(PyExc_TypeError, "parameter must be callable");
-		return Py_None;
+		return NULL;
 	}
 
 	if (!PyCallable_Check(callback_errorNotify)) {
 		PyErr_SetString(PyExc_TypeError, "parameter must be callable");
-		return Py_None;
+		return NULL;
 	}
 
 	Py_XINCREF(callback_callProgress);
@@ -1082,6 +1082,7 @@ static PyObject * PyOwplEventListenerAdd(PyObject * self, PyObject * params) {
 	Py_XDECREF(pyowpl_errorNotify);
 
 	Py_INCREF(Py_None);
+	result = Py_None;
 
 	pyowpl_callProgress = callback_callProgress;
 	pyowpl_registerProgress = callback_registerProgress;
@@ -1091,8 +1092,8 @@ static PyObject * PyOwplEventListenerAdd(PyObject * self, PyObject * params) {
 	pyowpl_errorNotify = callback_errorNotify;
 
 	owplEventListenerAdd(phApiEventsHandler, NULL);
-
-	return Py_None;
+	
+	return result;
 }
 
 /**
@@ -2618,7 +2619,7 @@ static PyObject * PyPhCfgSetI(PyObject *self, PyObject *params) {
  * @brief Declaration of the module API table
  */
 static PyMethodDef pyphapi_funcs[] = {
-    { "pyphapi",(PyCFunction) pyphapi, METH_NOARGS,  "Python Module of phApi"},
+    /*{ "pyphapi",(PyCFunction) pyphapi, METH_NOARGS,  "Python Module of phApi"},*/
     PY_PHAPI_FUNCTION_DECL("phInit",                PyPhInit),
     PY_PHAPI_FUNCTION_DECL("phAddAuthInfo",         PyPhAddAuthInfo),
     PY_PHAPI_FUNCTION_DECL("phAddVline",            PyPhAddVline),
@@ -2664,6 +2665,7 @@ static PyMethodDef pyphapi_funcs[] = {
 	PY_PHAPI_FUNCTION_DECL("owplEventListenerAdd",					PyOwplEventListenerAdd),
 	PY_PHAPI_FUNCTION_DECL("owplInit",								PyOwplInit),
 	PY_PHAPI_FUNCTION_DECL("owplShutdown",							PyOwplShutdown),
+	PY_PHAPI_FUNCTION_DECL("owplEventListenerAdd",					PyOwplEventListenerAdd),
 	PY_PHAPI_FUNCTION_DECL("owplConfigSetLocalHttpProxy",           PyOwplConfigSetLocalHttpProxy),
 	PY_PHAPI_FUNCTION_DECL("owplConfigSetTunnel",					PyOwplConfigSetTunnel),
 	PY_PHAPI_FUNCTION_DECL("owplConfigSetNat",						PyOwplConfigSetNat),
@@ -2730,4 +2732,5 @@ PyMODINIT_FUNC initpyphapi(void) {
     SetUnhandledExceptionFilter((LPTOP_LEVEL_EXCEPTION_FILTER)unhandledExceptionFilter);
 #endif
     Py_InitModule3("pyphapi", pyphapi_funcs, "");
+    PyEval_InitThreads();
 }
