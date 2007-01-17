@@ -10,8 +10,14 @@ RMDir "$INSTDIR\icons\"
 Delete "$INSTDIR\lang\*"
 RMDir "$INSTDIR\lang\"
 
+Delete "$INSTDIR\sounds\tones\default\*"
+RMDir "$INSTDIR\sounds\tones\default\"
+
 Delete "$INSTDIR\sounds\tones\jungle\*"
 RMDir "$INSTDIR\sounds\tones\jungle\"
+
+Delete "$INSTDIR\sounds\tones\jungle_svg\*"
+RMDir "$INSTDIR\sounds\tones\jungle_svg\"
 
 Delete "$INSTDIR\sounds\tones\*"
 RMDir "$INSTDIR\sounds\tones\"

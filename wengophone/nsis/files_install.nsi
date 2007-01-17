@@ -1,18 +1,13 @@
 Delete "$INSTDIR\qtwengophone.exe"
 Delete "$INSTDIR\*.dll"
 Delete "$INSTDIR\styles\*.dll"
+Delete "$INSTDIR\sounds\tones\default\*"
 Delete "$INSTDIR\sounds\tones\jungle\*"
+Delete "$INSTDIR\sounds\tones\jungle_svg\*"
 Delete "$INSTDIR\sounds\tones\*"
 Delete "$INSTDIR\sounds\*"
 Delete "$INSTDIR\lang\*"
 Delete "$INSTDIR\webpages\*"
-
-/** Debug or release mode. */
-!ifdef DEBUG
-	!include "files_install_debug.nsi"
-!else
-	!include "files_install_release.nsi"
-!endif
 
 SetOutPath "$INSTDIR"
 File "${BUILD_DIR}\qtwengophone.exe"
