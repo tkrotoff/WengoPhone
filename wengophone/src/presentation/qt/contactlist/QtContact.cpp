@@ -48,7 +48,7 @@ QtContact::QtContact(const std::string & contactId, CWengoPhone & cWengoPhone, Q
 	_openStatus = false;
 }
 
-void QtContact::paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex & ) {
+void QtContact::paint(QPainter * painter, const QStyleOptionViewItem & option, const QModelIndex &) {
 	QMutexLocker locker(&_mutex);
 
 	QtContactPixmap * spx = QtContactPixmap::getInstance();

@@ -26,8 +26,12 @@
 #include <util/Logger.h>
 
 QtChatAvatarWidget::QtChatAvatarWidget(QWidget * parent, const QString & id,
-	QPixmap picture, const QString & nickname, const QString & contactId, OWPictureMode pmode, NicknameMode nmode)
-	: QWidget(parent), _pictureMode(pmode), _nicknameMode(nmode), _contactId(id) {
+	const QPixmap & picture, const QString & nickname, const QString & contactId,
+	PictureMode pictureMode, NicknameMode nicknameMode)
+	: QWidget(parent),
+	_pictureMode(pictureMode),
+	_nicknameMode(nicknameMode),
+	_contactId(id) {
 
 	_ui.setupUi(this);
 	//setupPixmap(picture);
@@ -49,34 +53,34 @@ void QtChatAvatarWidget::setupPixmap(QPixmap pixmap) {
 	QPainter painter(&background);
 
 	if (!pixmap.isNull()) {
-			switch (_pictureMode) {
-			case HUGE:
-				painter.drawPixmap(0, 0, pixmap.scaled(96, 96, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
-				_ui.pictureLabel->resize(96, 96);
-				setMinimumSize(96, 96);
-				break;
-			case BIG:
-				painter.drawPixmap(5, 5, pixmap.scaled(60, 60, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
-				_ui.pictureLabel->resize(70, 70);
-				setMinimumSize(70, 70);
-				break;
-			case MEDIUM:
-				painter.drawPixmap(0, 0, pixmap.scaled(48, 48, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
-				_ui.pictureLabel->resize(48, 48);
-				setMinimumSize(48, 48);
-				break;
-			case SMALL:
-				painter.drawPixmap(0, 0, pixmap.scaled(24, 24, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
-				_ui.pictureLabel->resize(24, 24);
-				setMinimumSize(24, 24);
-				break;
-			case TINY:
-				painter.drawPixmap(0, 0, pixmap.scaled(12, 12, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
-				_ui.pictureLabel->resize(12, 12);
-				setMinimumSize(12, 12);
-				break;
-			default:
-				LOG_WARN("unknown picture mode: " + String::fromNumber(_pictureMode));
+		switch (_pictureMode) {
+		case PictureModeHuge:
+			painter.drawPixmap(0, 0, pixmap.scaled(96, 96, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+			_ui.pictureLabel->resize(96, 96);
+			setMinimumSize(96, 96);
+			break;
+		case PictureModeBig:
+			painter.drawPixmap(5, 5, pixmap.scaled(60, 60, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+			_ui.pictureLabel->resize(70, 70);
+			setMinimumSize(70, 70);
+			break;
+		case PictureModeMedium:
+			painter.drawPixmap(0, 0, pixmap.scaled(48, 48, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+			_ui.pictureLabel->resize(48, 48);
+			setMinimumSize(48, 48);
+			break;
+		case PictureModeSmall:
+			painter.drawPixmap(0, 0, pixmap.scaled(24, 24, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+			_ui.pictureLabel->resize(24, 24);
+			setMinimumSize(24, 24);
+			break;
+		case PictureModeTiny:
+			painter.drawPixmap(0, 0, pixmap.scaled(12, 12, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+			_ui.pictureLabel->resize(12, 12);
+			setMinimumSize(12, 12);
+			break;
+		default:
+			LOG_FATAL("unknown picture mode=" + String::fromNumber(_pictureMode));
 		}
 	} else {
 		painter.drawPixmap(5, 5, defaultAvatar.scaled(60, 60, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
@@ -93,7 +97,7 @@ void QtChatAvatarWidget::setupNickname(const QString & nickname) {
 	QFontMetrics fontMetrics(_ui.nicknameLabel->font());
 	int width = 60;
 	QString temp;
-	for(int i = 0; i < nickname.length(); i++) {
+	for (int i = 0; i < nickname.length(); i++) {
 		if (fontMetrics.width(temp) > width) {
 			break;
 		}

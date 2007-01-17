@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2005  Wengo
+ * Copyright (C) 2004-2006  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,7 @@
  */
 
 #include "QtChatWidget.h"
+
 #include "QtChatTabWidget.h"
 #include "QtChatEditEventManager.h"
 #include "QtChatEditActionBarWidget.h"
@@ -27,6 +28,11 @@
 #include "QtChatAvatarFrame.h"
 #include "chatroom/QtChatRoomInviteDlg.h"
 #include "emoticons/QtEmoticonsWidget.h"
+
+#include <presentation/qt/QtWengoPhone.h>
+#include <presentation/qt/contactlist/QtContactList.h>
+#include <presentation/qt/contactlist/QtContactListManager.h>
+#include <presentation/qt/filetransfer/QtFileTransfer.h>
 
 #include <coipmanager/CoIpManager.h>
 #include <filesessionmanager/SendFileSession.h>
@@ -38,10 +44,6 @@
 #include <control/CWengoPhone.h>
 #include <control/contactlist/CContactList.h>
 #include <control/profile/CUserProfile.h>
-#include <presentation/qt/QtWengoPhone.h>
-#include <presentation/qt/contactlist/QtContactList.h>
-#include <presentation/qt/contactlist/QtContactListManager.h>
-#include <presentation/qt/filetransfer/QtFileTransfer.h>
 
 #include <imwrapper/Account.h>
 #include <imwrapper/EnumIMProtocol.h>
@@ -585,7 +587,7 @@ bool QtChatWidget::canDoFileTransfer() {
 		if ( (imContact.getPresenceState() != EnumPresenceState::PresenceStateOffline) &&
 				(imContact.getPresenceState() != EnumPresenceState::PresenceStateUnknown) &&
 				(imContact.getPresenceState() != EnumPresenceState::PresenceStateUnavailable)) {
-	
+
 				return true;
 		}
 	}

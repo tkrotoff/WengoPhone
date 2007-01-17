@@ -33,24 +33,34 @@ class QtChatAvatarWidget : public QWidget {
 	Q_OBJECT
 public:
 
-	enum OWPictureMode {
-		HUGE,			// 96x96
-		BIG,			// 60x60
-		MEDIUM,			// 48x48
-		SMALL,			// 24x24
-		TINY,			// 12x12
+	enum PictureMode {
+		/** 96x96. */
+		PictureModeHuge,
+
+		/** 60x60. */
+		PictureModeBig,
+
+		/** 48x48. */
+		PictureModeMedium,
+
+		/** 24x24. */
+		PictureModeSmall,
+
+		/** 12x12. */
+		PictureModeTiny,
 	};
 
 	enum NicknameMode {
-		RIGHT,
-		LEFT,
-		TOP,
-		BOTTOM,
-		NONE,
+		NicknameModeRight,
+		NicknameModeLeft,
+		NicknameModeTop,
+		NicknameModeBottom,
+		NicknameModeNone,
 	};
 
-	QtChatAvatarWidget(QWidget * parent, const QString & id, QPixmap picture,
-		const QString & nickname, const QString & contactId, OWPictureMode pmode = SMALL, NicknameMode nmode = NONE);
+	QtChatAvatarWidget(QWidget * parent, const QString & id, const QPixmap & picture,
+		const QString & nickname, const QString & contactId,
+		PictureMode pictureMode = PictureModeSmall, NicknameMode nicknameMode = NicknameModeNone);
 
 	const QString getContactId() {
 		return _contactId;
@@ -64,7 +74,7 @@ private:
 
 	void setupNickname(const QString & nickname);
 
-	OWPictureMode _pictureMode;
+	PictureMode _pictureMode;
 
 	NicknameMode _nicknameMode;
 

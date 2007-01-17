@@ -35,7 +35,7 @@
  *
  * - Removes the ugly toolbar bottom line
  * - Changes QToolButton style under MacOSX
- * - Removes the ugly frame/marging around the status bar icons under Windows
+ * - Removes the ugly frame/marging around the status bar icons under Windows with classic theme
  *
  * @author Tanguy Krotoff
  */
