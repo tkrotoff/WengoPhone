@@ -656,13 +656,13 @@ owplLineGetProxy(const OWPL_LINE hLine,
 		n += strlen(vl->proxy); // +1 for \0 at the end of the string
 	}
 	
-	if (n > *nBuffer) {
+	if (n >= *nBuffer) {
 		*nBuffer = n;
 		return OWPL_RESULT_INSUFFICIENT_BUFFER;
 	}
 	if (szBuffer) {		
 		strncpy(szBuffer, vl->proxy, n);
-		
+		szBuffer[n] = '\0';
 	}
 	return OWPL_RESULT_SUCCESS;
 }
@@ -695,13 +695,13 @@ owplLineGetLocalUserName(const OWPL_LINE hLine,
 		n += strlen(vl->username); // +1 for \0 at the end of the string
 	}
 	
-	if (n > *nBuffer) {
+	if (n >= *nBuffer) {
 		*nBuffer = n;
 		return OWPL_RESULT_INSUFFICIENT_BUFFER;
 	}
 	if (szLocalUserName) {		
 		strncpy(szLocalUserName, vl->username, n);
-		
+		szLocalUserName[n] = '\0';
 	}
 	return OWPL_RESULT_SUCCESS;
 }
@@ -1248,7 +1248,7 @@ MY_DLLEXPORT OWPL_RESULT owplPresencePublish(OWPL_LINE  hLine,
 	phVLine * vl = NULL;
 
 	// save infos for later user from a timer event
-	if((vl = ph_vlid2vline(hLine)) != NULL) {
+	if((vl = ph_valid_vlid(hLine)) != NULL) {
 		vl->publishInfo.onlineState = Online;
 		if(szStatus != NULL) {
 			vl->publishInfo.szStatus = strdup(szStatus);
@@ -1257,6 +1257,8 @@ MY_DLLEXPORT OWPL_RESULT owplPresencePublish(OWPL_LINE  hLine,
 		// nine minutes timeout i.e. 540000ms
 		vl->publishInfo.publishTimeout = 540000;
 		vl->publishInfo.lastPublishTime = time(0);
+	} else {
+		return OWPL_RESULT_FAILURE;
 	}
 
 	owplLineGetUri(hLine, UriBuf, &n);
