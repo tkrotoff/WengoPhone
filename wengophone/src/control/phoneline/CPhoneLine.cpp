@@ -52,7 +52,9 @@ int CPhoneLine::makeCall(const std::string & phoneNumber) {
 }
 
 void CPhoneLine::stateChangedEventHandler(IPhoneLine & sender, EnumPhoneLineState::PhoneLineState state) {
-	_pPhoneLine->stateChangedEvent(state);
+	if (_pPhoneLine) {
+		_pPhoneLine->stateChangedEvent(state);
+	}
 }
 
 void CPhoneLine::phoneCallCreatedEventHandler(IPhoneLine & sender, PhoneCall & phoneCall) {
