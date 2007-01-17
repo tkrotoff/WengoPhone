@@ -122,6 +122,29 @@ Content-Length: 0\r\n\r\n"
 
 using namespace std;
 
+/**
+ * Set the SO_REUSEADDR option on sock, to avoid "Address already in use"
+ * errors.
+ */
+static int allow_address_reuse(Socket sock) {
+	int tmp = 1;
+#ifdef OS_WIN32
+	// On Win32, prototype is setsockopt(SOCKET, int, int, const char*, int)
+	return setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, (char*)&tmp, sizeof(tmp));
+#else
+	int optval;
+
+	// SO_REUSEPORT is only defined on BSD
+	// See Qt implementation: qnativesocketengine_unix.cpp
+#ifdef SO_REUSEPORT
+	optval = SO_REUSEPORT;
+#else
+	optval = SO_REUSEADDR;
+#endif
+	// On Unix, prototype is setsockopt(int, int, int, const void*, socklen_t)
+	return setsockopt(sock, SOL_SOCKET, optval, (void*)&tmp, sizeof(tmp));
+#endif
+}
 
 typedef struct	HttpProxy_s
 {
@@ -409,6 +432,11 @@ NETLIB_BOOLEAN is_local_udp_port_used(const char *itf, int port)
 		return NETLIB_TRUE;
 	}
 
+	if (allow_address_reuse(localsock) < 0) {
+		closesocket(localsock);
+		return NETLIB_TRUE;
+	}
+
 	if (bind(localsock, (struct sockaddr *)&raddr, sizeof (raddr)) < 0) {
 		closesocket(localsock);
 		return NETLIB_TRUE;
@@ -434,6 +462,11 @@ int get_local_free_udp_port(const char *itf)
 	raddr.sin_family = AF_INET;
 
 	if ((localsock = socket(PF_INET, SOCK_DGRAM, 0)) == -1) {
+		return -1;
+	}
+
+	if (allow_address_reuse(localsock) < 0) {
+		closesocket(localsock);
 		return -1;
 	}
 
@@ -534,6 +567,10 @@ NETLIB_BOOLEAN udp_sip_ping(const char *sip_server, int sip_port, int local_port
 
 	sock = socket(PF_INET, SOCK_DGRAM, 0);
 	if (sock <= 0) {
+		return -1;
+	}
+	if (allow_address_reuse(sock) < 0) {
+		closesocket(sock);
 		return -1;
 	}
 

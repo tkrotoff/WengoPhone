@@ -767,7 +767,7 @@ void pyphapi_lock_and_call(PyObject *callback, PyObject *args) {
         PyEval_CallObject(callback, args);
 
         Py_DECREF(args);
-	PyGILState_Release(gstate);
+		PyGILState_Release(gstate);
 	
     }
 }
@@ -2662,7 +2662,6 @@ static PyMethodDef pyphapi_funcs[] = {
     PY_PHAPI_FUNCTION_DECL("phGetNatInfo",          PyPhGetNatInfo),
     PY_PHAPI_FUNCTION_DECL("phConf",                PyPhConf),
 
-	PY_PHAPI_FUNCTION_DECL("owplEventListenerAdd",					PyOwplEventListenerAdd),
 	PY_PHAPI_FUNCTION_DECL("owplInit",								PyOwplInit),
 	PY_PHAPI_FUNCTION_DECL("owplShutdown",							PyOwplShutdown),
 	PY_PHAPI_FUNCTION_DECL("owplEventListenerAdd",					PyOwplEventListenerAdd),

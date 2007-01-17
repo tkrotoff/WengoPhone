@@ -512,8 +512,9 @@ static int cancel_match_invite(osip_transaction_t *invite, osip_message_t *cance
 
 	osip_via_param_get_byname (invite->topvia, "branch", &br);
 	via = osip_list_get(&cancel->vias, 0);
-	if (via==NULL) 
+	if (via==NULL) {
 		return -1; /* request without via??? */
+	}
 	osip_via_param_get_byname (via, "branch", &br2);
 	if (br != NULL && br2 == NULL)
 		return -1;
@@ -929,7 +930,7 @@ static void eXosip_process_new_invite(osip_transaction_t *transaction, osip_even
 	ADD_ELEMENT(jc->c_dialogs, jd);
 
 	osip_transaction_set_your_instance(transaction, __eXosip_new_jinfo(jc, jd, NULL, NULL));
-
+	//TODO: This is a hack in order not to send 101 dialog establisment message???
 	//  evt_answer = osip_new_outgoing_sipmessage(answer);
 	//  evt_answer->transactionid = transaction->transactionid;
 #ifdef AUTO_RING /* default is now to not send a 180 Ringing */
@@ -971,6 +972,7 @@ static void eXosip_process_new_invite(osip_transaction_t *transaction, osip_even
 
 	eXosip_update();
 	jc->c_inc_tr = transaction;
+	//TODO: This is a hack in order not to send 101 dialog establisment message???
 	//  osip_transaction_add_event(transaction, evt_answer);
 
 	/* be sure the invite will be processed

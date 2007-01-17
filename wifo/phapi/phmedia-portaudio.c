@@ -82,7 +82,9 @@ struct ph_audio_driver ph_pa_driver = {
   NULL,
   pa_stream_get_out_space,
   pa_stream_get_avail_data,
-  pa_stream_close
+  pa_stream_close,
+  NULL,
+  NULL
 };
 
 static int 
@@ -193,7 +195,7 @@ PaStream *pa_dev_open(phastream_t *as, int output, char *name, int rate, int fra
     name += 3;
   }
 
-  if (in = strstr(name,"IN="))
+  if ((in = strstr(name,"IN=")) != NULL)
   {
     inputParameters.device = atoi(in + 3);
   }
