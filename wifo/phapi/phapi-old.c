@@ -3512,7 +3512,7 @@ ph_call_replaces(eXosip_event_t *je)
 			info.event = phCALLREPLACED;
 			info.u.remoteUri = je->remote_uri;
 			info.localUri = je->local_uri;
-			info.newcid =  je->cid;
+			info.newcid = ca->cid;
 
 			info.vlid = oldca->vlid;
 
@@ -3529,12 +3529,9 @@ ph_call_replaces(eXosip_event_t *je)
 
 			ph_call_media_stop(oldca);
 
-			phAcceptCall(je->cid);
-
-
+			phAcceptCall(ca->cid);
 		}
 	}
-
 }
 
 
@@ -3627,12 +3624,10 @@ ph_call_answered(eXosip_event_t *je)
 		}
 	}
 
-
 	if (rca)
 	{
 		ph_refer_notify(rca->rdid, je->status_code, "Answered", 1);
 	}
-
 }
 
 
@@ -3679,7 +3674,6 @@ ph_call_proceeding(eXosip_event_t *je)
 	{
 		ph_refer_notify(rca->rdid, je->status_code, "Proceeding", 0);
 	}
-
 }
 
 void
@@ -3729,10 +3723,10 @@ ph_call_redirected(eXosip_event_t *je)
 	ph_release_call(ca);
 
 	if(phcb->callProgress) {
-		phcb->callProgress(je->cid, &info);
+		phcb->callProgress(ca->cid, &info);
 	}
 
-	owplFireCallEvent(je->cid,
+	owplFireCallEvent(ca->cid,
 		CALLSTATE_REDIRECTED,
 		CALLSTATE_REDIRECTED_NORMAL,
 		je->remote_contact,
@@ -3760,7 +3754,7 @@ void ph_callStopRinging(eXosip_event_t *je)
 		info.vlid = ca->vlid;
 
 		if(phcb->callProgress) {
-			phcb->callProgress(je->cid, &info);
+			phcb->callProgress(ca->cid, &info);
 		}
 
 		//TODO: Find an appropriate event to raise here for the new owpl API
@@ -3812,10 +3806,10 @@ ph_call_ringing(eXosip_event_t *je)
 	info.streams = ca->nego_mflags;
 
 	if(phcb->callProgress) {
-		phcb->callProgress(je->cid, &info);
+		phcb->callProgress(ca->cid, &info);
 	}
 
-	owplFireCallEvent(je->cid, CALLSTATE_REMOTE_ALERTING,
+	owplFireCallEvent(ca->cid, CALLSTATE_REMOTE_ALERTING,
 									CALLSTATE_REMOTE_ALERTING_NORMAL,
 									je->remote_uri, 0);
 
@@ -3823,7 +3817,6 @@ ph_call_ringing(eXosip_event_t *je)
 	{
 		ph_refer_notify(rca->rdid, 180, "Ringing", 0);
 	}
-
 }
 
 
@@ -3856,25 +3849,24 @@ ph_call_requestfailure(eXosip_event_t *je)
 		info.event = phCALLBUSY;
 		info.u.remoteUri = je->remote_uri;
 
-		owplFireCallEvent(je->cid, CALLSTATE_DISCONNECTED, CALLSTATE_DISCONNECTED_BUSY, je->remote_uri, 0);
+		owplFireCallEvent(ca->cid, CALLSTATE_DISCONNECTED, CALLSTATE_DISCONNECTED_BUSY, je->remote_uri, 0);
 	}
 	else
 	{
 		info.event = phCALLERROR;
 		info.u.errorCode = je->status_code;
 
-		owplFireCallEvent(je->cid, CALLSTATE_DISCONNECTED, CALLSTATE_DISCONNECTED_UNKNOWN, je->remote_uri, 0);
+		owplFireCallEvent(ca->cid, CALLSTATE_DISCONNECTED, CALLSTATE_DISCONNECTED_UNKNOWN, je->remote_uri, 0);
 	}
 
 	if (phcb->callProgress) {
-		phcb->callProgress(je->cid, &info);
+		phcb->callProgress(ca->cid, &info);
 	}
 
 	if (rca)
 	{
 		ph_refer_notify(rca->rdid, je->status_code, je->status_code == 486 ? "Busy" : "Request failure", 1);
 	}
-
 }
 
 
@@ -3902,17 +3894,15 @@ ph_call_serverfailure(eXosip_event_t *je)
 
 
 	if (phcb->callProgress) {
-		phcb->callProgress(je->cid, &info);
+		phcb->callProgress(ca->cid, &info);
 	}
 
-	owplFireCallEvent(je->cid, CALLSTATE_DISCONNECTED, CALLSTATE_DISCONNECTED_NETWORK, je->remote_uri, 0);
+	owplFireCallEvent(ca->cid, CALLSTATE_DISCONNECTED, CALLSTATE_DISCONNECTED_NETWORK, je->remote_uri, 0);
 
 	if (rca)
 	{
 		ph_refer_notify(rca->rdid, je->status_code, "Server failure", 1);
 	}
-
-
 }
 
 void
@@ -3942,27 +3932,24 @@ ph_call_globalfailure(eXosip_event_t *je)
 		info.event = phCALLBUSY;
 		info.u.remoteUri = je->remote_uri;
 
-		owplFireCallEvent(je->cid, CALLSTATE_DISCONNECTED, CALLSTATE_DISCONNECTED_BUSY, je->remote_uri, 0);
+		owplFireCallEvent(ca->cid, CALLSTATE_DISCONNECTED, CALLSTATE_DISCONNECTED_BUSY, je->remote_uri, 0);
 	}
 	else
 	{
 		info.event = phCALLERROR;
 		info.u.errorCode = je->status_code;
 
-		owplFireCallEvent(je->cid, CALLSTATE_DISCONNECTED, CALLSTATE_DISCONNECTED_NETWORK, je->remote_uri, 0);
+		owplFireCallEvent(ca->cid, CALLSTATE_DISCONNECTED, CALLSTATE_DISCONNECTED_NETWORK, je->remote_uri, 0);
 	}
 
 	if (phcb->callProgress) {
-		phcb->callProgress(je->cid, &info);
+		phcb->callProgress(ca->cid, &info);
 	}
 
 	if (rca)
 	{
 		ph_refer_notify(rca->rdid, je->status_code, "Global failure", 1);
 	}
-
-
-
 }
 
 void
@@ -3988,17 +3975,15 @@ ph_call_noanswer(eXosip_event_t *je)
 	info.localUri = je->local_uri;
 
 	if (phcb->callProgress) {
-		phcb->callProgress(je->cid, &info);
+		phcb->callProgress(ca->cid, &info);
 	}
 
-	owplFireCallEvent(je->cid, CALLSTATE_DISCONNECTED, CALLSTATE_DISCONNECTED_NO_RESPONSE, je->remote_uri, 0);
+	owplFireCallEvent(ca->cid, CALLSTATE_DISCONNECTED, CALLSTATE_DISCONNECTED_NO_RESPONSE, je->remote_uri, 0);
 
 	if (rca)
 	{
 		ph_refer_notify(rca->rdid, je->status_code, "No answer", 1);
 	}
-
-
 }
 
 
@@ -4017,24 +4002,22 @@ ph_call_closed(eXosip_event_t *je)
 		rca = ph_locate_call_by_cid(ca->rcid);
 		info.vlid = ca->vlid;
 		DBG_SIP_NEGO("release calls");
-		ph_release_call(ca);
-
+		
 		info.userData = je->external_reference;
 		info.event = phCALLCLOSED;
 		info.u.errorCode = 0;
 		if (phcb->callProgress) {
-			phcb->callProgress(je->cid, &info);
+			phcb->callProgress(ca->cid, &info);
 		}
 
-		owplFireCallEvent(je->cid, CALLSTATE_DISCONNECTED, CALLSTATE_DISCONNECTED_NORMAL, je->remote_uri, 0);
+		owplFireCallEvent(ca->cid, CALLSTATE_DISCONNECTED, CALLSTATE_DISCONNECTED_NORMAL, je->remote_uri, 0);
+		ph_release_call(ca);
 	}
 
 	if (rca)
 	{
 		ph_refer_notify(rca->rdid, je->status_code, "Closed", 1);
 	}
-
-
 }
 
 /**
@@ -4071,10 +4054,10 @@ ph_call_onhold(eXosip_event_t *je)
 	info.event = phCALLHELD;
 
 	if (phcb->callProgress) {
-		phcb->callProgress(je->cid, &info);
+		phcb->callProgress(ca->cid, &info);
 	}
 
-	owplFireCallEvent(je->cid, CALLSTATE_HOLD, CALLSTATE_HOLD_STARTED, je->remote_uri, 0);
+	owplFireCallEvent(ca->cid, CALLSTATE_HOLD, CALLSTATE_HOLD_STARTED, je->remote_uri, 0);
 }
 
 void
@@ -4114,13 +4097,12 @@ ph_call_offhold(eXosip_event_t *je)
 		info.streams = ca->nego_mflags;
 
 		if (phcb->callProgress) {
-			phcb->callProgress(je->cid, &info);
+			phcb->callProgress(ca->cid, &info);
 		}
-		owplFireCallEvent(je->cid, CALLSTATE_HOLD, CALLSTATE_HOLD_RESUMED, je->remote_uri, 0);
+		owplFireCallEvent(ca->cid, CALLSTATE_HOLD, CALLSTATE_HOLD_RESUMED, je->remote_uri, 0);
 	}
 
 	ca->remotehold = 0;
-
 }
 
 
@@ -4258,13 +4240,13 @@ void ph_call_refered(eXosip_event_t *je)
 
 	DBG_SIP_NEGO("SIP_NEGO: ph_call_refered\n");
 
-	ca = ph_locate_call_by_cid(je->cid);
+	//ca = ph_locate_call_by_cid(je->cid);
+	ca = ph_locate_call(je, 0);
 
 	if (ca)
 	{
 		vl = ph_valid_vlid(ca->vlid);
 	}
-
 
 	/*
 	we're rejecting the requests refering unxisting calls, vlines and
@@ -4287,17 +4269,17 @@ void ph_call_refered(eXosip_event_t *je)
 
 	ph_call_media_stop(ca);
 
-	info.newcid = phLinePlaceCall2(ca->vlid, je->refer_to,  0, je->cid, ca->user_mflags);
+	info.newcid = phLinePlaceCall2(ca->vlid, je->refer_to,  0, ca->cid, ca->user_mflags);
 
 	info.event = phXFERREQ;
 	info.u.remoteUri = je->refer_to;
 	info.vlid = ca->vlid;
 
 	if (phcb->callProgress) {
-		phcb->callProgress(je->cid, &info);
+		phcb->callProgress(ca->cid, &info);
 	}
 
-	owplFireCallEvent(je->cid,
+	owplFireCallEvent(ca->cid,
 		CALLSTATE_TRANSFER,
 		CALLSTATE_TRANSFER_INITIATED,
 		je->remote_contact,
@@ -4314,7 +4296,8 @@ void ph_call_refer_status(eXosip_event_t *je)
 	int status = 0;
 	int txcid;
 
-	ca = ph_locate_call_by_cid(je->cid);
+	//ca = ph_locate_call_by_cid(je->cid);
+	ca = ph_locate_call(je, 0);
 
 	if (!ca)
 	{
@@ -4368,7 +4351,7 @@ void ph_call_refer_status(eXosip_event_t *je)
 		/* blind transfer:  RINGING is good enough for us */
 		info.event = phXFEROK;
 
-		owplFireCallEvent(je->cid,
+		owplFireCallEvent(ca->cid,
 		CALLSTATE_TRANSFER,
 		CALLSTATE_TRANSFER_ACCEPTED,
 		je->remote_contact,
@@ -4378,7 +4361,7 @@ void ph_call_refer_status(eXosip_event_t *je)
 	{
 		info.event = phXFERPROGRESS;
 
-		owplFireCallEvent(je->cid,
+		owplFireCallEvent(ca->cid,
 		CALLSTATE_TRANSFER,
 		CALLSTATE_TRANSFER_TRYING,
 		je->remote_contact,
@@ -4388,7 +4371,7 @@ void ph_call_refer_status(eXosip_event_t *je)
 	{
 		info.event = phXFEROK;
 
-		owplFireCallEvent(je->cid,
+		owplFireCallEvent(ca->cid,
 		CALLSTATE_TRANSFER,
 		CALLSTATE_TRANSFER_ACCEPTED,
 		je->remote_contact,
@@ -4398,7 +4381,7 @@ void ph_call_refer_status(eXosip_event_t *je)
 	{
 		info.event = phXFERFAIL;
 
-		owplFireCallEvent(je->cid,
+		owplFireCallEvent(ca->cid,
 		CALLSTATE_TRANSFER,
 		CALLSTATE_TRANSFER_FAILURE,
 		je->remote_contact,
@@ -4408,7 +4391,7 @@ void ph_call_refer_status(eXosip_event_t *je)
 	txcid = ca->txcid;
 
 	if(phcb->callProgress) {
-		phcb->callProgress(je->cid, &info);
+		phcb->callProgress(ca->cid, &info);
 	}
 
 	if (info.event == phXFEROK || info.event == phXFERFAIL)
