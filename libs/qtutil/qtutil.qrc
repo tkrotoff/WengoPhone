@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/" >
+        <file>pics/desktopservice/16x16/file.png</file>
+        <file>pics/desktopservice/16x16/closed_folder.png</file>
+        <file>pics/desktopservice/16x16/opened_folder.png</file>
+        <file>pics/desktopservice/32x32/file.png</file>
+        <file>pics/desktopservice/32x32/closed_folder.png</file>
+        <file>pics/desktopservice/32x32/opened_folder.png</file>
+        <file>pics/desktopservice/128x128/file.png</file>
+        <file>pics/desktopservice/128x128/closed_folder.png</file>
+        <file>pics/desktopservice/128x128/opened_folder.png</file>
+    </qresource>
+</RCC>

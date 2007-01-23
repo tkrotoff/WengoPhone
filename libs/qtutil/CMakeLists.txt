@@ -17,35 +17,29 @@ ow_add_private_include_dirs(
 
 qt4_wrap_cpp(${PROJECT_NAME}_SRCS
 	include/qtutil/EventFilter.h
-	include/qtutil/KeyEventFilter.h
-	include/qtutil/MouseEventFilter.h
-	include/qtutil/PaintEventFilter.h
-	include/qtutil/EnabledChangeEventFilter.h
-	include/qtutil/PostEvent.h
-	include/qtutil/WidgetFactory.h
-	include/qtutil/Object.h
 	include/qtutil/QObjectThreadSafe.h
-	include/qtutil/ResizeEventFilter.h
 	include/qtutil/NonResizeableWidget.h
-	include/qtutil/StringListConvert.h
-	include/qtutil/Widget.h
 	include/qtutil/WengoStyleLabel.h
 	include/qtutil/ToolTipLineEdit.h
 	include/qtutil/ClickableLabel.h
-	include/qtutil/WidgetBackgroundImage.h
 	include/qtutil/Wizard.h
-	include/qtutil/QtThreadEvent.h
 	include/qtutil/ThreadEventFilter.h
-	include/qtutil/PixmapMerging.h
-	include/qtutil/SafeConnect.h
-	include/qtutil/LanguageChangeEventFilter.h
-	include/qtutil/CloseEventFilter.h
 	include/qtutil/AnimatedButton.h
 	include/qtutil/UpQComboBox.h
+	include/qtutil/LinkLabel.h
+	include/qtutil/ScrollFrame.h
+	include/qtutil/ImageSelector.h
+	src/QtThumbnailManager.h
+	src/QtThumbnailDirModel.h
 )
 
 qt4_wrap_ui(${PROJECT_NAME}_SRCS
 	src/Wizard.ui
+	src/ImageSelector.ui
+)
+
+qt4_add_resources(${PROJECT_NAME}_SRCS
+	qtutil.qrc
 )
 
 ow_add_sources(
@@ -72,7 +66,39 @@ ow_add_sources(
 	src/LanguageChangeEventFilter.cpp
 	src/CloseEventFilter.cpp
 	src/AnimatedButton.cpp
+	src/DesktopService.cpp
 	src/UpQComboBox.cpp
+	src/LinkLabel.cpp
+	src/ScrollFrame.cpp
+	src/ImageSelector.cpp
+	src/ThumbnailView.cpp
+	src/QtThumbnailDirModel.cpp
+	src/QtThumbnailManager.cpp
+)
+
+if (APPLE)
+	ow_add_sources(
+		src/MacDesktopService.cpp
+	)
+	qt4_wrap_cpp(${PROJECT_NAME}_SRCS
+		include/qtutil/MacDesktopService.h
+	)
+	ow_add_private_include_dirs(
+		/Developer/Headers/FlatCarbon/
+	)
+endif (APPLE)
+
+if (WIN32)
+	ow_add_sources(
+		src/WindowsDesktopService.cpp
+	)
+	qt4_wrap_cpp(${PROJECT_NAME}_SRCS
+		include/qtutil/WindowsDesktopService.h
+	)
+endif (WIN32)
+
+subdirs(
+	tests
 )
 
 ow_create_binary()

@@ -16,41 +16,48 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+#ifndef THUMBNAILVIEW_H
+#define THUMBNAILVIEW_H
 
-#ifndef OWUPQCOMBOBOX_H
-#define OWUPQCOMBOBOX_H
+#include <QtGui/QListView>
 
-#include <qtutil/owqtutildll.h>
-
-#include <QtGui/QComboBox>
 
 /**
- * QComboBox that sends a signal when the combobox menu is clicked.
- *
- * @see QComboBox
- * @author Xavier Desjardins
+ * An overloaded QListView, with a custom delegate to draw thumbnails.
  */
-class OWQTUTIL_API UpQComboBox : public QComboBox {
-	Q_OBJECT
+class ThumbnailView : public QListView {
 public:
-
-	UpQComboBox(QWidget * parent);
-
-	void showPopup();
-
-	void hidePopup();
-
-Q_SIGNALS:
+	ThumbnailView(QWidget* parent);
 
 	/**
-	 * Emitted when the popup combobox menu is being displayed.
+	 * Sets the thumbnail size, in pixels.
 	 */
-	void popupDisplayed();
+	void setThumbnailSize(int pixel);
 
 	/**
-	 * Emitted when the popup combobox menu is being hidden.
+	 * Returns the thumbnail size.
 	 */
-	void popupHidden();
+	int thumbnailSize() const;
+
+	/**
+	 * Returns the width of an item. This width is proportional to the
+	 * thumbnail size.
+	 */
+	int itemWidth() const;
+
+	/**
+	 * Returns the height of an item. This width is proportional to the
+	 * thumbnail size.
+	 */
+	int itemHeight() const;	
+
+	/**
+	 * Overloaded so that it shows a reasonable amount of thumbnails.
+	 */
+	virtual QSize sizeHint() const;
+
+private:
+	int _thumbnailSize;
 };
 
-#endif	//OWUPQCOMBOBOX_H
+#endif /* THUMBNAILVIEW_H */

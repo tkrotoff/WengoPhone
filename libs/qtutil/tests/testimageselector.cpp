@@ -16,41 +16,23 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+#include <QtCore/QDir>
 
-#ifndef OWUPQCOMBOBOX_H
-#define OWUPQCOMBOBOX_H
+#include <QtGui/QApplication>
+#include <QtGui/QPixmap>
 
-#include <qtutil/owqtutildll.h>
+#include <qtutil/DesktopService.h>
+#include <qtutil/ImageSelector.h>
 
-#include <QtGui/QComboBox>
+int main(int argc, char ** argv) {
+	Q_INIT_RESOURCE(qtutil);
+	QApplication app(argc, argv);
+	ImageSelector imageSelector(0);
+	imageSelector.setCurrentDir(QDir::currentPath());
 
-/**
- * QComboBox that sends a signal when the combobox menu is clicked.
- *
- * @see QComboBox
- * @author Xavier Desjardins
- */
-class OWQTUTIL_API UpQComboBox : public QComboBox {
-	Q_OBJECT
-public:
+	QString home = QDir::homePath();
+	QPixmap pixmap = DesktopService::getInstance()->pixmapForPath(home, 32);
+	imageSelector.addStartDirItem(home, "Home", pixmap);
 
-	UpQComboBox(QWidget * parent);
-
-	void showPopup();
-
-	void hidePopup();
-
-Q_SIGNALS:
-
-	/**
-	 * Emitted when the popup combobox menu is being displayed.
-	 */
-	void popupDisplayed();
-
-	/**
-	 * Emitted when the popup combobox menu is being hidden.
-	 */
-	void popupHidden();
-};
-
-#endif	//OWUPQCOMBOBOX_H
+	return imageSelector.exec();
+}

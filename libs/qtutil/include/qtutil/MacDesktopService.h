@@ -16,41 +16,19 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
+#ifndef MACDESKTOPSERVICE_H
+#define MACDESKTOPSERVICE_H
 
-#ifndef OWUPQCOMBOBOX_H
-#define OWUPQCOMBOBOX_H
-
-#include <qtutil/owqtutildll.h>
-
-#include <QtGui/QComboBox>
+#include <qtutil/DesktopService.h>
 
 /**
- * QComboBox that sends a signal when the combobox menu is clicked.
- *
- * @see QComboBox
- * @author Xavier Desjardins
+ * Implementation of @ref DesktopService using Mac native API
  */
-class OWQTUTIL_API UpQComboBox : public QComboBox {
-	Q_OBJECT
-public:
-
-	UpQComboBox(QWidget * parent);
-
-	void showPopup();
-
-	void hidePopup();
-
-Q_SIGNALS:
-
-	/**
-	 * Emitted when the popup combobox menu is being displayed.
-	 */
-	void popupDisplayed();
-
-	/**
-	 * Emitted when the popup combobox menu is being hidden.
-	 */
-	void popupHidden();
+class MacDesktopService : public DesktopService {
+	virtual QPixmap pixmapForPath(const QString & file, int size);
+	virtual QPixmap desktopIconPixmap(DesktopIconType iconType, int size);
+	virtual QStringList startFolderList();
+	virtual QString MacDesktopService::userFriendlyNameForPath(const QString & path);
 };
 
-#endif	//OWUPQCOMBOBOX_H
+#endif /* MACDESKTOPSERVICE_H */

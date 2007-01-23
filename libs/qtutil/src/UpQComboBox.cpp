@@ -27,3 +27,8 @@ void UpQComboBox::showPopup() {
 	popupDisplayed();
 	QComboBox::showPopup();
 }
+
+void UpQComboBox::hidePopup() {
+	popupHidden();
+	QComboBox::hidePopup();
+}

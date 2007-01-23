@@ -34,7 +34,16 @@ headers = [
 	'include/qtutil/CloseEventFilter.h',
     'include/qtutil/UpQComboBox.h',
 	'include/qtutil/AnimatedButton.h',
+	'include/qtutil/DesktopService.h',
+	'include/qtutil/UpQComboBox.h',
+	'include/qtutil/LinkLabel.h',
+	'include/qtutil/ScrollFrame.h',
+	'include/qtutil/ThumbnailView.h',
+	'include/qtutil/ImageSelector.h',
+	'src/QtThumbnailManager.h',
+	'src/QtThumbnailDirModel.h',
 ]
+
 sources = [
 	'src/EventFilter.cpp',
 	'src/KeyEventFilter.cpp',
@@ -60,9 +69,30 @@ sources = [
 	'src/CloseEventFilter.cpp',
     'src/UpQComboBox.cpp',
 	'src/AnimatedButton.cpp',
+	'src/DesktopService.cpp',
+	'src/UpQComboBox.cpp',
+	'src/LinkLabel.cpp',
+	'src/ScrollFrame.cpp',
+	'src/ThumbnailView.cpp',
+	'src/ImageSelector.cpp',
+	'src/QtThumbnailDirModel.cpp',
+	'src/QtThumbnailManager.cpp',
+
+	env.WengoCompileQt4Resource('qtutil.qrc'),
 ]
+
+if WengoOSMacOSX():
+	sources += [ 'src/MacDesktopService.cpp' ]
+	headers += [ 'include/qtutil/MacDesktopService.h' ]
+	include_path += ['/Developer/Headers/FlatCarbon/' ]
+
+if WengoOSWindows():
+	sources += [ 'src/WindowsDesktopService.cpp' ]
+	headers += [ 'include/qtutil/WindowsDesktopService.h' ]
+
 forms = [
 	'src/Wizard.ui',
+	'src/ImageSelector.ui',
 ]
 
 for form in forms:
@@ -81,3 +111,5 @@ env.WengoUseLibraries(libs)
 env.WengoAddDoxyfile()
 
 env.WengoStaticLibrary('qtutil', sources + moced, headers)
+
+env.SConscript('tests/SConscript')
