@@ -823,6 +823,7 @@ class WengoSConsEnvironment(SConsEnvironment):
 		@type dest string
 		@param dest destination directory
 		"""
+
 		for dest, src in zip(target, source):
 			dest = str(dest)
 			src = str(src)
@@ -835,7 +836,7 @@ class WengoSConsEnvironment(SConsEnvironment):
 					i = absSrcFile.find(src) + len(src) + 1
 					absDestFile = os.path.join(dest, absSrcFile[i:])
 					if (not os.path.exists(absDestFile)) \
-					    or (os.stat(absSrcFile).st_mtime != os.stat(absDestFile).st_mtime):
+						or (os.stat(absSrcFile).st_mtime != os.stat(absDestFile).st_mtime):
 						shutil.copy2(absSrcFile, absDestFile)
 
 				#Don't visit CVS, .svn and _svn directories
@@ -1350,7 +1351,7 @@ class WengoSConsEnvironment(SConsEnvironment):
 		"""
 		Look for framework 'fwk' in common directories
 		and return the path to this framework
-		
+
 		@type fwk string
 		@param fwk the framework to find
 		"""
@@ -1359,18 +1360,18 @@ class WengoSConsEnvironment(SConsEnvironment):
 			'/Library/Frameworks',
 			'/System/Library/Frameworks'
 		]
-		
+
 		for dir in dir_list:
 			path = os.path.join(dir, fwk + '.framework')
 			if (os.path.exists(path)):
 				return path
-		
+
 		return ''
 
 	def WengoAddFrameworks(self, frameworks):
 		"""
 		Adds Frameworks to the build process.
-		
+
 		@type frameworks stringlist
 		@param frameworks list of Frameworks to add
 		"""
@@ -1448,6 +1449,24 @@ class WengoSConsEnvironment(SConsEnvironment):
 
 		return os.path.abspath(os.path.join(self.WengoGetRootBuildDir(), subpath))
 
+
+	def __outputIsUpToDate(self, inputFile, outputFile):
+		"""
+		Returns True if outputFile is newer than inputFile
+		"""
+
+		if not os.path.exists(outputFile):
+			return False
+
+		if not os.path.exists(inputFile):
+			raise Exception("%s does not exist" % inputFile)
+
+		inputTime = os.stat(inputFile).st_mtime
+		outputTime = os.stat(outputFile).st_mtime
+
+		return outputTime >= inputTime
+
+
 	def __saveCurrentBuildPath(self):
 		"""
 		Saves the current build path.
@@ -1468,6 +1487,12 @@ class WengoSConsEnvironment(SConsEnvironment):
 		"""
 
 		return os.path.abspath(os.path.join(self['ROOT_BUILD_DIR'], self['BUILD_PATH']))
+
+	def saveCurrentSourcePath(self):
+		return self.__saveCurrentSourcePath()
+
+	def getSourcePath(self):
+		return self.__getSourcePath()
 
 	def __saveCurrentSourcePath(self):
 		"""
@@ -1633,7 +1658,6 @@ class WengoSConsEnvironment(SConsEnvironment):
 		@return Qt4 resource file compiled (.cpp)
 		"""
 
-		print 'rcc ' + qrcFile
 		qtdir = os.environ['QTDIR']
 		rcc = os.path.join(qtdir, 'bin', 'rcc')
 
@@ -1641,10 +1665,16 @@ class WengoSConsEnvironment(SConsEnvironment):
 		dir = os.path.dirname(os.path.join(self.__getSourcePath(), qrcFile))
 		os.chdir(dir)
 
+		inputFile = os.path.basename(qrcFile)
 		outputFile = os.path.basename(qrcFile) + '.cpp'
-		errcode = os.system(rcc + ' ' + os.path.basename(qrcFile) + ' -o ' + outputFile)
-		if errcode > 0:
-			raise Exception("error while executing rcc")
+
+		if not self.__outputIsUpToDate(inputFile, outputFile):
+			print 'rcc ' + qrcFile
+			name = os.path.basename(qrcFile)
+			name = os.path.splitext(name)[0]
+			errcode = os.system(rcc + ' ' + inputFile + ' -name ' + name + ' -o ' + outputFile)
+			if errcode > 0:
+				raise Exception("error while executing rcc")
 		return os.path.join(dir, outputFile)
 
 	def WengoCompileQt4UiFile(self, uiFile):
@@ -1657,7 +1687,6 @@ class WengoSConsEnvironment(SConsEnvironment):
 		@return C++ header corresponding to the Qt Designer file (.h)
 		"""
 
-		print 'uic ' + uiFile
 		qtdir = os.environ['QTDIR']
 		uic = os.path.join(qtdir, 'bin', 'uic')
 
@@ -1665,9 +1694,12 @@ class WengoSConsEnvironment(SConsEnvironment):
 		dir = os.path.dirname(os.path.join(self.__getSourcePath(), uiFile))
 		os.chdir(dir)
 
+		inputFile = os.path.basename(uiFile)
 		outputFile = 'ui_' + os.path.basename(uiFile[:-3]) + '.h'
 
-		os.system(uic + ' ' + os.path.basename(uiFile) + ' -o ' + outputFile)
+		if not self.__outputIsUpToDate(inputFile, outputFile):
+		    print 'uic ' + uiFile
+		    os.system(uic + ' ' + inputFile + ' -o ' + outputFile)
 		return os.path.join(dir, outputFile)
 
 	def WengoCreateFile(self, filename, fileTemplate, fileData):
