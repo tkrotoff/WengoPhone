@@ -544,7 +544,8 @@ void PhApiCallbacks::messageProgress(OWPL_MESSAGE_INFO * info) {
 		imChatSession = (*sessionIt).second;
 	}
 	//Drop typingstate packet if there is no chat session created
-	else if (ctype == "typingstate") {
+	else if (ctype == "typingstate" || 
+		     (ctype == "application" && subtype == "im-iscomposing+xml")) {
 		return;
 	} else {
 		LOG_DEBUG("creating new IMChatSession");
@@ -571,8 +572,35 @@ void PhApiCallbacks::messageProgress(OWPL_MESSAGE_INFO * info) {
 			}
 
 			p->typingStateChangedEvent(*p, *imChatSession, from, state);
-		}
+		} 
+        // Support for xten eyebeams typing state messages (Lukas)
+        else if (ctype == "application" && subtype == "im-iscomposing+xml") {
+			IMChat::TypingState state;
+
+			TiXmlDocument doc;
+			doc.Parse(content.c_str());
+			TiXmlHandle docHandle(&doc);
+
+			TiXmlText * basicText = docHandle.FirstChild("isComposing")
+											.FirstChild("state").FirstChild().Text();
+			if (basicText) {
+				std::string basic = basicText->Value();
+				if (String(basic).toLowerCase() == "active") {
+					state = IMChat::TypingStateTyping;
+				}
+				else if (String(basic).toLowerCase() == "idle") {
+					state = IMChat::TypingStateStopTyping;
+				} else {
+					state = IMChat::TypingStateNotTyping;
+				}
+			} else {
+				state = IMChat::TypingStateNotTyping;
+			}
+			p->typingStateChangedEvent(*p, *imChatSession, from, state);
+		}        
 		else {
+            // once a message is received, typing is inferred off
+			p->typingStateChangedEvent(*p, *imChatSession, from, IMChat::TypingStateNotTyping);
 			p->messageReceivedEvent(*p, *imChatSession, from, content);
 		}
 
