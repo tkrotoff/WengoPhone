@@ -1,5 +1,5 @@
 #!/bin/bash
-trap exit 1 ERR  # exit with failure on any error (bash-only feature)
+#trap exit 1 ERR  # exit with failure on any error (bash-only feature)
 
 export TERM=xterm
 
