@@ -1,1 +1,0 @@
-cmake .. -DCMAKE_VERBOSE_MAKEFILE=0 -G "NMake Makefiles"

@@ -1,1 +1,1 @@
-cmake .. -DCMAKE_VERBOSE_MAKEFILE=1 -G "NMake Makefiles"
+cmake .. -G "NMake Makefiles"

@@ -1,4 +1,5 @@
 #!/bin/bash
+trap exit 1 ERR  # exit with failure on any error (bash-only feature)
 
 export TERM=xterm
 
@@ -84,4 +85,3 @@ if [ -n "${DOT}" ]; then
 	${DOT} -Tpng -o${BUILDDIR}/wengophone.png ${BUILDDIR}/wengophone.dot
 	${DOT} -Tsvg -o${BUILDDIR}/wengophone.svg ${BUILDDIR}/wengophone.dot
 fi
-

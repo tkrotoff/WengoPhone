@@ -1,1 +1,1 @@
-"%VS80COMNTOOLS%vsvars32.bat" && cmake .. -DCMAKE_VERBOSE_MAKEFILE=1 -G "Visual Studio 8 2005"
+"%VS80COMNTOOLS%vsvars32.bat" && cmake .. -G "Visual Studio 8 2005"
