@@ -106,7 +106,8 @@ bool NetworkDiscovery::testUDP(const string & stunServer) {
 bool NetworkDiscovery::testSIP(const string & server, unsigned port, unsigned localPort) {
 	LOG_DEBUG("pinging SIP server " + server + " on port " + String::fromNumber(port) 
 		+ " from port " + String::fromNumber(localPort));
-	return (udp_sip_ping(server.c_str(), port, localPort, PING_TIMEOUT) == NETLIB_TRUE ? true : false);
+	return (udp_sip_ping(server.c_str(), port, localPort, 
+		PING_TIMEOUT, "nobody", server.c_str()) == NETLIB_TRUE ? true : false);
 }
 
 bool NetworkDiscovery::testSIPHTTPTunnel(const string & tunnelServer, unsigned tunnelPort, bool ssl,
@@ -119,7 +120,8 @@ bool NetworkDiscovery::testSIPHTTPTunnel(const string & tunnelServer, unsigned t
 		sipServer.c_str(), sipServerPort,
 		networkProxy.getServer().c_str(), networkProxy.getServerPort(),
 		networkProxy.getLogin().c_str(), networkProxy.getPassword().c_str(),
-		(ssl ? NETLIB_TRUE : NETLIB_FALSE), HTTP_TIMEOUT, NETLIB_TRUE, PING_TIMEOUT) == HTTP_OK) {
+		(ssl ? NETLIB_TRUE : NETLIB_FALSE), HTTP_TIMEOUT, sipServer.c_str(),
+		NETLIB_TRUE, PING_TIMEOUT) == HTTP_OK) {
 
 		result = true;
 	} else {
