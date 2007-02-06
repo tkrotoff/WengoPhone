@@ -162,7 +162,7 @@ targets += env.Install(lib_install_dir, env.WengoGetAlias("phapi"))
 targets += env.Install(lib_install_dir, env.WengoGetAlias("qtwengophone_alias"))
 
 targets += env.Install(lib_install_dir, [
-	env.WengoGetAlias("owcurl_alias"),
+	env.WengoGetAlias("curl_alias"),
 	env.WengoGetAlias("phapi_alias"),
 ])
 if WengoGetConsoleArgument("enable-video") == "yes":
