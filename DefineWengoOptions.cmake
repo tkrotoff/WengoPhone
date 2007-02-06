@@ -1,10 +1,3 @@
-option(PORTAUDIO_INTERNAL "Use internal PortAudio" ON)
-option(FFMPEG_INTERNAL "Use internal FFmpeg" ON)
-option(SPEEX_INTERNAL "Use internal Speex" ON)
-option(IAXCLIENT_INTERNAL "Use internal iaxclient" ON)
-option(SAMPLERATE_INTERNAL "Use internal libsamplerate" ON)
-option(OSIP2_INTERNAL "Use internal oSIP" ON)
-
 option(BUILDID_SUPPORT "Build WengoPhone/phApi with buildId (builds faster without)" OFF)
 
 option(WENGOPHONE_RESOURCEDIR_PATH "WengoPhone: use ${DATA_INSTALL_DIR} as hardcoded resource path" ON)
@@ -13,10 +6,6 @@ option(WENGOPHONE_XV_SUPPORT "Build WengoPhone with XV hardware acceleration sup
 option(SIPWRAPPER_BACKEND_SIPX "SipX backend for SipWrapper" OFF)
 option(SIPWRAPPER_BACKEND_PHAPI "PhApi backend for SipWrapper" OFF)
 option(IMWRAPPER_BACKEND_MULTI "PhApi and Gaim backend for IMWrapper" ON)
-
-option(PORTAUDIO_DIRECTSOUND_SUPPORT "Build PortAudio with DirectSound support" OFF)
-option(PORTAUDIO_OSS_SUPPORT "Build PortAudio with OSS support" ON)
-option(PORTAUDIO_ALSA_SUPPORT "Build PortAudio with ALSA support" OFF)
 
 option(OWSOUND_PORTAUDIO_SUPPORT "Build owsound with PortAudio support" ON)
 
