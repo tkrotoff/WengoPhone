@@ -4,7 +4,7 @@ ow_use_public_libraries(
 	owutil
 	owthread
 	owsystem
-	owcurl
+	curl
 	owqtutil
 )
 

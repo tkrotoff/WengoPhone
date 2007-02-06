@@ -20,11 +20,9 @@
 #ifndef OWPHAPISFPWRAPPER_H
 #define OWPHAPISFPWRAPPER_H
 
-#include <imwrapper/Account.h>
-#include <imwrapper/IMContact.h>
-
 #include <util/Singleton.h>
-#include <util/File.h>
+
+#include <string>
 
 /**
  * Class that wraps the calls to the SFP plugin
@@ -32,19 +30,23 @@
  * @author Nicolas Couturier
  */
 class PhApiSFPWrapper : public Singleton<PhApiSFPWrapper> {
-
 	friend class Singleton<PhApiSFPWrapper>;
-
-public :
+public:
 
 	/**
-	*
-	*
-	* @return	the call id if the invitation to transfer could be sent
-	*/
-	int sendFile(int vlineID, std::string fullIdentity, std::string contactUri, std::string filename, std::string shortFilename, std::string fileType, unsigned int fileSize);
+	 *
+	 *
+	 * @return the call id if the invitation to transfer could be sent
+	 */
+	int sendFile(int vlineID,
+		const std::string & fullIdentity,
+		const std::string & contactUri,
+		const std::string & filename,
+		const std::string & shortFilename,
+		const std::string & fileType,
+		unsigned fileSize);
 
-	int receiveFile(int callId, std::string filename);
+	int receiveFile(int callId, const std::string & filename);
 
 	int cancelTransfer(int callId);
 
@@ -52,15 +54,13 @@ public :
 
 	int resumeTransfer(int callId);
 
-private :
+private:
 
 	PhApiSFPWrapper();
 
 	~PhApiSFPWrapper();
 
-	void setBasePort(const unsigned int basePort);
-
+	void setBasePort(unsigned basePort);
 };
 
 #endif	//OWPHAPISFPWRAPPER_H
-

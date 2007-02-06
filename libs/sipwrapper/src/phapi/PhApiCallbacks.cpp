@@ -48,19 +48,19 @@ extern "C" {
 				PhApiCallbacks::getInstance().callProgress((OWPL_CALLSTATE_INFO *)pInfo);
 				break;
 
-			case EVENT_CATEGORY_LINESTATE : 
+			case EVENT_CATEGORY_LINESTATE :
 				PhApiCallbacks::getInstance().registerProgress((OWPL_LINESTATE_INFO *)pInfo);
 				break;
 
-			case EVENT_CATEGORY_MESSAGE : 
+			case EVENT_CATEGORY_MESSAGE :
 				PhApiCallbacks::getInstance().messageProgress((OWPL_MESSAGE_INFO *)pInfo);
 				break;
 
-			case EVENT_CATEGORY_SUB_STATUS : 
+			case EVENT_CATEGORY_SUB_STATUS :
 				PhApiCallbacks::getInstance().subscriptionProgress((OWPL_SUBSTATUS_INFO *)pInfo);
 				break;
 
-			case EVENT_CATEGORY_NOTIFY : 
+			case EVENT_CATEGORY_NOTIFY :
 				PhApiCallbacks::getInstance().onNotify((OWPL_NOTIFICATION_INFO *)pInfo);
 				break;
 
@@ -91,7 +91,7 @@ void PhApiCallbacks::callProgress(OWPL_CALLSTATE_INFO * info) {
 		std::string from;
 		phVideoFrameReceivedEvent_t * video_data = NULL;
 		switch(info->event) {
-			case CALLSTATE_UNKNOWN :			
+			case CALLSTATE_UNKNOWN :
 				break;
 
 			case CALLSTATE_NEWCALL :
@@ -207,7 +207,7 @@ void PhApiCallbacks::callProgress(OWPL_CALLSTATE_INFO * info) {
 						break;
 				}
 				break;
-				
+
 			case CALLSTATE_ALERTING :
 				switch(info->cause) {
 					case CALLSTATE_ALERTING_NORMAL :
@@ -217,7 +217,7 @@ void PhApiCallbacks::callProgress(OWPL_CALLSTATE_INFO * info) {
 						break;
 				}
 				break;
-				
+
 			case CALLSTATE_DESTROYED :
 				switch(info->cause) {
 					case CALLSTATE_DESTROYED_NORMAL :
@@ -227,7 +227,7 @@ void PhApiCallbacks::callProgress(OWPL_CALLSTATE_INFO * info) {
 						break;
 				}
 				break;
-				
+
 			case CALLSTATE_AUDIO_EVENT :
 				switch(info->cause) {
 					case CALLSTATE_AUDIO_START :
@@ -243,7 +243,7 @@ void PhApiCallbacks::callProgress(OWPL_CALLSTATE_INFO * info) {
 						break;
 				}
 				break;
-				
+
 			case CALLSTATE_VIDEO_EVENT :
 				switch(info->cause) {
 					case CALLSTATE_VIDEO_START :
@@ -267,10 +267,10 @@ void PhApiCallbacks::callProgress(OWPL_CALLSTATE_INFO * info) {
 						break;
 				}
 				break;
-				
+
 			case CALLSTATE_TRANSFER :
 				switch(info->cause) {
-					case CALLSTATE_TRANSFER_INITIATED :					
+					case CALLSTATE_TRANSFER_INITIATED :
 						break;
 
 					case CALLSTATE_TRANSFER_ACCEPTED :
@@ -292,7 +292,7 @@ void PhApiCallbacks::callProgress(OWPL_CALLSTATE_INFO * info) {
 						break;
 				}
 				break;
-				
+
 			case CALLSTATE_REDIRECTED :
 				switch(info->cause) {
 					case CALLSTATE_REDIRECTED_NORMAL :
@@ -304,7 +304,7 @@ void PhApiCallbacks::callProgress(OWPL_CALLSTATE_INFO * info) {
 						break;
 				}
 				break;
-				
+
 			case CALLSTATE_HOLD :
 				switch(info->cause) {
 					case CALLSTATE_HOLD_STARTED :
@@ -321,7 +321,7 @@ void PhApiCallbacks::callProgress(OWPL_CALLSTATE_INFO * info) {
 						break;
 				}
 				break;
-				
+
 			case CALLSTATE_SECURITY_EVENT :
 				switch(info->cause) {
 					case CALLSTATE_SECURITY_SELF_SIGNED_CERT :
@@ -337,7 +337,7 @@ void PhApiCallbacks::callProgress(OWPL_CALLSTATE_INFO * info) {
 						break;
 				}
 				break;
-				
+
 			case CALLSTATE_IDENTITY_CHANGE :
 				switch(info->cause) {
 					case CALLSTATE_IDENTITY_CHANGE_UNKNOWN :
@@ -544,8 +544,8 @@ void PhApiCallbacks::messageProgress(OWPL_MESSAGE_INFO * info) {
 		imChatSession = (*sessionIt).second;
 	}
 	//Drop typingstate packet if there is no chat session created
-	else if (ctype == "typingstate" || 
-		     (ctype == "application" && subtype == "im-iscomposing+xml")) {
+	else if (ctype == "typingstate" ||
+		(ctype == "application" && subtype == "im-iscomposing+xml")) {
 		return;
 	} else {
 		LOG_DEBUG("creating new IMChatSession");
@@ -572,7 +572,7 @@ void PhApiCallbacks::messageProgress(OWPL_MESSAGE_INFO * info) {
 			}
 
 			p->typingStateChangedEvent(*p, *imChatSession, from, state);
-		} 
+		}
         // Support for xten eyebeams typing state messages (Lukas)
         else if (ctype == "application" && subtype == "im-iscomposing+xml") {
 			IMChat::TypingState state;
@@ -597,7 +597,7 @@ void PhApiCallbacks::messageProgress(OWPL_MESSAGE_INFO * info) {
 				state = IMChat::TypingStateNotTyping;
 			}
 			p->typingStateChangedEvent(*p, *imChatSession, from, state);
-		}        
+		}
 		else {
             // once a message is received, typing is inferred off
 			p->typingStateChangedEvent(*p, *imChatSession, from, IMChat::TypingStateNotTyping);
@@ -628,7 +628,7 @@ void PhApiCallbacks::messageProgress(OWPL_MESSAGE_INFO * info) {
 	switch(info->event) {
 		case MESSAGE_UNKNOWN :
 			break;
-		
+
 		case MESSAGE_NEW :
 			switch(info->cause) {
 				case MESSAGE_NEW_NORMAL :
@@ -636,7 +636,7 @@ void PhApiCallbacks::messageProgress(OWPL_MESSAGE_INFO * info) {
 					from = String(info->szRemoteIdentity).split(" ")[0];
 					sessionIt = contactChatMap.find(from);
 					if (sessionIt != contactChatMap.end()) {
-						imChatSession = (*sessionIt).second;						
+						imChatSession = (*sessionIt).second;
 					} else {
 						LOG_DEBUG("creating new IMChatSession");
 						imChatSession = new IMChatSession(*PhApiIMChat::PhApiIMChatHack);
@@ -691,7 +691,7 @@ void PhApiCallbacks::messageProgress(OWPL_MESSAGE_INFO * info) {
 					break;
 			}
 			break;
-		
+
 		case MESSAGE_SUCCESS :
 			switch(info->cause) {
 				case MESSAGE_SUCCESS_NORMAL :
@@ -702,7 +702,7 @@ void PhApiCallbacks::messageProgress(OWPL_MESSAGE_INFO * info) {
 					break;
 			}
 			break;
-		
+
 		case MESSAGE_FAILURE :
 			switch(info->cause) {
 				case MESSAGE_FAILURE_UNKNOWN :
@@ -711,7 +711,7 @@ void PhApiCallbacks::messageProgress(OWPL_MESSAGE_INFO * info) {
 					from = String(info->szLocalIdentity).substr(5, atPos - 5);
 					sessionIt = contactChatMap.find(from);
 					if (sessionIt != contactChatMap.end()) {
-						imChatSession = (*sessionIt).second;						
+						imChatSession = (*sessionIt).second;
 					} else {
 						LOG_DEBUG("creating new IMChatSession");
 						imChatSession = new IMChatSession(*PhApiIMChat::PhApiIMChatHack);
@@ -730,7 +730,7 @@ void PhApiCallbacks::messageProgress(OWPL_MESSAGE_INFO * info) {
 					from = String(info->szLocalIdentity).substr(5, atPos - 5);
 					sessionIt = contactChatMap.find(from);
 					if (sessionIt != contactChatMap.end()) {
-						imChatSession = (*sessionIt).second;						
+						imChatSession = (*sessionIt).second;
 					} else {
 						LOG_DEBUG("creating new IMChatSession");
 						imChatSession = new IMChatSession(*PhApiIMChat::PhApiIMChatHack);
@@ -872,7 +872,7 @@ void PhApiCallbacks::onNotify(OWPL_NOTIFICATION_INFO * info) {
 				default :
 					break;
 			}
-			
+
 			//basicText = docHandle.FirstChild("presence").FirstChild("tuple").FirstChild("status").FirstChild("basic").FirstChild().Text();
 			//if (basicText) {
 			//	std::string basic = basicText->Value();

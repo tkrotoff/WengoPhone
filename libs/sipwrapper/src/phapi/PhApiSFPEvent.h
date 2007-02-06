@@ -20,10 +20,11 @@
 #ifndef OWPHAPISFPEVENT_H
 #define OWPHAPISFPEVENT_H
 
-#include "PhApiSFPWrapper.h"
-
 #include <util/Event.h>
-#include <util/String.h>
+
+#include <string>
+
+class PhApiSFPWrapper;
 
 /**
  * Class implementing the SFP events
@@ -31,39 +32,38 @@
  * @author Nicolas Couturier
  */
 class PhApiSFPEvent {
-
 public :
-	
+
 	static Event<void (PhApiSFPWrapper & sender, int callID, std::string uri, std::string fileName, std::string fileType, int fileSize)> inviteToTransferEvent;
-	
+
 	static Event<void (PhApiSFPWrapper & sender, int callID, std::string contactID, std::string fileName, std::string fileType, int fileSize)> newIncomingFileEvent;
-	
+
 	static Event<void (PhApiSFPWrapper & sender, int callID, std::string uri)> waitingForAnswerEvent;
-	
+
 	static Event<void (PhApiSFPWrapper & sender, int callID, std::string fileName, std::string fileType, int fileSize)> transferCancelledEvent;
-	
+
 	static Event<void (PhApiSFPWrapper & sender, int callID, std::string contactID, std::string fileName, std::string fileType, int fileSize)> transferCancelledByPeerEvent;
-	
+
 	static Event<void (PhApiSFPWrapper & sender, int callID, std::string contactID, std::string fileName, std::string fileType, int fileSize)> sendingFileBeginEvent;
 
 	static Event<void (PhApiSFPWrapper & sender, int callID, std::string contactID, std::string fileName, std::string fileType, int fileSize)> receivingFileBeginEvent;
-	
+
 	static Event<void (PhApiSFPWrapper & sender, int callID, std::string contactID, std::string fileName, std::string fileType, int fileSize)> transferFromPeerFinishedEvent;
-	
+
 	static Event<void (PhApiSFPWrapper & sender, int callID, std::string contactID, std::string fileName, std::string fileType, int fileSize)> transferToPeerFinishedEvent;
-	
+
 	static Event<void (PhApiSFPWrapper & sender, int callID, std::string contactID, std::string fileName, std::string fileType, int fileSize)> transferFromPeerFailedEvent;
-	
+
 	static Event<void (PhApiSFPWrapper & sender, int callID, std::string contactID, std::string fileName, std::string fileType, int fileSize)> transferToPeerFailedEvent;
-	
+
 	static Event<void (PhApiSFPWrapper & sender, int callID, int percentage)> transferProgressionEvent;
-	
+
 	static Event<void (PhApiSFPWrapper & sender, int callID, std::string contactID, std::string fileName, std::string fileType, int fileSize)> transferPausedByPeerEvent;
-	
+
 	static Event<void (PhApiSFPWrapper & sender, int callID, std::string contactID, std::string fileName, std::string fileType, int fileSize)> transferPausedEvent;
-	
+
 	static Event<void (PhApiSFPWrapper & sender, int callID, std::string contactID, std::string fileName, std::string fileType, int fileSize)> transferResumedByPeerEvent;
-	
+
 	static Event<void (PhApiSFPWrapper & sender, int callID, std::string contactID, std::string fileName, std::string fileType, int fileSize)> transferResumedEvent;
 
 	static Event<void (PhApiSFPWrapper & sender, const std::string contactID)> peerNeedsUpgradeEvent;

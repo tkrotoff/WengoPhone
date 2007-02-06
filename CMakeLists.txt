@@ -27,7 +27,6 @@ endif (MSVC80)
 subdirs(
 	libs/3rdparty
 
-	libs/owcurl
 	libs/owutil
 	libs/wenbox
 	libs/qtutil

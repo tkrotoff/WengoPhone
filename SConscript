@@ -12,7 +12,7 @@ projects = [
 	'libs/3rdparty/openssl',
 	'libs/3rdparty/samplerate',
 	'libs/3rdparty/tinyxml',
-	'libs/owcurl',
+	'libs/3rdparty/curl',
 	'libs/owutil',
 	'libs/3rdparty/gaim',
 	'libs/imwrapper',

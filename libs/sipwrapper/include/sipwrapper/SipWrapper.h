@@ -1,6 +1,6 @@
 /*
  * WengoPhone, a voice over Internet phone
- * Copyright (C) 2004-2006  Wengo
+ * Copyright (C) 2004-2007  Wengo
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -100,7 +100,7 @@ public:
 	 * @param localVideoFrame local webcam video frame
 	 */
 	Event<void (SipWrapper & sender, int callId,
-		piximage* remoteVideoFrame, piximage* localVideoFrame)> videoFrameReceivedEvent;
+		piximage * remoteVideoFrame, piximage * localVideoFrame)> videoFrameReceivedEvent;
 
 	virtual ~SipWrapper() {
 	}
@@ -157,9 +157,9 @@ public:
 	/**
 	 * Removes a given virtual phone line.
 	 *
-	 * @param	lineId id of the virtual phone line to remove
-	 * @param	now	if true, forces the removal without waiting for the unregister
-				if false, removal is not forced
+	 * @param lineId id of the virtual phone line to remove
+	 * @param now if true, forces the removal without waiting for the unregister
+	 *        if false, removal is not forced
 	 */
 	virtual void removeVirtualLine(int lineId, bool now = false) = 0;
 

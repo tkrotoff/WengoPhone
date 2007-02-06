@@ -17,45 +17,58 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include "PhApiSFPWrapper.h"
-#include "PhApiSFPCallbacks.h"
-
 #include <owpl_plugin.h>
 
 #include <util/String.h>
 
-PhApiSFPWrapper::PhApiSFPWrapper(){
+//FIXME This line is not the first one otherwise it does not compile under Visual C++ 8.0
+//do not know why
+#include "PhApiSFPWrapper.h"
+
+PhApiSFPWrapper::PhApiSFPWrapper() {
 }
 
-PhApiSFPWrapper::~PhApiSFPWrapper(){}
-
-int PhApiSFPWrapper::sendFile(int vlineID, std::string fullIdentity, std::string contactUri, std::string filename, std::string shortFilename, std::string fileType, unsigned int fileSize){
-    int retVal = 0;
-	owplPluginCallFunction(&retVal, "SFPPlugin", "sfp_send_file", "%d%s%s%s%s%s", vlineID, (char *)contactUri.c_str(), (char *)filename.c_str(), (char *)shortFilename.c_str(), (char *)fileType.c_str(), (char *)String::fromNumber(fileSize).c_str());
-    return retVal;
+PhApiSFPWrapper::~PhApiSFPWrapper() {
 }
 
-int PhApiSFPWrapper::receiveFile(int callId, std::string filename){
-    int retVal = 0;
-	return owplPluginCallFunction(&retVal, "SFPPlugin", "sfp_receive_file", "%d%s", callId, (char *)filename.c_str());
+int PhApiSFPWrapper::sendFile(int vlineID,
+	const std::string & fullIdentity,
+	const std::string & contactUri,
+	const std::string & filename,
+	const std::string & shortFilename,
+	const std::string & fileType,
+	unsigned fileSize) {
+	int retVal = 0;
+	owplPluginCallFunction(&retVal, "SFPPlugin", "sfp_send_file", "%d%s%s%s%s%s", vlineID,
+		(char *) contactUri.c_str(),
+		(char *) filename.c_str(),
+		(char *) shortFilename.c_str(),
+		(char *) fileType.c_str(),
+		(char *) String::fromNumber(fileSize).c_str());
+	return retVal;
 }
 
-int PhApiSFPWrapper::cancelTransfer(int callId){
-    int retVal = 0;
+int PhApiSFPWrapper::receiveFile(int callId, const std::string & filename) {
+	int retVal = 0;
+	return owplPluginCallFunction(&retVal, "SFPPlugin", "sfp_receive_file", "%d%s", callId, (char *) filename.c_str());
+}
+
+int PhApiSFPWrapper::cancelTransfer(int callId) {
+	int retVal = 0;
 	return owplPluginCallFunction(&retVal, "SFPPlugin", "sfp_cancel_transfer", "%d", callId);
 }
 
-int PhApiSFPWrapper::pauseTransfer(int callId){
-    int retVal = 0;
+int PhApiSFPWrapper::pauseTransfer(int callId) {
+	int retVal = 0;
 	return owplPluginCallFunction(&retVal, "SFPPlugin", "sfp_pause_transfer", "%d", callId);
 }
 
-int PhApiSFPWrapper::resumeTransfer(int callId){
-    int retVal = 0;
+int PhApiSFPWrapper::resumeTransfer(int callId) {
+	int retVal = 0;
 	return owplPluginCallFunction(&retVal, "SFPPlugin", "sfp_resume_transfer", "%d", callId);
 }
 
-void PhApiSFPWrapper::setBasePort(const unsigned int basePort){
+void PhApiSFPWrapper::setBasePort(unsigned basePort) {
 	const char * port = String::fromNumber(basePort).c_str();
 	owplPluginSetParam(port, strlen(port), "SFPPlugin", "sfp_file_transfer_port");
 }

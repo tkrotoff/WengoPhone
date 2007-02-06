@@ -99,8 +99,8 @@ ow_copy_file($ENV{QTDIR}/plugins/imageformats/libqmng.dylib
 	${FRAMEWORK_INSTALL_DIR}/qt-plugins/imageformats/libqmng.dylib
 )
 
-# owcurl
-ow_copy_file(${CMAKE_BINARY_DIR}/libs/owcurl/libowcurl.dylib
+# curl
+ow_copy_file(${CMAKE_BINARY_DIR}/libs/3rdparty/curl/libcurl.dylib
 	${FRAMEWORK_INSTALL_DIR}
 )
 
@@ -157,7 +157,7 @@ ow_change_install_name(/sw/lib/libgmodule-2.0.0.dylib @executable_path/../Framew
 ow_change_install_name(/sw/lib/libgthread-2.0.0.dylib @executable_path/../Frameworks/libgthread-2.0.0.dylib ${WENGO_EXE})
 ow_change_install_name(/sw/lib/libgnutls.12.dylib @executable_path/../Frameworks/libgnutls.12.dylib ${WENGO_EXE})
 
-ow_change_install_name(libowcurl.dylib @executable_path/../Frameworks/libowcurl.dylib ${WENGO_EXE})
+ow_change_install_name(libcurl.dylib @executable_path/../Frameworks/libcurl.dylib ${WENGO_EXE})
 
 ow_change_install_name(/sw/lib/libglib-2.0.0.dylib @executable_path/../Frameworks/libglib-2.0.0.dylib ${FRAMEWORK_INSTALL_DIR}/libgmodule-2.0.0.dylib)
 ow_change_install_name(/sw/lib/libglib-2.0.0.dylib @executable_path/../Frameworks/libglib-2.0.0.dylib ${FRAMEWORK_INSTALL_DIR}/libgthread-2.0.0.dylib)

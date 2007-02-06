@@ -4,7 +4,7 @@ ow_use_private_libraries(
 	glib2
 	gaim
 	tinyxml
-	owcurl
+	curl
 	ffmpeg
 	owutil
 )

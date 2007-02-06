@@ -12,7 +12,7 @@ headers = [
 libs = [
 	'owthread',
 	'owcutil',
-	'owcurl',
+	'curl',
 	'owutil',
 	'qt4',
 	'boost',

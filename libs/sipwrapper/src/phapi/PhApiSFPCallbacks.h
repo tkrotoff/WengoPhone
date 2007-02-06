@@ -23,55 +23,107 @@
 #include <string>
 
 /**
-* Class implementing the callbacks for the SFP plugin and throwing the corresponding events
-*
-* @author Nicolas Couturier
-*/
+ * Class implementing the callbacks for the SFP plugin and throwing the corresponding events
+ *
+ * @author Nicolas Couturier
+ */
 class PhApiSFPCallbacks {
-
 public:
 
-	static void inviteToTransfer(int cid, std::string uri, std::string short_filename, std::string file_type, int file_size);
+	static void inviteToTransfer(int cid,
+			const std::string & uri,
+			const std::string & short_filename,
+			const std::string & file_type,
+			int file_size);
 
-	static void newIncomingFile(int cid, std::string contactID, std::string short_filename, std::string file_type, int file_size);
+	static void newIncomingFile(int cid,
+			const std::string & contactID,
+			const std::string & short_filename,
+			const std::string & file_type,
+			int file_size);
 
-	static void waitingForAnswer(int cid, std::string uri);
+	static void waitingForAnswer(int cid, const std::string & uri);
 
-	static void transferCancelled(int cid, std::string short_filename, std::string file_type, int file_size);
+	static void transferCancelled(int cid,
+			const std::string & short_filename,
+			const std::string & file_type,
+			int file_size);
 
-	static void transferCancelledByPeer(int cid, std::string contactID, std::string short_filename, std::string file_type, int file_size);
+	static void transferCancelledByPeer(int cid,
+			const std::string & contactID,
+			const std::string & short_filename,
+			const std::string & file_type,
+			int file_size);
 
-	static void sendingFileBegin(int cid, std::string contactID, std::string short_filename, std::string file_type, int file_size);
+	static void sendingFileBegin(int cid,
+			const std::string & contactID,
+			const std::string & short_filename,
+			const std::string & file_type,
+			int file_size);
 
-	static void receivingFileBegin(int cid, std::string contactID, std::string short_filename, std::string file_type, int file_size);
+	static void receivingFileBegin(int cid,
+			const std::string & contactID,
+			const std::string & short_filename,
+			const std::string & file_type,
+			int file_size);
 
-	static void transferFromPeerFinished(int cid, std::string contactID, std::string short_filename, std::string file_type, int file_size);
+	static void transferFromPeerFinished(int cid,
+			const std::string & contactID,
+			const std::string & short_filename,
+			const std::string & file_type,
+			int file_size);
 
-	static void transferToPeerFinished(int cid, std::string contactID, std::string short_filename, std::string file_type, int file_size);
+	static void transferToPeerFinished(int cid,
+			const std::string & contactID,
+			const std::string & short_filename,
+			const std::string & file_type,
+			int file_size);
 
-	static void transferFromPeerFailed(int cid, std::string contactID, std::string short_filename, std::string file_type, int file_size);
+	static void transferFromPeerFailed(int cid,
+			const std::string & contactID,
+			const std::string & short_filename,
+			const std::string & file_type,
+			int file_size);
 
-	static void transferToPeerFailed(int cid, std::string contactID, std::string short_filename, std::string file_type, int file_size);
+	static void transferToPeerFailed(int cid,
+			const std::string & contactID,
+			const std::string & short_filename,
+			const std::string & file_type,
+			int file_size);
 
 	static void transferProgression(int cid, int percentage);
 
-	static void transferPausedByPeer(int cid, std::string contactID, std::string short_filename, std::string file_type, int file_size);
+	static void transferPausedByPeer(int cid,
+			const std::string & contactID,
+			const std::string & short_filename,
+			const std::string & file_type,
+			int file_size);
 
-	static void transferPaused(int cid, std::string contactID, std::string short_filename, std::string file_type, int file_size);
+	static void transferPaused(int cid,
+			const std::string & contactID,
+			const std::string & short_filename,
+			const std::string & file_type,
+			int file_size);
 
-	static void transferResumedByPeer(int cid, std::string contactID, std::string short_filename, std::string file_type, int file_size);
+	static void transferResumedByPeer(int cid,
+			const std::string & contactID,
+			const std::string & short_filename,
+			const std::string & file_type,
+			int file_size);
 
-	static void transferResumed(int cid, std::string contactID, std::string short_filename, std::string file_type, int file_size);
+	static void transferResumed(int cid,
+			const std::string & contactID,
+			const std::string & short_filename,
+			const std::string & file_type,
+			int file_size);
 
-	static void peerNeedsUpgrade(const std::string contactID);
+	static void peerNeedsUpgrade(const std::string & contactID);
 
 	static void needUpgrade();
 
 	static void setCallbacks();
 
-	static std::string replaceOddCharacters(std::string str);
-
+	static std::string replaceOddCharacters(const std::string & str);
 };
 
 #endif	//OWPHAPISFPCALLBACKS_H
-
