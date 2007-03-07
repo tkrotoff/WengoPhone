@@ -36,7 +36,6 @@
 
 #include <cutil/global.h>
 #include <http/HttpRequest.h>
-#include <http/HttpRequestManager.h>
 #include <system/RegisterProtocol.h>
 #include <thread/Timer.h>
 #include <util/Logger.h>
@@ -59,10 +58,6 @@ WengoPhone::WengoPhone() {
 	ss << "-";
 	ss << WengoPhoneBuildId::getSvnRevision();
 	HttpRequest::setUserAgent(ss.str());
-	////
-
-	// Creating instance of HttpRequestManager
-	HttpRequestManager::getInstance();
 	////
 
 	//Creating instance of NetworkObserver
