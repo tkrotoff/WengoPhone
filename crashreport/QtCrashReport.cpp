@@ -147,26 +147,26 @@ static std::string readLogFile() {
 }
 
 void QtCrashReport::createDescriptionFile() const {
-	FileWriter file(_descfile, false);
+	std::ofstream file;
+	file.open(_descfile.c_str(), std::ios::out);
 
-	file.write("Date: " + Date().toString() + String::EOL);
-	file.write("Time: " + Time().toString() + String::EOL);
+	file
+		<< "Date: " << Date().toString() << std::endl
+		<< "Time: " << Time().toString() << std::endl;
 
 #ifdef OS_WINDOWS
-	file.write("Windows version: " + std::string(WindowsVersion::getVersion()) + String::EOL);
+	file << "Windows version: " << WindowsVersion::getVersion() << std::endl;
 #endif
 
 	if (_ui->mailLineEdit) {
-		file.write("From: " + _ui->mailLineEdit->text().toStdString() + String::EOL);
+		file << "From: " << _ui->mailLineEdit->text().toStdString() << std::endl;
 	}
 
 	if (_ui->descTextEdit) {
-		file.write("Description: " + _ui->descTextEdit->toPlainText().toStdString() + String::EOL);
+		file << "Description: " << _ui->descTextEdit->toPlainText().toStdString() << std::endl;
 	}
 
-	file.write("User info:\n" + _info + String::EOL);
+	file << "User info:" << std::endl << _info << std::endl;
 
-	file.write(LOG_FILE + " content:\n" + readLogFile() + String::EOL);
-
-	file.close();
+	file << LOG_FILE << " content:" << std::endl << readLogFile() << std::endl;
 }

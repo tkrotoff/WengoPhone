@@ -67,6 +67,8 @@
 
 #include <QtGui/QtGui>
 
+#include <sstream>
+
 /**
  * Stub function to make GCC silent.
  *
@@ -78,10 +80,12 @@ int test_main(int argc, char *argv[]) {
 
 std::string getAddionnalInfo() {
 	Config & config = ConfigManager::getInstance().getCurrentConfig();
-	std::string info = "User: " + config.getProfileLastUsedName() + String::EOL;
-	info += "buildid: " + String::fromUnsignedLongLong(WengoPhoneBuildId::getBuildId()) + String::EOL;
-	info += "revision: " + String(WengoPhoneBuildId::getSvnRevision()) + String::EOL;
-	return info;
+	std::stringstream stream;
+	stream
+		<< "User: " << config.getProfileLastUsedName() << std::endl
+		<< "buildid: " << WengoPhoneBuildId::getBuildId() << std::endl
+		<< "revision: " << WengoPhoneBuildId::getSvnRevision() << std::endl;
+	return stream.str();
 }
 
 static void sigpipe_catcher(int sig) {
@@ -106,7 +110,7 @@ int main(int argc, char * argv[]) {
 
 	CommandLineParser cmdLineParser(argc, argv);
 
-	LOG_DEBUG(String::EOL + getAddionnalInfo());
+	LOG_DEBUG(getAddionnalInfo());
 
 #ifdef CC_MSVC
 	MemoryDump * memoryDump = new MemoryDump("WengoPhone", WengoPhoneBuildId::getSvnRevision());
