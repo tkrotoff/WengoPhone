@@ -878,16 +878,13 @@ void PhApiWrapper::init() {
 	phVideoControlSetWebcamCaptureResolution(320, 240);
 #endif
 
-	//If asynchronous mode = 0 then we have to call phPoll()
-	owplConfigSetAsyncCallbackMode (1);
-
 	_callbacks->startListeningPhApiEvents();
 
 	std::string tmp = _sipServer;
 	tmp += ":" + String::fromNumber(_sipServerPort);
 	owplConfigSetOutboundProxy(tmp.c_str());
 
-	if (owplInit(5060, 0, 0, NULL, 0) == OWPL_RESULT_SUCCESS) {
+	if (owplInit(1, 5060, 0, 0, NULL, 0) == OWPL_RESULT_SUCCESS) {
 		_isInitialized = true;
 		LOG_DEBUG("phApi successfully initialized");
 	} else {
