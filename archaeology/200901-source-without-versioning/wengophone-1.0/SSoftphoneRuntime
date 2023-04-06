@@ -1,0 +1,161 @@
+import os.path
+
+env = WengoEnvironment()
+runtime_dir = os.path.join(env.WengoGetRootBuildDir(), "softphone", "runtime")
+
+dlls = [
+	"win32/dlls/YLTELBOX.dll",
+	"win32/dlls/mgwz.dll",
+]
+
+base_sounds = [
+	"gui/sounds/ringin.wav",
+	"gui/sounds/occupied.wav",
+]
+
+default_theme_sounds = [
+	"gui/sounds/dtmf/sharp.wav",
+	"gui/sounds/dtmf/0.wav",
+	"gui/sounds/dtmf/1.wav",
+	"gui/sounds/dtmf/2.wav",
+	"gui/sounds/dtmf/3.wav",
+	"gui/sounds/dtmf/4.wav",
+	"gui/sounds/dtmf/5.wav",
+	"gui/sounds/dtmf/6.wav",
+	"gui/sounds/dtmf/7.wav",
+	"gui/sounds/dtmf/8.wav",
+	"gui/sounds/dtmf/9.wav",
+	"gui/sounds/dtmf/x.wav",
+]
+
+jungle_theme_sounds = [
+    "gui/sounds/dtmf/jungle/sharp.raw",
+    "gui/sounds/dtmf/jungle/0.raw",
+    "gui/sounds/dtmf/jungle/1.raw",
+    "gui/sounds/dtmf/jungle/2.raw",
+    "gui/sounds/dtmf/jungle/3.raw",
+    "gui/sounds/dtmf/jungle/4.raw",
+    "gui/sounds/dtmf/jungle/5.raw",
+    "gui/sounds/dtmf/jungle/6.raw",
+    "gui/sounds/dtmf/jungle/7.raw",
+    "gui/sounds/dtmf/jungle/8.raw",
+    "gui/sounds/dtmf/jungle/9.raw",
+    "gui/sounds/dtmf/jungle/x.raw",
+]
+
+docs = [
+	"readme-fr.txt",
+	"licence-fr.txt",
+	"changelog-fr.txt",
+	"COPYING",
+]
+
+web_stuff = [
+	"gui/index-fr.html",
+]
+
+icons_misc =  [
+    "gui/icons/homepage.png"
+]
+
+home_page = [
+    "gui/connecting/connecting_en.htm",
+    "gui/connecting/connecting_fr.htm",
+    "gui/connecting/footer.gif",
+    "gui/connecting/help.png",
+    "gui/connecting/nav_down_red.png",
+    "gui/connecting/patientez2.gif",
+]
+
+emoticons = [
+    "gui/icons/emoticons/default/icondef.xml",
+    "gui/icons/emoticons/default/angry.png",
+    "gui/icons/emoticons/default/bat.png",
+    "gui/icons/emoticons/default/beer.png",
+    "gui/icons/emoticons/default/biggrin.png",
+    "gui/icons/emoticons/default/blush.png",
+    "gui/icons/emoticons/default/boy.png",
+    "gui/icons/emoticons/default/brflower.png",
+    "gui/icons/emoticons/default/brheart.png",
+    "gui/icons/emoticons/default/coffee.png",
+    "gui/icons/emoticons/default/coolglasses.png",
+    "gui/icons/emoticons/default/cry.png",
+    "gui/icons/emoticons/default/cuffs.png",
+    "gui/icons/emoticons/default/devil.png",
+    "gui/icons/emoticons/default/drink.png",
+    "gui/icons/emoticons/default/flower.png",
+    "gui/icons/emoticons/default/frowning.png",
+    "gui/icons/emoticons/default/girl.png",
+    "gui/icons/emoticons/default/heart.png",
+    "gui/icons/emoticons/default/hugleft.png",
+    "gui/icons/emoticons/default/hugright.png",
+    "gui/icons/emoticons/default/kiss.png",
+    "gui/icons/emoticons/default/lamp.png",
+    "gui/icons/emoticons/default/mail.png",
+    "gui/icons/emoticons/default/music.png",
+    "gui/icons/emoticons/default/no.png",
+    "gui/icons/emoticons/default/oh.png",
+    "gui/icons/emoticons/default/phone.png",
+    "gui/icons/emoticons/default/photo.png",
+    "gui/icons/emoticons/default/pussy.png",
+    "gui/icons/emoticons/default/rainbow.png",
+    "gui/icons/emoticons/default/smile.png",
+    "gui/icons/emoticons/default/star.png",
+    "gui/icons/emoticons/default/stare.png",
+    "gui/icons/emoticons/default/tongue.png",
+    "gui/icons/emoticons/default/unhappy.png",
+    "gui/icons/emoticons/default/wink.png",
+    "gui/icons/emoticons/default/yes.png",
+]
+
+targets = []
+
+if env.WengoOsIsWindows():
+	targets += env.Install(runtime_dir, dlls)
+	targets += env.Install(runtime_dir, "libs/ffmpeg/binary-lib/avcodec.dll")
+	targets += env.Install(runtime_dir, env.WengoGetAlias("softphone-download"))
+	targets += env.Install(runtime_dir, env.WengoGetAlias("softphone-memorydump"))
+else:
+	targets += env.Install(runtime_dir, env.WengoGetAlias("libavcodec"))
+
+
+targets += env.Install(runtime_dir, env.WengoGetAlias("portaudio"))
+targets += env.Install(runtime_dir, env.WengoGetAlias("wengocurl"))
+targets += env.Install(runtime_dir, env.WengoGetAlias("softphone-gui"))
+targets += env.Install(runtime_dir, env.WengoGetAlias("wifo"))
+
+targets += env.Install(runtime_dir, [
+    env.WengoGetAlias("util"),
+    env.WengoGetAlias("sound"),
+    env.WengoGetAlias("wengovcard"),
+    env.WengoGetAlias("trayicon"),
+    env.WengoGetAlias("zip"),
+    env.WengoGetAlias("iconset"),
+    env.WengoGetAlias("wengocurl"),
+])
+if env.WengoGetConsoleArgument("enable-video") == "yes":
+    targets += env.Install(runtime_dir, env.WengoGetAlias("video"))
+    targets += env.Install(runtime_dir, env.WengoGetAlias("webcam"))
+
+targets += env.Install(runtime_dir, docs)
+targets += env.Install(runtime_dir, web_stuff)
+
+targets += env.Install(runtime_dir, "wengophone.png")
+targets += env.Install(runtime_dir, "wengophone.desktop")
+
+targets += env.Install(os.path.join(runtime_dir, "styles"), [
+    env.WengoGetAlias("thinkeramik"),
+    env.WengoGetAlias("kdefx"),
+])
+
+targets += env.Install(os.path.join(runtime_dir, "icons"), icons_misc)
+targets += env.Install(os.path.join(runtime_dir, "sounds"), base_sounds)
+targets += env.Install(os.path.join(runtime_dir, "sounds", "dtmf"),
+    default_theme_sounds)
+targets += env.Install(os.path.join(runtime_dir, "sounds", "dtmf", "jungle"),
+    jungle_theme_sounds)
+targets += env.Install(os.path.join(runtime_dir, "connecting"), home_page)
+targets += env.Install(os.path.join(runtime_dir, "emoticons", "default"),
+    emoticons)
+
+env.WengoAlias('softphone-runtime', targets)

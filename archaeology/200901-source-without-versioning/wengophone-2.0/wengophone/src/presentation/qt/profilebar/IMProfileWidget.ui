@@ -1,0 +1,211 @@
+<ui version="4.0" >
+ <author></author>
+ <comment></comment>
+ <exportmacro></exportmacro>
+ <class>IMProfileWidget</class>
+ <widget class="QWidget" name="IMProfileWidget" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>323</width>
+    <height>75</height>
+   </rect>
+  </property>
+  <layout class="QGridLayout" >
+   <property name="margin" >
+    <number>0</number>
+   </property>
+   <property name="spacing" >
+    <number>0</number>
+   </property>
+   <item row="1" column="1" >
+    <layout class="QGridLayout" >
+     <property name="margin" >
+      <number>0</number>
+     </property>
+     <property name="spacing" >
+      <number>6</number>
+     </property>
+     <item row="0" column="6" >
+      <widget class="QToolButton" name="editProfileButton" >
+       <property name="toolTip" >
+        <string>Edit My Profile</string>
+       </property>
+       <property name="icon" >
+        <iconset resource="../wengophone.qrc" >:/pics/config/imaccounts.png</iconset>
+       </property>
+       <property name="iconSize" >
+        <size>
+         <width>22</width>
+         <height>22</height>
+        </size>
+       </property>
+       <property name="autoRaise" >
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2" >
+      <widget class="QToolButton" name="aimButton" >
+       <property name="toolTip" >
+        <string>AIM/ICQ</string>
+       </property>
+       <property name="icon" >
+        <iconset resource="../wengophone.qrc" >:/pics/protocols/aim_off.png</iconset>
+       </property>
+       <property name="iconSize" >
+        <size>
+         <width>22</width>
+         <height>22</height>
+        </size>
+       </property>
+       <property name="autoRaise" >
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="3" >
+      <widget class="QToolButton" name="yahooButton" >
+       <property name="toolTip" >
+        <string>Yahoo!</string>
+       </property>
+       <property name="icon" >
+        <iconset resource="../wengophone.qrc" >:/pics/protocols/yahoo_off.png</iconset>
+       </property>
+       <property name="iconSize" >
+        <size>
+         <width>22</width>
+         <height>22</height>
+        </size>
+       </property>
+       <property name="autoRaise" >
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0" >
+      <widget class="QToolButton" name="wengoButton" >
+       <property name="toolTip" >
+        <string>Wengo</string>
+       </property>
+       <property name="icon" >
+        <iconset resource="../wengophone.qrc" >:/pics/protocols/wengo_off.png</iconset>
+       </property>
+       <property name="iconSize" >
+        <size>
+         <width>22</width>
+         <height>22</height>
+        </size>
+       </property>
+       <property name="autoRaise" >
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="4" >
+      <widget class="QToolButton" name="jabberButton" >
+       <property name="toolTip" >
+        <string>Jabber/GoogleTalk</string>
+       </property>
+       <property name="icon" >
+        <iconset resource="../wengophone.qrc" >:/pics/protocols/jabber_off.png</iconset>
+       </property>
+       <property name="iconSize" >
+        <size>
+         <width>22</width>
+         <height>22</height>
+        </size>
+       </property>
+       <property name="autoRaise" >
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="5" >
+      <spacer>
+       <property name="orientation" >
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" >
+        <size>
+         <width>111</width>
+         <height>28</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item row="0" column="1" >
+      <widget class="QToolButton" name="msnButton" >
+       <property name="toolTip" >
+        <string>MSN</string>
+       </property>
+       <property name="icon" >
+        <iconset resource="../wengophone.qrc" >:/pics/protocols/msn_off.png</iconset>
+       </property>
+       <property name="iconSize" >
+        <size>
+         <width>22</width>
+         <height>22</height>
+        </size>
+       </property>
+       <property name="autoRaise" >
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item rowspan="2" row="0" column="0" >
+    <widget class="QToolButton" name="avatarButton" >
+     <property name="icon" >
+      <iconset resource="../wengophone.qrc" >:/pics/avatar_background.png</iconset>
+     </property>
+     <property name="iconSize" >
+      <size>
+       <width>70</width>
+       <height>70</height>
+      </size>
+     </property>
+     <property name="autoRaise" >
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1" >
+    <widget class="ToolTipLineEdit" name="aliasLineEdit" >
+     <property name="toolTip" >
+      <string>Enter your nickname here</string>
+     </property>
+     <property name="text" >
+      <string>Enter your nickname here</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <pixmapfunction></pixmapfunction>
+ <customwidgets>
+  <customwidget>
+   <class>ToolTipLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>ToolTipLineEditProxy.h</header>
+   <container>0</container>
+   <pixmap></pixmap>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>avatarButton</tabstop>
+  <tabstop>aliasLineEdit</tabstop>
+  <tabstop>wengoButton</tabstop>
+  <tabstop>msnButton</tabstop>
+  <tabstop>aimButton</tabstop>
+  <tabstop>yahooButton</tabstop>
+  <tabstop>jabberButton</tabstop>
+  <tabstop>editProfileButton</tabstop>
+ </tabstops>
+ <resources>
+  <include location="../wengophone.qrc" />
+ </resources>
+ <connections/>
+</ui>

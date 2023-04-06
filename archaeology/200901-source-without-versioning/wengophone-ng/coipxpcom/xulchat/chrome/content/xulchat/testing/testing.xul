@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+
+<window
+  id         = "testing"
+  windowtype = "testing"
+  title      = "Testing Suite"
+  width      = "370"
+  minwidth   = "370"
+  minheight  = "670"
+  height     = "670"
+  onload     = ""
+  persist    = "screenX screenY width height"
+
+  xmlns  = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script type="application/x-javascript" src="chrome://xulchat/content/jsunit/app/jsUnitCore.js"/>
+
+  <script type="application/x-javascript" src="chrome://xulchat/content/global.js"/>
+  <script type="application/x-javascript" src="chrome://xulchat/content/testing/testing.js"/>
+
+  <script type="application/x-javascript">tt.Init(); tt.Run();</script>
+
+  <script type="application/x-javascript" src="chrome://xulchat/content/testing/accounts.js"/>
+
+<!--
+  <script type="application/x-javascript" src="chrome://xulchat/content/testing/contacts.js"/>
+  <script type="application/x-javascript" src="chrome://xulchat/content/testing/chat.js"/>
+-->
+
+</window>

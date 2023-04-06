@@ -1,0 +1,120 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>CreditsFormWidget</class>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>CreditsFormWidget</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>334</width>
+            <height>425</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Credits</string>
+    </property>
+    <property name="sizeGripEnabled">
+        <bool>true</bool>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>textLabel2</cstring>
+            </property>
+            <property name="text">
+                <string>&lt;h2&gt;Credits: &lt;/h2&gt;
+
+Développeurs :
+&lt;ul&gt;
+    &lt;li&gt;pbernery (Philippe Bernery)
+    &lt;li&gt;jbossart (Julien Bossart)
+    &lt;li&gt;krp (David Ferlier)
+    &lt;li&gt;jgilli (Julien Gilli)
+    &lt;li&gt;nghiath (Nghia Thai Huynh)
+    &lt;li&gt;tanguy_k (Tanguy Krotoff)
+    &lt;li&gt;vadim (Vadim Lebedev)
+    &lt;li&gt;mphan (Minh Phan Quang)
+    &lt;li&gt;jwagner (Jérôme Wagner)
+    &lt;li&gt;mstute (Mathieu Stute)
+&lt;/ul&gt;
+
+Autres contributeurs :
+&lt;ul&gt;
+    &lt;li&gt;Daniele Gobbetti : Webcam testing and italian translation.
+    &lt;li&gt;ruskie : translation fixups and a nice SourceMage? Spell.
+    &lt;li&gt;Laurent Schweizer : Patch to support local ringing, very good bug reports and insightful suggestions.
+    &lt;li&gt;Phoebe Lin and her team : Chinese translation
+    &lt;li&gt;Sacraco Yoshino : Japanese translation.
+    &lt;li&gt;Sherry Yang : patch for remote ring support in NG.
+    &lt;li&gt;All translators.
+&lt;/ul&gt;</string>
+            </property>
+        </widget>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>Layout1</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>0</number>
+                </property>
+                <property name="spacing">
+                    <number>6</number>
+                </property>
+                <spacer>
+                    <property name="name">
+                        <cstring>Horizontal Spacing2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>225</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>buttonOk</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;OK</string>
+                    </property>
+                    <property name="accel">
+                        <string></string>
+                    </property>
+                    <property name="autoDefault">
+                        <bool>true</bool>
+                    </property>
+                    <property name="default">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+    </vbox>
+</widget>
+<connections>
+    <connection>
+        <sender>buttonOk</sender>
+        <signal>clicked()</signal>
+        <receiver>CreditsFormWidget</receiver>
+        <slot>accept()</slot>
+    </connection>
+</connections>
+<pixmapinproject/>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

@@ -1,0 +1,52 @@
+### Whom it may concern:
+All developpers modifying PyCoIpManager
+
+## PyCoIpManager
+
+PyCoIpManager is the Python binding of CoIpManager.
+SIP (http://www.riverbankcomputing.co.uk/sip/) is used to generate the binding.
+SIP needs a .sip file for each class that will be usable from Python. 
+** Please note: **
+.sip configuration files are needed for all classes accesible from Python, but
+not for the internal or private classes.
+
+## How to write a .sip file
+Sip files look a lot like header files, with syntactic differences. Please look
+at the SIP documentation for more details.
+A script (SipGenerator.py) is available to generate a .sip file from a header 
+file written according to OpenWengo coding standards. This generator is tuned 
+to these standards, so please respect them. If you want to use the generator in 
+other projects, you are welcome, but you'll probably need to adapt it.
+Reviewing the generated files is always recommended. Furthermore, editing is 
+needed in some cases:
+	- for STL classes
+	- for headers not in include folders (the path to the original header 
+	file will be absolute, breaking portability)
+	- minor tuning in many other cases
+
+## How to batch generate sip files
+You can use generateSipFiles.h
+Again, this script is tuned to OpenWengo standards (folder structure etc)
+
+You can customize the following, by modifying internal variables:
+	- Header file list
+	- Output folder
+
+## How to generate header file lists for batch sip generation
+fileListGen.py generates header file lists. Given an input folder, it scans it 
+recursively, searching for files (usually .h header files, this is 
+customizable). It includes a list of exceptions, again tuned to OpenWengo needs.
+It outputs the list in fileListTemp.py, as a task list.
+
+### Task list format
+
+A task list is a Python list of tasks. See task format.
+
+### Task format
+
+A task is just a list of strings. The first string is the output subfolder, where 
+all the tasks' sip files will be written. The output folder path is relative to 
+the OUTPUT_DIR (a constant in generateSipFiles.py ). Next, we have the header files for which SIP files 
+are to be created.
+
+

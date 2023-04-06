@@ -1,0 +1,27 @@
+
+import os
+
+def build_rpm_spec(target, source, env):
+    for a_target, a_source in zip(target, source):
+        spec_h_in = file(str(a_source), "r")
+        spec_h_data = spec_h_in.read()
+        spec_h = file(str(a_target), "w+")
+        spec_h_data = spec_h_data.replace("__WENGOPHONE_VERSION__",
+            "0.1")
+        spec_h_data = spec_h_data.replace("__WENGOPHONE_RELEASE__",
+            "1")
+        spec_h_data = spec_h_data.replace("__WENGOPHONE_BUILDDIR_NAME__",
+            os.path.join(env.WengoGetRootBuildDirRelative(),
+                'softphone', 'runtime'))
+#	spec_h_data = spec_h_data.replace("__ENABLE_VIDEO__",
+#	     '%%define video %s' % (VIDEO_FLAG))
+        spec_h.write(spec_h_data)
+        spec_h.close()
+        spec_h_in.close()
+
+spec_builder = Builder(action = build_rpm_spec)
+env = WengoEnvironment()
+rpm_env = env.Copy(BUILDERS = {'Spec' : spec_builder})
+
+target = rpm_env.Spec('wengophone.spec', 'wengophone.spec.in')
+rpm_env.WengoAlias("softphone-rpm-installer-spec", target)

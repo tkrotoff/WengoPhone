@@ -1,0 +1,31 @@
+# Copies libraries specific to Windows
+
+# Code duplicated from libs/3rdparty
+
+## FFmpeg
+ow_copy_dir_recursive(${CMAKE_SOURCE_DIR}/libs/3rdparty/ffmpeg/binary-lib/msvc/*.dll ${LIB_DIR})
+####
+
+## LibPurple
+ow_copy_dir_recursive(${CMAKE_SOURCE_DIR}/libs/3rdparty/libpurple/binary-lib/msvc/*.dll ${LIB_DIR})
+####
+
+## GLib
+ow_copy_dir(${CMAKE_SOURCE_DIR}/libs/3rdparty/glib/binary-lib/msvc/*.dll ${LIB_DIR})
+####
+
+## OpenSSL
+ow_copy_dir(${CMAKE_SOURCE_DIR}/libs/3rdparty/openssl/binary-lib/win32/*.dll ${LIB_DIR})
+####
+
+## Used by PhApi on Windows only
+ow_copy_lib2(${CMAKE_BINARY_DIR}/libs/3rdparty/pthread pthread ${LIB_DIR})
+####
+
+## Boost libraries
+ow_copy_file(${BOOST_PROGRAM_OPTIONS_LIBRARY} ${LIB_DIR})
+ow_copy_file(${BOOST_REGEX_LIBRARY} ${LIB_DIR})
+ow_copy_file(${BOOST_SERIALIZATION_LIBRARY} ${LIB_DIR})
+ow_copy_file(${BOOST_SIGNALS_LIBRARY} ${LIB_DIR})
+ow_copy_file(${BOOST_THREAD_LIBRARY} ${LIB_DIR})
+####

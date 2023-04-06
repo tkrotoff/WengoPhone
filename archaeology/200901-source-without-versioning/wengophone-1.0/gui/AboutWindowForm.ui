@@ -1,0 +1,206 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>AboutWindowForm</class>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>AboutWindowForm</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>461</width>
+            <height>448</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>AboutWindowForm</string>
+    </property>
+    <property name="whatsThis" stdset="0">
+        <string>Gives the build ID of the softphone</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QLabel" row="1" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>wengoBuildIdStringLabel</cstring>
+            </property>
+            <property name="text">
+                <string></string>
+            </property>
+        </widget>
+        <widget class="QLabel" row="4" column="1">
+            <property name="name">
+                <cstring>lastBuildIdLabel</cstring>
+            </property>
+            <property name="text">
+                <string></string>
+            </property>
+        </widget>
+        <widget class="QLabel" row="3" column="0">
+            <property name="name">
+                <cstring>wengoBuilIdTextLabel</cstring>
+            </property>
+            <property name="text">
+                <string>WengoPhone Internal Build ID:</string>
+            </property>
+        </widget>
+        <widget class="QLabel" row="3" column="1">
+            <property name="name">
+                <cstring>wengoBuildIdLabel</cstring>
+            </property>
+            <property name="text">
+                <string></string>
+            </property>
+        </widget>
+        <widget class="QGroupBox" row="2" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>groupBox1</cstring>
+            </property>
+            <property name="title">
+                <string>WengoPhone</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>licenceLabel</cstring>
+                    </property>
+                    <property name="font">
+                        <font>
+                        </font>
+                    </property>
+                    <property name="cursor">
+                        <cursor>13</cursor>
+                    </property>
+                    <property name="text">
+                        <string>A voice over Internet phone
+Copyright (C) 2004-2005 Wengo wengo.fr
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either version 2
+of the License, or (at your option) any later version.
+
+WengoPhone is based on the following softwares:
+- phApi Copyright (C) Wengo, Vadim Lebedev, published under GNU GPL
+- eXosip Copyright (C) Aymeric Moizard, published under GNU GPL
+- oSIP Copyright (C) Aymeric Moizard, published under GNU LGPL
+- oRTP Copyright (C) Simon Morlat, published under GNU LGPL
+- trayicon Copyright (C) Justin Karneges, published under GNU LGPL
+- libvcard Copyright (C) Rik Hemsley
+- iconset &amp; zip Copyright (C) Justin Karneges &amp; Michail Pishchagin, published under LGPL
+- cURL Copyright (C) Daniel Stenberg, published under MIT/X derivate license
+- FFmpeg, published under GNU LGPL
+- Qt Toolkit Copyright (C) Trolltech AS
+
+Many thanks to all the contributors.</string>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QLayoutWidget" row="6" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>layout24</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>checkUpdateButton</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Check for updates...</string>
+                    </property>
+                    <property name="autoDefault">
+                        <bool>false</bool>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>creditsButton</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Credits...</string>
+                    </property>
+                    <property name="autoDefault">
+                        <bool>false</bool>
+                    </property>
+                </widget>
+                <spacer>
+                    <property name="name">
+                        <cstring>spacer2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>308</width>
+                            <height>21</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>okButton</cstring>
+                    </property>
+                    <property name="text">
+                        <string>OK</string>
+                    </property>
+                    <property name="default">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="QLabel" row="4" column="0">
+            <property name="name">
+                <cstring>lastBuilIdTextLabel</cstring>
+            </property>
+            <property name="text">
+                <string>Last Build ID Available:</string>
+            </property>
+        </widget>
+        <spacer row="5" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>spacer1</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>21</width>
+                    <height>30</height>
+                </size>
+            </property>
+        </spacer>
+    </grid>
+</widget>
+<connections>
+    <connection>
+        <sender>okButton</sender>
+        <signal>clicked()</signal>
+        <receiver>AboutWindowForm</receiver>
+        <slot>accept()</slot>
+    </connection>
+</connections>
+<tabstops>
+    <tabstop>checkUpdateButton</tabstop>
+    <tabstop>okButton</tabstop>
+</tabstops>
+<pixmapinproject/>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

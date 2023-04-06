@@ -1,0 +1,18 @@
+env = WengoGetEnvironment()
+
+libs = [
+	'boost'
+]
+
+if WengoCCGCC():
+	libs += [
+		'boost_unit_test_framework'
+	]
+if WengoCCMSVC():
+	libs += [
+		'libboost_unit_test_framework-vc71-mt.lib'
+	]
+
+env.WengoUseLibraries(libs)
+
+env.WengoDeclareSystemLibrary('boost-unit-test')

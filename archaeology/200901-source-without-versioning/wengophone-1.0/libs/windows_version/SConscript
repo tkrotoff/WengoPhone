@@ -1,0 +1,42 @@
+# 
+# WengoPhone, a voice over Internet phone
+#
+# Copyright (C) 2004-2005  Wengo
+# Copyright (C) 2005 David Ferlier <david.ferlier@wengo.fr>
+# 
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+
+env = WengoEnvironment()
+winver_env = env.Copy()
+test_env = env.Copy()
+
+winver_libdec = env.WengoDeclareLibraryAuto("winver", "libs/windows_version")
+winver_sources = []
+
+if winver_env.WengoOsIsWindows():
+	winver_env.WengoLibAddMultiple(["Kernel32", "Advapi32", "User32"])
+	winver_sources += ["WindowsVersion.c"]
+
+winver_lib = winver_env.WengoStaticLibrary('winver', winver_sources)
+winver_env.WengoAlias('winver', winver_lib)
+
+
+test_env.WengoUseLibrary("winver")
+test_env.WengoLibAddMultiple(["Kernel32", "Advapi32", "User32"])
+test_src = ["main.c"]
+winver_test = test_env.WengoProgram('winver_test', test_src)
+winver_env.WengoAlias('winver_test', winver_test)
+

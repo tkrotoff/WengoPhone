@@ -1,0 +1,47 @@
+
+env = WengoEnvironment()
+exosip_env = env.Copy()
+
+exosip_sources = [
+    'src/eXosip.c',
+    'src/eXutils.c',
+    'src/jauth.c',
+    'src/jcall.c',
+    'src/jcallback.c',
+    'src/jdialog.c',
+    'src/jevents.c',
+    'src/jfreinds.c',
+    'src/jidentity.c',
+    'src/jmsg.c',
+    'src/jnotify.c',
+    'src/jpipe.c',
+    'src/jreg.c',
+    'src/jrequest.c',
+    'src/jresponse.c',
+    'src/jsubscribe.c',
+    'src/jsubscribers.c',
+    'src/misc.c',
+    'src/sdp_offans.c',
+    'src/udp.c'
+]
+
+
+exosip_lib_dec = env.WengoDeclareLibraryAuto("exosip", "wifo/exosip")
+exosip_lib_dec.AddSubIncludePath("include")
+
+exosip_env.WengoUseLibrary("osip")
+exosip_env.WengoUseLibraryHeaders("exosip")
+
+if exosip_env.WengoOsIsWindows():
+    exosip_env.WengoLibAddMultiple(["ws2_32", "winmm", "iphlpapi"])
+
+exosip_env["WIN32_INSERT_DEF"] = 1
+
+exosip_env.WengoCppDefineAdd("OSIP_MT")
+exosip_env.WengoCppDefineAdd("ENABLE_TRACE")
+
+if exosip_env.WengoGetConsoleArgument("enable-http-tunnel") == "yes":
+    exosip_env.WengoCppDefineAdd("USE_HTTP_TUNNEL")
+
+exosip_lib = exosip_env.StaticLibrary('exosip', exosip_sources)
+exosip_env.WengoAlias("exosip", exosip_lib)

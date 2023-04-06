@@ -1,0 +1,126 @@
+For Your Information: This file is no longer maintained, it's here for
+archiving purpose only!
+
+=========================================================================
+WengoPhone-20050603
+* nouvelles icones et nouvelle interface
+* nouvelle fenetre de login
+
+WengoPhone-20050530
+* le demarrage de WengoPhone au lancement de Windows
+  n'etait plus detecte dans le panneau de configuration
+* sauvegarde des parametres sous Win9x
+
+WengoPhone-20050527
+* integration du tunnel HTTP
+* smileys vocaux
+* unregister correctement effectue a la fermeture de WengoPhone
+* panneau de configuration re-travaille
+* pre-complete le champ "Home Phone" au lieu de "Wengo Name"
+  lors d'appels sortants/entrants
+* le demarrage automatique n'utilise plus un fichier .lnk
+* la fenetre de mise a jour n'etait plus traduite
+* correction sonnerie occupee
+* la mise a jour n'ecrase plus le fichier wengo.config
+* debut de traduction en russe
+* correction: reception des messages de moins de 3 caracteres
+* option blocage/deblocage d'un contact
+* detection des droits de l'utilisateur lors de l'installation
+* detection de la langue lors de l'installation
+
+WengoPhone-20050419
+* correction de la gestion de l'UNICODE pour Win9x
+* nouvelles icones et nouveau theme
+* implementation de la messagerie instantannee et de la presence
+* fonctionne sous Linux (libsound et WenboxPlugin non implementes = stub)
+* optimisation: lancement plus rapide de l'application (CallHistory)
+* nouvelle fenetre pour les SMS avec signature
+* correction du double affichage du login dans la fenetre principale
+* re-ecriture totale des audio settings (libsound)
+* correction de la detection de la Wenbox si un autre mixer audio
+  USB est present
+* amelioration des rapports de bugs (version debug uniquement)
+* une mise a jour ne bloque plus les appels tant que l'utilisateur
+  ne clique pas sur oui/non
+* correction: variante du bug "mauvais numero" (cf WengoPhone-20050207)
+* nouvelle sonnerie par DJ David Bitton Yo!!!
+* lien vers le forum dans le menu aide
+* modifications de la fenetre de configuration
+* debut de traduction en chinois
+* phApi-0.0.25
+  * ring back tones (desactives)
+  * gestion du son en monothread sous Windows
+  * codecs AMR Narrow Band et Wide Band (PC a PC seulement)
+  * correction du bug 100% occupation CPU ?
+
+WengoPhone-20050207
+* correction du register qui ne se faisait plus
+* correction du bug "mauvais numero" durant une conversation
+* la procedure de login passe de 3 * 15 secondes a 5 * 15 secondes
+* affichage du login dans la fenetre principale
+* le fenetre de communication est desormais en top level + minimize
+
+WengoPhone-20050204
+* recompilation de Qt-3.3.4: moins d'espace disque occupe
+* fenetre pour rapporter les bugs en cas de crash
+  (version debug uniquement)
+
+WengoPhone-20050201
+* re-ecriture de la procedure de connection
+* re-connexion automatique au demarrage de WengoPhone
+* option: demarrage de WengoPhone au lancement de Windows
+* la Wenbox est reconnu sous Windows 2000 fr
+* retablissement du peripherique audio par defaut
+* mise a jour de Qt vers la version 3.3.4
+* fonctionne sous Windows 98
+* nouveaux themes: krisp, lipstik et plastikQ
+* bugs fixed
+
+WengoPhone-20050127
+* popup transparente lors d'un appel entrant
+* un upgrade n'affiche plus de console
+* modification de la fenetre a propos
+* en mode PSTN, un appel telephonique entrant sur la ligne Wengo
+  ne sonne plus occupe
+* modification des audio settings: libsound
+* phApi-0.0.24rc3
+
+WengoPhone-20050121
+* l'integralite de WengoPhone est desormais sous license GNU GPL !
+  cf licence-fr.txt
+* activation des SMS
+* bug fixed: accents dans l'historique des appels
+* plus de problemes avec les login/password ?
+* suppression de playsound.exe (plus de sablier)
+* playsound gere les fichiers .wav (suppression des .raw)
+* desactivation du double appel qui posait probleme
+* bugs fixed
+
+WengoPhone-20050113
+* login/password passe par QUrl::encode(),
+  il y avait des problemes avec les caracteres speciaux auparavant
+* la Wenbox est desormais totalement operationnelle
+* modification systray/fenetre de communication:
+  WengoPhone est desormais moins intrusif au niveau de l'interface
+* envoie regulier d'un packet UDP pour passer certains firewalls/NAT
+* nouvelles icones
+* suppression au niveau de l'historique des appels (touche suppr/del)
+* phApi-0.0.24rc2
+* bugs fixed
+
+WengoPhone-20050107
+* ajout du systray
+* ajout de la Wenbox
+* renommage de softphone.exe en wengophone.exe
+* l'installer supprime softphone.exe wengophone.exe phapiserver.exe au
+  lancement de l'installation
+* phapiserver.exe a ete supprime: phapiserver.exe est desormais inclue
+  dans wengophone.exe
+* le champ pseudo d'un contact a ete supprime
+* integration (desactivee) des SMS
+* register toute les 50 minutes
+* phApi-0.0.23
+* bugs fixed
+
+Softphone-20041218
+* premiere version

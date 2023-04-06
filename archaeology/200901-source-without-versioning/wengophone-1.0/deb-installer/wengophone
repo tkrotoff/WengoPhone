@@ -1,0 +1,10 @@
+#!/bin/sh
+
+#
+# Wrapper for the Linux version of the Wengophone project
+# David Ferlier <david.ferlier@wengo.fr>
+#
+
+cd /usr/lib/wengophone ||exit 1
+export LD_LIBRARY_PATH="."
+./wengophone 

@@ -1,0 +1,35 @@
+
+env = WengoEnvironment()
+
+util_decl = env.WengoDeclareLibraryAuto("util", "libs/util")
+util_decl.AddSubIncludePath("include")
+util_decl.RemoveLibrary("util")
+util_decl.AddLibrary("wengoutil")
+
+util_env = WengoQtEnvironment(env)
+util_env.WengoUseLibraryHeaders("util")
+util_env.WengoUseLibrary("wengocurl")
+
+util_sources = [
+    'src/observer/Subject.cpp', 
+    'src/Startup.cpp',
+    'src/WebBrowser.cpp',
+    'src/thread/Thread.cpp',
+    'src/thread/QtThread.cpp',
+    'src/thread/NullThread.cpp',
+    'src/StringList.cpp',
+    'src/timer/Timer.cpp',
+    'src/http/HttpRequest.cpp',
+    'src/http/CurlHttpRequest.cpp',
+    'src/http/NullHttpRequest.cpp',
+    'src/http/QtHttpRequest.cpp',
+    'include/http/moc_QtHttpRequest.cc',
+]
+
+if env.WengoOsIsWindows():
+    util_sources += [ 'src/MemoryDump.cpp' ]
+
+http_request_moc = util_env.Moc('include/http/QtHttpRequest.h')
+
+util_lib = util_env.WengoStaticLibrary('wengoutil', util_sources)
+util_env.WengoAlias("util", http_request_moc + util_lib)

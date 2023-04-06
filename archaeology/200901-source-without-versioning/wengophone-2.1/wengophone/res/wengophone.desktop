@@ -1,0 +1,14 @@
+[Desktop Entry]
+Name=WengoPhone
+Comment=VoIP softphone
+Comment[fr]=Téléphone VoIP
+Comment[it]=Programma VoIP
+GenericName=VoIP softphone
+GenericName[fr]=Téléphone VoIP
+GenericName[it]=Programma VoIP
+Exec=qtwengophone
+Icon=wengophone
+StartupNotify=true
+Terminal=false
+Type=Application
+Categories=Qt;Network;Telephony;VideoConference

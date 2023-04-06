@@ -1,0 +1,9 @@
+import os
+
+env = WengoEnvironment()
+rpm_env = env.Copy()
+
+rpm_env.WengoBuildInDir("rpms/BUILD/SConscript", "softphone/rpm-installer/rpms/BUILD")
+rpm_env.WengoBuildInDir("rpms/SOURCES/SConscript", "softphone/rpm-installer/rpms/SOURCES")
+rpm_env.WengoBuildInDir("rpms/SPECS/SConscript", "softphone/rpm-installer/rpms/SPECS")
+rpm_env.WengoBuildInDir("rpms/RPMS/SConscript", "softphone/rpm-installer/rpms/RPMS")

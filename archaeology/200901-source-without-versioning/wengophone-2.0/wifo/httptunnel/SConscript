@@ -1,0 +1,26 @@
+env = WengoGetEnvironment()
+
+libs = [
+	'owcurl'
+]
+lib_path = []
+include_path = ['.']
+defines = {}
+headers = []
+sources = [
+	'httptunnel.c'
+]
+
+if env.getConsoleArgument('enable-ssl'):
+    defines['HT_USE_SSL'] = 1
+
+if WengoOSWindows():
+	libs += ['ws2_32']
+	defines['WIN32'] = 1
+
+env.WengoAddIncludePath(include_path)
+env.WengoUseLibraries(libs)
+env.WengoAddDefines(defines)
+env.WengoAddDoxyfile()
+
+env.WengoStaticLibrary('httptunnel', sources)

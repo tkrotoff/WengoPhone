@@ -1,0 +1,205 @@
+import os.path
+
+env = WengoGetEnvironment()
+
+base_install_dir = WengoGetConsoleArgument("prefix")
+if base_install_dir == None:
+	base_install_dir = "/tmp"
+lib_install_dir  = os.path.join(base_install_dir, "lib", "qtwengophone")
+bin_install_dir = os.path.join(base_install_dir, "bin")
+wrapper_path = os.path.join(bin_install_dir, "qtwengophone")
+
+dlls = [
+]
+
+base_sounds = [
+	"../../../sounds/ringin.wav",
+	"../../../sounds/callclosed.wav",
+]
+
+avatars = [
+	"../../../pics/avatars/export11_96.png",
+	"../../../pics/avatars/export12_96.png",
+	"../../../pics/avatars/export13_96.png",
+	"../../../pics/avatars/export14_96.png",
+	"../../../pics/avatars/export15_96.png",
+	"../../../pics/avatars/export16_96.png",
+	"../../../pics/avatars/export17_96.png",
+	"../../../pics/avatars/export18_96.png",
+	"../../../pics/avatars/export1_96.png",
+	"../../../pics/avatars/export19_96.png",
+	"../../../pics/avatars/export20_96.png",
+	"../../../pics/avatars/export21_96.png",
+	"../../../pics/avatars/export22_96.png",
+	"../../../pics/avatars/export23_96.png",
+	"../../../pics/avatars/export24_96.png",
+	"../../../pics/avatars/export25_96.png",
+	"../../../pics/avatars/export26_96.png",
+	"../../../pics/avatars/export27_96.png",
+	"../../../pics/avatars/export28_96.png",
+	"../../../pics/avatars/export2_96.png",
+	"../../../pics/avatars/export29_96.png",
+	"../../../pics/avatars/export30_96.png",
+	"../../../pics/avatars/export31_96.png",
+	"../../../pics/avatars/export32_96.png",
+	"../../../pics/avatars/export33_96.png",
+	"../../../pics/avatars/export34_96.png",
+	"../../../pics/avatars/export35_96.png",
+	"../../../pics/avatars/export36_96.png",
+	"../../../pics/avatars/export37_96.png",
+	"../../../pics/avatars/export38_96.png",
+	"../../../pics/avatars/export3_96.png",
+	"../../../pics/avatars/export39_96.png",
+	"../../../pics/avatars/export40_96.png",
+	"../../../pics/avatars/export4_96.png",
+	"../../../pics/avatars/export5_96.png",
+	"../../../pics/avatars/export6_96.png",
+	"../../../pics/avatars/export7_96.png",
+	"../../../pics/avatars/export8_96.png",
+	"../../../pics/avatars/export9_96.png",
+	]
+
+default_theme_sounds = [
+	"../../../sounds/tones/star.wav",
+	"../../../sounds/tones/0.wav",
+	"../../../sounds/tones/1.wav",
+	"../../../sounds/tones/2.wav",
+	"../../../sounds/tones/3.wav",
+	"../../../sounds/tones/4.wav",
+	"../../../sounds/tones/5.wav",
+	"../../../sounds/tones/6.wav",
+	"../../../sounds/tones/7.wav",
+	"../../../sounds/tones/8.wav",
+	"../../../sounds/tones/9.wav",
+	"../../../sounds/tones/pound.wav",
+]
+
+jungle_theme_sounds = [
+	"../../../sounds/tones/jungle/pound.raw",
+	"../../../sounds/tones/jungle/star.raw",
+	"../../../sounds/tones/jungle/0.raw",
+	"../../../sounds/tones/jungle/1.raw",
+	"../../../sounds/tones/jungle/2.raw",
+	"../../../sounds/tones/jungle/3.raw",
+	"../../../sounds/tones/jungle/4.raw",
+	"../../../sounds/tones/jungle/5.raw",
+	"../../../sounds/tones/jungle/6.raw",
+	"../../../sounds/tones/jungle/7.raw",
+	"../../../sounds/tones/jungle/8.raw",
+	"../../../sounds/tones/jungle/9.raw",
+]
+
+docs = [
+]
+
+web_stuff = [
+]
+
+icons_misc =  [
+]
+
+home_page = [
+]
+
+lang = [
+	"gui/lang/wengo_de.qm",
+	"gui/lang/wengo_en.qm",
+	"gui/lang/wengo_es.qm",
+	"gui/lang/wengo_fi.qm",
+	"gui/lang/wengo_fr.qm",
+	"gui/lang/wengo_it.qm",
+	"gui/lang/wengo_ja.qm",
+	"gui/lang/wengo_de.qm",
+	"gui/lang/wengo_pl.qm",
+	"gui/lang/wengo_zh.qm",
+	"gui/lang/wengo_cs.qm",
+]
+
+emoticons = [
+	"chat/emoticons/emblem-unreadable.png",
+	"chat/emoticons/face-angel16.png",
+	"chat/emoticons/face-angel22.png",
+	"chat/emoticons/face-angel48.png",
+	"chat/emoticons/face-crying16.png",
+	"chat/emoticons/face-crying22.png",
+	"chat/emoticons/face-crying48.png",
+	"chat/emoticons/face-devil-grin16.png",
+	"chat/emoticons/face-devil-grin22.png",
+	"chat/emoticons/face-devil-grin48.png",
+	"chat/emoticons/face-glasses16.png",
+	"chat/emoticons/face-glasses22.png",
+	"chat/emoticons/face-glasses48.png",
+	"chat/emoticons/face-kiss16.png",
+	"chat/emoticons/face-kiss22.png",
+	"chat/emoticons/face-kiss48.png",
+	"chat/emoticons/face-plain16.png",
+	"chat/emoticons/face-plain22.png",
+	"chat/emoticons/face-plain48.png",
+	"chat/emoticons/face-sad16.png",
+	"chat/emoticons/face-sad22.png",
+	"chat/emoticons/face-sad48.png",
+	"chat/emoticons/face-smile16.png",
+	"chat/emoticons/face-smile22.png",
+	"chat/emoticons/face-smile48.png",
+	"chat/emoticons/face-smile-big16.png",
+	"chat/emoticons/face-smile-big22.png",
+	"chat/emoticons/face-smile-big48.png",
+	"chat/emoticons/face-surprise16.png",
+	"chat/emoticons/face-surprise22.png",
+	"chat/emoticons/face-surprise48.png",
+	"chat/emoticons/face-wink16.png",
+	"chat/emoticons/face-wink22.png",
+	"chat/emoticons/face-wink48.png",
+	]
+
+targets = []
+targets += env.Install(lib_install_dir, env.WengoGetAlias("portaudio"))
+if WengoOSWindows():
+	targets += env.Install(lib_install_dir, env.WengoGetAlias("softphone-download"))
+	targets += env.Install(lib_install_dir, env.WengoGetAlias("softphone-memorydump"))
+
+targets += env.Install(lib_install_dir, env.WengoGetAlias("phapi"))
+targets += env.Install(lib_install_dir, env.WengoGetAlias("qtwengophone_alias"))
+
+targets += env.Install(lib_install_dir, [
+	env.WengoGetAlias("owcurl_alias"),
+	env.WengoGetAlias("phapi_alias"),
+])
+if WengoGetConsoleArgument("enable-video") == "yes":
+	targets += env.Install(lib_install_dir, env.WengoGetAlias("libavcodec"))
+	#targets += env.Install(lib_install_dir, env.WengoGetAlias("video"))
+	targets += env.Install(lib_install_dir, env.WengoGetAlias("webcam"))
+
+targets += env.Install(lib_install_dir, docs)
+targets += env.Install(lib_install_dir, web_stuff)
+
+targets += env.Install(os.path.join(lib_install_dir, "icons"), icons_misc)
+targets += env.Install(os.path.join(lib_install_dir, "pics/avatars"), avatars)
+targets += env.Install(os.path.join(lib_install_dir, "sounds"), base_sounds)
+targets += env.Install(os.path.join(lib_install_dir, "sounds", "dtmf"), default_theme_sounds)
+targets += env.Install(os.path.join(lib_install_dir, "sounds", "dtmf", "jungle"), jungle_theme_sounds)
+#targets += env.Install(os.path.join(lib_install_dir, "connecting"), home_page)
+targets += env.Install(os.path.join(lib_install_dir, "emoticons"), emoticons)
+targets += env.Install(os.path.join(lib_install_dir, "lang"), env.WengoGetAlias("qtwengophone-translations"))
+
+wrapper_script = """
+#!/bin/sh
+#
+# Wengophone wrapper script for Linux
+# Author: David Ferlier <david.ferlier@wengo.fr>
+#
+
+cd %s || exit 1
+export LD_LIBRARY_PATH="."
+./wengophone
+"""
+
+def install_wrapper(target, source, env):
+	for a_target, a_source in zip(target, source):
+		t_wrapper = file(str(a_target), "w+")
+		t_wrapper.write(wrapper_script % lib_install_dir)
+		t_wrapper.close()
+
+targets += env.Command(wrapper_path, env.WengoGetAlias("qtwengophone_alias"), install_wrapper)
+
+env.WengoAlias('qtwengophone-install', targets)

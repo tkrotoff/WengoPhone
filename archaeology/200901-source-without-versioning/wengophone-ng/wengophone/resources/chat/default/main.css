@@ -1,0 +1,23 @@
+.header {
+	font-weight: bold;
+}
+
+.time {
+	font-weight: bold;
+}
+
+.incomingHeader {
+	background-color: #e4ffe6;
+}
+
+.incomingTime {
+	color: #98ab9a;
+}
+
+.outgoingHeader {
+	background-color: #f0efff;
+}
+
+.outgoingTime {
+	color: #a0a0ab;
+}

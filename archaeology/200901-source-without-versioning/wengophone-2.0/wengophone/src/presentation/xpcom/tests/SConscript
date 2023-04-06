@@ -1,0 +1,33 @@
+env = WengoGetQt4Environment()
+
+libs = [
+	'qtutil',
+	'qt4',
+	'xpcomwengophone',
+]
+lib_path = []
+include_path = []
+export_defines = {}
+defines = {}
+link_flags = []
+if WengoOSMacOSX():
+	frameworks = [
+		'AudioUnit',
+		'AudioToolbox',
+		'CoreAudio'
+	]
+	
+	env.WengoAddFrameworks(frameworks)
+
+headers = []
+sources = [
+	'main.cpp',
+	'MainWindow.cpp',
+]
+
+env.WengoCopyToBuildDir('MainWindow.ui', '.')
+env.WengoAddDefines(defines)
+env.WengoAddLinkFlags(link_flags)
+env.WengoAddIncludePath(include_path)
+env.WengoUseLibraries(libs)
+env.WengoProgram('testxpcomwengophone', sources, headers)

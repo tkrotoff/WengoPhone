@@ -1,0 +1,119 @@
+# 
+# WengoPhone, a voice over Internet phone
+#
+# Copyright (C) 2004-2005  Wengo
+# Copyright (C) 2005 David Ferlier <david.ferlier@wengo.fr>
+# 
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+
+libavcodec_i386_sources =  [
+    'i386/fdct_mmx.c',
+    'i386/cputest.c',
+    'i386/dsputil_mmx.c',
+    'i386/mpegvideo_mmx.c',
+    'i386/idct_mmx.c',
+    'i386/motion_est_mmx.c',
+    'i386/simple_idct_mmx.c',
+    'i386/vp3dsp_mmx.c',
+    'i386/vp3dsp_sse2.c',
+]
+
+libavcodec_i386_sse_sources = [
+    'i386/fft_sse.c',
+]
+
+libavcodec_core_sources = [
+    'bitstream.c',
+    'utils.c',
+    'mem.c',
+    'allcodecs.c',
+    'mpegvideo.c',
+    'jrevdct.c',
+    'jfdctfst.c',
+    'jfdctint.c',
+    'mpegaudio.c',
+    'ac3enc.c',
+    'mjpeg.c',
+    'resample.c',
+    'resample2.c',
+    'dsputil.c',
+    'motion_est.c',
+    'imgconvert.c',
+    'imgresample.c',
+    'mpeg12.c',
+    'mpegaudiodec.c',
+    'pcm.c',
+    'simple_idct.c',
+    'ratecontrol.c',
+    'adpcm.c',
+    'eval.c',
+    'error_resilience.c',
+    'fft.c',
+    'mdct.c',
+    'raw.c',
+    'golomb.c',
+    'cabac.c',
+    'dpcm.c',
+    'adx.c',
+    'faandct.c',
+    'parser.c',
+    'g726.c',
+    'vp3dsp.c',
+    'h264idct.c',
+    'rangecoder.c',
+    'pnm.c',
+    'h263.c',
+    'msmpeg4.c',
+    'h263dec.c',
+    'dvdsub.c',
+    'dvbsub.c',
+    'dvbsubdec.c'
+]
+
+libavcodec_sources = libavcodec_core_sources
+
+env = WengoEnvironment("ffmpeg")
+libavcodec_env = env
+libavcodec_env.WengoUseLibrary("libavutil")
+
+if libavcodec_env.WengoGetMachine().endswith("86"):
+    libavcodec_sources += libavcodec_i386_sources
+
+libavcodec_decl = env.WengoDeclareLibraryAuto("libavcodec",
+	"libs/ffmpeg/libavcodec")
+libavcodec_decl.RemoveLibrary("libavcodec")
+libavcodec_decl.AddLibrary("avcodec")
+
+libavcodec_decl.AddSubIncludePath("..")
+libavcodec_decl.AddSubIncludePath("../libavutil")
+
+libavcodec_sse_env = libavcodec_env.Copy()
+#libavcodec_sse_env.WengoCCFlagsAdd("-msse")
+
+# :)
+#if libavcodec_env.WengoGetMachine().endswith("86"):
+#    libavcodec_sse_lib = libavcodec_sse_env.WengoSharedObject('fft_sse',
+#        libavcodec_i386_sse_sources)
+#    libavcodec_sources += libavcodec_sse_lib
+
+libavcodec = None
+if libavcodec_env.WengoOsIsWindows():
+    libavcodec_decl.AddSubLibPath("../binary-lib")
+else:
+    libavcodec = libavcodec_env.WengoSharedLibrary('avcodec',
+            libavcodec_sources)
+
+libavcodec_env.WengoAlias('libavcodec', libavcodec)

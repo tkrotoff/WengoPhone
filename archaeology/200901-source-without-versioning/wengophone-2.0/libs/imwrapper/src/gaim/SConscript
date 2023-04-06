@@ -1,0 +1,35 @@
+env = WengoGetEnvironment()
+
+libs = [
+	'owcutil',
+	'gaim',
+	'imwrapper',
+]
+
+if WengoOSPosix():
+	env.ParseConfig('pkg-config --cflags --libs gthread-2.0')
+
+lib_path = []
+include_path = ['../gaim']
+defines = {}
+headers = []
+sources = [
+	'GaimIMFactory.cpp',
+	'GaimIMChat.cpp',
+	'GaimIMConnect.cpp',
+	'GaimIMPresence.cpp',
+	'GaimIMContactList.cpp',
+	'GaimChatMngr.cpp',
+	'GaimConnectMngr.cpp',
+	'GaimPresenceMngr.cpp',
+	'GaimAccountMngr.cpp',
+	'GaimContactListMngr.cpp',
+	'GaimEnumPresenceState.cpp',
+	'GaimEnumIMProtocol.cpp'
+]
+if WengoOSLinux():
+	defines['ENABLE_NLS'] = 1
+env.WengoAddDefines(defines)
+env.WengoAddIncludePath(include_path)
+env.WengoUseLibraries(libs)
+env.WengoStaticLibrary('gaimimwrapper', sources)

@@ -1,0 +1,11 @@
+
+env = WengoEnvironment()
+rpm_env = env.Copy()
+
+import os.path
+
+root_path = os.path.join(rpm_env.WengoGetRootBuildDir(), 'softphone', 'runtime')
+target = rpm_env.Tar('wengophone-build.tar', root_path)
+w_target = rpm_env.Install(root_path, 'wengophone_wrapper.sh')
+
+rpm_env.WengoAlias("softphone-rpm-installer-sources", target)

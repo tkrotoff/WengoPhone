@@ -1,0 +1,59 @@
+[Project]
+Language=cpp
+Root.0=$PROJECT_DIR$/src
+Root.0.access=writable
+Root.0.file_types=cpp_source;cpp_header
+Root.0.package_prefix=
+Root.1=$PROJECT_DIR$/together
+Root.1.access=writable
+Root.1.file_types=diagram
+Root.1.package_prefix=
+Version=3.0
+projectfile.encoding=Cp1252
+Root.2=$TGH$/jdk/jre/lib/rt.jar
+Root.2.access=import
+Root.2.non_removable=
+[workspace]
+Developer.CodingWorkspace={{0,2,-1,0,0,0,0,0,0,1,0,50,75,25,-1,-1,-1,-1}${0,1,-1,0,0,0,0,1,0,1,0,50,75,25,-1,-1,-1,-1}${0,3,-1,0,0,0,0,1,0,1,0,66,50,25,-1,-1,-1,-1}${0,3,-1,0,0,0,0,1,0,1,0,66,50,25,-1,-1,-1,-1}${0,-1,-1,0,0,0,0,0,0,1,0,5,5,5,-1,-1,-1,-1}${0,5,-1,0,0,0,0,0,0,1,0,50,50,25,-1,-1,-1,-1}${0,4,-1,0,0,0,0,1,0,1,1,66,50,25,-1,-1,-1,-1}${0,7,-1,0,0,0,0,0,0,1,0,50,50,75,-1,-1,-1,-1}}
+Developer.DebugWorkspace={{0,2,-1,0,0,0,0,0,0,1,0,50,75,25,-1,-1,-1,-1}${0,1,-1,0,0,0,0,1,0,1,1,50,75,25,-1,-1,-1,-1}${0,3,-1,0,0,0,0,0,0,1,0,50,50,25,-1,-1,-1,-1}${0,3,-1,0,0,0,0,0,0,1,0,50,50,25,-1,-1,-1,-1}${0,-1,-1,0,0,0,0,0,0,1,0,5,5,5,-1,-1,-1,-1}${0,4,-1,0,0,0,0,0,0,1,0,50,50,25,-1,-1,-1,-1}${0,0,-1,0,0,0,0,1,0,1,0,75,5,5,-1,-1,-1,-1}${0,7,-1,0,0,0,0,0,0,1,0,50,50,75,-1,-1,-1,-1}}
+Developer.DesignWorkspace={{0,2,-1,0,0,0,0,1,0,1,0,50,75,22,-1,-1,-1,-1}${0,1,-1,0,0,0,0,0,0,1,0,50,75,22,-1,-1,-1,-1}${0,3,-1,0,0,0,0,1,0,1,0,50,50,22,-1,-1,-1,-1}${0,3,-1,0,0,0,0,1,0,1,0,50,50,22,-1,-1,-1,-1}${0,-1,-1,0,0,0,0,0,0,1,0,5,5,5,-1,-1,-1,-1}${0,4,-1,0,0,0,0,1,0,1,1,50,50,22,-1,-1,-1,-1}${0,0,-1,0,0,0,0,0,0,1,0,75,5,5,-1,-1,-1,-1}${0,7,-1,0,0,0,0,0,0,1,0,50,50,75,-1,-1,-1,-1}}
+Developer.softphone-ng={{0,2,-1,0,0,0,0,1,0,1,0,54,75,25,-1,-1,-1,-1}${0,1,-1,0,0,0,0,1,0,1,0,54,75,25,-1,-1,-1,-1}${0,3,-1,0,0,0,0,0,0,1,0,50,50,25,-1,-1,-1,-1}${0,3,-1,0,0,0,0,0,0,1,0,50,50,25,-1,-1,-1,-1}${0,-1,-1,0,0,0,0,0,0,1,0,5,5,5,-1,-1,-1,-1}${0,4,-1,0,0,0,0,0,0,1,0,50,50,25,-1,-1,-1,-1}${1,-1,0,395,495,1172,314,1,0,1,1,5,5,5,-1,-1,-1,-1}${0,7,-1,0,0,0,0,0,0,1,0,50,50,75,-1,-1,-1,-1}}
+names.Developer={<default>}
+Developer.<default>={{0,2,-1,0,0,0,0,1,0,1,1,50,75,25,-1,-1,-1,-1}${0,1,-1,0,0,0,0,1,0,1,0,50,75,25,-1,-1,-1,-1}${0,3,-1,0,0,0,0,0,0,1,0,50,50,25,-1,-1,-1,-1}${0,3,-1,0,0,0,0,0,0,1,0,50,50,25,-1,-1,-1,-1}${0,-1,-1,0,0,0,0,0,0,1,0,5,5,5,-1,-1,-1,-1}${0,4,-1,0,0,0,0,0,0,1,0,50,50,25,-1,-1,-1,-1}${1,-1,0,44,752,1208,214,1,0,1,0,5,5,5,-1,-1,-1,-1}${0,7,-1,0,0,0,0,0,0,1,0,50,50,75,-1,-1,-1,-1}}
+[editor]
+recent.file.0=C:\\Documents and Settings\\tanguy\\Desktop\\openwengo-new\\trunk\\wengophone\\src\\presentation\\PPhoneCall.h
+recent.file.1=C:\\Documents and Settings\\tanguy\\Desktop\\openwengo-new\\trunk\\wengophone\\src\\control\\phonecall\\CPhoneCall.h
+recent.file.2=C:\\Documents and Settings\\tanguy\\Desktop\\openwengo-new\\trunk\\wengophone\\src\\model\\phonecall\\PhoneCallStateTalking.h
+recent.file.3=C:\\Documents and Settings\\tanguy\\Desktop\\openwengo-new\\trunk\\wengophone\\src\\model\\phonecall\\PhoneCallStateOk.h
+recent.file.4=C:\\Documents and Settings\\tanguy\\Desktop\\openwengo-new\\trunk\\wengophone\\src\\model\\phonecall\\PhoneCallState.h
+recent.file.5=C:\\Documents and Settings\\tanguy\\Desktop\\openwengo-new\\trunk\\wengophone\\src\\model\\phonecall\\PhoneCallState.cpp
+recent.file.6=C:\\Documents and Settings\\tanguy\\Desktop\\openwengo-new\\trunk\\wengophone\\src\\model\\phonecall\\PhoneCallStateDefault.h
+recent.file.7=C:\\Documents and Settings\\tanguy\\Desktop\\openwengo-new\\trunk\\wengophone\\src\\model\\phonecall\\PhoneCallStateHoldOk.h
+recent.file.8=C:\\Documents and Settings\\tanguy\\Desktop\\openwengo-new\\trunk\\wengophone\\src\\model\\phonecall\\PhoneCallStateIncoming.h
+recent.file.9=C:\\Documents and Settings\\tanguy\\Desktop\\openwengo-new\\trunk\\wengophone\\src\\model\\phonecall\\PhoneCallStateClosed.h
+[lastOpenProjectName]
+Developer=<default>
+[vcs]
+provider.class=CVS LAN
+[newDiagramExpert]
+includeInCurrentDiagram=false
+[search]
+file.fileTypes=*
+file.lookIn=All project source files
+file.replaceWith=vCard.	sso.
+file.scope=All
+file.textToFind=vCard->	sso->	PostEvent	addPhoneLine	_presence	showLoginWindow	phoneCall	_hangUpButton	_pickUpButton	callProgress
+file.caseSensitive= 
+[srccontrol]
+enabled=false
+[printFile]
+fontSize=10
+lineSpacing=1.0
+syntaxPrint=true
+useColor=false
+[genHTML]
+folder=C:\\Documents and Settings\\tanguy\\Desktop\\wengo\\softphone-ng\\doc
+generateFor=all_packages
+includeDiagrams=true
+launchBrowser=false
+navigationTree=true

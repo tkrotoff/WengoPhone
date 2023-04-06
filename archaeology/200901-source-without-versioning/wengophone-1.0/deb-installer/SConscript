@@ -1,0 +1,56 @@
+#
+# Debian installer support.
+# David Ferlier <david.ferlier@wengo.fr>
+#
+
+import popen2, os.path, sys
+
+env = WengoEnvironment()
+deb_env = env.Copy()
+deb_spec_template = 'wengophone.debian.control'
+deb_spec = 'debian/DEBIAN/control'
+
+wengophone_deb_params = {
+    "wengophone_version": env.WengoGetVariable("WENGOPHONE_ID_STRING"),
+    "wengophone_release": "1",
+    "wengophone_arch": "i386",
+    "wengophone_builddir_name": "build/%s-%s/runtime" % (sys.platform, "debug")
+}
+
+final_deb_name = 'Wengophone-%(wengophone_version)s-%(wengophone_release)s.%(wengophone_arch)s.deb' % wengophone_deb_params
+
+def build_deb_spec(env, target, source):
+    for a_target, a_source in zip(target, source):
+        spec_h_in = file(str(a_source), "r")
+        spec_h_data = spec_h_in.read()
+        spec_h = file(str(a_target), "w+")
+        spec_h.write(spec_h_data)
+        spec_h.close()
+        spec_h_in.close()
+
+def build_deb_installer(env, target, source):
+    cmd = "dpkg-deb --build "
+
+    for a_target, a_source in zip(target, source):
+        cmd += str(a_source)
+        out, infd = popen2.popen4(cmd)
+        print out.read()
+
+targets = []
+targets.append(deb_env.Command(deb_spec, deb_spec_template, build_deb_spec))
+targets += deb_env.WengoSyncDirs(os.path.join(deb_env.WengoGetConsoleArgument("prefix"), "lib/wengophone") , "debian/usr/lib/wengophone")
+
+targets.append(deb_env.Command("debian/usr/share/applications/wengophone.desktop", 'wengophone.desktop',
+               Copy('$TARGET', '$SOURCE')))
+targets.append(deb_env.Command("debian/usr/share/pixmaps/wengophone.png", 'wengophone.png',
+               Copy('$TARGET', '$SOURCE')))
+
+targets.append(deb_env.Command("debian/usr/bin/wengophone", 'wengophone',
+               Copy('$TARGET', '$SOURCE')))
+targets += deb_env.Command("debian.deb", 'debian', build_deb_installer)
+full_path = os.path.join(env.WengoGetRootBuildDir(), final_deb_name)
+targets.append(deb_env.Command(full_path, 'debian.deb',
+               Copy('$TARGET', '$SOURCE')))
+
+deb_env.WengoAlias("softphone-deb-installer", targets)
+deb_env.Depends(deb_env.WengoGetAlias("softphone-deb-installer"), deb_env.WengoGetAlias("softphone"))

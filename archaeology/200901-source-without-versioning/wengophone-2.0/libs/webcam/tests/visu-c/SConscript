@@ -1,0 +1,24 @@
+env = WengoGetQt4Environment()
+
+libs = [
+	'webcam',
+	'qt4',
+]
+
+include_path = [
+	'.'
+]
+
+headers = [
+	'webcam_test.h'
+]
+
+sources = [
+	'webcam_test.cpp'
+]
+
+env.WengoAddIncludePath(include_path)
+env.WengoUseLibraries(libs)
+
+env.WengoProgram('webcam-test-visu-c', sources, headers)
+

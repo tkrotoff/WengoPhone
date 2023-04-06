@@ -1,0 +1,16 @@
+env = WengoEnvironment()
+env_global = env.Copy()
+
+decl = env.WengoDeclareLibraryAuto("global", "libs/global")
+decl.AddSubIncludePath("include")
+
+if env.WengoOsIsWindows():
+	decl.AddSubIncludePath("include/msvc")
+
+env_global.WengoUseLibraryHeaders("global")
+
+sources = [
+	'src/fake.c'
+]
+
+env_global.WengoAlias("global", env_global.Library("global", sources))

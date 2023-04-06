@@ -1,0 +1,155 @@
+# 
+# WengoPhone, a voice over Internet phone
+#
+# Copyright (C) 2004-2005  Wengo
+# Copyright (C) 2005 David Ferlier <david.ferlier@wengo.fr>
+# 
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+
+import sys
+
+env = WengoEnvironment()
+pa_env = env.Copy()
+
+pa_libdec = env.WengoDeclareLibraryAuto("portaudio", "libs/portaudio")
+
+pa_libdec.AddSubIncludePath("pa_common")
+pa_libdec.AddSubLibPath("lib")
+
+pa_env.WengoUseLibraryHeaders("portaudio")
+
+if pa_env.WengoGetCompilationMode() == "debug":
+    pa_env.WengoCppDefineAdd('DEBUG')
+
+sources_common = [
+    "pa_common/pa_allocation.c",
+    "pa_common/pa_converters.c",
+    "pa_common/pa_cpuload.c",
+    "pa_common/pa_dither.c",
+    "pa_common/pa_front.c",
+    "pa_common/pa_process.c",
+    "pa_common/pa_skeleton.c",
+    "pa_common/pa_stream.c",
+    "pa_common/pa_trace.c",
+]
+
+sources_alsa = [
+    "pa_linux_alsa/pa_linux_alsa.c",
+]
+
+sources_unix = [
+    "pa_unix/pa_unix_util.c",
+    "pa_unix/pa_unix_hostapis.c"
+]
+
+sources_oss = [
+    "pa_unix_oss/pa_unix_oss.c"
+]
+
+sources_win = [
+    "pa_win/pa_win_util.c",
+    "pa_win/pa_win_hostapis.c",
+    "pa_win/pa_x86_plain_converters.c",
+]
+
+sources_win_msvc = [
+    "pa_win/msvc/Makefile-wengo.msvc",
+    "pa_win/msvc/portaudio-wengo.def"
+]
+
+sources_win_ds = [
+    "pa_win_ds/dsound_wrapper.c",
+    "pa_win_ds/pa_win_ds.c"
+]
+    
+sources_win_wmme = [
+    "pa_win_wmme/pa_win_wmme.c",
+]
+
+sources = sources_common
+
+defines = {
+    'SIZEOF_SHORT' : pa_env.WengoGetSizeOfShort(),
+    'SIZEOF_INT' :   pa_env.WengoGetSizeOfInt(),
+    'SIZEOF_LONG' :  pa_env.WengoGetSizeOfLong(),
+}
+
+if sys.byteorder == "little":
+    defines["PA_LITTLE_ENDIAN"] = 1
+
+elif sys.byteorder == "big":
+    defines["PA_BIG_ENDIAN"] = 1
+
+if pa_env.WengoGetConsoleArgument("enable-pa-debug")=="yes":
+   defines['PA_ENABLE_DEBUG_OUTPUT'] = 1
+
+if pa_env.WengoOsIsLinux():
+    defines['PA_USE_ALSA'] = 1
+    sources += sources_alsa + sources_unix
+    pa_env.WengoLibAdd("m")
+    pa_env.WengoLibAdd("asound")
+
+if pa_env.WengoOsIsBSD():
+    defines['PA_USE_OSS'] = 1
+    sources += sources_oss + sources_unix
+
+    pa_env.WengoLibAdd("m")
+
+if pa_env.WengoOsIsWindows():
+	defines["PA_NO_ASIO"] = 1
+	defines["PA_NO_WDMKS"] = 1
+	if env.WengoGetConsoleArgument("portaudio-ds")=="yes":
+		defines["PA_NO_WMME"] = 1
+		sources += sources_win + sources_win_ds
+	else:
+		sources += sources_win + sources_win_wmme
+		defines["PA_NO_DS"] = 1
+	pa_env.WengoLibAddMultiple(["ole32", "user32"])
+
+if pa_env.WengoOsIsBSD() or pa_env.WengoOsIsLinux():
+    pa_env.WengoLibAdd("pthread")
+    defines["HAVE_LIBPTHREAD"] = 1
+
+decl = env.WengoDeclareLibraryAuto("portaudio", "libs/portaudio")
+decl.AddSubIncludePath("pa_common")
+
+pa_env["WIN32_INSERT_DEF"] = 1
+pa_env.WengoCppDefineSetMultiple(defines)
+
+if pa_env.WengoGetConsoleArgument("enable-shared-portaudio") == "yes":
+	pa_lib = pa_env.WengoSharedLibrary("portaudio", sources)
+else:
+	pa_lib = pa_env.WengoStaticLibrary("portaudio", sources)
+env.WengoAlias("portaudio", pa_lib)
+
+pa_tests_env = env.Copy()
+pa_tests_env.WengoUseLibrary("portaudio")
+
+if pa_env.WengoOsIsWindows():
+	defines["PA_NO_ASIO"] = 1
+	defines["PA_NO_WDMKS"] = 1
+	if env.WengoGetConsoleArgument("portaudio-ds")=="yes":
+		defines["PA_NO_WMME"] = 1
+		sources += sources_win + sources_win_ds
+	else:
+		sources += sources_win + sources_win_wmme
+		defines["PA_NO_DS"] = 1
+	pa_tests_env.WengoLibAddMultiple(["ole32", "user32", "kernel32"])
+	pa_tests_env.WengoCppDefineSetMultiple(defines)
+
+
+pa_devs = pa_tests_env.WengoProgram("pa_devs", ["pa_tests/pa_devs.c"])
+env.WengoAlias("portaudio-padevs", pa_devs)

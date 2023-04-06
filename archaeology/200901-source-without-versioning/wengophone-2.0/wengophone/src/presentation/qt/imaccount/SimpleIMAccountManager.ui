@@ -1,0 +1,296 @@
+<ui version="4.0" >
+ <author></author>
+ <comment></comment>
+ <exportmacro></exportmacro>
+ <class>SimpleIMAccountManager</class>
+ <widget class="QWidget" name="SimpleIMAccountManager" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>214</height>
+   </rect>
+  </property>
+  <layout class="QGridLayout" >
+   <property name="margin" >
+    <number>0</number>
+   </property>
+   <property name="spacing" >
+    <number>6</number>
+   </property>
+   <item row="7" column="2" >
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" >
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="6" column="2" >
+    <widget class="QComboBox" name="googleTalkComboBox" >
+     <property name="editable" >
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="2" >
+    <widget class="QComboBox" name="jabberComboBox" >
+     <property name="editable" >
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="2" >
+    <widget class="QComboBox" name="yahooComboBox" >
+     <property name="editable" >
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="2" >
+    <widget class="QComboBox" name="aimComboBox" >
+     <property name="editable" >
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="2" >
+    <widget class="QComboBox" name="msnComboBox" >
+     <property name="editable" >
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="4" >
+    <widget class="QLabel" name="label" >
+     <property name="text" >
+      <string>Password:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="4" >
+    <widget class="QLineEdit" name="yahooPasswordLineEdit" >
+     <property name="echoMode" >
+      <enum>QLineEdit::Password</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="2" >
+    <widget class="QLabel" name="label_2" >
+     <property name="text" >
+      <string>Login:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="2" >
+    <widget class="QLineEdit" name="wengoLineEdit" >
+     <property name="enabled" >
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="4" >
+    <widget class="QLineEdit" name="msnPasswordLineEdit" >
+     <property name="echoMode" >
+      <enum>QLineEdit::Password</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="4" >
+    <widget class="QLineEdit" name="aimPasswordLineEdit" >
+     <property name="echoMode" >
+      <enum>QLineEdit::Password</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="4" >
+    <widget class="QLineEdit" name="jabberPasswordLineEdit" >
+     <property name="echoMode" >
+      <enum>QLineEdit::Password</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="4" >
+    <widget class="QLineEdit" name="googleTalkPasswordLineEdit" >
+     <property name="echoMode" >
+      <enum>QLineEdit::Password</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0" >
+    <widget class="QLabel" name="label_14" >
+     <property name="pixmap" >
+      <pixmap resource="../wengophone.qrc" >:/pics/protocols/wengo.png</pixmap>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1" >
+    <widget class="QLabel" name="label_13" >
+     <property name="text" >
+      <string>Wengo</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0" >
+    <widget class="QLabel" name="label_3" >
+     <property name="pixmap" >
+      <pixmap resource="../wengophone.qrc" >:/pics/protocols/msn.png</pixmap>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1" >
+    <widget class="QLabel" name="label_4" >
+     <property name="text" >
+      <string>MSN</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0" >
+    <widget class="QLabel" name="label_8" >
+     <property name="pixmap" >
+      <pixmap resource="../wengophone.qrc" >:/pics/protocols/aim.png</pixmap>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1" >
+    <widget class="QLabel" name="label_7" >
+     <property name="text" >
+      <string>AIM/ICQ</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0" >
+    <widget class="QLabel" name="label_6" >
+     <property name="pixmap" >
+      <pixmap resource="../wengophone.qrc" >:/pics/protocols/yahoo.png</pixmap>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="1" >
+    <widget class="QLabel" name="label_5" >
+     <property name="text" >
+      <string>Yahoo!</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0" >
+    <widget class="QLabel" name="label_10" >
+     <property name="pixmap" >
+      <pixmap resource="../wengophone.qrc" >:/pics/protocols/jabber.png</pixmap>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="1" >
+    <widget class="QLabel" name="label_9" >
+     <property name="text" >
+      <string>Jabber</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="0" >
+    <widget class="QLabel" name="label_11" >
+     <property name="pixmap" >
+      <pixmap resource="../wengophone.qrc" >:/pics/protocols/jabber.png</pixmap>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="1" >
+    <widget class="QLabel" name="label_12" >
+     <property name="text" >
+      <string>GoogleTalk</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="4" >
+    <widget class="QLineEdit" name="wengoPasswordLineEdit" >
+     <property name="enabled" >
+      <bool>false</bool>
+     </property>
+     <property name="echoMode" >
+      <enum>QLineEdit::Password</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="3" >
+    <widget class="QToolButton" name="deleteMsnButton" >
+     <property name="icon" >
+      <iconset resource="../wengophone.qrc" >:/pics/delete.png</iconset>
+     </property>
+     <property name="autoRaise" >
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="3" >
+    <widget class="QToolButton" name="deleteAimButton" >
+     <property name="icon" >
+      <iconset resource="../wengophone.qrc" >:/pics/delete.png</iconset>
+     </property>
+     <property name="autoRaise" >
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="3" >
+    <widget class="QToolButton" name="deleteYahooButton" >
+     <property name="icon" >
+      <iconset resource="../wengophone.qrc" >:/pics/delete.png</iconset>
+     </property>
+     <property name="autoRaise" >
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="3" >
+    <widget class="QToolButton" name="deleteJabberButton" >
+     <property name="icon" >
+      <iconset resource="../wengophone.qrc" >:/pics/delete.png</iconset>
+     </property>
+     <property name="autoRaise" >
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="3" >
+    <widget class="QToolButton" name="deleteGoogleTalkButton" >
+     <property name="icon" >
+      <iconset resource="../wengophone.qrc" >:/pics/delete.png</iconset>
+     </property>
+     <property name="autoRaise" >
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <pixmapfunction></pixmapfunction>
+ <tabstops>
+  <tabstop>wengoLineEdit</tabstop>
+  <tabstop>wengoPasswordLineEdit</tabstop>
+  <tabstop>msnComboBox</tabstop>
+  <tabstop>deleteMsnButton</tabstop>
+  <tabstop>msnPasswordLineEdit</tabstop>
+  <tabstop>aimComboBox</tabstop>
+  <tabstop>deleteAimButton</tabstop>
+  <tabstop>aimPasswordLineEdit</tabstop>
+  <tabstop>yahooComboBox</tabstop>
+  <tabstop>deleteYahooButton</tabstop>
+  <tabstop>yahooPasswordLineEdit</tabstop>
+  <tabstop>jabberComboBox</tabstop>
+  <tabstop>deleteJabberButton</tabstop>
+  <tabstop>jabberPasswordLineEdit</tabstop>
+  <tabstop>googleTalkComboBox</tabstop>
+  <tabstop>deleteGoogleTalkButton</tabstop>
+  <tabstop>googleTalkPasswordLineEdit</tabstop>
+ </tabstops>
+ <resources>
+  <include location="../wengophone.qrc" />
+ </resources>
+ <connections/>
+</ui>

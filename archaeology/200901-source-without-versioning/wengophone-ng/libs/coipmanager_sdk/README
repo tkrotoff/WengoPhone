@@ -1,0 +1,72 @@
+The CoIpManager SDK is intended to help developers create new features around communication. This is an easy to use, easy to install set of API for communication over IP. It is based on communication code of WengoPhone 2.1 and will be used by WengoPhone 3.0. It is also multi-platform (Mac OS X, Windows, Linux)
+
+## What's in CoIpManager SDK?
+
+CoIpManager SDK includes the CoIpManager library, its dependencies, and more. Here is the list of what's included:
+
+-	coipmanager_base: the base library of CoIpManager which defines basic types
+-	coipmanager: the main library which contains all the CoIpManage engine and its plugins (see the coip-plugins directory)
+-	coipmanager_threaded: a layer above coipmanager to make some actions non-blocking. Useful for writing GUI above CoIpManager
+-	PyCoIpManager: the Python binding of CoIpManager. The API is not fully accessible yet. A test (test_coipmanager.py) script is available in the bin directory. See execution instruction in the file.
+-	All CoIpManager dependencies:
+	- phapi 2.0
+	- sipwrapper, phapiwrapper
+	- gaim, gaimwrapper (a C++ API above Gaim)
+	- gaim dependencies (glib2, gnutls, ...)
+	- boost
+	- QtCore
+	- QtGui (because of PyQt4)
+	- PyQt4
+	- SIP
+	- curl
+	- networkdiscovery
+	- owutil
+	- owthread 
+	- webcam
+	- ...
+
+## Use it!
+
+### With OWBuild
+On all platform:
+
+-	if your build directory is clean:
+	-	type 'cmake -DCOIPMANAGER_INTERNAL=OFF ..' in your build directory
+-	else:
+	-	open the CMakeCache.txt file and set COIPMANAGER_INTERNAL to OFF (or use the ccmake utility). This tells OWBuild to not use CoIpManager from the repository.
+	-	type 'cmake ..' to update the build configuration
+-	build your software as usual (e.g: 'make wengocall' will build the application wengocall)
+
+### With other build system
+See below to know paltform specific configuration.
+
+#### Mac OS X
+-	The SDK is installed in /Library/Frameworks/CoIpManager.framework
+-	Add CoIpManager.framework/Headers in your include path and CoIpManager.framework/Libraries in your lib path
+
+#### Linux
+-	The SDK is installed in /usr/local/CoIpManager-0.1 by default
+-	Add /usr/local/CoIpManager-0.1/include to your include path and /usr/local/CoIpManager-0.1/lib in your lib path
+
+#### Windows
+-	The SDK is installed in C:\CoIpManager-0.1 by default
+-	Add C:\CoIpManager-0.1\include to your include path and C:\CoIpManager-0.1\lib in your lib path
+
+**Note for Mac OS X user:**
+On Mac OS X, program that uses CoIpManager must be "finalized": install_name to SDK libraries are not properly generated and must be updated. Fortunately CoIpManager SDK comes with a script that does that automatically: update_links. This python script is located in CoIpManager.framework/bin/.
+To use it:
+
+	python update_links.py <your_executable_to_update> <path_to_sdk>
+	e.g: python update_links.py wengocall.app/Contents/MacOS/wengocall /Library/Frameworks/CoIpManager.framework
+
+### Environment variable
+-	COIPMANAGER_PATH: if the SDK is not installed in the default path (see above to know default path) you can use the COIPMANAGER_PATH environment variable to tell OWBuild where it is installed.
+
+	e.g: COIPMANAGER_PATH=/Users/philou/CoIpManager-0.1 cmake ..
+
+-	COIPMANAGER_PLUGIN_PATH: CoIpManager looks for is plugins in some path relative to installation path. If you want to test a plugin without having to install it, you can set the COIPMANAGER_PLUGIN_PATH to tell CoIpManager where to look for plugins. Currently this variable support only one path. It will be appended to standard path.
+
+	e.g: COIPMANAGER_PLUGIN_PATH=/home/philou/coip-plugins/ wengocall
+
+## Report bugs
+CoIpManager SDK is beginning is life and may have some bugs. Please feel free to report them on the Trac by creating a ticket in the Milestone [CoIpManager Bugs](http://dev.openwengo.org/trac/openwengo/trac.cgi/milestone/CoIpManager%20Bugs). Describe your problem with as much information as possible, join TCP dump file, patch file, sample case to reproduce the problem if needed.

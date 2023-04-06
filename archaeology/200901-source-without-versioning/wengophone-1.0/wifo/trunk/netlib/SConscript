@@ -1,0 +1,39 @@
+# 
+# WengoPhone, a voice over Internet phone
+#
+# Copyright (C) 2004-2005  Wengo
+# Copyright (C) 2005 David Ferlier <david.ferlier@wengo.fr>
+# 
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+
+env = WengoEnvironment()
+netlib_env = env.Copy()
+
+netlib_sources = [
+    "get_net_conf.cpp",
+    "stun_func.cpp",
+    "udp_func.cpp",
+    "bugfix.cpp"
+]
+
+netlib_decl = env.WengoDeclareLibraryAuto("netlib", "wifo/netlib")
+netlib_decl.AddSubIncludePath("..")
+
+netlib_env.WengoLibAddMultiple(["user32", "shell32",
+    "ws2_32", "advapi32", "wininet", "urlmon"])
+
+netlib_lib = netlib_env.WengoStaticLibrary('netlib', netlib_sources)
+netlib_env.WengoAlias('netlib', netlib_lib)

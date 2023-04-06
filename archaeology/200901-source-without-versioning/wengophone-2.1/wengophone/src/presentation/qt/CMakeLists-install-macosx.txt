@@ -1,0 +1,262 @@
+# vim: filetype=cmake
+set(CMAKE_MODULE_PATH
+	${SOURCE_DIR}/owbuild/owbuild
+)
+
+set(FRAMEWORK_INSTALL_DIR
+	${BUILD_DIR}/WengoPhone.app/Contents/Frameworks
+)
+
+set(DATA_INSTALL_DIR
+	${BUILD_DIR}/WengoPhone.app/Contents/Resources
+)
+
+include(OWChangeIdentificationName)
+include(OWChangeInstallName)
+include(OWCopyFile)
+include(OWHdiUtil)
+
+
+## Copy and create the locale directories to have the Application translated by Mac OS X
+make_directory(${DATA_INSTALL_DIR}/lang)
+
+file(GLOB_RECURSE _qmFiles ${BUILD_DIR}/lang/*.qm)
+
+if (_qmFiles)
+	foreach (_qm ${_qmFiles})
+		# Extract language from qm file
+		GET_FILENAME_COMPONENT(lang ${_qm} NAME_WE)
+		STRING(REPLACE "qtwengophone_" "" lang ${lang})
+		
+		make_directory(${DATA_INSTALL_DIR}/${lang}.lproj)
+		ow_copy_file(${BUILD_DIR}/lang/qtwengophone_${lang}.qm ${DATA_INSTALL_DIR}/lang/)
+	endforeach (_qm ${_qmFiles})
+endif (_qmFiles)
+####
+
+## Create the Info.plist file
+file(WRITE "${BUILD_DIR}/WengoPhone.app/Contents/Info.plist"
+"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+"<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">\n"
+"<plist version=\"1.0\">\n"
+"<dict>\n"
+"	<key>CFBundleDevelopmentRegion</key>\n"
+"	<string>English</string>\n"
+"	<key>CFBundleExecutable</key>\n"
+"	<string>WengoPhone</string>\n"
+"	<key>CFBundleIconFile</key>\n"
+"	<string>wengophone.icns</string>\n"
+"	<key>CFBundleIdentifier</key>\n"
+"	<string>com.openwengo.WengoPhone</string>\n"
+"	<key>CFBundleInfoDictionaryVersion</key>\n"
+"	<string>6.0</string>\n"
+"	<key>CFBundlePackageType</key>\n"
+"	<string>APPL</string>\n"
+"	<key>CFBundleSignature</key>\n"
+"	<string>WNGP</string>\n"
+"	<key>CFBundleURLTypes</key>\n"
+"	<array>\n"
+"		<dict>\n"
+"			<key>CFBundleTypeRole</key>\n"
+"			<string>Viewer</string>\n"
+"			<key>CFBundleURLName</key>\n"
+"			<string>Wengo Me URL</string>\n"
+"			<key>CFBundleURLSchemes</key>\n"
+"			<array>\n"
+"				<string>wengo</string>\n"
+"			</array>\n"
+"		</dict>\n"
+"	</array>\n"
+"	<key>CFBundleVersion</key>\n"
+"	<string>${APPLICATION_VERSION}</string>\n"
+"</dict>\n"
+"</plist>\n"
+)
+####
+
+## Copying resources
+# WengoPhone icon
+ow_copy_file(${SOURCE_DIR}/wengophone/src/presentation/qt/macosx/template.app/Contents/Resources/wengophone.icns
+	${BUILD_DIR}/WengoPhone.app/Contents/Resources/wengophone.icns
+)
+####
+
+## Copying binaries
+# Copy Qt Frameworks
+ow_copy_file($ENV{QTDIR}/lib/QtCore.framework/Versions/4.0/QtCore
+	${FRAMEWORK_INSTALL_DIR}/QtCore.framework/Versions/4.0/QtCore
+)
+
+ow_copy_file($ENV{QTDIR}/lib/QtGui.framework/Versions/4.0/QtGui
+	${FRAMEWORK_INSTALL_DIR}/QtGui.framework/Versions/4.0/QtGui
+)
+
+ow_copy_file($ENV{QTDIR}/lib/QtXml.framework/Versions/4.0/QtXml
+	${FRAMEWORK_INSTALL_DIR}/QtXml.framework/Versions/4.0/QtXml
+)
+
+ow_copy_file($ENV{QTDIR}/lib/QtSvg.framework/Versions/4.0/QtSvg
+	${FRAMEWORK_INSTALL_DIR}/QtSvg.framework/Versions/4.0/QtSvg
+)
+
+# Copy libqmng (for MNG image support)
+ow_copy_file($ENV{QTDIR}/plugins/imageformats/libqmng.dylib
+	${FRAMEWORK_INSTALL_DIR}/qt-plugins/imageformats/libqmng.dylib
+)
+
+# curl
+ow_copy_file(${CMAKE_BINARY_DIR}/libs/3rdparty/curl/libcurl.dylib
+	${FRAMEWORK_INSTALL_DIR}/libowcurl.dylib
+)
+
+ow_change_identification_name(${FRAMEWORK_INSTALL_DIR}/libowcurl.dylib libowcurl.dylib)
+
+# owwebcam
+ow_copy_file(${CMAKE_BINARY_DIR}/libs/owwebcam/libowwebcam.dylib
+	${FRAMEWORK_INSTALL_DIR}/
+)
+
+# Copy PhApi
+ow_copy_file(${CMAKE_BINARY_DIR}/wifo/phapi/libphapi.dylib
+	${FRAMEWORK_INSTALL_DIR}/
+)
+
+ow_copy_file(${CMAKE_BINARY_DIR}/wifo/phapi-util/libphapiutil.dylib
+	${FRAMEWORK_INSTALL_DIR}/
+)
+
+# Copy PhApi plugins
+make_directory(${FRAMEWORK_INSTALL_DIR}/phapi-plugins/)
+
+ow_copy_file(${CMAKE_BINARY_DIR}/wifo/phapi/phspeexplugin/libphspeexplugin.so
+	${FRAMEWORK_INSTALL_DIR}/phapi-plugins/
+)
+
+ow_copy_file(${CMAKE_BINARY_DIR}/wifo/wifo-plugins/sfp-plugin/libsfp-plugin.so
+	${FRAMEWORK_INSTALL_DIR}/phapi-plugins/
+)
+
+# Copy glib2 and crypto libs
+set(LIB_DEP
+	libgnutls.12.dylib
+	libgcrypt.11.dylib
+	libtasn1.2.dylib
+	libpth.14.dylib
+	libgpg-error.0.dylib
+
+	libintl.3.dylib
+	libintl.1.dylib
+	libiconv.2.dylib
+	libgmodule-2.0.0.dylib
+	libglib-2.0.0.dylib
+	libgthread-2.0.0.dylib
+)
+
+foreach(lib ${LIB_DEP})
+	ow_copy_file(/sw/lib/${lib}
+		${FRAMEWORK_INSTALL_DIR}
+	)
+endforeach(lib ${LIB_DEP})
+####
+
+## Change install names
+set(WENGO_EXE "${BUILD_DIR}/WengoPhone.app/Contents/MacOS/WengoPhone")
+
+# Change install name for Qt Frameworks
+ow_change_install_name($ENV{QTDIR}/lib/QtCore.framework/Versions/4.0/QtCore @executable_path/../Frameworks/QtCore.framework/Versions/4.0/QtCore ${WENGO_EXE})
+ow_change_install_name($ENV{QTDIR}/lib/QtGui.framework/Versions/4.0/QtGui @executable_path/../Frameworks/QtGui.framework/Versions/4.0/QtGui ${WENGO_EXE})
+ow_change_install_name($ENV{QTDIR}/lib/QtXml.framework/Versions/4.0/QtXml @executable_path/../Frameworks/QtXml.framework/Versions/4.0/QtXml ${WENGO_EXE})
+ow_change_install_name($ENV{QTDIR}/lib/QtSvg.framework/Versions/4.0/QtSvg @executable_path/../Frameworks/QtSvg.framework/Versions/4.0/QtSvg ${WENGO_EXE})
+
+ow_change_install_name($ENV{QTDIR}/lib/QtCore.framework/Versions/4.0/QtCore @executable_path/../Frameworks/QtCore.framework/Versions/4.0/QtCore ${FRAMEWORK_INSTALL_DIR}/QtGui.framework/Versions/4.0/QtGui)
+ow_change_install_name($ENV{QTDIR}/lib/QtCore.framework/Versions/4.0/QtCore @executable_path/../Frameworks/QtCore.framework/Versions/4.0/QtCore ${FRAMEWORK_INSTALL_DIR}/QtXml.framework/Versions/4.0/QtXml)
+ow_change_install_name($ENV{QTDIR}/lib/QtCore.framework/Versions/4.0/QtCore @executable_path/../Frameworks/QtCore.framework/Versions/4.0/QtCore ${FRAMEWORK_INSTALL_DIR}/QtSvg.framework/Versions/4.0/QtSvg)
+ow_change_install_name($ENV{QTDIR}/lib/QtXml.framework/Versions/4.0/QtXml @executable_path/../Frameworks/QtXml.framework/Versions/4.0/QtXml ${FRAMEWORK_INSTALL_DIR}/QtSvg.framework/Versions/4.0/QtSvg)
+ow_change_install_name($ENV{QTDIR}/lib/QtGui.framework/Versions/4.0/QtGui @executable_path/../Frameworks/QtGui.framework/Versions/4.0/QtGui ${FRAMEWORK_INSTALL_DIR}/QtSvg.framework/Versions/4.0/QtSvg)
+
+# Change install name for other libs
+ow_change_install_name(/sw/lib/libssl.0.9.7.dylib /usr/lib/libssl.dylib ${WENGO_EXE})
+ow_change_install_name(/sw/lib/libcrypto.0.9.7.dylib /usr/lib/libcrypto.dylib ${WENGO_EXE})
+ow_change_install_name(/sw/lib/libxml2.2.dylib /usr/lib/libxml2.dylib ${WENGO_EXE})
+
+ow_change_install_name(/sw/lib/libiconv.2.dylib @executable_path/../Frameworks/libiconv.2.dylib ${WENGO_EXE})
+ow_change_install_name(/sw/lib/libintl.1.dylib @executable_path/../Frameworks/libintl.1.dylib ${WENGO_EXE})
+ow_change_install_name(/sw/lib/libintl.3.dylib @executable_path/../Frameworks/libintl.3.dylib ${WENGO_EXE})
+ow_change_install_name(/sw/lib/libglib-2.0.0.dylib @executable_path/../Frameworks/libglib-2.0.0.dylib ${WENGO_EXE})
+ow_change_install_name(/sw/lib/libgmodule-2.0.0.dylib @executable_path/../Frameworks/libgmodule-2.0.0.dylib ${WENGO_EXE})
+ow_change_install_name(/sw/lib/libgthread-2.0.0.dylib @executable_path/../Frameworks/libgthread-2.0.0.dylib ${WENGO_EXE})
+ow_change_install_name(/sw/lib/libgnutls.12.dylib @executable_path/../Frameworks/libgnutls.12.dylib ${WENGO_EXE})
+
+ow_change_install_name(${CMAKE_BINARY_DIR}/libs/3rdparty/curl/libcurl.dylib @executable_path/../Frameworks/libowcurl.dylib ${WENGO_EXE})
+ow_change_install_name(${CMAKE_BINARY_DIR}/wifo/phapi/libphapi.dylib @executable_path/../Frameworks/libphapi.dylib ${WENGO_EXE})
+ow_change_install_name(${CMAKE_BINARY_DIR}/wifo/phapi-util/libphapiutil.dylib @executable_path/../Frameworks/libphapiutil.dylib ${WENGO_EXE})
+ow_change_install_name(${CMAKE_BINARY_DIR}/libs/owwebcam/libowwebcam.dylib @executable_path/../Frameworks/libowwebcam.dylib ${WENGO_EXE})
+
+ow_change_install_name(/sw/lib/libglib-2.0.0.dylib @executable_path/../Frameworks/libglib-2.0.0.dylib ${FRAMEWORK_INSTALL_DIR}/libgmodule-2.0.0.dylib)
+ow_change_install_name(/sw/lib/libglib-2.0.0.dylib @executable_path/../Frameworks/libglib-2.0.0.dylib ${FRAMEWORK_INSTALL_DIR}/libgthread-2.0.0.dylib)
+
+ow_change_install_name(/sw/lib/libiconv.2.dylib @executable_path/../Frameworks/libiconv.2.dylib ${FRAMEWORK_INSTALL_DIR}/libgmodule-2.0.0.dylib)
+ow_change_install_name(/sw/lib/libiconv.2.dylib @executable_path/../Frameworks/libiconv.2.dylib ${FRAMEWORK_INSTALL_DIR}/libgthread-2.0.0.dylib)
+ow_change_install_name(/sw/lib/libiconv.2.dylib @executable_path/../Frameworks/libiconv.2.dylib ${FRAMEWORK_INSTALL_DIR}/libglib-2.0.0.dylib)
+ow_change_install_name(/sw/lib/libiconv.2.dylib @executable_path/../Frameworks/libiconv.2.dylib ${FRAMEWORK_INSTALL_DIR}/libintl.1.dylib)
+ow_change_install_name(/sw/lib/libiconv.2.dylib @executable_path/../Frameworks/libiconv.2.dylib ${FRAMEWORK_INSTALL_DIR}/libintl.3.dylib)
+ow_change_install_name(/sw/lib/libiconv.2.dylib @executable_path/../Frameworks/libiconv.2.dylib ${FRAMEWORK_INSTALL_DIR}/libgnutls.12.dylib)
+ow_change_install_name(/sw/lib/libiconv.2.dylib @executable_path/../Frameworks/libiconv.2.dylib ${FRAMEWORK_INSTALL_DIR}/libgcrypt.11.dylib)
+ow_change_install_name(/sw/lib/libiconv.2.dylib @executable_path/../Frameworks/libiconv.2.dylib ${FRAMEWORK_INSTALL_DIR}/libgpg-error.0.dylib)
+
+ow_change_install_name(/sw/lib/libintl.3.dylib @executable_path/../Frameworks/libintl.3.dylib ${FRAMEWORK_INSTALL_DIR}/libgmodule-2.0.0.dylib)
+ow_change_install_name(/sw/lib/libintl.3.dylib @executable_path/../Frameworks/libintl.3.dylib ${FRAMEWORK_INSTALL_DIR}/libgthread-2.0.0.dylib)
+ow_change_install_name(/sw/lib/libintl.3.dylib @executable_path/../Frameworks/libintl.3.dylib ${FRAMEWORK_INSTALL_DIR}/libglib-2.0.0.dylib)
+ow_change_install_name(/sw/lib/libintl.3.dylib @executable_path/../Frameworks/libintl.3.dylib ${FRAMEWORK_INSTALL_DIR}/libgpg-error.0.dylib)
+ow_change_install_name(/sw/lib/libintl.3.dylib @executable_path/../Frameworks/libintl.3.dylib ${FRAMEWORK_INSTALL_DIR}/libgcrypt.11.dylib)
+ow_change_install_name(/sw/lib/libintl.3.dylib @executable_path/../Frameworks/libintl.3.dylib ${FRAMEWORK_INSTALL_DIR}/libgnutls.12.dylib)
+
+ow_change_install_name(/sw/lib/libintl.1.dylib @executable_path/../Frameworks/libintl.1.dylib ${FRAMEWORK_INSTALL_DIR}/libgcrypt.11.dylib)
+ow_change_install_name(/sw/lib/libintl.1.dylib @executable_path/../Frameworks/libintl.1.dylib ${FRAMEWORK_INSTALL_DIR}/libgpg-error.0.dylib)
+
+ow_change_install_name(/sw/lib/libpth.14.dylib @executable_path/../Frameworks/libpth.14.dylib ${FRAMEWORK_INSTALL_DIR}/libgnutls.12.dylib)
+ow_change_install_name(/sw/lib/libpth.14.dylib @executable_path/../Frameworks/libpth.14.dylib ${FRAMEWORK_INSTALL_DIR}/libgcrypt.11.dylib)
+
+ow_change_install_name(/sw/lib/libgpg-error.0.dylib @executable_path/../Frameworks/libgpg-error.0.dylib ${FRAMEWORK_INSTALL_DIR}/libgnutls.12.dylib)
+ow_change_install_name(/sw/lib/libgpg-error.0.dylib @executable_path/../Frameworks/libgpg-error.0.dylib ${FRAMEWORK_INSTALL_DIR}/libgcrypt.11.dylib)
+
+ow_change_install_name(/sw/lib/libtasn1.2.dylib @executable_path/../Frameworks/libtasn1.2.dylib ${FRAMEWORK_INSTALL_DIR}/libgnutls.12.dylib)
+
+ow_change_install_name(/sw/lib/libgcrypt.11.dylib @executable_path/../Frameworks/libgcrypt.11.dylib ${FRAMEWORK_INSTALL_DIR}/libgnutls.12.dylib)
+
+ow_change_install_name(${CMAKE_BINARY_DIR}/libs/3rdparty/curl/libcurl.dylib @executable_path/../Frameworks/libowcurl.dylib ${FRAMEWORK_INSTALL_DIR}/libphapi.dylib)
+ow_change_install_name(${CMAKE_BINARY_DIR}/wifo/phapi-util/libphapiutil.dylib @executable_path/../Frameworks/libphapiutil.dylib ${FRAMEWORK_INSTALL_DIR}/libphapi.dylib)
+ow_change_install_name(${CMAKE_BINARY_DIR}/libs/owwebcam/libowwebcam.dylib @executable_path/../Frameworks/libowwebcam.dylib ${FRAMEWORK_INSTALL_DIR}/libphapi.dylib)
+ow_change_install_name(/sw/lib/libiconv.2.dylib @executable_path/../Frameworks/libiconv.2.dylib ${FRAMEWORK_INSTALL_DIR}/libphapi.dylib)
+ow_change_install_name(/sw/lib/libintl.1.dylib @executable_path/../Frameworks/libintl.1.dylib ${FRAMEWORK_INSTALL_DIR}/libphapi.dylib)
+ow_change_install_name(/sw/lib/libintl.3.dylib @executable_path/../Frameworks/libintl.3.dylib ${FRAMEWORK_INSTALL_DIR}/libphapi.dylib)
+ow_change_install_name(/sw/lib/libglib-2.0.0.dylib @executable_path/../Frameworks/libglib-2.0.0.dylib ${FRAMEWORK_INSTALL_DIR}/libphapi.dylib)
+ow_change_install_name(/sw/lib/libgmodule-2.0.0.dylib @executable_path/../Frameworks/libgmodule-2.0.0.dylib ${FRAMEWORK_INSTALL_DIR}/libphapi.dylib)
+ow_change_install_name(/sw/lib/libgthread-2.0.0.dylib @executable_path/../Frameworks/libgthread-2.0.0.dylib ${FRAMEWORK_INSTALL_DIR}/libphapi.dylib)
+ow_change_install_name(/sw/lib/libssl.0.9.7.dylib /usr/lib/libssl.dylib ${FRAMEWORK_INSTALL_DIR}/libphapi.dylib)
+ow_change_install_name(/sw/lib/libcrypto.0.9.7.dylib /usr/lib/libcrypto.dylib ${FRAMEWORK_INSTALL_DIR}/libphapi.dylib)
+
+ow_change_install_name(${CMAKE_BINARY_DIR}/libs/3rdparty/curl/libcurl.dylib @executable_path/../Frameworks/libowcurl.dylib ${FRAMEWORK_INSTALL_DIR}/phapi-plugins/libsfp-plugin.so)
+ow_change_install_name(${CMAKE_BINARY_DIR}/wifo/phapi/libphapi.dylib @executable_path/../Frameworks/libphapi.dylib ${FRAMEWORK_INSTALL_DIR}/phapi-plugins/libsfp-plugin.so)
+ow_change_install_name(${CMAKE_BINARY_DIR}/wifo/phapi-util/libphapiutil.dylib @executable_path/../Frameworks/libphapiutil.dylib ${FRAMEWORK_INSTALL_DIR}/phapi-plugins/libsfp-plugin.so)
+ow_change_install_name(${CMAKE_BINARY_DIR}/libs/owwebcam/libowwebcam.dylib @executable_path/../Frameworks/libowwebcam.dylib ${FRAMEWORK_INSTALL_DIR}/phapi-plugins/libsfp-plugin.so)
+ow_change_install_name(/sw/lib/libiconv.2.dylib @executable_path/../Frameworks/libiconv.2.dylib ${FRAMEWORK_INSTALL_DIR}/phapi-plugins/libsfp-plugin.so)
+ow_change_install_name(/sw/lib/libintl.1.dylib @executable_path/../Frameworks/libintl.1.dylib ${FRAMEWORK_INSTALL_DIR}/phapi-plugins/libsfp-plugin.so)
+ow_change_install_name(/sw/lib/libintl.3.dylib @executable_path/../Frameworks/libintl.3.dylib ${FRAMEWORK_INSTALL_DIR}/phapi-plugins/libsfp-plugin.so)
+ow_change_install_name(/sw/lib/libglib-2.0.0.dylib @executable_path/../Frameworks/libglib-2.0.0.dylib ${FRAMEWORK_INSTALL_DIR}/phapi-plugins/libsfp-plugin.so)
+ow_change_install_name(/sw/lib/libgmodule-2.0.0.dylib @executable_path/../Frameworks/libgmodule-2.0.0.dylib ${FRAMEWORK_INSTALL_DIR}/phapi-plugins/libsfp-plugin.so)
+ow_change_install_name(/sw/lib/libgthread-2.0.0.dylib @executable_path/../Frameworks/libgthread-2.0.0.dylib ${FRAMEWORK_INSTALL_DIR}/phapi-plugins/libsfp-plugin.so)
+ow_change_install_name(/sw/lib/libssl.0.9.7.dylib /usr/lib/libssl.dylib ${FRAMEWORK_INSTALL_DIR}/phapi-plugins/libsfp-plugin.so)
+ow_change_install_name(/sw/lib/libcrypto.0.9.7.dylib /usr/lib/libcrypto.dylib ${FRAMEWORK_INSTALL_DIR}/phapi-plugins/libsfp-plugin.so)
+####
+
+## Update rights on WengoPhone files
+message("Updating rights on WengoPhone.app...")
+execute_process(
+	COMMAND "chmod" -R 755 ${BUILD_DIR}/WengoPhone.app
+)
+####
+
+## Creates .dmg of WengoPhone
+ow_hdiutil(WengoPhone ${BUILD_DIR}/WengoPhone.app ${CMAKE_BINARY_DIR}/WengoPhone-revnumber.dmg)
+####

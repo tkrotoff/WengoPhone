@@ -1,0 +1,81 @@
+<ui version="4.0" >
+ <author></author>
+ <comment></comment>
+ <exportmacro></exportmacro>
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>510</width>
+    <height>597</height>
+   </rect>
+  </property>
+  <widget class="QWidget" name="centralwidget" >
+   <layout class="QGridLayout" >
+    <property name="margin" >
+     <number>9</number>
+    </property>
+    <property name="spacing" >
+     <number>6</number>
+    </property>
+    <item row="1" column="0" colspan="3" >
+     <widget class="QTabWidget" name="tabWidget" >
+      <property name="currentIndex" >
+       <number>0</number>
+      </property>
+      <widget class="QWidget" name="logTab" >
+       <attribute name="title" >
+        <string>Log</string>
+       </attribute>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar" >
+   <property name="geometry" >
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>510</width>
+     <height>19</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuWengoChat" >
+    <property name="title" >
+     <string>WengoChat</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menuChat" >
+    <property name="title" >
+     <string>Chat</string>
+    </property>
+    <addaction name="actionStart_a_chat" />
+   </widget>
+   <widget class="QMenu" name="menuAccount" >
+    <property name="title" >
+     <string>Account</string>
+    </property>
+    <addaction name="actionManage_account" />
+   </widget>
+   <addaction name="menuAccount" />
+   <addaction name="menuChat" />
+  </widget>
+  <widget class="QStatusBar" name="statusbar" />
+  <action name="actionManage_account" >
+   <property name="text" >
+    <string>Manage account...</string>
+   </property>
+  </action>
+  <action name="actionStart_a_chat" >
+   <property name="text" >
+    <string>Start a chat...</string>
+   </property>
+  </action>
+ </widget>
+ <pixmapfunction></pixmapfunction>
+ <resources/>
+ <connections/>
+</ui>

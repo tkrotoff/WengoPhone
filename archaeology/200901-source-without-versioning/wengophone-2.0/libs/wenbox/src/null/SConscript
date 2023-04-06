@@ -1,0 +1,22 @@
+env = WengoGetEnvironment()
+
+libs = [
+	'wenbox',
+]
+lib_path = []
+include_path = []
+defines = {
+	'WENBOX_DLL' : 1,
+	'BUILDING_DLL' : 1
+}
+headers = []
+sources = [
+	'NullWenbox.cpp',
+]
+
+#env.WengoExportDefines(export_defines)
+env.WengoAddDefines(defines)
+env.WengoAddLibPath(lib_path)
+env.WengoUseLibraries(libs)
+
+env.WengoSharedLibrary('nullwenbox', sources)

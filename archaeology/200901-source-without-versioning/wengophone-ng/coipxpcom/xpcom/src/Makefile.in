@@ -1,0 +1,63 @@
+
+DEPTH   = ../../..
+topsrcdir = @top_srcdir@
+srcdir    = @srcdir@
+
+include $(DEPTH)/config/autoconf.mk
+
+VPATH		:= $(srcdir) $(srcdir)/$(OSDIR)
+
+MOZILLA_INTERNAL_API = 1
+MODULE = xulconnection
+MODULE_NAME = xulconnectionModule
+LIBRARY_NAME = xulconnection
+IS_COMPONENT = 1
+EXPORT_LIBRARY = 1
+
+REQUIRES	= xpcom \
+		  string \
+		  widget \
+		  gfx \
+		  dom \
+		  content \
+		  docshell \
+		  xpconnect \
+		  view \
+		  webshell \
+		  $(NULL)
+
+LOCAL_INCLUDES = -I$(srcdir) \
+		-I$//cygdrive/c/dev/coipmanager/coipxpcom \
+		-I$//cygdrive/c/dev/coipmanager/libs/coipmanager_base/include \
+		-I$//cygdrive/c/dev/coipmanager/libs/owutil \
+		-I$//boost/include/boost-1_33_1 \
+
+XPIDLSRCS = \
+		ICommand.idl \
+		IListener.idl \
+		ISession.idl \
+		IConfigurator.idl \
+		nsISystemTools.idl \
+		$(NULL)
+
+CPPSRCS =	component.cpp \
+		CCommand.cpp \
+		nsSystemTools.cpp \
+		$(NULL)
+
+LIBS    +=  \
+    $(XPCOM_LIBS) \
+    $(NSPR_LIBS) \
+    $(NULL)
+
+OS_LIBS += $(call EXPAND_LIBNAME, urlmon)
+
+EXTRA_DSO_LDOPTS += $(MOZ_COMPONENT_LIBS) \
+		    $(srcdir)/coipxpcom.lib \
+		    $(NULL)
+
+# we don't want the shared lib, but we want to force the creation of a static lib.
+#FORCE_STATIC_LIB = 1
+SRCS_IN_OBJDIR	= 1
+
+include $(topsrcdir)/config/rules.mk

@@ -1,0 +1,101 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>SmsPageWidgetForm</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>SmsPageWidgetForm</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>374</width>
+            <height>282</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>SmsWidgetForm</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>5</number>
+        </property>
+        <widget class="QLabel" row="0" column="0">
+            <property name="name">
+                <cstring>textLabel1</cstring>
+            </property>
+            <property name="text">
+                <string>Phone number:</string>
+            </property>
+        </widget>
+        <widget class="QLabel" row="2" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>textLabel3</cstring>
+            </property>
+            <property name="text">
+                <string>Signature:</string>
+            </property>
+        </widget>
+        <widget class="QLineEdit" row="2" column="2">
+            <property name="name">
+                <cstring>signatureText</cstring>
+            </property>
+            <property name="maxLength">
+                <number>12</number>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Enter your signature (12 characters maximum)</string>
+            </property>
+        </widget>
+        <widget class="QPushButton" row="2" column="3">
+            <property name="name">
+                <cstring>sendButton</cstring>
+            </property>
+            <property name="text">
+                <string>Send</string>
+            </property>
+            <property name="accel">
+                <string></string>
+            </property>
+        </widget>
+        <widget class="QTextEdit" row="1" column="0" rowspan="1" colspan="4">
+            <property name="name">
+                <cstring>smsText</cstring>
+            </property>
+            <property name="focusPolicy">
+                <enum>StrongFocus</enum>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Your SMS (144 characters maximum)</string>
+            </property>
+        </widget>
+        <widget class="QComboBox" row="0" column="1" rowspan="1" colspan="3">
+            <property name="name">
+                <cstring>phoneComboBox</cstring>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>200</width>
+                    <height>0</height>
+                </size>
+            </property>
+            <property name="editable">
+                <bool>true</bool>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Enter a valid phone number that can receive SMS</string>
+            </property>
+        </widget>
+    </grid>
+</widget>
+<tabstops>
+    <tabstop>phoneComboBox</tabstop>
+    <tabstop>smsText</tabstop>
+    <tabstop>signatureText</tabstop>
+    <tabstop>sendButton</tabstop>
+</tabstops>
+<pixmapinproject/>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

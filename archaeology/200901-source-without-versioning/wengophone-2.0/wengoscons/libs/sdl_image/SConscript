@@ -1,0 +1,33 @@
+import os
+
+env = WengoGetEnvironment()
+
+libs = [
+	'sdl'
+]
+
+link_flags = []
+include_path = []
+lib_path = []
+
+if WengoOSMacOSX():
+	link_flags += ['-framework SDL_image']
+	include_path += ['/Library/Frameworks/SDL_image.framework/Headers']
+
+elif WengoOSWindows():
+	sdlimagedir = 'C:\\SDL_image-1.2.4\\'
+	include_path += [os.path.join(sdlimagedir, 'include')]
+	lib_path += [os.path.join(sdlimagedir, 'lib')]
+
+else:
+	include_path += ['/usr/include/SDL']
+	link_flags += ['-lSDL_image']
+
+env.WengoAddLinkFlags(link_flags)
+env.WengoAddIncludePath(include_path)
+env.WengoAddLibPath(lib_path)
+
+env.WengoUseLibraries(libs)
+
+env.WengoDeclareSystemLibrary('sdl_image')
+

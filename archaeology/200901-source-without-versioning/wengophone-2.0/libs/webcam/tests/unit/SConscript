@@ -1,0 +1,34 @@
+env = WengoGetEnvironment()
+
+libs = [
+	'boost-unit-test',
+	'owutil',
+	'webcam'
+]
+
+headers = [
+	'NullWebcamDriverTest.h',
+]
+
+sources = [
+	'WebcamTest.cpp'
+]
+
+link_flags = []
+
+if WengoOSMacOSX():
+	frameworks = [
+		'Quicktime'
+	]
+	
+	env.WengoAddFrameworks(frameworks)
+	
+	headers += ['QuicktimeWebcamDriverTest.h']
+elif WengoOSLinux():
+	headers += ['V4LWebcamDriverTest.h']
+
+env.WengoAddLinkFlags(link_flags)
+env.WengoUseLibraries(libs)
+
+env.WengoProgram('webcam-test-unit', sources, headers)
+

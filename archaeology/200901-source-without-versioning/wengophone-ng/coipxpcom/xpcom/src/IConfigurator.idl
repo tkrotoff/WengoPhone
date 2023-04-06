@@ -1,0 +1,50 @@
+/** BEGIN LICENSE
+  *
+  * OpenWengo, a voice over Internet phone for Firefox
+  * Copyright (C) 2004-2005 Wengo
+  *
+  * This program is free software; you can redistribute it and/or modify
+  * it under the terms of the GNU General Public License as published by
+  * the Free Software Foundation; either version 2 of the License, or
+  * (at your option) any later version.
+  *
+  * This program is distributed in the hope that it will be useful,
+  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  * GNU General Public License for more details.
+  *
+  * You should have received a copy of the GNU General Public License
+  * along with this program; if not, write to the Free Software
+  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+  *
+  * Contributors: Daniel Glazman (daniel.glazman@disruptive-innovations.com)
+  *
+  * END LICENSE
+ **/
+
+#include "nsISupports.idl"
+
+interface nsIPrefBranch;
+
+/**
+ *
+ */
+// uid by max
+[scriptable, uuid(55fa20d5-4954-41fa-a8af-efccc67f67f8)]
+
+interface IConfigurator : nsISupports
+{
+  attribute nsIPrefBranch prefs;
+
+  void Init();
+  
+  string GetChar(in AString aPrefID);
+  void SetChar(in AString aPrefID, in AString aValue);
+
+  long GetInt(in AString aPrefID);
+  void SetInt(in AString aPrefID, in long aValue);
+
+  boolean GetBool(in AString aPrefID);
+  void SetBool(in AString aPrefID, in boolean aValue);
+
+};

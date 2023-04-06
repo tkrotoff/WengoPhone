@@ -1,0 +1,27 @@
+import os
+
+env = WengoGetEnvironment()
+
+link_flags = []
+include_path = []
+lib_path = []
+
+if WengoOSMacOSX():
+	include_path += ['/Library/Frameworks/SDL.framework/Headers']
+	link_flags += ['-framework SDL']
+
+elif WengoOSWindows():
+	sdldir = "C:\\SDL-1.2.9\\"
+	include_path += [os.path.join(sdldir, 'include')]
+	lib_path += [os.path.join(sdldir, 'lib')]
+
+else:
+	include_path += ['/usr/include/SDL']
+	link_flags += ['-lSDL -lpthread']
+
+env.WengoAddLinkFlags(link_flags)
+env.WengoAddIncludePath(include_path)
+env.WengoAddLibPath(lib_path)
+
+env.WengoDeclareSystemLibrary('sdl')
+

@@ -1,0 +1,14 @@
+env = WengoGetEnvironment()
+
+projects = [
+	'src',
+	'src/presentation/gtk',
+	'src/presentation/qt',
+	'src/presentation/xpcom',
+	'src/presentation/xpcom/tests'
+]
+
+env.WengoAddDoxyfile()
+env.SConscript(dirs = projects)
+
+env.SConscript('tests/SConscript')

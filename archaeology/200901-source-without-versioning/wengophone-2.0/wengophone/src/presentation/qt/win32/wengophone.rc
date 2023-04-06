@@ -1,0 +1,43 @@
+//Icon with lowest ID value placed first to ensure application icon
+//remains consistent on all systems.
+IDI_ICON1 ICON "wengophone.ico"
+
+#ifndef Q_CC_BOR
+	#if defined(UNDER_CE) && UNDER_CE >= 400
+		#include <winbase.h>
+	#else
+		#include <winver.h>
+	#endif
+#endif
+
+VS_VERSION_INFO VERSIONINFO
+	FILEVERSION 0,0,0,0
+	PRODUCTVERSION 0,0,0,0
+	FILEFLAGSMASK 0x3fL
+#ifdef DEBUG
+	FILEFLAGS VS_FF_DEBUG
+#else
+	FILEFLAGS 0x0L
+#endif
+	FILEOS VOS__WINDOWS32
+	FILETYPE VFT_APP
+	FILESUBTYPE 0x0L
+	BEGIN
+		BLOCK "StringFileInfo"
+		BEGIN
+			BLOCK "040904B0"
+			BEGIN
+				VALUE "ProductName", "Wengo\0"
+				VALUE "ProductVersion", "beta\0"
+				VALUE "Comments", "WengoPhone, a voice over Internet phone\0"
+				VALUE "CompanyName", "Wengo\0"
+				VALUE "LegalCopyright", "Copyright (C) 2004-2006 Wengo\0"
+				VALUE "LegalTrademarks", "Wengo\0"
+				VALUE "FileDescription", "WengoPhone\0"
+				VALUE "FileVersion", "beta\0"
+				VALUE "InternalName", "wengophone\0"
+				VALUE "OriginalFilename", "qtwengophone.exe\0"
+			END
+		END
+	END
+/* End of Version info */

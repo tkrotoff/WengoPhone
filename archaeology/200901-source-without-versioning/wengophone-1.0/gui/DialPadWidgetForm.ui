@@ -1,0 +1,339 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>DialPadWidgetForm</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>DialPadWidgetForm</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>122</width>
+            <height>142</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>DialPadWidgetForm</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>0</number>
+        </property>
+        <property name="spacing">
+            <number>0</number>
+        </property>
+        <property name="resizeMode">
+            <enum>Fixed</enum>
+        </property>
+        <widget class="QComboBox" row="0" column="0" rowspan="1" colspan="3">
+            <item>
+                <property name="text">
+                    <string>Audio Smileys</string>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>Default</string>
+                </property>
+            </item>
+            <property name="name">
+                <cstring>dtmfThemeComboBox</cstring>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Audio smileys are brief sound effects that add fun to your Talk session</string>
+            </property>
+        </widget>
+        <widget class="QPushButton" row="3" column="1">
+            <property name="name">
+                <cstring>eightButton</cstring>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>40</width>
+                    <height>30</height>
+                </size>
+            </property>
+            <property name="maximumSize">
+                <size>
+                    <width>40</width>
+                    <height>30</height>
+                </size>
+            </property>
+            <property name="text">
+                <string>8 tuv</string>
+            </property>
+            <property name="accel">
+                <string></string>
+            </property>
+        </widget>
+        <widget class="QPushButton" row="3" column="2">
+            <property name="name">
+                <cstring>nineButton</cstring>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>40</width>
+                    <height>30</height>
+                </size>
+            </property>
+            <property name="maximumSize">
+                <size>
+                    <width>40</width>
+                    <height>30</height>
+                </size>
+            </property>
+            <property name="text">
+                <string>9 wxyz</string>
+            </property>
+            <property name="accel">
+                <string></string>
+            </property>
+        </widget>
+        <widget class="QPushButton" row="1" column="0">
+            <property name="name">
+                <cstring>oneButton</cstring>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>40</width>
+                    <height>30</height>
+                </size>
+            </property>
+            <property name="maximumSize">
+                <size>
+                    <width>40</width>
+                    <height>30</height>
+                </size>
+            </property>
+            <property name="text">
+                <string>1</string>
+            </property>
+        </widget>
+        <widget class="QPushButton" row="4" column="2">
+            <property name="name">
+                <cstring>sharpButton</cstring>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>40</width>
+                    <height>30</height>
+                </size>
+            </property>
+            <property name="maximumSize">
+                <size>
+                    <width>40</width>
+                    <height>30</height>
+                </size>
+            </property>
+            <property name="text">
+                <string>#</string>
+            </property>
+        </widget>
+        <widget class="QPushButton" row="1" column="1">
+            <property name="name">
+                <cstring>twoButton</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>0</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>40</width>
+                    <height>30</height>
+                </size>
+            </property>
+            <property name="maximumSize">
+                <size>
+                    <width>40</width>
+                    <height>30</height>
+                </size>
+            </property>
+            <property name="text">
+                <string>2 abc</string>
+            </property>
+        </widget>
+        <widget class="QPushButton" row="1" column="2">
+            <property name="name">
+                <cstring>threeButton</cstring>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>40</width>
+                    <height>30</height>
+                </size>
+            </property>
+            <property name="maximumSize">
+                <size>
+                    <width>40</width>
+                    <height>30</height>
+                </size>
+            </property>
+            <property name="text">
+                <string>3 def</string>
+            </property>
+            <property name="accel">
+                <string></string>
+            </property>
+        </widget>
+        <widget class="QPushButton" row="2" column="1">
+            <property name="name">
+                <cstring>fiveButton</cstring>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>40</width>
+                    <height>30</height>
+                </size>
+            </property>
+            <property name="maximumSize">
+                <size>
+                    <width>40</width>
+                    <height>30</height>
+                </size>
+            </property>
+            <property name="text">
+                <string>5 jkl</string>
+            </property>
+            <property name="accel">
+                <string></string>
+            </property>
+        </widget>
+        <widget class="QPushButton" row="2" column="2">
+            <property name="name">
+                <cstring>sixButton</cstring>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>40</width>
+                    <height>30</height>
+                </size>
+            </property>
+            <property name="maximumSize">
+                <size>
+                    <width>40</width>
+                    <height>30</height>
+                </size>
+            </property>
+            <property name="text">
+                <string>6 mno</string>
+            </property>
+            <property name="accel">
+                <string></string>
+            </property>
+        </widget>
+        <widget class="QPushButton" row="4" column="0">
+            <property name="name">
+                <cstring>starButton</cstring>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>40</width>
+                    <height>30</height>
+                </size>
+            </property>
+            <property name="maximumSize">
+                <size>
+                    <width>40</width>
+                    <height>30</height>
+                </size>
+            </property>
+            <property name="text">
+                <string>*</string>
+            </property>
+        </widget>
+        <widget class="QPushButton" row="3" column="0">
+            <property name="name">
+                <cstring>sevenButton</cstring>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>40</width>
+                    <height>30</height>
+                </size>
+            </property>
+            <property name="maximumSize">
+                <size>
+                    <width>40</width>
+                    <height>30</height>
+                </size>
+            </property>
+            <property name="text">
+                <string>7 pqrs</string>
+            </property>
+            <property name="accel">
+                <string></string>
+            </property>
+        </widget>
+        <widget class="QPushButton" row="2" column="0">
+            <property name="name">
+                <cstring>fourButton</cstring>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>40</width>
+                    <height>30</height>
+                </size>
+            </property>
+            <property name="maximumSize">
+                <size>
+                    <width>40</width>
+                    <height>30</height>
+                </size>
+            </property>
+            <property name="text">
+                <string>4 ghi</string>
+            </property>
+            <property name="accel">
+                <string></string>
+            </property>
+        </widget>
+        <widget class="QPushButton" row="4" column="1">
+            <property name="name">
+                <cstring>zeroButton</cstring>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>40</width>
+                    <height>30</height>
+                </size>
+            </property>
+            <property name="maximumSize">
+                <size>
+                    <width>40</width>
+                    <height>30</height>
+                </size>
+            </property>
+            <property name="text">
+                <string>0 +</string>
+            </property>
+            <property name="accel">
+                <string></string>
+            </property>
+        </widget>
+    </grid>
+</widget>
+<tabstops>
+    <tabstop>oneButton</tabstop>
+    <tabstop>twoButton</tabstop>
+    <tabstop>threeButton</tabstop>
+    <tabstop>fourButton</tabstop>
+    <tabstop>fiveButton</tabstop>
+    <tabstop>sixButton</tabstop>
+    <tabstop>sevenButton</tabstop>
+    <tabstop>eightButton</tabstop>
+    <tabstop>nineButton</tabstop>
+    <tabstop>starButton</tabstop>
+    <tabstop>zeroButton</tabstop>
+    <tabstop>sharpButton</tabstop>
+</tabstops>
+<pixmapinproject/>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

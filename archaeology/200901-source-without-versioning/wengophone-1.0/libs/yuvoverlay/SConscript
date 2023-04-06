@@ -1,0 +1,13 @@
+
+env = WengoEnvironment()
+
+overlay_env = env.Copy()
+
+overlay_decl = env.WengoDeclareLibraryAuto("yuvoverlay",
+    "libs/yuvoverlay")
+overlay_decl.AddSubIncludePath("include")
+overlay_env.WengoUseLibraryHeaders("yuvoverlay")
+
+overlay_sources = [ "src/Overlay.cpp", "src/OverlayDirectX.cpp" ]
+overlay_lib = overlay_env.WengoStaticLibrary("yuvoverlay", overlay_sources)
+overlay_env.WengoAlias("yuvoverlay", overlay_lib)

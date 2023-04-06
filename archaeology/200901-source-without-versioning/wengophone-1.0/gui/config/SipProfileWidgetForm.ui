@@ -1,0 +1,299 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>SipProfileWidgetForm</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>SipProfileWidgetForm</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>344</width>
+            <height>276</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>SipProfileWidgetForm</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>0</number>
+        </property>
+        <widget class="QButtonGroup" row="0" column="0">
+            <property name="name">
+                <cstring>buttonGroup1</cstring>
+            </property>
+            <property name="title">
+                <string>SIP Profile Configuration</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>textLabel1</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Username:</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="1" column="0">
+                    <property name="name">
+                        <cstring>textLabel4</cstring>
+                    </property>
+                    <property name="text">
+                        <string>User Id:</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="2" column="0">
+                    <property name="name">
+                        <cstring>textLabel2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Password:</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="3" column="0">
+                    <property name="name">
+                        <cstring>textLabel3</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Realm:</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="4" column="0">
+                    <property name="name">
+                        <cstring>textLabel1_2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Server:</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="5" column="0">
+                    <property name="name">
+                        <cstring>textLabel1_3</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Proxy:</string>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="6" column="1">
+                    <property name="name">
+                        <cstring>forceCheckBox</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Force Register Through Proxy</string>
+                    </property>
+                </widget>
+                <widget class="QLineEdit" row="4" column="1" rowspan="1" colspan="4">
+                    <property name="name">
+                        <cstring>serverEdit</cstring>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Enter the authentication server address</string>
+                    </property>
+                </widget>
+                <widget class="QLineEdit" row="3" column="1" rowspan="1" colspan="4">
+                    <property name="name">
+                        <cstring>realmEdit</cstring>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Enter the realm address</string>
+                    </property>
+                </widget>
+                <widget class="QLineEdit" row="2" column="1" rowspan="1" colspan="4">
+                    <property name="name">
+                        <cstring>passwordEdit</cstring>
+                    </property>
+                    <property name="echoMode">
+                        <enum>Password</enum>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Enter your password</string>
+                    </property>
+                </widget>
+                <widget class="QLineEdit" row="1" column="1" rowspan="1" colspan="4">
+                    <property name="name">
+                        <cstring>userIdEdit</cstring>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Enter your user id</string>
+                    </property>
+                </widget>
+                <widget class="QLineEdit" row="0" column="1" rowspan="1" colspan="4">
+                    <property name="name">
+                        <cstring>usernameEdit</cstring>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Enter your username</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="5" column="3">
+                    <property name="name">
+                        <cstring>textLabel1_4</cstring>
+                    </property>
+                    <property name="text">
+                        <string>:</string>
+                    </property>
+                </widget>
+                <widget class="QLineEdit" row="5" column="1" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>proxyEdit</cstring>
+                    </property>
+                </widget>
+                <spacer row="6" column="2">
+                    <property name="name">
+                        <cstring>spacer6</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>53</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QCheckBox" row="7" column="1">
+                    <property name="name">
+                        <cstring>autoCheckBox</cstring>
+                    </property>
+                    <property name="focusPolicy">
+                        <enum>StrongFocus</enum>
+                    </property>
+                    <property name="text">
+                        <string>Auto Register</string>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Register when WengoPhone starts</string>
+                    </property>
+                </widget>
+                <widget class="QLayoutWidget" row="9" column="0" rowspan="1" colspan="5">
+                    <property name="name">
+                        <cstring>layout6</cstring>
+                    </property>
+                    <grid>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <spacer row="0" column="0">
+                            <property name="name">
+                                <cstring>spacer5</cstring>
+                            </property>
+                            <property name="orientation">
+                                <enum>Horizontal</enum>
+                            </property>
+                            <property name="sizeType">
+                                <enum>Expanding</enum>
+                            </property>
+                            <property name="sizeHint">
+                                <size>
+                                    <width>170</width>
+                                    <height>20</height>
+                                </size>
+                            </property>
+                        </spacer>
+                        <widget class="QPushButton" row="0" column="3">
+                            <property name="name">
+                                <cstring>registerButton</cstring>
+                            </property>
+                            <property name="text">
+                                <string>&amp;Register</string>
+                            </property>
+                            <property name="accel">
+                                <string>Alt+R</string>
+                            </property>
+                            <property name="autoDefault">
+                                <bool>true</bool>
+                            </property>
+                        </widget>
+                        <widget class="QPushButton" row="0" column="1">
+                            <property name="name">
+                                <cstring>unregisterButton</cstring>
+                            </property>
+                            <property name="text">
+                                <string>&amp;Unregister</string>
+                            </property>
+                            <property name="accel">
+                                <string>Alt+U</string>
+                            </property>
+                        </widget>
+                    </grid>
+                </widget>
+                <widget class="QLayoutWidget" row="5" column="4" rowspan="2" colspan="1">
+                    <property name="name">
+                        <cstring>layout5</cstring>
+                    </property>
+                    <grid>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <spacer row="1" column="0">
+                            <property name="name">
+                                <cstring>spacer4</cstring>
+                            </property>
+                            <property name="orientation">
+                                <enum>Horizontal</enum>
+                            </property>
+                            <property name="sizeType">
+                                <enum>Fixed</enum>
+                            </property>
+                            <property name="sizeHint">
+                                <size>
+                                    <width>60</width>
+                                    <height>20</height>
+                                </size>
+                            </property>
+                        </spacer>
+                        <widget class="QLineEdit" row="0" column="0">
+                            <property name="name">
+                                <cstring>portEdit</cstring>
+                            </property>
+                        </widget>
+                    </grid>
+                </widget>
+            </grid>
+        </widget>
+        <spacer row="1" column="0">
+            <property name="name">
+                <cstring>spacer7</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>117</height>
+                </size>
+            </property>
+        </spacer>
+    </grid>
+</widget>
+<tabstops>
+    <tabstop>usernameEdit</tabstop>
+    <tabstop>userIdEdit</tabstop>
+    <tabstop>passwordEdit</tabstop>
+    <tabstop>realmEdit</tabstop>
+    <tabstop>serverEdit</tabstop>
+    <tabstop>proxyEdit</tabstop>
+    <tabstop>portEdit</tabstop>
+    <tabstop>forceCheckBox</tabstop>
+    <tabstop>autoCheckBox</tabstop>
+    <tabstop>registerButton</tabstop>
+    <tabstop>unregisterButton</tabstop>
+</tabstops>
+<pixmapinproject/>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

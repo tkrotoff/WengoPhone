@@ -1,0 +1,10 @@
+subdirs(
+	initplugin
+	connectmanager
+	callsessionmanager
+	chatsessionmanager
+	filesessionmanager
+	presencemanager
+	smssessionmanager
+	syncmanager
+)

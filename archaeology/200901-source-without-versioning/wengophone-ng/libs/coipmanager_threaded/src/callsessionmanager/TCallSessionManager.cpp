@@ -1,0 +1,56 @@
+/*
+ * WengoPhone, a voice over Internet phone
+ * Copyright (C) 2004-2007  Wengo
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+
+#include <coipmanager_threaded/callsessionmanager/TCallSessionManager.h>
+
+#include <coipmanager_threaded/TCoIpManager.h>
+#include <coipmanager_threaded/callsessionmanager/TCallSession.h>
+
+#include <coipmanager/CoIpManager.h>
+#include <coipmanager/callsessionmanager/CallSession.h>
+#include <coipmanager/callsessionmanager/CallSessionManager.h>
+
+#include <util/Logger.h>
+#include <util/SafeConnect.h>
+
+TCallSessionManager::TCallSessionManager(TCoIpManager & tCoIpManager)
+	: ITCoIpSessionManager(tCoIpManager) {
+
+	SAFE_CONNECT(getCallSessionManager(), SIGNAL(newCallSessionCreatedSignal(CallSession *)),
+		SLOT(newCallSessionCreatedSlot(CallSession *)));
+}
+
+TCallSessionManager::~TCallSessionManager() {
+}
+
+CallSessionManager * TCallSessionManager::getCallSessionManager() const {
+	return &_tCoIpManager.getCoIpManager().getCallSessionManager();
+}
+
+ICoIpSessionManager * TCallSessionManager::getICoIpSessionManager() const {
+	return getCallSessionManager();
+}
+
+TCallSession * TCallSessionManager::createTCallSession() {
+	return new TCallSession(_tCoIpManager, getCallSessionManager()->createCallSession());
+}
+
+void TCallSessionManager::newCallSessionCreatedSlot(CallSession * callSession) {
+	newCallSessionCreatedSignal(new TCallSession(_tCoIpManager, callSession));
+}

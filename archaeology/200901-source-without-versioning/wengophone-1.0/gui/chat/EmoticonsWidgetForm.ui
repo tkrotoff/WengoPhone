@@ -1,0 +1,28 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>EmoticonsWidgetForm</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>EmoticonsWidgetForm</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>129</width>
+            <height>112</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Emoticons</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>0</number>
+        </property>
+    </grid>
+</widget>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

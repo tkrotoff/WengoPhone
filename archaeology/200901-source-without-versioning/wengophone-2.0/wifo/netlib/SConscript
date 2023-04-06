@@ -1,0 +1,33 @@
+env = WengoGetEnvironment()
+
+libs = [
+	'owcurl',
+	'owcutil',
+	'httptunnel'
+]
+lib_path = []
+include_path = [
+	'include',
+	'.'
+]
+defines = {}
+headers = []
+sources = [
+	'src/netlib.cpp',
+	'src/netlib_util.cpp',
+	'src/stun_func.cpp',
+	'src/udp_func.cpp',
+	'src/bugfix.cpp',
+]
+
+if WengoOSWindows() and WengoCCMSVC():
+	libs += ['user32', 'shell32', 'ws2_32', 'advapi32', 'wininet', 'urlmon']
+
+env.WengoAddIncludePath(include_path)
+env['CPPPATH'] += ['../netlib']
+env.WengoAddDefines(defines)
+env.WengoUseLibraries(libs)
+env.WengoAddDoxyfile()
+
+if env.getConsoleArgument('enable-netlib') == 1:
+	env.WengoStaticLibrary('netlib', sources)

@@ -1,0 +1,41 @@
+# 
+# WengoPhone, a voice over Internet phone
+#
+# Copyright (C) 2004-2005  Wengo
+# Copyright (C) 2005 Mathieu Stute
+# 
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+
+env = WengoEnvironment()
+systemperf_env = env.Copy()
+
+systemperf_libdec = env.WengoDeclareLibraryAuto("systemperf", "libs/systemperf")
+systemperf_libdec.AddSubIncludePath("include")
+
+systemperf_env.WengoUseLibraryHeaders("systemperf")
+
+
+systemperf_sources = []
+
+if systemperf_env.WengoOsIsWindows():
+	systemperf_sources += [ "src/win32/CpuUsage.cpp" ]
+
+#sound_env.WengoLibAddMultiple(["winmm", "advapi32"])
+
+
+systemperf_library = systemperf_env.WengoStaticLibrary('systemperf', systemperf_sources)
+systemperf_env.WengoAlias('systemperf', systemperf_library)
+

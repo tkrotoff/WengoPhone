@@ -1,0 +1,86 @@
+/** BEGIN LICENSE
+  *
+  * OpenWengo, a voice over Internet phone for Firefox
+  * Copyright (C) 2004-2005 Wengo
+  *
+  * This program is free software; you can redistribute it and/or modify
+  * it under the terms of the GNU General Public License as published by
+  * the Free Software Foundation; either version 2 of the License, or
+  * (at your option) any later version.
+  *
+  * This program is distributed in the hope that it will be useful,
+  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  * GNU General Public License for more details.
+  *
+  * You should have received a copy of the GNU General Public License
+  * along with this program; if not, write to the Free Software
+  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+  *
+  * Contributors: Daniel Glazman (daniel.glazman@disruptive-innovations.com)
+  *
+  * END LICENSE
+ **/
+
+#include "nsISupports.idl"
+
+interface IListener;
+interface IConfigurator;
+
+/**
+ *
+ */
+// uid by max
+[scriptable, uuid(f40427f1-653e-4331-80ce-0db604b9b2e7)]
+
+interface ICommand : nsISupports
+{
+  void Init();
+
+  void SetListener(in IListener aListener);
+  void SetConfigurator(in IConfigurator aConfigurator);
+
+  void GetAccountList();
+
+  // EnumProtols.h
+  const short PROTOCOL_Unknown = 0;
+  const short PROTOCOL_All = 1;
+  const short PROTOCOL_MSN = 2;
+  const short PROTOCOL_Yahoo = 3;
+  const short PROTOCOL_AIMICQ = 4;
+  const short PROTOCOL_Jabber = 5;
+  const short PROTOCOL_SIPSIMPLE = 6;
+  const short PROTOCOL_SIP = 7;
+  const short PROTOCOL_Wengo = 8;
+  const short PROTOCOL_IAX = 9;
+
+  // create & connect
+  void CreateAndSetUserProfile(in AString userLogin,
+			       in AString userPassword,
+			       in short protocol,
+			       in boolean savePassword);
+  void SetUserProfile(in AString UUID,
+		      in AString userPassword,
+		      in boolean savePassword);
+  void ConnectAccount(in AString userLogin,
+		      in AString userPassword,
+		      in short protocol,
+		      in boolean savePassword);
+
+  void AccountLogOff();
+
+  // ChatSessionManager class
+//   void CreateChatSession(in unsigned short sessionID);
+
+  // ChatSesion class
+//   void ChatSession_start(in unsigned short sessionID);
+//   void ChatSession_getMessageHistory(in unsigned short sessionID);
+//   void ChatSession_sendMessage(in unsigned short sessionID,
+// 			       in AString message);
+//   void ChatSession_addContact(in unsigned short sessionID,
+// 			      in AString contactID,
+// 			      in short protocol);
+//   void ChatSession_removeContact(in unsigned short sessionID,
+// 				 in AString contactUUID);
+  
+};

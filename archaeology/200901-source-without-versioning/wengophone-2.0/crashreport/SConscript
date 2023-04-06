@@ -1,0 +1,32 @@
+env = WengoGetQt4Environment()
+
+sources = [
+	'main.cpp',
+	'FtpUpload.cpp',
+	'QtCrashReport.cpp'
+]
+headers = [
+	'FtpUpload.h',
+	'QtCrashReport.h'
+]
+libs = [
+	'owthread',
+	'owcutil',
+	'owcurl',
+	'owutil',
+	'qt4',
+	'boost',
+	'qtutil',
+	'owsystem'
+]
+forms = [
+	'CrashReport.ui',
+]
+
+for form in forms:
+	header = env.WengoCompileQt4UiFile(form)
+	headers += [header]
+
+env.WengoUseLibraries(libs)
+prog = env.WengoProgram('owcrashreport', sources, headers)
+env.WengoAlias('owcrashreport_alias', prog)

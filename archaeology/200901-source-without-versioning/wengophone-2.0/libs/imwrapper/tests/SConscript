@@ -1,0 +1,23 @@
+env = WengoGetEnvironment()
+
+link_flags = []
+
+libs = [
+	'imwrapper',
+]
+
+include_path = []
+
+headers = [
+]
+
+sources = [
+	'serialize-test.cpp',
+]
+
+if WengoOSMacOSX():
+	link_flags += ['-framework CoreFoundation']
+
+env.WengoAddLinkFlags(link_flags)
+env.WengoUseLibraries(libs)
+env.WengoProgram('serialize-test', sources, headers)

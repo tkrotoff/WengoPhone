@@ -1,0 +1,18 @@
+
+env = WengoEnvironment()
+miniua_env = env.Copy()
+
+ENABLE_VIDEO = miniua_env.WengoGetConsoleArgument("enable-video") == "yes"
+
+sources = [ "miniua.c" ]
+
+
+miniua_env.WengoUseLibrary('phapi')
+if ENABLE_VIDEO and not miniua_env.WengoOsIsWindows():
+	miniua_env.WengoUseLibrary('webcam')
+	miniua_env.WengoUseLibrary('libavcodec')
+	miniua_env.WengoUseLibrary('libavutil')
+
+prog = miniua_env.Program('miniua', sources)
+
+miniua_env.WengoAlias("miniua", prog)

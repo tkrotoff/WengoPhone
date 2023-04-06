@@ -1,0 +1,198 @@
+package idfowtleb13zoddeb14f6c6;
+
+/**
+@version 2.0
+@physicalPackage
+@__modelType diagram 
+*/
+class diagram {
+/**
+@__ref <oiref:cpp#Class#CWengoPhone:oiref><oihard>
+@__modelType reference
+@__imported 
+*/
+class reference4 {
+}
+/**
+@__ref <oiref:cpp#Class#PWengoPhone:oiref><oihard>
+@__modelType reference
+@__imported 
+*/
+class reference {
+}
+/**
+@__ref <oiref:cpp#Class#QtWengoPhone:oiref><oihard>
+@__modelType reference 
+*/
+class reference7 {
+}
+/**
+@__ref <oiref:cpp#Class#QtFactory:oiref><oihard>
+@__modelType reference 
+*/
+class reference10 {
+}
+/**
+@__ref <oiref:design#Class#id9h6lxeb13zoddeb2h4tdm.diagram:oiref><oihard>
+@__modelType reference
+@__fqn <oiref:#Package#presentation.qt.phonecall:oiref> 
+*/
+class reference31 {
+}
+/**
+@__ref <oiref:design#Class#idfhh8deb13zoddeb2h4te2.diagram:oiref><oihard>
+@__modelType reference
+@__fqn <oiref:#Package#presentation.qt.contactlist:oiref> 
+*/
+class reference32 {
+}
+/**
+@__ref <oiref:design#Class#id8r2jheb13zoddeb2h4tfd.diagram:oiref><oihard>
+@__modelType reference
+@__fqn <oiref:#Package#presentation.qt.account:oiref> 
+*/
+class reference34 {
+}
+/**
+@__ref <oiref:design#Class#id65z0xeb13zoddeb2h4tie.diagram:oiref><oihard>
+@__modelType reference
+@__fqn <oiref:#Package#presentation.qt.sipwrapper:oiref> 
+*/
+class reference39 {
+}
+/**
+@__ref <oiref:design#Class#id78hs5eb13zoddeb2h4tiu.diagram:oiref><oihard>
+@__modelType reference
+@__fqn <oiref:#Package#presentation.qt.phoneline:oiref> 
+*/
+class reference40 {
+}
+/**
+@__ref <oiref:design#Class#idhyqskeb13zoddeb2h4tkk.diagram:oiref><oihard>
+@__modelType reference
+@__fqn <oiref:#Package#presentation.qt.presence:oiref> 
+*/
+class reference43 {
+}
+/**
+@__ref <oiref:cpp#Class#CWengoPhoneLogger:oiref><oihard>
+@__modelType reference
+@__imported 
+*/
+class reference11 {
+}
+/**
+@__ref <oiref:cpp#Class#QtWengoPhoneLogger:oiref><oihard>
+@__modelType reference 
+*/
+class reference12 {
+}
+/**
+@__ref <oiref:cpp#Class#PWengoPhoneLogger:oiref><oihard>
+@__modelType reference
+@__imported 
+*/
+class reference15 {
+}
+/**
+@__ref <oiref:design#Class#id38b7weckelpx6eckelz6i.diagram:oiref><oihard>
+@__modelType reference
+@__fqn <oiref:#Package#presentation.qt.login:oiref> 
+*/
+class reference9 {
+}
+/**
+@__ref <oiref:cpp#Class#QtDialpad:oiref><oihard>
+@__modelType reference 
+*/
+class reference8 {
+}
+/**
+@__ref <oiref:design#Class#id59awedvfsf4fedvfspf2.diagram:oiref><oihard>
+@__modelType reference
+@__fqn <oiref:#Package#presentation.qt.sms:oiref> 
+*/
+class reference1 {
+}
+/**
+@__ref <oiref:cpp#Class#QtAbout:oiref><oihard>
+@__modelType reference 
+*/
+class reference3 {
+}
+/**
+@__ref <oiref:design#Class#idc20pmegw9rq1zegw9s0nx.diagram:oiref><oihard>
+@__modelType reference
+@__fqn <oiref:#Package#presentation.qt.macosx:oiref> 
+*/
+class reference13 {
+}
+/**
+@__ref <oiref:design#Class#idfmpkcegw9rq1zegw9s0re.diagram:oiref><oihard>
+@__modelType reference
+@__fqn <oiref:#Package#presentation.qt.win32:oiref> 
+*/
+class reference14 {
+}
+/**
+@__ref <oiref:design#Class#id27c8yegw9rq1zegw9s0qi.diagram:oiref><oihard>
+@__modelType reference
+@__fqn <oiref:#Package#presentation.qt.pics:oiref> 
+*/
+class reference16 {
+}
+}/**
+@__tags
+@shapeType ClassDiagram 
+*/
+class __tags {
+}/**
+@__options 
+*/
+class __options {
+}/**
+@__positions <oigroup:<oiref:cpp#Class#QtAbout:oiref>=5,548,155,110,1:oigroup>
+<oigroup:<oiref:cpp#Class#PWengoPhone:oiref>=920,60,219,160,0:oigroup>
+<oigroup:MemberLink#<oiref:cpp#Member#CWengoPhoneLogger#_cWengoPhone:oiref>=1270,150,761,150:oigroup>
+<oigroup:<oiref:design#Class#id8r2jheb13zoddeb2h4tfd.diagram:oiref>=2642,23,83,95,1:oigroup>
+<oigroup:<oiref:design#Class#id59awedvfsf4fedvfspf2.diagram:oiref>=2140,140,83,95,1:oigroup>
+<oigroup:Composite#supplierCardinality#MemberLink#<oiref:cpp#Member#CWengoPhoneLogger#_pWengoPhoneLogger:oiref>=1648,100,28,16,0:oigroup>
+<oigroup:MemberLink#<oiref:cpp#Member#CPhoneLine#_pPhoneLine:oiref>=1224,105,1270,105:oigroup>
+<oigroup:<oiref:design#Class#id38b7weckelpx6eckelz6i.diagram:oiref>=2872,20,83,104,1:oigroup>
+<oigroup:<oiref:design#Class#idcm9rneg3ppx2ieg3pq6rw.diagram:oiref>=101,434,83,95,1:oigroup>
+<oigroup:MemberLink#<oiref:cpp#Member#QtDialpad#_qtWengoPhone:oiref>=554,1140,554,1022:oigroup>
+<oigroup:MemberLink#<oiref:cpp#Member#QtPhoneLine#_cPhoneLine:oiref>=1101,361,1101,230:oigroup>
+<oigroup:Composite#supplierCardinality#MemberLink#<oiref:cpp#Member#QtWengoPhone#_cWengoPhone:oiref>=515,419,28,16,0:oigroup>
+<oigroup:<oiref:design#Class#id9h6lxeb13zoddeb2h4tdm.diagram:oiref>=2531,22,87,120,1:oigroup>
+<oigroup:<oiref:cpp#Class#CWengoPhoneLogger:oiref>=1270,30,310,240,0:oigroup>
+<oigroup:MemberLink#<oiref:cpp#Member#QtWengoPhone#_cWengoPhone:oiref>=547,540,547,419:oigroup>
+<oigroup:MemberLink#<oiref:cpp#Member#CWengoPhone#_pWengoPhone:oiref>=761,105,920,105:oigroup>
+<oigroup:<oiref:design#Class#iderlo6eg3ppx2ieg3pq6n4.diagram:oiref>=197,430,90,104,1:oigroup>
+<oigroup:<oiref:cpp#Extends#QtPhoneLine#PPhoneLine:oiref>=1165,361,1335,180:oigroup>
+<oigroup:<oiref:cpp#Class#CWengoPhone:oiref>=440,29,321,390,0:oigroup>
+<oigroup:Composite#supplierCardinality#MemberLink#<oiref:cpp#Member#CWengoPhone#_pWengoPhone:oiref>=888,85,28,16,0:oigroup>
+<oigroup:<oiref:design#Class#id65z0xeb13zoddeb2h4tie.diagram:oiref>=2752,22,84,95,1:oigroup>
+<oigroup:Composite#supplierCardinality#MemberLink#<oiref:cpp#Member#QtDialpad#_qtWengoPhone:oiref>=522,1022,28,16,0:oigroup>
+<oigroup:<oiref:cpp#Class#PWengoPhoneLogger:oiref>=1680,60,181,137,1:oigroup>
+<oigroup:<oiref:design#Class#idfhh8deb13zoddeb2h4te2.diagram:oiref>=2370,23,125,232,1:oigroup>
+<oigroup:<oiref:cpp#Class#QtPhoneLine:oiref>=1020,361,210,170,0:oigroup>
+<oigroup:<oiref:design#Class#id27c8yegw9rq1zegw9s0qi.diagram:oiref>=1,434,83,95,1:oigroup>
+<oigroup:<oiref:cpp#Extends#QtWengoPhone#PWengoPhone:oiref>=678,540,1029,220:oigroup>
+<oigroup:MemberLink#<oiref:cpp#Member#CWengoPhone#_cPhoneLine:oiref>=678,152,1040,152:oigroup>
+<oigroup:<oiref:design#Class#idc1hbxef7yxn7def7yy0u9.diagram:oiref>=1,434,83,95,1:oigroup>
+<oigroup:<oiref:design#Class#id78hs5eb13zoddeb2h4tiu.diagram:oiref>=2250,23,89,104,1:oigroup>
+<oigroup:<oiref:cpp#Class#QtDialpad:oiref>=390,1140,328,390,0:oigroup>
+<oigroup:<oiref:cpp#Extends#QtWengoPhoneLogger#PWengoPhoneLogger:oiref>=1525,540,1770,197:oigroup>
+<oigroup:<oiref:design#Class#idfmpkcegw9rq1zegw9s0re.diagram:oiref>=101,434,83,95,1:oigroup>
+<oigroup:Composite#supplierCardinality#MemberLink#<oiref:cpp#Member#QtWengoPhoneLogger#_cWengoPhoneLogger:oiref>=1348,270,28,16,0:oigroup>
+<oigroup:Composite#supplierCardinality#MemberLink#<oiref:cpp#Member#CWengoPhoneLogger#_cWengoPhone:oiref>=765,130,28,16,0:oigroup>
+<oigroup:<oiref:cpp#Class#QtFactory:oiref>=29,29,361,390,0:oigroup>
+<oigroup:<oiref:cpp#Class#QtWengoPhone:oiref>=350,540,459,482,0:oigroup>
+<oigroup:MemberLink#<oiref:cpp#Member#QtWengoPhoneLogger#_cWengoPhoneLogger:oiref>=1380,540,1380,270:oigroup>
+<oigroup:<oiref:cpp#Class#QtWengoPhoneLogger:oiref>=1280,540,390,482,0:oigroup>
+<oigroup:<oiref:design#Class#idc20pmegw9rq1zegw9s0nx.diagram:oiref>=197,430,90,104,1:oigroup>
+<oigroup:<oiref:design#Class#idhyqskeb13zoddeb2h4tkk.diagram:oiref>=2140,22,83,95,1:oigroup>
+<oigroup:MemberLink#<oiref:cpp#Member#CWengoPhoneLogger#_pWengoPhoneLogger:oiref>=1580,120,1680,120:oigroup>
+*/
+class __positions {
+}

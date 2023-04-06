@@ -1,0 +1,5 @@
+from wengoscons.common import wengoenv
+
+env = wengoenv.WengoSConsEnvironment()
+env.WengoCacheEnvironment()
+env.WengoBuildInDir("SConscript", "test")

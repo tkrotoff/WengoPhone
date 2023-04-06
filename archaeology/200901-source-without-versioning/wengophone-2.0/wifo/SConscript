@@ -1,0 +1,46 @@
+if WengoCCMSVC():
+	phapi_optimization_flags = [
+		'/Ox',
+		'/Ob2',
+		'/Oi',
+		'/Ot',
+		'/Oy',
+		'/G7',
+		'/GX-',
+		'/GR-' ,
+		'/arch:SSE'
+	]
+else:
+	phapi_optimization_flags = []
+
+WengoSetVariable('phapi_optimization_flags', phapi_optimization_flags)
+
+phapi_subprojects = [ 
+	'phapi-util',
+	'phapi/amrwb',
+	'phapi/amrnb',
+	'phapi/stun',
+	'phapi/gsm',
+	'phapi/speex',
+	'phapi/speexec',
+	'phapi/fidlib',
+	'phapi/msdirent',
+]
+
+if WengoGetConsoleArgument('enable-ilbc'):
+   phapi_subprojects += [ 'phapi/ilbc' ]
+
+
+projects = [
+	'httptunnel',
+	'netlib',
+	'ortp',
+	'libosip2',
+	'eXosip'] + phapi_subprojects + [
+	'phapi',
+	'miniua',
+	'sfp-plugin',
+	'tests/WifoPluginsConsole',
+]
+
+SConscript(dirs = projects)

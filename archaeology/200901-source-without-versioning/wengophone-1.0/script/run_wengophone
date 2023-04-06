@@ -1,0 +1,9 @@
+#!/bin/sh
+#
+# script to run wengophone
+#
+# author : Mathieu Stute
+
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:.
+./wengophone
+

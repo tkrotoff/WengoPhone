@@ -1,0 +1,75 @@
+env = WengoGetEnvironment()
+link_flags = []
+libs = [
+	'owthread',
+]
+lib_path = []
+include_path = [
+	'include'
+]
+defines = {}
+headers = []
+cc_flags = []
+
+sources = [
+	'src/AudioDevice.cpp',
+	'src/VolumeControl.cpp',
+	'src/EnumDeviceType.cpp',
+]
+
+if WengoOSWindows():
+	sources += [
+		'src/win32/Sound.cpp',
+		'src/win32/Win32VolumeControl.cpp',
+		'src/win32/Win32AudioDevice.cpp',
+		'src/win32/SoundThread.cpp',
+		'src/win32/Win32AudioDeviceId.cpp',
+		'src/win32/playsound/SoundFile.cpp',
+		'src/win32/playsound/PlaySoundFile.cpp'
+	]
+	libs += ['winmm', 'advapi32']
+
+elif WengoOSLinux() or WengoOSBSD():
+	sources += [
+		'src/portaudio/AudioDeviceManager.cpp',
+		'src/portaudio/PAAudioDevice.cpp',
+		'src/unix/Sound.cpp',
+		'src/unix/UnixVolumeControl.cpp',
+	]
+	libs += ['qt4', 'portaudio']
+
+elif WengoOSMacOSX():
+	sources += [
+		'src/mac/AudioDeviceManager.cpp',
+		'src/mac/CoreAudioUtilities.cpp',
+		'src/mac/MacAudioDevice.cpp',
+		'src/mac/MacSound.cpp',
+		'src/mac/MacVolumeControl.cpp',
+		'src/mac/Sound.cpp',
+	]
+
+	frameworks = [
+		'CoreAudio',
+		'Cocoa',
+	]
+	
+	env.WengoAddFrameworks(frameworks)
+
+	cc_flags += ['-x objective-c++']
+
+if WengoGetConsoleArgument('enable-libsound-portaudio') and WengoOSWindows():
+	sources += [
+		'src/portaudio/AudioDeviceManager.cpp',
+		'src/portaudio/PAAudioDevice.cpp'
+	]
+	libs += ['portaudio']
+elif WengoOSWindows():
+	sources += ['src/win32/AudioDeviceManager.cpp']
+
+env.WengoAddIncludePath(include_path)
+env.WengoAddDefines(defines)
+env.WengoAddCCFlags(cc_flags)
+env.WengoAddLinkFlags(link_flags)
+env.WengoUseLibraries(libs)
+
+env.WengoStaticLibrary('owsound', sources)

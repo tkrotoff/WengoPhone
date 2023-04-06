@@ -1,0 +1,24 @@
+
+#include "nsISupports.idl"
+
+interface IListener;
+interface ICommand;
+interface IConfigurator;
+interface nsISystemTools;
+
+/**
+ *
+ */
+// uid by max
+[scriptable, uuid(690b7821-81c1-40ae-a902-daa053d11ec1)]
+
+interface ISession : nsISupports
+{
+  attribute ICommand command;
+  attribute IListener listener;
+  attribute IConfigurator configurator;
+  attribute nsISystemTools systemtools;
+
+  void Init();
+
+};

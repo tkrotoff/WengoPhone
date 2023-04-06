@@ -1,0 +1,21 @@
+
+env = WengoEnvironment()
+thinkeramik_env = WengoQtEnvironment(env)
+
+thinkeramik_sources = [
+    "colorutil.cpp",
+    "gradients.cpp",
+    "pixmaploader.cpp",
+    "thinkeramik.cpp"
+]
+
+thinkeramik_env.WengoUseLibrary("kdefx")
+thinkeramik_env.WengoQtNoScan()
+thinkeramik_env.WengoMoc("thinkeramik.h")
+
+thinkeramik_env.WengoCppDefineSet("MAKE_KSTYLE_LIB", 1)
+thinkeramik_env.WengoCppDefineSet("MAKE_KDEFX_LIB", 1)
+
+thinkeramik_lib = thinkeramik_env.WengoSharedLibrary('wengokeramikstyle2',
+    thinkeramik_sources)
+thinkeramik_env.WengoAlias('thinkeramik', thinkeramik_lib)

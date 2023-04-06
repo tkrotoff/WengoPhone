@@ -1,0 +1,19 @@
+env = WengoGetEnvironment()
+
+libs = []
+lib_path = []
+include_path = ['include']
+defines = {}
+headers = []
+sources = [
+  'src/spxec.c',
+  'src/spxecfft.c',
+  'src/spxecfftwrap.c',
+]
+
+env.WengoAddIncludePath(include_path)
+env.WengoAddDefines(defines)
+env.WengoUseLibraries(libs)
+env.WengoAddDoxyfile()
+
+env.WengoStaticLibrary('speexec', sources)

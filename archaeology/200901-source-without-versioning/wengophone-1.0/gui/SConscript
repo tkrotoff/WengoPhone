@@ -1,0 +1,442 @@
+# 
+# WengoPhone, a voice over Internet phone
+#
+# Copyright (C) 2004-2005  Wengo
+# Copyright (C) 2005 David Ferlier <david.ferlier@wengo.fr>
+# 
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+
+import os, os.path, glob
+
+env = WengoEnvironment()
+wengophone_env = WengoQtEnvironment(env)
+wengophone_optimized_sources = []
+
+wengophone_sources= [
+    'main.cpp',
+    'contact/ContactPopupMenu.cpp',
+    'contact/Contact.cpp',
+    'contact/ContactId.cpp',
+    'contact/ContactList.cpp',
+    'contact/ContactListWidget.cpp',
+    'contact/ContactWidget.cpp',
+    'contact/ContactWindow.cpp',
+    'contact/XmlContactReader.cpp',
+    'contact/XmlContactWriter.cpp',
+    'util/WidgetStackControl.cpp',
+    'util/emit_signal.cpp',
+    'util/PhoneLineEdit.cpp',
+    'util/MyMessageBox.cpp',
+    'sip/ConversationSipState.cpp',
+    'sip/SipAddress.cpp',
+    'sip/SipPrimitives.cpp',
+    'sip/PhApiCallbacks.cpp',
+    'sip/InitSipState.cpp',
+    'sip/InputCallSipState.cpp',
+    'sip/WaitingSipState.cpp',
+    'sip/DialingSipState.cpp',
+    'sip/SipState.cpp',
+    'sms/SmsPageWidget.cpp',
+    'sms/Sms.cpp',
+    'chat/ChatPageWidget.cpp',
+    'chat/EmoticonsWidget.cpp',
+    'database/Database.cpp',
+    'database/FileSource.cpp',
+    'database/FileTarget.cpp',
+    'database/HttpTarget.cpp',
+    'database/VCardReader.cpp',
+    'database/VCardWriter.cpp',
+    'database/XmlConfigReader.cpp',
+    'database/XmlConfigWriter.cpp',
+    'database/XmlBuildIdReader.cpp',
+    'database/XmlCallHistoryReader.cpp',
+    'database/XmlCallHistoryWriter.cpp',
+    'database/XmlAuthReader.cpp',
+    'database/XmlAuthWriter.cpp',
+    'database/XmlUserReader.cpp',
+    'database/XmlUserWriter.cpp',
+    'config/Audio.cpp',
+    'config/AudioWidget.cpp',
+    'config/ConfigWindow.cpp',
+    'config/StyleWidget.cpp',
+    'config/Config.cpp',
+    'config/SipProfileWidget.cpp',
+    'config/Authentication.cpp',
+    'config/LanguageWidget.cpp',
+    'config/AdvancedConfig.cpp',
+    'config/AdvancedConfigWidget.cpp',
+    'config/Codec.cpp',
+    'config/CodecList.cpp',
+    'config/CodecListWidget.cpp',
+    'config/GeneralConfigWidget.cpp',
+    'update/Update.cpp',
+    'update/CheckUpdate.cpp',
+    'login/Login.cpp',
+    'login/LoginWindow.cpp',
+    'callhistory/CallHistoryWidget.cpp',
+    'callhistory/CallHistory.cpp',
+    'callhistory/CallLog.cpp',
+    'systray/Systray.cpp',
+    'systray/SystrayPopupWindow.cpp',
+    'connect/Connect.cpp',
+    'connect/Register.cpp',
+    'connect/SendUdpPacket.cpp',
+    'presence/Presence.cpp',
+    'presence/PresencePopupMenu.cpp',
+    'presence/PresenceStatus.cpp',
+    'presence/WatcherList.cpp',
+    'presence/XmlWatcherListReader.cpp',
+    'MainWindow.cpp',
+    'PhoneComboBox.cpp',
+    'AudioCallEvent.cpp',
+    'AudioCallManager.cpp',
+    'Softphone.cpp',
+    'StatusBar.cpp',
+    'SessionWindow.cpp',
+    'DialPadWidget.cpp',
+    'AudioCall.cpp',
+    'PhonePageWidget.cpp',
+    'AboutWindow.cpp',
+    'qmake_image_collection.cpp',
+    ]
+
+wengophone_images = [
+    'icons/sip_profile.png',
+    'icons/html.png',
+    'icons/call_button.png',
+    'icons/call_button_small.png',
+    'icons/call_video_button.png',
+    'icons/call_history.png',
+    'icons/call_history_on.png',
+    'icons/call_incoming.png',
+    'icons/call_missed.png',
+    'icons/call_outgoing.png',
+    'icons/configuration.png',
+    'icons/contact_find.png',
+    'icons/contact_list.png',
+    'icons/contact_list_on.png',
+    'icons/contact_picture.png',
+    'icons/contact_phone_home.png',
+    'icons/contact_phone_mobile.png',
+    'icons/contact_phone_wengo.png',
+    'icons/contact_phone_work.png',
+    'icons/contact_view.png',
+    'icons/contact_remove.png',
+    'icons/dialpad.png',
+    'icons/hangup_button_small.png',
+    'icons/headphones.png',
+    'icons/help.png',
+    'icons/microphone.png',
+    'icons/statusbar_audio.png',
+    'icons/statusbar_audio_error.png',
+    'icons/statusbar_connect.png',
+    'icons/statusbar_connect_error.png',
+    'icons/statusbar_sip.png',
+    'icons/statusbar_sip_httptunnel.png',
+    'icons/statusbar_sip_error.png',
+    'icons/statusbar_uptodate.png',
+    'icons/statusbar_uptodate_error.png',
+    'icons/background.png',
+    'icons/home.png',
+    'icons/home_on.png',
+    'icons/logo.png',
+    'icons/logo-mini.png',
+    'icons/logo-spiral.png',
+    'icons/systray_icon.png',
+    'icons/systray_icon_error.png',
+    'icons/contact_picture_mini.png',
+    'icons/sms_send.png',
+    'icons/systray_popup_window.png',
+    'icons/contact_add.png',
+    'icons/config_apparence.png',
+    'icons/config_audio.png',
+    'icons/config_audio_codecs.png',
+    'icons/config_expert.png',
+    'icons/config_general.png',
+    'icons/config_langues.png',
+    'icons/config_video.png',
+    'icons/config_video_codecs.png',
+    'icons/contact_block.png',
+    'presence/icons/wengo/away.png',
+    'presence/icons/wengo/dnd.png',
+    'presence/icons/wengo/offline.png',
+    'presence/icons/wengo/online.png',
+    'presence/icons/wengo/user.png',
+    'icons/arrow_down.png',
+    'icons/arrow_right.png',
+    'icons/chat/chat_send_message.png',
+    'icons/chat/underline.png',
+    'icons/chat/italic.png',
+    'icons/chat/bold.png',
+    'icons/chat/smileys.png',
+    'icons/chat/font.png',
+    'icons/chat/fontcolor.png',
+    'icons/webcam.png',
+    'icons/webcam_off.png',
+    'icons/video_fullscreen.png',
+    'icons/video_unfullscreen.png',
+    'icons/video_flip.png',
+    'icons/separator.png'
+]
+
+wengophone_translations = [
+    "lang/wengo_fr.ts",
+    "lang/wengo_en.ts",
+    "lang/wengo_zh.ts",
+    "lang/wengo_ru.ts",
+    "lang/wengo_es.ts",
+    "lang/wengo_zh-cn.ts",
+    "lang/wengo_zh.ts",
+    "lang/wengo_de.ts",
+    "lang/wengo_cs.ts",
+    "lang/wengo_pt.ts",
+    "lang/wengo_it.ts",
+    "lang/wengo_ja.ts",
+    "lang/wengo_pl.ts",
+    "lang/wengo_fi.ts",
+    "lang/wengo_nl.ts",
+]
+
+wengophone_forms =  [ 
+    'AboutWindowForm.ui',
+    'DialPadWidgetForm.ui',
+    'MainWindowForm.ui',
+    'PhonePageWidgetForm.ui',
+    'SessionWindowForm.ui',
+    'config/AdvancedConfigWidgetForm.ui',
+    'config/CodecListWidgetForm.ui',
+    'config/ConfigWindowForm.ui',
+    'config/LanguageWidgetForm.ui',
+    'config/SipProfileWidgetForm.ui',
+    'config/StyleWidgetForm.ui',
+    'config/AudioWidgetForm.ui',
+    'config/GeneralConfigWidgetForm.ui',
+    'config/VideoWidgetForm.ui',
+    'contact/ContactListWidgetForm.ui',
+    'contact/ContactWidgetForm.ui',
+    'contact/ContactWindowForm.ui',
+    'callhistory/CallHistoryWidgetForm.ui',
+    'login/LoginWindowForm.ui',
+    'chat/ChatPageWidgetForm.ui',
+    'chat/EmoticonsWidgetForm.ui',
+    'sms/SmsPageWidgetForm.ui',
+    'systray/SystrayPopupWindowForm.ui',
+    'visio/VisioPageWidgetForm.ui',
+	'visio/VideoCodecConfigWidgetForm.ui'
+]
+
+wengophone_translation_fr = wengophone_env.WengoQtLanguageRelease(
+    "lang/wengo_fr.ts", "lang/wengo_fr.qm")
+wengophone_translation_en = wengophone_env.WengoQtLanguageRelease(
+    "lang/wengo_en.ts", "lang/wengo_en.qm")
+wengophone_translation_zh = wengophone_env.WengoQtLanguageRelease(
+    "lang/wengo_zh.ts", "lang/wengo_zh.qm")
+wengophone_translation_ru = wengophone_env.WengoQtLanguageRelease(
+    "lang/wengo_ru.ts", "lang/wengo_ru.qm")
+wengophone_translation_es = wengophone_env.WengoQtLanguageRelease(
+    "lang/wengo_es.ts", "lang/wengo_es.qm")
+wengophone_translation_zh_cn = wengophone_env.WengoQtLanguageRelease(
+    "lang/wengo_zh-cn.ts", "lang/wengo_zh-cn.qm")
+wengophone_translation_de = wengophone_env.WengoQtLanguageRelease(
+    "lang/wengo_de.ts", "lang/wengo_de.qm")
+wengophone_translation_cs = wengophone_env.WengoQtLanguageRelease(
+    "lang/wengo_cs.ts", "lang/wengo_cs.qm")
+wengophone_translation_pt = wengophone_env.WengoQtLanguageRelease(
+    "lang/wengo_pt.ts", "lang/wengo_pt.qm")
+wengophone_translation_it = wengophone_env.WengoQtLanguageRelease(
+    "lang/wengo_it.ts", "lang/wengo_it.qm")
+wengophone_translation_ja = wengophone_env.WengoQtLanguageRelease(
+    "lang/wengo_ja.ts", "lang/wengo_ja.qm")
+wengophone_translation_pl = wengophone_env.WengoQtLanguageRelease(
+    "lang/wengo_pl.ts", "lang/wengo_pl.qm")
+wengophone_translation_fi = wengophone_env.WengoQtLanguageRelease(
+    "lang/wengo_fi.ts", "lang/wengo_fi.qm")
+wengophone_translation_nl = wengophone_env.WengoQtLanguageRelease(
+    "lang/wengo_nl.ts", "lang/wengo_nl.qm")
+
+wengophone_translations = [
+    wengophone_translation_fr,
+    wengophone_translation_en,
+    wengophone_translation_zh,
+    wengophone_translation_ru,
+    wengophone_translation_es,
+    wengophone_translation_zh_cn,
+    wengophone_translation_de,
+    wengophone_translation_cs,
+    wengophone_translation_pt,
+    wengophone_translation_it,
+    wengophone_translation_ja,
+    wengophone_translation_pl,
+    wengophone_translation_fi,
+    wengophone_translation_nl,
+]
+
+wengophone_config_h_defines = {}
+wengophone_config_h_defines["WL_TAG"] = wengophone_env.WengoGetConsoleArgument("wl-tag")
+wengophone_config_h_defines["INSTALLER_TYPE"] = wengophone_env.WengoGetConsoleArgument("installer-type")
+
+wengophone_env.WengoGenerateConfigHeader("softphone-config.h",
+    "softphone-config.h.in", wengophone_config_h_defines)
+
+if wengophone_env.WengoOsIsWindows():
+    wengophone_forms += [
+        'HomePageWidgetForm.ui',
+        'search/SearchPageWidgetForm.ui'
+    ]
+    wengophone_sources += [
+        "HomePageWidget.cpp",
+        "search/SearchPageWidget.cpp",
+        "plugins/wenbox/WenboxPlugin.cpp",
+        "plugins/wenbox/WenboxAudioDevice.cpp"
+    ]
+
+    wengophone_env.WengoLibAdd("qtmain")
+    wengophone_env.WengoLibPathAdd("plugins/wenbox")
+    wengophone_env.WengoLibAddMultiple(["vfw32", "YLTELBOX", "user32",
+                "gdi32", "shell32", "advapi32", "winmm", "ws2_32",
+                "wininet", "urlmon", "shlwapi", "qaxcontainer", "ole32",
+                "oleaut32", "qtmain"])
+
+    compilation_mode = wengophone_env.WengoGetCompilationMode()
+
+    if compilation_mode == "debug":
+        wengophone_env.WengoLinkFlagsAdd("/subsystem:console")
+    elif compilation_mode.startswith("release"):
+        wengophone_env.WengoLinkFlagsAdd("/subsystem:windows")
+        wengophone_env.WengoLinkFlagsAdd("/nodefaultlib:msvcrtd")
+
+    rc_target = env.Install(".", "win32/softphone.rc")
+    ico_target = env.Install(".", "win32/wengo.ico")
+    res_target = env.RES("softphone.rc")
+    env.Depends(res_target, ico_target)
+    env.Depends(res_target, rc_target)
+
+    wengophone_sources += [ "softphone.res" ]
+
+if wengophone_env.WengoOsIsLinux() or wengophone_env.WengoOsIsBSD():
+    wengophone_forms += [ 'HomePageWidgetForm_posix.ui' ]
+    wengophone_sources += [ 'HomePageWidget_posix.cpp' ]
+
+if wengophone_env.WengoGetConsoleArgument("enable-video") == "yes":
+    wengophone_sources += [
+        'config/VideoWidget.cpp',
+        'config/Video.cpp',
+        'visio/VisioPageWidget.cpp',
+        'visio/VisioPopupMenu.cpp',
+        'visio/VisioOutput.cpp',
+        'visio/VisioFrameProcessor.cpp',
+        'visio/VideoCodecConfigWidget.cpp',
+    ]
+
+    if wengophone_env.WengoOsIsWindows():
+        wengophone_optimized_sources += [ 'visio/Fast2PassScale.cpp' ]
+
+    wengophone_env.WengoUseLibrary("video")
+    wengophone_env.WengoUseLibrary("webcam")
+    wengophone_env.WengoUseLibrary("webcam_c")
+    wengophone_env.WengoUseLibrary("libavcodec")
+    wengophone_env.WengoUseLibrary("global")
+
+    if wengophone_env.WengoOsIsLinux():
+        wengophone_env.WengoUseLibrary("libavutil")
+
+    wengophone_env.WengoCppDefineAdd("PHAPI_VIDEO_SUPPORT")
+    wengophone_env.WengoCppDefineAdd("ENABLE_VIDEO")
+
+    if wengophone_env.WengoOsIsWindows():
+       wengophone_env.WengoLibAddMultiple(["strmiids", "comsupp"])
+else:
+	optimized_objects = []
+
+if wengophone_env.WengoGetConsoleArgument("enable-video-codec-config") == "yes":
+	wengophone_env.WengoCppDefineAdd("ENABLE_CODEC_CONFIG")
+
+if wengophone_env.WengoGetConsoleArgument("enable-advanced-sip-config") == "yes":
+    wengophone_env.WengoCppDefineAdd("ENABLE_ADVANCED_SIP_CONFIG")
+
+wengophone_env.Moc('database/HttpSource.h')
+
+wengophone_env.WengoUseLibrary("sound")
+wengophone_env.WengoUseLibrary("portaudio")
+wengophone_env.WengoUseLibrary("wengovcard")
+wengophone_env.WengoUseLibrary("phapi")
+wengophone_env.WengoUseLibrary("trayicon")
+wengophone_env.WengoUseLibrary("util")
+wengophone_env.WengoUseLibrary("wengocurl")
+wengophone_env.WengoUseLibrary("iconset")
+wengophone_env.WengoUseLibrary("zip")
+wengophone_env.WengoUseLibrary("wtimer")
+
+if wengophone_env.WengoGetConsoleArgument("enable-shared-phapi") == "no":
+	print "phapi static mode"
+	wengophone_env.WengoUseLibrary("exosip")
+	wengophone_env.WengoUseLibrary("ortp")
+	wengophone_env.WengoUseLibrary("osip")
+	wengophone_env.WengoUseLibrary("amrwb")
+	wengophone_env.WengoUseLibrary("amrnb")
+	wengophone_env.WengoUseLibrary("ilbc")
+	wengophone_env.WengoUseLibrary("stun")
+	wengophone_env.WengoUseLibrary("gsm")
+	wengophone_env.WengoUseLibrary("global")
+	wengophone_env.WengoUseLibrary("wtimer")
+	if wengophone_env.WengoGetConsoleArgument("enable-video") == "yes":
+		wengophone_env.WengoUseLibrary("libavcodec")
+		wengophone_env.WengoUseLibrary("webcam_c")
+		wengophone_env.WengoUseLibrary("webcam")
+	if wengophone_env.WengoGetConsoleArgument("enable-samplerate") == "yes":
+		wengophone_env.WengoUseLibrary("samplerate")
+	
+	#system libs
+	wengophone_env.WengoLibAddMultiple(["ws2_32", "winmm", "iphlpapi"])
+	
+	
+if wengophone_env.WengoGetConsoleArgument("enable-shared-wengocurl")=="no":
+	#system libs
+	wengophone_env.WengoLibAddMultiple(["ws2_32", "winmm", "Gdi32"])
+	wengophone_env.WengoUseLibrary("openssl")
+	
+
+if wengophone_env.WengoGetConsoleArgument("enable-http-tunnel") == "yes":
+	wengophone_env.WengoUseLibrary("httptunnel")
+
+if wengophone_env.WengoGetConsoleArgument("enable-netlib"):
+    wengophone_env.WengoUseLibrary("netlib")
+
+wengophone_env.WengoQt3WriteImagesToFile("wengophone_images.txt", wengophone_images)
+wengophone_env.WengoQt3ImagesEmbedFromFile("qmake_image_collection.cpp", "wengophone_images.txt")
+
+wengophone_env.WengoIncludePathsAdd(".")
+wengophone_env.WengoIncludePathsAdd("database")
+wengophone_env.WengoIncludePathsAdd("contact")
+wengophone_env.WengoIncludePathsAdd("connect")
+
+wengophone_optimized_objects = []
+if len(wengophone_optimized_sources):
+    wengophone_optimized_env = wengophone_env.Copy()
+    if wengophone_optimized_env.WengoOsIsWindows():
+        wengophone_optimized_env.WengoCCFlagsAddMultiple(['/Ox', '/Ob2', '/Oi', '/Ot', '/Oy', '/G7', '/GX-', '/GR-', '/arch:SSE'])
+
+    wengophone_optimized_objects = wengophone_optimized_env.SharedObject(
+	    wengophone_optimized_sources)
+
+wengophone_program = wengophone_env.WengoProgram('wengophone',
+    wengophone_forms + wengophone_sources + wengophone_optimized_objects)
+
+wengophone_env.WengoAlias("softphone-gui", wengophone_program)
+wengophone_env.WengoAlias("softphone-translations", wengophone_translations)
+
+wengophone_env.WengoAlias("softphone",
+    wengophone_program + wengophone_translations)

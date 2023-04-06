@@ -1,0 +1,220 @@
+<ui version="4.0" >
+ <class>NewAccountDialog</class>
+ <widget class="QDialog" name="NewAccountDialog" >
+  <property name="windowModality" >
+   <enum>Qt::NonModal</enum>
+  </property>
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>292</width>
+    <height>254</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Add An Account</string>
+  </property>
+  <layout class="QGridLayout" >
+   <property name="margin" >
+    <number>9</number>
+   </property>
+   <property name="spacing" >
+    <number>6</number>
+   </property>
+   <item row="0" column="0" >
+    <widget class="QComboBox" name="protocolComboBox" />
+   </item>
+   <item row="1" column="0" >
+    <widget class="QStackedWidget" name="stackedWidget" >
+     <property name="currentIndex" >
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="page" >
+      <layout class="QGridLayout" >
+       <property name="margin" >
+        <number>9</number>
+       </property>
+       <property name="spacing" >
+        <number>6</number>
+       </property>
+       <item row="1" column="1" >
+        <widget class="QLineEdit" name="accountPasswordLineEdit" >
+         <property name="echoMode" >
+          <enum>QLineEdit::Password</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1" >
+        <widget class="QLineEdit" name="accountLoginLineEdit" />
+       </item>
+       <item row="1" column="0" >
+        <widget class="QLabel" name="label_2" >
+         <property name="text" >
+          <string>Password:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0" >
+        <widget class="QLabel" name="label" >
+         <property name="text" >
+          <string>Login:</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="page_2" >
+      <layout class="QGridLayout" >
+       <property name="margin" >
+        <number>9</number>
+       </property>
+       <property name="spacing" >
+        <number>6</number>
+       </property>
+       <item row="0" column="0" >
+        <widget class="QLabel" name="label_3" >
+         <property name="text" >
+          <string>Login / username:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1" colspan="3" >
+        <widget class="QLineEdit" name="usernameLineEdit" />
+       </item>
+       <item row="1" column="0" >
+        <widget class="QLabel" name="label_4" >
+         <property name="text" >
+          <string>Password:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1" colspan="3" >
+        <widget class="QLineEdit" name="passwordLineEdit" >
+         <property name="echoMode" >
+          <enum>QLineEdit::Password</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0" >
+        <widget class="QLabel" name="label_5" >
+         <property name="text" >
+          <string>Realm:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1" colspan="3" >
+        <widget class="QLineEdit" name="realmLineEdit" />
+       </item>
+       <item row="3" column="0" >
+        <widget class="QLabel" name="label_6" >
+         <property name="text" >
+          <string>Displayname:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="1" colspan="3" >
+        <widget class="QLineEdit" name="displaynameLineEdit" />
+       </item>
+       <item row="4" column="0" >
+        <widget class="QLabel" name="label_7" >
+         <property name="text" >
+          <string>Server:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1" colspan="3" >
+        <widget class="QLineEdit" name="registerServerLineEdit" />
+       </item>
+       <item row="5" column="0" >
+        <widget class="QLabel" name="label_8" >
+         <property name="text" >
+          <string>Proxy:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1" >
+        <widget class="QLineEdit" name="sipProxyLineEdit" />
+       </item>
+       <item row="5" column="2" >
+        <widget class="QLabel" name="label_9" >
+         <property name="text" >
+          <string>:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="3" >
+        <widget class="QLineEdit" name="sipProxyPortLineEdit" >
+         <property name="text" >
+          <string>5060</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item row="2" column="0" >
+    <widget class="QDialogButtonBox" name="buttonBox" >
+     <property name="windowModality" >
+      <enum>Qt::WindowModal</enum>
+     </property>
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons" >
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::NoButton|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <tabstops>
+  <tabstop>protocolComboBox</tabstop>
+  <tabstop>accountLoginLineEdit</tabstop>
+  <tabstop>accountPasswordLineEdit</tabstop>
+  <tabstop>buttonBox</tabstop>
+  <tabstop>passwordLineEdit</tabstop>
+  <tabstop>realmLineEdit</tabstop>
+  <tabstop>displaynameLineEdit</tabstop>
+  <tabstop>registerServerLineEdit</tabstop>
+  <tabstop>sipProxyLineEdit</tabstop>
+  <tabstop>sipProxyPortLineEdit</tabstop>
+  <tabstop>usernameLineEdit</tabstop>
+ </tabstops>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>NewAccountDialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>248</x>
+     <y>254</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>157</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>NewAccountDialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>316</x>
+     <y>260</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>286</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

@@ -1,0 +1,32 @@
+# Author: David Ferlier <david.ferlier@wengo.fr>
+
+import popen2, os.path
+
+Import('wengophone_env')
+Import('wengophone_translations')
+Import('wengophone_translations_dest')
+
+def wengophone_lupdate(target, source, env):
+    lupdate_path = os.path.join(env["QTDIR"], 'bin', 'lupdate')
+    for a_target, a_source in zip(target, source):
+	out, infd = popen2.popen4(lupdate_path + " " + str(a_source))
+        a_target_file = file(str(a_target), "w+")
+        a_target_file.write(out.read())
+        a_target_file.close()
+
+def wengophone_language_release(target, source, env):
+    lrelease_path = os.path.join(env["QTDIR"], 'bin', 'lrelease')
+    for a_target, a_source in zip(target, source):
+	out, infd = popen2.popen4(
+	    lrelease_path + " " + str(a_source) + " -qm " + str(a_target))
+	print "wengophone-lrelease-target: Updated " + str(a_target)
+
+targets = []
+lupdate_target = wengophone_env.Command('lupdate.log', 'gui.pro',
+    wengophone_lupdate)
+lrelease_target = wengophone_env.Command(wengophone_translations_dest,
+    wengophone_translations, wengophone_language_release)
+
+targets = [ lupdate_target, lrelease_target ]
+
+Return('targets')

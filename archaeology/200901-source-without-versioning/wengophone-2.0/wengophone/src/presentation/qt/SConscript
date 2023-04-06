@@ -1,0 +1,476 @@
+import os, shutil
+
+env = WengoGetQt4Environment()
+
+libs = [
+	'wengophone',
+	'buildId',
+	'qtutil',
+	'webcam',
+	'qt4',
+	'owbrowser',
+	'trayicon',
+	'softupdater',
+	'owidle',
+]
+
+lib_path = []
+
+include_path = []
+
+defines = {}
+
+link_flags = []
+
+cc_flags = []
+
+headers = [
+	'QtWengoPhone.h',
+	'QtConfigPanel.h',
+	'QtDialpad.h',
+	'QtAbout.h',
+	'QtHttpProxyLogin.h',
+	'QtIdle.h',
+	'QtEnumIMProtocol.h',
+	'QtLanguage.h',
+	'QtToolBar.h',
+	'QtSystray.h',
+	'QtFactory.h',
+	'QtUserProfilePresenceMenu.h',
+	'QtWengoStyle.h',
+	'QtBrowserWidget.h',
+
+	'phoneline/QtPhoneLine.h',
+
+	'phonecall/QtPhoneCall.h',
+	'phonecall/QtVideo.h',
+	'phonecall/QtVideoQt.h',
+	'phonecall/QtContactCallList.h',
+	'phonecall/QtContactCallListWidget.h',
+	'phonecall/QtPhoneCallEventFilter.h',
+
+	'toaster/QtChatToaster.h',
+	'toaster/QtCallToaster.h',
+	'toaster/QtToaster.h',
+
+	'login/QtLogin.h',
+
+	'profile/QtProfileDetails.h',
+	'profile/QtUserProfile.h',
+	'profile/QtUserProfileHandler.h',
+
+	'imcontact/QtIMContactManager.h',
+	'imcontact/QtAddIMContact.h',
+	'imcontact/QtIMContactItem.h',
+	'imcontact/QtSimpleIMContactManager.h',
+
+	'imaccount/QtIMAccountItem.h',
+	'imaccount/QtIMAccountManager.h',
+	'imaccount/QtSimpleIMAccountManager.h',
+	'imaccount/QtIMAccountSettings.h',
+	'imaccount/QtIMAccountPlugin.h',
+	'imaccount/QtMSNSettings.h',
+	'imaccount/QtYahooSettings.h',
+	'imaccount/QtAIMSettings.h',
+	'imaccount/QtJabberSettings.h',
+	'imaccount/QtGoogleTalkSettings.h',
+
+	'contactlist/QtContactList.h',
+	'contactlist/QtContactWidget.h',
+	'contactlist/QtContactTreeMouseFilter.h',
+	'contactlist/QtContactManager.h',
+	'contactlist/QtContactListManager.h',
+	'contactlist/QtContact.h',
+	'contactlist/QtTreeViewDelegate.h',
+	'contactlist/QtContactPixmap.h',
+	'contactlist/QtContactInfo.h',
+	'contactlist/QtContactTreeKeyFilter.h',
+	'contactlist/QtRenameGroup.h',
+	'contactlist/QtConferenceAction.h',
+	'contactlist/QtContactMenu.h',
+
+	'conference/QtConferenceCallWidget.h',
+
+	'chat/emoticons/QtEmoticonsWidget.h',
+	'chat/emoticons/QtEmoticon.h',
+	'chat/emoticons/QtEmoticonButton.h',
+	'chat/emoticons/QtEmoticonsManager.h',
+	'chat/chatroom/QtChatRoomInviteDlg.h',
+	'chat/chatroom/QtChatRoomTreeWidgetItem.h',
+	'chat/chatroom/QtChatRoomListWidgetItem.h',
+	'chat/QtChatEditEventManager.h',
+	'chat/QtChatTabWidget.h',
+	'chat/QtChatAvatarFrame.h',
+	'chat/QtChatAvatarWidget.h',
+	'chat/QtChatHandler.h',
+	'chat/QtChatWidget.h',
+	'chat/QtChatWindow.h',
+	'chat/QtChatEditWidget.h',
+	'chat/QtChatHistoryWidget.h',
+	'chat/QtChatEditActionBarWidget.h',
+	'chat/QtWengoStyleBar.h',
+	'chat/QtChatUtils.h',
+
+	'webservices/sms/QtSms.h',
+	'webservices/softupdate/QtSoftUpdate.h',
+	'webservices/directory/QtWsDirectory.h',
+	'webservices/directory/QtWsDirectoryContact.h',
+
+	'callbar/QtCallBar.h',
+	'callbar/QtPhoneComboBox.h',
+
+	'statusbar/QtStatusBar.h',
+
+	'config/QtISettings.h',
+	'config/QtAdvancedConfig.h',
+	'config/QtAccountSettings.h',
+	'config/QtAdvancedSettings.h',
+	'config/QtAudioSettings.h',
+	'config/QtCallForwardSettings.h',
+	'config/QtGeneralSettings.h',
+	'config/QtNotificationSettings.h',
+	'config/QtPrivacySettings.h',
+	'config/QtVideoSettings.h',
+	'config/QtLanguagesSettings.h',
+	'config/QtWengoConfigDialog.h',
+
+	'profilebar/QtEventWidget.h',
+	'profilebar/QtIMProfileWidget.h',
+	'profilebar/QtProfileBar.h',
+	'profilebar/QtCreditWidget.h',
+	'profilebar/QtIMAccountPresenceMenu.h',
+
+	'history/QtHistoryWidget.h',
+	'history/QtHistoryItem.h',
+	'history/QtHistory.h',
+
+	'filetransfer/QtFileTransfer.h',
+	'filetransfer/QtFileTransferAcceptDialog.h',
+	'filetransfer/QtFileTransferWidget.h',
+	'filetransfer/QtFileTransferItem.h',
+	'filetransfer/QtFileTransferDownloadItem.h',
+	'filetransfer/QtFileTransferUploadItem.h',
+	'filetransfer/QtFileTransferNotifyDialog.h',
+
+	'webdirectory/QtWebDirectory.h',
+]
+
+sources = [
+	'../main.cpp',
+	'QtWengoPhone.cpp',
+	'QtConfigPanel.cpp',
+	'QtDialpad.cpp',
+	'QtWebcamButton.cpp',
+	'QtAbout.cpp',
+	'QtHttpProxyLogin.cpp',
+	'QtIdle.cpp',
+	'QtEnumIMProtocol.cpp',
+	'QtLanguage.cpp',
+	'QtToolBar.cpp',
+	'QtSystray.cpp',
+	'QtFactory.cpp',
+	'QtUserProfilePresenceMenu.cpp',
+	'QtWengoStyle.cpp',
+	'QtBrowserWidget.cpp',
+
+	'phoneline/QtPhoneLine.cpp',
+
+	'phonecall/QtPhoneCall.cpp',
+	'phonecall/QtVideo.cpp',
+	'phonecall/QtVideoQt.cpp',
+	'phonecall/QtContactCallList.cpp',
+	'phonecall/QtContactCallListWidget.cpp',
+	'phonecall/QtPhoneCallEventFilter.cpp',
+
+	'toaster/QtChatToaster.cpp',
+	'toaster/QtCallToaster.cpp',
+	'toaster/QtToaster.cpp',
+
+	'login/QtLogin.cpp',
+
+	'imcontact/QtIMContactManager.cpp',
+	'imcontact/QtAddIMContact.cpp',
+	'imcontact/QtIMContactItem.cpp',
+	'imcontact/QtSimpleIMContactManager.cpp',
+
+	'profile/QtProfileDetails.cpp',
+	'profile/QtUserProfile.cpp',
+	'profile/QtUserProfileHandler.cpp',
+
+	'imaccount/QtIMAccountItem.cpp',
+	'imaccount/QtIMAccountManager.cpp',
+	'imaccount/QtSimpleIMAccountManager.cpp',
+	'imaccount/QtIMAccountSettings.cpp',
+	'imaccount/QtIMAccountPlugin.cpp',
+	'imaccount/QtMSNSettings.cpp',
+	'imaccount/QtYahooSettings.cpp',
+	'imaccount/QtAIMSettings.cpp',
+	'imaccount/QtJabberSettings.cpp',
+	'imaccount/QtGoogleTalkSettings.cpp',
+
+	'wenbox/QtWenboxPlugin.cpp',
+
+	'contactlist/QtContactList.cpp',
+	'contactlist/ContactGroupPopupMenu.cpp',
+	'contactlist/QtContactWidget.cpp',
+	'contactlist/QtContactTreeMouseFilter.cpp',
+	'contactlist/QtContactManager.cpp',
+	'contactlist/QtContactListManager.cpp',
+	'contactlist/QtContact.cpp',
+	'contactlist/QtTreeViewDelegate.cpp',
+	'contactlist/QtContactPixmap.cpp',
+	'contactlist/QtContactInfo.cpp',
+	'contactlist/QtContactTreeKeyFilter.cpp',
+	'contactlist/QtRenameGroup.cpp',
+	'contactlist/QtConferenceAction.cpp',
+	'contactlist/QtContactMenu.cpp',
+
+	'conference/QtConferenceCallWidget.cpp',
+
+	'chat/emoticons/QtEmoticonsWidget.cpp',
+	'chat/emoticons/QtEmoticon.cpp',
+	'chat/emoticons/QtEmoticonButton.cpp',
+	'chat/emoticons/QtEmoticonsManager.cpp',
+	'chat/chatroom/QtChatRoomInviteDlg.cpp',
+	'chat/chatroom/QtChatRoomTreeWidgetItem.cpp',
+	'chat/chatroom/QtChatRoomListWidgetItem.cpp',
+	'chat/QtChatTabWidget.cpp',
+	'chat/QtChatAvatarFrame.cpp',
+	'chat/QtChatAvatarWidget.cpp',
+	'chat/QtChatHandler.cpp',
+	'chat/QtChatWidget.cpp',
+	'chat/QtChatEditEventManager.cpp',
+	'chat/QtChatWindow.cpp',
+	'chat/QtChatEditWidget.cpp',
+	'chat/QtChatHistoryWidget.cpp',
+	'chat/QtChatEditActionBarWidget.cpp',
+	'chat/QtWengoStyleBar.cpp',
+	'chat/QtChatUtils.cpp',
+
+	'webservices/sms/QtSms.cpp',
+	'webservices/softupdate/QtSoftUpdate.cpp',
+	'webservices/softupdate/QtBrowserSoftUpdate.cpp',
+	'webservices/directory/QtWsDirectory.cpp',
+	'webservices/directory/QtWsDirectoryContact.cpp',
+
+	'callbar/QtCallBar.cpp',
+	'callbar/QtPhoneComboBox.cpp',
+
+	'statusbar/QtStatusBar.cpp',
+
+	'config/QtAdvancedConfig.cpp',
+	'config/QtAccountSettings.cpp',
+	'config/QtAdvancedSettings.cpp',
+	'config/QtAudioSettings.cpp',
+	'config/QtCallForwardSettings.cpp',
+	'config/QtGeneralSettings.cpp',
+	'config/QtNotificationSettings.cpp',
+	'config/QtPrivacySettings.cpp',
+	'config/QtVideoSettings.cpp',
+	'config/QtLanguagesSettings.cpp',
+	'config/QtWengoConfigDialog.cpp',
+
+	'profilebar/QtEventWidget.cpp',
+	'profilebar/QtIMProfileWidget.cpp',
+	'profilebar/QtCreditWidget.cpp',
+	'profilebar/QtIMAccountPresenceMenu.cpp',
+	'profilebar/QtProfileBar.cpp',
+
+	'history/QtHistoryWidget.cpp',
+	'history/QtHistoryItem.cpp',
+	'history/QtHistory.cpp',
+
+	'filetransfer/QtFileTransfer.cpp',
+	'filetransfer/QtFileTransferAcceptDialog.cpp',
+	'filetransfer/QtFileTransferWidget.cpp',
+	'filetransfer/QtFileTransferItem.cpp',
+	'filetransfer/QtFileTransferDownloadItem.cpp',
+	'filetransfer/QtFileTransferUploadItem.cpp',
+	'filetransfer/QtFileTransferNotifyDialog.cpp',
+
+	'webdirectory/QtWebDirectory.cpp',
+
+	env.WengoCompileQt4Resource('wengophone.qrc'),
+]
+
+forms = [
+	'WengoPhoneWindow.ui',
+	'WengoPhoneWindowConfigPanel.ui',
+	'AboutWindow.ui',
+	'HttpProxyLoginWindow.ui',
+	'DialpadWidget.ui',
+
+	'login/LoginWindow.ui',
+
+	'imaccount/IMAccountTemplate.ui',
+	'imaccount/AIMSettings.ui',
+	'imaccount/GoogleTalkSettings.ui',
+	'imaccount/IMAccountManager.ui',
+	'imaccount/SimpleIMAccountManager.ui',
+	'imaccount/JabberSettings.ui',
+	'imaccount/MSNSettings.ui',
+	'imaccount/YahooSettings.ui',
+
+	'profile/ProfileDetails.ui',
+
+	'imcontact/IMContactManager.ui',
+	'imcontact/AddIMContact.ui',
+	'imcontact/SimpleIMContactManager.ui',
+
+	'webservices/directory/WsDirectory.ui',
+	'webservices/directory/WsDirectoryContact.ui',
+	'webservices/sms/SmsWindow.ui',
+	'webservices/softupdate/SoftUpdateWindow.ui',
+	'webservices/softupdate/BrowserSoftUpdateWindow.ui',
+
+	'conference/ConferenceCallWidget.ui',
+
+	'config/AccountSettings.ui',
+	'config/AdvancedConfigWindow.ui',
+	'config/GeneralSettings.ui',
+	'config/AdvancedSettings.ui',
+	'config/AudioSettings.ui',
+	'config/CallForwardSettings.ui',
+	'config/LanguagesSettings.ui',
+	'config/ManageBlockedUsersSettings.ui',
+	'config/NotificationSettings.ui',
+	'config/PrivacySettings.ui',
+	'config/VideoSettings.ui',
+	'config/WengoConfigDialog.ui',
+
+	'chat/ChatMainWindow.ui',
+	'chat/CloseChatTabWidget.ui',
+	'chat/ChatWidget.ui',
+	'chat/UserFrame.ui',
+	'chat/AvatarFrame.ui',
+	'chat/AvatarWidget.ui',
+
+	'contactlist/RenameGroupDialog.ui',
+	'contactlist/ContactWidget.ui',
+	'contactlist/ContactList.ui',
+
+	'profilebar/CreditWidget.ui',
+	'profilebar/EventWidget.ui',
+	'profilebar/IMProfileWidget.ui',
+
+	'toaster/QtChatToaster.ui',
+	'toaster/QtCallToaster.ui',
+
+	'phonecall/PhoneCallWidget.ui',
+	'phonecall/VideoWindow.ui',
+
+	'filetransfer/AcceptDialog.ui',
+	'filetransfer/FileTransferDialog.ui',
+	'filetransfer/FileTransferItem.ui',
+	'filetransfer/NotifyDialog.ui',
+
+	'history/HistoryWidget.ui',
+
+	'statusbar/StatusBarWidget.ui',
+]
+
+for form in forms:
+	header = env.WengoCompileQt4UiFile(form)
+	headers += [ header ]
+
+if WengoOSWindows() and WengoCCMSVC():
+	sources.append(WengoGetEnvironment().WengoCompileWindowsResource('win32/wengophone.rc'))
+
+if WengoGetConsoleArgument('sipxwrapper'):
+	defines['SIPXWRAPPER'] = 1
+	libs += ['sipxwrapper']
+elif WengoGetConsoleArgument('phapiwrapper'):
+	defines['PHAPIWRAPPER'] = 1
+	libs += ['phapiwrapper']
+elif WengoGetConsoleArgument('multiimwrapper'):
+	defines['MULTIIMWRAPPER'] = 1
+	libs += [
+		'multiimwrapper',
+	]
+else:
+	libs += ['nullsipwrapper']
+
+if WengoOSMacOSX():
+	libs += [
+		'glib-2.0',
+		'gthread-2.0'
+	]
+
+	cc_flags += [
+		'-x objective-c++'
+	]
+
+	headers += [
+		'chat/QtCloseChatTabWidget.h',
+		'macosx/QtMacApplication.h',
+	]
+
+	sources += [
+		'chat/QtCloseChatTabWidget.cpp',
+		'macosx/QtMacApplication.cpp',
+	]
+
+	frameworks = [
+		'CoreAudio',
+		'AudioToolbox',
+		'AudioUnit',
+		'Cocoa',
+		'Carbon',
+	]
+	
+	env.WengoAddFrameworks(frameworks)
+
+	env.WengoDeclareMacOSXAppTemplate('./macosx/template.app')
+
+if WengoOSLinux():
+	x11_lib_dir = '/usr/X11R6/lib'
+	if os.environ.has_key('X11R6LIBDIR'):
+		x11_lib_dir = os.environ['X11R6LIBDIR']
+	link_flags += [
+		'-L' + x11_lib_dir,
+	]
+	libs += ['SM', 'ICE', 'Xi', 'Xinerama', 'Xext', 'X11', 'Xrandr',]
+	if WengoGetConsoleArgument('enable-xv-hwaccel'):
+		include_path += ['/usr/X11R6/include',]
+		libs += ['Xv',]
+		sources += ['phonecall/XVWindow.cpp',]
+		sources += ['phonecall/QtVideoXV.cpp',]
+		headers += ['phonecall/XVWindow.h',]
+		headers += ['phonecall/QtVideoXV.h',]
+		defines['XV_HWACCEL'] = 1
+
+env.WengoCopyToBuildDir('pics/emoticons', 'emoticons')
+env.WengoCopyToBuildDir('webpages', 'webpages')
+env.WengoAddDefines(defines)
+env.WengoAddLinkFlags(link_flags)
+env.WengoAddCCFlags(cc_flags)
+env.WengoUseLibraries(libs)
+
+qt_mng_plugin_file = ''
+if WengoOSPosix():
+	qt_mng_plugin_file += 'lib'
+if WengoOSLinux():
+	qt_mng_plugin_file += 'qmng'
+else:
+	qt_mng_plugin_file += 'qmng1'
+if env.isDebugMode():
+	if WengoOSPosix():
+		qt_mng_plugin_file += '_debug'
+if WengoOSLinux() or (WengoOSBSD() and not WengoOSMacOSX()):
+	qt_mng_plugin_file += '.so'
+if WengoOSMacOSX():
+	qt_mng_plugin_file += '.dylib'
+if WengoOSWindows():
+	qt_mng_plugin_file += '.dll'
+
+print "Copying Qt's mng plugin to build dir..."
+try:
+	os.mkdir(os.path.join(env.WengoGetRootBuildDir(), 'imageformats'))
+	shutil.copy2(os.path.join(os.environ['QTDIR'], 'plugins', 'imageformats', qt_mng_plugin_file), env.WengoGetRootBuildDir());
+except (IOError, os.error), why:
+	print "Can't copy %s to %s: %s" % (qt_mng_plugin_file, os.path.join(env.WengoGetRootBuildDir(), 'imageformats', qt_mng_plugin_file), str(why))
+else:
+	print 'Done.'
+
+qtwengophone_program = env.WengoProgram('qtwengophone', sources, headers)
+env.WengoAlias("qtwengophone_alias", qtwengophone_program)

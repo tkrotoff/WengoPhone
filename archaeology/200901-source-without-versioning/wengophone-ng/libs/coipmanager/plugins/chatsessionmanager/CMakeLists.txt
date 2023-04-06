@@ -1,0 +1,4 @@
+subdirs(
+	libpurple
+	phapi
+)

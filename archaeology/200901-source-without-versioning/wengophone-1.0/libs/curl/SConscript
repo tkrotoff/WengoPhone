@@ -1,0 +1,122 @@
+# 
+# WengoPhone, a voice over Internet phone
+#
+# Copyright (C) 2004-2005  Wengo
+# Copyright (C) 2005 David Ferlier <david.ferlier@wengo.fr>
+# 
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+
+env = WengoEnvironment()
+curl_env = env.Copy()
+
+curl_libdec = env.WengoDeclareLibraryAuto("wengocurl", "libs/curl")
+
+curl_libdec.AddSubIncludePath("include")
+curl_libdec.AddSubIncludePath("lib")
+
+curl_env.WengoUseLibraryHeaders("wengocurl")
+if curl_env.WengoOsIsLinux() or curl_env.WengoOsIsBSD():
+	curl_env.WengoLibAdd("ssl")
+	curl_env.WengoLibAdd("z")
+
+if curl_env.WengoOsIsWindows():
+	curl_env.WengoLibPathAdd("../openssl/out32/msvc")
+	curl_env.WengoLibAdd("libeay32")
+	curl_env.WengoLibAdd("ssleay32")
+	curl_env.WengoLibAdd("Ws2_32")
+	curl_env.WengoLibAdd("Winmm")
+	curl_env.WengoLibAdd("Gdi32")
+	curl_env.WengoIncludePathsAdd("../openssl/inc32/openssl")
+	curl_env.WengoIncludePathsAdd("../openssl/inc32")
+
+curl_env.WengoCppDefineAdd('BUILDING_LIBCURL')
+curl_env.WengoCppDefineAdd('USE_SSLEAY')
+curl_env.WengoCppDefineAdd('CURL_DISABLE_FILE')
+curl_env.WengoCppDefineAdd('CURL_DISABLE_LDAP')
+curl_env.WengoCppDefineAdd('CURL_DISABLE_DICT')
+curl_env.WengoCppDefineAdd('CURL_DISABLE_TELNET')
+curl_env.WengoCppDefineAdd('CURL_DISABLE_FTP')
+curl_env.WengoCppDefineAdd('CURL_DISABLE_TFTP')
+
+if curl_env.WengoGetCompilationMode() == "debug":
+	curl_env.WengoCppDefineAdd('CURLDEBUG')
+	
+sources = [
+	'lib/base64.c',
+	'lib/connect.c',
+	'lib/content_encoding.c',
+	'lib/cookie.c',
+#	'lib/dict.c',
+	'lib/easy.c',
+	'lib/escape.c',
+#	'lib/file.c',
+	'lib/formdata.c',
+#	'lib/ftp.c',
+	'lib/getenv.c',
+	'lib/getinfo.c',
+	'lib/gtls.c',
+	'lib/hash.c',
+	'lib/hostares.c',
+	'lib/hostasyn.c',
+	'lib/hostip.c',
+	'lib/hostip4.c',
+	'lib/hostip6.c',
+	'lib/hostsyn.c',
+	'lib/hostthre.c',
+	'lib/http.c',
+	'lib/http_chunks.c',
+	'lib/http_digest.c',
+	'lib/http_negotiate.c',
+	'lib/http_ntlm.c',
+	'lib/if2ip.c',
+	'lib/inet_ntop.c',
+	'lib/inet_pton.c',
+	'lib/krb4.c',
+#	'lib/ldap.c',
+	'lib/llist.c',
+	'lib/md5.c',
+	'lib/memdebug.c',
+	'lib/mprintf.c',
+	'lib/multi.c',
+	'lib/netrc.c',
+#	'lib/nwlib.c',
+	'lib/parsedate.c',
+	'lib/progress.c',
+	'lib/security.c',
+	'lib/select.c',
+	'lib/sendf.c',
+	'lib/share.c',
+	'lib/speedcheck.c',
+	'lib/sslgen.c',
+	'lib/ssluse.c',
+	'lib/strequal.c',
+	'lib/strerror.c',
+	'lib/strtok.c',
+	'lib/strtoofft.c',
+#	'lib/telnet.c',
+#	'lib/tftp.c',
+	'lib/timeval.c',
+	'lib/transfer.c',
+	'lib/url.c',
+	'lib/version.c',
+]
+
+if curl_env.WengoGetConsoleArgument("enable-shared-wengocurl")=="yes":
+	curl_lib = curl_env.WengoSharedLibrary("wengocurl", sources)
+else:
+	curl_lib = curl_env.WengoStaticLibrary("wengocurl", sources)
+curl_env.WengoAlias("wengocurl", curl_lib)
+

@@ -1,0 +1,2 @@
+from NewProfileDialog import NewProfileDialog
+from UserProfileListManagerWidget import UserProfileListManagerWidget

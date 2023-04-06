@@ -1,0 +1,5 @@
+env = WengoEnvironment()
+
+env.WengoSetVariable("QtIncludePaths", ["/usr/include/qt3"])
+
+

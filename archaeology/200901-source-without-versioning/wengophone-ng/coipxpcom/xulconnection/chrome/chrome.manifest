@@ -1,0 +1,9 @@
+
+content xulconnection content/xulconnection/
+
+# locale wengophone en-US locale/en-US/wengophone/
+# skin   wengophone classic/1.0 skin/classic/wengophone/
+
+content venkman jar:venkman.jar!/content/venkman/
+locale venkman en-US jar:venkman.jar!/locale/en-US/venkman/
+skin   venkman modern/1.0 jar:venkman.jar!/skin/modern/venkman/

@@ -1,0 +1,63 @@
+# Author: David Ferlier <david.ferlier@wengo.fr>
+
+import popen2, shutil
+
+Import('wengophone_env')
+Import('wengophone_libs')
+Import('wengophone_sources')
+Import('wengophone_forms')
+Import('wengophone_translations')
+Import('wengophone_images')
+Import('BUILDBASEDIR')
+Import('WENGOPHONE_BRANCH')
+Import('BASEDIR')
+
+# If you think of it it's quite a shame to have to code that kind
+# of SHIT when you have scons around. *sigh*
+
+def _shitty_write_entry(fd, ent):
+    if ent.endswith(".res"):
+        return
+    fd.write(ent + " ")
+
+def _shitty_write(fd, src, title):
+    fd.write(str(title) + " += ")
+    for ent in src:
+        # HACK HACK HACK
+        _shitty_write_entry(fd, ent)
+    fd.write("\n")
+
+def wengophone_dotpro_generate(target, source, env):
+    for a_target, a_source in zip(target, source):
+	wengophone_dot_pro_file = file(str(a_target), "w+")
+	wengophone_dot_pro_file.write("TEMPLATE = app\n")
+	_shitty_write(wengophone_dot_pro_file, wengophone_sources, "SOURCES")
+	_shitty_write(wengophone_dot_pro_file, wengophone_forms,
+	    "INTERFACES")
+	_shitty_write(wengophone_dot_pro_file, wengophone_translations,
+	    "TRANSLATIONS")
+	wengophone_dot_pro_file.close()
+
+def designer_dotpro_generate(target, source, env):
+    for a_target, a_source in zip(target, source):
+	wengophone_dot_pro_file = file(str(a_target), "w+")
+	wengophone_dot_pro_file.write("TEMPLATE = app\n")
+	_shitty_write(wengophone_dot_pro_file, wengophone_forms,
+	    "INTERFACES")
+	_shitty_write(wengophone_dot_pro_file, wengophone_images,
+	    "IMAGES")
+	wengophone_dot_pro_file.close()
+	shutil.copy(BUILDBASEDIR  + "/softphone/" + WENGOPHONE_BRANCH + "/gui/designer.pro", BASEDIR + "/softphone/" + WENGOPHONE_BRANCH + "/gui")
+	
+targets = []
+dot_pro_target = wengophone_env.Command('gui.pro',
+    wengophone_forms + wengophone_sources + wengophone_translations,
+    wengophone_dotpro_generate)
+
+designer_dot_pro = wengophone_env.Command('designer.pro',
+    wengophone_forms + wengophone_images ,
+    designer_dotpro_generate)
+
+targets = [ dot_pro_target ] 
+targets.append(designer_dot_pro)
+Return('targets')

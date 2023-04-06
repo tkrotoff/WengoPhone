@@ -1,0 +1,21 @@
+High level library above SCons in order to simplify SConscript files.
+
+Please generate the documentation using Epydoc
+
+Known Bugs
+
+WengoAddIncludePath(['include'])
+results in:
+/Idebug\libs\qtutil\include /Ilibs\qtutil\include
+SCons seems to be buggy on this point when duplicate=0
+
+Under MacOSX it does not copy the .app file inside the build directory,
+only the UNIX application.
+
+for flag in flags:
+	#This does not work under MacOSX
+	#because of -framework QtGui blah blah...
+	#if not flag in env['LINKFLAGS']:
+		env.Append(LINKFLAGS = flag)
+
+WengoSCons starts to be quite stable.

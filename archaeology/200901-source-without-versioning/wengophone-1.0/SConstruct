@@ -1,0 +1,60 @@
+#
+# WengoPhone, a voice over Internet phone
+#
+# Copyright (C) 2004-2005  Wengo
+# Copyright (C) 2005 David Ferlier <david.ferlier@wengo.fr>
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+
+import sys, os.path
+sys.path.append("wengoscons")
+from wengoscons.common import wengoenv
+
+if not os.environ.has_key("QTDIR"):
+    print
+    print "**********************************************************"
+    print "*                                                        *"
+    print "* You do NOT have the QTDIR environment variable set     *"
+    print "* Please set it accordingly to the path QT was installed *"
+    print "*                                                        *"
+    print "**********************************************************"
+    print
+
+    Exit(1)
+
+env = wengoenv.WengoSConsEnvironment(tools = [ "default", "nsis", "nmsvs", "swig" ],
+    toolpath = [ "wengoscons/wengoscons/Tools" ])
+env.WengoCacheEnvironment()
+
+env.SConscript("scons/SOptions")
+if env.File("scons/SUserEnvironment").exists():
+    env.SConscript("scons/SUserEnvironment")
+
+if env.File("scons/SPersonalOptions").exists():
+    env.SConscript("scons/SPersonalOptions")
+
+WifoBranch = os.path.join('wifo', 'trunk')
+
+libScript = os.path.join("libs", "SConscript")
+wifoScript = os.path.join(WifoBranch, 'SConscript')
+
+env.SConscript(libScript)
+env.SConscript(wifoScript)
+#softphone
+env.SConscript('SConscript')
+
+env.Depends(env.WengoGetAlias("softphone-deb-installer"), env.WengoGetAlias("softphone-install"))
+

@@ -1,0 +1,66 @@
+env = WengoGetEnvironment()
+
+# WARNING: this SConscript must not be deleted. It is currently not used but
+# will be when coipmanager will be moved to lib.
+
+# No SConscript for FileSessionManager has been created because of cross-reference:
+# CoIpManager needs FileSessionManager and FileSessionManager needs CoIpManager.
+# It cannot be modelised in separate SConscript.
+
+libs = [
+	'owutil',
+	'imwrapper',
+]
+
+include_path = [
+	# CoIpManager
+	'include',
+
+	# FileSessionManager
+	'filesessionmanager/include',
+]
+
+headers = [
+	# CoIpManager files
+	'include/coipmanager/CoIpManager.h',
+	'include/coipmanager/Session.h',
+
+	# FileSessionManager files
+	'filesessionmanager/include/filesessionmanager/FileSessionManager.h',
+	'filesessionmanager/include/filesessionmanager/IFileSession.h',
+	'filesessionmanager/include/filesessionmanager/IFileSessionManager.h',
+	'filesessionmanager/include/filesessionmanager/IReceiveFileSession.cpp',
+	'filesessionmanager/include/filesessionmanager/ISendFileSession.cpp',
+	'filesessionmanager/include/filesessionmanager/ReceiveFileSession.h',
+	'filesessionmanager/include/filesessionmanager/SendFileSession.h',
+
+	# Test implementation
+	'filesessionmanager/implementation/test/include/testfilesessionmanager/TestSendFileSession.h',
+	'filesessionmanager/implementation/test/include/testfilesessionmanager/TestFileSessionManager.h',
+]
+
+sources = [
+	# CoIpManager files
+	'src/CoIpManager.cpp',
+	'src/Session.cpp',
+
+	# FileSessionManager files
+	'filesessionmanager/src/FileSessionManager.cpp',
+	'filesessionmanager/src/IFileSession.cpp',
+	'filesessionmanager/src/IFileSessionManager.cpp',
+	'filesessionmanager/src/IReceiveFileSession.cpp',
+	'filesessionmanager/src/ISendFileSession.cpp',
+	'filesessionmanager/src/ReceiveFileSession.h',
+	'filesessionmanager/src/SendFileSession.h',
+
+	# Test implementation
+	'filesessionmanager/implementation/test/src/TestSendFileSession.cpp',
+	'filesessionmanager/implementation/test/src/TestFileSessionManager.cpp',
+]
+
+env.WengoAddIncludePath(include_path)
+env.WengoUseLibraries(libs)
+
+env.WengoStaticLibrary('coipmanager', sources, headers)
+
+env.SConscript('tests/SConscript')

@@ -1,0 +1,23 @@
+env = WengoGetEnvironment()
+
+libs = [
+	'avutil'
+]
+
+includes = [
+	'libavcodec'
+]
+
+env.WengoAddIncludePath(includes)
+env.WengoUseLibraries(libs)
+
+configure_command = './configure --extra-cflags=-fno-common --extra-ldflags=-fno-common --disable-vhook'
+
+if WengoOSMacOSX() and  WengoArchX86():
+		configure_command += ' --disable-mmx --enable-memalign-hack'
+
+env.WengoAutoconf('avcodec', ['libavcodec/libavcodec.a'],
+	configure_command, 'cd libavcodec && make',
+	['configure'], ['config.mak'])
+
+

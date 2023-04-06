@@ -1,0 +1,61 @@
+import sys, os, popen2
+
+env = WengoEnvironment()
+nsis_env = env.Copy()
+
+nsis_scripts = [
+    "files_install.nsi",
+    "files_install_debug.nsi",
+    "files_install_release.nsi",
+    "files_uninstall.nsi",
+    "isUserAdmin.nsi",
+    "writeToFile.nsi",
+]
+
+nsis_dlls = [
+    "dll/debug/dbghelp.dll",
+    "dll/debug/msvcp71d.dll",
+    "dll/debug/msvcr71d.dll",
+    "dll/debug/qt-mt335.dll",
+    "dll/msvcp71.dll",
+    "dll/msvcr71.dll",
+    "dll/qt-mt335.dll",
+    "dll/styles/kkeramikstyle.dll",
+    "dll/styles/kkrispstyle.dll",
+    "dll/styles/klipstikstyle.dll",
+    "dll/styles/kliquidstyle.dll",
+    "dll/styles/kplastikqstyle.dll",
+    "dll/styles/kplastikstyle.dll",
+    "dll/styles/kthinkeramikstyle.dll",
+    "dll/styles/wengokeramikstyle.dll",
+]
+
+compilation_mode = nsis_env.WengoGetCompilationMode()
+installer_tag = nsis_env.WengoGetConsoleArgument("installer-tag")
+if installer_tag == "":
+    installer_tag = env.WengoGetVariable("WENGOPHONE_VER_STRING")
+    
+if installer_tag != "":
+    installer_name = "WengoSetup-" + compilation_mode + "-" + env.WengoGetVariable("WENGOPHONE_ID") + "-TAGGED-AS-%s.exe" % installer_tag
+else:
+    installer_name = "WengoSetup-" + compilation_mode + "-" + env.WengoGetVariable("WENGOPHONE_ID") + ".exe"
+
+nsis_defines = {}
+nsis_defines["GENERATED_INSTALLER_NAME"] = installer_name
+nsis_defines["GENERATED_INSTALLER_PATH"] = "."
+nsis_defines["PRODUCT_VERSION"] = nsis_env.WengoGetVariable("WENGOPHONE_ID")
+nsis_defines["BUILD_DIR"] = nsis_env.WengoGetRootBuildDir()
+
+if compilation_mode == "debug":
+    nsis_defines["DEBUG"] = ""
+
+nsis_env["NSISDEFINES"] = nsis_defines
+
+
+nsis_inst = nsis_env.Installer("installer.nsi")
+nsis_env.Depends(nsis_inst, nsis_scripts)
+nsis_env.Depends(nsis_inst, nsis_dlls)
+nsis_env.WengoAlias("softphone-nsis-installer", nsis_inst)
+nsis_env.Depends(nsis_env.WengoGetAlias("softphone-nsis-installer"), nsis_env.WengoGetAlias("softphone"))
+nsis_env.Depends(nsis_env.WengoGetAlias("softphone-nsis-installer"), nsis_env.WengoGetAlias("softphone-runtime"))
+

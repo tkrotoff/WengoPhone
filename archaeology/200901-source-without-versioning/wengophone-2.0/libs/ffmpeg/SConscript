@@ -1,0 +1,40 @@
+import SCons.Util
+
+env = WengoGetEnvironment()
+
+env.WengoAddDoxyfile()
+
+if WengoOSWindows():
+	env.Tool('mingw')
+	env['SHLIBPREFIX'] = ''
+	env['SHLIBSUFFIX'] = '.dll'
+	env['LIBSUFFIX'] = '.lib'
+	env['LIBPREFIX'] = ''
+
+	ccflags = [
+		'-O9',
+		'-Wno-switch'
+	]
+	defines = {
+		'HAVE_AV_CONFIG_H' : 1,
+		'_GNU_SOURCE' : 1,
+		'_LARGEFILE_SOURCE' : 1,
+		'_FILE_OFFSET_BITS' : 64
+	}
+	
+	#ffmpeg_env.WengoCacheEnvironment('ffmpeg')
+	env['SHCCFLAGS'] = SCons.Util.CLVar('$CCFLAGS')
+	
+	#ffmpeg_env.WengoCppDefineRemove('DEBUG')
+	
+	projects = [
+		'libavutil',
+		'libavcodec'
+	]
+	
+	env.SConscript(dirs = projects)
+
+else:
+	env.SConscript('SConscript-avutil')
+	env.SConscript('SConscript-avcodec')
+

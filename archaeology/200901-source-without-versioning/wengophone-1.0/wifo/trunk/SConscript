@@ -1,0 +1,66 @@
+# 
+# WengoPhone, a voice over Internet phone
+#
+# Copyright (C) 2004-2005  Wengo
+# Copyright (C) 2005 David Ferlier <david.ferlier@wengo.fr>
+# 
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+
+env = WengoEnvironment()
+if env.WengoOsIsWindows():
+    phapi_optimization_flags = [
+        '/Ox',
+        '/Ob2',
+        '/Oi',
+        '/Ot',
+        '/Oy',
+        '/G7',
+        '/GX-',
+        '/GR-' ,
+        '/arch:SSE'
+    ]
+else:
+    phapi_optimization_flags = []
+
+env.WengoSetVariable("phapi_optimization_flags", phapi_optimization_flags)
+
+env.WengoBuildInDir("httptunnel/SConscript", "wifo/httptunnel")
+env.WengoBuildInDir("netlib/SConscript", "wifo/netlib")
+env.WengoBuildInDir("ortp/SConscript", "wifo/ortp")
+env.WengoBuildInDir("libosip2/SConscript", "wifo/libosip2")
+env.WengoBuildInDir("eXosip/SConscript", "wifo/exosip")
+env.WengoBuildInDir("eXosip/phapi/amrwb/SConscript", "wifo/exosip/phapi/amrwb")
+env.WengoBuildInDir("eXosip/phapi/amrnb/SConscript", "wifo/exosip/phapi/amrnb")
+env.WengoBuildInDir("eXosip/phapi/stun/SConscript", "wifo/exosip/phapi/stun")
+env.WengoBuildInDir("eXosip/phapi/gsm/SConscript", "wifo/exosip/phapi/gsm")
+env.WengoBuildInDir("eXosip/phapi/ilbc/SConscript", "wifo/exosip/phapi/ilbc")
+env.WengoBuildInDir("eXosip/phapi/SConscript", "wifo/exosip/phapi")
+env.WengoBuildInDir("eXosip/miniua/SConscript", "wifo/exosip/miniua")
+
+wifo_targets = [
+	env.WengoGetAlias("phapi"),
+	env.WengoGetAlias("exosip"),
+	env.WengoGetAlias("netlib"),
+	env.WengoGetAlias("osip"),
+	env.WengoGetAlias("httptunnel"),
+    env.WengoGetAlias("amrwb"),
+	env.WengoGetAlias("amrnb"),
+	env.WengoGetAlias("stun"),
+	env.WengoGetAlias("ilbc"),
+	env.WengoGetAlias("gsm")
+]
+
+env.WengoAlias("wifo", wifo_targets)

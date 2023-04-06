@@ -1,0 +1,55 @@
+env = WengoGetEnvironment()
+
+libs = ['owutil']
+include_path = ['include']
+lib_path = []
+headers = []
+sources = []
+cc_flags = []
+link_flags = []
+
+sources += ['src/RegisterProtocol.cpp']
+
+if WengoOSWindows():
+	sources += [
+		'src/win/Startup.cpp',
+		'src/win/Processes.cpp',
+		'src/win/WindowsVersion.c',
+		'src/win/WindowsRegistry.cpp',
+	]
+	libs += ["Kernel32", "Advapi32", "User32"]
+
+elif WengoOSMacOSX():
+	sources += [
+		'src/null/Processes.cpp',
+		'src/mac/Startup.cpp',
+	]
+
+	cc_flags += ['-x objective-c++']
+
+	frameworks = [
+		'Cocoa'
+	]
+	
+	env.WengoAddFrameworks(frameworks)
+
+elif WengoOSPosix():
+	sources += [
+		'src/unix/Processes.cpp',
+		'src/null/Startup.cpp',
+	]
+
+else:
+	sources += [
+		'src/null/Processes.cpp',
+		'src/null/Startup.cpp',
+	]
+
+env.WengoAddCCFlags(cc_flags)
+env.WengoAddIncludePath(include_path)
+env.WengoUseLibraries(libs)
+env.WengoAddDoxyfile()
+env.WengoStaticLibrary('owsystem', sources)
+
+if WengoOSWindows():
+	SConscript('src/test/SConscript')

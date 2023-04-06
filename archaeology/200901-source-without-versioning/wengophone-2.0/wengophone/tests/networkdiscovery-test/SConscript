@@ -1,0 +1,19 @@
+env = WengoGetEnvironment()
+
+libs = [
+	'wengophone',
+	'phapiwrapper',
+	'buildId',
+	'owmemorydump',
+]
+
+headers = [
+]
+
+sources = [
+	'NetworkDiscoveryTest.cpp'
+]
+
+env.WengoUseLibraries(libs)
+
+env.WengoProgram('networkdiscovery-test', sources, headers)

@@ -1,0 +1,171 @@
+package idfhh8deb13zoddeb2h4te2;
+
+/**
+@version 2.0
+@physicalPackage
+@__modelType diagram 
+*/
+class diagram {
+/**
+@__ref <oiref:cpp#Class#QtContactList:oiref><oihard>
+@__modelType reference 
+*/
+class reference {
+}
+/**
+@__ref <oiref:cpp#Class#ContactList:oiref><oihard>
+@__modelType reference
+@__imported 
+*/
+class reference3 {
+}
+/**
+@__ref <oiref:cpp#Class#CContactList:oiref><oihard>
+@__modelType reference
+@__imported 
+*/
+class reference4 {
+}
+/**
+@__ref <oiref:cpp#Class#ContactDelegate:oiref><oihard>
+@__modelType reference 
+*/
+class reference6 {
+}
+/**
+@__ref <oiref:cpp#Class#ContactPopupMenu:oiref><oihard>
+@__modelType reference 
+*/
+class reference7 {
+}
+/**
+@__ref <oiref:cpp#Class#ContactGroup:oiref><oihard>
+@__modelType reference
+@__imported 
+*/
+class reference10 {
+}
+/**
+@__ref <oiref:cpp#Class#Contact:oiref><oihard>
+@__modelType reference
+@__imported 
+*/
+class reference11 {
+}
+/**
+@__ref <oiref:cpp#Class#QtContactGroup:oiref><oihard>
+@__modelType reference 
+*/
+class reference8 {
+}
+/**
+@__ref <oiref:cpp#Class#CContactGroup:oiref><oihard>
+@__modelType reference
+@__imported 
+*/
+class reference12 {
+}
+/**
+@__ref <oiref:cpp#Class#CContact:oiref><oihard>
+@__modelType reference
+@__imported 
+*/
+class reference13 {
+}
+/**
+@__ref <oiref:cpp#Class#QtContact:oiref><oihard>
+@__modelType reference 
+*/
+class reference17 {
+}
+/**
+@__ref <oiref:cpp#Class#TreeModel:oiref><oihard>
+@__modelType reference 
+*/
+class reference1 {
+}
+/**
+@__ref <oiref:cpp#Class#TreeItem:oiref><oihard>
+@__modelType reference 
+*/
+class reference2 {
+}
+/**
+@__ref <oiref:cpp#Class#QtAddContact:oiref><oihard>
+@__modelType reference 
+*/
+class reference5 {
+}
+/**
+@__ref <oiref:cpp#Class#QtContactWidget:oiref><oihard>
+@__modelType reference 
+*/
+class reference14 {
+}
+}/**
+@__tags
+@shapeType ClassDiagram 
+*/
+class __tags {
+}/**
+@__options 
+*/
+class __options {
+}/**
+@__positions <oigroup:MemberLink#<oiref:cpp#Member#CContact#_cContactGroup:oiref>=2060,639,1490,639:oigroup>
+<oigroup:<oiref:cpp#Class#QtAddContact:oiref>=2070,1590,172,210,0:oigroup>
+<oigroup:Composite#supplierCardinality#MemberLink#<oiref:cpp#Member#QtContactList#_model:oiref>=558,1570,28,16,0:oigroup>
+<oigroup:Composite#supplierCardinality#MemberLink#<oiref:cpp#Member#TreeModel#_rootItem:oiref>=1258,1673,28,16,0:oigroup>
+<oigroup:Composite#supplierCardinality#MemberLink#<oiref:cpp#Member#QtContactGroup#_item:oiref>=1348,1559,28,16,0:oigroup>
+<oigroup:<oiref:cpp#Class#ContactList:oiref>=470,10,420,400,0:oigroup>
+<oigroup:MemberLink#<oiref:cpp#Member#ContactPopupMenu#_contactList:oiref>=793,1142,793,410:oigroup>
+<oigroup:<oiref:cpp#Class#QtContactList:oiref>=450,890,310,390,0:oigroup>
+<oigroup:Composite#supplierCardinality#MemberLink#<oiref:cpp#Member#CContactGroup#_cContactList:oiref>=724,635,28,16,0:oigroup>
+<oigroup:MemberLink#<oiref:cpp#Member#TreeItem#_childItems:oiref>=1400,1833,1400,1915,1554,1915,1554,1761,1472,1761:oigroup>
+<oigroup:Composite#supplierCardinality#MemberLink#<oiref:cpp#Member#QtContactList#_contactPopupMenu:oiref>=839,1064,28,16,0:oigroup>
+<oigroup:MemberLink#<oiref:cpp#Member#QtContactList#_model:oiref>=590,1280,590,1590:oigroup>
+<oigroup:MemberLink#<oiref:cpp#Member#QtContactGroup#_item:oiref>=1380,1180,1380,1579:oigroup>
+<oigroup:MemberLink#<oiref:cpp#Member#QtContact#_cContact:oiref>=2160,920,2160,744:oigroup>
+<oigroup:Composite#supplierCardinality#MemberLink#<oiref:cpp#Member#CContact#_cContactGroup:oiref>=1494,619,28,16,0:oigroup>
+<oigroup:MemberLink#<oiref:cpp#Member#QtContactList#_cContactList:oiref>=552,890,552,800:oigroup>
+<oigroup:MemberLink#<oiref:cpp#Member#CContactGroup#_pContactGroup:oiref>=1580,657,1700,657:oigroup>
+<oigroup:<oiref:cpp#Class#QtContactWidget:oiref>=2529,870,298,1043,0:oigroup>
+<oigroup:Composite#supplierCardinality#MemberLink#<oiref:cpp#Member#CContactGroup#_contactGroup:oiref>=1358,390,28,16,0:oigroup>
+<oigroup:<oiref:cpp#Class#TreeItem:oiref>=1290,1579,182,254,1:oigroup>
+<oigroup:Composite#supplierCardinality#MemberLink#<oiref:cpp#Member#QtContact#_cContact:oiref>=2128,744,28,16,0:oigroup>
+<oigroup:MemberLink#<oiref:cpp#Member#CContact#_contact:oiref>=2160,550,2160,360:oigroup>
+<oigroup:Composite#supplierCardinality#MemberLink#<oiref:cpp#Member#QtContact#_item:oiref>=1394,1559,28,16,0:oigroup>
+<oigroup:<oiref:cpp#Extends#QtContactList#PContactList:oiref>=656,890,1010,769:oigroup>
+<oigroup:<oiref:cpp#Class#QtContactGroup:oiref>=1280,890,239,290,0:oigroup>
+<oigroup:<oiref:cpp#Class#QtContact:oiref>=2060,920,249,251,0:oigroup>
+<oigroup:Composite#supplierCardinality#MemberLink#<oiref:cpp#Member#TreeItem#_parentItem:oiref>=1476,1777,28,16,0:oigroup>
+<oigroup:<oiref:cpp#Class#CContactGroup:oiref>=1290,550,200,226,1:oigroup>
+<oigroup:Composite#supplierCardinality#MemberLink#<oiref:cpp#Member#QtContactList#_cContactList:oiref>=520,800,28,16,0:oigroup>
+<oigroup:MemberLink#<oiref:cpp#Member#QtContactList#_contactPopupMenu:oiref>=760,1084,871,1084:oigroup>
+<oigroup:MemberLink#<oiref:cpp#Member#TreeItem#_parentItem:oiref>=1436,1833,1436,1879,1518,1879,1518,1797,1472,1797:oigroup>
+<oigroup:Composite#supplierCardinality#MemberLink#<oiref:cpp#Member#CContactList#_contactList:oiref>=563,410,28,16,0:oigroup>
+<oigroup:MemberLink#<oiref:cpp#Member#CContact#_pContact:oiref>=2300,660,2390,660:oigroup>
+<oigroup:MemberLink#<oiref:cpp#Member#CContactGroup#_cContactList:oiref>=1290,655,720,655:oigroup>
+<oigroup:<oiref:cpp#Class#ContactPopupMenu:oiref>=871,940,251,289,0:oigroup>
+<oigroup:<oiref:cpp#Class#ContactDelegate:oiref>=2070,1310,180,160,0:oigroup>
+<oigroup:MemberLink#<oiref:cpp#Member#CContactList#_contactList:oiref>=595,550,595,410:oigroup>
+<oigroup:<oiref:cpp#Class#Contact:oiref>=1960,50,371,310,0:oigroup>
+<oigroup:Composite#supplierCardinality#MemberLink#<oiref:cpp#Member#CContact#_contact:oiref>=2128,360,28,16,0:oigroup>
+<oigroup:<oiref:cpp#Class#TreeModel:oiref>=519,1590,142,222,1:oigroup>
+<oigroup:MemberLink#<oiref:cpp#Member#QtContact#_item:oiref>=2184,1171,1426,1579:oigroup>
+<oigroup:Composite#supplierCardinality#MemberLink#<oiref:cpp#Member#ContactPopupMenu#_contact:oiref>=1992,360,28,16,0:oigroup>
+<oigroup:<oiref:cpp#Class#CContactList:oiref>=469,550,251,250,0:oigroup>
+<oigroup:MemberLink#<oiref:cpp#Member#TreeModel#_rootItem:oiref>=661,1693,1290,1693:oigroup>
+<oigroup:MemberLink#<oiref:cpp#Member#CContactGroup#_contactGroup:oiref>=1390,550,1390,390:oigroup>
+<oigroup:MemberLink#<oiref:cpp#Member#ContactPopupMenu#_contact:oiref>=996,940,2060,360:oigroup>
+<oigroup:MemberLink#<oiref:cpp#Member#QtAddContact#_qtContactWidget:oiref>=2242,1695,2529,1695:oigroup>
+<oigroup:MemberLink#<oiref:cpp#Member#QtContactGroup#_cContactGroup:oiref>=1390,890,1390,776:oigroup>
+<oigroup:<oiref:cpp#Class#CContact:oiref>=2060,550,200,194,1:oigroup>
+<oigroup:Composite#supplierCardinality#MemberLink#<oiref:cpp#Member#TreeItem#_childItems:oiref>=1476,1741,26,16,0:oigroup>
+<oigroup:MemberLink#<oiref:cpp#Member#CContactList#_pContactList:oiref>=720,679,900,679:oigroup>
+<oigroup:Composite#supplierCardinality#MemberLink#<oiref:cpp#Member#QtContactGroup#_cContactGroup:oiref>=1358,776,28,16,0:oigroup>
+<oigroup:<oiref:cpp#Class#ContactGroup:oiref>=1200,50,370,340,0:oigroup>
+<oigroup:Composite#supplierCardinality#MemberLink#<oiref:cpp#Member#QtAddContact#_qtContactWidget:oiref>=2497,1675,28,16,0:oigroup>
+*/
+class __positions {
+}

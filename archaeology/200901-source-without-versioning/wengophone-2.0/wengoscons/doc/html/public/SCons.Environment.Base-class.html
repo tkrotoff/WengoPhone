@@ -1,0 +1,908 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>SCons.Environment.Base</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css"></link>
+</head>
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+
+<!-- =========== START OF NAVBAR =========== -->
+<table class="navbar" border="0" width="100%" cellpadding="0" bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="center">
+    <th class="navbar">&nbsp;&nbsp;&nbsp;<a class="navbar" href="wengosconsng.wengoscons.wengoenv-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+    <th class="navbar">&nbsp;&nbsp;&nbsp;<a class="navbar" href="trees.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+    <th class="navbar">&nbsp;&nbsp;&nbsp;<a class="navbar" href="indices.html">Index</a>&nbsp;&nbsp;&nbsp;</th>
+    <th class="navbar">&nbsp;&nbsp;&nbsp;<a class="navbar" href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+    <th class="navbar" align="right" width="100%">
+      <table border="0" cellpadding="0" cellspacing="0">
+      <tr><th class="navbar" align="center">
+        <p class="nomargin">
+          <a class="navbar" target="_top" href="http://dev.openwengo.com">WengoSCons</a>
+      </p></th></tr></table>
+    </th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <font size="-1"><b class="breadcrumbs">
+        Package&nbsp;SCons ::
+        Module&nbsp;Environment ::
+        Class&nbsp;Base
+      </b></font></br>
+    </td>
+    <td><table cellpadding="0" cellspacing="0">
+      <tr><td align="right"><font size="-2">[<a href="../private/SCons.Environment.Base-class.html">show&nbsp;private</a>&nbsp;|&nbsp;hide&nbsp;private]</font></td></tr>
+      <tr><td align="right"><font size="-2">[<a href="frames.html"target="_top">frames</a>&nbsp;|&nbsp;<a href="SCons.Environment.Base-class.html" target="_top">no&nbsp;frames</a>]</font></td></tr>
+    </table></td>
+</tr></table>
+
+<!-- =========== START OF CLASS DESCRIPTION =========== -->
+<h2 class="class">Class Base</h2>
+
+<dl><dt><b>Known Subclasses:</b></dt>
+<dd>
+    <a href="SCons.Script.SConscript.SConsEnvironment-class.html"><code>SConsEnvironment</code></a></dd></dl>
+
+<hr/>
+
+Base class for construction Environments.  These are
+the primary objects used to communicate dependency and
+construction information to the build engine.
+
+Keyword arguments supplied when the construction Environment
+is created are construction variables used to initialize the
+Environment.<hr/>
+
+
+<!-- =========== START OF METHOD SUMMARY =========== -->
+<table class="summary" border="1" cellpadding="3" cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="summary">
+  <th colspan="2">Method Summary</th></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><a name="__init__"></a><span class="summary-sig"><span class="summary-sig-name">__init__</span>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>platform</span>,
+          <span class=summary-sig-arg>tools</span>,
+          <span class=summary-sig-arg>toolpath</span>,
+          <span class=summary-sig-arg>options</span>,
+          <span class="summary-sig-kwarg">**kw</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><a name="__cmp__"></a><span class="summary-sig"><span class="summary-sig-name">__cmp__</span>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>other</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><a name="__delitem__"></a><span class="summary-sig"><span class="summary-sig-name">__delitem__</span>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>key</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><a name="__getitem__"></a><span class="summary-sig"><span class="summary-sig-name">__getitem__</span>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>key</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><a name="__setitem__"></a><span class="summary-sig"><span class="summary-sig-name">__setitem__</span>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>key</span>,
+          <span class=summary-sig-arg>value</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><a name="Action"></a><span class="summary-sig"><span class="summary-sig-name">Action</span>(<span class=summary-sig-arg>self</span>,
+          <span class="summary-sig-vararg">*args</span>,
+          <span class="summary-sig-kwarg">**kw</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><a name="AddPostAction"></a><span class="summary-sig"><span class="summary-sig-name">AddPostAction</span>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>files</span>,
+          <span class=summary-sig-arg>action</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><a name="AddPreAction"></a><span class="summary-sig"><span class="summary-sig-name">AddPreAction</span>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>files</span>,
+          <span class=summary-sig-arg>action</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><a name="Alias"></a><span class="summary-sig"><span class="summary-sig-name">Alias</span>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>target</span>,
+          <span class="summary-sig-vararg">*source</span>,
+          <span class="summary-sig-kwarg">**kw</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><a name="AlwaysBuild"></a><span class="summary-sig"><span class="summary-sig-name">AlwaysBuild</span>(<span class=summary-sig-arg>self</span>,
+          <span class="summary-sig-vararg">*targets</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#Append" class="summary-sig-name"><code>Append</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class="summary-sig-kwarg">**kw</span>)</span></code>
+<br />
+Append values to existing construction variables
+in an Environment.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#AppendENVPath" class="summary-sig-name"><code>AppendENVPath</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>name</span>,
+          <span class=summary-sig-arg>newpath</span>,
+          <span class=summary-sig-arg>envname</span>,
+          <span class=summary-sig-arg>sep</span>)</span></code>
+<br />
+Append path elements to the path 'name' in the 'ENV'
+dictionary for this environment.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#AppendUnique" class="summary-sig-name"><code>AppendUnique</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class="summary-sig-kwarg">**kw</span>)</span></code>
+<br />
+Append values to existing construction variables
+in an Environment, if they're not already there.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><a name="arg2nodes"></a><span class="summary-sig"><span class="summary-sig-name">arg2nodes</span>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>args</span>,
+          <span class=summary-sig-arg>node_factory</span>,
+          <span class=summary-sig-arg>lookup_list</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><a name="BuildDir"></a><span class="summary-sig"><span class="summary-sig-name">BuildDir</span>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>build_dir</span>,
+          <span class=summary-sig-arg>src_dir</span>,
+          <span class=summary-sig-arg>duplicate</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><a name="Builder"></a><span class="summary-sig"><span class="summary-sig-name">Builder</span>(<span class=summary-sig-arg>self</span>,
+          <span class="summary-sig-kwarg">**kw</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><a name="CacheDir"></a><span class="summary-sig"><span class="summary-sig-name">CacheDir</span>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>path</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><a name="Clean"></a><span class="summary-sig"><span class="summary-sig-name">Clean</span>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>targets</span>,
+          <span class=summary-sig-arg>files</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#Command" class="summary-sig-name"><code>Command</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>target</span>,
+          <span class=summary-sig-arg>source</span>,
+          <span class=summary-sig-arg>action</span>,
+          <span class="summary-sig-kwarg">**kw</span>)</span></code>
+<br />
+Builds the supplied target files from the supplied
+source files using the supplied action.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><a name="Configure"></a><span class="summary-sig"><span class="summary-sig-name">Configure</span>(<span class=summary-sig-arg>self</span>,
+          <span class="summary-sig-vararg">*args</span>,
+          <span class="summary-sig-kwarg">**kw</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#Copy" class="summary-sig-name"><code>Copy</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>tools</span>,
+          <span class=summary-sig-arg>toolpath</span>,
+          <span class="summary-sig-kwarg">**kw</span>)</span></code>
+<br />
+Return a copy of a construction Environment.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#Depends" class="summary-sig-name"><code>Depends</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>target</span>,
+          <span class=summary-sig-arg>dependency</span>)</span></code>
+<br />
+Explicity specify that 'target's depend on 'dependency'.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#Detect" class="summary-sig-name"><code>Detect</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>progs</span>)</span></code>
+<br />
+Return the first available program in progs.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><a name="Dictionary"></a><span class="summary-sig"><span class="summary-sig-name">Dictionary</span>(<span class=summary-sig-arg>self</span>,
+          <span class="summary-sig-vararg">*args</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><a name="Dir"></a><span class="summary-sig"><span class="summary-sig-name">Dir</span>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>name</span>,
+          <span class="summary-sig-vararg">*args</span>,
+          <span class="summary-sig-kwarg">**kw</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><a name="Environment"></a><span class="summary-sig"><span class="summary-sig-name">Environment</span>(<span class=summary-sig-arg>self</span>,
+          <span class="summary-sig-kwarg">**kw</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#Execute" class="summary-sig-name"><code>Execute</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>action</span>,
+          <span class="summary-sig-vararg">*args</span>,
+          <span class="summary-sig-kwarg">**kw</span>)</span></code>
+<br />
+Directly execute an action through an Environment...</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><a name="File"></a><span class="summary-sig"><span class="summary-sig-name">File</span>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>name</span>,
+          <span class="summary-sig-vararg">*args</span>,
+          <span class="summary-sig-kwarg">**kw</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><a name="FindFile"></a><span class="summary-sig"><span class="summary-sig-name">FindFile</span>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>file</span>,
+          <span class=summary-sig-arg>dirs</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#FindIxes" class="summary-sig-name"><code>FindIxes</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>paths</span>,
+          <span class=summary-sig-arg>prefix</span>,
+          <span class=summary-sig-arg>suffix</span>)</span></code>
+<br />
+Search a list of paths for something that matches the prefix and suffix.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><a name="Flatten"></a><span class="summary-sig"><span class="summary-sig-name">Flatten</span>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>sequence</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#get" class="summary-sig-name"><code>get</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>key</span>,
+          <span class=summary-sig-arg>default</span>)</span></code>
+<br />
+Emulates the get() method of dictionaries.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#get_builder" class="summary-sig-name"><code>get_builder</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>name</span>)</span></code>
+<br />
+Fetch the builder with the specified name from the environment.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><a name="get_calculator"></a><span class="summary-sig"><span class="summary-sig-name">get_calculator</span>(<span class=summary-sig-arg>self</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#get_scanner" class="summary-sig-name"><code>get_scanner</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>skey</span>)</span></code>
+<br />
+Find the appropriate scanner given a key (usually a file suffix).</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><a name="GetBuildPath"></a><span class="summary-sig"><span class="summary-sig-name">GetBuildPath</span>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>files</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><a name="has_key"></a><span class="summary-sig"><span class="summary-sig-name">has_key</span>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>key</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#Ignore" class="summary-sig-name"><code>Ignore</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>target</span>,
+          <span class=summary-sig-arg>dependency</span>)</span></code>
+<br />
+Ignore a dependency.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#Install" class="summary-sig-name"><code>Install</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>dir</span>,
+          <span class=summary-sig-arg>source</span>)</span></code>
+<br />
+Install specified files in the given directory.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#InstallAs" class="summary-sig-name"><code>InstallAs</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>target</span>,
+          <span class=summary-sig-arg>source</span>)</span></code>
+<br />
+Install sources as targets.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#items" class="summary-sig-name"><code>items</code></a>(<span class=summary-sig-arg>self</span>)</span></code>
+<br />
+Emulates the items() method of dictionaries.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><a name="Literal"></a><span class="summary-sig"><span class="summary-sig-name">Literal</span>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>string</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><a name="Local"></a><span class="summary-sig"><span class="summary-sig-name">Local</span>(<span class=summary-sig-arg>self</span>,
+          <span class="summary-sig-vararg">*targets</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#Override" class="summary-sig-name"><code>Override</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>overrides</span>)</span></code>
+<br />
+Produce a modified environment whose variables
+are overriden by the overrides dictionaries.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#ParseConfig" class="summary-sig-name"><code>ParseConfig</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>command</span>,
+          <span class=summary-sig-arg>function</span>)</span></code>
+<br />
+Use the specified function to parse the output of the command
+in order to modify the current environment.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><a name="Platform"></a><span class="summary-sig"><span class="summary-sig-name">Platform</span>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>platform</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><a name="Precious"></a><span class="summary-sig"><span class="summary-sig-name">Precious</span>(<span class=summary-sig-arg>self</span>,
+          <span class="summary-sig-vararg">*targets</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#Prepend" class="summary-sig-name"><code>Prepend</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class="summary-sig-kwarg">**kw</span>)</span></code>
+<br />
+Prepend values to existing construction variables
+in an Environment.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#PrependENVPath" class="summary-sig-name"><code>PrependENVPath</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>name</span>,
+          <span class=summary-sig-arg>newpath</span>,
+          <span class=summary-sig-arg>envname</span>,
+          <span class=summary-sig-arg>sep</span>)</span></code>
+<br />
+Prepend path elements to the path 'name' in the 'ENV'
+dictionary for this environment.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#PrependUnique" class="summary-sig-name"><code>PrependUnique</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class="summary-sig-kwarg">**kw</span>)</span></code>
+<br />
+Append values to existing construction variables
+in an Environment, if they're not already there.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#Replace" class="summary-sig-name"><code>Replace</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class="summary-sig-kwarg">**kw</span>)</span></code>
+<br />
+Replace existing construction variables in an Environment
+with new construction variables and/or values.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#ReplaceIxes" class="summary-sig-name"><code>ReplaceIxes</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>path</span>,
+          <span class=summary-sig-arg>old_prefix</span>,
+          <span class=summary-sig-arg>old_suffix</span>,
+          <span class=summary-sig-arg>new_prefix</span>,
+          <span class=summary-sig-arg>new_suffix</span>)</span></code>
+<br />
+Replace old_prefix with new_prefix and old_suffix with new_suffix.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><a name="Repository"></a><span class="summary-sig"><span class="summary-sig-name">Repository</span>(<span class=summary-sig-arg>self</span>,
+          <span class="summary-sig-vararg">*dirs</span>,
+          <span class="summary-sig-kwarg">**kw</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><a name="Scanner"></a><span class="summary-sig"><span class="summary-sig-name">Scanner</span>(<span class=summary-sig-arg>self</span>,
+          <span class="summary-sig-vararg">*args</span>,
+          <span class="summary-sig-kwarg">**kw</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#scanner_map_delete" class="summary-sig-name"><code>scanner_map_delete</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>kw</span>)</span></code>
+<br />
+Delete the cached scanner map (if we need to).</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><a name="SConsignFile"></a><span class="summary-sig"><span class="summary-sig-name">SConsignFile</span>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>name</span>,
+          <span class=summary-sig-arg>dbm_module</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#SideEffect" class="summary-sig-name"><code>SideEffect</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>side_effect</span>,
+          <span class=summary-sig-arg>target</span>)</span></code>
+<br />
+Tell scons that side_effects are built as side 
+effects of building targets.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#SourceCode" class="summary-sig-name"><code>SourceCode</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>entry</span>,
+          <span class=summary-sig-arg>builder</span>)</span></code>
+<br />
+Arrange for a source code builder for (part of) a tree.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><a name="SourceSignatures"></a><span class="summary-sig"><span class="summary-sig-name">SourceSignatures</span>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>type</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#Split" class="summary-sig-name"><code>Split</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>arg</span>)</span></code>
+<br />
+This function converts a string or list into a list of strings
+or Nodes.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#subst" class="summary-sig-name"><code>subst</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>string</span>,
+          <span class=summary-sig-arg>raw</span>,
+          <span class=summary-sig-arg>target</span>,
+          <span class=summary-sig-arg>source</span>,
+          <span class=summary-sig-arg>dict</span>,
+          <span class=summary-sig-arg>conv</span>)</span></code>
+<br />
+Recursively interpolates construction variables from the
+Environment into the specified string, returning the expanded
+result.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><a name="subst_kw"></a><span class="summary-sig"><span class="summary-sig-name">subst_kw</span>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>kw</span>,
+          <span class=summary-sig-arg>raw</span>,
+          <span class=summary-sig-arg>target</span>,
+          <span class=summary-sig-arg>source</span>,
+          <span class=summary-sig-arg>dict</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#subst_list" class="summary-sig-name"><code>subst_list</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>string</span>,
+          <span class=summary-sig-arg>raw</span>,
+          <span class=summary-sig-arg>target</span>,
+          <span class=summary-sig-arg>source</span>,
+          <span class=summary-sig-arg>dict</span>,
+          <span class=summary-sig-arg>conv</span>)</span></code>
+<br />
+Calls through to SCons.Util.scons_subst_list().</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#subst_path" class="summary-sig-name"><code>subst_path</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>path</span>)</span></code>
+<br />
+Substitute a path list, turning EntryProxies into Nodes
+and leaving Nodes (and other objects) as-is.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#subst" class="summary-sig-name"><code>subst_target_source</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>string</span>,
+          <span class=summary-sig-arg>raw</span>,
+          <span class=summary-sig-arg>target</span>,
+          <span class=summary-sig-arg>source</span>,
+          <span class=summary-sig-arg>dict</span>,
+          <span class=summary-sig-arg>conv</span>)</span></code>
+<br />
+Recursively interpolates construction variables from the
+Environment into the specified string, returning the expanded
+result.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><a name="TargetSignatures"></a><span class="summary-sig"><span class="summary-sig-name">TargetSignatures</span>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>type</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><a name="Tool"></a><span class="summary-sig"><span class="summary-sig-name">Tool</span>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>tool</span>,
+          <span class=summary-sig-arg>toolpath</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><a name="use_build_signature"></a><span class="summary-sig"><span class="summary-sig-name">use_build_signature</span>(<span class=summary-sig-arg>self</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><a name="Value"></a><span class="summary-sig"><span class="summary-sig-name">Value</span>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>value</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#WhereIs" class="summary-sig-name"><code>WhereIs</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>prog</span>,
+          <span class=summary-sig-arg>path</span>,
+          <span class=summary-sig-arg>pathext</span>,
+          <span class=summary-sig-arg>reject</span>)</span></code>
+<br />
+Find prog in the path.</td></tr>
+</table><br />
+
+
+<!-- =========== START OF METHOD DETAILS =========== -->
+<table class="details" border="1" cellpadding="3" cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="details">
+  <th colspan="2">Method Details</th></tr>
+</table>
+
+<a name="Append"></a>
+<table width="100%" class="func-details" bgcolor="#e0e0e0"><tr><td>
+  <h3><span class="sig"><span class="sig-name">Append</span>(<span class=sig-arg>self</span>,
+          <span class="sig-kwarg">**kw</span>)</span>
+  </h3>
+Append values to existing construction variables
+in an Environment.  <dl><dt></dt><dd>
+  </dd></dl>
+</td></tr></table>
+
+<a name="AppendENVPath"></a>
+<table width="100%" class="func-details" bgcolor="#e0e0e0"><tr><td>
+  <h3><span class="sig"><span class="sig-name">AppendENVPath</span>(<span class=sig-arg>self</span>,
+          <span class=sig-arg>name</span>,
+          <span class=sig-arg>newpath</span>,
+          <span class=sig-arg>envname</span>=<span class=sig-default>'ENV'</span>,
+          <span class=sig-arg>sep</span>=<span class=sig-default>';'</span>)</span>
+  </h3>
+Append path elements to the path 'name' in the 'ENV'
+dictionary for this environment.  Will only add any particular
+path once, and will normpath and normcase all paths to help
+assure this.  This can also handle the case where the env
+variable is a list instead of a string.  <dl><dt></dt><dd>
+  </dd></dl>
+</td></tr></table>
+
+<a name="AppendUnique"></a>
+<table width="100%" class="func-details" bgcolor="#e0e0e0"><tr><td>
+  <h3><span class="sig"><span class="sig-name">AppendUnique</span>(<span class=sig-arg>self</span>,
+          <span class="sig-kwarg">**kw</span>)</span>
+  </h3>
+Append values to existing construction variables
+in an Environment, if they're not already there.  <dl><dt></dt><dd>
+  </dd></dl>
+</td></tr></table>
+
+<a name="Command"></a>
+<table width="100%" class="func-details" bgcolor="#e0e0e0"><tr><td>
+  <h3><span class="sig"><span class="sig-name">Command</span>(<span class=sig-arg>self</span>,
+          <span class=sig-arg>target</span>,
+          <span class=sig-arg>source</span>,
+          <span class=sig-arg>action</span>,
+          <span class="sig-kwarg">**kw</span>)</span>
+  </h3>
+Builds the supplied target files from the supplied
+source files using the supplied action.  Action may
+be any type that the Builder constructor will accept
+for an action.  <dl><dt></dt><dd>
+  </dd></dl>
+</td></tr></table>
+
+<a name="Copy"></a>
+<table width="100%" class="func-details" bgcolor="#e0e0e0"><tr><td>
+  <h3><span class="sig"><span class="sig-name">Copy</span>(<span class=sig-arg>self</span>,
+          <span class=sig-arg>tools</span>=<span class=sig-default>None</span>,
+          <span class=sig-arg>toolpath</span>=<span class=sig-default>[]</span>,
+          <span class="sig-kwarg">**kw</span>)</span>
+  </h3>
+Return a copy of a construction Environment.  The
+copy is like a Python "deep copy"--that is, independent
+copies are made recursively of each objects--except that
+a reference is copied when an object is not deep-copyable
+(like a function).  There are no references to any mutable
+objects in the original Environment.  <dl><dt></dt><dd>
+  </dd></dl>
+</td></tr></table>
+
+<a name="Depends"></a>
+<table width="100%" class="func-details" bgcolor="#e0e0e0"><tr><td>
+  <h3><span class="sig"><span class="sig-name">Depends</span>(<span class=sig-arg>self</span>,
+          <span class=sig-arg>target</span>,
+          <span class=sig-arg>dependency</span>)</span>
+  </h3>
+Explicity specify that 'target's depend on 'dependency'.  <dl><dt></dt><dd>
+  </dd></dl>
+</td></tr></table>
+
+<a name="Detect"></a>
+<table width="100%" class="func-details" bgcolor="#e0e0e0"><tr><td>
+  <h3><span class="sig"><span class="sig-name">Detect</span>(<span class=sig-arg>self</span>,
+          <span class=sig-arg>progs</span>)</span>
+  </h3>
+Return the first available program in progs.  <dl><dt></dt><dd>
+  </dd></dl>
+</td></tr></table>
+
+<a name="Execute"></a>
+<table width="100%" class="func-details" bgcolor="#e0e0e0"><tr><td>
+  <h3><span class="sig"><span class="sig-name">Execute</span>(<span class=sig-arg>self</span>,
+          <span class=sig-arg>action</span>,
+          <span class="sig-vararg">*args</span>,
+          <span class="sig-kwarg">**kw</span>)</span>
+  </h3>
+Directly execute an action through an Environment  <dl><dt></dt><dd>
+  </dd></dl>
+</td></tr></table>
+
+<a name="FindIxes"></a>
+<table width="100%" class="func-details" bgcolor="#e0e0e0"><tr><td>
+  <h3><span class="sig"><span class="sig-name">FindIxes</span>(<span class=sig-arg>self</span>,
+          <span class=sig-arg>paths</span>,
+          <span class=sig-arg>prefix</span>,
+          <span class=sig-arg>suffix</span>)</span>
+  </h3>
+Search a list of paths for something that matches the prefix and suffix.
+
+paths - the list of paths or nodes.
+prefix - construction variable for the prefix.
+suffix - construction variable for the suffix.  <dl><dt></dt><dd>
+  </dd></dl>
+</td></tr></table>
+
+<a name="get"></a>
+<table width="100%" class="func-details" bgcolor="#e0e0e0"><tr><td>
+  <h3><span class="sig"><span class="sig-name">get</span>(<span class=sig-arg>self</span>,
+          <span class=sig-arg>key</span>,
+          <span class=sig-arg>default</span>=<span class=sig-default>None</span>)</span>
+  </h3>
+Emulates the get() method of dictionaries.  <dl><dt></dt><dd>
+  </dd></dl>
+</td></tr></table>
+
+<a name="get_builder"></a>
+<table width="100%" class="func-details" bgcolor="#e0e0e0"><tr><td>
+  <h3><span class="sig"><span class="sig-name">get_builder</span>(<span class=sig-arg>self</span>,
+          <span class=sig-arg>name</span>)</span>
+  </h3>
+Fetch the builder with the specified name from the environment.  <dl><dt></dt><dd>
+  </dd></dl>
+</td></tr></table>
+
+<a name="get_scanner"></a>
+<table width="100%" class="func-details" bgcolor="#e0e0e0"><tr><td>
+  <h3><span class="sig"><span class="sig-name">get_scanner</span>(<span class=sig-arg>self</span>,
+          <span class=sig-arg>skey</span>)</span>
+  </h3>
+Find the appropriate scanner given a key (usually a file suffix).  <dl><dt></dt><dd>
+  </dd></dl>
+</td></tr></table>
+
+<a name="Ignore"></a>
+<table width="100%" class="func-details" bgcolor="#e0e0e0"><tr><td>
+  <h3><span class="sig"><span class="sig-name">Ignore</span>(<span class=sig-arg>self</span>,
+          <span class=sig-arg>target</span>,
+          <span class=sig-arg>dependency</span>)</span>
+  </h3>
+Ignore a dependency.  <dl><dt></dt><dd>
+  </dd></dl>
+</td></tr></table>
+
+<a name="Install"></a>
+<table width="100%" class="func-details" bgcolor="#e0e0e0"><tr><td>
+  <h3><span class="sig"><span class="sig-name">Install</span>(<span class=sig-arg>self</span>,
+          <span class=sig-arg>dir</span>,
+          <span class=sig-arg>source</span>)</span>
+  </h3>
+Install specified files in the given directory.  <dl><dt></dt><dd>
+  </dd></dl>
+</td></tr></table>
+
+<a name="InstallAs"></a>
+<table width="100%" class="func-details" bgcolor="#e0e0e0"><tr><td>
+  <h3><span class="sig"><span class="sig-name">InstallAs</span>(<span class=sig-arg>self</span>,
+          <span class=sig-arg>target</span>,
+          <span class=sig-arg>source</span>)</span>
+  </h3>
+Install sources as targets.  <dl><dt></dt><dd>
+  </dd></dl>
+</td></tr></table>
+
+<a name="items"></a>
+<table width="100%" class="func-details" bgcolor="#e0e0e0"><tr><td>
+  <h3><span class="sig"><span class="sig-name">items</span>(<span class=sig-arg>self</span>)</span>
+  </h3>
+Emulates the items() method of dictionaries.  <dl><dt></dt><dd>
+  </dd></dl>
+</td></tr></table>
+
+<a name="Override"></a>
+<table width="100%" class="func-details" bgcolor="#e0e0e0"><tr><td>
+  <h3><span class="sig"><span class="sig-name">Override</span>(<span class=sig-arg>self</span>,
+          <span class=sig-arg>overrides</span>)</span>
+  </h3>
+Produce a modified environment whose variables
+are overriden by the overrides dictionaries.
+
+overrides - a dictionary that will override
+the variables of this environment.
+
+This function is much more efficient than Copy()
+or creating a new Environment because it doesn't do
+a deep copy of the dictionary, and doesn't do a copy
+at all if there are no overrides.  <dl><dt></dt><dd>
+  </dd></dl>
+</td></tr></table>
+
+<a name="ParseConfig"></a>
+<table width="100%" class="func-details" bgcolor="#e0e0e0"><tr><td>
+  <h3><span class="sig"><span class="sig-name">ParseConfig</span>(<span class=sig-arg>self</span>,
+          <span class=sig-arg>command</span>,
+          <span class=sig-arg>function</span>=<span class=sig-default>None</span>)</span>
+  </h3>
+Use the specified function to parse the output of the command
+in order to modify the current environment. The 'command' can
+be a string or a list of strings representing a command and
+it's arguments. 'Function' is an optional argument that takes
+the environment and the output of the command. If no function is
+specified, the output will be treated as the output of a typical
+'X-config' command (i.e. gtk-config) and used to append to the
+ASFLAGS, CCFLAGS, CPPFLAGS, CPPPATH, LIBPATH, LIBS, LINKFLAGS
+and CCFLAGS variables.  <dl><dt></dt><dd>
+  </dd></dl>
+</td></tr></table>
+
+<a name="Prepend"></a>
+<table width="100%" class="func-details" bgcolor="#e0e0e0"><tr><td>
+  <h3><span class="sig"><span class="sig-name">Prepend</span>(<span class=sig-arg>self</span>,
+          <span class="sig-kwarg">**kw</span>)</span>
+  </h3>
+Prepend values to existing construction variables
+in an Environment.  <dl><dt></dt><dd>
+  </dd></dl>
+</td></tr></table>
+
+<a name="PrependENVPath"></a>
+<table width="100%" class="func-details" bgcolor="#e0e0e0"><tr><td>
+  <h3><span class="sig"><span class="sig-name">PrependENVPath</span>(<span class=sig-arg>self</span>,
+          <span class=sig-arg>name</span>,
+          <span class=sig-arg>newpath</span>,
+          <span class=sig-arg>envname</span>=<span class=sig-default>'ENV'</span>,
+          <span class=sig-arg>sep</span>=<span class=sig-default>';'</span>)</span>
+  </h3>
+Prepend path elements to the path 'name' in the 'ENV'
+dictionary for this environment.  Will only add any particular
+path once, and will normpath and normcase all paths to help
+assure this.  This can also handle the case where the env
+variable is a list instead of a string.  <dl><dt></dt><dd>
+  </dd></dl>
+</td></tr></table>
+
+<a name="PrependUnique"></a>
+<table width="100%" class="func-details" bgcolor="#e0e0e0"><tr><td>
+  <h3><span class="sig"><span class="sig-name">PrependUnique</span>(<span class=sig-arg>self</span>,
+          <span class="sig-kwarg">**kw</span>)</span>
+  </h3>
+Append values to existing construction variables
+in an Environment, if they're not already there.  <dl><dt></dt><dd>
+  </dd></dl>
+</td></tr></table>
+
+<a name="Replace"></a>
+<table width="100%" class="func-details" bgcolor="#e0e0e0"><tr><td>
+  <h3><span class="sig"><span class="sig-name">Replace</span>(<span class=sig-arg>self</span>,
+          <span class="sig-kwarg">**kw</span>)</span>
+  </h3>
+Replace existing construction variables in an Environment
+with new construction variables and/or values.  <dl><dt></dt><dd>
+  </dd></dl>
+</td></tr></table>
+
+<a name="ReplaceIxes"></a>
+<table width="100%" class="func-details" bgcolor="#e0e0e0"><tr><td>
+  <h3><span class="sig"><span class="sig-name">ReplaceIxes</span>(<span class=sig-arg>self</span>,
+          <span class=sig-arg>path</span>,
+          <span class=sig-arg>old_prefix</span>,
+          <span class=sig-arg>old_suffix</span>,
+          <span class=sig-arg>new_prefix</span>,
+          <span class=sig-arg>new_suffix</span>)</span>
+  </h3>
+Replace old_prefix with new_prefix and old_suffix with new_suffix.
+
+env - Environment used to interpolate variables.
+path - the path that will be modified.
+old_prefix - construction variable for the old prefix.
+old_suffix - construction variable for the old suffix.
+new_prefix - construction variable for the new prefix.
+new_suffix - construction variable for the new suffix.  <dl><dt></dt><dd>
+  </dd></dl>
+</td></tr></table>
+
+<a name="scanner_map_delete"></a>
+<table width="100%" class="func-details" bgcolor="#e0e0e0"><tr><td>
+  <h3><span class="sig"><span class="sig-name">scanner_map_delete</span>(<span class=sig-arg>self</span>,
+          <span class=sig-arg>kw</span>=<span class=sig-default>None</span>)</span>
+  </h3>
+Delete the cached scanner map (if we need to).  <dl><dt></dt><dd>
+  </dd></dl>
+</td></tr></table>
+
+<a name="SideEffect"></a>
+<table width="100%" class="func-details" bgcolor="#e0e0e0"><tr><td>
+  <h3><span class="sig"><span class="sig-name">SideEffect</span>(<span class=sig-arg>self</span>,
+          <span class=sig-arg>side_effect</span>,
+          <span class=sig-arg>target</span>)</span>
+  </h3>
+Tell scons that side_effects are built as side 
+effects of building targets.  <dl><dt></dt><dd>
+  </dd></dl>
+</td></tr></table>
+
+<a name="SourceCode"></a>
+<table width="100%" class="func-details" bgcolor="#e0e0e0"><tr><td>
+  <h3><span class="sig"><span class="sig-name">SourceCode</span>(<span class=sig-arg>self</span>,
+          <span class=sig-arg>entry</span>,
+          <span class=sig-arg>builder</span>)</span>
+  </h3>
+Arrange for a source code builder for (part of) a tree.  <dl><dt></dt><dd>
+  </dd></dl>
+</td></tr></table>
+
+<a name="Split"></a>
+<table width="100%" class="func-details" bgcolor="#e0e0e0"><tr><td>
+  <h3><span class="sig"><span class="sig-name">Split</span>(<span class=sig-arg>self</span>,
+          <span class=sig-arg>arg</span>)</span>
+  </h3>
+This function converts a string or list into a list of strings
+or Nodes.  This makes things easier for users by allowing files to
+be specified as a white-space separated list to be split.
+The input rules are:
+    - A single string containing names separated by spaces. These will be
+      split apart at the spaces.
+    - A single Node instance
+    - A list containing either strings or Node instances. Any strings
+      in the list are not split at spaces.
+In all cases, the function returns a list of Nodes and strings.  <dl><dt></dt><dd>
+  </dd></dl>
+</td></tr></table>
+
+<a name="subst"></a>
+<table width="100%" class="func-details" bgcolor="#e0e0e0"><tr><td>
+  <h3><span class="sig"><span class="sig-name">subst</span>(<span class=sig-arg>self</span>,
+          <span class=sig-arg>string</span>,
+          <span class=sig-arg>raw</span>=<span class=sig-default>0</span>,
+          <span class=sig-arg>target</span>=<span class=sig-default>None</span>,
+          <span class=sig-arg>source</span>=<span class=sig-default>None</span>,
+          <span class=sig-arg>dict</span>=<span class=sig-default>None</span>,
+          <span class=sig-arg>conv</span>=<span class=sig-default>None</span>)</span>
+  </h3>
+Recursively interpolates construction variables from the
+Environment into the specified string, returning the expanded
+result.  Construction variables are specified by a $ prefix
+in the string and begin with an initial underscore or
+alphabetic character followed by any number of underscores
+or alphanumeric characters.  The construction variable names
+may be surrounded by curly braces to separate the name from
+trailing characters.  <dl><dt></dt><dd>
+  </dd></dl>
+</td></tr></table>
+
+<a name="subst_list"></a>
+<table width="100%" class="func-details" bgcolor="#e0e0e0"><tr><td>
+  <h3><span class="sig"><span class="sig-name">subst_list</span>(<span class=sig-arg>self</span>,
+          <span class=sig-arg>string</span>,
+          <span class=sig-arg>raw</span>=<span class=sig-default>0</span>,
+          <span class=sig-arg>target</span>=<span class=sig-default>None</span>,
+          <span class=sig-arg>source</span>=<span class=sig-default>None</span>,
+          <span class=sig-arg>dict</span>=<span class=sig-default>None</span>,
+          <span class=sig-arg>conv</span>=<span class=sig-default>None</span>)</span>
+  </h3>
+Calls through to SCons.Util.scons_subst_list().  See
+the documentation for that function.  <dl><dt></dt><dd>
+  </dd></dl>
+</td></tr></table>
+
+<a name="subst_path"></a>
+<table width="100%" class="func-details" bgcolor="#e0e0e0"><tr><td>
+  <h3><span class="sig"><span class="sig-name">subst_path</span>(<span class=sig-arg>self</span>,
+          <span class=sig-arg>path</span>)</span>
+  </h3>
+Substitute a path list, turning EntryProxies into Nodes
+and leaving Nodes (and other objects) as-is.  <dl><dt></dt><dd>
+  </dd></dl>
+</td></tr></table>
+
+<a name="subst"></a>
+<table width="100%" class="func-details" bgcolor="#e0e0e0"><tr><td>
+  <h3><span class="sig"><span class="sig-name">subst_target_source</span>(<span class=sig-arg>self</span>,
+          <span class=sig-arg>string</span>,
+          <span class=sig-arg>raw</span>=<span class=sig-default>0</span>,
+          <span class=sig-arg>target</span>=<span class=sig-default>None</span>,
+          <span class=sig-arg>source</span>=<span class=sig-default>None</span>,
+          <span class=sig-arg>dict</span>=<span class=sig-default>None</span>,
+          <span class=sig-arg>conv</span>=<span class=sig-default>None</span>)</span>
+  </h3>
+Recursively interpolates construction variables from the
+Environment into the specified string, returning the expanded
+result.  Construction variables are specified by a $ prefix
+in the string and begin with an initial underscore or
+alphabetic character followed by any number of underscores
+or alphanumeric characters.  The construction variable names
+may be surrounded by curly braces to separate the name from
+trailing characters.  <dl><dt></dt><dd>
+  </dd></dl>
+</td></tr></table>
+
+<a name="WhereIs"></a>
+<table width="100%" class="func-details" bgcolor="#e0e0e0"><tr><td>
+  <h3><span class="sig"><span class="sig-name">WhereIs</span>(<span class=sig-arg>self</span>,
+          <span class=sig-arg>prog</span>,
+          <span class=sig-arg>path</span>=<span class=sig-default>None</span>,
+          <span class=sig-arg>pathext</span>=<span class=sig-default>None</span>,
+          <span class=sig-arg>reject</span>=<span class=sig-default>[]</span>)</span>
+  </h3>
+Find prog in the path.  <dl><dt></dt><dd>
+  </dd></dl>
+</td></tr></table>
+<br />
+
+
+<!-- =========== START OF NAVBAR =========== -->
+<table class="navbar" border="0" width="100%" cellpadding="0" bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="center">
+    <th class="navbar">&nbsp;&nbsp;&nbsp;<a class="navbar" href="wengosconsng.wengoscons.wengoenv-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+    <th class="navbar">&nbsp;&nbsp;&nbsp;<a class="navbar" href="trees.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+    <th class="navbar">&nbsp;&nbsp;&nbsp;<a class="navbar" href="indices.html">Index</a>&nbsp;&nbsp;&nbsp;</th>
+    <th class="navbar">&nbsp;&nbsp;&nbsp;<a class="navbar" href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+    <th class="navbar" align="right" width="100%">
+      <table border="0" cellpadding="0" cellspacing="0">
+      <tr><th class="navbar" align="center">
+        <p class="nomargin">
+          <a class="navbar" target="_top" href="http://dev.openwengo.com">WengoSCons</a>
+      </p></th></tr></table>
+    </th>
+  </tr>
+</table>
+
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+  <tr>
+    <td align="left"><font size="-2">Generated by Epydoc 2.1 on Tue Nov 08 16:16:09 2005</font></td>
+    <td align="right"><a href="http://epydoc.sourceforge.net"
+                      ><font size="-2">http://epydoc.sf.net</font></a></td>
+  </tr>
+</table>
+</body>
+</html>

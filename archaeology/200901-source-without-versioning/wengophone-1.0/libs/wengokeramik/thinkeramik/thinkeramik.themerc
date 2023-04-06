@@ -1,0 +1,7 @@
+[Misc]
+Name=Thin Keramik (Ver.3.2.1)
+Comment=Thin Keramik, powered by Keramik style engine.
+Comment[pt_BR]=Thin Keramik, baseado no estilo keramik.
+ConfigPage=kstyle_thinkeramik_config
+[KDE]
+WidgetStyle=ThinKeramik

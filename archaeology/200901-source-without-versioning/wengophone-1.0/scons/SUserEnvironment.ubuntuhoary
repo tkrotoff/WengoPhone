@@ -1,0 +1,5 @@
+from wengoscons.common import wengoenv
+env = WengoEnvironment()
+env.WengoSetVariable("QtIncludePaths", [ "/usr/include/qt3" ])
+#env['CC'] = 'gcc-3.4'
+#env['CXX'] = 'g++-3.3'

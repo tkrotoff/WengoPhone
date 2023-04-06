@@ -1,0 +1,18 @@
+
+env = WengoEnvironment()
+amrnb_env = env.Copy()
+
+amrnb_sources = [
+    "interf_dec.c",
+    "interf_enc.c",
+    "sp_dec.c",
+    "sp_enc.c" 
+]
+
+env.WengoDeclareLibraryAuto("amrnb", "wifo/exosip/phapi/amrnb")
+
+amrnb_env.WengoCCFlagsAddMultiple(
+    amrnb_env.WengoGetVariable("phapi_optimization_flags"))
+
+amrnb_lib = amrnb_env.WengoStaticLibrary('amrnb', amrnb_sources)
+amrnb_env.WengoAlias("amrnb", amrnb_lib)

@@ -1,0 +1,40 @@
+# This file is used by install/CMakeLists.txt and package/CMakeLists.txt
+#
+set(CMAKE_CURRENT_SOURCE_DIR "${SOURCE_DIR}" CACHE INTERNAL "CMake source dir" FORCE)
+set(CMAKE_SOURCE_DIR "${SOURCE_DIR}" CACHE INTERNAL "CMake source dir" FORCE)
+set(CMAKE_BINARY_DIR "${BINARY_DIR}" CACHE INTERNAL "CMake binary dir" FORCE)
+
+set(CMAKE_MODULE_PATH
+	${CMAKE_SOURCE_DIR}/owbuild
+	${CMAKE_SOURCE_DIR}/owbuild/owbuild
+)
+
+# Add macros
+include(${CMAKE_SOURCE_DIR}/owbuild/owbuild/CMakeLists.txt)
+
+# Add options/default values...
+include(${CMAKE_SOURCE_DIR}/DefineWengoOptions.cmake)
+include(${CMAKE_SOURCE_DIR}/DefineInstallationPaths.cmake)
+
+
+if (APPLE)
+	set(BUNDLE_DIR ${BUILD_DIR}/${COIPMANAGER_BUNDLE_NAME}.framework)
+	set(INCLUDE_DIR ${BUNDLE_DIR}/Versions/${COIPMANAGER_VERSION}/Headers)
+	set(LIB_DIR ${BUNDLE_DIR}/Versions/${COIPMANAGER_VERSION}/Libraries)
+	set(RESOURCES_DIR ${BUNDLE_DIR}/Versions/${COIPMANAGER_VERSION}/Resources)
+	set(BIN_DIR ${BUNDLE_DIR}/Versions/${COIPMANAGER_VERSION}/bin)
+else (APPLE)
+	set(BUNDLE_DIR ${BUILD_DIR}/${COIPMANAGER_BUNDLE_NAME}-${COIPMANAGER_VERSION})
+	set(INCLUDE_DIR ${BUNDLE_DIR}/include)
+	set(LIB_DIR ${BUNDLE_DIR}/lib)
+	set(BIN_DIR ${BUNDLE_DIR}/bin)
+endif (APPLE)
+
+set(COIPPLUGINS_DIR
+	${LIB_DIR}/coip-plugins
+)
+
+set(PHAPIPLUGINS_DIR
+	${LIB_DIR}/phapi-plugins
+)
+####

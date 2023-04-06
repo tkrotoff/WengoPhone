@@ -1,0 +1,196 @@
+ow_create_shared_library(libpurple)
+
+ow_use_public_libraries(
+	glib2
+)
+
+ow_add_public_include_dirs(
+	${CMAKE_CURRENT_SOURCE_DIR}/src
+)
+
+ow_add_private_include_dirs(
+	${CMAKE_CURRENT_SOURCE_DIR}/src/libpurple
+	${CMAKE_CURRENT_SOURCE_DIR}/src/libpurple/protocols/oscar
+)
+
+ow_use_private_libraries(
+	libxml
+	openssl
+)
+
+ow_add_private_libraries(
+	resolv
+)
+
+ow_add_private_definitions(
+	-DHAVE_CONFIG_H
+)
+
+if (APPLE)
+	ow_add_private_link_flags(
+		# avoid a -multi_module error (see http://gcc.gnu.org/ml/gcc/2005-06/msg00184.html)
+		-Wl,-single_module
+		# avoid a "has local relocation entries in non-writable section" (see http://lists.mplayerhq.hu/pipermail/ffmpeg-devel/2006-October/017814.html)
+		-read_only_relocs suppress
+	)
+
+	ow_add_private_definitions(
+		-Dsocklen_t=int
+		-D_SOCKLEN_T
+	)
+endif (APPLE)
+
+ow_add_sources(
+	src/libpurple/account.c
+	src/libpurple/accountopt.c
+	src/libpurple/blist.c
+	src/libpurple/buddyicon.c
+	src/libpurple/cipher.c
+	src/libpurple/circbuffer.c
+	src/libpurple/cmds.c
+	src/libpurple/certificate.c
+	src/libpurple/connection.c
+	src/libpurple/conversation.c
+	src/libpurple/core.c
+	src/libpurple/debug.c
+	src/libpurple/desktopitem.c
+	src/libpurple/dnsquery.c
+	src/libpurple/dnssrv.c
+	src/libpurple/eventloop.c
+	src/libpurple/ft.c
+	src/libpurple/idle.c
+	src/libpurple/imgstore.c
+	src/libpurple/log.c
+	src/libpurple/mime.c
+	src/libpurple/network.c
+	src/libpurple/notify.c
+	src/libpurple/nat-pmp.c	
+	src/libpurple/ntlm.c
+	src/libpurple/plugin.c
+	src/libpurple/pluginpref.c
+	src/libpurple/pounce.c
+	src/libpurple/prefs.c
+	src/libpurple/privacy.c
+	src/libpurple/proxy.c
+	src/libpurple/prpl.c
+	src/libpurple/request.c
+	src/libpurple/roomlist.c
+	src/libpurple/savedstatuses.c
+	src/libpurple/server.c
+	src/libpurple/signals.c
+	src/libpurple/sound.c
+	src/libpurple/sslconn.c
+	src/libpurple/status.c
+	src/libpurple/stringref.c
+	src/libpurple/stun.c
+	src/libpurple/upnp.c
+	src/libpurple/util.c
+	src/libpurple/value.c
+	src/libpurple/whiteboard.c
+	src/libpurple/xmlnode.c
+	src/libpurple/plugins/ssl/ssl.c
+	src/libpurple/plugins/ssl/ssl-openssl.c
+	src/libpurple/protocols/jabber/adhoccommands.c
+	src/libpurple/protocols/jabber/auth.c
+	src/libpurple/protocols/jabber/buddy.c
+	src/libpurple/protocols/jabber/caps.c
+	src/libpurple/protocols/jabber/chat.c
+	src/libpurple/protocols/jabber/disco.c
+	src/libpurple/protocols/jabber/google.c
+	src/libpurple/protocols/jabber/iq.c
+	src/libpurple/protocols/jabber/jabber.c
+	src/libpurple/protocols/jabber/jutil.c
+	src/libpurple/protocols/jabber/libxmpp.c
+	src/libpurple/protocols/jabber/message.c
+	src/libpurple/protocols/jabber/oob.c
+	src/libpurple/protocols/jabber/parser.c
+	src/libpurple/protocols/jabber/pep.c
+	src/libpurple/protocols/jabber/ping.c
+	src/libpurple/protocols/jabber/presence.c
+	src/libpurple/protocols/jabber/roster.c
+	src/libpurple/protocols/jabber/si.c
+	src/libpurple/protocols/jabber/usermood.c
+	src/libpurple/protocols/jabber/usernick.c
+	src/libpurple/protocols/jabber/usertune.c
+	src/libpurple/protocols/jabber/xdata.c
+	src/libpurple/protocols/msn/cmdproc.c
+	src/libpurple/protocols/msn/command.c
+	src/libpurple/protocols/msn/dialog.c
+	src/libpurple/protocols/msn/directconn.c
+	src/libpurple/protocols/msn/error.c
+	src/libpurple/protocols/msn/group.c
+	src/libpurple/protocols/msn/history.c
+	src/libpurple/protocols/msn/httpconn.c
+	src/libpurple/protocols/msn/msg.c
+	src/libpurple/protocols/msn/msn.c
+	src/libpurple/protocols/msn/nexus.c
+	src/libpurple/protocols/msn/notification.c
+	src/libpurple/protocols/msn/object.c
+	src/libpurple/protocols/msn/page.c
+	src/libpurple/protocols/msn/servconn.c
+	src/libpurple/protocols/msn/session.c
+	src/libpurple/protocols/msn/slp.c
+	src/libpurple/protocols/msn/slpcall.c
+	src/libpurple/protocols/msn/slplink.c
+	src/libpurple/protocols/msn/slpmsg.c
+	src/libpurple/protocols/msn/slpsession.c
+	src/libpurple/protocols/msn/state.c
+	src/libpurple/protocols/msn/switchboard.c
+	src/libpurple/protocols/msn/sync.c
+	src/libpurple/protocols/msn/table.c
+	src/libpurple/protocols/msn/transaction.c
+	src/libpurple/protocols/msn/user.c
+	src/libpurple/protocols/msn/userlist.c
+	src/libpurple/protocols/msn/msn-utils.c
+	src/libpurple/protocols/oscar/bstream.c
+	src/libpurple/protocols/oscar/family_admin.c
+	src/libpurple/protocols/oscar/family_advert.c
+	src/libpurple/protocols/oscar/family_alert.c
+	src/libpurple/protocols/oscar/family_auth.c
+	src/libpurple/protocols/oscar/family_bart.c
+	src/libpurple/protocols/oscar/family_bos.c
+	src/libpurple/protocols/oscar/family_buddy.c
+	src/libpurple/protocols/oscar/family_chat.c
+	src/libpurple/protocols/oscar/family_chatnav.c
+	src/libpurple/protocols/oscar/family_feedbag.c
+	src/libpurple/protocols/oscar/family_icbm.c
+	src/libpurple/protocols/oscar/family_icq.c
+	src/libpurple/protocols/oscar/family_invite.c
+	src/libpurple/protocols/oscar/family_locate.c
+	src/libpurple/protocols/oscar/family_odir.c
+	src/libpurple/protocols/oscar/family_oservice.c
+	src/libpurple/protocols/oscar/family_popup.c
+	src/libpurple/protocols/oscar/family_stats.c
+	src/libpurple/protocols/oscar/family_translate.c
+	src/libpurple/protocols/oscar/family_userlookup.c
+	src/libpurple/protocols/oscar/flap_connection.c
+	src/libpurple/protocols/oscar/libaim.c
+	src/libpurple/protocols/oscar/libicq.c
+	src/libpurple/protocols/oscar/misc.c
+	src/libpurple/protocols/oscar/msgcookie.c
+	src/libpurple/protocols/oscar/odc.c
+	src/libpurple/protocols/oscar/oft.c
+	src/libpurple/protocols/oscar/oscar.c
+	src/libpurple/protocols/oscar/oscar_data.c
+	src/libpurple/protocols/oscar/peer.c
+	src/libpurple/protocols/oscar/peer_proxy.c
+	src/libpurple/protocols/oscar/rxhandlers.c
+	src/libpurple/protocols/oscar/snac.c
+	src/libpurple/protocols/oscar/tlv.c
+	src/libpurple/protocols/oscar/util.c
+	src/libpurple/protocols/yahoo/util.c
+	src/libpurple/protocols/yahoo/yahoo.c
+	src/libpurple/protocols/yahoo/yahoo_aliases.c
+	src/libpurple/protocols/yahoo/yahoo_auth.c
+	src/libpurple/protocols/yahoo/yahoo_crypt.c
+	src/libpurple/protocols/yahoo/yahoo_doodle.c
+	src/libpurple/protocols/yahoo/yahoo_filexfer.c
+	src/libpurple/protocols/yahoo/yahoo_friend.c
+	src/libpurple/protocols/yahoo/yahoo_packet.c
+	src/libpurple/protocols/yahoo/yahoo_picture.c
+	src/libpurple/protocols/yahoo/yahoo_profile.c
+	src/libpurple/protocols/yahoo/yahoochat.c
+	src/libpurple/protocols/yahoo/ycht.c
+)
+
+ow_create_project_binary()

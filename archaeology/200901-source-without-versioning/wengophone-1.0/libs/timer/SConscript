@@ -1,0 +1,32 @@
+
+env = WengoEnvironment()
+t_env = env.Copy()
+t_test_env = env.Copy()
+
+t_decl = env.WengoDeclareLibraryAuto("wtimer", "libs/timer")
+t_decl.AddSubIncludePath("include")
+t_env.WengoUseLibraryHeaders("wtimer")
+
+t_sources = [ "src/timer_impl.c"]
+
+if t_env.WengoOsIsLinux() or t_env.WengoOsIsBSD():
+    t_sources += [ "src/clock_gettime/impl_timer.c" ]
+    t_env.WengoCppDefineAdd("TIMER_ENABLE_CLOCK_GETTIME_IMPL")
+    if t_env.WengoOsIsLinux():
+	t_env.WengoLibAddMultiple(["rt", "pthread"])
+if t_env.WengoOsIsWindows():
+    t_sources += [ "src/win32_mm/impl_timer.c" ]
+    t_env.WengoCppDefineAdd("TIMER_ENABLE_WINMM_IMPL")
+
+t_lib = t_env.WengoStaticLibrary("wtimer", t_sources)
+t_env.WengoAlias("wtimer", t_lib)
+
+t_test_sources = [ "test/test_timer.c" ]
+t_test_env.WengoUseLibrary("wtimer")
+t_test_env.WengoLibAdd("pthread")
+
+if t_test_env.WengoOsIsLinux():
+    t_test_env.WengoLibAddMultiple(["rt"])
+
+t_test_prog = t_test_env.WengoProgram("test_timer", t_test_sources)
+t_test_env.WengoAlias("wtimer-test", t_test_prog)

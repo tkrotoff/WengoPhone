@@ -1,0 +1,33 @@
+WengoPhone Code Conventions
+---------------------------
+
+Please read the file WengoPhoneCodeConventions.odt or go to the wiki page
+http://dev.openwengo.com/trac/openwengo/trac.cgi/wiki/WengoPhoneCodeConventions
+
+This document only explain specific conventions for WengoPhoneNG
+
+** Model component
+All classes are named after WengoPhoneCodeConventions.sxw
+All thread safe methods are named *ThreadSafe().
+Events are always postfixed with Event and event callbacks with EventHandler
+Besides this there is no specific conventions for this component.
+
+** Control component
+This component has some special conventions:
+all classes start with a big letter 'C' (meaning Control) e.g CWengoPhone.
+
+** Presentation component
+All classes start with a big letter 'P' (meaning Presentation) e.g PWengoPhone.
+All Qt classes start with 'Qt' e.g QtWengoPhone
+All GTK+ classes start with 'Gtk' e.g GtkWengoPhone
+ect...
+
+Qt classes have to be thread safe. All the calls from the model/control part
+should be threaded via QObjectThreadSafe (LibQtUtil).
+If a method addMessage(const std::string & message) is implemented inside a Qt class,
+this method should call another one named addMessageThreadSafe() that uses QObjectThreadSafe
+Same for the constructor that calls a method named initThreadSafe().
+So all thread safe methods are named *ThreadSafe().
+
+For UML pictures the resolution should be 1280x960 (~100KB)
+Name convention: $MODULE_framework1.jpg, $MODULE_framework2.jpg ...

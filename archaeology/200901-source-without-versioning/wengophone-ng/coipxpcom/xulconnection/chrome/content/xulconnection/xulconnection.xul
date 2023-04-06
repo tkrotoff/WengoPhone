@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+
+<!--
+<!DOCTYPE window SYSTEM "chrome://wengophone/locale/wengophone.dtd">
+-->
+
+<window
+  id         = "xulconnection"
+  windowtype = "xulconnection"
+  title      = "Test"
+  width      = "370"
+  minwidth   = "370"
+  minheight  = "670"
+  height     = "670"
+  onload     = "xc.Init()"
+  persist    = "screenX screenY width height"
+
+  xmlns  = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script type="application/x-javascript" src="chrome://xulconnection/content/global.js"/>
+  <script type="application/x-javascript" src="chrome://xulconnection/content/xulconnection.js"/>
+
+  <script src="chrome://venkman/content/venkman-overlay.js"/>
+
+  <button id="debugbutton" oncommand="Cleanup()" label="Clean" />
+  <textbox multiline="true" id="debugBox" style="color: red" flex="1" disabled="true" />
+  
+</window>

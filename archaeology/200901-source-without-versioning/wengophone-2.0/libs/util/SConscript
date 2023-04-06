@@ -1,0 +1,17 @@
+projects = [
+	'cutil',
+	'util',
+	'thread',
+	'http',
+	'serialization',
+	'serializer',
+	'shlibloader',
+	'settings',
+	'system',
+	'socket',
+]
+
+if WengoCCMSVC():
+	projects.append('memorydump')
+
+SConscript(dirs = projects)

@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+
+<dialog
+  id         = "create-account"
+  windowtype = "create-account"
+  title      = "Create an account"
+  minwidth   = "400"
+  minheight  = "100"
+  onload     = "Startup();"
+  persist    = "screenX screenY width height"
+  buttons    = "accept,cancel"
+  ondialogaccept = "return doOK();"
+  ondialogcancel = "return doCancel();"
+
+  xmlns  = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script type="application/x-javascript" src="chrome://xulchat/content/global.js"/>
+  <script type="application/x-javascript" src="chrome://xulchat/content/dgid.js"/>
+  <script type="application/x-javascript" src="chrome://xulchat/content/createAccount.js"/>
+
+  <script src="chrome://venkman/content/venkman-overlay.js"/>
+
+  <hbox>
+   <spacer flex="1"/>
+   <label style="width: 100px" id="labelProtocol" value="You choosed the protocol : "/>
+   <spacer flex="1"/>
+  </hbox>
+
+  <hbox>
+   <label style="width: 100px">Login :</label>
+   <textbox id="login" label="Login" flex="1" value="" />
+  </hbox>
+  <hbox>
+   <label style="width: 100px">Password :</label>
+   <textbox id="password" type="password" label="Lauch JsUnit" flex="1" />
+  </hbox>
+
+</dialog>

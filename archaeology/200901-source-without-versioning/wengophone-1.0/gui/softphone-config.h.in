@@ -1,0 +1,3 @@
+
+#define WL_TAG "%(WL_TAG)s"
+#define INSTALLER_TYPE "%(INSTALLER_TYPE)s"

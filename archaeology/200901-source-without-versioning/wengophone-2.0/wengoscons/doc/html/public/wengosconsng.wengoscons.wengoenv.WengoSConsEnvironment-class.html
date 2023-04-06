@@ -1,0 +1,1343 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+          "DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>wengosconsng.wengoscons.wengoenv.WengoSConsEnvironment</title>
+  <link rel="stylesheet" href="epydoc.css" type="text/css"></link>
+</head>
+<body bgcolor="white" text="black" link="blue" vlink="#204080"
+      alink="#204080">
+
+<!-- =========== START OF NAVBAR =========== -->
+<table class="navbar" border="0" width="100%" cellpadding="0" bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="center">
+    <th class="navbar">&nbsp;&nbsp;&nbsp;<a class="navbar" href="wengosconsng.wengoscons.wengoenv-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+    <th class="navbar">&nbsp;&nbsp;&nbsp;<a class="navbar" href="trees.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+    <th class="navbar">&nbsp;&nbsp;&nbsp;<a class="navbar" href="indices.html">Index</a>&nbsp;&nbsp;&nbsp;</th>
+    <th class="navbar">&nbsp;&nbsp;&nbsp;<a class="navbar" href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+    <th class="navbar" align="right" width="100%">
+      <table border="0" cellpadding="0" cellspacing="0">
+      <tr><th class="navbar" align="center">
+        <p class="nomargin">
+          <a class="navbar" target="_top" href="http://dev.openwengo.com">WengoSCons</a>
+      </p></th></tr></table>
+    </th>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr valign="top">
+    <td width="100%">
+      <font size="-1"><b class="breadcrumbs">
+        Package&nbsp;wengosconsng ::
+        Package&nbsp;wengoscons ::
+        <a href="wengosconsng.wengoscons.wengoenv-module.html">Module&nbsp;wengoenv</a> ::
+        Class&nbsp;WengoSConsEnvironment
+      </b></font></br>
+    </td>
+    <td><table cellpadding="0" cellspacing="0">
+      <tr><td align="right"><font size="-2">[<a href="../private/wengosconsng.wengoscons.wengoenv.WengoSConsEnvironment-class.html">show&nbsp;private</a>&nbsp;|&nbsp;hide&nbsp;private]</font></td></tr>
+      <tr><td align="right"><font size="-2">[<a href="frames.html"target="_top">frames</a>&nbsp;|&nbsp;<a href="wengosconsng.wengoscons.wengoenv.WengoSConsEnvironment-class.html" target="_top">no&nbsp;frames</a>]</font></td></tr>
+    </table></td>
+</tr></table>
+
+<!-- =========== START OF CLASS DESCRIPTION =========== -->
+<h2 class="class">Class WengoSConsEnvironment</h2>
+
+<pre class="base-tree">
+        <a href="SCons.Environment.Base-class.html"><code>Base</code></a> --+    
+               |    
+<a href="SCons.Script.SConscript.SConsEnvironment-class.html"><code>SConsEnvironment</code></a> --+
+                   |
+                  <b>WengoSConsEnvironment</b>
+</pre><br />
+
+<hr/>
+
+WengoSCons main class.
+
+Inherits from SConsEnvironment and adds very high level functions
+in order to simplify SConscript files.
+
+All methods and functions starting with Wengo* can be used in SConscript files.
+All other methods and functions should not be used and are internal.
+
+Functions starting with Wengo* work with the global WengoSConsEnvironment.
+Methods starting with env.Wengo* work with the local WengoSConsEnvironment.
+
+
+Generic SConscript template:
+
+<pre>
+env = WengoGetEnvironment()
+
+libs = [
+        'project1',
+        'project2'
+]
+lib_path = [
+        'project1/lib',
+        'project2/lib'
+]
+include_path = [
+        'project1/include',
+        'project2/include'
+]
+defines = {
+        'DEFINE1' : 1,
+        'DEFINE2' : 10
+}
+cc_flags = []
+link_flags = []
+headers = [
+        'myheader.h'
+]
+sources = [
+        'mysource.cpp'
+]
+
+if WengoOSWindows():
+        libs += [
+                'libwindows1',
+                'libwindows2'
+        ]
+        defines['WIN32'] = 1
+
+if WengoCCMSVC():
+        cc_flags += ['-myflag']
+
+if WengoOSLinux():
+        libs += ['liblinux1']
+        defines['LINUX'] = 1
+        sources += ['mylinuxsource.cpp']
+
+env.WengoAddLibPath(lib_path)
+env.WengoAddCCFlags(cc_flags)
+env.WengoAddLinkFlags(link_flags)
+env.WengoAddIncludePath(include_path)
+env.WengoAddDefines(defines)
+env.WengoUseLibraries(libs)
+
+env.WengoStaticLibrary('myproject', sources, headers)
+#env.WengoSharedLibrary('myproject', sources, headers)
+#env.WengoProgram('myproject', sources, headers)
+</pre>
+
+If you want to understand how works WengoSCons, check:
+- WengoProgram()
+- WengoSharedLibrary()
+- WengoStaticLibrary()
+- WengoUseLibraries()
+- __declareLibrary()
+- __useLibraries()
+- __useChildLibraries()
+- __getAllDependencies()
+This methods are WengoSCons heart.
+<hr/>
+
+<dl><dt><b>Authors:</b></dt>
+  <dd>
+    David Ferlier,
+    Laurent Almeras,
+    Tanguy Krotoff,
+    Philippe Bernery
+  </dd>
+</dl>
+
+
+<!-- =========== START OF METHOD SUMMARY =========== -->
+<table class="summary" border="1" cellpadding="3" cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="summary">
+  <th colspan="2">Method Summary</th></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><a name="__init__"></a><span class="summary-sig"><span class="summary-sig-name">__init__</span>(<span class=summary-sig-arg>self</span>,
+          <span class="summary-sig-vararg">*args</span>,
+          <span class="summary-sig-kwarg">**kwargs</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="wengosconsng.wengoscons.wengoenv.WengoSConsEnvironment-class.html#addConsoleArguments" class="summary-sig-name"><code>addConsoleArguments</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>args</span>)</span></code>
+<br />
+Adds an argument to the SCons system like it was set as a command line (console) argument.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">string or boolean
+</font></td>
+  <td><code><span class="summary-sig"><a href="wengosconsng.wengoscons.wengoenv.WengoSConsEnvironment-class.html#getConsoleArgument" class="summary-sig-name"><code>getConsoleArgument</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>arg</span>)</span></code>
+<br />
+Checks the presence of an argument on the command line (console).</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">string
+</font></td>
+  <td><code><span class="summary-sig"><a href="wengosconsng.wengoscons.wengoenv.WengoSConsEnvironment-class.html#getVariable" class="summary-sig-name"><code>getVariable</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>variable</span>)</span></code>
+<br />
+Gets a variable value given its name.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">boolean
+</font></td>
+  <td><code><span class="summary-sig"><a href="wengosconsng.wengoscons.wengoenv.WengoSConsEnvironment-class.html#isDebugMode" class="summary-sig-name"><code>isDebugMode</code></a>(<span class=summary-sig-arg>self</span>)</span></code>
+<br />
+Checks if the compilation is done in debug mode.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">boolean
+</font></td>
+  <td><code><span class="summary-sig"><a href="wengosconsng.wengoscons.wengoenv.WengoSConsEnvironment-class.html#isReleaseMode" class="summary-sig-name"><code>isReleaseMode</code></a>(<span class=summary-sig-arg>self</span>)</span></code>
+<br />
+Checks if the compilation is done in release mode.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">boolean
+</font></td>
+  <td><code><span class="summary-sig"><a href="wengosconsng.wengoscons.wengoenv.WengoSConsEnvironment-class.html#isReleaseModeWithSymbols" class="summary-sig-name"><code>isReleaseModeWithSymbols</code></a>(<span class=summary-sig-arg>self</span>)</span></code>
+<br />
+Checks if the compilation is done in release mode with debug symbols.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="wengosconsng.wengoscons.wengoenv.WengoSConsEnvironment-class.html#setDebugMode" class="summary-sig-name"><code>setDebugMode</code></a>(<span class=summary-sig-arg>self</span>)</span></code>
+<br />
+Sets the compilation mode to debug.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="wengosconsng.wengoscons.wengoenv.WengoSConsEnvironment-class.html#setReleaseMode" class="summary-sig-name"><code>setReleaseMode</code></a>(<span class=summary-sig-arg>self</span>)</span></code>
+<br />
+Sets the compilation mode to release.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="wengosconsng.wengoscons.wengoenv.WengoSConsEnvironment-class.html#setReleaseModeWithSymbols" class="summary-sig-name"><code>setReleaseModeWithSymbols</code></a>(<span class=summary-sig-arg>self</span>)</span></code>
+<br />
+Sets the compilation mode to release with debug symbols.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="wengosconsng.wengoscons.wengoenv.WengoSConsEnvironment-class.html#setVariable" class="summary-sig-name"><code>setVariable</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>variable</span>,
+          <span class=summary-sig-arg>value</span>)</span></code>
+<br />
+Sets a variable with a value than can be used later on.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="wengosconsng.wengoscons.wengoenv.WengoSConsEnvironment-class.html#WengoAddCCFlags" class="summary-sig-name"><code>WengoAddCCFlags</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>flags</span>)</span></code>
+<br />
+Adds flags to the CCFLAGS SCons variable.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="wengosconsng.wengoscons.wengoenv.WengoSConsEnvironment-class.html#WengoAddDefines" class="summary-sig-name"><code>WengoAddDefines</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>defines</span>)</span></code>
+<br />
+Adds defines to the CPPDEFINES SCons variable.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="wengosconsng.wengoscons.wengoenv.WengoSConsEnvironment-class.html#WengoAddDoxyfile" class="summary-sig-name"><code>WengoAddDoxyfile</code></a>(<span class=summary-sig-arg>self</span>)</span></code>
+<br />
+Adds a Doxyfile for documentation generation using doxygen.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="wengosconsng.wengoscons.wengoenv.WengoSConsEnvironment-class.html#WengoAddIncludePath" class="summary-sig-name"><code>WengoAddIncludePath</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>paths</span>)</span></code>
+<br />
+Adds paths to the CPPPATH SCons variable.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="wengosconsng.wengoscons.wengoenv.WengoSConsEnvironment-class.html#WengoAddLibPath" class="summary-sig-name"><code>WengoAddLibPath</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>paths</span>)</span></code>
+<br />
+Adds paths to the LIBPATH SCons variable.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="wengosconsng.wengoscons.wengoenv.WengoSConsEnvironment-class.html#WengoAddLinkFlags" class="summary-sig-name"><code>WengoAddLinkFlags</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>flags</span>)</span></code>
+<br />
+Adds flags to the LINKFLAGS SCons variable.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="wengosconsng.wengoscons.wengoenv.WengoSConsEnvironment-class.html#WengoAutoconf" class="summary-sig-name"><code>WengoAutoconf</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>libraryName</span>,
+          <span class=summary-sig-arg>outputFiles</span>,
+          <span class=summary-sig-arg>configureCommand</span>,
+          <span class=summary-sig-arg>makeCommand</span>)</span></code>
+<br />
+Build a library using autotools: configure and make.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">string
+</font></td>
+  <td><code><span class="summary-sig"><a href="wengosconsng.wengoscons.wengoenv.WengoSConsEnvironment-class.html#WengoCompileQt4Resource" class="summary-sig-name"><code>WengoCompileQt4Resource</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>qrcFile</span>)</span></code>
+<br />
+Compiles the Qt4 resource file .qrc.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">SCons node
+</font></td>
+  <td><code><span class="summary-sig"><a href="wengosconsng.wengoscons.wengoenv.WengoSConsEnvironment-class.html#WengoCompileWindowsResource" class="summary-sig-name"><code>WengoCompileWindowsResource</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>rcFile</span>)</span></code>
+<br />
+Compiles the Windows resource file .rc.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="wengosconsng.wengoscons.wengoenv.WengoSConsEnvironment-class.html#WengoDeclareLibrary" class="summary-sig-name"><code>WengoDeclareLibrary</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>projectName</span>,
+          <span class=summary-sig-arg>files</span>)</span></code>
+<br />
+Declares an internal library and add it to the dictionnary of libraries.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="wengosconsng.wengoscons.wengoenv.WengoSConsEnvironment-class.html#WengoDeclareSystemLibrary" class="summary-sig-name"><code>WengoDeclareSystemLibrary</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>projectName</span>)</span></code>
+<br />
+Declares a system library and add it to the dictionnary of libraries.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">string
+</font></td>
+  <td><code><span class="summary-sig"><a href="wengosconsng.wengoscons.wengoenv.WengoSConsEnvironment-class.html#WengoGetRootBuildDir" class="summary-sig-name"><code>WengoGetRootBuildDir</code></a>(<span class=summary-sig-arg>self</span>)</span></code>
+<br />
+Gets the root build directory.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">SCons project
+</font></td>
+  <td><code><span class="summary-sig"><a href="wengosconsng.wengoscons.wengoenv.WengoSConsEnvironment-class.html#WengoProgram" class="summary-sig-name"><code>WengoProgram</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>programName</span>,
+          <span class=summary-sig-arg>sources</span>,
+          <span class=summary-sig-arg>headers</span>)</span></code>
+<br />
+Generates a program e.g a .exe file given its name and source code.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">SCons project
+</font></td>
+  <td><code><span class="summary-sig"><a href="wengosconsng.wengoscons.wengoenv.WengoSConsEnvironment-class.html#WengoSharedLibrary" class="summary-sig-name"><code>WengoSharedLibrary</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>libraryName</span>,
+          <span class=summary-sig-arg>sources</span>,
+          <span class=summary-sig-arg>headers</span>)</span></code>
+<br />
+Generates a shared library e.g a .dll/.so file given its name and source code.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">SCons project
+</font></td>
+  <td><code><span class="summary-sig"><a href="wengosconsng.wengoscons.wengoenv.WengoSConsEnvironment-class.html#WengoStaticLibrary" class="summary-sig-name"><code>WengoStaticLibrary</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>libraryName</span>,
+          <span class=summary-sig-arg>sources</span>,
+          <span class=summary-sig-arg>headers</span>)</span></code>
+<br />
+Generates a static library e.g a .lib/.a file given its name and source code.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="wengosconsng.wengoscons.wengoenv.WengoSConsEnvironment-class.html#WengoUseLibraries" class="summary-sig-name"><code>WengoUseLibraries</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>libs</span>)</span></code>
+<br />
+Uses (e.g link, include_path, link_flags...) a list libraries given their names.</td></tr>
+<tr bgcolor="#e8f0f8" class="group">
+  <th colspan="2">&nbsp;&nbsp;&nbsp;&nbsp;Inherited from SConsEnvironment</th></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Script.SConscript.SConsEnvironment-class.html#Default" class="summary-sig-name"><code>Default</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class="summary-sig-vararg">*targets</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Script.SConscript.SConsEnvironment-class.html#EnsurePythonVersion" class="summary-sig-name"><code>EnsurePythonVersion</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>major</span>,
+          <span class=summary-sig-arg>minor</span>)</span></code>
+<br />
+Exit abnormally if the Python version is not late enough.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Script.SConscript.SConsEnvironment-class.html#EnsureSConsVersion" class="summary-sig-name"><code>EnsureSConsVersion</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>major</span>,
+          <span class=summary-sig-arg>minor</span>)</span></code>
+<br />
+Exit abnormally if the SCons version is not late enough.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Script.SConscript.SConsEnvironment-class.html#Exit" class="summary-sig-name"><code>Exit</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>value</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Script.SConscript.SConsEnvironment-class.html#Export" class="summary-sig-name"><code>Export</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class="summary-sig-vararg">*vars</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Script.SConscript.SConsEnvironment-class.html#GetLaunchDir" class="summary-sig-name"><code>GetLaunchDir</code></a>(<span class=summary-sig-arg>self</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Script.SConscript.SConsEnvironment-class.html#GetOption" class="summary-sig-name"><code>GetOption</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>name</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Script.SConscript.SConsEnvironment-class.html#Help" class="summary-sig-name"><code>Help</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>text</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Script.SConscript.SConsEnvironment-class.html#Import" class="summary-sig-name"><code>Import</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class="summary-sig-vararg">*vars</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Script.SConscript.SConsEnvironment-class.html#SConscript" class="summary-sig-name"><code>SConscript</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class="summary-sig-vararg">*ls</span>,
+          <span class="summary-sig-kwarg">**kw</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Script.SConscript.SConsEnvironment-class.html#SConscriptChdir" class="summary-sig-name"><code>SConscriptChdir</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>flag</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Script.SConscript.SConsEnvironment-class.html#SetOption" class="summary-sig-name"><code>SetOption</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>name</span>,
+          <span class=summary-sig-arg>value</span>)</span></code>
+</td></tr>
+<tr bgcolor="#e8f0f8" class="group">
+  <th colspan="2">&nbsp;&nbsp;&nbsp;&nbsp;Inherited from Base</th></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#__cmp__" class="summary-sig-name"><code>__cmp__</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>other</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#__delitem__" class="summary-sig-name"><code>__delitem__</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>key</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#__getitem__" class="summary-sig-name"><code>__getitem__</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>key</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#__setitem__" class="summary-sig-name"><code>__setitem__</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>key</span>,
+          <span class=summary-sig-arg>value</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#Action" class="summary-sig-name"><code>Action</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class="summary-sig-vararg">*args</span>,
+          <span class="summary-sig-kwarg">**kw</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#AddPostAction" class="summary-sig-name"><code>AddPostAction</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>files</span>,
+          <span class=summary-sig-arg>action</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#AddPreAction" class="summary-sig-name"><code>AddPreAction</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>files</span>,
+          <span class=summary-sig-arg>action</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#Alias" class="summary-sig-name"><code>Alias</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>target</span>,
+          <span class="summary-sig-vararg">*source</span>,
+          <span class="summary-sig-kwarg">**kw</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#AlwaysBuild" class="summary-sig-name"><code>AlwaysBuild</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class="summary-sig-vararg">*targets</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#Append" class="summary-sig-name"><code>Append</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class="summary-sig-kwarg">**kw</span>)</span></code>
+<br />
+Append values to existing construction variables
+in an Environment.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#AppendENVPath" class="summary-sig-name"><code>AppendENVPath</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>name</span>,
+          <span class=summary-sig-arg>newpath</span>,
+          <span class=summary-sig-arg>envname</span>,
+          <span class=summary-sig-arg>sep</span>)</span></code>
+<br />
+Append path elements to the path 'name' in the 'ENV'
+dictionary for this environment.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#AppendUnique" class="summary-sig-name"><code>AppendUnique</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class="summary-sig-kwarg">**kw</span>)</span></code>
+<br />
+Append values to existing construction variables
+in an Environment, if they're not already there.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#arg2nodes" class="summary-sig-name"><code>arg2nodes</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>args</span>,
+          <span class=summary-sig-arg>node_factory</span>,
+          <span class=summary-sig-arg>lookup_list</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#BuildDir" class="summary-sig-name"><code>BuildDir</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>build_dir</span>,
+          <span class=summary-sig-arg>src_dir</span>,
+          <span class=summary-sig-arg>duplicate</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#Builder" class="summary-sig-name"><code>Builder</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class="summary-sig-kwarg">**kw</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#CacheDir" class="summary-sig-name"><code>CacheDir</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>path</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#Clean" class="summary-sig-name"><code>Clean</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>targets</span>,
+          <span class=summary-sig-arg>files</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#Command" class="summary-sig-name"><code>Command</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>target</span>,
+          <span class=summary-sig-arg>source</span>,
+          <span class=summary-sig-arg>action</span>,
+          <span class="summary-sig-kwarg">**kw</span>)</span></code>
+<br />
+Builds the supplied target files from the supplied
+source files using the supplied action.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#Configure" class="summary-sig-name"><code>Configure</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class="summary-sig-vararg">*args</span>,
+          <span class="summary-sig-kwarg">**kw</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#Copy" class="summary-sig-name"><code>Copy</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>tools</span>,
+          <span class=summary-sig-arg>toolpath</span>,
+          <span class="summary-sig-kwarg">**kw</span>)</span></code>
+<br />
+Return a copy of a construction Environment.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#Depends" class="summary-sig-name"><code>Depends</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>target</span>,
+          <span class=summary-sig-arg>dependency</span>)</span></code>
+<br />
+Explicity specify that 'target's depend on 'dependency'.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#Detect" class="summary-sig-name"><code>Detect</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>progs</span>)</span></code>
+<br />
+Return the first available program in progs.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#Dictionary" class="summary-sig-name"><code>Dictionary</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class="summary-sig-vararg">*args</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#Dir" class="summary-sig-name"><code>Dir</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>name</span>,
+          <span class="summary-sig-vararg">*args</span>,
+          <span class="summary-sig-kwarg">**kw</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#Environment" class="summary-sig-name"><code>Environment</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class="summary-sig-kwarg">**kw</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#Execute" class="summary-sig-name"><code>Execute</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>action</span>,
+          <span class="summary-sig-vararg">*args</span>,
+          <span class="summary-sig-kwarg">**kw</span>)</span></code>
+<br />
+Directly execute an action through an Environment...</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#File" class="summary-sig-name"><code>File</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>name</span>,
+          <span class="summary-sig-vararg">*args</span>,
+          <span class="summary-sig-kwarg">**kw</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#FindFile" class="summary-sig-name"><code>FindFile</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>file</span>,
+          <span class=summary-sig-arg>dirs</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#FindIxes" class="summary-sig-name"><code>FindIxes</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>paths</span>,
+          <span class=summary-sig-arg>prefix</span>,
+          <span class=summary-sig-arg>suffix</span>)</span></code>
+<br />
+Search a list of paths for something that matches the prefix and suffix.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#Flatten" class="summary-sig-name"><code>Flatten</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>sequence</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#get" class="summary-sig-name"><code>get</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>key</span>,
+          <span class=summary-sig-arg>default</span>)</span></code>
+<br />
+Emulates the get() method of dictionaries.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#get_builder" class="summary-sig-name"><code>get_builder</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>name</span>)</span></code>
+<br />
+Fetch the builder with the specified name from the environment.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#get_calculator" class="summary-sig-name"><code>get_calculator</code></a>(<span class=summary-sig-arg>self</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#get_scanner" class="summary-sig-name"><code>get_scanner</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>skey</span>)</span></code>
+<br />
+Find the appropriate scanner given a key (usually a file suffix).</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#GetBuildPath" class="summary-sig-name"><code>GetBuildPath</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>files</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#has_key" class="summary-sig-name"><code>has_key</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>key</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#Ignore" class="summary-sig-name"><code>Ignore</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>target</span>,
+          <span class=summary-sig-arg>dependency</span>)</span></code>
+<br />
+Ignore a dependency.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#Install" class="summary-sig-name"><code>Install</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>dir</span>,
+          <span class=summary-sig-arg>source</span>)</span></code>
+<br />
+Install specified files in the given directory.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#InstallAs" class="summary-sig-name"><code>InstallAs</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>target</span>,
+          <span class=summary-sig-arg>source</span>)</span></code>
+<br />
+Install sources as targets.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#items" class="summary-sig-name"><code>items</code></a>(<span class=summary-sig-arg>self</span>)</span></code>
+<br />
+Emulates the items() method of dictionaries.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#Literal" class="summary-sig-name"><code>Literal</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>string</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#Local" class="summary-sig-name"><code>Local</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class="summary-sig-vararg">*targets</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#Override" class="summary-sig-name"><code>Override</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>overrides</span>)</span></code>
+<br />
+Produce a modified environment whose variables
+are overriden by the overrides dictionaries.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#ParseConfig" class="summary-sig-name"><code>ParseConfig</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>command</span>,
+          <span class=summary-sig-arg>function</span>)</span></code>
+<br />
+Use the specified function to parse the output of the command
+in order to modify the current environment.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#Platform" class="summary-sig-name"><code>Platform</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>platform</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#Precious" class="summary-sig-name"><code>Precious</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class="summary-sig-vararg">*targets</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#Prepend" class="summary-sig-name"><code>Prepend</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class="summary-sig-kwarg">**kw</span>)</span></code>
+<br />
+Prepend values to existing construction variables
+in an Environment.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#PrependENVPath" class="summary-sig-name"><code>PrependENVPath</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>name</span>,
+          <span class=summary-sig-arg>newpath</span>,
+          <span class=summary-sig-arg>envname</span>,
+          <span class=summary-sig-arg>sep</span>)</span></code>
+<br />
+Prepend path elements to the path 'name' in the 'ENV'
+dictionary for this environment.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#PrependUnique" class="summary-sig-name"><code>PrependUnique</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class="summary-sig-kwarg">**kw</span>)</span></code>
+<br />
+Append values to existing construction variables
+in an Environment, if they're not already there.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#Replace" class="summary-sig-name"><code>Replace</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class="summary-sig-kwarg">**kw</span>)</span></code>
+<br />
+Replace existing construction variables in an Environment
+with new construction variables and/or values.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#ReplaceIxes" class="summary-sig-name"><code>ReplaceIxes</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>path</span>,
+          <span class=summary-sig-arg>old_prefix</span>,
+          <span class=summary-sig-arg>old_suffix</span>,
+          <span class=summary-sig-arg>new_prefix</span>,
+          <span class=summary-sig-arg>new_suffix</span>)</span></code>
+<br />
+Replace old_prefix with new_prefix and old_suffix with new_suffix.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#Repository" class="summary-sig-name"><code>Repository</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class="summary-sig-vararg">*dirs</span>,
+          <span class="summary-sig-kwarg">**kw</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#Scanner" class="summary-sig-name"><code>Scanner</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class="summary-sig-vararg">*args</span>,
+          <span class="summary-sig-kwarg">**kw</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#scanner_map_delete" class="summary-sig-name"><code>scanner_map_delete</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>kw</span>)</span></code>
+<br />
+Delete the cached scanner map (if we need to).</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#SConsignFile" class="summary-sig-name"><code>SConsignFile</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>name</span>,
+          <span class=summary-sig-arg>dbm_module</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#SideEffect" class="summary-sig-name"><code>SideEffect</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>side_effect</span>,
+          <span class=summary-sig-arg>target</span>)</span></code>
+<br />
+Tell scons that side_effects are built as side 
+effects of building targets.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#SourceCode" class="summary-sig-name"><code>SourceCode</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>entry</span>,
+          <span class=summary-sig-arg>builder</span>)</span></code>
+<br />
+Arrange for a source code builder for (part of) a tree.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#SourceSignatures" class="summary-sig-name"><code>SourceSignatures</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>type</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#Split" class="summary-sig-name"><code>Split</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>arg</span>)</span></code>
+<br />
+This function converts a string or list into a list of strings
+or Nodes.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#subst" class="summary-sig-name"><code>subst</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>string</span>,
+          <span class=summary-sig-arg>raw</span>,
+          <span class=summary-sig-arg>target</span>,
+          <span class=summary-sig-arg>source</span>,
+          <span class=summary-sig-arg>dict</span>,
+          <span class=summary-sig-arg>conv</span>)</span></code>
+<br />
+Recursively interpolates construction variables from the
+Environment into the specified string, returning the expanded
+result.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#subst_kw" class="summary-sig-name"><code>subst_kw</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>kw</span>,
+          <span class=summary-sig-arg>raw</span>,
+          <span class=summary-sig-arg>target</span>,
+          <span class=summary-sig-arg>source</span>,
+          <span class=summary-sig-arg>dict</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#subst_list" class="summary-sig-name"><code>subst_list</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>string</span>,
+          <span class=summary-sig-arg>raw</span>,
+          <span class=summary-sig-arg>target</span>,
+          <span class=summary-sig-arg>source</span>,
+          <span class=summary-sig-arg>dict</span>,
+          <span class=summary-sig-arg>conv</span>)</span></code>
+<br />
+Calls through to SCons.Util.scons_subst_list().</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#subst_path" class="summary-sig-name"><code>subst_path</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>path</span>)</span></code>
+<br />
+Substitute a path list, turning EntryProxies into Nodes
+and leaving Nodes (and other objects) as-is.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#subst" class="summary-sig-name"><code>subst_target_source</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>string</span>,
+          <span class=summary-sig-arg>raw</span>,
+          <span class=summary-sig-arg>target</span>,
+          <span class=summary-sig-arg>source</span>,
+          <span class=summary-sig-arg>dict</span>,
+          <span class=summary-sig-arg>conv</span>)</span></code>
+<br />
+Recursively interpolates construction variables from the
+Environment into the specified string, returning the expanded
+result.</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#TargetSignatures" class="summary-sig-name"><code>TargetSignatures</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>type</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#Tool" class="summary-sig-name"><code>Tool</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>tool</span>,
+          <span class=summary-sig-arg>toolpath</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#use_build_signature" class="summary-sig-name"><code>use_build_signature</code></a>(<span class=summary-sig-arg>self</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#Value" class="summary-sig-name"><code>Value</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>value</span>)</span></code>
+</td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1">&nbsp;</font></td>
+  <td><code><span class="summary-sig"><a href="SCons.Environment.Base-class.html#WhereIs" class="summary-sig-name"><code>WhereIs</code></a>(<span class=summary-sig-arg>self</span>,
+          <span class=summary-sig-arg>prog</span>,
+          <span class=summary-sig-arg>path</span>,
+          <span class=summary-sig-arg>pathext</span>,
+          <span class=summary-sig-arg>reject</span>)</span></code>
+<br />
+Find prog in the path.</td></tr>
+</table><br />
+
+
+<!-- =========== START OF CLASS VARIABLE SUMMARY =========== -->
+<table class="summary" border="1" cellpadding="3" cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="summary">
+  <th colspan="2">Class Variable Summary</th></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1"><code>classobj</code></font></td>
+  <td><a name="CC"></a><b><code>CC</code></b> = <a href="wengosconsng.wengoscons.wengoenv.CC-class.html"><code>wengosconsng.wengoscons.wengoenv.CC</code></a></td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1"><code>classobj</code></font></td>
+  <td><a name="CCFlags"></a><b><code>CCFlags</code></b> = <a href="wengosconsng.wengoscons.wengoenv.CCFlags-class.html"><code>wengosconsng.wengoscons.wengoenv.CCFlags</code></a></td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1"><code>classobj</code></font></td>
+  <td><a name="CCGCC"></a><b><code>CCGCC</code></b> = <a href="wengosconsng.wengoscons.wengoenv.CCGCC-class.html"><code>wengosconsng.wengoscons.wengoenv.CCGCC</code></a></td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1"><code>classobj</code></font></td>
+  <td><a name="CCMSVC"></a><b><code>CCMSVC</code></b> = <a href="wengosconsng.wengoscons.wengoenv.CCMSVC-class.html"><code>wengosconsng.wengoscons.wengoenv.CCMSVC</code></a></td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1"><code>classobj</code></font></td>
+  <td><a name="Defines"></a><b><code>Defines</code></b> = <a href="wengosconsng.wengoscons.wengoenv.Defines-class.html"><code>wengosconsng.wengoscons.wengoenv.Defines</code></a></td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1"><code>classobj</code></font></td>
+  <td><a name="IncludePath"></a><b><code>IncludePath</code></b> = <a href="wengosconsng.wengoscons.wengoenv.IncludePath-class.html"><code>wengosconsng.wengoscons.wengoenv.IncludePath</code></a></td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1"><code>classobj</code></font></td>
+  <td><a name="LibPath"></a><b><code>LibPath</code></b> = <a href="wengosconsng.wengoscons.wengoenv.LibPath-class.html"><code>wengosconsng.wengoscons.wengoenv.LibPath</code></a></td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1"><code>classobj</code></font></td>
+  <td><a name="Libs"></a><b><code>Libs</code></b> = <a href="wengosconsng.wengoscons.wengoenv.Libs-class.html"><code>wengosconsng.wengoscons.wengoenv.Libs</code></a></td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1"><code>classobj</code></font></td>
+  <td><a name="LinkFlags"></a><b><code>LinkFlags</code></b> = <a href="wengosconsng.wengoscons.wengoenv.LinkFlags-class.html"><code>wengosconsng.wengoscons.wengoenv.LinkFlags</code></a></td></tr>
+<tr><td align="right" valign="top" width="15%"><font size="-1"><code>classobj</code></font></td>
+  <td><a name="OS"></a><b><code>OS</code></b> = <a href="wengosconsng.wengoscons.wengoenv.OS-class.html"><code>wengosconsng.wengoscons.wengoenv.OS</code></a></td></tr>
+</table><br />
+
+
+<!-- =========== START OF METHOD DETAILS =========== -->
+<table class="details" border="1" cellpadding="3" cellspacing="0" width="100%" bgcolor="white">
+<tr bgcolor="#70b0f0" class="details">
+  <th colspan="2">Method Details</th></tr>
+</table>
+
+<a name="addConsoleArguments"></a>
+<table width="100%" class="func-details" bgcolor="#e0e0e0"><tr><td>
+  <h3><span class="sig"><span class="sig-name">addConsoleArguments</span>(<span class=sig-arg>self</span>,
+          <span class=sig-arg>args</span>)</span>
+  </h3>
+Adds an argument to the SCons system like it was set as a command line (console) argument.
+
+Private, but cannot be named with __ since it is used by WengoAddConsoleArguments()
+  <dl><dt></dt><dd>
+    <dl><dt><b>Parameters:</b></dt>
+      <dd><code><b>args</b></code> -
+ console arguments to add to the SCons system
+        <br /><i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        (type=dictonnary)</i>
+      </dd>
+    </dl>
+  </dd></dl>
+</td></tr></table>
+
+<a name="getConsoleArgument"></a>
+<table width="100%" class="func-details" bgcolor="#e0e0e0"><tr><td>
+  <h3><span class="sig"><span class="sig-name">getConsoleArgument</span>(<span class=sig-arg>self</span>,
+          <span class=sig-arg>arg</span>)</span>
+  </h3>
+Checks the presence of an argument on the command line (console).
+
+Private, but cannot be named with __ since it is used by WengoGetConsoleArgument()
+  <dl><dt></dt><dd>
+    <dl><dt><b>Parameters:</b></dt>
+      <dd><code><b>arg</b></code> -
+ console argument to check
+        <br /><i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        (type=string)</i>
+      </dd>
+    </dl>
+    <dl><dt><b>Returns:</b></dt>
+      <dd>
+true/false if the argument is activated/desactivated or the string option of the argument        <br /><i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        (type=string or boolean)</i>
+      </dd>
+    </dl>
+  </dd></dl>
+</td></tr></table>
+
+<a name="getVariable"></a>
+<table width="100%" class="func-details" bgcolor="#e0e0e0"><tr><td>
+  <h3><span class="sig"><span class="sig-name">getVariable</span>(<span class=sig-arg>self</span>,
+          <span class=sig-arg>variable</span>)</span>
+  </h3>
+Gets a variable value given its name.
+
+Private, but cannot be named with __ since it is used by WengoGetVariable()
+  <dl><dt></dt><dd>
+    <dl><dt><b>Parameters:</b></dt>
+      <dd><code><b>variable</b></code> -
+ variable name
+        <br /><i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        (type=string)</i>
+      </dd>
+    </dl>
+    <dl><dt><b>Returns:</b></dt>
+      <dd>
+variable value        <br /><i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        (type=string)</i>
+      </dd>
+    </dl>
+  </dd></dl>
+</td></tr></table>
+
+<a name="isDebugMode"></a>
+<table width="100%" class="func-details" bgcolor="#e0e0e0"><tr><td>
+  <h3><span class="sig"><span class="sig-name">isDebugMode</span>(<span class=sig-arg>self</span>)</span>
+  </h3>
+Checks if the compilation is done in debug mode.
+  <dl><dt></dt><dd>
+    <dl><dt><b>Returns:</b></dt>
+      <dd>
+true if compilation done in debug mode; false otherwise        <br /><i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        (type=boolean)</i>
+      </dd>
+    </dl>
+  </dd></dl>
+</td></tr></table>
+
+<a name="isReleaseMode"></a>
+<table width="100%" class="func-details" bgcolor="#e0e0e0"><tr><td>
+  <h3><span class="sig"><span class="sig-name">isReleaseMode</span>(<span class=sig-arg>self</span>)</span>
+  </h3>
+Checks if the compilation is done in release mode.
+  <dl><dt></dt><dd>
+    <dl><dt><b>Returns:</b></dt>
+      <dd>
+true if compilation done in release mode; false otherwise        <br /><i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        (type=boolean)</i>
+      </dd>
+    </dl>
+  </dd></dl>
+</td></tr></table>
+
+<a name="isReleaseModeWithSymbols"></a>
+<table width="100%" class="func-details" bgcolor="#e0e0e0"><tr><td>
+  <h3><span class="sig"><span class="sig-name">isReleaseModeWithSymbols</span>(<span class=sig-arg>self</span>)</span>
+  </h3>
+Checks if the compilation is done in release mode with debug symbols.
+
+Release mode with debug symbols is only available for Microsoft Visual C++:
+debug symbols are included even if the general compilation is done in release mode.
+This is a modification at the application link.
+  <dl><dt></dt><dd>
+    <dl><dt><b>Returns:</b></dt>
+      <dd>
+true if compilation done in release mode with symbols; false otherwise        <br /><i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        (type=boolean)</i>
+      </dd>
+    </dl>
+  </dd></dl>
+</td></tr></table>
+
+<a name="setDebugMode"></a>
+<table width="100%" class="func-details" bgcolor="#e0e0e0"><tr><td>
+  <h3><span class="sig"><span class="sig-name">setDebugMode</span>(<span class=sig-arg>self</span>)</span>
+  </h3>
+Sets the compilation mode to debug.
+
+Private, but cannot be named with __ since it is used by WengoSetDebugMode()  <dl><dt></dt><dd>
+  </dd></dl>
+</td></tr></table>
+
+<a name="setReleaseMode"></a>
+<table width="100%" class="func-details" bgcolor="#e0e0e0"><tr><td>
+  <h3><span class="sig"><span class="sig-name">setReleaseMode</span>(<span class=sig-arg>self</span>)</span>
+  </h3>
+Sets the compilation mode to release.
+
+Private, but cannot be named with __ since it is used by WengoSetReleaseMode()  <dl><dt></dt><dd>
+  </dd></dl>
+</td></tr></table>
+
+<a name="setReleaseModeWithSymbols"></a>
+<table width="100%" class="func-details" bgcolor="#e0e0e0"><tr><td>
+  <h3><span class="sig"><span class="sig-name">setReleaseModeWithSymbols</span>(<span class=sig-arg>self</span>)</span>
+  </h3>
+Sets the compilation mode to release with debug symbols.
+
+Private, but cannot be named with __ since it is used by WengoSetReleaseModeWithSymbols()  <dl><dt></dt><dd>
+  </dd></dl>
+</td></tr></table>
+
+<a name="setVariable"></a>
+<table width="100%" class="func-details" bgcolor="#e0e0e0"><tr><td>
+  <h3><span class="sig"><span class="sig-name">setVariable</span>(<span class=sig-arg>self</span>,
+          <span class=sig-arg>variable</span>,
+          <span class=sig-arg>value</span>)</span>
+  </h3>
+Sets a variable with a value than can be used later on.
+
+Private, but cannot be named with __ since it is used by WengoSetVariable()
+  <dl><dt></dt><dd>
+    <dl><dt><b>Parameters:</b></dt>
+      <dd><code><b>variable</b></code> -
+ variable name
+        <br /><i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        (type=string)</i>
+      <dd><code><b>value</b></code> -
+ variable value
+        <br /><i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        (type=string)</i>
+      </dd>
+    </dl>
+  </dd></dl>
+</td></tr></table>
+
+<a name="WengoAddCCFlags"></a>
+<table width="100%" class="func-details" bgcolor="#e0e0e0"><tr><td>
+  <h3><span class="sig"><span class="sig-name">WengoAddCCFlags</span>(<span class=sig-arg>self</span>,
+          <span class=sig-arg>flags</span>)</span>
+  </h3>
+Adds flags to the CCFLAGS SCons variable.
+  <dl><dt></dt><dd>
+    <dl><dt><b>Parameters:</b></dt>
+      <dd><code><b>flags</b></code> -
+ list of flags to add
+        <br /><i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        (type=stringlist)</i>
+      </dd>
+    </dl>
+  </dd></dl>
+</td></tr></table>
+
+<a name="WengoAddDefines"></a>
+<table width="100%" class="func-details" bgcolor="#e0e0e0"><tr><td>
+  <h3><span class="sig"><span class="sig-name">WengoAddDefines</span>(<span class=sig-arg>self</span>,
+          <span class=sig-arg>defines</span>)</span>
+  </h3>
+Adds defines to the CPPDEFINES SCons variable.
+  <dl><dt></dt><dd>
+    <dl><dt><b>Parameters:</b></dt>
+      <dd><code><b>defines</b></code> -
+ defines to add
+        <br /><i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        (type=dictonnary)</i>
+      </dd>
+    </dl>
+  </dd></dl>
+</td></tr></table>
+
+<a name="WengoAddDoxyfile"></a>
+<table width="100%" class="func-details" bgcolor="#e0e0e0"><tr><td>
+  <h3><span class="sig"><span class="sig-name">WengoAddDoxyfile</span>(<span class=sig-arg>self</span>)</span>
+  </h3>
+Adds a Doxyfile for documentation generation using doxygen.
+
+Doxygen documentation is generated using the 'doxygen' command argument.
+The configuration file for doxygen cannot be specified so that all projects have
+the same name for it: 'Doxyfile'.
+  <dl><dt></dt><dd>
+<p><b>See Also:</b> </p>
+
+  </dd></dl>
+</td></tr></table>
+
+<a name="WengoAddIncludePath"></a>
+<table width="100%" class="func-details" bgcolor="#e0e0e0"><tr><td>
+  <h3><span class="sig"><span class="sig-name">WengoAddIncludePath</span>(<span class=sig-arg>self</span>,
+          <span class=sig-arg>paths</span>)</span>
+  </h3>
+Adds paths to the CPPPATH SCons variable.
+  <dl><dt></dt><dd>
+    <dl><dt><b>Parameters:</b></dt>
+      <dd><code><b>paths</b></code> -
+ paths to add
+        <br /><i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        (type=stringlist)</i>
+      </dd>
+    </dl>
+  </dd></dl>
+</td></tr></table>
+
+<a name="WengoAddLibPath"></a>
+<table width="100%" class="func-details" bgcolor="#e0e0e0"><tr><td>
+  <h3><span class="sig"><span class="sig-name">WengoAddLibPath</span>(<span class=sig-arg>self</span>,
+          <span class=sig-arg>paths</span>)</span>
+  </h3>
+Adds paths to the LIBPATH SCons variable.
+  <dl><dt></dt><dd>
+    <dl><dt><b>Parameters:</b></dt>
+      <dd><code><b>paths</b></code> -
+ paths to add
+        <br /><i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        (type=stringlist)</i>
+      </dd>
+    </dl>
+  </dd></dl>
+</td></tr></table>
+
+<a name="WengoAddLinkFlags"></a>
+<table width="100%" class="func-details" bgcolor="#e0e0e0"><tr><td>
+  <h3><span class="sig"><span class="sig-name">WengoAddLinkFlags</span>(<span class=sig-arg>self</span>,
+          <span class=sig-arg>flags</span>)</span>
+  </h3>
+Adds flags to the LINKFLAGS SCons variable.
+  <dl><dt></dt><dd>
+    <dl><dt><b>Parameters:</b></dt>
+      <dd><code><b>flags</b></code> -
+ list of flags to add
+        <br /><i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        (type=stringlist)</i>
+      </dd>
+    </dl>
+  </dd></dl>
+</td></tr></table>
+
+<a name="WengoAutoconf"></a>
+<table width="100%" class="func-details" bgcolor="#e0e0e0"><tr><td>
+  <h3><span class="sig"><span class="sig-name">WengoAutoconf</span>(<span class=sig-arg>self</span>,
+          <span class=sig-arg>libraryName</span>,
+          <span class=sig-arg>outputFiles</span>,
+          <span class=sig-arg>configureCommand</span>=<span class=sig-default>'./configure'</span>,
+          <span class=sig-arg>makeCommand</span>=<span class=sig-default>'make'</span>)</span>
+  </h3>
+Build a library using autotools: configure and make.
+
+Algorithm:
+- Copy the library source directory to the build path directory
+- Launch the configure command
+- Launch the make command
+- Declare the library as an internal library
+  <dl><dt></dt><dd>
+    <dl><dt><b>Parameters:</b></dt>
+      <dd><code><b>libraryName</b></code> -
+ name of the library to compile
+        <br /><i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        (type=string)</i>
+      <dd><code><b>outputFiles</b></code> -
+ list of awaited files (.a, .so, .dll, .dylib, ...)
+        <br /><i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        (type=stringlist)</i>
+      <dd><code><b>configureCommand</b></code> -
+ command line for 'configure' (e.g './configure --enable-gtk --disable-blahblah')
+        <br /><i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        (type=string)</i>
+      <dd><code><b>makeCommand</b></code> -
+ command line for 'make' (e.g 'make blahblah')
+        <br /><i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        (type=string)</i>
+      </dd>
+    </dl>
+  </dd></dl>
+</td></tr></table>
+
+<a name="WengoCompileQt4Resource"></a>
+<table width="100%" class="func-details" bgcolor="#e0e0e0"><tr><td>
+  <h3><span class="sig"><span class="sig-name">WengoCompileQt4Resource</span>(<span class=sig-arg>self</span>,
+          <span class=sig-arg>qrcFile</span>)</span>
+  </h3>
+Compiles the Qt4 resource file .qrc.
+  <dl><dt></dt><dd>
+    <dl><dt><b>Parameters:</b></dt>
+      <dd><code><b>qrcFile</b></code> -
+ Qt4 resource file .qrc
+        <br /><i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        (type=string)</i>
+      </dd>
+    </dl>
+    <dl><dt><b>Returns:</b></dt>
+      <dd>
+Qt4 resource file compiled (.cpp)        <br /><i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        (type=string)</i>
+      </dd>
+    </dl>
+  </dd></dl>
+</td></tr></table>
+
+<a name="WengoCompileWindowsResource"></a>
+<table width="100%" class="func-details" bgcolor="#e0e0e0"><tr><td>
+  <h3><span class="sig"><span class="sig-name">WengoCompileWindowsResource</span>(<span class=sig-arg>self</span>,
+          <span class=sig-arg>rcFile</span>)</span>
+  </h3>
+Compiles the Windows resource file .rc.
+  <dl><dt></dt><dd>
+    <dl><dt><b>Parameters:</b></dt>
+      <dd><code><b>rcFile</b></code> -
+ Windows resource file .rc
+        <br /><i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        (type=string)</i>
+      </dd>
+    </dl>
+    <dl><dt><b>Returns:</b></dt>
+      <dd>
+Windows resource file compiled (.res)        <br /><i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        (type=SCons node)</i>
+      </dd>
+    </dl>
+  </dd></dl>
+</td></tr></table>
+
+<a name="WengoDeclareLibrary"></a>
+<table width="100%" class="func-details" bgcolor="#e0e0e0"><tr><td>
+  <h3><span class="sig"><span class="sig-name">WengoDeclareLibrary</span>(<span class=sig-arg>self</span>,
+          <span class=sig-arg>projectName</span>,
+          <span class=sig-arg>files</span>)</span>
+  </h3>
+Declares an internal library and add it to the dictionnary of libraries.
+
+This is usefull for pre-compiled libraries.
+  <dl><dt></dt><dd>
+    <dl><dt><b>Parameters:</b></dt>
+      <dd><code><b>projectName</b></code> -
+ library project name to register
+        <br /><i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        (type=string)</i>
+      <dd><code><b>files</b></code> -
+ list of files (.lib/.dll/.a...) to install
+        <br /><i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        (type=stringlist)</i>
+      </dd>
+    </dl>
+  </dd></dl>
+</td></tr></table>
+
+<a name="WengoDeclareSystemLibrary"></a>
+<table width="100%" class="func-details" bgcolor="#e0e0e0"><tr><td>
+  <h3><span class="sig"><span class="sig-name">WengoDeclareSystemLibrary</span>(<span class=sig-arg>self</span>,
+          <span class=sig-arg>projectName</span>)</span>
+  </h3>
+Declares a system library and add it to the dictionnary of libraries.
+  <dl><dt></dt><dd>
+<p><b>See Also:</b> <a href="..\private\wengosconsng.wengoscons.wengoenv.WengoSConsEnvironment-class.html#__declareLibrary" class="link"><code>__declareLibrary</code></a></p>
+
+  </dd></dl>
+</td></tr></table>
+
+<a name="WengoGetRootBuildDir"></a>
+<table width="100%" class="func-details" bgcolor="#e0e0e0"><tr><td>
+  <h3><span class="sig"><span class="sig-name">WengoGetRootBuildDir</span>(<span class=sig-arg>self</span>)</span>
+  </h3>
+Gets the root build directory.
+
+Example: 'build/debug'
+  <dl><dt></dt><dd>
+    <dl><dt><b>Returns:</b></dt>
+      <dd>
+the root build directory        <br /><i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        (type=string)</i>
+      </dd>
+    </dl>
+  </dd></dl>
+</td></tr></table>
+
+<a name="WengoProgram"></a>
+<table width="100%" class="func-details" bgcolor="#e0e0e0"><tr><td>
+  <h3><span class="sig"><span class="sig-name">WengoProgram</span>(<span class=sig-arg>self</span>,
+          <span class=sig-arg>programName</span>,
+          <span class=sig-arg>sources</span>,
+          <span class=sig-arg>headers</span>=<span class=sig-default>[]</span>)</span>
+  </h3>
+Generates a program e.g a .exe file given its name and source code.
+
+All dependencies are handled properly like if the program were a kind
+of static library.
+if program A depends on static library B that needs C, there is no need inside A's SConscript
+to specify the need of C: B's SConscript already says that there is a dependency with C.
+If B becomes a shared library there is no need to modify A's SConscript which is nice.
+This permits to encapsulate/modularize dependencies.
+
+Can generate a .vcproj file for Microsoft Visual C++.
+  <dl><dt></dt><dd>
+    <dl><dt><b>Parameters:</b></dt>
+      <dd><code><b>programName</b></code> -
+ name of the program
+        <br /><i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        (type=string)</i>
+      <dd><code><b>sources</b></code> -
+ list of source file (e.g .cpp/.c)
+        <br /><i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        (type=stringlist)</i>
+      </dd>
+    </dl>
+    <dl><dt><b>Returns:</b></dt>
+      <dd>
+SCons project generated by SCons        <br /><i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        (type=SCons project)</i>
+      </dd>
+    </dl>
+  </dd></dl>
+</td></tr></table>
+
+<a name="WengoSharedLibrary"></a>
+<table width="100%" class="func-details" bgcolor="#e0e0e0"><tr><td>
+  <h3><span class="sig"><span class="sig-name">WengoSharedLibrary</span>(<span class=sig-arg>self</span>,
+          <span class=sig-arg>libraryName</span>,
+          <span class=sig-arg>sources</span>,
+          <span class=sig-arg>headers</span>=<span class=sig-default>[]</span>)</span>
+  </h3>
+Generates a shared library e.g a .dll/.so file given its name and source code.
+
+Dependencies changes between shared and static libraries under Windows
+are automatically handled: there is no need to heavily modify the SConscript file
+if you switch from a static library to a shared one.
+
+Can generate a .vcproj file for Microsoft Visual C++.
+  <dl><dt></dt><dd>
+    <dl><dt><b>Parameters:</b></dt>
+      <dd><code><b>libraryName</b></code> -
+ name of the library
+        <br /><i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        (type=string)</i>
+      <dd><code><b>sources</b></code> -
+ list of source file (e.g .cpp/.c)
+        <br /><i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        (type=stringlist)</i>
+      </dd>
+    </dl>
+    <dl><dt><b>Returns:</b></dt>
+      <dd>
+SCons project generated using SCons        <br /><i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        (type=SCons project)</i>
+      </dd>
+    </dl>
+  </dd></dl>
+</td></tr></table>
+
+<a name="WengoStaticLibrary"></a>
+<table width="100%" class="func-details" bgcolor="#e0e0e0"><tr><td>
+  <h3><span class="sig"><span class="sig-name">WengoStaticLibrary</span>(<span class=sig-arg>self</span>,
+          <span class=sig-arg>libraryName</span>,
+          <span class=sig-arg>sources</span>,
+          <span class=sig-arg>headers</span>=<span class=sig-default>[]</span>)</span>
+  </h3>
+Generates a static library e.g a .lib/.a file given its name and source code.
+
+Can generate a .vcproj file for Microsoft Visual C++.
+  <dl><dt></dt><dd>
+    <dl><dt><b>Parameters:</b></dt>
+      <dd><code><b>libraryName</b></code> -
+ name of the library
+        <br /><i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        (type=string)</i>
+      <dd><code><b>sources</b></code> -
+ list of source file (e.g .cpp/.c)
+        <br /><i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        (type=stringlist)</i>
+      </dd>
+    </dl>
+    <dl><dt><b>Returns:</b></dt>
+      <dd>
+SCons project generated using SCons        <br /><i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        (type=SCons project)</i>
+      </dd>
+    </dl>
+  </dd></dl>
+</td></tr></table>
+
+<a name="WengoUseLibraries"></a>
+<table width="100%" class="func-details" bgcolor="#e0e0e0"><tr><td>
+  <h3><span class="sig"><span class="sig-name">WengoUseLibraries</span>(<span class=sig-arg>self</span>,
+          <span class=sig-arg>libs</span>)</span>
+  </h3>
+Uses (e.g link, include_path, link_flags...) a list libraries given their names.
+  <dl><dt></dt><dd>
+    <dl><dt><b>Parameters:</b></dt>
+      <dd><code><b>libs</b></code> -
+ libraries to use
+        <br /><i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        (type=stringlist)</i>
+      </dd>
+    </dl>
+  </dd></dl>
+</td></tr></table>
+<br />
+
+
+<!-- =========== START OF NAVBAR =========== -->
+<table class="navbar" border="0" width="100%" cellpadding="0" bgcolor="#a0c0ff" cellspacing="0">
+  <tr valign="center">
+    <th class="navbar">&nbsp;&nbsp;&nbsp;<a class="navbar" href="wengosconsng.wengoscons.wengoenv-module.html">Home</a>&nbsp;&nbsp;&nbsp;</th>
+    <th class="navbar">&nbsp;&nbsp;&nbsp;<a class="navbar" href="trees.html">Trees</a>&nbsp;&nbsp;&nbsp;</th>
+    <th class="navbar">&nbsp;&nbsp;&nbsp;<a class="navbar" href="indices.html">Index</a>&nbsp;&nbsp;&nbsp;</th>
+    <th class="navbar">&nbsp;&nbsp;&nbsp;<a class="navbar" href="help.html">Help</a>&nbsp;&nbsp;&nbsp;</th>
+    <th class="navbar" align="right" width="100%">
+      <table border="0" cellpadding="0" cellspacing="0">
+      <tr><th class="navbar" align="center">
+        <p class="nomargin">
+          <a class="navbar" target="_top" href="http://dev.openwengo.com">WengoSCons</a>
+      </p></th></tr></table>
+    </th>
+  </tr>
+</table>
+
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+  <tr>
+    <td align="left"><font size="-2">Generated by Epydoc 2.1 on Tue Nov 08 16:16:09 2005</font></td>
+    <td align="right"><a href="http://epydoc.sourceforge.net"
+                      ><font size="-2">http://epydoc.sf.net</font></a></td>
+  </tr>
+</table>
+</body>
+</html>

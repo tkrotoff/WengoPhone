@@ -1,0 +1,20 @@
+
+env = WengoEnvironment()
+webcam_c_env = env.Copy()
+
+webcam_c_sources = [
+    "src/webcam.cpp",
+]
+
+webcam_c_decl = env.WengoDeclareLibraryAuto("webcam_c", "libs/webcam_c")
+webcam_c_decl.AddSubIncludePath("include")
+webcam_c_env.WengoUseLibraryHeaders("webcam_c")
+webcam_c_env.WengoUseLibrary("webcam")
+webcam_c_env.WengoUseLibrary("wtimer")
+webcam_c_env.WengoUseLibrary("global")
+webcam_c_env.WengoUseLibrary("libavcodec")
+
+
+
+webcam_c_lib = webcam_c_env.WengoStaticLibrary('webcam_c', webcam_c_sources)
+webcam_c_env.WengoAlias("webcam_c", webcam_c_lib)

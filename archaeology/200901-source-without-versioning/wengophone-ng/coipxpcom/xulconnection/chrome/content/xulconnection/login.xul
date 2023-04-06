@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+
+<window
+  id         = "login"
+  windowtype = "login"
+  title      = "Login"
+  height     = "170"
+  onload     = "Startup()"
+  xmlns  = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script type="application/x-javascript" src="chrome://xulconnection/content/global.js"/>
+  <script type="application/x-javascript" src="chrome://xulconnection/content/login.js"/>
+
+  <script src="chrome://venkman/content/venkman-overlay.js"/>
+
+  <textbox id="userLogin" value="malexandre@edis-consulting.com"/>
+  <textbox id="userPassword" type="password" />
+
+  <hbox>
+    <spacer flex="1" />
+    <button id="userButton" oncommand="userLogin()" label="Login" />
+    <spacer flex="1" />
+  </hbox>
+  
+</window>

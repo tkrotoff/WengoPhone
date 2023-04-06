@@ -1,0 +1,7 @@
+This package/directory is a library containing utility classes.
+
+Most of the classes depends on the boost library.
+Documentation can be generated using doxygen inside the doc directory.
+
+-- 
+Tanguy Krotoff <tanguy.krotoff@wengo.fr>

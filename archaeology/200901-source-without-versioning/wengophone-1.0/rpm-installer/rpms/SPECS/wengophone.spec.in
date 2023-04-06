@@ -1,0 +1,160 @@
+#
+# This is the RPM spec for the wengophone project.
+# Note that this is a template. Stuff beginning with __ is
+# interpolated from scons scripts
+#
+
+# Turn off find-debuginfo.sh
+#%define debug_package %{nil}
+#__ENABLE_VIDEO__
+
+Summary: VOIP client of the Wengo company
+Name: wengophone
+Version: 0.958m
+Release: 1
+License: GPL
+Group: Utilities/System
+Source0: wengophone-build.tar
+Vendor: Wengo
+Packager: David Ferlier <david.ferlier@wengo.fr>
+AutoReq: 0
+# Define root dir
+BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root
+
+%description
+Wengophone is an opensource SIP softphone (GPL licence).
+It is an ideal solution for any future proof telephony choice!
+(jump on the bandwagon http://www.openwengo.com !)
+
+
+%prep
+%setup -n __WENGOPHONE_BUILDDIR_NAME__
+%build
+
+%install
+rm -Rf $RPM_BUILD_ROOT
+WENGOPHONE_ROOT_DIR=$RPM_BUILD_ROOT/usr/lib/wengophone
+WENGOPHONE_LANG_DIR=$WENGOPHONE_ROOT_DIR/lang
+
+/usr/bin/install -d $WENGOPHONE_ROOT_DIR
+/usr/bin/install -d $WENGOPHONE_ROOT_DIR/lang
+/usr/bin/install -d $WENGOPHONE_ROOT_DIR/icons
+/usr/bin/install -d $WENGOPHONE_ROOT_DIR/sounds
+/usr/bin/install -d $WENGOPHONE_ROOT_DIR/styles
+/usr/bin/install -d $WENGOPHONE_ROOT_DIR/sounds/dtmf
+/usr/bin/install -d $WENGOPHONE_ROOT_DIR/sounds/dtmf/jungle
+/usr/bin/install -d $RPM_BUILD_ROOT/usr/bin
+
+/usr/bin/install -m 755 wengophone $WENGOPHONE_ROOT_DIR
+/usr/bin/install -m 755 wengophone_wrapper.sh $RPM_BUILD_ROOT/usr/bin/wengophone
+
+/usr/bin/install libwengocurl.so $WENGOPHONE_ROOT_DIR
+/usr/bin/install libphapi.so $WENGOPHONE_ROOT_DIR
+/usr/bin/install libwebcam.so $WENGOPHONE_ROOT_DIR
+/usr/bin/install libavcodec.so $WENGOPHONE_ROOT_DIR
+
+/usr/bin/install index-fr.html $WENGOPHONE_ROOT_DIR
+
+# No use in Linux, provided by dependencies
+#/usr/bin/install libwengokeramikstyle2.so $WENGOPHONE_ROOT_DIR/styles
+#/usr/bin/install libkdefx.so $WENGOPHONE_ROOT_DIR/styles
+
+/usr/bin/install lang/wengo_fr.qm $WENGOPHONE_LANG_DIR
+/usr/bin/install lang/wengo_en.qm $WENGOPHONE_LANG_DIR
+/usr/bin/install lang/wengo_ru.qm $WENGOPHONE_LANG_DIR
+/usr/bin/install lang/wengo_zh.qm $WENGOPHONE_LANG_DIR
+/usr/bin/install lang/wengo_es.qm $WENGOPHONE_LANG_DIR
+/usr/bin/install lang/wengo_it.qm $WENGOPHONE_LANG_DIR
+
+/usr/bin/install sounds/ringin.wav $WENGOPHONE_ROOT_DIR/sounds
+/usr/bin/install sounds/occupied.wav $WENGOPHONE_ROOT_DIR/sounds
+/usr/bin/install icons/homepage.png $WENGOPHONE_ROOT_DIR/icons
+
+for doc in readme-fr.txt licence-fr.txt changelog-fr.txt COPYING; do
+    /usr/bin/install $doc $WENGOPHONE_ROOT_DIR;
+done
+
+cp -r sounds $WENGOPHONE_ROOT_DIR
+cp -r emoticons $WENGOPHONE_ROOT_DIR
+
+%files
+/usr/bin/wengophone
+/usr/lib/wengophone/readme-fr.txt
+/usr/lib/wengophone/licence-fr.txt
+/usr/lib/wengophone/changelog-fr.txt
+/usr/lib/wengophone/index-fr.html
+/usr/lib/wengophone/COPYING
+/usr/lib/wengophone/wengophone
+/usr/lib/wengophone/download
+/usr/lib/wengophone/libwengocurl.so
+/usr/lib/wengophone/libphapi.so
+/usr/lib/wengophone/icons/homepage.png
+/usr/lib/wengophone/lang/wengo_fr.qm
+/usr/lib/wengophone/lang/wengo_en.qm
+/usr/lib/wengophone/lang/wengo_ru.qm
+/usr/lib/wengophone/lang/wengo_zh.qm
+/usr/lib/wengophone/lang/wengo_es.qm
+/usr/lib/wengophone/sounds/ringin.wav
+/usr/lib/wengophone/sounds/occupied.wav
+/usr/lib/wengophone/sounds/dtmf/sharp.wav
+/usr/lib/wengophone/sounds/dtmf/0.wav
+/usr/lib/wengophone/sounds/dtmf/1.wav
+/usr/lib/wengophone/sounds/dtmf/2.wav
+/usr/lib/wengophone/sounds/dtmf/3.wav
+/usr/lib/wengophone/sounds/dtmf/4.wav
+/usr/lib/wengophone/sounds/dtmf/5.wav
+/usr/lib/wengophone/sounds/dtmf/6.wav
+/usr/lib/wengophone/sounds/dtmf/7.wav
+/usr/lib/wengophone/sounds/dtmf/8.wav
+/usr/lib/wengophone/sounds/dtmf/9.wav
+/usr/lib/wengophone/sounds/dtmf/x.wav
+/usr/lib/wengophone/sounds/dtmf/jungle/sharp.raw
+/usr/lib/wengophone/sounds/dtmf/jungle/0.raw
+/usr/lib/wengophone/sounds/dtmf/jungle/1.raw
+/usr/lib/wengophone/sounds/dtmf/jungle/2.raw
+/usr/lib/wengophone/sounds/dtmf/jungle/3.raw
+/usr/lib/wengophone/sounds/dtmf/jungle/4.raw
+/usr/lib/wengophone/sounds/dtmf/jungle/5.raw
+/usr/lib/wengophone/sounds/dtmf/jungle/6.raw
+/usr/lib/wengophone/sounds/dtmf/jungle/7.raw
+/usr/lib/wengophone/sounds/dtmf/jungle/8.raw
+/usr/lib/wengophone/sounds/dtmf/jungle/9.raw
+/usr/lib/wengophone/sounds/dtmf/jungle/x.raw
+/usr/lib/wengophone/emoticons/default/angry.png
+/usr/lib/wengophone/emoticons/default/bat.png
+/usr/lib/wengophone/emoticons/default/beer.png
+/usr/lib/wengophone/emoticons/default/biggrin.png
+/usr/lib/wengophone/emoticons/default/blush.png
+/usr/lib/wengophone/emoticons/default/boy.png
+/usr/lib/wengophone/emoticons/default/brflower.png
+/usr/lib/wengophone/emoticons/default/brheart.png
+/usr/lib/wengophone/emoticons/default/coffee.png
+/usr/lib/wengophone/emoticons/default/coolglasses.png
+/usr/lib/wengophone/emoticons/default/cry.png
+/usr/lib/wengophone/emoticons/default/cuffs.png
+/usr/lib/wengophone/emoticons/default/devil.png
+/usr/lib/wengophone/emoticons/default/drink.png
+/usr/lib/wengophone/emoticons/default/flower.png
+/usr/lib/wengophone/emoticons/default/frowning.png
+/usr/lib/wengophone/emoticons/default/girl.png
+/usr/lib/wengophone/emoticons/default/heart.png
+/usr/lib/wengophone/emoticons/default/hugleft.png
+/usr/lib/wengophone/emoticons/default/hugright.png
+/usr/lib/wengophone/emoticons/default/icondef.xml
+/usr/lib/wengophone/emoticons/default/kiss.png
+/usr/lib/wengophone/emoticons/default/lamp.png
+/usr/lib/wengophone/emoticons/default/mail.png
+/usr/lib/wengophone/emoticons/default/music.png
+/usr/lib/wengophone/emoticons/default/no.png
+/usr/lib/wengophone/emoticons/default/oh.png
+/usr/lib/wengophone/emoticons/default/phone.png
+/usr/lib/wengophone/emoticons/default/photo.png
+/usr/lib/wengophone/emoticons/default/pussy.png
+/usr/lib/wengophone/emoticons/default/rainbow.png
+/usr/lib/wengophone/emoticons/default/smile.png
+/usr/lib/wengophone/emoticons/default/star.png
+/usr/lib/wengophone/emoticons/default/stare.png
+/usr/lib/wengophone/emoticons/default/tongue.png
+/usr/lib/wengophone/emoticons/default/unhappy.png
+/usr/lib/wengophone/emoticons/default/wink.png
+/usr/lib/wengophone/emoticons/default/yes.png

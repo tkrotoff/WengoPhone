@@ -1,0 +1,135 @@
+## libcurl (for Mac OS X 10.3)
+ow_copy_file(${CMAKE_BINARY_DIR}/libs/3rdparty/curl/libcurl.dylib ${LIB_DIR})
+####
+
+## Creates .plist files
+message(STATUS "Creating .plist files...")
+
+file(WRITE "${RESOURCES_DIR}/Info.plist"
+"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+"<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">\n"
+"<plist version=\"1.0\">\n"
+"<dict>\n"
+"	<key>CFBundleDevelopmentRegion</key>\n"
+"	<string>English</string>\n"
+"	<key>CFBundleExecutable</key>\n"
+"	<string>${BUNDLE_NAME}</string>\n"
+"	<key>CFBundleIdentifier</key>\n"
+"	<string>com.openwengo.CoIpManager</string>\n"
+"	<key>CFBundleInfoDictionaryVersion</key>\n"
+"	<string>6.0</string>\n"
+"	<key>CFBundlePackageType</key>\n"
+"	<string>FMWK</string>\n"
+"	<key>CFBundleSignature</key>\n"
+"	<string>WCIM</string>\n"
+"	<key>CFBundleVersion</key>\n"
+"	<string>${COIPMANAGER_VERSION}</string>\n"
+"	<key>CFBundleShortVersionString</key>\n"
+"	<string>${COIPMANAGER_VERSION}</string>\n"
+"</dict>\n"
+"</plist>\n"
+)
+
+file(WRITE "${RESOURCES_DIR}/version.plist"
+"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+"<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">\n"
+"<plist version=\"1.0\">\n"
+"<dict>\n"
+"	<key>BuildVersion</key>\n"
+"	<string>0</string>\n"
+"	<key>CFBundleShortVersionString</key>\n"
+"	<string>${COIPMANAGER_VERSION}</string>\n"
+"	<key>CFBundleVersion</key>\n"
+"	<string>${COIPMANAGER_VERSION}</string>\n"
+"	<key>ProjectName</key>\n"
+"	<string>${BUNDLE_NAME}</string>\n"
+"	<key>ReleaseStatus</key>\n"
+"	<string>dev</string>\n"
+"	<key>SourceVersion</key>\n"
+"	<string>${SVN_REVISION}</string>\n"
+"</dict>\n"
+"</plist>\n"
+)
+
+file(WRITE "${RESOURCES_DIR}/English.lproj/InfoPlist.strings"
+"CFBundleName = \"${BUNDLE_NAME}\""
+)
+####
+
+## Copy useful scripts
+message(STATUS "Copy useful scripts...")
+ow_copy_file(${CMAKE_SOURCE_DIR}/scripts/binary_utilities.py ${BIN_DIR})
+ow_copy_file(${CMAKE_SOURCE_DIR}/scripts/update_links.py ${BIN_DIR})
+ow_copy_file(${CMAKE_SOURCE_DIR}/libs/coipmanager_sdk/install/scripts/embed_coipmanager_sdk.py ${BIN_DIR})
+####
+
+## Create links to Headers and some other libs
+message(STATUS "Creating links...")
+
+execute_process(
+	COMMAND "ln" -s ${COIPMANAGER_VERSION} Current
+	WORKING_DIRECTORY ${BUNDLE_DIR}/Versions
+)
+
+execute_process(
+	COMMAND "ln" -s Versions/Current/Headers
+	WORKING_DIRECTORY ${BUNDLE_DIR}
+)
+
+execute_process(
+	COMMAND "ln" -s Versions/Current/Resources
+	WORKING_DIRECTORY ${BUNDLE_DIR}
+)
+
+execute_process(
+	COMMAND "ln" -s Versions/Current/Libraries
+	WORKING_DIRECTORY ${BUNDLE_DIR}
+)
+
+execute_process(
+	COMMAND "ln" -s Versions/Current/Frameworks
+	WORKING_DIRECTORY ${BUNDLE_DIR}
+)
+
+execute_process(
+	COMMAND "ln" -s Versions/Current/bin
+	WORKING_DIRECTORY ${BUNDLE_DIR}
+)
+####
+
+## Install in ${CMAKE_INSTALL_PREFIX}
+message(STATUS "Installing SDK...")
+# Remove previous framework
+execute_process(
+	COMMAND rm -Rf ${CMAKE_INSTALL_PREFIX}/${COIPMANAGER_BUNDLE_NAME}.framework
+)
+
+# cp -RP is used to keep symbolic links
+execute_process(
+	COMMAND cp -RP ${BUNDLE_DIR} ${CMAKE_INSTALL_PREFIX}/${COIPMANAGER_BUNDLE_NAME}.framework
+)
+
+execute_process(
+	COMMAND chown -R root:admin ${CMAKE_INSTALL_PREFIX}/${COIPMANAGER_BUNDLE_NAME}.framework
+)
+
+execute_process(
+	COMMAND chmod -R 755 ${CMAKE_INSTALL_PREFIX}/${COIPMANAGER_BUNDLE_NAME}.framework
+)
+
+execute_process(
+	COMMAND chmod -R 775 ${CMAKE_INSTALL_PREFIX}/${COIPMANAGER_BUNDLE_NAME}.framework/Versions
+)
+####
+
+# Changing install names
+message(STATUS "Updating install names...")
+
+set(SCRIPT
+	${CMAKE_SOURCE_DIR}/scripts/update_links.py
+)
+
+execute_process(
+	COMMAND python ${SCRIPT} "${CMAKE_INSTALL_PREFIX}/${COIPMANAGER_BUNDLE_NAME}.framework"
+)
+####

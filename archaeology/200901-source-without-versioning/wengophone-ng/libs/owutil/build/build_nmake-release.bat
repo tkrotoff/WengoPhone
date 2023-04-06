@@ -1,0 +1,1 @@
+cmake .. -DCMAKE_BUILD_TYPE=Release -DINSTALLER_WITH_PDB=0 -G "NMake Makefiles"

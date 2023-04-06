@@ -1,0 +1,60 @@
+#Options file for WengoSCons
+#Set your own global options here
+
+args = {
+	#if 1 then WengoPhoneBuildId is not generated
+	'nobuildid' : 0,
+
+	'enable-video' : 1,
+	'enable-ssl' : 1,
+	'enable-http-tunnel' : 1,
+	'enable-netlib' : 1,
+	'enable-phapi-embed' : 0,
+	'enable-phapi-video-hack' : 0,
+	'enable-shared-phapi' : 1,
+	'build-vcproj' : 0,
+	'sipxwrapper' : 0,
+	'phapiwrapper' : 0,
+	'multiimwrapper' : 1,
+	'nullsipwrapper' : 0,
+	'enable-phapi-audio-arts' : 0,
+	'enable-phapi-audio-esd' : 0,
+	'portaudio-oss' : 1,
+	'portaudio-alsa' : 1,
+	'enable-xv-hwaccel' : 0,
+
+	'enable-libsound-portaudio' : 1,
+
+	#if 0 wmme support
+	'portaudio-dsound' : 0,
+
+	#if 1 replace negotiated AMR-WB payload by SPEEX WB
+	'speexwb-replaces-amrwb' : 0,
+
+	#if 1 replace negotiated AMR-NB payload by SPEEX WB
+	'speexwb-replaces-amrnb' : 0,
+
+	#if 1 replace negotiated G726-WB payload by SPEEX WB
+	'speexwb-replaces-g726wb' : 1,
+
+	'enable-ipp' : 0,
+	'enable-ilbc' : 1,
+
+	'enable-webcam-dll' : 1,
+}
+
+if WengoOSMacOSX():
+	args['enable-libsound-portaudio'] = 0
+	args['enable-webcam-dll'] = 0
+	args['enable-shared-phapi'] = 0
+
+if WengoOSLinux() or WengoOSBSD():
+	args['enable-samplerate'] = 1 
+else:
+    args['enable-samplerate'] = 0
+
+WengoAddConsoleArguments(args)
+if WengoGetConsoleArgument("enable-debug-console"):
+	WengoShowWindowsConsole(True)
+else:
+	WengoShowWindowsConsole(False)

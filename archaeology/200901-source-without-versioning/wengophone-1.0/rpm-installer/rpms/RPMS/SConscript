@@ -1,0 +1,16 @@
+
+env = WengoEnvironment()
+top_dir = env.WengoGetBuildDirRelativePath("softphone/rpm-installer/rpms")
+
+def build_rpm_installer(target, source, env, for_signature):
+    return "rpmbuild --define '_topdir " + top_dir + "' -bb %s" % (source[0])
+
+rpm_builder = Builder(generator = build_rpm_installer)
+
+rpm_env = env.Copy(BUILDERS = {'Rpm' : rpm_builder})
+spec_target = rpm_env.WengoGetAlias("softphone-rpm-installer-spec")
+sources_target = rpm_env.WengoGetAlias("softphone-rpm-installer-sources")
+
+# It will rebuild the rpm every time, but who cares
+target = rpm_env.Rpm('wengophone.rpm', [spec_target, sources_target])
+rpm_env.WengoAlias("softphone-rpm-installer", target)

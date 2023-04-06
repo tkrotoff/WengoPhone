@@ -1,0 +1,28 @@
+env = WengoGetEnvironment()
+
+libs = []
+lib_path = []
+include_path = [
+	'src'
+]
+defines = {}
+
+headers = [
+	'src/common.h',
+	'src/fastest_coeffs.h',
+	'src/float_cast.h',
+	'src/high_qual_coeffs.h',
+	'src/mid_qual_coeffs.h',
+	'src/samplerate.h',
+	'src/config.h'
+]
+
+sources = [
+	'src/samplerate.c',
+	'src/src_linear.c',
+	'src/src_sinc.c',
+	'src/src_zoh.c'
+]
+
+env.WengoStaticLibrary('samplerate', sources, headers)
+env.WengoAddIncludePath(include_path)

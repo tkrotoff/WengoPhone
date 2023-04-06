@@ -1,0 +1,56 @@
+env = WengoGetEnvironment()
+
+libs = [
+	'owutil',
+	'wengophone',
+]
+if WengoOSMacOSX():
+	libs += ['glib-2.0', 'gthread-2.0']
+lib_path = []
+include_path = [
+	'include'
+]
+export_defines = {}
+defines = {
+	'XPCOM_DLL' : 1,
+	'BUILD_XPCOM_DLL' : 1
+}
+link_flags = []
+if WengoOSMacOSX():
+	frameworks = [
+		'CoreAudio',
+		'AudioUnit',
+		'AudioToolbox'
+	]
+	
+	env.WengoAddFrameworks(frameworks)
+headers = []
+sources = [
+	'src/Command.cpp',
+	'src/XPCOMPhoneCall.cpp',
+	'src/XPCOMPhoneLine.cpp',
+	'src/XPCOMWengoPhone.cpp',
+	'src/XPCOMIMHandler.cpp',
+	'src/XPCOMSms.cpp',
+]
+
+if WengoGetConsoleArgument('sipxwrapper'):
+	defines['SIPXWRAPPER'] = 1
+	libs += ['sipxwrapper']
+elif WengoGetConsoleArgument('phapiwrapper'):
+	defines['PHAPIWRAPPER'] = 1
+	libs += ['phapiwrapper']
+elif WengoGetConsoleArgument('multiimwrapper'):
+	defines['MULTIIMWRAPPER'] = 1
+	libs += [
+		'multiimwrapper',
+	]
+else:
+	libs += ['nullsipwrapper']
+
+#env.WengoExportDefines(export_defines)
+env.WengoAddDefines(defines)
+env.WengoAddLinkFlags(link_flags)
+env.WengoAddIncludePath(include_path)
+env.WengoUseLibraries(libs)
+env.WengoStaticLibrary('xpcomwengophone', sources, headers)

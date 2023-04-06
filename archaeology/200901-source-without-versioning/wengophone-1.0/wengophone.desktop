@@ -1,0 +1,12 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=WengoPhone
+Comment=VOIP softphone
+Comment[fr]=VOIP softphone
+Exec=wengophone
+Icon=wengophone.png
+StartupNotify=false
+Terminal=false
+Type=Application
+Categories=Qt;Network;
+MimeType=

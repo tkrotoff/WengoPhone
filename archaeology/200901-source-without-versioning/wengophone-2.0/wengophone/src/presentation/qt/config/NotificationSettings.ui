@@ -1,0 +1,323 @@
+<ui version="4.0" >
+ <author></author>
+ <comment></comment>
+ <exportmacro></exportmacro>
+ <class>NotificationSettings</class>
+ <widget class="QWidget" name="NotificationSettings" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>328</width>
+    <height>409</height>
+   </rect>
+  </property>
+  <layout class="QGridLayout" >
+   <property name="margin" >
+    <number>0</number>
+   </property>
+   <property name="spacing" >
+    <number>0</number>
+   </property>
+   <item row="0" column="0" >
+    <widget class="QGroupBox" name="standardNotificationsGroupBox" >
+     <property name="enabled" >
+      <bool>false</bool>
+     </property>
+     <property name="title" >
+      <string>Standard Notifications</string>
+     </property>
+     <layout class="QGridLayout" >
+      <property name="margin" >
+       <number>9</number>
+      </property>
+      <property name="spacing" >
+       <number>6</number>
+      </property>
+      <item row="1" column="0" >
+       <widget class="QLabel" name="label_6" >
+        <property name="sizePolicy" >
+         <sizepolicy>
+          <hsizetype>0</hsizetype>
+          <vsizetype>5</vsizetype>
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="pixmap" >
+         <pixmap resource="../wengophone.qrc" >:/pics/contact/chat.png</pixmap>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0" >
+       <widget class="QLabel" name="label" >
+        <property name="sizePolicy" >
+         <sizepolicy>
+          <hsizetype>0</hsizetype>
+          <vsizetype>5</vsizetype>
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="pixmap" >
+         <pixmap resource="../wengophone.qrc" >:/pics/contact/call.png</pixmap>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1" >
+       <widget class="QCheckBox" name="showToasterOnIncomingChatCheckBox" >
+        <property name="text" >
+         <string>Show pop-up window for incoming chats</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0" >
+       <widget class="QLabel" name="label_2" >
+        <property name="sizePolicy" >
+         <sizepolicy>
+          <hsizetype>0</hsizetype>
+          <vsizetype>5</vsizetype>
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="pixmap" >
+         <pixmap resource="../wengophone.qrc" >:/pics/status/online.png</pixmap>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1" >
+       <widget class="QCheckBox" name="showToasterOnContactOnlineCheckBox" >
+        <property name="text" >
+         <string>Show pop-up window when a contact is turning online</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1" >
+       <widget class="QCheckBox" name="showToasterOnIncomingCallCheckBox" >
+        <property name="text" >
+         <string>Show pop-up window for incoming calls</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="1" column="0" >
+    <widget class="QGroupBox" name="advancedNotificationsGroupBox" >
+     <property name="enabled" >
+      <bool>false</bool>
+     </property>
+     <property name="title" >
+      <string>Advanced Notifications</string>
+     </property>
+     <layout class="QGridLayout" >
+      <property name="margin" >
+       <number>9</number>
+      </property>
+      <property name="spacing" >
+       <number>6</number>
+      </property>
+      <item row="1" column="1" >
+       <widget class="QCheckBox" name="doNotDisturbNoWindowCheckBox" >
+        <property name="text" >
+         <string>Do not show any pop-up window</string>
+        </property>
+       </widget>
+      </item>
+      <item rowspan="2" row="4" column="0" >
+       <widget class="QLabel" name="label_4" >
+        <property name="sizePolicy" >
+         <sizepolicy>
+          <hsizetype>0</hsizetype>
+          <vsizetype>5</vsizetype>
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="pixmap" >
+         <pixmap resource="../wengophone.qrc" >:/pics/status/away.png</pixmap>
+        </property>
+       </widget>
+      </item>
+      <item rowspan="2" row="1" column="0" >
+       <widget class="QLabel" name="label_3" >
+        <property name="sizePolicy" >
+         <sizepolicy>
+          <hsizetype>0</hsizetype>
+          <vsizetype>5</vsizetype>
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="pixmap" >
+         <pixmap resource="../wengophone.qrc" >:/pics/status/donotdisturb.png</pixmap>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0" colspan="2" >
+       <widget class="QLabel" name="label_7" >
+        <property name="text" >
+         <string>When switched to "Away":</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0" colspan="2" >
+       <widget class="QLabel" name="label_8" >
+        <property name="text" >
+         <string>When switched to "Do Not Disturb":</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1" >
+       <widget class="QCheckBox" name="doNotDisturbNoAudioCheckBox" >
+        <property name="text" >
+         <string>No audio notifications</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="1" >
+       <widget class="QCheckBox" name="awayNoAudioCheckBox" >
+        <property name="text" >
+         <string>No audio notifications</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1" >
+       <widget class="QCheckBox" name="awayNoWindowCheckBox" >
+        <property name="text" >
+         <string>Do not show any pop-up window</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="2" column="0" >
+    <widget class="QGroupBox" name="groupBox_2" >
+     <property name="title" >
+      <string>Activate sounds for/when</string>
+     </property>
+     <layout class="QGridLayout" >
+      <property name="margin" >
+       <number>9</number>
+      </property>
+      <property name="spacing" >
+       <number>6</number>
+      </property>
+      <item row="1" column="2" >
+       <widget class="QPushButton" name="clearSoundButton" >
+        <property name="toolTip" >
+         <string>No sound</string>
+        </property>
+        <property name="icon" >
+         <iconset resource="../wengophone.qrc" >:/pics/delete.png</iconset>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1" >
+       <widget class="QLineEdit" name="soundLineEdit" >
+        <property name="toolTip" >
+         <string>Sound file</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="4" >
+       <widget class="QPushButton" name="playButton" >
+        <property name="toolTip" >
+         <string>Play sound file</string>
+        </property>
+        <property name="icon" >
+         <iconset resource="../wengophone.qrc" >:/pics/play.png</iconset>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="3" >
+       <widget class="QPushButton" name="browseButton" >
+        <property name="toolTip" >
+         <string>Find a sound file</string>
+        </property>
+        <property name="icon" >
+         <iconset resource="../wengophone.qrc" >:/pics/browse.png</iconset>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1" colspan="4" >
+       <widget class="QComboBox" name="soundComboBox" >
+        <item>
+         <property name="text" >
+          <string>Incoming call (ringtone)</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>Call closed (hang up tone)</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>Incoming chat</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>IM account connected</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>IM account disconnected</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>Contact online</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item rowspan="2" row="0" column="0" >
+       <widget class="QLabel" name="label_5" >
+        <property name="pixmap" >
+         <pixmap resource="../wengophone.qrc" >:/pics/audio/speaker.png</pixmap>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="3" column="0" >
+    <spacer>
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" >
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+  </layout>
+ </widget>
+ <pixmapfunction></pixmapfunction>
+ <tabstops>
+  <tabstop>showToasterOnIncomingCallCheckBox</tabstop>
+  <tabstop>showToasterOnIncomingChatCheckBox</tabstop>
+  <tabstop>showToasterOnContactOnlineCheckBox</tabstop>
+  <tabstop>doNotDisturbNoWindowCheckBox</tabstop>
+  <tabstop>doNotDisturbNoAudioCheckBox</tabstop>
+  <tabstop>awayNoWindowCheckBox</tabstop>
+  <tabstop>awayNoAudioCheckBox</tabstop>
+  <tabstop>soundComboBox</tabstop>
+  <tabstop>soundLineEdit</tabstop>
+  <tabstop>clearSoundButton</tabstop>
+  <tabstop>browseButton</tabstop>
+  <tabstop>playButton</tabstop>
+ </tabstops>
+ <resources>
+  <include location="../wengophone.qrc" />
+ </resources>
+ <connections/>
+</ui>

@@ -1,0 +1,174 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>VideoCodecConfigWidgetForm</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>VideoCodecConfigWidgetForm</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>301</width>
+            <height>246</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Codec Configuration</string>
+    </property>
+    <property name="toolTip" stdset="0">
+        <string>To apply settings press return while editing parameters value</string>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>5</number>
+        </property>
+        <property name="spacing">
+            <number>5</number>
+        </property>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout1</cstring>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel" row="0" column="0">
+                    <property name="name">
+                        <cstring>textLabel1</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Codec Parameters</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="1" column="0">
+                    <property name="name">
+                        <cstring>textLabel1_2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Parameters Value</string>
+                    </property>
+                </widget>
+                <widget class="QLineEdit" row="1" column="1">
+                    <property name="name">
+                        <cstring>ParameterLineEdit</cstring>
+                    </property>
+                    <property name="maxLength">
+                        <number>12</number>
+                    </property>
+                </widget>
+                <widget class="QComboBox" row="0" column="1">
+                    <item>
+                        <property name="text">
+                            <string>Quality</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Compress</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Gop size</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>QMin</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>QMax</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>IFrame Offset</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>IFrame Factor</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>BFrame Factor</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>BFrame Offset</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Max  BFrame</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Min Rate</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>Max Rate</string>
+                        </property>
+                    </item>
+                    <property name="name">
+                        <cstring>ParameterComboBox</cstring>
+                    </property>
+                    <property name="duplicatesEnabled">
+                        <bool>false</bool>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QGroupBox">
+            <property name="name">
+                <cstring>groupBox1</cstring>
+            </property>
+            <property name="title">
+                <string>Codec Console</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QTextEdit" row="0" column="0">
+                    <property name="name">
+                        <cstring>Console</cstring>
+                    </property>
+                    <property name="paletteForegroundColor">
+                        <color>
+                            <red>0</red>
+                            <green>255</green>
+                            <blue>0</blue>
+                        </color>
+                    </property>
+                    <property name="paletteBackgroundColor">
+                        <color>
+                            <red>0</red>
+                            <green>0</green>
+                            <blue>0</blue>
+                        </color>
+                    </property>
+                    <property name="font">
+                        <font>
+                            <family>Courier</family>
+                        </font>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+    </vbox>
+</widget>
+<pixmapinproject/>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

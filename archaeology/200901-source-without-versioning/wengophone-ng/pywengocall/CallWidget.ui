@@ -1,0 +1,117 @@
+<ui version="4.0" >
+ <class>CallWidget</class>
+ <widget class="QWidget" name="CallWidget" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>397</width>
+    <height>343</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Call window</string>
+  </property>
+  <widget class="QVideoWidget" name="remoteWebcamLabel" >
+   <property name="geometry" >
+    <rect>
+     <x>20</x>
+     <y>50</y>
+     <width>320</width>
+     <height>240</height>
+    </rect>
+   </property>
+   <property name="minimumSize" >
+    <size>
+     <width>320</width>
+     <height>240</height>
+    </size>
+   </property>
+   <property name="maximumSize" >
+    <size>
+     <width>320</width>
+     <height>240</height>
+    </size>
+   </property>
+   <property name="text" >
+    <string>Remote Webcam Label</string>
+   </property>
+  </widget>
+  <widget class="QVideoWidget" name="localWebcamLabel" >
+   <property name="geometry" >
+    <rect>
+     <x>300</x>
+     <y>260</y>
+     <width>80</width>
+     <height>60</height>
+    </rect>
+   </property>
+   <property name="minimumSize" >
+    <size>
+     <width>80</width>
+     <height>60</height>
+    </size>
+   </property>
+   <property name="maximumSize" >
+    <size>
+     <width>80</width>
+     <height>60</height>
+    </size>
+   </property>
+   <property name="text" >
+    <string>Local Webcam Label</string>
+   </property>
+  </widget>
+  <widget class="QWidget" name="layoutWidget" >
+   <property name="geometry" >
+    <rect>
+     <x>11</x>
+     <y>10</y>
+     <width>371</width>
+     <height>29</height>
+    </rect>
+   </property>
+   <layout class="QGridLayout" >
+    <property name="margin" >
+     <number>0</number>
+    </property>
+    <property name="spacing" >
+     <number>6</number>
+    </property>
+    <item row="0" column="0" >
+     <widget class="QLineEdit" name="phoneNumberLineEdit" >
+      <property name="minimumSize" >
+       <size>
+        <width>0</width>
+        <height>25</height>
+       </size>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1" >
+     <widget class="QPushButton" name="callButton" >
+      <property name="text" >
+       <string>Call</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="2" >
+     <widget class="QPushButton" name="hangUpButton" >
+      <property name="text" >
+       <string>Hang up</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QVideoWidget</class>
+   <extends>QLabel</extends>
+   <header>QVideoWidget.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

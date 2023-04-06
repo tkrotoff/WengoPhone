@@ -1,0 +1,8 @@
+Look in the appropriate files headers to get more information
+about the authors.
+
+This package was put together by Gael Martin <gael@kelta.net>, however
+numerous people, too many to count, have contributed to kdelibs and kdestyle
+as a whole.
+If you have a specific question, dig up the appropriate mailing list address,
+and ask away.

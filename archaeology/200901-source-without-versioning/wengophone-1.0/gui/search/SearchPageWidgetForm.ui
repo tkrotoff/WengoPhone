@@ -1,0 +1,44 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>SearchPageWidgetForm</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>SearchPageWidgetForm</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>423</width>
+            <height>456</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Search</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>0</number>
+        </property>
+        <property name="spacing">
+            <number>0</number>
+        </property>
+        <widget class="QAxWidget" row="0" column="0">
+            <property name="name">
+                <cstring>ieActiveX</cstring>
+            </property>
+            <property name="control">
+                <string>{8856f961-340a-11d0-a96b-00c04fd705a2}</string>
+            </property>
+        </widget>
+    </grid>
+</widget>
+<customwidgets>
+</customwidgets>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>qaxwidget.h</includehint>
+</includehints>
+</UI>

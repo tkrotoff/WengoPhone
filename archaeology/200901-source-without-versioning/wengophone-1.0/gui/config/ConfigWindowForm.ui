@@ -1,0 +1,227 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>ConfigWindowForm</class>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>ConfigWindowForm</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>613</width>
+            <height>465</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>ConfigWindowForm</string>
+    </property>
+    <property name="whatsThis" stdset="0">
+        <string>Configuration window: please select a category from the left panel</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QLayoutWidget" row="1" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>Layout</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="margin">
+                    <number>0</number>
+                </property>
+                <property name="spacing">
+                    <number>6</number>
+                </property>
+                <spacer>
+                    <property name="name">
+                        <cstring>spacer</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>20</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>saveButton</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Save</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+S</string>
+                    </property>
+                    <property name="default">
+                        <bool>true</bool>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Saves the configuration settings and close the window</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>closeButton</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Cancel</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+C</string>
+                    </property>
+                    <property name="autoDefault">
+                        <bool>true</bool>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Close the window</string>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="QListBox" row="0" column="0">
+            <item>
+                <property name="text">
+                    <string>General</string>
+                </property>
+                <property name="pixmap">
+                    <pixmap>config_general.png</pixmap>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>Language</string>
+                </property>
+                <property name="pixmap">
+                    <pixmap>config_langues.png</pixmap>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>Style</string>
+                </property>
+                <property name="pixmap">
+                    <pixmap>config_apparence.png</pixmap>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>Audio Settings</string>
+                </property>
+                <property name="pixmap">
+                    <pixmap>config_audio.png</pixmap>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>Video Settings</string>
+                </property>
+                <property name="pixmap">
+                    <pixmap>config_video.png</pixmap>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>Advanced</string>
+                </property>
+                <property name="pixmap">
+                    <pixmap>config_expert.png</pixmap>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>SIP Profile</string>
+                </property>
+                <property name="pixmap">
+                    <pixmap>sip_profile.png</pixmap>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>Audio Codecs</string>
+                </property>
+                <property name="pixmap">
+                    <pixmap>config_audio_codecs.png</pixmap>
+                </property>
+            </item>
+            <item>
+                <property name="text">
+                    <string>Video Codecs</string>
+                </property>
+                <property name="pixmap">
+                    <pixmap>config_video_codecs.png</pixmap>
+                </property>
+            </item>
+            <property name="name">
+                <cstring>listBox</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>1</hsizetype>
+                    <vsizetype>7</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>130</width>
+                    <height>0</height>
+                </size>
+            </property>
+        </widget>
+        <widget class="QWidgetStack" row="0" column="1">
+            <property name="name">
+                <cstring>widgetStack</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>7</hsizetype>
+                    <vsizetype>7</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>WStackPage</cstring>
+                </property>
+                <attribute name="id">
+                    <number>0</number>
+                </attribute>
+                <grid>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                </grid>
+            </widget>
+        </widget>
+    </grid>
+</widget>
+<connections>
+    <connection>
+        <sender>saveButton</sender>
+        <signal>clicked()</signal>
+        <receiver>ConfigWindowForm</receiver>
+        <slot>accept()</slot>
+    </connection>
+    <connection>
+        <sender>closeButton</sender>
+        <signal>clicked()</signal>
+        <receiver>ConfigWindowForm</receiver>
+        <slot>reject()</slot>
+    </connection>
+</connections>
+<pixmapinproject/>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

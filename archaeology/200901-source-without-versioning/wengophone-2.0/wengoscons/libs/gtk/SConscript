@@ -1,0 +1,59 @@
+env = WengoGetEnvironment()
+
+libs = []
+if WengoOSWindows():
+	libs += [
+		'gtk-win32-2.0',
+		'atk-1.0',
+		'gdk_pixbuf-2.0',
+		'pangowin32-1.0',
+		'pango-1.0',
+		'gobject-2.0',
+		'gmodule-2.0',
+		'glib-2.0',
+		'glade-2.0',
+		'xml2',
+	]
+
+lib_path = []
+if WengoOSWindows():
+	lib_path += ['C:\\GTK\\lib']
+
+include_path = []
+if WengoOSWindows():
+	include_path += [
+		'C:\\GTK\\include\\atk-1.0',
+		'C:\\GTK\\include\\cairo',
+		'C:\\GTK\\include\\fontconfig',
+		'C:\\GTK\\include\\freetype2',
+		'C:\\GTK\\include\\glib-2.0',
+		'C:\\GTK\\lib\\glib-2.0\\include',
+		'C:\\GTK\\include\\gtk-2.0',
+		'C:\\GTK\\lib\\gtk-2.0\\include',
+		'C:\\GTK\\include\\gtkglext-1.0',
+		'C:\\GTK\\include\\libglade-2.0',
+		'C:\\GTK\\include\\libxml2',
+		'C:\\GTK\\include\\pango-1.0'
+	]
+else:
+	env.ParseConfig('pkg-config --cflags --libs gtk+-2.0')
+	env.ParseConfig('pkg-config --cflags --libs libglade-2.0')
+
+defines = {}
+
+cc_flags = []
+if WengoCCMinGW():
+	cc_flags += ['-mms-bitfields']
+
+link_flags = []
+headers = []
+sources = []
+
+env.WengoAddLibPath(lib_path)
+env.WengoAddCCFlags(cc_flags)
+env.WengoAddLinkFlags(link_flags)
+env.WengoAddIncludePath(include_path)
+env.WengoAddDefines(defines)
+env.WengoUseLibraries(libs)
+
+env.WengoDeclareSystemLibrary('gtk')

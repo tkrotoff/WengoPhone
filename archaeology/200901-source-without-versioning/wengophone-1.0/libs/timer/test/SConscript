@@ -1,0 +1,14 @@
+env = WengoEnvironment()
+t_test_env = env.Copy()
+
+t_test_env.WengoUseLibrary("wtimer")
+t_test_env.WengoLibAdd("pthread")
+
+if t_test_env.WengoOsIsLinux():
+    t_test_env.WengoLibAddMultiple(["rt"])
+
+t_test_sources = [ "test_timer.c" ]
+
+t_test_prog = t_test_env.WengoProgram("test_timer", t_test_sources)
+t_test_env.WengoAlias("wtimer-test", t_test_prog)
+

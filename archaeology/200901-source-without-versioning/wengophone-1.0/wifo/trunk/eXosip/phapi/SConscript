@@ -1,0 +1,161 @@
+
+env = WengoEnvironment()
+phapi_env = env.Copy()
+
+phapi_defines = {
+		"USE_PCM": 1,
+		"NEED_ECMUX": 1,
+		"MINIMIZE_COPYING": 1,
+		"SCHEDULING_MODE": 0,
+		"BLOCKING_MODE": 0,
+		"DO_ECHO_CAN": 1,
+		"AEC_BIS": "",
+		"ENABLE_AMR_WB": 1,
+		"ENABLE_AMR": 1,
+		"MY_DLLEXPORTS": 1,
+		"USE_WAVEIN_CBK": 1,
+		"PSEUDO_AEC": 0,
+		"NO_ECHO__SUPPRESSOR": 1,
+		 "ENABLE_ILBC" : 1,
+		"OSIP_MT": 1,
+		"ENABLE_TRACE": 0,
+		"VIDEO_IOTHREAD_TIMERS": 1,
+	}
+
+
+phapi_sources = [
+    'phcodec.c',
+    'phmbuf.c',
+    'tonegen.c',
+    'phx.c',
+]
+
+optimized_phapi_sources = ["aec2.cpp", "fidlib.c"]
+
+
+
+phapi_lib_dec = phapi_env.WengoDeclareLibraryAuto("phapi", "wifo/exosip/phapi")
+phapi_lib_dec.AddSubIncludePath("..")
+
+if phapi_env.WengoOsIsDarwin():
+    phapi_sources += ['phapi-darwin.c']
+else:
+    phapi_sources += ['phapi.c']
+
+streamer_sources = ["phaudiodriver.c", "phmedia.c", "phmedia-audio.c" , 'phmedia-audio-null.c']
+
+if phapi_env.WengoOsIsLinux() or phapi_env.WengoOsIsBSD():
+    streamer_sources += ["phmedia-oss.c"]
+    if phapi_env.WengoGetConsoleArgument("enable-phapi-audio-arts") == "yes":
+        phapi_defines["ENABLE_ARTS"] =  1
+    	streamer_sources += ["phmedia-audio-arts.c"]
+    	phapi_env.ParseConfig('artsc-config --cflags --libs')
+    if phapi_env.WengoGetConsoleArgument("enable-phapi-audio-esd") == "yes":
+        phapi_defines["ENABLE_ESD"] =  1
+    	streamer_sources += ["phmedia-audio-esd.c"]
+    	phapi_env.ParseConfig('esd-config --cflags --libs')
+else:
+    streamer_sources += ["phmedia-winmm.c"]
+
+
+
+if phapi_env.WengoGetConsoleArgument("enable-phapi-embed") == "yes":
+   phapi_defines["SCHEDULING_MODE"] =  1
+
+if phapi_env.WengoGetConsoleArgument("enable-qos-debug") == "yes":
+   phapi_defines["PHAPI_QOS_DEBUG"] =  1
+
+phapi_env.WengoUseLibrary("exosip")
+phapi_env.WengoUseLibrary("ortp")
+phapi_env.WengoUseLibrary("osip")
+phapi_env.WengoUseLibrary("amrwb")
+phapi_env.WengoUseLibrary("amrnb")
+phapi_env.WengoUseLibrary("ilbc")
+phapi_env.WengoUseLibrary("stun")
+phapi_env.WengoUseLibrary("gsm")
+phapi_env.WengoUseLibrary("global")
+phapi_env.WengoUseLibrary("wtimer")
+
+if env.WengoOsIsLinux():
+    phapi_env.WengoLibAddMultiple(["pthread", "rt"])
+
+if env.WengoGetConsoleArgument("enable-video") == "yes":
+    phapi_env.WengoUseLibrary("libavcodec")
+    phapi_env.WengoUseLibrary("webcam_c")
+    phapi_env.WengoUseLibrary("webcam")
+    phapi_defines["PHAPI_VIDEO_SUPPORT"] = 1
+
+    streamer_sources += [
+		"phcodec-h263.c",
+		"phcodec-h264.c",
+		"phcodec-mpeg4.c",
+		"phmedia-video.c",
+		"phmedia-video-control.c",
+		"phmedia-video-bwcontrol.c",
+		"phcodec-avcodec-wrapper.c",
+    ]
+
+if phapi_env.WengoGetConsoleArgument("enable-http-tunnel") == "yes":
+    phapi_env.WengoUseLibrary("wengocurl")
+    phapi_env.WengoUseLibrary("httptunnel")
+    phapi_defines["USE_HTTP_TUNNEL"] = 1
+
+if phapi_env.WengoGetConsoleArgument("enable-samplerate") == "yes":
+    phapi_env.WengoUseLibrary("samplerate")
+    phapi_defines["PH_USE_RESAMPLE"] = 1
+
+if phapi_env.WengoGetConsoleArgument("enable-phapi-video-hack") == "yes":
+    phapi_defines["PHAPI_VIDEO_LOCAL_HACK"] = 1
+
+if phapi_env.WengoGetConsoleArgument("enable-netlib") == "yes":
+    phapi_env.WengoUseLibrary("netlib")
+
+ENABLE_PORTAUDIO = 1
+
+if ENABLE_PORTAUDIO:
+    phapi_env.WengoUseLibrary("portaudio")
+    phapi_defines["ENABLE_PORTAUDIO"] = 1
+    streamer_sources += ["phmedia-portaudio.c"]
+#    phapi_env.WengoLibAdd("portaudio")
+#    phapi_env.WengoLibPathAdd("libs/portaudio/lib")
+
+
+
+if phapi_env.WengoOsIsLinux() or phapi_env.WengoOsIsBSD():
+    phapi_env.ParseConfig('pkg-config --cflags --libs gthread-2.0')
+
+if phapi_env.WengoOsIsLinux():
+    if phapi_env.WengoGetConsoleArgument("disable-alsa") == "no":
+        phapi_defines["ENABLE_ALSA"] = 1
+        phapi_env.WengoLibAdd("asound")
+    streamer_sources += ["phmedia-alsa.c"]
+
+if phapi_env.WengoOsIsWindows():
+    phapi_defines["T_MSVC"] = 1
+    phapi_defines["USE_WIN_TIMERS"] = 1
+    phapi_defines["PH_VIDEO_USELOCK"] = 1
+    
+    phapi_env.WengoLibAddMultiple(["winmm", "ws2_32", "user32", "shell32", "advapi32", "urlmon", "wininet", "iphlpapi"])
+
+phapi_env.WengoCppDefineSetMultiple(phapi_defines)
+
+phapi_optimized_env = phapi_env.Copy()
+phapi_optimized_env.WengoUseLibraryHeaders("phapi")
+phapi_env.WengoUseLibraryHeaders("phapi")
+
+phapi_env.WengoCCFlagsAddMultiple(
+    phapi_env.WengoGetVariable("phapi_optimization_flags"))
+
+
+optimized_phapi_sources += streamer_sources
+
+optimized_objects = phapi_optimized_env.SharedObject(optimized_phapi_sources)
+
+if phapi_env.WengoGetConsoleArgument("enable-shared-phapi") == "yes":
+    phapi_lib = phapi_env.WengoSharedLibrary('phapi',
+        phapi_sources + optimized_objects)
+else:
+    phapi_lib = phapi_env.WengoStaticLibrary('phapi',
+        phapi_sources + optimized_objects)
+
+phapi_env.WengoAlias("phapi", phapi_lib)

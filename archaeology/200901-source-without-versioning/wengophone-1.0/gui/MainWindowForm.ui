@@ -1,0 +1,1112 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>MainWindowForm</class>
+<widget class="QMainWindow">
+    <property name="name">
+        <cstring>MainWindowForm</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>409</width>
+            <height>555</height>
+        </rect>
+    </property>
+    <property name="minimumSize">
+        <size>
+            <width>409</width>
+            <height>291</height>
+        </size>
+    </property>
+    <property name="caption">
+        <string>Wengophone</string>
+    </property>
+    <property name="usesBigPixmaps">
+        <bool>true</bool>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>5</number>
+        </property>
+        <property name="spacing">
+            <number>5</number>
+        </property>
+        <widget class="QWidgetStack">
+            <property name="name">
+                <cstring>widgetStack</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>7</hsizetype>
+                    <vsizetype>7</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>340</width>
+                    <height>0</height>
+                </size>
+            </property>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>qt_dead_widget_contactList</cstring>
+                </property>
+                <attribute name="id">
+                    <number>0</number>
+                </attribute>
+            </widget>
+        </widget>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout5</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QComboBox">
+                    <property name="name">
+                        <cstring>phoneComboBox</cstring>
+                    </property>
+                    <property name="editable">
+                        <bool>true</bool>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Enter a phone number or a Wengo name</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>callButton</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string></string>
+                    </property>
+                    <property name="pixmap">
+                        <pixmap>call_button.png</pixmap>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Calls the current phone number</string>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="QWidgetStack">
+            <property name="name">
+                <cstring>mainAudioWidgetStack</cstring>
+            </property>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>WStackPage</cstring>
+                </property>
+                <attribute name="id">
+                    <number>0</number>
+                </attribute>
+                <vbox>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <property name="margin">
+                        <number>0</number>
+                    </property>
+                    <property name="spacing">
+                        <number>0</number>
+                    </property>
+                    <widget class="QLayoutWidget">
+                        <property name="name">
+                            <cstring>layout6</cstring>
+                        </property>
+                        <hbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <property name="margin">
+                                <number>0</number>
+                            </property>
+                            <property name="spacing">
+                                <number>0</number>
+                            </property>
+                            <widget class="QLabel">
+                                <property name="name">
+                                    <cstring>audioSwitchLabel</cstring>
+                                </property>
+                                <property name="minimumSize">
+                                    <size>
+                                        <width>40</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
+                                <property name="maximumSize">
+                                    <size>
+                                        <width>40</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
+                                <property name="paletteBackgroundColor">
+                                    <color>
+                                        <red>220</red>
+                                        <green>220</green>
+                                        <blue>222</blue>
+                                    </color>
+                                </property>
+                                <property name="text">
+                                    <string></string>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Show or Hide the audio configuration panel</string>
+                                </property>
+                            </widget>
+                            <widget class="QLabel">
+                                <property name="name">
+                                    <cstring>audioTextLabel</cstring>
+                                </property>
+                                <property name="minimumSize">
+                                    <size>
+                                        <width>0</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
+                                <property name="maximumSize">
+                                    <size>
+                                        <width>32767</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
+                                <property name="paletteBackgroundColor">
+                                    <color>
+                                        <red>220</red>
+                                        <green>220</green>
+                                        <blue>222</blue>
+                                    </color>
+                                </property>
+                                <property name="text">
+                                    <string>Audio / Video configuration</string>
+                                </property>
+                            </widget>
+                        </hbox>
+                    </widget>
+                    <widget class="QWidgetStack">
+                        <property name="name">
+                            <cstring>audioWidgetStack</cstring>
+                        </property>
+                        <widget class="QWidget">
+                            <property name="name">
+                                <cstring>WStackPage</cstring>
+                            </property>
+                            <attribute name="id">
+                                <number>0</number>
+                            </attribute>
+                            <hbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="QLayoutWidget">
+                                    <property name="name">
+                                        <cstring>layout21</cstring>
+                                    </property>
+                                    <vbox>
+                                        <property name="name">
+                                            <cstring>unnamed</cstring>
+                                        </property>
+                                        <widget class="QLayoutWidget">
+                                            <property name="name">
+                                                <cstring>layout9</cstring>
+                                            </property>
+                                            <hbox>
+                                                <property name="name">
+                                                    <cstring>unnamed</cstring>
+                                                </property>
+                                                <widget class="QLabel">
+                                                    <property name="name">
+                                                        <cstring>pixmapLabel1</cstring>
+                                                    </property>
+                                                    <property name="pixmap">
+                                                        <pixmap>microphone.png</pixmap>
+                                                    </property>
+                                                </widget>
+                                                <widget class="QSlider">
+                                                    <property name="name">
+                                                        <cstring>inputSoundSlider</cstring>
+                                                    </property>
+                                                    <property name="sizePolicy">
+                                                        <sizepolicy>
+                                                            <hsizetype>7</hsizetype>
+                                                            <vsizetype>7</vsizetype>
+                                                            <horstretch>0</horstretch>
+                                                            <verstretch>0</verstretch>
+                                                        </sizepolicy>
+                                                    </property>
+                                                    <property name="minimumSize">
+                                                        <size>
+                                                            <width>60</width>
+                                                            <height>0</height>
+                                                        </size>
+                                                    </property>
+                                                    <property name="orientation">
+                                                        <enum>Horizontal</enum>
+                                                    </property>
+                                                    <property name="toolTip" stdset="0">
+                                                        <string>Input Sound</string>
+                                                    </property>
+                                                </widget>
+                                            </hbox>
+                                        </widget>
+                                        <widget class="QLayoutWidget">
+                                            <property name="name">
+                                                <cstring>layout12</cstring>
+                                            </property>
+                                            <hbox>
+                                                <property name="name">
+                                                    <cstring>unnamed</cstring>
+                                                </property>
+                                                <widget class="QLabel">
+                                                    <property name="name">
+                                                        <cstring>pixmapLabel2</cstring>
+                                                    </property>
+                                                    <property name="pixmap">
+                                                        <pixmap>headphones.png</pixmap>
+                                                    </property>
+                                                </widget>
+                                                <widget class="QSlider">
+                                                    <property name="name">
+                                                        <cstring>outputSoundSlider</cstring>
+                                                    </property>
+                                                    <property name="sizePolicy">
+                                                        <sizepolicy>
+                                                            <hsizetype>7</hsizetype>
+                                                            <vsizetype>7</vsizetype>
+                                                            <horstretch>0</horstretch>
+                                                            <verstretch>0</verstretch>
+                                                        </sizepolicy>
+                                                    </property>
+                                                    <property name="minimumSize">
+                                                        <size>
+                                                            <width>60</width>
+                                                            <height>0</height>
+                                                        </size>
+                                                    </property>
+                                                    <property name="orientation">
+                                                        <enum>Horizontal</enum>
+                                                    </property>
+                                                    <property name="toolTip" stdset="0">
+                                                        <string>Output Sound</string>
+                                                    </property>
+                                                </widget>
+                                            </hbox>
+                                        </widget>
+                                    </vbox>
+                                </widget>
+                                <widget class="Line">
+                                    <property name="name">
+                                        <cstring>line1</cstring>
+                                    </property>
+                                    <property name="frameShape">
+                                        <enum>VLine</enum>
+                                    </property>
+                                    <property name="frameShadow">
+                                        <enum>Sunken</enum>
+                                    </property>
+                                    <property name="orientation">
+                                        <enum>Vertical</enum>
+                                    </property>
+                                </widget>
+                                <widget class="QLayoutWidget">
+                                    <property name="name">
+                                        <cstring>layout23</cstring>
+                                    </property>
+                                    <grid>
+                                        <property name="name">
+                                            <cstring>unnamed</cstring>
+                                        </property>
+                                        <widget class="QLayoutWidget" row="0" column="1">
+                                            <property name="name">
+                                                <cstring>layout20</cstring>
+                                            </property>
+                                            <vbox>
+                                                <property name="name">
+                                                    <cstring>unnamed</cstring>
+                                                </property>
+                                                <property name="margin">
+                                                    <number>0</number>
+                                                </property>
+                                                <property name="spacing">
+                                                    <number>0</number>
+                                                </property>
+                                                <widget class="QCheckBox">
+                                                    <property name="name">
+                                                        <cstring>WenboxCheckBox</cstring>
+                                                    </property>
+                                                    <property name="text">
+                                                        <string>Wenbox USB</string>
+                                                    </property>
+                                                </widget>
+                                                <widget class="QCheckBox">
+                                                    <property name="name">
+                                                        <cstring>mutePlayBackCheckBox</cstring>
+                                                    </property>
+                                                    <property name="text">
+                                                        <string>Mute Playback</string>
+                                                    </property>
+                                                </widget>
+                                            </vbox>
+                                        </widget>
+                                        <spacer row="1" column="2">
+                                            <property name="name">
+                                                <cstring>spacer27_2</cstring>
+                                            </property>
+                                            <property name="orientation">
+                                                <enum>Horizontal</enum>
+                                            </property>
+                                            <property name="sizeType">
+                                                <enum>Expanding</enum>
+                                            </property>
+                                            <property name="sizeHint">
+                                                <size>
+                                                    <width>16</width>
+                                                    <height>16</height>
+                                                </size>
+                                            </property>
+                                        </spacer>
+                                        <widget class="QLabel" row="1" column="1">
+                                            <property name="name">
+                                                <cstring>AudioSettingsLabel</cstring>
+                                            </property>
+                                            <property name="cursor">
+                                                <cursor>13</cursor>
+                                            </property>
+                                            <property name="text">
+                                                <string>&lt;u&gt;Audio Settings&lt;/u&gt;</string>
+                                            </property>
+                                        </widget>
+                                        <spacer row="1" column="0">
+                                            <property name="name">
+                                                <cstring>spacer27</cstring>
+                                            </property>
+                                            <property name="orientation">
+                                                <enum>Horizontal</enum>
+                                            </property>
+                                            <property name="sizeType">
+                                                <enum>Expanding</enum>
+                                            </property>
+                                            <property name="sizeHint">
+                                                <size>
+                                                    <width>16</width>
+                                                    <height>16</height>
+                                                </size>
+                                            </property>
+                                        </spacer>
+                                    </grid>
+                                </widget>
+                                <widget class="Line">
+                                    <property name="name">
+                                        <cstring>line1_2</cstring>
+                                    </property>
+                                    <property name="frameShape">
+                                        <enum>VLine</enum>
+                                    </property>
+                                    <property name="frameShadow">
+                                        <enum>Sunken</enum>
+                                    </property>
+                                    <property name="orientation">
+                                        <enum>Vertical</enum>
+                                    </property>
+                                </widget>
+                                <widget class="QLayoutWidget">
+                                    <property name="name">
+                                        <cstring>layout28</cstring>
+                                    </property>
+                                    <grid>
+                                        <property name="name">
+                                            <cstring>unnamed</cstring>
+                                        </property>
+                                        <widget class="QCheckBox" row="0" column="1">
+                                            <property name="name">
+                                                <cstring>EnableVideoCheckBox</cstring>
+                                            </property>
+                                            <property name="text">
+                                                <string>Enable Video</string>
+                                            </property>
+                                        </widget>
+                                        <spacer row="1" column="2">
+                                            <property name="name">
+                                                <cstring>spacer27_4</cstring>
+                                            </property>
+                                            <property name="orientation">
+                                                <enum>Horizontal</enum>
+                                            </property>
+                                            <property name="sizeType">
+                                                <enum>Expanding</enum>
+                                            </property>
+                                            <property name="sizeHint">
+                                                <size>
+                                                    <width>16</width>
+                                                    <height>16</height>
+                                                </size>
+                                            </property>
+                                        </spacer>
+                                        <widget class="QLabel" row="1" column="1">
+                                            <property name="name">
+                                                <cstring>VideoSettingsLabel</cstring>
+                                            </property>
+                                            <property name="cursor">
+                                                <cursor>13</cursor>
+                                            </property>
+                                            <property name="text">
+                                                <string>&lt;u&gt;Video Settings&lt;/u&gt;</string>
+                                            </property>
+                                        </widget>
+                                        <spacer row="1" column="0">
+                                            <property name="name">
+                                                <cstring>spacer27_3</cstring>
+                                            </property>
+                                            <property name="orientation">
+                                                <enum>Horizontal</enum>
+                                            </property>
+                                            <property name="sizeType">
+                                                <enum>Expanding</enum>
+                                            </property>
+                                            <property name="sizeHint">
+                                                <size>
+                                                    <width>16</width>
+                                                    <height>16</height>
+                                                </size>
+                                            </property>
+                                        </spacer>
+                                    </grid>
+                                </widget>
+                            </hbox>
+                        </widget>
+                        <widget class="QWidget">
+                            <property name="name">
+                                <cstring>WStackPageLinux</cstring>
+                            </property>
+                            <attribute name="id">
+                                <number>1</number>
+                            </attribute>
+                            <hbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <property name="margin">
+                                    <number>0</number>
+                                </property>
+                                <property name="spacing">
+                                    <number>0</number>
+                                </property>
+                                <spacer>
+                                    <property name="name">
+                                        <cstring>spacer3_6</cstring>
+                                    </property>
+                                    <property name="orientation">
+                                        <enum>Horizontal</enum>
+                                    </property>
+                                    <property name="sizeType">
+                                        <enum>Expanding</enum>
+                                    </property>
+                                    <property name="sizeHint">
+                                        <size>
+                                            <width>20</width>
+                                            <height>20</height>
+                                        </size>
+                                    </property>
+                                </spacer>
+                                <widget class="QLayoutWidget">
+                                    <property name="name">
+                                        <cstring>layout8_3</cstring>
+                                    </property>
+                                    <grid>
+                                        <property name="name">
+                                            <cstring>unnamed</cstring>
+                                        </property>
+                                        <property name="margin">
+                                            <number>0</number>
+                                        </property>
+                                        <property name="spacing">
+                                            <number>0</number>
+                                        </property>
+                                        <widget class="QSlider" row="1" column="0" rowspan="1" colspan="3">
+                                            <property name="name">
+                                                <cstring>inputSoundSliderLinux</cstring>
+                                            </property>
+                                            <property name="sizePolicy">
+                                                <sizepolicy>
+                                                    <hsizetype>0</hsizetype>
+                                                    <vsizetype>0</vsizetype>
+                                                    <horstretch>0</horstretch>
+                                                    <verstretch>0</verstretch>
+                                                </sizepolicy>
+                                            </property>
+                                            <property name="orientation">
+                                                <enum>Horizontal</enum>
+                                            </property>
+                                            <property name="toolTip" stdset="0">
+                                                <string>Input Sound</string>
+                                            </property>
+                                        </widget>
+                                        <widget class="QLabel" row="0" column="1">
+                                            <property name="name">
+                                                <cstring>pixmapLabel1_3</cstring>
+                                            </property>
+                                            <property name="pixmap">
+                                                <pixmap>microphone.png</pixmap>
+                                            </property>
+                                        </widget>
+                                        <spacer row="0" column="2">
+                                            <property name="name">
+                                                <cstring>spacer4_2_2_3</cstring>
+                                            </property>
+                                            <property name="orientation">
+                                                <enum>Horizontal</enum>
+                                            </property>
+                                            <property name="sizeType">
+                                                <enum>Expanding</enum>
+                                            </property>
+                                            <property name="sizeHint">
+                                                <size>
+                                                    <width>20</width>
+                                                    <height>20</height>
+                                                </size>
+                                            </property>
+                                        </spacer>
+                                        <spacer row="0" column="0">
+                                            <property name="name">
+                                                <cstring>spacer4_2_6</cstring>
+                                            </property>
+                                            <property name="orientation">
+                                                <enum>Horizontal</enum>
+                                            </property>
+                                            <property name="sizeType">
+                                                <enum>Expanding</enum>
+                                            </property>
+                                            <property name="sizeHint">
+                                                <size>
+                                                    <width>20</width>
+                                                    <height>20</height>
+                                                </size>
+                                            </property>
+                                        </spacer>
+                                    </grid>
+                                </widget>
+                                <spacer>
+                                    <property name="name">
+                                        <cstring>spacer3_3_3_2</cstring>
+                                    </property>
+                                    <property name="orientation">
+                                        <enum>Horizontal</enum>
+                                    </property>
+                                    <property name="sizeType">
+                                        <enum>Expanding</enum>
+                                    </property>
+                                    <property name="sizeHint">
+                                        <size>
+                                            <width>30</width>
+                                            <height>20</height>
+                                        </size>
+                                    </property>
+                                </spacer>
+                                <widget class="QLayoutWidget">
+                                    <property name="name">
+                                        <cstring>layout8</cstring>
+                                    </property>
+                                    <grid>
+                                        <property name="name">
+                                            <cstring>unnamed</cstring>
+                                        </property>
+                                        <property name="margin">
+                                            <number>0</number>
+                                        </property>
+                                        <property name="spacing">
+                                            <number>0</number>
+                                        </property>
+                                        <spacer row="1" column="0">
+                                            <property name="name">
+                                                <cstring>spacer3_6_2</cstring>
+                                            </property>
+                                            <property name="orientation">
+                                                <enum>Horizontal</enum>
+                                            </property>
+                                            <property name="sizeType">
+                                                <enum>Expanding</enum>
+                                            </property>
+                                            <property name="sizeHint">
+                                                <size>
+                                                    <width>20</width>
+                                                    <height>20</height>
+                                                </size>
+                                            </property>
+                                        </spacer>
+                                        <widget class="QLabel" row="0" column="0" rowspan="1" colspan="3">
+                                            <property name="name">
+                                                <cstring>textLabel1</cstring>
+                                            </property>
+                                            <property name="text">
+                                                <string>Mute Playback</string>
+                                            </property>
+                                        </widget>
+                                        <spacer row="1" column="2">
+                                            <property name="name">
+                                                <cstring>spacer3_6_3</cstring>
+                                            </property>
+                                            <property name="orientation">
+                                                <enum>Horizontal</enum>
+                                            </property>
+                                            <property name="sizeType">
+                                                <enum>Expanding</enum>
+                                            </property>
+                                            <property name="sizeHint">
+                                                <size>
+                                                    <width>20</width>
+                                                    <height>20</height>
+                                                </size>
+                                            </property>
+                                        </spacer>
+                                    </grid>
+                                </widget>
+                                <spacer>
+                                    <property name="name">
+                                        <cstring>spacer3_3_3</cstring>
+                                    </property>
+                                    <property name="orientation">
+                                        <enum>Horizontal</enum>
+                                    </property>
+                                    <property name="sizeType">
+                                        <enum>Expanding</enum>
+                                    </property>
+                                    <property name="sizeHint">
+                                        <size>
+                                            <width>30</width>
+                                            <height>20</height>
+                                        </size>
+                                    </property>
+                                </spacer>
+                                <widget class="QLayoutWidget">
+                                    <property name="name">
+                                        <cstring>layout9_3</cstring>
+                                    </property>
+                                    <grid>
+                                        <property name="name">
+                                            <cstring>unnamed</cstring>
+                                        </property>
+                                        <property name="margin">
+                                            <number>0</number>
+                                        </property>
+                                        <property name="spacing">
+                                            <number>0</number>
+                                        </property>
+                                        <spacer row="0" column="0">
+                                            <property name="name">
+                                                <cstring>spacer4_2_3_3</cstring>
+                                            </property>
+                                            <property name="orientation">
+                                                <enum>Horizontal</enum>
+                                            </property>
+                                            <property name="sizeType">
+                                                <enum>Expanding</enum>
+                                            </property>
+                                            <property name="sizeHint">
+                                                <size>
+                                                    <width>20</width>
+                                                    <height>20</height>
+                                                </size>
+                                            </property>
+                                        </spacer>
+                                        <widget class="QSlider" row="1" column="0" rowspan="1" colspan="3">
+                                            <property name="name">
+                                                <cstring>outputSoundSliderLinux</cstring>
+                                            </property>
+                                            <property name="sizePolicy">
+                                                <sizepolicy>
+                                                    <hsizetype>0</hsizetype>
+                                                    <vsizetype>0</vsizetype>
+                                                    <horstretch>0</horstretch>
+                                                    <verstretch>0</verstretch>
+                                                </sizepolicy>
+                                            </property>
+                                            <property name="orientation">
+                                                <enum>Horizontal</enum>
+                                            </property>
+                                            <property name="toolTip" stdset="0">
+                                                <string>Output Sound</string>
+                                            </property>
+                                        </widget>
+                                        <widget class="QLabel" row="0" column="1">
+                                            <property name="name">
+                                                <cstring>pixmapLabel2_3</cstring>
+                                            </property>
+                                            <property name="pixmap">
+                                                <pixmap>headphones.png</pixmap>
+                                            </property>
+                                        </widget>
+                                        <spacer row="0" column="2">
+                                            <property name="name">
+                                                <cstring>spacer4_2_4_3</cstring>
+                                            </property>
+                                            <property name="orientation">
+                                                <enum>Horizontal</enum>
+                                            </property>
+                                            <property name="sizeType">
+                                                <enum>Expanding</enum>
+                                            </property>
+                                            <property name="sizeHint">
+                                                <size>
+                                                    <width>20</width>
+                                                    <height>20</height>
+                                                </size>
+                                            </property>
+                                        </spacer>
+                                    </grid>
+                                </widget>
+                                <spacer>
+                                    <property name="name">
+                                        <cstring>spacer3_4_3</cstring>
+                                    </property>
+                                    <property name="orientation">
+                                        <enum>Horizontal</enum>
+                                    </property>
+                                    <property name="sizeType">
+                                        <enum>Expanding</enum>
+                                    </property>
+                                    <property name="sizeHint">
+                                        <size>
+                                            <width>26</width>
+                                            <height>20</height>
+                                        </size>
+                                    </property>
+                                </spacer>
+                            </hbox>
+                        </widget>
+                    </widget>
+                </vbox>
+            </widget>
+        </widget>
+    </vbox>
+</widget>
+<menubar>
+    <property name="name">
+        <cstring>MenuBarEditorA</cstring>
+    </property>
+    <item text="Account" name="Account">
+        <action name="viewProfileAction"/>
+        <action name="newAccountAction"/>
+        <action name="creditAccountAction"/>
+        <separator/>
+        <action name="changeProfileAction"/>
+    </item>
+    <item text="Help" name="Help">
+        <action name="forumAccessAction"/>
+        <action name="helpAction"/>
+        <action name="aboutAction"/>
+    </item>
+</menubar>
+<toolbars>
+    <toolbar dock="2">
+        <property name="name">
+            <cstring>mainToolbar</cstring>
+        </property>
+        <property name="frameShadow">
+            <enum>Plain</enum>
+        </property>
+        <property name="movingEnabled">
+            <bool>false</bool>
+        </property>
+        <property name="label">
+            <string>Main Toolbar</string>
+        </property>
+        <widget class="Spacer">
+            <property name="name">
+                <cstring>spacer4</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Fixed</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>10</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </widget>
+        <action name="homePageAction"/>
+        <action name="contactListAction"/>
+        <action name="callHistoryAction"/>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>textLabel1_2</cstring>
+            </property>
+            <property name="text">
+                <string></string>
+            </property>
+            <property name="pixmap">
+                <pixmap>separator.png</pixmap>
+            </property>
+        </widget>
+        <action name="addContactAction"/>
+        <action name="findContactAction"/>
+        <widget class="Spacer">
+            <property name="name">
+                <cstring>spacer3_2</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>myPresenceStatusButton</cstring>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>110</width>
+                    <height>30</height>
+                </size>
+            </property>
+            <property name="maximumSize">
+                <size>
+                    <width>150</width>
+                    <height>30</height>
+                </size>
+            </property>
+            <property name="text">
+                <string></string>
+            </property>
+        </widget>
+        <widget class="Spacer">
+            <property name="name">
+                <cstring>spacer39</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Fixed</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>10</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </widget>
+    </toolbar>
+</toolbars>
+<actions>
+    <action>
+        <property name="name">
+            <cstring>dialpadAction</cstring>
+        </property>
+        <property name="text">
+            <string>Dialpad</string>
+        </property>
+        <property name="menuText">
+            <string>Dialpad</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>configAction</cstring>
+        </property>
+        <property name="text">
+            <string>Configuration</string>
+        </property>
+        <property name="menuText">
+            <string>Configuration</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>viewProfileAction</cstring>
+        </property>
+        <property name="text">
+            <string>View My Profile...</string>
+        </property>
+        <property name="menuText">
+            <string>View My Profile...</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>changeProfileAction</cstring>
+        </property>
+        <property name="text">
+            <string>Open Another Profile</string>
+        </property>
+        <property name="menuText">
+            <string>Open Another Profile</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>quitAction</cstring>
+        </property>
+        <property name="text">
+            <string>Quit</string>
+        </property>
+        <property name="menuText">
+            <string>Quit</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>helpAction</cstring>
+        </property>
+        <property name="text">
+            <string>Help...</string>
+        </property>
+        <property name="menuText">
+            <string>Help...</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>aboutAction</cstring>
+        </property>
+        <property name="text">
+            <string>About</string>
+        </property>
+        <property name="menuText">
+            <string>About</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>contactListAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>contact_list.png</iconset>
+        </property>
+        <property name="text">
+            <string>Contact List</string>
+        </property>
+        <property name="menuText">
+            <string>Contact List</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>addContactAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>contact_add.png</iconset>
+        </property>
+        <property name="text">
+            <string>Add a Contact</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>callHistoryAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>call_history.png</iconset>
+        </property>
+        <property name="text">
+            <string>Call History</string>
+        </property>
+        <property name="menuText">
+            <string>Call History</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>homePageAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>home_on.png</iconset>
+        </property>
+        <property name="text">
+            <string>Home Page</string>
+        </property>
+        <property name="menuText">
+            <string>Home Page</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>forumAccessAction</cstring>
+        </property>
+        <property name="text">
+            <string>Forum Access...</string>
+        </property>
+        <property name="menuText">
+            <string>Forum Access...</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>newAccountAction</cstring>
+        </property>
+        <property name="text">
+            <string>Create New Account...</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>creditAccountAction</cstring>
+        </property>
+        <property name="text">
+            <string>Credit Your Account...</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>sendSMSAction</cstring>
+        </property>
+        <property name="text">
+            <string>Send SMS</string>
+        </property>
+        <property name="menuText">
+            <string>Send SMS</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>addContactActionNoIcon</cstring>
+        </property>
+        <property name="text">
+            <string>Add a Contact</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>findContactAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>contact_find.png</iconset>
+        </property>
+        <property name="text">
+            <string>Find a Wengo Contact</string>
+        </property>
+    </action>
+</actions>
+<tabstops>
+    <tabstop>phoneComboBox</tabstop>
+    <tabstop>callButton</tabstop>
+</tabstops>
+<pixmapinproject/>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

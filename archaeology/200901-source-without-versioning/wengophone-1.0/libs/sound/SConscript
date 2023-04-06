@@ -1,0 +1,86 @@
+# 
+# WengoPhone, a voice over Internet phone
+#
+# Copyright (C) 2004-2005  Wengo
+# Copyright (C) 2005 David Ferlier <david.ferlier@wengo.fr>
+# 
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+
+env = WengoEnvironment()
+sound_env = WengoQtEnvironment(env)
+
+sound_libdec = env.WengoDeclareLibraryAuto("sound", "libs/sound")
+sound_libdec.AddSubIncludePath("include")
+sound_env.WengoUseLibrary("portaudio")
+
+sound_sources = []
+
+sound_env.WengoUseLibrary("portaudio")
+
+if sound_env.WengoOsIsBSD() or sound_env.WengoOsIsLinux():
+	sound_sources += [
+		"src/unix/Sound.cpp",
+		"src/unix/SoundMixer.cpp",
+		"src/unix/SoundMixerException.cpp",
+		"src/unix/Volume.cpp"
+	]
+	if sound_env.WengoGetConsoleArgument("enable-libsound-portaudio") =="no":
+		sound_sources += [ "src/unix/AudioDevice.cpp" ]
+
+elif sound_env.WengoOsIsWindows():
+	sound_sources += [
+		"src/win32/Sound.cpp",
+		"src/win32/SoundMixer.cpp",
+		"src/win32/SoundMixerException.cpp",
+		"src/win32/Volume.cpp",
+		"src/win32/SoundThread.cpp",
+		"src/win32/playsound/SoundFile.cpp",
+		"src/win32/playsound/PlaySoundFile.cpp"
+	]
+	if sound_env.WengoGetConsoleArgument("enable-libsound-portaudio") =="no":
+		sound_sources += [ "src/win32/AudioDevice.cpp" ]
+
+	sound_env.WengoLibAddMultiple(["winmm", "advapi32"])
+
+if sound_env.WengoOsIsDarwin():
+	sound_sources += [
+		"src/mac/Sound.cpp",
+		"src/mac/SoundMixer.cpp",
+		"src/mac/SoundMixerException.cpp",
+		"src/mac/Volume.cpp"
+	]
+	if sound_env.WengoGetConsoleArgument("enable-libsound-portaudio") =="no":
+		sound_sources += [ "src/mac/AudioDevice.cpp" ]
+
+if sound_env.WengoGetConsoleArgument("enable-libsound-portaudio") =="yes":
+	sound_sources += [ "src/portaudio/AudioDevice.cpp" ]
+
+sound_env.WengoUseLibraryHeaders("sound")
+sound_env.WengoUseLibrary("util")
+
+sound_library = sound_env.WengoStaticLibrary('sound', sound_sources)
+sound_env.WengoAlias('sound', sound_library)
+
+
+audio_device_test_env = WengoEnvironment().Copy()
+audio_device_test_env.WengoUseLibrary("sound")
+audio_device_test_env.WengoUseLibrary("portaudio")
+audio_device_test_env.WengoUseLibrary("util")
+audio_device_test_env.WengoLibAddMultiple(["winmm", "advapi32", "Kernel32"])
+sources = [ "src/portaudio/main.cpp" ]
+
+audio_device_test_prog = audio_device_test_env.WengoProgram('audio_device_test', sources)
+audio_device_test_env.WengoAlias('audio_device_test', audio_device_test_prog)

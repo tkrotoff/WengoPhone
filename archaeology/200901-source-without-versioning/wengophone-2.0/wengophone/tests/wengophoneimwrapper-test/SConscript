@@ -1,0 +1,31 @@
+env = WengoGetEnvironment()
+
+link_flags = []
+
+libs = [
+	'wengophone',
+	'phapiwrapper',
+	'gaimimwrapper',
+]
+
+headers = [
+]
+
+sources = [
+	'WengoPhoneIMWrapperTest.cpp',
+	'main.cpp',
+]
+
+if WengoOSMacOSX():
+	frameworks = [ 
+		'CoreAudio',
+		'AudioToolbox',
+		'AudioUnit',
+		'CoreServices'
+	]
+
+	env.WengoAddFrameworks(frameworks)
+
+env.WengoUseLibraries(libs)
+env.WengoAddLinkFlags(link_flags)
+env.WengoProgram('wengophoneimwrapper-test', sources, headers)

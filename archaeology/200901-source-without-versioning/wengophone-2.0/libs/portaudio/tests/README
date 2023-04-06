@@ -1,0 +1,6 @@
+sine16bit.sw est un fichier son au format :
+	RAW
+	16 bits signés
+	8kHz
+	Little Endian
+

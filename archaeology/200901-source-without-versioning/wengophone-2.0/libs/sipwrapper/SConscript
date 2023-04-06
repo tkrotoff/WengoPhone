@@ -1,0 +1,42 @@
+env = WengoGetEnvironment()
+
+libs = [
+	'owutil',
+]
+
+include_path = [
+	'include',
+]
+
+headers = [
+	'include/sipwrapper/EnumPhoneCallState.h',
+	'include/sipwrapper/EnumPhoneLineState.h',
+	'include/sipwrapper/EnumVideoQuality.h',
+	'include/sipwrapper/SipWrapper.h',
+	'include/sipwrapper/SipWrapperFactory.h'
+	'include/sipwrapper/WebcamVideoFrame.h',
+]
+
+sources = [
+	'src/SipWrapperFactory.cpp',
+	'src/EnumPhoneCallState.cpp',
+	'src/EnumPhoneLineState.cpp',
+	'src/EnumNatType.cpp',
+	'src/EnumVideoQuality.cpp',
+	'src/CodecList.cpp',
+]
+
+env.WengoUseLibraries(libs)
+env.WengoAddIncludePath(include_path)
+env.WengoStaticLibrary('sipwrapper', sources, headers)
+
+env.WengoAddDoxyfile()
+
+projects = [
+	'src/sipx',
+	'src/phapi',
+	'src/null',
+]
+env.SConscript(dirs = projects)
+
+#env.SConscript('tests/SConscript')

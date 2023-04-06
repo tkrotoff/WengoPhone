@@ -1,0 +1,39 @@
+
+env = WengoEnvironment()
+kdefx_env = WengoQtEnvironment(env)
+
+kdefx_sources = [
+    "kcpuinfo.cpp",
+    "kdrawutil.cpp",
+    "kimageeffect.cpp",
+    "kpixmap.cpp",
+    "kpixmapeffect.cpp",
+    "kpixmapsplitter.cpp",
+    "kstyle.cpp"
+]
+
+kdefx_include_paths = [
+    env.WengoGetBuildDirRelativePath("libs/wengokeramik/kdefx"),
+    env.WengoGetBuildDirRelativePath("libs/wengokeramik/kdefx/include")
+]
+
+kdefx_lib_paths = [
+    env.WengoGetBuildDirRelativePath("libs/wengokeramik/kdefx")
+]
+
+kdefx_libraries = [ "kdefx" ]
+
+env.WengoDeclareLibrary("kdefx",
+    include_paths = kdefx_include_paths,
+    lib_paths = kdefx_lib_paths,
+    libraries = kdefx_libraries)
+
+kdefx_env.WengoQtNoScan()
+kdefx_env.WengoMoc('kstyle.h')
+
+kdefx_env.WengoUseLibraryHeaders("kdefx")
+kdefx_env.WengoCppDefineSet("KDE_MAKE_LIB", 1)
+kdefx_env.WengoCppDefineSet("MAKE_KDEFX_LIB", 1)
+
+kdefx_lib = kdefx_env.WengoSharedLibrary('kdefx', kdefx_sources)
+kdefx_env.WengoAlias('kdefx', kdefx_lib)

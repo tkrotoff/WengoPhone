@@ -1,0 +1,26 @@
+env = WengoGetQt4Environment()
+
+libs = [
+	'qt4',
+	'qtutil'
+]
+lib_path = []
+include_path = ['include']
+headers = [
+	'include/idle/Idle.h',
+]
+sources = [
+	'src/Idle.cpp',
+]
+
+def moc(env, headers):
+	moced = []
+	for header in headers:
+		moced += [ env.Moc(header) ]
+	return moced
+moced = moc(env, headers)
+
+env.WengoAddIncludePath(include_path)
+env.WengoUseLibraries(libs)
+
+env.WengoStaticLibrary('owidle', sources + moced, headers)

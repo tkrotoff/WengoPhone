@@ -1,0 +1,26 @@
+env = WengoEnvironment()
+
+env.SConscript("wengokeramik/SConscript")
+
+if env.WengoGetConsoleArgument("enable-video") == "yes":
+	env.SConscript("ffmpeg/SConscript")
+
+env.WengoBuildInDir("timer/SConscript", "libs/timer")
+env.WengoBuildInDir("portaudio/SConscript", "libs/portaudio")
+env.WengoBuildInDir("global/SConscript", "libs/global")
+env.WengoBuildInDir("systemperf/SConscript", "libs/systemperf")
+env.WengoBuildInDir("systemperf/src/test/SConscript", "libs/systemperf/test")
+env.WengoBuildInDir("webcam/SConscript", "libs/webcam")
+env.WengoBuildInDir("webcam/tests/SConscript", "libs/webcam/test")
+env.WengoBuildInDir("webcam_c/SConscript", "libs/webcam_c")
+env.WengoBuildInDir("video/SConscript", "libs/video")
+env.WengoBuildInDir("curl/SConscript", "libs/curl")
+env.WengoBuildInDir("openssl/SConscript", "libs/openssl")
+env.WengoBuildInDir("util/SConscript", "libs/util")
+env.WengoBuildInDir("sound/SConscript", "libs/sound")
+env.WengoBuildInDir("vcard/SConscript", "libs/vcard")
+env.WengoBuildInDir("trayicon/SConscript", "libs/trayicon")
+env.WengoBuildInDir("zip/SConscript", "libs/zip")
+env.WengoBuildInDir("iconset/SConscript", "libs/iconset")
+env.WengoBuildInDir("yuvoverlay/SConscript", "libs/yuvoverlay")
+env.WengoBuildInDir("windows_version/SConscript", "libs/windows_version")

@@ -1,0 +1,73 @@
+PyCoIpManager is the Python binding for CoIpManager.
+
+## Build it!
+To build the binding, you need:
+
+-	Python v2.3 or higher (http://www.python.org)
+-	SIP (http://www.riverbankcomputing.co.uk/sip/)
+-	Qt v4.2 or higher (http://trolltech.com)
+-	PyQt (http://www.riverbankcomputing.co.uk/pyqt)
+
+Then type:
+
+	<make|nmake> PyCoIpManager
+
+**Note for Win32 users:**
+
+Qt, PtQt and SIP must be compiled and installed from sources.
+
+Here is why:
+
+-	Qt Free Edition is only available as a source tarball (as of Nov 2007).
+-	Our build process needs pyqtconfig.py. This means you have to compile PyQt yourself.
+-	SIP for Windows is only available as a source tarball (as of Nov 2007).
+
+Please install Python in a path that does not contain any spaces (not 'Program Files'). Our build system currently has a bug that prevents it from building PyCoIpManager. It blocks when generating the SIP binding files.
+
+**Note for Mac OS X users:**
+SIP must be compiled for python 2.3 because this is the version distributed with Mac OS X 10.4.
+
+**Note for Ubuntu Feisty users:**
+You need the following packages to build the binding and execute it:
+
+-	sip4
+-	python-sip4-dev
+-	python-qt4-dev
+-	python-qt4
+
+### Modifying CoIpManager
+#### Adding a class
+
+If you add a class (named X) to CoIpManager (and it's not a purely internal class), you will need to add it to the binding as well. Otherwise the binding won't compile. A purely internal class is a class not used by any exported class' public API, and they are pretty rare.
+
+Please follow the following checklist:
+-	add the class' X.cpp source to the appropriate CMakeList.txt
+-	add the class' X.h source to the appropriate CMakeList.txt, in the Qt_wrap section, if your class needs to be compiled with Qt's moc
+-	make sure CoIpManager compiles with the new class: the steps until now are the classic steps needed to integrate your new class into CoIpManager's CMake build system.
+-	create a X.sip file for the class (you can use SipGenerator.py) and copy it to the appropriate folder
+-	add an %Include X.sip to CoIpManagerBinding.sip (otherwise you'll get a 'X is undefined' error from SIP)
+-	add the class' bindings sipX.cpp source to the appropriate CMakeList.txt (otherwise you'll get either a PyCoIp linking error, or subtler, a Python import error)
+
+## Use it!
+To test it, you can use the [test_coipmanager.py](http://dev.openwengo.org/trac/openwengo/trac.cgi/browser/wengophone-ng/trunk/libs/coipmanager_bindings/sip/test/test_coipmanager.py) script available in the tests directory.
+
+	python test_coipmanager.py
+
+It expects to have a _PyCoIpManager_ python module. The one compiled by OWBuild may be badly named (e.g: on Mac OS X, it is named libPyCoIpManager.so). Simply rename to PyCoIpManager.so on Mac OS X and Linux and PyCoIpManager.pyd on Windows.
+
+This script doesn't do much for now: it tries to register to an event and receive it.
+
+**Error that can happend:**
+
+	Traceback (most recent call last):
+	  File "test_coipmanager.py", line 24, in <module>
+	    SIGNAL("userProfileSetSignal(UserProfile)"), userProfileSetSlot)
+	TypeError: argument 1 of QObject.connect() has an invalid type
+
+This is due to a bad creation of the binding: TUserProfileManager inherits PyQt4.QtCore.QAbstractFileEngineHandler whereas it should inherits PyQt4.QtCore.QObject. This happends when giving bad parameters to sip. Check parameters given by the sip build system to fix that.
+
+**Note for Mac OS X users:**
+The _PyCoIpManager_ module needs to be correctly linked to the CoIpManager framework. You can
+use the [link_to_coipmanager_sdk.py](http://dev.openwengo.org/trac/openwengo/trac.cgi/browser/wengophone-ng/trunk/libs/coipmanager_sdk/install/macosx/link_to_coipmanager_sdk.py) script for that.
+
+	python link_to_coipmanager_sdk.py PyCoIpManager.so /Library/Frameworks/CoIpManager.framework/

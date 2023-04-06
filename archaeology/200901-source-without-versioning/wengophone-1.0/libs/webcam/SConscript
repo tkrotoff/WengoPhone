@@ -1,0 +1,49 @@
+
+env = WengoEnvironment()
+
+webcam_driver_env = env.Copy()
+
+webcam_driver_sources = [
+    "src/Webcam.cpp",
+]
+
+webcam_directx_sources = [
+    "src/directx-driver/WebcamDirectX.cpp",
+    "src/directx-driver/WebcamDirectXUtils.cpp"
+]
+
+webcam_v4l_sources = [
+    "src/v4l-driver/WebcamV4l.cpp"
+]
+
+webcam_null_sources = [
+    "src/null-driver/WebcamNull.cpp",
+]
+
+webcam_driver_env.WengoCppDefineAdd("WEBCAM_BUILDING_DLL")
+
+webcam_driver_decl = env.WengoDeclareLibraryAuto("webcam", "libs/webcam")
+webcam_driver_decl.AddSubIncludePath("include")
+webcam_driver_env.WengoUseLibraryHeaders("webcam")
+webcam_driver_env.WengoUseLibrary("libavcodec")
+# disabled for now, weird linking problem
+webcam_driver_env.WengoUseLibrary("wtimer")
+
+if webcam_driver_env.WengoOsIsWindows():
+    webcam_driver_sources += webcam_directx_sources
+    webcam_driver_env.WengoLibAddMultiple(["winmm", "strmiids", "comsupp"])
+
+elif webcam_driver_env.WengoOsIsLinux():
+    webcam_driver_env.WengoLibAdd("pthread")
+    webcam_driver_env.WengoLibAdd("rt")
+    webcam_driver_sources += webcam_v4l_sources
+
+else:
+    webcam_driver_sources += webcam_null_sources
+
+if webcam_driver_env.WengoGetConsoleArgument("enable-shared-webcam")=="yes":
+	webcam_driver_lib = webcam_driver_env.WengoSharedLibrary('webcam', webcam_driver_sources)
+else:
+	webcam_driver_lib = webcam_driver_env.WengoStaticLibrary('webcam', webcam_driver_sources)
+
+webcam_driver_env.WengoAlias("webcam", webcam_driver_lib)

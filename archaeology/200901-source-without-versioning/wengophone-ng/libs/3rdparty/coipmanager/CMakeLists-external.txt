@@ -1,0 +1,200 @@
+if (NOT COIPMANAGER_FOUND)
+	find_package(CoIpManager REQUIRED)
+endif (NOT COIPMANAGER_FOUND)
+
+# Here we declare all project associated with
+# libraries included in CoIpManager SDK
+
+if (APPLE)
+  ## Glib 2
+  # Only for Mac OS X because of a link problem.
+  # See the FindCoIpManager.cmake file.
+  ow_create_project(glib2)
+  ow_use_public_libraries(COIPMANAGER)
+  ####
+endif (APPLE)
+
+## Curl
+ow_create_project(curl)
+ow_use_public_libraries(COIPMANAGER)
+####
+
+## all libs/owutil/*
+ow_create_project(owcutil)
+ow_use_public_libraries(COIPMANAGER)
+add_definitions(-DDLL_SUPPORT)
+
+ow_create_project(owutil)
+ow_use_public_libraries(
+	owcutil
+	boost
+	COIPMANAGER
+)
+
+ow_create_project(owserialization)
+ow_use_public_libraries(
+	owutil
+	COIPMANAGER
+)
+
+ow_create_project(owserializer)
+ow_use_public_libraries(
+	owserialization
+	COIPMANAGER
+)
+
+ow_create_project(owsettings)
+ow_use_public_libraries(
+	owserialization
+	owserializer
+	COIPMANAGER
+)
+
+ow_create_project(owshlibloader)
+ow_use_public_libraries(
+	owutil
+	COIPMANAGER
+)
+
+ow_create_project(owsocket)
+ow_use_public_libraries(
+	COIPMANAGER
+)
+
+ow_create_project(owsystem)
+ow_use_public_libraries(
+	owutil
+	COIPMANAGER
+)
+
+ow_create_project(owhttp)
+ow_use_public_libraries(
+	curl
+	COIPMANAGER
+)
+ow_add_public_definitions(-DOWHTTP_DLL)
+
+ow_create_project(owmemorydump)
+ow_use_public_libraries(
+	owutil
+	COIPMANAGER
+)
+####
+
+## Wifo
+ow_create_project(netlib)
+ow_use_public_libraries(
+	COIPMANAGER
+)
+ow_use_private_libraries(
+	owcutil
+	curl
+)
+####
+
+## Other libraries
+ow_create_project(networkdiscovery)
+ow_use_public_libraries(
+	netlib
+	owutil
+	COIPMANAGER
+)
+
+ow_create_project(pixertool)
+ow_use_public_libraries(
+	owcutil
+	ffmpeg
+	COIPMANAGER
+)
+
+ow_create_project(webcam)
+ow_use_public_libraries(
+	owutil
+	pixertool
+	COIPMANAGER
+)
+
+ow_create_project(sipwrapper)
+ow_use_public_libraries(
+	networkdiscovery
+	pixertool
+	owutil
+	COIPMANAGER
+)
+
+ow_create_project(phapiwrapper)
+ow_use_public_libraries(
+	COIPMANAGER
+)
+####
+
+ow_create_project(coipmanager_base)
+ow_use_public_libraries(
+	networkdiscovery
+	owserialization
+	owserializer
+	owutil
+	#tinyxml
+	COIPMANAGER
+)
+
+#ow_create_project(purplewrapper)
+#ow_use_public_libraries(
+	#libpurple
+	#coipmanager_base
+	#COIPMANAGER
+#)
+
+ow_create_project(webservice)
+ow_use_public_libraries(
+	owutil
+	owhttp
+	coipmanager_base
+	COIPMANAGER
+)
+
+ow_create_project(ssorequest)
+ow_use_public_libraries(
+	webservice
+	#tinyxml
+	COIPMANAGER
+)
+
+ow_create_project(coipmanager)
+ow_use_public_libraries(
+	coipmanager_base
+	sipwrapper
+	owutil
+	COIPMANAGER
+)
+
+ow_create_project(coipmanager_threaded)
+ow_use_public_libraries(
+
+	# FIXME Should be private??
+	coipmanager
+
+	coipmanager_base
+	sipwrapper
+	COIPMANAGER
+)
+
+ow_create_project(qtcoreutil)
+ow_use_public_libraries(
+	qtcore
+	qtgui
+	owutil
+)
+
+ow_create_project(qtevent)
+ow_use_public_libraries(
+	qtcore
+)
+
+ow_create_project(owqtutil)
+ow_use_public_libraries(
+	qtcore
+	qtgui
+)
+
+ow_create_project(sound)

@@ -1,0 +1,22 @@
+
+Import('env qtEnv')
+Import('registerLibraries')
+
+util_tests_env = qtEnv(env)
+
+libs = ["cppunit", "util", "qttestrunner", "curl"]
+registerLibraries(util_tests_env, libs, [".."])
+
+util_tests_sources = [ 'main.cpp',
+	'StringTest.cpp',
+	'StringListTest.cpp',
+	'WebBrowserTest.cpp',
+	'StartupTest.cpp',
+	'HttpRequestTest.cpp',
+	'QtHttpRequestTest.cpp',
+	'NullHttpRequestTest.cpp',
+	'CurlHttpRequestTest.cpp',
+]
+
+pkg = util_tests_env.Program('test', util_tests_sources)
+Return('pkg')

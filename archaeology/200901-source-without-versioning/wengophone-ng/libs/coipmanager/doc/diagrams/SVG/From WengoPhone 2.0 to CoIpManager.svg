@@ -1,0 +1,1036 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://inkscape.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="1488.189"
+   height="1052.3622"
+   id="svg2436"
+   sodipodi:version="0.32"
+   inkscape:version="0.43+devel"
+   version="1.0"
+   sodipodi:docbase="/Users/philou/Documents/Projets/WengoPhone-CoIp/wengophone/src/model/coipmanager/docs/Diagrams/SVG"
+   sodipodi:docname="From WengoPhone 2.0 to CoIpManager.svg">
+  <defs
+     id="defs2438" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.54734008"
+     inkscape:cx="744.09448"
+     inkscape:cy="526.18109"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     width="1488.189px"
+     height="1052.3622px"
+     inkscape:window-width="1280"
+     inkscape:window-height="806"
+     inkscape:window-x="0"
+     inkscape:window-y="22" />
+  <metadata
+     id="metadata2441">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>From WengoPhone 2.0 to CoIpManager</dc:title>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Philippe Bernery</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/GPL/2.0/" />
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/GPL/2.0/">
+        <cc:permits
+           rdf:resource="http://web.resource.org/cc/Reproduction" />
+        <cc:permits
+           rdf:resource="http://web.resource.org/cc/Distribution" />
+        <cc:requires
+           rdf:resource="http://web.resource.org/cc/Notice" />
+        <cc:permits
+           rdf:resource="http://web.resource.org/cc/DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://web.resource.org/cc/ShareAlike" />
+        <cc:requires
+           rdf:resource="http://web.resource.org/cc/SourceCode" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:black;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:6, 6;stroke-dashoffset:0;stroke-opacity:1"
+       d="M 744.09448,14.616144 L 744.09448,1037.746"
+       id="path2444" />
+    <text
+       xml:space="preserve"
+       style="font-size:18px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Charter"
+       x="292.32281"
+       y="39.546371"
+       id="text3319"
+       sodipodi:linespacing="100%"><tspan
+         sodipodi:role="line"
+         id="tspan3321"
+         x="292.32281"
+         y="39.546371">WengoPhone 2.0</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:18px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Charter"
+       x="1076.1134"
+       y="38.385372"
+       id="text3323"
+       sodipodi:linespacing="100%"><tspan
+         sodipodi:role="line"
+         id="tspan3325"
+         x="1076.1134"
+         y="38.385372">CoIpManager</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:14;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr;text-anchor:start;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Charter"
+       x="16.443159"
+       y="1041.4001"
+       id="text3327"
+       sodipodi:linespacing="100%"><tspan
+         sodipodi:role="line"
+         id="tspan3329"
+         x="16.443159"
+         y="1041.4001">From WengoPhone 2.0 to CoIpManager</tspan></text>
+    <g
+       id="g5148"
+       transform="translate(-63.83131,-20.36893)">
+      <rect
+         ry="11.106725"
+         rx="11.106725"
+         y="111.44808"
+         x="995.72461"
+         height="36.540352"
+         width="162.60457"
+         id="rect5131"
+         style="fill:none;stroke:black;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      <text
+         sodipodi:linespacing="100%"
+         id="text5133"
+         y="136.31526"
+         x="1047.0287"
+         style="font-size:18px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Charter"
+         xml:space="preserve"><tspan
+           y="136.31526"
+           x="1047.0287"
+           id="tspan5135"
+           sodipodi:role="line">Connect</tspan></text>
+    </g>
+    <g
+       transform="translate(49.32948,155.1288)"
+       id="g8740">
+      <rect
+         style="fill:none;stroke:black;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="rect8742"
+         width="162.60457"
+         height="36.540352"
+         x="237.5123"
+         y="95.004921"
+         rx="11.106725"
+         ry="11.106725" />
+      <text
+         xml:space="preserve"
+         style="font-size:18px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Charter"
+         x="274.64145"
+         y="120.23209"
+         id="text8744"
+         sodipodi:linespacing="100%"><tspan
+           sodipodi:role="line"
+           id="tspan8746"
+           x="274.64145"
+           y="120.23209">UserProfile</tspan></text>
+    </g>
+    <path
+       id="path8748"
+       d="M 43.43327,52.983509 L 1444.7557,52.983509"
+       style="fill:none;fill-rule:evenodd;stroke:black;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:4, 4;stroke-dashoffset:0;stroke-opacity:1" />
+    <g
+       transform="translate(694.381,52.78896)"
+       id="g8758">
+      <rect
+         style="fill:none;stroke:black;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="rect8760"
+         width="162.60457"
+         height="36.540352"
+         x="237.5123"
+         y="95.004921"
+         rx="11.106725"
+         ry="11.106725" />
+      <text
+         xml:space="preserve"
+         style="font-size:18px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Charter"
+         x="274.64145"
+         y="120.23209"
+         id="text8762"
+         sodipodi:linespacing="100%"><tspan
+           sodipodi:role="line"
+           id="tspan8764"
+           x="274.64145"
+           y="120.23209">UserProfile</tspan></text>
+    </g>
+    <g
+       id="g8922"
+       transform="translate(59.10268,-77.06385)">
+      <rect
+         style="fill:none;stroke:black;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="rect8817"
+         width="162.60457"
+         height="36.540352"
+         x="227.73909"
+         y="557.24042"
+         rx="11.106725"
+         ry="11.106725" />
+      <text
+         xml:space="preserve"
+         style="font-size:18px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Charter"
+         x="267.19547"
+         y="582.1076"
+         id="text8819"
+         sodipodi:linespacing="100%"><tspan
+           sodipodi:role="line"
+           id="tspan8821"
+           x="267.19547"
+           y="582.1076">ContactList</tspan></text>
+    </g>
+    <g
+       id="g8907"
+       transform="translate(59.10268,27.33411)">
+      <rect
+         style="fill:none;stroke:black;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="rect8841"
+         width="162.60457"
+         height="36.540352"
+         x="227.73909"
+         y="750.9043"
+         rx="11.106725"
+         ry="11.106725" />
+      <text
+         xml:space="preserve"
+         style="font-size:18px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Charter"
+         x="269.17517"
+         y="775.77148"
+         id="text8843"
+         sodipodi:linespacing="100%"><tspan
+           sodipodi:role="line"
+           id="tspan8845"
+           x="269.17517"
+           y="775.77148">PhoneCall</tspan></text>
+    </g>
+    <g
+       id="g8902"
+       transform="translate(59.10268,11.31026)">
+      <rect
+         style="fill:none;stroke:black;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="rect8849"
+         width="162.60457"
+         height="36.540352"
+         x="227.73909"
+         y="844.08221"
+         rx="11.106725"
+         ry="11.106725" />
+      <text
+         xml:space="preserve"
+         style="font-size:18px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Charter"
+         x="250.22159"
+         y="868.9494"
+         id="text8851"
+         sodipodi:linespacing="100%"><tspan
+           sodipodi:role="line"
+           id="tspan8853"
+           x="250.22159"
+           y="868.9494">IMChatSession</tspan></text>
+    </g>
+    <g
+       id="g8897"
+       transform="translate(59.10268,33.65386)">
+      <rect
+         ry="11.106725"
+         rx="11.106725"
+         y="898.8927"
+         x="227.73909"
+         height="36.540352"
+         width="162.60457"
+         id="rect8861"
+         style="fill:none;stroke:black;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+      <text
+         sodipodi:linespacing="100%"
+         id="text8863"
+         y="923.14789"
+         x="277.81137"
+         style="font-size:18px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Charter"
+         xml:space="preserve"><tspan
+           y="923.14789"
+           x="277.81137"
+           id="tspan8865"
+           sodipodi:role="line">WsSMS</tspan></text>
+    </g>
+    <g
+       id="g9121"
+       transform="translate(189.2106,67.44527)">
+      <rect
+         style="fill:none;stroke:black;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="rect9013"
+         width="162.60457"
+         height="36.540352"
+         x="742.68268"
+         y="780.13654"
+         rx="11.106725"
+         ry="11.106725" />
+      <text
+         xml:space="preserve"
+         style="font-size:18px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Charter"
+         x="778.50537"
+         y="805.00372"
+         id="text9015"
+         sodipodi:linespacing="100%"><tspan
+           sodipodi:role="line"
+           id="tspan9017"
+           x="778.50537"
+           y="805.00372">CallSession</tspan></text>
+    </g>
+    <g
+       id="g9126"
+       transform="translate(43.04924,94.92774)">
+      <rect
+         style="fill:none;stroke:black;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="rect9021"
+         width="162.60457"
+         height="36.540352"
+         x="888.84406"
+         y="809.36884"
+         rx="11.106725"
+         ry="11.106725" />
+      <text
+         xml:space="preserve"
+         style="font-size:18px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Charter"
+         x="924.45264"
+         y="832.55298"
+         id="text9023"
+         sodipodi:linespacing="100%"><tspan
+           sodipodi:role="line"
+           id="tspan9025"
+           x="924.45264"
+           y="832.55298">ChatSession</tspan></text>
+    </g>
+    <g
+       id="g9106"
+       transform="translate(-161.5768,162.6046)">
+      <rect
+         style="fill:none;stroke:black;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="rect9029"
+         width="162.60457"
+         height="36.540352"
+         x="1093.4701"
+         y="798.40674"
+         rx="11.106725"
+         ry="11.106725" />
+      <text
+         xml:space="preserve"
+         style="font-size:18px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Charter"
+         x="1128.6335"
+         y="822.31091"
+         id="text9031"
+         sodipodi:linespacing="100%"><tspan
+           sodipodi:role="line"
+           id="tspan9033"
+           x="1128.6335"
+           y="822.31091">SMSSession</tspan></text>
+    </g>
+    <g
+       transform="translate(59.10269,-2.209289)"
+       id="g9035">
+      <g
+         id="g9043"
+         transform="translate(0,1.718781)">
+        <rect
+           style="fill:none;stroke:black;stroke-width:2.13631177;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+           id="rect9037"
+           width="186.21948"
+           height="36.404041"
+           x="215.93163"
+           y="701.64301"
+           rx="12.719745"
+           ry="11.065291" />
+        <text
+           xml:space="preserve"
+           style="font-size:18px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Charter"
+           x="242.64331"
+           y="726.44202"
+           id="text9039"
+           sodipodi:linespacing="100%"><tspan
+             sodipodi:role="line"
+             id="tspan9041"
+             x="242.64331"
+             y="726.44202">PresenceHandler</tspan></text>
+      </g>
+    </g>
+    <g
+       id="g9131"
+       transform="translate(176.6732,-370.8846)">
+      <rect
+         style="fill:none;stroke:black;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         id="rect9050"
+         width="162.60457"
+         height="36.540352"
+         x="1036.8325"
+         y="931.77905"
+         rx="11.106725"
+         ry="11.106725" />
+      <text
+         xml:space="preserve"
+         style="font-size:18px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Charter"
+         x="1077.4446"
+         y="955.68323"
+         id="text9052"
+         sodipodi:linespacing="100%"><tspan
+           sodipodi:role="line"
+           id="tspan9054"
+           x="1077.4446"
+           y="955.68323">Serializers</tspan></text>
+    </g>
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:black;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 173.56668,858.69831 L 173.56668,858.69831"
+       id="path9207"
+       inkscape:connector-type="polyline" />
+    <g
+       transform="translate(982.1127,-589.2279)"
+       id="g9209">
+      <g
+         id="g9211">
+        <rect
+           ry="11.106725"
+           rx="11.106725"
+           y="680.09735"
+           x="231.39311"
+           height="36.540352"
+           width="162.60457"
+           id="rect9213"
+           style="fill:none;stroke:black;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+        <text
+           sodipodi:linespacing="100%"
+           id="text9215"
+           y="704.8385"
+           x="270.32437"
+           style="font-size:18px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Charter"
+           xml:space="preserve"><tspan
+             y="704.8385"
+             x="270.32437"
+             id="tspan9217"
+             sodipodi:role="line">PhoneLine</tspan></text>
+      </g>
+    </g>
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:black;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 1095.4979,109.28804 L 1212.5058,109.20091"
+       id="path9219"
+       inkscape:connector-type="polyline"
+       inkscape:connection-start="#g5148"
+       inkscape:connection-end="#g9209" />
+    <g
+       id="g9447"
+       transform="translate(-0.913506,137.8359)">
+      <g
+         transform="translate(40.00968,-182.798)"
+         id="g8799">
+        <rect
+           ry="11.106725"
+           rx="11.106725"
+           y="385.5007"
+           x="248.11168"
+           height="36.540352"
+           width="162.60457"
+           id="rect8774"
+           style="fill:none;stroke:black;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+        <text
+           sodipodi:linespacing="100%"
+           id="text8776"
+           y="408.55887"
+           x="254.80481"
+           style="font-size:18px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Charter"
+           xml:space="preserve"><tspan
+             y="408.55887"
+             x="254.80481"
+             id="tspan8778"
+             sodipodi:role="line">IMAccountHandler</tspan></text>
+      </g>
+      <g
+         transform="translate(60.74833,-239.5318)"
+         id="g8927">
+        <rect
+           style="fill:none;stroke:black;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+           id="rect8806"
+           width="162.60457"
+           height="36.540352"
+           x="227.73909"
+           y="491.46771"
+           rx="11.106725"
+           ry="11.106725" />
+        <text
+           xml:space="preserve"
+           style="font-size:18px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Charter"
+           x="266.26859"
+           y="514.52588"
+           id="text8808"
+           sodipodi:linespacing="100%"><tspan
+             sodipodi:role="line"
+             id="tspan8810"
+             x="266.26859"
+             y="514.52588">IMAccount</tspan></text>
+      </g>
+      <rect
+         ry="11.106725"
+         rx="11.106725"
+         y="188.95192"
+         x="274.05264"
+         height="113.27509"
+         width="190.00984"
+         id="rect9257"
+         style="fill:none;stroke:black;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:4, 4;stroke-dashoffset:0;stroke-opacity:1" />
+    </g>
+    <g
+       id="g9435"
+       transform="translate(0.913536,-308.853)">
+      <g
+         transform="translate(40.37574,136.6411)"
+         id="g8794">
+        <rect
+           style="fill:none;stroke:black;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+           id="rect8768"
+           width="162.60457"
+           height="36.540352"
+           x="248.11168"
+           y="285.01471"
+           rx="11.106725"
+           ry="11.106725" />
+        <text
+           xml:space="preserve"
+           style="font-size:18px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Charter"
+           x="267.57935"
+           y="309.8819"
+           id="text8770"
+           sodipodi:linespacing="100%"><tspan
+             sodipodi:role="line"
+             id="tspan8772"
+             x="267.57935"
+             y="309.8819">ConnectHandler</tspan></text>
+      </g>
+      <g
+         transform="translate(55.26729,-207.3812)"
+         id="g8932">
+        <g
+           id="g8942">
+          <rect
+             ry="11.106725"
+             rx="11.106725"
+             y="680.09735"
+             x="231.39311"
+             height="36.540352"
+             width="162.60457"
+             id="rect8934"
+             style="fill:none;stroke:black;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+          <text
+             sodipodi:linespacing="100%"
+             id="text8936"
+             y="704.8385"
+             x="270.32437"
+             style="font-size:18px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Charter"
+             xml:space="preserve"><tspan
+               y="704.8385"
+               x="270.32437"
+               id="tspan8938"
+               sodipodi:role="line">PhoneLine</tspan></text>
+        </g>
+      </g>
+      <rect
+         ry="10.750027"
+         rx="11.107669"
+         y="409.2439"
+         x="272.21753"
+         height="109.63721"
+         width="190.02599"
+         id="rect9280"
+         style="fill:none;stroke:black;stroke-width:0.98385298;stroke-miterlimit:4;stroke-dasharray:3.93541201, 3.93541201;stroke-dashoffset:0;stroke-opacity:1" />
+    </g>
+    <g
+       id="g9424"
+       transform="translate(0,0.216258)">
+      <g
+         transform="translate(58.92132,-18.94436)"
+         id="g8917">
+        <rect
+           ry="11.106725"
+           rx="11.106725"
+           y="632.14813"
+           x="227.73909"
+           height="36.540352"
+           width="162.60457"
+           id="rect8825"
+           style="fill:none;stroke:black;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+        <text
+           sodipodi:linespacing="100%"
+           id="text8827"
+           y="656.05231"
+           x="268.3511"
+           style="font-size:18px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Charter"
+           xml:space="preserve"><tspan
+             y="656.05231"
+             x="268.3511"
+             id="tspan8829"
+             sodipodi:role="line">Serializers</tspan></text>
+      </g>
+      <g
+         transform="translate(59.92551,-133.9502)"
+         id="g8912">
+        <rect
+           ry="11.065291"
+           rx="12.719745"
+           y="701.64301"
+           x="215.93163"
+           height="36.404041"
+           width="186.21948"
+           id="rect8833"
+           style="fill:none;stroke:black;stroke-width:2.13631177;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+        <text
+           sodipodi:linespacing="100%"
+           id="text8835"
+           y="726.44202"
+           x="222.23299"
+           style="font-size:18px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Charter"
+           xml:space="preserve"><tspan
+             y="726.44202"
+             x="222.23299"
+             id="tspan8837"
+             sodipodi:role="line">IMContactListHandler</tspan></text>
+      </g>
+      <rect
+         ry="10.211939"
+         rx="11.85484"
+         y="556.60968"
+         x="266.7399"
+         height="104.14938"
+         width="202.80832"
+         id="rect9282"
+         style="fill:none;stroke:black;stroke-width:0.99064016;stroke-miterlimit:4;stroke-dasharray:3.96256073, 3.96256073;stroke-dashoffset:0;stroke-opacity:1" />
+    </g>
+    <g
+       id="g9292"
+       transform="translate(-4.453235,45.05811)">
+      <g
+         transform="translate(-0.687988,0)"
+         id="g9153">
+        <rect
+           style="fill:none;stroke:black;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+           id="rect8752"
+           width="162.60457"
+           height="36.540352"
+           x="935.55139"
+           y="168.08562"
+           rx="11.106725"
+           ry="11.106725" />
+        <text
+           xml:space="preserve"
+           style="font-size:18px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Charter"
+           x="950.52411"
+           y="189.6048"
+           id="text8754"
+           sodipodi:linespacing="100%"><tspan
+             sodipodi:role="line"
+             id="tspan8756"
+             x="950.52411"
+             y="189.6048">AccountManager</tspan></text>
+      </g>
+      <g
+         id="g8780"
+         transform="translate(692.7042,122.4102)">
+        <rect
+           ry="11.106725"
+           rx="11.106725"
+           y="95.004921"
+           x="240.67616"
+           height="36.540352"
+           width="162.60457"
+           id="rect8782"
+           style="fill:none;stroke:black;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+        <text
+           sodipodi:linespacing="100%"
+           id="text8784"
+           y="118.18909"
+           x="276.4989"
+           style="font-size:18px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Charter"
+           xml:space="preserve"><tspan
+             y="118.18909"
+             x="276.4989"
+             id="tspan8786"
+             sodipodi:role="line">AccountList</tspan></text>
+      </g>
+      <g
+         id="g9136"
+         transform="translate(704.1582,-224.7232)">
+        <rect
+           ry="11.106725"
+           rx="11.106725"
+           y="491.46771"
+           x="227.73909"
+           height="36.540352"
+           width="162.60457"
+           id="rect9138"
+           style="fill:none;stroke:black;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+        <text
+           sodipodi:linespacing="100%"
+           id="text9140"
+           y="514.52588"
+           x="277.36066"
+           style="font-size:18px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Charter"
+           xml:space="preserve"><tspan
+             y="514.52588"
+             x="277.36066"
+             id="tspan9142"
+             sodipodi:role="line">Account</tspan></text>
+      </g>
+      <rect
+         ry="15.21032"
+         rx="11.096804"
+         y="159.03542"
+         x="922.72876"
+         height="155.12679"
+         width="189.84012"
+         id="rect9284"
+         style="fill:none;stroke:black;stroke-width:1.16972053;stroke-miterlimit:4;stroke-dasharray:4.67888227, 4.67888227;stroke-dashoffset:0;stroke-opacity:1" />
+    </g>
+    <g
+       id="g9398"
+       transform="translate(-4.453243,50.52994)">
+      <g
+         id="g8947"
+         transform="translate(695.2728,242.9934)">
+        <rect
+           ry="11.106725"
+           rx="11.106725"
+           y="95.004921"
+           x="240.67616"
+           height="36.540352"
+           width="162.60457"
+           id="rect8949"
+           style="fill:none;stroke:black;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+        <text
+           sodipodi:linespacing="100%"
+           id="text8951"
+           y="116.52409"
+           x="255.64888"
+           style="font-size:18px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Charter"
+           xml:space="preserve"><tspan
+             y="116.52409"
+             x="255.64888"
+             id="tspan8953"
+             sodipodi:role="line">ContactManager</tspan></text>
+      </g>
+      <g
+         transform="translate(694.8752,292.3228)"
+         id="g8955">
+        <rect
+           style="fill:none;stroke:black;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+           id="rect8957"
+           width="162.60457"
+           height="36.540352"
+           x="240.67616"
+           y="95.004921"
+           rx="11.106725"
+           ry="11.106725" />
+        <text
+           xml:space="preserve"
+           style="font-size:18px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Charter"
+           x="276.4989"
+           y="118.18909"
+           id="text8959"
+           sodipodi:linespacing="100%"><tspan
+             sodipodi:role="line"
+             id="tspan8961"
+             x="276.4989"
+             y="118.18909">ContactList</tspan></text>
+      </g>
+      <rect
+         ry="10.393354"
+         rx="11.108628"
+         y="327.93341"
+         x="922.62762"
+         height="105.99959"
+         width="190.0424"
+         id="rect9286"
+         style="fill:none;stroke:black;stroke-width:0.96743566;stroke-miterlimit:4;stroke-dasharray:3.86974257, 3.86974257;stroke-dashoffset:0;stroke-opacity:1" />
+    </g>
+    <g
+       id="g9409"
+       transform="translate(-3.539798,6.672248)">
+      <g
+         transform="translate(77.6483,27.40524)"
+         id="g9086">
+        <rect
+           ry="11.106725"
+           rx="11.106725"
+           y="528.00812"
+           x="857.78479"
+           height="36.540352"
+           width="162.60457"
+           id="rect8965"
+           style="fill:none;stroke:black;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+        <text
+           sodipodi:linespacing="100%"
+           id="text8967"
+           y="550.24731"
+           x="887.67725"
+           style="font-size:18px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Charter"
+           xml:space="preserve"><tspan
+             y="550.24731"
+             x="887.67725"
+             id="tspan8969"
+             sodipodi:role="line">AccountSync</tspan></text>
+      </g>
+      <g
+         transform="translate(-141.5939,74.90771)"
+         id="g9091">
+        <rect
+           ry="11.106725"
+           rx="11.106725"
+           y="528.00812"
+           x="1077.027"
+           height="36.540352"
+           width="162.60457"
+           id="rect8973"
+           style="fill:none;stroke:black;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+        <text
+           sodipodi:linespacing="100%"
+           id="text8975"
+           y="551.4173"
+           x="1110.5531"
+           style="font-size:18px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Charter"
+           xml:space="preserve"><tspan
+             y="551.4173"
+             x="1110.5531"
+             id="tspan8977"
+             sodipodi:role="line">ContactSync</tspan></text>
+      </g>
+      <g
+         transform="translate(-247.5609,-78.56183)"
+         id="g9096">
+        <rect
+           ry="11.106725"
+           rx="11.106725"
+           y="586.47272"
+           x="1182.994"
+           height="36.540352"
+           width="162.60457"
+           id="rect8981"
+           style="fill:none;stroke:black;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+        <text
+           sodipodi:linespacing="100%"
+           id="text8983"
+           y="610.03491"
+           x="1201.4358"
+           style="font-size:18px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Charter"
+           xml:space="preserve"><tspan
+             y="610.03491"
+             x="1201.4358"
+             id="tspan8985"
+             sodipodi:role="line">UserProfileSync</tspan></text>
+      </g>
+      <rect
+         ry="15.031853"
+         rx="11.097205"
+         y="497.03024"
+         x="921.81189"
+         height="153.30663"
+         width="189.84698"
+         id="rect9288"
+         style="fill:none;stroke:black;stroke-width:1.16285896;stroke-miterlimit:4;stroke-dasharray:4.65143588, 4.65143588;stroke-dashoffset:0;stroke-opacity:1" />
+    </g>
+    <g
+       id="g9361"
+       transform="translate(-2.626254,0.268335)">
+      <g
+         transform="translate(118.2759,56.63757)"
+         id="g9116">
+        <rect
+           ry="11.106725"
+           rx="11.106725"
+           y="675.99652"
+           x="817.27545"
+           height="36.540352"
+           width="162.60457"
+           id="rect8989"
+           style="fill:none;stroke:black;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+        <text
+           sodipodi:linespacing="100%"
+           id="text8991"
+           y="700.73767"
+           x="831.41974"
+           style="font-size:18px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Charter"
+           xml:space="preserve"><tspan
+             y="700.73767"
+             x="831.41974"
+             id="tspan8993"
+             sodipodi:role="line">AccountPresence</tspan></text>
+      </g>
+      <g
+         transform="translate(-83.26748,95.00496)"
+         id="g9111">
+        <rect
+           ry="11.106725"
+           rx="11.106725"
+           y="686.95862"
+           x="1018.4749"
+           height="36.540352"
+           width="162.60457"
+           id="rect8997"
+           style="fill:none;stroke:black;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+        <text
+           sodipodi:linespacing="100%"
+           id="text8999"
+           y="711.82581"
+           x="1036.2528"
+           style="font-size:18px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Charter"
+           xml:space="preserve"><tspan
+             y="711.82581"
+             x="1036.2528"
+             id="tspan9001"
+             sodipodi:role="line">ContactPresence</tspan></text>
+      </g>
+      <g
+         transform="translate(-305.0047,-1.4e-5)"
+         id="g9101">
+        <rect
+           ry="11.106725"
+           rx="11.106725"
+           y="683.30463"
+           x="1239.8682"
+           height="36.540352"
+           width="162.60457"
+           id="rect9005"
+           style="fill:none;stroke:black;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
+        <text
+           sodipodi:linespacing="100%"
+           id="text9007"
+           y="708.5318"
+           x="1242.5618"
+           style="font-size:18px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Charter"
+           xml:space="preserve"><tspan
+             y="708.5318"
+             x="1242.5618"
+             id="tspan9009"
+             sodipodi:role="line">UserProfilePresence</tspan></text>
+      </g>
+      <rect
+         ry="14.853389"
+         rx="11.097609"
+         y="676.07458"
+         x="920.8949"
+         height="151.48651"
+         width="189.85388"
+         id="rect9290"
+         style="fill:none;stroke:black;stroke-width:1.15595639;stroke-miterlimit:4;stroke-dasharray:4.62382566, 4.62382566;stroke-dashoffset:0;stroke-opacity:1" />
+    </g>
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:black;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 450.44635,255.34633 L 930.8933,179.12162"
+       id="path9485"
+       inkscape:connector-type="polyline"
+       inkscape:connection-start="#g8740"
+       inkscape:connection-end="#g8758" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:black;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 450.44635,270.09485 L 917.69066,279.6947"
+       id="path9487"
+       inkscape:connector-type="polyline"
+       inkscape:connection-start="#g8740"
+       inkscape:connection-end="#g9292" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:black;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 463.64898,148.41954 L 930.8933,115.20064"
+       id="path9493"
+       inkscape:connector-type="polyline"
+       inkscape:connection-start="#g9435"
+       inkscape:connection-end="#g5148" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:black;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 470.04354,604.39137 L 917.69066,584.58209"
+       id="path9495"
+       inkscape:connector-type="polyline"
+       inkscape:connection-start="#g9424"
+       inkscape:connection-end="#g9409" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:black;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 462.32195,724.13336 L 917.69066,747.24"
+       id="path9497"
+       inkscape:connector-type="polyline"
+       inkscape:connection-start="#g9035"
+       inkscape:connection-end="#g9361" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:black;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 450.44634,805.35612 L 930.8933,857.00444"
+       id="path9499"
+       inkscape:connector-type="polyline"
+       inkscape:connection-start="#g8907"
+       inkscape:connection-end="#g9121" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:black;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 450.44634,879.90234 L 930.8933,916.32707"
+       id="path9501"
+       inkscape:connector-type="polyline"
+       inkscape:connection-start="#g8902"
+       inkscape:connection-end="#g9126" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:black;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 450.44634,954.44856 L 930.8933,975.64969"
+       id="path9503"
+       inkscape:connector-type="polyline"
+       inkscape:connection-start="#g8897"
+       inkscape:connection-end="#g9106" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:black;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 1108.7005,579.95183 L 1212.5057,579.51275"
+       id="path9505"
+       inkscape:connector-type="polyline"
+       inkscape:connection-start="#g9409"
+       inkscape:connection-end="#g9131" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:black;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 446.29495,249.13372 L 935.04469,128.6195"
+       id="path9507"
+       inkscape:connector-type="polyline"
+       inkscape:connection-start="#g8740"
+       inkscape:connection-end="#g5148" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:black;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 463.64898,368.35775 L 917.69066,296.72453"
+       id="path9509"
+       inkscape:connector-type="polyline"
+       inkscape:connection-start="#g9447"
+       inkscape:connection-end="#g9292" />
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:black;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 450.44634,489.90029 L 917.69066,441.38059"
+       id="path9511"
+       inkscape:connector-type="polyline"
+       inkscape:connection-start="#g8922"
+       inkscape:connection-end="#g9398" />
+  </g>
+</svg>

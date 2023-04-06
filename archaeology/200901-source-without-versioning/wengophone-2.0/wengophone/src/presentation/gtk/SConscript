@@ -1,0 +1,38 @@
+env = WengoGetQt4Environment()
+
+libs = [
+	'gtk',
+	'wengophone',
+]
+lib_path = []
+include_path = []
+defines = {
+	'GTKINTERFACE' : 1
+}
+headers = [
+	'GtkWengoPhone.h',
+	'phoneline/GtkPhoneLine.h',
+	'WidgetFactory.h'
+]
+sources = [
+	#'../main.cpp',
+	'GtkWengoPhone.cpp',
+	'phoneline/GtkPhoneLine.cpp',
+	'WidgetFactory.cpp'
+]
+
+if WengoGetConsoleArgument('sipxwrapper'):
+	defines['SIPXWRAPPER'] = 1
+	libs += ['sipxwrapper']
+elif WengoGetConsoleArgument('phapiwrapper'):
+	defines['PHAPIWRAPPER'] = 1
+	libs += ['phapiwrapper']
+else:
+	libs += ['nullsipwrapper']
+
+#if WengoOSWindows():
+#	sources += env.WengoCompileWindowsResource('win/wengophone.rc')
+
+env.WengoAddDefines(defines)
+env.WengoUseLibraries(libs)
+env.WengoProgram('gtkwengophone', sources, headers)

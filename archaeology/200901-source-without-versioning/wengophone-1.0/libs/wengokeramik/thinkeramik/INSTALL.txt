@@ -1,0 +1,25 @@
+Make sure you have setup QTDIR to the right directory (e.g. c:\QT)
+Also make sure that the kdefx folder can be found 2 directories up
+or change the INCLUDE and LIB path in the ".pro"
+
+open a command prompt and do:
+
+qmake 
+nmake
+
+Currently this has only been tested with MSVC++ V7+ 
+(KDElibs might not compile with other compilers)
+
+Styles DLLs are installed in $(QTDIR)\plugins\styles.
+
+In order to deploy these styles with your applications you need to put the kdefx.dll
+in the same folder as your application and any styles you want into a folder called
+"styles" located at the root of you application. 
+
+E.g. if you app is called "myapp.exe" and located in "c:\apps" then here's what you should
+get:
+
+c:\apps\myapp.exe
+c:\apps\kdefx.dll
+c:\apps\styles\kcomixstyle.dll
+c:\apps\styles\....

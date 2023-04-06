@@ -1,0 +1,66 @@
+package id9h6lxeb13zoddeb2h4tdm;
+
+/**
+@version 2.0
+@physicalPackage
+@__modelType diagram 
+*/
+class diagram {
+/**
+@__ref <oiref:cpp#Class#CPhoneCall:oiref><oihard>
+@__modelType reference
+@__imported 
+*/
+class reference {
+}
+/**
+@__ref <oiref:cpp#Class#QtPhoneLine:oiref><oihard>
+@__modelType reference
+@__imported 
+*/
+class reference10 {
+}
+/**
+@__ref <oiref:cpp#Class#QtPhoneCall:oiref><oihard>
+@__modelType reference 
+*/
+class reference11 {
+}
+/**
+@__ref <oiref:cpp#Class#PPhoneCall:oiref><oihard>
+@__modelType reference
+@__imported 
+*/
+class reference13 {
+}
+/**
+@__ref <oiref:cpp#Class#QtVideo:oiref><oihard>
+@__modelType reference 
+*/
+class reference12 {
+}
+}/**
+@__tags
+@shapeType ClassDiagram 
+*/
+class __tags {
+}/**
+@__options 
+*/
+class __options {
+}/**
+@__positions <oigroup:<oiref:cpp#Class#QtPhoneLine:oiref>=850,410,300,350,0:oigroup>
+<oigroup:MemberLink#<oiref:cpp#Member#QtPhoneCall#_videoWindow:oiref>=310,590,220,590:oigroup>
+<oigroup:<oiref:cpp#Class#QtPhoneCall:oiref>=310,410,310,440,0:oigroup>
+<oigroup:MemberLink#<oiref:cpp#Member#QtPhoneCall#_cPhoneCall:oiref>=423,410,423,291:oigroup>
+<oigroup:<oiref:cpp#Class#CPhoneCall:oiref>=340,20,250,271,0:oigroup>
+<oigroup:Composite#supplierCardinality#MemberLink#<oiref:cpp#Member#QtPhoneCall#_videoWindow:oiref>=224,570,28,16,0:oigroup>
+<oigroup:<oiref:cpp#Class#QtVideo:oiref>=80,511,140,159,0:oigroup>
+<oigroup:Composite#supplierCardinality#MemberLink#<oiref:cpp#Member#CPhoneCall#_pPhoneCall:oiref>=708,110,28,16,0:oigroup>
+<oigroup:MemberLink#<oiref:cpp#Member#CPhoneCall#_pPhoneCall:oiref>=590,130,740,130:oigroup>
+<oigroup:<oiref:cpp#Class#PPhoneCall:oiref>=740,30,230,200,0:oigroup>
+<oigroup:Composite#supplierCardinality#MemberLink#<oiref:cpp#Member#QtPhoneCall#_cPhoneCall:oiref>=391,291,28,16,0:oigroup>
+<oigroup:<oiref:cpp#Extends#QtPhoneCall#PPhoneCall:oiref>=521,410,855,230:oigroup>
+*/
+class __positions {
+}

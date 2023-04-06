@@ -1,0 +1,43 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>HomePageWidgetForm</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>HomePageWidgetForm</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>321</width>
+            <height>421</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>HomePageWidgetForm</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>0</number>
+        </property>
+        <property name="spacing">
+            <number>0</number>
+        </property>
+        <widget class="QTextBrowser" row="0" column="0">
+            <property name="name">
+                <cstring>browser</cstring>
+            </property>
+            <property name="vScrollBarMode">
+                <enum>AlwaysOff</enum>
+            </property>
+            <property name="hScrollBarMode">
+                <enum>AlwaysOff</enum>
+            </property>
+        </widget>
+    </grid>
+</widget>
+<pixmapinproject/>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

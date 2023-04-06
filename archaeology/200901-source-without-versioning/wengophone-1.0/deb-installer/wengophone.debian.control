@@ -1,0 +1,10 @@
+Package: wengophone
+Version: 0.958
+Section: devel
+Priority: optional
+Architecture: i386
+Depends: bash (>= 2.05), libqt3-mt (>= 3.3) | libqt3c102-mt (>= 3.3), libstdc++5 (>= 3.3) | libstdc++6 (>= 4.0) , libc6 (>= 2.3), zlib1g (>= 1.2), libglib2.0-0 (>=2.0), libssl0.9.7 (>= 0.9.7), libasound2 (>= 1.0)
+Maintainer: Mathieu Stute <mathieu.stute@wengo.fr>
+Description: Wengophone is an opensource SIP softphone (GPL licence).
+ It is an ideal solution for any future proof telephony choice!
+ (jump on the bandwagon http://www.openwengo.com !)

@@ -1,0 +1,26 @@
+env = WengoGetQt4Environment()
+
+lib_path = []
+include_path = ['.']
+
+libs = [
+	'owutil',
+	'qtutil',
+	'qt4',
+]
+
+headers = ['QtBrowser.h']
+sources = ['QtBrowser.cpp']
+
+def moc(env, headers):
+	moced = []
+	for header in headers:
+		moced += [ env.Moc(header) ]
+	return moced
+moced = moc(env, headers)
+
+env.WengoAddIncludePath(include_path)
+env.WengoUseLibraries(libs)
+env.WengoAddDoxyfile()
+
+env.WengoStaticLibrary('owbrowser', sources + moced, headers)

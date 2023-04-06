@@ -1,0 +1,27 @@
+ow_create_project(libpurple)
+
+ow_use_public_libraries(
+	glib2
+)
+
+ow_add_public_libraries(
+	${CMAKE_CURRENT_SOURCE_DIR}/binary-lib/msvc/libpurple.lib
+)
+
+if (MSVC)
+	ow_add_public_definitions(
+		-DG_GNUC_NULL_TERMINATED=""
+	)
+endif (MSVC)
+
+if (WIN32)
+	ow_add_public_include_dirs(
+		${CMAKE_CURRENT_SOURCE_DIR}/src/libpurple/win32
+	)   
+endif (WIN32)
+
+ow_add_public_include_dirs(
+	${CMAKE_CURRENT_SOURCE_DIR}/src
+)
+
+ow_copy_dir_recursive(${CMAKE_CURRENT_SOURCE_DIR}/binary-lib/msvc/*.dll ${BUILD_DIR})

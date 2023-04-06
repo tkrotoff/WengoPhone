@@ -1,0 +1,49 @@
+package id5mskreb13zoddeb2h4t8u;
+
+/**
+@version 2.0
+@physicalPackage
+@__modelType diagram 
+*/
+class diagram {
+/**
+@__ref <oiref:cpp#Class#GtkPhoneLine:oiref><oihard>
+@__modelType reference 
+*/
+class reference {
+}
+/**
+@__ref <oiref:cpp#Class#PPhoneLine:oiref><oihard>
+@__modelType reference
+@__imported 
+*/
+class reference4 {
+}
+/**
+@__ref <oiref:cpp#Class#CPhoneLine:oiref><oihard>
+@__modelType reference
+@__imported 
+*/
+class reference5 {
+}
+}/**
+@__tags
+@shapeType ClassDiagram 
+*/
+class __tags {
+}/**
+@__options 
+*/
+class __options {
+}/**
+@__positions <oigroup:<oiref:cpp#Extends#GtkPhoneLine#PPhoneLine:oiref>=364,210,665,141:oigroup>
+<oigroup:Composite#supplierCardinality#MemberLink#<oiref:cpp#Member#GtkPhoneLine#_cPhoneLine:oiref>=288,166,28,16,0:oigroup>
+<oigroup:Composite#supplierCardinality#MemberLink#<oiref:cpp#Member#CPhoneLine#_pPhoneLine:oiref>=588,70,28,16,0:oigroup>
+<oigroup:MemberLink#<oiref:cpp#Member#CPhoneLine#_pPhoneLine:oiref>=425,90,620,90:oigroup>
+<oigroup:<oiref:cpp#Class#PPhoneLine:oiref>=620,20,91,121,1:oigroup>
+<oigroup:<oiref:cpp#Class#CPhoneLine:oiref>=230,20,195,146,1:oigroup>
+<oigroup:<oiref:cpp#Class#GtkPhoneLine:oiref>=240,210,168,142,1:oigroup>
+<oigroup:MemberLink#<oiref:cpp#Member#GtkPhoneLine#_cPhoneLine:oiref>=320,210,320,166:oigroup> 
+*/
+class __positions {
+}

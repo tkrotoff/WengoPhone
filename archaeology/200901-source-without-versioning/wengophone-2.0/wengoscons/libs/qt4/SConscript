@@ -1,0 +1,222 @@
+import os
+
+env = WengoGetEnvironment()
+
+if not os.environ.has_key('QTDIR'):
+	print 'Error: QTDIR environment variable not set'
+	print "Please, set QTDIR environment variable to the "\
+			"location of your Qt 4 installation, then restart the "\
+			"build process."
+	env.Exit(1)
+
+if not os.environ.has_key('QTLIBDIR'):
+	print 'Warning: QTLIBDIR environment variable not set, using' + str(os.environ['QTDIR'])
+	print "Please, set QTLIBDIR environment variable to the "\
+			"location of your Qt 4 libraries if you "\
+			"encounter any issue regarding linking to"\
+			" Qt libraries, then restart the build process."
+	qt_lib_dir = os.path.join(os.environ['QTDIR'], 'lib')
+else:
+	qt_lib_dir = os.environ['QTLIBDIR']
+
+if not os.environ.has_key('QTINCLUDEDIR'):
+	print 'Warning: QTINCLUDEDIR environment variable not set.'
+	print "Please, set QTINCLUDEDIR environment variable to the "\
+		"location of your Qt 4 header files, then restart the "\
+		"build process."
+	qtincludedir = os.path.join(os.environ['QTDIR'], 'include')
+else:
+	qtincludedir = os.environ['QTINCLUDEDIR']
+
+qtdir = os.environ['QTDIR']
+
+libs = []
+link_flags = []
+lib_path = [qt_lib_dir]
+include_path = []
+if WengoOSMacOSX():
+	include_path += [os.path.join(qtdir, 'lib', 'QtCore.framework', 'Headers')]
+	#include_path += [os.path.join(qtdir, 'lib', 'QtCore.framework', 'Headers')]
+	#include_path += [os.path.join(qtdir, 'lib', 'QtGui.framework', 'Headers')]
+	#include_path += [os.path.join(qtdir, 'lib', 'QtNetwork.framework', 'Headers')]
+	#include_path += [os.path.join(qtdir, 'lib', 'QtXml.framework', 'Headers')]
+	#include_path += [os.path.join(qtdir, 'lib', 'QtSvg.framework', 'Headers')]
+	#include_path += [os.path.join(qtdir, 'include', 'QtUiTools')]
+elif WengoOSLinux():
+	include_path += [qtincludedir]
+	#include_path += [os.path.join(qtincludedir, 'Qt')]
+	#include_path += [os.path.join(qtincludedir, 'QtCore')]
+	#include_path += [os.path.join(qtincludedir, 'QtGui')]
+	#include_path += [os.path.join(qtincludedir, 'QtNetwork')]
+	#include_path += [os.path.join(qtincludedir, 'QtXml')]
+	#include_path += [os.path.join(qtincludedir, 'QtSvg')]
+	#include_path += [os.path.join(qtincludedir, 'QtUiTools')]
+else:
+	include_path += [os.path.join(qtdir, 'include')]
+	#include_path += [os.path.join(qtdir, 'include', 'Qt')]
+	#include_path += [os.path.join(qtdir, 'include', 'QtCore')]
+	#include_path += [os.path.join(qtdir, 'include', 'QtGui')]
+	#include_path += [os.path.join(qtdir, 'include', 'QtNetwork')]
+	#include_path += [os.path.join(qtdir, 'include', 'QtXml')]
+	#include_path += [os.path.join(qtdir, 'include', 'QtSvg')]
+	#include_path += [os.path.join(qtdir, 'include', 'QtUiTools')]
+	#include_path += [os.path.join(qtdir, 'include', 'ActiveQt')]
+defines = {
+	'UNICODE' : 1,
+	'QT_DLL' : 1,
+	'QT_PLUGIN' : 1,
+	'QT_CORE_LIB' : 1,
+	'QT_GUI_LIB' : 1,
+	'QT_XML_LIB' : 1,
+	'QT_NETWORK_LIB' : 0,
+	'QT_THREAD_SUPPORT' : 1,
+	'QT_NO_KEYWORDS' : 1,
+}
+cc_flags = []
+headers = []
+sources = []
+
+if WengoCCGCC():
+	cc_flags += [
+		'-frtti',
+		'-fexceptions'
+	]
+
+if WengoCCMinGW():
+	link_flags += [
+		'-mthreads',
+		'-Wl,-enable-stdcall-fixup',
+		'-Wl,-enable-auto-import',
+		'-Wl,-enable-runtime-pseudo-reloc'
+	]
+elif WengoCCGCC():
+	link_flags += [
+		'-mthreads'
+	]
+
+if WengoOSWindows():
+	if WengoDebugMode():
+		libs += [
+			'QtUiToolsd',
+			'QtCored4',
+			'QtGuid4',
+			'QtNetworkd4',
+			'QtXmld4',
+			'QtSvgd4',
+			'qtmaind',
+
+			'gdi32',
+			'comdlg32',
+			'oleaut32',
+			'imm32',
+			'winmm',
+			'winspool',
+			'ws2_32',
+			'ole32',
+			'user32',
+			'msimg32',
+			'shell32',
+			'kernel32',
+			'uuid',
+			'advapi32',
+		]
+		try:
+			if env.WengoQtEdition() == 'QT_EDITION_DESKTOP':
+				libs.append('QAxContainerd')
+				defines['QT_COMMERCIAL'] = 1
+		except:
+			print 'env.WengoQtEdition() error'
+
+	else:
+		libs += [
+			'QtUiTools',
+			'QtCore4',
+			'QtGui4',
+			'QtNetwork4',
+			'QtXml4',
+			'QtSvg4',
+			'qtmain',
+
+			'gdi32',
+			'comdlg32',
+			'oleaut32',
+			'imm32',
+			'winmm',
+			'winspool',
+			'ws2_32',
+			'ole32',
+			'user32',
+			'msimg32',
+			'shell32',
+			'kernel32',
+			'uuid',
+			'advapi32',
+		]
+		try:
+			if env.WengoQtEdition() == 'QT_EDITION_DESKTOP':
+				libs.append('QAxContainer')
+				defines['QT_COMMERCIAL'] = 1
+		except:
+			print 'env.WengoQtEdition() error'
+
+	if WengoCCMinGW():
+		include_path += [os.path.join(qtdir, 'mkspecs', 'win32-g++')]
+
+	defines['QT_LARGEFILE_SUPPORT'] = 1
+	defines['WIN32'] = 1
+
+elif WengoOSLinux() or WengoOSBSD():
+	if WengoDebugMode():
+		libs += [
+			'QtCore_debug',
+			'QtGui_debug',
+			'QtNetwork_debug',
+			'QtXml_debug',
+			'QtSvg_debug',
+			'QtUiTools_debug',
+		]
+	else:
+		libs += [
+			'QtCore',
+			'QtGui',
+			'QtNetwork',
+			'QtXml',
+			'QtSvg',
+			'QtUiTools',
+		]
+	include_path += [os.path.join(qtdir, 'mkspecs', 'linux-g++')]
+
+elif WengoOSMacOSX():
+	cc_flags += [
+		'-F' + os.path.join(qtdir, 'lib'),
+	]
+
+	libs += [
+		'z',
+		'QtUiTools',
+	]
+
+	include_path += [os.path.join(qtdir, 'mkspecs', 'macx-g++')]
+
+	link_flags += [
+		'-framework Carbon',
+		'-framework QuickTime',
+		'-framework ApplicationServices',
+		'-framework QtCore',
+		'-framework QtGui',
+#		'-framework QtNetwork',
+		'-framework QtXml',
+		'-framework QtSvg',
+		'-F' + os.path.join(qtdir, 'lib'),
+		'-headerpad_max_install_names'
+	]
+
+
+env.WengoAddLibPath(lib_path)
+env.WengoAddCCFlags(cc_flags)
+env.WengoAddLinkFlags(link_flags)
+env.WengoAddIncludePath(include_path)
+env.WengoAddDefines(defines)
+env.WengoUseLibraries(libs)
+
+env.WengoDeclareSystemLibrary('qt4')

@@ -1,0 +1,29 @@
+env = WengoGetEnvironment()
+
+libs = [
+	# Will be 'coipmanager', when moved to libs
+	'wengophone',
+	'buildId',
+]
+
+sources = [
+	'main.cpp',
+]
+
+link_flags = []
+
+if WengoOSMacOSX():
+	frameworks = [
+		'AudioToolbox',
+		'AudioUnit',
+		'Cocoa',
+		'CoreAudio',
+		'Quicktime',
+	]
+	
+	env.WengoAddFrameworks(frameworks);
+
+env.WengoUseLibraries(libs)
+env.WengoAddLinkFlags(link_flags)
+
+env.WengoProgram('coipmanager-tests', sources)

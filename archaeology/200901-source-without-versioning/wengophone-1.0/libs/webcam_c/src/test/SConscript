@@ -1,0 +1,17 @@
+
+env = WengoEnvironment()
+webcam_env = WengoQtEnvironment(env)
+
+webcam_env.WengoUseLibrary("webcam_c")
+webcam_env.WengoUseLibrary("webcam")
+webcam_env.WengoUseLibraryHeaders("webcam")
+webcam_env.WengoUseLibraryHeaders("libavcodec")
+
+sources = [
+    "test.cpp"
+]
+
+webcam_env.WengoLibAddMultiple(["strmiids", "comsupp"])
+
+webcam_test_prog = webcam_env.WengoProgram("webcam-c-test", sources)
+webcam_env.WengoAlias("webcam-c-test", webcam_test_prog)

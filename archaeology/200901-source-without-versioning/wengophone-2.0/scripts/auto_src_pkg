@@ -1,0 +1,89 @@
+#!/bin/sh
+#
+#	auto_src_pkg: checkout sources at a date & create an archive
+#       It Can be used to create nightly svn snapshots.
+#	 
+
+#command line argument check
+
+todayString=`date +%Y%m%d`
+
+case $# in
+	0)
+	rev=$todayString
+	;;
+	1)
+	rev=$1
+	;;
+	*)
+	echo "Checkout sources & create an archive"
+ 	echo "usage:"
+	echo "    auto_src_pkg [date in YYYYMMDD format]"
+ 	echo "examples:"
+	echo "    auto_src_pkg 20060115"
+	echo "    auto_src_pkg"	
+ 	exit
+esac
+
+rm -rf openwengo_$rev openwengo_$rev.tar.bz2
+
+# Download sources from svn
+echo -n "Downloading sources... "
+mkdir -p openwengo_$rev/wengoscons
+
+svn export --force -q -r {$rev} --password guest --username guest\
+    http://dev.openwengo.com/svn/openwengo/wengophone-ng/trunk/wengoscons\
+    openwengo_$rev/wengoscons
+
+mkdir -p openwengo_$rev/wengophone
+
+svn export --force -q -r {$rev} --password guest --username guest\
+    http://dev.openwengo.com/svn/openwengo/wengophone-ng/trunk/wengophone\
+    openwengo_$rev/wengophone
+
+mkdir -p openwengo_$rev/libs
+
+svn export --force -q -r {$rev} --password guest --username guest\
+    http://dev.openwengo.com/svn/openwengo/wengophone-ng/trunk/libs\
+    openwengo_$rev/libs
+
+mkdir -p openwengo_$rev/wifo
+
+svn export --force -q -r {$rev} --password guest --username guest\
+    http://dev.openwengo.com/svn/openwengo/wengophone-ng/trunk/wifo\
+    openwengo_$rev/wifo
+
+svn export -q -r {$rev} --password guest --username guest\
+    http://dev.openwengo.com/svn/openwengo/wengophone-ng/trunk/SConscript\
+    openwengo_$rev/SConscript
+
+svn export -q -r {$rev} --password guest --username guest\
+    http://dev.openwengo.com/svn/openwengo/wengophone-ng/trunk/SConstruct\
+    openwengo_$rev/SConstruct
+
+svn export -q -r {$rev} --password guest --username guest\
+    http://dev.openwengo.com/svn/openwengo/wengophone-ng/trunk/SOptions\
+    openwengo_$rev/SOptions
+echo "done"
+
+# Remove binaries
+echo -n "Cleaning tree to remove anything not needed for non-Windows builds..."
+rm -rf openwengo_$rev/wengoscons/doc/html
+rm -rf openwengo_$rev/wengophone/together
+find openwengo_$rev -iname \*.dll | xargs rm -f 
+find openwengo_$rev -iname \*.jpg | xargs rm -f 
+find openwengo_$rev -iname \*.lib | xargs rm -f
+find openwengo_$rev -iname \*.pdf -a -iname \*.html | xargs rm -f
+echo "done"
+
+# Make the sources archive
+echo -n "Writing archive... "
+tar cjf wengophone-ng-GNULinux-latest.tar.bz2 openwengo_$rev
+echo "done"
+
+#echo -n "Cleaning..."
+#rm -rf openwengo_$rev
+#echo -n "Cleaning done!"
+
+md5=`md5sum wengophone-ng-GNULinux-latest.tar.bz2`
+echo "MD5 checksum: $md5" | tee wengophone-ng-GNULinux-latest.info

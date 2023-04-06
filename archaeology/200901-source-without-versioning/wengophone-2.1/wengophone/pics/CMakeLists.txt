@@ -1,0 +1,3 @@
+if (COPY_DATA_FILES_ON_CONFIGURE)
+	ow_copy_dir(${CMAKE_CURRENT_SOURCE_DIR}/avatars/*.png ${DATA_COPY_DIR}/pics/avatars/.)
+endif (COPY_DATA_FILES_ON_CONFIGURE)

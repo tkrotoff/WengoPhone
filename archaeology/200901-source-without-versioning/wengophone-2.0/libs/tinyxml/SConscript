@@ -1,0 +1,19 @@
+env = WengoGetEnvironment()
+
+libs = []
+lib_path = []
+include_path = [
+	'.'
+]
+defines = {}
+headers = []
+sources = [
+	'tinyxml.cpp',
+	'tinyxmlerror.cpp',
+	'tinyxmlparser.cpp'
+]
+
+env.WengoAddIncludePath(include_path)
+env.WengoAddDoxyfile()
+
+env.WengoStaticLibrary('tinyxml', sources)

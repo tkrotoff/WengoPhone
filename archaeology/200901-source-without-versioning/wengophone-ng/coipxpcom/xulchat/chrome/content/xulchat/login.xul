@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+
+<window
+  id         = "login"
+  windowtype = "login"
+  title      = "Login"
+  width      = "370"
+  minwidth   = "370"
+  minheight  = "670"
+  height     = "670"
+  onload     = "Startup()"
+  xmlns  = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script type="application/x-javascript" src="chrome://xulchat/content/global.js"/>
+  <script type="application/x-javascript" src="chrome://xulchat/content/login.js"/>
+
+  <script src="chrome://venkman/content/venkman-overlay.js"/>
+
+	<groupbox>
+		<caption label="Accounts"/>
+		<listbox id="account-list" />
+		<hbox>
+			<menu label="+">
+				<menupopup>
+				<menu label="Protocol">
+					<menupopup>
+						<menuitem label="MSN" oncommand="CreateAccount('msn')" />
+						<menuitem label="Yahoo !" oncommand="CreateAccount('yahoo')" />
+						<menuitem label="AIM ICQ" oncommand="CreateAccount('aimicq')" />
+						<menuitem label="Jabber" oncommand="CreateAccount('jabber')" />
+						<menuitem label="SIP" oncommand="CreateAccount('sip')" />
+						<menuitem label="Wengo" oncommand="CreateAccount('wengo')" />
+						<menuitem label="IAX" oncommand="CreateAccount('iax')" />
+					</menupopup>
+				</menu>
+				</menupopup>
+			</menu>
+			<toolbarbutton label="-" oncommand="RemoveAccount()" />
+		</hbox>
+	</groupbox>
+
+	<groupbox>
+		<caption label="Chat"/>
+	<hbox>
+	 <textbox id="chat-contact" flex="1" value="" />
+	 <menu label="+">
+	  <menupopup>
+	   <menu label="Protocol">
+	    <menupopup>
+	     <menuitem label="MSN" oncommand="AddChatContact('msn')" />
+	     <menuitem label="Yahoo !" oncommand="AddChatContact('yahoo')" />
+	     <menuitem label="AIM ICQ" oncommand="AddChatContact('aimicq')" />
+	     <menuitem label="Jabber" oncommand="AddChatContact('jabber')" />
+	     <menuitem label="SIP" oncommand="AddChatContact('sip')" />
+	     <menuitem label="Wengo" oncommand="AddChatContact('wengo')" />
+	     <menuitem label="IAX" oncommand="AddChatContact('iax')" />
+	    </menupopup>
+	   </menu>
+	  </menupopup>
+	 </menu>
+<!--
+	 <button oncommand="AddChatContact();" label="Add Contact" />
+-->
+	</hbox>
+
+<!-- closebutton="true" onclosetab="RemoveCurrentTab();" -->
+
+<tabbox id="chat-tabbox" style="height: 300px;">
+  <tabs id="chat-tabs">
+   <tab label="Info" />
+  </tabs>
+  <tabpanels id="chat-tabpanels" flex="1">
+   <tabpanel>
+	<label value="Enter a contact email to chat :)"/>
+   </tabpanel>
+  </tabpanels>
+</tabbox>
+
+	</groupbox>
+  
+</window>

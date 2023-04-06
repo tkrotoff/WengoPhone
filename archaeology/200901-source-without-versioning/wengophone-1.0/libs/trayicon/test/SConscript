@@ -1,0 +1,10 @@
+Import('env qtEnv')
+Import('registerLibraries registerIncpaths')
+
+trayicon_test_env = qtEnv(env)
+registerLibraries(trayicon_test_env,
+	["trayicon", "gdi32", "user32", "shell32"], [".."])
+registerIncpaths(trayicon_test_env, [".."])
+
+pkg = trayicon_test_env.Program('test_trayicon', ["main.cpp"])
+Return('pkg')

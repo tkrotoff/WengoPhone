@@ -1,0 +1,45 @@
+env = WengoEnvironment()
+
+# Static/shared options
+
+env.WengoDeclareConsoleArgument("enable-shared-portaudio", "yes")
+env.WengoDeclareConsoleArgument("enable-shared-webcam", "yes")
+env.WengoDeclareConsoleArgument("enable-shared-wengocurl", "yes")
+env.WengoDeclareConsoleArgument("enable-shared-phapi", "yes")
+
+# GUI options
+
+env.WengoDeclareConsoleArgument("enable-local-wengophone-config", "no")
+env.WengoDeclareConsoleArgument("enable-advanced-sip-config", "no")
+env.WengoDeclareConsoleArgument("enable-video-codec-config", "no")
+
+# PHAPI options
+
+env.WengoDeclareConsoleArgument("enable-phapi-embed", "no")
+env.WengoDeclareConsoleArgument("enable-phapi-video-hack", "no")
+env.WengoDeclareConsoleArgument("enable-qos-debug", "no")
+env.WengoDeclareConsoleArgument("enable-samplerate", "no")
+env.WengoDeclareConsoleArgument("enable-pa-debug", "no")
+env.WengoDeclareConsoleArgument("portaudio-ds", "no")
+env.WengoDeclareConsoleArgument("disable-alsa", "no")
+env.WengoDeclareConsoleArgument("new-media-streamer", "no")
+env.WengoDeclareConsoleArgument("enable-phapi-audio-arts", "no")
+env.WengoDeclareConsoleArgument("enable-phapi-audio-esd", "no")
+
+#  libsound options
+
+env.WengoDeclareConsoleArgument("enable-libsound-portaudio", "yes")
+
+# Global options
+
+env.WengoDeclareConsoleArgument("enable-video", "yes")
+env.WengoDeclareConsoleArgument("enable-http-tunnel", "yes")
+env.WengoDeclareConsoleArgument("enable-netlib", "yes")
+env.WengoDeclareConsoleArgument("enable-ts-update", "yes")
+env.WengoDeclareConsoleArgument("wengophone-branch", "trunk")
+env.WengoDeclareConsoleArgument("wifo-branch", "trunk")
+env.WengoDeclareConsoleArgument("wl-tag", "wengo")
+env.WengoDeclareConsoleArgument("installer-tag", "")
+env.WengoDeclareConsoleArgument("installer-type", "nsiswin32")
+env.WengoDeclareConsoleArgument("build-vcproj", "no")
+env.WengoDeclareConsoleArgument("prefix", "/usr/local")

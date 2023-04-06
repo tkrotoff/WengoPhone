@@ -1,0 +1,58 @@
+env = WengoGetEnvironment()
+
+libs = [
+	'owthread',
+	'owutil',
+	'ortp',
+	'phapi',
+	'sfp-plugin',
+	'stun',
+	'httptunnel',
+	'tinyxml',
+	'owsound',
+	'imwrapper',
+	'sipwrapper',
+]
+
+defines = {}
+lib_path = []
+include_path = [
+	'../phapi'
+]
+link_flags = []
+
+if WengoOSMacOSX():
+	frameworks = [
+		'CoreFoundation',
+	]
+
+	env.WengoAddFrameworks(frameworks)
+
+if WengoGetConsoleArgument('enable-video'):
+	defines['ENABLE_VIDEO'] = 1
+	libs += [
+		'pixertool'
+	]
+
+if WengoGetConsoleArgument('enable-shared-phapi'):
+	defines['PHAPI_DLL'] = 1
+
+headers = []
+sources = [
+	'PhApiFactory.cpp',
+	'PhApiWrapper.cpp',
+	'PhApiCallbacks.cpp',
+	'PhApiIMChat.cpp',
+	'PhApiIMConnect.cpp',
+	'PhApiIMPresence.cpp',
+	'PhApiCodecList.cpp',
+	'PhApiSFPCallbacks.cpp',
+	'PhApiSFPWrapper.cpp',
+	'PhApiSFPEvent.cpp',
+]
+
+env.WengoAddIncludePath(include_path)
+env.WengoAddLinkFlags(link_flags)
+env.WengoAddDefines(defines)
+env.WengoUseLibraries(libs)
+env.WengoStaticLibrary('phapiwrapper', sources)

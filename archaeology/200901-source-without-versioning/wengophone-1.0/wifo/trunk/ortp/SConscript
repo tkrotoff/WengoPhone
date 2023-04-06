@@ -1,0 +1,45 @@
+
+env = WengoEnvironment()
+
+ortp_env = env.Copy()
+ortp_env["WIN32_INSERT_DEF"] = 1
+
+ortp_sources = [
+    "src/avprofile.c",
+	"src/ortp.c",
+	"src/ortpdlkm.c", 
+	"src/payloadtype.c",
+	"src/port_fct.c",
+	"src/posixtimer.c",
+	"src/rtpmod.c",
+	"src/rtpparse.c",
+	"src/rtpsession.c",
+	"src/rtpsignaltable.c",
+	"src/rtptimer.c",
+	"src/scheduler.c",
+	"src/sessionset.c",
+	"src/str_utils.c",
+	"src/export.c",
+	"src/telephonyevents.c",
+	"src/rtcp.c",
+]
+
+ortp_lib_dec = ortp_env.WengoDeclareLibraryAuto("ortp", "wifo/ortp")
+ortp_lib_dec.AddSubIncludePath("src")
+ortp_env.WengoUseLibraryHeaders("ortp")
+
+if ortp_env.WengoGetConsoleArgument("enable-http-tunnel") == "yes":
+    ortp_env.WengoCppDefineAdd("USE_HTTP_TUNNEL")
+
+#ortp_env.WengoCppDefineAdd("RTCP")
+
+ortp_env.WengoCppDefineSet("RTP_MAX_SIZE", 8192)
+
+if ortp_env.WengoOsIsWindows():
+    ortp_env.WengoLibAddMultiple(["ws2_32", "winmm"])
+
+if ortp_env.WengoOsIsLinux() or ortp_env.WengoOsIsBSD():
+    ortp_env.ParseConfig("pkg-config --cflags --libs gthread-2.0")
+
+ortp_lib = ortp_env.WengoStaticLibrary("ortp", ortp_sources)
+ortp_env.WengoAlias("ortp", ortp_lib)

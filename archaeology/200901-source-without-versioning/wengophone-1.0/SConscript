@@ -1,0 +1,42 @@
+# 
+# WengoPhone, a voice over Internet phone
+#
+# Copyright (C) 2004-2005  Wengo
+# Copyright (C) 2005 David Ferlier <david.ferlier@wengo.fr>
+# 
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+import time
+
+env = WengoEnvironment()
+
+wengophone_id = time.strftime("%Y%m%d%H%M%S", time.gmtime())
+wengophone_version = "0.99"
+wengophone_revision = "rev5829"
+
+env.WengoSetVariable("WENGOPHONE_ID", wengophone_id)
+env.WengoSetVariable("WENGOPHONE_ID_STRING", wengophone_version + "-" + wengophone_revision)
+env.WengoSetVariable("WENGOPHONE_VER_STRING", wengophone_version)
+
+env.WengoBuildInDir("download/SConscript", "softphone/download")
+env.WengoBuildInDir("gui/SConscript", "softphone/gui")
+env.WengoBuildInDir("buildid/SConscript", "softphone/buildid")
+env.WengoBuildInDir("nsis-installer/SConscript", "softphone/nsis-installer")
+env.WengoBuildInDir("memorydump/SConscript", "softphone/memorydump")
+if not env.WengoOsIsWindows():
+    env.WengoBuildInDir("deb-installer/SConscript", "softphone/deb-installer")
+
+env.SConscript('SSoftphoneRuntime')
+env.SConscript('SSoftphoneInstall')

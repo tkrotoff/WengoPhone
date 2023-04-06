@@ -1,0 +1,50 @@
+#!/bin/sh
+#
+#	auto_src_pkg: checkout sources at a date & create an archive
+#       It Can be used to create nightly svn snapshots.
+#	 
+
+#command line argument check
+
+todayString=`date +%Y%m%d`
+
+case $# in
+	0)
+	rev=$todayString
+	;;
+	1)
+	rev=$1
+	;;
+	*)
+	echo "Checkout sources & create an archive"
+ 	echo "usage:"
+	echo "    auto_src_pkg [date in YYYYMMDD format]"
+ 	echo "examples:"
+	echo "    auto_src_pkg 20060115"
+	echo "    auto_src_pkg"	
+ 	exit
+esac
+
+rm -rf openwengo_$rev openwengo_$rev.tar.bz2
+
+# Download sources from svn
+echo -n "Downloading sources... "
+svn export -q -r {$rev} --password guest --username guest http://dev.openwengo.com/svn/openwengo/softphone-classic/branches/1.0 openwengo_$rev
+echo "done"
+
+
+# Remove binaries
+
+rm -r openwengo_$rev/win32
+rm -r openwengo_$rev/nsis-installer
+rm -r openwengo_$rev/libs/ffmpeg/binary-lib
+
+
+# Make the sources archive
+echo -n "Writing archive... "
+tar cjf openwengo_$rev.tar.bz2 openwengo_$rev
+echo "done"
+
+
+md5=`md5sum openwengo_$rev.tar.bz2`
+echo "MD5 checksum: $md5" | tee openwengo_$rev.info

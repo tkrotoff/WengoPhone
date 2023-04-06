@@ -1,0 +1,7 @@
+# Generate package
+execute_process(
+	COMMAND /Developer/Tools/packagemaker -build -v -p ${BUILD_DIR}/${COIPMANAGER_BUNDLE_NAME}-${COIPMANAGER_VERSION}.pkg -proj ${CMAKE_SOURCE_DIR}/libs/coipmanager_sdk/package/macosx/CoIpManager-SDK-0.2.pmproj
+)
+
+# Archive package
+ow_zip_directory(${BUILD_DIR}/${COIPMANAGER_BUNDLE_NAME}-${COIPMANAGER_VERSION}.pkg ${BUILD_DIR}/${COIPMANAGER_BUNDLE_NAME}-revnumber.pkg)
